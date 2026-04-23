@@ -124,7 +124,16 @@ class MedianFinder:
 **NeetCode 150 — Linked List:**
 - [23. Merge k Sorted Lists](../../leetcode-150/linked-list/023-merge-k-sorted-lists/) — min-heap of k heads
 
-*More coming soon — the Heap/Priority Queue category itself (K Closest Points, Find Median from Data Stream) plus Dijkstra problems in Graphs.*
+**NeetCode 150 — Heap / Priority Queue:**
+- [703. Kth Largest Element in a Stream](../../leetcode-150/heap-priority-queue/703-kth-largest-element-in-a-stream/) — size-K min-heap
+- [1046. Last Stone Weight](../../leetcode-150/heap-priority-queue/1046-last-stone-weight/) — max-heap via negation
+- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
+- [215. Kth Largest Element in an Array](../../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/) — heap vs. quickselect
+- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — max-heap + cooldown queue
+- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/) — k-way merge across per-user feeds
+- [295. Find Median from Data Stream](../../leetcode-150/heap-priority-queue/295-find-median-from-data-stream/) — two-heap balancing
+
+*More coming soon — Dijkstra problems in Graphs.*
 
 ## References
 

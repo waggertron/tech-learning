@@ -133,6 +133,13 @@ def longest_consecutive(nums):
 - [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/) — old → new node map
 - [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — hash map + doubly linked list composite
 
+**NeetCode 150 — Trees:**
+- [105. Construct Binary Tree from Preorder and Inorder](../../leetcode-150/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/) — O(1) inorder-index lookup via hash map
+
+**NeetCode 150 — Heap / Priority Queue:**
+- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — frequency counts
+- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/) — user → tweets and follower → followees maps
+
 *More categories coming soon — Graph (Clone Graph), Tries, etc.*
 
 ## References
