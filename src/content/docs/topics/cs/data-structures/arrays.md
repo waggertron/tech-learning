@@ -133,7 +133,16 @@ def range_sum_array(nums):
 - [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
 - [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/)
 
-*More categories coming soon — Binary Search, DP, etc.*
+**NeetCode 150 — Binary Search:**
+- [704. Binary Search](../../leetcode-150/binary-search/704-binary-search/)
+- [74. Search a 2D Matrix](../../leetcode-150/binary-search/074-search-a-2d-matrix/)
+- [875. Koko Eating Bananas](../../leetcode-150/binary-search/875-koko-eating-bananas/) — binary search on the answer
+- [153. Find Minimum in Rotated Sorted Array](../../leetcode-150/binary-search/153-find-minimum-in-rotated-sorted-array/)
+- [33. Search in Rotated Sorted Array](../../leetcode-150/binary-search/033-search-in-rotated-sorted-array/)
+- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/) — per-key sorted list
+- [4. Median of Two Sorted Arrays](../../leetcode-150/binary-search/004-median-of-two-sorted-arrays/) — partition binary search
+
+*More categories coming soon — Linked Lists, Trees, DP, etc.*
 
 ## References
 

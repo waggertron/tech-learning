@@ -24,7 +24,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 2. [Two Pointers](./two-pointers/) (5 problems)
 3. [Sliding Window](./sliding-window/) (6 problems)
 4. [Stack](./stack/) (7 problems)
-5. Binary Search (7) — *coming soon*
+5. [Binary Search](./binary-search/) (7 problems)
 6. Linked List (11) — *coming soon*
 7. Trees (15) — *coming soon*
 8. Heap / Priority Queue (7) — *coming soon*

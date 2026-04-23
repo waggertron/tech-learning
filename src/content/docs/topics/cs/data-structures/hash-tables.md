@@ -126,6 +126,9 @@ def longest_consecutive(nums):
 **NeetCode 150 — Stack:**
 - [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/) — pair-map for close→open lookup
 
+**NeetCode 150 — Binary Search:**
+- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/) — outer key → sorted-list mapping
+
 *More categories coming soon — Linked Lists (#146 LRU Cache), Graph (Clone Graph), etc.*
 
 ## References
