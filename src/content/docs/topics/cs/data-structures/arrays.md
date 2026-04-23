@@ -106,6 +106,19 @@ def range_sum_array(nums):
     return range_sum
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Arrays &amp; Hashing:**
+- [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
+- [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
+- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
+- [238. Product of Array Except Self](../../leetcode-150/arrays-and-hashing/238-product-of-array-except-self/)
+- [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
+- [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
+- [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
+
+*More categories coming soon — Two Pointers, Sliding Window, Binary Search, DP, etc.*
+
 ## References
 
 - [Array — Wikipedia](https://en.wikipedia.org/wiki/Array_(data_structure))

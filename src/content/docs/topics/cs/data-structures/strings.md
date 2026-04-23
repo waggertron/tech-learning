@@ -104,6 +104,15 @@ def group_anagrams(words):
     return list(groups.values())
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Arrays &amp; Hashing:**
+- [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
+- [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
+- [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
+
+*More categories coming soon — Sliding Window, Two Pointers, DP on strings, etc.*
+
 ## References
 
 - [KMP algorithm — Wikipedia](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)

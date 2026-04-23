@@ -113,6 +113,13 @@ class MedianFinder:
         return (-self.lo[0] + self.hi[0]) / 2
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Arrays &amp; Hashing:**
+- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/) — size-k min-heap approach
+
+*More coming soon — the Heap/Priority Queue category itself (K Closest Points, Merge K Sorted Lists, Find Median from Data Stream) plus Dijkstra problems in Graphs.*
+
 ## References
 
 - [Heap (data structure) — Wikipedia](https://en.wikipedia.org/wiki/Heap_(data_structure))

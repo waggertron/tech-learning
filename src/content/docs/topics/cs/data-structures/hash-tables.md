@@ -103,6 +103,19 @@ def longest_consecutive(nums):
     return best
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Arrays &amp; Hashing:**
+- [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
+- [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
+- [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
+- [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
+- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
+- [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
+- [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
+
+*More categories coming soon — Sliding Window (all the subarray-sum / character-frequency problems), Stack (#146 LRU Cache), Graph (Clone Graph), etc.*
+
 ## References
 
 - [Hash table — Wikipedia](https://en.wikipedia.org/wiki/Hash_table)
