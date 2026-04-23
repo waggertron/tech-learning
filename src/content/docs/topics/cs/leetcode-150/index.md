@@ -22,7 +22,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 
 1. [Arrays & Hashing](./arrays-and-hashing/) (9 problems)
 2. [Two Pointers](./two-pointers/) (5 problems)
-3. Sliding Window (6) — *coming soon*
+3. [Sliding Window](./sliding-window/) (6 problems)
 4. Stack (7) — *coming soon*
 5. Binary Search (7) — *coming soon*
 6. Linked List (11) — *coming soon*

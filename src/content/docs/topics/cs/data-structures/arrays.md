@@ -123,7 +123,11 @@ def range_sum_array(nums):
 - [11. Container With Most Water](../../leetcode-150/two-pointers/011-container-with-most-water/)
 - [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/)
 
-*More categories coming soon — Sliding Window, Binary Search, DP, etc.*
+**NeetCode 150 — Sliding Window:**
+- [121. Best Time to Buy and Sell Stock](../../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/)
+- [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/)
+
+*More categories coming soon — Binary Search, DP, etc.*
 
 ## References
 

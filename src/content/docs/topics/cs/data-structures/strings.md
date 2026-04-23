@@ -114,7 +114,13 @@ def group_anagrams(words):
 **NeetCode 150 — Two Pointers:**
 - [125. Valid Palindrome](../../leetcode-150/two-pointers/125-valid-palindrome/)
 
-*More categories coming soon — Sliding Window, DP on strings, etc.*
+**NeetCode 150 — Sliding Window:**
+- [3. Longest Substring Without Repeating Characters](../../leetcode-150/sliding-window/003-longest-substring-without-repeating-characters/)
+- [424. Longest Repeating Character Replacement](../../leetcode-150/sliding-window/424-longest-repeating-character-replacement/)
+- [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
+- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
+
+*More categories coming soon — DP on strings, etc.*
 
 ## References
 

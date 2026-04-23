@@ -95,6 +95,13 @@ def max_sliding_window(nums, k):
     return result
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Sliding Window:**
+- [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/) — monotonic deque is the optimal pattern
+
+*More coming soon — BFS problems in Trees (Binary Tree Level Order Traversal) and Graphs (Number of Islands, Rotting Oranges, Word Ladder).*
+
 ## References
 
 - [Queue — Wikipedia](https://en.wikipedia.org/wiki/Queue_(abstract_data_type))

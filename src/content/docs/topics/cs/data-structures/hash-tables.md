@@ -117,7 +117,13 @@ def longest_consecutive(nums):
 **NeetCode 150 — Two Pointers:**
 - [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/) — "improved" approach uses a hash set for inner two-sum
 
-*More categories coming soon — Sliding Window (all the subarray-sum / character-frequency problems), Stack (#146 LRU Cache), Graph (Clone Graph), etc.*
+**NeetCode 150 — Sliding Window:**
+- [3. Longest Substring Without Repeating Characters](../../leetcode-150/sliding-window/003-longest-substring-without-repeating-characters/)
+- [424. Longest Repeating Character Replacement](../../leetcode-150/sliding-window/424-longest-repeating-character-replacement/)
+- [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
+- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
+
+*More categories coming soon — Stack (#146 LRU Cache), Graph (Clone Graph), etc.*
 
 ## References
 
