@@ -123,7 +123,10 @@ def longest_consecutive(nums):
 - [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
 - [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
 
-*More categories coming soon — Stack (#146 LRU Cache), Graph (Clone Graph), etc.*
+**NeetCode 150 — Stack:**
+- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/) — pair-map for close→open lookup
+
+*More categories coming soon — Linked Lists (#146 LRU Cache), Graph (Clone Graph), etc.*
 
 ## References
 

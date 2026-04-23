@@ -127,6 +127,12 @@ def range_sum_array(nums):
 - [121. Best Time to Buy and Sell Stock](../../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/)
 - [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/)
 
+**NeetCode 150 — Stack:**
+- [150. Evaluate Reverse Polish Notation](../../leetcode-150/stack/150-evaluate-reverse-polish-notation/)
+- [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/)
+- [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
+- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/)
+
 *More categories coming soon — Binary Search, DP, etc.*
 
 ## References

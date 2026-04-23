@@ -120,6 +120,9 @@ def group_anagrams(words):
 - [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
 - [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
 
+**NeetCode 150 — Stack:**
+- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
+
 *More categories coming soon — DP on strings, etc.*
 
 ## References

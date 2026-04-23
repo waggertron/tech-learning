@@ -131,7 +131,16 @@ class MinStack:
 **NeetCode 150 — Two Pointers:**
 - [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/) — monotonic-stack alternative approach
 
-*More coming soon — the Stack category itself (#20 Valid Parentheses, #739 Daily Temperatures, #84 Largest Rectangle in Histogram), plus iterative DFS in Trees/Graphs.*
+**NeetCode 150 — Stack:**
+- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
+- [155. Min Stack](../../leetcode-150/stack/155-min-stack/)
+- [150. Evaluate Reverse Polish Notation](../../leetcode-150/stack/150-evaluate-reverse-polish-notation/)
+- [22. Generate Parentheses](../../leetcode-150/stack/022-generate-parentheses/) — recursion stack / backtracking
+- [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/) — monotonic decreasing stack
+- [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
+- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/) — monotonic increasing stack
+
+*More coming soon — iterative DFS in Trees/Graphs.*
 
 ## References
 
