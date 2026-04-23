@@ -31,7 +31,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 9. [Backtracking](./backtracking/) (9 problems)
 10. [Tries](./tries/) (3 problems)
 11. [Graphs](./graphs/) (13 problems)
-12. Advanced Graphs (6) — *coming soon*
+12. [Advanced Graphs](./advanced-graphs/) (5 problems)
 13. 1-D Dynamic Programming (12) — *coming soon*
 14. 2-D Dynamic Programming (11) — *coming soon*
 15. Greedy (8) — *coming soon*
