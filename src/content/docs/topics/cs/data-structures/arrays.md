@@ -108,7 +108,7 @@ def range_sum_array(nums):
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays &amp; Hashing:**
+**NeetCode 150 — Arrays & Hashing:**
 - [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
 - [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
 - [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
@@ -117,7 +117,13 @@ def range_sum_array(nums):
 - [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
 - [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
 
-*More categories coming soon — Two Pointers, Sliding Window, Binary Search, DP, etc.*
+**NeetCode 150 — Two Pointers:**
+- [167. Two Sum II — Input Array Is Sorted](../../leetcode-150/two-pointers/167-two-sum-ii/)
+- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/)
+- [11. Container With Most Water](../../leetcode-150/two-pointers/011-container-with-most-water/)
+- [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/)
+
+*More categories coming soon — Sliding Window, Binary Search, DP, etc.*
 
 ## References
 

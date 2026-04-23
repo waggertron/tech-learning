@@ -126,6 +126,13 @@ class MinStack:
         return self.stack[-1][1]
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Two Pointers:**
+- [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/) — monotonic-stack alternative approach
+
+*More coming soon — the Stack category itself (#20 Valid Parentheses, #739 Daily Temperatures, #84 Largest Rectangle in Histogram), plus iterative DFS in Trees/Graphs.*
+
 ## References
 
 - [Stack — Wikipedia](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))

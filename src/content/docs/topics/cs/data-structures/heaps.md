@@ -115,7 +115,7 @@ class MedianFinder:
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays &amp; Hashing:**
+**NeetCode 150 — Arrays & Hashing:**
 - [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/) — size-k min-heap approach
 
 *More coming soon — the Heap/Priority Queue category itself (K Closest Points, Merge K Sorted Lists, Find Median from Data Stream) plus Dijkstra problems in Graphs.*

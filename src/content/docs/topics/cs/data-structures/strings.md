@@ -106,12 +106,15 @@ def group_anagrams(words):
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays &amp; Hashing:**
+**NeetCode 150 — Arrays & Hashing:**
 - [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
 - [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
 - [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
 
-*More categories coming soon — Sliding Window, Two Pointers, DP on strings, etc.*
+**NeetCode 150 — Two Pointers:**
+- [125. Valid Palindrome](../../leetcode-150/two-pointers/125-valid-palindrome/)
+
+*More categories coming soon — Sliding Window, DP on strings, etc.*
 
 ## References
 

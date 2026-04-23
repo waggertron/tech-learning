@@ -20,8 +20,8 @@ Each problem page includes the prompt, all three approaches with working Python,
 
 ## Categories
 
-1. [Arrays &amp; Hashing](./arrays-and-hashing/) (9 problems)
-2. Two Pointers (5) — *coming soon*
+1. [Arrays & Hashing](./arrays-and-hashing/) (9 problems)
+2. [Two Pointers](./two-pointers/) (5 problems)
 3. Sliding Window (6) — *coming soon*
 4. Stack (7) — *coming soon*
 5. Binary Search (7) — *coming soon*
@@ -36,7 +36,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 14. 2-D Dynamic Programming (11) — *coming soon*
 15. Greedy (8) — *coming soon*
 16. Intervals (6) — *coming soon*
-17. Math &amp; Geometry (8) — *coming soon*
+17. Math & Geometry (8) — *coming soon*
 18. Bit Manipulation (7) — *coming soon*
 
 ## How to use

@@ -1,5 +1,5 @@
 ---
-title: Arrays &amp; Hashing
+title: Arrays & Hashing
 description: 9 foundational problems covering arrays, hash maps, and the patterns that show up across the entire NeetCode 150.
 parent: leetcode-150
 tags: [leetcode, neetcode-150, arrays, hash-tables]

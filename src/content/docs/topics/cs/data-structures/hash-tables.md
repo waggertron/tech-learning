@@ -105,7 +105,7 @@ def longest_consecutive(nums):
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays &amp; Hashing:**
+**NeetCode 150 — Arrays & Hashing:**
 - [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
 - [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
 - [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
@@ -113,6 +113,9 @@ def longest_consecutive(nums):
 - [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
 - [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
 - [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
+
+**NeetCode 150 — Two Pointers:**
+- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/) — "improved" approach uses a hash set for inner two-sum
 
 *More categories coming soon — Sliding Window (all the subarray-sum / character-frequency problems), Stack (#146 LRU Cache), Graph (Clone Graph), etc.*
 
