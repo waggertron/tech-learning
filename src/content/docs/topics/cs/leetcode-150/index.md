@@ -30,7 +30,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 8. [Heap / Priority Queue](./heap-priority-queue/) (7 problems)
 9. [Backtracking](./backtracking/) (9 problems)
 10. [Tries](./tries/) (3 problems)
-11. Graphs (13) — *coming soon*
+11. [Graphs](./graphs/) (13 problems)
 12. Advanced Graphs (6) — *coming soon*
 13. 1-D Dynamic Programming (12) — *coming soon*
 14. 2-D Dynamic Programming (11) — *coming soon*
