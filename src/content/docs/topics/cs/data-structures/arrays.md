@@ -142,7 +142,10 @@ def range_sum_array(nums):
 - [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/) — per-key sorted list
 - [4. Median of Two Sorted Arrays](../../leetcode-150/binary-search/004-median-of-two-sorted-arrays/) — partition binary search
 
-*More categories coming soon — Linked Lists, Trees, DP, etc.*
+**NeetCode 150 — Linked List:**
+- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array indexed as an implicit linked list
+
+*More categories coming soon — Trees, DP, etc.*
 
 ## References
 

@@ -129,7 +129,11 @@ def longest_consecutive(nums):
 **NeetCode 150 — Binary Search:**
 - [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/) — outer key → sorted-list mapping
 
-*More categories coming soon — Linked Lists (#146 LRU Cache), Graph (Clone Graph), etc.*
+**NeetCode 150 — Linked List:**
+- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/) — old → new node map
+- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — hash map + doubly linked list composite
+
+*More categories coming soon — Graph (Clone Graph), Tries, etc.*
 
 ## References
 

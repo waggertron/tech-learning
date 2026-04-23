@@ -121,7 +121,10 @@ class MedianFinder:
 **NeetCode 150 — Sliding Window:**
 - [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/) — lazy-deletion max-heap alternative
 
-*More coming soon — the Heap/Priority Queue category itself (K Closest Points, Merge K Sorted Lists, Find Median from Data Stream) plus Dijkstra problems in Graphs.*
+**NeetCode 150 — Linked List:**
+- [23. Merge k Sorted Lists](../../leetcode-150/linked-list/023-merge-k-sorted-lists/) — min-heap of k heads
+
+*More coming soon — the Heap/Priority Queue category itself (K Closest Points, Find Median from Data Stream) plus Dijkstra problems in Graphs.*
 
 ## References
 

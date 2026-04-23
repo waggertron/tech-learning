@@ -120,6 +120,21 @@ def remove_nth_from_end(head, n):
     return dummy.next
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Linked List:**
+- [206. Reverse Linked List](../../leetcode-150/linked-list/206-reverse-linked-list/)
+- [21. Merge Two Sorted Lists](../../leetcode-150/linked-list/021-merge-two-sorted-lists/)
+- [141. Linked List Cycle](../../leetcode-150/linked-list/141-linked-list-cycle/) — Floyd's tortoise and hare
+- [143. Reorder List](../../leetcode-150/linked-list/143-reorder-list/)
+- [19. Remove Nth Node From End of List](../../leetcode-150/linked-list/019-remove-nth-node-from-end-of-list/) — offset two-pointer
+- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/)
+- [2. Add Two Numbers](../../leetcode-150/linked-list/002-add-two-numbers/)
+- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array-as-linked-list with Floyd's
+- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — hash map + doubly linked list
+- [23. Merge k Sorted Lists](../../leetcode-150/linked-list/023-merge-k-sorted-lists/) — min-heap of heads
+- [25. Reverse Nodes in k-Group](../../leetcode-150/linked-list/025-reverse-nodes-in-k-group/)
+
 ## References
 
 - [Linked list — Wikipedia](https://en.wikipedia.org/wiki/Linked_list)
