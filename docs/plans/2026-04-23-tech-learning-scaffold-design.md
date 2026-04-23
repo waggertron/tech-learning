@@ -143,6 +143,12 @@ cp src/content/docs/posts/_template.md src/content/docs/posts/$(date +%Y-%m-%d)-
 3. Set canonical URL to the site version
 4. Adjust platform-specific formatting as needed
 
+## Implementation notes (post-scaffold)
+
+- **Templates moved out of `src/content/docs/`** → now live in top-level `templates/`. Reason: Astro's underscore-prefix ignore rule applies to *files*, not *folders*, so `_template/` was being built into the site. Moving templates outside the content tree is cleaner than fighting the loader. Helper scripts reference `templates/` directly.
+- **Starlight 0.32.6 `social` config** uses the object form (`{ github: 'url' }`), not the array-of-objects form that landed in later versions. Update if upgrading.
+- **Zod pinned to `^3.24.1`** because Starlight 0.32 expects Zod v3; without the pin, npm resolved Zod v4 and schema parsing crashed at build time.
+
 ## Out of Scope (YAGNI)
 
 - Cross-posting automation (dev.to API, RSS sync)

@@ -1,0 +1,5 @@
+/* Custom theme tweaks. Starlight's defaults are good — add overrides here as needed. */
+
+:root {
+  --sl-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
