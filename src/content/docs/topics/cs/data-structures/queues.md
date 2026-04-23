@@ -105,6 +105,9 @@ def max_sliding_window(nums, k):
 - [199. Binary Tree Right Side View](../../leetcode-150/trees/199-binary-tree-right-side-view/) — BFS variant
 - [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/) — BFS with null markers
 
+**NeetCode 150 — Heap / Priority Queue:**
+- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — cooldown FIFO alongside a max-heap
+
 *More coming soon — Graphs (Number of Islands, Rotting Oranges, Word Ladder).*
 
 ## References

@@ -28,7 +28,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 6. [Linked List](./linked-list/) (11 problems)
 7. [Trees](./trees/) (15 problems)
 8. [Heap / Priority Queue](./heap-priority-queue/) (7 problems)
-9. Backtracking (9) — *coming soon*
+9. [Backtracking](./backtracking/) (9 problems)
 10. Tries (3) — *coming soon*
 11. Graphs (13) — *coming soon*
 12. Advanced Graphs (6) — *coming soon*

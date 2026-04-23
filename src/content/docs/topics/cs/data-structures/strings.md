@@ -123,6 +123,10 @@ def group_anagrams(words):
 **NeetCode 150 — Stack:**
 - [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
 
+**NeetCode 150 — Backtracking:**
+- [131. Palindrome Partitioning](../../leetcode-150/backtracking/131-palindrome-partitioning/) — cut + palindrome check with optional DP table
+- [17. Letter Combinations of a Phone Number](../../leetcode-150/backtracking/017-letter-combinations-of-a-phone-number/)
+
 *More categories coming soon — DP on strings, etc.*
 
 ## References

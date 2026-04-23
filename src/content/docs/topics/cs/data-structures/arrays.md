@@ -145,6 +145,20 @@ def range_sum_array(nums):
 **NeetCode 150 — Linked List:**
 - [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array indexed as an implicit linked list
 
+**NeetCode 150 — Heap / Priority Queue:**
+- [1046. Last Stone Weight](../../leetcode-150/heap-priority-queue/1046-last-stone-weight/)
+- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/) — in-place quickselect alternative
+- [215. Kth Largest Element in an Array](../../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/) — three-way partition quickselect
+
+**NeetCode 150 — Backtracking:**
+- [78. Subsets](../../leetcode-150/backtracking/078-subsets/)
+- [39. Combination Sum](../../leetcode-150/backtracking/039-combination-sum/)
+- [46. Permutations](../../leetcode-150/backtracking/046-permutations/)
+- [90. Subsets II](../../leetcode-150/backtracking/090-subsets-ii/) — sort + skip same-level duplicates
+- [40. Combination Sum II](../../leetcode-150/backtracking/040-combination-sum-ii/)
+- [79. Word Search](../../leetcode-150/backtracking/079-word-search/) — grid DFS + in-place visited
+- [51. N-Queens](../../leetcode-150/backtracking/051-n-queens/) — board as array
+
 *More categories coming soon — Trees, DP, etc.*
 
 ## References
