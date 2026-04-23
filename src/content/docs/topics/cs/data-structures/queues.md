@@ -100,7 +100,12 @@ def max_sliding_window(nums, k):
 **NeetCode 150 — Sliding Window:**
 - [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/) — monotonic deque is the optimal pattern
 
-*More coming soon — BFS problems in Trees (Binary Tree Level Order Traversal) and Graphs (Number of Islands, Rotting Oranges, Word Ladder).*
+**NeetCode 150 — Trees:**
+- [102. Binary Tree Level Order Traversal](../../leetcode-150/trees/102-binary-tree-level-order-traversal/) — BFS per-level batching template
+- [199. Binary Tree Right Side View](../../leetcode-150/trees/199-binary-tree-right-side-view/) — BFS variant
+- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/) — BFS with null markers
+
+*More coming soon — Graphs (Number of Islands, Rotting Oranges, Word Ladder).*
 
 ## References
 

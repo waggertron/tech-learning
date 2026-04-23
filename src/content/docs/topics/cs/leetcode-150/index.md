@@ -26,7 +26,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 4. [Stack](./stack/) (7 problems)
 5. [Binary Search](./binary-search/) (7 problems)
 6. [Linked List](./linked-list/) (11 problems)
-7. Trees (15) — *coming soon*
+7. [Trees](./trees/) (15 problems)
 8. Heap / Priority Queue (7) — *coming soon*
 9. Backtracking (9) — *coming soon*
 10. Tries (3) — *coming soon*

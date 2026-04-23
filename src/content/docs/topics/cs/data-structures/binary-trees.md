@@ -107,6 +107,25 @@ def lca(root, p, q):
     return root if left and right else (left or right)
 ```
 
+## LeetCode problems
+
+**NeetCode 150 — Trees:**
+- [226. Invert Binary Tree](../../leetcode-150/trees/226-invert-binary-tree/)
+- [104. Maximum Depth of Binary Tree](../../leetcode-150/trees/104-maximum-depth-of-binary-tree/)
+- [543. Diameter of Binary Tree](../../leetcode-150/trees/543-diameter-of-binary-tree/) — height + accumulator DFS
+- [110. Balanced Binary Tree](../../leetcode-150/trees/110-balanced-binary-tree/) — bottom-up DFS with sentinel
+- [100. Same Tree](../../leetcode-150/trees/100-same-tree/)
+- [572. Subtree of Another Tree](../../leetcode-150/trees/572-subtree-of-another-tree/)
+- [235. Lowest Common Ancestor of a BST](../../leetcode-150/trees/235-lowest-common-ancestor-of-a-bst/) — iterative BST walk
+- [102. Binary Tree Level Order Traversal](../../leetcode-150/trees/102-binary-tree-level-order-traversal/)
+- [199. Binary Tree Right Side View](../../leetcode-150/trees/199-binary-tree-right-side-view/)
+- [1448. Count Good Nodes in Binary Tree](../../leetcode-150/trees/1448-count-good-nodes-in-binary-tree/) — path-state DFS
+- [98. Validate Binary Search Tree](../../leetcode-150/trees/098-validate-binary-search-tree/) — recursive bounds
+- [230. Kth Smallest Element in a BST](../../leetcode-150/trees/230-kth-smallest-element-in-a-bst/) — iterative inorder
+- [105. Construct Binary Tree from Preorder and Inorder](../../leetcode-150/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
+- [124. Binary Tree Maximum Path Sum](../../leetcode-150/trees/124-binary-tree-maximum-path-sum/) — tree DP with accumulator
+- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/)
+
 ## References
 
 - [Binary tree — Wikipedia](https://en.wikipedia.org/wiki/Binary_tree)

@@ -140,7 +140,11 @@ class MinStack:
 - [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
 - [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/) — monotonic increasing stack
 
-*More coming soon — iterative DFS in Trees/Graphs.*
+**NeetCode 150 — Trees:**
+- [230. Kth Smallest Element in a BST](../../leetcode-150/trees/230-kth-smallest-element-in-a-bst/) — iterative inorder with explicit stack
+- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/) — DFS variants use the recursion stack
+
+*More coming soon — iterative DFS in Graphs.*
 
 ## References
 
