@@ -1,9 +1,9 @@
 ---
-title: Tech Learning
-description: A shareable knowledge base of tech topics I research and educate myself on.
+title: Here Be Dragons
+description: A knowledge base about the complex, underexplored, and easy-to-break corners of software — the places where old maps used to say "here be dragons."
 template: splash
 hero:
-  tagline: Notes, explanations, and write-ups from what I'm learning in tech.
+  tagline: Notes from the edges of the map — where software gets strange, complex, and occasionally bites.
   actions:
     - text: Browse Topics
       link: /tech-learning/topics/
@@ -14,13 +14,41 @@ hero:
       icon: document
 ---
 
-## What this is
+## Where the name comes from
 
-A single place where I collect what I'm learning in tech:
+**"Here be dragons"** is a phrase used since the Middle Ages to mark regions of a map a cartographer didn't understand. Its only confirmed historical appearance is on the **Hunt–Lenox Globe (c. 1508)** — the third-oldest known terrestrial globe, inscribed near the eastern coast of Asia with the Latin **"HIC SVNT DRACONES"** — literally *"here are dragons."* Earlier medieval maps used the related phrase **"HIC SVNT LEONES"** ("here are lions") to mark uncharted territory.
 
-- **Topics** — evergreen, categorized knowledge base entries. Things like "RAG", "Kubernetes networking", "Postgres indexes".
-- **Posts** — dated write-ups. What I learned this week, project notes, experiments.
+The actual practice was less about mythical beasts than about honest humility: a cartographer drawing the known world had to decide what to do with the parts they hadn't been to, hadn't been mapped, or had only third-hand rumors about. *Here be dragons* was a way of saying: **"I don't know what's here. Tread carefully."** The Hunt–Lenox Globe now lives at the New York Public Library; you can still see the phrase right where the mapmaker ran out of certainty.
 
-Content is authored in plain markdown so the same source renders nicely on GitHub, here as a site, and can be pasted into dev.to / Medium / LinkedIn.
+## Why software borrowed it
 
-See the [repo on GitHub](https://github.com/waggertron/tech-learning).
+Programmers have picked up the phrase as a comment for the same reason:
+
+```python
+# HERE BE DRAGONS
+# This function is load-bearing in ways we don't fully understand.
+# The three call sites below depend on the exact order of the
+# side effects. Before refactoring, read the 2023 outage postmortem.
+```
+
+A *here be dragons* comment marks a region of a codebase where:
+
+- **The logic works** — but nobody fully understands why.
+- **The next person will break it** if they refactor without reading the history.
+- **The constraint isn't visible** in the code itself; it lives in an incident report, a regulation, a race condition, or a performance cliff that doesn't surface in tests.
+- **Modifying it has unforeseen consequences** that ripple into parts of the system the author doesn't know about.
+
+It's the opposite of clean-code bravado. It's a cartographer's note: *I mapped this as well as I could. Don't assume the map is the territory.*
+
+## What this site is
+
+A place to sketch those parts of the tech landscape I've been wandering through — the ones that fit in textbooks, and the ones that only show up when a system is already running and something breaks.
+
+- **Topics** — evergreen, categorized reference entries. Things like Kubernetes, RAG, the vehicle-routing problem, SOLID principles, HIPAA compliance. Written to still be useful a year from now.
+- **Posts** — dated write-ups. What I learned this week, notes from a project, patterns pulled out of real code.
+
+Plain markdown throughout, so the same source renders on GitHub, on this site, and in a cross-post on dev.to or LinkedIn.
+
+## The repo
+
+Source and history at [github.com/waggertron/tech-learning](https://github.com/waggertron/tech-learning). Contributions, corrections, and dragons welcome.

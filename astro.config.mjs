@@ -8,7 +8,7 @@ export default defineConfig({
   base: '/tech-learning',
   integrations: [
     starlight({
-      title: 'Tech Learning',
+      title: 'Here Be Dragons',
       description: 'A shareable knowledge base of tech topics I research.',
       social: {
         github: 'https://github.com/waggertron/tech-learning',
