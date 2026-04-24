@@ -1,6 +1,6 @@
 ---
 title: Data Structures
-description: The top ten data structures that show up in coding interviews — intro, representation, time complexity, and five common uses for each.
+description: The top ten data structures that show up in coding interviews, intro, representation, time complexity, and five common uses for each.
 category: cs
 tags: [data-structures, algorithms, interviews, cs-fundamentals]
 status: draft
@@ -29,10 +29,10 @@ A data structure is a way of organizing data so the operations you need on it ar
 
 Every subtopic follows a consistent structure so they're easy to scan:
 
-- **Intro** — what it is and why it exists
-- **In-depth description** — how it's typically implemented and the key invariants
-- **Time complexity** — average- and worst-case for the main operations
-- **Common uses in DSA** — five interview-relevant problem patterns it unlocks
+- **Intro**, what it is and why it exists
+- **In-depth description**, how it's typically implemented and the key invariants
+- **Time complexity**, average- and worst-case for the main operations
+- **Common uses in DSA**, five interview-relevant problem patterns it unlocks
 
 ## Picking the right structure
 
@@ -50,9 +50,9 @@ A rough decision flow:
 
 ## References
 
-- *Cracking the Coding Interview* — Gayle Laakmann McDowell
-- *Elements of Programming Interviews* — Aziz, Lee, Prakash
-- *Introduction to Algorithms* (CLRS) — Cormen, Leiserson, Rivest, Stein
+- *Cracking the Coding Interview*, Gayle Laakmann McDowell
+- *Elements of Programming Interviews*, Aziz, Lee, Prakash
+- *Introduction to Algorithms* (CLRS), Cormen, Leiserson, Rivest, Stein
 - [NeetCode 150 Roadmap](https://neetcode.io/roadmap)
 - [Blind 75 list](https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU)
 - [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)

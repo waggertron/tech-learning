@@ -85,7 +85,7 @@ def subsets(nums):
 - **Space:** O(n) recursion + output.
 
 ### Why `path[:]`?
-We mutate `path` in place across recursive calls. When we record a subset, we need a snapshot — hence the copy.
+We mutate `path` in place across recursive calls. When we record a subset, we need a snapshot, hence the copy.
 
 ## Summary
 
@@ -99,4 +99,4 @@ All three have the same asymptotic complexity (the output itself is Θ(n · 2ⁿ
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; enumeration
+- [Arrays](../../../data-structures/arrays/), input; enumeration

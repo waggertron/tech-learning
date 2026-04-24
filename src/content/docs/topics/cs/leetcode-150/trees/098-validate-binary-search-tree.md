@@ -22,7 +22,7 @@ Given the root of a binary tree, determine if it is a valid Binary Search Tree:
 
 LeetCode 98 · [Link](https://leetcode.com/problems/validate-binary-search-tree/) · *Medium*
 
-## Approach 1: Brute force — check "all left < root < all right" at each node
+## Approach 1: Brute force, check "all left < root < all right" at each node
 
 For each node, walk its left subtree confirming all < node, and right subtree confirming all > node.
 
@@ -111,4 +111,4 @@ Both Approach 2 and Approach 3 are O(n); the bounds version scales more naturall
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — BST invariant propagation
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), BST invariant propagation

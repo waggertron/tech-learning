@@ -18,7 +18,7 @@ Given an array of `intervals` where each interval is `[start, end]`, merge all o
 
 LeetCode 56 · [Link](https://leetcode.com/problems/merge-intervals/) · *Medium*
 
-## Approach 1: Brute force — quadratic merge
+## Approach 1: Brute force, quadratic merge
 
 Repeatedly find any pair of overlapping intervals and merge them until none remain.
 
@@ -43,7 +43,7 @@ def merge(intervals):
 ```
 
 **Complexity**
-- **Time:** O(n log n) — sort dominates.
+- **Time:** O(n log n), sort dominates.
 - **Space:** O(n) output.
 
 ## Approach 3: Bucket sort (when values are bounded)
@@ -66,4 +66,4 @@ Standard answer is sort + sweep. The same template feeds Insert Interval, Meetin
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sort + sweep
+- [Arrays](../../../data-structures/arrays/), sort + sweep

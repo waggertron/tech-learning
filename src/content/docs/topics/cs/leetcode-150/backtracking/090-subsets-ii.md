@@ -52,7 +52,7 @@ Works but wastes effort generating then filtering duplicates.
 
 ## Approach 2: Sort + skip duplicates at the same level (canonical)
 
-Sort the array so duplicates sit together. At each recursion level, after taking `nums[i]`, skip any subsequent indices with the same value — they would produce the same subset at this level.
+Sort the array so duplicates sit together. At each recursion level, after taking `nums[i]`, skip any subsequent indices with the same value, they would produce the same subset at this level.
 
 ```python
 def subsets_with_dup(nums):
@@ -63,7 +63,7 @@ def subsets_with_dup(nums):
     def backtrack(start):
         result.append(path[:])
         for i in range(start, len(nums)):
-            if i > start and nums[i] == nums[i - 1]:
+            if i > start and nums[i] == nums[i, 1]:
                 continue   # skip duplicate at same level
             path.append(nums[i])
             backtrack(i + 1)
@@ -78,7 +78,7 @@ def subsets_with_dup(nums):
 - **Space:** O(n) recursion.
 
 ### Why "at the same level"?
-`i > start` means we've already considered one occurrence of this value at this recursion depth — taking a second one would produce a duplicate subset. But `i == start` is fine: that's a different level, where we *do* want to include the duplicate.
+`i > start` means we've already considered one occurrence of this value at this recursion depth, taking a second one would produce a duplicate subset. But `i == start` is fine: that's a different level, where we *do* want to include the duplicate.
 
 ## Approach 3: Counter / multiset iteration
 
@@ -122,9 +122,9 @@ def subsets_with_dup(nums):
 | **Sort + skip same-level duplicates** | O(n · 2ⁿ) | O(n) |
 | Counter / multiset | O(n · 2ⁿ) | O(n) |
 
-The sort + skip template is the one to memorize — same pattern applies to Combination Sum II (40) and Permutations II (47).
+The sort + skip template is the one to memorize, same pattern applies to Combination Sum II (40) and Permutations II (47).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sorted for dedup at each level
-- [Hash Tables](../../../data-structures/hash-tables/) — optional Counter approach
+- [Arrays](../../../data-structures/arrays/), sorted for dedup at each level
+- [Hash Tables](../../../data-structures/hash-tables/), optional Counter approach

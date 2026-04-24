@@ -1,5 +1,5 @@
 ---
-title: Modern web browser security — the threats, the headers, and what Chrome has been doing about them
+title: Modern web browser security, the threats, the headers, and what Chrome has been doing about them
 description: Same-origin policy, CORS, CSP, supply-chain attacks, clickjacking, cookie theft, CVE soup. What the browser protects you from by default, what it doesn't, and the headers / features you should ship on every site.
 date: 2026-04-24
 tags: [browser, security, web, csp, cors]
@@ -11,12 +11,12 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-modern-br
 
 Modern browsers enforce **a lot** of security without developer involvement:
 
-- **Same-Origin Policy (SOP)** — page from `a.com` can't read the DOM or response bodies of `b.com`. This is the foundation.
-- **Mixed-content blocking** — HTTPS pages can't load `http://` resources.
-- **Sandboxed iframes** — a cross-origin iframe can't touch the parent, and vice versa, beyond explicit `postMessage`.
-- **Site isolation** — since 2018, Chrome puts each site in its own process to contain Spectre-class attacks.
-- **Default `SameSite=Lax`** on cookies — blocks the most common CSRF scenarios automatically.
-- **Automatic HTTPS upgrade** — HSTS preloading, plain `http://` navigation is actively warned against.
+- **Same-Origin Policy (SOP)**, page from `a.com` can't read the DOM or response bodies of `b.com`. This is the foundation.
+- **Mixed-content blocking**, HTTPS pages can't load `http://` resources.
+- **Sandboxed iframes**, a cross-origin iframe can't touch the parent, and vice versa, beyond explicit `postMessage`.
+- **Site isolation**, since 2018, Chrome puts each site in its own process to contain Spectre-class attacks.
+- **Default `SameSite=Lax`** on cookies, blocks the most common CSRF scenarios automatically.
+- **Automatic HTTPS upgrade**, HSTS preloading, plain `http://` navigation is actively warned against.
 
 If you do nothing else, your site is substantially harder to attack than it was in 2010. Still, "default" isn't "done." There's a dozen headers and features you should layer on.
 
@@ -48,7 +48,7 @@ Attacker embeds your site in an iframe and tricks the user into clicking somethi
 
 Your site loads a compromised third-party script: analytics, ad networks, a bundled npm dependency.
 
-**Blast radius:** same as XSS — the attacker's code runs in your origin.
+**Blast radius:** same as XSS, the attacker's code runs in your origin.
 
 **Mitigation:** CSP, Subresource Integrity (SRI), careful dependency review, minimal third-party scripts.
 
@@ -101,10 +101,10 @@ Content-Security-Policy: default-src 'self';
   form-action 'self';
 ```
 
-- `default-src 'self'` — everything same-origin unless overridden.
-- `script-src 'self' 'nonce-...'` — only your scripts + inline scripts with matching nonce. **No `unsafe-inline`**, no `unsafe-eval` for JS.
-- `frame-ancestors 'none'` — no one can iframe you. Replaces `X-Frame-Options`.
-- `base-uri 'self'` — stops `<base>` tag injection from redirecting relative URLs.
+- `default-src 'self'`, everything same-origin unless overridden.
+- `script-src 'self' 'nonce-...'`, only your scripts + inline scripts with matching nonce. **No `unsafe-inline`**, no `unsafe-eval` for JS.
+- `frame-ancestors 'none'`, no one can iframe you. Replaces `X-Frame-Options`.
+- `base-uri 'self'`, stops `<base>` tag injection from redirecting relative URLs.
 
 Start with `Content-Security-Policy-Report-Only` + a reporting endpoint. Fix violations. Then promote to enforcing.
 
@@ -114,7 +114,7 @@ Start with `Content-Security-Policy-Report-Only` + a reporting endpoint. Fix vio
 Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 ```
 
-Forces browsers to use HTTPS for the next year. The `preload` directive submits you to browsers' preload list — a permanent decision. Don't preload until you're *sure* every subdomain supports HTTPS.
+Forces browsers to use HTTPS for the next year. The `preload` directive submits you to browsers' preload list, a permanent decision. Don't preload until you're *sure* every subdomain supports HTTPS.
 
 ### X-Content-Type-Options
 
@@ -138,7 +138,7 @@ Limits what's sent in the `Referer` header. Stops leaking URLs with tokens or se
 Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()
 ```
 
-Lock down browser APIs your app doesn't use. If you don't need geolocation, block it — a compromised third-party script can't then prompt users for their location.
+Lock down browser APIs your app doesn't use. If you don't need geolocation, block it, a compromised third-party script can't then prompt users for their location.
 
 ### Cross-Origin-Opener-Policy, Cross-Origin-Embedder-Policy, Cross-Origin-Resource-Policy
 
@@ -150,7 +150,7 @@ Cross-Origin-Embedder-Policy: require-corp
 Cross-Origin-Resource-Policy: same-site
 ```
 
-Set them if you need `SharedArrayBuffer` or precision timers. Otherwise `COOP: same-origin` alone is a good baseline — prevents a popup from reading your window.
+Set them if you need `SharedArrayBuffer` or precision timers. Otherwise `COOP: same-origin` alone is a good baseline, prevents a popup from reading your window.
 
 ### X-Frame-Options (legacy)
 
@@ -164,11 +164,11 @@ Superseded by CSP's `frame-ancestors`, but keep it for older browsers.
 
 Cookie flags every auth cookie must have:
 
-- `HttpOnly` — not readable from JS.
-- `Secure` — HTTPS only.
-- `SameSite=Lax` or `Strict` — CSRF mitigation.
+- `HttpOnly`, not readable from JS.
+- `Secure`, HTTPS only.
+- `SameSite=Lax` or `Strict`, CSRF mitigation.
 - `Path=/` or narrower.
-- `__Host-` prefix for extra safety: `Set-Cookie: __Host-session=...; Secure; Path=/; SameSite=Lax`. Browsers reject this cookie if `Secure` is missing, `Path` isn't `/`, or `Domain` is set — eliminating cookie tossing.
+- `__Host-` prefix for extra safety: `Set-Cookie: __Host-session=...; Secure; Path=/; SameSite=Lax`. Browsers reject this cookie if `Secure` is missing, `Path` isn't `/`, or `Domain` is set, eliminating cookie tossing.
 
 ## Subresource Integrity (SRI)
 
@@ -204,14 +204,14 @@ Content-Security-Policy: require-trusted-types-for 'script';
 
 Effectively eliminates DOM-based XSS. Adoption is still early but growing; worth enabling in new apps.
 
-## CORS — widely misunderstood
+## CORS, widely misunderstood
 
 CORS relaxes the Same-Origin Policy for specific cases. Critical correctness points:
 
 - **CORS is not access control.** It protects *the user's browser* from reading a response. It doesn't protect your API. Always enforce auth on the server.
 - **`Access-Control-Allow-Origin: *` disallows credentials.** If you need cookies / auth, echo the specific origin and set `Access-Control-Allow-Credentials: true`.
 - **Never reflect arbitrary origins.** `Access-Control-Allow-Origin: <request.Origin>` without validation makes your API accessible to *every* website with user credentials. Validate against a whitelist.
-- **Preflight requests** — browsers issue an OPTIONS request before non-simple requests. Handle it server-side; return the right `Access-Control-Allow-*` headers.
+- **Preflight requests**, browsers issue an OPTIONS request before non-simple requests. Handle it server-side; return the right `Access-Control-Allow-*` headers.
 
 ## Dependency supply chain
 
@@ -226,7 +226,7 @@ npm, PyPI, and similar ecosystems have all seen malicious package takeovers, typ
 ## Browser-feature-specific concerns
 
 - **`window.open` and `target="_blank"`.** Without `rel="noopener noreferrer"`, the opened window can manipulate your page via `window.opener`. Always set the rel.
-- **Password managers.** Disabling autocomplete (`autocomplete="off"`) on login forms *harms* security — users pick weaker passwords. Don't do it.
+- **Password managers.** Disabling autocomplete (`autocomplete="off"`) on login forms *harms* security, users pick weaker passwords. Don't do it.
 - **`localStorage` for sensitive data.** Readable by any JS running in your origin. XSS = exfiltration.
 - **Service Workers.** Powerful but can be hijacked if you don't scope them correctly. Always scoped to the path they're registered at.
 - **PostMessage to iframes.** Always validate `event.origin`. Never blindly trust messages.
@@ -247,12 +247,12 @@ Spikes in CSP violations often reveal active attacks or a new vendor trying to l
 The browser platform has been getting safer without much fanfare:
 
 - **Third-party cookies ending.** Chrome's transition complete in 2024; Firefox and Safari already ahead. Cross-site tracking via cookies is over.
-- **Privacy Sandbox.** Chrome-led replacement for third-party cookies — Topics API, FLEDGE / Protected Audience, Attribution Reporting. Controversial, but reshapes ads without direct tracking.
+- **Privacy Sandbox.** Chrome-led replacement for third-party cookies, Topics API, FLEDGE / Protected Audience, Attribution Reporting. Controversial, but reshapes ads without direct tracking.
 - **Post-quantum TLS.** Chrome and Firefox ship Kyber / ML-KEM hybrid key exchanges. Long-term plan for the cryptography transition.
 - **Storage Partitioning.** Cross-site iframes now get their own storage keyed to the top-level site, not the iframe's origin. Breaks some legacy trackers.
-- **Declarative Net Request** — ad-blocker / extension API in MV3 — tighter sandboxing of extension behavior.
+- **Declarative Net Request**, ad-blocker / extension API in MV3, tighter sandboxing of extension behavior.
 - **Credential management and passkeys.** WebAuthn / passkey UX now feasible as the primary auth method on many properties.
-- **Fenced Frames.** A stronger iframe with additional isolation — one of the Privacy Sandbox primitives.
+- **Fenced Frames.** A stronger iframe with additional isolation, one of the Privacy Sandbox primitives.
 
 Keep reading Chrome Platform Status and Mozilla's Firefox release notes; the pace is fast.
 
@@ -278,7 +278,7 @@ Before shipping a public site:
 - **Shipping CSP in report-only forever.** Staying in report-only never actually blocks attacks.
 - **`unsafe-inline` in `script-src`.** Gives up most of CSP's value. Migrate to nonces.
 - **Wide CORS allowing credentials.** A pervasive vulnerability. Whitelist tightly.
-- **Cookies with `Domain=.acme.com` scope.** Readable from every subdomain — one subdomain XSS leaks everywhere.
+- **Cookies with `Domain=.acme.com` scope.** Readable from every subdomain, one subdomain XSS leaks everywhere.
 - **Disabling SOP with `crossorigin` attributes you don't understand.** Read the docs before setting them.
 - **Assuming CSP stops supply-chain attacks on your own code.** If your own script is compromised (`script-src 'self'` allows it), CSP won't save you.
 - **Forgetting about fonts and images.** CSP `font-src` / `img-src` default to `default-src`. Missing either can make legitimate assets fail.
@@ -286,20 +286,20 @@ Before shipping a public site:
 
 ## References
 
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/) — the canonical web-app threat taxonomy
-- [MDN — Web Security](https://developer.mozilla.org/en-US/docs/Web/Security) — deep explainers on every primitive
-- [MDN — Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
-- [web.dev — Security](https://web.dev/secure/) — Google's hands-on guides
-- [Chrome Platform Status](https://chromestatus.com/) — upcoming browser changes
-- [Securitum CSP Evaluator](https://csp-evaluator.withgoogle.com/) — lint your CSP
-- [Mozilla Observatory](https://observatory.mozilla.org/) — scan your site's security headers
-- [Troy Hunt — Secure headers](https://www.troyhunt.com/shhh-dont-let-your-response-headers/) — older but still relevant
-- [Scott Helme — securityheaders.com](https://securityheaders.com/) — rate your site
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/), the canonical web-app threat taxonomy
+- [MDN, Web Security](https://developer.mozilla.org/en-US/docs/Web/Security), deep explainers on every primitive
+- [MDN, Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+- [web.dev, Security](https://web.dev/secure/), Google's hands-on guides
+- [Chrome Platform Status](https://chromestatus.com/), upcoming browser changes
+- [Securitum CSP Evaluator](https://csp-evaluator.withgoogle.com/), lint your CSP
+- [Mozilla Observatory](https://observatory.mozilla.org/), scan your site's security headers
+- [Troy Hunt, Secure headers](https://www.troyhunt.com/shhh-dont-let-your-response-headers/), older but still relevant
+- [Scott Helme, securityheaders.com](https://securityheaders.com/), rate your site
 
 ## Related topics and posts
 
-- [Sessions, JWTs, and cookies — security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
+- [Sessions, JWTs, and cookies, security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
 - [Stateless auth](./2026-04-24-stateless-auth/)
 - [REST API design](./2026-04-24-rest-api-design/)
 - [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [AI Coding Tool Blindspots — Slopsquatting](../topics/ai/coding-tool-blindspots/slopsquatting/) — an emerging supply-chain vector
+- [AI Coding Tool Blindspots, Slopsquatting](../topics/ai/coding-tool-blindspots/slopsquatting/), an emerging supply-chain vector

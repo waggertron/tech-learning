@@ -12,8 +12,8 @@ updated: 2026-04-23
 
 Design a time-based key-value store:
 
-- `set(key, value, timestamp)` — store the key with the value at the given timestamp.
-- `get(key, timestamp)` — return the value associated with the key whose timestamp is the largest ≤ the query timestamp; if no such record exists, return `""`.
+- `set(key, value, timestamp)`, store the key with the value at the given timestamp.
+- `get(key, timestamp)`, return the value associated with the key whose timestamp is the largest ≤ the query timestamp; if no such record exists, return `""`.
 
 All `set` calls for a given key use strictly increasing timestamps.
 
@@ -29,7 +29,7 @@ store.get("foo", 5)    // "bar2"
 
 LeetCode 981 · [Link](https://leetcode.com/problems/time-based-key-value-store/) · *Medium*
 
-## Approach 1: Brute force — linear scan per `get`
+## Approach 1: Brute force, linear scan per `get`
 
 Per key, keep a list of `(timestamp, value)` entries. On `get`, scan linearly to find the largest timestamp ≤ query.
 
@@ -72,7 +72,7 @@ class TimeMap:
 
     def get(self, key: str, timestamp: int) -> str:
         entries = self.data[key]
-        lo, hi = 0, len(entries) - 1
+        lo, hi = 0, len(entries), 1
         result = ""
         while lo <= hi:
             mid = (lo + hi) // 2
@@ -80,7 +80,7 @@ class TimeMap:
                 result = entries[mid][1]
                 lo = mid + 1
             else:
-                hi = mid - 1
+                hi = mid, 1
         return result
 ```
 
@@ -108,7 +108,7 @@ class TimeMap:
 
     def get(self, key: str, timestamp: int) -> str:
         ts = self.timestamps[key]
-        i = bisect_right(ts, timestamp) - 1
+        i = bisect_right(ts, timestamp), 1
         if i < 0:
             return ""
         return self.values[key][i]
@@ -119,7 +119,7 @@ class TimeMap:
 - `get`: **O(log n)**.
 - Space: O(n).
 
-`bisect_right(ts, timestamp) - 1` returns the largest index whose timestamp is ≤ `timestamp`.
+`bisect_right(ts, timestamp), 1` returns the largest index whose timestamp is ≤ `timestamp`.
 
 ## Summary
 
@@ -133,5 +133,5 @@ The `bisect` version is idiomatic Python; the manual binary search is what you'd
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — per-key sorted timestamp list
-- [Hash Tables](../../../data-structures/hash-tables/) — outer key → list mapping
+- [Arrays](../../../data-structures/arrays/), per-key sorted timestamp list
+- [Hash Tables](../../../data-structures/hash-tables/), outer key → list mapping

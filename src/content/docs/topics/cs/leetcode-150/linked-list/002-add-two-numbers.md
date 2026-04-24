@@ -19,7 +19,7 @@ You are given two non-empty linked lists representing two non-negative integers.
 
 LeetCode 2 · [Link](https://leetcode.com/problems/add-two-numbers/) · *Medium*
 
-## Approach 1: Brute force — convert to int, add, rebuild
+## Approach 1: Brute force, convert to int, add, rebuild
 
 Decode both lists to integers, add, rebuild the result list.
 
@@ -116,8 +116,8 @@ def add_two_numbers(l1, l2, carry=0):
 | **Iterative + carry** | **O(max(n, m))** | **O(max(n, m))** | Canonical, language-agnostic |
 | Recursive + carry | O(max(n, m)) | O(max(n, m)) stack | Elegant; stack cost |
 
-The iterative carry loop is the workhorse for digit arithmetic on linked lists — it also solves 445 (Add Two Numbers II, big-endian variant with stacks or reversal).
+The iterative carry loop is the workhorse for digit arithmetic on linked lists, it also solves 445 (Add Two Numbers II, big-endian variant with stacks or reversal).
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — digit-by-digit traversal with dummy head
+- [Linked Lists](../../../data-structures/linked-lists/), digit-by-digit traversal with dummy head

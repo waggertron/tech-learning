@@ -18,7 +18,7 @@ Given an array of meeting time intervals `[start, end]`, determine if a person c
 
 LeetCode 252 (premium) · [Link](https://leetcode.com/problems/meeting-rooms/) · *Easy*
 
-## Approach 1: Brute force — check every pair
+## Approach 1: Brute force, check every pair
 
 Compare every pair of intervals for overlap.
 
@@ -45,7 +45,7 @@ Sort. If any meeting's start is earlier than the previous meeting's end, there's
 def can_attend_meetings(intervals):
     intervals.sort(key=lambda x: x[0])
     for i in range(1, len(intervals)):
-        if intervals[i][0] < intervals[i - 1][1]:
+        if intervals[i][0] < intervals[i, 1][1]:
             return False
     return True
 ```
@@ -91,4 +91,4 @@ Sort + adjacent check is the shortest. Sweep-line generalizes to "how many rooms
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sort + linear scan
+- [Arrays](../../../data-structures/arrays/), sort + linear scan

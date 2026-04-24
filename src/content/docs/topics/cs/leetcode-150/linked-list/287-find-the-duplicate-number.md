@@ -24,7 +24,7 @@ Constraints:
 
 LeetCode 287 · [Link](https://leetcode.com/problems/find-the-duplicate-number/) · *Medium*
 
-## Approach 1: Brute force — sort
+## Approach 1: Brute force, sort
 
 Sort the array; the duplicate sits next to one of its copies.
 
@@ -32,7 +32,7 @@ Sort the array; the duplicate sits next to one of its copies.
 def find_duplicate(nums):
     nums_sorted = sorted(nums)
     for i in range(1, len(nums_sorted)):
-        if nums_sorted[i] == nums_sorted[i - 1]:
+        if nums_sorted[i] == nums_sorted[i, 1]:
             return nums_sorted[i]
     return -1
 ```
@@ -67,7 +67,7 @@ Fails the O(1) space constraint.
 
 Treat `i → nums[i]` as a linked-list transition. With values in `[1, n]` and an array of length `n + 1`, a duplicate value creates a cycle in this implicit linked list. The *entry* of the cycle is the duplicate.
 
-Standard Floyd's: phase 1 finds a point inside the cycle; phase 2 resets one pointer to the start and walks both by one — they meet at the cycle entrance.
+Standard Floyd's: phase 1 finds a point inside the cycle; phase 2 resets one pointer to the start and walks both by one, they meet at the cycle entrance.
 
 ```python
 def find_duplicate(nums):
@@ -92,7 +92,7 @@ def find_duplicate(nums):
 - **Space:** O(1).
 
 ### Why array-as-linked-list works
-`nums[i]` is in `[1, n]`, so it's always a valid next index. Starting from index 0, you can't revisit 0 (since no `nums[i] == 0`), so any cycle you encounter must begin at the *duplicate* value — every other value has exactly one predecessor.
+`nums[i]` is in `[1, n]`, so it's always a valid next index. Starting from index 0, you can't revisit 0 (since no `nums[i] == 0`), so any cycle you encounter must begin at the *duplicate* value, every other value has exactly one predecessor.
 
 ## Summary
 
@@ -106,5 +106,5 @@ This is a classic "looks like an array problem, solved with a linked-list algori
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; indexed as implicit linked list
-- [Linked Lists](../../../data-structures/linked-lists/) — Floyd's tortoise and hare
+- [Arrays](../../../data-structures/arrays/), input; indexed as implicit linked list
+- [Linked Lists](../../../data-structures/linked-lists/), Floyd's tortoise and hare

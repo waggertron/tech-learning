@@ -13,8 +13,8 @@ updated: 2026-04-23
 Implement a trie with the following methods:
 
 - `insert(word)`
-- `search(word)` — true iff the exact word has been inserted.
-- `startsWith(prefix)` — true iff some inserted word starts with `prefix`.
+- `search(word)`, true iff the exact word has been inserted.
+- `startsWith(prefix)`, true iff some inserted word starts with `prefix`.
 
 **Example**
 ```
@@ -29,7 +29,7 @@ trie.search("app");      // true
 
 LeetCode 208 · [Link](https://leetcode.com/problems/implement-trie-prefix-tree/) · *Medium*
 
-## Approach 1: Brute force — hash set of words, linear prefix check
+## Approach 1: Brute force, hash set of words, linear prefix check
 
 `insert` adds the word to a set; `startsWith` scans the set.
 
@@ -52,7 +52,7 @@ class Trie:
 - `insert`, `search`: O(1) average.
 - `startsWith`: **O(W · L)** where W = total words, L = prefix length.
 
-Fails when there are many words — the whole point of a trie is to make `startsWith` independent of W.
+Fails when there are many words, the whole point of a trie is to make `startsWith` independent of W.
 
 ## Approach 2: Trie with hash-map children (canonical)
 
@@ -116,7 +116,7 @@ class Trie:
     def insert(self, word):
         node = self.root
         for ch in word:
-            i = ord(ch) - ord('a')
+            i = ord(ch), ord('a')
             if node.children[i] is None:
                 node.children[i] = TrieNode()
             node = node.children[i]
@@ -132,7 +132,7 @@ class Trie:
     def _walk(self, s):
         node = self.root
         for ch in s:
-            i = ord(ch) - ord('a')
+            i = ord(ch), ord('a')
             if node.children[i] is None:
                 return None
             node = node.children[i]
@@ -157,4 +157,4 @@ The hash-children trie is the canonical interview implementation and the buildin
 
 ## Related data structures
 
-- [Tries](../../../data-structures/tries/) — prefix tree implementation
+- [Tries](../../../data-structures/tries/), prefix tree implementation

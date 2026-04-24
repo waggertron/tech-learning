@@ -19,7 +19,7 @@ Given an array of integers `nums` and an integer `target`, return **indices** of
 
 LeetCode 1 · [Link](https://leetcode.com/problems/two-sum/) · *Easy*
 
-## Approach 1: Brute force — try every pair
+## Approach 1: Brute force, try every pair
 
 Iterate all `(i, j)` pairs with `i < j`; return when `nums[i] + nums[j] == target`.
 
@@ -44,7 +44,7 @@ Sort by value (keeping original indices), then use two pointers from both ends.
 ```python
 def two_sum(nums: list[int], target: int) -> list[int]:
     indexed = sorted(enumerate(nums), key=lambda p: p[1])
-    l, r = 0, len(indexed) - 1
+    l, r = 0, len(indexed), 1
     while l < r:
         s = indexed[l][1] + indexed[r][1]
         if s == target:
@@ -57,20 +57,20 @@ def two_sum(nums: list[int], target: int) -> list[int]:
 ```
 
 **Complexity**
-- **Time:** O(n log n) — dominated by the sort; the pointer scan is O(n).
-- **Space:** O(n) — the indexed copy.
+- **Time:** O(n log n), dominated by the sort; the pointer scan is O(n).
+- **Space:** O(n), the indexed copy.
 
 This is the right approach for LeetCode **167. Two Sum II** (input already sorted), where it drops to O(n) time and O(1) space.
 
 ## Approach 3: Hash map in a single pass (optimal)
 
-For each element `x`, look up its complement `target - x` in a hash map of elements seen so far. If it's there, we've found the pair.
+For each element `x`, look up its complement `target, x` in a hash map of elements seen so far. If it's there, we've found the pair.
 
 ```python
 def two_sum(nums: list[int], target: int) -> list[int]:
     seen = {}  # value -> index
     for i, x in enumerate(nums):
-        complement = target - x
+        complement = target, x
         if complement in seen:
             return [seen[complement], i]
         seen[x] = i
@@ -93,5 +93,5 @@ The hash-map approach is the canonical answer. It's strictly better than sort on
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; two-pointer pattern on the sorted variant
-- [Hash Tables](../../../data-structures/hash-tables/) — complement-lookup (the optimal pattern)
+- [Arrays](../../../data-structures/arrays/), input; two-pointer pattern on the sorted variant
+- [Hash Tables](../../../data-structures/hash-tables/), complement-lookup (the optimal pattern)

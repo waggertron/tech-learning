@@ -20,7 +20,7 @@ Given the root of a binary tree, return the maximum path sum of any non-empty pa
 
 LeetCode 124 · [Link](https://leetcode.com/problems/binary-tree-maximum-path-sum/) · *Hard*
 
-## Approach 1: Brute force — DFS from every node
+## Approach 1: Brute force, DFS from every node
 
 For every node, treat it as the "top" of a path and compute the best path going down either side. Track the max across all nodes.
 
@@ -56,7 +56,7 @@ def max_path_sum(root):
 
 ## Approach 2: Single DFS with side-effect accumulator (optimal)
 
-At each node, compute the max "straight-down gain" the node can contribute to its parent — at most one of its children, since a path is simple. While doing so, also consider the path that *passes through* the current node (using both children) and update a running best.
+At each node, compute the max "straight-down gain" the node can contribute to its parent, at most one of its children, since a path is simple. While doing so, also consider the path that *passes through* the current node (using both children) and update a running best.
 
 ```python
 def max_path_sum(root):
@@ -82,9 +82,9 @@ def max_path_sum(root):
 - **Space:** O(h) recursion.
 
 ### The three moving parts
-1. **Return value** — `node.val + max(left, right)` — the best path *including this node that can continue up to the parent*. Can only use one child.
-2. **Side-effect update** — `node.val + left + right` — the best path *peaking at this node*. Uses both children.
-3. **`max(0, ...)`** — negative subtree contributions are ignored; we pretend that branch isn't there.
+1. **Return value**, `node.val + max(left, right)`, the best path *including this node that can continue up to the parent*. Can only use one child.
+2. **Side-effect update**, `node.val + left + right`, the best path *peaking at this node*. Uses both children.
+3. **`max(0, ...)`**, negative subtree contributions are ignored; we pretend that branch isn't there.
 
 This is the same pattern as problem 543 (Diameter of Binary Tree), refined for weighted paths.
 
@@ -95,8 +95,8 @@ This is the same pattern as problem 543 (Diameter of Binary Tree), refined for w
 | DFS from every node | O(n²) | O(h) |
 | **Single DFS with accumulator** | **O(n)** | **O(h)** |
 
-This pattern — DFS returns a "local gain to parent," side-effect tracks "global best through this node" — is one of the most important templates in tree DP. It also solves problem 543 and 687.
+This pattern, DFS returns a "local gain to parent," side-effect tracks "global best through this node", is one of the most important templates in tree DP. It also solves problem 543 and 687.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — tree DP with side-effect accumulator
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), tree DP with side-effect accumulator

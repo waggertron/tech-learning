@@ -10,12 +10,12 @@ updated: 2026-04-24
 
 ## What fuzz testing is
 
-**Fuzz testing is generating lots of inputs — usually with structure but partly random — and checking that your code either produces the right output or fails safely.** Where an example-based unit test asserts one input gives one output, a fuzz test asserts *a property* holds over many inputs.
+**Fuzz testing is generating lots of inputs, usually with structure but partly random, and checking that your code either produces the right output or fails safely.** Where an example-based unit test asserts one input gives one output, a fuzz test asserts *a property* holds over many inputs.
 
 Two related flavors:
 
-- **Property-based testing** (PBT) — Hypothesis, QuickCheck, fast-check. Inputs are generated from a typed spec; assertions are about invariants.
-- **Coverage-guided fuzzing** (CGF) — AFL, libFuzzer, go-fuzz, Jazzer. Inputs are mutated bytes; the fuzzer learns which mutations reach new code paths and tries more like them.
+- **Property-based testing** (PBT), Hypothesis, QuickCheck, fast-check. Inputs are generated from a typed spec; assertions are about invariants.
+- **Coverage-guided fuzzing** (CGF), AFL, libFuzzer, go-fuzz, Jazzer. Inputs are mutated bytes; the fuzzer learns which mutations reach new code paths and tries more like them.
 
 PBT is the developer-facing tool; CGF is the security-facing tool. Both have earned their place in any serious suite.
 
@@ -51,19 +51,19 @@ def test_sort_preserves_elements(xs):
     assert sorted(xs, reverse=True)[::-1] == sorted(xs)
 ```
 
-Hypothesis generates hundreds of lists — empty, single-element, negative numbers, huge, sorted, reversed. Every invariant holds, or Hypothesis finds a minimal counterexample.
+Hypothesis generates hundreds of lists, empty, single-element, negative numbers, huge, sorted, reversed. Every invariant holds, or Hypothesis finds a minimal counterexample.
 
 ### Useful invariants to look for
 
-- **Round-trip** — `parse(serialize(x)) == x`, or `decrypt(encrypt(x)) == x`.
-- **Idempotence** — `f(f(x)) == f(x)`.
-- **Inverse** — `inverse(f(x)) == x`.
-- **Algebraic properties** — `add(a, b) == add(b, a)` (commutativity), `(a + b) + c == a + (b + c)` (associativity).
-- **Monotonicity** — adding an element never decreases the output.
-- **Invariance** — a property holds no matter the input.
-- **Metamorphic relations** — `f(scale(x, 2)) == scale(f(x), 2)`.
+- **Round-trip**, `parse(serialize(x)) == x`, or `decrypt(encrypt(x)) == x`.
+- **Idempotence**, `f(f(x)) == f(x)`.
+- **Inverse**, `inverse(f(x)) == x`.
+- **Algebraic properties**, `add(a, b) == add(b, a)` (commutativity), `(a + b) + c == a + (b + c)` (associativity).
+- **Monotonicity**, adding an element never decreases the output.
+- **Invariance**, a property holds no matter the input.
+- **Metamorphic relations**, `f(scale(x, 2)) == scale(f(x), 2)`.
 
-### Shrinking — the killer feature
+### Shrinking, the killer feature
 
 When a property fails, PBT tools **shrink** the counterexample to a minimal failing case. You don't get "list of 94 floats of which five are subtly wrong"; you get "[-1.0, 0.0]" with a clear trace.
 
@@ -76,14 +76,14 @@ Hypothesis is exceptional at this. A rule that fails because of integer overflow
 | Python | [Hypothesis](https://hypothesis.readthedocs.io/) |
 | JavaScript / TypeScript | [fast-check](https://fast-check.dev/) |
 | Go | [Gopter](https://github.com/leanovate/gopter), built-in `testing/quick` |
-| Haskell | [QuickCheck](https://hackage.haskell.org/package/QuickCheck) — the original |
+| Haskell | [QuickCheck](https://hackage.haskell.org/package/QuickCheck), the original |
 | Rust | [proptest](https://docs.rs/proptest/) |
 | Erlang | [PropEr](https://proper-testing.github.io/) |
 | Elixir | [StreamData](https://hexdocs.pm/stream_data/) |
-| Ruby | [Rantly](https://github.com/rantly-rb/rantly) — less active |
+| Ruby | [Rantly](https://github.com/rantly-rb/rantly), less active |
 | Java / Kotlin | [jqwik](https://jqwik.net/) |
 
-### Hypothesis example — the real juice
+### Hypothesis example, the real juice
 
 Testing a rate limiter:
 
@@ -160,23 +160,23 @@ Run:
 go test -fuzz=FuzzParse -fuzztime=10m
 ```
 
-The fuzzer maintains a **corpus** — inputs that reached new code paths. Over time the corpus grows to cover most of the reachable state.
+The fuzzer maintains a **corpus**, inputs that reached new code paths. Over time the corpus grows to cover most of the reachable state.
 
 ### Tools
 
-- **[AFL++](https://github.com/AFLplusplus/AFLplusplus)** — the canonical CGF for C/C++.
-- **[libFuzzer](https://llvm.org/docs/LibFuzzer.html)** — built into LLVM, used heavily by Chrome.
-- **[Go's built-in fuzzer](https://go.dev/security/fuzz/)** — since Go 1.18; shown above.
-- **[Atheris](https://github.com/google/atheris)** — libFuzzer bindings for Python.
-- **[Jazzer](https://github.com/CodeIntelligenceTesting/jazzer)** — JVM fuzzer.
-- **[cargo-fuzz](https://rust-fuzz.github.io/book/cargo-fuzz.html)** — Rust via libFuzzer.
+- **[AFL++](https://github.com/AFLplusplus/AFLplusplus)**, the canonical CGF for C/C++.
+- **[libFuzzer](https://llvm.org/docs/LibFuzzer.html)**, built into LLVM, used heavily by Chrome.
+- **[Go's built-in fuzzer](https://go.dev/security/fuzz/)**, since Go 1.18; shown above.
+- **[Atheris](https://github.com/google/atheris)**, libFuzzer bindings for Python.
+- **[Jazzer](https://github.com/CodeIntelligenceTesting/jazzer)**, JVM fuzzer.
+- **[cargo-fuzz](https://rust-fuzz.github.io/book/cargo-fuzz.html)**, Rust via libFuzzer.
 
 ### What CGF finds
 
-- Memory corruption (buffer overflows, use-after-free) — primarily in unsafe languages.
-- Logic crashes — unhandled exceptions, panics, assertions.
-- Parser bugs — inputs that loop forever, recurse too deep, blow the stack.
-- Differential bugs — two implementations that should agree, don't.
+- Memory corruption (buffer overflows, use-after-free), primarily in unsafe languages.
+- Logic crashes, unhandled exceptions, panics, assertions.
+- Parser bugs, inputs that loop forever, recurse too deep, blow the stack.
+- Differential bugs, two implementations that should agree, don't.
 
 ### OSS-Fuzz
 
@@ -198,12 +198,12 @@ Whenever two teams implement the same spec, differential fuzzing finds spec ambi
 
 A 2023+ development: feeding a codebase to an LLM and asking it to generate plausible inputs, which then seed a fuzzer. Google's **OSS-Fuzz-Gen** uses this to bootstrap fuzz harnesses for projects that had none.
 
-The LLM isn't the fuzzer. It's the creator of good seed inputs — the hardest human-effort step in fuzzing. CGF + LLM seeds is the current frontier.
+The LLM isn't the fuzzer. It's the creator of good seed inputs, the hardest human-effort step in fuzzing. CGF + LLM seeds is the current frontier.
 
 ## Common mistakes
 
 - **Testing only happy paths.** The first PBT every project adds should test error handling: "every invalid input either throws a known exception or returns a specific error; nothing else."
-- **Examples disguised as properties.** `@given(st.integers(min_value=0, max_value=10))` — ten inputs isn't a fuzz test. Widen the strategy.
+- **Examples disguised as properties.** `@given(st.integers(min_value=0, max_value=10))`, ten inputs isn't a fuzz test. Widen the strategy.
 - **Time-based properties without a fake clock.** A test that asserts "X happened within 100ms" fails under CI load. Inject the clock.
 - **Ignoring flaky PBT failures.** Hypothesis found a real bug; you retry and the test passes because the generator chose a different input. Save the seed (Hypothesis does this automatically) and reproduce.
 - **Running CGF for 30 seconds.** CGF needs hours to days. Either run it continuously (OSS-Fuzz) or budget CI for serious time.
@@ -212,18 +212,18 @@ The LLM isn't the fuzzer. It's the creator of good seed inputs — the hardest h
 
 ## Integrating into CI
 
-- **PBT** — run as part of the regular test suite. Fast; < 10 seconds for most properties.
-- **Short fuzz runs** — 60 seconds per target in CI, as a regression gate.
-- **Long fuzz runs** — on a nightly or weekly job, hours per target.
-- **Corpus** — check in seeds; keep the evolving corpus in cache or object storage.
+- **PBT**, run as part of the regular test suite. Fast; < 10 seconds for most properties.
+- **Short fuzz runs**, 60 seconds per target in CI, as a regression gate.
+- **Long fuzz runs**, on a nightly or weekly job, hours per target.
+- **Corpus**, check in seeds; keep the evolving corpus in cache or object storage.
 
 ## Complementary, not replacement
 
 Fuzz tests don't replace:
 
-- [Unit tests](../unit-tests/) — specific behaviors you care about.
-- [Component tests](../component-tests/) — UI behavior the fuzzer can't reason about.
-- [Integration tests](../integration-tests/) — cross-component interactions.
+- [Unit tests](../unit-tests/), specific behaviors you care about.
+- [Component tests](../component-tests/), UI behavior the fuzzer can't reason about.
+- [Integration tests](../integration-tests/), cross-component interactions.
 
 A good property complements them. A test suite with only PBT has no specific-example assertions; a test suite with only examples misses edge cases. Layer both.
 
@@ -231,14 +231,14 @@ A good property complements them. A test suite with only PBT has no specific-exa
 
 - [Hypothesis documentation](https://hypothesis.readthedocs.io/)
 - [fast-check documentation](https://fast-check.dev/)
-- [QuickCheck — Koen Claessen, John Hughes, 2000](https://www.cs.tufts.edu/~nr/cs257/archive/john-hughes/quick.pdf) — the paper
-- [OSS-Fuzz](https://github.com/google/oss-fuzz) — Google's continuous fuzzing for OSS
+- [QuickCheck, Koen Claessen, John Hughes, 2000](https://www.cs.tufts.edu/~nr/cs257/archive/john-hughes/quick.pdf), the paper
+- [OSS-Fuzz](https://github.com/google/oss-fuzz), Google's continuous fuzzing for OSS
 - [Go Fuzzing tutorial](https://go.dev/doc/tutorial/fuzz)
-- [Fuzzing Book — Zeller, Gopinath, et al.](https://www.fuzzingbook.org/) — comprehensive free online book
-- [David MacIver — *How to specify it!*](https://www.youtube.com/watch?v=G0NUOst-53U) — John Hughes talk on property design
+- [Fuzzing Book, Zeller, Gopinath, et al.](https://www.fuzzingbook.org/), comprehensive free online book
+- [David MacIver, *How to specify it!*](https://www.youtube.com/watch?v=G0NUOst-53U), John Hughes talk on property design
 
 ## Related topics
 
-- [Unit tests](../unit-tests/) — the example-based counterpart
-- [Integration tests](../integration-tests/) — where differential fuzzing often lives
-- [TDD](../tdd/) — property-based TDD is a fringe but effective practice
+- [Unit tests](../unit-tests/), the example-based counterpart
+- [Integration tests](../integration-tests/), where differential fuzzing often lives
+- [TDD](../tdd/), property-based TDD is a fringe but effective practice

@@ -18,7 +18,7 @@ Given two strings `s1` and `s2`, return `true` if `s2` contains any permutation 
 
 LeetCode 567 · [Link](https://leetcode.com/problems/permutation-in-string/) · *Medium*
 
-## Approach 1: Brute force — generate all permutations of s1
+## Approach 1: Brute force, generate all permutations of s1
 
 Generate every permutation of `s1` and check whether any is a substring of `s2`.
 
@@ -36,7 +36,7 @@ def check_inclusion(s1: str, s2: str) -> bool:
 - **Time:** O(n! · m) where n = `len(s1)`, m = `len(s2)`. Effectively unusable for n > 10.
 - **Space:** O(n) per permutation.
 
-Included to emphasize "permutation substring = anagram substring" — don't actually enumerate permutations.
+Included to emphasize "permutation substring = anagram substring", don't actually enumerate permutations.
 
 ## Approach 2: Check each window of length n for anagram
 
@@ -50,7 +50,7 @@ def check_inclusion(s1: str, s2: str) -> bool:
     if n > m:
         return False
     target = Counter(s1)
-    for i in range(m - n + 1):
+    for i in range(m, n + 1):
         if Counter(s2[i:i + n]) == target:
             return True
     return False
@@ -77,9 +77,9 @@ def check_inclusion(s1: str, s2: str) -> bool:
         return True
     for i in range(n, m):
         window[s2[i]] += 1
-        window[s2[i - n]] -= 1
-        if window[s2[i - n]] == 0:
-            del window[s2[i - n]]
+        window[s2[i, n]] -= 1
+        if window[s2[i, n]] == 0:
+            del window[s2[i, n]]
         if window == target:
             return True
     return False
@@ -100,9 +100,9 @@ Instead of comparing full counters every step, maintain a `matches` integer that
 | Per-window Counter | O(m · n) | O(n) |
 | **Running counter window** | **O(m)** | **O(k)** |
 
-The key realization is "permutation substring ⇔ anagram substring" — once you see it, the fixed-size sliding window falls out.
+The key realization is "permutation substring ⇔ anagram substring", once you see it, the fixed-size sliding window falls out.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input; substring == character sequence
-- [Hash Tables](../../../data-structures/hash-tables/) — frequency counters over s1 and the running window
+- [Strings](../../../data-structures/strings/), input; substring == character sequence
+- [Hash Tables](../../../data-structures/hash-tables/), frequency counters over s1 and the running window

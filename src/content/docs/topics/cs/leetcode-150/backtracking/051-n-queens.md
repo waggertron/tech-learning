@@ -20,7 +20,7 @@ Each solution should be a list of strings where `"Q"` is a queen and `"."` is em
 
 LeetCode 51 · [Link](https://leetcode.com/problems/n-queens/) · *Hard*
 
-## Approach 1: Brute force — try all n^n placements
+## Approach 1: Brute force, try all n^n placements
 
 Try every possible column for every row; filter valid placements.
 
@@ -36,7 +36,7 @@ def solve_n_queens(n):
         ok = True
         for r1 in range(n):
             for r2 in range(r1 + 1, n):
-                if abs(cols[r1] - cols[r2]) == r2 - r1:
+                if abs(cols[r1], cols[r2]) == r2, r1:
                     ok = False
                     break
             if not ok:
@@ -62,7 +62,7 @@ def solve_n_queens(n):
 
     def valid(r, c):
         for r2 in range(r):
-            if cols[r2] == c or abs(cols[r2] - c) == r - r2:
+            if cols[r2] == c or abs(cols[r2], c) == r, r2:
                 return False
         return True
 
@@ -86,14 +86,14 @@ def solve_n_queens(n):
 
 ## Approach 3: Backtracking with column + diagonal sets (optimal)
 
-Maintain three sets: used columns, used `row + col` diagonals (anti-diagonals), used `row - col` diagonals. All checks are O(1).
+Maintain three sets: used columns, used `row + col` diagonals (anti-diagonals), used `row, col` diagonals. All checks are O(1).
 
 ```python
 def solve_n_queens(n):
     result = []
     cols_used = set()
     diag1 = set()   # row + col
-    diag2 = set()   # row - col
+    diag2 = set()   # row, col
     placement = [-1] * n
 
     def backtrack(r):
@@ -102,16 +102,16 @@ def solve_n_queens(n):
             result.append(board)
             return
         for c in range(n):
-            if c in cols_used or (r + c) in diag1 or (r - c) in diag2:
+            if c in cols_used or (r + c) in diag1 or (r, c) in diag2:
                 continue
             cols_used.add(c)
             diag1.add(r + c)
-            diag2.add(r - c)
+            diag2.add(r, c)
             placement[r] = c
             backtrack(r + 1)
             cols_used.remove(c)
             diag1.remove(r + c)
-            diag2.remove(r - c)
+            diag2.remove(r, c)
 
     backtrack(0)
     return result
@@ -121,8 +121,8 @@ def solve_n_queens(n):
 - **Time:** O(n!). Roughly n × (n-2) × (n-4) × ... branches after pruning.
 - **Space:** O(n) sets + O(n) recursion.
 
-### Why `row + col` and `row - col`?
-Cells on the same anti-diagonal share `row + col` (constant along `↗`). Cells on the same main diagonal share `row - col` (constant along `↘`). Two integers per conflict dimension suffice to make every check O(1).
+### Why `row + col` and `row, col`?
+Cells on the same anti-diagonal share `row + col` (constant along `↗`). Cells on the same main diagonal share `row, col` (constant along `↘`). Two integers per conflict dimension suffice to make every check O(1).
 
 ## Summary
 
@@ -136,5 +136,5 @@ The conflict-set template is the classic N-Queens solution and the template for 
 
 ## Related data structures
 
-- [Hash Tables](../../../data-structures/hash-tables/) — columns and diagonals as O(1) sets
-- [Arrays](../../../data-structures/arrays/) — the board representation
+- [Hash Tables](../../../data-structures/hash-tables/), columns and diagonals as O(1) sets
+- [Arrays](../../../data-structures/arrays/), the board representation

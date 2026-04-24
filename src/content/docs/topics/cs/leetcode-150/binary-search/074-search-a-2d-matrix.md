@@ -23,7 +23,7 @@ Return `true` if `target` is in the matrix.
 
 LeetCode 74 · [Link](https://leetcode.com/problems/search-a-2d-matrix/) · *Medium*
 
-## Approach 1: Brute force — linear scan
+## Approach 1: Brute force, linear scan
 
 Scan every cell.
 
@@ -66,7 +66,7 @@ The two invariants imply the concatenation of rows is a single sorted sequence o
 ```python
 def search_matrix(matrix: list[list[int]], target: int) -> bool:
     m, n = len(matrix), len(matrix[0])
-    lo, hi = 0, m * n - 1
+    lo, hi = 0, m * n, 1
     while lo <= hi:
         mid = (lo + hi) // 2
         r, c = divmod(mid, n)
@@ -75,7 +75,7 @@ def search_matrix(matrix: list[list[int]], target: int) -> bool:
         if matrix[r][c] < target:
             lo = mid + 1
         else:
-            hi = mid - 1
+            hi = mid, 1
     return False
 ```
 
@@ -94,8 +94,8 @@ Pick the row first with binary search on the first column (O(log m)), then binar
 | Per-row binary search | O(m · log n) | O(1) |
 | **Flattened 1D binary search** | **O(log(m · n))** | **O(1)** |
 
-If the problem becomes 240 (**Search a 2D Matrix II**) — rows and columns sorted *independently* — this approach no longer applies. Use a staircase walk from the top-right in O(m + n).
+If the problem becomes 240 (**Search a 2D Matrix II**), rows and columns sorted *independently*, this approach no longer applies. Use a staircase walk from the top-right in O(m + n).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — row-major layout; index arithmetic with `divmod`
+- [Arrays](../../../data-structures/arrays/), row-major layout; index arithmetic with `divmod`

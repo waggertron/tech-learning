@@ -46,11 +46,11 @@ One `Application` = one deployable unit. ArgoCD reads the manifests at `path` in
 
 Key fields:
 
-- **`source`** — where the manifests live. Can be plain YAML, Kustomize, Helm, or Jsonnet.
-- **`destination`** — where to apply them. Same cluster as ArgoCD (`kubernetes.default.svc`) or a registered remote cluster.
-- **`syncPolicy.automated.prune`** — delete resources that are no longer in Git.
-- **`syncPolicy.automated.selfHeal`** — revert live changes that drift from Git.
-- **`syncOptions.ServerSideApply=true`** — use Kubernetes server-side apply, which handles field ownership better than the legacy client-side apply.
+- **`source`**, where the manifests live. Can be plain YAML, Kustomize, Helm, or Jsonnet.
+- **`destination`**, where to apply them. Same cluster as ArgoCD (`kubernetes.default.svc`) or a registered remote cluster.
+- **`syncPolicy.automated.prune`**, delete resources that are no longer in Git.
+- **`syncPolicy.automated.selfHeal`**, revert live changes that drift from Git.
+- **`syncOptions.ServerSideApply=true`**, use Kubernetes server-side apply, which handles field ownership better than the legacy client-side apply.
 
 ## How it actually works
 
@@ -75,12 +75,12 @@ Three loops running continuously:
 
 An Application has two axes of status:
 
-- **Sync status** — does the live cluster match the repo? (`Synced` / `OutOfSync`)
-- **Health status** — is the live resource healthy? (`Healthy` / `Progressing` / `Degraded` / `Missing`)
+- **Sync status**, does the live cluster match the repo? (`Synced` / `OutOfSync`)
+- **Health status**, is the live resource healthy? (`Healthy` / `Progressing` / `Degraded` / `Missing`)
 
 A `Deployment` rollout that's mid-flight is `Synced` and `Progressing`. A crashlooping pod is `Synced` and `Degraded`. A pending PVC is `OutOfSync` or `Healthy` depending on whether the PVC exists yet. Learn to read both columns together.
 
-## Sync waves — ordered apply within an Application
+## Sync waves, ordered apply within an Application
 
 Some resources have to exist before others. A `Namespace` before a `Deployment`. A `CRD` before an instance of that CRD. A `Secret` before a `Deployment` that mounts it.
 
@@ -94,15 +94,15 @@ metadata:
 
 Default is `0`. Common pattern:
 
-- `-2` — namespaces, CRDs
-- `-1` — RBAC, service accounts, secrets
-- `0` — workloads (Deployments, StatefulSets)
-- `1` — services, ingresses
-- `2` — external-facing cert/DNS resources
+- `-2`, namespaces, CRDs
+- `-1`, RBAC, service accounts, secrets
+- `0`, workloads (Deployments, StatefulSets)
+- `1`, services, ingresses
+- `2`, external-facing cert/DNS resources
 
-All resources in the same wave apply in parallel. The next wave starts only after the previous wave's resources are **healthy**. A failing health check stalls the sync — which is usually what you want.
+All resources in the same wave apply in parallel. The next wave starts only after the previous wave's resources are **healthy**. A failing health check stalls the sync, which is usually what you want.
 
-## Sync hooks — imperative steps inside a declarative apply
+## Sync hooks, imperative steps inside a declarative apply
 
 For the cases where declarative isn't enough (DB migrations, one-time init), hooks let you run a Job at a specific point:
 
@@ -118,14 +118,14 @@ metadata:
 
 Hook types:
 
-- **`PreSync`** — runs before the main sync. DB migrations, schema changes.
-- **`Sync`** — runs as part of the sync. Rarely useful.
-- **`PostSync`** — runs after sync completes. Smoke tests, cache warmup.
-- **`SyncFail`** — runs if sync fails. Rollback hooks, paging.
+- **`PreSync`**, runs before the main sync. DB migrations, schema changes.
+- **`Sync`**, runs as part of the sync. Rarely useful.
+- **`PostSync`**, runs after sync completes. Smoke tests, cache warmup.
+- **`SyncFail`**, runs if sync fails. Rollback hooks, paging.
 
 `hook-delete-policy` controls when the Job is cleaned up. `HookSucceeded` is almost always what you want.
 
-## App of Apps — the bootstrapping pattern
+## App of Apps, the bootstrapping pattern
 
 Your first `Application` is a pain to create by hand. Your hundredth is impossible. App of Apps solves it:
 
@@ -149,7 +149,7 @@ spec:
 
 The `bootstrap/apps/` directory in the repo contains more `Application` YAMLs. Each of those Applications deploys an actual workload. You apply the root Application once, by hand. It applies all the children. Adding a new workload = `git add bootstrap/apps/new-thing.yaml`; no kubectl.
 
-## ApplicationSet — generators for apps
+## ApplicationSet, generators for apps
 
 App of Apps works but hand-writes each child Application. `ApplicationSet` generates them:
 
@@ -184,7 +184,7 @@ spec:
           prune: true
 ```
 
-Generators include `list`, `git` (directories or files), `cluster`, `matrix`, and `pullRequest`. The PR generator is magic for preview environments — it creates an Application for every open PR.
+Generators include `list`, `git` (directories or files), `cluster`, `matrix`, and `pullRequest`. The PR generator is magic for preview environments, it creates an Application for every open PR.
 
 ## Sync policies
 
@@ -206,12 +206,12 @@ When `true`, drift gets auto-reverted. Someone `kubectl edit`s your Deployment t
 
 A grab-bag:
 
-- **`CreateNamespace=true`** — create the destination namespace if missing.
-- **`ServerSideApply=true`** — use server-side apply. Handles controllers that own fields (HPAs, Karpenter).
-- **`ApplyOutOfSyncOnly=true`** — skip applying unchanged resources. Faster large syncs.
-- **`Replace=true`** — use `kubectl replace` instead of apply. Dangerous — don't use without a reason.
+- **`CreateNamespace=true`**, create the destination namespace if missing.
+- **`ServerSideApply=true`**, use server-side apply. Handles controllers that own fields (HPAs, Karpenter).
+- **`ApplyOutOfSyncOnly=true`**, skip applying unchanged resources. Faster large syncs.
+- **`Replace=true`**, use `kubectl replace` instead of apply. Dangerous, don't use without a reason.
 
-## `ignoreDifferences` — telling ArgoCD to stop complaining
+## `ignoreDifferences`, telling ArgoCD to stop complaining
 
 Some fields change after a resource is created, by other controllers:
 
@@ -237,7 +237,7 @@ spec:
         - '.spec.template.spec.containers[] | select(.name == "sidecar") | .image'
 ```
 
-Use `jsonPointers` for simple fields and `jqPathExpressions` for complex array filtering. Commit each exclusion with a comment explaining *why* — future-you will delete it by mistake otherwise.
+Use `jsonPointers` for simple fields and `jqPathExpressions` for complex array filtering. Commit each exclusion with a comment explaining *why*, future-you will delete it by mistake otherwise.
 
 ## Multi-cluster
 
@@ -251,7 +251,7 @@ Under the hood ArgoCD creates a Secret in the `argocd` namespace storing the kub
 
 A common topology: one "mgmt" cluster runs ArgoCD, Flux, observability, and CI; application workloads run in per-environment clusters.
 
-## `AppProject` — scoping and RBAC
+## `AppProject`, scoping and RBAC
 
 Not every team should be able to deploy to every namespace. `AppProject` scopes:
 
@@ -307,7 +307,7 @@ Rollout replaces Deployment; ArgoCD manages the Rollout resource. Analysis templ
 ## Common footguns
 
 - **`ignoreDifferences` on `data` fields of Secrets.** If a controller mutates a Secret's contents, ArgoCD can't tell by field path alone. Use a `jqPathExpression` or exclude the Secret from the Application entirely.
-- **Default `automated: {}` without `prune: true`.** Silent drift — you delete a resource from the repo, it stays in the cluster, nothing yells.
+- **Default `automated: {}` without `prune: true`.** Silent drift, you delete a resource from the repo, it stays in the cluster, nothing yells.
 - **CRD and CRD-instance in the same Application.** Race condition: the instance applies before the CRD is established. Split into two Applications with sync waves.
 - **Large Helm charts with server-side apply disabled.** Field ownership conflicts everywhere. Turn on `ServerSideApply=true`.
 - **`ApplyOutOfSyncOnly=true` with Helm.** Sometimes Helm values change in a way that affects many resources; this option can skip apparently-unchanged ones. Test carefully.
@@ -332,10 +332,10 @@ When an Application is unhappy:
 - [Sync waves](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/)
 - [Sync hooks](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/)
 - [ApplicationSets](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/)
-- [Argo Rollouts](https://argoproj.github.io/argo-rollouts/) — progressive delivery companion
+- [Argo Rollouts](https://argoproj.github.io/argo-rollouts/), progressive delivery companion
 - [`ignoreDifferences`](https://argo-cd.readthedocs.io/en/stable/user-guide/diffing/)
 
 ## Related topics
 
-- [GitOps](../gitops/) — the philosophy ArgoCD implements
-- [MLOps](../mlops/) — ArgoCD for model deployment
+- [GitOps](../gitops/), the philosophy ArgoCD implements
+- [MLOps](../mlops/), ArgoCD for model deployment

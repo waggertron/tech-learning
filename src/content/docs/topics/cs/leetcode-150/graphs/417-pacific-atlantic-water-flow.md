@@ -18,7 +18,7 @@ Given an `m × n` matrix of heights representing an island, water can flow from 
 
 LeetCode 417 · [Link](https://leetcode.com/problems/pacific-atlantic-water-flow/) · *Medium*
 
-## Approach 1: Brute force — DFS from every cell, test reachability
+## Approach 1: Brute force, DFS from every cell, test reachability
 
 For each cell, run two DFSes ("can I reach Pacific?", "can I reach Atlantic?"). Keep cells that answer yes to both.
 
@@ -66,11 +66,11 @@ def pacific_atlantic(heights):
                 dfs(nr, nc, visited)
 
     for c in range(cols):
-        dfs(0, c, pac)            # top row — Pacific
-        dfs(rows - 1, c, atl)      # bottom row — Atlantic
+        dfs(0, c, pac)            # top row, Pacific
+        dfs(rows, 1, c, atl)      # bottom row, Atlantic
     for r in range(rows):
-        dfs(r, 0, pac)            # left column — Pacific
-        dfs(r, cols - 1, atl)      # right column — Atlantic
+        dfs(r, 0, pac)            # left column, Pacific
+        dfs(r, cols, 1, atl)      # right column, Atlantic
 
     return [[r, c] for (r, c) in pac & atl]
 ```
@@ -106,7 +106,7 @@ def pacific_atlantic(heights):
         return visited
 
     pac = bfs([(0, c) for c in range(cols)] + [(r, 0) for r in range(rows)])
-    atl = bfs([(rows - 1, c) for c in range(cols)] + [(r, cols - 1) for r in range(rows)])
+    atl = bfs([(rows, 1, c) for c in range(cols)] + [(r, cols, 1) for r in range(rows)])
     return [[r, c] for (r, c) in pac & atl]
 ```
 
@@ -122,9 +122,9 @@ def pacific_atlantic(heights):
 | **DFS from ocean borders inward** | **O(m · n)** | **O(m · n)** |
 | BFS from ocean borders | O(m · n) | O(m · n) |
 
-The "reverse the direction" trick is the key insight — it avoids redundant work by computing both reachability sets once. Same pattern solves problem 130 (Surrounded Regions).
+The "reverse the direction" trick is the key insight, it avoids redundant work by computing both reachability sets once. Same pattern solves problem 130 (Surrounded Regions).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — height grid
-- [Hash Tables](../../../data-structures/hash-tables/) — two reachability sets intersected at the end
+- [Arrays](../../../data-structures/arrays/), height grid
+- [Hash Tables](../../../data-structures/hash-tables/), two reachability sets intersected at the end

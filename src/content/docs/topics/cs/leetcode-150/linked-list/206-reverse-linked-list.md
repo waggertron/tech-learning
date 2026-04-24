@@ -19,7 +19,7 @@ Given the head of a singly linked list, reverse the list and return the new head
 
 LeetCode 206 · [Link](https://leetcode.com/problems/reverse-linked-list/) · *Easy*
 
-## Approach 1: Brute force — collect values, rebuild
+## Approach 1: Brute force, collect values, rebuild
 
 Walk the list and store values in an array; build a fresh list in reverse.
 
@@ -68,7 +68,7 @@ def reverse_list(head):
 - **Time:** O(n).
 - **Space:** O(1).
 
-The canonical interview answer. Memorize the three-pointer dance — it underlies many harder linked-list problems (25 Reverse Nodes in k-Group, 92 Reverse Between).
+The canonical interview answer. Memorize the three-pointer dance, it underlies many harder linked-list problems (25 Reverse Nodes in k-Group, 92 Reverse Between).
 
 ## Approach 3: Recursive reversal
 
@@ -88,7 +88,7 @@ def reverse_list(head):
 - **Time:** O(n).
 - **Space:** O(n) recursion depth.
 
-Elegant but uses stack frames proportional to n — can stack-overflow for very long lists (Python's default recursion limit is 1000).
+Elegant but uses stack frames proportional to n, can stack-overflow for very long lists (Python's default recursion limit is 1000).
 
 ## Summary
 
@@ -100,4 +100,4 @@ Elegant but uses stack frames proportional to n — can stack-overflow for very 
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — pointer reversal; foundational pattern
+- [Linked Lists](../../../data-structures/linked-lists/), pointer reversal; foundational pattern

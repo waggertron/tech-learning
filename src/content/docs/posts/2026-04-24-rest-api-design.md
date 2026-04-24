@@ -1,5 +1,5 @@
 ---
-title: REST API design — resources, verbs, and the decisions that actually matter
+title: REST API design, resources, verbs, and the decisions that actually matter
 description: Roy Fielding's 2000 thesis, adjusted for how people actually ship APIs in 2026. Resource modeling, the right verbs, status codes, pagination, versioning, error shapes, and the small number of choices that make or break an API's usability.
 date: 2026-04-24
 tags: [rest, api-design, http, architecture]
@@ -7,11 +7,11 @@ crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-rest-api-design/
 ---
 
-## What REST is — and isn't
+## What REST is, and isn't
 
 **REST** (Representational State Transfer) is a style Roy Fielding defined in his 2000 PhD thesis describing HTTP's core constraints. A true REST API is stateless, cacheable, layered, uniform in interface, and exposes hypermedia (HATEOAS) for driving the client state machine.
 
-Approximately **0% of production APIs** pass all those tests. What people ship is usually "REST-ish" — HTTP + JSON + verbs-on-resources. That's fine. The value of the REST style is the *direction* — resources, uniform interface, statelessness — not perfect adherence to Fielding's thesis.
+Approximately **0% of production APIs** pass all those tests. What people ship is usually "REST-ish", HTTP + JSON + verbs-on-resources. That's fine. The value of the REST style is the *direction*, resources, uniform interface, statelessness, not perfect adherence to Fielding's thesis.
 
 This post is about REST as practiced, with the bits of theory that still pay off.
 
@@ -40,7 +40,7 @@ Three tests for a good resource:
 2. **It has a clear lifecycle.** Creation, updates, deletion.
 3. **Its verbs (CRUD) map reasonably to user operations.**
 
-A `User` is a resource. A `SearchResult` usually isn't. An `Order` is; `SubmitOrder` isn't — it's an action on an `Order`.
+A `User` is a resource. A `SearchResult` usually isn't. An `Order` is; `SubmitOrder` isn't, it's an action on an `Order`.
 
 ### Nested resources
 
@@ -66,7 +66,7 @@ The first is cleaner for REST tooling (OpenAPI understands it; middleware and ca
 
 Avoid mixing: having some actions as verbs (`/cancel`) and some as body fields makes the API surface feel arbitrary.
 
-## The verbs — semantic details
+## The verbs, semantic details
 
 | Verb | Semantics | Idempotent | Safe | Body |
 | --- | --- | --- | --- | --- |
@@ -84,28 +84,28 @@ Avoid mixing: having some actions as verbs (`/cancel`) and some as body fields m
 Two practical consequences:
 
 1. **Clients and CDNs can retry idempotent requests safely.** That's a reason to structure mutations as PUT when you can.
-2. **Don't change state in GET.** This is the single most broken thing — pre-fetching crawlers, HEAD probes, and caches will replay GETs arbitrarily.
+2. **Don't change state in GET.** This is the single most broken thing, pre-fetching crawlers, HEAD probes, and caches will replay GETs arbitrarily.
 
 ## Status codes
 
 The minimum set you must know:
 
-- **200 OK** — success with a body.
-- **201 Created** — POST success with a new resource; include `Location` header.
-- **204 No Content** — success with no body (DELETE, sometimes PATCH).
-- **301 / 302 / 307 / 308** — redirects (308 permanent, 307 temporary, strict method preservation; 301/302 have legacy method-change behavior).
-- **400 Bad Request** — malformed request (bad JSON, missing required field).
-- **401 Unauthorized** — no or bad credentials. (Really means "unauthenticated.")
-- **403 Forbidden** — authenticated but not allowed.
-- **404 Not Found** — resource doesn't exist (or you shouldn't reveal it).
-- **405 Method Not Allowed** — wrong verb on a valid URL.
-- **409 Conflict** — state conflict (illegal state transition, version mismatch, duplicate).
-- **410 Gone** — existed, now permanently removed.
-- **415 Unsupported Media Type** — wrong content-type.
-- **422 Unprocessable Entity** — syntactically valid but semantically wrong (DRF's default for validation errors).
-- **429 Too Many Requests** — rate limit. Include `Retry-After`.
-- **500 Internal Server Error** — generic blow-up. You should rarely see this in logs without a corresponding alert.
-- **503 Service Unavailable** — temporary outage; include `Retry-After` if you can predict it.
+- **200 OK**, success with a body.
+- **201 Created**, POST success with a new resource; include `Location` header.
+- **204 No Content**, success with no body (DELETE, sometimes PATCH).
+- **301 / 302 / 307 / 308**, redirects (308 permanent, 307 temporary, strict method preservation; 301/302 have legacy method-change behavior).
+- **400 Bad Request**, malformed request (bad JSON, missing required field).
+- **401 Unauthorized**, no or bad credentials. (Really means "unauthenticated.")
+- **403 Forbidden**, authenticated but not allowed.
+- **404 Not Found**, resource doesn't exist (or you shouldn't reveal it).
+- **405 Method Not Allowed**, wrong verb on a valid URL.
+- **409 Conflict**, state conflict (illegal state transition, version mismatch, duplicate).
+- **410 Gone**, existed, now permanently removed.
+- **415 Unsupported Media Type**, wrong content-type.
+- **422 Unprocessable Entity**, syntactically valid but semantically wrong (DRF's default for validation errors).
+- **429 Too Many Requests**, rate limit. Include `Retry-After`.
+- **500 Internal Server Error**, generic blow-up. You should rarely see this in logs without a corresponding alert.
+- **503 Service Unavailable**, temporary outage; include `Retry-After` if you can predict it.
 
 Pick codes deliberately. Returning 200 with `{"error": "..."}` breaks every HTTP tool (caching, monitoring, tracing, retries).
 
@@ -158,21 +158,21 @@ Avoid inventing DSLs in query strings (`?q=status:assigned AND clinician_id:17`)
 
 Four options, in descending order of popularity:
 
-### 1. URL path — `/v1/visits`
+### 1. URL path, `/v1/visits`
 
 Simplest, most visible, easiest to route. Every major public API does this.
 
-### 2. Accept header — `Accept: application/vnd.acme.v1+json`
+### 2. Accept header, `Accept: application/vnd.acme.v1+json`
 
 Keeps URLs clean; harder to debug with curl. Purist-favored.
 
-### 3. Custom header — `X-API-Version: 2026-01-01`
+### 3. Custom header, `X-API-Version: 2026-01-01`
 
 Like option 2 but explicit.
 
 ### 4. No versioning, backwards-compatible evolution
 
-Stripe's approach — pin a version at signup (`Stripe-Version: 2026-01-01`), add fields freely (clients ignore unknown), never remove or rename.
+Stripe's approach, pin a version at signup (`Stripe-Version: 2026-01-01`), add fields freely (clients ignore unknown), never remove or rename.
 
 Pick option 1 for most B2B/internal APIs. Pick option 4 if your API evolves fast and you have the discipline to never break clients.
 
@@ -198,7 +198,7 @@ Minimums:
 - When the error is field-specific, name the field.
 - A stable request ID so you can find logs.
 
-[RFC 7807 — Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc7807) is the canonical format if you want a standard:
+[RFC 7807, Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc7807) is the canonical format if you want a standard:
 
 ```json
 {
@@ -210,7 +210,7 @@ Minimums:
 }
 ```
 
-## Authentication and authorization — what REST says
+## Authentication and authorization, what REST says
 
 REST doesn't dictate how to authenticate, but idiomatic choices:
 
@@ -234,7 +234,7 @@ X-RateLimit-Reset: 1714065600
 Retry-After: 30
 ```
 
-Actual rate limiting is its own topic — see the [throttling and rate-limiting post](./2026-04-24-throttling-and-rate-limiting/).
+Actual rate limiting is its own topic, see the [throttling and rate-limiting post](./2026-04-24-throttling-and-rate-limiting/).
 
 ## Idempotency keys
 
@@ -250,9 +250,9 @@ Server stores a hash of the key + request body. Re-sends with the same key retur
 
 Stripe popularized this; most new APIs with "actions that must not be duplicated" (payments, bookings, bulk imports) include it.
 
-## HATEOAS — the part no one uses
+## HATEOAS, the part no one uses
 
-Fielding's purist REST requires hypermedia controls — responses contain links to next actions:
+Fielding's purist REST requires hypermedia controls, responses contain links to next actions:
 
 ```json
 {
@@ -268,7 +268,7 @@ Fielding's purist REST requires hypermedia controls — responses contain links 
 
 In principle, the client could walk only links from a single entry URL, never hard-coding paths. In practice, ~no client does this. HATEOAS comes and goes in fashion; most 2026 APIs ignore it, and their clients work fine.
 
-## OpenAPI — the spec that won
+## OpenAPI, the spec that won
 
 Write your API spec in OpenAPI (Swagger). Generate clients, validate requests, render documentation.
 
@@ -303,10 +303,10 @@ paths:
 
 Spec-first is the modern default: write the OpenAPI doc, generate types on both sides, implement to match. Tools:
 
-- **[drf-spectacular](https://drf-spectacular.readthedocs.io/)** — Django REST Framework's generator.
-- **[FastAPI](https://fastapi.tiangolo.com/)** — spec is generated from code.
-- **[Stoplight](https://stoplight.io/)** / **[Redocly](https://redocly.com/)** — spec-first design tools.
-- **[openapi-typescript](https://openapi-ts.dev/)** — generate TS types from a spec.
+- **[drf-spectacular](https://drf-spectacular.readthedocs.io/)**, Django REST Framework's generator.
+- **[FastAPI](https://fastapi.tiangolo.com/)**, spec is generated from code.
+- **[Stoplight](https://stoplight.io/)** / **[Redocly](https://redocly.com/)**, spec-first design tools.
+- **[openapi-typescript](https://openapi-ts.dev/)**, generate TS types from a spec.
 
 ## Common mistakes
 
@@ -319,7 +319,7 @@ Spec-first is the modern default: write the OpenAPI doc, generate types on both 
 - **No pagination.** "It's fine at launch" becomes a 30-second query in a year.
 - **Breaking changes without a version.** Even a renamed field can break a client. Bump the version.
 - **Timestamps without timezone.** Always use ISO 8601 with `Z` or offset.
-- **Inconsistent casing.** `snake_case` or `camelCase` — pick one in JSON and stick to it.
+- **Inconsistent casing.** `snake_case` or `camelCase`, pick one in JSON and stick to it.
 - **Chatty clients.** Listing requires 50 calls. Support batch or field selection.
 
 ## The small set of decisions that matter
@@ -335,18 +335,18 @@ Four decisions. Every other design question (casing, verbs, status codes) has a 
 
 ## References
 
-- [Roy Fielding — *Architectural Styles and the Design of Network-based Software Architectures*](https://ics.uci.edu/~fielding/pubs/dissertation/top.htm) — the thesis
-- [Microsoft — REST API design guidelines](https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md) — the most concrete public style guide
-- [Google — API Design Guide](https://cloud.google.com/apis/design) — emphasizes resource design
-- [Stripe API reference](https://stripe.com/docs/api) — the de facto best-in-class public API
-- [GitHub REST API](https://docs.github.com/en/rest) — second canonical reference
-- [JSON:API spec](https://jsonapi.org/) — for teams that want stronger conventions
-- [RFC 7807 — Problem Details](https://datatracker.ietf.org/doc/html/rfc7807) — standard error shape
-- [RFC 9110 — HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110) — authoritative modern HTTP reference
+- [Roy Fielding, *Architectural Styles and the Design of Network-based Software Architectures*](https://ics.uci.edu/~fielding/pubs/dissertation/top.htm), the thesis
+- [Microsoft, REST API design guidelines](https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md), the most concrete public style guide
+- [Google, API Design Guide](https://cloud.google.com/apis/design), emphasizes resource design
+- [Stripe API reference](https://stripe.com/docs/api), the de facto best-in-class public API
+- [GitHub REST API](https://docs.github.com/en/rest), second canonical reference
+- [JSON:API spec](https://jsonapi.org/), for teams that want stronger conventions
+- [RFC 7807, Problem Details](https://datatracker.ietf.org/doc/html/rfc7807), standard error shape
+- [RFC 9110, HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110), authoritative modern HTTP reference
 
 ## Related topics and posts
 
 - [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
 - [Stateless auth](./2026-04-24-stateless-auth/)
-- [Sessions, JWTs, and cookies — security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
-- [Django Part 6 — DRF basics](../topics/web/django/part-06-drf-basics/)
+- [Sessions, JWTs, and cookies, security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
+- [Django Part 6, DRF basics](../topics/web/django/part-06-drf-basics/)

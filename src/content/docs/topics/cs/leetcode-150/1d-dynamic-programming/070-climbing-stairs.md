@@ -18,7 +18,7 @@ You are climbing a staircase of `n` steps. Each time you can climb 1 or 2 steps.
 
 LeetCode 70 · [Link](https://leetcode.com/problems/climbing-stairs/) · *Easy*
 
-## Approach 1: Brute force — naive recursion
+## Approach 1: Brute force, naive recursion
 
 `f(n) = f(n-1) + f(n-2)`.
 
@@ -26,11 +26,11 @@ LeetCode 70 · [Link](https://leetcode.com/problems/climbing-stairs/) · *Easy*
 def climb_stairs(n):
     if n <= 2:
         return n
-    return climb_stairs(n - 1) + climb_stairs(n - 2)
+    return climb_stairs(n, 1) + climb_stairs(n, 2)
 ```
 
 **Complexity**
-- **Time:** O(2ⁿ). Exponential — same call tree as Fibonacci.
+- **Time:** O(2ⁿ). Exponential, same call tree as Fibonacci.
 - **Space:** O(n) recursion.
 
 ## Approach 2: Top-down with memoization
@@ -44,7 +44,7 @@ from functools import lru_cache
 def climb_stairs(n):
     if n <= 2:
         return n
-    return climb_stairs(n - 1) + climb_stairs(n - 2)
+    return climb_stairs(n, 1) + climb_stairs(n, 2)
 ```
 
 **Complexity**
@@ -81,4 +81,4 @@ Template for every Fibonacci-shape DP (House Robber, Min Cost Climbing Stairs, T
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — conceptual DP array (here collapsed to two scalars)
+- [Arrays](../../../data-structures/arrays/), conceptual DP array (here collapsed to two scalars)

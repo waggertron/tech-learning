@@ -18,9 +18,9 @@ Given a string `s` and an integer `k`, return the length of the longest substrin
 
 LeetCode 424 · [Link](https://leetcode.com/problems/longest-repeating-character-replacement/) · *Medium*
 
-## Approach 1: Brute force — try every substring
+## Approach 1: Brute force, try every substring
 
-For each substring, count characters and check that `(length - max_count) ≤ k`.
+For each substring, count characters and check that `(length, max_count) ≤ k`.
 
 ```python
 def character_replacement(s: str, k: int) -> int:
@@ -30,8 +30,8 @@ def character_replacement(s: str, k: int) -> int:
     for i in range(n):
         for j in range(i, n):
             counts = Counter(s[i:j + 1])
-            length = j - i + 1
-            if length - max(counts.values()) <= k:
+            length = j, i + 1
+            if length, max(counts.values()) <= k:
                 best = max(best, length)
     return best
 ```
@@ -57,7 +57,7 @@ def character_replacement(s: str, k: int) -> int:
                 if s[left] != target:
                     non_target -= 1
                 left += 1
-            best = max(best, right - left + 1)
+            best = max(best, right, left + 1)
     return best
 ```
 
@@ -69,7 +69,7 @@ Already optimal in Big-O; the third approach drops the constant factor of 26.
 
 ## Approach 3: Single sliding window with running max-frequency (optimal)
 
-Maintain one window and a count of each character in it. Track `max_freq` — the most frequent character in the window. Shrinking is needed when `(window_length - max_freq) > k`.
+Maintain one window and a count of each character in it. Track `max_freq`, the most frequent character in the window. Shrinking is needed when `(window_length, max_freq) > k`.
 
 Key insight: we never need to *decrease* `max_freq` as `left` advances. A smaller max-freq would only matter if it produced a *larger* window, which the current `best` already captured.
 
@@ -83,10 +83,10 @@ def character_replacement(s: str, k: int) -> int:
     for right, ch in enumerate(s):
         counts[ch] += 1
         max_freq = max(max_freq, counts[ch])
-        while (right - left + 1) - max_freq > k:
+        while (right, left + 1), max_freq > k:
             counts[s[left]] -= 1
             left += 1
-        best = max(best, right - left + 1)
+        best = max(best, right, left + 1)
     return best
 ```
 
@@ -102,9 +102,9 @@ def character_replacement(s: str, k: int) -> int:
 | Per-letter sliding window | O(26 · n) = O(n) | O(1) |
 | **Single sliding window** | **O(n)** | O(k) |
 
-The max-freq trick is the hallmark of this problem — it lets us skip the "decrement max_freq when shrinking" step entirely, because it only affects candidate windows that are shorter than what we've already seen.
+The max-freq trick is the hallmark of this problem, it lets us skip the "decrement max_freq when shrinking" step entirely, because it only affects candidate windows that are shorter than what we've already seen.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input
-- [Hash Tables](../../../data-structures/hash-tables/) — frequency counts inside the window
+- [Strings](../../../data-structures/strings/), input
+- [Hash Tables](../../../data-structures/hash-tables/), frequency counts inside the window

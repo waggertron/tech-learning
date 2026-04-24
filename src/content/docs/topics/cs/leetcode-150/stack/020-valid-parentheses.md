@@ -20,7 +20,7 @@ Given a string `s` containing only the characters `'('`, `')'`, `'{'`, `'}'`, `'
 
 LeetCode 20 · [Link](https://leetcode.com/problems/valid-parentheses/) · *Easy*
 
-## Approach 1: Brute force — repeated replacement
+## Approach 1: Brute force, repeated replacement
 
 Repeatedly remove innermost pairs (`"()"`, `"[]"`, `"{}"`) until the string stops changing. Valid iff the final string is empty.
 
@@ -95,6 +95,6 @@ All stack approaches have the same asymptotic complexity; the pair-map version i
 
 ## Related data structures
 
-- [Stacks](../../../data-structures/stacks/) — LIFO matching of open/close delimiters
-- [Strings](../../../data-structures/strings/) — input
-- [Hash Tables](../../../data-structures/hash-tables/) — pair-map for close→open lookup
+- [Stacks](../../../data-structures/stacks/), LIFO matching of open/close delimiters
+- [Strings](../../../data-structures/strings/), input
+- [Hash Tables](../../../data-structures/hash-tables/), pair-map for close→open lookup

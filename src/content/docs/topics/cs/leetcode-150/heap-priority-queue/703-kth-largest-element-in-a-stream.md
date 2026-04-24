@@ -12,8 +12,8 @@ updated: 2026-04-23
 
 Design a class that efficiently returns the `k`-th largest element in a stream of integers:
 
-- `KthLargest(k, nums)` — initialize with a starting stream.
-- `add(val)` — add `val` and return the current kth largest.
+- `KthLargest(k, nums)`, initialize with a starting stream.
+- `add(val)`, add `val` and return the current kth largest.
 
 **Example**
 ```
@@ -27,7 +27,7 @@ add(4)   // 8
 
 LeetCode 703 · [Link](https://leetcode.com/problems/kth-largest-element-in-a-stream/) · *Easy*
 
-## Approach 1: Brute force — sort on every add
+## Approach 1: Brute force, sort on every add
 
 Keep a sorted list; on each add, insert and return `list[-k]`.
 
@@ -51,7 +51,7 @@ class KthLargest:
 
 Maintain a min-heap of all values; the top is the smallest, not what we want. We'd need a max-heap or inverted indexing. Doesn't beat sorting asymptotically.
 
-Skip — the meaningful optimization is Approach 3.
+Skip, the meaningful optimization is Approach 3.
 
 ## Approach 3: Size-K min-heap (optimal)
 
@@ -80,7 +80,7 @@ class KthLargest:
 - Space: O(k).
 
 ### Why min-heap?
-A min-heap of size K holds the K largest seen — the smallest of those K sits at the top and is, by definition, the Kth largest overall. When a new value arrives, it only matters if it's larger than the current min (otherwise it can't be in the top K).
+A min-heap of size K holds the K largest seen, the smallest of those K sits at the top and is, by definition, the Kth largest overall. When a new value arrives, it only matters if it's larger than the current min (otherwise it can't be in the top K).
 
 `heapreplace` pops and pushes in one operation, cheaper than push + pop as separate calls.
 
@@ -91,8 +91,8 @@ A min-heap of size K holds the K largest seen — the smallest of those K sits a
 | Sorted list (insort) | O(n) | O(n) |
 | **Size-K min-heap** | **O(log k)** | **O(k)** |
 
-This is the canonical "top-K streaming" pattern — the same template solves Top K Frequent (347) online and streaming percentile problems.
+This is the canonical "top-K streaming" pattern, the same template solves Top K Frequent (347) online and streaming percentile problems.
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — size-K min-heap for online top-K
+- [Heaps / Priority Queues](../../../data-structures/heaps/), size-K min-heap for online top-K

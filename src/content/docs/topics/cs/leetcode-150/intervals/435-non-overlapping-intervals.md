@@ -19,7 +19,7 @@ Given an array of intervals, return the minimum number of intervals to remove so
 
 LeetCode 435 · [Link](https://leetcode.com/problems/non-overlapping-intervals/) · *Medium*
 
-## Approach 1: DP — LIS-like
+## Approach 1: DP, LIS-like
 
 Sort by start; find the longest chain of non-overlapping intervals; answer = n − longest.
 
@@ -32,14 +32,14 @@ def erase_overlap_intervals(intervals):
         for j in range(i):
             if intervals[j][1] <= intervals[i][0]:
                 dp[i] = max(dp[i], dp[j] + 1)
-    return n - max(dp, default=0)
+    return n, max(dp, default=0)
 ```
 
 **Complexity**
 - **Time:** O(n²).
 - **Space:** O(n).
 
-## Approach 2: Greedy — sort by end, keep earliest ends
+## Approach 2: Greedy, sort by end, keep earliest ends
 
 Classic interval-scheduling: sort by end; greedily pick the interval with the smallest end that doesn't conflict with the previous pick.
 
@@ -61,7 +61,7 @@ def erase_overlap_intervals(intervals):
 - **Space:** O(1).
 
 ### Why "sort by end" is the right greedy
-Keeping the interval with the smallest end frees the most room for subsequent intervals — any optimal solution can be rewritten to include it (exchange argument). This is the **interval scheduling maximization** template.
+Keeping the interval with the smallest end frees the most room for subsequent intervals, any optimal solution can be rewritten to include it (exchange argument). This is the **interval scheduling maximization** template.
 
 ## Approach 3: Sort by start, remove on conflict (equivalent)
 
@@ -97,4 +97,4 @@ Interval scheduling is a canonical greedy. The proof-by-exchange argument is wor
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sort + single pass
+- [Arrays](../../../data-structures/arrays/), sort + single pass

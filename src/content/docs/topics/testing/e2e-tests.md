@@ -1,6 +1,6 @@
 ---
 title: End-to-end tests (E2E)
-description: Real browser, real backend, real user journey. The tier of last resort — slow, flaky, expensive to maintain — but the only tests that catch bugs spanning the whole system. What they're for, how to keep them sane, and why they stay at the top of the pyramid.
+description: Real browser, real backend, real user journey. The tier of last resort, slow, flaky, expensive to maintain, but the only tests that catch bugs spanning the whole system. What they're for, how to keep them sane, and why they stay at the top of the pyramid.
 parent: testing
 tags: [e2e-tests, playwright, cypress, testing]
 status: draft
@@ -12,7 +12,7 @@ updated: 2026-04-24
 
 **An E2E test drives a real browser through a real user flow against a real backend.** Click login, see the dashboard, click a button, see the state change. The test doesn't know or care how the system is implemented; it simulates a user.
 
-Unlike [component tests](../component-tests/), which stub the network, E2E tests hit a full stack — deployed, running, with a real database. They're the highest-fidelity tests you can write, and also the slowest and most brittle.
+Unlike [component tests](../component-tests/), which stub the network, E2E tests hit a full stack, deployed, running, with a real database. They're the highest-fidelity tests you can write, and also the slowest and most brittle.
 
 ## Why E2E tests exist despite the cost
 
@@ -23,17 +23,17 @@ Unlike [component tests](../component-tests/), which stub the network, E2E tests
 
 They are necessary. They are not a replacement for the lower tiers.
 
-## The modern default — Playwright
+## The modern default, Playwright
 
 [Playwright](https://playwright.dev/) has quietly become the new default for web E2E testing. Written by Microsoft, ex-Puppeteer team. Key strengths:
 
 - Single API across Chromium, Firefox, WebKit.
-- Auto-waiting — no manual `sleep` / `waitForSelector` chains.
+- Auto-waiting, no manual `sleep` / `waitForSelector` chains.
 - Built-in test runner with parallelization.
 - Great trace viewer for debugging failures.
 - First-class TypeScript.
 
-### Example — Playwright test
+### Example, Playwright test
 
 ```ts
 // tests/login.spec.ts
@@ -61,7 +61,7 @@ test.describe('Login', () => {
 ```
 
 - Queries by accessible role/label, same as Testing Library. Good E2E tests look like component tests from the outside.
-- Assertions like `expect(page).toHaveURL(...)` and `expect(locator).toBeVisible()` auto-retry until they pass or time out — no manual waits.
+- Assertions like `expect(page).toHaveURL(...)` and `expect(locator).toBeVisible()` auto-retry until they pass or time out, no manual waits.
 
 ## The alternatives
 
@@ -76,7 +76,7 @@ test.describe('Login', () => {
 
 For new projects in 2026, Playwright is the default. Cypress holds on in codebases that started with it.
 
-## Page Object pattern — still relevant
+## Page Object pattern, still relevant
 
 Without structure, E2E tests become copy-paste monsters. The Page Object pattern abstracts UI details behind a class:
 
@@ -109,7 +109,7 @@ When the login form HTML changes, you update one method. Tests stay readable.
 
 Playwright's newer [component model](https://playwright.dev/docs/pom) makes this even lighter. Use it.
 
-## Test data — the hardest part
+## Test data, the hardest part
 
 Three strategies for getting the system into a known state:
 
@@ -132,7 +132,7 @@ test.beforeEach(async ({ request }) => {
 ```
 
 Pros: test-owned data; cleanup easy; no fixture pollution.
-Cons: slower — every test does HTTP setup.
+Cons: slower, every test does HTTP setup.
 
 ### 3. UI-driven setup
 
@@ -143,7 +143,7 @@ Cons: if the "create visit" UI is broken, 80% of tests fail for the same reason.
 
 Most teams use a blend: seed a baseline world, then API-create per-test additions.
 
-## Auth — skip it where you can
+## Auth, skip it where you can
 
 Logging in via the UI once per test is slow. Two patterns:
 
@@ -203,14 +203,14 @@ A 10-minute E2E suite blocks every PR. Ways to reduce:
 
 Target: under 5 minutes for the critical E2E suite; under 20 minutes for the full nightly.
 
-## Flakiness — the tax you pay
+## Flakiness, the tax you pay
 
 E2E tests are flaky. Timing issues, animations, network blips, clock skew. Mitigation:
 
 - **Auto-waiting assertions** (Playwright's defaults).
 - **No manual `sleep`.** Always `expect(...).toBeVisible({ timeout: ... })`.
 - **Disable animations** in test environments (`prefers-reduced-motion`).
-- **Stable selectors** — accessible role/name, not `.btn-3.css-xyz-9`.
+- **Stable selectors**, accessible role/name, not `.btn-3.css-xyz-9`.
 - **Retry twice max.** More than that hides real bugs.
 - **Trace failed runs.** Playwright's trace viewer is gold; upload it as a CI artifact.
 
@@ -233,11 +233,11 @@ Four times the runtime; find the small number of browser-specific bugs. Usually 
 
 ## CI integration
 
-- **Record and upload traces** on failure — `trace: 'retain-on-failure'`.
-- **Upload screenshots** — `screenshot: 'only-on-failure'`.
-- **Video** — useful for hard-to-debug failures; heavy on storage.
+- **Record and upload traces** on failure, `trace: 'retain-on-failure'`.
+- **Upload screenshots**, `screenshot: 'only-on-failure'`.
+- **Video**, useful for hard-to-debug failures; heavy on storage.
 - **Block the merge** on smoke subset; let full E2E warn-only until stable.
-- **Report durations** — a test that gets 50% slower week over week is tomorrow's flake.
+- **Report durations**, a test that gets 50% slower week over week is tomorrow's flake.
 
 ## Staging vs ephemeral environments
 
@@ -257,7 +257,7 @@ Ephemeral is the gold standard; staging is the pragmatic default. Most teams evo
 
 Combine with [Chromatic](https://www.chromatic.com/), [Percy](https://percy.io/), or Playwright's built-in snapshot comparison. Catches "the logo is now misaligned" the way behavior tests can't.
 
-Turn on only for stable UI — visual tests are more flake-prone than behavior tests. Budget for maintenance.
+Turn on only for stable UI, visual tests are more flake-prone than behavior tests. Budget for maintenance.
 
 ## Common mistakes
 
@@ -273,25 +273,25 @@ Turn on only for stable UI — visual tests are more flake-prone than behavior t
 
 For a mid-sized product:
 
-- **Smoke (1–5 tests)** — login + one critical path. Run on every PR and every deploy.
-- **Critical path (10–30 tests)** — checkout, account creation, key workflows. Run on every PR.
-- **Full regression (50–200 tests)** — run nightly on main.
-- **Cross-browser** — smoke + critical path, run weekly or on release candidates.
+- **Smoke (1–5 tests)**, login + one critical path. Run on every PR and every deploy.
+- **Critical path (10–30 tests)**, checkout, account creation, key workflows. Run on every PR.
+- **Full regression (50–200 tests)**, run nightly on main.
+- **Cross-browser**, smoke + critical path, run weekly or on release candidates.
 
 Going above 200 E2E tests is usually a sign you should push coverage down to integration or component tests.
 
 ## References
 
 - [Playwright documentation](https://playwright.dev/docs/intro)
-- [Playwright — Test Generator](https://playwright.dev/docs/codegen-intro) — record-and-replay test creation
+- [Playwright, Test Generator](https://playwright.dev/docs/codegen-intro), record-and-replay test creation
 - [Cypress documentation](https://docs.cypress.io/)
-- [Martin Fowler — TestPyramid](https://martinfowler.com/bliki/TestPyramid.html) — on why the base is wider
-- [Kent C. Dodds — Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications) — modern reshaping of the pyramid
-- [Google testing blog — Just Say No to More End-to-End Tests](https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html) — the skeptical case
+- [Martin Fowler, TestPyramid](https://martinfowler.com/bliki/TestPyramid.html), on why the base is wider
+- [Kent C. Dodds, Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications), modern reshaping of the pyramid
+- [Google testing blog, Just Say No to More End-to-End Tests](https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html), the skeptical case
 
 ## Related topics
 
-- [Smoke tests](../smoke-tests/) — the E2E subset that runs on every deploy
-- [Component tests](../component-tests/) — the tier below, where most UI coverage should live
-- [Integration tests](../integration-tests/) — where backend coverage should live
-- [Unit tests](../unit-tests/) — the base of the pyramid
+- [Smoke tests](../smoke-tests/), the E2E subset that runs on every deploy
+- [Component tests](../component-tests/), the tier below, where most UI coverage should live
+- [Integration tests](../integration-tests/), where backend coverage should live
+- [Unit tests](../unit-tests/), the base of the pyramid

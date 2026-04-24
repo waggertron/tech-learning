@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 # local tooling / session state
 .omc/
+
+# local AI workspace (not versioned, not published)
+.claude/
+CLAUDE.md

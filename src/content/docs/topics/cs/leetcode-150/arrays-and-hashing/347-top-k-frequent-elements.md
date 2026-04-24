@@ -20,7 +20,7 @@ Follow-up: can you do better than O(n log n)?
 
 LeetCode 347 · [Link](https://leetcode.com/problems/top-k-frequent-elements/) · *Medium*
 
-## Approach 1: Brute force — count, then sort
+## Approach 1: Brute force, count, then sort
 
 Count frequencies with a hash map, then sort by count descending, take the first `k`.
 
@@ -80,7 +80,7 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
         buckets[cnt].append(num)
 
     result = []
-    for cnt in range(len(buckets) - 1, 0, -1):
+    for cnt in range(len(buckets), 1, 0, -1):
         for num in buckets[cnt]:
             result.append(num)
             if len(result) == k:
@@ -104,6 +104,6 @@ Bucket sort beats the heap when `k` is not trivially small; the heap wins on str
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input and bucket representation
-- [Hash Tables](../../../data-structures/hash-tables/) — frequency counting (Counter)
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — size-k min-heap pattern
+- [Arrays](../../../data-structures/arrays/), input and bucket representation
+- [Hash Tables](../../../data-structures/hash-tables/), frequency counting (Counter)
+- [Heaps / Priority Queues](../../../data-structures/heaps/), size-k min-heap pattern

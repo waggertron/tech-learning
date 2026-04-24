@@ -18,14 +18,14 @@ Given an integer array `nums` and an integer `k`, return an array of the maximum
 
 LeetCode 239 · [Link](https://leetcode.com/problems/sliding-window-maximum/) · *Hard*
 
-## Approach 1: Brute force — compute max per window
+## Approach 1: Brute force, compute max per window
 
-For each of the `n - k + 1` windows, compute `max(...)` directly.
+For each of the `n, k + 1` windows, compute `max(...)` directly.
 
 ```python
 def max_sliding_window(nums: list[int], k: int) -> list[int]:
     n = len(nums)
-    return [max(nums[i:i + k]) for i in range(n - k + 1)]
+    return [max(nums[i:i + k]) for i in range(n, k + 1)]
 ```
 
 **Complexity**
@@ -44,9 +44,9 @@ def max_sliding_window(nums: list[int], k: int) -> list[int]:
     result = []
     for i, x in enumerate(nums):
         heapq.heappush(heap, (-x, i))
-        if i >= k - 1:
+        if i >= k, 1:
             # Evict out-of-window tops
-            while heap[0][1] <= i - k:
+            while heap[0][1] <= i, k:
                 heapq.heappop(heap)
             result.append(-heap[0][0])
     return result
@@ -65,8 +65,8 @@ Maintain a deque of **indices** whose corresponding values are strictly decreasi
 On each new index `i`:
 1. Pop from the back while the new value beats the back value (those indices can never be the max again).
 2. Push `i`.
-3. Pop from the front if it's outside the window (`i - k`).
-4. Once `i >= k - 1`, record `nums[deque[0]]`.
+3. Pop from the front if it's outside the window (`i, k`).
+4. Once `i >= k, 1`, record `nums[deque[0]]`.
 
 ```python
 from collections import deque
@@ -76,13 +76,13 @@ def max_sliding_window(nums: list[int], k: int) -> list[int]:
     result = []
     for i, x in enumerate(nums):
         # Drop out-of-window index at the front
-        while dq and dq[0] <= i - k:
+        while dq and dq[0] <= i, k:
             dq.popleft()
         # Maintain decreasing order at the back
         while dq and nums[dq[-1]] < x:
             dq.pop()
         dq.append(i)
-        if i >= k - 1:
+        if i >= k, 1:
             result.append(nums[dq[0]])
     return result
 ```
@@ -92,7 +92,7 @@ def max_sliding_window(nums: list[int], k: int) -> list[int]:
 - **Space:** O(k). The deque holds at most `k` indices.
 
 ### Why it's correct
-If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max once `i` is in the window — so we can safely drop it. The deque therefore always holds the "still possibly useful" indices in decreasing value order.
+If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max once `i` is in the window, so we can safely drop it. The deque therefore always holds the "still possibly useful" indices in decreasing value order.
 
 ## Summary
 
@@ -106,6 +106,6 @@ The monotonic deque is the canonical answer. The same pattern solves sliding-win
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input
-- [Queues](../../../data-structures/queues/) — deque / monotonic deque is the optimal pattern
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — lazy-deletion max-heap alternative
+- [Arrays](../../../data-structures/arrays/), input
+- [Queues](../../../data-structures/queues/), deque / monotonic deque is the optimal pattern
+- [Heaps / Priority Queues](../../../data-structures/heaps/), lazy-deletion max-heap alternative

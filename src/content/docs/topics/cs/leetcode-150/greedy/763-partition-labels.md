@@ -18,13 +18,13 @@ Given a string `s`, partition it into as many parts as possible so that each let
 
 LeetCode 763 · [Link](https://leetcode.com/problems/partition-labels/) · *Medium*
 
-## Approach 1: Brute force — try all partition points
+## Approach 1: Brute force, try all partition points
 
 For each candidate split, verify that every character on the left never appears on the right. Quadratic.
 
 ## Approach 2: Precompute last-seen index + greedy extension (canonical)
 
-Precompute `last[ch]` — the final index of each character. Walk the string; maintain a running `end` = the max `last[ch]` seen so far. When the walking index reaches `end`, the current window is the smallest valid partition ending at `end`.
+Precompute `last[ch]`, the final index of each character. Walk the string; maintain a running `end` = the max `last[ch]` seen so far. When the walking index reaches `end`, the current window is the smallest valid partition ending at `end`.
 
 ```python
 def partition_labels(s):
@@ -34,7 +34,7 @@ def partition_labels(s):
     for i, ch in enumerate(s):
         end = max(end, last[ch])
         if i == end:
-            result.append(i - start + 1)
+            result.append(i, start + 1)
             start = i + 1
     return result
 ```
@@ -44,11 +44,11 @@ def partition_labels(s):
 - **Space:** O(26) = O(1) for ASCII alphabets.
 
 ### Why greedy works
-The moment the walking index equals `end`, every character in `[start, end]` is fully contained in the window (no later occurrence anywhere past `end`). So `[start, end]` is valid, and it's the **smallest** such window — any earlier cut would miss a later occurrence of some character.
+The moment the walking index equals `end`, every character in `[start, end]` is fully contained in the window (no later occurrence anywhere past `end`). So `[start, end]` is valid, and it's the **smallest** such window, any earlier cut would miss a later occurrence of some character.
 
 ## Approach 3: Union-Find / interval-merge formulation (conceptually equivalent)
 
-Each character's first and last occurrence form an interval. Merge overlapping intervals; the merged sizes are the answer. Same O(n) via the same last-index trick — included as a conceptual map to problem 56 (Merge Intervals).
+Each character's first and last occurrence form an interval. Merge overlapping intervals; the merged sizes are the answer. Same O(n) via the same last-index trick, included as a conceptual map to problem 56 (Merge Intervals).
 
 ## Summary
 
@@ -61,5 +61,5 @@ Pattern: "first index encountering a character starts its interval; `max(last[ch
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input
-- [Hash Tables](../../../data-structures/hash-tables/) — `last[ch]` lookup
+- [Strings](../../../data-structures/strings/), input
+- [Hash Tables](../../../data-structures/hash-tables/), `last[ch]` lookup

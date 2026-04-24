@@ -45,7 +45,7 @@ def longest_increasing_path(matrix):
 
 ## Approach 2: Memoized DFS (canonical)
 
-Each cell's "longest path starting here" is a property of the cell alone — no backtracking mutation needed because the strictly-increasing constraint prevents cycles. Cache it.
+Each cell's "longest path starting here" is a property of the cell alone, no backtracking mutation needed because the strictly-increasing constraint prevents cycles. Cache it.
 
 ```python
 from functools import lru_cache
@@ -72,7 +72,7 @@ def longest_increasing_path(matrix):
 - **Space:** O(m · n) memo + recursion.
 
 ### Why no "visited" set is needed
-Strict inequality implies no cycles — the sequence of values on any path is strictly increasing, so revisit is impossible. This is what allows the memoization to be sound.
+Strict inequality implies no cycles, the sequence of values on any path is strictly increasing, so revisit is impossible. This is what allows the memoization to be sound.
 
 ## Approach 3: Topological sort + BFS (iterative, avoids recursion)
 
@@ -132,6 +132,6 @@ Memoized DFS is the canonical answer. Topological sort is the "avoid recursion" 
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input grid
-- [Hash Tables](../../../data-structures/hash-tables/) — memo cache (`lru_cache`)
-- [Queues](../../../data-structures/queues/) — topological BFS variant
+- [Arrays](../../../data-structures/arrays/), input grid
+- [Hash Tables](../../../data-structures/hash-tables/), memo cache (`lru_cache`)
+- [Queues](../../../data-structures/queues/), topological BFS variant

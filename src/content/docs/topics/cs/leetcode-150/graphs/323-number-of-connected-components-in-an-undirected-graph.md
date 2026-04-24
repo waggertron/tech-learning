@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given `n` nodes labeled `0` to `n - 1` and a list of undirected edges, return the number of connected components.
+Given `n` nodes labeled `0` to `n, 1` and a list of undirected edges, return the number of connected components.
 
 **Example**
 - `n = 5`, `edges = [[0,1],[1,2],[3,4]]` → `2`
@@ -131,4 +131,4 @@ All optimal. Pick union-find when edges arrive online or you also need "are u an
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — connected components via any of the three
+- [Graphs](../../../data-structures/graphs/), connected components via any of the three

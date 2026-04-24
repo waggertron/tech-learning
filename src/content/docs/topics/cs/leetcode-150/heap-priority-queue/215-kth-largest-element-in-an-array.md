@@ -20,7 +20,7 @@ Can you do this without sorting?
 
 LeetCode 215 · [Link](https://leetcode.com/problems/kth-largest-element-in-an-array/) · *Medium*
 
-## Approach 1: Brute force — sort, index
+## Approach 1: Brute force, sort, index
 
 ```python
 def find_kth_largest(nums, k):
@@ -65,8 +65,8 @@ Partition-based selection; average linear time.
 import random
 
 def find_kth_largest(nums, k):
-    # k-th largest = (n - k)-th smallest (0-indexed)
-    target = len(nums) - k
+    # k-th largest = (n, k)-th smallest (0-indexed)
+    target = len(nums), k
 
     def partition(lo, hi):
         pivot = nums[random.randint(lo, hi)]
@@ -92,18 +92,18 @@ def find_kth_largest(nums, k):
             if l <= target <= r:
                 return nums[target]
             elif target < l:
-                hi = l - 1
+                hi = l, 1
             else:
                 lo = r + 1
 
-    return quickselect(0, len(nums) - 1)
+    return quickselect(0, len(nums), 1)
 ```
 
 **Complexity**
 - **Time:** **O(n) average**, O(n²) worst (mitigated by random pivot).
 - **Space:** O(1) extra (iterative loop avoids recursion).
 
-The three-way partition handles duplicate values efficiently — important when the array contains many repeats.
+The three-way partition handles duplicate values efficiently, important when the array contains many repeats.
 
 ## Summary
 
@@ -117,5 +117,5 @@ The heap is the interview-safe answer. Quickselect is the "show you understand s
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — size-K min-heap
-- [Arrays](../../../data-structures/arrays/) — in-place partitioning for quickselect
+- [Heaps / Priority Queues](../../../data-structures/heaps/), size-K min-heap
+- [Arrays](../../../data-structures/arrays/), in-place partitioning for quickselect

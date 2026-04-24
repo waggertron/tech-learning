@@ -1,6 +1,6 @@
 ---
 title: Tries
-description: Prefix trees — rooted trees where edges are characters and paths spell words. Optimized for prefix queries, autocomplete, and string-set operations.
+description: Prefix trees, rooted trees where edges are characters and paths spell words. Optimized for prefix queries, autocomplete, and string-set operations.
 parent: data-structures
 tags: [data-structures, trie, prefix-tree, interviews]
 status: draft
@@ -21,13 +21,13 @@ Each **trie node** typically stores:
 
 **Insertion** walks down the tree from the root, creating new nodes as needed, and marks the final node as end-of-word. **Search** follows children; if any character isn't a child, the word isn't present. **Prefix search** is the same walk without the end-of-word check.
 
-The crucial property: every operation on a string of length L is **O(L)**. It does *not* depend on the number of words stored. This makes tries competitive even against hash sets when you need prefix queries — hash sets give you O(L) membership but can't answer "starts-with" without scanning every key.
+The crucial property: every operation on a string of length L is **O(L)**. It does *not* depend on the number of words stored. This makes tries competitive even against hash sets when you need prefix queries, hash sets give you O(L) membership but can't answer "starts-with" without scanning every key.
 
 **Space is the tradeoff.** A naive trie uses `26 × |nodes|` pointers in the worst case. Mitigations:
 
-- **Hash-map children** — only allocate children that exist.
-- **Compressed trie (radix tree / Patricia trie)** — collapse chains of single-child nodes into one edge labeled with a substring. Used in IP routing (longest-prefix match) and some string indexes.
-- **DAWG / suffix automaton** — merge suffixes to deduplicate nodes; relevant for large static dictionaries.
+- **Hash-map children**, only allocate children that exist.
+- **Compressed trie (radix tree / Patricia trie)**, collapse chains of single-child nodes into one edge labeled with a substring. Used in IP routing (longest-prefix match) and some string indexes.
+- **DAWG / suffix automaton**, merge suffixes to deduplicate nodes; relevant for large static dictionaries.
 
 **Tries shine on grid word-search problems.** The naive approach of checking every dictionary word against every grid position is too slow. Instead, build a trie of the dictionary and do DFS on the grid, pruning whenever the current path is no longer a prefix in the trie. This is how Word Search II goes from timeouts to sub-second.
 
@@ -38,16 +38,16 @@ The crucial property: every operation on a string of length L is **O(L)**. It do
 | Insert word of length L | O(L) | O(L) (worst case, new path) |
 | Search word of length L | O(L) | O(1) |
 | Prefix search (length L, k matches) | O(L + output) | O(1) + output |
-| Delete | O(L) | — |
+| Delete | O(L) | - |
 | Build from n words, total length T | O(T) | O(T) (naive), less with compression |
 
 ## Common uses in DSA
 
-1. **Autocomplete / typeahead** — prefix query against a dictionary of candidates, often ranked by frequency.
-2. **Spell check and approximate matching** — trie traversal combined with edit-distance DP for "within-k-edits" suggestions.
-3. **Longest common prefix / word-replacement problems** — Longest Common Prefix, Replace Words, Longest Word in Dictionary.
-4. **Word search on a grid** — Word Search II: build trie of dictionary, DFS the board, prune via trie.
-5. **IP routing tables** — longest-prefix match for destination IPs, implemented as a binary/radix trie over the bits of the address.
+1. **Autocomplete / typeahead**, prefix query against a dictionary of candidates, often ranked by frequency.
+2. **Spell check and approximate matching**, trie traversal combined with edit-distance DP for "within-k-edits" suggestions.
+3. **Longest common prefix / word-replacement problems**, Longest Common Prefix, Replace Words, Longest Word in Dictionary.
+4. **Word search on a grid**, Word Search II: build trie of dictionary, DFS the board, prune via trie.
+5. **IP routing tables**, longest-prefix match for destination IPs, implemented as a binary/radix trie over the bits of the address.
 
 **Canonical LeetCode problems:** #208 Implement Trie (Prefix Tree), #211 Design Add and Search Words Data Structure, #212 Word Search II, #648 Replace Words, #720 Longest Word in Dictionary.
 
@@ -132,13 +132,13 @@ Tries drive all 3 NeetCode 150 problems in the Tries category.
 
 **Tries:**
 - [208. Implement Trie (Prefix Tree)](../../leetcode-150/tries/208-implement-trie/)
-- [211. Design Add and Search Words Data Structure](../../leetcode-150/tries/211-design-add-and-search-words-data-structure/) — trie + wildcard DFS
-- [212. Word Search II](../../leetcode-150/tries/212-word-search-ii/) — trie + grid DFS
+- [211. Design Add and Search Words Data Structure](../../leetcode-150/tries/211-design-add-and-search-words-data-structure/), trie + wildcard DFS
+- [212. Word Search II](../../leetcode-150/tries/212-word-search-ii/), trie + grid DFS
 
 ## References
 
-- [Trie — Wikipedia](https://en.wikipedia.org/wiki/Trie)
-- [Radix tree / Patricia trie — Wikipedia](https://en.wikipedia.org/wiki/Radix_tree)
-- [Tries for string processing — cp-algorithms](https://cp-algorithms.com/string/aho_corasick.html)
-- [Implement Trie — LeetCode 208](https://leetcode.com/problems/implement-trie-prefix-tree/)
-- [Word Search II — LeetCode 212 (trie + DFS)](https://leetcode.com/problems/word-search-ii/)
+- [Trie, Wikipedia](https://en.wikipedia.org/wiki/Trie)
+- [Radix tree / Patricia trie, Wikipedia](https://en.wikipedia.org/wiki/Radix_tree)
+- [Tries for string processing, cp-algorithms](https://cp-algorithms.com/string/aho_corasick.html)
+- [Implement Trie, LeetCode 208](https://leetcode.com/problems/implement-trie-prefix-tree/)
+- [Word Search II, LeetCode 212 (trie + DFS)](https://leetcode.com/problems/word-search-ii/)

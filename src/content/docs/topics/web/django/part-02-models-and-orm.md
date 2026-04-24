@@ -1,5 +1,5 @@
 ---
-title: "Part 2 — Models, migrations, and the ORM"
+title: "Part 2, Models, migrations, and the ORM"
 description: Define models as Python classes, let Django generate migrations, and query the database through the ORM. Relationships, Meta options, and the signals that will bite you later.
 parent: django
 tags: [django, orm, models, migrations, beginner]
@@ -56,7 +56,7 @@ Some vocabulary:
 
 - **Field types** are `CharField`, `IntegerField`, `DateTimeField`, `ForeignKey`, `ManyToManyField`, etc. Each maps to a SQL column type.
 - **`null`** is about the database (`NULL` vs `NOT NULL`). **`blank`** is about forms (can the user leave this field empty). These are independent.
-- **`on_delete`** is mandatory on `ForeignKey` — behavior when the target is deleted: `CASCADE`, `PROTECT`, `SET_NULL`, `SET_DEFAULT`, `RESTRICT`, `DO_NOTHING`.
+- **`on_delete`** is mandatory on `ForeignKey`, behavior when the target is deleted: `CASCADE`, `PROTECT`, `SET_NULL`, `SET_DEFAULT`, `RESTRICT`, `DO_NOTHING`.
 - **`related_name`** controls the reverse accessor: `author.posts.all()` instead of the default `author.post_set.all()`. Always set it explicitly.
 
 ## Migrations
@@ -71,7 +71,7 @@ python manage.py sqlmigrate blog 0001   # peek at the SQL without running it
 
 **Check your migrations into git.** They're part of the schema history and must be reproducible in production.
 
-## The ORM — CRUD basics
+## The ORM, CRUD basics
 
 ```python
 # Create
@@ -81,12 +81,12 @@ alice = Author.objects.create(name="Alice", email="alice@example.com")
 Post.objects.filter(published_at__isnull=False)      # QuerySet (lazy)
 Post.objects.get(slug="hello-world")                  # single object; raises DoesNotExist or MultipleObjectsReturned
 
-# Update — row by row
+# Update, row by row
 post = Post.objects.get(pk=1)
 post.title = "Updated"
 post.save()
 
-# Update — in one query (the right way for batch changes)
+# Update, in one query (the right way for batch changes)
 Post.objects.filter(author=alice).update(published_at=now())
 
 # Delete
@@ -99,7 +99,7 @@ Nothing hits the database until you iterate, slice with a step, call `len()`/`li
 
 ```python
 qs = Post.objects.filter(author=alice)   # no SQL
-qs = qs.filter(published_at__isnull=False)  # still no SQL — chained
+qs = qs.filter(published_at__isnull=False)  # still no SQL, chained
 count = qs.count()                        # SQL: SELECT COUNT(*) ...
 for p in qs: ...                          # SQL: SELECT ... (and cached)
 ```
@@ -117,8 +117,8 @@ Post.objects.filter(tags__name__in=["python", "web"])          # join into Tag
 
 ## Relationships
 
-**Forward**: `post.author` — the Author.
-**Reverse**: `author.posts.all()` — all Posts by this Author.
+**Forward**: `post.author`, the Author.
+**Reverse**: `author.posts.all()`, all Posts by this Author.
 
 ```python
 alice.posts.count()
@@ -172,12 +172,12 @@ print(connection.queries[-3:])     # last 3 SQL queries in this session
 
 ## Gotchas
 
-- **`get()` raises `DoesNotExist`** — always wrap in `try/except` or use `filter(...).first()`.
-- **`save()` triggers `pre_save`/`post_save` signals**, but `update()` does not — this is a common footgun when you expect side effects.
+- **`get()` raises `DoesNotExist`**, always wrap in `try/except` or use `filter(...).first()`.
+- **`save()` triggers `pre_save`/`post_save` signals**, but `update()` does not, this is a common footgun when you expect side effects.
 - **`auto_now_add=True` only fires on `create()`**; `auto_now=True` fires on every `save()`.
-- **Integer vs BigInteger primary keys** — Django 3.2+ defaults to `BigAutoField`. Old projects may still be on `AutoField`; mixing `ForeignKey(on_delete=...)` across types breaks.
-- **Migrations with data migrations** — when you need to both change schema AND transform data, write a `RunPython` migration. Keep data migrations idempotent.
-- **Squashing migrations** — over time you'll accumulate hundreds of migrations per app. `python manage.py squashmigrations blog 0001 0150` consolidates them; squash once per release cycle, not continuously.
+- **Integer vs BigInteger primary keys**, Django 3.2+ defaults to `BigAutoField`. Old projects may still be on `AutoField`; mixing `ForeignKey(on_delete=...)` across types breaks.
+- **Migrations with data migrations**, when you need to both change schema AND transform data, write a `RunPython` migration. Keep data migrations idempotent.
+- **Squashing migrations**, over time you'll accumulate hundreds of migrations per app. `python manage.py squashmigrations blog 0001 0150` consolidates them; squash once per release cycle, not continuously.
 
 ## What's next
 
@@ -185,7 +185,7 @@ Part 3 wires models to URLs and templates so you can actually see your data in a
 
 ## References
 
-- [Models — Django docs](https://docs.djangoproject.com/en/5.2/topics/db/models/)
-- [Making queries — Django docs](https://docs.djangoproject.com/en/5.2/topics/db/queries/)
-- [Migrations — Django docs](https://docs.djangoproject.com/en/5.2/topics/migrations/)
+- [Models, Django docs](https://docs.djangoproject.com/en/5.2/topics/db/models/)
+- [Making queries, Django docs](https://docs.djangoproject.com/en/5.2/topics/db/queries/)
+- [Migrations, Django docs](https://docs.djangoproject.com/en/5.2/topics/migrations/)
 - [Model Meta options](https://docs.djangoproject.com/en/5.2/ref/models/options/)

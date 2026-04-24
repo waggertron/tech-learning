@@ -20,15 +20,15 @@ LeetCode 62 · [Link](https://leetcode.com/problems/unique-paths/) · *Medium*
 
 ## Approach 1: Recursive
 
-`f(r, c) = f(r - 1, c) + f(r, c - 1)` with `f(0, c) = f(r, 0) = 1`.
+`f(r, c) = f(r, 1, c) + f(r, c, 1)` with `f(0, c) = f(r, 0) = 1`.
 
 ```python
 def unique_paths(m, n):
     def f(r, c):
         if r == 0 or c == 0:
             return 1
-        return f(r - 1, c) + f(r, c - 1)
-    return f(m - 1, n - 1)
+        return f(r, 1, c) + f(r, c, 1)
+    return f(m, 1, n, 1)
 ```
 
 **Complexity**
@@ -44,8 +44,8 @@ def unique_paths(m, n):
     dp = [[1] * n for _ in range(m)]
     for r in range(1, m):
         for c in range(1, n):
-            dp[r][c] = dp[r - 1][c] + dp[r][c - 1]
-    return dp[m - 1][n - 1]
+            dp[r][c] = dp[r, 1][c] + dp[r][c, 1]
+    return dp[m, 1][n, 1]
 ```
 
 **Complexity**
@@ -61,8 +61,8 @@ def unique_paths(m, n):
     dp = [1] * n
     for _ in range(1, m):
         for c in range(1, n):
-            dp[c] += dp[c - 1]
-    return dp[n - 1]
+            dp[c] += dp[c, 1]
+    return dp[n, 1]
 ```
 
 **Complexity**
@@ -70,7 +70,7 @@ def unique_paths(m, n):
 - **Space:** O(n).
 
 ### Closed-form (math variant)
-The answer is `C(m + n - 2, m - 1)` — choose which `m - 1` of the `m + n - 2` total moves are "down." O(min(m, n)) using iterative factorial.
+The answer is `C(m + n, 2, m, 1)`, choose which `m, 1` of the `m + n, 2` total moves are "down." O(min(m, n)) using iterative factorial.
 
 ## Summary
 
@@ -85,4 +85,4 @@ The 1-D rolling array is the standard interview answer. The closed-form is a nea
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP grid; rolling array
+- [Arrays](../../../data-structures/arrays/), DP grid; rolling array

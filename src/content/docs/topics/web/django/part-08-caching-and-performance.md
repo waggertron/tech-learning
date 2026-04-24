@@ -1,5 +1,5 @@
 ---
-title: "Part 8 — Caching, performance, and the N+1 problem"
+title: "Part 8, Caching, performance, and the N+1 problem"
 description: How to find the slow queries, fix them with `select_related`/`prefetch_related`, add per-view and fragment caching, pick a cache backend, and profile a Django app in production.
 parent: django
 tags: [django, performance, caching, n-plus-1, redis, advanced]
@@ -8,7 +8,7 @@ created: 2026-04-24
 updated: 2026-04-24
 ---
 
-## Rule #1 — measure first
+## Rule #1, measure first
 
 Nearly every "Django is slow" report is actually one of:
 
@@ -97,7 +97,7 @@ class Meta:
 
 Generate a migration and `migrate`.
 
-## Caching — the framework
+## Caching, the framework
 
 `CACHES` in settings configures backends. A typical prod setup:
 
@@ -112,7 +112,7 @@ CACHES = {
 }
 ```
 
-### Low-level cache API — your best tool
+### Low-level cache API, your best tool
 
 ```python
 from django.core.cache import cache
@@ -141,10 +141,10 @@ cache.many({"a": 1, "b": 2}, timeout=60)
 
 Cache invalidation is hard because you have two sources of truth. Strategies:
 
-- **TTL** — accept staleness up to the timeout. Simplest, works for most things.
-- **Manual delete** — `cache.delete("top_posts")` in the write path.
-- **Versioned keys** — include a version in the key; bump the version on write.
-- **Signal-driven** — `post_save` on a model deletes affected cache entries.
+- **TTL**, accept staleness up to the timeout. Simplest, works for most things.
+- **Manual delete**, `cache.delete("top_posts")` in the write path.
+- **Versioned keys**, include a version in the key; bump the version on write.
+- **Signal-driven**, `post_save` on a model deletes affected cache entries.
 
 ### Per-view caching
 
@@ -181,19 +181,19 @@ MIDDLEWARE = [
 CACHE_MIDDLEWARE_SECONDS = 600
 ```
 
-This caches **everything**, which is almost never what you want — authenticated requests get cached per-user and the memory footprint explodes. Use per-view instead.
+This caches **everything**, which is almost never what you want, authenticated requests get cached per-user and the memory footprint explodes. Use per-view instead.
 
 ## Database connection pooling
 
 Django doesn't pool DB connections out of the box. Options:
 
-- **[`CONN_MAX_AGE`](https://docs.djangoproject.com/en/5.2/ref/settings/#conn-max-age)** — persistent connections per worker. `CONN_MAX_AGE = 60` is a safe starting point; infinity (`None`) if your DB handles idle connections well.
-- **PgBouncer** in front of Postgres — dedicated connection pooler, the production default for Django + Postgres at scale.
-- **`CONN_HEALTH_CHECKS = True`** (Django 4.1+) — pings before reuse; prevents stale connections after DB restarts.
+- **[`CONN_MAX_AGE`](https://docs.djangoproject.com/en/5.2/ref/settings/#conn-max-age)**, persistent connections per worker. `CONN_MAX_AGE = 60` is a safe starting point; infinity (`None`) if your DB handles idle connections well.
+- **PgBouncer** in front of Postgres, dedicated connection pooler, the production default for Django + Postgres at scale.
+- **`CONN_HEALTH_CHECKS = True`** (Django 4.1+), pings before reuse; prevents stale connections after DB restarts.
 
 ## Bulk operations
 
-`save()` one at a time does one SQL round-trip per record — deadly for imports and migrations.
+`save()` one at a time does one SQL round-trip per record, deadly for imports and migrations.
 
 ```python
 # Instead of N INSERTs
@@ -236,17 +236,17 @@ def export_posts(request):
 
 ## Profiling in production
 
-- **APM** — Sentry Performance, Datadog, New Relic. One of these is not optional at scale.
-- **`django-silk`** — request profiler with SQL inspection, kept to a whitelist of users.
-- **Structured logging** — log query count per request via a middleware that wraps the view and reports `len(connection.queries)`.
+- **APM**, Sentry Performance, Datadog, New Relic. One of these is not optional at scale.
+- **`django-silk`**, request profiler with SQL inspection, kept to a whitelist of users.
+- **Structured logging**, log query count per request via a middleware that wraps the view and reports `len(connection.queries)`.
 
 ## Gotchas
 
-- **Cache key explosion** — keying by user ID * something-else fills memory fast. Put sensitive keys on separate Redis databases so you can flush one without nuking everything.
-- **"Stale while revalidate"** — Django's cache has no SWR out of the box; for that, look at `django-cachalot` or roll your own.
-- **Denormalization** — sometimes the right fix is to add a column (`Author.post_count`) updated via signals, not to keep running `COUNT(*)`. Trade storage for query time.
-- **Pagination count cost** — `count(*)` over a filtered table is slow on Postgres. Consider cursor pagination (where you paginate by a sortable key like `id` or timestamp) instead of page-number pagination.
-- **Migrations on huge tables** — adding a non-null column with a default rewrites every row. Add as nullable first, backfill in batches, then switch to non-null.
+- **Cache key explosion**, keying by user ID * something-else fills memory fast. Put sensitive keys on separate Redis databases so you can flush one without nuking everything.
+- **"Stale while revalidate"**, Django's cache has no SWR out of the box; for that, look at `django-cachalot` or roll your own.
+- **Denormalization**, sometimes the right fix is to add a column (`Author.post_count`) updated via signals, not to keep running `COUNT(*)`. Trade storage for query time.
+- **Pagination count cost**, `count(*)` over a filtered table is slow on Postgres. Consider cursor pagination (where you paginate by a sortable key like `id` or timestamp) instead of page-number pagination.
+- **Migrations on huge tables**, adding a non-null column with a default rewrites every row. Add as nullable first, backfill in batches, then switch to non-null.
 
 ## What's next
 
@@ -254,9 +254,9 @@ Part 9 covers async views, Channels (WebSockets), and Celery for background work
 
 ## References
 
-- [Cache framework — Django docs](https://docs.djangoproject.com/en/5.2/topics/cache/)
+- [Cache framework, Django docs](https://docs.djangoproject.com/en/5.2/topics/cache/)
 - [Database optimization](https://docs.djangoproject.com/en/5.2/topics/db/optimization/)
 - [django-debug-toolbar](https://django-debug-toolbar.readthedocs.io/)
-- [django-silk](https://github.com/jazzband/django-silk) — production profiler
-- [PgBouncer](https://www.pgbouncer.org/) — Postgres connection pooler
-- [High Performance Django](https://highperformancedjango.com/) — older but still-useful guide
+- [django-silk](https://github.com/jazzband/django-silk), production profiler
+- [PgBouncer](https://www.pgbouncer.org/), Postgres connection pooler
+- [High Performance Django](https://highperformancedjango.com/), older but still-useful guide

@@ -107,5 +107,5 @@ All optimal in time. Backtracking is smallest in recursion-stack terms and is th
 
 ## Related data structures
 
-- [Hash Tables](../../../data-structures/hash-tables/) — digit → letters map
-- [Strings](../../../data-structures/strings/) — output
+- [Hash Tables](../../../data-structures/hash-tables/), digit → letters map
+- [Strings](../../../data-structures/strings/), output

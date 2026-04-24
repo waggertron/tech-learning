@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given the root of a binary tree, return its maximum depth — the number of nodes along the longest path from the root to a leaf.
+Given the root of a binary tree, return its maximum depth, the number of nodes along the longest path from the root to a leaf.
 
 **Example**
 - `root = [3,9,20,null,null,15,7]` → `3`
@@ -98,5 +98,5 @@ All optimal; the one-line recursion is the canonical answer.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — height computation
-- [Queues](../../../data-structures/queues/) — BFS level count
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), height computation
+- [Queues](../../../data-structures/queues/), BFS level count

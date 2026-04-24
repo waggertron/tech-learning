@@ -41,8 +41,8 @@ def multiply(num1, num2):
         return "0"
     n, m = len(num1), len(num2)
     result = [0] * (n + m)
-    for i in range(n - 1, -1, -1):
-        for j in range(m - 1, -1, -1):
+    for i in range(n, 1, -1, -1):
+        for j in range(m, 1, -1, -1):
             prod = int(num1[i]) * int(num2[j])
             p1, p2 = i + j, i + j + 1
             total = prod + result[p2]
@@ -79,5 +79,5 @@ Schoolbook is the canonical interview answer. Know the `i + j + 1` positional in
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — digit strings
-- [Arrays](../../../data-structures/arrays/) — result accumulator
+- [Strings](../../../data-structures/strings/), digit strings
+- [Arrays](../../../data-structures/arrays/), result accumulator

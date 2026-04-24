@@ -18,13 +18,13 @@ Given an array `hand` of integers (each a card value) and an integer `groupSize`
 
 LeetCode 846 · [Link](https://leetcode.com/problems/hand-of-straights/) · *Medium*
 
-## Approach 1: Brute force — try every partitioning
+## Approach 1: Brute force, try every partitioning
 
 Exponential. Skip.
 
 ## Approach 2: Sort + per-smallest consumption (canonical greedy)
 
-Count occurrences. Repeatedly take the smallest remaining value `x`; it must start a run of `x, x+1, ..., x + k - 1` — remove one of each. If at any point you can't, return false.
+Count occurrences. Repeatedly take the smallest remaining value `x`; it must start a run of `x, x+1, ..., x + k, 1`, remove one of each. If at any point you can't, return false.
 
 ```python
 from collections import Counter
@@ -88,9 +88,9 @@ def is_n_straight_hand(hand, group_size):
 | **Sort + per-smallest** | **O(n log n + n · k)** | **O(n)** |
 | Min-heap + lazy | O(n log n + n · k) | O(n) |
 
-The greedy choice — always start the next group from the smallest remaining value — is forced: if the smallest value can't start a group, no group can contain it, so the answer is false.
+The greedy choice, always start the next group from the smallest remaining value, is forced: if the smallest value can't start a group, no group can contain it, so the answer is false.
 
 ## Related data structures
 
-- [Hash Tables](../../../data-structures/hash-tables/) — frequency counts (Counter)
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — smallest-first consumption
+- [Hash Tables](../../../data-structures/hash-tables/), frequency counts (Counter)
+- [Heaps / Priority Queues](../../../data-structures/heaps/), smallest-first consumption

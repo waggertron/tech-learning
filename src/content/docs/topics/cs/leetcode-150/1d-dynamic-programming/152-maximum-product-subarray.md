@@ -19,7 +19,7 @@ Given an integer array `nums`, find the contiguous subarray (at least one elemen
 
 LeetCode 152 · [Link](https://leetcode.com/problems/maximum-product-subarray/) · *Medium*
 
-## Approach 1: Brute force — every subarray
+## Approach 1: Brute force, every subarray
 
 For each `(i, j)`, compute the product.
 
@@ -40,7 +40,7 @@ def max_product(nums):
 
 ## Approach 2: Kadane-like DP tracking max only (WRONG)
 
-First instinct: `dp[i] = max(nums[i], dp[i - 1] * nums[i])`. This fails when a large negative product meets a negative number — the product becomes large positive.
+First instinct: `dp[i] = max(nums[i], dp[i, 1] * nums[i])`. This fails when a large negative product meets a negative number, the product becomes large positive.
 
 Not a valid approach. Included to motivate Approach 3.
 
@@ -79,4 +79,4 @@ The "track both extremes" pattern also solves problem 978 (Longest Turbulent Sub
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — running-max/min scalars
+- [Arrays](../../../data-structures/arrays/), running-max/min scalars

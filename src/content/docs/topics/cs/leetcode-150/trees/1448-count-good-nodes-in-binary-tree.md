@@ -19,7 +19,7 @@ Given a binary tree, a node `X` in the tree is called **good** if, along the pat
 
 LeetCode 1448 · [Link](https://leetcode.com/problems/count-good-nodes-in-binary-tree/) · *Medium*
 
-## Approach 1: Brute force — for each node, walk up to the root
+## Approach 1: Brute force, for each node, walk up to the root
 
 For every node, walk its ancestor chain to verify the invariant.
 
@@ -53,7 +53,7 @@ def good_nodes(root):
 - **Time:** O(n · h). Each of n nodes walks up O(h).
 - **Space:** O(n) for the parent map.
 
-Wasteful — we're re-walking ancestor chains that largely overlap.
+Wasteful, we're re-walking ancestor chains that largely overlap.
 
 ## Approach 2: DFS carrying running max (optimal)
 
@@ -115,4 +115,4 @@ The recursive path-state DFS is the canonical answer and the template for many "
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — path-state DFS pattern
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), path-state DFS pattern

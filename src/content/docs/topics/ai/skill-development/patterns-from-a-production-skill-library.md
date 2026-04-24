@@ -1,6 +1,6 @@
 ---
 title: Patterns from a production skill library
-description: Forty-plus Claude Code skills from a real monorepo, grouped into archetypes — workflow, quality gate, infra-awareness, language-awareness, and utility. What made each one earn its place, and the patterns worth stealing.
+description: Forty-plus Claude Code skills from a real monorepo, grouped into archetypes, workflow, quality gate, infra-awareness, language-awareness, and utility. What made each one earn its place, and the patterns worth stealing.
 parent: skill-development
 tags: [skills, claude-code, patterns, case-study]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-24
 
 ## Why patterns, not a copy-paste list
 
-Every real team's skills are stack-specific. The *patterns* — what shape a skill takes, when it fires, what it does to the model's behavior — generalize. What follows is a set of archetypes derived from a working library of ~40 skills across a monorepo and a handful of personal utility skills. Every skill in the library earned its place by preventing a recurring failure or codifying a non-obvious workflow. The names below are lightly sanitized; the patterns are what matter.
+Every real team's skills are stack-specific. The *patterns*, what shape a skill takes, when it fires, what it does to the model's behavior, generalize. What follows is a set of archetypes derived from a working library of ~40 skills across a monorepo and a handful of personal utility skills. Every skill in the library earned its place by preventing a recurring failure or codifying a non-obvious workflow. The names below are lightly sanitized; the patterns are what matter.
 
 ## What a Claude Code skill actually is
 
@@ -31,15 +31,15 @@ The model reads every skill's `description` on every turn. If the description ma
 
 Five categories cover almost every skill in the library:
 
-1. **Workflow** — the choreography of getting work done (branching, PRs, plans, insights).
-2. **Quality gate** — what to run before committing, merging, or shipping.
-3. **Infra-awareness** — rules for a specific piece of infrastructure (Helm, Terraform, Argo, Redis…).
-4. **Language-awareness** — project-specific conventions for Python, TypeScript, and framework usage.
-5. **Utility** — single-purpose tools (convert, diagram, format).
+1. **Workflow**, the choreography of getting work done (branching, PRs, plans, insights).
+2. **Quality gate**, what to run before committing, merging, or shipping.
+3. **Infra-awareness**, rules for a specific piece of infrastructure (Helm, Terraform, Argo, Redis…).
+4. **Language-awareness**, project-specific conventions for Python, TypeScript, and framework usage.
+5. **Utility**, single-purpose tools (convert, diagram, format).
 
 Each archetype has its own DNA.
 
-## Archetype 1 — Workflow skills
+## Archetype 1, Workflow skills
 
 These encode "how we work" so the model doesn't have to re-learn it every session.
 
@@ -57,19 +57,19 @@ These encode "how we work" so the model doesn't have to re-learn it every sessio
 
 ### Pattern: *the checklist-on-activation*
 
-Workflow skills work best as **imperative checklists**. The model is good at following numbered steps when the steps are specific. An `adversarial-pr-review` skill that says "consider all possible failure modes" fires and produces nothing useful. One that says "go through each of these five historical failure categories — change-of-environment, change-of-format, security, change-of-interface, LLM-response-regression — and give one concrete risk per category" produces a real review.
+Workflow skills work best as **imperative checklists**. The model is good at following numbered steps when the steps are specific. An `adversarial-pr-review` skill that says "consider all possible failure modes" fires and produces nothing useful. One that says "go through each of these five historical failure categories, change-of-environment, change-of-format, security, change-of-interface, LLM-response-regression, and give one concrete risk per category" produces a real review.
 
 ### Pattern: *the atomic-update rule*
 
 `pr-feedback-propagation` exists because the most common post-review bug is: "fixed the code, forgot the plan doc still says the old design." The skill's job is to make "change X" mean "change all artifacts that describe X." This generalizes: anytime a piece of information lives in multiple places, a skill that fires on "I'm changing X" is worth the investment.
 
-## Archetype 2 — Quality-gate skills
+## Archetype 2, Quality-gate skills
 
 | Skill | Purpose |
 | --- | --- |
 | `fast-checks` | Run all fast checks (lint, typecheck, unit, component) across the repo. No Docker. Pre-commit confidence. |
 | `pre-commit-quality-gates` | Verify lint, format, and tests pass before committing |
-| `explicit-version-upgrades` | When bumping any dependency version — exact pins, PR justification, verification after |
+| `explicit-version-upgrades` | When bumping any dependency version, exact pins, PR justification, verification after |
 | `dependency-management` | Install / update / remove deps consistently in a polyglot monorepo |
 | `e2e-testing-workflow` | Run E2E, set up auth fixtures, debug failures |
 
@@ -81,33 +81,33 @@ The fast/slow split (`fast-checks` vs `e2e-testing-workflow`) shows up everywher
 
 `explicit-version-upgrades` enforces that every dependency bump comes with a written reason. This seems bureaucratic until the third time a silent `patch` bump breaks production. The skill shape: "when you detect a change to `package.json` or `pyproject.toml`, require an explanation string in the PR body before proceeding."
 
-## Archetype 3 — Infra-awareness skills
+## Archetype 3, Infra-awareness skills
 
 This was the biggest category in the library. Every piece of infrastructure with non-obvious rules got its own skill:
 
-- `argocd-awareness` — sync-wave ordering, FQDN addressing, pre-merge validation
-- `docker-aware` — multi-stage build conventions, container cleanup
-- `github-actions-workflows` — self-hosted runner conventions, composite actions, change detection
-- `gitops-awareness` — environment promotion flow, no manual cluster drift
-- `helm-awareness` — values layering, sync-wave ordering, multi-environment
-- `karpenter-awareness` — NodePool / EC2NodeClass, Spot strategies
-- `keda-awareness` — ScaledObjects, HPA conflict prevention, scale-to-zero
-- `kubernetes-awareness` — namespace isolation, RBAC, cost management
-- `mongodb-awareness` — dual-topology (managed vs in-cluster), connection patterns
-- `redis-awareness` — worker queues, sync-policy ignoreDifferences pitfalls
-- `rds-awareness` — migration safety, connection patterns, cost-optimized config
-- `self-hosted-runner` — caching and disk pruning on a 50GB runner
-- `terraform-awareness` — module patterns, state management, two-repo architecture
-- `nx-monorepo-awareness` — the five wiring layers when moving a project
-- `github-actions-workflows` — workflow conventions for this repo's CI
+- `argocd-awareness`, sync-wave ordering, FQDN addressing, pre-merge validation
+- `docker-aware`, multi-stage build conventions, container cleanup
+- `github-actions-workflows`, self-hosted runner conventions, composite actions, change detection
+- `gitops-awareness`, environment promotion flow, no manual cluster drift
+- `helm-awareness`, values layering, sync-wave ordering, multi-environment
+- `karpenter-awareness`, NodePool / EC2NodeClass, Spot strategies
+- `keda-awareness`, ScaledObjects, HPA conflict prevention, scale-to-zero
+- `kubernetes-awareness`, namespace isolation, RBAC, cost management
+- `mongodb-awareness`, dual-topology (managed vs in-cluster), connection patterns
+- `redis-awareness`, worker queues, sync-policy ignoreDifferences pitfalls
+- `rds-awareness`, migration safety, connection patterns, cost-optimized config
+- `self-hosted-runner`, caching and disk pruning on a 50GB runner
+- `terraform-awareness`, module patterns, state management, two-repo architecture
+- `nx-monorepo-awareness`, the five wiring layers when moving a project
+- `github-actions-workflows`, workflow conventions for this repo's CI
 
 ### Pattern: *one skill per "land mine"*
 
-Infra-awareness skills exist because a specific operation — "rename an Nx project," "add a KEDA scaler," "modify ignoreDifferences in a sync policy" — has *one correct path and many wrong ones*. The skill is the correct path, written down, activated by keywords in the task.
+Infra-awareness skills exist because a specific operation, "rename an Nx project," "add a KEDA scaler," "modify ignoreDifferences in a sync policy", has *one correct path and many wrong ones*. The skill is the correct path, written down, activated by keywords in the task.
 
 Descriptions follow a template:
 
-> *Use when modifying [artifact type] — enforces [specific rules] and prevents [specific failure mode].*
+> *Use when modifying [artifact type], enforces [specific rules] and prevents [specific failure mode].*
 
 The "prevents" clause is load-bearing. It's what keeps the description from being vague. "Enforces best practices" triggers nothing; "prevents cascading sync failures by enforcing dependency ordering, FQDN addressing, and pre-merge validation" triggers when you edit an ArgoCD Application.
 
@@ -115,24 +115,24 @@ The "prevents" clause is load-bearing. It's what keeps the description from bein
 
 Infra skills lean toward **explaining the system** rather than **dictating every action**. `helm-awareness` doesn't say "use this template." It explains values layering, sync-wave ordering, and the four-chart / ten-environment topology, and trusts the model to apply that context. This generalizes: skills that teach *why* outlive skills that dictate *what*, because the "what" changes every quarter.
 
-## Archetype 4 — Language-awareness skills
+## Archetype 4, Language-awareness skills
 
 | Skill | Scope |
 | --- | --- |
 | `python-awareness` | FastAPI, Pydantic, uv, Ruff, Pyrefly, type safety conventions |
 | `typescript-awareness` | Next.js, React, Biome, npm workspaces, type safety |
-| `typing-best-practices` | Cross-language — when to narrow, when to widen, how to avoid `any` / `Any` |
+| `typing-best-practices` | Cross-language, when to narrow, when to widen, how to avoid `any` / `Any` |
 | `lit-web-components` | Event propagation, `this` binding, composition patterns |
 
 ### Pattern: *tool-choice is part of the skill*
 
-The Python skill encodes `uv` over `pip`, `Ruff` over `black` + `flake8`, `Pyrefly` as the type checker. These aren't "Python skills" — they're "Python-as-we-write-it-here" skills. A model that reads `python-awareness` stops suggesting `virtualenv` and `pipenv`; one that doesn't keeps fighting the project's toolchain.
+The Python skill encodes `uv` over `pip`, `Ruff` over `black` + `flake8`, `Pyrefly` as the type checker. These aren't "Python skills", they're "Python-as-we-write-it-here" skills. A model that reads `python-awareness` stops suggesting `virtualenv` and `pipenv`; one that doesn't keeps fighting the project's toolchain.
 
 ### Pattern: *one cross-cutting skill for fundamentals*
 
-`typing-best-practices` covers both Python and TypeScript because the underlying instincts — narrow types at boundaries, avoid escape hatches, prefer discriminated unions — are language-agnostic. Splitting it into two language-specific skills would duplicate the teaching; keeping it cross-cutting means the principles fire regardless of which file the model is editing.
+`typing-best-practices` covers both Python and TypeScript because the underlying instincts, narrow types at boundaries, avoid escape hatches, prefer discriminated unions, are language-agnostic. Splitting it into two language-specific skills would duplicate the teaching; keeping it cross-cutting means the principles fire regardless of which file the model is editing.
 
-## Archetype 5 — Utility skills
+## Archetype 5, Utility skills
 
 The smallest category, but high-leverage:
 
@@ -185,14 +185,14 @@ Every skill in the library can answer three questions:
 2. **What does it activate on?** Specific files, specific task phrases, specific commands. If the trigger is "when writing code," it's too broad.
 3. **What's the contract at the end?** The skill either produces a specific artifact (a PR review, an ADR, a diagram) or leaves the repo in a specific verified state (tests green, ADR updated, plan closed). "Give better advice" isn't a contract.
 
-Skills that can't answer all three get deleted. This is a maintenance discipline, not a one-time audit — a library of 40 skills has about 3-5 rot and need pruning per quarter in a moving codebase.
+Skills that can't answer all three get deleted. This is a maintenance discipline, not a one-time audit, a library of 40 skills has about 3-5 rot and need pruning per quarter in a moving codebase.
 
 ## The skill-file lifecycle
 
-- **Day 0** — a recurring failure or workflow friction gets called out.
-- **Day 1** — a skill is drafted from the last PR where the problem happened. Description cites the failure mode.
-- **Week 2** — the skill fires in anger. You see whether it actually changes model behavior. About a third of skills don't, and get reworked.
-- **Month 3** — the underlying rule changes (new framework version, new convention). The skill either gets updated or starts to drift. Skills that drift more than two updates behind get deleted.
+- **Day 0**, a recurring failure or workflow friction gets called out.
+- **Day 1**, a skill is drafted from the last PR where the problem happened. Description cites the failure mode.
+- **Week 2**, the skill fires in anger. You see whether it actually changes model behavior. About a third of skills don't, and get reworked.
+- **Month 3**, the underlying rule changes (new framework version, new convention). The skill either gets updated or starts to drift. Skills that drift more than two updates behind get deleted.
 
 Treat skills as code. Review them in PRs. Grep for stale references. Delete the ones that stop firing.
 
@@ -208,24 +208,24 @@ Treat skills as code. Review them in PRs. Grep for stale references. Delete the 
 
 If you're building a repo's first skill library, start with these five archetypes as concrete skills and grow from there:
 
-1. **`fast-checks`** — one skill that runs every fast quality gate in the repo. Name it, document what it covers, wire it into pre-commit.
-2. **`pre-commit-quality-gates`** — the "are we ready to commit?" checklist. Different from `fast-checks` — this one is the narrative flow, not the commands.
-3. **`feature-branch-workflow`** — how to start a task and prep a PR. Low controversy, high leverage.
-4. **`adversarial-pr-review`** — attack your own PR before anyone else does. Cheaper to find problems here than in review.
+1. **`fast-checks`**, one skill that runs every fast quality gate in the repo. Name it, document what it covers, wire it into pre-commit.
+2. **`pre-commit-quality-gates`**, the "are we ready to commit?" checklist. Different from `fast-checks`, this one is the narrative flow, not the commands.
+3. **`feature-branch-workflow`**, how to start a task and prep a PR. Low controversy, high leverage.
+4. **`adversarial-pr-review`**, attack your own PR before anyone else does. Cheaper to find problems here than in review.
 5. **One infra-awareness skill** for the single piece of infra in your stack with the most footguns (Helm, Argo, Terraform, Kubernetes, whatever). Start with one; add more as the pain teaches you which.
 
 That's five skills. They fit in a single session's context, they cover 80% of where an AI coding agent's defaults go wrong, and they leave plenty of room to grow a library that looks like the one above.
 
 ## The bigger observation
 
-Skills aren't configuration. They're a **specific shape of documentation** — one the model reads, routes on, and executes. Teams that already write good internal READMEs have most of the raw material; the transformation is structural: break the knowledge into triggered units, write descriptions that match how tasks actually arrive, and prune ruthlessly. The result is a project-specific agent that makes fewer of the usual mistakes.
+Skills aren't configuration. They're a **specific shape of documentation**, one the model reads, routes on, and executes. Teams that already write good internal READMEs have most of the raw material; the transformation is structural: break the knowledge into triggered units, write descriptions that match how tasks actually arrive, and prune ruthlessly. The result is a project-specific agent that makes fewer of the usual mistakes.
 
 A library of forty skills is not the goal. A library where every entry earns its place every month is.
 
 ## Related topics
 
-- [AI Skill Development — overview](./) — the parent topic
-- [Writing a first skill](./writing-a-first-skill/) — the minimal viable skill
-- [Frontmatter and discovery](./frontmatter-and-discovery/) — how descriptions become routing signals
-- [Skill vs tool vs agent](./skill-vs-tool-vs-agent/) — which knowledge goes into which unit
-- [AI Coding Tool Blindspots](../coding-tool-blindspots/) — the failure modes skills are written against
+- [AI Skill Development, overview](./), the parent topic
+- [Writing a first skill](./writing-a-first-skill/), the minimal viable skill
+- [Frontmatter and discovery](./frontmatter-and-discovery/), how descriptions become routing signals
+- [Skill vs tool vs agent](./skill-vs-tool-vs-agent/), which knowledge goes into which unit
+- [AI Coding Tool Blindspots](../coding-tool-blindspots/), the failure modes skills are written against

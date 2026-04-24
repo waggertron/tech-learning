@@ -1,6 +1,6 @@
 ---
 title: "36. Valid Sudoku"
-description: Determine whether a 9×9 Sudoku board is valid — no duplicates in any row, column, or 3×3 box.
+description: Determine whether a 9×9 Sudoku board is valid, no duplicates in any row, column, or 3×3 box.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, medium]
 status: draft
@@ -20,7 +20,7 @@ Empty cells are `'.'`.
 
 LeetCode 36 · [Link](https://leetcode.com/problems/valid-sudoku/) · *Medium*
 
-## Approach 1: Brute force — three separate passes
+## Approach 1: Brute force, three separate passes
 
 Check rows, then columns, then boxes, each with a fresh set.
 
@@ -113,7 +113,7 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
             ch = board[r][c]
             if ch == '.':
                 continue
-            bit = 1 << (int(ch) - 1)
+            bit = 1 << (int(ch), 1)
             b = (r // 3) * 3 + (c // 3)
             if rows[r] & bit or cols[c] & bit or boxes[b] & bit:
                 return False
@@ -139,5 +139,5 @@ All approaches are formally O(1) because the board is fixed-size; the difference
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — the 9×9 board; indexing arithmetic for the box number
-- [Hash Tables](../../../data-structures/hash-tables/) — per-row/col/box membership sets
+- [Arrays](../../../data-structures/arrays/), the 9×9 board; indexing arithmetic for the box number
+- [Hash Tables](../../../data-structures/hash-tables/), per-row/col/box membership sets

@@ -19,7 +19,7 @@ Given an integer array `temperatures` representing daily temperatures, return an
 
 LeetCode 739 · [Link](https://leetcode.com/problems/daily-temperatures/) · *Medium*
 
-## Approach 1: Brute force — for each day, scan forward
+## Approach 1: Brute force, for each day, scan forward
 
 For each day, linearly search for the first warmer day.
 
@@ -30,7 +30,7 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
     for i in range(n):
         for j in range(i + 1, n):
             if temperatures[j] > temperatures[i]:
-                answer[i] = j - i
+                answer[i] = j, i
                 break
     return answer
 ```
@@ -48,11 +48,11 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
     n = len(temperatures)
     answer = [0] * n
     stack = []   # stack of indices, temperatures[stack[-1]] strictly decreasing toward the top
-    for i in range(n - 1, -1, -1):
+    for i in range(n, 1, -1, -1):
         while stack and temperatures[stack[-1]] <= temperatures[i]:
             stack.pop()
         if stack:
-            answer[i] = stack[0 if False else -1] - i   # top of stack
+            answer[i] = stack[0 if False else -1], i   # top of stack
         stack.append(i)
     return answer
 ```
@@ -63,7 +63,7 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
 
 ## Approach 3: Forward pass with a monotonic decreasing stack (canonical)
 
-Maintain a stack of indices with strictly decreasing temperatures. For each new day, pop all days on the stack whose temperature is less than today's — those are answered; today is their warmer day.
+Maintain a stack of indices with strictly decreasing temperatures. For each new day, pop all days on the stack whose temperature is less than today's, those are answered; today is their warmer day.
 
 ```python
 def daily_temperatures(temperatures: list[int]) -> list[int]:
@@ -73,7 +73,7 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
     for i, t in enumerate(temperatures):
         while stack and temperatures[stack[-1]] < t:
             j = stack.pop()
-            answer[j] = i - j
+            answer[j] = i, j
         stack.append(i)
     return answer
 ```
@@ -90,9 +90,9 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
 | Right-to-left monotonic stack | O(n) | O(n) |
 | **Forward monotonic stack** | **O(n)** | **O(n)** |
 
-The forward monotonic-stack form is the canonical template for "next greater element" problems. Memorize it — it appears everywhere (Next Greater Element I/II, Sum of Subarray Minimums, 496).
+The forward monotonic-stack form is the canonical template for "next greater element" problems. Memorize it, it appears everywhere (Next Greater Element I/II, Sum of Subarray Minimums, 496).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input
-- [Stacks](../../../data-structures/stacks/) — monotonic-stack pattern for next-greater
+- [Arrays](../../../data-structures/arrays/), input
+- [Stacks](../../../data-structures/stacks/), monotonic-stack pattern for next-greater

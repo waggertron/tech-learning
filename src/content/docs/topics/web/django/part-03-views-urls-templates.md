@@ -1,5 +1,5 @@
 ---
-title: "Part 3 — Views, URLs, and templates"
+title: "Part 3, Views, URLs, and templates"
 description: Function-based vs class-based views, URL routing with `path()`/`re_path()`/`include()`, the Django template language, and how to render data cleanly.
 parent: django
 tags: [django, views, urls, templates, beginner]
@@ -12,7 +12,7 @@ updated: 2026-04-24
 
 Django accepts any callable `(request, *args, **kwargs) -> HttpResponse`.
 
-**Function-based views** (FBVs) — the simpler form:
+**Function-based views** (FBVs), the simpler form:
 
 ```python
 from django.http import HttpResponseNotFound
@@ -28,7 +28,7 @@ def post_detail(request, slug):
     return render(request, "blog/post_detail.html", {"post": post})
 ```
 
-**Class-based views** (CBVs) — composable via mixins, concise for CRUD:
+**Class-based views** (CBVs), composable via mixins, concise for CRUD:
 
 ```python
 from django.views.generic import DetailView, ListView
@@ -84,7 +84,7 @@ urlpatterns = [
 ]
 ```
 
-**Path converters** — built in: `str` (default), `int`, `slug`, `uuid`, `path`. You can write custom ones for business types like ISBN.
+**Path converters**, built in: `str` (default), `int`, `slug`, `uuid`, `path`. You can write custom ones for business types like ISBN.
 
 **Reversing URLs**
 
@@ -101,11 +101,11 @@ In templates:
 <a href="{% url 'blog:detail' slug=post.slug %}">{{ post.title }}</a>
 ```
 
-**Why namespaces (`app_name`) matter** — two apps can both name a URL `"detail"`. Without namespacing, `reverse("detail")` is ambiguous.
+**Why namespaces (`app_name`) matter**, two apps can both name a URL `"detail"`. Without namespacing, `reverse("detail")` is ambiguous.
 
 ## The template language
 
-Django's template language is intentionally weak — no arbitrary Python, to keep logic in views.
+Django's template language is intentionally weak, no arbitrary Python, to keep logic in views.
 
 ```django
 {# blog/templates/blog/post_list.html #}
@@ -135,8 +135,8 @@ Django's template language is intentionally weak — no arbitrary Python, to kee
 
 ### The two syntaxes
 
-- **`{{ variable }}`** — output an expression, with optional filters: `{{ value|default:"n/a"|upper }}`.
-- **`{% tag %}`** — control flow and logic: `{% if %}`, `{% for %}`, `{% url %}`, `{% block %}`, `{% extends %}`, `{% include %}`.
+- **`{{ variable }}`**, output an expression, with optional filters: `{{ value|default:"n/a"|upper }}`.
+- **`{% tag %}`**, control flow and logic: `{% if %}`, `{% for %}`, `{% url %}`, `{% block %}`, `{% extends %}`, `{% include %}`.
 
 ### Template inheritance
 
@@ -180,15 +180,15 @@ def site_name(request):
     return {"SITE_NAME": "My Blog"}
 ```
 
-Register in `settings.TEMPLATES[0]["OPTIONS"]["context_processors"]`. Useful for site-wide variables (current user, feature flags, menu items) but don't overuse — every template renders the same processor, so keep them cheap.
+Register in `settings.TEMPLATES[0]["OPTIONS"]["context_processors"]`. Useful for site-wide variables (current user, feature flags, menu items) but don't overuse, every template renders the same processor, so keep them cheap.
 
 ## Gotchas
 
-- **`render()` vs `HttpResponse`** — `render()` auto-wires the request context (needed for CSRF, auth). Using bare `HttpResponse` on HTML breaks forms.
-- **Empty templates** — `{% block content %}{% endblock %}` in base without default content is fine; `{% block content %}{% endblock content %}` (named) helps debugging.
-- **Template `DEBUG`** — set `"debug": True` in `TEMPLATES[0]["OPTIONS"]` to get usable error pages during development.
-- **Silent failures** — by default, if `{{ post.author.name }}` fails somewhere in the chain, Django returns empty string. Set `string_if_invalid` in `TEMPLATES` to a sentinel in dev to catch these.
-- **Class-based view learning curve** — the [CCBV (Classy Class-Based Views)](https://ccbv.co.uk/) site shows the full inheritance chain for every generic view; bookmark it before writing CBVs.
+- **`render()` vs `HttpResponse`**, `render()` auto-wires the request context (needed for CSRF, auth). Using bare `HttpResponse` on HTML breaks forms.
+- **Empty templates**, `{% block content %}{% endblock %}` in base without default content is fine; `{% block content %}{% endblock content %}` (named) helps debugging.
+- **Template `DEBUG`**, set `"debug": True` in `TEMPLATES[0]["OPTIONS"]` to get usable error pages during development.
+- **Silent failures**, by default, if `{{ post.author.name }}` fails somewhere in the chain, Django returns empty string. Set `string_if_invalid` in `TEMPLATES` to a sentinel in dev to catch these.
+- **Class-based view learning curve**, the [CCBV (Classy Class-Based Views)](https://ccbv.co.uk/) site shows the full inheritance chain for every generic view; bookmark it before writing CBVs.
 
 ## What's next
 
@@ -196,8 +196,8 @@ Part 4 adds forms, so users can submit data, not just read it.
 
 ## References
 
-- [Writing views — Django docs](https://docs.djangoproject.com/en/5.2/topics/http/views/)
-- [Class-based views — Django docs](https://docs.djangoproject.com/en/5.2/topics/class-based-views/)
-- [URL dispatcher — Django docs](https://docs.djangoproject.com/en/5.2/topics/http/urls/)
+- [Writing views, Django docs](https://docs.djangoproject.com/en/5.2/topics/http/views/)
+- [Class-based views, Django docs](https://docs.djangoproject.com/en/5.2/topics/class-based-views/)
+- [URL dispatcher, Django docs](https://docs.djangoproject.com/en/5.2/topics/http/urls/)
 - [The Django template language](https://docs.djangoproject.com/en/5.2/ref/templates/language/)
-- [Classy Class-Based Views (CCBV)](https://ccbv.co.uk/) — inheritance tree reference
+- [Classy Class-Based Views (CCBV)](https://ccbv.co.uk/), inheritance tree reference

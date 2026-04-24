@@ -28,7 +28,7 @@ OR-Tools could have bolted on capacity, time windows, breaks, and fuel as separa
 - Fuel dimension → refueling variant
 - Driver hours dimension → break regulations
 
-One abstraction unifies what textbook treatments split into 5–6 unrelated formulations. Reading CVRP and VRPTW source side-by-side, the structure is *almost identical* — swap the callback, rename the dimension.
+One abstraction unifies what textbook treatments split into 5–6 unrelated formulations. Reading CVRP and VRPTW source side-by-side, the structure is *almost identical*, swap the callback, rename the dimension.
 
 ### 2. Clarke-Wright savings (1964) is still in the toolbox
 
@@ -39,14 +39,14 @@ One of the first things I noticed: OR-Tools' `SAVINGS` first-solution strategy i
 3. Sort pairs by savings descending.
 4. Merge greedily, respecting capacity.
 
-It doesn't give the best answer; it gives a good starting point that the local-search phase then improves. But 60 years later, it's still the default initial solution for a huge swath of problems. This is a pattern — some heuristics are **shaped like the problem** and don't go obsolete.
+It doesn't give the best answer; it gives a good starting point that the local-search phase then improves. But 60 years later, it's still the default initial solution for a huge swath of problems. This is a pattern, some heuristics are **shaped like the problem** and don't go obsolete.
 
 ### 3. The phase-1 / phase-2 split is worth understanding before touching the API
 
 Every metaheuristic VRP solver does the same two phases:
 
-- **Phase 1 — build a feasible solution** (`PATH_CHEAPEST_ARC`, `SAVINGS`, `PARALLEL_CHEAPEST_INSERTION`, …).
-- **Phase 2 — improve via local search + metaheuristic** (2-opt, Or-opt, Lin-Kernighan; Guided Local Search, Tabu, Simulated Annealing).
+- **Phase 1, build a feasible solution** (`PATH_CHEAPEST_ARC`, `SAVINGS`, `PARALLEL_CHEAPEST_INSERTION`, …).
+- **Phase 2, improve via local search + metaheuristic** (2-opt, Or-opt, Lin-Kernighan; Guided Local Search, Tabu, Simulated Annealing).
 
 When solutions fail, the failure usually traces to one of these. "No feasible solution found" on a tight VRPTW = phase 1 couldn't even get started; try `PARALLEL_CHEAPEST_INSERTION`. "Solutions are correct but bad" = phase 2 needs more time budget.
 
@@ -54,11 +54,11 @@ When solutions fail, the failure usually traces to one of these. "No feasible so
 
 Capacity is a per-route invariant: sum the demands on a route, check against `Q`. Time windows are ordering constraints that interact with sequencing. Two customers whose windows don't overlap force a specific order. Moves that are fine under capacity (2-opt, swap, relocate) routinely break feasibility under time windows.
 
-Practical consequence: on tight VRPTW, you often can't use `PATH_CHEAPEST_ARC` as the first-solution strategy — it greedily extends routes and paints itself into corners that violate later windows. `PARALLEL_CHEAPEST_INSERTION` considers all routes simultaneously and is much more likely to find something feasible.
+Practical consequence: on tight VRPTW, you often can't use `PATH_CHEAPEST_ARC` as the first-solution strategy, it greedily extends routes and paints itself into corners that violate later windows. `PARALLEL_CHEAPEST_INSERTION` considers all routes simultaneously and is much more likely to find something feasible.
 
 ### 5. There's a standard benchmark from 1987 that people still use
 
-Solomon's 1987 VRPTW benchmark — 56 instances, 100 customers each, categorized as R (random), C (clustered), RC (mixed) — is the industry-standard test suite. Modern papers still report results on it. Similarly, CVRPLIB's X-class (2014) is the current CVRP standard. These benchmarks are how you answer "is my VRP solver any good."
+Solomon's 1987 VRPTW benchmark, 56 instances, 100 customers each, categorized as R (random), C (clustered), RC (mixed), is the industry-standard test suite. Modern papers still report results on it. Similarly, CVRPLIB's X-class (2014) is the current CVRP standard. These benchmarks are how you answer "is my VRP solver any good."
 
 ## If I were going to ship a production VRP solver…
 
@@ -75,17 +75,17 @@ For learning: OR-Tools is the right first tool. It's free, Python-accessible, th
 
 If you want to go deeper:
 
-- [VRP hub](../topics/cs/vehicle-routing/) — concept, modeling primitives, when VRP is (and isn't) the right frame
-- [CVRP](../topics/cs/vehicle-routing/capacitated/) — capacity constraint, full OR-Tools code sketch
-- [VRPTW](../topics/cs/vehicle-routing/time-windows/) — time windows, Solomon benchmarks, why it's harder than it looks
-- [Pickup and Delivery](../topics/cs/vehicle-routing/pickup-and-delivery/) — pairing constraints, ride-sharing applications
-- [Solution approaches](../topics/cs/vehicle-routing/solution-approaches/) — all the metaheuristic machinery, OR-Tools API, when to upgrade
+- [VRP hub](../topics/cs/vehicle-routing/), concept, modeling primitives, when VRP is (and isn't) the right frame
+- [CVRP](../topics/cs/vehicle-routing/capacitated/), capacity constraint, full OR-Tools code sketch
+- [VRPTW](../topics/cs/vehicle-routing/time-windows/), time windows, Solomon benchmarks, why it's harder than it looks
+- [Pickup and Delivery](../topics/cs/vehicle-routing/pickup-and-delivery/), pairing constraints, ride-sharing applications
+- [Solution approaches](../topics/cs/vehicle-routing/solution-approaches/), all the metaheuristic machinery, OR-Tools API, when to upgrade
 
 ## References I used
 
-- [OR-Tools Routing](https://developers.google.com/optimization/routing/vrp) — the starting point
-- [Wikipedia VRP](https://en.wikipedia.org/wiki/Vehicle_routing_problem) — variant taxonomy
-- Dantzig & Ramser 1959 — [Truck Dispatching Problem](https://pubsonline.informs.org/doi/10.1287/mnsc.6.1.80), the founding paper
-- Clarke & Wright 1964 — savings algorithm
-- Solomon 1987 — VRPTW benchmark
-- [CVRPLIB](https://vrp.atd-lab.inf.puc-rio.br/) — CVRP benchmark instances
+- [OR-Tools Routing](https://developers.google.com/optimization/routing/vrp), the starting point
+- [Wikipedia VRP](https://en.wikipedia.org/wiki/Vehicle_routing_problem), variant taxonomy
+- Dantzig & Ramser 1959, [Truck Dispatching Problem](https://pubsonline.informs.org/doi/10.1287/mnsc.6.1.80), the founding paper
+- Clarke & Wright 1964, savings algorithm
+- Solomon 1987, VRPTW benchmark
+- [CVRPLIB](https://vrp.atd-lab.inf.puc-rio.br/), CVRP benchmark instances

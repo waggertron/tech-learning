@@ -18,7 +18,7 @@ Given `n` pairs of parentheses, generate all combinations of well-formed parenth
 
 LeetCode 22 · [Link](https://leetcode.com/problems/generate-parentheses/) · *Medium*
 
-## Approach 1: Brute force — generate every 2n-char string, filter valid
+## Approach 1: Brute force, generate every 2n-char string, filter valid
 
 Enumerate all 2^(2n) strings over `{(, )}`, keep the valid ones.
 
@@ -68,7 +68,7 @@ def generate_parenthesis(n: int) -> list[str]:
 ```
 
 **Complexity**
-- **Time:** O(4^n / sqrt(n)) — the n-th Catalan number times a linear factor. Much smaller than the brute-force 4^n.
+- **Time:** O(4^n / sqrt(n)), the n-th Catalan number times a linear factor. Much smaller than the brute-force 4^n.
 - **Space:** O(n) recursion.
 
 ## Approach 3: Backtracking with the exact open/close invariant (optimal)
@@ -115,4 +115,4 @@ Approach 3 is the canonical answer and the cleanest expression of the idea. The 
 
 ## Related data structures
 
-- [Stacks](../../../data-structures/stacks/) — the recursion stack is the backtracking frontier
+- [Stacks](../../../data-structures/stacks/), the recursion stack is the backtracking frontier

@@ -57,8 +57,8 @@ def spiral_order(matrix):
     if not matrix:
         return []
     result = []
-    top, bottom = 0, len(matrix) - 1
-    left, right = 0, len(matrix[0]) - 1
+    top, bottom = 0, len(matrix), 1
+    left, right = 0, len(matrix[0]), 1
 
     while top <= bottom and left <= right:
         for c in range(left, right + 1):
@@ -68,11 +68,11 @@ def spiral_order(matrix):
             result.append(matrix[r][right])
         right -= 1
         if top <= bottom:
-            for c in range(right, left - 1, -1):
+            for c in range(right, left, 1, -1):
                 result.append(matrix[bottom][c])
             bottom -= 1
         if left <= right:
-            for r in range(bottom, top - 1, -1):
+            for r in range(bottom, top, 1, -1):
                 result.append(matrix[r][left])
             left += 1
     return result
@@ -104,4 +104,4 @@ The boundary-shrink template works for Spiral Matrix II (fill), III (starting of
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — 2D matrix traversal
+- [Arrays](../../../data-structures/arrays/), 2D matrix traversal

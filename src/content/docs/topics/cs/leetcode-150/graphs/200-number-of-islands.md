@@ -33,7 +33,7 @@ def num_islands(grid):
         if not (0 <= r < rows and 0 <= c < cols) or grid[r][c] != "1":
             return
         grid[r][c] = "0"
-        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1)
+        dfs(r + 1, c); dfs(r, 1, c); dfs(r, c + 1); dfs(r, c, 1)
 
     for r in range(rows):
         for c in range(cols):
@@ -49,7 +49,7 @@ def num_islands(grid):
 
 ## Approach 2: BFS with a queue
 
-Same idea, BFS instead of DFS — avoids deep recursion on large grids.
+Same idea, BFS instead of DFS, avoids deep recursion on large grids.
 
 ```python
 from collections import deque
@@ -130,10 +130,10 @@ def num_islands(grid):
 | **BFS** | O(m · n) | O(min(m, n)) | Use when grids are deep (avoid recursion depth) |
 | Union-Find | O(m · n · α) | O(m · n) | Overkill here, template for incremental updates |
 
-DFS/BFS are equivalent in Big-O. Choose Union-Find when the graph is growing over time — adding edges online and asking "how many components now?"
+DFS/BFS are equivalent in Big-O. Choose Union-Find when the graph is growing over time, adding edges online and asking "how many components now?"
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — the grid; in-place mutation as visited marker
-- [Queues](../../../data-structures/queues/) — BFS
-- [Stacks](../../../data-structures/stacks/) — implicit via DFS recursion
+- [Arrays](../../../data-structures/arrays/), the grid; in-place mutation as visited marker
+- [Queues](../../../data-structures/queues/), BFS
+- [Stacks](../../../data-structures/stacks/), implicit via DFS recursion

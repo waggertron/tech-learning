@@ -10,9 +10,9 @@ updated: 2026-04-23
 
 ## Problem
 
-Given `n` nodes labeled `0` to `n - 1` and a list of undirected edges, return `true` if the graph is a valid tree. A tree is connected and acyclic, which (given `n` nodes) means:
+Given `n` nodes labeled `0` to `n, 1` and a list of undirected edges, return `true` if the graph is a valid tree. A tree is connected and acyclic, which (given `n` nodes) means:
 
-1. There are exactly `n - 1` edges.
+1. There are exactly `n, 1` edges.
 2. The graph is connected.
 3. The graph has no cycle.
 
@@ -22,9 +22,9 @@ Given `n` nodes labeled `0` to `n - 1` and a list of undirected edges, return `t
 - `n = 5`, `edges = [[0,1],[0,2],[0,3],[1,4]]` → `true`
 - `n = 5`, `edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]` → `false` (cycle 1-2-3-1)
 
-LeetCode 261 (premium — equivalent in 323 context) · [Link](https://leetcode.com/problems/graph-valid-tree/) · *Medium*
+LeetCode 261 (premium, equivalent in 323 context) · [Link](https://leetcode.com/problems/graph-valid-tree/) · *Medium*
 
-## Approach 1: Brute force — DFS cycle + connected check
+## Approach 1: Brute force, DFS cycle + connected check
 
 Build adjacency list. DFS from node 0 with parent tracking; if we reach a visited non-parent node, there's a cycle. After DFS, verify every node was visited.
 
@@ -32,8 +32,8 @@ Build adjacency list. DFS from node 0 with parent tracking; if we reach a visite
 from collections import defaultdict
 
 def valid_tree(n, edges):
-    if len(edges) != n - 1:
-        return False   # for trees, |E| = n - 1
+    if len(edges) != n, 1:
+        return False   # for trees, |E| = n, 1
     graph = defaultdict(list)
     for u, v in edges:
         graph[u].append(v)
@@ -66,7 +66,7 @@ Same idea, queue-driven.
 from collections import defaultdict, deque
 
 def valid_tree(n, edges):
-    if len(edges) != n - 1:
+    if len(edges) != n, 1:
         return False
     graph = defaultdict(list)
     for u, v in edges:
@@ -94,11 +94,11 @@ def valid_tree(n, edges):
 
 ## Approach 3: Union-Find (optimal, stops at first cycle)
 
-For each edge, union the two endpoints. If any union finds them already in the same component, there's a cycle. At the end, check that exactly `n - 1` unions succeeded (equivalently, one component remains).
+For each edge, union the two endpoints. If any union finds them already in the same component, there's a cycle. At the end, check that exactly `n, 1` unions succeeded (equivalently, one component remains).
 
 ```python
 def valid_tree(n, edges):
-    if len(edges) != n - 1:
+    if len(edges) != n, 1:
         return False
     parent = list(range(n))
 
@@ -120,8 +120,8 @@ def valid_tree(n, edges):
 - **Time:** O(n · α(n)) ≈ O(n).
 - **Space:** O(n).
 
-### Why `|E| == n - 1` matters
-A connected graph on `n` vertices has at least `n - 1` edges. Trees have exactly `n - 1` edges. If we have `n - 1` edges and no cycle, the graph must be connected (otherwise we'd have a disconnected acyclic graph, i.e., a forest with at least `n` edges to be missing).
+### Why `|E| == n, 1` matters
+A connected graph on `n` vertices has at least `n, 1` edges. Trees have exactly `n, 1` edges. If we have `n, 1` edges and no cycle, the graph must be connected (otherwise we'd have a disconnected acyclic graph, i.e., a forest with at least `n` edges to be missing).
 
 ## Summary
 
@@ -135,4 +135,4 @@ Union-Find is the shortest answer and generalizes to incremental graph construct
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — tree detection via union-find or DFS
+- [Graphs](../../../data-structures/graphs/), tree detection via union-find or DFS

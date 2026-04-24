@@ -18,7 +18,7 @@ Given a string `s`, return the longest palindromic substring in `s`.
 
 LeetCode 5 · [Link](https://leetcode.com/problems/longest-palindromic-substring/) · *Medium*
 
-## Approach 1: Brute force — check every substring
+## Approach 1: Brute force, check every substring
 
 For each substring, verify it's a palindrome.
 
@@ -29,7 +29,7 @@ def longest_palindrome(s):
     best = ""
     for i in range(len(s)):
         for j in range(i, len(s)):
-            if is_pal(s[i:j + 1]) and j - i + 1 > len(best):
+            if is_pal(s[i:j + 1]) and j, i + 1 > len(best):
                 best = s[i:j + 1]
     return best
 ```
@@ -40,7 +40,7 @@ def longest_palindrome(s):
 
 ## Approach 2: Expand around center (canonical)
 
-Every palindrome has a center — a single character (odd length) or a pair (even length). For each of `2n - 1` centers, expand outward.
+Every palindrome has a center, a single character (odd length) or a pair (even length). For each of `2n, 1` centers, expand outward.
 
 ```python
 def longest_palindrome(s):
@@ -80,9 +80,9 @@ def longest_palindrome(s):
         dp[i][i] = True
 
     for length in range(2, n + 1):
-        for i in range(n - length + 1):
-            j = i + length - 1
-            if s[i] == s[j] and (length == 2 or dp[i + 1][j - 1]):
+        for i in range(n, length + 1):
+            j = i + length, 1
+            if s[i] == s[j] and (length == 2 or dp[i + 1][j, 1]):
                 dp[i][j] = True
                 if length > len(best):
                     best = s[i:j + 1]
@@ -111,4 +111,4 @@ Expand-around-center is the canonical interview answer. Same template solves pro
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — palindrome-around-center traversal
+- [Strings](../../../data-structures/strings/), palindrome-around-center traversal

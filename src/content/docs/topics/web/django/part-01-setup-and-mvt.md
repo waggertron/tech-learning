@@ -1,5 +1,5 @@
 ---
-title: "Part 1 — Project setup and the MVT pattern"
+title: "Part 1, Project setup and the MVT pattern"
 description: Install Django, start a project, run the dev server, and understand how a request flows through URLs → views → templates. The MVT pattern and where each piece lives.
 parent: django
 tags: [django, python, web, beginner]
@@ -31,7 +31,7 @@ Django has two organizational units: the **project** (the top-level config) and 
 
 ```bash
 django-admin startproject mysite .
-# The `.` matters — it puts files in the current dir rather than making an extra mysite/ wrapper.
+# The `.` matters, it puts files in the current dir rather than making an extra mysite/ wrapper.
 
 python manage.py migrate   # creates the initial SQLite DB
 python manage.py runserver # http://127.0.0.1:8000/
@@ -55,12 +55,12 @@ You should now see the Django green rocket.
 
 Key knobs in `settings.py`:
 
-- `DEBUG = True` — local only; leaks stack traces otherwise.
-- `ALLOWED_HOSTS = []` — must include your domain in production.
-- `INSTALLED_APPS` — the apps Django knows about.
-- `MIDDLEWARE` — ordered list of request/response processors.
-- `DATABASES` — SQLite by default; swap to Postgres for anything real.
-- `SECRET_KEY` — signing key; never commit a production one.
+- `DEBUG = True`, local only; leaks stack traces otherwise.
+- `ALLOWED_HOSTS = []`, must include your domain in production.
+- `INSTALLED_APPS`, the apps Django knows about.
+- `MIDDLEWARE`, ordered list of request/response processors.
+- `DATABASES`, SQLite by default; swap to Postgres for anything real.
+- `SECRET_KEY`, signing key; never commit a production one.
 
 ## Create your first app
 
@@ -72,7 +72,7 @@ Add `"blog"` to `INSTALLED_APPS` in `settings.py`.
 
 ## The MVT pattern
 
-Django calls its architecture **MVT** — **Model, View, Template**. It's basically MVC with different names:
+Django calls its architecture **MVT**, **Model, View, Template**. It's basically MVC with different names:
 
 | Django term | What it is | Equivalent elsewhere |
 | --- | --- | --- |
@@ -147,7 +147,7 @@ urlpatterns = [
 ]
 ```
 
-**`blog/templates/blog/home.html`** (the nested `blog/` is intentional — Django searches all template dirs, so namespacing prevents collisions)
+**`blog/templates/blog/home.html`** (the nested `blog/` is intentional, Django searches all template dirs, so namespacing prevents collisions)
 
 ```html
 <!DOCTYPE html>
@@ -159,22 +159,22 @@ urlpatterns = [
 </html>
 ```
 
-Restart `runserver` (it usually auto-reloads) and hit `http://127.0.0.1:8000/` — you should see "Hello, World!"
+Restart `runserver` (it usually auto-reloads) and hit `http://127.0.0.1:8000/`, you should see "Hello, World!"
 
 ## Gotchas at this stage
 
-- **`STATICFILES_DIRS` vs `STATIC_ROOT`** — `_DIRS` is where Django *looks* for static files in development; `_ROOT` is where `collectstatic` puts them in production. You'll want both eventually.
-- **Template namespace** — always nest templates under an app-named folder (`blog/templates/blog/home.html`). Without this, two apps with `home.html` collide silently.
-- **`app_name` in urls.py** — enables `{% url "blog:home" %}` in templates. Add it from day one; it's annoying to retrofit later.
-- **Migrations before server** — `python manage.py migrate` before `runserver` the first time, or you'll see "no such table" errors.
-- **Python 3.12+** — Django 5.2 supports Python 3.10–3.12; pick one and pin it in your project.
+- **`STATICFILES_DIRS` vs `STATIC_ROOT`**, `_DIRS` is where Django *looks* for static files in development; `_ROOT` is where `collectstatic` puts them in production. You'll want both eventually.
+- **Template namespace**, always nest templates under an app-named folder (`blog/templates/blog/home.html`). Without this, two apps with `home.html` collide silently.
+- **`app_name` in urls.py**, enables `{% url "blog:home" %}` in templates. Add it from day one; it's annoying to retrofit later.
+- **Migrations before server**, `python manage.py migrate` before `runserver` the first time, or you'll see "no such table" errors.
+- **Python 3.12+**, Django 5.2 supports Python 3.10–3.12; pick one and pin it in your project.
 
 ## What's next
 
-Part 2 introduces models, migrations, and the ORM — the reason most people actually use Django.
+Part 2 introduces models, migrations, and the ORM, the reason most people actually use Django.
 
 ## References
 
-- [Django — Writing your first Django app (tutorial 1)](https://docs.djangoproject.com/en/5.2/intro/tutorial01/)
+- [Django, Writing your first Django app (tutorial 1)](https://docs.djangoproject.com/en/5.2/intro/tutorial01/)
 - [Django settings reference](https://docs.djangoproject.com/en/5.2/ref/settings/)
 - [URL dispatcher](https://docs.djangoproject.com/en/5.2/topics/http/urls/)

@@ -1,6 +1,6 @@
 ---
 title: "271. Encode and Decode Strings"
-description: Design an encoding/decoding scheme for a list of strings — the inverse pair must be lossless.
+description: Design an encoding/decoding scheme for a list of strings, the inverse pair must be lossless.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, design, medium]
 status: draft
@@ -19,7 +19,7 @@ Design an algorithm to encode a list of strings into a single string, and a seco
 
 LeetCode 271 (premium; free equivalent exists as **LC 659 / 1923**) · [Link](https://leetcode.com/problems/encode-and-decode-strings/) · *Medium*
 
-## Approach 1: Brute force — single-char delimiter + escape
+## Approach 1: Brute force, single-char delimiter + escape
 
 Pick a rare character as a delimiter, escape any occurrences in the source.
 
@@ -57,11 +57,11 @@ def decode(s: str) -> list[str]:
 - **Time:** O(N).
 - **Space:** O(N).
 
-Correct and robust. Not typically accepted on LeetCode because the problem wants you to design the scheme, but worth knowing for real-world code — the right answer unless there's a reason to roll your own.
+Correct and robust. Not typically accepted on LeetCode because the problem wants you to design the scheme, but worth knowing for real-world code, the right answer unless there's a reason to roll your own.
 
 ## Approach 3: Length-prefix encoding (optimal, self-delimiting)
 
-Prefix each string with its length and a fixed delimiter (e.g., `#`). The length tells the decoder exactly how many characters to take next — no escaping needed.
+Prefix each string with its length and a fixed delimiter (e.g., `#`). The length tells the decoder exactly how many characters to take next, no escaping needed.
 
 ```python
 def encode(strs: list[str]) -> str:
@@ -81,7 +81,7 @@ def decode(s: str) -> list[str]:
 - **Time:** O(N). Each character is visited a constant number of times.
 - **Space:** O(N).
 
-This works for any character content — including the `#` delimiter — because the length prefix makes the scheme self-delimiting. The canonical interview answer.
+This works for any character content, including the `#` delimiter, because the length prefix makes the scheme self-delimiting. The canonical interview answer.
 
 ## Summary
 
@@ -91,9 +91,9 @@ This works for any character content — including the `#` delimiter — because
 | JSON | O(N) | O(N) | Production-correct; not always accepted |
 | **Length prefix** | **O(N)** | **O(N)** | Robust and self-delimiting |
 
-Length-prefix encoding is the pattern behind many real-world formats — Pascal strings, netstrings, Protocol Buffers' length-delimited format, HTTP chunked encoding.
+Length-prefix encoding is the pattern behind many real-world formats, Pascal strings, netstrings, Protocol Buffers' length-delimited format, HTTP chunked encoding.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input/output; immutability-aware concatenation
-- [Arrays](../../../data-structures/arrays/) — the list container being serialized
+- [Strings](../../../data-structures/strings/), input/output; immutability-aware concatenation
+- [Arrays](../../../data-structures/arrays/), the list container being serialized

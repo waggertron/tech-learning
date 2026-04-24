@@ -1,6 +1,6 @@
 ---
-title: "Part 10 — Production: deployment, security, observability"
-description: The checklist that separates a toy Django app from a production one — settings hardening, ASGI/WSGI servers, static files, zero-downtime migrations, logging, Sentry, and the security headers you forget until someone else tells you to add them.
+title: "Part 10, Production: deployment, security, observability"
+description: The checklist that separates a toy Django app from a production one, settings hardening, ASGI/WSGI servers, static files, zero-downtime migrations, logging, Sentry, and the security headers you forget until someone else tells you to add them.
 parent: django
 tags: [django, production, deployment, security, observability, expert]
 status: draft
@@ -61,7 +61,7 @@ HSTS is sticky: once you set `SECURE_HSTS_SECONDS`, browsers remember. Start wit
 
 ### Content Security Policy
 
-Not built into Django core; use [`django-csp`](https://django-csp.readthedocs.io/). Worth the effort — a real CSP blocks most XSS classes before they run.
+Not built into Django core; use [`django-csp`](https://django-csp.readthedocs.io/). Worth the effort, a real CSP blocks most XSS classes before they run.
 
 ## Secrets
 
@@ -87,9 +87,9 @@ In production, inject via your platform (AWS Secrets Manager, GCP Secret Manager
 
 ## WSGI vs ASGI
 
-- **WSGI** (`gunicorn`, `uWSGI`) — the traditional choice. Sync only. Fast, battle-tested.
-- **ASGI** (`uvicorn`, `daphne`, `hypercorn`) — required for async views, Channels, HTTP/2, WebSockets.
-- **Hybrid** — `gunicorn -k uvicorn.workers.UvicornWorker` runs uvicorn under gunicorn for supervision + async support.
+- **WSGI** (`gunicorn`, `uWSGI`), the traditional choice. Sync only. Fast, battle-tested.
+- **ASGI** (`uvicorn`, `daphne`, `hypercorn`), required for async views, Channels, HTTP/2, WebSockets.
+- **Hybrid**, `gunicorn -k uvicorn.workers.UvicornWorker` runs uvicorn under gunicorn for supervision + async support.
 
 Typical production command:
 
@@ -98,7 +98,7 @@ gunicorn mysite.asgi:application \
   -k uvicorn.workers.UvicornWorker \
   -w 4 \
   --bind 0.0.0.0:8000 \
-  --access-logfile - \
+  --access-logfile, \
   --error-logfile -
 ```
 
@@ -108,10 +108,10 @@ Workers rule of thumb: `(2 × CPU cores) + 1`. Long-lived connections (WebSocket
 
 Two different things:
 
-- **Static files** — your CSS, JS, images. Collected once during deploy.
-- **Media files** — user uploads. Stored somewhere writable that survives restarts.
+- **Static files**, your CSS, JS, images. Collected once during deploy.
+- **Media files**, user uploads. Stored somewhere writable that survives restarts.
 
-### Static — WhiteNoise is the easy path
+### Static, WhiteNoise is the easy path
 
 ```bash
 pip install whitenoise
@@ -128,7 +128,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 WhiteNoise serves static files directly from your Django process. Simple, adequate for modest traffic, includes compression and cache-busting via content hashes. Behind a CDN it scales fine.
 
-### Media — use object storage
+### Media, use object storage
 
 Local disk on a single server breaks as soon as you add a second instance. Use S3 (or GCS, Azure Blob, Cloudflare R2):
 
@@ -153,13 +153,13 @@ Django 5+ uses the `STORAGES` dict; older code used `DEFAULT_FILE_STORAGE` / `ST
 ## Database in production
 
 - **Postgres.** SQLite is fine for tiny projects but you'll outgrow it.
-- **Managed service** — RDS, Cloud SQL, Supabase. Taking backups, patching, and replication off your plate is worth the premium.
-- **Connection pooling** — `CONN_MAX_AGE=60` minimum; PgBouncer at scale (Part 8).
-- **Replicas** — Django supports database routers, but the simpler route is: all reads and writes to the primary, until you have a real reason.
+- **Managed service**, RDS, Cloud SQL, Supabase. Taking backups, patching, and replication off your plate is worth the premium.
+- **Connection pooling**, `CONN_MAX_AGE=60` minimum; PgBouncer at scale (Part 8).
+- **Replicas**, Django supports database routers, but the simpler route is: all reads and writes to the primary, until you have a real reason.
 
 ## Running migrations in production
 
-The simple flow — "apply migrations before starting the web server" — works for most apps. Some deploy systems need more care.
+The simple flow, "apply migrations before starting the web server", works for most apps. Some deploy systems need more care.
 
 ### Zero-downtime migration patterns
 
@@ -169,7 +169,7 @@ The simple flow — "apply migrations before starting the web server" — works 
   3. Make non-null (via default or after backfill). Deploy.
   4. Eventually remove the old column.
 
-- **Backward-compatible changes during deploys.** Never rename a column in one deploy — you'll have old and new code running simultaneously. Add new → dual-write → cut over → remove old.
+- **Backward-compatible changes during deploys.** Never rename a column in one deploy, you'll have old and new code running simultaneously. Add new → dual-write → cut over → remove old.
 
 - **Long-running DDL on big tables.** Postgres `ALTER TABLE ADD COLUMN DEFAULT x` rewrites the whole table on old versions. Postgres 11+ can do it instantly for non-volatile defaults. Know your Postgres version.
 
@@ -203,7 +203,7 @@ LOGGING = {
 
 Log as JSON to stdout and let your platform (Cloud Logging, Datadog, Loki) aggregate. Structured logs are queryable.
 
-## Error tracking — Sentry
+## Error tracking, Sentry
 
 ```bash
 pip install sentry-sdk[django]
@@ -223,9 +223,9 @@ Not optional at any real-world scale. The first time an exception silently 500s 
 
 ## Metrics and tracing
 
-- **[`django-prometheus`](https://github.com/korfuri/django-prometheus)** — request count, latency histogram, DB query count per view.
-- **OpenTelemetry** — distributed tracing; useful when a request touches multiple services.
-- **APM** — Datadog, New Relic, Sentry Performance — one of these usually covers metrics + traces + logs in a single product.
+- **[`django-prometheus`](https://github.com/korfuri/django-prometheus)**, request count, latency histogram, DB query count per view.
+- **OpenTelemetry**, distributed tracing; useful when a request touches multiple services.
+- **APM**, Datadog, New Relic, Sentry Performance, one of these usually covers metrics + traces + logs in a single product.
 
 ## Health checks
 
@@ -246,23 +246,23 @@ def liveness(request):
     return JsonResponse({"status": "alive"})
 ```
 
-- **Liveness** — am I running? If no, restart me.
-- **Readiness** — can I serve traffic? If no, take me out of the load balancer.
+- **Liveness**, am I running? If no, restart me.
+- **Readiness**, can I serve traffic? If no, take me out of the load balancer.
 
 Both endpoints should skip expensive work. A readiness probe that does heavy DB work becomes a DoS on your own infrastructure.
 
 ## Backups
 
-- DB — automated daily snapshots + continuous WAL archiving. Test restore at least quarterly.
-- Media — object storage with versioning enabled.
-- `dumpdata` / `loaddata` — fine for migrating a small project; not a backup strategy.
+- DB, automated daily snapshots + continuous WAL archiving. Test restore at least quarterly.
+- Media, object storage with versioning enabled.
+- `dumpdata` / `loaddata`, fine for migrating a small project; not a backup strategy.
 
 ## A deploy-day checklist
 
 Before shipping a new version:
 
 - [ ] `python manage.py check --deploy` passes.
-- [ ] Migrations reviewed — no destructive ALTERs on big tables.
+- [ ] Migrations reviewed, no destructive ALTERs on big tables.
 - [ ] `collectstatic` ran in build.
 - [ ] New env vars configured in the target environment.
 - [ ] Sentry DSN is correct for the env.
@@ -271,24 +271,24 @@ Before shipping a new version:
 
 ## Gotchas
 
-- **`SECRET_KEY` rotation** — rotating breaks every active session and every signed URL. Have a migration plan (store old keys under `SECRET_KEY_FALLBACKS` for a grace period).
-- **`ALLOWED_HOSTS` and load balancers** — if your LB sends `Host: internal-10.0.0.5`, that host must be allowed too, or liveness probes fail.
-- **Time zones** — `USE_TZ = True` (default). Store UTC, convert on render. Mixing tz-aware and tz-naive datetimes is the single most common production bug I've seen.
-- **Long-running workers after deploy** — Celery workers hold stale code until restarted. Your deploy script must restart them.
-- **Database migrations in parallel deploys** — two web instances both running `migrate` race. Run migrations in a single pre-deploy step.
-- **Manage commands on prod shells** — `python manage.py shell` on a production box is a loaded footgun. Use a read-only replica where possible.
+- **`SECRET_KEY` rotation**, rotating breaks every active session and every signed URL. Have a migration plan (store old keys under `SECRET_KEY_FALLBACKS` for a grace period).
+- **`ALLOWED_HOSTS` and load balancers**, if your LB sends `Host: internal-10.0.0.5`, that host must be allowed too, or liveness probes fail.
+- **Time zones**, `USE_TZ = True` (default). Store UTC, convert on render. Mixing tz-aware and tz-naive datetimes is the single most common production bug I've seen.
+- **Long-running workers after deploy**, Celery workers hold stale code until restarted. Your deploy script must restart them.
+- **Database migrations in parallel deploys**, two web instances both running `migrate` race. Run migrations in a single pre-deploy step.
+- **Manage commands on prod shells**, `python manage.py shell` on a production box is a loaded footgun. Use a read-only replica where possible.
 
 ## The end of the series
 
-Ten parts, from `startproject` through production. Django rewards depth — the patterns in Parts 7–10 come up again whenever you scale an app, and the ORM from Part 2 is what you'll spend the most time refining. Keep reading the release notes; Django's async, `STORAGES`, `GeneratedField`, and other recent additions all came from the 4.x and 5.x lines.
+Ten parts, from `startproject` through production. Django rewards depth, the patterns in Parts 7–10 come up again whenever you scale an app, and the ORM from Part 2 is what you'll spend the most time refining. Keep reading the release notes; Django's async, `STORAGES`, `GeneratedField`, and other recent additions all came from the 4.x and 5.x lines.
 
 ## References
 
-- [Deployment checklist — Django docs](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/)
+- [Deployment checklist, Django docs](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/)
 - [`manage.py check --deploy`](https://docs.djangoproject.com/en/5.2/ref/checks/#security)
 - [Security in Django](https://docs.djangoproject.com/en/5.2/topics/security/)
 - [WhiteNoise](https://whitenoise.readthedocs.io/)
 - [django-storages](https://django-storages.readthedocs.io/)
 - [Sentry for Django](https://docs.sentry.io/platforms/python/integrations/django/)
 - [django-prometheus](https://github.com/korfuri/django-prometheus)
-- [Django release notes](https://docs.djangoproject.com/en/5.2/releases/) — read these when upgrading
+- [Django release notes](https://docs.djangoproject.com/en/5.2/releases/), read these when upgrading

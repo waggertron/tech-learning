@@ -19,7 +19,7 @@ Given a string `s` and a dictionary of strings `wordDict`, return `true` if `s` 
 
 LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
 
-## Approach 1: Recursive — try every prefix
+## Approach 1: Recursive, try every prefix
 
 ```python
 def word_break(s, word_dict):
@@ -85,7 +85,7 @@ def word_break(s, word_dict):
 - **Space:** O(n).
 
 ### Optimization
-Limit the inner loop to `j >= i - max_word_length`. Saves time when dictionary words are short relative to `s`.
+Limit the inner loop to `j >= i, max_word_length`. Saves time when dictionary words are short relative to `s`.
 
 ## Summary
 
@@ -99,5 +99,5 @@ The "partition a string into dictionary pieces" template applies to Word Break I
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — prefix DP
-- [Hash Tables](../../../data-structures/hash-tables/) — O(1) dictionary membership
+- [Strings](../../../data-structures/strings/), prefix DP
+- [Hash Tables](../../../data-structures/hash-tables/), O(1) dictionary membership

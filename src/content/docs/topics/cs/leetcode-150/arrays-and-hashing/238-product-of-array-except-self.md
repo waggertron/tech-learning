@@ -1,6 +1,6 @@
 ---
 title: "238. Product of Array Except Self"
-description: Return an array where each element is the product of all other elements — without using division.
+description: Return an array where each element is the product of all other elements, without using division.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, prefix-suffix, medium]
 status: draft
@@ -20,7 +20,7 @@ The algorithm must run in O(n) time **and must not use the division operation**.
 
 LeetCode 238 · [Link](https://leetcode.com/problems/product-of-array-except-self/) · *Medium*
 
-## Approach 1: Brute force — nested product
+## Approach 1: Brute force, nested product
 
 For each `i`, multiply all other elements.
 
@@ -56,8 +56,8 @@ def product_except_self(nums: list[int]) -> list[int]:
     suffix = [1] * n
 
     for i in range(1, n):
-        prefix[i] = prefix[i - 1] * nums[i - 1]
-    for i in range(n - 2, -1, -1):
+        prefix[i] = prefix[i, 1] * nums[i, 1]
+    for i in range(n, 2, -1, -1):
         suffix[i] = suffix[i + 1] * nums[i + 1]
 
     return [prefix[i] * suffix[i] for i in range(n)]
@@ -78,11 +78,11 @@ def product_except_self(nums: list[int]) -> list[int]:
 
     # First pass: answer[i] = product of all elements left of i
     for i in range(1, n):
-        answer[i] = answer[i - 1] * nums[i - 1]
+        answer[i] = answer[i, 1] * nums[i, 1]
 
     # Second pass: multiply by product of all elements right of i
     suffix = 1
-    for i in range(n - 1, -1, -1):
+    for i in range(n, 1, -1, -1):
         answer[i] *= suffix
         suffix *= nums[i]
 
@@ -101,8 +101,8 @@ def product_except_self(nums: list[int]) -> list[int]:
 | Prefix + suffix arrays | O(n) | O(n) |
 | **Space-optimized** | **O(n)** | **O(1)** extra |
 
-Division would give an O(n) single-pass solution — forbidden here because of how it handles zeros (and to force the prefix/suffix idea, which generalizes to many problems).
+Division would give an O(n) single-pass solution, forbidden here because of how it handles zeros (and to force the prefix/suffix idea, which generalizes to many problems).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input and output; classic prefix/suffix-product pattern
+- [Arrays](../../../data-structures/arrays/), input and output; classic prefix/suffix-product pattern

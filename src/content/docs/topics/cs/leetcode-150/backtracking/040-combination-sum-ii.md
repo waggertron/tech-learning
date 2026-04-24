@@ -18,7 +18,7 @@ Given a collection of integers `candidates` (may contain duplicates) and a targe
 
 LeetCode 40 · [Link](https://leetcode.com/problems/combination-sum-ii/) · *Medium*
 
-## Approach 1: Brute force — all subsets, filter by sum, dedup
+## Approach 1: Brute force, all subsets, filter by sum, dedup
 
 Generate the power set; keep subsets summing to target; dedup via canonical tuples.
 
@@ -41,7 +41,7 @@ Exponential and wasteful.
 
 ## Approach 2: Backtracking with `start` index (no skip)
 
-Standard `start`-based backtracking — but without duplicate handling, this produces duplicate combinations when the input has repeated values.
+Standard `start`-based backtracking, but without duplicate handling, this produces duplicate combinations when the input has repeated values.
 
 ```python
 def combination_sum2(candidates, target):
@@ -57,7 +57,7 @@ def combination_sum2(candidates, target):
             if candidates[i] > remaining:
                 break
             path.append(candidates[i])
-            backtrack(i + 1, remaining - candidates[i])
+            backtrack(i + 1, remaining, candidates[i])
             path.pop()
 
     backtrack(0, target)
@@ -69,7 +69,7 @@ def combination_sum2(candidates, target):
 - **Time:** exponential + O(m log m) for dedup.
 - **Space:** exponential storage.
 
-The dedup step is a symptom — fix it at the source.
+The dedup step is a symptom, fix it at the source.
 
 ## Approach 3: Sort + skip same-level duplicates (canonical)
 
@@ -88,10 +88,10 @@ def combination_sum2(candidates, target):
         for i in range(start, len(candidates)):
             if candidates[i] > remaining:
                 break   # pruning
-            if i > start and candidates[i] == candidates[i - 1]:
+            if i > start and candidates[i] == candidates[i, 1]:
                 continue   # skip duplicate at this level
             path.append(candidates[i])
-            backtrack(i + 1, remaining - candidates[i])   # i + 1 because no reuse
+            backtrack(i + 1, remaining, candidates[i])   # i + 1 because no reuse
             path.pop()
 
     backtrack(0, target)
@@ -114,4 +114,4 @@ The skip-same-level template (shared with Subsets II) is the right abstraction f
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sorted for pruning and dedup
+- [Arrays](../../../data-structures/arrays/), sorted for pruning and dedup

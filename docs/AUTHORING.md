@@ -1,4 +1,4 @@
-# Authoring guide — Here Be Dragons
+# Authoring guide, Here Be Dragons
 
 How to add content to this repo without re-learning the hard-won conventions. Written after a long session that produced ~260 pages; every rule below is one I paid to discover.
 
@@ -10,17 +10,17 @@ See also the companion [skill](./..//.claude/skills/authoring/SKILL.md), which i
 
 A shareable, postable knowledge base. One markdown source renders three ways:
 
-1. **On GitHub** — each file reads cleanly as a README.
-2. **As a site** — Astro + Starlight, deployed to GitHub Pages at `https://waggertron.github.io/tech-learning/`.
-3. **Portable to social** — same markdown pastes into dev.to, Medium, LinkedIn with minimal edits.
+1. **On GitHub**, each file reads cleanly as a README.
+2. **As a site**, Astro + Starlight, deployed to GitHub Pages at `https://waggertron.github.io/tech-learning/`.
+3. **Portable to social**, same markdown pastes into dev.to, Medium, LinkedIn with minimal edits.
 
-Display title: **"Here Be Dragons"** (in `astro.config.mjs` and `src/content/docs/index.mdx`). Repo slug stays `tech-learning` — it's the URL path.
+Display title: **"Here Be Dragons"** (in `astro.config.mjs` and `src/content/docs/index.mdx`). Repo slug stays `tech-learning`, it's the URL path.
 
 ---
 
 ## The two content shapes
 
-### Topics — evergreen reference
+### Topics, evergreen reference
 
 `src/content/docs/topics/<category>/<slug>/`
 
@@ -28,17 +28,17 @@ Display title: **"Here Be Dragons"** (in `astro.config.mjs` and `src/content/doc
 - **Flat subtopic** = `<subtopic>.md` inside the topic folder. Use when it's a single page with no assets.
 - **Folder subtopic** = `<subtopic>/index.md` inside the topic folder. Use when it has images, child pages, or code-sample files.
 
-Current categories: `ai/`, `cs/`, `web/`, `testing/`, `ops/`. Adding a new category is fine — just add `topics/<new>/index.md` as a landing page.
+Current categories: `ai/`, `cs/`, `web/`, `testing/`, `ops/`. Adding a new category is fine, just add `topics/<new>/index.md` as a landing page.
 
-### Posts — dated write-ups
+### Posts, dated write-ups
 
 `src/content/docs/posts/YYYY-MM-DD-<slug>.md`
 
-Single file. No folders. Self-registering — appear in the sidebar automatically.
+Single file. No folders. Self-registering, appear in the sidebar automatically.
 
 ---
 
-## Frontmatter — every field that matters
+## Frontmatter, every field that matters
 
 ### Topic index.md
 
@@ -72,7 +72,7 @@ updated: 2026-04-24
 
 ```yaml
 ---
-title: Post title — second clause if useful
+title: Post title, second clause if useful
 description: One to two sentences describing what's inside.
 date: 2026-04-24
 tags: [tag1, tag2]
@@ -89,9 +89,9 @@ These are the only frontmatter bugs that have broken the build so far:
 
 1. **Unquoted description starting with a backtick.** `description: \`Form\` vs ...` parses as something exotic in YAML. Fix: wrap the whole value in double quotes, or avoid backtick as the first character.
 
-2. **Unquoted description containing `: ` (colon space).** `description: ... the test types that back it up: unit, component, ...` — YAML sees `back it up` as a key. Fix: wrap in double quotes.
+2. **Unquoted description containing `: ` (colon space).** `description: ... the test types that back it up: unit, component, ...`, YAML sees `back it up` as a key. Fix: wrap in double quotes.
 
-3. **Unquoted description containing `"word"`.** `description: "Favor composition" is a ...` — YAML parses the first `"..."` as the full scalar and errors on the rest. Fix: wrap everything in single quotes, or drop the inner quotes.
+3. **Unquoted description containing `"word"`.** `description: "Favor composition" is a ...`, YAML parses the first `"..."` as the full scalar and errors on the rest. Fix: wrap everything in single quotes, or drop the inner quotes.
 
 **Rule of thumb:** if the description has any punctuation you'd hesitate about (`:`, `"`, backticks, `@`, `!`), put the whole description in double quotes. If the description contains double quotes, wrap in single quotes.
 
@@ -103,26 +103,26 @@ The collected notes of one engineer. First-person plural occasionally, but mostl
 
 ### Title format
 
-`Topic name — concrete framing` is a common shape. The em-dash-subtitle works in both the sidebar and the hero area. Keep under ~70 characters so it doesn't wrap on mobile.
+`Topic name, concrete framing` is a common shape. The em-dash-subtitle works in both the sidebar and the hero area. Keep under ~70 characters so it doesn't wrap on mobile.
 
 ### Description format
 
 One sentence. Says what's *inside*, not what it's *about*. Concrete. Examples from the repo:
 
-- Good: "Token bucket, leaky bucket, fixed and sliding windows — the four algorithms, when to pick each, where in the stack to enforce them, what to send back to clients, and the pitfalls that make a 'working' rate limiter let abuse through."
+- Good: "Token bucket, leaky bucket, fixed and sliding windows, the four algorithms, when to pick each, where in the stack to enforce them, what to send back to clients, and the pitfalls that make a 'working' rate limiter let abuse through."
 - Bad: "An overview of rate limiting."
 
 ### Body structure
 
 Most topics follow this rough arc:
 
-1. **Hook paragraph** — one short paragraph that states what the thing is in plain language.
-2. **Why it matters** — two to five paragraphs, the problem the thing solves.
-3. **The core of it** — concrete details, code, diagrams.
-4. **Tradeoffs / what it doesn't cover** — every topic should have this.
-5. **Common gotchas** — a bulleted list.
-6. **References** — external authoritative links.
-7. **Related topics** — internal links, cross-linking pattern.
+1. **Hook paragraph**, one short paragraph that states what the thing is in plain language.
+2. **Why it matters**, two to five paragraphs, the problem the thing solves.
+3. **The core of it**, concrete details, code, diagrams.
+4. **Tradeoffs / what it doesn't cover**, every topic should have this.
+5. **Common gotchas**, a bulleted list.
+6. **References**, external authoritative links.
+7. **Related topics**, internal links, cross-linking pattern.
 
 The best pages on this site carry the reader from "I've heard of this" to "I could explain this to a teammate" in about 15 minutes of reading.
 
@@ -144,7 +144,7 @@ Lines 550+ usually mean the topic should split.
 
 ### Diagrams
 
-- ASCII is fine and often best — renders in every output channel.
+- ASCII is fine and often best, renders in every output channel.
 - Mermaid works in Starlight when the plugin is enabled (it isn't here yet). Stick to ASCII.
 - See `topics/cs/data-structures/` for solid ASCII examples.
 
@@ -167,11 +167,11 @@ Posts end with a **Related topics and posts** section with the same shape. Links
 
 The site currently has dense cross-links. Patterns worth preserving:
 
-- **Series** — each part of a series links back to the hub and forward to the next part.
-- **Bi-directional topic links** — e.g. every LeetCode 150 problem links to its data-structure topic; every data-structure topic lists every problem that exercises it.
-- **Topic → Post → Topic** — posts cite the reference topics they're grounded in; those topics don't usually link back to the post (posts age out).
-- **Category index** — every category `index.md` lists all its topics.
-- **Root `topics/index.mdx`** — lists every topic and named subtopic.
+- **Series**, each part of a series links back to the hub and forward to the next part.
+- **Bi-directional topic links**, e.g. every LeetCode 150 problem links to its data-structure topic; every data-structure topic lists every problem that exercises it.
+- **Topic → Post → Topic**, posts cite the reference topics they're grounded in; those topics don't usually link back to the post (posts age out).
+- **Category index**, every category `index.md` lists all its topics.
+- **Root `topics/index.mdx`**, lists every topic and named subtopic.
 
 When you add a topic, update at least:
 
@@ -211,7 +211,7 @@ No Conventional Commits prefix required; the git log is readable without one.
 
 The `npm run new:topic -- <category> <slug>` and `npm run new:post -- <slug>` scripts copy a template and stamp today's date. Good for empty starts.
 
-In practice, most of this session bypassed the scripts — we pasted content directly into `Write` tool calls with the right frontmatter. Either works.
+In practice, most of this session bypassed the scripts, we pasted content directly into `Write` tool calls with the right frontmatter. Either works.
 
 ---
 
@@ -283,7 +283,7 @@ Condensed observations that should survive.
 
 ### About the frontmatter
 
-- **Always quote descriptions.** The time saved by unquoted descriptions is dwarfed by the time spent debugging YAML parse failures. (The current repo has a mix — new content should default to quoted.)
+- **Always quote descriptions.** The time saved by unquoted descriptions is dwarfed by the time spent debugging YAML parse failures. (The current repo has a mix, new content should default to quoted.)
 - **`date` for posts, `created`/`updated` for topics.** Both schemas are used; don't mix.
 - **`canonical` matters for cross-posts.** Set it even if you don't cross-post yet.
 
@@ -293,11 +293,11 @@ Condensed observations that should survive.
 
 | Symptom | First place to look |
 | --- | --- |
-| Build fails on YAML | The named file's frontmatter — usually description quoting |
+| Build fails on YAML | The named file's frontmatter, usually description quoting |
 | "language not recognized" warning | Unknown language tag in a code fence; switch to `text` or a known language |
 | Deploy fails on GitHub Actions | Pages settings; `base` in `astro.config.mjs`; build succeeded locally first |
 | Page exists but isn't in sidebar | Missing frontmatter, wrong directory, or forgot to save |
-| Link in content is 404 | Relative path — astro wants `./subtopic/` or `../sibling/`, not absolute |
+| Link in content is 404 | Relative path, astro wants `./subtopic/` or `../sibling/`, not absolute |
 | Mermaid diagram rendered as text | Mermaid plugin isn't enabled; use ASCII art |
 
 ---

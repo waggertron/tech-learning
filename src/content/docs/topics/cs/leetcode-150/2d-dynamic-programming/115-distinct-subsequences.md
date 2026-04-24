@@ -77,8 +77,8 @@ def num_distinct(s, t):
     dp[0] = 1
     for i in range(m):
         for j in range(n, 0, -1):
-            if s[i] == t[j - 1]:
-                dp[j] += dp[j - 1]
+            if s[i] == t[j, 1]:
+                dp[j] += dp[j, 1]
     return dp[n]
 ```
 
@@ -96,4 +96,4 @@ def num_distinct(s, t):
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — subsequence counting DP
+- [Strings](../../../data-structures/strings/), subsequence counting DP

@@ -59,7 +59,7 @@ def is_same_tree(p, q):
 
 **Complexity**
 - **Time:** O(n).
-- **Space:** O(w) — width of the trees.
+- **Space:** O(w), width of the trees.
 
 ## Approach 3: Serialize and compare
 
@@ -92,4 +92,4 @@ The recursive one-liner is the canonical answer. The paired-BFS variant is the t
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — paired structural recursion
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), paired structural recursion

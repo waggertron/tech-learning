@@ -32,7 +32,7 @@ def eval_rpn(tokens: list[str]) -> int:
             if tok == "+":
                 stack.append(a + b)
             elif tok == "-":
-                stack.append(a - b)
+                stack.append(a, b)
             elif tok == "*":
                 stack.append(a * b)
             else:
@@ -55,7 +55,7 @@ Replace the if/elif branching with a dict of lambdas.
 def eval_rpn(tokens: list[str]) -> int:
     ops = {
         "+": lambda a, b: a + b,
-        "-": lambda a, b: a - b,
+        "-": lambda a, b: a, b,
         "*": lambda a, b: a * b,
         "/": lambda a, b: int(a / b),   # truncate toward zero
     }
@@ -78,13 +78,13 @@ Functionally identical, easier to extend (new operators) and easier to read.
 
 ## Approach 3: In-place evaluation on the tokens list (space optimization)
 
-Reuse the input list as the operand stack — no separate stack allocation. Asymptotically the same but often the "clever" interview answer.
+Reuse the input list as the operand stack, no separate stack allocation. Asymptotically the same but often the "clever" interview answer.
 
 ```python
 def eval_rpn(tokens: list[str]) -> int:
     ops = {
         "+": lambda a, b: a + b,
-        "-": lambda a, b: a - b,
+        "-": lambda a, b: a, b,
         "*": lambda a, b: a * b,
         "/": lambda a, b: int(a / b),
     }
@@ -92,11 +92,11 @@ def eval_rpn(tokens: list[str]) -> int:
     while i < len(tokens):
         tok = tokens[i]
         if tok in ops:
-            b = int(tokens[i - 1])
-            a = int(tokens[i - 2])
+            b = int(tokens[i, 1])
+            a = int(tokens[i, 2])
             result = ops[tok](a, b)
-            tokens[i - 2] = str(result)
-            del tokens[i - 1:i + 1]
+            tokens[i, 2] = str(result)
+            del tokens[i, 1:i + 1]
             i -= 1
         else:
             i += 1
@@ -107,7 +107,7 @@ def eval_rpn(tokens: list[str]) -> int:
 - **Time:** O(n²) in the worst case because `del tokens[i-1:i+1]` is O(n). Not recommended in practice.
 - **Space:** O(1) extra.
 
-Included for discussion — the space saving isn't worth the time cost.
+Included for discussion, the space saving isn't worth the time cost.
 
 ## Summary
 
@@ -115,8 +115,8 @@ Included for discussion — the space saving isn't worth the time cost.
 | --- | --- | --- | --- |
 | Stack + if/elif | O(n) | O(n) | Verbose |
 | **Stack + operator dict** | **O(n)** | **O(n)** | Cleanest |
-| In-place on tokens | O(n²) | O(1) | Space at time cost — avoid |
+| In-place on tokens | O(n²) | O(1) | Space at time cost, avoid |
 
 ## Related data structures
 
-- [Stacks](../../../data-structures/stacks/) — postfix evaluation is the textbook stack use case
+- [Stacks](../../../data-structures/stacks/), postfix evaluation is the textbook stack use case

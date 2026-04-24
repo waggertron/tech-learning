@@ -1,6 +1,6 @@
 ---
 title: MLOps
-description: The engineering discipline around getting ML models into production and keeping them useful. Experiment tracking, feature stores, model registries, serving, monitoring drift, and retraining — what each layer does and when you actually need it.
+description: The engineering discipline around getting ML models into production and keeping them useful. Experiment tracking, feature stores, model registries, serving, monitoring drift, and retraining, what each layer does and when you actually need it.
 category: ops
 tags: [mlops, machine-learning, mlflow, feature-stores, monitoring]
 status: draft
@@ -18,7 +18,7 @@ A trained model in a notebook and a model serving production traffic are separat
 - How do you retrain without breaking everything that depends on the current model?
 - How do you A/B test a new model against the current one?
 
-MLOps is the name for the engineering practice that answers these. The term is modeled on DevOps — same instincts (automation, version control, monitoring, continuous delivery), applied to models instead of services.
+MLOps is the name for the engineering practice that answers these. The term is modeled on DevOps, same instincts (automation, version control, monitoring, continuous delivery), applied to models instead of services.
 
 ## The MLOps lifecycle
 
@@ -42,11 +42,11 @@ Real-world MLOps platforms break into five layers. You don't need all of them on
 
 **Tools:**
 
-- [MLflow](https://mlflow.org/) — open-source, file- or DB-backed, minimal setup
-- [Weights & Biases](https://wandb.ai/) — SaaS, rich dashboards, team collaboration
-- [Neptune](https://neptune.ai/) — SaaS, strong metadata organization
-- [Comet](https://www.comet.com/) — SaaS, similar to W&B
-- [TensorBoard](https://www.tensorflow.org/tensorboard) — logs only; use with one of the above for registry
+- [MLflow](https://mlflow.org/), open-source, file- or DB-backed, minimal setup
+- [Weights & Biases](https://wandb.ai/), SaaS, rich dashboards, team collaboration
+- [Neptune](https://neptune.ai/), SaaS, strong metadata organization
+- [Comet](https://www.comet.com/), SaaS, similar to W&B
+- [TensorBoard](https://www.tensorflow.org/tensorboard), logs only; use with one of the above for registry
 
 Minimal MLflow example:
 
@@ -73,11 +73,11 @@ with mlflow.start_run():
 
 **Tools:**
 
-- [Feast](https://feast.dev/) — open-source, multi-backend (Redis, DynamoDB, Postgres)
-- [Tecton](https://www.tecton.ai/) — commercial, the founders of Feast
-- [Databricks Feature Store](https://docs.databricks.com/en/machine-learning/feature-store/index.html) — native to Databricks
-- [Vertex AI Feature Store](https://cloud.google.com/vertex-ai/docs/featurestore) — GCP
-- [SageMaker Feature Store](https://aws.amazon.com/sagemaker/feature-store/) — AWS
+- [Feast](https://feast.dev/), open-source, multi-backend (Redis, DynamoDB, Postgres)
+- [Tecton](https://www.tecton.ai/), commercial, the founders of Feast
+- [Databricks Feature Store](https://docs.databricks.com/en/machine-learning/feature-store/index.html), native to Databricks
+- [Vertex AI Feature Store](https://cloud.google.com/vertex-ai/docs/featurestore), GCP
+- [SageMaker Feature Store](https://aws.amazon.com/sagemaker/feature-store/), AWS
 
 When feature stores are overkill: small teams, few features, batch inference only. A well-tested set of feature-engineering functions shared between training and serving covers 80% of the value without the operational weight.
 
@@ -138,7 +138,7 @@ def predict(features: list[float]) -> dict:
     return {"score": score}
 ```
 
-Add `/healthz`, `/metrics`, request/response logging, input validation — everything a normal service has.
+Add `/healthz`, `/metrics`, request/response logging, input validation, everything a normal service has.
 
 ### 5. Monitoring
 
@@ -146,28 +146,28 @@ Add `/healthz`, `/metrics`, request/response logging, input validation — every
 
 **Solution:** monitor four things, in addition to normal service health:
 
-- **Data drift** — has the input distribution changed? KS test, population stability index, or Evidently AI.
-- **Prediction drift** — has the output distribution changed? Often easier to detect than data drift.
-- **Calibration** — do predicted probabilities match observed frequencies?
-- **Ground-truth latency** — how long until you find out whether a prediction was correct? Some problems have same-day ground truth; others take weeks.
+- **Data drift**, has the input distribution changed? KS test, population stability index, or Evidently AI.
+- **Prediction drift**, has the output distribution changed? Often easier to detect than data drift.
+- **Calibration**, do predicted probabilities match observed frequencies?
+- **Ground-truth latency**, how long until you find out whether a prediction was correct? Some problems have same-day ground truth; others take weeks.
 
 **Tools:**
 
-- [Evidently AI](https://www.evidentlyai.com/) — open-source drift and quality dashboards
-- [WhyLabs](https://whylabs.ai/) — SaaS, fluent data observability
-- [Arize](https://arize.com/) — SaaS, strong on LLM observability now too
-- [Fiddler](https://www.fiddler.ai/) — commercial, explainability-first
+- [Evidently AI](https://www.evidentlyai.com/), open-source drift and quality dashboards
+- [WhyLabs](https://whylabs.ai/), SaaS, fluent data observability
+- [Arize](https://arize.com/), SaaS, strong on LLM observability now too
+- [Fiddler](https://www.fiddler.ai/), commercial, explainability-first
 
 Dashboards alone aren't enough. Wire drift into **alerts** that page when the PSI exceeds a threshold.
 
-## The CI/CD dimension — CT and CI/CD/CM
+## The CI/CD dimension, CT and CI/CD/CM
 
 Applied to ML, CI/CD fragments into three pipelines:
 
-- **CI** — code changes. Unit tests, lint, type checks. Same as any service.
-- **CT (continuous training)** — data or schedule changes. Re-run the training pipeline when fresh data arrives or on a cron. Produce a new model version; don't auto-promote.
-- **CD** — deploy a *specific* model version to production. Usually a manual promotion after evaluation against a holdout set.
-- **CM (continuous monitoring)** — drift and performance monitoring triggering retraining or rollbacks.
+- **CI**, code changes. Unit tests, lint, type checks. Same as any service.
+- **CT (continuous training)**, data or schedule changes. Re-run the training pipeline when fresh data arrives or on a cron. Produce a new model version; don't auto-promote.
+- **CD**, deploy a *specific* model version to production. Usually a manual promotion after evaluation against a holdout set.
+- **CM (continuous monitoring)**, drift and performance monitoring triggering retraining or rollbacks.
 
 Keep CI and CT separate. A flaky code change shouldn't eat GPU hours retraining a model.
 
@@ -175,9 +175,9 @@ Keep CI and CT separate. A flaky code change shouldn't eat GPU hours retraining 
 
 Google's well-known [MLOps levels](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning) offer a useful gradient:
 
-- **Level 0 — manual process.** Data scientists hand models over to engineers. No automation, no monitoring. Most teams start here.
-- **Level 1 — ML pipeline automation.** The training pipeline is a DAG that runs on a schedule or trigger. CT is automated; CD is manual.
-- **Level 2 — CI/CD pipeline automation.** Training *code* changes trigger the pipeline. Model versions are promoted automatically based on evaluation metrics. Full MLOps maturity.
+- **Level 0, manual process.** Data scientists hand models over to engineers. No automation, no monitoring. Most teams start here.
+- **Level 1, ML pipeline automation.** The training pipeline is a DAG that runs on a schedule or trigger. CT is automated; CD is manual.
+- **Level 2, CI/CD pipeline automation.** Training *code* changes trigger the pipeline. Model versions are promoted automatically based on evaluation metrics. Full MLOps maturity.
 
 Most production systems live at Level 1. Level 2 requires high data volume and an experiment cadence that justifies the infrastructure.
 
@@ -193,21 +193,21 @@ ML deployments are GitOps too: a repo holds manifests that reference model versi
 
 ### Batch vs online
 
-Not every model needs to be a REST service. Many recommendation, churn, and risk models run as nightly batch jobs — pull the data, score every row, write results to a table. Batch is easier, cheaper, and has looser latency requirements. Reach for online serving only when you need it.
+Not every model needs to be a REST service. Many recommendation, churn, and risk models run as nightly batch jobs, pull the data, score every row, write results to a table. Batch is easier, cheaper, and has looser latency requirements. Reach for online serving only when you need it.
 
 ### Shadow mode
 
 A new model runs in parallel with the current one and logs predictions without affecting users. Compare the distributions, validate behavior, then cut over. Essential for high-stakes models.
 
-## LLM ops — the new cousin
+## LLM ops, the new cousin
 
 Everything above was built for classical ML (gradient boosting, random forests, small neural nets). LLMs introduce new concerns:
 
-- **Prompt versioning** — prompts are code; treat them like it.
-- **Evaluation** — LLM quality is harder to measure than a regression MAE. Use LLM-as-judge, golden datasets, and human evals.
-- **Cost monitoring** — per-request cost varies with input/output tokens. Track it.
-- **Retrieval** — RAG stacks have their own failure modes (index staleness, chunking drift). See the [RAG topic](../../ai/rag/).
-- **Latency** — LLM latency is dominated by the provider, not your code. Build in streaming, fallback models, and circuit breakers.
+- **Prompt versioning**, prompts are code; treat them like it.
+- **Evaluation**, LLM quality is harder to measure than a regression MAE. Use LLM-as-judge, golden datasets, and human evals.
+- **Cost monitoring**, per-request cost varies with input/output tokens. Track it.
+- **Retrieval**, RAG stacks have their own failure modes (index staleness, chunking drift). See the [RAG topic](../../ai/rag/).
+- **Latency**, LLM latency is dominated by the provider, not your code. Build in streaming, fallback models, and circuit breakers.
 
 Tools specifically for LLM ops: [LangSmith](https://smith.langchain.com/), [Helicone](https://www.helicone.ai/), [PromptLayer](https://promptlayer.com/), [Humanloop](https://humanloop.com/), [Braintrust](https://www.braintrust.dev/).
 
@@ -227,27 +227,27 @@ If you're setting up MLOps from scratch on a small team:
 
 1. **MLflow** for tracking + registry (self-hosted; file backend is fine).
 2. **DVC** or **lakeFS** for dataset versioning, or just a well-structured S3 layout with version suffixes.
-3. **Shared Python package** for feature engineering — no full feature store yet.
+3. **Shared Python package** for feature engineering, no full feature store yet.
 4. **FastAPI + joblib** for serving, deployed like any other service.
 5. **Evidently AI** for drift monitoring, wired to Prometheus or a dashboard.
-6. **A `retrain.py` script** run on a schedule — evaluate, register, *don't* autopromote.
+6. **A `retrain.py` script** run on a schedule, evaluate, register, *don't* autopromote.
 
 That's a fully functional MLOps setup in one afternoon. Grow features as the pain reveals what's missing.
 
 ## References
 
-- [Google — MLOps: Continuous delivery and automation pipelines in machine learning](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning) — the canonical maturity levels
+- [Google, MLOps: Continuous delivery and automation pipelines in machine learning](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning), the canonical maturity levels
 - [MLflow documentation](https://mlflow.org/docs/latest/)
-- [Feast — feature store](https://docs.feast.dev/)
-- [Evidently AI — monitoring](https://docs.evidentlyai.com/)
-- [Made With ML — MLOps course](https://madewithml.com/) — practical, from-scratch walkthrough
-- [Eugene Yan — applied ML writing](https://eugeneyan.com/) — the go-to blog for production ML patterns
-- [Chip Huyen — *Designing Machine Learning Systems*](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/) — the textbook
-- [ML Ops principles — ml-ops.org](https://ml-ops.org/) — a solid community reference
+- [Feast, feature store](https://docs.feast.dev/)
+- [Evidently AI, monitoring](https://docs.evidentlyai.com/)
+- [Made With ML, MLOps course](https://madewithml.com/), practical, from-scratch walkthrough
+- [Eugene Yan, applied ML writing](https://eugeneyan.com/), the go-to blog for production ML patterns
+- [Chip Huyen, *Designing Machine Learning Systems*](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/), the textbook
+- [ML Ops principles, ml-ops.org](https://ml-ops.org/), a solid community reference
 
 ## Related topics
 
-- [GitOps](../gitops/) — the deployment philosophy
-- [ArgoCD](../argocd/) — GitOps controller for model deployments
-- [AI Harness Development](../../ai/harness-development/) — the runtime layer for LLM systems
-- [RAG](../../ai/rag/) — retrieval patterns for LLM apps
+- [GitOps](../gitops/), the deployment philosophy
+- [ArgoCD](../argocd/), GitOps controller for model deployments
+- [AI Harness Development](../../ai/harness-development/), the runtime layer for LLM systems
+- [RAG](../../ai/rag/), retrieval patterns for LLM apps

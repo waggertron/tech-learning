@@ -21,7 +21,7 @@ Follow-up: can you do it in O(n log n)?
 
 LeetCode 300 · [Link](https://leetcode.com/problems/longest-increasing-subsequence/) · *Medium*
 
-## Approach 1: Brute force — try every subsequence
+## Approach 1: Brute force, try every subsequence
 
 Enumerate all 2ⁿ subsequences; keep the longest strictly increasing.
 
@@ -31,7 +31,7 @@ Enumerate all 2ⁿ subsequences; keep the longest strictly increasing.
 
 Skip.
 
-## Approach 2: DP — O(n²)
+## Approach 2: DP, O(n²)
 
 `dp[i]` = length of LIS ending at `i`. `dp[i] = 1 + max(dp[j] for j < i if nums[j] < nums[i])`.
 
@@ -75,7 +75,7 @@ def length_of_lis(nums):
 - **Space:** O(n) for the `tails` array.
 
 ### Note
-`tails` is not itself a valid LIS — it's the *length-indexed* smallest tails. But `len(tails)` equals the LIS length, which is all we need.
+`tails` is not itself a valid LIS, it's the *length-indexed* smallest tails. But `len(tails)` equals the LIS length, which is all we need.
 
 For the actual sequence, track predecessor indices alongside (more bookkeeping).
 
@@ -91,4 +91,4 @@ Patience sort is the canonical O(n log n) answer. Same template: Longest Bitonic
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP array / `tails` binary search
+- [Arrays](../../../data-structures/arrays/), DP array / `tails` binary search

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Design a stack that supports `push`, `pop`, `top`, and `getMin` — all in O(1) time.
+Design a stack that supports `push`, `pop`, `top`, and `getMin`, all in O(1) time.
 
 **Example**
 ```
@@ -24,7 +24,7 @@ ms.getMin();   // -2
 
 LeetCode 155 · [Link](https://leetcode.com/problems/min-stack/) · *Medium*
 
-## Approach 1: Brute force — scan on getMin
+## Approach 1: Brute force, scan on getMin
 
 Use a plain stack; compute `min(stack)` on every `getMin` call.
 
@@ -116,4 +116,4 @@ The tuple-stack and auxiliary-stack approaches are equivalent in Big-O. Pick by 
 
 ## Related data structures
 
-- [Stacks](../../../data-structures/stacks/) — carrying running aggregate state per frame is a classic pattern
+- [Stacks](../../../data-structures/stacks/), carrying running aggregate state per frame is a classic pattern

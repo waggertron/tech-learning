@@ -1,6 +1,6 @@
 ---
-title: Throttling and rate limiting — algorithms, placement, and the right response codes
-description: Token bucket, leaky bucket, fixed and sliding windows — the four algorithms, when to pick each, where in the stack to enforce them, what to send back to clients, and the pitfalls that make a "working" rate limiter let abuse through.
+title: Throttling and rate limiting, algorithms, placement, and the right response codes
+description: Token bucket, leaky bucket, fixed and sliding windows, the four algorithms, when to pick each, where in the stack to enforce them, what to send back to clients, and the pitfalls that make a "working" rate limiter let abuse through.
 date: 2026-04-24
 tags: [rate-limiting, throttling, security, performance]
 crosspost: [devto, linkedin]
@@ -11,9 +11,9 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-throttlin
 
 Every public endpoint faces three different threats at the same time:
 
-- **Abuse** — scrapers, credential stuffers, and API-draining bots.
-- **Overload** — legitimate traffic briefly spiking past capacity.
-- **Noisy neighbors** — one customer's runaway integration eating everyone else's quota.
+- **Abuse**, scrapers, credential stuffers, and API-draining bots.
+- **Overload**, legitimate traffic briefly spiking past capacity.
+- **Noisy neighbors**, one customer's runaway integration eating everyone else's quota.
 
 Rate limiting addresses all three but with different parameters. A login endpoint wants a strict per-IP burst limit (abuse). A long-running read endpoint wants a fair-share queue (overload + neighbors). A write endpoint usually wants a per-account quota (neighbors).
 
@@ -37,11 +37,11 @@ Good for: coarse quotas ("100 API calls per hour"), where approximate counting i
 
 ### 2. Sliding window log
 
-Store every request timestamp. Count those newer than `now - window`.
+Store every request timestamp. Count those newer than `now, window`.
 
 ```
 log[user].append(now)
-log[user] = [t for t in log[user] if t > now - 60]
+log[user] = [t for t in log[user] if t > now, 60]
 if len(log[user]) > limit: reject
 ```
 
@@ -58,7 +58,7 @@ Approximate the sliding window by blending two fixed windows.
 prev_window_count = counts[user][previous_minute]
 curr_window_count = counts[user][current_minute]
 elapsed_in_curr = now % 60  / 60    # fraction
-weighted = prev_window_count * (1 - elapsed_in_curr) + curr_window_count
+weighted = prev_window_count * (1, elapsed_in_curr) + curr_window_count
 if weighted > limit: reject
 ```
 
@@ -72,7 +72,7 @@ Good for: public API quotas with millions of users. Cloudflare and others ship t
 A bucket of N tokens refills at rate R tokens/sec, capped at N. Each request consumes 1 token; if empty, reject or wait.
 
 ```
-tokens = min(N, tokens + (now - last_refill) * R)
+tokens = min(N, tokens + (now, last_refill) * R)
 last_refill = now
 if tokens >= 1:
     tokens -= 1
@@ -107,7 +107,7 @@ Rate limiting can happen at many layers. Pick intentionally:
 
 ### At the edge (CDN / WAF)
 
-Cloudflare, Fastly, AWS WAF. Drops abusive traffic before it reaches your servers. Cheap, fast, effective against bot swarms. Configured by rules — usually per-IP with a small number of dimensions.
+Cloudflare, Fastly, AWS WAF. Drops abusive traffic before it reaches your servers. Cheap, fast, effective against bot swarms. Configured by rules, usually per-IP with a small number of dimensions.
 
 **Use for:** DDoS-adjacent protection, bot mitigation, simple per-IP bounds.
 
@@ -131,7 +131,7 @@ Connection pools + query budgets. Not quite rate limiting, but the same instinct
 
 Most production systems do 2–3 of these layered. Edge handles the dumb abuse; gateway handles plan quotas; application handles business-logic rules.
 
-## Example — Django middleware with a Redis token bucket
+## Example, Django middleware with a Redis token bucket
 
 ```python
 # rate_limit.py
@@ -152,7 +152,7 @@ local state = redis.call('HMGET', key, 'tokens', 'ts')
 local tokens = tonumber(state[1]) or capacity
 local ts = tonumber(state[2]) or now
 
-local elapsed = math.max(0, now - ts)
+local elapsed = math.max(0, now, ts)
 tokens = math.min(capacity, tokens + elapsed * rate)
 
 if tokens < cost then
@@ -161,7 +161,7 @@ if tokens < cost then
   return {0, tokens}
 end
 
-tokens = tokens - cost
+tokens = tokens, cost
 redis.call('HMSET', key, 'tokens', tokens, 'ts', now)
 redis.call('EXPIRE', key, 3600)
 return {1, tokens}
@@ -190,15 +190,15 @@ class RateLimitMiddleware:
         return response
 ```
 
-Everything in a single Lua script — atomic on Redis, no race between check and decrement. The cost parameter lets expensive endpoints consume more tokens.
+Everything in a single Lua script, atomic on Redis, no race between check and decrement. The cost parameter lets expensive endpoints consume more tokens.
 
-## The response — do it right
+## The response, do it right
 
 Clients need three things:
 
-1. **HTTP 429 Too Many Requests** — the status code.
-2. **`Retry-After` header** — seconds until retry, or an HTTP-date.
-3. **Current limit state** (optional but kind) — `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.
+1. **HTTP 429 Too Many Requests**, the status code.
+2. **`Retry-After` header**, seconds until retry, or an HTTP-date.
+3. **Current limit state** (optional but kind), `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.
 
 ```
 HTTP/1.1 429 Too Many Requests
@@ -217,23 +217,23 @@ Clients can back off intelligently; support can debug.
 
 The key you count against is a design decision:
 
-- **By IP** — robust but imperfect (NAT, shared networks, CGNAT). Still the only option for unauthenticated endpoints.
-- **By API key** — clean for B2B APIs.
-- **By user ID** — the correct unit for authenticated user-facing APIs.
-- **By session / cookie** — roughly equivalent to user ID.
-- **By tenant / account** — the unit that matters for per-customer quotas.
+- **By IP**, robust but imperfect (NAT, shared networks, CGNAT). Still the only option for unauthenticated endpoints.
+- **By API key**, clean for B2B APIs.
+- **By user ID**, the correct unit for authenticated user-facing APIs.
+- **By session / cookie**, roughly equivalent to user ID.
+- **By tenant / account**, the unit that matters for per-customer quotas.
 
 Most production systems do **authenticated → user, unauthenticated → IP**. The public login endpoint almost always needs IP-level limits because that's all you have.
 
 ## Distributed concerns
 
-A multi-node API with local per-process counters can't enforce a global rate limit — a burst sent across 10 pods gets 10× the intended rate.
+A multi-node API with local per-process counters can't enforce a global rate limit, a burst sent across 10 pods gets 10× the intended rate.
 
 Options:
 
 1. **Centralize state in Redis** (as above). Cheap and correct.
-2. **Sticky routing by key** — route all requests from a user to one pod. Works but loses the redundancy benefits of multiple pods.
-3. **Probabilistic approaches** — each pod approximates the limit locally; sample-broadcast to sync. Used at hyperscale.
+2. **Sticky routing by key**, route all requests from a user to one pod. Works but loses the redundancy benefits of multiple pods.
+3. **Probabilistic approaches**, each pod approximates the limit locally; sample-broadcast to sync. Used at hyperscale.
 
 Centralized Redis handles most teams' needs up to six-figure RPS. Beyond that, consider specialized services like [Envoy's global rate limit service](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/ratelimit) or [Stripe's custom approach](https://stripe.com/blog/rate-limiters).
 
@@ -301,16 +301,16 @@ Ship that on day one; tune on day N.
 
 ## References
 
-- [Stripe — *Scaling your API with rate limiters*](https://stripe.com/blog/rate-limiters) — battle-tested perspective
-- [Cloudflare — *How we built rate limiting capable of scaling to millions of domains*](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
-- [NGINX — Rate Limiting](https://www.nginx.com/blog/rate-limiting-nginx/) — classic leaky bucket
+- [Stripe, *Scaling your API with rate limiters*](https://stripe.com/blog/rate-limiters), battle-tested perspective
+- [Cloudflare, *How we built rate limiting capable of scaling to millions of domains*](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
+- [NGINX, Rate Limiting](https://www.nginx.com/blog/rate-limiting-nginx/), classic leaky bucket
 - [Envoy global rate limit filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/rate_limit_filter)
-- [django-ratelimit](https://django-ratelimit.readthedocs.io/) — solid middleware option for Django
-- [RFC 6585 — 429](https://datatracker.ietf.org/doc/html/rfc6585) — formal definition
-- [RFC 7231 — Retry-After](https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.3)
+- [django-ratelimit](https://django-ratelimit.readthedocs.io/), solid middleware option for Django
+- [RFC 6585, 429](https://datatracker.ietf.org/doc/html/rfc6585), formal definition
+- [RFC 7231, Retry-After](https://datatracker.ietf.org/doc/html/rfc7231#section-7.1.3)
 
 ## Related topics and posts
 
-- [REST API design](./2026-04-24-rest-api-design/) — where rate-limit headers fit in
-- [Stateless auth](./2026-04-24-stateless-auth/) — identifying the rate-limited client
+- [REST API design](./2026-04-24-rest-api-design/), where rate-limit headers fit in
+- [Stateless auth](./2026-04-24-stateless-auth/), identifying the rate-limited client
 - [Modern browser security concerns](./2026-04-24-modern-browser-security/)

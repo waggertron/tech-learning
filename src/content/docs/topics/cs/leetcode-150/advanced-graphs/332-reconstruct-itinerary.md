@@ -18,7 +18,7 @@ You are given a list of airline tickets where `tickets[i] = [fromᵢ, toᵢ]`. R
 
 LeetCode 332 · [Link](https://leetcode.com/problems/reconstruct-itinerary/) · *Hard*
 
-## Approach 1: Brute force — backtracking
+## Approach 1: Brute force, backtracking
 
 Try every permutation of tickets starting from JFK; pick the lexicographically smallest valid one.
 
@@ -124,5 +124,5 @@ Hierholzer's is the canonical answer. The "build in reverse" trick is subtle; re
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — Eulerian path; Hierholzer's algorithm
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — lexicographic neighbor selection
+- [Graphs](../../../data-structures/graphs/), Eulerian path; Hierholzer's algorithm
+- [Heaps / Priority Queues](../../../data-structures/heaps/), lexicographic neighbor selection

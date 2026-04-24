@@ -1,6 +1,6 @@
 ---
 title: "53. Maximum Subarray"
-description: Find the contiguous subarray with the largest sum — Kadane's algorithm.
+description: Find the contiguous subarray with the largest sum, Kadane's algorithm.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, dp, medium]
 status: draft
@@ -19,7 +19,7 @@ Given an integer array `nums`, find the contiguous subarray (at least one elemen
 
 LeetCode 53 · [Link](https://leetcode.com/problems/maximum-subarray/) · *Medium*
 
-## Approach 1: Brute force — every subarray
+## Approach 1: Brute force, every subarray
 
 ```python
 def max_subarray(nums):
@@ -51,7 +51,7 @@ def max_subarray(nums):
 
         left_suffix = right_prefix = float('-inf')
         total = 0
-        for i in range(mid, lo - 1, -1):
+        for i in range(mid, lo, 1, -1):
             total += nums[i]
             left_suffix = max(left_suffix, total)
         total = 0
@@ -60,7 +60,7 @@ def max_subarray(nums):
             right_prefix = max(right_prefix, total)
 
         return max(left_max, right_max, left_suffix + right_prefix)
-    return helper(0, len(nums) - 1)
+    return helper(0, len(nums), 1)
 ```
 
 **Complexity**
@@ -69,7 +69,7 @@ def max_subarray(nums):
 
 ## Approach 3: Kadane's algorithm (optimal greedy)
 
-Keep a running sum. If it goes negative, reset to 0 — no point carrying negative baggage forward.
+Keep a running sum. If it goes negative, reset to 0, no point carrying negative baggage forward.
 
 ```python
 def max_subarray(nums):
@@ -85,7 +85,7 @@ def max_subarray(nums):
 - **Space:** O(1).
 
 ### Why greedy works
-At each position, the best subarray ending here is either "extend the previous best" or "start fresh from here." That's it — a greedy choice (restart vs. extend) at every index suffices, because a negative running total can only hurt future extensions.
+At each position, the best subarray ending here is either "extend the previous best" or "start fresh from here." That's it, a greedy choice (restart vs. extend) at every index suffices, because a negative running total can only hurt future extensions.
 
 ## Summary
 
@@ -99,4 +99,4 @@ Kadane's is the canonical answer. Same template: Maximum Product Subarray (152) 
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; running sum
+- [Arrays](../../../data-structures/arrays/), input; running sum

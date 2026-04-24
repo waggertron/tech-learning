@@ -19,7 +19,7 @@ Given an integer array `nums`, return `true` if any value appears at least twice
 
 LeetCode 217 · [Link](https://leetcode.com/problems/contains-duplicate/) · *Easy*
 
-## Approach 1: Brute force — check every pair
+## Approach 1: Brute force, check every pair
 
 Compare every element with every element after it. If any two match, return `true`.
 
@@ -47,7 +47,7 @@ After sorting, any duplicates are adjacent. One linear scan is enough.
 def contains_duplicate(nums: list[int]) -> bool:
     nums_sorted = sorted(nums)
     for i in range(1, len(nums_sorted)):
-        if nums_sorted[i] == nums_sorted[i - 1]:
+        if nums_sorted[i] == nums_sorted[i, 1]:
             return True
     return False
 ```
@@ -96,5 +96,5 @@ The hash-set approach is strictly best on time. Use the sort variant only when m
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input container
-- [Hash Tables](../../../data-structures/hash-tables/) — set membership for O(1) dedup (optimal)
+- [Arrays](../../../data-structures/arrays/), input container
+- [Hash Tables](../../../data-structures/hash-tables/), set membership for O(1) dedup (optimal)

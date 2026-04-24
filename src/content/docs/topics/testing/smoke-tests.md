@@ -10,15 +10,15 @@ updated: 2026-04-24
 
 ## What a smoke test is
 
-**A smoke test is a small, fast check that confirms the system is running at all.** Named after the electronics test — turn it on, does smoke come out? If yes, dig deeper.
+**A smoke test is a small, fast check that confirms the system is running at all.** Named after the electronics test, turn it on, does smoke come out? If yes, dig deeper.
 
-Smoke tests are **not** designed to find bugs. They're designed to answer one question: *can I move forward?* Deploy succeeded — smoke tests confirm the server is reachable. Incident declared — smoke tests confirm which endpoints still work.
+Smoke tests are **not** designed to find bugs. They're designed to answer one question: *can I move forward?* Deploy succeeded, smoke tests confirm the server is reachable. Incident declared, smoke tests confirm which endpoints still work.
 
 Three defining properties:
 
-- **Fast** — under 60 seconds total, ideally under 15.
-- **Narrow** — a handful of endpoints / flows, not dozens.
-- **Reliable** — if a smoke test fails, something is really wrong. Low false-positive rate is sacred.
+- **Fast**, under 60 seconds total, ideally under 15.
+- **Narrow**, a handful of endpoints / flows, not dozens.
+- **Reliable**, if a smoke test fails, something is really wrong. Low false-positive rate is sacred.
 
 ## What to smoke-test
 
@@ -33,11 +33,11 @@ The basics every web service should have:
 
 That's six tests. Under a minute. Good enough to catch ~90% of broken deploys.
 
-## Example — a bash smoke test
+## Example, a bash smoke test
 
 ```bash
 #!/bin/bash
-# smoke-test.sh — exits non-zero if anything fails
+# smoke-test.sh, exits non-zero if anything fails
 
 set -euo pipefail
 
@@ -47,33 +47,33 @@ PASSWORD="${PASSWORD:-demo1234}"
 
 fail() { echo "FAIL: $*"; exit 1; }
 
-echo "1/6 — GET /healthz"
+echo "1/6, GET /healthz"
 code=$(curl -s -o /dev/null -w '%{http_code}' "$API/healthz")
 [[ "$code" == "200" ]] || fail "healthz returned $code"
 
-echo "2/6 — GET /readyz"
+echo "2/6, GET /readyz"
 code=$(curl -s -o /dev/null -w '%{http_code}' "$API/readyz")
 [[ "$code" == "200" ]] || fail "readyz returned $code"
 
-echo "3/6 — GET /version"
+echo "3/6, GET /version"
 version=$(curl -s "$API/version" | jq -r .sha)
 [[ -n "$version" && "$version" != "null" ]] || fail "version missing"
 echo "   version: $version"
 
-echo "4/6 — POST /auth/login"
+echo "4/6, POST /auth/login"
 token=$(curl -sf -X POST "$API/api/v1/auth/login/" \
   -H 'Content-Type: application/json' \
   -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}" \
   | jq -r .access)
 [[ -n "$token" && "$token" != "null" ]] || fail "login failed"
 
-echo "5/6 — GET /api/v1/patients/ with token"
+echo "5/6, GET /api/v1/patients/ with token"
 code=$(curl -s -o /dev/null -w '%{http_code}' \
   -H "Authorization: Bearer $token" \
   "$API/api/v1/patients/")
 [[ "$code" == "200" ]] || fail "patients list returned $code"
 
-echo "6/6 — POST /api/v1/patients/ then DELETE"
+echo "6/6, POST /api/v1/patients/ then DELETE"
 pid=$(curl -sf -X POST "$API/api/v1/patients/" \
   -H "Authorization: Bearer $token" \
   -H 'Content-Type: application/json' \
@@ -88,9 +88,9 @@ Six checks, done in 10 seconds against a local environment. Embed it in the repo
 
 ## When to run them
 
-- **After every deploy.** Blocker — if smoke fails, roll back.
+- **After every deploy.** Blocker, if smoke fails, roll back.
 - **As a canary in CI.** Before the heavy integration / E2E suite runs, smoke first. A broken build fails in 15 seconds, not 15 minutes.
-- **On-call triage.** "I just got paged; is the API actually up?" — run smoke.
+- **On-call triage.** "I just got paged; is the API actually up?", run smoke.
 - **After an infra change.** DNS cutover, cert renewal, load balancer reconfiguration. Smoke confirms nothing user-visible broke.
 - **Hourly in prod** as a synthetic canary. Catches outages before customers notice.
 
@@ -98,11 +98,11 @@ Six checks, done in 10 seconds against a local environment. Embed it in the repo
 
 Run smoke tests on a schedule against production:
 
-- **[Checkly](https://www.checklyhq.com/)** — Playwright-based synthetic monitoring.
-- **[Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/)** — same idea, Datadog-integrated.
+- **[Checkly](https://www.checklyhq.com/)**, Playwright-based synthetic monitoring.
+- **[Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/)**, same idea, Datadog-integrated.
 - **[New Relic Synthetics](https://docs.newrelic.com/docs/synthetics/)**
-- **[UptimeRobot / Statuscake](https://uptimerobot.com/)** — simpler HTTP-level uptime checks.
-- **Cron + curl + alerting** — roll-your-own via a tiny always-on container hitting your endpoints.
+- **[UptimeRobot / Statuscake](https://uptimerobot.com/)**, simpler HTTP-level uptime checks.
+- **Cron + curl + alerting**, roll-your-own via a tiny always-on container hitting your endpoints.
 
 The checks that matter:
 
@@ -148,7 +148,7 @@ Shared with the E2E suite but tagged `@smoke` and run earlier. Playwright's [tes
 ## Common mistakes
 
 - **Testing too much.** A "smoke test" that takes 5 minutes is an integration test. Trim ruthlessly.
-- **Flaky smoke tests.** A flake rate above ~1% makes the test useless — nobody believes a failure. Fix or remove.
+- **Flaky smoke tests.** A flake rate above ~1% makes the test useless, nobody believes a failure. Fix or remove.
 - **No cleanup.** Leaving smoke-test data behind pollutes prod. Use a disposable tenant or delete what you create.
 - **Wrong granularity.** "GET /api/" that returns "Hello World" is too coarse. Hit something that actually requires the DB, cache, and auth.
 - **Same as integration tests.** If smoke is a subset of integration, duplicate the files. Run `pytest -m smoke` for the quick pass and `pytest -m integration` for the full one.
@@ -171,14 +171,14 @@ If you can't check all of them, it's not earning its keep.
 
 ## References
 
-- [Martin Fowler — TestCoverage](https://martinfowler.com/bliki/TestCoverage.html) — contextualizes smoke as a subset
-- [Checkly](https://www.checklyhq.com/) — synthetic monitoring product
+- [Martin Fowler, TestCoverage](https://martinfowler.com/bliki/TestCoverage.html), contextualizes smoke as a subset
+- [Checkly](https://www.checklyhq.com/), synthetic monitoring product
 - [Datadog Synthetics](https://docs.datadoghq.com/synthetics/)
-- [Playwright test annotations](https://playwright.dev/docs/test-annotations#tag-tests) — for tagging a smoke subset
-- [Google SRE book — Chapter on release engineering](https://sre.google/sre-book/release-engineering/) — smoke as part of release validation
+- [Playwright test annotations](https://playwright.dev/docs/test-annotations#tag-tests), for tagging a smoke subset
+- [Google SRE book, Chapter on release engineering](https://sre.google/sre-book/release-engineering/), smoke as part of release validation
 
 ## Related topics
 
-- [E2E tests](../e2e-tests/) — smoke tests at the UI tier are a subset of these
-- [Integration tests](../integration-tests/) — smoke tests often reuse the same infrastructure
-- [Unit tests](../unit-tests/) — the opposite end of the speed/coverage spectrum
+- [E2E tests](../e2e-tests/), smoke tests at the UI tier are a subset of these
+- [Integration tests](../integration-tests/), smoke tests often reuse the same infrastructure
+- [Unit tests](../unit-tests/), the opposite end of the speed/coverage spectrum

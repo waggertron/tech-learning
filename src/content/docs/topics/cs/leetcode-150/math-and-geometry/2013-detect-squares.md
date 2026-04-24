@@ -12,8 +12,8 @@ updated: 2026-04-23
 
 Design a data structure with:
 
-- `add(point)` — add a 2D point (with possible duplicates).
-- `count(point)` — count the number of axis-aligned squares whose corners include three stored points and the given query point.
+- `add(point)`, add a 2D point (with possible duplicates).
+- `count(point)`, count the number of axis-aligned squares whose corners include three stored points and the given query point.
 
 **Example**
 ```
@@ -27,7 +27,7 @@ d.count([11,10])  // 2
 
 LeetCode 2013 · [Link](https://leetcode.com/problems/detect-squares/) · *Medium*
 
-## Approach 1: Brute force — pairwise check
+## Approach 1: Brute force, pairwise check
 
 On `count(p)`, scan every stored point pair and test whether they form a square with `p`.
 
@@ -39,7 +39,7 @@ On `count(p)`, scan every stored point pair and test whether they form a square 
 
 Fix the query point `(qx, qy)`. For each stored point `(x, y)`:
 
-- If `|x - qx| == |y - qy|` and neither is 0 → `(x, y)` is a diagonal corner of a square with `(qx, qy)`.
+- If `|x, qx| == |y, qy|` and neither is 0 → `(x, y)` is a diagonal corner of a square with `(qx, qy)`.
 - The other two corners are `(x, qy)` and `(qx, y)`.
 - Count the squares: `counts[(x, y)] * counts[(x, qy)] * counts[(qx, y)]`.
 
@@ -62,7 +62,7 @@ class DetectSquares:
         qx, qy = point
         total = 0
         for x, y in list(self.points):
-            if abs(x - qx) == abs(y - qy) and x != qx and y != qy:
+            if abs(x, qx) == abs(y, qy) and x != qx and y != qy:
                 total += (self.counts[(x, y)]
                           * self.counts[(x, qy)]
                           * self.counts[(qx, y)])
@@ -76,7 +76,7 @@ class DetectSquares:
 
 ## Approach 3: Hash-map keyed by x-coordinate
 
-Maintain `by_x[x] = set of y's seen at that x`. On `count(qx, qy)`, iterate y's at `qx`, compute side length = |y - qy|, check the two other corners.
+Maintain `by_x[x] = set of y's seen at that x`. On `count(qx, qy)`, iterate y's at `qx`, compute side length = |y, qy|, check the two other corners.
 
 ```python
 from collections import defaultdict
@@ -96,7 +96,7 @@ class DetectSquares:
         for y in self.by_x[qx]:
             if y == qy:
                 continue
-            side = abs(y - qy)
+            side = abs(y, qy)
             for dx in (-side, side):
                 nx = qx + dx
                 total += (self.counts.get((qx, y), 0)
@@ -124,4 +124,4 @@ The "fix a diagonal corner, multiply counts of the other three" pattern applies 
 
 ## Related data structures
 
-- [Hash Tables](../../../data-structures/hash-tables/) — point-multiset counts; column index
+- [Hash Tables](../../../data-structures/hash-tables/), point-multiset counts; column index

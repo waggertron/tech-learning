@@ -14,7 +14,7 @@ You are given an array `stones` where each stone has a positive integer weight. 
 
 1. Take the two heaviest stones `x, y` (with `x ≤ y`).
 2. If `x == y`, both are destroyed.
-3. Otherwise, replace them with a stone of weight `y - x`.
+3. Otherwise, replace them with a stone of weight `y, x`.
 
 Return the weight of the last remaining stone, or 0 if none remain.
 
@@ -24,7 +24,7 @@ Return the weight of the last remaining stone, or 0 if none remain.
 
 LeetCode 1046 · [Link](https://leetcode.com/problems/last-stone-weight/) · *Easy*
 
-## Approach 1: Brute force — sort each round
+## Approach 1: Brute force, sort each round
 
 Each round, sort the array, pop the two largest, compute the remainder, append.
 
@@ -36,7 +36,7 @@ def last_stone_weight(stones):
         y = stones.pop()
         x = stones.pop()
         if x != y:
-            stones.append(y - x)
+            stones.append(y, x)
     return stones[0] if stones else 0
 ```
 
@@ -58,7 +58,7 @@ def last_stone_weight(stones):
         y = -heapq.heappop(heap)
         x = -heapq.heappop(heap)
         if x != y:
-            heapq.heappush(heap, -(y - x))
+            heapq.heappush(heap, -(y, x))
     return -heap[0] if heap else 0
 ```
 
@@ -79,7 +79,7 @@ def last_stone_weight(stones):
         y = sl.pop()
         x = sl.pop()
         if x != y:
-            sl.add(y - x)
+            sl.add(y, x)
     return sl[0] if sl else 0
 ```
 
@@ -101,4 +101,4 @@ Simulation problems with dynamic priority almost always want a heap.
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — max-heap via negated min-heap
+- [Heaps / Priority Queues](../../../data-structures/heaps/), max-heap via negated min-heap

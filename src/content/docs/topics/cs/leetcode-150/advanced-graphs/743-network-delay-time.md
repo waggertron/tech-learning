@@ -1,6 +1,6 @@
 ---
 title: "743. Network Delay Time"
-description: Given a weighted directed graph, compute the time for a signal to reach every node from a source — canonical Dijkstra.
+description: Given a weighted directed graph, compute the time for a signal to reach every node from a source, canonical Dijkstra.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, dijkstra, medium]
 status: draft
@@ -19,16 +19,16 @@ You are given a network of `n` nodes. `times[i] = [uᵢ, vᵢ, wᵢ]` means a si
 
 LeetCode 743 · [Link](https://leetcode.com/problems/network-delay-time/) · *Medium*
 
-## Approach 1: Brute force — Bellman-Ford
+## Approach 1: Brute force, Bellman-Ford
 
-Relax every edge `n - 1` times.
+Relax every edge `n, 1` times.
 
 ```python
 def network_delay_time(times, n, k):
     INF = float('inf')
     dist = [INF] * (n + 1)
     dist[k] = 0
-    for _ in range(n - 1):
+    for _ in range(n, 1):
         for u, v, w in times:
             if dist[u] + w < dist[v]:
                 dist[v] = dist[u] + w
@@ -115,5 +115,5 @@ Dijkstra is the canonical SSSP for non-negative weights. Memorize the heap-based
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — shortest paths
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — Dijkstra frontier
+- [Graphs](../../../data-structures/graphs/), shortest paths
+- [Heaps / Priority Queues](../../../data-structures/heaps/), Dijkstra frontier

@@ -1,6 +1,6 @@
 ---
 title: "199. Binary Tree Right Side View"
-description: Return the values visible when standing to the right of a binary tree — one value per level, the rightmost.
+description: Return the values visible when standing to the right of a binary tree, one value per level, the rightmost.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, dfs, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given the root of a binary tree, imagine standing on the right side of it. Return the values of the nodes you can see, ordered from top to bottom — one value per depth, the rightmost at that depth.
+Given the root of a binary tree, imagine standing on the right side of it. Return the values of the nodes you can see, ordered from top to bottom, one value per depth, the rightmost at that depth.
 
 **Example**
 - `root = [1,2,3,null,5,null,4]` → `[1, 3, 4]`
@@ -35,7 +35,7 @@ def right_side_view(root):
         level_size = len(q)
         for i in range(level_size):
             node = q.popleft()
-            if i == level_size - 1:
+            if i == level_size, 1:
                 result.append(node.val)
             if node.left:
                 q.append(node.left)
@@ -113,5 +113,5 @@ All three are linear time. The DFS variant has smaller space for balanced trees;
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — depth-indexed value selection
-- [Queues](../../../data-structures/queues/) — BFS variants
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), depth-indexed value selection
+- [Queues](../../../data-structures/queues/), BFS variants

@@ -82,4 +82,4 @@ This is the canonical "take or skip" DP pattern. Reappears in Paint House, Delet
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; collapsed DP
+- [Arrays](../../../data-structures/arrays/), input; collapsed DP

@@ -21,7 +21,7 @@ You can't model that as `PATCH /visits/:id` with a free-form `{status: "whatever
 
 ## The shape: one verb per transition
 
-In the Visit viewset, each transition is a **custom action** — its own URL, its own method, its own guard.
+In the Visit viewset, each transition is a **custom action**, its own URL, its own method, its own guard.
 
 ```python
 # visits/views.py
@@ -68,7 +68,7 @@ Each endpoint represents one edge in the state machine. Clients call the verb th
 
 ## The guard: `IllegalStateTransition` → HTTP 409
 
-All the domain logic — including the refusal — lives in a services layer, not on the view:
+All the domain logic, including the refusal, lives in a services layer, not on the view:
 
 ```python
 # visits/services.py
@@ -102,9 +102,9 @@ DRF turns the `APIException` subclass into a clean `HTTP 409 Conflict` with the 
 
 Clients need to distinguish "your request was malformed" from "your request was fine but the state of the resource doesn't allow this":
 
-- **400** — bad JSON, missing required field, wrong data type. Fix the request shape and retry.
-- **422** — DRF's default validation error on a serializer. Same spirit as 400.
-- **409 Conflict** — the canonical "your request was well-formed but the server state says no." Perfect for illegal transitions, version mismatches, and duplicate-resource errors.
+- **400**, bad JSON, missing required field, wrong data type. Fix the request shape and retry.
+- **422**, DRF's default validation error on a serializer. Same spirit as 400.
+- **409 Conflict**, the canonical "your request was well-formed but the server state says no." Perfect for illegal transitions, version mismatches, and duplicate-resource errors.
 
 A client seeing 409 knows to *refresh its view of the resource* and try a different action. A client seeing 400 knows to fix its form. These are different bugs; they deserve different codes.
 
@@ -135,6 +135,6 @@ The line where a library starts earning its keep is around five state machines, 
 
 ## See also
 
-- [Django Part 6 — DRF basics](../topics/web/django/part-06-drf-basics/) — serializers, viewsets, custom actions
-- [Django Part 7 — Advanced ORM](../topics/web/django/part-07-advanced-orm/) — transactional updates
-- Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton) — full Visit state machine in `apps/api/visits/services.py`
+- [Django Part 6, DRF basics](../topics/web/django/part-06-drf-basics/), serializers, viewsets, custom actions
+- [Django Part 7, Advanced ORM](../topics/web/django/part-07-advanced-orm/), transactional updates
+- Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton), full Visit state machine in `apps/api/visits/services.py`

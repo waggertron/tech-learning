@@ -12,8 +12,8 @@ updated: 2026-04-23
 
 Design a data structure supporting:
 
-- `addWord(word)` — add a word.
-- `search(word)` — true iff any added word matches. `word` may contain `.` which matches any single letter.
+- `addWord(word)`, add a word.
+- `search(word)`, true iff any added word matches. `word` may contain `.` which matches any single letter.
 
 **Example**
 ```
@@ -27,7 +27,7 @@ wd.search("b..");  // true
 
 LeetCode 211 · [Link](https://leetcode.com/problems/design-add-and-search-words-data-structure/) · *Medium*
 
-## Approach 1: Brute force — list of words, regex match
+## Approach 1: Brute force, list of words, regex match
 
 Store words in a list; on search, compile `.` as regex.
 
@@ -118,7 +118,7 @@ class WordDictionary:
 - `search`: O(L) average, O(26^L) worst (all wildcards in a dense trie).
 - Space: O(total chars).
 
-The wildcard branches are where performance can degrade — a prompt like `"......"` against a dense dictionary is the pathological case.
+The wildcard branches are where performance can degrade, a prompt like `"......"` against a dense dictionary is the pathological case.
 
 ## Summary
 
@@ -132,4 +132,4 @@ The trie approach generalizes to **212 Word Search II** (the next problem) where
 
 ## Related data structures
 
-- [Tries](../../../data-structures/tries/) — trie with wildcard DFS
+- [Tries](../../../data-structures/tries/), trie with wildcard DFS

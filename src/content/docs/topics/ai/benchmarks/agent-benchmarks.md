@@ -1,6 +1,6 @@
 ---
 title: Agent benchmarks
-description: Terminal-Bench, TAU-bench, OSWorld, WebArena, GAIA, BrowseComp. Benchmarks that measure an LLM's ability to actually do things — use a browser, operate a terminal, call APIs, navigate a real OS. The hardest-to-score and most reward-hackable category.
+description: Terminal-Bench, TAU-bench, OSWorld, WebArena, GAIA, BrowseComp. Benchmarks that measure an LLM's ability to actually do things, use a browser, operate a terminal, call APIs, navigate a real OS. The hardest-to-score and most reward-hackable category.
 parent: benchmarks
 tags: [agents, tau-bench, osworld, webarena, gaia, benchmarks]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-24
 
 ## What agent benchmarks measure
 
-Agent benchmarks evaluate models that **act** — operate a browser, run shell commands, call APIs, navigate a desktop. The score is pass/fail on a task completion, not on generating correct text.
+Agent benchmarks evaluate models that **act**, operate a browser, run shell commands, call APIs, navigate a desktop. The score is pass/fail on a task completion, not on generating correct text.
 
 Two structural differences from QA benchmarks:
 
@@ -21,7 +21,7 @@ Both properties make agent benchmarks uniquely gameable. [Berkeley's RDI team ha
 
 ## SWE-bench and its variants
 
-See the [coding benchmarks](../coding-benchmarks/) page. SWE-bench is technically an agent benchmark — it requires long-horizon tool use — but has its own full treatment there.
+See the [coding benchmarks](../coding-benchmarks/) page. SWE-bench is technically an agent benchmark, it requires long-horizon tool use, but has its own full treatment there.
 
 ## Terminal-Bench
 
@@ -33,17 +33,17 @@ See the [coding benchmarks](../coding-benchmarks/) page. SWE-bench is technicall
 
 ## TAU-bench (τ-bench)
 
-Released by Sierra in 2024. Evaluates agents in simulated real-world enterprise environments — a retail customer-service API and an airline-booking API. Tasks: "look up my order and extend the return window," "cancel my flight and rebook me on the afternoon one."
+Released by Sierra in 2024. Evaluates agents in simulated real-world enterprise environments, a retail customer-service API and an airline-booking API. Tasks: "look up my order and extend the return window," "cancel my flight and rebook me on the afternoon one."
 
-**Why it matters.** The closest benchmark to deployed enterprise agents — API calls, policy constraints, multi-turn user interaction with a simulated user persona.
+**Why it matters.** The closest benchmark to deployed enterprise agents, API calls, policy constraints, multi-turn user interaction with a simulated user persona.
 
 **TAU2 (2025).** Expanded version with telecom scenarios and more nuanced policies.
 
-**Reading TAU scores.** Two axes: pass rate (did the task complete?) and pass^k (did the task complete reliably across N repeated runs?). Reliability matters in production; TAU measures it explicitly. An 80% pass@1 with 40% pass^4 means the agent is half-working — not production-ready.
+**Reading TAU scores.** Two axes: pass rate (did the task complete?) and pass^k (did the task complete reliably across N repeated runs?). Reliability matters in production; TAU measures it explicitly. An 80% pass@1 with 40% pass^4 means the agent is half-working, not production-ready.
 
 ## OSWorld
 
-Released by University of Hong Kong / Salesforce, 2024. 369 cross-application tasks on Ubuntu, Windows, and macOS. Tasks span browsers, office suites, code editors, file managers. Execution-based evaluation — the scorer actually runs the agent's actions and checks the final desktop state.
+Released by University of Hong Kong / Salesforce, 2024. 369 cross-application tasks on Ubuntu, Windows, and macOS. Tasks span browsers, office suites, code editors, file managers. Execution-based evaluation, the scorer actually runs the agent's actions and checks the final desktop state.
 
 **Why it matters.** The most comprehensive computer-use benchmark. Measures real GUI manipulation, not just CLI.
 
@@ -73,7 +73,7 @@ Released by CMU, 2023. Canonical web-navigation benchmark. Agents operate agains
 
 ## BrowseComp
 
-Released by OpenAI, 2024. 1,266 questions requiring deep web browsing — find information that isn't in any one source, synthesize across sites.
+Released by OpenAI, 2024. 1,266 questions requiring deep web browsing, find information that isn't in any one source, synthesize across sites.
 
 **Why it matters.** Highlights the "actual research" failure mode. A model that answers 90% of HLE can still struggle to find the current CEO's birthday across multiple sources.
 
@@ -83,7 +83,7 @@ Released by OpenAI, 2024. 1,266 questions requiring deep web browsing — find i
 
 Broad evaluation framework covering 8 environments: OS, DB, Knowledge Graph, Card Game, Lateral Thinking, House-Holding, Web Shopping, Web Browsing. Research-focused; less direct relevance for production evaluation but useful for capability breadth.
 
-## BFCL — Berkeley Function Calling Leaderboard
+## BFCL, Berkeley Function Calling Leaderboard
 
 Specifically evaluates **function-calling / tool-use quality**. Not full agent tasks, but structured tool-call correctness across hundreds of functions and scenarios.
 
@@ -91,9 +91,9 @@ Specifically evaluates **function-calling / tool-use quality**. Not full agent t
 
 ## MLE-Bench, DA-Bench, and specialized agent benchmarks
 
-- **MLE-Bench** — machine-learning engineering tasks (Kaggle-like). Tests whether an agent can build a working ML model end-to-end.
-- **DA-Bench** — data analytics tasks. Load data, answer questions, produce charts.
-- **HAL (Hackers And Lawyers)** — legal/compliance agent scenarios.
+- **MLE-Bench**, machine-learning engineering tasks (Kaggle-like). Tests whether an agent can build a working ML model end-to-end.
+- **DA-Bench**, data analytics tasks. Load data, answer questions, produce charts.
+- **HAL (Hackers And Lawyers)**, legal/compliance agent scenarios.
 
 These are the domain-specialized agent benchmarks. Useful for hiring decisions (will this model do my team's work?) but rarely on headline charts.
 
@@ -101,10 +101,10 @@ These are the domain-specialized agent benchmarks. Useful for hiring decisions (
 
 Berkeley's [RDI team analysis](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/) demonstrates how every major agent benchmark can be hacked:
 
-- **SWE-bench** — agent inspects the test file, hard-codes the expected output.
-- **WebArena** — agent finds a shortcut through the test environment, bypasses the intended task.
-- **OSWorld** — agent modifies success-detection scripts themselves.
-- **TAU-bench** — agent exploits the simulated user's fallback behaviors.
+- **SWE-bench**, agent inspects the test file, hard-codes the expected output.
+- **WebArena**, agent finds a shortcut through the test environment, bypasses the intended task.
+- **OSWorld**, agent modifies success-detection scripts themselves.
+- **TAU-bench**, agent exploits the simulated user's fallback behaviors.
 
 None of these represent "the agent solved the task correctly." All produce high scores.
 
@@ -128,7 +128,7 @@ Agents are flaky. A 70% pass@1 with 30% pass^4 means only 30% of the time does t
 
 ### Look at error distributions
 
-A benchmark pass rate doesn't tell you *which* tasks failed. Model A at 70% and Model B at 70% can have non-overlapping failures — A crushes web tasks, B crushes CLI tasks. Aggregate scores hide this.
+A benchmark pass rate doesn't tell you *which* tasks failed. Model A at 70% and Model B at 70% can have non-overlapping failures, A crushes web tasks, B crushes CLI tasks. Aggregate scores hide this.
 
 ## What agent benchmarks don't measure
 
@@ -140,20 +140,20 @@ A benchmark pass rate doesn't tell you *which* tasks failed. Model A at 70% and 
 
 ## References
 
-- [SWE-bench](https://www.swebench.com/) — see the [coding benchmarks page](../coding-benchmarks/) for depth
+- [SWE-bench](https://www.swebench.com/), see the [coding benchmarks page](../coding-benchmarks/) for depth
 - [TAU-bench (Sierra)](https://github.com/sierra-research/tau-bench)
 - [OSWorld](https://os-world.github.io/)
 - [WebArena](https://webarena.dev/)
-- [GAIA — Mialon et al., 2023](https://arxiv.org/abs/2311.12983)
+- [GAIA, Mialon et al., 2023](https://arxiv.org/abs/2311.12983)
 - [BrowseComp (OpenAI)](https://openai.com/index/browsecomp/)
 - [Berkeley Function Calling Leaderboard](https://gorilla.cs.berkeley.edu/leaderboard.html)
 - [AgentBench](https://llmbench.ai/agent)
-- [Berkeley RDI — *How We Broke Top AI Agent Benchmarks*](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/) — essential reading on gaming
+- [Berkeley RDI, *How We Broke Top AI Agent Benchmarks*](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/), essential reading on gaming
 - [Steel.dev agent benchmark index](https://leaderboard.steel.dev/results)
 - [Awesome Agents leaderboards](https://awesomeagents.ai/leaderboards/)
 
 ## Related topics
 
-- [Coding benchmarks](../coding-benchmarks/) — SWE-bench details
-- [Evaluation methodology and metrics](../evaluation-and-methods/) — pass^k, reliability metrics
-- [AI Harness Development](../../harness-development/) — building the scaffold an agent runs in
+- [Coding benchmarks](../coding-benchmarks/), SWE-bench details
+- [Evaluation methodology and metrics](../evaluation-and-methods/), pass^k, reliability metrics
+- [AI Harness Development](../../harness-development/), building the scaffold an agent runs in

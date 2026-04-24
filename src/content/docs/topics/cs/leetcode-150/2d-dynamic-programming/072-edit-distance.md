@@ -22,8 +22,8 @@ LeetCode 72 · [Link](https://leetcode.com/problems/edit-distance/) · *Hard*
 
 `f(i, j)` = edit distance between `word1[i:]` and `word2[j:]`.
 
-- If `i == m`: need `n - j` inserts.
-- If `j == n`: need `m - i` deletes.
+- If `i == m`: need `n, j` inserts.
+- If `j == n`: need `m, i` deletes.
 - If chars match: `f(i + 1, j + 1)`.
 - Else: `1 + min(f(i + 1, j), f(i, j + 1), f(i + 1, j + 1))` (delete, insert, replace).
 
@@ -31,9 +31,9 @@ LeetCode 72 · [Link](https://leetcode.com/problems/edit-distance/) · *Hard*
 def min_distance(word1, word2):
     def f(i, j):
         if i == len(word1):
-            return len(word2) - j
+            return len(word2), j
         if j == len(word2):
-            return len(word1) - i
+            return len(word1), i
         if word1[i] == word2[j]:
             return f(i + 1, j + 1)
         return 1 + min(f(i + 1, j), f(i, j + 1), f(i + 1, j + 1))
@@ -53,9 +53,9 @@ def min_distance(word1, word2):
     @lru_cache(maxsize=None)
     def f(i, j):
         if i == len(word1):
-            return len(word2) - j
+            return len(word2), j
         if j == len(word2):
-            return len(word1) - i
+            return len(word1), i
         if word1[i] == word2[j]:
             return f(i + 1, j + 1)
         return 1 + min(f(i + 1, j), f(i, j + 1), f(i + 1, j + 1))
@@ -80,10 +80,10 @@ def min_distance(word1, word2):
         dp[0][j] = j
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            if word1[i - 1] == word2[j - 1]:
-                dp[i][j] = dp[i - 1][j - 1]
+            if word1[i, 1] == word2[j, 1]:
+                dp[i][j] = dp[i, 1][j, 1]
             else:
-                dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
+                dp[i][j] = 1 + min(dp[i, 1][j], dp[i][j, 1], dp[i, 1][j, 1])
     return dp[m][n]
 ```
 
@@ -99,8 +99,8 @@ def min_distance(word1, word2):
 | Top-down memo | O(m · n) | O(m · n) |
 | **Bottom-up 2-D DP** | **O(m · n)** | **O(m · n)** |
 
-Edit Distance (Levenshtein) is one of the most-cited DP problems — it underlies spell-check, DNA alignment, and diff algorithms.
+Edit Distance (Levenshtein) is one of the most-cited DP problems, it underlies spell-check, DNA alignment, and diff algorithms.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — 2-D DP over prefix lengths
+- [Strings](../../../data-structures/strings/), 2-D DP over prefix lengths

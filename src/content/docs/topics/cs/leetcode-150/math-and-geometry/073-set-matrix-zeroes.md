@@ -1,6 +1,6 @@
 ---
 title: "73. Set Matrix Zeroes"
-description: If an element in an m×n matrix is 0, set its entire row and column to 0 — in place.
+description: If an element in an m×n matrix is 0, set its entire row and column to 0, in place.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]
 status: draft
@@ -18,7 +18,7 @@ Given an `m × n` integer matrix, if a cell is `0`, set its entire row and colum
 
 LeetCode 73 · [Link](https://leetcode.com/problems/set-matrix-zeroes/) · *Medium*
 
-## Approach 1: Brute force — make a copy
+## Approach 1: Brute force, make a copy
 
 Create a copy; read from the copy while writing zeroes to the original.
 
@@ -54,7 +54,7 @@ def set_zeroes(matrix):
 - **Time:** O(m · n).
 - **Space:** O(m + n).
 
-## Approach 3: First row and column as markers (O(1) space — canonical)
+## Approach 3: First row and column as markers (O(1) space, canonical)
 
 Use the first row and column themselves as flag arrays. Track separately whether the first row / first column themselves need zeroing.
 
@@ -101,4 +101,4 @@ def set_zeroes(matrix):
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — in-place marking strategy
+- [Arrays](../../../data-structures/arrays/), in-place marking strategy

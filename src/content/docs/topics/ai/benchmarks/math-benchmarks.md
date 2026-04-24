@@ -1,6 +1,6 @@
 ---
 title: Math benchmarks
-description: GSM8K, MATH, AIME, FrontierMath, OlympiadBench. The benchmark family where LLMs went from "embarrassingly bad" in 2021 to beating most competition math in 2025 — and the remaining gap that FrontierMath exposes.
+description: GSM8K, MATH, AIME, FrontierMath, OlympiadBench. The benchmark family where LLMs went from "embarrassingly bad" in 2021 to beating most competition math in 2025, and the remaining gap that FrontierMath exposes.
 parent: benchmarks
 tags: [math, gsm8k, aime, frontiermath, benchmarks]
 status: draft
@@ -12,14 +12,14 @@ updated: 2026-04-24
 
 Math is a useful laboratory for reasoning evaluation:
 
-- **Ground truth is cheap to verify.** The answer is "42" or it isn't — no rubric required.
+- **Ground truth is cheap to verify.** The answer is "42" or it isn't, no rubric required.
 - **Problems scale in difficulty cleanly.** Grade-school → competition → research, in steps anyone can calibrate against.
 - **Memorization is visible.** A model that recites an answer without derivation can be spotted by asking variants.
 - **Tool use is separable.** Pure LLM vs "LLM with calculator" vs "LLM with Python interpreter" gives three distinct numbers per model.
 
 This is why the math-benchmark family has carried more signal about reasoning progress than the broader knowledge family over the past four years.
 
-## GSM8K — Grade School Math 8K
+## GSM8K, Grade School Math 8K
 
 Released by OpenAI in 2021. 8,500 linguistically diverse grade-school-level word problems requiring multi-step arithmetic. 2–8 elementary-school operations per problem.
 
@@ -39,15 +39,15 @@ The 2021 Hendrycks benchmark. 12,500 problems from high-school math competitions
 
 **What makes it cleaner than GSM8K.** Harder (competition math, not word problems), and the difficulty levels give a cleaner picture of where a model breaks.
 
-## AIME — American Invitational Mathematics Examination
+## AIME, American Invitational Mathematics Examination
 
-Real AIME problems from 2022–2024 serve as benchmarks. AIME is a real high-school competition — 15 problems, 3 hours, answers are integers 0–999.
+Real AIME problems from 2022–2024 serve as benchmarks. AIME is a real high-school competition, 15 problems, 3 hours, answers are integers 0–999.
 
 **Why it's used.** Public problems exist; solutions exist; exact-match scoring is trivial; problems are hard enough to still differentiate top models.
 
 **Saturation (April 2026).** AIME 2024 is largely solved by top reasoning models (100% on many subsets with reasoning compute). AIME 2025 is newer and partially unsolved. The community cycles to the latest year's problems as they're released.
 
-**Contamination risk.** AIME problems are heavily discussed online — training data almost certainly includes worked solutions. The signal is mostly about "can the model match a solution," not "can it derive one." Still useful, but interpret with that caveat.
+**Contamination risk.** AIME problems are heavily discussed online, training data almost certainly includes worked solutions. The signal is mostly about "can the model match a solution," not "can it derive one." Still useful, but interpret with that caveat.
 
 ## FrontierMath
 
@@ -55,7 +55,7 @@ Released in 2024 by Epoch AI. ~300 original, research-level math problems across
 
 **What it measures.** Research-level mathematical reasoning. Problems are designed to take a specialist mathematician hours to days to solve. The formulation is unambiguous and the answer is numerical, but the path is genuinely research-grade.
 
-**Human baseline.** Professional mathematicians in the problem's subfield: substantial but unclear "success rate" — hours per problem.
+**Human baseline.** Professional mathematicians in the problem's subfield: substantial but unclear "success rate", hours per problem.
 
 **Current state (April 2026).** Frontier models score in the **single digits to mid-teens**. This is the most under-saturated serious math benchmark we have.
 
@@ -73,19 +73,19 @@ Chinese Academy of Sciences benchmark, 2024. Olympiad-level problems in math and
 
 Top reasoning results get reported against specific, hard problem sets:
 
-- **Putnam** — undergraduate math competition.
-- **IMO (International Math Olympiad)** — the gold standard high-school competition.
-- **USAMO** — USA Mathematical Olympiad.
+- **Putnam**, undergraduate math competition.
+- **IMO (International Math Olympiad)**, the gold standard high-school competition.
+- **USAMO**, USA Mathematical Olympiad.
 
-These show up in model release announcements as headline results ("model solved 5/6 IMO problems"). Treat as evidence, not as benchmark scores — the problem count is small and the selection is often cherry-picked.
+These show up in model release announcements as headline results ("model solved 5/6 IMO problems"). Treat as evidence, not as benchmark scores, the problem count is small and the selection is often cherry-picked.
 
 ## Tool-use math benchmarks
 
 Math with a Python interpreter is a different thing than math without. Many benchmarks now report separate scores:
 
-- **Pure reasoning** — model must derive and compute mentally.
-- **Code interpreter** — model can write and run Python.
-- **Full agent** — model can use arbitrary tools, web search, scratchpads.
+- **Pure reasoning**, model must derive and compute mentally.
+- **Code interpreter**, model can write and run Python.
+- **Full agent**, model can use arbitrary tools, web search, scratchpads.
 
 A model may score 60% on MATH without tools, 95% with a code interpreter. Both are useful to know for different deployment contexts.
 
@@ -107,7 +107,7 @@ Some leaderboards report `pass@1` (one attempt), others `pass@8` or `pass@64`. P
 
 For problems with numerical answers, a model generating correct-looking but incorrect arithmetic can sometimes stumble onto the right number. Random agreement on AIME problems is ~0.1% per item, but over hundreds of attempts, lucky guesses add up.
 
-## Reasoning-mode math — the story of 2024–2026
+## Reasoning-mode math, the story of 2024–2026
 
 The biggest shift in math benchmarks during 2024–2025 was the introduction of **reasoning-mode** models (OpenAI's o1 series, Anthropic's extended thinking, DeepSeek R1, Gemini's Flash Thinking). These use RL training to produce long chain-of-thought generations before final answers.
 
@@ -128,16 +128,16 @@ The reasoning-mode gap on math benchmarks is the single biggest evidence that te
 
 ## References
 
-- [GSM8K — Cobbe et al., 2021](https://arxiv.org/abs/2110.14168) — and the chain-of-thought paper that emerged from it
-- [MATH — Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)
-- [FrontierMath — Epoch AI, 2024](https://epoch.ai/frontiermath) — the under-saturated benchmark
-- [OlympiadBench — 2024](https://github.com/OpenBMB/OlympiadBench)
-- [AoPS — Art of Problem Solving](https://artofproblemsolving.com/) — where most of the training-data leakage originates
-- [DeepSeek-R1 tech report](https://arxiv.org/abs/2501.12948) — the open reasoning-mode reference
+- [GSM8K, Cobbe et al., 2021](https://arxiv.org/abs/2110.14168), and the chain-of-thought paper that emerged from it
+- [MATH, Hendrycks et al., 2021](https://arxiv.org/abs/2103.03874)
+- [FrontierMath, Epoch AI, 2024](https://epoch.ai/frontiermath), the under-saturated benchmark
+- [OlympiadBench, 2024](https://github.com/OpenBMB/OlympiadBench)
+- [AoPS, Art of Problem Solving](https://artofproblemsolving.com/), where most of the training-data leakage originates
+- [DeepSeek-R1 tech report](https://arxiv.org/abs/2501.12948), the open reasoning-mode reference
 - [OpenAI o1 system card](https://openai.com/index/openai-o1-system-card/)
 
 ## Related topics
 
-- [Knowledge and reasoning benchmarks](../knowledge-and-reasoning/) — adjacent category
-- [Coding benchmarks](../coding-benchmarks/) — the other "objective ground truth" family
-- [Evaluation methodology and metrics](../evaluation-and-methods/) — why pass@k details matter
+- [Knowledge and reasoning benchmarks](../knowledge-and-reasoning/), adjacent category
+- [Coding benchmarks](../coding-benchmarks/), the other "objective ground truth" family
+- [Evaluation methodology and metrics](../evaluation-and-methods/), why pass@k details matter

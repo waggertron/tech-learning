@@ -72,7 +72,7 @@ def reverse_bits(n):
 | String reversal | O(32) | O(32) |
 | **Mask-and-swap** | **O(1)** | **O(1)** |
 
-Mask-and-swap is the classic "known-width bit reversal" trick — also used in FFT bit-reversal permutations.
+Mask-and-swap is the classic "known-width bit reversal" trick, also used in FFT bit-reversal permutations.
 
 ## Related data structures
 

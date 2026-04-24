@@ -1,6 +1,6 @@
 ---
 title: Integration tests
-description: Tests that exercise a real slice of the system — real database, real message broker, real HTTP — to verify components work together. Slower and fewer than unit tests, and the tier where your architecture either holds up or falls apart.
+description: Tests that exercise a real slice of the system, real database, real message broker, real HTTP, to verify components work together. Slower and fewer than unit tests, and the tier where your architecture either holds up or falls apart.
 parent: testing
 tags: [integration-tests, testing, databases, docker]
 status: draft
@@ -10,14 +10,14 @@ updated: 2026-04-24
 
 ## What an integration test is
 
-**An integration test exercises multiple components wired together with real infrastructure** — a real Postgres, a real Redis, a real HTTP server. It verifies that the seams actually work: that your ORM queries map to the SQL you expect, that your serialization round-trips, that your migration is applied before the test runs.
+**An integration test exercises multiple components wired together with real infrastructure**, a real Postgres, a real Redis, a real HTTP server. It verifies that the seams actually work: that your ORM queries map to the SQL you expect, that your serialization round-trips, that your migration is applied before the test runs.
 
 Distinguishing from nearby tiers:
 
-- **Unit test** — no I/O. Pure logic.
-- **Component test** — one slice with real immediate collaborators, I/O stubbed.
-- **Integration test** — real I/O, real dependencies, usually spun up in Docker or test containers.
-- **E2E test** — full system, real browser, real user flow.
+- **Unit test**, no I/O. Pure logic.
+- **Component test**, one slice with real immediate collaborators, I/O stubbed.
+- **Integration test**, real I/O, real dependencies, usually spun up in Docker or test containers.
+- **E2E test**, full system, real browser, real user flow.
 
 ## What you need integration tests for
 
@@ -25,13 +25,13 @@ Classes of bugs unit tests miss:
 
 - **ORM queries that pass on SQLite but fail on Postgres** (`DISTINCT ON`, array columns, window functions).
 - **Migrations that work alone but break in order** (dropping a column another migration depends on).
-- **Transaction scope** — a test that mocks `transaction.atomic` passes; the real code deadlocks.
-- **Message serialization** — a Celery task's arguments change shape between queue and worker.
+- **Transaction scope**, a test that mocks `transaction.atomic` passes; the real code deadlocks.
+- **Message serialization**, a Celery task's arguments change shape between queue and worker.
 - **Connection-pool exhaustion** under concurrency.
 - **Index vs no-index performance** regressions.
 - **Network timeouts** that only surface against a real service.
 
-## Testcontainers — the modern default
+## Testcontainers, the modern default
 
 Running a real dependency in CI used to mean "install Postgres on the CI runner." Now: spin up a container per test session with [Testcontainers](https://testcontainers.com/).
 
@@ -50,10 +50,10 @@ Testcontainers libraries exist for Python, Node, Go, Java, Rust. They manage con
 
 Alternatives:
 
-- **Docker Compose** for tests — works, requires more orchestration in CI.
-- **In-memory / lighter replacements** (`fakeredis`, `aiosqlite`) — good for fast loops; bad when you actually need the real service's semantics.
+- **Docker Compose** for tests, works, requires more orchestration in CI.
+- **In-memory / lighter replacements** (`fakeredis`, `aiosqlite`), good for fast loops; bad when you actually need the real service's semantics.
 
-## Example — a repository test against real Postgres
+## Example, a repository test against real Postgres
 
 ```python
 # test_visit_repository.py
@@ -97,7 +97,7 @@ What this catches that a unit test can't:
 Most test frameworks wrap each test in a transaction and roll back at the end. For databases this is the fastest isolation strategy:
 
 ```python
-# pytest-django default — each test in a transaction, rolled back
+# pytest-django default, each test in a transaction, rolled back
 @pytest.mark.django_db
 def test_creates_visit():
     visit = Visit.objects.create(patient_id=1, tenant_id=1)
@@ -116,12 +116,12 @@ def test_task_sees_committed_data():
 
 Slower but correct for multi-process scenarios.
 
-## HTTP integration — real server, real network
+## HTTP integration, real server, real network
 
 For tests that verify the deployed HTTP surface, run a real server in-process:
 
 ```python
-# pytest fixture — spin up Django's built-in test server
+# pytest fixture, spin up Django's built-in test server
 import pytest
 from django.test import LiveServerTestCase
 
@@ -140,14 +140,14 @@ def test_health_endpoint_returns_200(live_server):
 
 Tests that cross real HTTP catch serialization mismatches, wrong content types, missing CORS headers, and middleware ordering bugs that component tests skip.
 
-## Contract tests — a specialized integration test
+## Contract tests, a specialized integration test
 
 When two services talk to each other, both sides implement the contract. Drift between them breaks integrations.
 
 **Pact** ([pact-broker](https://docs.pact.io/pact_broker)) records consumer expectations and verifies provider compliance in CI:
 
 ```python
-# consumer side — write what you expect
+# consumer side, write what you expect
 pact = Pact("consumer", "provider")
 pact.given("visit 42 exists").upon_receiving("get visit 42").with_request(
     method="GET", path="/api/v1/visits/42/"
@@ -157,7 +157,7 @@ pact.given("visit 42 exists").upon_receiving("get visit 42").with_request(
 )
 ```
 
-The consumer generates a **contract file**. The provider runs its own test using that contract — if the provider fails the contract, CI fails.
+The consumer generates a **contract file**. The provider runs its own test using that contract, if the provider fails the contract, CI fails.
 
 Alternative: OpenAPI / GraphQL schemas as the contract, with schema-diff tooling in CI.
 
@@ -165,10 +165,10 @@ Alternative: OpenAPI / GraphQL schemas as the contract, with schema-diff tooling
 
 Integration tests share resources. Two tests that both `CREATE TABLE audit_log` fight. Strategies:
 
-- **Per-test-worker schemas** — each pytest-xdist worker gets its own schema or database.
-- **Per-test namespaces** — use UUIDs in table names, keys, tenant IDs.
-- **Serial markers** for tests that can't parallelize — pytest's `@pytest.mark.serial`.
-- **Transaction-per-test** — already covered, the default when it works.
+- **Per-test-worker schemas**, each pytest-xdist worker gets its own schema or database.
+- **Per-test namespaces**, use UUIDs in table names, keys, tenant IDs.
+- **Serial markers** for tests that can't parallelize, pytest's `@pytest.mark.serial`.
+- **Transaction-per-test**, already covered, the default when it works.
 
 Fast integration test suites run in parallel. Flaky ones usually have shared state no one planned for.
 
@@ -187,14 +187,14 @@ Don't `sleep(60)` in tests. Inject the clock into domain code (see [Unit tests](
 
 ## Test data at scale
 
-Unit tests get away with hand-crafted objects. Integration tests often need meaningful fixtures — 10 tenants, 100 patients, 1000 visits. Options:
+Unit tests get away with hand-crafted objects. Integration tests often need meaningful fixtures, 10 tenants, 100 patients, 1000 visits. Options:
 
-- **Factory Boy / factory_bot** — Pythonic / Ruby factories with database persistence.
-- **Fishery** — TypeScript equivalent.
-- **SQL fixtures** — a `seed.sql` run before tests. Ugly but fast.
-- **Snapshot the seed** — run the seed command once, take a PG dump, restore it per test session.
+- **Factory Boy / factory_bot**, Pythonic / Ruby factories with database persistence.
+- **Fishery**, TypeScript equivalent.
+- **SQL fixtures**, a `seed.sql` run before tests. Ugly but fast.
+- **Snapshot the seed**, run the seed command once, take a PG dump, restore it per test session.
 
-The bigger the fixture, the slower the setup. Integration tests should use the smallest fixture that reproduces the behavior — not a copy of production.
+The bigger the fixture, the slower the setup. Integration tests should use the smallest fixture that reproduces the behavior, not a copy of production.
 
 ## CI considerations
 
@@ -222,16 +222,16 @@ Integration tests are necessary but not sufficient.
 
 ## References
 
-- [Testcontainers](https://testcontainers.com/) — container lifecycle for tests
-- [Pact](https://docs.pact.io/) — consumer-driven contracts
+- [Testcontainers](https://testcontainers.com/), container lifecycle for tests
+- [Pact](https://docs.pact.io/), consumer-driven contracts
 - [pytest-django](https://pytest-django.readthedocs.io/)
 - [Django `LiveServerTestCase`](https://docs.djangoproject.com/en/5.2/topics/testing/tools/#liveservertestcase)
-- [factory_boy](https://factoryboy.readthedocs.io/) / [factory-bot-rb](https://github.com/thoughtbot/factory_bot) — fixture factories
-- [Martin Fowler — IntegrationTest](https://martinfowler.com/bliki/IntegrationTest.html) — on the overloaded term
+- [factory_boy](https://factoryboy.readthedocs.io/) / [factory-bot-rb](https://github.com/thoughtbot/factory_bot), fixture factories
+- [Martin Fowler, IntegrationTest](https://martinfowler.com/bliki/IntegrationTest.html), on the overloaded term
 
 ## Related topics
 
-- [Unit tests](../unit-tests/) — the tier below
-- [Component tests](../component-tests/) — tier below with I/O stubbed
-- [E2E tests](../e2e-tests/) — the tier above with a real browser
-- [Smoke tests](../smoke-tests/) — the subset you run post-deploy
+- [Unit tests](../unit-tests/), the tier below
+- [Component tests](../component-tests/), tier below with I/O stubbed
+- [E2E tests](../e2e-tests/), the tier above with a real browser
+- [Smoke tests](../smoke-tests/), the subset you run post-deploy

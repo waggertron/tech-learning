@@ -11,7 +11,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-ml-rerank
 
 An OR-Tools VRP minimizes something like *total drive time + window violations + skill penalties*. It's good at that. What it doesn't know:
 
-- This patient has had three visits with clinician A and two with B — A got higher satisfaction scores.
+- This patient has had three visits with clinician A and two with B, A got higher satisfaction scores.
 - This clinician is late on Tuesday mornings, historically.
 - A visit at 14:00 in Santa Monica after a visit in Downtown LA is nominally feasible on haversine + 40 mph, but the traffic reality says otherwise.
 
@@ -28,7 +28,7 @@ minimize  total_drive_time
         - γ · sum(rerank_score(visit, assigned_clinician))
 ```
 
-- **α, β** penalize constraint violations — keep them large so the solver respects them.
+- **α, β** penalize constraint violations, keep them large so the solver respects them.
 - **γ** weights the ML score. Larger γ → the optimizer prefers high-scoring assignments even at some drive-time cost.
 
 The negative sign on the ML term is deliberate: the model predicts a "goodness score" in [0, 1], so we *subtract* it from the cost we're minimizing.
@@ -45,7 +45,7 @@ import joblib
 FEATURES = [
     "clinician_on_time_pct_30d",
     "visits_this_patient_this_clinician",
-    "credential_gap",          # ordinal: clinician skill - required skill
+    "credential_gap",          # ordinal: clinician skill, required skill
     "hour_of_day",
     "day_of_week",
     "traffic_bucket",          # 0-4, derived from hour + region
@@ -62,7 +62,7 @@ def train(df, out_path="ranker.pkl"):
     joblib.dump(model, out_path)
 ```
 
-Training data is synthetic for a portfolio project — a seed script simulates 90 days with realistic noise. The model's job isn't to make a revolutionary prediction; it's to make the solver pick "Sarah for Mrs. Chen" over "Jordan for Mrs. Chen" when both are feasible.
+Training data is synthetic for a portfolio project, a seed script simulates 90 days with realistic noise. The model's job isn't to make a revolutionary prediction; it's to make the solver pick "Sarah for Mrs. Chen" over "Jordan for Mrs. Chen" when both are feasible.
 
 ## Loading the model once, scoring in the hot loop
 
@@ -85,7 +85,7 @@ def score(visit, clinician) -> float:
     features = np.array([[
         clinician.on_time_pct_30d,
         count_prior_visits(visit.patient_id, clinician.id),
-        clinician.credential_ordinal - visit.required_credential_ordinal,
+        clinician.credential_ordinal, visit.required_credential_ordinal,
         visit.window_start.hour,
         visit.window_start.weekday(),
         traffic_bucket(visit.window_start, visit.patient.region),
@@ -95,13 +95,13 @@ def score(visit, clinician) -> float:
 
 ## Wiring the score into OR-Tools
 
-OR-Tools doesn't take arbitrary per-assignment penalties directly — its arc costs are between nodes, not between vehicle-and-node. There are two common approaches:
+OR-Tools doesn't take arbitrary per-assignment penalties directly, its arc costs are between nodes, not between vehicle-and-node. There are two common approaches:
 
 ### Approach 1: precompute a `vehicle_arc_cost` matrix
 
 ```python
 # For each (clinician, visit) pair, precompute:
-#   arc_cost = travel_time - gamma * score(visit, clinician) * scaling_factor
+#   arc_cost = travel_time, gamma * score(visit, clinician) * scaling_factor
 # Register one transit callback per vehicle, using that vehicle's row.
 
 for v_idx, clin in enumerate(clinicians):
@@ -121,7 +121,7 @@ for v_idx, clin in enumerate(clinicians):
     routing.SetArcCostEvaluatorOfVehicle(cb_idx, v_idx)
 ```
 
-One transit callback per vehicle, closed over the clinician index. The ML score shows up as an **arrival bonus** — a high-scoring pairing makes the arc cheaper to traverse.
+One transit callback per vehicle, closed over the clinician index. The ML score shows up as an **arrival bonus**, a high-scoring pairing makes the arc cheaper to traverse.
 
 ### Approach 2: precompute all scores, use a dimension
 
@@ -135,7 +135,7 @@ Approach 2 is cleaner mathematically but harder to scale. Approach 1 is what the
 
 ## Integer arithmetic, scaling, and overflow
 
-OR-Tools arc costs are integers. ML scores are floats in [0, 1]. Multiply by 100 (or 1000) before casting. Also clamp — if the model ever produces an outlier, you don't want the arc cost to go wildly negative and break the solver:
+OR-Tools arc costs are integers. ML scores are floats in [0, 1]. Multiply by 100 (or 1000) before casting. Also clamp, if the model ever produces an outlier, you don't want the arc cost to go wildly negative and break the solver:
 
 ```python
 bonus = int(np.clip(score_value * 100, 0, 100))
@@ -149,10 +149,10 @@ A weekly Celery task (`ml.retrain`) reads the latest data from the reporting sch
 
 ## The philosophical point
 
-OR does hard constraints well. ML does soft preferences well. Putting them in the same objective function is underrated. It's not a novel research idea — it's a practical engineering pattern that shows up in ride dispatch, delivery routing, warehouse picking, anywhere a solver and a predictor have to collaborate. The hard part is keeping the ML score bounded and the weights sane.
+OR does hard constraints well. ML does soft preferences well. Putting them in the same objective function is underrated. It's not a novel research idea, it's a practical engineering pattern that shows up in ride dispatch, delivery routing, warehouse picking, anywhere a solver and a predictor have to collaborate. The hard part is keeping the ML score bounded and the weights sane.
 
 ## See also
 
-- [Vehicle Routing Problem — topic](../topics/cs/vehicle-routing/) — the VRP background
-- [OR-Tools VRP with skill constraints](./2026-04-24-or-tools-vrp-with-skill-constraints/) — the solver setup this post plugs into
-- Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton) — code in `apps/api/scheduling/ranker.py` and `apps/api/scheduling/vrp.py`
+- [Vehicle Routing Problem, topic](../topics/cs/vehicle-routing/), the VRP background
+- [OR-Tools VRP with skill constraints](./2026-04-24-or-tools-vrp-with-skill-constraints/), the solver setup this post plugs into
+- Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton), code in `apps/api/scheduling/ranker.py` and `apps/api/scheduling/vrp.py`

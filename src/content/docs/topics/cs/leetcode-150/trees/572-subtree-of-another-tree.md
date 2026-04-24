@@ -18,7 +18,7 @@ Given the roots of two binary trees `root` and `subRoot`, return `true` if `subR
 
 LeetCode 572 · [Link](https://leetcode.com/problems/subtree-of-another-tree/) · *Easy*
 
-## Approach 1: Brute force — at every node of `root`, check Same Tree
+## Approach 1: Brute force, at every node of `root`, check Same Tree
 
 DFS `root`; at each node, run `isSameTree` against `subRoot`.
 
@@ -62,7 +62,7 @@ def is_subtree(root, subRoot):
 - **Space:** O(m + n) for the strings.
 
 ### Why the delimiters matter
-Without unique delimiters, `serialize(subRoot)` could match a substring of `serialize(root)` that doesn't correspond to an actual subtree — for example, matching a prefix of one node's serialization plus a suffix of another. The delimiter pattern I used (`,val,(L)(R)`) ensures a node's serialization has unambiguous start and end.
+Without unique delimiters, `serialize(subRoot)` could match a substring of `serialize(root)` that doesn't correspond to an actual subtree, for example, matching a prefix of one node's serialization plus a suffix of another. The delimiter pattern I used (`,val,(L)(R)`) ensures a node's serialization has unambiguous start and end.
 
 ## Approach 3: Hash each subtree (Merkle-style)
 
@@ -120,4 +120,4 @@ Approach 1 is what most interviewers expect; Approach 2 with KMP is the asymptot
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — paired structural check with prefix/substring intuition
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), paired structural check with prefix/substring intuition

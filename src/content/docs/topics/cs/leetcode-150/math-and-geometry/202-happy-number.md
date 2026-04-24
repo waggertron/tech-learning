@@ -102,5 +102,5 @@ Floyd's is the generalizable answer (applies to any deterministic next-state seq
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — Floyd's on a numeric sequence treated as a linked list
-- [Hash Tables](../../../data-structures/hash-tables/) — seen-set variant
+- [Linked Lists](../../../data-structures/linked-lists/), Floyd's on a numeric sequence treated as a linked list
+- [Hash Tables](../../../data-structures/hash-tables/), seen-set variant

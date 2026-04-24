@@ -32,7 +32,7 @@ def max_area_of_island(grid):
         if not (0 <= r < rows and 0 <= c < cols) or grid[r][c] != 1:
             return 0
         grid[r][c] = 0
-        return 1 + dfs(r + 1, c) + dfs(r - 1, c) + dfs(r, c + 1) + dfs(r, c - 1)
+        return 1 + dfs(r + 1, c) + dfs(r, 1, c) + dfs(r, c + 1) + dfs(r, c, 1)
 
     best = 0
     for r in range(rows):
@@ -138,9 +138,9 @@ def max_area_of_island(grid):
 | BFS with area counter | O(m · n) | O(min(m, n)) |
 | Union-Find with sizes | O(m · n · α) | O(m · n) |
 
-The DFS-return-area pattern is the cleanest here — it generalizes to "for each component, compute some aggregate" (sum, min, max, perimeter).
+The DFS-return-area pattern is the cleanest here, it generalizes to "for each component, compute some aggregate" (sum, min, max, perimeter).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — the grid
-- [Queues](../../../data-structures/queues/) — BFS
+- [Arrays](../../../data-structures/arrays/), the grid
+- [Queues](../../../data-structures/queues/), BFS

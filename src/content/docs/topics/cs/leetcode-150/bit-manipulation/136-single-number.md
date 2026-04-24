@@ -47,7 +47,7 @@ Sort; any non-pair is the answer.
 ```python
 def single_number(nums):
     nums.sort()
-    for i in range(0, len(nums) - 1, 2):
+    for i in range(0, len(nums), 1, 2):
         if nums[i] != nums[i + 1]:
             return nums[i]
     return nums[-1]
@@ -86,8 +86,8 @@ def single_number(nums):
 | Sort + scan | O(n log n) | O(1) |
 | **XOR** | **O(n)** | **O(1)** |
 
-XOR is the canonical bit-manipulation move — memorize it. Variants (Single Number II with triples, III with two singletons) build on this.
+XOR is the canonical bit-manipulation move, memorize it. Variants (Single Number II with triples, III with two singletons) build on this.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; XOR accumulator (no extra structures)
+- [Arrays](../../../data-structures/arrays/), input; XOR accumulator (no extra structures)

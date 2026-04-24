@@ -1,6 +1,6 @@
 ---
 title: "102. Binary Tree Level Order Traversal"
-description: Return the values of a binary tree in level-order — one list per level.
+description: Return the values of a binary tree in level-order, one list per level.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given the root of a binary tree, return the level-order traversal of its nodes' values — a list of lists, where the i-th list contains the values at depth `i`.
+Given the root of a binary tree, return the level-order traversal of its nodes' values, a list of lists, where the i-th list contains the values at depth `i`.
 
 **Example**
 - `root = [3,9,20,null,null,15,7]` → `[[3],[9,20],[15,7]]`
@@ -109,9 +109,9 @@ Slightly more overhead than Approach 1; useful when you need non-contiguous dept
 | DFS with depth-indexed lists | O(n) | O(h) |
 | BFS with `(node, depth)` tags | O(n) | O(w + n) |
 
-Approach 1 is the textbook BFS template — memorize it. Same structure is reused in problems 199 (Right Side View), 515 (Largest per Row), 103 (Zigzag Level Order), and many others.
+Approach 1 is the textbook BFS template, memorize it. Same structure is reused in problems 199 (Right Side View), 515 (Largest per Row), 103 (Zigzag Level Order), and many others.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — hierarchy
-- [Queues](../../../data-structures/queues/) — BFS engine with per-level batching
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), hierarchy
+- [Queues](../../../data-structures/queues/), BFS engine with per-level batching

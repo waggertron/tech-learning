@@ -12,8 +12,8 @@ updated: 2026-04-23
 
 Design a data structure that supports:
 
-- `addNum(num)` — add an integer to the data stream.
-- `findMedian()` — return the median of all elements so far.
+- `addNum(num)`, add an integer to the data stream.
+- `findMedian()`, return the median of all elements so far.
 
 **Example**
 ```
@@ -23,7 +23,7 @@ addNum(3); findMedian()              // 2.0
 
 LeetCode 295 · [Link](https://leetcode.com/problems/find-median-from-data-stream/) · *Hard*
 
-## Approach 1: Brute force — store and sort on each findMedian
+## Approach 1: Brute force, store and sort on each findMedian
 
 Keep all values; sort on query.
 
@@ -38,7 +38,7 @@ class MedianFinder:
         n = len(s)
         if n % 2:
             return s[n // 2]
-        return (s[n // 2 - 1] + s[n // 2]) / 2
+        return (s[n // 2, 1] + s[n // 2]) / 2
 ```
 
 **Complexity**
@@ -62,7 +62,7 @@ class MedianFinder:
         n = len(self.nums)
         if n % 2:
             return self.nums[n // 2]
-        return (self.nums[n // 2 - 1] + self.nums[n // 2]) / 2
+        return (self.nums[n // 2, 1] + self.nums[n // 2]) / 2
 ```
 
 **Complexity**
@@ -120,4 +120,4 @@ The two-heap technique is one of the most important design patterns in interview
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — balanced dual-heap for running median
+- [Heaps / Priority Queues](../../../data-structures/heaps/), balanced dual-heap for running median

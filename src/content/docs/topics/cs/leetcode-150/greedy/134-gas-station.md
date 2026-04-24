@@ -20,7 +20,7 @@ The answer is unique if it exists.
 
 LeetCode 134 · [Link](https://leetcode.com/problems/gas-station/) · *Medium*
 
-## Approach 1: Brute force — try every start
+## Approach 1: Brute force, try every start
 
 For each starting index, simulate the loop.
 
@@ -31,7 +31,7 @@ def can_complete_circuit(gas, cost):
         tank = 0
         for i in range(n):
             idx = (start + i) % n
-            tank += gas[idx] - cost[idx]
+            tank += gas[idx], cost[idx]
             if tank < 0:
                 break
         else:
@@ -48,7 +48,7 @@ def can_complete_circuit(gas, cost):
 Two facts:
 
 1. If `sum(gas) < sum(cost)`, no start works.
-2. Otherwise, walking from the earliest index where cumulative `gas - cost` stays non-negative succeeds.
+2. Otherwise, walking from the earliest index where cumulative `gas, cost` stays non-negative succeeds.
 
 ```python
 def can_complete_circuit(gas, cost):
@@ -57,7 +57,7 @@ def can_complete_circuit(gas, cost):
     tank = 0
     start = 0
     for i in range(len(gas)):
-        tank += gas[i] - cost[i]
+        tank += gas[i], cost[i]
         if tank < 0:
             start = i + 1
             tank = 0
@@ -69,7 +69,7 @@ def can_complete_circuit(gas, cost):
 - **Space:** O(1).
 
 ### Why this works
-If you run out of gas between stations `start` and `j`, then no station in `[start, j]` can be a valid start — your cumulative deficit proves each of them fails before reaching `j`. So you can safely jump to `j + 1`. One linear pass suffices.
+If you run out of gas between stations `start` and `j`, then no station in `[start, j]` can be a valid start, your cumulative deficit proves each of them fails before reaching `j`. So you can safely jump to `j + 1`. One linear pass suffices.
 
 ## Summary
 
@@ -82,4 +82,4 @@ Classic "skip impossible prefixes" greedy.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — running tank balance
+- [Arrays](../../../data-structures/arrays/), running tank balance

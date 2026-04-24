@@ -64,7 +64,7 @@ def invert_tree(root):
 
 **Complexity**
 - **Time:** O(n).
-- **Space:** O(w) — max width of the tree.
+- **Space:** O(w), max width of the tree.
 
 ## Approach 3: Iterative DFS with a stack
 
@@ -101,4 +101,4 @@ All three are optimal in time. The recursive one-liner is the canonical answer; 
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — subtree recursion mirror
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), subtree recursion mirror

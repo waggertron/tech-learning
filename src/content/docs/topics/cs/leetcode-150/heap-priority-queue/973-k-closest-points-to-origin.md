@@ -18,7 +18,7 @@ Given an array `points` where `points[i] = [xᵢ, yᵢ]`, return the `k` points 
 
 LeetCode 973 · [Link](https://leetcode.com/problems/k-closest-points-to-origin/) · *Medium*
 
-## Approach 1: Brute force — sort by squared distance
+## Approach 1: Brute force, sort by squared distance
 
 Sort all points; take the first k.
 
@@ -86,9 +86,9 @@ def k_closest(points, k):
         if p < k:
             quickselect(p + 1, hi, k)
         else:
-            quickselect(lo, p - 1, k)
+            quickselect(lo, p, 1, k)
 
-    quickselect(0, len(points) - 1, k)
+    quickselect(0, len(points), 1, k)
     return points[:k]
 ```
 
@@ -106,9 +106,9 @@ Pick quickselect when you're allowed to mutate the input and want the tightest a
 | **Size-K max-heap** | **O(n log k)** | **O(k)** |
 | Quickselect | O(n) avg / O(n²) worst | O(log n) |
 
-The heap version is the canonical interview answer. Quickselect is the "optimal-average" answer — know it for when the interviewer pushes on tighter bounds.
+The heap version is the canonical interview answer. Quickselect is the "optimal-average" answer, know it for when the interviewer pushes on tighter bounds.
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — size-K top/bottom heap template
-- [Arrays](../../../data-structures/arrays/) — in-place partitioning for quickselect
+- [Heaps / Priority Queues](../../../data-structures/heaps/), size-K top/bottom heap template
+- [Arrays](../../../data-structures/arrays/), in-place partitioning for quickselect

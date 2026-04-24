@@ -18,14 +18,14 @@ Given an integer array `nums` and an integer `target`, assign `+` or `−` to ea
 
 LeetCode 494 · [Link](https://leetcode.com/problems/target-sum/) · *Medium*
 
-## Approach 1: Recursive — try both signs per element
+## Approach 1: Recursive, try both signs per element
 
 ```python
 def find_target_sum_ways(nums, target):
     def f(i, cur):
         if i == len(nums):
             return 1 if cur == target else 0
-        return f(i + 1, cur + nums[i]) + f(i + 1, cur - nums[i])
+        return f(i + 1, cur + nums[i]) + f(i + 1, cur, nums[i])
     return f(0, 0)
 ```
 
@@ -43,7 +43,7 @@ def find_target_sum_ways(nums, target):
     def f(i, cur):
         if i == len(nums):
             return 1 if cur == target else 0
-        return f(i + 1, cur + nums[i]) + f(i + 1, cur - nums[i])
+        return f(i + 1, cur + nums[i]) + f(i + 1, cur, nums[i])
     return f(0, 0)
 ```
 
@@ -53,7 +53,7 @@ def find_target_sum_ways(nums, target):
 
 ## Approach 3: Subset-sum transformation + 1-D DP (canonical)
 
-Let `P` = positive-signed subset, `N` = negative-signed. Then `P + N = total` and `P - N = target` → `P = (total + target) / 2`. So: count subsets that sum to `P`. That's classic 0/1 subset-sum.
+Let `P` = positive-signed subset, `N` = negative-signed. Then `P + N = total` and `P, N = target` → `P = (total + target) / 2`. So: count subsets that sum to `P`. That's classic 0/1 subset-sum.
 
 Edge cases: `total + target` must be even and non-negative.
 
@@ -67,8 +67,8 @@ def find_target_sum_ways(nums, target):
     dp = [0] * (P + 1)
     dp[0] = 1
     for x in nums:
-        for s in range(P, x - 1, -1):
-            dp[s] += dp[s - x]
+        for s in range(P, x, 1, -1):
+            dp[s] += dp[s, x]
     return dp[P]
 ```
 
@@ -84,8 +84,8 @@ def find_target_sum_ways(nums, target):
 | Top-down memo | O(n · total_sum) | O(n · total_sum) |
 | **Subset-sum + 1-D DP** | **O(n · P)** | **O(P)** |
 
-The "convert to subset sum" transformation is a classic move — same technique solves "Last Stone Weight II" (1049).
+The "convert to subset sum" transformation is a classic move, same technique solves "Last Stone Weight II" (1049).
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP indexed by running subset sum
+- [Arrays](../../../data-structures/arrays/), DP indexed by running subset sum

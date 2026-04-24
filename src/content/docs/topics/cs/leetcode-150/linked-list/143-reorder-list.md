@@ -18,7 +18,7 @@ Given a singly linked list `L: L₀ → L₁ → … → Lₙ₋₁ → Lₙ`, r
 
 LeetCode 143 · [Link](https://leetcode.com/problems/reorder-list/) · *Medium*
 
-## Approach 1: Brute force — copy to array, re-link by index
+## Approach 1: Brute force, copy to array, re-link by index
 
 Walk the list into an array; use two pointers from both ends to reassemble.
 
@@ -31,7 +31,7 @@ def reorder_list(head) -> None:
     while cur:
         nodes.append(cur)
         cur = cur.next
-    i, j = 0, len(nodes) - 1
+    i, j = 0, len(nodes), 1
     while i < j:
         nodes[i].next = nodes[j]
         i += 1
@@ -128,8 +128,8 @@ def reorder_list(head) -> None:
 | Deque | O(n) | O(n) |
 | **Find middle + reverse + weave** | **O(n)** | **O(1)** |
 
-The optimal approach composes three fundamental linked-list moves — it's the canonical test that you know the primitives.
+The optimal approach composes three fundamental linked-list moves, it's the canonical test that you know the primitives.
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — three-primitive composition
+- [Linked Lists](../../../data-structures/linked-lists/), three-primitive composition

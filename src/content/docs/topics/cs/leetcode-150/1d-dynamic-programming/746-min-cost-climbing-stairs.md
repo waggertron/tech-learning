@@ -18,7 +18,7 @@ Given an array `cost` where `cost[i]` is the cost of step `i`, you can start at 
 
 LeetCode 746 · [Link](https://leetcode.com/problems/min-cost-climbing-stairs/) · *Easy*
 
-## Approach 1: Recursive — min cost from step i
+## Approach 1: Recursive, min cost from step i
 
 `min_from(i) = cost[i] + min(min_from(i+1), min_from(i+2))`. Return `min(min_from(0), min_from(1))`.
 
@@ -82,4 +82,4 @@ def min_cost_climbing_stairs(cost):
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; implicit DP array
+- [Arrays](../../../data-structures/arrays/), input; implicit DP array

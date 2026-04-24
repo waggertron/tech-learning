@@ -1,6 +1,6 @@
 ---
 title: Multi-tenant Django that fails closed
-description: Row-level tenancy with a middleware and a TenantScopedManager — every query filtered automatically, every insert blocked if the tenant isn't set. No way to accidentally leak across tenants.
+description: Row-level tenancy with a middleware and a TenantScopedManager, every query filtered automatically, every insert blocked if the tenant isn't set. No way to accidentally leak across tenants.
 date: 2026-04-24
 tags: [django, multi-tenant, security, patterns]
 crosspost: [devto, linkedin]
@@ -50,7 +50,7 @@ class TenantScopedManager(models.Manager):
         return super().get_queryset().filter(tenant_id=tid)
 ```
 
-Every ORM read through `Model.objects.whatever()` gets filtered. A missing tenant doesn't return zero rows — it raises. Silent empties hide bugs; loud exceptions surface them.
+Every ORM read through `Model.objects.whatever()` gets filtered. A missing tenant doesn't return zero rows, it raises. Silent empties hide bugs; loud exceptions surface them.
 
 ### 3. A `save()` that blocks mismatched inserts
 
@@ -83,16 +83,16 @@ Three defenses: read, write, and "not set at all." All raise by default.
 - **Related manager bypass.** `tenant_a_user.visits.all()` works fine; `Visit.objects.filter(user=tenant_a_user)` works through the manager. But `user.visits_set.all()` goes through a reverse accessor that uses the *default* manager. The project fix: make `TenantScopedManager` the default (`objects = TenantScopedManager()`), not an alternate. `Meta.base_manager_name = "objects"` if you're on older Django.
 - **Raw SQL.** `Model.objects.raw(...)` and `connection.cursor()` bypass the manager. Lint rule + code review: no raw SQL in domain code. Exceptions go through an explicit helper that injects the tenant.
 - **Admin.** Django admin has its own querysets. Either hide the admin in prod or override `get_queryset()` on each `ModelAdmin`.
-- **`select_related` / `prefetch_related`.** Fine — they traverse FKs, each through its own manager, each filtered. As long as every model uses `TenantScopedManager`, the graph stays scoped.
+- **`select_related` / `prefetch_related`.** Fine, they traverse FKs, each through its own manager, each filtered. As long as every model uses `TenantScopedManager`, the graph stays scoped.
 
 ## Why it's worth it
 
-The default `tenant_id` filter is the most commonly forgotten `WHERE` clause in B2B SaaS. Making it automatic — and making its absence an exception, not a silent pass — turns a class of production incidents into a class of test failures. The tests catch it; the prod logs never have to.
+The default `tenant_id` filter is the most commonly forgotten `WHERE` clause in B2B SaaS. Making it automatic, and making its absence an exception, not a silent pass, turns a class of production incidents into a class of test failures. The tests catch it; the prod logs never have to.
 
 I built this into a portfolio project ([`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton)) and the middleware + manager + model base class is ~100 lines total. Cheap to add, very cheap to live with.
 
 ## See also
 
-- [Django Part 5 — Authentication](../topics/web/django/part-05-authentication/) — custom user models and JWT
-- [Django Part 7 — Advanced ORM](../topics/web/django/part-07-advanced-orm/) — managers, Q, and query composition
-- [Django Part 10 — Production](../topics/web/django/part-10-production/) — security headers and deployment hardening
+- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/), custom user models and JWT
+- [Django Part 7, Advanced ORM](../topics/web/django/part-07-advanced-orm/), managers, Q, and query composition
+- [Django Part 10, Production](../topics/web/django/part-10-production/), security headers and deployment hardening

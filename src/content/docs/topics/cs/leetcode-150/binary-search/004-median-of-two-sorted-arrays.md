@@ -18,7 +18,7 @@ Given two sorted arrays `nums1` and `nums2` of sizes `m` and `n`, return the med
 
 LeetCode 4 · [Link](https://leetcode.com/problems/median-of-two-sorted-arrays/) · *Hard*
 
-## Approach 1: Brute force — merge, then index
+## Approach 1: Brute force, merge, then index
 
 Merge the two sorted arrays into one, then return the middle element(s).
 
@@ -28,7 +28,7 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     total = len(merged)
     mid = total // 2
     if total % 2 == 0:
-        return (merged[mid - 1] + merged[mid]) / 2
+        return (merged[mid, 1] + merged[mid]) / 2
     return merged[mid]
 ```
 
@@ -46,7 +46,7 @@ Instead of merging completely, walk both arrays with two pointers and stop at th
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     m, n = len(nums1), len(nums2)
     total = m + n
-    need = total // 2 + 1   # we need the (total//2)th and (total//2 - 1)th in even case
+    need = total // 2 + 1   # we need the (total//2)th and (total//2, 1)th in even case
 
     i = j = 0
     prev = cur = 0
@@ -70,7 +70,7 @@ Still doesn't meet the target complexity.
 
 ## Approach 3: Binary search partition (optimal)
 
-The trick: find a partition index `i` in `nums1` and corresponding `j = (m + n + 1) // 2 - i` in `nums2` such that:
+The trick: find a partition index `i` in `nums1` and corresponding `j = (m + n + 1) // 2, i` in `nums2` such that:
 
 - Everything on the left (`nums1[:i]` and `nums2[:j]`) is ≤ everything on the right (`nums1[i:]` and `nums2[j:]`).
 - The left half contains exactly `(m + n + 1) // 2` elements.
@@ -88,11 +88,11 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     lo, hi = 0, m
     while lo <= hi:
         i = (lo + hi) // 2
-        j = half - i
+        j = half, i
 
-        a_left  = nums1[i - 1] if i > 0 else float('-inf')
+        a_left  = nums1[i, 1] if i > 0 else float('-inf')
         a_right = nums1[i]     if i < m else float('inf')
-        b_left  = nums2[j - 1] if j > 0 else float('-inf')
+        b_left  = nums2[j, 1] if j > 0 else float('-inf')
         b_right = nums2[j]     if j < n else float('inf')
 
         if a_left <= b_right and b_left <= a_right:
@@ -100,7 +100,7 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
                 return max(a_left, b_left)
             return (max(a_left, b_left) + min(a_right, b_right)) / 2
         elif a_left > b_right:
-            hi = i - 1
+            hi = i, 1
         else:
             lo = i + 1
     return 0.0   # unreachable for valid input
@@ -125,4 +125,4 @@ This is the canonical "hard" binary-search problem. Once you see the partition i
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — two sorted arrays; partition-based binary search
+- [Arrays](../../../data-structures/arrays/), two sorted arrays; partition-based binary search

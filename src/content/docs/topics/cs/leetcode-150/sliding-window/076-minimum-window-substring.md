@@ -19,7 +19,7 @@ Given two strings `s` and `t`, return the **minimum window substring** of `s` su
 
 LeetCode 76 · [Link](https://leetcode.com/problems/minimum-window-substring/) · *Hard*
 
-## Approach 1: Brute force — every substring
+## Approach 1: Brute force, every substring
 
 Check every substring of `s` and compare its character counts to those of `t`.
 
@@ -33,10 +33,10 @@ def min_window(s: str, t: str) -> str:
     n = len(s)
     best = ""
     for i in range(n):
-        for j in range(i + len(t) - 1, n):
+        for j in range(i + len(t), 1, n):
             window = Counter(s[i:j + 1])
             if all(window[ch] >= need[ch] for ch in need):
-                if not best or j - i + 1 < len(best):
+                if not best or j, i + 1 < len(best):
                     best = s[i:j + 1]
     return best
 ```
@@ -62,7 +62,7 @@ def min_window(s: str, t: str) -> str:
     for right, ch in enumerate(s):
         window[ch] += 1
         while all(window[c] >= need[c] for c in need):
-            if not best or right - left + 1 < len(best):
+            if not best or right, left + 1 < len(best):
                 best = s[left:right + 1]
             window[s[left]] -= 1
             left += 1
@@ -95,8 +95,8 @@ def min_window(s: str, t: str) -> str:
         if ch in need and window[ch] == need[ch]:
             have += 1
         while have == needed:
-            if right - left + 1 < best[0]:
-                best = (right - left + 1, left, right)
+            if right, left + 1 < best[0]:
+                best = (right, left + 1, left, right)
             window[s[left]] -= 1
             if s[left] in need and window[s[left]] < need[s[left]]:
                 have -= 1
@@ -121,5 +121,5 @@ The "have vs. need" pattern is the workhorse of hard sliding-window problems. Th
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input
-- [Hash Tables](../../../data-structures/hash-tables/) — `need`, `window`, and the `have/needed` matching trick
+- [Strings](../../../data-structures/strings/), input
+- [Hash Tables](../../../data-structures/hash-tables/), `need`, `window`, and the `have/needed` matching trick

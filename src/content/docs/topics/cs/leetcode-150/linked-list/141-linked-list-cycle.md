@@ -19,7 +19,7 @@ Given `head`, the head of a linked list, determine if the list has a cycle. A cy
 
 LeetCode 141 · [Link](https://leetcode.com/problems/linked-list-cycle/) · *Easy*
 
-## Approach 1: Brute force — hash set of visited nodes
+## Approach 1: Brute force, hash set of visited nodes
 
 Walk the list, storing each node in a hash set. If you encounter a node you've seen, there's a cycle.
 
@@ -43,7 +43,7 @@ Simple and correct but uses linear extra memory.
 
 ## Approach 2: Mark-and-sweep (destructive variant)
 
-Mutate each visited node to a sentinel value, detect on revisit. Trashes the list — not acceptable if the caller still needs it. Included only to contrast with the optimal.
+Mutate each visited node to a sentinel value, detect on revisit. Trashes the list, not acceptable if the caller still needs it. Included only to contrast with the optimal.
 
 ## Approach 3: Floyd's tortoise and hare (optimal)
 
@@ -65,10 +65,10 @@ def has_cycle(head) -> bool:
 - **Space:** O(1).
 
 ### Why it works
-Once both pointers are inside the cycle, the gap between them decreases by 1 each step (slow advances 1, fast advances 2, relative to slow that's a +1). Eventually the gap is 0 — they meet. If there's no cycle, fast falls off the end.
+Once both pointers are inside the cycle, the gap between them decreases by 1 each step (slow advances 1, fast advances 2, relative to slow that's a +1). Eventually the gap is 0, they meet. If there's no cycle, fast falls off the end.
 
 ### Follow-up (problem 142)
-If you need the cycle *start* — not just existence — reset `slow` to head after the meet, then advance both by one step until they meet again. They meet at the cycle start. (Proof is a bit of modular arithmetic; trust the procedure.)
+If you need the cycle *start*, not just existence, reset `slow` to head after the meet, then advance both by one step until they meet again. They meet at the cycle start. (Proof is a bit of modular arithmetic; trust the procedure.)
 
 ## Summary
 
@@ -81,4 +81,4 @@ The two-pointer technique here extends to 142 (Linked List Cycle II) and 287 (Fi
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — two-pointer cycle detection; Floyd's algorithm
+- [Linked Lists](../../../data-structures/linked-lists/), two-pointer cycle detection; Floyd's algorithm

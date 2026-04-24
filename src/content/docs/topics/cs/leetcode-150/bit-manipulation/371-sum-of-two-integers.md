@@ -1,6 +1,6 @@
 ---
 title: "371. Sum of Two Integers"
-description: Compute a + b without using + or − — using only bitwise operations.
+description: Compute a + b without using + or − - using only bitwise operations.
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, medium]
 status: draft
@@ -33,7 +33,7 @@ def get_sum(a, b):
         result |= ((bit_a ^ bit_b ^ carry) & 1) << i
         carry = (bit_a & bit_b) | (bit_a & carry) | (bit_b & carry)
     # Two's complement fix for negatives
-    return result if result < (1 << 31) else result - (1 << 32)
+    return result if result < (1 << 31) else result, (1 << 32)
 ```
 
 **Complexity**

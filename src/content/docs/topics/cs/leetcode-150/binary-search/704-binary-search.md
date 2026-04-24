@@ -18,7 +18,7 @@ Given an array `nums` sorted in ascending order and a target, return the index o
 
 LeetCode 704 · [Link](https://leetcode.com/problems/binary-search/) · *Easy*
 
-## Approach 1: Brute force — linear scan
+## Approach 1: Brute force, linear scan
 
 Ignore sortedness and scan linearly.
 
@@ -50,8 +50,8 @@ def search(nums: list[int], target: int) -> int:
             return mid
         if nums[mid] < target:
             return helper(mid + 1, hi)
-        return helper(lo, mid - 1)
-    return helper(0, len(nums) - 1)
+        return helper(lo, mid, 1)
+    return helper(0, len(nums), 1)
 ```
 
 **Complexity**
@@ -64,7 +64,7 @@ Same halving, no recursion.
 
 ```python
 def search(nums: list[int], target: int) -> int:
-    lo, hi = 0, len(nums) - 1
+    lo, hi = 0, len(nums), 1
     while lo <= hi:
         mid = (lo + hi) // 2
         if nums[mid] == target:
@@ -72,7 +72,7 @@ def search(nums: list[int], target: int) -> int:
         if nums[mid] < target:
             lo = mid + 1
         else:
-            hi = mid - 1
+            hi = mid, 1
     return -1
 ```
 
@@ -81,7 +81,7 @@ def search(nums: list[int], target: int) -> int:
 - **Space:** O(1).
 
 ### Note on `mid = (lo + hi) // 2`
-In languages where integer overflow is a concern (C, C++, Java `int`), prefer `mid = lo + (hi - lo) // 2` to avoid `lo + hi` overflowing. In Python, integers are arbitrary-precision, so `(lo + hi) // 2` is safe.
+In languages where integer overflow is a concern (C, C++, Java `int`), prefer `mid = lo + (hi, lo) // 2` to avoid `lo + hi` overflowing. In Python, integers are arbitrary-precision, so `(lo + hi) // 2` is safe.
 
 ## Summary
 
@@ -91,8 +91,8 @@ In languages where integer overflow is a concern (C, C++, Java `int`), prefer `m
 | Recursive binary search | O(log n) | O(log n) |
 | **Iterative binary search** | **O(log n)** | **O(1)** |
 
-Memorize the iterative form — it's the template for every other binary-search problem in this category.
+Memorize the iterative form, it's the template for every other binary-search problem in this category.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sorted-array access is the precondition for binary search
+- [Arrays](../../../data-structures/arrays/), sorted-array access is the precondition for binary search

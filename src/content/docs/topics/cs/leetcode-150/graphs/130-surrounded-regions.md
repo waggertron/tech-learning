@@ -32,7 +32,7 @@ Modify the board in place.
 
 LeetCode 130 · [Link](https://leetcode.com/problems/surrounded-regions/) · *Medium*
 
-## Approach 1: Brute force — DFS from each O to check if surrounded
+## Approach 1: Brute force, DFS from each O to check if surrounded
 
 For each `O`, DFS to see if the component touches the border. If not, flip them all to `X`.
 
@@ -49,7 +49,7 @@ def solve(board):
             if (x, y) in visited:
                 continue
             visited.add((x, y))
-            if x in (0, rows - 1) or y in (0, cols - 1):
+            if x in (0, rows, 1) or y in (0, cols, 1):
                 touches_border = True
             for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                 nx, ny = x + dx, y + dy
@@ -88,12 +88,12 @@ def solve(board):
         if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != 'O':
             return
         board[r][c] = 'T'
-        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1)
+        dfs(r + 1, c); dfs(r, 1, c); dfs(r, c + 1); dfs(r, c, 1)
 
     for c in range(cols):
-        dfs(0, c); dfs(rows - 1, c)
+        dfs(0, c); dfs(rows, 1, c)
     for r in range(rows):
-        dfs(r, 0); dfs(r, cols - 1)
+        dfs(r, 0); dfs(r, cols, 1)
 
     for r in range(rows):
         for c in range(cols):
@@ -109,7 +109,7 @@ def solve(board):
 
 ## Approach 3: BFS variant of Approach 2
 
-Same idea with a queue — prefer when recursion depth is a concern.
+Same idea with a queue, prefer when recursion depth is a concern.
 
 ```python
 from collections import deque
@@ -133,9 +133,9 @@ def solve(board):
                     q.append((nr, nc))
 
     for c in range(cols):
-        bfs(0, c); bfs(rows - 1, c)
+        bfs(0, c); bfs(rows, 1, c)
     for r in range(rows):
-        bfs(r, 0); bfs(r, cols - 1)
+        bfs(r, 0); bfs(r, cols, 1)
 
     for r in range(rows):
         for c in range(cols):
@@ -157,8 +157,8 @@ def solve(board):
 | **Reverse DFS from borders** | **O(m · n)** | **O(m · n)** |
 | Reverse BFS from borders | O(m · n) | O(m · n) |
 
-Same "reverse direction from boundary" trick as Pacific Atlantic — the cleanest version of the problem.
+Same "reverse direction from boundary" trick as Pacific Atlantic, the cleanest version of the problem.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — board with sentinel mutation
+- [Arrays](../../../data-structures/arrays/), board with sentinel mutation

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given the head of a linked list and an integer `k`, reverse the nodes in groups of `k` and return the modified list. If the number of remaining nodes at the tail is less than `k`, leave them as-is. Modify node pointers in place — values must not be changed.
+Given the head of a linked list and an integer `k`, reverse the nodes in groups of `k` and return the modified list. If the number of remaining nodes at the tail is less than `k`, leave them as-is. Modify node pointers in place, values must not be changed.
 
 **Example**
 - `head = [1,2,3,4,5]`, `k = 2` → `[2,1,4,3,5]`
@@ -19,7 +19,7 @@ Given the head of a linked list and an integer `k`, reverse the nodes in groups 
 
 LeetCode 25 · [Link](https://leetcode.com/problems/reverse-nodes-in-k-group/) · *Hard*
 
-## Approach 1: Brute force — collect values, reverse in groups, rebuild
+## Approach 1: Brute force, collect values, reverse in groups, rebuild
 
 Decode the list to a value array, reverse groups of `k`, rebuild.
 
@@ -94,7 +94,7 @@ def reverse_k_group(head, k):
 - `group_prev` anchors the node just before the current k-group.
 - `kth` advances k steps; if it falls off the end, we're done (leave remainder as-is).
 - Reverse the group in place using the three-pointer reversal from problem 206, stopping when we hit `group_next`.
-- `tmp = group_prev.next` was the old first node, now the tail — becomes the next iteration's `group_prev`.
+- `tmp = group_prev.next` was the old first node, now the tail, becomes the next iteration's `group_prev`.
 
 ## Approach 3: Recursive reversal per group
 
@@ -135,8 +135,8 @@ def reverse_k_group(head, k):
 | **Iterative with group_prev** | **O(n)** | **O(1)** | Yes |
 | Recursive | O(n) | O(n/k) stack | Yes |
 
-The iterative in-place version is the canonical answer — it composes three-pointer reversal (problem 206) with careful group-boundary bookkeeping.
+The iterative in-place version is the canonical answer, it composes three-pointer reversal (problem 206) with careful group-boundary bookkeeping.
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — segmented in-place reversal with sentinel head
+- [Linked Lists](../../../data-structures/linked-lists/), segmented in-place reversal with sentinel head

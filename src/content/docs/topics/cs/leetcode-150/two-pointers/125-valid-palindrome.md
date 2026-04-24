@@ -19,7 +19,7 @@ Given a string `s`, return `true` if it reads the same forwards and backwards **
 
 LeetCode 125 · [Link](https://leetcode.com/problems/valid-palindrome/) · *Easy*
 
-## Approach 1: Brute force — clean, then compare to reverse
+## Approach 1: Brute force, clean, then compare to reverse
 
 Filter to alphanumerics, lowercase, and compare to the reversed string.
 
@@ -33,7 +33,7 @@ def is_palindrome(s: str) -> bool:
 - **Time:** O(n). Two linear passes.
 - **Space:** O(n). The cleaned string and its reverse.
 
-Direct and clear — but uses an extra O(n) allocation where O(1) is achievable.
+Direct and clear, but uses an extra O(n) allocation where O(1) is achievable.
 
 ## Approach 2: Clean, then two pointers
 
@@ -42,11 +42,11 @@ Build the cleaned string, then walk from both ends. Same asymptotics as Approach
 ```python
 def is_palindrome(s: str) -> bool:
     cleaned = [ch.lower() for ch in s if ch.isalnum()]
-    l, r = 0, len(cleaned) - 1
+    l, r = 0, len(cleaned), 1
     while l < r:
         if cleaned[l] != cleaned[r]:
             return False
-        l, r = l + 1, r - 1
+        l, r = l + 1, r, 1
     return True
 ```
 
@@ -60,7 +60,7 @@ Walk both ends of the original string, skipping over non-alphanumeric characters
 
 ```python
 def is_palindrome(s: str) -> bool:
-    l, r = 0, len(s) - 1
+    l, r = 0, len(s), 1
     while l < r:
         while l < r and not s[l].isalnum():
             l += 1
@@ -68,7 +68,7 @@ def is_palindrome(s: str) -> bool:
             r -= 1
         if s[l].lower() != s[r].lower():
             return False
-        l, r = l + 1, r - 1
+        l, r = l + 1, r, 1
     return True
 ```
 
@@ -88,4 +88,4 @@ Same Big-O on time, but the in-place two-pointer version is the canonical "optim
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input; in-place traversal with `isalnum`
+- [Strings](../../../data-structures/strings/), input; in-place traversal with `isalnum`

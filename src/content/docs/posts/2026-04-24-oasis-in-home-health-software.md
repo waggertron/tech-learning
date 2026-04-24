@@ -1,6 +1,6 @@
 ---
-title: OASIS in home-health software — the assessment data model you didn't ask for
-description: The CMS-mandated patient assessment behind every US home-health agency — what OASIS-E is, why it's 90+ "M-items," the five encounter types, how it's submitted, and why building software around it is harder than it looks.
+title: OASIS in home-health software, the assessment data model you didn't ask for
+description: The CMS-mandated patient assessment behind every US home-health agency, what OASIS-E is, why it's 90+ "M-items," the five encounter types, how it's submitted, and why building software around it is harder than it looks.
 date: 2026-04-24
 tags: [oasis, home-health, healthcare, medicare, cms, compliance]
 crosspost: [devto, linkedin]
@@ -9,26 +9,26 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-oasis-in-
 
 ## What OASIS is
 
-**OASIS — Outcome and Assessment Information Set** — is a standardized patient assessment dataset required by the Centers for Medicare & Medicaid Services (CMS) for every Medicare- or Medicaid-certified home health agency (HHA) in the United States.
+**OASIS, Outcome and Assessment Information Set**, is a standardized patient assessment dataset required by the Centers for Medicare & Medicaid Services (CMS) for every Medicare- or Medicaid-certified home health agency (HHA) in the United States.
 
-It's **required**. Not "used by most agencies" — legally required. An HHA cannot bill Medicare without submitting an OASIS assessment for each patient.
+It's **required**. Not "used by most agencies", legally required. An HHA cannot bill Medicare without submitting an OASIS assessment for each patient.
 
 It's used for three distinct purposes, each important to different parts of the industry:
 
-1. **Payment** — the Patient-Driven Groupings Model (PDGM) maps OASIS responses to HIPPS payment codes.
-2. **Quality reporting** — Home Health Value-Based Purchasing, Home Health Compare star ratings, and the Home Health Quality Reporting Program all compute measures from OASIS.
-3. **Care planning** — clinicians use the assessment to build the patient's plan of care.
+1. **Payment**, the Patient-Driven Groupings Model (PDGM) maps OASIS responses to HIPPS payment codes.
+2. **Quality reporting**, Home Health Value-Based Purchasing, Home Health Compare star ratings, and the Home Health Quality Reporting Program all compute measures from OASIS.
+3. **Care planning**, clinicians use the assessment to build the patient's plan of care.
 
-Any software that touches home-health operations — EHRs, clinical documentation, billing, routing, ops consoles — interacts with OASIS somehow.
+Any software that touches home-health operations, EHRs, clinical documentation, billing, routing, ops consoles, interacts with OASIS somehow.
 
-## The current version — OASIS-E / OASIS-E1
+## The current version, OASIS-E / OASIS-E1
 
 - **OASIS-E** went live **January 1, 2023**. It was the biggest overhaul since OASIS-C2 in 2017, adding cognitive assessment, social determinants of health, and Transfer of Health Information items to align with the IMPACT Act.
 - **OASIS-E1** took effect **January 1, 2025**, adding new items (notably around COVID-19 vaccination) and modifying a handful of existing ones.
 
 Versions matter. An EHR that's still emitting OASIS-D1 XML is submitting invalid assessments. The CMS submission portal will reject them.
 
-CMS publishes the current version's **OASIS-E1 Guidance Manual**, data specifications, and XML schema on its [Home Health Quality Reporting](https://www.cms.gov/medicare/quality/home-health/quality-reporting-and-coding) pages. The schema alone is ~350 pages of PDF — worth downloading once so you can grep it.
+CMS publishes the current version's **OASIS-E1 Guidance Manual**, data specifications, and XML schema on its [Home Health Quality Reporting](https://www.cms.gov/medicare/quality/home-health/quality-reporting-and-coding) pages. The schema alone is ~350 pages of PDF, worth downloading once so you can grep it.
 
 ## The five encounter types (Reason for Assessment)
 
@@ -47,31 +47,31 @@ OASIS isn't a one-time thing. Each patient has multiple assessments over their e
 
 Different RFAs require different item sets. A discharge assessment doesn't require the full Start-of-Care battery, but it does require discharge-specific items. Software that treats OASIS as a single flat form misses 90% of the rule complexity.
 
-## The data model — M-items (and O-, A-, B-, C-, D-, GG-items)
+## The data model, M-items (and O-, A-, B-, C-, D-, GG-items)
 
 OASIS items are identified by alphanumeric codes. The bulk are **M-items** (e.g. `M0010`, `M1800`):
 
-- `M0010` — CMS Certification Number
-- `M0018` — National Provider Identifier
-- `M0030` — Start of Care Date
-- `M1021` / `M1023` — Primary and Other Diagnoses (ICD-10 codes)
-- `M1800`–`M1910` — ADL / IADL items (bathing, dressing, toileting, ambulation)
-- `M2020`–`M2030` — medications
-- `M2102` — types and sources of assistance
-- `M2401` — intervention synopsis
-- `M2420` — discharge disposition
+- `M0010`, CMS Certification Number
+- `M0018`, National Provider Identifier
+- `M0030`, Start of Care Date
+- `M1021` / `M1023`, Primary and Other Diagnoses (ICD-10 codes)
+- `M1800`–`M1910`, ADL / IADL items (bathing, dressing, toileting, ambulation)
+- `M2020`–`M2030`, medications
+- `M2102`, types and sources of assistance
+- `M2401`, intervention synopsis
+- `M2420`, discharge disposition
 
 OASIS-E added new prefixes:
 
-- **GG-items** — functional abilities (self-care, mobility), aligned with other post-acute settings
-- **A-items** — patient admit info
-- **B-items** — hearing, speech, vision
-- **C-items** — cognitive patterns
-- **D-items** — mood (PHQ-2/9)
-- **J-items** — pain
-- **O-items** — admission / medication reconciliation
+- **GG-items**, functional abilities (self-care, mobility), aligned with other post-acute settings
+- **A-items**, patient admit info
+- **B-items**, hearing, speech, vision
+- **C-items**, cognitive patterns
+- **D-items**, mood (PHQ-2/9)
+- **J-items**, pain
+- **O-items**, admission / medication reconciliation
 
-That's **90+ items on a full Start-of-Care**. Every response has a controlled vocabulary — usually a fixed list of integer codes like `0 = Never, 1 = Once a day, ...`. Most items carry a set of skip rules: answering one question a certain way means skipping downstream items.
+That's **90+ items on a full Start-of-Care**. Every response has a controlled vocabulary, usually a fixed list of integer codes like `0 = Never, 1 = Once a day, ...`. Most items carry a set of skip rules: answering one question a certain way means skipping downstream items.
 
 ## Why the data model is harder than it looks
 
@@ -83,7 +83,7 @@ Nearly every item has conditions for when it's applicable:
 - If the episode is a hospice admission, skip therapy items.
 - If the RFA is Discharge, include `M2420` but not `M1021`.
 
-CMS publishes decision trees. You implement them. Get one wrong and the submission either rejects (better) or silently accepts wrong data (worse — the agency will find out when their star rating drops six months later).
+CMS publishes decision trees. You implement them. Get one wrong and the submission either rejects (better) or silently accepts wrong data (worse, the agency will find out when their star rating drops six months later).
 
 ### 2. Response codes are not self-describing
 
@@ -105,13 +105,13 @@ CMS publishes changes to items, response options, and skip logic at version boun
 
 This is sometimes outsourced to a clinical coding service; sometimes embedded via a medical-terminology vendor (IMO Health, Intelligent Medical Objects).
 
-## Submission — iQIES and the XML schema
+## Submission, iQIES and the XML schema
 
-Since January 2020, OASIS is submitted through **iQIES** (Internet Quality Improvement and Evaluation System) — the CMS portal.
+Since January 2020, OASIS is submitted through **iQIES** (Internet Quality Improvement and Evaluation System), the CMS portal.
 
 ### The file format
 
-OASIS is submitted as **XML** — not JSON, not CSV. The schema is published by CMS and versioned with OASIS itself. A minimally-structured submission looks like:
+OASIS is submitted as **XML**, not JSON, not CSV. The schema is published by CMS and versioned with OASIS itself. A minimally-structured submission looks like:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -132,7 +132,7 @@ OASIS is submitted as **XML** — not JSON, not CSV. The schema is published by 
 
 Key gotchas:
 
-- **Dates are `YYYYMMDD`** — no separators. Common bug.
+- **Dates are `YYYYMMDD`**, no separators. Common bug.
 - **All item codes are prefixed with the M-code** (e.g. `<M0030_START_CARE_DT>`).
 - **Empty / skipped items must be present with a specific skip indicator**, depending on item rules. Missing elements fail schema validation.
 - **Character encoding is strict UTF-8**, and certain characters (tabs, angle brackets, some emojis) must be entity-escaped.
@@ -142,12 +142,12 @@ Key gotchas:
 
 iQIES runs multi-pass validation:
 
-1. **Schema validation** — is the XML well-formed and matches the XSD?
-2. **Edit validation** — are the skip-logic rules satisfied? Are code values valid for the item?
-3. **Consistency validation** — do dates make sense (SOC before ROC before Discharge)?
-4. **Timing** — was the assessment submitted within the required 30-day window?
+1. **Schema validation**, is the XML well-formed and matches the XSD?
+2. **Edit validation**, are the skip-logic rules satisfied? Are code values valid for the item?
+3. **Consistency validation**, do dates make sense (SOC before ROC before Discharge)?
+4. **Timing**, was the assessment submitted within the required 30-day window?
 
-Validation errors are returned as a list of item codes and error codes. Your software has to surface them to the clinician, let them correct the assessment, and resubmit — often as a correction (`TRANS_TYPE_CD=02` with matching `CORRECTION_NUM` and `CORRECTION_AUTH_CD`).
+Validation errors are returned as a list of item codes and error codes. Your software has to surface them to the clinician, let them correct the assessment, and resubmit, often as a correction (`TRANS_TYPE_CD=02` with matching `CORRECTION_NUM` and `CORRECTION_AUTH_CD`).
 
 ### Lock and submission status
 
@@ -159,7 +159,7 @@ in-progress → completed → locked → submitted → accepted | rejected
 
 Clinicians can't edit a locked assessment. Corrections after submission are their own workflow with their own rules. An EHR that lets clinicians "fix a typo" on a submitted OASIS is producing audit findings.
 
-## How OASIS drives payment — PDGM
+## How OASIS drives payment, PDGM
 
 The **Patient-Driven Groupings Model** (PDGM) replaced the old PPS model in 2020. Each 30-day billing period is classified into one of **432 case-mix groups** based on:
 
@@ -171,15 +171,15 @@ The **Patient-Driven Groupings Model** (PDGM) replaced the old PPS model in 2020
 
 OASIS drives four of the five. Get the items wrong and the agency is paid the wrong amount. Get them systematically wrong and the agency gets clawbacks in audit.
 
-Most home-health EHRs include a PDGM calculator that recomputes HIPPS codes live as clinicians edit OASIS items — so they can see payment implications and catch errors before lock.
+Most home-health EHRs include a PDGM calculator that recomputes HIPPS codes live as clinicians edit OASIS items, so they can see payment implications and catch errors before lock.
 
 ## Star ratings and Home Health Compare
 
 Quality measures computed from OASIS feed:
 
-- **Home Health Compare** — public-facing star ratings at [medicare.gov](https://www.medicare.gov/care-compare/)
-- **Home Health Value-Based Purchasing (HHVBP)** — payment adjustments based on quality scores
-- **Home Health Quality Reporting Program (HHQRP)** — publishing requirement with a 2% Medicare pay cut for non-reporters
+- **Home Health Compare**, public-facing star ratings at [medicare.gov](https://www.medicare.gov/care-compare/)
+- **Home Health Value-Based Purchasing (HHVBP)**, payment adjustments based on quality scores
+- **Home Health Quality Reporting Program (HHQRP)**, publishing requirement with a 2% Medicare pay cut for non-reporters
 
 Measures are computed by CMS from submitted OASIS; your software doesn't compute them directly. But your software's accuracy directly determines the agency's stars.
 
@@ -197,7 +197,7 @@ This is the core architectural investment. Everything downstream (clinician UX, 
 
 ### Offline capture
 
-Home-health clinicians visit patients — often in areas with poor or no connectivity. OASIS data often starts in a mobile app with no network. Sync, conflict resolution, and partial-save semantics are real engineering problems.
+Home-health clinicians visit patients, often in areas with poor or no connectivity. OASIS data often starts in a mobile app with no network. Sync, conflict resolution, and partial-save semantics are real engineering problems.
 
 ### Clinician-friendly UX
 
@@ -213,16 +213,16 @@ OASIS asks brutal questions. A clinician enters 100+ items per patient, sometime
 
 OASIS doesn't live alone:
 
-- **ICD-10 coding system** — `M1021` etc.
-- **Plan of Care (Form CMS-485)** — separate artifact, often regenerated from OASIS responses.
-- **Billing** — claim creation consumes the HIPPS code from OASIS.
-- **Physician orders** — some OASIS items reference physician orders which live elsewhere.
+- **ICD-10 coding system**, `M1021` etc.
+- **Plan of Care (Form CMS-485)**, separate artifact, often regenerated from OASIS responses.
+- **Billing**, claim creation consumes the HIPPS code from OASIS.
+- **Physician orders**, some OASIS items reference physician orders which live elsewhere.
 
 A siloed OASIS module is less useful than one integrated into the clinician's charting workflow.
 
 ### The audit trail
 
-Every edit to an OASIS item by every user needs a log. Not nice-to-have — regulatory. Auditors reviewing a questionable submission ask "who entered this value, when, and from where?" If you can't answer, the agency is in trouble.
+Every edit to an OASIS item by every user needs a log. Not nice-to-have, regulatory. Auditors reviewing a questionable submission ask "who entered this value, when, and from where?" If you can't answer, the agency is in trouble.
 
 ### PHI everywhere
 
@@ -236,16 +236,16 @@ OASIS data is PHI. All of it. See the [HIPAA post](./2026-04-24-hipaa-for-softwa
 
 The major commercial home-health EHRs:
 
-- **HCHB (Homecare Homebase)** — large market share
-- **WellSky Home Health** — formerly Kinnser
-- **Axxess** — widely used in mid-sized HHAs
-- **Netsmart myUnity** — both clinical and financial
-- **Alora Home Health** — smaller, cloud-first
-- **MatrixCare** — part of ResMed, broader post-acute
+- **HCHB (Homecare Homebase)**, large market share
+- **WellSky Home Health**, formerly Kinnser
+- **Axxess**, widely used in mid-sized HHAs
+- **Netsmart myUnity**, both clinical and financial
+- **Alora Home Health**, smaller, cloud-first
+- **MatrixCare**, part of ResMed, broader post-acute
 
 Plus a long tail of smaller vendors and in-house tools at large HHAs.
 
-Newer entrants building around dispatch, routing, patient engagement, and AI (like Axle Health) either integrate with an existing OASIS-certified EHR or build their own. OASIS *certification* — the ability to produce a schema-valid, CMS-accepted submission — is real engineering investment, which is why most ops-focused tools integrate rather than replace.
+Newer entrants building around dispatch, routing, patient engagement, and AI (like Axle Health) either integrate with an existing OASIS-certified EHR or build their own. OASIS *certification*, the ability to produce a schema-valid, CMS-accepted submission, is real engineering investment, which is why most ops-focused tools integrate rather than replace.
 
 ## A pragmatic starter approach
 
@@ -257,33 +257,33 @@ If you're actually building OASIS capture:
 4. **Implement XML submission to the iQIES spec.** Test with the CMS-provided test environments.
 5. **Pick an ICD-10 source.** The CMS free download is fine for a portfolio project; production systems use IMO Health or similar for clinical concept mapping.
 6. **Write a PDGM calculator.** The logic is public; the tricky part is keeping it current with annual updates.
-7. **Build the audit trail first.** Don't retrofit it — every mutation writes an audit entry from day one.
+7. **Build the audit trail first.** Don't retrofit it, every mutation writes an audit entry from day one.
 8. **Get a real clinician to test the UX.** OASIS is tolerable for clinicians who know what they're doing; for everyone else it's a slog. UX matters.
 
 ## Non-goals for most teams
 
 You almost certainly should not build:
 
-- **Your own OASIS *certification* toolchain** if an existing EHR is in the picture — hook in via HL7/FHIR or vendor APIs.
-- **Your own PDGM / HIPPS engine from scratch** if licensing one is affordable — the rules are intricate.
-- **Your own clinical coding** for ICD-10 — use a terminology vendor.
+- **Your own OASIS *certification* toolchain** if an existing EHR is in the picture, hook in via HL7/FHIR or vendor APIs.
+- **Your own PDGM / HIPPS engine from scratch** if licensing one is affordable, the rules are intricate.
+- **Your own clinical coding** for ICD-10, use a terminology vendor.
 - **A competing EHR** unless you've raised for it and staffed clinically.
 
 Most operational tooling in home health (dispatch, routing, patient engagement) should leave OASIS to the clinical system of record and integrate.
 
 ## References
 
-- [CMS — Home Health Quality Reporting Program](https://www.cms.gov/medicare/quality/home-health/quality-reporting-and-coding) — authoritative source for the OASIS spec
-- [OASIS-E1 Guidance Manual (CMS)](https://www.cms.gov/medicare/quality/home-health/hhqrp-oasis-user-manuals) — the ~350-page clinician reference
-- [iQIES](https://iqies.cms.gov/) — submission portal
-- [Home Health Compare](https://www.medicare.gov/care-compare/) — where quality measures surface publicly
-- [HHVBP overview (CMS)](https://www.cms.gov/medicare/quality/home-health/hhvbp-model) — how the quality data affects payment
-- [PDGM overview (CMS)](https://www.cms.gov/medicare/medicare-fee-for-service-payment/homehealthpps/hh-pdgm) — the payment model
+- [CMS, Home Health Quality Reporting Program](https://www.cms.gov/medicare/quality/home-health/quality-reporting-and-coding), authoritative source for the OASIS spec
+- [OASIS-E1 Guidance Manual (CMS)](https://www.cms.gov/medicare/quality/home-health/hhqrp-oasis-user-manuals), the ~350-page clinician reference
+- [iQIES](https://iqies.cms.gov/), submission portal
+- [Home Health Compare](https://www.medicare.gov/care-compare/), where quality measures surface publicly
+- [HHVBP overview (CMS)](https://www.cms.gov/medicare/quality/home-health/hhvbp-model), how the quality data affects payment
+- [PDGM overview (CMS)](https://www.cms.gov/medicare/medicare-fee-for-service-payment/homehealthpps/hh-pdgm), the payment model
 - [OASIS-E to OASIS-E1 differences (CMS memo)](https://www.cms.gov/files/document/oasis-e1-change-table.pdf)
 
 ## Related topics and posts
 
-- [HIPAA for software engineers](./2026-04-24-hipaa-for-software-engineers/) — how OASIS data must be protected
-- [SOC 2 for software engineers](./2026-04-24-soc-2-for-software-engineers/) — the audit that sits alongside HIPAA
-- [Vehicle Routing Problem topic](../topics/cs/vehicle-routing/) — the operational layer that sits on top of OASIS-driven scheduling
-- [Multi-tenant Django that fails closed](./2026-04-24-multi-tenant-django-fails-closed/) — the tenancy pattern for multi-agency OASIS software
+- [HIPAA for software engineers](./2026-04-24-hipaa-for-software-engineers/), how OASIS data must be protected
+- [SOC 2 for software engineers](./2026-04-24-soc-2-for-software-engineers/), the audit that sits alongside HIPAA
+- [Vehicle Routing Problem topic](../topics/cs/vehicle-routing/), the operational layer that sits on top of OASIS-driven scheduling
+- [Multi-tenant Django that fails closed](./2026-04-24-multi-tenant-django-fails-closed/), the tenancy pattern for multi-agency OASIS software

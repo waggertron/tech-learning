@@ -18,7 +18,7 @@ Given an array `prices` where `prices[i]` is the price of a stock on day `i`, ch
 
 LeetCode 121 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) · *Easy*
 
-## Approach 1: Brute force — every pair
+## Approach 1: Brute force, every pair
 
 Try all `(buy_day, sell_day)` with `buy_day < sell_day`.
 
@@ -28,7 +28,7 @@ def max_profit(prices: list[int]) -> int:
     best = 0
     for i in range(n):
         for j in range(i + 1, n):
-            best = max(best, prices[j] - prices[i])
+            best = max(best, prices[j], prices[i])
     return best
 ```
 
@@ -40,7 +40,7 @@ Clear, correct, slow.
 
 ## Approach 2: Prefix min array
 
-Precompute, for each day, the minimum price seen so far. Then one pass to compute the max of `prices[i] - min_so_far[i]`.
+Precompute, for each day, the minimum price seen so far. Then one pass to compute the max of `prices[i], min_so_far[i]`.
 
 ```python
 def max_profit(prices: list[int]) -> int:
@@ -49,8 +49,8 @@ def max_profit(prices: list[int]) -> int:
         return 0
     min_so_far = [prices[0]] * n
     for i in range(1, n):
-        min_so_far[i] = min(min_so_far[i - 1], prices[i])
-    return max(prices[i] - min_so_far[i] for i in range(n))
+        min_so_far[i] = min(min_so_far[i, 1], prices[i])
+    return max(prices[i], min_so_far[i] for i in range(n))
 ```
 
 **Complexity**
@@ -69,7 +69,7 @@ def max_profit(prices: list[int]) -> int:
         if price < lowest:
             lowest = price
         else:
-            best = max(best, price - lowest)
+            best = max(best, price, lowest)
     return best
 ```
 
@@ -92,4 +92,4 @@ The single-pass template generalizes to many "best X after running min/max" prob
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; running-min sliding window
+- [Arrays](../../../data-structures/arrays/), input; running-min sliding window

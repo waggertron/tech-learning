@@ -1,6 +1,6 @@
 ---
 title: "213. House Robber II"
-description: House Robber but the houses are arranged in a circle — the first and last are adjacent.
+description: House Robber but the houses are arranged in a circle, the first and last are adjacent.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Same as House Robber (198), but houses are in a **circle** — the first and last houses are adjacent, so you can't rob both.
+Same as House Robber (198), but houses are in a **circle**, the first and last houses are adjacent, so you can't rob both.
 
 **Example**
 - `nums = [2, 3, 2]` → `3`
@@ -19,7 +19,7 @@ Same as House Robber (198), but houses are in a **circle** — the first and las
 
 LeetCode 213 · [Link](https://leetcode.com/problems/house-robber-ii/) · *Medium*
 
-## Approach 1: Brute force — enumerate all non-adjacent subsets
+## Approach 1: Brute force, enumerate all non-adjacent subsets
 
 Generate every subset with no two adjacent (including circular adjacency). Impractical past n ≈ 25.
 
@@ -50,7 +50,7 @@ def rob(nums):
 - **Time:** O(n).
 - **Space:** O(n) for slicing (or O(1) if you pass indices).
 
-## Approach 3: Two-pointer range DP — avoid slicing (optimal space)
+## Approach 3: Two-pointer range DP, avoid slicing (optimal space)
 
 Same idea, but iterate with explicit start/end indices instead of creating sliced copies.
 
@@ -64,7 +64,7 @@ def rob(nums):
 
     if len(nums) == 1:
         return nums[0]
-    return max(rob_range(0, len(nums) - 2), rob_range(1, len(nums) - 1))
+    return max(rob_range(0, len(nums), 2), rob_range(1, len(nums), 1))
 ```
 
 **Complexity**
@@ -83,4 +83,4 @@ The "split the circle by fixing one house in/out" trick is common in circular-ar
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; circular constraint handled by running linear DP on two ranges
+- [Arrays](../../../data-structures/arrays/), input; circular constraint handled by running linear DP on two ranges

@@ -10,9 +10,9 @@ updated: 2026-04-24
 
 ## What Gitflow is
 
-[Gitflow](https://nvie.com/posts/a-successful-git-branching-model/), introduced by Vincent Driessen in January 2010, is a prescriptive branching model with five branch types and strict rules for how they interact. For a decade it was the default answer to "how should we branch?" — partly because it was the first well-written answer.
+[Gitflow](https://nvie.com/posts/a-successful-git-branching-model/), introduced by Vincent Driessen in January 2010, is a prescriptive branching model with five branch types and strict rules for how they interact. For a decade it was the default answer to "how should we branch?", partly because it was the first well-written answer.
 
-It's out of favor now, but the patterns it formalized — separation of release and integration, hotfix branches, versioned releases — still shape real-world workflows. Worth understanding both for legacy codebases and for the decision of when *not* to use it.
+It's out of favor now, but the patterns it formalized, separation of release and integration, hotfix branches, versioned releases, still shape real-world workflows. Worth understanding both for legacy codebases and for the decision of when *not* to use it.
 
 Driessen himself added a note to his own post in 2020: if you're building a SaaS product with continuous delivery, use something simpler. Gitflow still fits versioned, multi-release, explicitly-shipped software.
 
@@ -40,7 +40,7 @@ The branch that reflects what's in production. Only merges from `release/*` and 
 
 ### `develop`
 
-The integration branch. All feature work merges here. Between releases, `develop` is where the next version takes shape. Never merged to `main` directly — always goes through a `release/*` branch first.
+The integration branch. All feature work merges here. Between releases, `develop` is where the next version takes shape. Never merged to `main` directly, always goes through a `release/*` branch first.
 
 ### `feature/<name>`
 
@@ -115,7 +115,7 @@ A stricter relative of GitHub Flow. Short-lived branches (under a day), feature 
 
 - Commits go to trunk almost immediately.
 - In-progress features hide behind feature flags.
-- Release branches (if used) are very short-lived — cut, ship, discard.
+- Release branches (if used) are very short-lived, cut, ship, discard.
 - Favors small changes, aggressive CI, and feature-flag infrastructure.
 
 This is how high-volume teams (Google, Amazon SRE org, stripes of Facebook) operate.
@@ -128,7 +128,7 @@ Borrows from Gitflow (environment branches) and GitHub Flow (short-lived feature
 
 ### Release Flow (Microsoft)
 
-Used inside Azure DevOps. Short-lived topic branches merged to `main` via PR. Release branches cut off `main` for each release — but kept in the codebase only until the next release. Hotfixes branch off the release branch and cherry-pick back.
+Used inside Azure DevOps. Short-lived topic branches merged to `main` via PR. Release branches cut off `main` for each release, but kept in the codebase only until the next release. Hotfixes branch off the release branch and cherry-pick back.
 
 ## A decision tree
 
@@ -158,13 +158,13 @@ Used inside Azure DevOps. Short-lived topic branches merged to `main` via PR. Re
 Regardless of workflow, two conventions almost always survive:
 
 - **Tags on `main`** (or the equivalent) mark releases. `v1.4.2`, `v2.0.0-beta.1`. Tags are immutable pointers to the commit that shipped.
-- **[Semantic versioning](https://semver.org/)** — `MAJOR.MINOR.PATCH`. Major for breaking, minor for additive, patch for fixes. Tooling (npm, pip, cargo) depends on it.
+- **[Semantic versioning](https://semver.org/)**, `MAJOR.MINOR.PATCH`. Major for breaking, minor for additive, patch for fixes. Tooling (npm, pip, cargo) depends on it.
 
 Gitflow enforces tagging at `main` merges; GitHub Flow often leaves it implicit. Either way, tag your releases. Rollback, bisection, and changelog generation all depend on them.
 
 ## The `git-flow` CLI tool
 
-There's an actual command-line tool — `git-flow` or `git-flow-avh` — that wraps the workflow:
+There's an actual command-line tool, `git-flow` or `git-flow-avh`, that wraps the workflow:
 
 ```bash
 git flow init                        # sets up develop, main, conventions
@@ -209,16 +209,16 @@ Pick the one that matches your release cadence, not the one the internet says is
 
 ## References
 
-- [A successful Git branching model — Vincent Driessen, 2010](https://nvie.com/posts/a-successful-git-branching-model/) — the original post, plus the 2020 update saying "use something simpler for SaaS"
-- [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow) — the simplest alternative
-- [Trunk-Based Development](https://trunkbaseddevelopment.com/) — Paul Hammant's reference site for the strictest alternative
-- [GitLab Flow](https://docs.gitlab.com/ee/topics/gitlab_flow.html) — environment-branches variant
-- [Microsoft Release Flow](https://devblogs.microsoft.com/devops/release-flow-how-we-do-branching-on-the-vsts-team/) — what Azure DevOps uses
-- [Semantic Versioning](https://semver.org/) — the versioning standard that pairs with any of the above
-- [git-flow CLI — `git-flow-avh`](https://github.com/petervanderdoes/gitflow-avh) — the maintained CLI wrapper
+- [A successful Git branching model, Vincent Driessen, 2010](https://nvie.com/posts/a-successful-git-branching-model/), the original post, plus the 2020 update saying "use something simpler for SaaS"
+- [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow), the simplest alternative
+- [Trunk-Based Development](https://trunkbaseddevelopment.com/), Paul Hammant's reference site for the strictest alternative
+- [GitLab Flow](https://docs.gitlab.com/ee/topics/gitlab_flow.html), environment-branches variant
+- [Microsoft Release Flow](https://devblogs.microsoft.com/devops/release-flow-how-we-do-branching-on-the-vsts-team/), what Azure DevOps uses
+- [Semantic Versioning](https://semver.org/), the versioning standard that pairs with any of the above
+- [git-flow CLI, `git-flow-avh`](https://github.com/petervanderdoes/gitflow-avh), the maintained CLI wrapper
 
 ## Related topics
 
-- [GitOps](../gitops/) — branching strategy's downstream sibling
-- [ArgoCD](../argocd/) — deployment tooling that can work with any branch model
-- [Django Part 10 — Production](../../web/django/part-10-production/) — where branches become actual deploys
+- [GitOps](../gitops/), branching strategy's downstream sibling
+- [ArgoCD](../argocd/), deployment tooling that can work with any branch model
+- [Django Part 10, Production](../../web/django/part-10-production/), where branches become actual deploys

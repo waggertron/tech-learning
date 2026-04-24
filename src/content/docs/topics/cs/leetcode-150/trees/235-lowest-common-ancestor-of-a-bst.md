@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given the root of a Binary Search Tree (BST) and two nodes `p` and `q`, return their lowest common ancestor (LCA) — the lowest node that has both `p` and `q` as descendants (where a node is a descendant of itself).
+Given the root of a Binary Search Tree (BST) and two nodes `p` and `q`, return their lowest common ancestor (LCA), the lowest node that has both `p` and `q` as descendants (where a node is a descendant of itself).
 
 **Example**
 - `root = [6,2,8,0,4,7,9,null,null,3,5]`, `p = 2`, `q = 8` → `6`
@@ -86,8 +86,8 @@ def lowest_common_ancestor(root, p, q):
 | Recursive BST walk | O(h) | O(h) |
 | **Iterative BST walk** | **O(h)** | **O(1)** |
 
-The iterative BST walk is optimal. For generic binary trees (not BSTs), see problem 236 — which needs Approach 1.
+The iterative BST walk is optimal. For generic binary trees (not BSTs), see problem 236, which needs Approach 1.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — BST ordering invariant; iterative walk
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), BST ordering invariant; iterative walk

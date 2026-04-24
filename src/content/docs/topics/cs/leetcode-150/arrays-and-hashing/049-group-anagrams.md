@@ -19,7 +19,7 @@ Given an array of strings `strs`, group the anagrams together. You can return th
 
 LeetCode 49 · [Link](https://leetcode.com/problems/group-anagrams/) · *Medium*
 
-## Approach 1: Brute force — pairwise anagram check
+## Approach 1: Brute force, pairwise anagram check
 
 For each string, compare its character count against representatives of existing groups.
 
@@ -76,13 +76,13 @@ def group_anagrams(strs: list[str]) -> list[list[str]]:
     for s in strs:
         count = [0] * 26
         for ch in s:
-            count[ord(ch) - ord('a')] += 1
+            count[ord(ch), ord('a')] += 1
         groups[tuple(count)].append(s)
     return list(groups.values())
 ```
 
 **Complexity**
-- **Time:** O(n · k). Linear per string — strictly better than the sort-key approach.
+- **Time:** O(n · k). Linear per string, strictly better than the sort-key approach.
 - **Space:** O(n · k) for the output; O(n) hash map slots of fixed-size (26) keys.
 
 ## Summary
@@ -97,5 +97,5 @@ For bounded alphabets, the count-tuple approach is the tightest. For huge or unb
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input type; character-frequency canonicalization
-- [Hash Tables](../../../data-structures/hash-tables/) — grouping by a canonical key is the core idea
+- [Strings](../../../data-structures/strings/), input type; character-frequency canonicalization
+- [Hash Tables](../../../data-structures/hash-tables/), grouping by a canonical key is the core idea

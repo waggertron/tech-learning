@@ -47,7 +47,7 @@ name: home-health-api
 description: Django API for the home-health platform
 type: application
 version: 1.2.3            # chart version (semver)
-appVersion: "2.0.1"       # app version — informational
+appVersion: "2.0.1"       # app version, informational
 
 dependencies:
   - name: postgresql
@@ -94,7 +94,7 @@ postgresql:
     database: home_health
 ```
 
-Values are the contract between the chart author and the chart user. Name them carefully — changing a values key is a breaking change.
+Values are the contract between the chart author and the chart user. Name them carefully, changing a values key is a breaking change.
 
 ### `templates/`
 
@@ -161,7 +161,7 @@ helm rollback  → revert to a previous revision
 helm uninstall → delete the release and all its resources
 ```
 
-Each install or upgrade creates a **revision**. Helm stores the rendered manifest and values for every revision in a Secret (by default) in the release's namespace. This is what makes rollback instant — no re-render, no re-fetch.
+Each install or upgrade creates a **revision**. Helm stores the rendered manifest and values for every revision in a Secret (by default) in the release's namespace. This is what makes rollback instant, no re-render, no re-fetch.
 
 ```bash
 helm install home-health ./mychart --namespace home-health --create-namespace
@@ -171,7 +171,7 @@ helm history home-health       # all revisions with timestamps
 helm uninstall home-health
 ```
 
-## Values layering — the multi-env workflow
+## Values layering, the multi-env workflow
 
 For a service deployed to dev / staging / prod, don't copy-paste. Layer values files:
 
@@ -235,11 +235,11 @@ postgresql:
     database: home_health
 ```
 
-**Umbrella chart** — your chart's only job is to wire together dependencies. `templates/` is nearly empty.
+**Umbrella chart**, your chart's only job is to wire together dependencies. `templates/` is nearly empty.
 
-**Library chart** — a chart of only helpers (no resources). `type: library` in `Chart.yaml`. Other charts depend on it to share `_helpers.tpl`-style partials. Useful when you have 10 service charts that all need the same labels, probes, and image-pull config.
+**Library chart**, a chart of only helpers (no resources). `type: library` in `Chart.yaml`. Other charts depend on it to share `_helpers.tpl`-style partials. Useful when you have 10 service charts that all need the same labels, probes, and image-pull config.
 
-## The ConfigMap hash pattern — how to roll Pods on config changes
+## The ConfigMap hash pattern, how to roll Pods on config changes
 
 A ConfigMap change alone does not roll Deployments. Pods continue using the old config until they restart. Common Helm idiom:
 
@@ -276,7 +276,7 @@ metadata:
 - `pre-upgrade`, `post-upgrade`
 - `pre-delete`, `post-delete`
 - `pre-rollback`, `post-rollback`
-- `test` — `helm test <release>` runs only these
+- `test`, `helm test <release>` runs only these
 
 Use for database migrations, one-time schema jobs, validation runs. Hooks run outside the normal sync so they don't show up in `helm list` resources.
 
@@ -319,14 +319,14 @@ helm pull oci://ghcr.io/acme/charts/mychart --version 1.2.3
 helm install my-app oci://ghcr.io/acme/charts/mychart --version 1.2.3
 ```
 
-OCI charts live alongside container images in the same registry — one credential, one auth story. Since Helm 3.8 (2022), this is the recommended distribution method.
+OCI charts live alongside container images in the same registry, one credential, one auth story. Since Helm 3.8 (2022), this is the recommended distribution method.
 
 ## Alternatives and when to pick them
 
 | Tool | Strengths | When to pick |
 | --- | --- | --- |
 | **Helm** | Mature, huge chart ecosystem, dependency composition, revisions | Distributing software; complex configs with many knobs |
-| **Kustomize** | No templates — patches; built into kubectl | Smallish in-house apps; base + overlay pattern |
+| **Kustomize** | No templates, patches; built into kubectl | Smallish in-house apps; base + overlay pattern |
 | **Jsonnet / Tanka** | Real programming language | Heavy config generation; shared libraries across teams |
 | **Timoni** | CUE-based, type-checked | Schema-first workflows; teams that want guardrails |
 | **Pulumi / CDK8s** | Write manifests in TypeScript/Go/Python | You already write IaC in a general-purpose language |
@@ -343,7 +343,7 @@ Most production stacks pick Helm for third-party apps and Kustomize for their ow
 - **Breaking values changes without a `version` bump.** Consumers upgrade and suddenly their values don't work. Bump `version` (the chart version) on every breaking change; document migration.
 - **Missing the `values.schema.json`.** Users pass wrong types, Helm renders nonsense, and you find out at `kubectl apply` time. Schemas catch misuse at `helm template`.
 - **Overly clever helper functions.** Helm template debugging is hard. `helm template --debug` is your friend. Keep helpers simple and well-tested.
-- **Subcharts that override each other's values.** Two dependencies each define a key named `service` — whichever loads last wins. Use aliases (`alias: db`) to namespace.
+- **Subcharts that override each other's values.** Two dependencies each define a key named `service`, whichever loads last wins. Use aliases (`alias: db`) to namespace.
 - **`helm upgrade` on a chart with schema changes to CRDs.** Helm won't update CRDs from `crds/` after initial install. Manually apply CRD updates before upgrading.
 - **Rollback of a deletion.** `helm rollback` can't recover a resource the chart no longer defines. Roll *forward* to a fixed version.
 
@@ -375,15 +375,15 @@ helm history <release>                                    # revision history
 - [Helm documentation](https://helm.sh/docs/)
 - [Chart best practices](https://helm.sh/docs/chart_best_practices/)
 - [Template function list (Go + Sprig)](https://helm.sh/docs/chart_template_guide/function_list/)
-- [Artifact Hub](https://artifacthub.io/) — the canonical public chart registry
-- [Bitnami charts](https://github.com/bitnami/charts) — large collection of production-ready dependency charts
-- [helm-secrets](https://github.com/jkroepke/helm-secrets) — SOPS-backed encrypted values
-- [Timoni](https://timoni.sh/) — the CUE-based alternative
-- [Kustomize](https://kustomize.io/) — the template-free alternative
+- [Artifact Hub](https://artifacthub.io/), the canonical public chart registry
+- [Bitnami charts](https://github.com/bitnami/charts), large collection of production-ready dependency charts
+- [helm-secrets](https://github.com/jkroepke/helm-secrets), SOPS-backed encrypted values
+- [Timoni](https://timoni.sh/), the CUE-based alternative
+- [Kustomize](https://kustomize.io/), the template-free alternative
 
 ## Related topics
 
-- [Kubernetes](../kubernetes/) — the substrate Helm deploys to
-- [ArgoCD](../argocd/) — applies Helm charts in a GitOps loop
-- [GitOps](../gitops/) — the deployment philosophy Helm plugs into
-- [Terraform](../terraform/) — provisions the cluster Helm runs on
+- [Kubernetes](../kubernetes/), the substrate Helm deploys to
+- [ArgoCD](../argocd/), applies Helm charts in a GitOps loop
+- [GitOps](../gitops/), the deployment philosophy Helm plugs into
+- [Terraform](../terraform/), provisions the cluster Helm runs on

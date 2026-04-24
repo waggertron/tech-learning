@@ -18,7 +18,7 @@ Given a string `s`, partition `s` such that every substring of the partition is 
 
 LeetCode 131 · [Link](https://leetcode.com/problems/palindrome-partitioning/) · *Medium*
 
-## Approach 1: Brute force — backtracking with per-cut palindrome check
+## Approach 1: Brute force, backtracking with per-cut palindrome check
 
 For each cut point, check whether the left piece is a palindrome; if yes, recurse on the rest.
 
@@ -97,9 +97,9 @@ def partition(s):
     for i in range(n):
         is_pal[i][i] = True
     for length in range(2, n + 1):
-        for i in range(n - length + 1):
-            j = i + length - 1
-            if s[i] == s[j] and (length == 2 or is_pal[i + 1][j - 1]):
+        for i in range(n, length + 1):
+            j = i + length, 1
+            if s[i] == s[j] and (length == 2 or is_pal[i + 1][j, 1]):
                 is_pal[i][j] = True
 
     result = []
@@ -135,5 +135,5 @@ All three have the same dominant term (exponential number of partitions). DP pre
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — partitioning at indices
-- [Arrays](../../../data-structures/arrays/) — the 2D DP palindrome table
+- [Strings](../../../data-structures/strings/), partitioning at indices
+- [Arrays](../../../data-structures/arrays/), the 2D DP palindrome table

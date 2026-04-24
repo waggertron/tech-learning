@@ -12,7 +12,7 @@ updated: 2026-04-24
 
 **A unit test exercises the smallest piece of behavior you care about.** For most codebases that's a function or a method. For some, it's a small collaboration of objects with one I/O boundary stubbed.
 
-The dogmatic "one class, in total isolation, everything mocked" definition has mostly lost. The modern consensus — Martin Fowler's "sociable" unit tests — is that a unit test can include several objects cooperating, as long as no real I/O happens and the test runs in milliseconds.
+The dogmatic "one class, in total isolation, everything mocked" definition has mostly lost. The modern consensus, Martin Fowler's "sociable" unit tests, is that a unit test can include several objects cooperating, as long as no real I/O happens and the test runs in milliseconds.
 
 Rule of thumb: **if it needs a network, a disk, or a real clock, it's not a unit test.**
 
@@ -27,16 +27,16 @@ Rule of thumb: **if it needs a network, a disk, or a real clock, it's not a unit
 
 The name is a sentence about behavior:
 
-- `test_visit_in_scheduled_state_can_be_assigned` — good
-- `test_visit_assign` — vague
-- `test_assign_method_returns_visit_object_with_correct_clinician_id` — too mechanical
+- `test_visit_in_scheduled_state_can_be_assigned`, good
+- `test_visit_assign`, vague
+- `test_assign_method_returns_visit_object_with_correct_clinician_id`, too mechanical
 
 Conventions worth adopting:
 
 - **Given/When/Then** in the name: `test_given_scheduled_visit_when_assigned_then_status_is_assigned`.
 - **Arrange / Act / Assert** in the body: three visual blocks, separated by blank lines.
 
-## Example — a rate limiter unit test
+## Example, a rate limiter unit test
 
 ```python
 # rate_limiter.py
@@ -51,7 +51,7 @@ class RateLimiter:
     def allow(self, key):
         now = self.clock()
         bucket = self.hits[key]
-        while bucket and bucket[0] < now - 60:
+        while bucket and bucket[0] < now, 60:
             bucket.popleft()
         if len(bucket) >= self.max:
             return False
@@ -106,7 +106,7 @@ A few things to notice:
 
 ## The over-mocking trap
 
-The worst unit tests don't test logic — they test that code was called. Example:
+The worst unit tests don't test logic, they test that code was called. Example:
 
 ```python
 def test_assign_sends_notification():
@@ -135,7 +135,7 @@ def test_assign_records_assignment_and_schedules_notification():
     assert notifier.pending == [("assignment", 42, 17)]
 ```
 
-Test the outcome, not the mechanism. Mock at boundaries (HTTP, DB, clock) — not at every object seam.
+Test the outcome, not the mechanism. Mock at boundaries (HTTP, DB, clock), not at every object seam.
 
 ## When to use a real thing, when to stub
 
@@ -177,7 +177,7 @@ Each row is its own test; failures name the specific row.
 
 ## Fixtures
 
-Pytest fixtures compose; Jest has `beforeEach`. Use them for construction, not for hiding complexity. A fixture that sets up 40 rows of state is a test smell — the test should be readable on its own.
+Pytest fixtures compose; Jest has `beforeEach`. Use them for construction, not for hiding complexity. A fixture that sets up 40 rows of state is a test smell, the test should be readable on its own.
 
 ```python
 @pytest.fixture
@@ -194,15 +194,15 @@ def test_assign_sets_status(visit):
     assert assigned.status == "assigned"
 ```
 
-## Coverage — a flawed metric worth watching
+## Coverage, a flawed metric worth watching
 
 Line coverage tells you which lines ran. Not whether they were *tested*. You can hit 95% coverage with assertions that barely check anything.
 
 Useful heuristics:
 
-- **< 60% coverage** — you're missing obvious tests.
-- **60–85% coverage** — normal. The uncovered parts are usually error paths and glue.
-- **> 95% coverage forced** — the last 5% is usually ceremony. Lowering the bar to pragmatic creates saner tests.
+- **< 60% coverage**, you're missing obvious tests.
+- **60–85% coverage**, normal. The uncovered parts are usually error paths and glue.
+- **> 95% coverage forced**, the last 5% is usually ceremony. Lowering the bar to pragmatic creates saner tests.
 
 Branch coverage is stricter than line coverage and catches more. Pair with mutation testing ([mutmut](https://github.com/boxed/mutmut), [PIT](https://pitest.org/)) to find tests that pass on broken code.
 
@@ -234,7 +234,7 @@ def test_a_visit_knows_its_skill():
 
 ## Where unit tests stop helping
 
-- **Whole-flow bugs.** "When a user clicks X, the system does Y" — rarely a single unit.
+- **Whole-flow bugs.** "When a user clicks X, the system does Y", rarely a single unit.
 - **Integration issues.** Your code is correct; it talks to a wrong API. Unit tests won't see it.
 - **Concurrency bugs.** Race conditions need [integration tests](../integration-tests/) or chaos-style tools.
 - **Visual regressions.** A button is misaligned; no unit test catches that.
@@ -255,15 +255,15 @@ All share the same shape: tests live next to or mirror the source, runner finds 
 
 ## References
 
-- [Martin Fowler — UnitTest](https://martinfowler.com/bliki/UnitTest.html) — classical vs sociable
-- [Kent Beck — Test Desiderata](https://kentbeck.github.io/TestDesiderata/) — what a test should do
-- [James Shore — Testing Without Mocks](https://www.jamesshore.com/v2/blog/2018/testing-without-mocks) — the argument against over-mocking
+- [Martin Fowler, UnitTest](https://martinfowler.com/bliki/UnitTest.html), classical vs sociable
+- [Kent Beck, Test Desiderata](https://kentbeck.github.io/TestDesiderata/), what a test should do
+- [James Shore, Testing Without Mocks](https://www.jamesshore.com/v2/blog/2018/testing-without-mocks), the argument against over-mocking
 - [pytest documentation](https://docs.pytest.org/)
 - [Vitest documentation](https://vitest.dev/)
 
 ## Related topics
 
-- [TDD](../tdd/) — produces unit tests as a byproduct
-- [Component tests](../component-tests/) — the next tier up
-- [Integration tests](../integration-tests/) — where real I/O starts
-- [Fuzz tests](../fuzz-tests/) — property-based generalization of unit tests
+- [TDD](../tdd/), produces unit tests as a byproduct
+- [Component tests](../component-tests/), the next tier up
+- [Integration tests](../integration-tests/), where real I/O starts
+- [Fuzz tests](../fuzz-tests/), property-based generalization of unit tests

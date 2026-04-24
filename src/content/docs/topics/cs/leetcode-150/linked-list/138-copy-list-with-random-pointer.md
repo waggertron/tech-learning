@@ -14,7 +14,7 @@ A linked list of length `n` is given where each node contains an extra random po
 
 LeetCode 138 · [Link](https://leetcode.com/problems/copy-list-with-random-pointer/) · *Medium*
 
-## Approach 1: Brute force — index-based two-pass
+## Approach 1: Brute force, index-based two-pass
 
 First pass: walk the list, store nodes in an array, create a parallel array of new nodes.
 Second pass: for each original node, find its random's index, set the new node's random to the corresponding new node.
@@ -132,5 +132,5 @@ The hash-map approach is the production-style answer. The interwoven-nodes trick
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — two-dimensional pointer graphs
-- [Hash Tables](../../../data-structures/hash-tables/) — old-to-new mapping
+- [Linked Lists](../../../data-structures/linked-lists/), two-dimensional pointer graphs
+- [Hash Tables](../../../data-structures/hash-tables/), old-to-new mapping

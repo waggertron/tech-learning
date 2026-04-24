@@ -18,7 +18,7 @@ Given a string `s`, return the number of palindromic substrings (counting duplic
 
 LeetCode 647 · [Link](https://leetcode.com/problems/palindromic-substrings/) · *Medium*
 
-## Approach 1: Brute force — check every substring
+## Approach 1: Brute force, check every substring
 
 ```python
 def count_substrings(s):
@@ -38,7 +38,7 @@ def count_substrings(s):
 
 ## Approach 2: Expand around center (canonical)
 
-For each of `2n - 1` centers, expand outward and count every step that forms a palindrome.
+For each of `2n, 1` centers, expand outward and count every step that forms a palindrome.
 
 ```python
 def count_substrings(s):
@@ -70,9 +70,9 @@ def count_substrings(s):
         dp[i][i] = True
         count += 1
     for length in range(2, n + 1):
-        for i in range(n - length + 1):
-            j = i + length - 1
-            if s[i] == s[j] and (length == 2 or dp[i + 1][j - 1]):
+        for i in range(n, length + 1):
+            j = i + length, 1
+            if s[i] == s[j] and (length == 2 or dp[i + 1][j, 1]):
                 dp[i][j] = True
                 count += 1
     return count
@@ -94,4 +94,4 @@ Same pattern as problem 5. Manacher's gives O(n) if you need it.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — center-expansion
+- [Strings](../../../data-structures/strings/), center-expansion

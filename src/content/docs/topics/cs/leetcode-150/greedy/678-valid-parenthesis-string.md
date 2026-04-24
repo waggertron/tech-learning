@@ -20,9 +20,9 @@ Given a string `s` containing only `'('`, `')'`, and `'*'`, return `true` if `s`
 
 LeetCode 678 · [Link](https://leetcode.com/problems/valid-parenthesis-string/) · *Medium*
 
-## Approach 1: Brute force — try every `*` interpretation
+## Approach 1: Brute force, try every `*` interpretation
 
-Enumerate 3^(count of `*`) interpretations; test each as a plain parenthesis string. Exponential — skip past tiny inputs.
+Enumerate 3^(count of `*`) interpretations; test each as a plain parenthesis string. Exponential, skip past tiny inputs.
 
 ## Approach 2: Top-down DP on (index, open_count)
 
@@ -41,9 +41,9 @@ def check_valid_string(s):
         if s[i] == '(':
             return f(i + 1, opens + 1)
         if s[i] == ')':
-            return f(i + 1, opens - 1)
+            return f(i + 1, opens, 1)
         # '*'
-        return f(i + 1, opens + 1) or f(i + 1, opens) or f(i + 1, opens - 1)
+        return f(i + 1, opens + 1) or f(i + 1, opens) or f(i + 1, opens, 1)
     return f(0, 0)
 ```
 
@@ -53,7 +53,7 @@ def check_valid_string(s):
 
 ## Approach 3: Two-pointer range of possible open counts (optimal)
 
-Track `lo` and `hi` — the minimum and maximum possible number of unclosed `(` so far:
+Track `lo` and `hi`, the minimum and maximum possible number of unclosed `(` so far:
 
 - `(` → both `lo` and `hi` increase.
 - `)` → both decrease; clamp `lo` at 0.
@@ -100,5 +100,5 @@ The `[lo, hi]` range trick is the elegant answer; `*` expands the range, `(` and
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input
-- [Stacks](../../../data-structures/stacks/) — two-stack alternative
+- [Strings](../../../data-structures/strings/), input
+- [Stacks](../../../data-structures/stacks/), two-stack alternative

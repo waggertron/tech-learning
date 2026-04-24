@@ -1,6 +1,6 @@
 ---
 title: "210. Course Schedule II"
-description: Return a valid order to finish all courses, or [] if impossible — topological sort of a DAG.
+description: Return a valid order to finish all courses, or [] if impossible, topological sort of a DAG.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-There are `numCourses` courses labeled `0` to `numCourses - 1`. Given prerequisites `[a, b]` meaning course `b` must be taken before `a`, return any ordering of courses you should take to finish all courses. If impossible, return `[]`.
+There are `numCourses` courses labeled `0` to `numCourses, 1`. Given prerequisites `[a, b]` meaning course `b` must be taken before `a`, return any ordering of courses you should take to finish all courses. If impossible, return `[]`.
 
 **Example**
 - `numCourses = 2`, `prerequisites = [[1, 0]]` → `[0, 1]`
@@ -19,12 +19,12 @@ There are `numCourses` courses labeled `0` to `numCourses - 1`. Given prerequisi
 
 LeetCode 210 · [Link](https://leetcode.com/problems/course-schedule-ii/) · *Medium*
 
-## Approach 1: Brute force — check feasibility first, then try to order
+## Approach 1: Brute force, check feasibility first, then try to order
 
 Use problem 207 to check for cycles. If none, use a second pass to build the order. Two passes, wasted work.
 
 ```python
-# Essentially: two passes of the graph — once to detect cycles, once to order.
+# Essentially: two passes of the graph, once to detect cycles, once to order.
 # Skipping full implementation since it's strictly worse than the one-pass versions.
 ```
 
@@ -76,7 +76,7 @@ def find_order(num_courses, prerequisites):
 - **Time:** O(V + E).
 - **Space:** O(V + E).
 
-## Approach 3: Kahn's algorithm (BFS on in-degree) — optimal and natural
+## Approach 3: Kahn's algorithm (BFS on in-degree), optimal and natural
 
 Incrementally process zero-in-degree nodes; the output order is the topological sort.
 
@@ -115,8 +115,8 @@ def find_order(num_courses, prerequisites):
 | **DFS post-order reversed** | **O(V + E)** | **O(V + E)** | Elegant |
 | **Kahn's (BFS in-degree)** | **O(V + E)** | **O(V + E)** | Most natural for this problem |
 
-Kahn's is usually the cleanest answer here — you get feasibility and ordering in one pass. DFS post-order is worth knowing because it generalizes to problems where you need a specific topological ordering (e.g., tie-breaking alphabetically).
+Kahn's is usually the cleanest answer here, you get feasibility and ordering in one pass. DFS post-order is worth knowing because it generalizes to problems where you need a specific topological ordering (e.g., tie-breaking alphabetically).
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — topological sort (Kahn's vs. DFS post-order)
+- [Graphs](../../../data-structures/graphs/), topological sort (Kahn's vs. DFS post-order)

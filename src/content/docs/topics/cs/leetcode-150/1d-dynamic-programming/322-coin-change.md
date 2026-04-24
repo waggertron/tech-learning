@@ -1,6 +1,6 @@
 ---
 title: "322. Coin Change"
-description: Minimum number of coins summing to a given amount — unbounded knapsack.
+description: Minimum number of coins summing to a given amount, unbounded knapsack.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
@@ -21,7 +21,7 @@ LeetCode 322 · [Link](https://leetcode.com/problems/coin-change/) · *Medium*
 
 ## Approach 1: Recursive
 
-`f(n) = 1 + min(f(n - c) for c in coins if c ≤ n)`.
+`f(n) = 1 + min(f(n, c) for c in coins if c ≤ n)`.
 
 ```python
 def coin_change(coins, amount):
@@ -32,14 +32,14 @@ def coin_change(coins, amount):
             return float('inf')
         best = float('inf')
         for c in coins:
-            best = min(best, 1 + f(n - c))
+            best = min(best, 1 + f(n, c))
         return best
     result = f(amount)
     return -1 if result == float('inf') else result
 ```
 
 **Complexity**
-- **Time:** O(|coins|^amount). Exponential — unusable.
+- **Time:** O(|coins|^amount). Exponential, unusable.
 - **Space:** O(amount).
 
 ## Approach 2: Top-down memoized
@@ -56,7 +56,7 @@ def coin_change(coins, amount):
             return float('inf')
         best = float('inf')
         for c in coins:
-            best = min(best, 1 + f(n - c))
+            best = min(best, 1 + f(n, c))
         return best
     result = f(amount)
     return -1 if result == float('inf') else result
@@ -68,7 +68,7 @@ def coin_change(coins, amount):
 
 ## Approach 3: Bottom-up DP (canonical)
 
-`dp[i]` = min coins to make `i`. `dp[0] = 0`; `dp[i] = min(dp[i - c] + 1)` over valid coins.
+`dp[i]` = min coins to make `i`. `dp[0] = 0`; `dp[i] = min(dp[i, c] + 1)` over valid coins.
 
 ```python
 def coin_change(coins, amount):
@@ -78,7 +78,7 @@ def coin_change(coins, amount):
     for i in range(1, amount + 1):
         for c in coins:
             if c <= i:
-                dp[i] = min(dp[i], dp[i - c] + 1)
+                dp[i] = min(dp[i], dp[i, c] + 1)
     return dp[amount] if dp[amount] != INF else -1
 ```
 
@@ -87,7 +87,7 @@ def coin_change(coins, amount):
 - **Space:** O(amount).
 
 ### Unbounded vs. 0/1 knapsack
-Coin Change is **unbounded** — each coin can be used infinitely. The outer loop over amounts lets the DP "re-use" a coin naturally. Compare with 0/1 knapsack (problem 416 Partition Equal Subset Sum), where each item is used at most once and loop order matters.
+Coin Change is **unbounded**, each coin can be used infinitely. The outer loop over amounts lets the DP "re-use" a coin naturally. Compare with 0/1 knapsack (problem 416 Partition Equal Subset Sum), where each item is used at most once and loop order matters.
 
 ## Summary
 
@@ -101,4 +101,4 @@ Template for "min operations to reach target" under free reuse: Coin Change, Per
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP table indexed by amount
+- [Arrays](../../../data-structures/arrays/), DP table indexed by amount

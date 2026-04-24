@@ -13,7 +13,7 @@ updated: 2026-04-24
 Customers come in **paired** nodes: for each pair `(p, d)`, `p` is a pickup location, `d` is a delivery. Two new constraints on top of the base VRP:
 
 1. **Precedence.** Along any vehicle's route, `p` must be visited before its matching `d`.
-2. **Same vehicle.** `p` and `d` must be served by the same vehicle — no transfers between trucks.
+2. **Same vehicle.** `p` and `d` must be served by the same vehicle, no transfers between trucks.
 
 Pair count can be larger than vehicle count; multiple pairs can share a vehicle.
 
@@ -55,7 +55,7 @@ for pickup_node, delivery_node in pickup_delivery_pairs:
         routing.VehicleVar(pickup_index) == routing.VehicleVar(delivery_index)
     )
 
-    # 3. Precedence — pickup cumul ≤ delivery cumul on the time (or distance) dimension
+    # 3. Precedence, pickup cumul ≤ delivery cumul on the time (or distance) dimension
     distance_dim = routing.GetDimensionOrDie("Distance")
     routing.solver().Add(
         distance_dim.CumulVar(pickup_index) <= distance_dim.CumulVar(delivery_index)
@@ -66,7 +66,7 @@ The `CumulVar` comparison is how precedence is expressed: the cumulative dimensi
 
 ## Capacity + PDP
 
-Layering CVRP capacity on top of PDP is common. The pickup node has demand `+q`; the delivery node has demand `-q`. The **capacity dimension's cumul** at any point along the route equals the current load — positive on pickups, negative on deliveries, never exceeding `Q` at any intermediate step.
+Layering CVRP capacity on top of PDP is common. The pickup node has demand `+q`; the delivery node has demand `-q`. The **capacity dimension's cumul** at any point along the route equals the current load, positive on pickups, negative on deliveries, never exceeding `Q` at any intermediate step.
 
 ```python
 def demand_callback(from_index):
@@ -83,25 +83,25 @@ routing.AddDimensionWithVehicleCapacity(
 )
 ```
 
-OR-Tools automatically enforces the capacity constraint at **every node** along every route — so the negative demand at a delivery actually frees up capacity, and subsequent pickups can use that freed capacity.
+OR-Tools automatically enforces the capacity constraint at **every node** along every route, so the negative demand at a delivery actually frees up capacity, and subsequent pickups can use that freed capacity.
 
 ## Gotchas
 
 - **Pair indices are node indices, not arcs.** Pass the numeric node indices from your manager, not location names.
 - **Zero-demand pickups/deliveries are OK.** If a task is "move one person" with implicit demand of 1, make the demand explicit and let the capacity dimension handle it.
 - **Precedence is per-dimension.** Use the time dimension for temporal precedence, distance for spatial. Mixing signals produces subtle bugs.
-- **Dropped-pair semantics.** If dropping a pickup is allowed, you must also drop its matching delivery — OR-Tools handles this automatically when you use `AddDisjunction` with a penalty on both nodes (see the "dropped visits" pattern on the main variants page).
+- **Dropped-pair semantics.** If dropping a pickup is allowed, you must also drop its matching delivery, OR-Tools handles this automatically when you use `AddDisjunction` with a penalty on both nodes (see the "dropped visits" pattern on the main variants page).
 - **Multi-leg transfers** (cross-docking, hub-and-spoke with transshipment) are **not standard PDP**. The one-vehicle constraint is essential; multi-leg problems need specialized formulations (PDP with transshipment, PDPT).
 
 ## Applications
 
-- **Ride-sharing** — passenger pickups and dropoffs, same vehicle constraint is physically enforced.
-- **Same-day delivery / parcel relay** — where items can't transfer between couriers.
-- **Freight forwarding** — load cross-dock, but the intra-route leg must be one truck.
-- **Home care scheduling** — patient pickup from home, drop at clinic, then back home.
+- **Ride-sharing**, passenger pickups and dropoffs, same vehicle constraint is physically enforced.
+- **Same-day delivery / parcel relay**, where items can't transfer between couriers.
+- **Freight forwarding**, load cross-dock, but the intra-route leg must be one truck.
+- **Home care scheduling**, patient pickup from home, drop at clinic, then back home.
 
 ## References
 
-- [Pickup and Delivery — OR-Tools](https://developers.google.com/optimization/routing/pickup_delivery)
+- [Pickup and Delivery, OR-Tools](https://developers.google.com/optimization/routing/pickup_delivery)
 - [Dial-a-Ride problem (related)](https://en.wikipedia.org/wiki/Dial-a-ride_problem)
 - Savelsbergh & Sol (1995). "The General Pickup and Delivery Problem." *Transportation Science* 29(1):17–29.

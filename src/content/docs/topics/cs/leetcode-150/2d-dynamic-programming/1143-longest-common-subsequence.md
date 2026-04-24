@@ -48,10 +48,10 @@ def longest_common_subsequence(text1, text2):
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            if text1[i - 1] == text2[j - 1]:
-                dp[i][j] = 1 + dp[i - 1][j - 1]
+            if text1[i, 1] == text2[j, 1]:
+                dp[i][j] = 1 + dp[i, 1][j, 1]
             else:
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+                dp[i][j] = max(dp[i, 1][j], dp[i][j, 1])
     return dp[m][n]
 ```
 
@@ -61,7 +61,7 @@ def longest_common_subsequence(text1, text2):
 
 ## Approach 3: 1-D rolling array (optimal space)
 
-Keep two rows — current and previous. Or one row with a diagonal scratch scalar.
+Keep two rows, current and previous. Or one row with a diagonal scratch scalar.
 
 ```python
 def longest_common_subsequence(text1, text2):
@@ -73,10 +73,10 @@ def longest_common_subsequence(text1, text2):
     for i in range(1, m + 1):
         curr = [0] * (n + 1)
         for j in range(1, n + 1):
-            if text1[i - 1] == text2[j - 1]:
-                curr[j] = 1 + prev[j - 1]
+            if text1[i, 1] == text2[j, 1]:
+                curr[j] = 1 + prev[j, 1]
             else:
-                curr[j] = max(prev[j], curr[j - 1])
+                curr[j] = max(prev[j], curr[j, 1])
         prev = curr
     return prev[n]
 ```
@@ -93,8 +93,8 @@ def longest_common_subsequence(text1, text2):
 | 2-D DP | O(m · n) | O(m · n) |
 | **1-D rolling DP** | **O(m · n)** | **O(min(m, n))** |
 
-LCS is the prototype of the "compare two sequences" DP. Its recurrence pattern — `if match then diagonal+1 else max(up, left)` — shows up in Edit Distance, Shortest Common Supersequence, Minimum ASCII Delete Sum.
+LCS is the prototype of the "compare two sequences" DP. Its recurrence pattern, `if match then diagonal+1 else max(up, left)`, shows up in Edit Distance, Shortest Common Supersequence, Minimum ASCII Delete Sum.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — sequence alignment DP
+- [Strings](../../../data-structures/strings/), sequence alignment DP

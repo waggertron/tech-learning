@@ -2,9 +2,9 @@
 
 A shareable, postable knowledge base of tech topics I research and educate myself on. One repo, three outputs:
 
-1. **Browsable on GitHub** — every topic has a `README`-style markdown file that reads cleanly on github.com
-2. **Static site** — Astro + Starlight build, deployed to GitHub Pages at [waggertron.github.io/tech-learning](https://waggertron.github.io/tech-learning/)
-3. **Portable to social** — plain markdown, easy to paste into dev.to / Medium / LinkedIn
+1. **Browsable on GitHub**, every topic has a `README`-style markdown file that reads cleanly on github.com
+2. **Static site**, Astro + Starlight build, deployed to GitHub Pages at [waggertron.github.io/tech-learning](https://waggertron.github.io/tech-learning/)
+3. **Portable to social**, plain markdown, easy to paste into dev.to / Medium / LinkedIn
 
 ## Structure
 
@@ -39,7 +39,7 @@ npm run new:topic -- <category> <slug>
 # e.g. npm run new:topic -- ai rag-basics
 ```
 
-Creates `src/content/docs/topics/<category>/<slug>/` from the template with today's date. Edit `index.md` — set `title`, `description`, `tags`. Write.
+Creates `src/content/docs/topics/<category>/<slug>/` from the template with today's date. Edit `index.md`, set `title`, `description`, `tags`. Write.
 
 ### Add a subtopic
 
@@ -48,7 +48,7 @@ Two shapes, pick based on what you need:
 - **Flat** (single page, no assets): `cp templates/topic/subtopic.md src/content/docs/topics/<category>/<topic>/<subtopic>.md`
 - **Folder** (has images, code samples in files, or children): `cp -r templates/topic/subtopic-folder src/content/docs/topics/<category>/<topic>/<subtopic>`
 
-Update frontmatter — set `parent` to the parent topic's slug so breadcrumbs work.
+Update frontmatter, set `parent` to the parent topic's slug so breadcrumbs work.
 
 ### Add a post
 
@@ -80,19 +80,19 @@ When a post is ready to share externally:
 
 1. Copy the markdown body (everything below the frontmatter block)
 2. Paste into dev.to / Medium / LinkedIn / Hashnode
-3. **Set the canonical URL** on the external platform to the `canonical` value from the post's frontmatter — this tells search engines the version on this site is the primary one
+3. **Set the canonical URL** on the external platform to the `canonical` value from the post's frontmatter, this tells search engines the version on this site is the primary one
 4. Adjust any platform-specific formatting:
    - dev.to / Hashnode: image paths need absolute URLs
    - Medium: strip Starlight-specific MDX components if any were used
-   - LinkedIn: preview the first 2 lines — they get truncated in the feed
+   - LinkedIn: preview the first 2 lines, they get truncated in the feed
 
 ## Conventions
 
 - Topics are **evergreen** (update them as your understanding grows); posts are **snapshots** (generally don't rewrite history)
 - Keep nesting ≤ 3 levels (category → topic → subtopic)
 - Images and assets live next to the markdown that uses them, not in a shared `assets/` dump
-- Set `status: draft` in frontmatter while writing; flip to `published` when ready (currently informational only — all files ship)
+- Set `status: draft` in frontmatter while writing; flip to `published` when ready (currently informational only, all files ship)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).

@@ -21,7 +21,7 @@ Return the minimum integer `k` such that she can eat all bananas within `h` hour
 
 LeetCode 875 · [Link](https://leetcode.com/problems/koko-eating-bananas/) · *Medium*
 
-## Approach 1: Brute force — try every speed from 1 upward
+## Approach 1: Brute force, try every speed from 1 upward
 
 Start at `k = 1` and increment until she finishes in time.
 
@@ -43,7 +43,7 @@ def min_eating_speed(piles: list[int], h: int) -> int:
 
 ## Approach 2: Linear search from max downward (no improvement)
 
-Starting from `k = max(piles)` and decrementing doesn't help — we'd still do O(max) iterations.
+Starting from `k = max(piles)` and decrementing doesn't help, we'd still do O(max) iterations.
 
 A genuine middle tier is the **realization that feasibility is monotonic**: if speed `k` works, every `k' > k` also works. That monotonicity is the signal for binary search.
 
@@ -73,11 +73,11 @@ def min_eating_speed(piles: list[int], h: int) -> int:
 - **Space:** O(1).
 
 ### Integer-only hours (avoid float `ceil`)
-`ceil(p / k)` can be replaced with `(p + k - 1) // k` to avoid floating point entirely:
+`ceil(p / k)` can be replaced with `(p + k, 1) // k` to avoid floating point entirely:
 
 ```python
 def hours(k: int) -> int:
-    return sum((p + k - 1) // k for p in piles)
+    return sum((p + k, 1) // k for p in piles)
 ```
 
 ## Summary
@@ -93,4 +93,4 @@ Adjacent problems: 1011 Capacity To Ship Packages, 410 Split Array Largest Sum, 
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — the piles array; feasibility predicate
+- [Arrays](../../../data-structures/arrays/), the piles array; feasibility predicate

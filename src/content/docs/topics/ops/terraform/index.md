@@ -1,6 +1,6 @@
 ---
 title: Terraform
-description: Infrastructure as code. Providers, resources, state, modules, workspaces, and the operational patterns — remote state with locking, per-environment isolation, module composition, drift detection — that make Terraform survive contact with a real team.
+description: Infrastructure as code. Providers, resources, state, modules, workspaces, and the operational patterns, remote state with locking, per-environment isolation, module composition, drift detection, that make Terraform survive contact with a real team.
 category: ops
 tags: [terraform, iac, infrastructure, opentofu, cloud]
 status: draft
@@ -13,7 +13,7 @@ updated: 2026-04-24
 **Terraform is declarative infrastructure-as-code.** You write HCL (HashiCorp Configuration Language) describing cloud resources you want; Terraform figures out what's already there, computes a plan, and applies the difference.
 
 - Written in Go, originally by HashiCorp, open-sourced in 2014.
-- Supports hundreds of providers — AWS, GCP, Azure, Kubernetes, GitHub, PagerDuty, Datadog, Cloudflare, essentially any API worth talking to.
+- Supports hundreds of providers, AWS, GCP, Azure, Kubernetes, GitHub, PagerDuty, Datadog, Cloudflare, essentially any API worth talking to.
 - **License changed in 2023** from MPL 2.0 to BUSL 1.1. The community forked to [OpenTofu](https://opentofu.org/) (Linux Foundation, MPL 2.0). For most teams the two are interchangeable today; OpenTofu is the long-term safe choice if licensing matters.
 
 This page uses "Terraform" throughout; every pattern applies to OpenTofu.
@@ -51,9 +51,9 @@ infra/
         └── outputs.tf
 ```
 
-File names aren't special; Terraform reads every `*.tf` in the directory. The split is convention — keeps code readable.
+File names aren't special; Terraform reads every `*.tf` in the directory. The split is convention, keeps code readable.
 
-### `versions.tf` — pin everything
+### `versions.tf`, pin everything
 
 ```hcl
 terraform {
@@ -74,7 +74,7 @@ terraform {
 
 Floating versions cause silent regressions. Pin to a minor; let patches flow.
 
-### `backend.tf` — remote state
+### `backend.tf`, remote state
 
 ```hcl
 terraform {
@@ -106,7 +106,7 @@ resource "aws_s3_bucket" "logs" {
 ```
 
 - **`resource`** keyword, resource type, local name.
-- Terraform manages this resource's lifecycle — creates, updates, destroys.
+- Terraform manages this resource's lifecycle, creates, updates, destroys.
 - Referenced elsewhere as `aws_s3_bucket.logs.arn`.
 
 ### Data sources
@@ -176,7 +176,7 @@ locals {
 }
 ```
 
-Reusable expressions. Don't overuse — too many locals obscure what's happening.
+Reusable expressions. Don't overuse, too many locals obscure what's happening.
 
 ## Modules
 
@@ -226,7 +226,7 @@ modules/
 
 Good module rules:
 
-- **One responsibility.** A "vpc" module, an "rds" module — not a "whole-environment" module.
+- **One responsibility.** A "vpc" module, an "rds" module, not a "whole-environment" module.
 - **Accept variables, emit outputs.** No hidden side effects.
 - **Validate inputs.** Use `validation` blocks; fail fast.
 - **Document required provider versions** in `versions.tf`.
@@ -236,7 +236,7 @@ Good module rules:
 
 Two ways to create multiple of the same resource.
 
-### `count` — indexed list
+### `count`, indexed list
 
 ```hcl
 resource "aws_instance" "worker" {
@@ -250,7 +250,7 @@ resource "aws_instance" "worker" {
 
 **Problem:** if you remove an element from the middle of a list, every subsequent resource's index shifts, and Terraform destroys/recreates them all. Catastrophic for persistent resources.
 
-### `for_each` — keyed map (usually better)
+### `for_each`, keyed map (usually better)
 
 ```hcl
 resource "aws_iam_user" "team" {
@@ -284,11 +284,11 @@ Critical: when two engineers run `terraform apply` at the same time, without loc
 - GCS backend uses GCS object versioning + Cloud Build's lock system.
 - Terraform Cloud uses internal locks.
 
-If you see `Error: state locked`, check who's running Terraform before forcing the unlock. `terraform force-unlock <lock-id>` — only if you're sure the holding process crashed.
+If you see `Error: state locked`, check who's running Terraform before forcing the unlock. `terraform force-unlock <lock-id>`, only if you're sure the holding process crashed.
 
 ### Sensitive data in state
 
-State contains *everything* — passwords set via `random_password`, RDS credentials, private keys. Even `sensitive = true` outputs are plain in the state file.
+State contains *everything*, passwords set via `random_password`, RDS credentials, private keys. Even `sensitive = true` outputs are plain in the state file.
 
 - Encrypt at rest (S3 server-side, GCS default encryption).
 - Restrict IAM access tightly.
@@ -307,7 +307,7 @@ terraform import aws_s3.existing acme-bucket  # start managing an existing resou
 
 `state mv` and `state rm` are scalpels. They change Terraform's view of the world without touching the cloud. Use carefully.
 
-### `terraform_remote_state` — reading other states
+### `terraform_remote_state`, reading other states
 
 ```hcl
 data "terraform_remote_state" "network" {
@@ -334,7 +334,7 @@ Two meanings, depending on backend:
 
 `terraform workspace new prod`. All workspaces share the same backend path; Terraform appends the workspace name. Useful for quick experiments.
 
-**Not a production pattern.** Workspaces don't isolate state enough — one mistake and you apply prod changes to dev.
+**Not a production pattern.** Workspaces don't isolate state enough, one mistake and you apply prod changes to dev.
 
 ### Terraform Cloud / HCP workspaces
 
@@ -369,8 +369,8 @@ Terragrunt is worth it once you have more than three environments or want module
 
 ### Monorepo vs polyrepo
 
-- **Monorepo** — `infra/` contains all environments and all modules. Easier to refactor; everyone sees everyone's changes.
-- **Polyrepo** — separate repos for network, shared services, per-app. Harder to coordinate; cleaner access control.
+- **Monorepo**, `infra/` contains all environments and all modules. Easier to refactor; everyone sees everyone's changes.
+- **Polyrepo**, separate repos for network, shared services, per-app. Harder to coordinate; cleaner access control.
 
 Start monorepo. Split later if team boundaries demand it.
 
@@ -390,9 +390,9 @@ terraform validate                 # HCL + schema validation
 
 Patterns:
 
-- `-out=tfplan` in CI — compute plan on PR, apply on merge to `main`.
-- `-refresh-only` — update state from reality without proposing changes (drift detection).
-- `-target=aws_s3.bucket` — apply just one resource. Escape hatch only.
+- `-out=tfplan` in CI, compute plan on PR, apply on merge to `main`.
+- `-refresh-only`, update state from reality without proposing changes (drift detection).
+- `-target=aws_s3.bucket`, apply just one resource. Escape hatch only.
 
 ## Providers
 
@@ -490,14 +490,14 @@ Managed services that do the same plus UI, RBAC, policy-as-code (OPA, Sentinel),
 - **Using `terraform apply` in production without a saved plan.** Two people running apply race; state corrupts. Always `-out=tfplan`.
 - **Secrets in `.tf` files.** They end up in Git. Use `random_password` + AWS Secrets Manager, or inject via CI from a vault.
 - **`terraform destroy` on shared state.** If many projects share one state, `destroy` nukes everything. Partition state.
-- **Importing incorrectly.** `terraform import` tells Terraform "you manage this." If the config differs from reality, the next plan will "fix" it — which might mean destroy and recreate. Import with an exact matching config.
+- **Importing incorrectly.** `terraform import` tells Terraform "you manage this." If the config differs from reality, the next plan will "fix" it, which might mean destroy and recreate. Import with an exact matching config.
 - **Provider drift between plan and apply.** Providers update between the two runs; plan becomes stale. Use `-out=tfplan` and apply promptly.
 - **Cyclic dependencies between modules.** Terraform's DAG refuses. Usually a sign you should merge or restructure the modules.
 - **Terraform state in a public S3 bucket.** It's happened. Block Public Access on every state bucket.
 
 ## Operational patterns worth stealing
 
-- **Two-repo architecture** — `infra/` for Terraform, `manifests/` for Kubernetes GitOps. Infra changes rarely; manifests change constantly. Different review cadences.
+- **Two-repo architecture**, `infra/` for Terraform, `manifests/` for Kubernetes GitOps. Infra changes rarely; manifests change constantly. Different review cadences.
 - **Small state files.** Split infra into layers (network, data, apps) with their own state. Smaller plans, faster iterations, blast radius per layer.
 - **Pre-commit hooks.** `terraform fmt`, `terraform validate`, `tflint`, `tfsec` or `checkov`. Cheap, catches most common mistakes.
 - **Policy-as-code.** Sentinel (Terraform Cloud), OPA (Conftest), or Spacelift policies. Enforce "no public S3 buckets," "all resources tagged," etc. at plan time.
@@ -522,17 +522,17 @@ Most "what's happening?" questions end with `terraform state show` and `terrafor
 
 - [Terraform documentation](https://developer.hashicorp.com/terraform/docs)
 - [OpenTofu documentation](https://opentofu.org/docs/)
-- [Terraform Registry](https://registry.terraform.io/) — the canonical module + provider index
-- [terraform-aws-modules](https://github.com/terraform-aws-modules) — excellent reference implementations
-- [Terraform Best Practices — Anton Babenko](https://www.terraform-best-practices.com/)
-- [Terragrunt](https://terragrunt.gruntwork.io/) — the DRY wrapper
-- [Atlantis](https://www.runatlantis.io/) — open-source PR automation
-- [Infracost](https://www.infracost.io/) — cost estimation in CI
-- [tfsec](https://github.com/aquasecurity/tfsec) / [Checkov](https://www.checkov.io/) — static security analysis
+- [Terraform Registry](https://registry.terraform.io/), the canonical module + provider index
+- [terraform-aws-modules](https://github.com/terraform-aws-modules), excellent reference implementations
+- [Terraform Best Practices, Anton Babenko](https://www.terraform-best-practices.com/)
+- [Terragrunt](https://terragrunt.gruntwork.io/), the DRY wrapper
+- [Atlantis](https://www.runatlantis.io/), open-source PR automation
+- [Infracost](https://www.infracost.io/), cost estimation in CI
+- [tfsec](https://github.com/aquasecurity/tfsec) / [Checkov](https://www.checkov.io/), static security analysis
 
 ## Related topics
 
-- [Kubernetes](../kubernetes/) — what Terraform often provisions
-- [Helm](../helm/) — deploys software into the cluster Terraform made
-- [GitOps](../gitops/) — the adjacent philosophy for runtime (vs. provisioning) state
-- [ArgoCD](../argocd/) — the runtime reconciler that complements Terraform's one-shot apply
+- [Kubernetes](../kubernetes/), what Terraform often provisions
+- [Helm](../helm/), deploys software into the cluster Terraform made
+- [GitOps](../gitops/), the adjacent philosophy for runtime (vs. provisioning) state
+- [ArgoCD](../argocd/), the runtime reconciler that complements Terraform's one-shot apply

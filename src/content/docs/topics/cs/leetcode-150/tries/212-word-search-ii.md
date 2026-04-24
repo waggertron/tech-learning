@@ -19,7 +19,7 @@ Given a 2D board of characters and a list of words, return all words that can be
 
 LeetCode 212 · [Link](https://leetcode.com/problems/word-search-ii/) · *Hard*
 
-## Approach 1: Brute force — solve Word Search for each word
+## Approach 1: Brute force, solve Word Search for each word
 
 Run problem 79's algorithm once per word.
 
@@ -35,8 +35,8 @@ def find_words(board, words):
                 return False
             saved = board[r][c]
             board[r][c] = "#"
-            found = (dfs(r + 1, c, i + 1) or dfs(r - 1, c, i + 1)
-                     or dfs(r, c + 1, i + 1) or dfs(r, c - 1, i + 1))
+            found = (dfs(r + 1, c, i + 1) or dfs(r, 1, c, i + 1)
+                     or dfs(r, c + 1, i + 1) or dfs(r, c, 1, i + 1))
             board[r][c] = saved
             return found
 
@@ -91,9 +91,9 @@ def find_words(board, words):
             next_node.word = None    # dedup
         board[r][c] = "#"
         dfs(r + 1, c, next_node)
-        dfs(r - 1, c, next_node)
+        dfs(r, 1, c, next_node)
         dfs(r, c + 1, next_node)
-        dfs(r, c - 1, next_node)
+        dfs(r, c, 1, next_node)
         board[r][c] = ch
 
     for r in range(rows):
@@ -131,5 +131,5 @@ This problem is the canonical "why tries matter" interview question. The trie tu
 
 ## Related data structures
 
-- [Tries](../../../data-structures/tries/) — dictionary representation with DFS pruning
-- [Arrays](../../../data-structures/arrays/) — board with in-place visited marker
+- [Tries](../../../data-structures/tries/), dictionary representation with DFS pruning
+- [Arrays](../../../data-structures/arrays/), board with in-place visited marker

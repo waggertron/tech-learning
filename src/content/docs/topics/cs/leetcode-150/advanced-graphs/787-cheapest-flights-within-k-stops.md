@@ -1,6 +1,6 @@
 ---
 title: "787. Cheapest Flights Within K Stops"
-description: Find the cheapest price from src to dst with at most K stops — Bellman-Ford with a hop limit.
+description: Find the cheapest price from src to dst with at most K stops, Bellman-Ford with a hop limit.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, bellman-ford, bfs, medium]
 status: draft
@@ -18,7 +18,7 @@ Given `n` cities and flights `flights[i] = [fromᵢ, toᵢ, priceᵢ]`, return t
 
 LeetCode 787 · [Link](https://leetcode.com/problems/cheapest-flights-within-k-stops/) · *Medium*
 
-## Approach 1: Brute force — DFS with memo
+## Approach 1: Brute force, DFS with memo
 
 DFS all paths from src, prune with cost; memoize by `(city, remaining_stops)`.
 
@@ -39,7 +39,7 @@ def find_cheapest_price(n, flights, src, dst, k):
             return float('inf')
         best = float('inf')
         for nb, cost in graph[city]:
-            best = min(best, cost + dfs(nb, stops_left - 1))
+            best = min(best, cost + dfs(nb, stops_left, 1))
         return best
 
     result = dfs(src, k + 1)
@@ -70,7 +70,7 @@ def find_cheapest_price(n, flights, src, dst, k):
             return cost
         if stops > 0:
             for nb, w in graph[city]:
-                heapq.heappush(heap, (cost + w, nb, stops - 1))
+                heapq.heappush(heap, (cost + w, nb, stops, 1))
     return -1
 ```
 
@@ -103,7 +103,7 @@ def find_cheapest_price(n, flights, src, dst, k):
 - **Space:** O(V).
 
 ### Why the snapshot matters
-Without copying, a flight `u → v` relaxed in iteration `i` could be immediately used by `v → x` in the same iteration — that's two hops in one "hop budget" slot, corrupting the answer.
+Without copying, a flight `u → v` relaxed in iteration `i` could be immediately used by `v → x` in the same iteration, that's two hops in one "hop budget" slot, corrupting the answer.
 
 ## Summary
 
@@ -113,8 +113,8 @@ Without copying, a flight `u → v` relaxed in iteration `i` could be immediatel
 | Modified Dijkstra | O(E · k · log(V · k)) | O(V · k) |
 | **Bellman-Ford + hop cap** | **O(k · E)** | **O(V)** |
 
-Bellman-Ford with a hop cap is the cleanest solution for this shape of problem — the hop count is exactly `k + 1` iterations. Same pattern applies to any "at-most-k-edges" shortest-path variant.
+Bellman-Ford with a hop cap is the cleanest solution for this shape of problem, the hop count is exactly `k + 1` iterations. Same pattern applies to any "at-most-k-edges" shortest-path variant.
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — Bellman-Ford; hop-limited shortest path
+- [Graphs](../../../data-structures/graphs/), Bellman-Ford; hop-limited shortest path

@@ -17,11 +17,11 @@ Required methods:
 - `postTweet(userId, tweetId)`
 - `follow(followerId, followeeId)`
 - `unfollow(followerId, followeeId)`
-- `getNewsFeed(userId)` — return the 10 most-recent tweet IDs from the user and those they follow, most recent first.
+- `getNewsFeed(userId)`, return the 10 most-recent tweet IDs from the user and those they follow, most recent first.
 
 LeetCode 355 · [Link](https://leetcode.com/problems/design-twitter/) · *Medium*
 
-## Approach 1: Brute force — merge all tweets and sort
+## Approach 1: Brute force, merge all tweets and sort
 
 Per-user tweet list; on `getNewsFeed`, concatenate relevant lists and sort by timestamp.
 
@@ -87,7 +87,7 @@ class Twitter:
         # Seed the heap with the latest tweet from each user
         for u in users:
             if self.tweets[u]:
-                i = len(self.tweets[u]) - 1
+                i = len(self.tweets[u]), 1
                 t, tid = self.tweets[u][i]
                 heap.append((-t, u, i, tid))
         heapq.heapify(heap)
@@ -135,6 +135,6 @@ The k-way merge pattern is the right generalization: it's the same code you'd us
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — k-way merge on per-user feeds
-- [Hash Tables](../../../data-structures/hash-tables/) — user → tweets, follower → followees
-- [Linked Lists](../../../data-structures/linked-lists/) — could replace the per-user list if you need O(1) prepend
+- [Heaps / Priority Queues](../../../data-structures/heaps/), k-way merge on per-user feeds
+- [Hash Tables](../../../data-structures/hash-tables/), user → tweets, follower → followees
+- [Linked Lists](../../../data-structures/linked-lists/), could replace the per-user list if you need O(1) prepend

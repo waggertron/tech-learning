@@ -19,7 +19,7 @@ Given a list `tasks` (characters A–Z representing task types) and an integer `
 
 LeetCode 621 · [Link](https://leetcode.com/problems/task-scheduler/) · *Medium*
 
-## Approach 1: Brute force — simulate cycle-by-cycle
+## Approach 1: Brute force, simulate cycle-by-cycle
 
 Track remaining counts per task and the cooldown expiration for each. At each time step, pick any runnable task.
 
@@ -48,7 +48,7 @@ def least_interval(tasks, n):
 - **Time:** O(T · 26) where T is the answer. Correct but slow on big inputs.
 - **Space:** O(26).
 
-Choosing highest-remaining-count is key — otherwise you strand long runs.
+Choosing highest-remaining-count is key, otherwise you strand long runs.
 
 ## Approach 2: Max-heap + cooldown queue
 
@@ -86,10 +86,10 @@ Cleaner than the brute force; a natural fit for "greedy scheduling with recurrin
 Let `max_count` be the count of the most-frequent task and `ties` be the number of tasks that hit `max_count`. The answer is:
 
 ```
-max(len(tasks), (max_count - 1) * (n + 1) + ties)
+max(len(tasks), (max_count, 1) * (n + 1) + ties)
 ```
 
-Intuition: build a skeleton of `max_count - 1` "rows" of width `n + 1`, plus a tail row with `ties` slots. Other tasks slot into the idle spaces. If there are more tasks than that schedule provides for, the total time is just `len(tasks)` (no idle needed).
+Intuition: build a skeleton of `max_count, 1` "rows" of width `n + 1`, plus a tail row with `ties` slots. Other tasks slot into the idle spaces. If there are more tasks than that schedule provides for, the total time is just `len(tasks)` (no idle needed).
 
 ```python
 from collections import Counter
@@ -98,7 +98,7 @@ def least_interval(tasks, n):
     counts = Counter(tasks)
     max_count = max(counts.values())
     ties = sum(1 for c in counts.values() if c == max_count)
-    return max(len(tasks), (max_count - 1) * (n + 1) + ties)
+    return max(len(tasks), (max_count, 1) * (n + 1) + ties)
 ```
 
 **Complexity**
@@ -117,6 +117,6 @@ The closed-form is elegant and fast; the heap variant is what you reach for when
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — max-heap + waiting queue for cooldown scheduling
-- [Queues](../../../data-structures/queues/) — cooldown FIFO
-- [Hash Tables](../../../data-structures/hash-tables/) — frequency counts
+- [Heaps / Priority Queues](../../../data-structures/heaps/), max-heap + waiting queue for cooldown scheduling
+- [Queues](../../../data-structures/queues/), cooldown FIFO
+- [Hash Tables](../../../data-structures/hash-tables/), frequency counts

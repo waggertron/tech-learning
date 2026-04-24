@@ -12,8 +12,8 @@ updated: 2026-04-23
 
 Design an LRU cache supporting:
 
-- `get(key)` — return the value if present, else `-1`. Accessing a key marks it most-recently used.
-- `put(key, value)` — insert or update. If the cache is full, evict the least-recently used entry.
+- `get(key)`, return the value if present, else `-1`. Accessing a key marks it most-recently used.
+- `put(key, value)`, insert or update. If the cache is full, evict the least-recently used entry.
 
 Both operations must run in **O(1)**.
 
@@ -28,9 +28,9 @@ get(2)      // -1
 
 LeetCode 146 · [Link](https://leetcode.com/problems/lru-cache/) · *Medium*
 
-## Approach 1: Brute force — list + dict, O(n) on access
+## Approach 1: Brute force, list + dict, O(n) on access
 
-Keep a dict for values and a list for recency order. Every get/put moves the key to the end of the list — O(n) to find and remove.
+Keep a dict for values and a list for recency order. Every get/put moves the key to the end of the list, O(n) to find and remove.
 
 ```python
 class LRUCache:
@@ -152,11 +152,11 @@ class LRUCache:
 ```
 
 **Complexity**
-- **Get/put:** **O(1)** (not amortized — true worst case).
+- **Get/put:** **O(1)** (not amortized, true worst case).
 - **Space:** O(capacity).
 
 ### Why both data structures are needed
-The hash map gives O(1) lookup *by key*; the doubly linked list gives O(1) removal *given a node reference* and ordering. Either alone can't do both — hence the composite.
+The hash map gives O(1) lookup *by key*; the doubly linked list gives O(1) removal *given a node reference* and ordering. Either alone can't do both, hence the composite.
 
 ## Summary
 
@@ -170,5 +170,5 @@ Implement this one from memory. It's the template for LFU cache (460), and for a
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — doubly linked list for O(1) splicing
-- [Hash Tables](../../../data-structures/hash-tables/) — O(1) lookup of nodes by key
+- [Linked Lists](../../../data-structures/linked-lists/), doubly linked list for O(1) splicing
+- [Hash Tables](../../../data-structures/hash-tables/), O(1) lookup of nodes by key

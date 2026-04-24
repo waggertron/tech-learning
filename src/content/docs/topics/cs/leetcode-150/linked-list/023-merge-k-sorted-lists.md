@@ -21,7 +21,7 @@ Let `N` = total number of nodes across all `k` lists.
 
 LeetCode 23 · [Link](https://leetcode.com/problems/merge-k-sorted-lists/) · *Hard*
 
-## Approach 1: Brute force — dump values, sort, rebuild
+## Approach 1: Brute force, dump values, sort, rebuild
 
 Walk every list, collect values, sort, rebuild.
 
@@ -84,7 +84,7 @@ Simple but slow for large k.
 
 ## Approach 3a: Divide-and-conquer pairwise merge (optimal)
 
-Merge lists in pairs like merge sort — O(log k) levels, O(N) work each.
+Merge lists in pairs like merge sort, O(log k) levels, O(N) work each.
 
 ```python
 def merge_k_lists(lists):
@@ -145,5 +145,5 @@ Both optimal approaches are O(N log k). Use the heap when lists may be very long
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — pointer splicing
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — min-heap of list heads (k-way merge pattern)
+- [Linked Lists](../../../data-structures/linked-lists/), pointer splicing
+- [Heaps / Priority Queues](../../../data-structures/heaps/), min-heap of list heads (k-way merge pattern)

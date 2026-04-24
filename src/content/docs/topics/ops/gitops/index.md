@@ -12,16 +12,16 @@ updated: 2026-04-24
 
 **GitOps is operational change management where Git is the only place you change anything, and an automated controller makes reality match what the repo says.**
 
-Everything else — tooling, debates about push vs pull, specific controllers — follows from that.
+Everything else, tooling, debates about push vs pull, specific controllers, follows from that.
 
 ## The four principles (OpenGitOps)
 
 The [OpenGitOps Working Group](https://opengitops.dev/) formalized four principles in 2022. They're short enough to memorize:
 
-1. **Declarative** — the system's desired state is expressed declaratively.
-2. **Versioned and immutable** — the desired state is stored in a way that enforces versioning and retains complete version history (i.e., Git).
-3. **Pulled automatically** — approved changes to the desired state are automatically applied to the system.
-4. **Continuously reconciled** — software agents continuously ensure the actual state matches the desired state, and alert on drift.
+1. **Declarative**, the system's desired state is expressed declaratively.
+2. **Versioned and immutable**, the desired state is stored in a way that enforces versioning and retains complete version history (i.e., Git).
+3. **Pulled automatically**, approved changes to the desired state are automatically applied to the system.
+4. **Continuously reconciled**, software agents continuously ensure the actual state matches the desired state, and alert on drift.
 
 If any one of the four is missing, it's not GitOps, just "Git plus deploys."
 
@@ -98,12 +98,12 @@ Not just YAML. The whole **desired state** of the system:
 
 The two-repo pattern is common:
 
-- **`infra/`** — Terraform for VPC, EKS, IAM, RDS, etc. Applied via Terraform Cloud or Atlantis.
-- **`manifests/`** — Kubernetes manifests, applied by ArgoCD.
+- **`infra/`**, Terraform for VPC, EKS, IAM, RDS, etc. Applied via Terraform Cloud or Atlantis.
+- **`manifests/`**, Kubernetes manifests, applied by ArgoCD.
 
 The boundary is "things that exist before you can deploy anything" (infra) vs "things you deploy all day" (manifests).
 
-## Secrets — the hardest part
+## Secrets, the hardest part
 
 You can't commit secrets to Git. Three patterns solve it:
 
@@ -175,9 +175,9 @@ Promotion to staging is a commit that bumps `envs/staging/kustomization.yaml` to
 
 ### 3. Trunk per environment
 
-Separate branches (`env/dev`, `env/prod`) each track their own tip. Cherry-pick or merge to promote. Less popular now — branches drift; dir-per-env is clearer.
+Separate branches (`env/dev`, `env/prod`) each track their own tip. Cherry-pick or merge to promote. Less popular now, branches drift; dir-per-env is clearer.
 
-## Drift detection — the underrated feature
+## Drift detection, the underrated feature
 
 GitOps controllers don't just apply on change. They **continuously reconcile**. If someone `kubectl scale deployment foo --replicas=10` by hand:
 
@@ -202,7 +202,7 @@ This is the feature that turns GitOps from "automated deploys" into "continuousl
 5. Watch ArgoCD apply it.
 6. `kubectl delete deployment/foo`. Watch ArgoCD put it back within ~3 minutes.
 
-That's the entire teaching loop. Everything after — App of Apps, ApplicationSets, progressive delivery — is variations on the same idea.
+That's the entire teaching loop. Everything after, App of Apps, ApplicationSets, progressive delivery, is variations on the same idea.
 
 ## Tooling landscape
 
@@ -212,7 +212,7 @@ That's the entire teaching loop. Everything after — App of Apps, ApplicationSe
 | [Flux](https://fluxcd.io/) | Kubernetes | CNCF graduated, Kustomize-native, no UI by default |
 | [Jenkins X](https://jenkins-x.io/) | Kubernetes + pipelines | Full lifecycle, less popular than pre-2022 |
 | [Weave GitOps](https://docs.gitops.weaveworks.org/) | Kubernetes | Flux-based, commercial distribution available |
-| [Atlantis](https://www.runatlantis.io/) | Terraform | PR-based workflow for Terraform — the GitOps pattern applied to IaC |
+| [Atlantis](https://www.runatlantis.io/) | Terraform | PR-based workflow for Terraform, the GitOps pattern applied to IaC |
 | [Crossplane](https://www.crossplane.io/) | Multi-cloud control plane | Manages cloud resources as Kubernetes CRDs |
 
 ## What changes culturally
@@ -230,18 +230,18 @@ Teams that adopt GitOps notice:
 - **CRD ordering.** You can't create an `Application` that references a `AppProject` that doesn't exist yet. Solution: sync waves (ArgoCD) or Kustomize ordering.
 - **Manual hotfixes.** Someone patches prod by hand during an incident. The controller reverts it. Either disable auto-sync during incidents, or commit the hotfix immediately and come back to clean up.
 - **Large repos.** Monolithic manifest repos slow down ArgoCD. Break into per-app or per-team repos once you pass ~1000 manifests.
-- **PR-based approvals for deploys.** GitOps gives you deploy approvals for free via PR review — but it also means every config tweak needs PR review. Tune the approval rules by path so trivial changes don't require VP sign-off.
+- **PR-based approvals for deploys.** GitOps gives you deploy approvals for free via PR review, but it also means every config tweak needs PR review. Tune the approval rules by path so trivial changes don't require VP sign-off.
 
 ## References
 
-- [OpenGitOps principles](https://opengitops.dev/) — the canonical four-principle definition
+- [OpenGitOps principles](https://opengitops.dev/), the canonical four-principle definition
 - [ArgoCD docs](https://argo-cd.readthedocs.io/)
 - [Flux docs](https://fluxcd.io/flux/)
-- [Kelsey Hightower — "GitOps"](https://www.cncf.io/blog/2022/06/22/gitops-101-a-primer/) — CNCF primer
-- [Weaveworks — "Guide to GitOps"](https://www.weave.works/technologies/gitops/) — the team that coined the term
+- [Kelsey Hightower, "GitOps"](https://www.cncf.io/blog/2022/06/22/gitops-101-a-primer/), CNCF primer
+- [Weaveworks, "Guide to GitOps"](https://www.weave.works/technologies/gitops/), the team that coined the term
 
 ## Related topics
 
-- [ArgoCD](../argocd/) — the reference controller
-- [MLOps](../mlops/) — GitOps patterns applied to ML systems
-- [Django Part 10 — Production](../../web/django/part-10-production/) — deployment patterns that compose with GitOps
+- [ArgoCD](../argocd/), the reference controller
+- [MLOps](../mlops/), GitOps patterns applied to ML systems
+- [Django Part 10, Production](../../web/django/part-10-production/), deployment patterns that compose with GitOps

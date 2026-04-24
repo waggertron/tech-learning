@@ -19,7 +19,7 @@ Given the heads of two sorted linked lists `list1` and `list2`, merge them into 
 
 LeetCode 21 · [Link](https://leetcode.com/problems/merge-two-sorted-lists/) · *Easy*
 
-## Approach 1: Brute force — collect values, sort, rebuild
+## Approach 1: Brute force, collect values, sort, rebuild
 
 Walk both lists into one array, sort it, rebuild a fresh list.
 
@@ -48,7 +48,7 @@ def merge_two_lists(l1, l2):
 - **Time:** O((n + m) log(n + m)). Sort dominates.
 - **Space:** O(n + m).
 
-Wasteful — ignores the sorted structure.
+Wasteful, ignores the sorted structure.
 
 ## Approach 2: Iterative in-place splicing (optimal)
 
@@ -107,4 +107,4 @@ The iterative splice is the canonical answer and a prerequisite for problem 23 (
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — pointer splicing with dummy head
+- [Linked Lists](../../../data-structures/linked-lists/), pointer splicing with dummy head

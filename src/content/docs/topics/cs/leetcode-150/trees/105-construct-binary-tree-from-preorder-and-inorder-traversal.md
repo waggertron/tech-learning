@@ -54,11 +54,11 @@ def build_tree(preorder, inorder):
         pre_i[0] += 1
         root = TreeNode(root_val)
         mid = inorder_idx[root_val]
-        root.left = rec(in_l, mid - 1)
+        root.left = rec(in_l, mid, 1)
         root.right = rec(mid + 1, in_r)
         return root
 
-    return rec(0, len(inorder) - 1)
+    return rec(0, len(inorder), 1)
 ```
 
 **Complexity**
@@ -66,7 +66,7 @@ def build_tree(preorder, inorder):
 - **Space:** O(n) for the map + O(h) recursion.
 
 ### Why the preorder index is shared state
-We consume the preorder from left to right — but we must process the left subtree completely *before* starting the right subtree. By sharing a single counter (`pre_i`) across recursive calls, the left subtree's exhaustion naturally positions us at the right subtree's root.
+We consume the preorder from left to right, but we must process the left subtree completely *before* starting the right subtree. By sharing a single counter (`pre_i`) across recursive calls, the left subtree's exhaustion naturally positions us at the right subtree's root.
 
 ## Approach 3: Iterative with a stack
 
@@ -80,9 +80,9 @@ More code; rarely preferred unless recursion depth is a specific concern. The it
 | **Hash map + recursion** | **O(n)** | **O(n)** |
 | Iterative stack | O(n) | O(n) |
 
-The hash-map + recursion pattern generalizes to problem 106 (Build from Inorder + Postorder) — same code with the preorder cursor replaced by a right-to-left postorder cursor.
+The hash-map + recursion pattern generalizes to problem 106 (Build from Inorder + Postorder), same code with the preorder cursor replaced by a right-to-left postorder cursor.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — reconstruction from traversals
-- [Hash Tables](../../../data-structures/hash-tables/) — O(1) index lookup in inorder
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), reconstruction from traversals
+- [Hash Tables](../../../data-structures/hash-tables/), O(1) index lookup in inorder

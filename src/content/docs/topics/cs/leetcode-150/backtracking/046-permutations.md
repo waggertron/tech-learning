@@ -18,7 +18,7 @@ Given an array `nums` of **distinct** integers, return all possible permutations
 
 LeetCode 46 · [Link](https://leetcode.com/problems/permutations/) · *Medium*
 
-## Approach 1: Brute force — `itertools.permutations`
+## Approach 1: Brute force, `itertools.permutations`
 
 Python's standard library does this directly.
 
@@ -108,4 +108,4 @@ All three are optimal in Big-O (output is itself Θ(n · n!)). Backtracking with
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; `used` marker array
+- [Arrays](../../../data-structures/arrays/), input; `used` marker array

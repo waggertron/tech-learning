@@ -82,7 +82,7 @@ def max_profit(prices):
 
     for i in range(1, len(prices)):
         prev_hold, prev_sold, prev_rest = hold, sold, rest
-        hold = max(prev_hold, prev_rest - prices[i])   # keep or buy from rest
+        hold = max(prev_hold, prev_rest, prices[i])   # keep or buy from rest
         sold = prev_hold + prices[i]                    # must have been holding, now sell
         rest = max(prev_rest, prev_sold)                # stay rest or enter from cooldown
 
@@ -114,4 +114,4 @@ State-machine DP is the right abstraction whenever you have "at each position, t
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — input; state-machine transitions
+- [Arrays](../../../data-structures/arrays/), input; state-machine transitions

@@ -37,7 +37,7 @@ def solve(clinicians, visits, distance_matrix, time_matrix):
     ...
 ```
 
-A VRP solver is fundamentally a graph model. Every visit is a node. Every clinician has their own start node and end node — both at that clinician's home address. The solver's job is to pick which visits go on which clinician's path, and in what order.
+A VRP solver is fundamentally a graph model. Every visit is a node. Every clinician has their own start node and end node, both at that clinician's home address. The solver's job is to pick which visits go on which clinician's path, and in what order.
 
 ## Distance callback → travel time
 
@@ -78,12 +78,12 @@ for clin_i, clin in enumerate(clinicians):
     start = routing.Start(clin_i)
     end = routing.End(clin_i)
     dim.CumulVar(start).SetRange(clin.shift_start_sec, clin.shift_start_sec)
-    dim.CumulVar(end).SetRange(clin.shift_end_sec - 3600, clin.shift_end_sec)
+    dim.CumulVar(end).SetRange(clin.shift_end_sec, 3600, clin.shift_end_sec)
 ```
 
-The time dimension tracks a cumulative variable at every node — "what's the clock say when we arrive here?" Constraining that variable to a visit's window is how the solver learns the rule. Slack lets a clinician wait if they arrive early.
+The time dimension tracks a cumulative variable at every node, "what's the clock say when we arrive here?" Constraining that variable to a visit's window is how the solver learns the rule. Slack lets a clinician wait if they arrive early.
 
-## Skill matching — the tricky one
+## Skill matching, the tricky one
 
 OR-Tools doesn't have a built-in "this visit needs credential ≥ LVN." You express it as a **vehicle-disjunction constraint**:
 
@@ -97,7 +97,7 @@ for visit_idx, visit in enumerate(visits):
     routing.SetAllowedVehiclesForIndex(allowed_clinicians, idx)
 ```
 
-Each visit is pinned to a subset of vehicles (clinicians). The solver can't put an RN-only visit on an MA's route. Very clean, and it uses the solver's native propagation rather than penalty terms — which matters for solve speed.
+Each visit is pinned to a subset of vehicles (clinicians). The solver can't put an RN-only visit on an MA's route. Very clean, and it uses the solver's native propagation rather than penalty terms, which matters for solve speed.
 
 ## Let visits be dropped (with a cost)
 
@@ -125,13 +125,13 @@ search.time_limit.seconds = 10
 solution = routing.SolveWithParameters(search)
 ```
 
-- **`PATH_CHEAPEST_ARC`** for the initial solution — greedy but fast. Gets you to "feasible" quickly.
-- **`GUIDED_LOCAL_SEARCH`** for improvement — the best general-purpose metaheuristic for VRP. Happy to run until your time budget runs out.
-- **`time_limit`** — hard wall. 10 seconds for this size (25 clinicians × 80 visits). Production VRP solvers often run 30–60 seconds.
+- **`PATH_CHEAPEST_ARC`** for the initial solution, greedy but fast. Gets you to "feasible" quickly.
+- **`GUIDED_LOCAL_SEARCH`** for improvement, the best general-purpose metaheuristic for VRP. Happy to run until your time budget runs out.
+- **`time_limit`**, hard wall. 10 seconds for this size (25 clinicians × 80 visits). Production VRP solvers often run 30–60 seconds.
 
 ## What OR-Tools doesn't solve for you
 
-- **Distance matrix quality.** Garbage in, garbage out. This project uses haversine × 40 mph — cheap, wrong in specific ways (bridges, highways, traffic), but fine for a portfolio demo. For production, you'd call an actual routing service (Mapbox, Google, OSRM).
+- **Distance matrix quality.** Garbage in, garbage out. This project uses haversine × 40 mph, cheap, wrong in specific ways (bridges, highways, traffic), but fine for a portfolio demo. For production, you'd call an actual routing service (Mapbox, Google, OSRM).
 - **Warm starts.** Re-solving a nearly-identical problem from scratch is wasteful. OR-Tools supports reading an initial solution from a prior one but you have to plumb it yourself.
 - **Infeasibility diagnosis.** If the solver returns no solution, it doesn't tell you *why*. Was the time window too tight? Not enough clinicians with the right skill? You find out by relaxing one constraint at a time.
 - **Determinism across versions.** Upgrade OR-Tools and the exact solution changes. For tests, assert on *properties* (total cost bounded, no skill violations) not on exact route ordering.
@@ -144,6 +144,6 @@ Full code in [`home-health-provider-skeleton`](https://github.com/waggertron/hom
 
 ## See also
 
-- [Vehicle Routing Problem topic](../topics/cs/vehicle-routing/) — full background on CVRP, VRPTW, PDP
-- [Haversine Distance](../topics/cs/haversine-distance/) — the matrix this VRP consumes
-- [Django Part 9 — Async and background tasks](../topics/web/django/part-09-async-and-background-tasks/) — Celery and Channels
+- [Vehicle Routing Problem topic](../topics/cs/vehicle-routing/), full background on CVRP, VRPTW, PDP
+- [Haversine Distance](../topics/cs/haversine-distance/), the matrix this VRP consumes
+- [Django Part 9, Async and background tasks](../topics/web/django/part-09-async-and-background-tasks/), Celery and Channels

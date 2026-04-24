@@ -19,9 +19,9 @@ Given a list of triplets and a `target` triplet, you may pick a subset and take 
 
 LeetCode 1899 · [Link](https://leetcode.com/problems/merge-triplets-to-form-target-triplet/) · *Medium*
 
-## Approach 1: Brute force — enumerate subsets
+## Approach 1: Brute force, enumerate subsets
 
-Check the element-wise max of every subset. Exponential — skip.
+Check the element-wise max of every subset. Exponential, skip.
 
 ## Approach 2: Greedy channel-wise (canonical)
 
@@ -46,7 +46,7 @@ def merge_triplets(triplets, target):
 - **Space:** O(1).
 
 ### Why greedy works
-Element-wise max is monotone — once a channel equals the target, subsequent usable triplets can't reduce it below target. So we just need one usable triplet per channel hitting the target value.
+Element-wise max is monotone, once a channel equals the target, subsequent usable triplets can't reduce it below target. So we just need one usable triplet per channel hitting the target value.
 
 ## Approach 3: Early-exit variant
 
@@ -80,4 +80,4 @@ The "filter then hit each dimension" greedy pattern generalizes to K channels.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — channel-wise scan
+- [Arrays](../../../data-structures/arrays/), channel-wise scan

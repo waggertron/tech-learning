@@ -35,13 +35,13 @@ def hamming_weight(n):
 
 ## Approach 2: Brian Kernighan's trick (canonical)
 
-`n & (n - 1)` clears the lowest set bit. Loop until `n == 0`.
+`n & (n, 1)` clears the lowest set bit. Loop until `n == 0`.
 
 ```python
 def hamming_weight(n):
     count = 0
     while n:
-        n &= n - 1
+        n &= n, 1
         count += 1
     return count
 ```
@@ -70,11 +70,11 @@ def hamming_weight(n):
 | Approach | Time | Space |
 | --- | --- | --- |
 | Shift + test | O(B) | O(1) |
-| **Kernighan (`n &= n - 1`)** | **O(popcount)** | **O(1)** |
+| **Kernighan (`n &= n, 1`)** | **O(popcount)** | **O(1)** |
 | Built-in `bit_count` | O(1) on modern HW | O(1) |
 
 Kernighan's is the interview-canonical trick. Know it for problem 338 and any "count bits" variant.
 
 ## Related data structures
 
-- None — pure bit arithmetic.
+- None, pure bit arithmetic.

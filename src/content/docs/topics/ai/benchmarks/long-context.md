@@ -10,11 +10,11 @@ updated: 2026-04-24
 
 ## What these benchmarks test
 
-A model's advertised context length (say, 1 million tokens) is one thing. Whether the model can actually **find**, **remember**, and **use** information buried deep in that context is a different question — and the gap is often enormous.
+A model's advertised context length (say, 1 million tokens) is one thing. Whether the model can actually **find**, **remember**, and **use** information buried deep in that context is a different question, and the gap is often enormous.
 
 Long-context benchmarks test the latter. They're the reason "2M context window" claims need an asterisk.
 
-## NIAH — Needle in a Haystack
+## NIAH, Needle in a Haystack
 
 The foundational long-context benchmark, Greg Kamradt's 2023 test. Take a long document ("haystack"), insert a small, specific fact ("needle"), ask the model a question whose answer requires that fact.
 
@@ -24,7 +24,7 @@ Example:
 - Needle: "The best thing to do in San Francisco is eat a sandwich and sit in Dolores Park on a sunny day."
 - Question: "What is the best thing to do in San Francisco?"
 
-Measured by whether the model produces the needle. Repeated across context lengths and needle positions — a heatmap is the standard visualization.
+Measured by whether the model produces the needle. Repeated across context lengths and needle positions, a heatmap is the standard visualization.
 
 **Why it went viral.** It's conceptually simple, easy to implement, and produces a compelling visual: models with "1M token context" sometimes have glaring blind spots at specific positions.
 
@@ -34,10 +34,10 @@ Measured by whether the model produces the needle. Repeated across context lengt
 
 NVIDIA, 2024. The response to NIAH's saturation. RULER ("What's the Real Context size?") extends NIAH with 13 synthetic tasks across four categories:
 
-- **Retrieval** — single / multi-key / multi-value needles, multi-hop retrieval.
-- **Multi-hop tracing** — entity chains, variable tracking across positions.
-- **Aggregation** — "how many times does word X appear?"
-- **Question answering** — non-synthetic QA with long documents.
+- **Retrieval**, single / multi-key / multi-value needles, multi-hop retrieval.
+- **Multi-hop tracing**, entity chains, variable tracking across positions.
+- **Aggregation**, "how many times does word X appear?"
+- **Question answering**, non-synthetic QA with long documents.
 
 **Why it matters.** "Can you find a needle" is trivial; "can you reason across multiple needles" is not. RULER exposes that:
 
@@ -60,16 +60,16 @@ Tsinghua, 2023 / 2024. Multi-domain long-context benchmark covering single- and 
 
 Unified NIAH framework (2025). Extends beyond traditional NIAH with:
 
-- **Multi-needle** — multiple facts inserted; model must retrieve all.
-- **Long-needle** — the needle itself is long, requiring the model to track a multi-sentence fact.
-- **Needle-in-needle** — nested context where relevant facts contain their own references.
-- **Distractor needles** — plausible-but-wrong facts inserted alongside the real one.
+- **Multi-needle**, multiple facts inserted; model must retrieve all.
+- **Long-needle**, the needle itself is long, requiring the model to track a multi-sentence fact.
+- **Needle-in-needle**, nested context where relevant facts contain their own references.
+- **Distractor needles**, plausible-but-wrong facts inserted alongside the real one.
 
-Integrates with RAG evaluation — the same framework scores retrieval-augmented setups.
+Integrates with RAG evaluation, the same framework scores retrieval-augmented setups.
 
 ## Sequential-NIAH
 
-2025. Evaluates extraction of *sequential* information — a list of facts in order, not a single needle. Exposes a common failure mode: models find the first and last needles but miss middle ones.
+2025. Evaluates extraction of *sequential* information, a list of facts in order, not a single needle. Exposes a common failure mode: models find the first and last needles but miss middle ones.
 
 ## Infinite Bench / ∞Bench
 
@@ -97,7 +97,7 @@ Extremely relevant for agents with long tool-use histories. The more prior steps
 
 ### 5. Reasoning-mode helps but isn't magic
 
-Reasoning models do better on RULER than non-reasoning variants at the same context, but the "effective context" gap remains — just shifted upward a bit.
+Reasoning models do better on RULER than non-reasoning variants at the same context, but the "effective context" gap remains, just shifted upward a bit.
 
 ## How to evaluate for your use case
 
@@ -117,16 +117,16 @@ Generic long-context benchmarks are a coarse signal. For a specific deployment:
 
 ## References
 
-- [NIAH — Greg Kamradt's repo](https://github.com/gkamradt/LLMTest_NeedleInAHaystack)
-- [RULER — NVIDIA, 2024](https://github.com/NVIDIA/RULER) — and the COLM 2024 paper
-- [LongBench v2 — 2024](https://longbench2.github.io/)
-- [U-NIAH — 2025](https://dl.acm.org/doi/10.1145/3786609) (ACM TOIS)
+- [NIAH, Greg Kamradt's repo](https://github.com/gkamradt/LLMTest_NeedleInAHaystack)
+- [RULER, NVIDIA, 2024](https://github.com/NVIDIA/RULER), and the COLM 2024 paper
+- [LongBench v2, 2024](https://longbench2.github.io/)
+- [U-NIAH, 2025](https://dl.acm.org/doi/10.1145/3786609) (ACM TOIS)
 - [Sequential-NIAH (arxiv 2504.04713)](https://arxiv.org/abs/2504.04713)
-- [∞Bench — 2024](https://github.com/OpenBMB/InfiniteBench)
-- [Nelson F. Liu et al. — *Lost in the Middle*](https://arxiv.org/abs/2307.03172) — the paper that named the middle-of-context failure mode
+- [∞Bench, 2024](https://github.com/OpenBMB/InfiniteBench)
+- [Nelson F. Liu et al., *Lost in the Middle*](https://arxiv.org/abs/2307.03172), the paper that named the middle-of-context failure mode
 
 ## Related topics
 
-- [RAG](../../rag/) — the applied problem long-context benchmarks inform
-- [Evaluation methodology and metrics](../evaluation-and-methods/) — measurement for long-context systems
-- [Knowledge and reasoning benchmarks](../knowledge-and-reasoning/) — static QA that doesn't require long context
+- [RAG](../../rag/), the applied problem long-context benchmarks inform
+- [Evaluation methodology and metrics](../evaluation-and-methods/), measurement for long-context systems
+- [Knowledge and reasoning benchmarks](../knowledge-and-reasoning/), static QA that doesn't require long context

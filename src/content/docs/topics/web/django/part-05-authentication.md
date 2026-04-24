@@ -1,5 +1,5 @@
 ---
-title: "Part 5 — Authentication and authorization"
+title: "Part 5, Authentication and authorization"
 description: Django's built-in auth system, the `User` model, login/logout views, permissions and groups, and when to customize the User model.
 parent: django
 tags: [django, auth, users, permissions, intermediate]
@@ -19,7 +19,7 @@ updated: 2026-04-24
 - `AuthenticationMiddleware` that attaches `request.user` to every request
 - A permissions model (per-model + per-object via third-party packages)
 
-Enabled by default in the project template — you already have it.
+Enabled by default in the project template, you already have it.
 
 ## Logging a user in
 
@@ -80,7 +80,7 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 `LOGIN_URL` in settings (default `/accounts/login/`) is where unauthenticated users get bounced to.
 
-## Custom User model — do it on day one
+## Custom User model, do it on day one
 
 A painful reality: swapping `User` *after* your first migration is hard. **Always define a custom User model before you `migrate` the first time**, even if it just subclasses `AbstractUser` with no changes.
 
@@ -90,7 +90,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class User(AbstractUser):
-    # You'll want *something* here eventually — email uniqueness, avatar, etc.
+    # You'll want *something* here eventually, email uniqueness, avatar, etc.
     email = models.EmailField(unique=True)
 ```
 
@@ -115,8 +115,8 @@ class Post(models.Model):
 
 ### AbstractUser vs AbstractBaseUser
 
-- **`AbstractUser`** — all the default User fields; just add yours. 90% of projects want this.
-- **`AbstractBaseUser`** — a minimal skeleton (password + last_login). Use when you need a completely different identifier (e.g., email-only, no username).
+- **`AbstractUser`**, all the default User fields; just add yours. 90% of projects want this.
+- **`AbstractBaseUser`**, a minimal skeleton (password + last_login). Use when you need a completely different identifier (e.g., email-only, no username).
 
 ## Permissions
 
@@ -152,12 +152,12 @@ user.groups.add(editors)
 
 Model permissions are **per model**, not per row. "Alice can edit *her* posts" is not expressible in built-in auth. Options:
 
-- **Check in the view** — `if post.author != request.user: raise PermissionDenied`.
-- **[django-guardian](https://github.com/django-guardian/django-guardian)** — adds per-object permissions with `user.has_perm("blog.change_post", post_instance)`.
+- **Check in the view**, `if post.author != request.user: raise PermissionDenied`.
+- **[django-guardian](https://github.com/django-guardian/django-guardian)**, adds per-object permissions with `user.has_perm("blog.change_post", post_instance)`.
 
 ## The admin
 
-`django.contrib.admin` uses the auth system — staff users see the admin, superusers see everything.
+`django.contrib.admin` uses the auth system, staff users see the admin, superusers see everything.
 
 ```python
 # blog/admin.py
@@ -178,7 +178,7 @@ Don't expose admin over the public internet without at least IP restrictions or 
 
 The default is **session-based**: login → set session cookie → every request re-reads the session. Works great for server-rendered HTML.
 
-For APIs (covered in Part 6), you'll want **token auth** or **JWT** — Django REST Framework ships both.
+For APIs (covered in Part 6), you'll want **token auth** or **JWT**, Django REST Framework ships both.
 
 ## Password security
 
@@ -203,11 +203,11 @@ PASSWORD_HASHERS = [
 
 ## Gotchas
 
-- **`is_authenticated` is a property** — `if request.user.is_authenticated:` not `.is_authenticated()`. It was a method in Django 1.x.
-- **Password change invalidates sessions** — users must re-login after a password change. Use `update_session_auth_hash(request, user)` to keep them logged in.
-- **Anonymous users still have `request.user`** — it's an `AnonymousUser` instance, not `None`. Always check `.is_authenticated`.
-- **`authenticate()` returns `None` on failure, not an exception** — easy to forget the `if user is not None:` guard.
-- **Email as username** — the built-in `User` uses `username` as the login field. Either write a custom auth backend or use a package like [django-allauth](https://github.com/pennersr/django-allauth), which also does social login.
+- **`is_authenticated` is a property**, `if request.user.is_authenticated:` not `.is_authenticated()`. It was a method in Django 1.x.
+- **Password change invalidates sessions**, users must re-login after a password change. Use `update_session_auth_hash(request, user)` to keep them logged in.
+- **Anonymous users still have `request.user`**, it's an `AnonymousUser` instance, not `None`. Always check `.is_authenticated`.
+- **`authenticate()` returns `None` on failure, not an exception**, easy to forget the `if user is not None:` guard.
+- **Email as username**, the built-in `User` uses `username` as the login field. Either write a custom auth backend or use a package like [django-allauth](https://github.com/pennersr/django-allauth), which also does social login.
 
 ## What's next
 
@@ -217,5 +217,5 @@ Part 6 exposes your app as an API using Django REST Framework.
 
 - [User authentication in Django](https://docs.djangoproject.com/en/5.2/topics/auth/)
 - [Customizing authentication](https://docs.djangoproject.com/en/5.2/topics/auth/customizing/)
-- [django-allauth](https://github.com/pennersr/django-allauth) — social + email auth
-- [django-guardian](https://github.com/django-guardian/django-guardian) — object-level permissions
+- [django-allauth](https://github.com/pennersr/django-allauth), social + email auth
+- [django-guardian](https://github.com/django-guardian/django-guardian), object-level permissions

@@ -19,7 +19,7 @@ Given a 2D board of characters and a string `word`, return `true` if `word` can 
 
 LeetCode 79 · [Link](https://leetcode.com/problems/word-search/) · *Medium*
 
-## Approach 1: Brute force — DFS from every cell with a visited set
+## Approach 1: Brute force, DFS from every cell with a visited set
 
 From each cell matching `word[0]`, DFS to the four neighbors, tracking visited positions in a set.
 
@@ -36,9 +36,9 @@ def exist(board, word):
             return False
         visited.add((r, c))
         found = (dfs(r + 1, c, i + 1, visited) or
-                 dfs(r - 1, c, i + 1, visited) or
+                 dfs(r, 1, c, i + 1, visited) or
                  dfs(r, c + 1, i + 1, visited) or
-                 dfs(r, c - 1, i + 1, visited))
+                 dfs(r, c, 1, i + 1, visited))
         visited.remove((r, c))
         return found
 
@@ -69,9 +69,9 @@ def exist(board, word):
         saved = board[r][c]
         board[r][c] = '#'
         found = (dfs(r + 1, c, i + 1) or
-                 dfs(r - 1, c, i + 1) or
+                 dfs(r, 1, c, i + 1) or
                  dfs(r, c + 1, i + 1) or
-                 dfs(r, c - 1, i + 1))
+                 dfs(r, c, 1, i + 1))
         board[r][c] = saved
         return found
 
@@ -90,7 +90,7 @@ Standard interview answer. The "restore on backtrack" is the essential pattern.
 
 ## Approach 3: Start-cell pruning with character counts
 
-Before doing any DFS, count characters on the board. If the board lacks any character of `word` (or not enough of each), return `false` immediately. Additionally, if the last character of `word` is rarer on the board than the first, reverse `word` before searching — DFS from rare characters prunes faster.
+Before doing any DFS, count characters on the board. If the board lacks any character of `word` (or not enough of each), return `false` immediately. Additionally, if the last character of `word` is rarer on the board than the first, reverse `word` before searching, DFS from rare characters prunes faster.
 
 ```python
 from collections import Counter
@@ -114,9 +114,9 @@ def exist(board, word):
         saved = board[r][c]
         board[r][c] = '#'
         found = (dfs(r + 1, c, i + 1) or
-                 dfs(r - 1, c, i + 1) or
+                 dfs(r, 1, c, i + 1) or
                  dfs(r, c + 1, i + 1) or
-                 dfs(r, c - 1, i + 1))
+                 dfs(r, c, 1, i + 1))
         board[r][c] = saved
         return found
 
@@ -145,5 +145,5 @@ Related problem: **Word Search II (212)** uses a trie over multiple target words
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — the grid; in-place mutation as visited marker
-- [Hash Tables](../../../data-structures/hash-tables/) — optional Counter pruning
+- [Arrays](../../../data-structures/arrays/), the grid; in-place mutation as visited marker
+- [Hash Tables](../../../data-structures/hash-tables/), optional Counter pruning

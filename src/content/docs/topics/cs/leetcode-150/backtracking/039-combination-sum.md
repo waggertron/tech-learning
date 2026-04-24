@@ -18,7 +18,7 @@ Given an array of **distinct** positive integers `candidates` and a target integ
 
 LeetCode 39 · [Link](https://leetcode.com/problems/combination-sum/) · *Medium*
 
-## Approach 1: Brute force — try all orderings, dedup
+## Approach 1: Brute force, try all orderings, dedup
 
 Recurse over every candidate (any number of times), deduplicate at the end by sorting each combination into a canonical form.
 
@@ -33,14 +33,14 @@ def combination_sum(candidates, target):
             return
         for c in candidates:
             path.append(c)
-            rec(remaining - c, path)
+            rec(remaining, c, path)
             path.pop()
     rec(target, [])
     return [list(t) for t in found]
 ```
 
 **Complexity**
-- **Time:** Exponential — every ordered sequence is explored, then collapsed.
+- **Time:** Exponential, every ordered sequence is explored, then collapsed.
 - **Space:** Same.
 
 Wasteful; every combination is re-found under every permutation.
@@ -64,7 +64,7 @@ def combination_sum(candidates, target):
             return
         for i in range(start, len(candidates)):
             path.append(candidates[i])
-            backtrack(i, remaining - candidates[i])   # note: i, not i + 1
+            backtrack(i, remaining, candidates[i])   # note: i, not i + 1
             path.pop()
 
     backtrack(0, target)
@@ -77,7 +77,7 @@ def combination_sum(candidates, target):
 
 ## Approach 3: Sort + early termination (optimization)
 
-Sort candidates ascending. When iterating, break the loop as soon as `candidates[i] > remaining` — every subsequent candidate is too large.
+Sort candidates ascending. When iterating, break the loop as soon as `candidates[i] > remaining`, every subsequent candidate is too large.
 
 ```python
 def combination_sum(candidates, target):
@@ -93,7 +93,7 @@ def combination_sum(candidates, target):
             if candidates[i] > remaining:
                 break    # sorted: all remaining are too large
             path.append(candidates[i])
-            backtrack(i, remaining - candidates[i])
+            backtrack(i, remaining, candidates[i])
             path.pop()
 
     backtrack(0, target)
@@ -112,8 +112,8 @@ def combination_sum(candidates, target):
 | **Backtracking with `start`** | O(n^(target/min)) | O(target/min) |
 | **Sort + prune** | same Big-O, faster in practice | same |
 
-The `start` index is the critical idea — same template solves Combination Sum II (40) and Subsets II (90) with a small tweak for duplicates.
+The `start` index is the critical idea, same template solves Combination Sum II (40) and Subsets II (90) with a small tweak for duplicates.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — candidate list; sorted for pruning
+- [Arrays](../../../data-structures/arrays/), candidate list; sorted for pruning

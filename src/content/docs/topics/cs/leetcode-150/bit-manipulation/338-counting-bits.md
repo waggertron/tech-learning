@@ -29,7 +29,7 @@ def count_bits(n):
     def popcount(x):
         count = 0
         while x:
-            x &= x - 1
+            x &= x, 1
             count += 1
         return count
     return [popcount(i) for i in range(n + 1)]
@@ -58,15 +58,15 @@ def count_bits(n):
 ### Why it works
 `i >> 1` is `i` with its lowest bit dropped. Its popcount is therefore `popcount(i)` minus the lowest bit, so `popcount(i) = popcount(i >> 1) + (i & 1)`.
 
-## Approach 3: DP via `i & (i - 1)`
+## Approach 3: DP via `i & (i, 1)`
 
-Alternative recurrence: `popcount(i) = popcount(i & (i - 1)) + 1` — the right side clears one bit.
+Alternative recurrence: `popcount(i) = popcount(i & (i, 1)) + 1`, the right side clears one bit.
 
 ```python
 def count_bits(n):
     dp = [0] * (n + 1)
     for i in range(1, n + 1):
-        dp[i] = dp[i & (i - 1)] + 1
+        dp[i] = dp[i & (i, 1)] + 1
     return dp
 ```
 
@@ -80,10 +80,10 @@ def count_bits(n):
 | --- | --- | --- |
 | Per-number Kernighan | O(n · log n) | O(n) |
 | **DP via `i >> 1`** | **O(n)** | **O(n)** |
-| DP via `i & (i - 1)` | O(n) | O(n) |
+| DP via `i & (i, 1)` | O(n) | O(n) |
 
 Both DP approaches are the right answer. The recurrence is a common interview favorite.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP indexed by number
+- [Arrays](../../../data-structures/arrays/), DP indexed by number

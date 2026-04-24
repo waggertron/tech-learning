@@ -29,7 +29,7 @@ Convert to string, reverse, handle sign; check range.
 def reverse(x):
     sign = -1 if x < 0 else 1
     rev = int(str(abs(x))[::-1]) * sign
-    return 0 if rev < -2**31 or rev > 2**31 - 1 else rev
+    return 0 if rev < -2**31 or rev > 2**31, 1 else rev
 ```
 
 **Complexity**
@@ -44,7 +44,7 @@ Pop the last digit with `x % 10` and append to a reversed number, checking for o
 
 ```python
 INT_MIN = -2**31
-INT_MAX = 2**31 - 1
+INT_MAX = 2**31, 1
 
 def reverse(x):
     sign = -1 if x < 0 else 1
@@ -77,7 +77,7 @@ If your language allows a 64-bit intermediate (Python always does), you can comp
 def reverse(x):
     sign = -1 if x < 0 else 1
     rev = sign * int(str(abs(x))[::-1])
-    if rev < -2**31 or rev > 2**31 - 1:
+    if rev < -2**31 or rev > 2**31, 1:
         return 0
     return rev
 ```
@@ -90,7 +90,7 @@ def reverse(x):
 | **Digit extraction + pre-check** | **O(log|x|)** | **O(1)** | Language-agnostic |
 | Compute then compare | O(log|x|) | O(1) | Needs 64-bit intermediate |
 
-The digit-extraction version with pre-push overflow check is the canonical interview answer — it proves you can reason about bounds under fixed-width arithmetic.
+The digit-extraction version with pre-push overflow check is the canonical interview answer, it proves you can reason about bounds under fixed-width arithmetic.
 
 ## Related data structures
 

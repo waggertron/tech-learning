@@ -1,6 +1,6 @@
 ---
 title: "207. Course Schedule"
-description: Determine whether you can finish all courses given a list of prerequisite edges — i.e., whether the graph is a DAG.
+description: Determine whether you can finish all courses given a list of prerequisite edges, i.e., whether the graph is a DAG.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, cycle-detection, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-You are given `numCourses` courses labeled `0` to `numCourses - 1` and an array `prerequisites` where `prerequisites[i] = [a, b]` means you must take course `b` before course `a`. Return `true` if you can finish all courses — i.e., the prerequisite graph has no cycles.
+You are given `numCourses` courses labeled `0` to `numCourses, 1` and an array `prerequisites` where `prerequisites[i] = [a, b]` means you must take course `b` before course `a`. Return `true` if you can finish all courses, i.e., the prerequisite graph has no cycles.
 
 **Example**
 - `numCourses = 2`, `prerequisites = [[1, 0]]` → `true`
@@ -18,7 +18,7 @@ You are given `numCourses` courses labeled `0` to `numCourses - 1` and an array 
 
 LeetCode 207 · [Link](https://leetcode.com/problems/course-schedule/) · *Medium*
 
-## Approach 1: Brute force — DFS with path tracking
+## Approach 1: Brute force, DFS with path tracking
 
 For each course, DFS tracking the current recursion path; if we hit a course already on the path, it's a cycle.
 
@@ -134,5 +134,5 @@ Both DFS+color and Kahn's are optimal. Kahn's generalizes directly to problem 21
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — cycle detection; topological sort
-- [Hash Tables](../../../data-structures/hash-tables/) — adjacency list (defaultdict)
+- [Graphs](../../../data-structures/graphs/), cycle detection; topological sort
+- [Hash Tables](../../../data-structures/hash-tables/), adjacency list (defaultdict)

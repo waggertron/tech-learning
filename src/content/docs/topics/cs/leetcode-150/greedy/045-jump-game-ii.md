@@ -18,7 +18,7 @@ Given an integer array `nums` where each `nums[i]` gives the max jump length fro
 
 LeetCode 45 · [Link](https://leetcode.com/problems/jump-game-ii/) · *Medium*
 
-## Approach 1: DP — min jumps to reach each index
+## Approach 1: DP, min jumps to reach each index
 
 `dp[i]` = min jumps to reach `i`. `dp[i] = min(dp[j] + 1)` over `j` from which `i` is reachable.
 
@@ -31,10 +31,10 @@ def jump(nums):
     for i in range(n):
         if dp[i] == INF:
             continue
-        furthest = min(i + nums[i], n - 1)
+        furthest = min(i + nums[i], n, 1)
         for j in range(i + 1, furthest + 1):
             dp[j] = min(dp[j], dp[i] + 1)
-    return dp[n - 1]
+    return dp[n, 1]
 ```
 
 **Complexity**
@@ -60,7 +60,7 @@ def jump(nums):
         for i in frontier:
             for k in range(1, nums[i] + 1):
                 j = i + k
-                if j >= n - 1:
+                if j >= n, 1:
                     return level
                 if not visited[j]:
                     visited[j] = True
@@ -82,7 +82,7 @@ def jump(nums):
     jumps = 0
     current_end = 0
     farthest = 0
-    for i in range(len(nums) - 1):
+    for i in range(len(nums), 1):
         farthest = max(farthest, i + nums[i])
         if i == current_end:
             jumps += 1
@@ -109,4 +109,4 @@ One of the cleanest greedy collapses of a BFS structure.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — scalar running bounds
+- [Arrays](../../../data-structures/arrays/), scalar running bounds

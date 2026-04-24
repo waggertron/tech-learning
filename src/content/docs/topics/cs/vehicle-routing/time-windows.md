@@ -1,6 +1,6 @@
 ---
 title: VRP with Time Windows (VRPTW)
-description: VRP where each customer must be served within a specified time interval — a hard constraint on when a vehicle can arrive.
+description: VRP where each customer must be served within a specified time interval, a hard constraint on when a vehicle can arrive.
 parent: vehicle-routing
 tags: [vrp, vrptw, time-windows, or-tools]
 status: draft
@@ -13,7 +13,7 @@ updated: 2026-04-24
 Every customer `i` has a time window `[e_i, l_i]`:
 
 - A vehicle may **arrive before `e_i`** but must wait until `e_i` to start service (soft floor).
-- A vehicle may **not arrive after `l_i`** — that's infeasible (hard ceiling, standard variant).
+- A vehicle may **not arrive after `l_i`**, that's infeasible (hard ceiling, standard variant).
 - Service takes a known duration `s_i`; after service, the vehicle leaves.
 
 Soft-TW variants exist (penalties for late arrival) but the standard VRPTW uses hard windows.
@@ -45,9 +45,9 @@ Time windows dramatically tighten feasibility: the same set of customers and dis
 
 Solomon (1987) defined 56 benchmark instances, 100 customers each, still the canonical VRPTW test suite:
 
-- **R** — customers placed randomly
-- **C** — customers placed in clusters
-- **RC** — mix of random and clustered
+- **R**, customers placed randomly
+- **C**, customers placed in clusters
+- **RC**, mix of random and clustered
 
 Each family has tight-window (1) and wide-window (2) subvariants. An algorithm's score on Solomon is commonly reported as `(number of vehicles, total distance)` lexicographically.
 
@@ -64,7 +64,7 @@ def time_callback(from_index, to_index):
 
 time_idx = routing.RegisterTransitCallback(time_callback)
 
-# Time dimension — slack is the allowed wait
+# Time dimension, slack is the allowed wait
 routing.AddDimension(
     time_idx,
     slack_max=60,               # max 60 minutes of wait per leg
@@ -87,7 +87,7 @@ for vehicle_idx in range(num_vehicles):
     time_dim.CumulVar(index).SetRange(depot_open, depot_close)
 ```
 
-`CumulVar(index)` is the **cumulative time at that stop** — i.e., the arrival time after waiting. Setting its range to `[earliest, latest]` is exactly the time-window constraint.
+`CumulVar(index)` is the **cumulative time at that stop**, i.e., the arrival time after waiting. Setting its range to `[earliest, latest]` is exactly the time-window constraint.
 
 ## Why VRPTW is harder than CVRP
 
@@ -101,12 +101,12 @@ The practical consequence: OR-Tools' default first-solution strategy (`PATH_CHEA
 - **Units matter.** All time values must use the same scale (seconds, minutes, hours). Mixing units is the classic bug.
 - **Service time.** Decide if it's charged against the arriving vehicle, and include it in the transit callback.
 - **Waiting is allowed.** Arriving before `e_i` is fine; the vehicle simply waits. Model this via `slack_max` on the time dimension.
-- **Depot hours.** Don't forget — the depot itself typically has open/close times. Apply a range to `routing.Start(vehicle_idx)` and `routing.End(vehicle_idx)`.
+- **Depot hours.** Don't forget, the depot itself typically has open/close times. Apply a range to `routing.Start(vehicle_idx)` and `routing.End(vehicle_idx)`.
 - **Makespan objective.** If you care about the length of the *longest* route (driver shift limits), set `time_dim.SetGlobalSpanCostCoefficient(100)` (or similar).
 
 ## References
 
-- [VRP with Time Windows — OR-Tools](https://developers.google.com/optimization/routing/vrptw)
-- [Solomon VRPTW benchmarks — SINTEF](https://www.sintef.no/projectweb/top/vrptw/solomon-benchmark/)
+- [VRP with Time Windows, OR-Tools](https://developers.google.com/optimization/routing/vrptw)
+- [Solomon VRPTW benchmarks, SINTEF](https://www.sintef.no/projectweb/top/vrptw/solomon-benchmark/)
 - [OR-Tools Dimensions concept](https://developers.google.com/optimization/routing/dimensions)
 - Solomon, M. M. (1987). "Algorithms for the vehicle routing and scheduling problems with time window constraints." *Operations Research* 35(2):254–265.

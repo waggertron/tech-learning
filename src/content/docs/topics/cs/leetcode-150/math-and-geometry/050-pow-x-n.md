@@ -1,6 +1,6 @@
 ---
 title: "50. Pow(x, n)"
-description: Compute x raised to the power n — fast exponentiation.
+description: Compute x raised to the power n, fast exponentiation.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, recursion, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Implement `pow(x, n)` — raise `x` to the integer power `n`. `n` can be negative. Use only basic arithmetic (don't call a library `pow`).
+Implement `pow(x, n)`, raise `x` to the integer power `n`. `n` can be negative. Use only basic arithmetic (don't call a library `pow`).
 
 **Example**
 - `x = 2.0, n = 10` → `1024.0`
@@ -18,7 +18,7 @@ Implement `pow(x, n)` — raise `x` to the integer power `n`. `n` can be negativ
 
 LeetCode 50 · [Link](https://leetcode.com/problems/powx-n/) · *Medium*
 
-## Approach 1: Brute force — multiply n times
+## Approach 1: Brute force, multiply n times
 
 ```python
 def my_pow(x, n):
@@ -97,4 +97,4 @@ Fast exponentiation is the template for modular exponentiation (common in number
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — bit-based iteration (no auxiliary structure)
+- [Arrays](../../../data-structures/arrays/), bit-based iteration (no auxiliary structure)

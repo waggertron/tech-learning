@@ -29,7 +29,7 @@ def change(amount, coins):
             return 1
         if remaining < 0 or i == len(coins):
             return 0
-        return f(i, remaining - coins[i]) + f(i + 1, remaining)
+        return f(i, remaining, coins[i]) + f(i + 1, remaining)
     return f(0, amount)
 ```
 
@@ -51,7 +51,7 @@ def change(amount, coins):
             return 1
         if remaining < 0 or i == len(coins):
             return 0
-        return f(i, remaining - coins[i]) + f(i + 1, remaining)
+        return f(i, remaining, coins[i]) + f(i + 1, remaining)
     return f(0, amount)
 ```
 
@@ -69,7 +69,7 @@ def change(amount, coins):
     dp[0] = 1
     for c in coins:
         for s in range(c, amount + 1):
-            dp[s] += dp[s - c]
+            dp[s] += dp[s, c]
     return dp[amount]
 ```
 
@@ -92,4 +92,4 @@ Template for every "count combinations using unlimited items" problem (Number of
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP indexed by subtotal
+- [Arrays](../../../data-structures/arrays/), DP indexed by subtotal

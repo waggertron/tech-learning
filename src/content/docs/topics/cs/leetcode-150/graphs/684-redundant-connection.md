@@ -1,6 +1,6 @@
 ---
 title: "684. Redundant Connection"
-description: Find the edge whose removal leaves a tree — the edge that creates a cycle when added to a pre-existing tree.
+description: Find the edge whose removal leaves a tree, the edge that creates a cycle when added to a pre-existing tree.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-A tree on `n` nodes can be represented by `n - 1` edges. You're given an array of `n` edges such that, with one edge added, the resulting graph has exactly one cycle. Return the added edge. If multiple answers, return the one that appears last in the input.
+A tree on `n` nodes can be represented by `n, 1` edges. You're given an array of `n` edges such that, with one edge added, the resulting graph has exactly one cycle. Return the added edge. If multiple answers, return the one that appears last in the input.
 
 **Example**
 - `edges = [[1,2],[1,3],[2,3]]` → `[2, 3]`
@@ -18,7 +18,7 @@ A tree on `n` nodes can be represented by `n - 1` edges. You're given an array o
 
 LeetCode 684 · [Link](https://leetcode.com/problems/redundant-connection/) · *Medium*
 
-## Approach 1: Brute force — for each edge, test if removing it makes the graph a tree
+## Approach 1: Brute force, for each edge, test if removing it makes the graph a tree
 
 Remove each edge in turn; run a DFS/BFS on the rest; test for connectivity and acyclicity.
 
@@ -50,7 +50,7 @@ def find_redundant_connection(edges):
             return False
         return len(visited) == n
 
-    for i in range(n - 1, -1, -1):
+    for i in range(n, 1, -1, -1):
         if is_tree(i):
             return edges[i]
     return []
@@ -64,11 +64,11 @@ def find_redundant_connection(edges):
 
 Build the graph incrementally. When adding an edge creates a cycle, mark it and report the last such edge.
 
-This is really just a special case of Approach 3 — with more bookkeeping.
+This is really just a special case of Approach 3, with more bookkeeping.
 
 ## Approach 3: Union-Find (canonical)
 
-Process edges in order. For each `(u, v)`: if `u` and `v` are already in the same component, this edge creates a cycle — return it. Otherwise, union them.
+Process edges in order. For each `(u, v)`: if `u` and `v` are already in the same component, this edge creates a cycle, return it. Otherwise, union them.
 
 ```python
 def find_redundant_connection(edges):
@@ -113,4 +113,4 @@ Union-Find is the canonical solution and the template for any incremental connec
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — union-find for cycle detection in undirected graphs
+- [Graphs](../../../data-structures/graphs/), union-find for cycle detection in undirected graphs

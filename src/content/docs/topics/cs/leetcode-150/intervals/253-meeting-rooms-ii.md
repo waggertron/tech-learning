@@ -18,7 +18,7 @@ Given an array of meeting time intervals, return the minimum number of conferenc
 
 LeetCode 253 (premium) · [Link](https://leetcode.com/problems/meeting-rooms-ii/) · *Medium*
 
-## Approach 1: Brute force — simulate time ticks
+## Approach 1: Brute force, simulate time ticks
 
 For every time t from 0 to max_end, count active meetings. Max over all t is the answer.
 
@@ -87,5 +87,5 @@ Heap version is the canonical answer. Sweep-line is the shortest.
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — end-time min-heap
-- [Arrays](../../../data-structures/arrays/) — separate start/end sorted arrays
+- [Heaps / Priority Queues](../../../data-structures/heaps/), end-time min-heap
+- [Arrays](../../../data-structures/arrays/), separate start/end sorted arrays

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Design an algorithm to serialize a binary tree to a string and deserialize that string back to the original tree. There's no required format — just that serialize/deserialize are inverses.
+Design an algorithm to serialize a binary tree to a string and deserialize that string back to the original tree. There's no required format, just that serialize/deserialize are inverses.
 
 **Example**
 - `root = [1,2,3,null,null,4,5]` → some string, then back to `[1,2,3,null,null,4,5]`
@@ -152,10 +152,10 @@ Less common in practice; included to show the symmetry.
 Preorder DFS is the interview-favorite. BFS is easier to eyeball-debug.
 
 ### Aside: size of the serialization
-With null markers, every internal node contributes 1 value token and every leaf contributes 1 value + 2 nulls. A tree with `n` nodes has `n + 1` null slots (the external "holes"), giving a total of `2n + 1` tokens — linear in `n`.
+With null markers, every internal node contributes 1 value token and every leaf contributes 1 value + 2 nulls. A tree with `n` nodes has `n + 1` null slots (the external "holes"), giving a total of `2n + 1` tokens, linear in `n`.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — structural encoding / decoding
-- [Queues](../../../data-structures/queues/) — BFS-based serialization
-- [Stacks](../../../data-structures/stacks/) — DFS-based serialization (recursion stack)
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), structural encoding / decoding
+- [Queues](../../../data-structures/queues/), BFS-based serialization
+- [Stacks](../../../data-structures/stacks/), DFS-based serialization (recursion stack)

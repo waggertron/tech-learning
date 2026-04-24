@@ -1,6 +1,6 @@
 ---
 title: "416. Partition Equal Subset Sum"
-description: Determine if an integer array can be partitioned into two subsets with equal sums — 0/1 knapsack.
+description: Determine if an integer array can be partitioned into two subsets with equal sums, 0/1 knapsack.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
@@ -18,7 +18,7 @@ Given a non-empty array `nums` of positive integers, determine if the array can 
 
 LeetCode 416 · [Link](https://leetcode.com/problems/partition-equal-subset-sum/) · *Medium*
 
-## Approach 1: Brute force — enumerate subsets
+## Approach 1: Brute force, enumerate subsets
 
 Try every subset; test whether it sums to `total / 2`.
 
@@ -82,8 +82,8 @@ def can_partition(nums):
     dp = [False] * (target + 1)
     dp[0] = True
     for x in nums:
-        for s in range(target, x - 1, -1):
-            dp[s] = dp[s] or dp[s - x]
+        for s in range(target, x, 1, -1):
+            dp[s] = dp[s] or dp[s, x]
     return dp[target]
 ```
 
@@ -92,7 +92,7 @@ def can_partition(nums):
 - **Space:** O(target).
 
 ### Why iterate from high to low
-In 0/1 knapsack, iterating `s` low-to-high would let an item be included more than once in the same outer iteration. Going high-to-low uses only values that haven't yet been updated this round — preserving the 0/1 semantics.
+In 0/1 knapsack, iterating `s` low-to-high would let an item be included more than once in the same outer iteration. Going high-to-low uses only values that haven't yet been updated this round, preserving the 0/1 semantics.
 
 ## Summary
 
@@ -102,8 +102,8 @@ In 0/1 knapsack, iterating `s` low-to-high would let an item be included more th
 | Top-down memo | O(n · target) | O(n · target) |
 | **Bottom-up 1-D DP** | **O(n · target)** | **O(target)** |
 
-Template for every 0/1 knapsack problem — Target Sum (494), Last Stone Weight II (1049), etc.
+Template for every 0/1 knapsack problem, Target Sum (494), Last Stone Weight II (1049), etc.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — DP array indexed by subset sum
+- [Arrays](../../../data-structures/arrays/), DP array indexed by subset sum

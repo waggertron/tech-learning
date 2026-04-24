@@ -1,5 +1,5 @@
 ---
-title: Composition over inheritance — the advice that actually earns its keep
+title: Composition over inheritance, the advice that actually earns its keep
 description: 'Favor composition over inheritance is a Gang-of-Four line that has aged well. Why inheritance goes wrong, what composition looks like in practice, and the narrow cases where inheritance still deserves a seat.'
 date: 2026-04-24
 tags: [design, oop, composition, inheritance, architecture]
@@ -15,7 +15,7 @@ That's it. The rest is elaboration.
 
 ## Where the advice came from
 
-The Gang of Four's 1994 *Design Patterns* had it as an explicit principle: *"Favor object composition over class inheritance."* Every pattern in the book uses composition; the ones that use inheritance do so narrowly. Thirty years later the advice has only gotten stronger because frameworks learned the same lesson independently — React, Rust's trait system, Go's struct embedding, all treat inheritance as either absent or heavily constrained.
+The Gang of Four's 1994 *Design Patterns* had it as an explicit principle: *"Favor object composition over class inheritance."* Every pattern in the book uses composition; the ones that use inheritance do so narrowly. Thirty years later the advice has only gotten stronger because frameworks learned the same lesson independently, React, Rust's trait system, Go's struct embedding, all treat inheritance as either absent or heavily constrained.
 
 ## Why inheritance goes wrong
 
@@ -23,7 +23,7 @@ Inheritance looks cheap: `class Truck extends Vehicle` and you get `start()`, `s
 
 ### 1. Tight coupling to the base class
 
-`Truck` now depends on every public method and protected field of `Vehicle`. Change `Vehicle`'s `start()` — even just to add a log line — and `Truck` has to be regression-tested. The parent-child relationship is the most coupled one the language offers.
+`Truck` now depends on every public method and protected field of `Vehicle`. Change `Vehicle`'s `start()`, even just to add a log line, and `Truck` has to be regression-tested. The parent-child relationship is the most coupled one the language offers.
 
 ### 2. The fragile base class problem
 
@@ -90,7 +90,7 @@ cat = Animal("Mittens", MeowVoice())
 Before: `Dog` and `Cat` are types. After: `Animal` is a type; voice is a field. You can:
 
 - Add a new voice without touching `Animal`.
-- Swap a voice at runtime (`dog.voice = MeowVoice()` — weird but possible).
+- Swap a voice at runtime (`dog.voice = MeowVoice()`, weird but possible).
 - Test `Animal` with a fake voice.
 - Compose voices (`OverlaidVoice(BarkVoice(), MeowVoice())`).
 
@@ -118,7 +118,7 @@ Subclass-proliferation disease cured. Adding a new sort is adding a class, not c
 
 Some language communities embrace composition via traits (Rust), mixins (Ruby), or interfaces with default methods (Java, Kotlin, Python). Each is "compose a set of behaviors into a type" without an is-a relationship.
 
-Rust's `impl Iterator for MyType { ... }` is pure composition — `MyType` doesn't "inherit" anything; it implements a trait.
+Rust's `impl Iterator for MyType { ... }` is pure composition, `MyType` doesn't "inherit" anything; it implements a trait.
 
 ### The Decorator pattern
 
@@ -157,7 +157,7 @@ An `AbstractTenantScopedModel` with common audit fields (`created_at`, `updated_
 
 In some languages (Java before default methods; older Python), there's no other way to share implementation.
 
-### 4. Performance — zero-overhead abstraction
+### 4. Performance, zero-overhead abstraction
 
 Virtual dispatch via inheritance is sometimes cheaper than composition's indirection. Rare; don't optimize prematurely.
 
@@ -165,7 +165,7 @@ Virtual dispatch via inheritance is sometimes cheaper than composition's indirec
 
 - **First choice:** composition. Hold an instance.
 - **Second choice:** an interface / protocol / trait / mixin.
-- **Third choice:** inheritance — only for genuine is-a relationships, with a shallow hierarchy (< 3 deep), from a base class you control.
+- **Third choice:** inheritance, only for genuine is-a relationships, with a shallow hierarchy (< 3 deep), from a base class you control.
 
 If your design doc says "X extends Y" and you can't name a genuine is-a relationship, change it to composition.
 
@@ -173,7 +173,7 @@ If your design doc says "X extends Y" and you can't name a genuine is-a relation
 
 ### React
 
-React moved from mixins (early) to class inheritance (`React.Component`) to hooks (composition of pure functions). Each step pushed toward composition. The hook story is explicit — "compose behaviors" — and has produced more readable, testable, reusable code than the class-based approach.
+React moved from mixins (early) to class inheritance (`React.Component`) to hooks (composition of pure functions). Each step pushed toward composition. The hook story is explicit, "compose behaviors", and has produced more readable, testable, reusable code than the class-based approach.
 
 ### Django models
 
@@ -209,13 +209,13 @@ If most answers point away from inheritance, refactor. If most point toward, lea
 
 ## References
 
-- [Gang of Four — *Design Patterns*](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/) — where the advice is first formalized
-- [Sandi Metz — *Practical Object-Oriented Design in Ruby*](https://www.poodr.com/) — spends a chapter on why composition wins
-- [Brian Goetz — *The Good, the Bad, and the Ugly of Inheritance* (JVMLS 2017)](https://www.youtube.com/watch?v=Bte6xqLZ-Ss) — senior Java architect on why modern JVM design prefers composition
-- [Steve Yegge — *Execution in the Kingdom of Nouns*](https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html) — the critique of Java's forced-OO design
-- [Joe Armstrong (Erlang) — *Why OO sucks*](https://wiki.c2.com/?ArgumentsAgainstOop) — the more radical position
+- [Gang of Four, *Design Patterns*](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/), where the advice is first formalized
+- [Sandi Metz, *Practical Object-Oriented Design in Ruby*](https://www.poodr.com/), spends a chapter on why composition wins
+- [Brian Goetz, *The Good, the Bad, and the Ugly of Inheritance* (JVMLS 2017)](https://www.youtube.com/watch?v=Bte6xqLZ-Ss), senior Java architect on why modern JVM design prefers composition
+- [Steve Yegge, *Execution in the Kingdom of Nouns*](https://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html), the critique of Java's forced-OO design
+- [Joe Armstrong (Erlang), *Why OO sucks*](https://wiki.c2.com/?ArgumentsAgainstOop), the more radical position
 
 ## Related topics and posts
 
-- [SOLID principles](./2026-04-24-solid-principles/) — LSP and OCP are deeply tied to this choice
-- [Functional Core, Imperative Shell](../topics/cs/functional-core-imperative-shell/) — composition writ large
+- [SOLID principles](./2026-04-24-solid-principles/), LSP and OCP are deeply tied to this choice
+- [Functional Core, Imperative Shell](../topics/cs/functional-core-imperative-shell/), composition writ large

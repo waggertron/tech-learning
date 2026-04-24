@@ -1,5 +1,5 @@
 ---
-title: "Part 4 — Forms and user input"
+title: "Part 4, Forms and user input"
 description: "Form vs ModelForm, validation hooks (clean_field, clean), rendering, CSRF, and formsets. The boundary where your app meets user input."
 parent: django
 tags: [django, forms, validation, csrf]
@@ -39,7 +39,7 @@ class ContactForm(forms.Form):
 Two validation hooks:
 
 - **`clean_<field>`** runs per field and returns the cleaned value (or raises).
-- **`clean`** runs once across all fields — the place for cross-field validation.
+- **`clean`** runs once across all fields, the place for cross-field validation.
 
 ## The view pattern
 
@@ -59,7 +59,7 @@ def contact(request):
     return render(request, "blog/contact.html", {"form": form})
 ```
 
-The **POST-redirect-GET** pattern is important. A successful POST should respond with a redirect, not an HTML page — otherwise refreshing resubmits the form.
+The **POST-redirect-GET** pattern is important. A successful POST should respond with a redirect, not an HTML page, otherwise refreshing resubmits the form.
 
 ## `ModelForm`
 
@@ -119,7 +119,7 @@ For full control, render fields individually:
 </div>
 ```
 
-Django 5 ships `{{ form.as_div }}` as the default — friendly for modern CSS without needing a library.
+Django 5 ships `{{ form.as_div }}` as the default, friendly for modern CSS without needing a library.
 
 ## CSRF
 
@@ -127,7 +127,7 @@ Django 5 ships `{{ form.as_div }}` as the default — friendly for modern CSS wi
 
 For AJAX, include the CSRF token in the `X-CSRFToken` header. Django exposes the token at `document.cookie` (`csrftoken`) by default.
 
-## Formsets — many-at-once
+## Formsets, many-at-once
 
 When you need to edit a variable number of records in one form submission:
 
@@ -158,16 +158,16 @@ Formsets are powerful but their template rendering is verbose. If you find yours
 
 ## Third-party helpers
 
-- **[django-crispy-forms](https://github.com/django-crispy-forms/django-crispy-forms)** + a template pack (Bootstrap, Tailwind) — better rendering without hand-writing each field.
-- **[django-widget-tweaks](https://github.com/jazzband/django-widget-tweaks)** — per-field CSS classes and attributes from the template (`{{ field|add_class:"input-lg" }}`).
+- **[django-crispy-forms](https://github.com/django-crispy-forms/django-crispy-forms)** + a template pack (Bootstrap, Tailwind), better rendering without hand-writing each field.
+- **[django-widget-tweaks](https://github.com/jazzband/django-widget-tweaks)**, per-field CSS classes and attributes from the template (`{{ field|add_class:"input-lg" }}`).
 
 ## Gotchas
 
-- **File uploads** — `<form enctype="multipart/form-data">` is required, and in the view you must pass `request.FILES` to the form: `PostForm(request.POST, request.FILES)`.
-- **Initial data** — pass `initial={"title": "Draft"}` for pre-filled fields on `GET`.
-- **Validation error on `__all__`** — `form.non_field_errors()` renders cross-field errors (those from `clean()`).
-- **Boolean checkboxes on edit** — `required=False` is needed, or an unchecked box fails validation on an existing instance.
-- **Deleted FK protection** — if your form references a `ForeignKey(on_delete=PROTECT)`, deleting a referenced row silently breaks submissions; catch and surface gracefully.
+- **File uploads**, `<form enctype="multipart/form-data">` is required, and in the view you must pass `request.FILES` to the form: `PostForm(request.POST, request.FILES)`.
+- **Initial data**, pass `initial={"title": "Draft"}` for pre-filled fields on `GET`.
+- **Validation error on `__all__`**, `form.non_field_errors()` renders cross-field errors (those from `clean()`).
+- **Boolean checkboxes on edit**, `required=False` is needed, or an unchecked box fails validation on an existing instance.
+- **Deleted FK protection**, if your form references a `ForeignKey(on_delete=PROTECT)`, deleting a referenced row silently breaks submissions; catch and surface gracefully.
 
 ## What's next
 
@@ -175,7 +175,7 @@ Part 5 adds authentication, so the "who is submitting this form?" question has a
 
 ## References
 
-- [Working with forms — Django docs](https://docs.djangoproject.com/en/5.2/topics/forms/)
-- [ModelForm — Django docs](https://docs.djangoproject.com/en/5.2/topics/forms/modelforms/)
-- [Formsets — Django docs](https://docs.djangoproject.com/en/5.2/topics/forms/formsets/)
+- [Working with forms, Django docs](https://docs.djangoproject.com/en/5.2/topics/forms/)
+- [ModelForm, Django docs](https://docs.djangoproject.com/en/5.2/topics/forms/modelforms/)
+- [Formsets, Django docs](https://docs.djangoproject.com/en/5.2/topics/forms/formsets/)
 - [CSRF protection](https://docs.djangoproject.com/en/5.2/howto/csrf/)

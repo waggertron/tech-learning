@@ -19,7 +19,7 @@ You are given a list of strings `words` from an alien language, sorted lexicogra
 
 LeetCode 269 (premium) · [Link](https://leetcode.com/problems/alien-dictionary/) · *Hard*
 
-## Approach 1: Brute force — try all character orderings
+## Approach 1: Brute force, try all character orderings
 
 For each permutation of the distinct letters, test whether the given words are lexicographically ordered under it. Return the first permutation that works.
 
@@ -31,9 +31,9 @@ Educational only; don't actually write this.
 
 ## Approach 2: Build graph from adjacent-word constraints + Kahn's BFS (canonical)
 
-From adjacent word pairs, extract the **first differing character pair** — that's a directed edge (earlier → later). Then topologically sort.
+From adjacent word pairs, extract the **first differing character pair**, that's a directed edge (earlier → later). Then topologically sort.
 
-Edge cases: if a word is a strict prefix of the previous word (e.g., `["abc", "ab"]`), it's a contradiction — return `""`.
+Edge cases: if a word is a strict prefix of the previous word (e.g., `["abc", "ab"]`), it's a contradiction, return `""`.
 
 ```python
 from collections import defaultdict, deque
@@ -132,9 +132,9 @@ def alien_order(words):
 | **Kahn's BFS** | **O(N + E)** | **O(N + E)** |
 | DFS post-order reversed | O(N + E) | O(N + E) |
 
-Kahn's is the canonical answer — you extract edges in one pass and topologically sort in another. The prefix-contradiction check is the easy-to-miss gotcha.
+Kahn's is the canonical answer, you extract edges in one pass and topologically sort in another. The prefix-contradiction check is the easy-to-miss gotcha.
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — topological sort of a DAG built from ordering constraints
-- [Hash Tables](../../../data-structures/hash-tables/) — adjacency map (set per node to dedup edges)
+- [Graphs](../../../data-structures/graphs/), topological sort of a DAG built from ordering constraints
+- [Hash Tables](../../../data-structures/hash-tables/), adjacency map (set per node to dedup edges)

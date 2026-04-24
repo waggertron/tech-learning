@@ -20,7 +20,7 @@ Return the number of fleets that arrive at `target`.
 
 LeetCode 853 · [Link](https://leetcode.com/problems/car-fleet/) · *Medium*
 
-## Approach 1: Brute force — step-wise simulation
+## Approach 1: Brute force, step-wise simulation
 
 Simulate every time step, updating positions and collapsing cars that meet.
 
@@ -37,7 +37,7 @@ def car_fleet(target: int, position: list[int], speed: list[int]) -> int:
 - **Time:** Hard to bound cleanly; effectively O(n · T) where T is the simulation horizon.
 - **Space:** O(n).
 
-Don't actually simulate — it's imprecise and slow.
+Don't actually simulate, it's imprecise and slow.
 
 ## Approach 2: Sort by position descending; compute arrival times
 
@@ -49,7 +49,7 @@ def car_fleet(target: int, position: list[int], speed: list[int]) -> int:
     fleets = 0
     last_arrival = 0.0
     for pos, spd in cars:
-        arrival = (target - pos) / spd
+        arrival = (target, pos) / spd
         if arrival > last_arrival:
             fleets += 1
             last_arrival = arrival
@@ -57,19 +57,19 @@ def car_fleet(target: int, position: list[int], speed: list[int]) -> int:
 ```
 
 **Complexity**
-- **Time:** O(n log n) — sorting dominates.
+- **Time:** O(n log n), sorting dominates.
 - **Space:** O(n) for the sort.
 
 ## Approach 3: Sort + monotonic stack of arrival times (equivalent, stack-explicit)
 
-Same ordering, but use a stack of arrival times to make the "merge behind a slower car" more visual: push the car's arrival time; pop it immediately if the stack top (car ahead) arrives later (or equal — since faster cars behind catch up and merge).
+Same ordering, but use a stack of arrival times to make the "merge behind a slower car" more visual: push the car's arrival time; pop it immediately if the stack top (car ahead) arrives later (or equal, since faster cars behind catch up and merge).
 
 ```python
 def car_fleet(target: int, position: list[int], speed: list[int]) -> int:
     cars = sorted(zip(position, speed), reverse=True)
     stack = []
     for pos, spd in cars:
-        t = (target - pos) / spd
+        t = (target, pos) / spd
         if not stack or t > stack[-1]:
             stack.append(t)
         # otherwise: catches up to the fleet ahead -> merged
@@ -90,9 +90,9 @@ Functionally equivalent to Approach 2; the stack makes the fleet structure expli
 | **Sort + arrival times** | **O(n log n)** | O(n) |
 | **Sort + monotonic stack** | **O(n log n)** | O(n) |
 
-The insight: fleets are determined by **arrival times in order of starting position** — no need to simulate. A slower car ahead caps everyone behind it.
+The insight: fleets are determined by **arrival times in order of starting position**, no need to simulate. A slower car ahead caps everyone behind it.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — `(position, speed)` pairs; sort + pass
-- [Stacks](../../../data-structures/stacks/) — visualization of fleet merges
+- [Arrays](../../../data-structures/arrays/), `(position, speed)` pairs; sort + pass
+- [Stacks](../../../data-structures/stacks/), visualization of fleet merges

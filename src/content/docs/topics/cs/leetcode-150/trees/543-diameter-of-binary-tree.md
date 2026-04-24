@@ -10,14 +10,14 @@ updated: 2026-04-23
 
 ## Problem
 
-Given the root of a binary tree, return the length of the diameter — the longest path between any two nodes in the tree. The path may or may not pass through the root. Length is measured in **edges**.
+Given the root of a binary tree, return the length of the diameter, the longest path between any two nodes in the tree. The path may or may not pass through the root. Length is measured in **edges**.
 
 **Example**
 - `root = [1,2,3,4,5]` → `3` (path: `4 → 2 → 1 → 3` or `5 → 2 → 1 → 3`)
 
 LeetCode 543 · [Link](https://leetcode.com/problems/diameter-of-binary-tree/) · *Easy*
 
-## Approach 1: Brute force — for each node, compute left + right heights
+## Approach 1: Brute force, for each node, compute left + right heights
 
 At every node, compute the height of its left and right subtrees, and track the max of `(left + right)`.
 
@@ -71,7 +71,7 @@ def diameter_of_binary_tree(root):
 - **Space:** O(h) recursion depth.
 
 ### Pattern: "side-effect accumulator during a DFS that returns something else"
-This is the template for a whole class of tree problems — including 124 Max Path Sum, 1245 Tree Diameter, and many others. The DFS returns a "local contribution to the parent" (here, the height), and the diameter is updated as a side effect based on the *combined* contributions from both children.
+This is the template for a whole class of tree problems, including 124 Max Path Sum, 1245 Tree Diameter, and many others. The DFS returns a "local contribution to the parent" (here, the height), and the diameter is updated as a side effect based on the *combined* contributions from both children.
 
 ## Summary
 
@@ -80,8 +80,8 @@ This is the template for a whole class of tree problems — including 124 Max Pa
 | For each node, recompute heights | O(n²) | O(h) |
 | **Single DFS with accumulator** | **O(n)** | **O(h)** |
 
-There's no meaningful middle tier here — this is the jump from "obvious recursive statement" to the realization that you can compute height *and* update diameter in one DFS.
+There's no meaningful middle tier here, this is the jump from "obvious recursive statement" to the realization that you can compute height *and* update diameter in one DFS.
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — height + accumulator DFS
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), height + accumulator DFS

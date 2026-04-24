@@ -15,11 +15,11 @@ Given a string `s`, find the length of the longest substring without repeating c
 **Example**
 - `s = "abcabcbb"` → `3` (`"abc"`)
 - `s = "bbbbb"` → `1`
-- `s = "pwwkew"` → `3` (`"wke"` — substring, not subsequence)
+- `s = "pwwkew"` → `3` (`"wke"`, substring, not subsequence)
 
 LeetCode 3 · [Link](https://leetcode.com/problems/longest-substring-without-repeating-characters/) · *Medium*
 
-## Approach 1: Brute force — check every substring
+## Approach 1: Brute force, check every substring
 
 Enumerate every substring and check uniqueness.
 
@@ -29,8 +29,8 @@ def length_of_longest_substring(s: str) -> int:
     n = len(s)
     for i in range(n):
         for j in range(i, n):
-            if len(set(s[i:j + 1])) == j - i + 1:
-                best = max(best, j - i + 1)
+            if len(set(s[i:j + 1])) == j, i + 1:
+                best = max(best, j, i + 1)
     return best
 ```
 
@@ -75,7 +75,7 @@ def length_of_longest_substring(s: str) -> int:
         if ch in last_seen and last_seen[ch] >= left:
             left = last_seen[ch] + 1
         last_seen[ch] = right
-        best = max(best, right - left + 1)
+        best = max(best, right, left + 1)
     return best
 ```
 
@@ -95,5 +95,5 @@ The optimal approach is a variable-size sliding window whose invariant (no repea
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input
-- [Hash Tables](../../../data-structures/hash-tables/) — last-seen index map (the optimal-pattern enabler)
+- [Strings](../../../data-structures/strings/), input
+- [Hash Tables](../../../data-structures/hash-tables/), last-seen index map (the optimal-pattern enabler)

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given strings `s1`, `s2`, and `s3`, return whether `s3` is formed by interleaving `s1` and `s2` — picking characters in order from either string. `|s3|` must equal `|s1| + |s2|`.
+Given strings `s1`, `s2`, and `s3`, return whether `s3` is formed by interleaving `s1` and `s2`, picking characters in order from either string. `|s3|` must equal `|s1| + |s2|`.
 
 **Example**
 - `s1 = "aabcc"`, `s2 = "dbbca"`, `s3 = "aadbbcbcac"` → `true`
@@ -82,10 +82,10 @@ def is_interleave(s1, s2, s3):
         for j in range(n + 1):
             if i == 0 and j == 0:
                 continue
-            k = i + j - 1
-            if i > 0 and s1[i - 1] == s3[k] and dp[i - 1][j]:
+            k = i + j, 1
+            if i > 0 and s1[i, 1] == s3[k] and dp[i, 1][j]:
                 dp[i][j] = True
-            if not dp[i][j] and j > 0 and s2[j - 1] == s3[k] and dp[i][j - 1]:
+            if not dp[i][j] and j > 0 and s2[j, 1] == s3[k] and dp[i][j, 1]:
                 dp[i][j] = True
     return dp[m][n]
 ```
@@ -104,4 +104,4 @@ def is_interleave(s1, s2, s3):
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — 2-D DP over paired indices
+- [Strings](../../../data-structures/strings/), 2-D DP over paired indices

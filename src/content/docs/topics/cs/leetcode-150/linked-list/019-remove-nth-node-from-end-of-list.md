@@ -19,9 +19,9 @@ Given the head of a linked list, remove the `n`-th node from the end and return 
 
 LeetCode 19 · [Link](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) · *Medium*
 
-## Approach 1: Brute force — two passes (count, then remove)
+## Approach 1: Brute force, two passes (count, then remove)
 
-First pass: count length `L`. Second pass: advance `L - n - 1` steps, then splice.
+First pass: count length `L`. Second pass: advance `L, n, 1` steps, then splice.
 
 ```python
 class ListNode:
@@ -37,7 +37,7 @@ def remove_nth_from_end(head, n):
         L += 1
         cur = cur.next
     cur = dummy
-    for _ in range(L - n):
+    for _ in range(L, n):
         cur = cur.next
     cur.next = cur.next.next
     return dummy.next
@@ -109,4 +109,4 @@ The offset-n two-pointer trick generalizes to "find the k-th from end" and varia
 
 ## Related data structures
 
-- [Linked Lists](../../../data-structures/linked-lists/) — two-pointer distance pattern with dummy head
+- [Linked Lists](../../../data-structures/linked-lists/), two-pointer distance pattern with dummy head

@@ -1,6 +1,6 @@
 ---
-title: "Part 6 — Django REST Framework basics"
-description: Expose Django models as a JSON API. Serializers, ViewSets, routers, authentication, permissions, and pagination — the 80% that powers most REST backends.
+title: "Part 6, Django REST Framework basics"
+description: Expose Django models as a JSON API. Serializers, ViewSets, routers, authentication, permissions, and pagination, the 80% that powers most REST backends.
 parent: django
 tags: [django, drf, api, rest, intermediate]
 status: draft
@@ -32,7 +32,7 @@ REST_FRAMEWORK = {
 }
 ```
 
-## Serializers — the ORM ↔ JSON boundary
+## Serializers, the ORM ↔ JSON boundary
 
 A serializer turns model instances into JSON (and validated JSON back into model instances).
 
@@ -63,8 +63,8 @@ class PostSerializer(serializers.ModelSerializer):
 
 Two patterns shown:
 
-- **`ReadOnlyField(source="author.username")`** — flatten a nested attribute.
-- **Separate read/write for relations** — read nested (`tags`), write by PK (`tag_ids`). Cleaner than nested write, which DRF deliberately makes awkward.
+- **`ReadOnlyField(source="author.username")`**, flatten a nested attribute.
+- **Separate read/write for relations**, read nested (`tags`), write by PK (`tag_ids`). Cleaner than nested write, which DRF deliberately makes awkward.
 
 ## ViewSets and routers
 
@@ -127,9 +127,9 @@ That registers:
 
 ## Authentication choices
 
-- **SessionAuthentication** — browser sessions; pairs with Django auth, respects CSRF.
-- **TokenAuthentication** — a long-lived opaque token stored in the DB, sent as `Authorization: Token <key>`.
-- **JWT** (via [`djangorestframework-simplejwt`](https://github.com/jazzband/djangorestframework-simplejwt)) — short-lived access tokens, long-lived refresh tokens, no DB lookup per request.
+- **SessionAuthentication**, browser sessions; pairs with Django auth, respects CSRF.
+- **TokenAuthentication**, a long-lived opaque token stored in the DB, sent as `Authorization: Token <key>`.
+- **JWT** (via [`djangorestframework-simplejwt`](https://github.com/jazzband/djangorestframework-simplejwt)), short-lived access tokens, long-lived refresh tokens, no DB lookup per request.
 
 For mobile/SPA backends, JWT with simplejwt is the common choice.
 
@@ -138,8 +138,8 @@ For mobile/SPA backends, JWT with simplejwt is the common choice.
 Built-in classes:
 
 - `AllowAny`, `IsAuthenticated`, `IsAdminUser`, `IsAuthenticatedOrReadOnly`.
-- `DjangoModelPermissions` — maps HTTP methods to Django's `add_/change_/delete_/view_` permissions.
-- `DjangoObjectPermissions` — object-level (requires a backend like guardian).
+- `DjangoModelPermissions`, maps HTTP methods to Django's `add_/change_/delete_/view_` permissions.
+- `DjangoObjectPermissions`, object-level (requires a backend like guardian).
 
 Custom permission:
 
@@ -186,11 +186,11 @@ Now `/api/posts/?author=3&search=django&ordering=-published_at` works out of the
 }
 ```
 
-For large lists, consider `CursorPagination` — uses an opaque cursor, stable under concurrent writes.
+For large lists, consider `CursorPagination`, uses an opaque cursor, stable under concurrent writes.
 
 ## Nested and related data
 
-The serializer example above does lists via `select_related` / `prefetch_related` in the viewset. **This matters** — the default DRF pattern N+1's the database fast:
+The serializer example above does lists via `select_related` / `prefetch_related` in the viewset. **This matters**, the default DRF pattern N+1's the database fast:
 
 ```python
 # BAD: N+1 query on every post
@@ -230,19 +230,19 @@ You get an interactive Swagger UI at `/api/docs/` generated from your serializer
 
 ## Gotchas
 
-- **`ModelSerializer.create()` does not write M2M relations** if you pass `commit=False` through it — use `perform_create` to handle.
+- **`ModelSerializer.create()` does not write M2M relations** if you pass `commit=False` through it, use `perform_create` to handle.
 - **Nested writes are intentionally painful.** DRF doesn't want you mutating multiple tables through one endpoint. Either use split read/write fields (above) or write `create()`/`update()` methods explicitly.
-- **Browsable API in production** — DRF's default HTML-rendered browsable API is a dev luxury; disable in production by removing `BrowsableAPIRenderer` from `DEFAULT_RENDERER_CLASSES`.
-- **Throttling** — DRF has `AnonRateThrottle` and `UserRateThrottle` but they're opt-in. For serious protection, use nginx/Cloudflare rate limiting in addition.
-- **Versioning** — decide your scheme (URL path, header, query param) *before* shipping. Changing later is painful for clients.
+- **Browsable API in production**, DRF's default HTML-rendered browsable API is a dev luxury; disable in production by removing `BrowsableAPIRenderer` from `DEFAULT_RENDERER_CLASSES`.
+- **Throttling**, DRF has `AnonRateThrottle` and `UserRateThrottle` but they're opt-in. For serious protection, use nginx/Cloudflare rate limiting in addition.
+- **Versioning**, decide your scheme (URL path, header, query param) *before* shipping. Changing later is painful for clients.
 
 ## What's next
 
-Part 7 goes deep on the ORM — `select_related`, `prefetch_related`, `Q`/`F`, subqueries, aggregation.
+Part 7 goes deep on the ORM, `select_related`, `prefetch_related`, `Q`/`F`, subqueries, aggregation.
 
 ## References
 
 - [Django REST Framework docs](https://www.django-rest-framework.org/)
-- [drf-spectacular](https://drf-spectacular.readthedocs.io/) — OpenAPI schema generator
-- [django-filter](https://django-filter.readthedocs.io/) — filter backend
-- [django-rest-framework-simplejwt](https://django-rest-framework-simplejwt.readthedocs.io/) — JWT auth
+- [drf-spectacular](https://drf-spectacular.readthedocs.io/), OpenAPI schema generator
+- [django-filter](https://django-filter.readthedocs.io/), filter backend
+- [django-rest-framework-simplejwt](https://django-rest-framework-simplejwt.readthedocs.io/), JWT auth

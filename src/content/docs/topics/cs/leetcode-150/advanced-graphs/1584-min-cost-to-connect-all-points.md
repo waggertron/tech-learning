@@ -1,6 +1,6 @@
 ---
 title: "1584. Min Cost to Connect All Points"
-description: Connect n points with minimum total wire — a minimum spanning tree problem on a complete Manhattan-distance graph.
+description: Connect n points with minimum total wire, a minimum spanning tree problem on a complete Manhattan-distance graph.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, mst, prim, kruskal, union-find, medium]
 status: draft
@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-Given `n` points on a 2D plane, connect them all with the minimum total cost, where the cost between two points is their Manhattan distance (`|x1 - x2| + |y1 - y2|`). Return the minimum total cost.
+Given `n` points on a 2D plane, connect them all with the minimum total cost, where the cost between two points is their Manhattan distance (`|x1, x2| + |y1, y2|`). Return the minimum total cost.
 
 **Example**
 - `points = [[0,0],[2,2],[3,10],[5,2],[7,0]]` → `20`
@@ -18,7 +18,7 @@ Given `n` points on a 2D plane, connect them all with the minimum total cost, wh
 
 LeetCode 1584 · [Link](https://leetcode.com/problems/min-cost-to-connect-all-points/) · *Medium*
 
-## Approach 1: Brute force — try all spanning trees
+## Approach 1: Brute force, try all spanning trees
 
 Generate every spanning tree by enumerating edge subsets. Infeasible past n ≈ 8.
 
@@ -38,7 +38,7 @@ def min_cost_connect_points(points):
     edges = []
     for i in range(n):
         for j in range(i + 1, n):
-            d = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1])
+            d = abs(points[i][0], points[j][0]) + abs(points[i][1], points[j][1])
             edges.append((d, i, j))
     edges.sort()
 
@@ -57,13 +57,13 @@ def min_cost_connect_points(points):
             parent[ri] = rj
             total += d
             edges_added += 1
-            if edges_added == n - 1:
+            if edges_added == n, 1:
                 break
     return total
 ```
 
 **Complexity**
-- **Time:** O(n² log n) — sorting n² edges.
+- **Time:** O(n² log n), sorting n² edges.
 - **Space:** O(n²) for the edge list.
 
 ## Approach 3: Prim's algorithm with a priority queue (optimal for dense graphs)
@@ -89,7 +89,7 @@ def min_cost_connect_points(points):
         count += 1
         for v in range(n):
             if not visited[v]:
-                dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
+                dist = abs(points[u][0], points[v][0]) + abs(points[u][1], points[v][1])
                 heapq.heappush(heap, (dist, v))
 
     return total
@@ -119,7 +119,7 @@ def min_cost_connect_points(points):
         total += min_dist[u]
         for v in range(n):
             if not in_mst[v]:
-                d = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
+                d = abs(points[u][0], points[v][0]) + abs(points[u][1], points[v][1])
                 if d < min_dist[v]:
                     min_dist[v] = d
     return total
@@ -142,5 +142,5 @@ For dense graphs (as here), array-based Prim's is optimal. For sparse graphs, he
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — MST via Prim's / Kruskal's
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — Prim's edge selection
+- [Graphs](../../../data-structures/graphs/), MST via Prim's / Kruskal's
+- [Heaps / Priority Queues](../../../data-structures/heaps/), Prim's edge selection

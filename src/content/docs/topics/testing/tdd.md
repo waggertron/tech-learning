@@ -22,7 +22,7 @@ Three steps, in order, enforced by convention. Named and popularized by Kent Bec
 
 You'll never follow them literally. The point is direction, not dogma. When you drift from them, you know what you gave up.
 
-## The cycle — red, green, refactor
+## The cycle, red, green, refactor
 
 ```
 ┌─────────┐       ┌──────────┐       ┌────────────┐
@@ -35,9 +35,9 @@ You'll never follow them literally. The point is direction, not dogma. When you 
      └──────────────────────────────────────┘
 ```
 
-### Red — write a failing test
+### Red, write a failing test
 
-It must fail for the right reason — usually "the thing I'm trying to make doesn't exist yet" or "this specific behavior doesn't happen yet." Not "syntax error."
+It must fail for the right reason, usually "the thing I'm trying to make doesn't exist yet" or "this specific behavior doesn't happen yet." Not "syntax error."
 
 ```python
 def test_split_tip_evenly():
@@ -45,9 +45,9 @@ def test_split_tip_evenly():
     assert bill.per_person(4) == 30.00   # fails: Bill doesn't exist
 ```
 
-### Green — smallest code that passes
+### Green, smallest code that passes
 
-Resist the urge to write "the right implementation." Write the simplest thing that could possibly make the test pass. Even if it's `return 30.00`. That ugly "fake it" implementation is *supposed* to offend you — the next test will reveal its limits.
+Resist the urge to write "the right implementation." Write the simplest thing that could possibly make the test pass. Even if it's `return 30.00`. That ugly "fake it" implementation is *supposed* to offend you, the next test will reveal its limits.
 
 ```python
 class Bill:
@@ -69,7 +69,7 @@ def test_split_tip_five_ways():
 
 Now the hard-coded 30 doesn't work. Time for a real implementation.
 
-### Refactor — improve the shape
+### Refactor, improve the shape
 
 With tests passing, clean up. Names, duplication, accidental complexity. The tests are the net: they catch regressions while you change how.
 
@@ -98,14 +98,14 @@ A failing test one minute after you wrote the code is easy to fix. A regression 
 - **Legacy code without seams.** You can't TDD changes inside a 5000-line function with no test harness. You have to first introduce tests via the [Working Effectively with Legacy Code](https://www.oreilly.com/library/view/working-effectively-with/0131177052/) "characterization test" approach, *then* TDD from there.
 - **Prototypes.** If the code might not survive the week, TDD is overhead. Just write the code and delete it later.
 
-## Two schools — Chicago vs London
+## Two schools, Chicago vs London
 
 TDD isn't monolithic. Two distinct styles:
 
 ### Chicago (state-based, "classical")
 
 - Test the output / state of the code.
-- Build up from the bottom — small objects first, wire together later.
+- Build up from the bottom, small objects first, wire together later.
 - Mock sparingly, mostly for external dependencies.
 - Championed by Kent Beck, Martin Fowler.
 
@@ -122,7 +122,7 @@ Most real-world practice is a blend, leaning Chicago for logic and London for wi
 
 ### "TDD slows me down"
 
-Short-term, it does — 10–20% slower in the first week. After that, the regression rate drops, the refactor confidence rises, and the net effect is positive in almost every team study.
+Short-term, it does, 10–20% slower in the first week. After that, the regression rate drops, the refactor confidence rises, and the net effect is positive in almost every team study.
 
 The slowness people notice is real but misattributed. It's the cost of thinking about the problem before typing. TDD forces that thinking; skipping TDD defers it.
 
@@ -132,7 +132,7 @@ It makes you tightly covered on the paths you exercised. It doesn't guarantee br
 
 ### "TDD replaces other tests"
 
-TDD is mostly a unit-test discipline. You still need integration, E2E, and smoke tests — TDD just gives you strong unit coverage as a byproduct.
+TDD is mostly a unit-test discipline. You still need integration, E2E, and smoke tests, TDD just gives you strong unit coverage as a byproduct.
 
 ### "TDD means writing tests first, always"
 
@@ -176,7 +176,7 @@ def test_rate_limiter_blocks_after_limit():
         assert limiter.allow("user-1") is True
     assert limiter.allow("user-1") is False
 
-# Green — real implementation now
+# Green, real implementation now
 import time
 from collections import defaultdict, deque
 
@@ -188,7 +188,7 @@ class RateLimiter:
     def allow(self, key):
         now = time.time()
         bucket = self.hits[key]
-        while bucket and bucket[0] < now - 60:
+        while bucket and bucket[0] < now, 60:
             bucket.popleft()
         if len(bucket) >= self.max:
             return False
@@ -196,7 +196,7 @@ class RateLimiter:
         return True
 ```
 
-Next test: "it should forget hits older than a minute." Can't test that without injecting the clock — forcing a refactor to make time injectable. And so on.
+Next test: "it should forget hits older than a minute." Can't test that without injecting the clock, forcing a refactor to make time injectable. And so on.
 
 The tests drove the design. The real implementation emerged from the pressure of the tests, not from a design meeting.
 
@@ -217,15 +217,15 @@ The tests drove the design. The real implementation emerged from the pressure of
 
 ## References
 
-- [Kent Beck — *Test-Driven Development: By Example*](https://www.oreilly.com/library/view/test-driven-development/0321146530/) — the original
-- [Robert Martin — *The Three Rules of TDD*](https://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd)
-- [Steve Freeman, Nat Pryce — *Growing Object-Oriented Software, Guided by Tests*](https://www.oreilly.com/library/view/growing-object-oriented-software/9780321574442/) — the London school
-- [Michael Feathers — *Working Effectively with Legacy Code*](https://www.oreilly.com/library/view/working-effectively-with/0131177052/) — how to introduce tests where none exist
-- [Kent Beck — *Test Desiderata*](https://kentbeck.github.io/TestDesiderata/) — short essay on what makes a test good
-- [James Shore — The Art of Agile Development, Ch. on TDD](https://www.jamesshore.com/v2/books/aoad2)
+- [Kent Beck, *Test-Driven Development: By Example*](https://www.oreilly.com/library/view/test-driven-development/0321146530/), the original
+- [Robert Martin, *The Three Rules of TDD*](https://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd)
+- [Steve Freeman, Nat Pryce, *Growing Object-Oriented Software, Guided by Tests*](https://www.oreilly.com/library/view/growing-object-oriented-software/9780321574442/), the London school
+- [Michael Feathers, *Working Effectively with Legacy Code*](https://www.oreilly.com/library/view/working-effectively-with/0131177052/), how to introduce tests where none exist
+- [Kent Beck, *Test Desiderata*](https://kentbeck.github.io/TestDesiderata/), short essay on what makes a test good
+- [James Shore, The Art of Agile Development, Ch. on TDD](https://www.jamesshore.com/v2/books/aoad2)
 
 ## Related topics
 
-- [Unit tests](../unit-tests/) — the test type TDD produces most of
-- [Component tests](../component-tests/) — applying TDD at the UI tier
-- [Integration tests](../integration-tests/) — tests that don't fit TDD's fast-feedback loop, but still need writing
+- [Unit tests](../unit-tests/), the test type TDD produces most of
+- [Component tests](../component-tests/), applying TDD at the UI tier
+- [Integration tests](../integration-tests/), tests that don't fit TDD's fast-feedback loop, but still need writing

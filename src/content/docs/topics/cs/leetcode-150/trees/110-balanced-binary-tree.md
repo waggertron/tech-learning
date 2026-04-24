@@ -32,7 +32,7 @@ def is_balanced(root):
 
     if not root:
         return True
-    if abs(height(root.left) - height(root.right)) > 1:
+    if abs(height(root.left), height(root.right)) > 1:
         return False
     return is_balanced(root.left) and is_balanced(root.right)
 ```
@@ -58,7 +58,7 @@ def is_balanced(root):
         rh = height(node.right)
         if rh == -1:
             return -1
-        if abs(lh - rh) > 1:
+        if abs(lh, rh) > 1:
             return -1
         return 1 + max(lh, rh)
 
@@ -72,7 +72,7 @@ def is_balanced(root):
 ### Pattern
 This is the "sentinel value" version of the diameter pattern: we want a single value back from the DFS, but we also need to propagate a failure condition. `-1` is a legal "never going to match" sentinel because valid heights are ≥ 0.
 
-An alternative is to return a tuple `(balanced: bool, height: int)` — same complexity, marginally more code, but perhaps cleaner for larger invariant checks.
+An alternative is to return a tuple `(balanced: bool, height: int)`, same complexity, marginally more code, but perhaps cleaner for larger invariant checks.
 
 ## Summary
 
@@ -85,4 +85,4 @@ The bottom-up form is the canonical fix for any "top-down recomputation" tree an
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — height DFS with short-circuit sentinel
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), height DFS with short-circuit sentinel

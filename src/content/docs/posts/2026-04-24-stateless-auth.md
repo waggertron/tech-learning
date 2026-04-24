@@ -1,5 +1,5 @@
 ---
-title: Stateless auth — the idea, the tradeoffs, and what "stateless" actually means in practice
+title: Stateless auth, the idea, the tradeoffs, and what "stateless" actually means in practice
 description: A walk through the stateless-auth idea, what JWTs buy you and don't, why sessions keep coming back, and the hybrid patterns that most modern systems actually run.
 date: 2026-04-24
 tags: [auth, jwt, sessions, security, architecture]
@@ -19,7 +19,7 @@ The appeal:
 
 This is the central sales pitch of JWTs. It's real, and it's also narrower than the industry sometimes pretends.
 
-## JWT — the most common instance
+## JWT, the most common instance
 
 A JSON Web Token is a compact, signed (sometimes encrypted) token with three dot-separated base64url parts:
 
@@ -29,9 +29,9 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEyMyIsImV4cCI6MTcxNDA2NTY
 
 Three parts:
 
-- **Header** — `{ "alg": "HS256", "typ": "JWT" }`. The algorithm.
-- **Payload** — claims. `sub`, `exp`, `iat`, custom claims.
-- **Signature** — HMAC or RSA/ECDSA signature of the header+payload.
+- **Header**, `{ "alg": "HS256", "typ": "JWT" }`. The algorithm.
+- **Payload**, claims. `sub`, `exp`, `iat`, custom claims.
+- **Signature**, HMAC or RSA/ECDSA signature of the header+payload.
 
 The server verifies the signature, trusts the claims, and proceeds.
 
@@ -44,9 +44,9 @@ The server verifies the signature, trusts the claims, and proceeds.
 
 ### What "stateless" doesn't mean
 
-Stateless does not mean secure-by-default. It doesn't mean simpler overall. And it doesn't mean better, necessarily. What it means is: the *authentication* step is stateless. Other things — session management, logout, revocation — often are not.
+Stateless does not mean secure-by-default. It doesn't mean simpler overall. And it doesn't mean better, necessarily. What it means is: the *authentication* step is stateless. Other things, session management, logout, revocation, often are not.
 
-## The revocation problem — the biggest footgun
+## The revocation problem, the biggest footgun
 
 A session-based system can log out by deleting the session. A JWT-based system can't: a JWT issued yesterday, with 24 hours of validity, is valid in every service that trusts the signer, whether or not the user "logged out."
 
@@ -56,12 +56,12 @@ Three responses:
 
 The common pattern:
 
-- **Access token** — JWT, 5–15 minutes, stateless.
-- **Refresh token** — opaque, longer-lived (hours to days), stored server-side, used to mint new access tokens.
+- **Access token**, JWT, 5–15 minutes, stateless.
+- **Refresh token**, opaque, longer-lived (hours to days), stored server-side, used to mint new access tokens.
 
 The access token doesn't need revocation because it expires quickly. The refresh token is server-managed and can be revoked (delete the row).
 
-This is the OAuth 2 dance. Well-understood, works, but the "refresh" flow is state-ful — you're back to a session store for the thing that really matters.
+This is the OAuth 2 dance. Well-understood, works, but the "refresh" flow is state-ful, you're back to a session store for the thing that really matters.
 
 ### 2. Token blocklist
 
@@ -71,7 +71,7 @@ Used in practice when the blocklist is small relative to issuance rate (most use
 
 ### 3. Rotate signing keys
 
-If a key is compromised, rotate. Old tokens become invalid. Blunt but effective — used for mass logouts (breach response).
+If a key is compromised, rotate. Old tokens become invalid. Blunt but effective, used for mass logouts (breach response).
 
 ### The practical reality
 
@@ -100,14 +100,14 @@ On a high-RPS API, an extra 1 KB per request adds up. Keep JWTs lean: put stable
 
 A minimal access token needs:
 
-- `sub` — user ID (stable, opaque identifier)
-- `iss` — issuer
-- `aud` — audience (which service the token is for)
-- `exp` — expiry
-- `iat` — issued at
+- `sub`, user ID (stable, opaque identifier)
+- `iss`, issuer
+- `aud`, audience (which service the token is for)
+- `exp`, expiry
+- `iat`, issued at
 - Maybe `tenant` or `org_id` for multi-tenant routing
 
-That's it. Roles, permissions, feature flags — these are mutable and better fetched on-demand by the receiving service using `sub`. Stuffing them into the JWT means a role change doesn't take effect until the token expires.
+That's it. Roles, permissions, feature flags, these are mutable and better fetched on-demand by the receiving service using `sub`. Stuffing them into the JWT means a role change doesn't take effect until the token expires.
 
 ## Signing algorithms
 
@@ -119,7 +119,7 @@ Issuer and verifier share a secret. Simpler but requires trusting every verifier
 
 ### Asymmetric (RS256, ES256, PS256)
 
-Issuer holds a private key, signs. Anyone holds the public key, verifies. The standard for OIDC and multi-service ecosystems. ES256 is generally recommended over RS256 for new deployments — smaller tokens, comparable security.
+Issuer holds a private key, signs. Anyone holds the public key, verifies. The standard for OIDC and multi-service ecosystems. ES256 is generally recommended over RS256 for new deployments, smaller tokens, comparable security.
 
 ### `alg: none`
 
@@ -127,7 +127,7 @@ A legacy option that disables signature verification. If your library accepts th
 
 ## When to prefer sessions
 
-Sessions — a random opaque ID stored in a cookie, paired with server-side state — are still the right answer for many cases:
+Sessions, a random opaque ID stored in a cookie, paired with server-side state, are still the right answer for many cases:
 
 - **First-party web apps.** The same server handles auth and API. No cross-service token propagation needed.
 - **Mutable auth state.** Permissions, roles, features that change frequently. Server-side lookup keeps them fresh.
@@ -137,7 +137,7 @@ Sessions — a random opaque ID stored in a cookie, paired with server-side stat
 
 A random 32-byte opaque token in a cookie, paired with a Redis-backed session store, is a boringly reliable pattern. It's not fashionable. It works.
 
-## The hybrid pattern — what production really looks like
+## The hybrid pattern, what production really looks like
 
 Most modern systems look like this:
 
@@ -177,7 +177,7 @@ The industry converged on this because it balances the stateless win (fast verif
 
 ## Service-to-service auth
 
-Inter-service calls use the same JWT mechanism — with either user-propagated tokens (the client's JWT is re-used; often not what you want) or service JWTs (issued to each service, with its own identity).
+Inter-service calls use the same JWT mechanism, with either user-propagated tokens (the client's JWT is re-used; often not what you want) or service JWTs (issued to each service, with its own identity).
 
 **mTLS + JWT** is the modern service-to-service standard: mTLS authenticates the sender (who are you?), JWT carries the claim (what are you allowed to do?).
 
@@ -245,17 +245,17 @@ JWTs are great when their model fits. They're not a default.
 
 ## References
 
-- [RFC 7519 — JSON Web Token](https://datatracker.ietf.org/doc/html/rfc7519)
-- [RFC 8725 — JWT Best Current Practices](https://datatracker.ietf.org/doc/html/rfc8725)
-- [OAuth 2.0 — RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+- [RFC 7519, JSON Web Token](https://datatracker.ietf.org/doc/html/rfc7519)
+- [RFC 8725, JWT Best Current Practices](https://datatracker.ietf.org/doc/html/rfc8725)
+- [OAuth 2.0, RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
 - [OpenID Connect Core](https://openid.net/specs/openid-connect-core-1_0.html)
-- [Auth0 — *JWT Handbook*](https://auth0.com/resources/ebooks/jwt-handbook) — thorough practical guide
-- [Tim McLean — *Critical vulnerabilities in JWT libraries*](https://www.chosenplaintext.ca/2015/03/31/jwt-algorithm-confusion.html) — the historical "why you verify algorithms" post
-- [Randall Degges — *Stop Using JWTs as Session Tokens*](https://developer.okta.com/blog/2017/08/17/why-jwts-suck-as-session-tokens) — the skeptical case
+- [Auth0, *JWT Handbook*](https://auth0.com/resources/ebooks/jwt-handbook), thorough practical guide
+- [Tim McLean, *Critical vulnerabilities in JWT libraries*](https://www.chosenplaintext.ca/2015/03/31/jwt-algorithm-confusion.html), the historical "why you verify algorithms" post
+- [Randall Degges, *Stop Using JWTs as Session Tokens*](https://developer.okta.com/blog/2017/08/17/why-jwts-suck-as-session-tokens), the skeptical case
 
 ## Related topics and posts
 
-- [Sessions, JWTs, and cookies — security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
+- [Sessions, JWTs, and cookies, security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
 - [REST API design](./2026-04-24-rest-api-design/)
 - [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [Django Part 5 — Authentication](../topics/web/django/part-05-authentication/)
+- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/)

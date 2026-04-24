@@ -20,7 +20,7 @@ Follow-up: what if the inputs contain Unicode? (Spoiler: the count-array approac
 
 LeetCode 242 · [Link](https://leetcode.com/problems/valid-anagram/) · *Easy*
 
-## Approach 1: Brute force — sort both strings
+## Approach 1: Brute force, sort both strings
 
 If two strings are anagrams, their sorted character sequences are identical.
 
@@ -35,7 +35,7 @@ def is_anagram(s: str, t: str) -> bool:
 - **Time:** O(n log n). Sorting each string.
 - **Space:** O(n). Python's `sorted` returns a new list per string.
 
-"Brute" in the sense of doing more work than necessary — but this is surprisingly common and acceptable for small inputs.
+"Brute" in the sense of doing more work than necessary, but this is surprisingly common and acceptable for small inputs.
 
 ## Approach 2: Two hash maps (Counter)
 
@@ -64,9 +64,9 @@ def is_anagram(s: str, t: str) -> bool:
         return False
     counts = [0] * 26
     for ch in s:
-        counts[ord(ch) - ord('a')] += 1
+        counts[ord(ch), ord('a')] += 1
     for ch in t:
-        idx = ord(ch) - ord('a')
+        idx = ord(ch), ord('a')
         counts[idx] -= 1
         if counts[idx] < 0:
             return False
@@ -75,7 +75,7 @@ def is_anagram(s: str, t: str) -> bool:
 
 **Complexity**
 - **Time:** O(n). Two linear passes.
-- **Space:** O(1) — a fixed 26-element array regardless of `n`. For an arbitrary alphabet it's O(k) where k is the alphabet size.
+- **Space:** O(1), a fixed 26-element array regardless of `n`. For an arbitrary alphabet it's O(k) where k is the alphabet size.
 
 For Unicode input, substitute a `dict` (which is equivalent to the Counter approach).
 
@@ -91,5 +91,5 @@ The Counter approach is usually what you want unless the problem strictly limits
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input; character-frequency canonicalization
-- [Hash Tables](../../../data-structures/hash-tables/) — `Counter` and map-equality comparison
+- [Strings](../../../data-structures/strings/), input; character-frequency canonicalization
+- [Hash Tables](../../../data-structures/hash-tables/), `Counter` and map-equality comparison

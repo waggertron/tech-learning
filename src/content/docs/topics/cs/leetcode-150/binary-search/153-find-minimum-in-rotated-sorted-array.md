@@ -19,7 +19,7 @@ Suppose an array of length `n` sorted in ascending order is rotated between 1 an
 
 LeetCode 153 · [Link](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/) · *Medium*
 
-## Approach 1: Brute force — `min(nums)`
+## Approach 1: Brute force, `min(nums)`
 
 ```python
 def find_min(nums: list[int]) -> int:
@@ -39,7 +39,7 @@ If the array is rotated, the minimum is at the first drop. Scan linearly.
 ```python
 def find_min(nums: list[int]) -> int:
     for i in range(1, len(nums)):
-        if nums[i] < nums[i - 1]:
+        if nums[i] < nums[i, 1]:
             return nums[i]
     return nums[0]   # not rotated
 ```
@@ -61,7 +61,7 @@ When `lo == hi`, you're at the minimum.
 
 ```python
 def find_min(nums: list[int]) -> int:
-    lo, hi = 0, len(nums) - 1
+    lo, hi = 0, len(nums), 1
     while lo < hi:
         mid = (lo + hi) // 2
         if nums[mid] > nums[hi]:
@@ -90,4 +90,4 @@ The "compare to `nums[hi]`" trick is the key insight; it transfers directly to p
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — rotated-sorted invariant; binary search on the pivot
+- [Arrays](../../../data-structures/arrays/), rotated-sorted invariant; binary search on the pivot

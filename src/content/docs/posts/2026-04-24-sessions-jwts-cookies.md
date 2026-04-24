@@ -1,5 +1,5 @@
 ---
-title: Sessions, JWTs, and cookies — security and tradeoffs
+title: Sessions, JWTs, and cookies, security and tradeoffs
 description: Where you put the auth token decides your threat model. A walk through session cookies, JWTs in headers, JWTs in cookies, the XSS/CSRF tradeoff, SameSite, HttpOnly, Secure, and why the "right answer" depends on the shape of your product.
 date: 2026-04-24
 tags: [auth, cookies, jwt, xss, csrf, security]
@@ -23,13 +23,13 @@ All three work. Each is wrong for certain products. Pick deliberately.
 
 Two high-impact web-app attacks dominate this choice:
 
-### XSS — Cross-Site Scripting
+### XSS, Cross-Site Scripting
 
 Attacker injects JavaScript into your site (via an input you failed to sanitize, a compromised npm package, a malicious ad iframe, etc.). That script runs in the victim's session and can read anything the page's JavaScript can read.
 
 If your auth token is in `localStorage`, the attacker's script grabs it and walks away. Game over.
 
-### CSRF — Cross-Site Request Forgery
+### CSRF, Cross-Site Request Forgery
 
 Victim visits `evil.com`. That site makes a request to `yourapp.com` (via an image, form, or fetch). The browser attaches `yourapp.com`'s cookies automatically. If your site doesn't verify the request is intentional, the attacker forced an authenticated action (change password, transfer money).
 
@@ -44,9 +44,9 @@ Cookie holds an opaque random token. Server looks up session state in Redis / DB
 | Property | Value |
 | --- | --- |
 | Token location | Cookie (`HttpOnly; Secure; SameSite=Lax`) |
-| XSS risk on token | **Low** — `HttpOnly` blocks JS access |
-| CSRF risk | **Yes** — cookies are attached to cross-site requests. Mitigate with SameSite + CSRF tokens. |
-| Revocation | Instant — delete the session row |
+| XSS risk on token | **Low**, `HttpOnly` blocks JS access |
+| CSRF risk | **Yes**, cookies are attached to cross-site requests. Mitigate with SameSite + CSRF tokens. |
+| Revocation | Instant, delete the session row |
 | Scale | Requires session store |
 | Good for | First-party web apps, admin consoles |
 
@@ -59,9 +59,9 @@ Client stores JWT in `localStorage` or in-memory. Sends it in `Authorization: Be
 | Property | Value |
 | --- | --- |
 | Token location | `localStorage` or JS memory |
-| XSS risk on token | **High** — any XSS exfiltrates it |
-| CSRF risk | **No** — no automatic attach; attacker must actively send the header |
-| Revocation | Hard — see [stateless auth post](./2026-04-24-stateless-auth/) |
+| XSS risk on token | **High**, any XSS exfiltrates it |
+| CSRF risk | **No**, no automatic attach; attacker must actively send the header |
+| Revocation | Hard, see [stateless auth post](./2026-04-24-stateless-auth/) |
 | Scale | No session store needed for verification |
 | Good for | Mobile apps, CLI tools, SPAs with strong CSP |
 
@@ -74,26 +74,26 @@ Put the JWT itself in a cookie. Get browser automation (auto-send on navigation)
 | Property | Value |
 | --- | --- |
 | Token location | Cookie (`HttpOnly; Secure; SameSite=Strict/Lax`) |
-| XSS risk on token | **Low** — `HttpOnly` |
-| CSRF risk | **Yes** — cookies are attached cross-site. Same mitigations apply. |
-| Revocation | Same JWT problem as Bearer — expiry-based |
+| XSS risk on token | **Low**, `HttpOnly` |
+| CSRF risk | **Yes**, cookies are attached cross-site. Same mitigations apply. |
+| Revocation | Same JWT problem as Bearer, expiry-based |
 | Scale | No session store |
 | Good for | First-party SPAs that want to skip a session store |
 
-This hybrid is popular. It gives you the cookie security model without needing a Redis session store — you pay for revocation in expiry-based attack windows.
+This hybrid is popular. It gives you the cookie security model without needing a Redis session store, you pay for revocation in expiry-based attack windows.
 
-## Cookie flags — get these right
+## Cookie flags, get these right
 
 For any cookie carrying auth:
 
-- **`HttpOnly`** — not readable from JavaScript. Block XSS from reading it.
-- **`Secure`** — only sent over HTTPS. Always in prod.
-- **`SameSite=Lax`** (default for most browsers now) — cookie sent on top-level cross-site navigations (link clicks), but not on cross-site POSTs or iframe subresources. Blocks the nastiest CSRF.
-- **`SameSite=Strict`** — cookie never sent cross-site. Maximally safe, but breaks top-level navigations (you're logged out when you click a link from email).
-- **`SameSite=None`** — cookie sent on all cross-site requests. Requires `Secure`. Only for third-party contexts (embedded widgets, analytics pixels).
-- **`Domain`** — scope. Tight scoping reduces the attack surface.
-- **`Path`** — narrow it to the auth path if the cookie is only meant for that.
-- **`Max-Age` / `Expires`** — don't issue "forever" cookies unless you really mean it.
+- **`HttpOnly`**, not readable from JavaScript. Block XSS from reading it.
+- **`Secure`**, only sent over HTTPS. Always in prod.
+- **`SameSite=Lax`** (default for most browsers now), cookie sent on top-level cross-site navigations (link clicks), but not on cross-site POSTs or iframe subresources. Blocks the nastiest CSRF.
+- **`SameSite=Strict`**, cookie never sent cross-site. Maximally safe, but breaks top-level navigations (you're logged out when you click a link from email).
+- **`SameSite=None`**, cookie sent on all cross-site requests. Requires `Secure`. Only for third-party contexts (embedded widgets, analytics pixels).
+- **`Domain`**, scope. Tight scoping reduces the attack surface.
+- **`Path`**, narrow it to the auth path if the cookie is only meant for that.
+- **`Max-Age` / `Expires`**, don't issue "forever" cookies unless you really mean it.
 
 Python example with Django:
 
@@ -108,19 +108,19 @@ CSRF_COOKIE_HTTPONLY = False                # CSRF token must be JS-readable
 CSRF_COOKIE_SAMESITE = "Lax"
 ```
 
-## CSRF — what actually works
+## CSRF, what actually works
 
 Token-based CSRF protection:
 
-1. Server sets a `csrftoken` cookie (JS-readable — *not* HttpOnly).
+1. Server sets a `csrftoken` cookie (JS-readable, *not* HttpOnly).
 2. Client reads the cookie, includes its value in `X-CSRFToken` header for every non-idempotent request.
 3. Server compares cookie and header; rejects if mismatched.
 
 An attacker on `evil.com` can cause the browser to send the cookie, but can't read it (same-origin policy), so can't put it in a header. Defeats CSRF.
 
-This is the "Double Submit Cookie" pattern. Combined with SameSite=Lax, it's overkill in the safe direction — which is what you want.
+This is the "Double Submit Cookie" pattern. Combined with SameSite=Lax, it's overkill in the safe direction, which is what you want.
 
-## XSS — don't ship XSS
+## XSS, don't ship XSS
 
 No matter where the token is, an XSS is bad. Mitigation:
 
@@ -138,7 +138,7 @@ Some teams interpret "never store JWTs in localStorage" literally and end up wit
 
 - **Storing the token in localStorage** is dangerous if your app is vulnerable to XSS.
 - **The right answer** is either: store it in `HttpOnly` cookie (no JS access), or keep it in memory (grabbable only during a live XSS session, not persisted).
-- **In-memory** means the token is lost on refresh — OK if you have a refresh token flow that can re-acquire silently (via a refresh cookie or SSO).
+- **In-memory** means the token is lost on refresh, OK if you have a refresh token flow that can re-acquire silently (via a refresh cookie or SSO).
 
 Most production SPAs settle on: refresh token in `HttpOnly` cookie, access token in memory. Mobile apps use secure OS-level keychains.
 
@@ -159,7 +159,7 @@ Replaces the older *implicit flow* (token in URL fragment), which is now discour
 A refresh token steady-state isn't great: if stolen, it regenerates access tokens forever. Rotation:
 
 - Every time a refresh token is used, issue a new one, invalidate the old.
-- Track the entire family. If an old refresh token is used after rotation, the whole family is compromised — kill the session.
+- Track the entire family. If an old refresh token is used after rotation, the whole family is compromised, kill the session.
 
 Auth0, Okta, Cognito, and most modern providers implement this automatically. If you roll your own, include it.
 
@@ -197,32 +197,32 @@ This three-lane setup covers most security and operational needs without being e
 
 For any new authenticated product:
 
-- [ ] Decide where the credential lives (cookie / header / memory) — write it down.
+- [ ] Decide where the credential lives (cookie / header / memory), write it down.
 - [ ] Set `HttpOnly; Secure; SameSite=Lax` on auth cookies.
 - [ ] CSRF token on all non-idempotent endpoints (if using cookies).
-- [ ] Content Security Policy — at minimum `script-src 'self'`.
+- [ ] Content Security Policy, at minimum `script-src 'self'`.
 - [ ] Refresh token rotation with family tracking.
 - [ ] Short access-token lifetime (5–15 minutes).
-- [ ] Logout actually invalidates — delete session / add to denylist.
-- [ ] Max session length — force re-auth after N hours.
+- [ ] Logout actually invalidates, delete session / add to denylist.
+- [ ] Max session length, force re-auth after N hours.
 - [ ] Rate limit login (see [throttling post](./2026-04-24-throttling-and-rate-limiting/)).
 - [ ] Audit log every auth decision (login, token refresh, logout, revocation).
 
 ## References
 
-- [OWASP — Cross-Site Scripting (XSS) prevention cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
-- [OWASP — CSRF prevention cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
-- [MDN — `Set-Cookie`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie) and [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
+- [OWASP, Cross-Site Scripting (XSS) prevention cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
+- [OWASP, CSRF prevention cheat sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
+- [MDN, `Set-Cookie`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie) and [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
 - [OAuth 2 Security Best Current Practice (RFC 8725 + 9068)](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics)
 - [PKCE for OAuth public clients (RFC 7636)](https://datatracker.ietf.org/doc/html/rfc7636)
-- [MDN — Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
-- [Thomas Ptacek — *You probably shouldn't use JWTs*](https://fly.io/blog/api-tokens-a-tedious-survey/) — a good skeptical read
-- [Randall Degges — *Stop Using JWTs as Session Tokens*](https://developer.okta.com/blog/2017/08/17/why-jwts-suck-as-session-tokens)
+- [MDN, Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+- [Thomas Ptacek, *You probably shouldn't use JWTs*](https://fly.io/blog/api-tokens-a-tedious-survey/), a good skeptical read
+- [Randall Degges, *Stop Using JWTs as Session Tokens*](https://developer.okta.com/blog/2017/08/17/why-jwts-suck-as-session-tokens)
 
 ## Related topics and posts
 
-- [Stateless auth](./2026-04-24-stateless-auth/) — the broader JWT discussion
+- [Stateless auth](./2026-04-24-stateless-auth/), the broader JWT discussion
 - [REST API design](./2026-04-24-rest-api-design/)
 - [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
 - [Modern browser security concerns](./2026-04-24-modern-browser-security/)
-- [Django Part 5 — Authentication](../topics/web/django/part-05-authentication/)
+- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/)

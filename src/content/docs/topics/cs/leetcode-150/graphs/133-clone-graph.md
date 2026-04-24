@@ -112,5 +112,5 @@ All three are optimal in Big-O. DFS is the shortest to write.
 
 ## Related data structures
 
-- [Hash Tables](../../../data-structures/hash-tables/) — old → new node mapping
-- [Queues](../../../data-structures/queues/) — BFS variant
+- [Hash Tables](../../../data-structures/hash-tables/), old → new node mapping
+- [Queues](../../../data-structures/queues/), BFS variant

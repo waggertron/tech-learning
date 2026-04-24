@@ -24,7 +24,7 @@ Given two words `beginWord` and `endWord`, and a word list `wordList`, return th
 
 LeetCode 127 · [Link](https://leetcode.com/problems/word-ladder/) · *Hard*
 
-## Approach 1: Brute force — BFS comparing every pair
+## Approach 1: Brute force, BFS comparing every pair
 
 BFS from `beginWord`. At each frontier word, scan the whole word list for "1 letter off" candidates.
 
@@ -56,7 +56,7 @@ def ladder_length(beginWord, endWord, wordList):
 - **Time:** O(N² · L) where N = `|wordList|`, L = word length.
 - **Space:** O(N · L).
 
-Quadratic in N — too slow for large lists.
+Quadratic in N, too slow for large lists.
 
 ## Approach 2: Pattern buckets + BFS (optimal single-direction)
 
@@ -149,6 +149,6 @@ Bidirectional BFS is a general technique for "minimum number of edits" problems 
 
 ## Related data structures
 
-- [Graphs](../../../data-structures/graphs/) — implicit graph via string edit distance
-- [Hash Tables](../../../data-structures/hash-tables/) — pattern-bucket adjacency
-- [Queues](../../../data-structures/queues/) — BFS engine
+- [Graphs](../../../data-structures/graphs/), implicit graph via string edit distance
+- [Hash Tables](../../../data-structures/hash-tables/), pattern-bucket adjacency
+- [Queues](../../../data-structures/queues/), BFS engine

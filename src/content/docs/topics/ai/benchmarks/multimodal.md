@@ -25,7 +25,7 @@ Vision-language models have their own benchmark ecosystem. The major ones in 202
 | **AI2D** | Diagram understanding (grade-school science) |
 | **MathVerse** | Mathematical reasoning with visual input |
 
-## MMMU — Massive Multi-discipline Multimodal Understanding
+## MMMU, Massive Multi-discipline Multimodal Understanding
 
 2023. 11,500 college-exam-level questions across 30 disciplines, each with one or more images. Subjects span art, business, health, humanities, sciences, tech.
 
@@ -45,7 +45,7 @@ Vision-language models have their own benchmark ecosystem. The major ones in 202
 
 ## ChartQA
 
-Chart-and-graph question answering. Bar charts, line charts, pie charts — "what was the revenue in Q2?" kind of questions.
+Chart-and-graph question answering. Bar charts, line charts, pie charts, "what was the revenue in Q2?" kind of questions.
 
 **Why it matters.** Charts are ubiquitous in business and science, and they're a known failure mode. A model may read a table of numbers fine but fail to extract numbers from a chart of the same data.
 
@@ -53,15 +53,15 @@ Chart-and-graph question answering. Bar charts, line charts, pie charts — "wha
 
 ## DocVQA and related document-understanding benchmarks
 
-- **DocVQA** — question answering over scanned documents.
-- **InfographicVQA** — harder; complex designed infographics with text + images + icons.
-- **TextVQA** — short text within natural images.
+- **DocVQA**, question answering over scanned documents.
+- **InfographicVQA**, harder; complex designed infographics with text + images + icons.
+- **TextVQA**, short text within natural images.
 
 These exercise OCR + layout + reasoning together. Models good at pure OCR (good text extraction) but bad at layout reasoning fail; so do the reverse.
 
 ## OCRBench
 
-Specifically tests OCR capability in isolation — transcription of text from images, including weird fonts, rotated text, mathematical notation, multi-language.
+Specifically tests OCR capability in isolation, transcription of text from images, including weird fonts, rotated text, mathematical notation, multi-language.
 
 **Why it matters.** A prerequisite for DocVQA. Weak OCR guarantees weak DocVQA.
 
@@ -71,23 +71,23 @@ Broader vision-language evaluation frameworks aggregating multiple capabilities 
 
 ## Video benchmarks
 
-- **Video-MME** — comprehensive video understanding (short to long clips).
-- **MVBench** — 20 video tasks spanning action, scene, object, and attribute understanding.
-- **LongVideoBench** — long-form video question answering (hour-plus videos).
+- **Video-MME**, comprehensive video understanding (short to long clips).
+- **MVBench**, 20 video tasks spanning action, scene, object, and attribute understanding.
+- **LongVideoBench**, long-form video question answering (hour-plus videos).
 
-Video benchmarks lag image benchmarks — the models are weaker, the benchmarks are less mature, and compute costs are prohibitive.
+Video benchmarks lag image benchmarks, the models are weaker, the benchmarks are less mature, and compute costs are prohibitive.
 
 ## Audio benchmarks
 
-- **AudioBench** — audio question answering.
-- **MMAU** — multimodal audio understanding.
+- **AudioBench**, audio question answering.
+- **MMAU**, multimodal audio understanding.
 
 Still early in development. Most "multimodal" claims in 2026 are primarily vision-language; audio is catch-up.
 
 ## Embodied / spatial benchmarks
 
-- **SpatialBench, MindCube** — 3D and embodied spatial reasoning.
-- **RoboBench** — robot-task completion from visual input.
+- **SpatialBench, MindCube**, 3D and embodied spatial reasoning.
+- **RoboBench**, robot-task completion from visual input.
 
 Emerging category. Frontier models struggle; benchmark-gaming is less of a concern because they're hard to saturate.
 
@@ -97,7 +97,7 @@ Emerging category. Frontier models struggle; benchmark-gaming is less of a conce
 - **Interactive manipulation.** Benchmarks mostly use static images; real use involves screenshots that change.
 - **Video generation quality.** Video-MME tests understanding, not generation.
 - **Cross-modal reasoning at scale.** Combining image + audio + text in one task is barely benchmarked.
-- **Grounded interaction.** "Point to the button" — barely tested.
+- **Grounded interaction.** "Point to the button", barely tested.
 
 ## Reading multimodal scores
 
@@ -121,24 +121,24 @@ Same as every other benchmark: reasoning-mode variants score ~15–25 points hig
 
 Frontier multimodal models (GPT-5.x vision, Gemini 3.x, Claude 4.x vision):
 
-- **MMMU ~80%** — closing on saturation.
-- **MMMU-Pro ~65%** — still differentiates.
+- **MMMU ~80%**, closing on saturation.
+- **MMMU-Pro ~65%**, still differentiates.
 - **MathVista ~75%** with reasoning.
-- **ChartQA ~90%** — nearly saturated.
-- **DocVQA ~93%** — nearly saturated.
+- **ChartQA ~90%**, nearly saturated.
+- **DocVQA ~93%**, nearly saturated.
 
 The frontier is shifting toward:
 
 - **Longer videos** (an hour+ of footage).
-- **Agentic multimodal** — a model using a browser with screenshots in the loop.
+- **Agentic multimodal**, a model using a browser with screenshots in the loop.
 - **High-resolution technical diagrams** (engineering drawings, scientific figures).
 - **3D / spatial.**
 
 ## References
 
-- [MMMU — Yue et al., 2023](https://arxiv.org/abs/2311.16502)
-- [MMMU-Pro](https://mmmu-benchmark.github.io/) — the successor
-- [MathVista — Lu et al., 2023](https://mathvista.github.io/)
+- [MMMU, Yue et al., 2023](https://arxiv.org/abs/2311.16502)
+- [MMMU-Pro](https://mmmu-benchmark.github.io/), the successor
+- [MathVista, Lu et al., 2023](https://mathvista.github.io/)
 - [ChartQA](https://github.com/vis-nlp/ChartQA)
 - [DocVQA](https://www.docvqa.org/)
 - [OCRBench](https://github.com/Yuliang-Liu/MultimodalOCR)
@@ -149,6 +149,6 @@ The frontier is shifting toward:
 
 ## Related topics
 
-- [Knowledge and reasoning benchmarks](../knowledge-and-reasoning/) — text-only counterpart
-- [Agent benchmarks](../agent-benchmarks/) — where multimodal matters for computer-use
-- [RAG](../../rag/) — increasingly multimodal (retrieve across images + text)
+- [Knowledge and reasoning benchmarks](../knowledge-and-reasoning/), text-only counterpart
+- [Agent benchmarks](../agent-benchmarks/), where multimodal matters for computer-use
+- [RAG](../../rag/), increasingly multimodal (retrieve across images + text)

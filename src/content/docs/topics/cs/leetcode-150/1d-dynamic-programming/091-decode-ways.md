@@ -19,7 +19,7 @@ A digit string can be decoded to letters using `A=1, B=2, ..., Z=26`. Given a di
 
 LeetCode 91 · [Link](https://leetcode.com/problems/decode-ways/) · *Medium*
 
-## Approach 1: Recursive — try single and double digit
+## Approach 1: Recursive, try single and double digit
 
 At position `i`, try decoding 1 digit (if ≠ '0') and/or 2 digits (if in `[10, 26]`).
 
@@ -77,7 +77,7 @@ def num_decodings(s):
         cur = 0
         if s[i] != '0':
             cur += prev1
-        two = int(s[i - 1:i + 1])
+        two = int(s[i, 1:i + 1])
         if 10 <= two <= 26:
             cur += prev2
         prev2, prev1 = prev1, cur
@@ -96,8 +96,8 @@ def num_decodings(s):
 | Memoized | O(n) | O(n) |
 | **Bottom-up, two vars** | **O(n)** | **O(1)** |
 
-Index-DP on strings with local transition rules — template for Unique BSTs, Partition DP, and similar problems.
+Index-DP on strings with local transition rules, template for Unique BSTs, Partition DP, and similar problems.
 
 ## Related data structures
 
-- [Strings](../../../data-structures/strings/) — input; DP over index
+- [Strings](../../../data-structures/strings/), input; DP over index

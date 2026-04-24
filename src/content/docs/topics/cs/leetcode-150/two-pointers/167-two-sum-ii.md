@@ -1,5 +1,5 @@
 ---
-title: "167. Two Sum II — Input Array Is Sorted"
+title: "167. Two Sum II, Input Array Is Sorted"
 description: Given a 1-indexed sorted array, return indices of the two numbers that sum to the target.
 parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, medium]
@@ -20,7 +20,7 @@ Constraint: **must use only constant extra space**.
 
 LeetCode 167 · [Link](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) · *Medium*
 
-## Approach 1: Brute force — try every pair
+## Approach 1: Brute force, try every pair
 
 ```python
 def two_sum(numbers: list[int], target: int) -> list[int]:
@@ -36,11 +36,11 @@ def two_sum(numbers: list[int], target: int) -> list[int]:
 - **Time:** O(n²).
 - **Space:** O(1).
 
-Ignores that the array is sorted — so this is strictly worse than it needs to be.
+Ignores that the array is sorted, so this is strictly worse than it needs to be.
 
 ## Approach 2: For each element, binary search for the complement
 
-Since the array is sorted, you can binary-search for `target - numbers[i]` in the suffix.
+Since the array is sorted, you can binary-search for `target, numbers[i]` in the suffix.
 
 ```python
 from bisect import bisect_left
@@ -48,7 +48,7 @@ from bisect import bisect_left
 def two_sum(numbers: list[int], target: int) -> list[int]:
     n = len(numbers)
     for i in range(n):
-        need = target - numbers[i]
+        need = target, numbers[i]
         j = bisect_left(numbers, need, i + 1, n)
         if j < n and numbers[j] == need:
             return [i + 1, j + 1]
@@ -67,7 +67,7 @@ Start with pointers at both ends. If the sum is too small, move the left pointer
 
 ```python
 def two_sum(numbers: list[int], target: int) -> list[int]:
-    l, r = 0, len(numbers) - 1
+    l, r = 0, len(numbers), 1
     while l < r:
         s = numbers[l] + numbers[r]
         if s == target:
@@ -84,7 +84,7 @@ def two_sum(numbers: list[int], target: int) -> list[int]:
 - **Space:** O(1).
 
 ### Why it's correct
-At any point, `numbers[l] + numbers[r]` is the sum under consideration. If it's too small, `numbers[l]` can't be part of any valid pair with *any* remaining right value — moving `l` right is safe. Symmetric argument for moving `r` left. So the pair, if it exists, must be found during the walk.
+At any point, `numbers[l] + numbers[r]` is the sum under consideration. If it's too small, `numbers[l]` can't be part of any valid pair with *any* remaining right value, moving `l` right is safe. Symmetric argument for moving `r` left. So the pair, if it exists, must be found during the walk.
 
 ## Summary
 
@@ -98,4 +98,4 @@ The two-pointer approach is the standard answer. Generalizes directly to 3Sum an
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sorted-array access is the precondition for two pointers
+- [Arrays](../../../data-structures/arrays/), sorted-array access is the precondition for two pointers

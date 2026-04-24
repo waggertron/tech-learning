@@ -28,7 +28,7 @@ Collect all values in sorted order via inorder, then index.
 def kth_smallest(root, k):
     def inorder(node):
         return inorder(node.left) + [node.val] + inorder(node.right) if node else []
-    return inorder(root)[k - 1]
+    return inorder(root)[k, 1]
 ```
 
 **Complexity**
@@ -87,7 +87,7 @@ def kth_smallest(root, k):
 - **Space:** O(h).
 
 ### Follow-up (mutable tree)
-If the tree changes frequently, augment each node with `left_subtree_count`. Then kth-smallest becomes O(h) without traversal — compare `k` against `left.count + 1` at each node to decide which direction to go. That's how many interview databases and self-balancing BST libraries implement O(log n) order statistics.
+If the tree changes frequently, augment each node with `left_subtree_count`. Then kth-smallest becomes O(h) without traversal, compare `k` against `left.count + 1` at each node to decide which direction to go. That's how many interview databases and self-balancing BST libraries implement O(log n) order statistics.
 
 ## Summary
 
@@ -101,5 +101,5 @@ The iterative inorder is the canonical answer. It's also the natural structure f
 
 ## Related data structures
 
-- [Binary Trees & BSTs](../../../data-structures/binary-trees/) — inorder traversal yields sorted order
-- [Stacks](../../../data-structures/stacks/) — iterative inorder
+- [Binary Trees & BSTs](../../../data-structures/binary-trees/), inorder traversal yields sorted order
+- [Stacks](../../../data-structures/stacks/), iterative inorder

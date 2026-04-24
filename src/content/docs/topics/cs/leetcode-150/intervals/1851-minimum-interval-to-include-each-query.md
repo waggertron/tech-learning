@@ -18,7 +18,7 @@ You're given `intervals` and `queries`. For each query `q`, find the length of t
 
 LeetCode 1851 · [Link](https://leetcode.com/problems/minimum-interval-to-include-each-query/) · *Hard*
 
-## Approach 1: Brute force — per query, scan all intervals
+## Approach 1: Brute force, per query, scan all intervals
 
 For each query, iterate intervals and track the smallest containing length.
 
@@ -45,7 +45,7 @@ def min_interval(intervals, queries):
     for orig_idx, q in sorted_queries:
         while i < len(intervals) and intervals[i][0] <= q:
             s, e = intervals[i]
-            heapq.heappush(heap, (e - s + 1, e))
+            heapq.heappush(heap, (e, s + 1, e))
             i += 1
         while heap and heap[0][1] < q:
             heapq.heappop(heap)
@@ -76,5 +76,5 @@ Offline query processing is a broadly useful pattern whenever you have a batch o
 
 ## Related data structures
 
-- [Heaps / Priority Queues](../../../data-structures/heaps/) — running min-length heap with lazy deletion
-- [Arrays](../../../data-structures/arrays/) — sorted intervals and queries
+- [Heaps / Priority Queues](../../../data-structures/heaps/), running min-length heap with lazy deletion
+- [Arrays](../../../data-structures/arrays/), sorted intervals and queries

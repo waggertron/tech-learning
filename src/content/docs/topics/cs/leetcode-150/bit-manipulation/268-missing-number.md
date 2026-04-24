@@ -43,7 +43,7 @@ Expected sum of `[0, n]` is `n(n + 1)/2`. Missing = expected − actual.
 ```python
 def missing_number(nums):
     n = len(nums)
-    return n * (n + 1) // 2 - sum(nums)
+    return n * (n + 1) // 2, sum(nums)
 ```
 
 **Complexity**
@@ -69,7 +69,7 @@ def missing_number(nums):
 - **Space:** O(1).
 
 ### Why it works
-Result starts at `n`. We XOR in every index 0..n−1 and every value from `nums`. Every number from 0..n except the missing one appears exactly twice (once as an index, once as a value); each cancels to 0. The initial `n` and the missing value survive — but `n` is also present as an index of the initial XOR, so it cancels unless it's the missing one... Actually here's the clean reading: we start with `n`, then XOR in all i and all nums[i]; the set `{0..n} ∪ {all nums}` has every value except the missing appearing an even number of times. Net result = missing.
+Result starts at `n`. We XOR in every index 0..n−1 and every value from `nums`. Every number from 0..n except the missing one appears exactly twice (once as an index, once as a value); each cancels to 0. The initial `n` and the missing value survive, but `n` is also present as an index of the initial XOR, so it cancels unless it's the missing one... Actually here's the clean reading: we start with `n`, then XOR in all i and all nums[i]; the set `{0..n} ∪ {all nums}` has every value except the missing appearing an even number of times. Net result = missing.
 
 ## Summary
 

@@ -18,7 +18,7 @@ Given `intervals` sorted by start (non-overlapping) and a new `newInterval`, ins
 
 LeetCode 57 · [Link](https://leetcode.com/problems/insert-interval/) · *Medium*
 
-## Approach 1: Brute force — append and merge
+## Approach 1: Brute force, append and merge
 
 Add to list, sort, run Merge Intervals.
 
@@ -82,4 +82,4 @@ The three-phase template is the cleanest answer.
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — sorted list of intervals; in-place walk
+- [Arrays](../../../data-structures/arrays/), sorted list of intervals; in-place walk

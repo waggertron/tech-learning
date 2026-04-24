@@ -1,6 +1,6 @@
 ---
 title: "994. Rotting Oranges"
-description: Minimum time for all fresh oranges to rot via adjacent contact — a multi-source BFS.
+description: Minimum time for all fresh oranges to rot via adjacent contact, a multi-source BFS.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, bfs, multi-source, medium]
 status: draft
@@ -12,9 +12,9 @@ updated: 2026-04-23
 
 You are given an `m × n` grid where each cell is:
 
-- `0` — empty
-- `1` — fresh orange
-- `2` — rotten orange
+- `0`, empty
+- `1`, fresh orange
+- `2`, rotten orange
 
 Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten. Return the minimum number of minutes until no fresh orange remains, or `-1` if impossible.
 
@@ -25,7 +25,7 @@ Every minute, any fresh orange that is 4-directionally adjacent to a rotten oran
 
 LeetCode 994 · [Link](https://leetcode.com/problems/rotting-oranges/) · *Medium*
 
-## Approach 1: Brute force — simulate minute-by-minute
+## Approach 1: Brute force, simulate minute-by-minute
 
 On each tick, scan the grid and mark any fresh orange adjacent to a rotten one. Keep ticking until no more changes.
 
@@ -148,5 +148,5 @@ Multi-source BFS is the canonical template for "fire/water/infection spreads fro
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/) — grid
-- [Queues](../../../data-structures/queues/) — BFS engine with multi-source seeding
+- [Arrays](../../../data-structures/arrays/), grid
+- [Queues](../../../data-structures/queues/), BFS engine with multi-source seeding
