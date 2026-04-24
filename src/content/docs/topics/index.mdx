@@ -1,11 +1,104 @@
 ---
 title: Topics
-description: Evergreen, categorized knowledge base entries.
+description: Evergreen, categorized knowledge base entries. Full index of topics and subtopics with links.
 ---
 
 Topics are the durable knowledge base. Each topic lives at `topics/<category>/<slug>/index.md` and can have subtopics underneath it.
 
-Browse the sidebar to explore. Topics are grouped by category.
+## AI
+
+- [AI — category overview](./ai/)
+- [Prompt Engineering](./ai/prompt-engineering/) — crafting LLM inputs to reliably elicit a target output
+  - [Context Window Management](./ai/prompt-engineering/context-window-management/)
+  - [Prompt Injection Defense](./ai/prompt-engineering/prompt-injection-defense/)
+  - [Structured Outputs](./ai/prompt-engineering/structured-outputs/)
+  - [Templates](./ai/prompt-engineering/templates/)
+- [AI Harness Development](./ai/harness-development/) — the scaffolding around an LLM that turns it into something useful
+  - [Context Engineering](./ai/harness-development/context-engineering/)
+  - [Permission Models](./ai/harness-development/permission-models/)
+  - [Tool Design](./ai/harness-development/tool-design/)
+- [RAG (Retrieval-Augmented Generation)](./ai/rag/) — grounding LLM responses in external knowledge
+  - [Chunking](./ai/rag/chunking/)
+  - [Embeddings](./ai/rag/embeddings/)
+  - [Hybrid Search](./ai/rag/hybrid-search/)
+  - [Reranking](./ai/rag/reranking/)
+- [AI Skill Development](./ai/skill-development/) — packaged, invocable capabilities loaded on demand
+  - [Writing a First Skill](./ai/skill-development/writing-a-first-skill/)
+  - [Frontmatter and Discovery](./ai/skill-development/frontmatter-and-discovery/)
+  - [Skill vs Tool vs Agent](./ai/skill-development/skill-vs-tool-vs-agent/)
+  - [Patterns from a Production Skill Library](./ai/skill-development/patterns-from-a-production-skill-library/)
+- [AI Coding Tool Blindspots](./ai/coding-tool-blindspots/) — predictable failure modes of modern AI coding assistants
+  - [Benchmark Contamination](./ai/coding-tool-blindspots/benchmark-contamination/)
+  - [Prompt Injection](./ai/coding-tool-blindspots/prompt-injection/)
+  - [Slopsquatting](./ai/coding-tool-blindspots/slopsquatting/)
+- [DESIGN.md](./ai/design-md/) — Google Labs' open-source format for giving agents a persistent design-system understanding
+
+## Computer Science
+
+- [CS — category overview](./cs/)
+- [Data Structures](./cs/data-structures/) — the top 10 interview data structures with Python code
+  - [Arrays](./cs/data-structures/arrays/)
+  - [Strings](./cs/data-structures/strings/)
+  - [Hash Tables](./cs/data-structures/hash-tables/)
+  - [Linked Lists](./cs/data-structures/linked-lists/)
+  - [Stacks](./cs/data-structures/stacks/)
+  - [Queues](./cs/data-structures/queues/)
+  - [Heaps](./cs/data-structures/heaps/)
+  - [Binary Trees](./cs/data-structures/binary-trees/)
+  - [Graphs](./cs/data-structures/graphs/)
+  - [Tries](./cs/data-structures/tries/)
+- [LeetCode 150 (NeetCode)](./cs/leetcode-150/) — 150 problems across 18 categories, each with brute-force, improved, and optimal Python approaches
+  - [Arrays & Hashing](./cs/leetcode-150/arrays-and-hashing/)
+  - [Two Pointers](./cs/leetcode-150/two-pointers/)
+  - [Sliding Window](./cs/leetcode-150/sliding-window/)
+  - [Stack](./cs/leetcode-150/stack/)
+  - [Binary Search](./cs/leetcode-150/binary-search/)
+  - [Linked List](./cs/leetcode-150/linked-list/)
+  - [Trees](./cs/leetcode-150/trees/)
+  - [Tries](./cs/leetcode-150/tries/)
+  - [Heap / Priority Queue](./cs/leetcode-150/heap-priority-queue/)
+  - [Backtracking](./cs/leetcode-150/backtracking/)
+  - [Graphs](./cs/leetcode-150/graphs/)
+  - [Advanced Graphs](./cs/leetcode-150/advanced-graphs/)
+  - [1-D Dynamic Programming](./cs/leetcode-150/1d-dynamic-programming/)
+  - [2-D Dynamic Programming](./cs/leetcode-150/2d-dynamic-programming/)
+  - [Greedy](./cs/leetcode-150/greedy/)
+  - [Intervals](./cs/leetcode-150/intervals/)
+  - [Math & Geometry](./cs/leetcode-150/math-and-geometry/)
+  - [Bit Manipulation](./cs/leetcode-150/bit-manipulation/)
+- [Haversine Distance](./cs/haversine-distance/) — great-circle distance with Python/SQL/JavaScript, and when to upgrade to Vincenty or Karney
+- [Vehicle Routing Problem](./cs/vehicle-routing/) — CVRP, VRPTW, pickup-and-delivery, and what Google OR-Tools actually does
+  - [Capacitated VRP](./cs/vehicle-routing/capacitated/)
+  - [Time Windows (VRPTW)](./cs/vehicle-routing/time-windows/)
+  - [Pickup and Delivery](./cs/vehicle-routing/pickup-and-delivery/)
+  - [Solution Approaches](./cs/vehicle-routing/solution-approaches/)
+- [Functional Core, Imperative Shell](./cs/functional-core-imperative-shell/) — Gary Bernhardt's architecture pattern
+
+## Web
+
+- [Web — category overview](./web/)
+- [Django](./web/django/) — 10-part series from beginner to expert
+  - [Part 1 — Setup and MVT](./web/django/part-01-setup-and-mvt/)
+  - [Part 2 — Models and the ORM](./web/django/part-02-models-and-orm/)
+  - [Part 3 — Views, URLs, and templates](./web/django/part-03-views-urls-templates/)
+  - [Part 4 — Forms and user input](./web/django/part-04-forms-and-user-input/)
+  - [Part 5 — Authentication](./web/django/part-05-authentication/)
+  - [Part 6 — DRF basics](./web/django/part-06-drf-basics/)
+  - [Part 7 — Advanced ORM](./web/django/part-07-advanced-orm/)
+  - [Part 8 — Caching and performance](./web/django/part-08-caching-and-performance/)
+  - [Part 9 — Async, Channels, and Celery](./web/django/part-09-async-and-background-tasks/)
+  - [Part 10 — Production](./web/django/part-10-production/)
+
+## Operations
+
+- [Ops — category overview](./ops/)
+- [Kubernetes](./ops/kubernetes/) — the container orchestrator: architecture, workloads, networking, storage, RBAC, autoscaling, footguns
+- [Helm](./ops/helm/) — the package manager for Kubernetes: charts, values, templates, releases
+- [Terraform](./ops/terraform/) — infrastructure as code: providers, resources, state, modules, multi-environment patterns
+- [GitOps](./ops/gitops/) — Git as the source of truth for infrastructure, with a reconciliation agent doing the work
+- [ArgoCD](./ops/argocd/) — the reference GitOps controller for Kubernetes
+- [Gitflow](./ops/gitflow/) — Vincent Driessen's 2010 branching model and its modern alternatives
+- [MLOps](./ops/mlops/) — the engineering discipline around getting ML models into production
 
 ## Conventions
 
