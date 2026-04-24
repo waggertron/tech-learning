@@ -28,6 +28,11 @@ export default defineConfig({
           autogenerate: { directory: 'posts' },
           collapsed: false,
         },
+        {
+          label: 'Personal',
+          autogenerate: { directory: 'personal' },
+          collapsed: false,
+        },
       ],
     }),
   ],

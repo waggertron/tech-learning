@@ -4,7 +4,7 @@ description: "Two parties, one degree of freedom, fear on both sides. Why cooper
 date: 2026-04-24
 tags: [game-theory, prisoners-dilemma, systems, philosophy]
 crosspost: [linkedin]
-canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-prisoners-dilemma/
+canonical: https://waggertron.github.io/tech-learning/personal/2026-04-24-prisoners-dilemma/
 ---
 
 Give it a moment to consider the concept of the prisoner's dilemma.
