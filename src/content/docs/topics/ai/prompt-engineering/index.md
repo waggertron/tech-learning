@@ -41,6 +41,7 @@ Prompt engineering is the practice of crafting and structuring the input text gi
 
 ## Subtopics
 
+- [Prompt templates](./templates/) — the canonical 12 reusable patterns (zero-shot, few-shot, CoT, ReAct, step-back, ToT, meta-prompting, …) with working examples
 - [Structured outputs](./structured-outputs/) — JSON mode, schema-constrained decoding, function calling
 - [Context window management](./context-window-management/) — lost-in-the-middle, compression, retrieval integration
 - [Prompt injection defense](./prompt-injection-defense/) — adversarial robustness patterns for agentic systems
