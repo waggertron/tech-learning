@@ -1,6 +1,6 @@
 ---
 title: "Part 4 — Forms and user input"
-description: `Form` vs `ModelForm`, validation hooks (`clean_field`, `clean`), rendering, CSRF, and formsets. The boundary where your app meets user input.
+description: "Form vs ModelForm, validation hooks (clean_field, clean), rendering, CSRF, and formsets. The boundary where your app meets user input."
 parent: django
 tags: [django, forms, validation, csrf]
 status: draft
