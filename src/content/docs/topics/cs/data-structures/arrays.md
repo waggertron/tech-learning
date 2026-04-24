@@ -108,58 +108,115 @@ def range_sum_array(nums):
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays & Hashing:**
-- [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
+Arrays are the most referenced data structure in the NeetCode 150 — 74 problems across 17 categories.
+
+**Arrays & Hashing:**
 - [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
-- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
-- [238. Product of Array Except Self](../../leetcode-150/arrays-and-hashing/238-product-of-array-except-self/)
 - [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
-- [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
 - [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
+- [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
+- [238. Product of Array Except Self](../../leetcode-150/arrays-and-hashing/238-product-of-array-except-self/)
+- [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
+- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
 
-**NeetCode 150 — Two Pointers:**
-- [167. Two Sum II — Input Array Is Sorted](../../leetcode-150/two-pointers/167-two-sum-ii/)
-- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/)
+**Two Pointers:**
 - [11. Container With Most Water](../../leetcode-150/two-pointers/011-container-with-most-water/)
+- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/)
 - [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/)
+- [167. Two Sum II — Input Array Is Sorted](../../leetcode-150/two-pointers/167-two-sum-ii/)
 
-**NeetCode 150 — Sliding Window:**
+**Sliding Window:**
 - [121. Best Time to Buy and Sell Stock](../../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/)
 - [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/)
 
-**NeetCode 150 — Stack:**
-- [150. Evaluate Reverse Polish Notation](../../leetcode-150/stack/150-evaluate-reverse-polish-notation/)
+**Stack:**
+- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/)
 - [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/)
 - [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
-- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/)
 
-**NeetCode 150 — Binary Search:**
-- [704. Binary Search](../../leetcode-150/binary-search/704-binary-search/)
-- [74. Search a 2D Matrix](../../leetcode-150/binary-search/074-search-a-2d-matrix/)
-- [875. Koko Eating Bananas](../../leetcode-150/binary-search/875-koko-eating-bananas/) — binary search on the answer
-- [153. Find Minimum in Rotated Sorted Array](../../leetcode-150/binary-search/153-find-minimum-in-rotated-sorted-array/)
+**Binary Search:**
+- [4. Median of Two Sorted Arrays](../../leetcode-150/binary-search/004-median-of-two-sorted-arrays/)
 - [33. Search in Rotated Sorted Array](../../leetcode-150/binary-search/033-search-in-rotated-sorted-array/)
-- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/) — per-key sorted list
-- [4. Median of Two Sorted Arrays](../../leetcode-150/binary-search/004-median-of-two-sorted-arrays/) — partition binary search
+- [74. Search a 2D Matrix](../../leetcode-150/binary-search/074-search-a-2d-matrix/)
+- [153. Find Minimum in Rotated Sorted Array](../../leetcode-150/binary-search/153-find-minimum-in-rotated-sorted-array/)
+- [704. Binary Search](../../leetcode-150/binary-search/704-binary-search/)
+- [875. Koko Eating Bananas](../../leetcode-150/binary-search/875-koko-eating-bananas/)
+- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/)
 
-**NeetCode 150 — Linked List:**
-- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array indexed as an implicit linked list
+**Linked List:**
+- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array indexed as implicit linked list
 
-**NeetCode 150 — Heap / Priority Queue:**
-- [1046. Last Stone Weight](../../leetcode-150/heap-priority-queue/1046-last-stone-weight/)
-- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/) — in-place quickselect alternative
-- [215. Kth Largest Element in an Array](../../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/) — three-way partition quickselect
+**Heap / Priority Queue:**
+- [215. Kth Largest Element in an Array](../../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/)
+- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
 
-**NeetCode 150 — Backtracking:**
-- [78. Subsets](../../leetcode-150/backtracking/078-subsets/)
+**Backtracking:**
 - [39. Combination Sum](../../leetcode-150/backtracking/039-combination-sum/)
-- [46. Permutations](../../leetcode-150/backtracking/046-permutations/)
-- [90. Subsets II](../../leetcode-150/backtracking/090-subsets-ii/) — sort + skip same-level duplicates
 - [40. Combination Sum II](../../leetcode-150/backtracking/040-combination-sum-ii/)
-- [79. Word Search](../../leetcode-150/backtracking/079-word-search/) — grid DFS + in-place visited
+- [46. Permutations](../../leetcode-150/backtracking/046-permutations/)
 - [51. N-Queens](../../leetcode-150/backtracking/051-n-queens/) — board as array
+- [78. Subsets](../../leetcode-150/backtracking/078-subsets/)
+- [79. Word Search](../../leetcode-150/backtracking/079-word-search/) — grid DFS + in-place visited
+- [90. Subsets II](../../leetcode-150/backtracking/090-subsets-ii/)
+- [131. Palindrome Partitioning](../../leetcode-150/backtracking/131-palindrome-partitioning/) — 2-D palindrome DP table
 
-*More categories coming soon — Trees, DP, etc.*
+**Tries:**
+- [212. Word Search II](../../leetcode-150/tries/212-word-search-ii/) — grid with in-place visited marker
+
+**Graphs:**
+- [130. Surrounded Regions](../../leetcode-150/graphs/130-surrounded-regions/)
+- [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/)
+- [417. Pacific Atlantic Water Flow](../../leetcode-150/graphs/417-pacific-atlantic-water-flow/)
+- [695. Max Area of Island](../../leetcode-150/graphs/695-max-area-of-island/)
+- [994. Rotting Oranges](../../leetcode-150/graphs/994-rotting-oranges/)
+
+**Advanced Graphs:**
+- [778. Swim in Rising Water](../../leetcode-150/advanced-graphs/778-swim-in-rising-water/) — grid with modified Dijkstra
+
+**1-D Dynamic Programming:**
+- [70. Climbing Stairs](../../leetcode-150/1d-dynamic-programming/070-climbing-stairs/)
+- [152. Maximum Product Subarray](../../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/)
+- [198. House Robber](../../leetcode-150/1d-dynamic-programming/198-house-robber/)
+- [213. House Robber II](../../leetcode-150/1d-dynamic-programming/213-house-robber-ii/)
+- [300. Longest Increasing Subsequence](../../leetcode-150/1d-dynamic-programming/300-longest-increasing-subsequence/)
+- [322. Coin Change](../../leetcode-150/1d-dynamic-programming/322-coin-change/)
+- [416. Partition Equal Subset Sum](../../leetcode-150/1d-dynamic-programming/416-partition-equal-subset-sum/)
+- [746. Min Cost Climbing Stairs](../../leetcode-150/1d-dynamic-programming/746-min-cost-climbing-stairs/)
+
+**2-D Dynamic Programming:**
+- [62. Unique Paths](../../leetcode-150/2d-dynamic-programming/062-unique-paths/)
+- [309. Best Time to Buy and Sell Stock with Cooldown](../../leetcode-150/2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
+- [312. Burst Balloons](../../leetcode-150/2d-dynamic-programming/312-burst-balloons/) — interval DP
+- [329. Longest Increasing Path in a Matrix](../../leetcode-150/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/)
+- [494. Target Sum](../../leetcode-150/2d-dynamic-programming/494-target-sum/)
+- [518. Coin Change II](../../leetcode-150/2d-dynamic-programming/518-coin-change-ii/)
+
+**Greedy:**
+- [45. Jump Game II](../../leetcode-150/greedy/045-jump-game-ii/)
+- [53. Maximum Subarray](../../leetcode-150/greedy/053-maximum-subarray/)
+- [55. Jump Game](../../leetcode-150/greedy/055-jump-game/)
+- [134. Gas Station](../../leetcode-150/greedy/134-gas-station/)
+- [1899. Merge Triplets to Form Target Triplet](../../leetcode-150/greedy/1899-merge-triplets-to-form-target-triplet/)
+
+**Intervals:**
+- [56. Merge Intervals](../../leetcode-150/intervals/056-merge-intervals/)
+- [57. Insert Interval](../../leetcode-150/intervals/057-insert-interval/)
+- [252. Meeting Rooms](../../leetcode-150/intervals/252-meeting-rooms/)
+- [253. Meeting Rooms II](../../leetcode-150/intervals/253-meeting-rooms-ii/)
+- [435. Non-overlapping Intervals](../../leetcode-150/intervals/435-non-overlapping-intervals/)
+- [1851. Minimum Interval to Include Each Query](../../leetcode-150/intervals/1851-minimum-interval-to-include-each-query/)
+
+**Math & Geometry:**
+- [43. Multiply Strings](../../leetcode-150/math-and-geometry/043-multiply-strings/) — digit array accumulator
+- [48. Rotate Image](../../leetcode-150/math-and-geometry/048-rotate-image/)
+- [50. Pow(x, n)](../../leetcode-150/math-and-geometry/050-pow-x-n/)
+- [54. Spiral Matrix](../../leetcode-150/math-and-geometry/054-spiral-matrix/)
+- [66. Plus One](../../leetcode-150/math-and-geometry/066-plus-one/)
+- [73. Set Matrix Zeroes](../../leetcode-150/math-and-geometry/073-set-matrix-zeroes/)
+
+**Bit Manipulation:**
+- [136. Single Number](../../leetcode-150/bit-manipulation/136-single-number/)
+- [338. Counting Bits](../../leetcode-150/bit-manipulation/338-counting-bits/)
 
 ## References
 

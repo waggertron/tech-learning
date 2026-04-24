@@ -128,23 +128,29 @@ class MinStack:
 
 ## LeetCode problems
 
-**NeetCode 150 — Two Pointers:**
-- [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/) — monotonic-stack alternative approach
+Stacks appear in 12 NeetCode 150 problems across 5 categories.
 
-**NeetCode 150 — Stack:**
+**Two Pointers:**
+- [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/) — monotonic-stack alternative
+
+**Stack:**
 - [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
-- [155. Min Stack](../../leetcode-150/stack/155-min-stack/)
+- [22. Generate Parentheses](../../leetcode-150/stack/022-generate-parentheses/) — recursion stack
+- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/) — monotonic increasing
 - [150. Evaluate Reverse Polish Notation](../../leetcode-150/stack/150-evaluate-reverse-polish-notation/)
-- [22. Generate Parentheses](../../leetcode-150/stack/022-generate-parentheses/) — recursion stack / backtracking
-- [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/) — monotonic decreasing stack
+- [155. Min Stack](../../leetcode-150/stack/155-min-stack/)
+- [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/) — monotonic decreasing
 - [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
-- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/) — monotonic increasing stack
 
-**NeetCode 150 — Trees:**
-- [230. Kth Smallest Element in a BST](../../leetcode-150/trees/230-kth-smallest-element-in-a-bst/) — iterative inorder with explicit stack
-- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/) — DFS variants use the recursion stack
+**Trees:**
+- [230. Kth Smallest Element in a BST](../../leetcode-150/trees/230-kth-smallest-element-in-a-bst/) — iterative inorder
+- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/) — DFS recursion stack
 
-*More coming soon — iterative DFS in Graphs.*
+**Graphs:**
+- [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/) — iterative DFS variant
+
+**Greedy:**
+- [678. Valid Parenthesis String](../../leetcode-150/greedy/678-valid-parenthesis-string/) — two-stack alternative
 
 ## References
 

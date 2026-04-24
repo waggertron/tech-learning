@@ -115,25 +115,38 @@ class MedianFinder:
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays & Hashing:**
-- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/) — size-k min-heap approach
+Heaps / priority queues appear in 17 NeetCode 150 problems across 7 categories.
 
-**NeetCode 150 — Sliding Window:**
+**Arrays & Hashing:**
+- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/) — size-k min-heap
+
+**Sliding Window:**
 - [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/) — lazy-deletion max-heap alternative
 
-**NeetCode 150 — Linked List:**
+**Linked List:**
 - [23. Merge k Sorted Lists](../../leetcode-150/linked-list/023-merge-k-sorted-lists/) — min-heap of k heads
 
-**NeetCode 150 — Heap / Priority Queue:**
-- [703. Kth Largest Element in a Stream](../../leetcode-150/heap-priority-queue/703-kth-largest-element-in-a-stream/) — size-K min-heap
-- [1046. Last Stone Weight](../../leetcode-150/heap-priority-queue/1046-last-stone-weight/) — max-heap via negation
-- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
+**Heap / Priority Queue:**
 - [215. Kth Largest Element in an Array](../../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/) — heap vs. quickselect
-- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — max-heap + cooldown queue
-- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/) — k-way merge across per-user feeds
 - [295. Find Median from Data Stream](../../leetcode-150/heap-priority-queue/295-find-median-from-data-stream/) — two-heap balancing
+- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/) — k-way merge across feeds
+- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — max-heap + cooldown queue
+- [703. Kth Largest Element in a Stream](../../leetcode-150/heap-priority-queue/703-kth-largest-element-in-a-stream/) — size-K min-heap
+- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
+- [1046. Last Stone Weight](../../leetcode-150/heap-priority-queue/1046-last-stone-weight/) — max-heap via negation
 
-*More coming soon — Dijkstra problems in Graphs.*
+**Advanced Graphs:**
+- [332. Reconstruct Itinerary](../../leetcode-150/advanced-graphs/332-reconstruct-itinerary/) — lexicographic neighbor heap
+- [743. Network Delay Time](../../leetcode-150/advanced-graphs/743-network-delay-time/) — Dijkstra
+- [778. Swim in Rising Water](../../leetcode-150/advanced-graphs/778-swim-in-rising-water/) — modified Dijkstra
+- [1584. Min Cost to Connect All Points](../../leetcode-150/advanced-graphs/1584-min-cost-to-connect-all-points/) — Prim's MST
+
+**Intervals:**
+- [253. Meeting Rooms II](../../leetcode-150/intervals/253-meeting-rooms-ii/) — end-time min-heap
+- [1851. Minimum Interval to Include Each Query](../../leetcode-150/intervals/1851-minimum-interval-to-include-each-query/) — offline + heap
+
+**Greedy:**
+- [846. Hand of Straights](../../leetcode-150/greedy/846-hand-of-straights/) — min-heap consumption
 
 ## References
 

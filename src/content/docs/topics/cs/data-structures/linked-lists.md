@@ -122,18 +122,26 @@ def remove_nth_from_end(head, n):
 
 ## LeetCode problems
 
-**NeetCode 150 — Linked List:**
-- [206. Reverse Linked List](../../leetcode-150/linked-list/206-reverse-linked-list/)
-- [21. Merge Two Sorted Lists](../../leetcode-150/linked-list/021-merge-two-sorted-lists/)
-- [141. Linked List Cycle](../../leetcode-150/linked-list/141-linked-list-cycle/) — Floyd's tortoise and hare
-- [143. Reorder List](../../leetcode-150/linked-list/143-reorder-list/)
-- [19. Remove Nth Node From End of List](../../leetcode-150/linked-list/019-remove-nth-node-from-end-of-list/) — offset two-pointer
-- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/)
+Linked lists appear in 13 NeetCode 150 problems across 3 categories.
+
+**Linked List:**
 - [2. Add Two Numbers](../../leetcode-150/linked-list/002-add-two-numbers/)
-- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array-as-linked-list with Floyd's
-- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — hash map + doubly linked list
+- [19. Remove Nth Node From End of List](../../leetcode-150/linked-list/019-remove-nth-node-from-end-of-list/) — offset two-pointer
+- [21. Merge Two Sorted Lists](../../leetcode-150/linked-list/021-merge-two-sorted-lists/)
 - [23. Merge k Sorted Lists](../../leetcode-150/linked-list/023-merge-k-sorted-lists/) — min-heap of heads
 - [25. Reverse Nodes in k-Group](../../leetcode-150/linked-list/025-reverse-nodes-in-k-group/)
+- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/)
+- [141. Linked List Cycle](../../leetcode-150/linked-list/141-linked-list-cycle/) — Floyd's tortoise and hare
+- [143. Reorder List](../../leetcode-150/linked-list/143-reorder-list/) — mid + reverse + weave
+- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — doubly linked list + hash map
+- [206. Reverse Linked List](../../leetcode-150/linked-list/206-reverse-linked-list/)
+- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/) — array-as-linked-list
+
+**Heap / Priority Queue:**
+- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/) — could use linked lists for per-user feed
+
+**Math & Geometry:**
+- [202. Happy Number](../../leetcode-150/math-and-geometry/202-happy-number/) — Floyd's on a numeric sequence
 
 ## References
 

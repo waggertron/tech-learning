@@ -128,7 +128,9 @@ def find_words(board, words):
 
 ## LeetCode problems
 
-**NeetCode 150 — Tries:**
+Tries drive all 3 NeetCode 150 problems in the Tries category.
+
+**Tries:**
 - [208. Implement Trie (Prefix Tree)](../../leetcode-150/tries/208-implement-trie/)
 - [211. Design Add and Search Words Data Structure](../../leetcode-150/tries/211-design-add-and-search-words-data-structure/) — trie + wildcard DFS
 - [212. Word Search II](../../leetcode-150/tries/212-word-search-ii/) — trie + grid DFS

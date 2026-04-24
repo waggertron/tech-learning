@@ -97,18 +97,29 @@ def max_sliding_window(nums, k):
 
 ## LeetCode problems
 
-**NeetCode 150 — Sliding Window:**
-- [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/) — monotonic deque is the optimal pattern
+Queues (and deques) appear in 12 NeetCode 150 problems across 5 categories.
 
-**NeetCode 150 — Trees:**
-- [102. Binary Tree Level Order Traversal](../../leetcode-150/trees/102-binary-tree-level-order-traversal/) — BFS per-level batching template
-- [199. Binary Tree Right Side View](../../leetcode-150/trees/199-binary-tree-right-side-view/) — BFS variant
+**Sliding Window:**
+- [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/) — monotonic deque
+
+**Trees:**
+- [102. Binary Tree Level Order Traversal](../../leetcode-150/trees/102-binary-tree-level-order-traversal/) — BFS per-level batching
+- [104. Maximum Depth of Binary Tree](../../leetcode-150/trees/104-maximum-depth-of-binary-tree/) — BFS level count
+- [199. Binary Tree Right Side View](../../leetcode-150/trees/199-binary-tree-right-side-view/)
 - [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/) — BFS with null markers
 
-**NeetCode 150 — Heap / Priority Queue:**
-- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — cooldown FIFO alongside a max-heap
+**Heap / Priority Queue:**
+- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — cooldown FIFO + max-heap
 
-*More coming soon — Graphs (Number of Islands, Rotting Oranges, Word Ladder).*
+**Graphs:**
+- [127. Word Ladder](../../leetcode-150/graphs/127-word-ladder/) — BFS
+- [133. Clone Graph](../../leetcode-150/graphs/133-clone-graph/) — BFS variant
+- [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/) — BFS on grid
+- [695. Max Area of Island](../../leetcode-150/graphs/695-max-area-of-island/) — BFS variant
+- [994. Rotting Oranges](../../leetcode-150/graphs/994-rotting-oranges/) — multi-source BFS
+
+**2-D Dynamic Programming:**
+- [329. Longest Increasing Path in a Matrix](../../leetcode-150/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/) — topological BFS variant
 
 ## References
 

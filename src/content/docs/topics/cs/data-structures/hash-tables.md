@@ -105,42 +105,67 @@ def longest_consecutive(nums):
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays & Hashing:**
+Hash tables appear in 34 NeetCode 150 problems across 14 categories.
+
+**Arrays & Hashing:**
+- [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
+- [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
+- [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
+- [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
 - [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
 - [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
-- [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
-- [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
 - [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
-- [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
-- [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
 
-**NeetCode 150 — Two Pointers:**
-- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/) — "improved" approach uses a hash set for inner two-sum
+**Two Pointers:**
+- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/) — hash-set variant for inner two-sum
 
-**NeetCode 150 — Sliding Window:**
+**Sliding Window:**
 - [3. Longest Substring Without Repeating Characters](../../leetcode-150/sliding-window/003-longest-substring-without-repeating-characters/)
+- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
 - [424. Longest Repeating Character Replacement](../../leetcode-150/sliding-window/424-longest-repeating-character-replacement/)
 - [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
-- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
 
-**NeetCode 150 — Stack:**
-- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/) — pair-map for close→open lookup
+**Stack:**
+- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
 
-**NeetCode 150 — Binary Search:**
-- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/) — outer key → sorted-list mapping
+**Binary Search:**
+- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/)
 
-**NeetCode 150 — Linked List:**
-- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/) — old → new node map
-- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — hash map + doubly linked list composite
+**Linked List:**
+- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/)
+- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/) — hash map + doubly linked list
 
-**NeetCode 150 — Trees:**
-- [105. Construct Binary Tree from Preorder and Inorder](../../leetcode-150/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/) — O(1) inorder-index lookup via hash map
+**Trees:**
+- [105. Construct Binary Tree from Preorder and Inorder](../../leetcode-150/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
 
-**NeetCode 150 — Heap / Priority Queue:**
-- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/) — frequency counts
-- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/) — user → tweets and follower → followees maps
+**Heap / Priority Queue:**
+- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/)
+- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/)
 
-*More categories coming soon — Graph (Clone Graph), Tries, etc.*
+**Backtracking:**
+- [17. Letter Combinations of a Phone Number](../../leetcode-150/backtracking/017-letter-combinations-of-a-phone-number/)
+- [51. N-Queens](../../leetcode-150/backtracking/051-n-queens/) — columns/diagonals as sets
+- [79. Word Search](../../leetcode-150/backtracking/079-word-search/) — Counter pruning
+- [90. Subsets II](../../leetcode-150/backtracking/090-subsets-ii/)
+
+**Graphs:**
+- [127. Word Ladder](../../leetcode-150/graphs/127-word-ladder/) — pattern-bucket adjacency
+- [133. Clone Graph](../../leetcode-150/graphs/133-clone-graph/)
+- [207. Course Schedule](../../leetcode-150/graphs/207-course-schedule/) — adjacency list
+- [269. Alien Dictionary](../../leetcode-150/graphs/269-alien-dictionary/)
+- [329. Longest Increasing Path in a Matrix](../../leetcode-150/graphs/329-longest-increasing-path-in-a-matrix/) — memoization cache
+- [417. Pacific Atlantic Water Flow](../../leetcode-150/graphs/417-pacific-atlantic-water-flow/) — reachability sets
+
+**1-D Dynamic Programming:**
+- [139. Word Break](../../leetcode-150/1d-dynamic-programming/139-word-break/)
+
+**Greedy:**
+- [763. Partition Labels](../../leetcode-150/greedy/763-partition-labels/)
+- [846. Hand of Straights](../../leetcode-150/greedy/846-hand-of-straights/)
+
+**Math & Geometry:**
+- [202. Happy Number](../../leetcode-150/math-and-geometry/202-happy-number/) — seen-set variant
+- [2013. Detect Squares](../../leetcode-150/math-and-geometry/2013-detect-squares/)
 
 ## References
 

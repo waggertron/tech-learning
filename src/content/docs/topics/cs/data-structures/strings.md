@@ -106,28 +106,48 @@ def group_anagrams(words):
 
 ## LeetCode problems
 
-**NeetCode 150 — Arrays & Hashing:**
-- [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
+Strings appear in 23 NeetCode 150 problems across 9 categories.
+
+**Arrays & Hashing:**
 - [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
+- [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
 - [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
 
-**NeetCode 150 — Two Pointers:**
+**Two Pointers:**
 - [125. Valid Palindrome](../../leetcode-150/two-pointers/125-valid-palindrome/)
 
-**NeetCode 150 — Sliding Window:**
+**Sliding Window:**
 - [3. Longest Substring Without Repeating Characters](../../leetcode-150/sliding-window/003-longest-substring-without-repeating-characters/)
+- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
 - [424. Longest Repeating Character Replacement](../../leetcode-150/sliding-window/424-longest-repeating-character-replacement/)
 - [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
-- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
 
-**NeetCode 150 — Stack:**
+**Stack:**
 - [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
 
-**NeetCode 150 — Backtracking:**
-- [131. Palindrome Partitioning](../../leetcode-150/backtracking/131-palindrome-partitioning/) — cut + palindrome check with optional DP table
+**Backtracking:**
 - [17. Letter Combinations of a Phone Number](../../leetcode-150/backtracking/017-letter-combinations-of-a-phone-number/)
+- [131. Palindrome Partitioning](../../leetcode-150/backtracking/131-palindrome-partitioning/)
 
-*More categories coming soon — DP on strings, etc.*
+**1-D Dynamic Programming:**
+- [5. Longest Palindromic Substring](../../leetcode-150/1d-dynamic-programming/005-longest-palindromic-substring/)
+- [91. Decode Ways](../../leetcode-150/1d-dynamic-programming/091-decode-ways/)
+- [139. Word Break](../../leetcode-150/1d-dynamic-programming/139-word-break/)
+- [647. Palindromic Substrings](../../leetcode-150/1d-dynamic-programming/647-palindromic-substrings/)
+
+**2-D Dynamic Programming:**
+- [10. Regular Expression Matching](../../leetcode-150/2d-dynamic-programming/010-regular-expression-matching/)
+- [72. Edit Distance](../../leetcode-150/2d-dynamic-programming/072-edit-distance/)
+- [97. Interleaving String](../../leetcode-150/2d-dynamic-programming/097-interleaving-string/)
+- [115. Distinct Subsequences](../../leetcode-150/2d-dynamic-programming/115-distinct-subsequences/)
+- [1143. Longest Common Subsequence](../../leetcode-150/2d-dynamic-programming/1143-longest-common-subsequence/)
+
+**Greedy:**
+- [678. Valid Parenthesis String](../../leetcode-150/greedy/678-valid-parenthesis-string/)
+- [763. Partition Labels](../../leetcode-150/greedy/763-partition-labels/)
+
+**Math & Geometry:**
+- [43. Multiply Strings](../../leetcode-150/math-and-geometry/043-multiply-strings/)
 
 ## References
 

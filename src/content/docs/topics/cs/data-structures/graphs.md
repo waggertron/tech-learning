@@ -158,7 +158,9 @@ class UnionFind:
 
 ## LeetCode problems
 
-**NeetCode 150 — Graphs:**
+Graphs appear in 18 NeetCode 150 problems across 2 categories (13 Graphs + 5 Advanced Graphs).
+
+**Graphs:**
 - [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/) — DFS/BFS/Union-Find
 - [695. Max Area of Island](../../leetcode-150/graphs/695-max-area-of-island/)
 - [133. Clone Graph](../../leetcode-150/graphs/133-clone-graph/)

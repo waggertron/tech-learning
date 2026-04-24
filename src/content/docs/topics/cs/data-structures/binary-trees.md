@@ -109,7 +109,9 @@ def lca(root, p, q):
 
 ## LeetCode problems
 
-**NeetCode 150 — Trees:**
+Binary trees (and BSTs) drive all 15 NeetCode 150 problems in the Trees category.
+
+**Trees:**
 - [226. Invert Binary Tree](../../leetcode-150/trees/226-invert-binary-tree/)
 - [104. Maximum Depth of Binary Tree](../../leetcode-150/trees/104-maximum-depth-of-binary-tree/)
 - [543. Diameter of Binary Tree](../../leetcode-150/trees/543-diameter-of-binary-tree/) — height + accumulator DFS
