@@ -32,8 +32,8 @@ Each problem page includes the prompt, all three approaches with working Python,
 10. [Tries](./tries/) (3 problems)
 11. [Graphs](./graphs/) (13 problems)
 12. [Advanced Graphs](./advanced-graphs/) (5 problems)
-13. 1-D Dynamic Programming (12) — *coming soon*
-14. 2-D Dynamic Programming (11) — *coming soon*
+13. [1-D Dynamic Programming](./1d-dynamic-programming/) (12 problems)
+14. [2-D Dynamic Programming](./2d-dynamic-programming/) (11 problems)
 15. Greedy (8) — *coming soon*
 16. Intervals (6) — *coming soon*
 17. Math & Geometry (8) — *coming soon*
