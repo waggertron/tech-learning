@@ -26,7 +26,7 @@ export default defineConfig({
         {
           label: 'Posts',
           autogenerate: { directory: 'posts' },
-          collapsed: true,
+          collapsed: false,
         },
       ],
     }),
