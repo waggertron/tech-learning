@@ -38,7 +38,7 @@ def my_pow(x, n):
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L1-L3 (sign handling) | O(1) | 1 | O(1) |
-| **L4, L5 (multiply loop)** | **O(1)** | **|n|** | **O(|n|)** ← dominates |
+| **L4, L5 (multiply loop)** | **O(1)** | **\|n\|** | **O(\|n\|)** ← dominates |
 
 Every multiplication is O(1); the loop runs |n| times.
 

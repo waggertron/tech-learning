@@ -39,7 +39,7 @@ def reverse(x):
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L1 (sign check) | O(1) | 1 | O(1) |
-| **L2 (string reverse)** | **O(d)** | **1** | **O(log|x|)** ← dominates |
+| **L2 (string reverse)** | **O(d)** | **1** | **O(log\|x\|)** ← dominates |
 | L3 (range check) | O(1) | 1 | O(1) |
 
 **Complexity**
@@ -79,10 +79,10 @@ def reverse(x):
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L1-L2 (init) | O(1) | 1 | O(1) |
-| **L3-L8 (digit loop)** | **O(1)** | **d** | **O(log|x|)** ← dominates |
-| L4-L5 (pop digit) | O(1) | d | O(log|x|) |
-| L6-L7 (overflow guard) | O(1) | d | O(log|x|) |
-| L8 (build result) | O(1) | d | O(log|x|) |
+| **L3-L8 (digit loop)** | **O(1)** | **d** | **O(log\|x\|)** ← dominates |
+| L4-L5 (pop digit) | O(1) | d | O(log\|x\|) |
+| L6-L7 (overflow guard) | O(1) | d | O(log\|x\|) |
+| L8 (build result) | O(1) | d | O(log\|x\|) |
 
 One iteration per digit; each iteration does O(1) work.
 
@@ -110,9 +110,9 @@ def reverse(x):
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| String manipulation | O(log|x|) | O(log|x|) | Shortest |
-| **Digit extraction + pre-check** | **O(log|x|)** | **O(1)** | Language-agnostic |
-| Compute then compare | O(log|x|) | O(1) | Needs 64-bit intermediate |
+| String manipulation | O(log\|x\|) | O(log\|x\|) | Shortest |
+| **Digit extraction + pre-check** | **O(log\|x\|)** | **O(1)** | Language-agnostic |
+| Compute then compare | O(log\|x\|) | O(1) | Needs 64-bit intermediate |
 
 The digit-extraction version with pre-push overflow check is the canonical interview answer, it proves you can reason about bounds under fixed-width arithmetic.
 

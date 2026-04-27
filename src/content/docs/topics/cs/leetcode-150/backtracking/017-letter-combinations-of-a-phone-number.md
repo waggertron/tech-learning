@@ -47,7 +47,7 @@ def letter_combinations(digits):
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L1 (outer loop) | O(1) overhead | n | O(n) |
-| **L2 (list comprehension)** | **O(k · |result|)** | **n** | **O(k^n · n)** ← dominates |
+| **L2 (list comprehension)** | **O(k · \|result\|)** | **n** | **O(k^n · n)** ← dominates |
 
 After processing digit i, `result` has k^i entries each of length i. The comprehension at step i processes k^(i-1) × k entries. Total work is the sum over i of i × k^i = O(n · k^n).
 

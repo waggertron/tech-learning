@@ -47,7 +47,7 @@ def min_window(s: str, t: str) -> str:
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (Counter(t)) | O(|t|) | 1 | O(|t|) |
+| L1 (Counter(t)) | O(\|t\|) | 1 | O(\|t\|) |
 | L2 (outer loop) | O(1) | n | O(n) |
 | L3 (inner loop) | O(1) | O(n²) total | O(n²) |
 | **L4 (Counter build)** | **O(n)** | **O(n²)** | **O(n³)** ← dominates |
@@ -89,7 +89,7 @@ def min_window(s: str, t: str) -> str:
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (init) | O(|t|) | 1 | O(|t|) |
+| L1-L2 (init) | O(\|t\|) | 1 | O(\|t\|) |
 | L3 (expand right) | O(1) | n | O(n) |
 | L4 (increment) | O(1) | n | O(n) |
 | **L5 (all-check)** | **O(k)** | **O(n) times** | **O(n · k)** ← dominates |
@@ -140,7 +140,7 @@ def min_window(s: str, t: str) -> str:
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L5 (init) | O(|t|) | 1 | O(|t|) |
+| L1-L5 (init) | O(\|t\|) | 1 | O(\|t\|) |
 | **L6 (expand right)** | **O(1) body** | **n** | **O(n)** ← dominates |
 | L7/L8/L9 (window update) | O(1) | n | O(n) |
 | L10-L14 (shrink left) | O(1) per step | at most n total | O(n) |
