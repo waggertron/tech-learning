@@ -46,3 +46,97 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 - **Path-DP DFS**, Count Good Nodes, Max Path Sum.
 - **Traversal-pair reconstruction**, Build Tree from Preorder+Inorder.
 - **DFS with null markers**, Serialize and Deserialize.
+
+## BFS level-separation techniques
+
+Level-order BFS puts nodes into a queue. The queue gives you nodes in the right order, but it doesn't tell you where one level ends and the next begins. Three tricks solve this. All are O(n) time and O(n) space; the differences are code clarity and constant-factor overhead.
+
+### Technique 1: level_size snapshot (preferred)
+
+Before processing a level, snapshot the queue length. That count is exactly how many nodes belong to the current level, because all of this level's nodes are already in the queue before any of their children get enqueued.
+
+```python
+from collections import deque
+
+def level_order(root):
+    if not root:
+        return []
+    result = []
+    queue = deque([root])
+    while queue:
+        level_size = len(queue)      # snapshot: children added after this don't count
+        level = []
+        for _ in range(level_size):
+            node = queue.popleft()
+            level.append(node.val)
+            if node.left:  queue.append(node.left)
+            if node.right: queue.append(node.right)
+        result.append(level)
+    return result
+```
+
+The `level_size` snapshot is the key detail. You add children *inside* the loop, but the loop runs exactly `level_size` times, so those children belong to the next iteration of the outer `while`. No sentinel, no second queue, no off-by-one to track.
+
+Problems that use this directly: **102 (Level Order Traversal)**, **199 (Right Side View)** (take the last node of each level), **637 (Average of Levels)**.
+
+### Technique 2: sentinel (None marker)
+
+Insert a `None` into the queue after the last node of each level. When you dequeue a `None`, the level just ended. If the queue is non-empty, push another `None` to mark the end of the next level.
+
+```python
+def level_order_sentinel(root):
+    if not root:
+        return []
+    result = []
+    queue = deque([root, None])   # None marks end of level 0
+    level = []
+    while queue:
+        node = queue.popleft()
+        if node is None:
+            result.append(level)
+            level = []
+            if queue:             # don't push a sentinel onto an empty queue
+                queue.append(None)
+        else:
+            level.append(node.val)
+            if node.left:  queue.append(node.left)
+            if node.right: queue.append(node.right)
+    return result
+```
+
+The sentinel approach works but requires the `if queue` guard to avoid an infinite loop (sentinel dequeued, queue empty, sentinel enqueued, repeat). It's also harder to scan at a glance because the level boundary is implicit in the `None` check rather than a counted loop. Useful to know for interviews where the interviewer asks "how else could you do it?"
+
+### Technique 3: two queues
+
+Keep two separate queues: `current` for the level being processed, `next_level` for the children being collected. Drain `current` completely, then swap.
+
+```python
+def level_order_two_queues(root):
+    if not root:
+        return []
+    result = []
+    current = deque([root])
+    while current:
+        level = []
+        next_level = deque()
+        while current:
+            node = current.popleft()
+            level.append(node.val)
+            if node.left:  next_level.append(node.left)
+            if node.right: next_level.append(node.right)
+        result.append(level)
+        current = next_level
+    return result
+```
+
+The two-queue version makes the level boundary structural: one queue per level, swapped when empty. It allocates a new `deque` each level, which adds minor overhead but makes the intent unambiguous. Older textbooks use this form; most modern solutions prefer the snapshot.
+
+### When to reach for each
+
+| Situation | Reach for |
+| --- | --- |
+| General level-order work | `level_size` snapshot |
+| Interviewer asks for alternatives | Sentinel or two-queue |
+| Teaching the concept from scratch | Two-queue (most explicit) |
+
+The snapshot is the default. Two or three lines shorter than the others, no sentinel bookkeeping, and the level boundary falls out of the loop bound naturally.

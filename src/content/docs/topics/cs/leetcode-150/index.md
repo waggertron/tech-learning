@@ -38,6 +38,7 @@ Each problem page includes the prompt, all three approaches with working Python,
 16. [Intervals](./intervals/) (6 problems)
 17. [Math & Geometry](./math-and-geometry/) (8 problems)
 18. [Bit Manipulation](./bit-manipulation/) (7 problems)
+19. [Matrix](./matrix/) (4 problems)
 
 ## Browse by difficulty
 
