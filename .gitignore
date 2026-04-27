@@ -26,5 +26,14 @@ pnpm-debug.log*
 .omc/
 
 # local AI workspace (not versioned, not published)
-.claude/
 CLAUDE.md
+.claude/*
+# exceptions: publish the quiz and learning skills (reusable; not personal data)
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/quiz/
+!.claude/skills/learning/
+.claude/skills/quiz/*
+!.claude/skills/quiz/SKILL.md
+.claude/skills/learning/*
+!.claude/skills/learning/SKILL.md
