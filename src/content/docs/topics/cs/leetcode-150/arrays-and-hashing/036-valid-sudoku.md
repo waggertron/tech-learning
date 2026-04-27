@@ -1,5 +1,5 @@
 ---
-title: "36. Valid Sudoku"
+title: "36. Valid Sudoku (Medium)"
 description: "Determine whether a 9x9 Sudoku board is valid, no duplicates in any row, column, or 3x3 box."
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, medium]

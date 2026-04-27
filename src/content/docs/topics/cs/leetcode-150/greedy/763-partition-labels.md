@@ -1,5 +1,5 @@
 ---
-title: "763. Partition Labels"
+title: "763. Partition Labels (Medium)"
 description: Partition a string so each letter appears in at most one piece; return the sizes of the pieces.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, hash-tables, strings, medium]

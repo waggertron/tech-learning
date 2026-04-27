@@ -35,15 +35,15 @@ Classic patterns: subsets, combinations, permutations, grid DFS, and constraint-
 
 ## Problems
 
-1. [78. Subsets](./078-subsets/), *Medium*
-2. [39. Combination Sum](./039-combination-sum/), *Medium*
-3. [46. Permutations](./046-permutations/), *Medium*
-4. [90. Subsets II](./090-subsets-ii/), *Medium*
-5. [40. Combination Sum II](./040-combination-sum-ii/), *Medium*
-6. [79. Word Search](./079-word-search/), *Medium*
-7. [131. Palindrome Partitioning](./131-palindrome-partitioning/), *Medium*
-8. [17. Letter Combinations of a Phone Number](./017-letter-combinations-of-a-phone-number/), *Medium*
-9. [51. N-Queens](./051-n-queens/), *Hard*
+1. [78. Subsets (Medium)](./078-subsets/)
+2. [39. Combination Sum (Medium)](./039-combination-sum/)
+3. [46. Permutations (Medium)](./046-permutations/)
+4. [90. Subsets II (Medium)](./090-subsets-ii/)
+5. [40. Combination Sum II (Medium)](./040-combination-sum-ii/)
+6. [79. Word Search (Medium)](./079-word-search/)
+7. [131. Palindrome Partitioning (Medium)](./131-palindrome-partitioning/)
+8. [17. Letter Combinations of a Phone Number (Medium)](./017-letter-combinations-of-a-phone-number/)
+9. [51. N-Queens (Hard)](./051-n-queens/)
 
 ## Key patterns unlocked here
 

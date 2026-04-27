@@ -1,5 +1,5 @@
 ---
-title: "252. Meeting Rooms"
+title: "252. Meeting Rooms (Easy)"
 description: Determine if a person can attend all meetings (no overlapping intervals).
 parent: intervals
 tags: [leetcode, neetcode-150, intervals, easy]

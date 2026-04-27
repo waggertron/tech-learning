@@ -1,5 +1,5 @@
 ---
-title: "704. Binary Search"
+title: "704. Binary Search (Easy)"
 description: Find a target in a sorted array, returning its index or -1.
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, easy]

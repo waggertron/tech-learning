@@ -1,5 +1,5 @@
 ---
-title: "46. Permutations"
+title: "46. Permutations (Medium)"
 description: Return all permutations of an array of distinct integers.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]

@@ -1,5 +1,5 @@
 ---
-title: "25. Reverse Nodes in k-Group"
+title: "25. Reverse Nodes in k-Group (Hard)"
 description: Reverse the nodes of a linked list k at a time, leaving any remainder of fewer than k nodes as-is.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, hard]

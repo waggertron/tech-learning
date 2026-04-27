@@ -1,5 +1,5 @@
 ---
-title: "138. Copy List with Random Pointer"
+title: "138. Copy List with Random Pointer (Medium)"
 description: Deep copy a linked list where each node also has a random pointer to any node in the list (or null).
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, hash-tables, medium]

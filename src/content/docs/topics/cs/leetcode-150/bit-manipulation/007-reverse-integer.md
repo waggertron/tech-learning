@@ -1,5 +1,5 @@
 ---
-title: "7. Reverse Integer"
+title: "7. Reverse Integer (Medium)"
 description: Reverse the digits of a signed 32-bit integer, returning 0 on overflow.
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, math, medium]

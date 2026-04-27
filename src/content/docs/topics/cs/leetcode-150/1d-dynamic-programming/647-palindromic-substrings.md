@@ -1,5 +1,5 @@
 ---
-title: "647. Palindromic Substrings"
+title: "647. Palindromic Substrings (Medium)"
 description: Count the number of palindromic substrings in a string.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]

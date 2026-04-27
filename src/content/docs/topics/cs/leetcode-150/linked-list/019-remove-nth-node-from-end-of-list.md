@@ -1,5 +1,5 @@
 ---
-title: "19. Remove Nth Node From End of List"
+title: "19. Remove Nth Node From End of List (Medium)"
 description: Remove the nth node from the end of a linked list in one pass.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, two-pointers, medium]

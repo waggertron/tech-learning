@@ -1,5 +1,5 @@
 ---
-title: "1851. Minimum Interval to Include Each Query"
+title: "1851. Minimum Interval to Include Each Query (Hard)"
 description: "For each query, find the smallest interval that contains the query point; or -1 if none."
 parent: intervals
 tags: [leetcode, neetcode-150, intervals, heap, offline-query, hard]

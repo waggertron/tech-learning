@@ -1,5 +1,5 @@
 ---
-title: "1448. Count Good Nodes in Binary Tree"
+title: "1448. Count Good Nodes in Binary Tree (Medium)"
 description: Count nodes on every root-to-node path that are >= every value above them.
 parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, medium]

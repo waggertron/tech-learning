@@ -1,5 +1,5 @@
 ---
-title: "124. Binary Tree Maximum Path Sum"
+title: "124. Binary Tree Maximum Path Sum (Hard)"
 description: Return the maximum path sum in a binary tree. A path is any sequence of adjacent nodes, not necessarily through the root.
 parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, tree-dp, hard]

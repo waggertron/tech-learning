@@ -1,5 +1,5 @@
 ---
-title: "191. Number of 1 Bits"
+title: "191. Number of 1 Bits (Easy)"
 description: Count the set bits in an unsigned 32-bit integer (popcount / Hamming weight).
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, easy]

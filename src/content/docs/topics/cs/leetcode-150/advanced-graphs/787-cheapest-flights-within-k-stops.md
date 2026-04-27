@@ -1,5 +1,5 @@
 ---
-title: "787. Cheapest Flights Within K Stops"
+title: "787. Cheapest Flights Within K Stops (Medium)"
 description: Find the cheapest price from src to dst with at most K stops, Bellman-Ford with a hop limit.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, bellman-ford, bfs, medium]

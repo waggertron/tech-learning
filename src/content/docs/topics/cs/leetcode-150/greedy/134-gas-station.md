@@ -1,5 +1,5 @@
 ---
-title: "134. Gas Station"
+title: "134. Gas Station (Medium)"
 description: Find the starting gas station from which you can complete a circular trip, or return -1.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]

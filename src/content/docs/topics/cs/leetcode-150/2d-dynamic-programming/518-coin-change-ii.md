@@ -1,5 +1,5 @@
 ---
-title: "518. Coin Change II"
+title: "518. Coin Change II (Medium)"
 description: Count the number of ways to make an amount using unlimited coins of each denomination.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]

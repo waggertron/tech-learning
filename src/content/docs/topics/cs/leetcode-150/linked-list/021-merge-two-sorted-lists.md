@@ -1,5 +1,5 @@
 ---
-title: "21. Merge Two Sorted Lists"
+title: "21. Merge Two Sorted Lists (Easy)"
 description: Merge two sorted linked lists into one sorted linked list.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, easy]

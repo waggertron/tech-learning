@@ -1,5 +1,5 @@
 ---
-title: "22. Generate Parentheses"
+title: "22. Generate Parentheses (Medium)"
 description: Generate all combinations of n pairs of well-formed parentheses.
 parent: stack
 tags: [leetcode, neetcode-150, stacks, backtracking, medium]

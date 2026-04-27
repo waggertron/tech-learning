@@ -1,5 +1,5 @@
 ---
-title: "1143. Longest Common Subsequence"
+title: "1143. Longest Common Subsequence (Medium)"
 description: Find the length of the longest common subsequence of two strings.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]

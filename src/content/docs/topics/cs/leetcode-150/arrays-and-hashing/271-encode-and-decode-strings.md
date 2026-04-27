@@ -1,5 +1,5 @@
 ---
-title: "271. Encode and Decode Strings"
+title: "271. Encode and Decode Strings (Medium)"
 description: "Design an encoding/decoding scheme for a list of strings, the inverse pair must be lossless."
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, design, medium]

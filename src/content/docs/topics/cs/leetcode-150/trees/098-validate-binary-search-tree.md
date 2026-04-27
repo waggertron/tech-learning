@@ -1,5 +1,5 @@
 ---
-title: "98. Validate Binary Search Tree"
+title: "98. Validate Binary Search Tree (Medium)"
 description: Determine whether a binary tree is a valid BST.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bst, dfs, medium]

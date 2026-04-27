@@ -1,5 +1,5 @@
 ---
-title: "417. Pacific Atlantic Water Flow"
+title: "417. Pacific Atlantic Water Flow (Medium)"
 description: Find cells from which water can flow to both the Pacific and Atlantic oceans.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, grid, medium]

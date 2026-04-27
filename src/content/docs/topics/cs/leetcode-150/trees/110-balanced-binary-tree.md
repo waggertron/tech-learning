@@ -1,5 +1,5 @@
 ---
-title: "110. Balanced Binary Tree"
+title: "110. Balanced Binary Tree (Easy)"
 description: Determine whether a binary tree is height-balanced.
 parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, easy]

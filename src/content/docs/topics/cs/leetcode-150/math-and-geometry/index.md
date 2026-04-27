@@ -20,14 +20,14 @@ Math & Geometry is a grab-bag of problems where the algorithmic insight is often
 
 ## Problems
 
-1. [48. Rotate Image](./048-rotate-image/), *Medium*
-2. [54. Spiral Matrix](./054-spiral-matrix/), *Medium*
-3. [73. Set Matrix Zeroes](./073-set-matrix-zeroes/), *Medium*
-4. [202. Happy Number](./202-happy-number/), *Easy*
-5. [66. Plus One](./066-plus-one/), *Easy*
-6. [50. Pow(x, n)](./050-pow-x-n/), *Medium*
-7. [43. Multiply Strings](./043-multiply-strings/), *Medium*
-8. [2013. Detect Squares](./2013-detect-squares/), *Medium*
+1. [48. Rotate Image (Medium)](./048-rotate-image/)
+2. [54. Spiral Matrix (Medium)](./054-spiral-matrix/)
+3. [73. Set Matrix Zeroes (Medium)](./073-set-matrix-zeroes/)
+4. [202. Happy Number (Easy)](./202-happy-number/)
+5. [66. Plus One (Easy)](./066-plus-one/)
+6. [50. Pow(x, n) (Medium)](./050-pow-x-n/)
+7. [43. Multiply Strings (Medium)](./043-multiply-strings/)
+8. [2013. Detect Squares (Medium)](./2013-detect-squares/)
 
 ## Key patterns unlocked here
 

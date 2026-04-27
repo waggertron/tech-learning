@@ -19,13 +19,13 @@ A stack is LIFO, you push and pop from the same end. In interviews it shows up i
 
 ## Problems
 
-1. [20. Valid Parentheses](./020-valid-parentheses/), *Easy*
-2. [155. Min Stack](./155-min-stack/), *Medium*
-3. [150. Evaluate Reverse Polish Notation](./150-evaluate-reverse-polish-notation/), *Medium*
-4. [22. Generate Parentheses](./022-generate-parentheses/), *Medium*
-5. [739. Daily Temperatures](./739-daily-temperatures/), *Medium*
-6. [853. Car Fleet](./853-car-fleet/), *Medium*
-7. [84. Largest Rectangle in Histogram](./084-largest-rectangle-in-histogram/), *Hard*
+1. [20. Valid Parentheses (Easy)](./020-valid-parentheses/)
+2. [155. Min Stack (Medium)](./155-min-stack/)
+3. [150. Evaluate Reverse Polish Notation (Medium)](./150-evaluate-reverse-polish-notation/)
+4. [22. Generate Parentheses (Medium)](./022-generate-parentheses/)
+5. [739. Daily Temperatures (Medium)](./739-daily-temperatures/)
+6. [853. Car Fleet (Medium)](./853-car-fleet/)
+7. [84. Largest Rectangle in Histogram (Hard)](./084-largest-rectangle-in-histogram/)
 
 ## Key patterns unlocked here
 

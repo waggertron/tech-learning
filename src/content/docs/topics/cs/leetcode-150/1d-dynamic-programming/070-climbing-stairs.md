@@ -1,5 +1,5 @@
 ---
-title: "70. Climbing Stairs"
+title: "70. Climbing Stairs (Easy)"
 description: Count ways to climb n stairs taking 1 or 2 steps at a time.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, fibonacci, easy]

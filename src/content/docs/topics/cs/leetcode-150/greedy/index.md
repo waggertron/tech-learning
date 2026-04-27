@@ -19,14 +19,14 @@ Two classic proof structures:
 
 ## Problems
 
-1. [53. Maximum Subarray](./053-maximum-subarray/), *Medium*
-2. [55. Jump Game](./055-jump-game/), *Medium*
-3. [45. Jump Game II](./045-jump-game-ii/), *Medium*
-4. [134. Gas Station](./134-gas-station/), *Medium*
-5. [846. Hand of Straights](./846-hand-of-straights/), *Medium*
-6. [1899. Merge Triplets to Form Target Triplet](./1899-merge-triplets-to-form-target-triplet/), *Medium*
-7. [763. Partition Labels](./763-partition-labels/), *Medium*
-8. [678. Valid Parenthesis String](./678-valid-parenthesis-string/), *Medium*
+1. [53. Maximum Subarray (Medium)](./053-maximum-subarray/)
+2. [55. Jump Game (Medium)](./055-jump-game/)
+3. [45. Jump Game II (Medium)](./045-jump-game-ii/)
+4. [134. Gas Station (Medium)](./134-gas-station/)
+5. [846. Hand of Straights (Medium)](./846-hand-of-straights/)
+6. [1899. Merge Triplets to Form Target Triplet (Medium)](./1899-merge-triplets-to-form-target-triplet/)
+7. [763. Partition Labels (Medium)](./763-partition-labels/)
+8. [678. Valid Parenthesis String (Medium)](./678-valid-parenthesis-string/)
 
 ## Key patterns unlocked here
 

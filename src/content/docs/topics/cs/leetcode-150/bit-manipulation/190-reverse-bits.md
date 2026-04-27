@@ -1,5 +1,5 @@
 ---
-title: "190. Reverse Bits"
+title: "190. Reverse Bits (Easy)"
 description: Reverse the bits of a 32-bit unsigned integer.
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, easy]

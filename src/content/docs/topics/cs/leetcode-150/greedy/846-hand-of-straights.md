@@ -1,5 +1,5 @@
 ---
-title: "846. Hand of Straights"
+title: "846. Hand of Straights (Medium)"
 description: Determine whether a hand of cards can be rearranged into groups of consecutive runs of size k.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, hash-tables, medium]

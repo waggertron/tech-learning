@@ -1,5 +1,5 @@
 ---
-title: "153. Find Minimum in Rotated Sorted Array"
+title: "153. Find Minimum in Rotated Sorted Array (Medium)"
 description: Find the minimum element in a sorted array that has been rotated by some unknown pivot.
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]

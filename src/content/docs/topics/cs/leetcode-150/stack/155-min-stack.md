@@ -1,5 +1,5 @@
 ---
-title: "155. Min Stack"
+title: "155. Min Stack (Medium)"
 description: "Design a stack that supports push, pop, top, and getMin all in O(1)."
 parent: stack
 tags: [leetcode, neetcode-150, stacks, design, medium]

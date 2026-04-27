@@ -1,5 +1,5 @@
 ---
-title: "121. Best Time to Buy and Sell Stock"
+title: "121. Best Time to Buy and Sell Stock (Easy)"
 description: Maximize profit from one buy and one sell, given an array of daily prices.
 parent: sliding-window
 tags: [leetcode, neetcode-150, arrays, sliding-window, easy]

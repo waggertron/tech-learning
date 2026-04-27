@@ -1,5 +1,5 @@
 ---
-title: "778. Swim in Rising Water"
+title: "778. Swim in Rising Water (Hard)"
 description: Find the minimum time (max grid cell on the path) to swim from top-left to bottom-right, Dijkstra on min-max edges.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, dijkstra, binary-search, union-find, hard]

@@ -1,5 +1,5 @@
 ---
-title: "213. House Robber II"
+title: "213. House Robber II (Medium)"
 description: House Robber but the houses are arranged in a circle, the first and last are adjacent.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]

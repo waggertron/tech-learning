@@ -1,5 +1,5 @@
 ---
-title: "54. Spiral Matrix"
+title: "54. Spiral Matrix (Medium)"
 description: Return all elements of an m×n matrix in spiral order.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]

@@ -1,5 +1,5 @@
 ---
-title: "572. Subtree of Another Tree"
+title: "572. Subtree of Another Tree (Easy)"
 description: Given the roots of two trees, determine whether one is a subtree of the other.
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]

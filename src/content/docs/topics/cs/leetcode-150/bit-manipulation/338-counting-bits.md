@@ -1,5 +1,5 @@
 ---
-title: "338. Counting Bits"
+title: "338. Counting Bits (Easy)"
 description: Return an array where the i-th element is the number of 1-bits in i, for all i from 0 to n.
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, dp, easy]

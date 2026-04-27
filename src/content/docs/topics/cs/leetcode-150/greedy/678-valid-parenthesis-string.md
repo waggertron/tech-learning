@@ -1,5 +1,5 @@
 ---
-title: "678. Valid Parenthesis String"
+title: "678. Valid Parenthesis String (Medium)"
 description: Determine if a string of '(', ')', and '*' is valid, where '*' can be '(', ')', or empty.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, dp, stacks, medium]

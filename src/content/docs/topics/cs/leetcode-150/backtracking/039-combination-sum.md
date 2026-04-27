@@ -1,5 +1,5 @@
 ---
-title: "39. Combination Sum"
+title: "39. Combination Sum (Medium)"
 description: Find all unique combinations from a candidate set that sum to a target (unlimited reuse of each candidate).
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]

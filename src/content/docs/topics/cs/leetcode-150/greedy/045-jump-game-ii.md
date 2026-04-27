@@ -1,5 +1,5 @@
 ---
-title: "45. Jump Game II"
+title: "45. Jump Game II (Medium)"
 description: Minimum jumps to reach the last index.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, bfs, medium]

@@ -1,5 +1,5 @@
 ---
-title: "199. Binary Tree Right Side View"
+title: "199. Binary Tree Right Side View (Medium)"
 description: Return the values visible when standing to the right of a binary tree, one value per level, the rightmost.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, dfs, medium]

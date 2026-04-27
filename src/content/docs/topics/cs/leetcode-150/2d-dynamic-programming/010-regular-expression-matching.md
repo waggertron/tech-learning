@@ -1,5 +1,5 @@
 ---
-title: "10. Regular Expression Matching"
+title: "10. Regular Expression Matching (Hard)"
 description: Match a string against a pattern with '.' (any single char) and '*' (zero or more of the preceding element).
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, regex, hard]

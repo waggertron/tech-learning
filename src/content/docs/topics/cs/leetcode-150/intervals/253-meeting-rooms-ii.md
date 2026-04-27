@@ -1,5 +1,5 @@
 ---
-title: "253. Meeting Rooms II"
+title: "253. Meeting Rooms II (Medium)"
 description: Minimum number of rooms needed to hold all meetings.
 parent: intervals
 tags: [leetcode, neetcode-150, intervals, heap, sweep-line, medium]

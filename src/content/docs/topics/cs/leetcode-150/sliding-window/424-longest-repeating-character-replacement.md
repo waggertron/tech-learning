@@ -1,5 +1,5 @@
 ---
-title: "424. Longest Repeating Character Replacement"
+title: "424. Longest Repeating Character Replacement (Medium)"
 description: Given a string and k, find the longest substring you can make uniform by replacing up to k characters.
 parent: sliding-window
 tags: [leetcode, neetcode-150, strings, sliding-window, medium]

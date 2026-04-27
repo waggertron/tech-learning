@@ -1,5 +1,5 @@
 ---
-title: "1899. Merge Triplets to Form Target Triplet"
+title: "1899. Merge Triplets to Form Target Triplet (Medium)"
 description: Using element-wise max over a subset of triplets, can you produce a given target triplet?
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]

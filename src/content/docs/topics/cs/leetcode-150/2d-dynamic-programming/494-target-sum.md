@@ -1,5 +1,5 @@
 ---
-title: "494. Target Sum"
+title: "494. Target Sum (Medium)"
 description: Count the number of ways to assign + and − signs to an integer array so the signed sum equals a target.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]

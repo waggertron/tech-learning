@@ -1,5 +1,5 @@
 ---
-title: "150. Evaluate Reverse Polish Notation"
+title: "150. Evaluate Reverse Polish Notation (Medium)"
 description: Evaluate an arithmetic expression given in Reverse Polish (postfix) notation.
 parent: stack
 tags: [leetcode, neetcode-150, stacks, medium]

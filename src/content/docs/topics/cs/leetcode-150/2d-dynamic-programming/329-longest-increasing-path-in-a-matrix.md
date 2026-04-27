@@ -1,5 +1,5 @@
 ---
-title: "329. Longest Increasing Path in a Matrix"
+title: "329. Longest Increasing Path in a Matrix (Hard)"
 description: Find the length of the longest strictly increasing path in a 2D grid.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, dfs, memoization, grid, hard]

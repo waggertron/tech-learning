@@ -1,5 +1,5 @@
 ---
-title: "49. Group Anagrams"
+title: "49. Group Anagrams (Medium)"
 description: Group strings that are anagrams of each other.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, hash-tables, medium]

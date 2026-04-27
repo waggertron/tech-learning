@@ -1,5 +1,5 @@
 ---
-title: "146. LRU Cache"
+title: "146. LRU Cache (Medium)"
 description: Design a Least-Recently-Used cache with O(1) get and put.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, hash-tables, design, medium]

@@ -1,5 +1,5 @@
 ---
-title: "130. Surrounded Regions"
+title: "130. Surrounded Regions (Medium)"
 description: Capture all regions of O's that are completely surrounded by X's on a 2D board.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, grid, medium]

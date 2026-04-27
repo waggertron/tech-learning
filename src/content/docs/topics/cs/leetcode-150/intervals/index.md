@@ -19,12 +19,12 @@ Interval problems reduce to a few techniques:
 
 ## Problems
 
-1. [57. Insert Interval](./057-insert-interval/), *Medium*
-2. [56. Merge Intervals](./056-merge-intervals/), *Medium*
-3. [435. Non-overlapping Intervals](./435-non-overlapping-intervals/), *Medium*
-4. [252. Meeting Rooms](./252-meeting-rooms/), *Easy*
-5. [253. Meeting Rooms II](./253-meeting-rooms-ii/), *Medium*
-6. [1851. Minimum Interval to Include Each Query](./1851-minimum-interval-to-include-each-query/), *Hard*
+1. [57. Insert Interval (Medium)](./057-insert-interval/)
+2. [56. Merge Intervals (Medium)](./056-merge-intervals/)
+3. [435. Non-overlapping Intervals (Medium)](./435-non-overlapping-intervals/)
+4. [252. Meeting Rooms (Easy)](./252-meeting-rooms/)
+5. [253. Meeting Rooms II (Medium)](./253-meeting-rooms-ii/)
+6. [1851. Minimum Interval to Include Each Query (Hard)](./1851-minimum-interval-to-include-each-query/)
 
 ## Key patterns unlocked here
 

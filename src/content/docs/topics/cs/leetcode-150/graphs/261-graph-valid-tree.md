@@ -1,5 +1,5 @@
 ---
-title: "261. Graph Valid Tree"
+title: "261. Graph Valid Tree (Medium)"
 description: Determine whether an undirected graph is a valid tree (connected and acyclic).
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, dfs, medium]

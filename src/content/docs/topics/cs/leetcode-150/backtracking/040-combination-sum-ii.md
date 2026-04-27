@@ -1,5 +1,5 @@
 ---
-title: "40. Combination Sum II"
+title: "40. Combination Sum II (Medium)"
 description: Find all unique combinations where each candidate is used at most once and the sum equals the target.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]

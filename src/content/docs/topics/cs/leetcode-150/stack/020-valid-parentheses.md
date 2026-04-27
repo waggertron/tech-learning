@@ -1,5 +1,5 @@
 ---
-title: "20. Valid Parentheses"
+title: "20. Valid Parentheses (Easy)"
 description: "Determine whether a string of brackets (), [], {} is correctly nested and closed."
 parent: stack
 tags: [leetcode, neetcode-150, stacks, strings, easy]

@@ -20,11 +20,11 @@ The Graphs category taught BFS/DFS/Union-Find/topo sort. This category adds the 
 
 ## Problems
 
-1. [332. Reconstruct Itinerary](./332-reconstruct-itinerary/), *Hard*
-2. [1584. Min Cost to Connect All Points](./1584-min-cost-to-connect-all-points/), *Medium*
-3. [743. Network Delay Time](./743-network-delay-time/), *Medium*
-4. [787. Cheapest Flights Within K Stops](./787-cheapest-flights-within-k-stops/), *Medium*
-5. [778. Swim in Rising Water](./778-swim-in-rising-water/), *Hard*
+1. [332. Reconstruct Itinerary (Hard)](./332-reconstruct-itinerary/)
+2. [1584. Min Cost to Connect All Points (Medium)](./1584-min-cost-to-connect-all-points/)
+3. [743. Network Delay Time (Medium)](./743-network-delay-time/)
+4. [787. Cheapest Flights Within K Stops (Medium)](./787-cheapest-flights-within-k-stops/)
+5. [778. Swim in Rising Water (Hard)](./778-swim-in-rising-water/)
 
 *Note: [269. Alien Dictionary](../graphs/269-alien-dictionary/) is sometimes categorized here. This site places it in the Graphs category since it's a topological-sort variant.*
 

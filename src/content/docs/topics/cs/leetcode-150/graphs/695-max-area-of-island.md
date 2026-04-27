@@ -1,5 +1,5 @@
 ---
-title: "695. Max Area of Island"
+title: "695. Max Area of Island (Medium)"
 description: Find the largest island by cell count in a 2D grid.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, medium]

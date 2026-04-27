@@ -1,5 +1,5 @@
 ---
-title: "543. Diameter of Binary Tree"
+title: "543. Diameter of Binary Tree (Easy)"
 description: Return the length of the longest path between any two nodes in a binary tree.
 parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, easy]

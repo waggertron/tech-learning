@@ -20,21 +20,21 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 
 ## Problems
 
-1. [226. Invert Binary Tree](./226-invert-binary-tree/), *Easy*
-2. [104. Maximum Depth of Binary Tree](./104-maximum-depth-of-binary-tree/), *Easy*
-3. [543. Diameter of Binary Tree](./543-diameter-of-binary-tree/), *Easy*
-4. [110. Balanced Binary Tree](./110-balanced-binary-tree/), *Easy*
-5. [100. Same Tree](./100-same-tree/), *Easy*
-6. [572. Subtree of Another Tree](./572-subtree-of-another-tree/), *Easy*
-7. [235. Lowest Common Ancestor of a BST](./235-lowest-common-ancestor-of-a-bst/), *Medium*
-8. [102. Binary Tree Level Order Traversal](./102-binary-tree-level-order-traversal/), *Medium*
-9. [199. Binary Tree Right Side View](./199-binary-tree-right-side-view/), *Medium*
-10. [1448. Count Good Nodes in Binary Tree](./1448-count-good-nodes-in-binary-tree/), *Medium*
-11. [98. Validate Binary Search Tree](./098-validate-binary-search-tree/), *Medium*
-12. [230. Kth Smallest Element in a BST](./230-kth-smallest-element-in-a-bst/), *Medium*
-13. [105. Construct Binary Tree from Preorder and Inorder Traversal](./105-construct-binary-tree-from-preorder-and-inorder-traversal/), *Medium*
-14. [124. Binary Tree Maximum Path Sum](./124-binary-tree-maximum-path-sum/), *Hard*
-15. [297. Serialize and Deserialize Binary Tree](./297-serialize-and-deserialize-binary-tree/), *Hard*
+1. [226. Invert Binary Tree (Easy)](./226-invert-binary-tree/)
+2. [104. Maximum Depth of Binary Tree (Easy)](./104-maximum-depth-of-binary-tree/)
+3. [543. Diameter of Binary Tree (Easy)](./543-diameter-of-binary-tree/)
+4. [110. Balanced Binary Tree (Easy)](./110-balanced-binary-tree/)
+5. [100. Same Tree (Easy)](./100-same-tree/)
+6. [572. Subtree of Another Tree (Easy)](./572-subtree-of-another-tree/)
+7. [235. Lowest Common Ancestor of a BST (Medium)](./235-lowest-common-ancestor-of-a-bst/)
+8. [102. Binary Tree Level Order Traversal (Medium)](./102-binary-tree-level-order-traversal/)
+9. [199. Binary Tree Right Side View (Medium)](./199-binary-tree-right-side-view/)
+10. [1448. Count Good Nodes in Binary Tree (Medium)](./1448-count-good-nodes-in-binary-tree/)
+11. [98. Validate Binary Search Tree (Medium)](./098-validate-binary-search-tree/)
+12. [230. Kth Smallest Element in a BST (Medium)](./230-kth-smallest-element-in-a-bst/)
+13. [105. Construct Binary Tree from Preorder and Inorder Traversal (Medium)](./105-construct-binary-tree-from-preorder-and-inorder-traversal/)
+14. [124. Binary Tree Maximum Path Sum (Hard)](./124-binary-tree-maximum-path-sum/)
+15. [297. Serialize and Deserialize Binary Tree (Hard)](./297-serialize-and-deserialize-binary-tree/)
 
 ## Key patterns unlocked here
 

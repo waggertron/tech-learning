@@ -1,5 +1,5 @@
 ---
-title: "1. Two Sum"
+title: "1. Two Sum (Easy)"
 description: Return indices of the two numbers in an array that add up to a target.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, easy]

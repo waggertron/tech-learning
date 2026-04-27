@@ -1,5 +1,5 @@
 ---
-title: "210. Course Schedule II"
+title: "210. Course Schedule II (Medium)"
 description: Return a valid order to finish all courses, or [] if impossible, topological sort of a DAG.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, medium]

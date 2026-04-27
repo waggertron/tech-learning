@@ -1,5 +1,5 @@
 ---
-title: "141. Linked List Cycle"
+title: "141. Linked List Cycle (Easy)"
 description: Determine whether a linked list contains a cycle.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, two-pointers, easy]

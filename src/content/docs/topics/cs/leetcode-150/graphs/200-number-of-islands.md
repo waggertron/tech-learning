@@ -1,5 +1,5 @@
 ---
-title: "200. Number of Islands"
+title: "200. Number of Islands (Medium)"
 description: Count the number of islands (connected components of land cells) in a 2D grid.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, union-find, medium]

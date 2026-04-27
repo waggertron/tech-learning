@@ -1,5 +1,5 @@
 ---
-title: "416. Partition Equal Subset Sum"
+title: "416. Partition Equal Subset Sum (Medium)"
 description: Determine if an integer array can be partitioned into two subsets with equal sums, 0/1 knapsack.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]

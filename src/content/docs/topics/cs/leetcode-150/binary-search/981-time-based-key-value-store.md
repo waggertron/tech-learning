@@ -1,5 +1,5 @@
 ---
-title: "981. Time Based Key-Value Store"
+title: "981. Time Based Key-Value Store (Medium)"
 description: Design a time-versioned key-value store supporting set(key, value, timestamp) and get(key, timestamp).
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, hash-tables, design, medium]

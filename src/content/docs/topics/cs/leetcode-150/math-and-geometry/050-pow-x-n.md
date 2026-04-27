@@ -1,5 +1,5 @@
 ---
-title: "50. Pow(x, n)"
+title: "50. Pow(x, n) (Medium)"
 description: Compute x raised to the power n, fast exponentiation.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, recursion, medium]

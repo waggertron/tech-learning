@@ -1,5 +1,5 @@
 ---
-title: "74. Search a 2D Matrix"
+title: "74. Search a 2D Matrix (Medium)"
 description: Search for a target in an m×n matrix whose rows are sorted and each row's first element exceeds the previous row's last.
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]

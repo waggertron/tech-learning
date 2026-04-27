@@ -1,5 +1,5 @@
 ---
-title: "84. Largest Rectangle in Histogram"
+title: "84. Largest Rectangle in Histogram (Hard)"
 description: Find the largest rectangular area that fits under a histogram of unit-width bars.
 parent: stack
 tags: [leetcode, neetcode-150, arrays, stacks, monotonic-stack, hard]

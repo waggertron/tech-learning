@@ -1,5 +1,5 @@
 ---
-title: "746. Min Cost Climbing Stairs"
+title: "746. Min Cost Climbing Stairs (Easy)"
 description: Minimum cost to reach the top, where each step has a cost and you can start from step 0 or 1.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, easy]

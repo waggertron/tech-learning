@@ -18,17 +18,17 @@ When the state needs two indices, usually "position in A × position in B" or "r
 
 ## Problems
 
-1. [62. Unique Paths](./062-unique-paths/), *Medium*
-2. [1143. Longest Common Subsequence](./1143-longest-common-subsequence/), *Medium*
-3. [309. Best Time to Buy and Sell Stock with Cooldown](./309-best-time-to-buy-and-sell-stock-with-cooldown/), *Medium*
-4. [518. Coin Change II](./518-coin-change-ii/), *Medium*
-5. [494. Target Sum](./494-target-sum/), *Medium*
-6. [97. Interleaving String](./097-interleaving-string/), *Medium*
-7. [329. Longest Increasing Path in a Matrix](./329-longest-increasing-path-in-a-matrix/), *Hard*
-8. [115. Distinct Subsequences](./115-distinct-subsequences/), *Hard*
-9. [72. Edit Distance](./072-edit-distance/), *Hard*
-10. [312. Burst Balloons](./312-burst-balloons/), *Hard*
-11. [10. Regular Expression Matching](./010-regular-expression-matching/), *Hard*
+1. [62. Unique Paths (Medium)](./062-unique-paths/)
+2. [1143. Longest Common Subsequence (Medium)](./1143-longest-common-subsequence/)
+3. [309. Best Time to Buy and Sell Stock with Cooldown (Medium)](./309-best-time-to-buy-and-sell-stock-with-cooldown/)
+4. [518. Coin Change II (Medium)](./518-coin-change-ii/)
+5. [494. Target Sum (Medium)](./494-target-sum/)
+6. [97. Interleaving String (Medium)](./097-interleaving-string/)
+7. [329. Longest Increasing Path in a Matrix (Hard)](./329-longest-increasing-path-in-a-matrix/)
+8. [115. Distinct Subsequences (Hard)](./115-distinct-subsequences/)
+9. [72. Edit Distance (Hard)](./072-edit-distance/)
+10. [312. Burst Balloons (Hard)](./312-burst-balloons/)
+11. [10. Regular Expression Matching (Hard)](./010-regular-expression-matching/)
 
 ## Key patterns unlocked here
 

@@ -1,5 +1,5 @@
 ---
-title: "42. Trapping Rain Water"
+title: "42. Trapping Rain Water (Hard)"
 description: Compute how much water is trapped between bars of varying heights after it rains.
 parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, stacks, dp, hard]

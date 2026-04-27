@@ -1,5 +1,5 @@
 ---
-title: "875. Koko Eating Bananas"
+title: "875. Koko Eating Bananas (Medium)"
 description: Find the minimum eating speed k such that Koko can finish all banana piles within h hours.
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]

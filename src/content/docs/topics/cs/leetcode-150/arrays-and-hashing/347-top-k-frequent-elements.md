@@ -1,5 +1,5 @@
 ---
-title: "347. Top K Frequent Elements"
+title: "347. Top K Frequent Elements (Medium)"
 description: Return the k most frequent elements in an array.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, heaps, medium]

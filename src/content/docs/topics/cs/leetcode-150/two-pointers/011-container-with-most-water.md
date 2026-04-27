@@ -1,5 +1,5 @@
 ---
-title: "11. Container With Most Water"
+title: "11. Container With Most Water (Medium)"
 description: "Given an array of heights, find two lines that together with the x-axis form a container holding the most water."
 parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, greedy, medium]

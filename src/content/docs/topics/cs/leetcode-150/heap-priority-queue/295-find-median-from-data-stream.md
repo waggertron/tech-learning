@@ -1,5 +1,5 @@
 ---
-title: "295. Find Median from Data Stream"
+title: "295. Find Median from Data Stream (Hard)"
 description: Continuously compute the median of a stream of numbers.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, design, hard]

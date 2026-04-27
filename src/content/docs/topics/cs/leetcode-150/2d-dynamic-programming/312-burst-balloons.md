@@ -1,5 +1,5 @@
 ---
-title: "312. Burst Balloons"
+title: "312. Burst Balloons (Hard)"
 description: Maximize coins by choosing the order to burst balloons, where each burst earns a product of neighboring values.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, interval-dp, hard]

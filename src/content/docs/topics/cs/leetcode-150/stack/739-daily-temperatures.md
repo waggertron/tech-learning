@@ -1,5 +1,5 @@
 ---
-title: "739. Daily Temperatures"
+title: "739. Daily Temperatures (Medium)"
 description: For each day, find how many days until a warmer temperature.
 parent: stack
 tags: [leetcode, neetcode-150, arrays, stacks, monotonic-stack, medium]

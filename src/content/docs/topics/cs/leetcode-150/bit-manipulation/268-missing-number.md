@@ -1,5 +1,5 @@
 ---
-title: "268. Missing Number"
+title: "268. Missing Number (Easy)"
 description: Find the missing number from an array of distinct numbers in [0, n].
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, math, easy]

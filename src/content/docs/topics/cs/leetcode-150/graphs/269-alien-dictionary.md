@@ -1,5 +1,5 @@
 ---
-title: "269. Alien Dictionary"
+title: "269. Alien Dictionary (Hard)"
 description: Given a sorted list of words from an alien alphabet, deduce the alphabet order.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, hard]

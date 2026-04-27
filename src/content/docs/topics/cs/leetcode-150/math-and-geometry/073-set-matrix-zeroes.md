@@ -1,5 +1,5 @@
 ---
-title: "73. Set Matrix Zeroes"
+title: "73. Set Matrix Zeroes (Medium)"
 description: If an element in an m×n matrix is 0, set its entire row and column to 0, in place.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]

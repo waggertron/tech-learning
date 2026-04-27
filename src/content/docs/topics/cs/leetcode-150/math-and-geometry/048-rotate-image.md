@@ -1,5 +1,5 @@
 ---
-title: "48. Rotate Image"
+title: "48. Rotate Image (Medium)"
 description: Rotate an n×n matrix 90° clockwise in place.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]

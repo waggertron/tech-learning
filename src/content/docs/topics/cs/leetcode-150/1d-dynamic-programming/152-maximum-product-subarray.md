@@ -1,5 +1,5 @@
 ---
-title: "152. Maximum Product Subarray"
+title: "152. Maximum Product Subarray (Medium)"
 description: Find the contiguous subarray with the largest product.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]

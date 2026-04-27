@@ -1,5 +1,5 @@
 ---
-title: "62. Unique Paths"
+title: "62. Unique Paths (Medium)"
 description: Count paths from the top-left to the bottom-right of an m×n grid, moving only right or down.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, grid, medium]

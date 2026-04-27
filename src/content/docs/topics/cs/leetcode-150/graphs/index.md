@@ -19,19 +19,19 @@ Graphs are the most flexible category in the list, many problems that don't obvi
 
 ## Problems
 
-1. [200. Number of Islands](./200-number-of-islands/), *Medium*
-2. [695. Max Area of Island](./695-max-area-of-island/), *Medium*
-3. [133. Clone Graph](./133-clone-graph/), *Medium*
-4. [994. Rotting Oranges](./994-rotting-oranges/), *Medium*
-5. [417. Pacific Atlantic Water Flow](./417-pacific-atlantic-water-flow/), *Medium*
-6. [130. Surrounded Regions](./130-surrounded-regions/), *Medium*
-7. [207. Course Schedule](./207-course-schedule/), *Medium*
-8. [210. Course Schedule II](./210-course-schedule-ii/), *Medium*
-9. [684. Redundant Connection](./684-redundant-connection/), *Medium*
-10. [261. Graph Valid Tree](./261-graph-valid-tree/), *Medium*
-11. [323. Number of Connected Components in an Undirected Graph](./323-number-of-connected-components-in-an-undirected-graph/), *Medium*
-12. [127. Word Ladder](./127-word-ladder/), *Hard*
-13. [269. Alien Dictionary](./269-alien-dictionary/), *Hard*
+1. [200. Number of Islands (Medium)](./200-number-of-islands/)
+2. [695. Max Area of Island (Medium)](./695-max-area-of-island/)
+3. [133. Clone Graph (Medium)](./133-clone-graph/)
+4. [994. Rotting Oranges (Medium)](./994-rotting-oranges/)
+5. [417. Pacific Atlantic Water Flow (Medium)](./417-pacific-atlantic-water-flow/)
+6. [130. Surrounded Regions (Medium)](./130-surrounded-regions/)
+7. [207. Course Schedule (Medium)](./207-course-schedule/)
+8. [210. Course Schedule II (Medium)](./210-course-schedule-ii/)
+9. [684. Redundant Connection (Medium)](./684-redundant-connection/)
+10. [261. Graph Valid Tree (Medium)](./261-graph-valid-tree/)
+11. [323. Number of Connected Components in an Undirected Graph (Medium)](./323-number-of-connected-components-in-an-undirected-graph/)
+12. [127. Word Ladder (Hard)](./127-word-ladder/)
+13. [269. Alien Dictionary (Hard)](./269-alien-dictionary/)
 
 ## Key patterns unlocked here
 

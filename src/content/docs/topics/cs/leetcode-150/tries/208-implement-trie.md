@@ -1,5 +1,5 @@
 ---
-title: "208. Implement Trie (Prefix Tree)"
+title: "208. Implement Trie (Prefix Tree) (Medium)"
 description: Implement a trie supporting insert, search, and startsWith in O(L).
 parent: tries
 tags: [leetcode, neetcode-150, tries, design, medium]

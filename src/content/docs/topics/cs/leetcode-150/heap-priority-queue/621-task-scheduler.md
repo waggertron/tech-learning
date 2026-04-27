@@ -1,5 +1,5 @@
 ---
-title: "621. Task Scheduler"
+title: "621. Task Scheduler (Medium)"
 description: Compute the minimum total time to run a list of CPU tasks given a cooldown constraint between identical tasks.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, greedy, math, medium]

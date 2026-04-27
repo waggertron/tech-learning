@@ -1,5 +1,5 @@
 ---
-title: "973. K Closest Points to Origin"
+title: "973. K Closest Points to Origin (Medium)"
 description: Return the k points closest to the origin by Euclidean distance.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, quickselect, medium]

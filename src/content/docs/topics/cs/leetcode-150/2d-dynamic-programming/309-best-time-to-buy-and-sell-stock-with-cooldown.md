@@ -1,5 +1,5 @@
 ---
-title: "309. Best Time to Buy and Sell Stock with Cooldown"
+title: "309. Best Time to Buy and Sell Stock with Cooldown (Medium)"
 description: Maximize profit from buying/selling a stock with unlimited transactions and a one-day cooldown after each sell.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, state-machine, medium]

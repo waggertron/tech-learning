@@ -1,5 +1,5 @@
 ---
-title: "355. Design Twitter"
+title: "355. Design Twitter (Medium)"
 description: Design a simplified Twitter feed where each user's recent 10 tweets across followed users are merged in order.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, hash-tables, design, medium]

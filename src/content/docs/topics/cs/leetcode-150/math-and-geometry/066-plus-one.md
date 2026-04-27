@@ -1,5 +1,5 @@
 ---
-title: "66. Plus One"
+title: "66. Plus One (Easy)"
 description: Add 1 to a non-negative integer represented as a digit array.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, arrays, easy]

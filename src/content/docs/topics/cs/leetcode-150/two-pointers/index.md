@@ -20,11 +20,11 @@ Three pointer movements cover almost all problems:
 
 ## Problems
 
-1. [125. Valid Palindrome](./125-valid-palindrome/), *Easy*
-2. [167. Two Sum II, Input Array Is Sorted](./167-two-sum-ii/), *Medium*
-3. [15. 3Sum](./015-3sum/), *Medium*
-4. [11. Container With Most Water](./011-container-with-most-water/), *Medium*
-5. [42. Trapping Rain Water](./042-trapping-rain-water/), *Hard*
+1. [125. Valid Palindrome (Easy)](./125-valid-palindrome/)
+2. [167. Two Sum II, Input Array Is Sorted (Medium)](./167-two-sum-ii/)
+3. [15. 3Sum (Medium)](./015-3sum/)
+4. [11. Container With Most Water (Medium)](./011-container-with-most-water/)
+5. [42. Trapping Rain Water (Hard)](./042-trapping-rain-water/)
 
 ## Key patterns unlocked here
 

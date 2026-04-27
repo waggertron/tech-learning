@@ -1,5 +1,5 @@
 ---
-title: "684. Redundant Connection"
+title: "684. Redundant Connection (Medium)"
 description: Find the edge whose removal leaves a tree, the edge that creates a cycle when added to a pre-existing tree.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, medium]

@@ -1,5 +1,5 @@
 ---
-title: "206. Reverse Linked List"
+title: "206. Reverse Linked List (Easy)"
 description: Reverse a singly linked list.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, easy]

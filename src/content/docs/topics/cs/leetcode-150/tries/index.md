@@ -14,9 +14,9 @@ A trie stores a set of strings as a tree, where each edge is a character and a p
 
 ## Problems
 
-1. [208. Implement Trie (Prefix Tree)](./208-implement-trie/), *Medium*
-2. [211. Design Add and Search Words Data Structure](./211-design-add-and-search-words-data-structure/), *Medium*
-3. [212. Word Search II](./212-word-search-ii/), *Hard*
+1. [208. Implement Trie (Prefix Tree) (Medium)](./208-implement-trie/)
+2. [211. Design Add and Search Words Data Structure (Medium)](./211-design-add-and-search-words-data-structure/)
+3. [212. Word Search II (Hard)](./212-word-search-ii/)
 
 ## Key patterns unlocked here
 

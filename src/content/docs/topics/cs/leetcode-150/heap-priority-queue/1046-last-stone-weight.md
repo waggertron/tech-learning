@@ -1,5 +1,5 @@
 ---
-title: "1046. Last Stone Weight"
+title: "1046. Last Stone Weight (Easy)"
 description: Simulate a collision game on a heap; return the final remaining stone.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, simulation, easy]

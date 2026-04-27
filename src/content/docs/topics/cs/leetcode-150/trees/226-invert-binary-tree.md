@@ -1,5 +1,5 @@
 ---
-title: "226. Invert Binary Tree"
+title: "226. Invert Binary Tree (Easy)"
 description: Invert (mirror) a binary tree by swapping every left and right child.
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]

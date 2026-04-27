@@ -21,13 +21,13 @@ Python: `heapq` is a min-heap on a list. Negate values for max-heap. Heaps don't
 
 ## Problems
 
-1. [703. Kth Largest Element in a Stream](./703-kth-largest-element-in-a-stream/), *Easy*
-2. [1046. Last Stone Weight](./1046-last-stone-weight/), *Easy*
-3. [973. K Closest Points to Origin](./973-k-closest-points-to-origin/), *Medium*
-4. [215. Kth Largest Element in an Array](./215-kth-largest-element-in-an-array/), *Medium*
-5. [621. Task Scheduler](./621-task-scheduler/), *Medium*
-6. [355. Design Twitter](./355-design-twitter/), *Medium*
-7. [295. Find Median from Data Stream](./295-find-median-from-data-stream/), *Hard*
+1. [703. Kth Largest Element in a Stream (Easy)](./703-kth-largest-element-in-a-stream/)
+2. [1046. Last Stone Weight (Easy)](./1046-last-stone-weight/)
+3. [973. K Closest Points to Origin (Medium)](./973-k-closest-points-to-origin/)
+4. [215. Kth Largest Element in an Array (Medium)](./215-kth-largest-element-in-an-array/)
+5. [621. Task Scheduler (Medium)](./621-task-scheduler/)
+6. [355. Design Twitter (Medium)](./355-design-twitter/)
+7. [295. Find Median from Data Stream (Hard)](./295-find-median-from-data-stream/)
 
 ## Key patterns unlocked here
 

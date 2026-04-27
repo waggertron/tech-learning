@@ -1,5 +1,5 @@
 ---
-title: "202. Happy Number"
+title: "202. Happy Number (Easy)"
 description: A happy number eventually reaches 1 under the "sum of squares of digits" operation.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, cycle-detection, easy]

@@ -19,12 +19,12 @@ There are two flavors:
 
 ## Problems
 
-1. [121. Best Time to Buy and Sell Stock](./121-best-time-to-buy-and-sell-stock/), *Easy*
-2. [3. Longest Substring Without Repeating Characters](./003-longest-substring-without-repeating-characters/), *Medium*
-3. [424. Longest Repeating Character Replacement](./424-longest-repeating-character-replacement/), *Medium*
-4. [567. Permutation in String](./567-permutation-in-string/), *Medium*
-5. [76. Minimum Window Substring](./076-minimum-window-substring/), *Hard*
-6. [239. Sliding Window Maximum](./239-sliding-window-maximum/), *Hard*
+1. [121. Best Time to Buy and Sell Stock (Easy)](./121-best-time-to-buy-and-sell-stock/)
+2. [3. Longest Substring Without Repeating Characters (Medium)](./003-longest-substring-without-repeating-characters/)
+3. [424. Longest Repeating Character Replacement (Medium)](./424-longest-repeating-character-replacement/)
+4. [567. Permutation in String (Medium)](./567-permutation-in-string/)
+5. [76. Minimum Window Substring (Hard)](./076-minimum-window-substring/)
+6. [239. Sliding Window Maximum (Hard)](./239-sliding-window-maximum/)
 
 ## Key patterns unlocked here
 

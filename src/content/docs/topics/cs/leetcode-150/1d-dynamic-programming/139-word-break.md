@@ -1,5 +1,5 @@
 ---
-title: "139. Word Break"
+title: "139. Word Break (Medium)"
 description: Determine whether a string can be segmented into space-separated words from a given dictionary.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hash-tables, medium]

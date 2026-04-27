@@ -1,5 +1,5 @@
 ---
-title: "57. Insert Interval"
+title: "57. Insert Interval (Medium)"
 description: Insert a new interval into a non-overlapping sorted list, merging as needed.
 parent: intervals
 tags: [leetcode, neetcode-150, intervals, medium]

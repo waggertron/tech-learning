@@ -1,5 +1,5 @@
 ---
-title: "1584. Min Cost to Connect All Points"
+title: "1584. Min Cost to Connect All Points (Medium)"
 description: Connect n points with minimum total wire, a minimum spanning tree problem on a complete Manhattan-distance graph.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, mst, prim, kruskal, union-find, medium]

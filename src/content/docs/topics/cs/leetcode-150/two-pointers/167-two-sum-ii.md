@@ -1,5 +1,5 @@
 ---
-title: "167. Two Sum II, Input Array Is Sorted"
+title: "167. Two Sum II, Input Array Is Sorted (Medium)"
 description: Given a 1-indexed sorted array, return indices of the two numbers that sum to the target.
 parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, medium]

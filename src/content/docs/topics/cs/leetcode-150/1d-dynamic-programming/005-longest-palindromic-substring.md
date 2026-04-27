@@ -1,5 +1,5 @@
 ---
-title: "5. Longest Palindromic Substring"
+title: "5. Longest Palindromic Substring (Medium)"
 description: Find the longest palindromic substring in a string.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]

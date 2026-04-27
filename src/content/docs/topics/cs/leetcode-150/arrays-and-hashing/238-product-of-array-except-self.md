@@ -1,5 +1,5 @@
 ---
-title: "238. Product of Array Except Self"
+title: "238. Product of Array Except Self (Medium)"
 description: Return an array where each element is the product of all other elements, without using division.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, prefix-suffix, medium]

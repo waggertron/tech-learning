@@ -1,5 +1,5 @@
 ---
-title: "43. Multiply Strings"
+title: "43. Multiply Strings (Medium)"
 description: Multiply two non-negative integers represented as strings.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, strings, medium]

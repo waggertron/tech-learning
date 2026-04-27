@@ -1,5 +1,5 @@
 ---
-title: "217. Contains Duplicate"
+title: "217. Contains Duplicate (Easy)"
 description: Return true if any value in the array appears at least twice.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, easy]

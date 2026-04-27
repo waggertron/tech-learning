@@ -1,5 +1,5 @@
 ---
-title: "322. Coin Change"
+title: "322. Coin Change (Medium)"
 description: Minimum number of coins summing to a given amount, unbounded knapsack.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]

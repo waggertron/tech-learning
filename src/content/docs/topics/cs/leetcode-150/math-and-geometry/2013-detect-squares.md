@@ -1,5 +1,5 @@
 ---
-title: "2013. Detect Squares"
+title: "2013. Detect Squares (Medium)"
 description: Design a data structure that counts axis-aligned squares formed by stored points.
 parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, hash-tables, design, medium]

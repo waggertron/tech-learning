@@ -1,5 +1,5 @@
 ---
-title: "239. Sliding Window Maximum"
+title: "239. Sliding Window Maximum (Hard)"
 description: Return the maximum of every contiguous window of size k across an array.
 parent: sliding-window
 tags: [leetcode, neetcode-150, arrays, sliding-window, deque, heap, hard]

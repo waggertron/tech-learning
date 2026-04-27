@@ -18,18 +18,18 @@ Dynamic programming is about **(a)** defining a state that captures the subprobl
 
 ## Problems
 
-1. [70. Climbing Stairs](./070-climbing-stairs/), *Easy*
-2. [746. Min Cost Climbing Stairs](./746-min-cost-climbing-stairs/), *Easy*
-3. [198. House Robber](./198-house-robber/), *Medium*
-4. [213. House Robber II](./213-house-robber-ii/), *Medium*
-5. [5. Longest Palindromic Substring](./005-longest-palindromic-substring/), *Medium*
-6. [647. Palindromic Substrings](./647-palindromic-substrings/), *Medium*
-7. [91. Decode Ways](./091-decode-ways/), *Medium*
-8. [322. Coin Change](./322-coin-change/), *Medium*
-9. [152. Maximum Product Subarray](./152-maximum-product-subarray/), *Medium*
-10. [139. Word Break](./139-word-break/), *Medium*
-11. [300. Longest Increasing Subsequence](./300-longest-increasing-subsequence/), *Medium*
-12. [416. Partition Equal Subset Sum](./416-partition-equal-subset-sum/), *Medium*
+1. [70. Climbing Stairs (Easy)](./070-climbing-stairs/)
+2. [746. Min Cost Climbing Stairs (Easy)](./746-min-cost-climbing-stairs/)
+3. [198. House Robber (Medium)](./198-house-robber/)
+4. [213. House Robber II (Medium)](./213-house-robber-ii/)
+5. [5. Longest Palindromic Substring (Medium)](./005-longest-palindromic-substring/)
+6. [647. Palindromic Substrings (Medium)](./647-palindromic-substrings/)
+7. [91. Decode Ways (Medium)](./091-decode-ways/)
+8. [322. Coin Change (Medium)](./322-coin-change/)
+9. [152. Maximum Product Subarray (Medium)](./152-maximum-product-subarray/)
+10. [139. Word Break (Medium)](./139-word-break/)
+11. [300. Longest Increasing Subsequence (Medium)](./300-longest-increasing-subsequence/)
+12. [416. Partition Equal Subset Sum (Medium)](./416-partition-equal-subset-sum/)
 
 ## Key patterns unlocked here
 

@@ -1,5 +1,5 @@
 ---
-title: "567. Permutation in String"
+title: "567. Permutation in String (Medium)"
 description: Return true if one string contains any permutation of another as a substring.
 parent: sliding-window
 tags: [leetcode, neetcode-150, strings, sliding-window, hash-tables, medium]

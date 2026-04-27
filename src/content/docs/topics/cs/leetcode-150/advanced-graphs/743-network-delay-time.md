@@ -1,5 +1,5 @@
 ---
-title: "743. Network Delay Time"
+title: "743. Network Delay Time (Medium)"
 description: Given a weighted directed graph, compute the time for a signal to reach every node from a source, canonical Dijkstra.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, dijkstra, medium]

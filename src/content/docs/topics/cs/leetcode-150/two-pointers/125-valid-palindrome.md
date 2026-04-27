@@ -1,5 +1,5 @@
 ---
-title: "125. Valid Palindrome"
+title: "125. Valid Palindrome (Easy)"
 description: Determine if a string is a palindrome, considering only alphanumeric characters and ignoring case.
 parent: two-pointers
 tags: [leetcode, neetcode-150, strings, two-pointers, easy]

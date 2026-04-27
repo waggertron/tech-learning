@@ -1,5 +1,5 @@
 ---
-title: "143. Reorder List"
+title: "143. Reorder List (Medium)"
 description: Reorder a linked list L₀ → L₁ → … → Lₙ₋₁ → Lₙ into L₀ → Lₙ → L₁ → Lₙ₋₁ → L₂ → …
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, two-pointers, medium]

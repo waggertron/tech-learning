@@ -1,5 +1,5 @@
 ---
-title: "105. Construct Binary Tree from Preorder and Inorder Traversal"
+title: "105. Construct Binary Tree from Preorder and Inorder Traversal (Medium)"
 description: Reconstruct a binary tree from its preorder and inorder traversal lists.
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, hash-tables, medium]

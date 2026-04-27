@@ -1,5 +1,5 @@
 ---
-title: "128. Longest Consecutive Sequence"
+title: "128. Longest Consecutive Sequence (Medium)"
 description: Find the length of the longest run of consecutive integers in an unsorted array, in O(n) time.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, medium]

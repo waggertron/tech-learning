@@ -1,5 +1,5 @@
 ---
-title: "242. Valid Anagram"
+title: "242. Valid Anagram (Easy)"
 description: Given two strings, return true if one is an anagram of the other.
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, hash-tables, easy]

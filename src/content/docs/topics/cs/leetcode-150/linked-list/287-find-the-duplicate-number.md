@@ -1,5 +1,5 @@
 ---
-title: "287. Find the Duplicate Number"
+title: "287. Find the Duplicate Number (Medium)"
 description: Find the duplicate in an array of n+1 integers, each in range [1, n], without modifying the array and in O(1) space.
 parent: linked-list
 tags: [leetcode, neetcode-150, arrays, linked-lists, two-pointers, medium]

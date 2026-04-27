@@ -1,5 +1,5 @@
 ---
-title: "33. Search in Rotated Sorted Array"
+title: "33. Search in Rotated Sorted Array (Medium)"
 description: Find a target in a sorted array that has been rotated by some unknown pivot. O(log n).
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]

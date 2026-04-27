@@ -1,5 +1,5 @@
 ---
-title: "435. Non-overlapping Intervals"
+title: "435. Non-overlapping Intervals (Medium)"
 description: Minimum number of intervals to remove so the remainder are non-overlapping.
 parent: intervals
 tags: [leetcode, neetcode-150, intervals, greedy, medium]

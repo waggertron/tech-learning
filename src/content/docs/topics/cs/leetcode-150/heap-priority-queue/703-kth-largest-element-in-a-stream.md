@@ -1,5 +1,5 @@
 ---
-title: "703. Kth Largest Element in a Stream"
+title: "703. Kth Largest Element in a Stream (Easy)"
 description: Maintain the kth largest element in a data stream under repeated `add` calls.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, design, easy]

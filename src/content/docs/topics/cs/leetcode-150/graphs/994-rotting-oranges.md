@@ -1,5 +1,5 @@
 ---
-title: "994. Rotting Oranges"
+title: "994. Rotting Oranges (Medium)"
 description: Minimum time for all fresh oranges to rot via adjacent contact, a multi-source BFS.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, bfs, multi-source, medium]

@@ -1,5 +1,5 @@
 ---
-title: "100. Same Tree"
+title: "100. Same Tree (Easy)"
 description: Determine if two binary trees are structurally identical with the same values.
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]

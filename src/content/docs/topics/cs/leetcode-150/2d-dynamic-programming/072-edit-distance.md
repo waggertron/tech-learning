@@ -1,5 +1,5 @@
 ---
-title: "72. Edit Distance"
+title: "72. Edit Distance (Hard)"
 description: Minimum number of insert/delete/replace operations to transform one string into another.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hard]

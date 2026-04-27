@@ -1,5 +1,5 @@
 ---
-title: "102. Binary Tree Level Order Traversal"
+title: "102. Binary Tree Level Order Traversal (Medium)"
 description: Return the values of a binary tree in level-order, one list per level.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, medium]

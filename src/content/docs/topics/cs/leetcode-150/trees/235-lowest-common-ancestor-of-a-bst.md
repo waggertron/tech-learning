@@ -1,5 +1,5 @@
 ---
-title: "235. Lowest Common Ancestor of a BST"
+title: "235. Lowest Common Ancestor of a BST (Medium)"
 description: Find the LCA of two nodes in a Binary Search Tree.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bst, medium]

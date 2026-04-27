@@ -1,5 +1,5 @@
 ---
-title: "853. Car Fleet"
+title: "853. Car Fleet (Medium)"
 description: "Count the number of fleets that arrive at a target destination, where a faster car behind a slower one merges into a single fleet."
 parent: stack
 tags: [leetcode, neetcode-150, arrays, stacks, sorting, medium]

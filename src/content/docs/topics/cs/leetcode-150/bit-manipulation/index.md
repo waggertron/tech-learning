@@ -19,13 +19,13 @@ Bit manipulation is a small but powerful toolkit. Memorize the primitives:
 
 ## Problems
 
-1. [136. Single Number](./136-single-number/), *Easy*
-2. [191. Number of 1 Bits](./191-number-of-1-bits/), *Easy*
-3. [338. Counting Bits](./338-counting-bits/), *Easy*
-4. [190. Reverse Bits](./190-reverse-bits/), *Easy*
-5. [268. Missing Number](./268-missing-number/), *Easy*
-6. [371. Sum of Two Integers](./371-sum-of-two-integers/), *Medium*
-7. [7. Reverse Integer](./007-reverse-integer/), *Medium*
+1. [136. Single Number (Easy)](./136-single-number/)
+2. [191. Number of 1 Bits (Easy)](./191-number-of-1-bits/)
+3. [338. Counting Bits (Easy)](./338-counting-bits/)
+4. [190. Reverse Bits (Easy)](./190-reverse-bits/)
+5. [268. Missing Number (Easy)](./268-missing-number/)
+6. [371. Sum of Two Integers (Medium)](./371-sum-of-two-integers/)
+7. [7. Reverse Integer (Medium)](./007-reverse-integer/)
 
 ## Key patterns unlocked here
 

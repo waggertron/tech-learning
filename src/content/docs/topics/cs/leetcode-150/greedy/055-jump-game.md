@@ -1,5 +1,5 @@
 ---
-title: "55. Jump Game"
+title: "55. Jump Game (Medium)"
 description: Determine if you can reach the last index from the first, where each nums[i] gives the max jump length.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]

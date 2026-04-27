@@ -1,5 +1,5 @@
 ---
-title: "297. Serialize and Deserialize Binary Tree"
+title: "297. Serialize and Deserialize Binary Tree (Hard)"
 description: Convert a binary tree to a string and back.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, dfs, design, hard]

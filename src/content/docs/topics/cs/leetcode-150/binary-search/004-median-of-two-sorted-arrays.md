@@ -1,5 +1,5 @@
 ---
-title: "4. Median of Two Sorted Arrays"
+title: "4. Median of Two Sorted Arrays (Hard)"
 description: Find the median of two sorted arrays in O(log(min(m, n))).
 parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, hard]

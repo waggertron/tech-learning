@@ -1,5 +1,5 @@
 ---
-title: "332. Reconstruct Itinerary"
+title: "332. Reconstruct Itinerary (Hard)"
 description: Given a list of airline tickets, reconstruct the itinerary that uses every ticket exactly once, starting from "JFK" and lexicographically smallest.
 parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, eulerian-path, hard]

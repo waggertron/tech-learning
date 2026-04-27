@@ -1,5 +1,5 @@
 ---
-title: "127. Word Ladder"
+title: "127. Word Ladder (Hard)"
 description: Transform one word into another using a word list, changing one letter at a time. Return the shortest ladder length.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, bfs, strings, hard]

@@ -1,5 +1,5 @@
 ---
-title: "371. Sum of Two Integers"
+title: "371. Sum of Two Integers (Medium)"
 description: Compute a + b without using + or - using only bitwise operations.
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, medium]

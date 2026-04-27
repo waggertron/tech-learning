@@ -1,5 +1,5 @@
 ---
-title: "97. Interleaving String"
+title: "97. Interleaving String (Medium)"
 description: Determine whether s3 can be formed by interleaving s1 and s2 while preserving relative order within each.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]

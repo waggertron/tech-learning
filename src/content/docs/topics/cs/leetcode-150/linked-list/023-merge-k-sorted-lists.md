@@ -1,5 +1,5 @@
 ---
-title: "23. Merge k Sorted Lists"
+title: "23. Merge k Sorted Lists (Hard)"
 description: Merge k sorted linked lists into one sorted list.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, heaps, divide-and-conquer, hard]

@@ -1,5 +1,5 @@
 ---
-title: "230. Kth Smallest Element in a BST"
+title: "230. Kth Smallest Element in a BST (Medium)"
 description: Return the kth smallest value in a Binary Search Tree.
 parent: trees
 tags: [leetcode, neetcode-150, trees, bst, dfs, medium]

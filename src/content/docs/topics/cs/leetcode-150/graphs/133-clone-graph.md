@@ -1,5 +1,5 @@
 ---
-title: "133. Clone Graph"
+title: "133. Clone Graph (Medium)"
 description: Deep copy a connected undirected graph.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, hash-tables, medium]

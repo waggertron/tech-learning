@@ -1,5 +1,5 @@
 ---
-title: "136. Single Number"
+title: "136. Single Number (Easy)"
 description: Find the element that appears once in an array where every other element appears twice.
 parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, xor, easy]

@@ -1,5 +1,5 @@
 ---
-title: "56. Merge Intervals"
+title: "56. Merge Intervals (Medium)"
 description: Merge all overlapping intervals in a list.
 parent: intervals
 tags: [leetcode, neetcode-150, intervals, sorting, medium]

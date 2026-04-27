@@ -39,6 +39,15 @@ Each problem page includes the prompt, all three approaches with working Python,
 17. [Math & Geometry](./math-and-geometry/) (8 problems)
 18. [Bit Manipulation](./bit-manipulation/) (7 problems)
 
+## Browse by difficulty
+
+Pattern-grouping is the default; difficulty is the orthogonal axis when you want to ramp up gradually or save the hard set for last.
+
+- [Easy problems](./by-difficulty/easy/) (28 problems)
+- [Medium problems](./by-difficulty/medium/) (99 problems)
+- [Hard problems](./by-difficulty/hard/) (22 problems)
+- [By-difficulty hub](./by-difficulty/), all three together
+
 ## How to use
 
 Work through a category end-to-end. Within each problem:

@@ -18,13 +18,13 @@ Binary search is deceptively simple: halve the search space using a comparison. 
 
 ## Problems
 
-1. [704. Binary Search](./704-binary-search/), *Easy*
-2. [74. Search a 2D Matrix](./074-search-a-2d-matrix/), *Medium*
-3. [875. Koko Eating Bananas](./875-koko-eating-bananas/), *Medium*
-4. [153. Find Minimum in Rotated Sorted Array](./153-find-minimum-in-rotated-sorted-array/), *Medium*
-5. [33. Search in Rotated Sorted Array](./033-search-in-rotated-sorted-array/), *Medium*
-6. [981. Time Based Key-Value Store](./981-time-based-key-value-store/), *Medium*
-7. [4. Median of Two Sorted Arrays](./004-median-of-two-sorted-arrays/), *Hard*
+1. [704. Binary Search (Easy)](./704-binary-search/)
+2. [74. Search a 2D Matrix (Medium)](./074-search-a-2d-matrix/)
+3. [875. Koko Eating Bananas (Medium)](./875-koko-eating-bananas/)
+4. [153. Find Minimum in Rotated Sorted Array (Medium)](./153-find-minimum-in-rotated-sorted-array/)
+5. [33. Search in Rotated Sorted Array (Medium)](./033-search-in-rotated-sorted-array/)
+6. [981. Time Based Key-Value Store (Medium)](./981-time-based-key-value-store/)
+7. [4. Median of Two Sorted Arrays (Hard)](./004-median-of-two-sorted-arrays/)
 
 ## Key patterns unlocked here
 

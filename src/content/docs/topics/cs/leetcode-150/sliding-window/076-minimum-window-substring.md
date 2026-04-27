@@ -1,5 +1,5 @@
 ---
-title: "76. Minimum Window Substring"
+title: "76. Minimum Window Substring (Hard)"
 description: Find the minimum substring of s that contains every character of t (with multiplicity).
 parent: sliding-window
 tags: [leetcode, neetcode-150, strings, sliding-window, hash-tables, hard]

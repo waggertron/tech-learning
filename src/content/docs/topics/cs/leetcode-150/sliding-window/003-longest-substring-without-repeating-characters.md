@@ -1,5 +1,5 @@
 ---
-title: "3. Longest Substring Without Repeating Characters"
+title: "3. Longest Substring Without Repeating Characters (Medium)"
 description: Find the length of the longest substring without repeating characters.
 parent: sliding-window
 tags: [leetcode, neetcode-150, strings, sliding-window, hash-tables, medium]

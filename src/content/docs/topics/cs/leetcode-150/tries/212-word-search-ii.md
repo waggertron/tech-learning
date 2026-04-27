@@ -1,5 +1,5 @@
 ---
-title: "212. Word Search II"
+title: "212. Word Search II (Hard)"
 description: Find every word from a dictionary that can be formed from sequentially adjacent cells in a 2D board.
 parent: tries
 tags: [leetcode, neetcode-150, tries, backtracking, dfs, grid, hard]

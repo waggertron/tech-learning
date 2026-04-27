@@ -1,5 +1,5 @@
 ---
-title: "79. Word Search"
+title: "79. Word Search (Medium)"
 description: Determine whether a word can be constructed from sequentially adjacent cells in a 2D board.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, dfs, grid, medium]

@@ -1,5 +1,5 @@
 ---
-title: "115. Distinct Subsequences"
+title: "115. Distinct Subsequences (Hard)"
 description: Count the number of distinct subsequences of s that equal t.
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hard]

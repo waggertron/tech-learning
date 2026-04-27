@@ -1,5 +1,5 @@
 ---
-title: "198. House Robber"
+title: "198. House Robber (Medium)"
 description: Maximum money you can rob without alerting any two adjacent houses.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]

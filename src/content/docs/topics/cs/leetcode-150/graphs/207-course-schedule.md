@@ -1,5 +1,5 @@
 ---
-title: "207. Course Schedule"
+title: "207. Course Schedule (Medium)"
 description: Determine whether you can finish all courses given a list of prerequisite edges, i.e., whether the graph is a DAG.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, cycle-detection, medium]

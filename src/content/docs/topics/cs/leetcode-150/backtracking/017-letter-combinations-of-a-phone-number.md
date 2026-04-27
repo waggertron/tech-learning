@@ -1,5 +1,5 @@
 ---
-title: "17. Letter Combinations of a Phone Number"
+title: "17. Letter Combinations of a Phone Number (Medium)"
 description: Return all possible letter combinations that a phone-keypad string could represent.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]

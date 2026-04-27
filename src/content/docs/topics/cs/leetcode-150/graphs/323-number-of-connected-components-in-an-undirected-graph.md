@@ -1,5 +1,5 @@
 ---
-title: "323. Number of Connected Components in an Undirected Graph"
+title: "323. Number of Connected Components in an Undirected Graph (Medium)"
 description: Count connected components in an undirected graph.
 parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, dfs, bfs, medium]

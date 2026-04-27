@@ -1,5 +1,5 @@
 ---
-title: "78. Subsets"
+title: "78. Subsets (Medium)"
 description: Return all possible subsets of a set of distinct integers.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]

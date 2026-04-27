@@ -20,17 +20,17 @@ Linked lists aren't dominant in production code anymore, dynamic arrays have bet
 
 ## Problems
 
-1. [206. Reverse Linked List](./206-reverse-linked-list/), *Easy*
-2. [21. Merge Two Sorted Lists](./021-merge-two-sorted-lists/), *Easy*
-3. [141. Linked List Cycle](./141-linked-list-cycle/), *Easy*
-4. [143. Reorder List](./143-reorder-list/), *Medium*
-5. [19. Remove Nth Node From End of List](./019-remove-nth-node-from-end-of-list/), *Medium*
-6. [138. Copy List with Random Pointer](./138-copy-list-with-random-pointer/), *Medium*
-7. [2. Add Two Numbers](./002-add-two-numbers/), *Medium*
-8. [287. Find the Duplicate Number](./287-find-the-duplicate-number/), *Medium*
-9. [146. LRU Cache](./146-lru-cache/), *Medium*
-10. [23. Merge k Sorted Lists](./023-merge-k-sorted-lists/), *Hard*
-11. [25. Reverse Nodes in k-Group](./025-reverse-nodes-in-k-group/), *Hard*
+1. [206. Reverse Linked List (Easy)](./206-reverse-linked-list/)
+2. [21. Merge Two Sorted Lists (Easy)](./021-merge-two-sorted-lists/)
+3. [141. Linked List Cycle (Easy)](./141-linked-list-cycle/)
+4. [143. Reorder List (Medium)](./143-reorder-list/)
+5. [19. Remove Nth Node From End of List (Medium)](./019-remove-nth-node-from-end-of-list/)
+6. [138. Copy List with Random Pointer (Medium)](./138-copy-list-with-random-pointer/)
+7. [2. Add Two Numbers (Medium)](./002-add-two-numbers/)
+8. [287. Find the Duplicate Number (Medium)](./287-find-the-duplicate-number/)
+9. [146. LRU Cache (Medium)](./146-lru-cache/)
+10. [23. Merge k Sorted Lists (Hard)](./023-merge-k-sorted-lists/)
+11. [25. Reverse Nodes in k-Group (Hard)](./025-reverse-nodes-in-k-group/)
 
 ## Key patterns unlocked here
 

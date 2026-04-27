@@ -1,5 +1,5 @@
 ---
-title: "215. Kth Largest Element in an Array"
+title: "215. Kth Largest Element in an Array (Medium)"
 description: Return the kth largest element in an unsorted array.
 parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, quickselect, medium]

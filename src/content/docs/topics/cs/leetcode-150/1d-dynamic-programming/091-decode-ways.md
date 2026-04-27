@@ -1,5 +1,5 @@
 ---
-title: "91. Decode Ways"
+title: "91. Decode Ways (Medium)"
 description: Count the number of ways a digit string can be decoded to letters A–Z under the mapping A=1, Z=26.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]

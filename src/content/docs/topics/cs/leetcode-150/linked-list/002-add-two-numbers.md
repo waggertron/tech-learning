@@ -1,5 +1,5 @@
 ---
-title: "2. Add Two Numbers"
+title: "2. Add Two Numbers (Medium)"
 description: Add two numbers represented by linked lists in reverse order.
 parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, math, medium]

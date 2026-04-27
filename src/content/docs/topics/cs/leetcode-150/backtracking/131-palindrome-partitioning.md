@@ -1,5 +1,5 @@
 ---
-title: "131. Palindrome Partitioning"
+title: "131. Palindrome Partitioning (Medium)"
 description: Partition a string so every piece is a palindrome; return all such partitions.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, strings, dp, medium]

@@ -1,5 +1,5 @@
 ---
-title: "51. N-Queens"
+title: "51. N-Queens (Hard)"
 description: Place n queens on an n×n chessboard so that no two attack each other; return all distinct solutions.
 parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, hard]

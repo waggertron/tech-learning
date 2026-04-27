@@ -1,5 +1,5 @@
 ---
-title: "104. Maximum Depth of Binary Tree"
+title: "104. Maximum Depth of Binary Tree (Easy)"
 description: Return the maximum depth of a binary tree.
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, bfs, easy]

@@ -1,5 +1,5 @@
 ---
-title: "300. Longest Increasing Subsequence"
+title: "300. Longest Increasing Subsequence (Medium)"
 description: Find the length of the longest strictly increasing subsequence.
 parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, binary-search, medium]

@@ -1,5 +1,5 @@
 ---
-title: "53. Maximum Subarray"
+title: "53. Maximum Subarray (Medium)"
 description: Find the contiguous subarray with the largest sum, Kadane's algorithm.
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, dp, medium]

@@ -1,5 +1,5 @@
 ---
-title: "211. Design Add and Search Words Data Structure"
+title: "211. Design Add and Search Words Data Structure (Medium)"
 description: Support adding words and searching with a '.' wildcard that matches any single character.
 parent: tries
 tags: [leetcode, neetcode-150, tries, backtracking, design, medium]
