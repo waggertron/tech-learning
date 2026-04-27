@@ -47,6 +47,62 @@ A stack is also the memory model for function calls (the call stack): every recu
 
 **Canonical LeetCode problems:** #20 Valid Parentheses, #84 Largest Rectangle in Histogram, #150 Evaluate Reverse Polish Notation, #224 Basic Calculator, #739 Daily Temperatures, #853 Car Fleet, #1249 Minimum Remove to Make Valid Parentheses.
 
+## What clues you in
+
+The fastest mental test: while scanning the input one item at a time, do I sometimes need to *go back and finish business with the most recent unfinished thing*? If yes, reach for a stack.
+
+If the answer to "which earlier element matters here?" is **the most recent one**, the data structure is a stack. If the answer is **the oldest one**, it's a queue.
+
+## Signal and what it sounds like
+
+Patterns in problem statements that map to a stack (or a monotonic stack):
+
+| Signal | What it sounds like |
+| --- | --- |
+| **Nested / matched pairs** | "valid parentheses," "balance the brackets," "is this expression well-formed" |
+| **Reverse-order processing** | "most recent X that…," "previous greater element," "undo the last action" |
+| **Push when X, pop when Y** | RPN evaluation, function-call traces, HTML/XML tag closers |
+| **Top-only with order memory** | "next greater element," "daily temperatures," "min stack" |
+| **Iterative replacement of recursion** | flatten DFS, tree traversal without the call stack |
+
+When two or three of these signals appear together, the answer is almost always a stack.
+
+## Linguistic clues
+
+Train your eye to spot these phrases. Each one fires the stack reflex:
+
+1. **"Matching"** — pairs, opens/closes, brackets/tags. Inherently nested.
+2. **"Most recent"** — "next greater," "previous smaller," "the most recent X that hasn't been Y." Closest-prior-unresolved → monotonic stack.
+3. **"Until"** — "pop until the top is X," "process previous Y until something Z." That `while top satisfies condition: pop` shape is the giveaway (Daily Temperatures, Largest Rectangle in Histogram).
+4. **Reverse-order traversal you can't actually do** — "process the input in reverse but you only get it forward," postfix → infix conversion, RPN. Push everything, then unwind.
+5. **Undo / cancel / backtrack** — anything that needs to remember the *last* state to roll back to. Min Stack, browser-history-back, text-editor undo. Equal-and-opposite pushes/pops.
+6. **Nested anything** — function calls, scopes, regions, balanced expressions, indentation levels, tag trees. Nested = LIFO almost by definition.
+
+## Counter clues
+
+Distinguishing stack from its closest neighbors:
+
+- **vs. queue (BFS / FIFO)**: when you finish processing one item, do you go to the *most recent* unfinished thing (stack) or the *oldest* unfinished thing (queue)? "Shortest path in unweighted graph," "level-order traversal," "process in arrival order" → queue.
+- **vs. two-pointer**: two-pointer needs a relationship between two ends with a monotonic shrink (sorted-array two-sum, palindrome check, container with most water). Brackets fundamentally can't use two-pointer because `"([)]"` looks symmetric to two-pointer but is invalid; a stack catches the LIFO violation immediately.
+- **vs. heap / priority queue**: if the next thing to process is the *largest / smallest / most-extreme*, that's a heap (k-closest, top-k, scheduler with priorities). Stack only ever cares about the top — the most recently pushed.
+- **vs. hash map / set**: if the question is "have I seen X before?" with no order requirement, that's a set. Stack imposes order, set doesn't.
+- **vs. deque / monotonic deque**: when you need to drop from *both* ends (sliding-window maximum), a monotonic deque is the upgrade from a monotonic stack.
+
+When two structures both seem to fit, ask: *do I ever need to access anything other than the top?* If yes, it's not a stack.
+
+## Related problems
+
+Curated kin where the recognition skill above is exercised. Each adds one twist on the basic pattern:
+
+- **20. Valid Parentheses** — the canonical LIFO match. Push openers, pop on closers.
+- **150. Evaluate Reverse Polish Notation** — push numbers, on operator pop two and combine.
+- **155. Min Stack** — stack of `(value, running_min)` to keep `min()` at O(1).
+- **739. Daily Temperatures** — monotonic decreasing stack of indices; pop while top is colder than current.
+- **84. Largest Rectangle in Histogram** — monotonic increasing stack; on each pop, current bar is the right boundary, the new top is the left boundary.
+- **22. Generate Parentheses** — recursion = implicit stack of partial strings; the call-stack *is* the data structure.
+- **224 / 227 / 772. Basic Calculator** — operator/operand stacks with precedence, the parser-by-hand variant.
+- **42. Trapping Rain Water** — monotonic stack alternative to two-pointer; for each popped bar, water is bounded by current and new top.
+
 ## Python example
 
 ```python
@@ -77,7 +133,7 @@ def daily_temperatures(temps):
     for i, t in enumerate(temps):
         while stack and temps[stack[-1]] < t:
             j = stack.pop()
-            ans[j] = i, j
+            ans[j] = i - j
         stack.append(i)
     return ans
 
@@ -99,7 +155,7 @@ def eval_rpn(tokens):
     stack = []
     ops = {
         '+': lambda a, b: a + b,
-        '-': lambda a, b: a, b,
+        '-': lambda a, b: a - b,
         '*': lambda a, b: a * b,
         '/': lambda a, b: int(a / b),   # truncate toward zero
     }
