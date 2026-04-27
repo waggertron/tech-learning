@@ -10,6 +10,7 @@ description: Computer science fundamentals, data structures, NeetCode 150 walkth
 - [Haversine Distance](./haversine-distance/), great-circle distance between lat/lon points, with Python/SQL/JavaScript implementations and notes on when to upgrade to Vincenty or Karney
 - [Vehicle Routing Problem](./vehicle-routing/), CVRP, VRPTW, pickup-and-delivery, and what Google OR-Tools actually does
 - [Functional Core, Imperative Shell](./functional-core-imperative-shell/), Gary Bernhardt's architecture pattern: pure logic at the center, I/O at the edges
+- [Flight Itinerary with Transfers](./flight-itinerary/), find a valid trip through a flight graph with departure and arrival times: DFS, BFS for fewest layovers, Dijkstra for earliest arrival, plus the time-expanded graph framework that subsumes all three
 
 ## How the topics connect
 
