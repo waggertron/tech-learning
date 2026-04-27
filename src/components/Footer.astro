@@ -9,7 +9,9 @@ const homeUrl = import.meta.env.BASE_URL.endsWith('/')
 <Default><slot /></Default>
 
 <div class="hbd-footer">
-  <a href={`${homeUrl}#where-the-name-comes-from`}>Why the name "Here Be Dragons"?</a>
+  <p class="hbd-blurb">
+    <strong>"Here be dragons"</strong> is what cartographers wrote on the parts of the map they hadn't been to. In code, the same phrase marks the load-bearing corners that work but no one fully understands. This site is notes from those edges. <a href={`${homeUrl}#where-the-name-comes-from`}>The full origin →</a>
+  </p>
 </div>
 
 <style>
@@ -17,14 +19,20 @@ const homeUrl = import.meta.env.BASE_URL.endsWith('/')
     margin-top: 3rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--sl-color-hairline-light);
-    text-align: center;
     font-size: var(--sl-text-sm);
     color: var(--sl-color-gray-3);
+  }
+  .hbd-blurb {
+    max-width: 50rem;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 1.55;
   }
   .hbd-footer a {
     color: inherit;
     text-decoration: none;
     border-bottom: 1px dotted currentColor;
+    white-space: nowrap;
   }
   .hbd-footer a:hover {
     color: var(--sl-color-text-accent);
