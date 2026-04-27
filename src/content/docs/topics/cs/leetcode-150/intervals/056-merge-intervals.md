@@ -32,18 +32,33 @@ Sort; then walk, merging each new interval into the last of the result if they o
 
 ```python
 def merge(intervals):
-    intervals.sort(key=lambda x: x[0])
-    result = []
-    for interval in intervals:
-        if result and interval[0] <= result[-1][1]:
-            result[-1][1] = max(result[-1][1], interval[1])
+    intervals.sort(key=lambda x: x[0])   # L1: O(n log n)
+    result = []                            # L2: O(1) setup
+    for interval in intervals:             # L3: O(n) iterations
+        if result and interval[0] <= result[-1][1]:    # L4: O(1) check
+            result[-1][1] = max(result[-1][1], interval[1])  # L5: O(1) extend
         else:
-            result.append(list(interval))
+            result.append(list(interval))  # L6: O(1) amortized
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(intervals).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L2 (init) | O(1) | 1 | O(1) |
+| L3 (loop) | O(1) | n | O(n) |
+| L4 (overlap check) | O(1) | n | O(n) |
+| L5 (extend) | O(1) | up to n | O(n) |
+| L6 (append) | O(1) amortized | up to n | O(n) |
+
+L1 dominates: sorting requires O(n log n) comparisons, and the linear sweep that follows is O(n). Everything after the sort is a single pass.
+
 **Complexity**
-- **Time:** O(n log n), sort dominates.
+- **Time:** O(n log n), driven by L1 (the sort).
 - **Space:** O(n) output.
 
 ## Approach 3: Bucket sort (when values are bounded)
@@ -63,6 +78,41 @@ If interval endpoints are bounded (e.g., within [0, 10⁴]), use a boolean array
 | Bucket sort | O(max_value) | O(max_value) |
 
 Standard answer is sort + sweep. The same template feeds Insert Interval, Meeting Rooms II, and more.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_056_merge_intervals.py and run.
+# Uses the canonical implementation (Approach 2).
+
+def merge(intervals):
+    intervals.sort(key=lambda x: x[0])
+    result = []
+    for interval in intervals:
+        if result and interval[0] <= result[-1][1]:
+            result[-1][1] = max(result[-1][1], interval[1])
+        else:
+            result.append(list(interval))
+    return result
+
+def _run_tests():
+    # Example 1 from problem statement
+    assert merge([[1,3],[2,6],[8,10],[15,18]]) == [[1,6],[8,10],[15,18]]
+    # Example 2: touching endpoints merge
+    assert merge([[1,4],[4,5]]) == [[1,5]]
+    # Single interval (edge case)
+    assert merge([[1,2]]) == [[1,2]]
+    # All overlap into one
+    assert merge([[1,10],[2,5],[3,8]]) == [[1,10]]
+    # Already non-overlapping
+    assert merge([[1,2],[3,4],[5,6]]) == [[1,2],[3,4],[5,6]]
+    # Unsorted input
+    assert merge([[15,18],[1,3],[2,6],[8,10]]) == [[1,6],[8,10],[15,18]]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

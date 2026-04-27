@@ -24,17 +24,30 @@ Compare every pair of intervals for overlap.
 
 ```python
 def can_attend_meetings(intervals):
-    n = len(intervals)
-    for i in range(n):
-        for j in range(i + 1, n):
-            a, b = intervals[i], intervals[j]
-            if a[0] < b[1] and b[0] < a[1]:
+    n = len(intervals)                              # L1: O(1)
+    for i in range(n):                              # L2: outer loop, n iterations
+        for j in range(i + 1, n):                   # L3: inner loop, up to n-1 iterations
+            a, b = intervals[i], intervals[j]       # L4: O(1) unpack
+            if a[0] < b[1] and b[0] < a[1]:         # L5: overlap check, O(1)
                 return False
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(intervals).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (n) | O(1) | 1 | O(1) |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L3 (inner loop)** | **O(1)** | **n*(n-1)/2 total** | **O(n²)** ← dominates |
+| L4-L5 (unpack + check) | O(1) | up to n*(n-1)/2 | O(n²) |
+
+Every pair of intervals is inspected once. No sorting, no extra space. The quadratic cost comes directly from iterating all C(n, 2) pairs.
+
 **Complexity**
-- **Time:** O(n²).
+- **Time:** O(n²), driven by L3 (the nested pair enumeration).
 - **Space:** O(1).
 
 ## Approach 2: Sort by start + check adjacent (canonical)
@@ -43,39 +56,63 @@ Sort. If any meeting's start is earlier than the previous meeting's end, there's
 
 ```python
 def can_attend_meetings(intervals):
-    intervals.sort(key=lambda x: x[0])
-    for i in range(1, len(intervals)):
-        if intervals[i][0] < intervals[i, 1][1]:
+    intervals.sort(key=lambda x: x[0])             # L1: O(n log n)
+    for i in range(1, len(intervals)):              # L2: linear scan, n-1 iterations
+        if intervals[i][0] < intervals[i - 1][1]:  # L3: adjacent overlap check, O(1)
             return False
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(intervals).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L2 (loop) | O(1) | n-1 | O(n) |
+| L3 (overlap check) | O(1) | up to n-1 | O(n) |
+
+Once sorted by start time, only adjacent pairs can overlap: if interval i and interval j (j > i+1) overlapped, interval i+1 would also overlap with one of them. So a single linear scan after sorting is sufficient. The sort is the only non-trivial cost.
+
 **Complexity**
-- **Time:** O(n log n).
-- **Space:** O(1).
+- **Time:** O(n log n), driven by L1 (the sort).
+- **Space:** O(1) extra (sort is in-place for Python lists; the input is mutated).
 
 ## Approach 3: Sweep line on events
 
-Decompose into `+1` (start) and `-1` (end) events; sort by time with `-1` before `+1` on ties; running sum must stay ≤ 1.
+Decompose into `+1` (start) and `-1` (end) events; sort by time with `-1` before `+1` on ties; running sum must stay <= 1.
 
 ```python
 def can_attend_meetings(intervals):
-    events = []
-    for s, e in intervals:
-        events.append((s, 1))
-        events.append((e, -1))
-    events.sort(key=lambda x: (x[0], x[1]))   # end before start on ties
-    cur = 0
-    for _, delta in events:
-        cur += delta
-        if cur > 1:
+    events = []                                        # L1: O(1)
+    for s, e in intervals:                             # L2: build events, O(n)
+        events.append((s, 1))                          # L3: start event
+        events.append((e, -1))                         # L4: end event
+    events.sort(key=lambda x: (x[0], x[1]))            # L5: sort 2n events, O(n log n)
+    cur = 0                                            # L6: O(1)
+    for _, delta in events:                            # L7: scan events, 2n iterations
+        cur += delta                                   # L8: O(1) update
+        if cur > 1:                                    # L9: overlap if 2 active at once
             return False
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(intervals).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2-L4 (build events) | O(1) per interval | n | O(n) |
+| **L5 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L7-L9 (scan) | O(1) per event | 2n | O(n) |
+
+The events list has 2n entries (one start, one end per interval). Sorting 2n items is still O(n log n). The tie-breaking `(time, delta)` sort puts `-1` (end) before `+1` (start) at the same time, which correctly handles back-to-back meetings that share an endpoint as non-overlapping.
+
 **Complexity**
-- **Time:** O(n log n).
-- **Space:** O(n).
+- **Time:** O(n log n), driven by L5 (sorting 2n events).
+- **Space:** O(n) for the events list.
 
 Useful when the next problem (Meeting Rooms II) extends the counting.
 
@@ -87,7 +124,39 @@ Useful when the next problem (Meeting Rooms II) extends the counting.
 | **Sort + adjacent check** | **O(n log n)** | **O(1)** |
 | Sweep-line events | O(n log n) | O(n) |
 
-Sort + adjacent check is the shortest. Sweep-line generalizes to "how many rooms at peak" (252 → 253).
+Sort + adjacent check is the shortest. Sweep-line generalizes to "how many rooms at peak" (252 -> 253).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_252.py and run.
+# Uses the canonical implementation (Approach 2: sort + adjacent check).
+
+def can_attend_meetings(intervals):
+    intervals.sort(key=lambda x: x[0])
+    for i in range(1, len(intervals)):
+        if intervals[i][0] < intervals[i - 1][1]:
+            return False
+    return True
+
+def _run_tests():
+    # Example: overlapping meetings
+    assert can_attend_meetings([[0,30],[5,10],[15,20]]) == False
+    # Example: no overlap
+    assert can_attend_meetings([[7,10],[2,4]]) == True
+    # Edge: empty list
+    assert can_attend_meetings([]) == True
+    # Edge: single meeting
+    assert can_attend_meetings([[1,5]]) == True
+    # Back-to-back: end == start is not an overlap
+    assert can_attend_meetings([[1,5],[5,10]]) == True
+    # Exactly overlapping by 1 unit
+    assert can_attend_meetings([[1,6],[5,10]]) == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

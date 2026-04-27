@@ -20,23 +20,35 @@ LeetCode 128 · [Link](https://leetcode.com/problems/longest-consecutive-sequenc
 
 ## Approach 1: Brute force, for each number, walk forward
 
-For each number `x`, linearly scan the array for `x+1`, `x+2`, … until a miss.
+For each number `x`, linearly scan the array for `x+1`, `x+2`, until a miss.
 
 ```python
 def longest_consecutive(nums: list[int]) -> int:
-    best = 0
-    for x in nums:
-        cur = x
-        length = 1
-        while cur + 1 in nums:   # O(n) membership on a list
-            cur += 1
-            length += 1
-        best = max(best, length)
+    best = 0                              # L1: O(1)
+    for x in nums:                        # L2: outer loop, n iterations
+        cur = x                           # L3: O(1)
+        length = 1                        # L4: O(1)
+        while cur + 1 in nums:            # L5: O(n) membership on a list, per call
+            cur += 1                      # L6: O(1)
+            length += 1                   # L7: O(1)
+        best = max(best, length)          # L8: O(1)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L5 (list membership)** | **O(n)** | **up to n per outer iteration** | **O(n³)** ← dominates |
+| L3, L4, L6, L7, L8 | O(1) | proportional to run lengths | O(n²) at most |
+
+Each `in nums` on a list costs O(n), called up to n times per outer loop iteration.
+
 **Complexity**
-- **Time:** O(n³) in the worst case. `cur + 1 in nums` is O(n) on a list, called up to n times per outer iteration.
+- **Time:** O(n³) in the worst case, driven by L5 (O(n) membership called up to n times per outer).
 - **Space:** O(1) extra.
 
 Clearly doesn't meet the O(n) requirement, useful to see what the naive instinct would cost.
@@ -47,53 +59,79 @@ After sorting, runs of consecutive integers are adjacent. Walk the sorted array.
 
 ```python
 def longest_consecutive(nums: list[int]) -> int:
-    if not nums:
+    if not nums:                                    # L1: O(1) guard
         return 0
-    nums_sorted = sorted(set(nums))   # de-dup first
-    best = cur = 1
-    for i in range(1, len(nums_sorted)):
-        if nums_sorted[i] == nums_sorted[i, 1] + 1:
-            cur += 1
-            best = max(best, cur)
+    nums_sorted = sorted(set(nums))                 # L2: O(n log n) sort after O(n) dedup
+    best = cur = 1                                  # L3: O(1)
+    for i in range(1, len(nums_sorted)):            # L4: loop, n iterations
+        if nums_sorted[i] == nums_sorted[i - 1] + 1:  # L5: O(1) comparison
+            cur += 1                                # L6: O(1)
+            best = max(best, cur)                   # L7: O(1)
         else:
-            cur = 1
+            cur = 1                                 # L8: O(1) reset
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L2 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L4-L8 (linear scan) | O(1) | n | O(n) |
+
+The sort owns the cost; the rest is a single linear pass.
+
 **Complexity**
-- **Time:** O(n log n). Dominated by the sort.
+- **Time:** O(n log n), dominated by L2 (the sort).
 - **Space:** O(n) for the sorted set.
 
 Correct and simple, but violates the explicit O(n) constraint in the prompt.
 
 ## Approach 3: Hash set + run-start detection (optimal)
 
-Put everything in a set. For each number, only start counting a run if `x, 1` is *not* in the set (so `x` is a run start). Then walk upward as long as the next integer is present.
+Put everything in a set. For each number, only start counting a run if `x - 1` is *not* in the set (so `x` is a run start). Then walk upward as long as the next integer is present.
 
-Each element is touched by a walking pointer at most once across the whole algorithm → total O(n).
+Each element is touched by a walking pointer at most once across the whole algorithm, giving total O(n).
 
 ```python
 def longest_consecutive(nums: list[int]) -> int:
-    num_set = set(nums)
-    best = 0
-    for x in num_set:
-        if x, 1 in num_set:       # not a run start
+    num_set = set(nums)                    # L1: O(n) set construction
+    best = 0                               # L2: O(1)
+    for x in num_set:                      # L3: outer loop, n iterations
+        if x - 1 in num_set:              # L4: O(1) set lookup, skip non-starts
             continue
-        cur = x
-        length = 1
-        while cur + 1 in num_set:
-            cur += 1
-            length += 1
-        best = max(best, length)
+        cur = x                            # L5: O(1)
+        length = 1                         # L6: O(1)
+        while cur + 1 in num_set:         # L7: O(1) set lookup per call
+            cur += 1                       # L8: O(1)
+            length += 1                    # L9: O(1)
+        best = max(best, length)           # L10: O(1)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (set construction) | O(n) | 1 | O(n) |
+| L3 (outer loop) | O(1) | n | O(n) |
+| L4 (skip non-starts) | O(1) | n | O(n) |
+| **L7 (inner while, set lookup)** | **O(1)** | **n total across all starts** | **O(n)** ← key insight |
+| L10 (max) | O(1) | per start | O(n) |
+
+L4's guard ensures each element is walked from its run-start exactly once. Even though L7 is inside a `while` loop, the total number of iterations across all outer iterations is at most `n` (each element visited once as a "next" step).
+
 **Complexity**
-- **Time:** O(n). The `x, 1 in num_set` guard means each run is walked from its start exactly once; the inner `while` loops run n times in total across the whole outer loop.
+- **Time:** O(n), driven by L1 (set build) plus the amortized-O(n) total inner-while work at L7.
 - **Space:** O(n) for the set.
 
 ### Alternative: Union-Find
-A second O(n) approach unions every `x` with `x, 1` and `x + 1` in a disjoint-set structure and returns the largest component size. Same asymptotics, more code, worth knowing for the pattern.
+
+A second O(n) approach unions every `x` with `x - 1` and `x + 1` in a disjoint-set structure and returns the largest component size. Same asymptotics, more code, worth knowing for the pattern.
 
 ## Summary
 
@@ -104,6 +142,39 @@ A second O(n) approach unions every `x` with `x, 1` and `x + 1` in a disjoint-se
 | **Hash set + run start** | **O(n)** | O(n) |
 
 The run-start trick is elegant and exact-fit to the problem's constraint. Recognize "I need O(n) but I also need order" as the signal to reach for a hash set with an invariant.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_longest_consecutive.py and run.
+# Uses the canonical implementation (Approach 3: hash set + run-start detection).
+
+def longest_consecutive(nums: list[int]) -> int:
+    num_set = set(nums)
+    best = 0
+    for x in num_set:
+        if x - 1 in num_set:
+            continue
+        cur = x
+        length = 1
+        while cur + 1 in num_set:
+            cur += 1
+            length += 1
+        best = max(best, length)
+    return best
+
+def _run_tests():
+    assert longest_consecutive([100, 4, 200, 1, 3, 2]) == 4
+    assert longest_consecutive([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]) == 9
+    assert longest_consecutive([]) == 0
+    assert longest_consecutive([1]) == 1
+    assert longest_consecutive([1, 2, 3, 4, 5]) == 5
+    assert longest_consecutive([5, 4, 3, 2, 1]) == 5
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

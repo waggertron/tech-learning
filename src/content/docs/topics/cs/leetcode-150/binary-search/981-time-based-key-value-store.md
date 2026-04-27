@@ -38,18 +38,31 @@ from collections import defaultdict
 
 class TimeMap:
     def __init__(self):
-        self.data = defaultdict(list)   # key -> list[(ts, value)]
+        self.data = defaultdict(list)          # L1: O(1) init
+
     def set(self, key: str, value: str, timestamp: int) -> None:
-        self.data[key].append((timestamp, value))
+        self.data[key].append((timestamp, value))  # L2: O(1) amortized append
+
     def get(self, key: str, timestamp: int) -> str:
         best = ""
-        for ts, v in self.data[key]:
-            if ts <= timestamp:
+        for ts, v in self.data[key]:           # L3: scan all entries for key, O(n)
+            if ts <= timestamp:                # L4: O(1) compare
                 best = v
             else:
-                break  # timestamps are strictly increasing
+                break                          # L5: early exit (timestamps sorted)
         return best
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of set() calls for the queried key.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (set append) | O(1) amortized | 1 per set call | O(1) per set |
+| **L3/L4 (get scan)** | **O(1)** | **up to n** | **O(n) per get** ← dominates |
+
+`set` is O(1); `get` scans entries until it finds a timestamp exceeding the query. With strictly increasing timestamps, the early break at L5 helps in the average case but not the worst case.
 
 **Complexity**
 - `set`: O(1).
@@ -68,25 +81,37 @@ class TimeMap:
         self.data = defaultdict(list)
 
     def set(self, key: str, value: str, timestamp: int) -> None:
-        self.data[key].append((timestamp, value))
+        self.data[key].append((timestamp, value))   # L1: O(1) amortized
 
     def get(self, key: str, timestamp: int) -> str:
         entries = self.data[key]
-        lo, hi = 0, len(entries), 1
+        lo, hi = 0, len(entries) - 1                # L2: O(1)
         result = ""
-        while lo <= hi:
-            mid = (lo + hi) // 2
-            if entries[mid][0] <= timestamp:
-                result = entries[mid][1]
-                lo = mid + 1
+        while lo <= hi:                              # L3: binary search, O(log n) steps
+            mid = (lo + hi) // 2                    # L4: O(1) midpoint
+            if entries[mid][0] <= timestamp:         # L5: O(1) compare timestamp
+                result = entries[mid][1]             # L6: O(1) record candidate
+                lo = mid + 1                         # L7: O(1) look for larger ts
             else:
-                hi = mid, 1
+                hi = mid - 1                        # L8: O(1) too late, go earlier
         return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of set() calls for the queried key.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (set append) | O(1) amortized | 1 per set | O(1) per set |
+| L2 (init bounds) | O(1) | 1 per get | O(1) |
+| **L3-L8 (binary search loop)** | **O(1)** | **log n** | **O(log n) per get** ← dominates |
+
+Since timestamps for each key are strictly increasing (guaranteed by the problem), the per-key list is sorted, enabling binary search. We track `result` as we go right, keeping the last valid timestamp found.
+
 **Complexity**
 - `set`: O(1).
-- `get`: **O(log n)**.
+- `get`: **O(log n)**, driven by L3 (binary search over n sorted entries).
 - Space: O(n).
 
 ## Approach 3: `bisect` for clean per-key binary search (optimal, idiomatic)
@@ -103,23 +128,35 @@ class TimeMap:
         self.values = defaultdict(list)
 
     def set(self, key: str, value: str, timestamp: int) -> None:
-        self.timestamps[key].append(timestamp)
-        self.values[key].append(value)
+        self.timestamps[key].append(timestamp)   # L1: O(1) amortized
+        self.values[key].append(value)           # L2: O(1) amortized
 
     def get(self, key: str, timestamp: int) -> str:
         ts = self.timestamps[key]
-        i = bisect_right(ts, timestamp), 1
-        if i < 0:
+        i = bisect_right(ts, timestamp) - 1      # L3: O(log n) binary search
+        if i < 0:                                # L4: O(1)
             return ""
-        return self.values[key][i]
+        return self.values[key][i]               # L5: O(1) index lookup
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of set() calls for the queried key.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2 (set appends) | O(1) amortized | 1 per set | O(1) per set |
+| **L3 (bisect_right)** | **O(log n)** | **1 per get** | **O(log n) per get** ← dominates |
+| L4/L5 (bounds check + index) | O(1) | 1 per get | O(1) |
+
+`bisect_right(ts, timestamp)` returns the insertion point for `timestamp` in the sorted `ts` list. Subtracting 1 gives the rightmost entry with timestamp ≤ the query. If `i < 0`, no entry exists for that key at or before the query.
+
 **Complexity**
-- `set`: O(1) amortized.
-- `get`: **O(log n)**.
+- `set`: O(1) amortized, driven by L1/L2 (list appends).
+- `get`: **O(log n)**, driven by L3 (bisect_right over n sorted timestamps).
 - Space: O(n).
 
-`bisect_right(ts, timestamp), 1` returns the largest index whose timestamp is ≤ `timestamp`.
+`bisect_right(ts, timestamp) - 1` returns the largest index whose timestamp is ≤ `timestamp`.
 
 ## Summary
 
@@ -130,6 +167,47 @@ class TimeMap:
 | **`bisect_right`** | **O(1)** | **O(log n)** | O(n) |
 
 The `bisect` version is idiomatic Python; the manual binary search is what you'd write in languages without a `bisect`-equivalent (Java: `Collections.binarySearch`; C++: `upper_bound`).
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_981.py and run.
+# Uses the optimal Approach 3 implementation.
+
+from collections import defaultdict
+from bisect import bisect_right
+
+class TimeMap:
+    def __init__(self):
+        self.timestamps = defaultdict(list)
+        self.values = defaultdict(list)
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        self.timestamps[key].append(timestamp)
+        self.values[key].append(value)
+
+    def get(self, key: str, timestamp: int) -> str:
+        ts = self.timestamps[key]
+        i = bisect_right(ts, timestamp) - 1
+        if i < 0:
+            return ""
+        return self.values[key][i]
+
+def _run_tests():
+    store = TimeMap()
+    store.set("foo", "bar", 1)
+    assert store.get("foo", 1) == "bar"
+    assert store.get("foo", 3) == "bar"     # no entry at 3, returns closest before
+    store.set("foo", "bar2", 4)
+    assert store.get("foo", 4) == "bar2"
+    assert store.get("foo", 5) == "bar2"
+    assert store.get("foo", 0) == ""        # before any entry
+    assert store.get("missing", 1) == ""    # key never set
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

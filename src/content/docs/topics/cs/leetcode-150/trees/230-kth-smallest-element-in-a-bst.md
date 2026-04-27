@@ -26,13 +26,24 @@ Collect all values in sorted order via inorder, then index.
 
 ```python
 def kth_smallest(root, k):
-    def inorder(node):
+    def inorder(node):                          # L1: recursive inorder
         return inorder(node.left) + [node.val] + inorder(node.right) if node else []
-    return inorder(root)[k, 1]
+    return inorder(root)[k - 1]                 # L2: O(1) index
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, k = target rank.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (inorder + concat)** | **O(n) per call due to list concat** | **n** | **O(n²)** ← dominates |
+| L2 (index) | O(1) | 1 | O(1) |
+
+The `+` operator on lists creates a new list each time, making this O(n²) as written. Using `append` + generator would make it O(n).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n) with a proper append-based inorder; O(n²) with list concatenation as written.
 - **Space:** O(n) for the list.
 
 Works but doesn't exploit "early termination" once we've hit k.
@@ -47,16 +58,28 @@ def kth_smallest(root, k):
     result = [None]
     def inorder(node):
         if not node or result[0] is not None:
-            return
-        inorder(node.left)
-        count[0] += 1
+            return                              # L1: base / already found
+        inorder(node.left)                     # L2: recurse left
+        count[0] += 1                          # L3: O(1) increment
         if count[0] == k:
-            result[0] = node.val
+            result[0] = node.val               # L4: O(1) record answer
             return
-        inorder(node.right)
+        inorder(node.right)                    # L5: recurse right
     inorder(root)
     return result[0]
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, k = target rank.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (recurse left) | O(1) dispatch | h + k visits | O(h + k) |
+| L3 (increment) | O(1) | k | O(k) |
+| **L4/L5 (record + recurse right)** | **O(1)** | **h + k** | **O(h + k)** ← dominates |
+
+Once `count[0] == k`, all subsequent calls return immediately via L1's guard.
 
 **Complexity**
 - **Time:** O(h + k). Early exit after k visits.
@@ -72,18 +95,30 @@ def kth_smallest(root, k):
     node = root
     while node or stack:
         while node:
-            stack.append(node)
+            stack.append(node)      # L1: push left spine
             node = node.left
-        node = stack.pop()
-        k -= 1
+        node = stack.pop()          # L2: O(1) pop
+        k -= 1                      # L3: O(1) decrement
         if k == 0:
-            return node.val
-        node = node.right
+            return node.val         # L4: O(1) return kth
+        node = node.right           # L5: move to right subtree
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, k = target rank.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (push spine) | O(1) per push | h + k total | O(h + k) |
+| L2/L3 (pop + decrement) | O(1) | k | O(k) |
+| **L4/L5 (return or advance)** | **O(1)** | **h + k** | **O(h + k)** ← dominates (all lines tie) |
+
+We push nodes lazily (only down the left spine), so we never visit more than h + k nodes.
+
 **Complexity**
-- **Time:** O(h + k).
+- **Time:** O(h + k), driven by L1/L2 processing h + k nodes.
 - **Space:** O(h).
 
 ### Follow-up (mutable tree)
@@ -98,6 +133,61 @@ If the tree changes frequently, augment each node with `left_subtree_count`. The
 | **Iterative inorder + stack** | **O(h + k)** | **O(h)** |
 
 The iterative inorder is the canonical answer. It's also the natural structure for related problems (next-in-inorder, inorder successor).
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def kth_smallest(root, k):
+    stack = []
+    node = root
+    while node or stack:
+        while node:
+            stack.append(node)
+            node = node.left
+        node = stack.pop()
+        k -= 1
+        if k == 0:
+            return node.val
+        node = node.right
+    return -1
+
+def _run_tests():
+    # [3,1,4,null,2], k=1 -> 1
+    assert kth_smallest(build_tree([3, 1, 4, None, 2]), 1) == 1
+    # [5,3,6,2,4,null,null,1], k=3 -> 3
+    assert kth_smallest(build_tree([5, 3, 6, 2, 4, None, None, 1]), 3) == 3
+    # single node, k=1
+    assert kth_smallest(build_tree([1]), 1) == 1
+    # k = n (largest)
+    assert kth_smallest(build_tree([3, 1, 4, None, 2]), 4) == 4
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

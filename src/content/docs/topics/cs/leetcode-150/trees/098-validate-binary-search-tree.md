@@ -28,26 +28,38 @@ For each node, walk its left subtree confirming all < node, and right subtree co
 
 ```python
 def is_valid_bst(root):
-    def all_less(node, val):
+    def all_less(node, val):           # L1: walk subtree checking < val
         if not node:
             return True
         return node.val < val and all_less(node.left, val) and all_less(node.right, val)
 
-    def all_greater(node, val):
+    def all_greater(node, val):        # L2: walk subtree checking > val
         if not node:
             return True
         return node.val > val and all_greater(node.left, val) and all_greater(node.right, val)
 
     if not root:
         return True
-    return (all_less(root.left, root.val)
-            and all_greater(root.right, root.val)
-            and is_valid_bst(root.left)
-            and is_valid_bst(root.right))
+    return (all_less(root.left, root.val)    # L3: O(n) subtree walk
+            and all_greater(root.right, root.val)  # L4: O(n) subtree walk
+            and is_valid_bst(root.left)            # L5: recurse left
+            and is_valid_bst(root.right))          # L6: recurse right
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2 (subtree walks) | O(n) | O(n) calls | O(n²) |
+| **L3/L4 (all_less/all_greater)** | **O(n)** | **n nodes** | **O(n²)** ← dominates |
+| L5/L6 (recurse children) | O(1) dispatch | n | O(n) |
+
+For each node, the subtree walks re-examine every descendant. In a skewed tree of depth n, the same nodes are re-visited O(n) times each, giving O(n²) total.
+
 **Complexity**
-- **Time:** O(n²) worst case.
+- **Time:** O(n²) worst case, driven by L3/L4 re-walking subtrees at every node.
 - **Space:** O(h).
 
 Correct but re-walks subtrees many times.
@@ -58,23 +70,36 @@ An inorder walk of a BST yields values in sorted order. Compare each visited val
 
 ```python
 def is_valid_bst(root):
-    prev = [float('-inf')]
+    prev = [float('-inf')]          # L1: mutable cell for prev value
 
     def inorder(node):
         if not node:
             return True
-        if not inorder(node.left):
+        if not inorder(node.left):  # L2: recurse left, O(h) stack depth
             return False
-        if node.val <= prev[0]:
+        if node.val <= prev[0]:     # L3: O(1) monotonicity check
             return False
-        prev[0] = node.val
-        return inorder(node.right)
+        prev[0] = node.val          # L4: O(1) update
+        return inorder(node.right)  # L5: recurse right
 
     return inorder(root)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (recurse left) | O(1) dispatch | n | O(n) |
+| L3 (compare prev) | O(1) | n | O(n) |
+| L4 (update prev) | O(1) | n | O(n) |
+| **L5 (recurse right)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+
+Every node is visited exactly once. All lines contribute O(n) total; the whole traversal is O(n).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), each node visited once via L2/L5.
 - **Space:** O(h) recursion.
 
 Elegant; the BST's defining property makes this a one-liner-ish implementation.
@@ -88,15 +113,26 @@ def is_valid_bst(root):
     def validate(node, low, high):
         if not node:
             return True
-        if not (low < node.val < high):
+        if not (low < node.val < high):  # L1: O(1) bounds check
             return False
-        return (validate(node.left, low, node.val)
-                and validate(node.right, node.val, high))
+        return (validate(node.left, low, node.val)    # L2: tighten high
+                and validate(node.right, node.val, high))  # L3: tighten low
     return validate(root, float('-inf'), float('inf'))
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (bounds check) | O(1) | n | O(n) |
+| **L2/L3 (recurse children)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+
+Each node is visited exactly once, with O(1) work per node. The bounds are passed as scalars so there is no copying cost.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L2/L3 visiting every node once.
 - **Space:** O(h) recursion.
 
 ## Summary
@@ -108,6 +144,61 @@ def is_valid_bst(root):
 | **Recursive bounds** | **O(n)** | **O(h)** |
 
 Both Approach 2 and Approach 3 are O(n); the bounds version scales more naturally to variants that need upper/lower constraints (insertion, range counting).
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def is_valid_bst(root):
+    def validate(node, low, high):
+        if not node:
+            return True
+        if not (low < node.val < high):
+            return False
+        return (validate(node.left, low, node.val)
+                and validate(node.right, node.val, high))
+    return validate(root, float('-inf'), float('inf'))
+
+def _run_tests():
+    # [2,1,3] -> True
+    assert is_valid_bst(build_tree([2, 1, 3])) == True
+    # [5,1,4,null,null,3,6] -> False (4 is root of right subtree but 4 < 5)
+    assert is_valid_bst(build_tree([5, 1, 4, None, None, 3, 6])) == False
+    # single node -> True
+    assert is_valid_bst(build_tree([1])) == True
+    # empty -> True
+    assert is_valid_bst(None) == True
+    # [3,1,5,0,2,4,6] -> True (full balanced BST)
+    assert is_valid_bst(build_tree([3, 1, 5, 0, 2, 4, 6])) == True
+    # [5,4,6,null,null,3,7] -> False (3 in right subtree is < root 5)
+    assert is_valid_bst(build_tree([5, 4, 6, None, None, 3, 7])) == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

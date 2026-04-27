@@ -30,15 +30,27 @@ from math import ceil
 
 def min_eating_speed(piles: list[int], h: int) -> int:
     k = 1
-    while True:
-        hours = sum(ceil(p / k) for p in piles)
+    while True:                                     # L1: loop up to max(piles) times
+        hours = sum(ceil(p / k) for p in piles)    # L2: O(n) feasibility check
         if hours <= h:
             return k
-        k += 1
+        k += 1                                      # L3: O(1) increment
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(piles), M = max(piles).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop) | O(1) | up to M | O(M) |
+| **L2 (feasibility sum)** | **O(n)** | **up to M** | **O(n · M)** ← dominates |
+| L3 (increment) | O(1) | up to M | O(M) |
+
+In the worst case k must reach max(piles) before succeeding. Each check scans all n piles.
+
 **Complexity**
-- **Time:** O(n · max(piles)) worst case.
+- **Time:** O(n · max(piles)) worst case, driven by L2.
 - **Space:** O(1).
 
 ## Approach 2: Linear search from max downward (no improvement)
@@ -56,28 +68,41 @@ from math import ceil
 
 def min_eating_speed(piles: list[int], h: int) -> int:
     def hours(k: int) -> int:
-        return sum(ceil(p / k) for p in piles)
+        return sum(ceil(p / k) for p in piles)    # L1: O(n) per call
 
-    lo, hi = 1, max(piles)
-    while lo < hi:
-        mid = (lo + hi) // 2
-        if hours(mid) <= h:
-            hi = mid        # mid works; look smaller
+    lo, hi = 1, max(piles)                         # L2: O(n) to find max
+    while lo < hi:                                  # L3: loop, O(log M) iterations
+        mid = (lo + hi) // 2                       # L4: O(1) midpoint
+        if hours(mid) <= h:                        # L5: O(n) feasibility check
+            hi = mid                               # L6: O(1) mid works, try smaller
         else:
-            lo = mid + 1    # too slow; need larger k
+            lo = mid + 1                           # L7: O(1) too slow, need larger k
     return lo
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(piles), M = max(piles).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (find max) | O(n) | 1 | O(n) |
+| L3 (loop) | O(1) | log M | O(log M) |
+| **L5 (feasibility check)** | **O(n)** | **log M** | **O(n · log M)** ← dominates |
+| L6 or L7 (narrow) | O(1) | log M | O(log M) |
+
+The search space for k is [1, max(piles)], so the binary search runs log(max(piles)) steps. Each step calls `hours(k)` which sums over all n piles in O(n).
+
 **Complexity**
-- **Time:** O(n · log(max(piles))). Each feasibility check is O(n); we do log(max) of them.
+- **Time:** O(n · log(max(piles))), driven by L5 (O(n) feasibility check repeated log M times).
 - **Space:** O(1).
 
 ### Integer-only hours (avoid float `ceil`)
-`ceil(p / k)` can be replaced with `(p + k, 1) // k` to avoid floating point entirely:
+`ceil(p / k)` can be replaced with `(p + k - 1) // k` to avoid floating point entirely:
 
 ```python
 def hours(k: int) -> int:
-    return sum((p + k, 1) // k for p in piles)
+    return sum((p + k - 1) // k for p in piles)
 ```
 
 ## Summary
@@ -90,6 +115,39 @@ def hours(k: int) -> int:
 This is the template for every "minimum/maximum value that satisfies a monotonic predicate" problem. Once you recognize the monotonicity, you have the algorithm.
 
 Adjacent problems: 1011 Capacity To Ship Packages, 410 Split Array Largest Sum, 1482 Minimum Days to Make Bouquets, 2226 Maximum Candies Allocated to K Children.
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_875.py and run.
+# Uses the optimal Approach 3 implementation.
+
+from math import ceil
+
+def min_eating_speed(piles: list, h: int) -> int:
+    def hours(k: int) -> int:
+        return sum(ceil(p / k) for p in piles)
+
+    lo, hi = 1, max(piles)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if hours(mid) <= h:
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+
+def _run_tests():
+    assert min_eating_speed([3, 6, 7, 11], 8) == 4
+    assert min_eating_speed([30, 11, 23, 4, 20], 5) == 30
+    assert min_eating_speed([30, 11, 23, 4, 20], 6) == 23
+    assert min_eating_speed([1], 1) == 1              # single pile, exact fit
+    assert min_eating_speed([1000000000], 2) == 500000000  # large pile, 2 hours
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

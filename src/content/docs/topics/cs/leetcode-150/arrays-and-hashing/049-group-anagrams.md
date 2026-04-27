@@ -27,23 +27,36 @@ For each string, compare its character count against representatives of existing
 from collections import Counter
 
 def group_anagrams(strs: list[str]) -> list[list[str]]:
-    groups = []
-    for s in strs:
-        cs = Counter(s)
-        placed = False
-        for g in groups:
-            if Counter(g[0]) == cs:
-                g.append(s)
+    groups = []                                # L1: O(1)
+    for s in strs:                             # L2: outer loop, n iterations
+        cs = Counter(s)                        # L3: O(k) per string
+        placed = False                         # L4: O(1)
+        for g in groups:                       # L5: inner loop, up to n groups
+            if Counter(g[0]) == cs:            # L6: O(k) counter comparison
+                g.append(s)                    # L7: O(1) amortized
                 placed = True
                 break
         if not placed:
-            groups.append([s])
+            groups.append([s])                 # L8: O(1) amortized
     return groups
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(strs), k = average length of each string.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (outer loop) | O(1) | n | O(n) |
+| L3 (Counter build) | O(k) | n | O(n·k) |
+| **L5, L6 (inner loop + compare)** | **O(k)** | **up to n per outer** | **O(n²·k)** ← dominates |
+| L7, L8 (append) | O(1) amortized | n | O(n) |
+
+For each of `n` strings, the inner loop scans up to `n` existing groups and does an O(k) counter comparison each time.
+
 **Complexity**
-- **Time:** O(n² · k). For each of `n` strings, we compare against up to `n` groups; each comparison is O(k) where `k` is the string length.
-- **Space:** O(n · k) for the output plus counters.
+- **Time:** O(n²·k), driven by L5/L6 (inner loop with counter comparison).
+- **Space:** O(n·k) for the output plus counters.
 
 ## Approach 2: Sorted-string as hash key
 
@@ -53,16 +66,29 @@ Anagrams share the same multiset of characters; their sorted form is identical. 
 from collections import defaultdict
 
 def group_anagrams(strs: list[str]) -> list[list[str]]:
-    groups = defaultdict(list)
-    for s in strs:
-        key = "".join(sorted(s))
-        groups[key].append(s)
-    return list(groups.values())
+    groups = defaultdict(list)                 # L1: O(1)
+    for s in strs:                             # L2: n iterations
+        key = "".join(sorted(s))               # L3: O(k log k) sort + O(k) join
+        groups[key].append(s)                  # L4: O(1) avg hash insert + append
+    return list(groups.values())               # L5: O(n) to collect
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(strs), k = average length of each string.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (loop) | O(1) | n | O(n) |
+| **L3 (sort + join)** | **O(k log k)** | **n** | **O(n·k log k)** ← dominates |
+| L4 (hash + append) | O(k) avg (key hashing) | n | O(n·k) |
+| L5 (collect values) | O(n) | 1 | O(n) |
+
+The sort step on each string drives the total. Key hashing is O(k) but that's dominated by the sort.
+
 **Complexity**
-- **Time:** O(n · k log k). Sorting each string of length `k` takes O(k log k).
-- **Space:** O(n · k) for keys + output.
+- **Time:** O(n·k log k), driven by L3 (sorting each string).
+- **Space:** O(n·k) for keys + output.
 
 ## Approach 3: Char-count tuple as key (optimal for bounded alphabet)
 
@@ -72,28 +98,87 @@ Skip sorting entirely; a 26-slot frequency tuple is a cheaper, immutable key.
 from collections import defaultdict
 
 def group_anagrams(strs: list[str]) -> list[list[str]]:
-    groups = defaultdict(list)
-    for s in strs:
-        count = [0] * 26
-        for ch in s:
-            count[ord(ch), ord('a')] += 1
-        groups[tuple(count)].append(s)
-    return list(groups.values())
+    groups = defaultdict(list)                 # L1: O(1)
+    for s in strs:                             # L2: n iterations
+        count = [0] * 26                       # L3: O(1), fixed 26-slot array
+        for ch in s:                           # L4: k iterations per string
+            count[ord(ch) - ord('a')] += 1     # L5: O(1) array index
+        groups[tuple(count)].append(s)         # L6: O(26)=O(1) tuple + hash + append
+    return list(groups.values())               # L7: O(n) to collect
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(strs), k = average length of each string.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (outer loop) | O(1) | n | O(n) |
+| L3 (init count) | O(1) | n | O(n) |
+| **L4, L5 (char frequency)** | **O(1)** | **n·k total** | **O(n·k)** ← dominates |
+| L6 (tuple + hash) | O(1) (26-slot fixed) | n | O(n) |
+| L7 (collect) | O(n) | 1 | O(n) |
+
+The inner loop counts each character in O(1); no sort is needed. The tuple key is fixed at 26 elements regardless of string length.
+
 **Complexity**
-- **Time:** O(n · k). Linear per string, strictly better than the sort-key approach.
-- **Space:** O(n · k) for the output; O(n) hash map slots of fixed-size (26) keys.
+- **Time:** O(n·k), driven by L4/L5 (character counting). Linear per string, strictly better than the sort-key approach.
+- **Space:** O(n·k) for the output; O(n) hash map slots of fixed-size (26) keys.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Pairwise Counter compare | O(n² · k) | O(n · k) |
-| Sorted-string key | O(n · k log k) | O(n · k) |
-| **Char-count tuple key** | **O(n · k)** | O(n · k) |
+| Pairwise Counter compare | O(n²·k) | O(n·k) |
+| Sorted-string key | O(n·k log k) | O(n·k) |
+| **Char-count tuple key** | **O(n·k)** | O(n·k) |
 
 For bounded alphabets, the count-tuple approach is the tightest. For huge or unbounded alphabets, the sort-key version is simpler and often fast enough.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_group_anagrams.py and run.
+# Uses the canonical implementation (Approach 3: char-count tuple key).
+
+from collections import defaultdict
+
+def group_anagrams(strs: list[str]) -> list[list[str]]:
+    groups = defaultdict(list)
+    for s in strs:
+        count = [0] * 26
+        for ch in s:
+            count[ord(ch) - ord('a')] += 1
+        groups[tuple(count)].append(s)
+    return list(groups.values())
+
+def _run_tests():
+    # Sort inner lists for deterministic comparison
+    def normalize(result):
+        return sorted(sorted(g) for g in result)
+
+    r1 = group_anagrams(["eat","tea","tan","ate","nat","bat"])
+    assert normalize(r1) == [["ate","eat","tea"], ["bat"], ["nat","tan"]]
+
+    r2 = group_anagrams([""])
+    assert normalize(r2) == [[""]]
+
+    r3 = group_anagrams(["a"])
+    assert normalize(r3) == [["a"]]
+
+    # All same anagram group
+    r4 = group_anagrams(["abc","bca","cab"])
+    assert normalize(r4) == [["abc","bca","cab"]]
+
+    # All distinct
+    r5 = group_anagrams(["a","b","c"])
+    assert normalize(r5) == [["a"],["b"],["c"]]
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

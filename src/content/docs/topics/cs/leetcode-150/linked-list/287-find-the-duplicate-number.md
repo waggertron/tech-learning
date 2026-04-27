@@ -30,15 +30,26 @@ Sort the array; the duplicate sits next to one of its copies.
 
 ```python
 def find_duplicate(nums):
-    nums_sorted = sorted(nums)
+    nums_sorted = sorted(nums)                    # L1: O(n log n) sort
     for i in range(1, len(nums_sorted)):
-        if nums_sorted[i] == nums_sorted[i, 1]:
+        if nums_sorted[i] == nums_sorted[i - 1]:  # L2: O(1) compare adjacent
             return nums_sorted[i]
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = length of nums (n + 1 integers in range [1, n]).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L2 (scan adjacent) | O(1) | up to n | O(n) |
+
+Sorting is the only superlinear step. The scan at L2 is O(n) but dominated by L1.
+
 **Complexity**
-- **Time:** O(n log n).
+- **Time:** O(n log n), driven by L1.
 - **Space:** O(n) (Python sort copies).
 
 Violates "don't modify" *in spirit* (we're using a sorted copy, but the problem usually permits non-destructive). Fails the O(1) space constraint.
@@ -51,14 +62,25 @@ Walk once, checking a set.
 def find_duplicate(nums):
     seen = set()
     for x in nums:
-        if x in seen:
+        if x in seen:          # L1: O(1) set lookup
             return x
-        seen.add(x)
+        seen.add(x)            # L2: O(1) set insert
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = length of nums (n + 1 integers in range [1, n]).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (set lookup)** | **O(1)** | **up to n + 1** | **O(n)** ← dominates |
+| L2 (set insert) | O(1) | up to n | O(n) |
+
+We return as soon as the duplicate is found, so at most n + 1 iterations.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1/L2.
 - **Space:** O(n).
 
 Fails the O(1) space constraint.
@@ -75,24 +97,70 @@ def find_duplicate(nums):
     slow = nums[0]
     fast = nums[0]
     while True:
-        slow = nums[slow]
-        fast = nums[nums[fast]]
+        slow = nums[slow]          # L1: O(1) slow advances 1 step
+        fast = nums[nums[fast]]    # L2: O(1) fast advances 2 steps
         if slow == fast:
             break
     # Phase 2: find the entrance of the cycle
     slow = nums[0]
     while slow != fast:
-        slow = nums[slow]
-        fast = nums[fast]
+        slow = nums[slow]          # L3: O(1) slow advances 1 step
+        fast = nums[fast]          # L4: O(1) fast advances 1 step
     return slow
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = length of nums minus 1 (values in range [1, n], array length n + 1).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1-L2 (phase 1)** | **O(1)** | **up to n + cycle length** | **O(n)** ← dominates phase 1 |
+| **L3-L4 (phase 2)** | **O(1)** | **up to n** | **O(n)** ← dominates phase 2 |
+
+Phase 1 detects the cycle in O(n + c) steps where c is the cycle length. Phase 2 walks at most n steps to reach the cycle entrance. Total: O(n).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1-L2 (phase 1) and L3-L4 (phase 2).
 - **Space:** O(1).
 
 ### Why array-as-linked-list works
 `nums[i]` is in `[1, n]`, so it's always a valid next index. Starting from index 0, you can't revisit 0 (since no `nums[i] == 0`), so any cycle you encounter must begin at the *duplicate* value, every other value has exactly one predecessor.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_287.py and run.
+# Uses Floyd's cycle detection approach (Approach 3).
+
+def find_duplicate(nums):
+    slow = nums[0]
+    fast = nums[0]
+    while True:
+        slow = nums[slow]
+        fast = nums[nums[fast]]
+        if slow == fast:
+            break
+    slow = nums[0]
+    while slow != fast:
+        slow = nums[slow]
+        fast = nums[fast]
+    return slow
+
+def _run_tests():
+    # Examples from problem statement
+    assert find_duplicate([1,3,4,2,2]) == 2
+    assert find_duplicate([3,1,3,4,2]) == 3
+    # All same value
+    assert find_duplicate([3,3,3,3,3]) == 3
+    # Duplicate at boundary
+    assert find_duplicate([1,1]) == 1
+    assert find_duplicate([2,2,2,1]) == 2
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

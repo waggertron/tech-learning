@@ -1,6 +1,6 @@
 ---
 title: "1448. Count Good Nodes in Binary Tree"
-description: Count nodes on every root-to-node path that are ≥ every value above them.
+description: Count nodes on every root-to-node path that are >= every value above them.
 parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, medium]
 status: draft
@@ -25,22 +25,21 @@ For every node, walk its ancestor chain to verify the invariant.
 
 ```python
 def good_nodes(root):
-    # Build parent pointers with BFS/DFS, then check each node.
     from collections import deque
-    parent = {root: None}
+    parent = {root: None}              # L1: O(1) init
     q = deque([root])
     while q:
-        n = q.popleft()
+        n = q.popleft()                # L2: O(1) dequeue
         for child in (n.left, n.right):
             if child:
-                parent[child] = n
+                parent[child] = n      # L3: O(1) record parent
                 q.append(child)
     count = 0
     for node in parent:
         is_good = True
         cur, v = parent[node], node.val
         while cur is not None:
-            if cur.val > v:
+            if cur.val > v:            # L4: O(h) ancestor walk per node
                 is_good = False
                 break
             cur = parent[cur]
@@ -48,6 +47,17 @@ def good_nodes(root):
             count += 1
     return count
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2/L3 (BFS build) | O(1) | n | O(n) |
+| **L4 (ancestor walk)** | **O(h)** | **n** | **O(n · h)** ← dominates |
+
+Each of the n nodes walks up to O(h) ancestors. In a balanced tree this is O(n log n); in a skewed tree it's O(n²).
 
 **Complexity**
 - **Time:** O(n · h). Each of n nodes walks up O(h).
@@ -64,14 +74,26 @@ def good_nodes(root):
     def dfs(node, max_so_far):
         if not node:
             return 0
-        good = 1 if node.val >= max_so_far else 0
-        new_max = max(max_so_far, node.val)
-        return good + dfs(node.left, new_max) + dfs(node.right, new_max)
+        good = 1 if node.val >= max_so_far else 0    # L1: O(1) check
+        new_max = max(max_so_far, node.val)           # L2: O(1) update
+        return good + dfs(node.left, new_max) + dfs(node.right, new_max)  # L3: recurse
     return dfs(root, float('-inf'))
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (good check) | O(1) | n | O(n) |
+| L2 (update max) | O(1) | n | O(n) |
+| **L3 (recurse both)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+
+Each node is visited exactly once with O(1) work, carrying the running max as a parameter.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L3 visiting every node once.
 - **Space:** O(h) recursion.
 
 ### Pattern: "path-state DFS"
@@ -85,19 +107,29 @@ Stack of `(node, max_so_far)` pairs.
 def good_nodes(root):
     if not root:
         return 0
-    stack = [(root, float('-inf'))]
+    stack = [(root, float('-inf'))]   # L1: O(1) init
     count = 0
     while stack:
-        node, mx = stack.pop()
+        node, mx = stack.pop()        # L2: O(1) pop
         if node.val >= mx:
-            count += 1
-        new_max = max(mx, node.val)
+            count += 1                # L3: O(1) count
+        new_max = max(mx, node.val)   # L4: O(1) update
         if node.left:
-            stack.append((node.left, new_max))
+            stack.append((node.left, new_max))   # L5: O(1) push
         if node.right:
-            stack.append((node.right, new_max))
+            stack.append((node.right, new_max))  # L6: O(1) push
     return count
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (pop) | O(1) | n | O(n) |
+| L3/L4 (check + update) | O(1) | n | O(n) |
+| **L5/L6 (push children)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
 
 **Complexity**
 - **Time:** O(n).
@@ -112,6 +144,53 @@ def good_nodes(root):
 | Iterative DFS with state | O(n) | O(h) |
 
 The recursive path-state DFS is the canonical answer and the template for many "longest increasing path" / "valid-along-path" tree problems.
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def good_nodes(root):
+    def dfs(node, max_so_far):
+        if not node:
+            return 0
+        good = 1 if node.val >= max_so_far else 0
+        new_max = max(max_so_far, node.val)
+        return good + dfs(node.left, new_max) + dfs(node.right, new_max)
+    return dfs(root, float('-inf'))
+
+def _run_tests():
+    assert good_nodes(build_tree([3, 1, 4, 3, None, 1, 5])) == 4
+    assert good_nodes(build_tree([3, 3, None, 4, 2])) == 3
+    assert good_nodes(build_tree([1])) == 1
+    # 5 (good), 6 (good, >=5), 7 (good, >=6); 4 and 3 not good
+    assert good_nodes(build_tree([5, 4, 6, 3, None, None, 7])) == 3
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

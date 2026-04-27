@@ -24,17 +24,30 @@ Compare roots, then recurse into matching children.
 
 ```python
 def is_same_tree(p, q):
-    if not p and not q:
+    if not p and not q:      # L1: both null = same
         return True
-    if not p or not q:
+    if not p or not q:       # L2: one null = different structure
         return False
-    return (p.val == q.val
-            and is_same_tree(p.left, q.left)
-            and is_same_tree(p.right, q.right))
+    return (p.val == q.val                          # L3: O(1) value compare
+            and is_same_tree(p.left, q.left)        # L4: recurse left
+            and is_same_tree(p.right, q.right))     # L5: recurse right
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (null check) | O(1) | up to n | O(n) |
+| L2 (structure check) | O(1) | up to n | O(n) |
+| L3 (value compare) | O(1) | up to n | O(n) |
+| **L4/L5 (recurse children)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+
+Each node pair is visited at most once. The recursion short-circuits as soon as a mismatch is found, so best case is O(1) (root values differ), worst case O(n) (identical trees).
+
 **Complexity**
-- **Time:** O(n). Visits each node once (worst case).
+- **Time:** O(n), driven by L4/L5 visiting every node pair once.
 - **Space:** O(h) recursion depth.
 
 ## Approach 2: Iterative BFS over paired nodes
@@ -45,17 +58,29 @@ Queue of `(p_node, q_node)` pairs; compare, then enqueue corresponding children.
 from collections import deque
 
 def is_same_tree(p, q):
-    q_pairs = deque([(p, q)])
+    q_pairs = deque([(p, q)])          # L1: O(1) init
     while q_pairs:
-        a, b = q_pairs.popleft()
+        a, b = q_pairs.popleft()       # L2: O(1) dequeue
         if not a and not b:
-            continue
+            continue                   # L3: both null, OK
         if not a or not b or a.val != b.val:
-            return False
-        q_pairs.append((a.left, b.left))
-        q_pairs.append((a.right, b.right))
+            return False               # L4: O(1) check
+        q_pairs.append((a.left, b.left))    # L5: O(1) enqueue
+        q_pairs.append((a.right, b.right))  # L6: O(1) enqueue
     return True
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (dequeue) | O(1) | n | O(n) |
+| L4 (check) | O(1) | n | O(n) |
+| **L5/L6 (enqueue children)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+
+Same O(n) total; queue holds at most O(w) pairs where w is the max tree width.
 
 **Complexity**
 - **Time:** O(n).
@@ -67,15 +92,27 @@ Serialize both trees with null markers and compare the strings.
 
 ```python
 def is_same_tree(p, q):
-    def serialize(node):
+    def serialize(node):               # L1: preorder DFS
         if not node:
             return "#"
-        return f"{node.val},{serialize(node.left)},{serialize(node.right)}"
-    return serialize(p) == serialize(q)
+        return f"{node.val},{serialize(node.left)},{serialize(node.right)}"  # L2: O(n) string build
+    return serialize(p) == serialize(q)  # L3: O(n) string compare
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (DFS dispatch) | O(1) | n | O(n) |
+| **L2 (string concat)** | **O(n) per node due to f-string** | **n** | **O(n²)** ← dominates |
+| L3 (string compare) | O(n) | 1 | O(n) |
+
+The f-string approach creates a new string at each node by concatenating partial results, making it O(n²) in practice. Using `parts.append` + `"".join` at the end would make it O(n).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n) with `join`; O(n²) as written due to string concatenation.
 - **Space:** O(n) for the serialized strings.
 
 Correct but wasteful; included because it shows the structural equality of the problem and serialization.
@@ -89,6 +126,60 @@ Correct but wasteful; included because it shows the structural equality of the p
 | Serialize + compare | O(n) | O(n) |
 
 The recursive one-liner is the canonical answer. The paired-BFS variant is the template for iterative structural comparisons.
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def is_same_tree(p, q):
+    if not p and not q:
+        return True
+    if not p or not q:
+        return False
+    return (p.val == q.val
+            and is_same_tree(p.left, q.left)
+            and is_same_tree(p.right, q.right))
+
+def _run_tests():
+    # identical trees
+    assert is_same_tree(build_tree([1, 2, 3]), build_tree([1, 2, 3])) == True
+    # different structure
+    assert is_same_tree(build_tree([1, 2]), build_tree([1, None, 2])) == False
+    # both empty
+    assert is_same_tree(None, None) == True
+    # one empty
+    assert is_same_tree(build_tree([1]), None) == False
+    # single node same
+    assert is_same_tree(build_tree([1]), build_tree([1])) == True
+    # different values
+    assert is_same_tree(build_tree([1, 2, 3]), build_tree([1, 2, 4])) == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

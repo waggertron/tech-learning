@@ -26,11 +26,19 @@ Python's standard library does this directly.
 from itertools import permutations
 
 def permute(nums):
-    return [list(p) for p in permutations(nums)]
+    return [list(p) for p in permutations(nums)]  # L1: O(n · n!) total output
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (generate + convert)** | **O(n) per permutation** | **n!** | **O(n · n!)** ← dominates |
+
 **Complexity**
-- **Time:** O(n · n!).
+- **Time:** O(n · n!), driven by L1 generating and copying n! permutations each of length n.
 - **Space:** O(n · n!) output.
 
 Production-correct; usually rejected in interviews that want the algorithm.
@@ -48,23 +56,35 @@ def permute(nums):
 
     def backtrack():
         if len(path) == n:
-            result.append(path[:])
+            result.append(path[:])      # L1: O(n) copy at leaf
             return
         for i in range(n):
             if used[i]:
-                continue
-            used[i] = True
-            path.append(nums[i])
-            backtrack()
-            path.pop()
-            used[i] = False
+                continue                # L2: O(1) skip used
+            used[i] = True             # L3: O(1) mark used
+            path.append(nums[i])        # L4: O(1) push
+            backtrack()                 # L5: recurse
+            path.pop()                 # L6: O(1) pop
+            used[i] = False            # L7: O(1) unmark
 
     backtrack()
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (copy) | O(n) | n! | O(n · n!) |
+| L2 (skip) | O(1) | n per level | O(n · n!) |
+| **L5 (recurse)** | **O(1) dispatch** | **n · n! nodes** | **O(n · n!)** ← dominates (all lines tie) |
+
+The recursion tree has n! leaves, each at depth n, giving O(n · n!) total node visits.
+
 **Complexity**
-- **Time:** O(n · n!).
+- **Time:** O(n · n!), driven by L5 traversing the full permutation tree.
 - **Space:** O(n) recursion + output.
 
 The clearest expression of the backtracking template for permutations.
@@ -79,16 +99,26 @@ def permute(nums):
 
     def backtrack(start):
         if start == len(nums):
-            result.append(nums[:])
+            result.append(nums[:])          # L1: O(n) copy
             return
         for i in range(start, len(nums)):
-            nums[start], nums[i] = nums[i], nums[start]
-            backtrack(start + 1)
-            nums[start], nums[i] = nums[i], nums[start]
+            nums[start], nums[i] = nums[i], nums[start]   # L2: O(1) swap
+            backtrack(start + 1)                          # L3: recurse
+            nums[start], nums[i] = nums[i], nums[start]   # L4: O(1) undo swap
 
     backtrack(0)
     return result
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (copy) | O(n) | n! | O(n · n!) |
+| L2/L4 (swap + undo) | O(1) | n · n! | O(n · n!) |
+| **L3 (recurse)** | **O(1) dispatch** | **n · n! nodes** | **O(n · n!)** ← dominates (all lines tie) |
 
 **Complexity**
 - **Time:** O(n · n!).
@@ -104,7 +134,44 @@ Saves the `used` array. Slightly less readable; mutates input.
 | **Backtracking + `used`** | **O(n · n!)** | **O(n)** recursion |
 | In-place swap | O(n · n!) | O(n) recursion |
 
-All three are optimal in Big-O (output is itself Θ(n · n!)). Backtracking with `used` is the cleanest template; extends directly to Permutations II (duplicates allowed).
+All three are optimal in Big-O (output is itself O(n · n!)). Backtracking with `used` is the cleanest template; extends directly to Permutations II (duplicates allowed).
+
+## Test cases
+
+```python
+def permute(nums):
+    result = []
+    n = len(nums)
+    used = [False] * n
+    path = []
+    def backtrack():
+        if len(path) == n:
+            result.append(path[:])
+            return
+        for i in range(n):
+            if used[i]: continue
+            used[i] = True
+            path.append(nums[i])
+            backtrack()
+            path.pop()
+            used[i] = False
+    backtrack()
+    return result
+
+def _run_tests():
+    r = permute([1, 2, 3])
+    assert len(r) == 6
+    assert sorted(map(tuple, r)) == sorted([
+        (1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)])
+    r2 = permute([0, 1])
+    assert sorted(map(tuple, r2)) == [(0,1),(1,0)]
+    # single element
+    assert permute([1]) == [[1]]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

@@ -29,21 +29,32 @@ def reorder_list(head) -> None:
     nodes = []
     cur = head
     while cur:
-        nodes.append(cur)
+        nodes.append(cur)          # L1: O(1) per node, n total
         cur = cur.next
-    i, j = 0, len(nodes), 1
-    while i < j:
-        nodes[i].next = nodes[j]
+    i, j = 0, len(nodes) - 1
+    while i < j:                   # L2: n/2 iterations
+        nodes[i].next = nodes[j]   # L3: O(1) splice
         i += 1
         if i == j:
             break
-        nodes[j].next = nodes[i]
+        nodes[j].next = nodes[i]   # L4: O(1) splice
         j -= 1
     nodes[i].next = None
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the list.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (collect) | O(1) | n | O(n) |
+| **L2-L4 (re-link)** | **O(1)** | **n/2** | **O(n)** ← dominates |
+
+Both phases are O(n). The array costs O(n) extra space but simplifies the two-ended access to O(1) per step.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1 and L2-L4 equally.
 - **Space:** O(n) for the array.
 
 ## Approach 2: Use a deque (slightly cleaner)
@@ -59,21 +70,32 @@ def reorder_list(head) -> None:
     dq = deque()
     cur = head
     while cur:
-        dq.append(cur)
+        dq.append(cur)             # L1: O(1) per node
         cur = cur.next
     take_left = True
     tail = None
-    while dq:
-        node = dq.popleft() if take_left else dq.pop()
+    while dq:                      # L2: n iterations
+        node = dq.popleft() if take_left else dq.pop()  # L3: O(1) deque pop
         if tail:
-            tail.next = node
+            tail.next = node       # L4: O(1) link
         tail = node
         take_left = not take_left
     tail.next = None
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the list.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (build deque) | O(1) | n | O(n) |
+| **L2-L4 (drain + link)** | **O(1)** | **n** | **O(n)** ← dominates |
+
+Same asymptotics as Approach 1 but deque's O(1) popleft avoids the index bookkeeping.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1 and L2-L4 equally.
 - **Space:** O(n) for the deque.
 
 ## Approach 3: Find middle + reverse second half + merge (optimal)
@@ -91,21 +113,88 @@ def reorder_list(head) -> None:
 
     # 1. Find middle (slow ends at middle)
     slow = fast = head
-    while fast.next and fast.next.next:
-        slow = slow.next
-        fast = fast.next.next
+    while fast.next and fast.next.next:   # L1: slow/fast to find mid
+        slow = slow.next                   # L2: O(1) advance slow
+        fast = fast.next.next             # L3: O(1) advance fast
 
     # 2. Reverse second half
     prev, curr = None, slow.next
     slow.next = None     # cut the list in two
     while curr:
         nxt = curr.next
-        curr.next = prev
+        curr.next = prev                   # L4: O(1) pointer reversal
         prev = curr
         curr = nxt
     second = prev
 
     # 3. Weave
+    first = head
+    while second:                          # L5: n/2 iterations
+        t1 = first.next
+        t2 = second.next
+        first.next = second               # L6: O(1) splice
+        second.next = t1                  # L7: O(1) splice
+        first = t1
+        second = t2
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the list.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (find middle) | O(1) | n/2 | O(n) |
+| L4 (reverse) | O(1) | n/2 | O(n) |
+| **L5-L7 (weave)** | **O(1)** | **n/2** | **O(n)** ← all three phases equal |
+
+Three independent O(n) passes, each touching n/2 nodes. No extra allocation. The cut at `slow.next = None` is essential: it prevents the weave loop from running into the reversed half before it's consumed.
+
+**Complexity**
+- **Time:** O(n). Three linear passes (L1-L3, L4, L5-L7).
+- **Space:** O(1).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_143.py and run.
+# Uses the find-middle + reverse + weave approach (Approach 3).
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def to_list(head):
+    out = []
+    while head:
+        out.append(head.val)
+        head = head.next
+    return out
+
+def from_list(vals):
+    dummy = ListNode()
+    cur = dummy
+    for v in vals:
+        cur.next = ListNode(v)
+        cur = cur.next
+    return dummy.next
+
+def reorder_list(head) -> None:
+    if not head or not head.next:
+        return
+    slow = fast = head
+    while fast.next and fast.next.next:
+        slow = slow.next
+        fast = fast.next.next
+    prev, curr = None, slow.next
+    slow.next = None
+    while curr:
+        nxt = curr.next
+        curr.next = prev
+        prev = curr
+        curr = nxt
+    second = prev
     first = head
     while second:
         t1 = first.next
@@ -114,11 +203,33 @@ def reorder_list(head) -> None:
         second.next = t1
         first = t1
         second = t2
-```
 
-**Complexity**
-- **Time:** O(n). Three linear passes.
-- **Space:** O(1).
+def _run_tests():
+    # Even length: [1,2,3,4] -> [1,4,2,3]
+    h = from_list([1,2,3,4])
+    reorder_list(h)
+    assert to_list(h) == [1,4,2,3]
+
+    # Odd length: [1,2,3,4,5] -> [1,5,2,4,3]
+    h = from_list([1,2,3,4,5])
+    reorder_list(h)
+    assert to_list(h) == [1,5,2,4,3]
+
+    # Single node: no change
+    h = from_list([1])
+    reorder_list(h)
+    assert to_list(h) == [1]
+
+    # Two nodes: [1,2] -> [1,2]
+    h = from_list([1,2])
+    reorder_list(h)
+    assert to_list(h) == [1,2]
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

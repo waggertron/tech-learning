@@ -26,13 +26,25 @@ First element of `preorder` is the root. Find it in `inorder` to split left/righ
 def build_tree(preorder, inorder):
     if not preorder:
         return None
-    root_val = preorder[0]
+    root_val = preorder[0]                         # L1: O(1)
     root = TreeNode(root_val)
-    mid = inorder.index(root_val)
-    root.left = build_tree(preorder[1:mid + 1], inorder[:mid])
-    root.right = build_tree(preorder[mid + 1:], inorder[mid + 1:])
+    mid = inorder.index(root_val)                  # L2: O(n) linear scan
+    root.left = build_tree(preorder[1:mid + 1], inorder[:mid])        # L3: O(n) slice
+    root.right = build_tree(preorder[mid + 1:], inorder[mid + 1:])   # L4: O(n) slice
     return root
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (read first) | O(1) | n | O(n) |
+| **L2 (`list.index`)** | **O(n)** | **n** | **O(n²)** ← dominates |
+| L3/L4 (slicing) | O(n) | n | O(n²) |
+
+Both L2 and L3/L4 are O(n) per call, and both are called O(n) times total. The n² comes from re-scanning the inorder array at every level of recursion.
 
 **Complexity**
 - **Time:** O(n²). `list.index` is O(n); called O(n) times.
@@ -44,22 +56,36 @@ Precompute `val -> index` in `inorder` once (O(n)). Pass index ranges into the r
 
 ```python
 def build_tree(preorder, inorder):
-    inorder_idx = {v: i for i, v in enumerate(inorder)}
+    inorder_idx = {v: i for i, v in enumerate(inorder)}  # L1: O(n) build map
     pre_i = [0]
 
     def rec(in_l, in_r):
         if in_l > in_r:
             return None
-        root_val = preorder[pre_i[0]]
-        pre_i[0] += 1
+        root_val = preorder[pre_i[0]]           # L2: O(1) index into preorder
+        pre_i[0] += 1                           # L3: O(1) advance pointer
         root = TreeNode(root_val)
-        mid = inorder_idx[root_val]
-        root.left = rec(in_l, mid, 1)
-        root.right = rec(mid + 1, in_r)
+        mid = inorder_idx[root_val]             # L4: O(1) hash lookup
+        root.left = rec(in_l, mid - 1)          # L5: recurse left subtree
+        root.right = rec(mid + 1, in_r)         # L6: recurse right subtree
         return root
 
-    return rec(0, len(inorder), 1)
+    return rec(0, len(inorder) - 1)
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (build map) | O(n) | 1 | O(n) |
+| L2 (read preorder) | O(1) | n | O(n) |
+| L3 (advance pointer) | O(1) | n | O(n) |
+| **L4 (hash lookup)** | **O(1)** | **n** | **O(n)** ← dominates (all per-node lines tie) |
+| L5/L6 (recurse) | O(1) dispatch | n | O(n) |
+
+Every node is constructed in O(1) given the precomputed map. No slicing, no scanning.
 
 **Complexity**
 - **Time:** O(n). Each node constructed in O(1) given the index.
@@ -81,6 +107,71 @@ More code; rarely preferred unless recursion depth is a specific concern. The it
 | Iterative stack | O(n) | O(n) |
 
 The hash-map + recursion pattern generalizes to problem 106 (Build from Inorder + Postorder), same code with the preorder cursor replaced by a right-to-left postorder cursor.
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(preorder, inorder):
+    inorder_idx = {v: i for i, v in enumerate(inorder)}
+    pre_i = [0]
+
+    def rec(in_l, in_r):
+        if in_l > in_r:
+            return None
+        root_val = preorder[pre_i[0]]
+        pre_i[0] += 1
+        root = TreeNode(root_val)
+        mid = inorder_idx[root_val]
+        root.left = rec(in_l, mid - 1)
+        root.right = rec(mid + 1, in_r)
+        return root
+
+    return rec(0, len(inorder) - 1)
+
+def tree_to_list(root):
+    """Level-order serialize for comparison."""
+    if not root:
+        return []
+    from collections import deque
+    result, q = [], deque([root])
+    while q:
+        node = q.popleft()
+        if node:
+            result.append(node.val)
+            q.append(node.left)
+            q.append(node.right)
+        else:
+            result.append(None)
+    # strip trailing Nones
+    while result and result[-1] is None:
+        result.pop()
+    return result
+
+def _run_tests():
+    # example from problem
+    t = build_tree([3, 9, 20, 15, 7], [9, 3, 15, 20, 7])
+    assert tree_to_list(t) == [3, 9, 20, None, None, 15, 7]
+    # single node
+    t2 = build_tree([-1], [-1])
+    assert t2.val == -1
+    assert t2.left is None and t2.right is None
+    # left-skewed
+    t3 = build_tree([1, 2, 3], [3, 2, 1])
+    assert tree_to_list(t3) == [1, 2, None, 3]
+    # right-skewed
+    t4 = build_tree([1, 2, 3], [1, 2, 3])
+    assert tree_to_list(t4) == [1, None, 2, None, 3]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

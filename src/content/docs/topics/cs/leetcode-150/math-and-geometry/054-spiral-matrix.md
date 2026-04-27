@@ -26,26 +26,38 @@ Walk, turning when you hit a visited cell or the boundary.
 def spiral_order(matrix):
     if not matrix:
         return []
-    rows, cols = len(matrix), len(matrix[0])
+    rows, cols = len(matrix), len(matrix[0])    # L1: O(1)
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
     result = []
-    visited = [[False] * cols for _ in range(rows)]
+    visited = [[False] * cols for _ in range(rows)]  # L2: O(m·n)
     r = c = d = 0
-    for _ in range(rows * cols):
-        result.append(matrix[r][c])
-        visited[r][c] = True
+    for _ in range(rows * cols):                # L3: loop m·n times
+        result.append(matrix[r][c])             # L4: O(1) amortized
+        visited[r][c] = True                    # L5: O(1)
         dr, dc = directions[d]
         nr, nc = r + dr, c + dc
         if not (0 <= nr < rows and 0 <= nc < cols and not visited[nr][nc]):
-            d = (d + 1) % 4
+            d = (d + 1) % 4                     # L6: O(1) turn
             dr, dc = directions[d]
             nr, nc = r + dr, c + dc
         r, c = nr, nc
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = number of rows, n = number of columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init visited) | O(1) | m·n | O(m·n) |
+| **L3-L6 (walk loop)** | **O(1)** | **m·n** | **O(m·n)** ← dominates |
+| L4 (append) | O(1) amortized | m·n | O(m·n) |
+
+Every cell is visited exactly once.
+
 **Complexity**
-- **Time:** O(m · n).
+- **Time:** O(m · n), driven by L3/L4/L5/L6 (one pass over all cells).
 - **Space:** O(m · n) visited array.
 
 ## Approach 2: Shrinking boundaries (canonical, optimal space)
@@ -57,29 +69,40 @@ def spiral_order(matrix):
     if not matrix:
         return []
     result = []
-    top, bottom = 0, len(matrix), 1
-    left, right = 0, len(matrix[0]), 1
+    top, bottom = 0, len(matrix) - 1           # L1: O(1)
+    left, right = 0, len(matrix[0]) - 1        # L2: O(1)
 
-    while top <= bottom and left <= right:
-        for c in range(left, right + 1):
-            result.append(matrix[top][c])
-        top += 1
-        for r in range(top, bottom + 1):
+    while top <= bottom and left <= right:      # L3: outer loop, min(m,n)/2 rounds
+        for c in range(left, right + 1):        # L4: walk top row
+            result.append(matrix[top][c])       # L5: O(1) amortized
+        top += 1                                # L6: shrink
+        for r in range(top, bottom + 1):        # L7: walk right col
             result.append(matrix[r][right])
         right -= 1
         if top <= bottom:
-            for c in range(right, left, 1, -1):
+            for c in range(right, left - 1, -1):# L8: walk bottom row (fixed typo)
                 result.append(matrix[bottom][c])
             bottom -= 1
         if left <= right:
-            for r in range(bottom, top, 1, -1):
+            for r in range(bottom, top - 1, -1):# L9: walk left col (fixed typo)
                 result.append(matrix[r][left])
             left += 1
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = number of rows, n = number of columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3 (outer loop) | O(1) | min(m,n)/2 rounds | O(min(m,n)) |
+| **L4-L9 (four-side walks)** | **O(1) per cell** | **m·n total** | **O(m·n)** ← dominates |
+
+All four side-walks together visit each cell exactly once across all rounds.
+
 **Complexity**
-- **Time:** O(m · n).
+- **Time:** O(m · n), driven by L4-L9 (visiting every cell in every layer).
 - **Space:** O(1) extra.
 
 The `if top <= bottom` / `if left <= right` guards handle the last single row or column in non-square matrices.
@@ -101,6 +124,48 @@ Append the top row, then recurse on the transpose-reversed inner matrix. Elegant
 | Recursive peel | O(m · n) | O(min(m, n)) |
 
 The boundary-shrink template works for Spiral Matrix II (fill), III (starting offset), and IV (multiple passes).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_054.py and run.
+# Uses the canonical implementation (Approach 2: shrinking boundaries).
+
+def spiral_order(matrix):
+    if not matrix:
+        return []
+    result = []
+    top, bottom = 0, len(matrix) - 1
+    left, right = 0, len(matrix[0]) - 1
+    while top <= bottom and left <= right:
+        for c in range(left, right + 1):
+            result.append(matrix[top][c])
+        top += 1
+        for r in range(top, bottom + 1):
+            result.append(matrix[r][right])
+        right -= 1
+        if top <= bottom:
+            for c in range(right, left - 1, -1):
+                result.append(matrix[bottom][c])
+            bottom -= 1
+        if left <= right:
+            for r in range(bottom, top - 1, -1):
+                result.append(matrix[r][left])
+            left += 1
+    return result
+
+def _run_tests():
+    assert spiral_order([[1,2,3],[4,5,6],[7,8,9]]) == [1,2,3,6,9,8,7,4,5]
+    assert spiral_order([[1,2,3,4],[5,6,7,8],[9,10,11,12]]) == [1,2,3,4,8,12,11,10,9,5,6,7]
+    assert spiral_order([[1]]) == [1]                      # 1x1
+    assert spiral_order([[1,2],[3,4]]) == [1,2,4,3]        # 2x2
+    assert spiral_order([[1],[2],[3]]) == [1,2,3]          # single column
+    assert spiral_order([[1,2,3]]) == [1,2,3]              # single row
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

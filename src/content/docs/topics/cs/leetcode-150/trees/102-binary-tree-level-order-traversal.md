@@ -30,23 +30,37 @@ def level_order(root):
     if not root:
         return []
     result = []
-    q = deque([root])
+    q = deque([root])              # L1: O(1) init
     while q:
         level = []
-        for _ in range(len(q)):
-            node = q.popleft()
-            level.append(node.val)
+        for _ in range(len(q)):    # L2: iterate over current level only
+            node = q.popleft()     # L3: O(1) dequeue
+            level.append(node.val) # L4: O(1) record value
             if node.left:
-                q.append(node.left)
+                q.append(node.left)   # L5: O(1) enqueue left
             if node.right:
-                q.append(node.right)
-        result.append(level)
+                q.append(node.right)  # L6: O(1) enqueue right
+        result.append(level)       # L7: O(1) amortized
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, w = max tree width.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (level loop) | O(1) overhead | n total iterations | O(n) |
+| L3 (dequeue) | O(1) | n | O(n) |
+| L4 (append val) | O(1) | n | O(n) |
+| **L5/L6 (enqueue children)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L7 (append level) | O(1) amortized | h levels | O(h) |
+
+Every node is enqueued and dequeued exactly once. The `len(q)` snapshot at the start of each outer loop iteration is what allows us to separate levels without storing depth tags.
+
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(w).
+- **Time:** O(n), driven by L3/L4/L5/L6 processing each node once.
+- **Space:** O(w) for the queue (w = max width).
 
 ## Approach 2: DFS with depth-indexed lists
 
@@ -58,14 +72,24 @@ def level_order(root):
     def dfs(node, depth):
         if not node:
             return
-        if depth == len(result):
+        if depth == len(result):       # L1: first visit at this depth
             result.append([])
-        result[depth].append(node.val)
-        dfs(node.left, depth + 1)
-        dfs(node.right, depth + 1)
+        result[depth].append(node.val) # L2: O(1) append
+        dfs(node.left, depth + 1)      # L3: recurse left
+        dfs(node.right, depth + 1)     # L4: recurse right
     dfs(root, 0)
     return result
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, w = max tree width.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (depth check) | O(1) | n | O(n) |
+| **L2 (append val)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L3/L4 (recurse) | O(1) dispatch | n | O(n) |
 
 **Complexity**
 - **Time:** O(n).
@@ -84,16 +108,27 @@ def level_order(root):
     if not root:
         return []
     levels = defaultdict(list)
-    q = deque([(root, 0)])
+    q = deque([(root, 0)])          # L1: O(1) init with depth tag
     while q:
-        node, d = q.popleft()
-        levels[d].append(node.val)
+        node, d = q.popleft()       # L2: O(1) dequeue
+        levels[d].append(node.val)  # L3: O(1) append to depth bucket
         if node.left:
-            q.append((node.left, d + 1))
+            q.append((node.left, d + 1))   # L4: O(1) enqueue
         if node.right:
-            q.append((node.right, d + 1))
-    return [levels[d] for d in range(len(levels))]
+            q.append((node.right, d + 1))  # L5: O(1) enqueue
+    return [levels[d] for d in range(len(levels))]  # L6: O(n) reconstruct
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, w = max tree width.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (dequeue) | O(1) | n | O(n) |
+| **L3 (append)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L4/L5 (enqueue) | O(1) | n | O(n) |
+| L6 (reconstruct) | O(n) | 1 | O(n) |
 
 **Complexity**
 - **Time:** O(n).
@@ -110,6 +145,64 @@ Slightly more overhead than Approach 1; useful when you need non-contiguous dept
 | BFS with `(node, depth)` tags | O(n) | O(w + n) |
 
 Approach 1 is the textbook BFS template, memorize it. Same structure is reused in problems 199 (Right Side View), 515 (Largest per Row), 103 (Zigzag Level Order), and many others.
+
+## Test cases
+
+```python
+from collections import deque
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def level_order(root):
+    if not root:
+        return []
+    result = []
+    q = deque([root])
+    while q:
+        level = []
+        for _ in range(len(q)):
+            node = q.popleft()
+            level.append(node.val)
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        result.append(level)
+    return result
+
+def _run_tests():
+    assert level_order(build_tree([3, 9, 20, None, None, 15, 7])) == [[3], [9, 20], [15, 7]]
+    assert level_order(build_tree([1])) == [[1]]
+    assert level_order(None) == []
+    # skewed tree
+    t = TreeNode(1, TreeNode(2, TreeNode(3)))
+    assert level_order(t) == [[1], [2], [3]]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

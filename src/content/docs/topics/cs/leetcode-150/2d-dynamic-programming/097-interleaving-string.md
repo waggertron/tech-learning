@@ -24,23 +24,35 @@ LeetCode 97 · [Link](https://leetcode.com/problems/interleaving-string/) · *Me
 
 ```python
 def is_interleave(s1, s2, s3):
-    if len(s1) + len(s2) != len(s3):
+    if len(s1) + len(s2) != len(s3):   # L1: O(1) length guard
         return False
     def f(i, j):
-        k = i + j
-        if k == len(s3):
+        k = i + j                       # L2: O(1) current s3 index
+        if k == len(s3):               # L3: O(1) base case: consumed all of s3
             return True
-        if i < len(s1) and s1[i] == s3[k] and f(i + 1, j):
+        if i < len(s1) and s1[i] == s3[k] and f(i + 1, j):   # L4: try s1 branch
             return True
-        if j < len(s2) and s2[j] == s3[k] and f(i, j + 1):
+        if j < len(s2) and s2[j] == s3[k] and f(i, j + 1):   # L5: try s2 branch
             return True
         return False
     return f(0, 0)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = len(s1), n = len(s2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (length check) | O(1) | 1 | O(1) |
+| L2-L3 (index + base) | O(1) | per call | O(1) each |
+| **L4, L5 (two recursive branches)** | **O(1) work + up to 2 calls** | **O(2^(m+n)) call tree** | **O(2^(m+n))** ← dominates |
+
+At each step, both `s1[i]` and `s2[j]` might match `s3[k]`, spawning two branches. Without caching the same `(i, j)` is recomputed many times.
+
 **Complexity**
-- **Time:** O(2^(m + n)).
-- **Space:** O(m + n).
+- **Time:** O(2^(m + n)), driven by L4/L5 double-branching on ambiguous matches.
+- **Space:** O(m + n) recursion depth.
 
 ## Approach 2: Top-down memoized
 
@@ -48,30 +60,90 @@ def is_interleave(s1, s2, s3):
 from functools import lru_cache
 
 def is_interleave(s1, s2, s3):
-    if len(s1) + len(s2) != len(s3):
+    if len(s1) + len(s2) != len(s3):   # L1: O(1) length guard
         return False
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=None)            # L2: cache decorator
     def f(i, j):
-        k = i + j
-        if k == len(s3):
+        k = i + j                       # L3: O(1)
+        if k == len(s3):               # L4: O(1) base case
             return True
-        if i < len(s1) and s1[i] == s3[k] and f(i + 1, j):
+        if i < len(s1) and s1[i] == s3[k] and f(i + 1, j):   # L5: O(1) with cache
             return True
-        if j < len(s2) and s2[j] == s3[k] and f(i, j + 1):
+        if j < len(s2) and s2[j] == s3[k] and f(i, j + 1):   # L6: O(1) with cache
             return True
         return False
     return f(0, 0)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = len(s1), n = len(s2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (guard + cache) | O(1) | 1 | O(1) |
+| L3-L4 (index + base) | O(1) | once per unique (i,j) | O(m · n) total |
+| **L5, L6 (recursive calls, cache hits after first)** | **O(1) per call** | **at most (m+1)(n+1) states** | **O(m · n)** ← dominates |
+
+With memoization each `(i, j)` is computed once. Short-circuit evaluation means the second branch at L6 is only evaluated if L5 returns False.
+
 **Complexity**
-- **Time:** O(m · n).
-- **Space:** O(m · n).
+- **Time:** O(m · n), driven by L5/L6 across all unique (i,j) states.
+- **Space:** O(m · n) memo table.
 
 ## Approach 3: Bottom-up 2-D DP
 
 `dp[i][j]` = can `s3[:i + j]` be formed from `s1[:i]` and `s2[:j]`?
 
 ```python
+def is_interleave(s1, s2, s3):
+    m, n = len(s1), len(s2)             # L1: O(1)
+    if m + n != len(s3):               # L2: O(1) length guard
+        return False
+    dp = [[False] * (n + 1) for _ in range(m + 1)]  # L3: O(m*n) table init
+    dp[0][0] = True                    # L4: O(1) base case
+    for i in range(m + 1):            # L5: outer loop O(m)
+        for j in range(n + 1):        # L6: inner loop O(n)
+            if i == 0 and j == 0:
+                continue
+            k = i + j - 1             # L7: O(1) s3 index
+            if i > 0 and s1[i - 1] == s3[k] and dp[i - 1][j]:    # L8: O(1) from-s1 check
+                dp[i][j] = True
+            if not dp[i][j] and j > 0 and s2[j - 1] == s3[k] and dp[i][j - 1]:  # L9: O(1) from-s2 check
+                dp[i][j] = True
+    return dp[m][n]                    # L10: O(1) answer
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(s1), n = len(s2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L4 (init) | O(1) or O(m·n) | 1 | O(m · n) |
+| **L5+L6 (double loop)** | **O(1) body** | **(m+1)(n+1)** | **O(m · n)** ← dominates |
+| L7-L9 (cell fill) | O(1) | once per cell | included above |
+
+Each cell requires at most two O(1) lookups. The double loop at L5/L6 drives the total cost.
+
+**Complexity**
+- **Time:** O(m · n), driven by L5/L6 (the full double loop).
+- **Space:** O(m · n). Can be reduced to O(min(m, n)) via rolling array.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Naive recursion | O(2^(m + n)) | O(m + n) |
+| Top-down memo | O(m · n) | O(m · n) |
+| **Bottom-up 2-D DP** | **O(m · n)** | **O(m · n)** |
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_097.py and run.
+# Uses the canonical implementation (Approach 3: bottom-up 2-D DP).
+
 def is_interleave(s1, s2, s3):
     m, n = len(s1), len(s2)
     if m + n != len(s3):
@@ -82,25 +154,28 @@ def is_interleave(s1, s2, s3):
         for j in range(n + 1):
             if i == 0 and j == 0:
                 continue
-            k = i + j, 1
-            if i > 0 and s1[i, 1] == s3[k] and dp[i, 1][j]:
+            k = i + j - 1
+            if i > 0 and s1[i - 1] == s3[k] and dp[i - 1][j]:
                 dp[i][j] = True
-            if not dp[i][j] and j > 0 and s2[j, 1] == s3[k] and dp[i][j, 1]:
+            if not dp[i][j] and j > 0 and s2[j - 1] == s3[k] and dp[i][j - 1]:
                 dp[i][j] = True
     return dp[m][n]
+
+def _run_tests():
+    # problem statement examples
+    assert is_interleave("aabcc", "dbbca", "aadbbcbcac") == True
+    assert is_interleave("aabcc", "dbbca", "aadbbbaccc") == False
+    # edge: empty strings
+    assert is_interleave("", "", "") == True
+    assert is_interleave("a", "", "a") == True
+    assert is_interleave("", "b", "b") == True
+    # wrong length
+    assert is_interleave("a", "b", "abc") == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(m · n).
-- **Space:** O(m · n). Can be reduced to O(min(m, n)) via rolling array.
-
-## Summary
-
-| Approach | Time | Space |
-| --- | --- | --- |
-| Naive recursion | O(2^(m + n)) | O(m + n) |
-| Top-down memo | O(m · n) | O(m · n) |
-| **Bottom-up 2-D DP** | **O(m · n)** | **O(m · n)** |
 
 ## Related data structures
 

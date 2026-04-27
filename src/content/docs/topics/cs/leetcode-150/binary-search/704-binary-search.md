@@ -24,14 +24,24 @@ Ignore sortedness and scan linearly.
 
 ```python
 def search(nums: list[int], target: int) -> int:
-    for i, x in enumerate(nums):
-        if x == target:
+    for i, x in enumerate(nums):    # L1: scan every element, up to n iterations
+        if x == target:             # L2: O(1) compare
             return i
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1/L2 (linear scan)** | **O(1)** | **n** | **O(n)** ← dominates |
+
+No early termination in the worst case (target not present or at the last position).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1 (linear scan ignoring sortedness).
 - **Space:** O(1).
 
 Fails the problem's O(log n) requirement.
@@ -43,19 +53,30 @@ Divide the range and recurse.
 ```python
 def search(nums: list[int], target: int) -> int:
     def helper(lo: int, hi: int) -> int:
-        if lo > hi:
+        if lo > hi:                          # L1: base case, O(1)
             return -1
-        mid = (lo + hi) // 2
-        if nums[mid] == target:
+        mid = (lo + hi) // 2               # L2: O(1)
+        if nums[mid] == target:             # L3: O(1) compare
             return mid
-        if nums[mid] < target:
-            return helper(mid + 1, hi)
-        return helper(lo, mid, 1)
-    return helper(0, len(nums), 1)
+        if nums[mid] < target:              # L4: O(1) compare
+            return helper(mid + 1, hi)      # L5: recurse on right half
+        return helper(lo, mid - 1)          # L6: recurse on left half
+    return helper(0, len(nums) - 1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1-L4 (per frame)** | **O(1)** | **log n** | **O(log n)** ← dominates |
+| L5 or L6 (recurse) | stack frame | log n | O(log n) stack space |
+
+Each recursive call handles a half-size subproblem, so there are at most log n stack frames active at once.
+
 **Complexity**
-- **Time:** O(log n).
+- **Time:** O(log n), driven by L1-L4 (log n recursive levels, O(1) work each).
 - **Space:** O(log n) recursion depth.
 
 ## Approach 3: Iterative binary search (optimal)
@@ -64,24 +85,36 @@ Same halving, no recursion.
 
 ```python
 def search(nums: list[int], target: int) -> int:
-    lo, hi = 0, len(nums), 1
-    while lo <= hi:
-        mid = (lo + hi) // 2
-        if nums[mid] == target:
+    lo, hi = 0, len(nums) - 1            # L1: O(1)
+    while lo <= hi:                       # L2: loop, at most log n iterations
+        mid = (lo + hi) // 2             # L3: O(1) midpoint
+        if nums[mid] == target:           # L4: O(1) compare
             return mid
-        if nums[mid] < target:
-            lo = mid + 1
+        if nums[mid] < target:            # L5: O(1) compare
+            lo = mid + 1                  # L6: O(1) narrow right
         else:
-            hi = mid, 1
+            hi = mid - 1                  # L7: O(1) narrow left
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| **L2/L3/L4/L5 (loop body)** | **O(1)** | **log n** | **O(log n)** ← dominates |
+| L6 or L7 (narrow) | O(1) | log n | O(log n) |
+
+Each iteration halves the search space from [lo, hi] to either [lo, mid-1] or [mid+1, hi]. Starting with n elements, after k steps we have n / 2^k elements remaining. The loop terminates when n / 2^k < 1, i.e., k > log2(n).
+
 **Complexity**
-- **Time:** O(log n).
+- **Time:** O(log n), driven by L2 (loop halves the search space each iteration).
 - **Space:** O(1).
 
 ### Note on `mid = (lo + hi) // 2`
-In languages where integer overflow is a concern (C, C++, Java `int`), prefer `mid = lo + (hi, lo) // 2` to avoid `lo + hi` overflowing. In Python, integers are arbitrary-precision, so `(lo + hi) // 2` is safe.
+In languages where integer overflow is a concern (C, C++, Java `int`), prefer `mid = lo + (hi - lo) // 2` to avoid `lo + hi` overflowing. In Python, integers are arbitrary-precision, so `(lo + hi) // 2` is safe.
 
 ## Summary
 
@@ -92,6 +125,37 @@ In languages where integer overflow is a concern (C, C++, Java `int`), prefer `m
 | **Iterative binary search** | **O(log n)** | **O(1)** |
 
 Memorize the iterative form, it's the template for every other binary-search problem in this category.
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_704.py and run.
+# Uses the optimal Approach 3 implementation.
+
+def search(nums: list, target: int) -> int:
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1
+
+def _run_tests():
+    assert search([-1, 0, 3, 5, 9, 12], 9) == 4
+    assert search([-1, 0, 3, 5, 9, 12], 2) == -1    # not present
+    assert search([5], 5) == 0                        # single element found
+    assert search([5], 3) == -1                       # single element not found
+    assert search([-1, 0, 3, 5, 9, 12], -1) == 0     # first element
+    assert search([-1, 0, 3, 5, 9, 12], 12) == 5     # last element
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

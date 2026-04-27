@@ -26,12 +26,11 @@ For every node, treat it as the "top" of a path and compute the best path going 
 
 ```python
 def max_path_sum(root):
-    def max_gain(node):
-        # best straight-down path starting here
+    def max_gain(node):              # L1: straight-down best path
         if not node:
             return 0
-        left = max(0, max_gain(node.left))
-        right = max(0, max_gain(node.right))
+        left = max(0, max_gain(node.left))   # L2: O(n) subtree walk
+        right = max(0, max_gain(node.right)) # L3: O(n) subtree walk
         return node.val + max(left, right)
 
     best = float('-inf')
@@ -40,18 +39,30 @@ def max_path_sum(root):
         nonlocal best
         if not node:
             return
-        left = max(0, max_gain(node.left))
-        right = max(0, max_gain(node.right))
-        best = max(best, node.val + left + right)
-        visit(node.left)
+        left = max(0, max_gain(node.left))   # L4: O(n) per node
+        right = max(0, max_gain(node.right)) # L5: O(n) per node
+        best = max(best, node.val + left + right)  # L6: O(1) update
+        visit(node.left)                     # L7: recurse
         visit(node.right)
 
     visit(root)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L4/L5 (`max_gain` calls)** | **O(n)** | **n nodes** | **O(n²)** ← dominates |
+| L6 (update best) | O(1) | n | O(n) |
+| L7 (visit recurse) | O(1) dispatch | n | O(n) |
+
+`max_gain` is called freshly for every node visited by `visit`. In a balanced tree that's O(n log n) total; in a skewed tree it's O(n²).
+
 **Complexity**
-- **Time:** O(n²). `max_gain` called at every node, each call O(n).
+- **Time:** O(n²). `max_gain` called at every node, each call O(n), driven by L4/L5.
 - **Space:** O(h) recursion.
 
 ## Approach 2: Single DFS with side-effect accumulator (optimal)
@@ -66,19 +77,31 @@ def max_path_sum(root):
         nonlocal best
         if not node:
             return 0
-        left = max(0, max_gain(node.left))
-        right = max(0, max_gain(node.right))
+        left = max(0, max_gain(node.left))          # L1: recurse left, O(1) dispatch
+        right = max(0, max_gain(node.right))         # L2: recurse right, O(1) dispatch
         # best path passing through this node (uses both children)
-        best = max(best, node.val + left + right)
+        best = max(best, node.val + left + right)    # L3: O(1) side-effect update
         # return straight-down gain (one child at most) to the parent
-        return node.val + max(left, right)
+        return node.val + max(left, right)           # L4: O(1) return
 
     max_gain(root)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2 (recurse children) | O(1) dispatch | n | O(n) |
+| L3 (update best) | O(1) | n | O(n) |
+| **L4 (compute return val)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+
+Each node is visited exactly once. The combination of "return local gain" and "update global best" eliminates all redundant traversal.
+
 **Complexity**
-- **Time:** O(n). Each node visited once.
+- **Time:** O(n). Each node visited once, driven by L1/L2.
 - **Space:** O(h) recursion.
 
 ### The three moving parts
@@ -96,6 +119,60 @@ This is the same pattern as problem 543 (Diameter of Binary Tree), refined for w
 | **Single DFS with accumulator** | **O(n)** | **O(h)** |
 
 This pattern, DFS returns a "local gain to parent," side-effect tracks "global best through this node", is one of the most important templates in tree DP. It also solves problem 543 and 687.
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def max_path_sum(root):
+    best = float('-inf')
+    def max_gain(node):
+        nonlocal best
+        if not node:
+            return 0
+        left = max(0, max_gain(node.left))
+        right = max(0, max_gain(node.right))
+        best = max(best, node.val + left + right)
+        return node.val + max(left, right)
+    max_gain(root)
+    return best
+
+def _run_tests():
+    assert max_path_sum(build_tree([1, 2, 3])) == 6
+    assert max_path_sum(build_tree([-10, 9, 20, None, None, 15, 7])) == 42
+    # single node
+    assert max_path_sum(build_tree([1])) == 1
+    # all negative: must pick least negative
+    assert max_path_sum(build_tree([-3, -1, -2])) == -1
+    # negative root, positive children: best path is 2 + (-1) + 3 = 4
+    assert max_path_sum(build_tree([-1, 2, 3])) == 4
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

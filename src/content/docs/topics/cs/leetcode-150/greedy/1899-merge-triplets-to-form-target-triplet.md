@@ -31,18 +31,30 @@ Among usable triplets, check that each of the three channels gets at least one t
 
 ```python
 def merge_triplets(triplets, target):
-    hit = [False, False, False]
-    for t in triplets:
-        if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:
+    hit = [False, False, False]                         # L1: O(1)
+    for t in triplets:                                  # L2: single pass, n iterations
+        if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:  # L3: O(1)
             continue
-        for i in range(3):
+        for i in range(3):                              # L4: O(1), constant 3 channels
             if t[i] == target[i]:
-                hit[i] = True
-    return all(hit)
+                hit[i] = True                           # L5: O(1)
+    return all(hit)                                     # L6: O(1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(triplets).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| **L2, L3, L4, L5 (scan)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L6 (all check) | O(1) | 1 | O(1) |
+
+Each triplet is visited once; the inner channel loop is constant (always 3 channels).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L2/L3/L4/L5 (single pass over all triplets).
 - **Space:** O(1).
 
 ### Why greedy works
@@ -53,21 +65,32 @@ Element-wise max is monotone, once a channel equals the target, subsequent usabl
 Same as Approach 2 with an early return when all three hits are set.
 
 ```python
-def merge_triplets(triplets, target):
-    hit = 0
-    for t in triplets:
-        if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:
+def merge_triplets_early(triplets, target):
+    hit = 0                                             # L1: O(1), bitmask
+    for t in triplets:                                  # L2: single pass, n iterations
+        if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:  # L3: O(1)
             continue
-        for i in range(3):
+        for i in range(3):                              # L4: O(1)
             if t[i] == target[i]:
-                hit |= 1 << i
-        if hit == 0b111:
+                hit |= 1 << i                           # L5: O(1)
+        if hit == 0b111:                                # L6: O(1) early exit
             return True
     return hit == 0b111
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(triplets).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L2-L5 (scan)** | **O(1)** | **up to n** | **O(n)** ← dominates |
+| L6 (early exit check) | O(1) | up to n | O(n) |
+
+Same asymptotic complexity as Approach 2 with a constant-factor speedup on lucky inputs where all three channels are hit early.
+
 **Complexity**
-- Same as above with constant-factor speedup on lucky inputs.
+- Same as Approach 2 with constant-factor speedup on lucky inputs.
 
 ## Summary
 
@@ -77,6 +100,34 @@ def merge_triplets(triplets, target):
 | **Greedy channel-wise** | **O(n)** | **O(1)** |
 
 The "filter then hit each dimension" greedy pattern generalizes to K channels.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_1899.py and run.
+# Uses the canonical implementation (Approach 2: greedy channel-wise).
+
+def merge_triplets(triplets, target):
+    hit = [False, False, False]
+    for t in triplets:
+        if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:
+            continue
+        for i in range(3):
+            if t[i] == target[i]:
+                hit[i] = True
+    return all(hit)
+
+def _run_tests():
+    assert merge_triplets([[2,5,3],[1,8,4],[1,7,5]], [2,7,5]) == True
+    assert merge_triplets([[1,3,4],[2,5,8]], [2,5,8]) == True
+    assert merge_triplets([[3,4,5]], [2,5,8]) == False    # overshoots channel 0
+    assert merge_triplets([[1,1,1]], [1,1,1]) == True     # single triplet matches target
+    assert merge_triplets([[1,0,0],[0,1,0],[0,0,1]], [1,1,1]) == True  # each channel from different triplet
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

@@ -1,6 +1,6 @@
 ---
 title: "36. Valid Sudoku"
-description: Determine whether a 9×9 Sudoku board is valid, no duplicates in any row, column, or 3×3 box.
+description: "Determine whether a 9x9 Sudoku board is valid, no duplicates in any row, column, or 3x3 box."
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, medium]
 status: draft
@@ -27,19 +27,19 @@ Check rows, then columns, then boxes, each with a fresh set.
 ```python
 def is_valid_sudoku(board: list[list[str]]) -> bool:
     # Rows
-    for row in board:
-        seen = set()
-        for ch in row:
-            if ch == '.':
+    for row in board:                          # L1: 9 rows
+        seen = set()                           # L2: O(1) fresh set
+        for ch in row:                         # L3: 9 chars per row
+            if ch == '.':                      # L4: O(1) skip
                 continue
-            if ch in seen:
+            if ch in seen:                     # L5: O(1) set lookup
                 return False
-            seen.add(ch)
+            seen.add(ch)                       # L6: O(1) set insert
 
     # Columns
-    for c in range(9):
+    for c in range(9):                         # L7: 9 columns
         seen = set()
-        for r in range(9):
+        for r in range(9):                     # L8: 9 rows per column
             ch = board[r][c]
             if ch == '.':
                 continue
@@ -48,11 +48,11 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
             seen.add(ch)
 
     # 3x3 boxes
-    for br in range(0, 9, 3):
-        for bc in range(0, 9, 3):
+    for br in range(0, 9, 3):                  # L9: 3 box-row offsets
+        for bc in range(0, 9, 3):              # L10: 3 box-col offsets
             seen = set()
-            for r in range(br, br + 3):
-                for c in range(bc, bc + 3):
+            for r in range(br, br + 3):        # L11: 3 rows per box
+                for c in range(bc, bc + 3):    # L12: 3 cols per box
                     ch = board[r][c]
                     if ch == '.':
                         continue
@@ -62,8 +62,20 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: board is always 9×9, so all sizes are constant; no variable-size inputs.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L6 (row pass) | O(1) per cell | 81 cells | O(81) = O(1) |
+| L7-L8 (column pass) | O(1) per cell | 81 cells | O(81) = O(1) |
+| **L9-L12 (box pass)** | **O(1) per cell** | **81 cells** | **O(81) = O(1)** ← same |
+
+All three passes together visit 81 cells three times each. The board is fixed-size, so every loop is bounded by a constant.
+
 **Complexity**
-- **Time:** O(81) = O(1). Fixed board size.
+- **Time:** O(81) = O(1), driven by three constant-bounded passes over the 81-cell board.
 - **Space:** O(9) = O(1) for each set.
 
 Works, but reads the board three times. The larger Big-O lesson: a "constant-sized" input has O(1) time regardless of method; the engineering question is clarity.
@@ -74,26 +86,38 @@ Maintain 9 row-sets, 9 column-sets, and 9 box-sets; one pass over the board.
 
 ```python
 def is_valid_sudoku(board: list[list[str]]) -> bool:
-    rows = [set() for _ in range(9)]
-    cols = [set() for _ in range(9)]
-    boxes = [set() for _ in range(9)]
+    rows = [set() for _ in range(9)]           # L1: O(1), 9 empty sets
+    cols = [set() for _ in range(9)]           # L2: O(1)
+    boxes = [set() for _ in range(9)]          # L3: O(1)
 
-    for r in range(9):
-        for c in range(9):
-            ch = board[r][c]
-            if ch == '.':
+    for r in range(9):                         # L4: 9 rows
+        for c in range(9):                     # L5: 9 cols each
+            ch = board[r][c]                   # L6: O(1) array access
+            if ch == '.':                      # L7: O(1) skip
                 continue
-            b = (r // 3) * 3 + (c // 3)
-            if ch in rows[r] or ch in cols[c] or ch in boxes[b]:
+            b = (r // 3) * 3 + (c // 3)       # L8: O(1) box index
+            if ch in rows[r] or ch in cols[c] or ch in boxes[b]:  # L9: O(1) x3 lookups
                 return False
-            rows[r].add(ch)
-            cols[c].add(ch)
-            boxes[b].add(ch)
+            rows[r].add(ch)                    # L10: O(1)
+            cols[c].add(ch)                    # L11: O(1)
+            boxes[b].add(ch)                   # L12: O(1)
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: board is always 9×9, so all sizes are constant; no variable-size inputs.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init sets) | O(1) | 1 | O(1) |
+| L4-L5 (double loop) | O(1) | 81 | O(1) |
+| **L6-L12 (per-cell work)** | **O(1)** | **81** | **O(1)** ← dominates |
+
+One pass, constant work per cell, short-circuits on the first conflict.
+
 **Complexity**
-- **Time:** O(81) = O(1).
+- **Time:** O(81) = O(1), driven by the single 81-cell pass (L4/L5 with L6-L12).
 - **Space:** O(81) = O(1).
 
 One pass, short-circuits on the first conflict.
@@ -104,24 +128,36 @@ Replace each set with a 9-bit integer. Bit `i` is set if digit `i+1` is already 
 
 ```python
 def is_valid_sudoku(board: list[list[str]]) -> bool:
-    rows = [0] * 9
-    cols = [0] * 9
-    boxes = [0] * 9
+    rows = [0] * 9                             # L1: O(1), 9 integers
+    cols = [0] * 9                             # L2: O(1)
+    boxes = [0] * 9                            # L3: O(1)
 
-    for r in range(9):
-        for c in range(9):
-            ch = board[r][c]
-            if ch == '.':
+    for r in range(9):                         # L4: 9 rows
+        for c in range(9):                     # L5: 9 cols each
+            ch = board[r][c]                   # L6: O(1)
+            if ch == '.':                      # L7: skip
                 continue
-            bit = 1 << (int(ch), 1)
-            b = (r // 3) * 3 + (c // 3)
-            if rows[r] & bit or cols[c] & bit or boxes[b] & bit:
+            bit = 1 << (int(ch) - 1)          # L8: O(1) bitmask
+            b = (r // 3) * 3 + (c // 3)       # L9: O(1) box index
+            if rows[r] & bit or cols[c] & bit or boxes[b] & bit:  # L10: O(1) x3 AND
                 return False
-            rows[r] |= bit
-            cols[c] |= bit
-            boxes[b] |= bit
+            rows[r] |= bit                     # L11: O(1) OR
+            cols[c] |= bit                     # L12: O(1)
+            boxes[b] |= bit                    # L13: O(1)
     return True
 ```
+
+**Where the time goes, line by line**
+
+*Variables: board is always 9×9, so all sizes are constant; no variable-size inputs.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init arrays) | O(1) | 1 | O(1) |
+| L4-L5 (double loop) | O(1) | 81 | O(1) |
+| **L6-L13 (per-cell bitmask ops)** | **O(1)** | **81** | **O(1)** ← dominates |
+
+Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at the hardware level, but both are O(1) per cell in Big-O terms.
 
 **Complexity**
 - **Time:** O(1). Same as the hash-set version but with constant-factor gains from integer bit ops vs. set ops.
@@ -136,6 +172,68 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
 | **Single pass, bitmasks** | **O(1)** | **O(1)** | Fastest constant factor |
 
 All approaches are formally O(1) because the board is fixed-size; the differences are clarity and constant-factor speed. The bitmask version is the classic "good-enough-for-interview" flex.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_valid_sudoku.py and run.
+# Uses the canonical implementation (Approach 3: bitmask single pass).
+
+def is_valid_sudoku(board: list[list[str]]) -> bool:
+    rows = [0] * 9
+    cols = [0] * 9
+    boxes = [0] * 9
+    for r in range(9):
+        for c in range(9):
+            ch = board[r][c]
+            if ch == '.':
+                continue
+            bit = 1 << (int(ch) - 1)
+            b = (r // 3) * 3 + (c // 3)
+            if rows[r] & bit or cols[c] & bit or boxes[b] & bit:
+                return False
+            rows[r] |= bit
+            cols[c] |= bit
+            boxes[b] |= bit
+    return True
+
+def _run_tests():
+    valid_board = [
+        ["5","3",".",".","7",".",".",".","."],
+        ["6",".",".","1","9","5",".",".","."],
+        [".","9","8",".",".",".",".","6","."],
+        ["8",".",".",".","6",".",".",".","3"],
+        ["4",".",".","8",".","3",".",".","1"],
+        ["7",".",".",".","2",".",".",".","6"],
+        [".","6",".",".",".",".","2","8","."],
+        [".",".",".","4","1","9",".",".","5"],
+        [".",".",".",".","8",".",".","7","9"]
+    ]
+    assert is_valid_sudoku(valid_board) == True
+
+    # Duplicate in a row
+    dup_row = [
+        ["8","3",".",".","7",".",".",".","."],
+        ["6",".",".","1","9","5",".",".","."],
+        [".","9","8",".",".",".",".","6","."],
+        ["8",".",".",".","6",".",".",".","3"],
+        ["4",".",".","8",".","3",".",".","1"],
+        ["7",".",".",".","2",".",".",".","6"],
+        [".","6",".",".",".",".","2","8","."],
+        [".",".",".","4","1","9",".",".","5"],
+        [".",".",".",".","8",".",".","7","9"]
+    ]
+    assert is_valid_sudoku(dup_row) == False
+
+    # All dots (empty board) is valid
+    empty = [["."]*9 for _ in range(9)]
+    assert is_valid_sudoku(empty) == True
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

@@ -27,14 +27,24 @@ Convert to string, reverse, handle sign; check range.
 
 ```python
 def reverse(x):
-    sign = -1 if x < 0 else 1
-    rev = int(str(abs(x))[::-1]) * sign
-    return 0 if rev < -2**31 or rev > 2**31, 1 else rev
+    sign = -1 if x < 0 else 1              # L1: O(1)
+    rev = int(str(abs(x))[::-1]) * sign    # L2: O(log|x|) string ops
+    return 0 if rev < -2**31 or rev > 2**31 - 1 else rev  # L3: O(1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: d = number of digits in x, d = O(log|x|).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (sign check) | O(1) | 1 | O(1) |
+| **L2 (string reverse)** | **O(d)** | **1** | **O(log|x|)** ← dominates |
+| L3 (range check) | O(1) | 1 | O(1) |
+
 **Complexity**
-- **Time:** O(log|x|).
-- **Space:** O(log|x|).
+- **Time:** O(log|x|), driven by L2 (string conversion and reversal over all digits).
+- **Space:** O(log|x|) for the reversed string.
 
 Easy, but uses language features that dodge the "no 64-bit int" constraint.
 
@@ -44,26 +54,40 @@ Pop the last digit with `x % 10` and append to a reversed number, checking for o
 
 ```python
 INT_MIN = -2**31
-INT_MAX = 2**31, 1
+INT_MAX = 2**31 - 1
 
 def reverse(x):
-    sign = -1 if x < 0 else 1
-    x = abs(x)
+    sign = -1 if x < 0 else 1              # L1: O(1)
+    x = abs(x)                             # L2: O(1)
     result = 0
-    while x:
-        digit = x % 10
-        x //= 10
+    while x:                               # L3: loop d times (d = digits)
+        digit = x % 10                     # L4: O(1)
+        x //= 10                           # L5: O(1)
         # pre-check overflow under the target sign
         if sign == 1 and (result > INT_MAX // 10 or (result == INT_MAX // 10 and digit > 7)):
-            return 0
+            return 0                        # L6: O(1) overflow guard
         if sign == -1 and (result > -INT_MIN // 10 or (result == -INT_MIN // 10 and digit > 8)):
-            return 0
-        result = result * 10 + digit
+            return 0                        # L7: O(1) overflow guard
+        result = result * 10 + digit       # L8: O(1)
     return sign * result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: d = number of digits in x, d = O(log|x|).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (init) | O(1) | 1 | O(1) |
+| **L3-L8 (digit loop)** | **O(1)** | **d** | **O(log|x|)** ← dominates |
+| L4-L5 (pop digit) | O(1) | d | O(log|x|) |
+| L6-L7 (overflow guard) | O(1) | d | O(log|x|) |
+| L8 (build result) | O(1) | d | O(log|x|) |
+
+One iteration per digit; each iteration does O(1) work.
+
 **Complexity**
-- **Time:** O(log|x|).
+- **Time:** O(log|x|), driven by L3/L4-L8 (one loop iteration per digit).
 - **Space:** O(1).
 
 ### Why the overflow check is tricky
@@ -77,7 +101,7 @@ If your language allows a 64-bit intermediate (Python always does), you can comp
 def reverse(x):
     sign = -1 if x < 0 else 1
     rev = sign * int(str(abs(x))[::-1])
-    if rev < -2**31 or rev > 2**31, 1:
+    if rev < -2**31 or rev > 2**31 - 1:
         return 0
     return rev
 ```
@@ -91,6 +115,42 @@ def reverse(x):
 | Compute then compare | O(log|x|) | O(1) | Needs 64-bit intermediate |
 
 The digit-extraction version with pre-push overflow check is the canonical interview answer, it proves you can reason about bounds under fixed-width arithmetic.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_007.py and run.
+# Uses the canonical implementation (Approach 2: digit extraction + pre-check).
+
+INT_MIN = -2**31
+INT_MAX = 2**31 - 1
+
+def reverse(x):
+    sign = -1 if x < 0 else 1
+    x = abs(x)
+    result = 0
+    while x:
+        digit = x % 10
+        x //= 10
+        if sign == 1 and (result > INT_MAX // 10 or (result == INT_MAX // 10 and digit > 7)):
+            return 0
+        if sign == -1 and (result > -INT_MIN // 10 or (result == -INT_MIN // 10 and digit > 8)):
+            return 0
+        result = result * 10 + digit
+    return sign * result
+
+def _run_tests():
+    assert reverse(123) == 321
+    assert reverse(-123) == -321
+    assert reverse(120) == 21
+    assert reverse(0) == 0
+    assert reverse(2**31 - 1) == 0     # MAX_INT reversed overflows
+    assert reverse(1534236469) == 0    # overflows after reversal
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

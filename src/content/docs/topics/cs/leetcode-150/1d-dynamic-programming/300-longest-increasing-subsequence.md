@@ -37,18 +37,31 @@ Skip.
 
 ```python
 def length_of_lis(nums):
-    n = len(nums)
-    dp = [1] * n
-    for i in range(1, n):
-        for j in range(i):
-            if nums[j] < nums[i]:
-                dp[i] = max(dp[i], dp[j] + 1)
-    return max(dp)
+    n = len(nums)                          # L1: O(1)
+    dp = [1] * n                           # L2: O(n) init, every element is a LIS of length 1
+    for i in range(1, n):                  # L3: outer loop, n-1 iterations
+        for j in range(i):                 # L4: inner loop, up to i iterations
+            if nums[j] < nums[i]:          # L5: O(1) comparison
+                dp[i] = max(dp[i], dp[j] + 1)  # L6: O(1) update
+    return max(dp)                         # L7: O(n) scan
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init dp) | O(1) | n | O(n) |
+| L3 (outer loop) | O(1) | n-1 | O(n) |
+| **L4, L6 (inner loop + update)** | **O(1)** | **0+1+2+...+(n-1) = n(n-1)/2** | **O(n²)** ← dominates |
+| L7 (max scan) | O(1) | n | O(n) |
+
+The triangular sum at L4 is the bottleneck. For each index `i`, we scan all `j < i`, giving 1 + 2 + ... + (n-1) = O(n²) iterations total.
+
 **Complexity**
-- **Time:** O(n²).
-- **Space:** O(n).
+- **Time:** O(n²), driven by L4/L6 (the nested loop).
+- **Space:** O(n) for the dp array.
 
 Canonical "beginner" DP.
 
@@ -60,18 +73,32 @@ Maintain `tails[k]` = the smallest tail of any increasing subsequence of length 
 from bisect import bisect_left
 
 def length_of_lis(nums):
-    tails = []
-    for x in nums:
-        i = bisect_left(tails, x)
-        if i == len(tails):
-            tails.append(x)
+    tails = []                             # L1: O(1), empty tails array
+    for x in nums:                         # L2: outer loop, n iterations
+        i = bisect_left(tails, x)          # L3: O(log k) binary search, k = len(tails)
+        if i == len(tails):                # L4: O(1) check
+            tails.append(x)               # L5: O(1) amortized, extend LIS
         else:
-            tails[i] = x
-    return len(tails)
+            tails[i] = x                  # L6: O(1), update smallest tail
+    return len(tails)                      # L7: O(1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L3 (binary search)** | **O(log n)** | **n** | **O(n log n)** ← dominates |
+| L5, L6 (append/assign) | O(1) amortized | n total | O(n) |
+| L7 (return) | O(1) | 1 | O(1) |
+
+L3 does a binary search over `tails`, which grows to at most n elements. Each of the n elements is processed once with one binary search call, giving O(n log n) total. The append at L5 is O(1) amortized over the whole loop.
+
 **Complexity**
-- **Time:** O(n log n).
+- **Time:** O(n log n), driven by L3 (binary search inside the loop).
 - **Space:** O(n) for the `tails` array.
 
 ### Note
@@ -88,6 +115,37 @@ For the actual sequence, track predecessor indices alongside (more bookkeeping).
 | **Patience sort + binary search** | **O(n log n)** | **O(n)** |
 
 Patience sort is the canonical O(n log n) answer. Same template: Longest Bitonic Subsequence, Russian Doll Envelopes (354), Minimum Number of Operations to Make Array Increasing (1827 variants).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_300.py and run.
+# Uses the canonical implementation (Approach 3: patience sort + binary search).
+
+from bisect import bisect_left
+
+def length_of_lis(nums):
+    tails = []
+    for x in nums:
+        i = bisect_left(tails, x)
+        if i == len(tails):
+            tails.append(x)
+        else:
+            tails[i] = x
+    return len(tails)
+
+def _run_tests():
+    assert length_of_lis([10, 9, 2, 5, 3, 7, 101, 18]) == 4  # LeetCode example: [2,3,7,101]
+    assert length_of_lis([0, 1, 0, 3, 2, 3]) == 4
+    assert length_of_lis([7, 7, 7, 7]) == 1                   # all duplicates
+    assert length_of_lis([1]) == 1                             # single element
+    assert length_of_lis([1, 2, 3, 4, 5]) == 5                # already sorted
+    assert length_of_lis([5, 4, 3, 2, 1]) == 1                # strictly decreasing
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

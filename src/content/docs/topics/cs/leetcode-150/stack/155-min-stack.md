@@ -1,6 +1,6 @@
 ---
 title: "155. Min Stack"
-description: Design a stack that supports push, pop, top, and getMin all in O(1).
+description: "Design a stack that supports push, pop, top, and getMin all in O(1)."
 parent: stack
 tags: [leetcode, neetcode-150, stacks, design, medium]
 status: draft
@@ -31,12 +31,29 @@ Use a plain stack; compute `min(stack)` on every `getMin` call.
 ```python
 class MinStack:
     def __init__(self):
-        self.stack = []
-    def push(self, val: int) -> None: self.stack.append(val)
-    def pop(self) -> None: self.stack.pop()
-    def top(self) -> int: return self.stack[-1]
-    def getMin(self) -> int: return min(self.stack)
+        self.stack = []                            # L1: O(1)
+    def push(self, val: int) -> None:
+        self.stack.append(val)                     # L2: O(1) amortized
+    def pop(self) -> None:
+        self.stack.pop()                           # L3: O(1)
+    def top(self) -> int:
+        return self.stack[-1]                      # L4: O(1)
+    def getMin(self) -> int:
+        return min(self.stack)                     # L5: O(n) full scan
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of elements currently on the stack.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (push) | O(1) amortized | per call | O(1) per push |
+| L3 (pop) | O(1) | per call | O(1) per pop |
+| L4 (top) | O(1) | per call | O(1) per top |
+| **L5 (getMin scan)** | **O(n)** | **per call** | **O(n) per getMin** ← bottleneck |
+
+`min(stack)` must scan all n elements every time.
 
 **Complexity**
 - `push`, `pop`, `top`: O(1).
@@ -52,23 +69,36 @@ Maintain a parallel stack of running minimums. On `push`, push `min(val, current
 ```python
 class MinStack:
     def __init__(self):
-        self.stack = []
-        self.mins = []
+        self.stack = []                            # L1: O(1)
+        self.mins = []                             # L2: O(1) parallel min-stack
 
     def push(self, val: int) -> None:
-        self.stack.append(val)
-        self.mins.append(val if not self.mins else min(val, self.mins[-1]))
+        self.stack.append(val)                     # L3: O(1)
+        self.mins.append(val if not self.mins else min(val, self.mins[-1]))  # L4: O(1)
 
     def pop(self) -> None:
-        self.stack.pop()
-        self.mins.pop()
+        self.stack.pop()                           # L5: O(1)
+        self.mins.pop()                            # L6: O(1)
 
     def top(self) -> int:
-        return self.stack[-1]
+        return self.stack[-1]                      # L7: O(1)
 
     def getMin(self) -> int:
-        return self.mins[-1]
+        return self.mins[-1]                       # L8: O(1) top of min-stack
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of elements currently on the stack.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3, L4 (push both stacks) | O(1) | per push | O(1) per push |
+| L5, L6 (pop both stacks) | O(1) | per pop | O(1) per pop |
+| L7 (top) | O(1) | per call | O(1) per top |
+| **L8 (getMin)** | **O(1)** | **per call** | **O(1) per getMin** ← optimal |
+
+Every operation is O(1); the mins stack mirrors every push/pop.
 
 **Complexity**
 - All operations: **O(1)**.
@@ -81,21 +111,34 @@ Same asymptotics as Approach 2 but with one container instead of two.
 ```python
 class MinStack:
     def __init__(self):
-        self.stack = []   # list of (value, running_min)
+        self.stack = []                            # L1: O(1) list of (value, running_min)
 
     def push(self, val: int) -> None:
-        cur_min = val if not self.stack else min(val, self.stack[-1][1])
-        self.stack.append((val, cur_min))
+        cur_min = val if not self.stack else min(val, self.stack[-1][1])  # L2: O(1)
+        self.stack.append((val, cur_min))          # L3: O(1) amortized
 
     def pop(self) -> None:
-        self.stack.pop()
+        self.stack.pop()                           # L4: O(1)
 
     def top(self) -> int:
-        return self.stack[-1][0]
+        return self.stack[-1][0]                   # L5: O(1) first element of top tuple
 
     def getMin(self) -> int:
-        return self.stack[-1][1]
+        return self.stack[-1][1]                   # L6: O(1) second element of top tuple
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of elements currently on the stack.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2, L3 (push: compute min + append tuple) | O(1) | per push | O(1) per push |
+| L4 (pop) | O(1) | per pop | O(1) per pop |
+| L5 (top) | O(1) | per call | O(1) per top |
+| **L6 (getMin)** | **O(1)** | **per call** | **O(1) per getMin** ← optimal |
+
+All operations remain O(1) by keeping the running minimum embedded in each stack frame.
 
 **Complexity**
 - All operations: **O(1)**.
@@ -113,6 +156,60 @@ A third variant pushes to the aux min-stack **only** when a new minimum is estab
 | **Tuple stack** | O(1) | **O(1)** | O(n) |
 
 The tuple-stack and auxiliary-stack approaches are equivalent in Big-O. Pick by taste.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_min_stack.py and run.
+# Uses the canonical implementation (Approach 3: tuple stack).
+
+class MinStack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, val: int) -> None:
+        cur_min = val if not self.stack else min(val, self.stack[-1][1])
+        self.stack.append((val, cur_min))
+
+    def pop(self) -> None:
+        self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1][0]
+
+    def getMin(self) -> int:
+        return self.stack[-1][1]
+
+def _run_tests():
+    ms = MinStack()
+    ms.push(-2)
+    ms.push(0)
+    ms.push(-3)
+    assert ms.getMin() == -3
+    ms.pop()
+    assert ms.top() == 0
+    assert ms.getMin() == -2
+
+    # Push in increasing order
+    ms2 = MinStack()
+    ms2.push(1)
+    ms2.push(2)
+    ms2.push(3)
+    assert ms2.getMin() == 1
+    ms2.pop()
+    assert ms2.getMin() == 1
+
+    # Single element
+    ms3 = MinStack()
+    ms3.push(5)
+    assert ms3.top() == 5
+    assert ms3.getMin() == 5
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

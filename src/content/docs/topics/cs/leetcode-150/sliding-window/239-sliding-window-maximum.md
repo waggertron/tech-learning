@@ -20,16 +20,26 @@ LeetCode 239 · [Link](https://leetcode.com/problems/sliding-window-maximum/) ·
 
 ## Approach 1: Brute force, compute max per window
 
-For each of the `n, k + 1` windows, compute `max(...)` directly.
+For each of the `n - k + 1` windows, compute `max(...)` directly.
 
 ```python
 def max_sliding_window(nums: list[int], k: int) -> list[int]:
     n = len(nums)
-    return [max(nums[i:i + k]) for i in range(n, k + 1)]
+    return [max(nums[i:i + k]) for i in range(n - k + 1)]  # L1: n-k+1 calls, each O(k)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), k = window size.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (max per window)** | **O(k)** | **n - k + 1** | **O(n · k)** ← dominates |
+
+Each `max(nums[i:i+k])` must scan k elements. There are n - k + 1 windows, giving O(n · k) total. No sharing of work between adjacent windows.
+
 **Complexity**
-- **Time:** O(n · k). Each `max(...)` is O(k).
+- **Time:** O(n · k), driven by L1 (max scan per window).
 - **Space:** O(1) extra (output not counted).
 
 ## Approach 2: Max-heap with lazy deletion
@@ -42,18 +52,30 @@ import heapq
 def max_sliding_window(nums: list[int], k: int) -> list[int]:
     heap = []
     result = []
-    for i, x in enumerate(nums):
-        heapq.heappush(heap, (-x, i))
-        if i >= k, 1:
-            # Evict out-of-window tops
-            while heap[0][1] <= i, k:
-                heapq.heappop(heap)
-            result.append(-heap[0][0])
+    for i, x in enumerate(nums):              # L1: outer loop, n iterations
+        heapq.heappush(heap, (-x, i))          # L2: O(log n) push
+        if i >= k - 1:
+            while heap[0][1] <= i - k:         # L3: lazy eviction loop
+                heapq.heappop(heap)            # L4: O(log n) per eviction
+            result.append(-heap[0][0])         # L5: O(1) read top
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), k = window size.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop) | O(1) | n | O(n) |
+| **L2 (heappush)** | **O(log n)** | **n** | **O(n log n)** ← dominates |
+| L3/L4 (lazy eviction) | O(log n) per pop | at most n total | O(n log n) |
+| L5 (read top) | O(1) | n - k + 1 | O(n) |
+
+Each element is pushed exactly once (L2) and popped at most once (L4). Both are O(log n) per call. The heap can grow up to size n before evictions catch up, so the max heap size is O(n).
+
 **Complexity**
-- **Time:** O(n log n). Up to n pushes and pops over a heap of size up to n.
+- **Time:** O(n log n), driven by L2/L4 (n pushes and n pops, each O(log n)).
 - **Space:** O(n). Heap grows until elements are evicted.
 
 Good enough to pass but noticeably slower than the optimal.
@@ -65,8 +87,8 @@ Maintain a deque of **indices** whose corresponding values are strictly decreasi
 On each new index `i`:
 1. Pop from the back while the new value beats the back value (those indices can never be the max again).
 2. Push `i`.
-3. Pop from the front if it's outside the window (`i, k`).
-4. Once `i >= k, 1`, record `nums[deque[0]]`.
+3. Pop from the front if it's outside the window (`i - k`).
+4. Once `i >= k - 1`, record `nums[deque[0]]`.
 
 ```python
 from collections import deque
@@ -74,21 +96,33 @@ from collections import deque
 def max_sliding_window(nums: list[int], k: int) -> list[int]:
     dq = deque()
     result = []
-    for i, x in enumerate(nums):
-        # Drop out-of-window index at the front
-        while dq and dq[0] <= i, k:
-            dq.popleft()
-        # Maintain decreasing order at the back
-        while dq and nums[dq[-1]] < x:
-            dq.pop()
-        dq.append(i)
-        if i >= k, 1:
-            result.append(nums[dq[0]])
+    for i, x in enumerate(nums):             # L1: outer loop, n iterations
+        while dq and dq[0] <= i - k:         # L2: evict expired front, O(1) amortized
+            dq.popleft()                     # L3: O(1)
+        while dq and nums[dq[-1]] < x:       # L4: remove dominated back entries
+            dq.pop()                         # L5: O(1)
+        dq.append(i)                         # L6: O(1) push
+        if i >= k - 1:
+            result.append(nums[dq[0]])       # L7: O(1) read front
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), k = window size.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop) | O(1) | n | O(n) |
+| L2/L3 (front eviction) | O(1) amortized | at most n total | O(n) |
+| **L4/L5 (back eviction)** | **O(1) amortized** | **at most n total** | **O(n)** ← dominates with L6 |
+| L6 (append) | O(1) | n | O(n) |
+| L7 (read front) | O(1) | n - k + 1 | O(n) |
+
+Each index enters the deque exactly once (L6) and leaves at most once (L3 or L5). So across the entire run, L3 fires at most n times and L5 fires at most n times. No index is touched more than twice, giving O(n) total despite the nested while loops.
+
 **Complexity**
-- **Time:** O(n). Each index is pushed and popped at most once from the deque.
+- **Time:** O(n), driven by L1/L4/L6 (each index enters and leaves the deque at most once).
 - **Space:** O(k). The deque holds at most `k` indices.
 
 ### Why it's correct
@@ -103,6 +137,39 @@ If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max on
 | **Monotonic deque** | **O(n)** | **O(k)** |
 
 The monotonic deque is the canonical answer. The same pattern solves sliding-window minimum and shows up in dynamic programming optimizations (convex-hull trick, monotonic queue DP).
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_239.py and run.
+# Uses the optimal Approach 3 implementation.
+
+from collections import deque
+
+def max_sliding_window(nums: list, k: int) -> list:
+    dq = deque()
+    result = []
+    for i, x in enumerate(nums):
+        while dq and dq[0] <= i - k:
+            dq.popleft()
+        while dq and nums[dq[-1]] < x:
+            dq.pop()
+        dq.append(i)
+        if i >= k - 1:
+            result.append(nums[dq[0]])
+    return result
+
+def _run_tests():
+    assert max_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7]
+    assert max_sliding_window([1], 1) == [1]                    # single element
+    assert max_sliding_window([1, -1], 1) == [1, -1]            # k=1, each element is its window
+    assert max_sliding_window([9, 8, 7, 6, 5], 3) == [9, 8, 7] # strictly decreasing
+    assert max_sliding_window([1, 2, 3, 4, 5], 3) == [3, 4, 5] # strictly increasing
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

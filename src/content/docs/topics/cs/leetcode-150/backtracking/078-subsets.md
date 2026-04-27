@@ -20,21 +20,30 @@ LeetCode 78 · [Link](https://leetcode.com/problems/subsets/) · *Medium*
 
 ## Approach 1: Bitmask enumeration
 
-There are 2ⁿ subsets; enumerate them by treating `i ∈ [0, 2ⁿ)` as a bitmask over the input.
+There are 2^n subsets; enumerate them by treating `i in [0, 2^n)` as a bitmask over the input.
 
 ```python
 def subsets(nums):
     n = len(nums)
     result = []
-    for mask in range(1 << n):
-        subset = [nums[i] for i in range(n) if mask & (1 << i)]
+    for mask in range(1 << n):                          # L1: 2^n iterations
+        subset = [nums[i] for i in range(n) if mask & (1 << i)]  # L2: O(n) per mask
         result.append(subset)
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) overhead | 2^n | O(2^n) |
+| **L2 (build subset)** | **O(n)** | **2^n** | **O(n · 2^n)** ← dominates |
+
 **Complexity**
-- **Time:** O(n · 2ⁿ).
-- **Space:** O(n · 2ⁿ) output.
+- **Time:** O(n · 2^n), driven by L2 scanning bits for each mask.
+- **Space:** O(n · 2^n) output.
 
 Simple and fast for small n. Struggles past n ≈ 20.
 
@@ -45,14 +54,25 @@ Start with `[[]]`; for each element, duplicate every existing subset and add the
 ```python
 def subsets(nums):
     result = [[]]
-    for x in nums:
-        result += [s + [x] for s in result]
+    for x in nums:                                       # L1: n iterations
+        result += [s + [x] for s in result]             # L2: O(|result| · k) per step
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), k = average subset length.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) overhead | n | O(n) |
+| **L2 (extend result)** | **O(2^i · i) at step i** | **n steps** | **O(n · 2^n)** ← dominates |
+
+At step i, `result` has 2^i entries and we copy each to produce 2^i new ones. Total work is the sum over i from 0 to n-1 of 2^i · i = O(n · 2^n).
+
 **Complexity**
-- **Time:** O(n · 2ⁿ).
-- **Space:** O(n · 2ⁿ).
+- **Time:** O(n · 2^n).
+- **Space:** O(n · 2^n).
 
 Elegant, especially in Python. Slightly more allocation than the backtracking version.
 
@@ -67,21 +87,33 @@ def subsets(nums):
 
     def backtrack(i):
         if i == len(nums):
-            result.append(path[:])
+            result.append(path[:])    # L1: O(n) copy at leaf
             return
         # exclude
-        backtrack(i + 1)
+        backtrack(i + 1)              # L2: recurse without nums[i]
         # include
-        path.append(nums[i])
-        backtrack(i + 1)
-        path.pop()
+        path.append(nums[i])          # L3: O(1) push
+        backtrack(i + 1)              # L4: recurse with nums[i]
+        path.pop()                    # L5: O(1) pop
 
     backtrack(0)
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (copy) | O(n) | 2^n leaves | O(n · 2^n) |
+| L2/L4 (recurse) | O(1) dispatch | 2^n nodes | O(2^n) |
+| **L3/L5 (push/pop)** | **O(1)** | **2^n** | **O(2^n)** ← dominates (L1 ties) |
+
+The binary choice (include/exclude) at each of n levels gives exactly 2^n leaves.
+
 **Complexity**
-- **Time:** O(n · 2ⁿ).
+- **Time:** O(n · 2^n).
 - **Space:** O(n) recursion + output.
 
 ### Why `path[:]`?
@@ -91,11 +123,42 @@ We mutate `path` in place across recursive calls. When we record a subset, we ne
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Bitmask | O(n · 2ⁿ) | O(n · 2ⁿ) |
-| Iterative build | O(n · 2ⁿ) | O(n · 2ⁿ) |
-| **Backtracking** | **O(n · 2ⁿ)** | **O(n · 2ⁿ)** |
+| Bitmask | O(n · 2^n) | O(n · 2^n) |
+| Iterative build | O(n · 2^n) | O(n · 2^n) |
+| **Backtracking** | **O(n · 2^n)** | **O(n · 2^n)** |
 
-All three have the same asymptotic complexity (the output itself is Θ(n · 2ⁿ)). The backtracking template is the one that generalizes to Subsets II (with duplicates) and other tree-of-choices problems.
+All three have the same asymptotic complexity (the output itself is O(n · 2^n)). The backtracking template is the one that generalizes to Subsets II (with duplicates) and other tree-of-choices problems.
+
+## Test cases
+
+```python
+def subsets(nums):
+    result = []; path = []
+    def backtrack(i):
+        if i == len(nums):
+            result.append(path[:])
+            return
+        backtrack(i + 1)
+        path.append(nums[i])
+        backtrack(i + 1)
+        path.pop()
+    backtrack(0)
+    return result
+
+def _run_tests():
+    r = subsets([1, 2, 3])
+    assert len(r) == 8
+    assert sorted(map(tuple, r)) == sorted([
+        (), (1,), (2,), (3,), (1,2), (1,3), (2,3), (1,2,3)])
+    r2 = subsets([0])
+    assert sorted(map(tuple, r2)) == [(), (0,)]
+    # empty input
+    assert subsets([]) == [[]]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

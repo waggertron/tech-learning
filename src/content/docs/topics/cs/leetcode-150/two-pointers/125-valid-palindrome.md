@@ -25,12 +25,23 @@ Filter to alphanumerics, lowercase, and compare to the reversed string.
 
 ```python
 def is_palindrome(s: str) -> bool:
-    cleaned = "".join(ch.lower() for ch in s if ch.isalnum())
-    return cleaned == cleaned[::-1]
+    cleaned = "".join(ch.lower() for ch in s if ch.isalnum())  # L1: O(n) filter+join
+    return cleaned == cleaned[::-1]                             # L2: O(n) reverse+compare
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (filter + join)** | **O(n)** | **1** | **O(n)** ← dominates |
+| L2 (reverse + compare) | O(n) | 1 | O(n) |
+
+Both steps are linear; neither dominates asymptotically.
+
 **Complexity**
-- **Time:** O(n). Two linear passes.
+- **Time:** O(n), driven by L1/L2 (two linear passes).
 - **Space:** O(n). The cleaned string and its reverse.
 
 Direct and clear, but uses an extra O(n) allocation where O(1) is achievable.
@@ -41,17 +52,29 @@ Build the cleaned string, then walk from both ends. Same asymptotics as Approach
 
 ```python
 def is_palindrome(s: str) -> bool:
-    cleaned = [ch.lower() for ch in s if ch.isalnum()]
-    l, r = 0, len(cleaned), 1
-    while l < r:
-        if cleaned[l] != cleaned[r]:
-            return False
-        l, r = l + 1, r, 1
+    cleaned = [ch.lower() for ch in s if ch.isalnum()]  # L1: O(n) filter
+    l, r = 0, len(cleaned) - 1                          # L2: O(1) init pointers
+    while l < r:                                         # L3: at most n/2 iterations
+        if cleaned[l] != cleaned[r]:                     # L4: O(1) compare
+            return False                                 # L5: O(1) early exit
+        l, r = l + 1, r - 1                             # L6: O(1) advance both
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (filter)** | **O(n)** | **1** | **O(n)** ← dominates |
+| L2 (init pointers) | O(1) | 1 | O(1) |
+| L3-L6 (two-pointer scan) | O(1) | at most n/2 | O(n) |
+
+The filter pass dominates; the pointer scan is at most half the cleaned length.
+
 **Complexity**
-- **Time:** O(n). Best case O(1) (first mismatch).
+- **Time:** O(n), driven by L1 (filter) and L3/L4 (scan). Best case O(1) (first mismatch).
 - **Space:** O(n). The cleaned list.
 
 ## Approach 3: Two pointers, skip non-alphanumerics in-place (optimal)
@@ -60,20 +83,33 @@ Walk both ends of the original string, skipping over non-alphanumeric characters
 
 ```python
 def is_palindrome(s: str) -> bool:
-    l, r = 0, len(s), 1
-    while l < r:
-        while l < r and not s[l].isalnum():
-            l += 1
-        while l < r and not s[r].isalnum():
-            r -= 1
-        if s[l].lower() != s[r].lower():
-            return False
-        l, r = l + 1, r, 1
+    l, r = 0, len(s) - 1                # L1: O(1) init pointers
+    while l < r:                         # L2: at most n steps total
+        while l < r and not s[l].isalnum():  # L3: skip non-alnum on left
+            l += 1                       # L4: O(1)
+        while l < r and not s[r].isalnum():  # L5: skip non-alnum on right
+            r -= 1                       # L6: O(1)
+        if s[l].lower() != s[r].lower():  # L7: O(1) compare
+            return False                  # L8: O(1) early exit
+        l, r = l + 1, r - 1             # L9: O(1) advance both
     return True
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| L2 (outer loop) | O(1) | at most n | O(n) |
+| **L3-L6 (skip non-alnum)** | **O(1) per step** | **n total** | **O(n)** ← dominates |
+| L7-L9 (compare + advance) | O(1) | at most n/2 | O(n) |
+
+Each character in `s` is touched at most once (either skipped in L3/L5 or compared in L7). Total work is O(n).
+
 **Complexity**
-- **Time:** O(n). Each index is visited at most once.
+- **Time:** O(n), driven by L3-L6 (each character visited once). Each index is visited at most once.
 - **Space:** O(1). No auxiliary structures.
 
 ## Summary
@@ -85,6 +121,38 @@ def is_palindrome(s: str) -> bool:
 | **Two pointers in place** | **O(n)** | **O(1)** |
 
 Same Big-O on time, but the in-place two-pointer version is the canonical "optimal-space" answer.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_valid_palindrome.py and run.
+# Uses the canonical implementation (Approach 3: two pointers in place).
+
+def is_palindrome(s: str) -> bool:
+    l, r = 0, len(s) - 1
+    while l < r:
+        while l < r and not s[l].isalnum():
+            l += 1
+        while l < r and not s[r].isalnum():
+            r -= 1
+        if s[l].lower() != s[r].lower():
+            return False
+        l, r = l + 1, r - 1
+    return True
+
+def _run_tests():
+    assert is_palindrome("A man, a plan, a canal: Panama") == True
+    assert is_palindrome("race a car") == False
+    assert is_palindrome(" ") == True
+    assert is_palindrome("") == True
+    assert is_palindrome("a") == True
+    assert is_palindrome("aa") == True
+    assert is_palindrome("ab") == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

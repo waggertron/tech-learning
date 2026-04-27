@@ -28,19 +28,32 @@ Precompute `last[ch]`, the final index of each character. Walk the string; maint
 
 ```python
 def partition_labels(s):
-    last = {ch: i for i, ch in enumerate(s)}
-    result = []
-    start = end = 0
-    for i, ch in enumerate(s):
-        end = max(end, last[ch])
-        if i == end:
-            result.append(i, start + 1)
-            start = i + 1
+    last = {ch: i for i, ch in enumerate(s)}    # L1: O(n), last occurrence of each char
+    result = []                                 # L2: O(1)
+    start = end = 0                             # L3: O(1)
+    for i, ch in enumerate(s):                  # L4: single pass, n iterations
+        end = max(end, last[ch])                # L5: O(1), extend window if needed
+        if i == end:                            # L6: O(1), window is closed
+            result.append(i - start + 1)        # L7: O(1) amortized
+            start = i + 1                       # L8: O(1)
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (build last map) | O(1) | n | O(n) |
+| **L4-L8 (greedy scan)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L5 (extend end) | O(1) | n | O(n) |
+| L6-L8 (emit partition) | O(1) amortized | at most n | O(n) |
+
+Two O(n) passes: one to build `last`, one to scan and emit partitions.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L4/L5/L6-L8 (two linear passes).
 - **Space:** O(26) = O(1) for ASCII alphabets.
 
 ### Why greedy works
@@ -58,6 +71,35 @@ Each character's first and last occurrence form an interval. Merge overlapping i
 | **Last-seen + greedy extension** | **O(n)** | **O(1)** |
 
 Pattern: "first index encountering a character starts its interval; `max(last[ch])` grows the window."
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_763.py and run.
+# Uses the canonical implementation (Approach 2: last-seen + greedy extension).
+
+def partition_labels(s):
+    last = {ch: i for i, ch in enumerate(s)}
+    result = []
+    start = end = 0
+    for i, ch in enumerate(s):
+        end = max(end, last[ch])
+        if i == end:
+            result.append(i - start + 1)
+            start = i + 1
+    return result
+
+def _run_tests():
+    assert partition_labels("ababcbacadefegdehijhklij") == [9, 7, 8]
+    assert partition_labels("eccbbbbdec") == [10]
+    assert partition_labels("a") == [1]              # single character
+    assert partition_labels("abcd") == [1, 1, 1, 1]  # all unique, each its own partition
+    assert partition_labels("aabb") == [2, 2]         # two non-overlapping pairs
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

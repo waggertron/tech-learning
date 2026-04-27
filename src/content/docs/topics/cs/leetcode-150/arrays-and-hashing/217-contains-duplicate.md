@@ -25,16 +25,29 @@ Compare every element with every element after it. If any two match, return `tru
 
 ```python
 def contains_duplicate(nums: list[int]) -> bool:
-    n = len(nums)
-    for i in range(n):
-        for j in range(i + 1, n):
-            if nums[i] == nums[j]:
-                return True
+    n = len(nums)                              # L1: O(1)
+    for i in range(n):                         # L2: outer loop, n iterations
+        for j in range(i + 1, n):             # L3: inner loop, up to n-i-1 iterations
+            if nums[i] == nums[j]:             # L4: O(1) comparison
+                return True                    # L5: O(1) early return
     return False
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (len) | O(1) | 1 | O(1) |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L3, L4 (inner loop + compare)** | **O(1)** | **~n²/2 worst case** | **O(n²)** ← dominates |
+| L5 (return) | O(1) | at most 1 | O(1) |
+
+The nested loops each run up to n, yielding ~n²/2 comparisons in the worst case (no duplicates).
+
 **Complexity**
-- **Time:** O(n²). Two nested loops each up to `n`, so ~n²/2 comparisons worst case.
+- **Time:** O(n²), driven by L3/L4 (nested loop comparisons).
 - **Space:** O(1). No extra structures; only the loop indices.
 
 This is the most direct approach but quadratic time makes it unusable for large inputs.
@@ -45,15 +58,27 @@ After sorting, any duplicates are adjacent. One linear scan is enough.
 
 ```python
 def contains_duplicate(nums: list[int]) -> bool:
-    nums_sorted = sorted(nums)
-    for i in range(1, len(nums_sorted)):
-        if nums_sorted[i] == nums_sorted[i, 1]:
-            return True
+    nums_sorted = sorted(nums)                    # L1: O(n log n), new list
+    for i in range(1, len(nums_sorted)):          # L2: loop, n-1 iterations
+        if nums_sorted[i] == nums_sorted[i - 1]:  # L3: O(1) comparison
+            return True                           # L4: O(1) early return
     return False
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L2, L3 (linear scan) | O(1) | n-1 | O(n) |
+| L4 (return) | O(1) | at most 1 | O(1) |
+
+The sort is the only meaningful cost; the scan after it is linear.
+
 **Complexity**
-- **Time:** O(n log n). The sort dominates; the linear scan is O(n).
+- **Time:** O(n log n), driven by L1 (the sort).
 - **Space:** O(n) for `sorted(nums)` (Python returns a new list). If you mutate in place with `nums.sort()`, it's O(log n) for the sort's stack frames (Timsort).
 
 Improvement: we dropped one order of growth. Worth knowing as an alternative when memory is tight and in-place sort is available.
@@ -64,19 +89,34 @@ Walk the array once, storing values in a set. The first repeat hit is a duplicat
 
 ```python
 def contains_duplicate(nums: list[int]) -> bool:
-    seen = set()
-    for x in nums:
-        if x in seen:
-            return True
-        seen.add(x)
+    seen = set()                       # L1: O(1) empty set
+    for x in nums:                     # L2: loop, n iterations
+        if x in seen:                  # L3: O(1) avg set lookup
+            return True                # L4: O(1) early return
+        seen.add(x)                    # L5: O(1) avg set insert
     return False
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init set) | O(1) | 1 | O(1) |
+| L2 (loop) | O(1) | n | O(n) |
+| **L3 (set lookup)** | **O(1) avg** | **n** | **O(n)** ← dominates |
+| L4 (return) | O(1) | at most 1 | O(1) |
+| L5 (set insert) | O(1) avg | up to n | O(n) |
+
+Each iteration does constant-time hash operations. Single pass, O(1) average per step.
+
 **Complexity**
-- **Time:** O(n). Single pass; `in` and `add` on a hash set are O(1) average.
+- **Time:** O(n), driven by L3/L5 (hash operations per element).
 - **Space:** O(n). The set can hold up to all `n` values before a duplicate is found.
 
 ### One-liner
+
 Same complexity, more Pythonic:
 
 ```python
@@ -93,6 +133,33 @@ def contains_duplicate(nums: list[int]) -> bool:
 | **Hash set** | **O(n)** | O(n) |
 
 The hash-set approach is strictly best on time. Use the sort variant only when memory is constrained *and* you can sort in place.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_contains_duplicate.py and run.
+# Uses the canonical implementation (Approach 3: hash set).
+
+def contains_duplicate(nums: list[int]) -> bool:
+    seen = set()
+    for x in nums:
+        if x in seen:
+            return True
+        seen.add(x)
+    return False
+
+def _run_tests():
+    assert contains_duplicate([1, 2, 3, 1]) == True
+    assert contains_duplicate([1, 2, 3, 4]) == False
+    assert contains_duplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2]) == True
+    assert contains_duplicate([]) == False
+    assert contains_duplicate([5]) == False
+    assert contains_duplicate([5, 5]) == True
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

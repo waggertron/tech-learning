@@ -1,6 +1,6 @@
 ---
 title: "271. Encode and Decode Strings"
-description: Design an encoding/decoding scheme for a list of strings, the inverse pair must be lossless.
+description: "Design an encoding/decoding scheme for a list of strings, the inverse pair must be lossless."
 parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, design, medium]
 status: draft
@@ -24,14 +24,24 @@ LeetCode 271 (premium; free equivalent exists as **LC 659 / 1923**) · [Link](ht
 Pick a rare character as a delimiter, escape any occurrences in the source.
 
 ```python
-def encode(strs: list[str]) -> str:
-    # Use '\x1f' (unit separator) as delimiter; escape it in payloads
+def encode(strs: list[str]) -> str:          # L1: join with escaped delimiter
     return "\x1f".join(s.replace("\\", "\\\\").replace("\x1f", "\\u") for s in strs)
 
-def decode(s: str) -> list[str]:
+def decode(s: str) -> list[str]:             # L2: split + unescape
     result, parts = [], s.split("\x1f")
     return [p.replace("\\u", "\x1f").replace("\\\\", "\\") for p in parts]
 ```
+
+**Where the time goes, line by line**
+
+*Variables: N = total number of characters across all strings, m = number of strings.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (encode: escape + join)** | **O(N)** | **1** | **O(N)** ← dominates |
+| **L2 (decode: split + unescape)** | **O(N)** | **1** | **O(N)** ← dominates |
+
+Both encode and decode scan every character a constant number of times.
 
 **Complexity**
 - **Time:** O(N) where N is the total number of characters (both encode and decode are linear in output size).
@@ -47,11 +57,22 @@ Offload escaping to a proven serializer.
 import json
 
 def encode(strs: list[str]) -> str:
-    return json.dumps(strs)
+    return json.dumps(strs)        # L1: O(N) JSON encode
 
 def decode(s: str) -> list[str]:
-    return json.loads(s)
+    return json.loads(s)           # L2: O(N) JSON decode
 ```
+
+**Where the time goes, line by line**
+
+*Variables: N = total number of characters across all strings.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (json.dumps)** | **O(N)** | **1** | **O(N)** ← dominates |
+| **L2 (json.loads)** | **O(N)** | **1** | **O(N)** ← dominates |
+
+JSON serialization and deserialization are linear in the total character count.
 
 **Complexity**
 - **Time:** O(N).
@@ -65,17 +86,32 @@ Prefix each string with its length and a fixed delimiter (e.g., `#`). The length
 
 ```python
 def encode(strs: list[str]) -> str:
-    return "".join(f"{len(s)}#{s}" for s in strs)
+    return "".join(f"{len(s)}#{s}" for s in strs)  # L1: O(N) one pass
 
 def decode(s: str) -> list[str]:
-    result, i = [], 0
-    while i < len(s):
-        j = s.index('#', i)
-        length = int(s[i:j])
-        result.append(s[j + 1:j + 1 + length])
-        i = j + 1 + length
+    result, i = [], 0                   # L2: O(1) init
+    while i < len(s):                   # L3: loop, advances by len(each string)+header
+        j = s.index('#', i)             # L4: O(len_digits) scan for '#'
+        length = int(s[i:j])            # L5: O(len_digits) parse int
+        result.append(s[j + 1:j + 1 + length])  # L6: O(length) slice
+        i = j + 1 + length              # L7: O(1) advance
     return result
 ```
+
+**Where the time goes, line by line**
+
+*Variables: N = total number of characters across all strings, m = number of strings.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (encode: format + join)** | **O(N)** | **1** | **O(N)** ← dominates |
+| L2 (init) | O(1) | 1 | O(1) |
+| L3 (loop) | O(1) | m iterations | O(m) |
+| L4 (index '#') | O(digits) | m | O(m·d) |
+| **L6 (slice)** | **O(length)** | **m** | **O(N) total** ← dominates decode |
+| L7 (advance) | O(1) | m | O(m) |
+
+Each character in the original strings is visited exactly once during the decode slice (L6). The loop overhead is O(m) for headers.
 
 **Complexity**
 - **Time:** O(N). Each character is visited a constant number of times.
@@ -92,6 +128,41 @@ This works for any character content, including the `#` delimiter, because the l
 | **Length prefix** | **O(N)** | **O(N)** | Robust and self-delimiting |
 
 Length-prefix encoding is the pattern behind many real-world formats, Pascal strings, netstrings, Protocol Buffers' length-delimited format, HTTP chunked encoding.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_encode_decode.py and run.
+# Uses the canonical implementation (Approach 3: length-prefix encoding).
+
+def encode(strs: list[str]) -> str:
+    return "".join(f"{len(s)}#{s}" for s in strs)
+
+def decode(s: str) -> list[str]:
+    result, i = [], 0
+    while i < len(s):
+        j = s.index('#', i)
+        length = int(s[i:j])
+        result.append(s[j + 1:j + 1 + length])
+        i = j + 1 + length
+    return result
+
+def _run_tests():
+    cases = [
+        ["hello", "world", "foo", "bar"],
+        [""],
+        ["a"],
+        [],
+        ["hello#world", "foo#bar"],   # '#' inside strings
+        ["5#abc", "def"],             # digits + '#' inside strings
+    ]
+    for strs in cases:
+        assert decode(encode(strs)) == strs, f"Failed on: {strs}"
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

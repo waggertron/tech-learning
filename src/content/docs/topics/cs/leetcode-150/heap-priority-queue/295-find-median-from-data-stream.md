@@ -32,18 +32,27 @@ class MedianFinder:
     def __init__(self):
         self.nums = []
     def addNum(self, num):
-        self.nums.append(num)
+        self.nums.append(num)          # L1: O(1) append
     def findMedian(self):
-        s = sorted(self.nums)
+        s = sorted(self.nums)          # L2: O(n log n) sort on every query
         n = len(s)
         if n % 2:
             return s[n // 2]
-        return (s[n // 2, 1] + s[n // 2]) / 2
+        return (s[n // 2 - 1] + s[n // 2]) / 2
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of elements added so far.*
+
+| Line | Per-call cost | Times executed | Contribution per call |
+| --- | --- | --- | --- |
+| L1 (addNum append) | O(1) | 1 per addNum | O(1) |
+| **L2 (findMedian sort)** | **O(n log n)** | **1 per findMedian** | **O(n log n)** ← dominates |
+
 **Complexity**
-- `addNum`: O(1).
-- `findMedian`: O(n log n).
+- `addNum`: O(1) (L1).
+- `findMedian`: O(n log n) (L2).
 - Space: O(n).
 
 ## Approach 2: Insertion sort via `bisect.insort`
@@ -57,17 +66,28 @@ class MedianFinder:
     def __init__(self):
         self.nums = []
     def addNum(self, num):
-        bisect.insort(self.nums, num)
+        bisect.insort(self.nums, num)   # L1: O(log n) find + O(n) shift
     def findMedian(self):
         n = len(self.nums)
         if n % 2:
-            return self.nums[n // 2]
-        return (self.nums[n // 2, 1] + self.nums[n // 2]) / 2
+            return self.nums[n // 2]    # L2: O(1) index
+        return (self.nums[n // 2 - 1] + self.nums[n // 2]) / 2
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of elements added so far.*
+
+| Line | Per-call cost | Times executed | Contribution per call |
+| --- | --- | --- | --- |
+| **L1 (insort)** | **O(n)** | **1 per addNum** | **O(n)** ← dominates addNum |
+| L2 (findMedian index) | O(1) | 1 per findMedian | O(1) |
+
+`bisect.insort` uses binary search (O(log n)) to find the insertion point but then shifts all elements after it (O(n)).
+
 **Complexity**
-- `addNum`: O(n) (shift on insert).
-- `findMedian`: O(1).
+- `addNum`: O(n) (L1 shift dominates).
+- `findMedian`: O(1) (L2).
 - Space: O(n).
 
 ## Approach 3: Two heaps (canonical, optimal)
@@ -83,22 +103,35 @@ class MedianFinder:
         self.hi = []   # min-heap
 
     def addNum(self, num):
-        heapq.heappush(self.lo, -num)
+        heapq.heappush(self.lo, -num)                     # L1: O(log n) push to lo
         # Push the largest of `lo` into `hi`
-        heapq.heappush(self.hi, -heapq.heappop(self.lo))
+        heapq.heappush(self.hi, -heapq.heappop(self.lo))  # L2: O(log n) pop+push
         # Rebalance: lo should be at least as large as hi
         if len(self.hi) > len(self.lo):
-            heapq.heappush(self.lo, -heapq.heappop(self.hi))
+            heapq.heappush(self.lo, -heapq.heappop(self.hi))  # L3: O(log n) rebalance
 
     def findMedian(self):
         if len(self.lo) > len(self.hi):
-            return -self.lo[0]
-        return (-self.lo[0] + self.hi[0]) / 2
+            return -self.lo[0]           # L4: O(1) read lo top
+        return (-self.lo[0] + self.hi[0]) / 2  # L5: O(1) average both tops
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of elements added so far.*
+
+| Line | Per-call cost | Times executed | Contribution per call |
+| --- | --- | --- | --- |
+| **L1 (push to lo)** | **O(log n)** | **1 per addNum** | **O(log n)** ← dominates addNum |
+| L2 (pop lo + push hi) | O(log n) | 1 per addNum | O(log n) |
+| L3 (rebalance, conditional) | O(log n) | up to 1 per addNum | O(log n) |
+| L4-L5 (findMedian) | O(1) | 1 per findMedian | O(1) |
+
+Each `addNum` does at most 3 heap operations, each O(log n). The heaps together hold all n elements, so heap size is O(n). The median read is always O(1) because it only looks at the tops.
+
 **Complexity**
-- `addNum`: **O(log n)**.
-- `findMedian`: **O(1)**.
+- `addNum`: O(log n), driven by L1-L3.
+- `findMedian`: O(1) (L4 or L5).
 - Space: O(n).
 
 ### Invariant
@@ -107,6 +140,62 @@ After each `addNum`:
 - `len(lo) ∈ {len(hi), len(hi) + 1}`.
 
 If the total count is odd, the median is `lo`'s top; if even, it's the average of both tops.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_295.py and run.
+# Uses the two-heaps approach (Approach 3).
+import heapq
+
+class MedianFinder:
+    def __init__(self):
+        self.lo = []
+        self.hi = []
+
+    def addNum(self, num):
+        heapq.heappush(self.lo, -num)
+        heapq.heappush(self.hi, -heapq.heappop(self.lo))
+        if len(self.hi) > len(self.lo):
+            heapq.heappush(self.lo, -heapq.heappop(self.hi))
+
+    def findMedian(self):
+        if len(self.lo) > len(self.hi):
+            return float(-self.lo[0])
+        return (-self.lo[0] + self.hi[0]) / 2.0
+
+def _run_tests():
+    # Example from problem statement
+    mf = MedianFinder()
+    mf.addNum(1); mf.addNum(2)
+    assert mf.findMedian() == 1.5
+    mf.addNum(3)
+    assert mf.findMedian() == 2.0
+
+    # Single element
+    mf2 = MedianFinder()
+    mf2.addNum(42)
+    assert mf2.findMedian() == 42.0
+
+    # Odd count median
+    mf3 = MedianFinder()
+    for v in [5, 3, 8, 1, 9]:
+        mf3.addNum(v)
+    # sorted: [1,3,5,8,9] -> median = 5
+    assert mf3.findMedian() == 5.0
+
+    # Even count median
+    mf4 = MedianFinder()
+    for v in [2, 4, 6, 8]:
+        mf4.addNum(v)
+    # sorted: [2,4,6,8] -> median = (4+6)/2 = 5.0
+    assert mf4.findMedian() == 5.0
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-On an `n × n` grid, `grid[r][c]` is the elevation at `(r, c)`. At time `t`, any cell with elevation ≤ `t` is swimmable; you can move to adjacent cells if both current and next have elevation ≤ `t`. Return the minimum `t` at which you can travel from `(0, 0)` to `(n, 1, n, 1)`.
+On an `n × n` grid, `grid[r][c]` is the elevation at `(r, c)`. At time `t`, any cell with elevation ≤ `t` is swimmable; you can move to adjacent cells if both current and next have elevation ≤ `t`. Return the minimum `t` at which you can travel from `(0, 0)` to `(n - 1, n - 1)`.
 
 Equivalently: find the path from top-left to bottom-right that minimizes the **maximum cell value** along it.
 
@@ -28,41 +28,160 @@ Binary-search the answer. For each candidate `t`, BFS through cells with value �
 from collections import deque
 
 def swim_in_water(grid):
-    n = len(grid)
+    n = len(grid)                           # L1: O(1)
 
-    def reachable(t):
-        if grid[0][0] > t:
+    def reachable(t):                       # L2: BFS for a fixed threshold t
+        if grid[0][0] > t:                  # L3: O(1) early exit
             return False
-        visited = {(0, 0)}
-        q = deque([(0, 0)])
-        while q:
-            r, c = q.popleft()
-            if (r, c) == (n, 1, n, 1):
+        visited = {(0, 0)}                  # L4: O(1) init visited set
+        q = deque([(0, 0)])                 # L5: O(1) init queue
+        while q:                            # L6: BFS loop, up to n² cells
+            r, c = q.popleft()              # L7: O(1) dequeue
+            if (r, c) == (n - 1, n - 1):   # L8: O(1) goal check
                 return True
             for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nr, nc = r + dr, c + dc
+                nr, nc = r + dr, c + dc     # L9: O(1) per neighbor
                 if 0 <= nr < n and 0 <= nc < n and (nr, nc) not in visited and grid[nr][nc] <= t:
-                    visited.add((nr, nc))
-                    q.append((nr, nc))
+                    visited.add((nr, nc))   # L10: O(1) amortized
+                    q.append((nr, nc))      # L11: O(1) amortized
         return False
 
-    lo, hi = grid[0][0], n * n, 1
-    while lo < hi:
-        mid = (lo + hi) // 2
-        if reachable(mid):
-            hi = mid
+    lo, hi = grid[0][0], n * n - 1         # L12: O(1) search bounds
+    while lo < hi:                          # L13: binary search, log(n²) = 2 log n iters
+        mid = (lo + hi) // 2               # L14: O(1)
+        if reachable(mid):                  # L15: O(n²) BFS call
+            hi = mid                        # L16: O(1)
         else:
-            lo = mid + 1
-    return lo
+            lo = mid + 1                    # L17: O(1)
+    return lo                              # L18: O(1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = grid side length (n×n grid).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| L13 (binary search) | O(1) | 2 log n iters | O(log n) |
+| **L15 (BFS call)** | **O(n²)** | **2 log n** | **O(n² log n)** ← dominates |
+| L6-L11 (BFS body) | O(1) per cell | n² per BFS | O(n²) per call |
+
+Each BFS traverses at most n² cells. The binary search calls BFS O(log(n²)) = O(log n) times. The product gives O(n² log n). The set membership check inside L9 is O(1) amortized for a hash set.
+
 **Complexity**
-- **Time:** O(n² log(n²)) = O(n² log n).
+- **Time:** O(n² log n), driven by L15 (BFS inside binary search).
 - **Space:** O(n²).
 
 ## Approach 2: Modified Dijkstra, min-max path (optimal)
 
 Think of the path cost as `max(cell values on path)` instead of `sum`. Dijkstra still works: at each pop, the priority is the max cell value on the best path to that cell.
+
+```python
+import heapq
+
+def swim_in_water(grid):
+    n = len(grid)                                               # L1: O(1)
+    heap = [(grid[0][0], 0, 0)]                                # L2: O(1) seed heap with top-left
+    visited = set()                                            # L3: O(1) init visited
+    while heap:                                                # L4: main loop, at most n² pops
+        t, r, c = heapq.heappop(heap)                         # L5: O(log n²) = O(log n) pop
+        if (r, c) in visited:                                  # L6: O(1) stale check
+            continue
+        visited.add((r, c))                                    # L7: O(1)
+        if (r, c) == (n - 1, n - 1):                          # L8: O(1) goal check
+            return t
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nr, nc = r + dr, c + dc                           # L9: O(1) per neighbor
+            if 0 <= nr < n and 0 <= nc < n and (nr, nc) not in visited:
+                heapq.heappush(heap, (max(t, grid[nr][nc]), nr, nc))  # L10: O(log n) push
+    return -1
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = grid side length (n×n grid).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init) | O(1) | 1 | O(1) |
+| L4 (loop test) | O(1) | up to n² | O(n²) |
+| **L5 (heappop)** | **O(log n)** | **n²** | **O(n² log n)** ← dominates |
+| L6-L8 (checks) | O(1) | n² | O(n²) |
+| L9 (neighbors) | O(1) | 4n² total | O(n²) |
+| **L10 (heappush)** | **O(log n)** | **up to 4n²** | **O(n² log n)** ← dominates |
+
+The heap holds at most n² entries (one per cell). Each cell is popped exactly once after being visited. Each pop and push costs O(log(n²)) = O(log n). With n² cells and 4 neighbors each: O(n² log n) total. The `max(t, grid[nr][nc])` at L10 is the key insight: path cost becomes the bottleneck elevation, not the sum.
+
+**Complexity**
+- **Time:** O(n² log n), driven by L5/L10 (heap pop/push, n² cells, each O(log n)).
+- **Space:** O(n²).
+
+## Approach 3: Union-Find with sorted cell activation
+
+Sort cells by elevation. Activate in order; whenever activating a cell merges the start and end into one component, return its elevation.
+
+```python
+def swim_in_water(grid):
+    n = len(grid)
+    # (value, r, c), sorted ascending by value
+    cells = sorted((grid[r][c], r, c) for r in range(n) for c in range(n))  # L1: O(n² log n)
+    parent = list(range(n * n))      # L2: O(n²) init union-find
+    active = [False] * (n * n)       # L3: O(n²) init active flags
+
+    def find(x):                     # L4: path-compressed find, near O(1) amortized
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):                 # L5: O(1) union by root reassignment
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    for v, r, c in cells:           # L6: iterate n² cells in elevation order
+        idx = r * n + c
+        active[idx] = True           # L7: O(1) activate cell
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < n and 0 <= nc < n and active[nr * n + nc]:
+                union(idx, nr * n + nc)  # L8: near O(1) amortized
+        if find(0) == find(n * n - 1):   # L9: O(1) check if connected
+            return v
+    return -1
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = grid side length (n×n grid).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (sort cells)** | **O(n² log n)** | **1** | **O(n² log n)** ← dominates |
+| L2-L3 (init arrays) | O(1) | n² each | O(n²) |
+| L6 (cell loop) | O(1) | n² | O(n²) |
+| L7 (activate) | O(1) | n² | O(n²) |
+| L8 (union) | near O(1) amortized | up to 4n² | O(n²) |
+| L9 (connectivity check) | near O(1) amortized | n² | O(n²) |
+
+L1 dominates: sorting n² cells costs O(n² log n). The union-find operations (L8/L9) use path compression with halving, giving amortized near-O(1) per operation (technically O(α(n²)) where α is the inverse Ackermann function, effectively constant for all practical n).
+
+**Complexity**
+- **Time:** O(n² log n), dominated by L1 (sorting), with near-O(n²) for the union-find passes.
+- **Space:** O(n²).
+
+## Summary
+
+| Approach | Time | Space | Notes |
+| --- | --- | --- | --- |
+| Binary search + BFS | O(n² log n) | O(n²) | Clean, generalizes |
+| **Modified Dijkstra (min-max)** | **O(n² log n)** | **O(n²)** | Canonical |
+| Union-Find with sorted cells | O(n² log n) | O(n²) | Neat alternative |
+
+All three are O(n² log n). Dijkstra with min-max edge weights is the most reusable, same template solves problems like "min maximum capacity path."
+
+## Test cases
 
 ```python
 import heapq
@@ -76,66 +195,36 @@ def swim_in_water(grid):
         if (r, c) in visited:
             continue
         visited.add((r, c))
-        if (r, c) == (n, 1, n, 1):
+        if (r, c) == (n - 1, n - 1):
             return t
         for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             nr, nc = r + dr, c + dc
             if 0 <= nr < n and 0 <= nc < n and (nr, nc) not in visited:
                 heapq.heappush(heap, (max(t, grid[nr][nc]), nr, nc))
     return -1
+
+def _run_tests():
+    # Example 1: 2x2 grid, must cross elevation 3
+    assert swim_in_water([[0,2],[1,3]]) == 3
+    # Example 2: 5x5 spiral, answer is 16
+    assert swim_in_water([
+        [0,1,2,3,4],
+        [24,23,22,21,5],
+        [12,13,14,15,16],
+        [11,17,18,19,20],
+        [10,9,8,7,6]
+    ]) == 16
+    # Single cell: already at destination
+    assert swim_in_water([[0]]) == 0
+    # 1x1 with nonzero elevation
+    assert swim_in_water([[7]]) == 7
+    # 2x2, direct path available via low values
+    assert swim_in_water([[0,1],[3,2]]) == 2
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(n² log n). Each cell pushed/popped once.
-- **Space:** O(n²).
-
-## Approach 3: Union-Find with sorted cell activation
-
-Sort cells by elevation. Activate in order; whenever activating a cell merges the start and end into one component, return its elevation.
-
-```python
-def swim_in_water(grid):
-    n = len(grid)
-    # (value, r, c), sorted ascending by value
-    cells = sorted((grid[r][c], r, c) for r in range(n) for c in range(n))
-    parent = list(range(n * n))
-    active = [False] * (n * n)
-
-    def find(x):
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-    def union(a, b):
-        ra, rb = find(a), find(b)
-        if ra != rb:
-            parent[ra] = rb
-
-    for v, r, c in cells:
-        idx = r * n + c
-        active[idx] = True
-        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < n and 0 <= nc < n and active[nr * n + nc]:
-                union(idx, nr * n + nc)
-        if find(0) == find(n * n, 1):
-            return v
-    return -1
-```
-
-**Complexity**
-- **Time:** O(n² log n), sorting + near-O(1) union-find ops.
-- **Space:** O(n²).
-
-## Summary
-
-| Approach | Time | Space | Notes |
-| --- | --- | --- | --- |
-| Binary search + BFS | O(n² log n) | O(n²) | Clean, generalizes |
-| **Modified Dijkstra (min-max)** | **O(n² log n)** | **O(n²)** | Canonical |
-| Union-Find with sorted cells | O(n² log n) | O(n²) | Neat alternative |
-
-All three are O(n² log n). Dijkstra with min-max edge weights is the most reusable, same template solves problems like "min maximum capacity path."
 
 ## Related data structures
 

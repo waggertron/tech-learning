@@ -24,11 +24,19 @@ Sort all points; take the first k.
 
 ```python
 def k_closest(points, k):
-    return sorted(points, key=lambda p: p[0] ** 2 + p[1] ** 2)[:k]
+    return sorted(points, key=lambda p: p[0] ** 2 + p[1] ** 2)[:k]  # L1: O(n log n)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of points, k = number of closest points to return.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+
 **Complexity**
-- **Time:** O(n log n).
+- **Time:** O(n log n), driven by L1.
 - **Space:** O(n).
 
 Simple and often accepted.
@@ -43,17 +51,29 @@ import heapq
 def k_closest(points, k):
     # Max-heap via negated distance
     heap = []
-    for x, y in points:
+    for x, y in points:                       # L1: iterate n points
         d = -(x * x + y * y)
         if len(heap) < k:
-            heapq.heappush(heap, (d, x, y))
+            heapq.heappush(heap, (d, x, y))   # L2: O(log k) push
         elif d > heap[0][0]:
-            heapq.heapreplace(heap, (d, x, y))
+            heapq.heapreplace(heap, (d, x, y)) # L3: O(log k) replace farthest
     return [[x, y] for _, x, y in heap]
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of points, k = number of closest points to return.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop) | O(1) | n | O(n) |
+| **L2 (heappush)** | **O(log k)** | **up to k** | **O(k log k)** |
+| **L3 (heapreplace)** | **O(log k)** | **up to n - k** | **O(n log k)** ← dominates |
+
+For the first k points, each push costs O(log k). For the remaining n - k points, each potential replace also costs O(log k). Total: O(n log k).
+
 **Complexity**
-- **Time:** O(n log k).
+- **Time:** O(n log k), driven by L2/L3.
 - **Space:** O(k).
 
 Strictly better than Approach 1 when k ≪ n.
@@ -67,7 +87,7 @@ def k_closest(points, k):
     def dist(p):
         return p[0] ** 2 + p[1] ** 2
 
-    def partition(lo, hi):
+    def partition(lo, hi):                           # L1: O(hi - lo) per call
         pivot = dist(points[hi])
         store = lo
         for i in range(lo, hi):
@@ -78,25 +98,80 @@ def k_closest(points, k):
         return store
 
     def quickselect(lo, hi, k):
-        if lo >= hi:
+        if lo >= hi:                                 # L2: base case
             return
-        p = partition(lo, hi)
+        p = partition(lo, hi)                        # L3: O(subarray size)
         if p == k:
             return
         if p < k:
-            quickselect(p + 1, hi, k)
+            quickselect(p + 1, hi, k)               # L4: recurse right
         else:
-            quickselect(lo, p, 1, k)
+            quickselect(lo, p - 1, k)               # L5: recurse left
 
-    quickselect(0, len(points), 1, k)
+    quickselect(0, len(points) - 1, k)
     return points[:k]
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of points, k = number of closest points to return.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (partition) | O(subarray size) | log n avg rounds | O(n) avg |
+| **L4 or L5 (recurse)** | **O(1) per frame** | **log n avg** | **O(n) avg** ← dominates |
+
+On average each partition halves the search space: n + n/2 + n/4 + ... = 2n = O(n). Worst case O(n²) when pivot is always the extreme (use random pivot to mitigate).
+
 **Complexity**
-- **Time:** **O(n) average**, O(n²) worst case (pathological pivots; mitigate with randomization).
-- **Space:** O(log n) recursion.
+- **Time:** O(n) average, O(n²) worst case (L1-L3 partition cost).
+- **Space:** O(log n) recursion depth.
 
 Pick quickselect when you're allowed to mutate the input and want the tightest average complexity.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_973.py and run.
+# Uses the size-K max-heap approach (Approach 2).
+import heapq
+
+def k_closest(points, k):
+    heap = []
+    for x, y in points:
+        d = -(x * x + y * y)
+        if len(heap) < k:
+            heapq.heappush(heap, (d, x, y))
+        elif d > heap[0][0]:
+            heapq.heapreplace(heap, (d, x, y))
+    return [[x, y] for _, x, y in heap]
+
+def _run_tests():
+    # Example 1: k=1, closest is [-2,2] (dist=8 vs 10)
+    result = k_closest([[1,3],[-2,2]], 1)
+    assert result == [[-2,2]], f"got {result}"
+
+    # Example 2: k=2, answer is [[3,3],[-2,4]] (order doesn't matter)
+    result = k_closest([[3,3],[5,-1],[-2,4]], 2)
+    assert sorted(result) == sorted([[3,3],[-2,4]]), f"got {result}"
+
+    # Single point, k=1
+    assert k_closest([[0,0]], 1) == [[0,0]]
+
+    # All equidistant: any k points valid
+    result = k_closest([[1,0],[-1,0],[0,1],[0,-1]], 2)
+    assert len(result) == 2
+
+    # k equals n: return all
+    pts = [[1,2],[3,4],[0,0]]
+    result = k_closest(pts, 3)
+    assert len(result) == 3
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

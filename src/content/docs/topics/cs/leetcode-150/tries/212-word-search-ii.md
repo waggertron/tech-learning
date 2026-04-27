@@ -29,28 +29,40 @@ def find_words(board, words):
 
     def exist(word):
         def dfs(r, c, i):
-            if i == len(word):
+            if i == len(word):                # L1: base case, O(1)
                 return True
             if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[i]:
-                return False
+                return False                  # L2: bounds + match check, O(1)
             saved = board[r][c]
-            board[r][c] = "#"
-            found = (dfs(r + 1, c, i + 1) or dfs(r, 1, c, i + 1)
-                     or dfs(r, c + 1, i + 1) or dfs(r, c, 1, i + 1))
-            board[r][c] = saved
+            board[r][c] = "#"               # L3: mark visited, O(1)
+            found = (dfs(r + 1, c, i + 1) or dfs(r - 1, c, i + 1)
+                     or dfs(r, c + 1, i + 1) or dfs(r, c - 1, i + 1))  # L4: 4 directions
+            board[r][c] = saved             # L5: unmark, O(1)
             return found
 
-        for r in range(rows):
+        for r in range(rows):               # L6: iterate over m*n cells
             for c in range(cols):
                 if dfs(r, c, 0):
                     return True
         return False
 
-    return [w for w in words if exist(w)]
+    return [w for w in words if exist(w)]  # L7: run exist() W times
 ```
 
+**Where the time goes, line by line**
+
+*Variables: W = len(words), L = max word length, m = board rows, n = board columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L6/L7 (start cells per word) | O(1) | m · n per word | O(m · n) |
+| **L4 (4-way DFS per cell)** | **O(4^L) worst** | **m · n per word** | **O(m · n · 4^L) per word** |
+| L7 (repeat for W words) | O(m · n · 4^L) | W | **O(W · m · n · 4^L)** ← dominates |
+
+Each `exist(word)` call launches a DFS from every cell. In the worst case, the DFS branches 4 ways at each of L levels. Multiplied by W words, shared prefix work is repeated from scratch.
+
 **Complexity**
-- **Time:** O(W · m · n · 4^L) where W = words, L = max word length.
+- **Time:** O(W · m · n · 4^L), driven by L4/L7 (full DFS per word, no prefix sharing).
 - **Space:** O(L) recursion.
 
 Typically times out: overlapping prefixes across words cause massive duplicate work.
@@ -66,9 +78,8 @@ class TrieNode:
         self.word = None    # full word stored at terminal nodes (dedup helper)
 
 def find_words(board, words):
-    # Build the trie
     root = TrieNode()
-    for w in words:
+    for w in words:                        # L1: build trie, O(sum of word lengths)
         node = root
         for ch in w:
             if ch not in node.children:
@@ -83,27 +94,40 @@ def find_words(board, words):
         if not (0 <= r < rows and 0 <= c < cols):
             return
         ch = board[r][c]
-        if ch == "#" or ch not in node.children:
+        if ch == "#" or ch not in node.children:  # L2: O(1) trie lookup prune
             return
         next_node = node.children[ch]
         if next_node.word:
             found.append(next_node.word)
-            next_node.word = None    # dedup
-        board[r][c] = "#"
-        dfs(r + 1, c, next_node)
-        dfs(r, 1, c, next_node)
+            next_node.word = None                  # L3: O(1) dedup
+        board[r][c] = "#"                          # L4: O(1) mark visited
+        dfs(r + 1, c, next_node)                  # L5: 4-way DFS
+        dfs(r - 1, c, next_node)
         dfs(r, c + 1, next_node)
-        dfs(r, c, 1, next_node)
-        board[r][c] = ch
+        dfs(r, c - 1, next_node)
+        board[r][c] = ch                           # L6: O(1) unmark
 
-    for r in range(rows):
+    for r in range(rows):                          # L7: launch from every cell
         for c in range(cols):
             dfs(r, c, root)
     return found
 ```
 
+**Where the time goes, line by line**
+
+*Variables: W = len(words), L = max word length, m = board rows, n = board columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (trie build) | O(1) per char | sum of word lengths | O(W · L) |
+| L2 (trie prune) | O(1) | each DFS step | prunes dead branches early |
+| L7 (start cells) | O(1) | m · n | O(m · n) |
+| **L5 (4-way DFS)** | **O(4^L) worst** | **m · n** | **O(m · n · 4^L)** ← dominates |
+
+The key improvement over Approach 1: all W words are searched simultaneously. When a trie path doesn't match, the DFS prunes at L2 instead of re-launching W separate searches. Shared prefixes are explored only once.
+
 **Complexity**
-- **Time:** O(m · n · 4^L). Trie lookup is O(1) per step.
+- **Time:** O(m · n · 4^L), driven by L5/L7 (single DFS over all cells, guided by the trie).
 - **Space:** O(total characters in words).
 
 ## Approach 3: Approach 2 + dead-branch pruning
@@ -128,6 +152,71 @@ Complexity is unchanged asymptotically but wall-clock is often 2–10× faster.
 | + dead-branch pruning | same Big-O | same | Practical speedup |
 
 This problem is the canonical "why tries matter" interview question. The trie turns "run N similar searches" into "run one search against a structure that encodes all N."
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_212.py and run.
+# Uses the canonical Approach 2 implementation (trie + board DFS).
+
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.word = None
+
+def find_words(board, words):
+    root = TrieNode()
+    for w in words:
+        node = root
+        for ch in w:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.word = w
+
+    rows, cols = len(board), len(board[0])
+    found = []
+
+    def dfs(r, c, node):
+        if not (0 <= r < rows and 0 <= c < cols):
+            return
+        ch = board[r][c]
+        if ch == "#" or ch not in node.children:
+            return
+        next_node = node.children[ch]
+        if next_node.word:
+            found.append(next_node.word)
+            next_node.word = None
+        board[r][c] = "#"
+        dfs(r + 1, c, next_node)
+        dfs(r - 1, c, next_node)
+        dfs(r, c + 1, next_node)
+        dfs(r, c - 1, next_node)
+        board[r][c] = ch
+
+    for r in range(rows):
+        for c in range(cols):
+            dfs(r, c, root)
+    return found
+
+def _run_tests():
+    board1 = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]
+    result1 = set(find_words(board1, ["oath","pea","eat","rain"]))
+    assert result1 == {"oath", "eat"}
+
+    # single cell board
+    assert find_words([["a"]], ["a"]) == ["a"]
+    assert find_words([["a"]], ["b"]) == []
+
+    # word not present (requires cell reuse)
+    board2 = [["a","b"],["c","d"]]
+    assert set(find_words(board2, ["ab", "cd", "abdc"])) == {"ab", "cd", "abdc"}
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

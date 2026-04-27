@@ -29,17 +29,17 @@ def exist(board, word):
 
     def dfs(r, c, i, visited):
         if i == len(word):
-            return True
+            return True                               # L1: found full word
         if not (0 <= r < rows and 0 <= c < cols):
-            return False
+            return False                              # L2: out of bounds
         if (r, c) in visited or board[r][c] != word[i]:
-            return False
-        visited.add((r, c))
+            return False                              # L3: O(1) hash check
+        visited.add((r, c))                           # L4: O(1) mark
         found = (dfs(r + 1, c, i + 1, visited) or
-                 dfs(r, 1, c, i + 1, visited) or
+                 dfs(r - 1, c, i + 1, visited) or
                  dfs(r, c + 1, i + 1, visited) or
-                 dfs(r, c, 1, i + 1, visited))
-        visited.remove((r, c))
+                 dfs(r, c - 1, i + 1, visited))       # L5: 4 recursive calls
+        visited.remove((r, c))                        # L6: O(1) unmark
         return found
 
     for r in range(rows):
@@ -63,16 +63,16 @@ def exist(board, word):
 
     def dfs(r, c, i):
         if i == len(word):
-            return True
+            return True                               # L1: full match
         if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[i]:
-            return False
+            return False                              # L2: boundary / mismatch
         saved = board[r][c]
-        board[r][c] = '#'
+        board[r][c] = '#'                             # L3: O(1) mark in-place
         found = (dfs(r + 1, c, i + 1) or
-                 dfs(r, 1, c, i + 1) or
+                 dfs(r - 1, c, i + 1) or
                  dfs(r, c + 1, i + 1) or
-                 dfs(r, c, 1, i + 1))
-        board[r][c] = saved
+                 dfs(r, c - 1, i + 1))               # L4: 4 recursive calls
+        board[r][c] = saved                           # L5: O(1) restore
         return found
 
     for r in range(rows):
@@ -82,8 +82,20 @@ def exist(board, word):
     return False
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = rows * cols (board cells), L = len(word).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (boundary/mismatch) | O(1) | one per DFS call | O(n · 4^L) |
+| L3/L5 (mark/restore) | O(1) | one per DFS call | O(n · 4^L) |
+| **L4 (four recursive calls)** | **O(1) dispatch** | **n · 4^L** | **O(n · 4^L)** ← dominates |
+
+Starting from each of n cells, the DFS explores at most 4^L paths of length L.
+
 **Complexity**
-- **Time:** O(m · n · 4^L).
+- **Time:** O(m · n · 4^L), driven by L4 branching four ways per step.
 - **Space:** O(L) recursion. No auxiliary set.
 
 Standard interview answer. The "restore on backtrack" is the essential pattern.
@@ -96,27 +108,21 @@ Before doing any DFS, count characters on the board. If the board lacks any char
 from collections import Counter
 
 def exist(board, word):
-    board_counts = Counter(c for row in board for c in row)
+    board_counts = Counter(c for row in board for c in row)  # L1: O(n) count
     for ch, needed in Counter(word).items():
         if board_counts[ch] < needed:
-            return False
+            return False                                      # L2: O(L) fast reject
 
     if board_counts[word[-1]] < board_counts[word[0]]:
-        word = word[::-1]
+        word = word[::-1]                                     # L3: O(L) reverse
 
-    # then do Approach 2's DFS
     rows, cols = len(board), len(board[0])
     def dfs(r, c, i):
-        if i == len(word):
-            return True
-        if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[i]:
-            return False
-        saved = board[r][c]
-        board[r][c] = '#'
-        found = (dfs(r + 1, c, i + 1) or
-                 dfs(r, 1, c, i + 1) or
-                 dfs(r, c + 1, i + 1) or
-                 dfs(r, c, 1, i + 1))
+        if i == len(word): return True
+        if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[i]: return False
+        saved = board[r][c]; board[r][c] = '#'
+        found = (dfs(r + 1, c, i + 1) or dfs(r - 1, c, i + 1) or
+                 dfs(r, c + 1, i + 1) or dfs(r, c - 1, i + 1))  # L4: DFS as before
         board[r][c] = saved
         return found
 
@@ -126,6 +132,16 @@ def exist(board, word):
                 return True
     return False
 ```
+
+**Where the time goes, line by line**
+
+*Variables: n = rows * cols (board cells), L = len(word).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2 (count + reject) | O(n + L) | 1 | O(n + L) |
+| L3 (reverse) | O(L) | at most 1 | O(L) |
+| **L4 (DFS)** | **O(n · 4^L)** | **1** | **O(n · 4^L)** ← dominates |
 
 **Complexity**
 - **Time:** Same worst case; much faster in practice on edge-case inputs.
@@ -142,6 +158,38 @@ def exist(board, word):
 The in-place mutation approach is the canonical interview answer. Counter-based pruning is a common "how would you optimize?" follow-up.
 
 Related problem: **Word Search II (212)** uses a trie over multiple target words to amortize DFS work.
+
+## Test cases
+
+```python
+def exist(board, word):
+    rows, cols = len(board), len(board[0])
+    def dfs(r, c, i):
+        if i == len(word): return True
+        if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[i]: return False
+        saved = board[r][c]; board[r][c] = '#'
+        found = (dfs(r+1,c,i+1) or dfs(r-1,c,i+1) or dfs(r,c+1,i+1) or dfs(r,c-1,i+1))
+        board[r][c] = saved
+        return found
+    for r in range(rows):
+        for c in range(cols):
+            if dfs(r, c, 0): return True
+    return False
+
+def _run_tests():
+    board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+    import copy
+    assert exist(copy.deepcopy(board), "ABCCED") == True
+    assert exist(copy.deepcopy(board), "SEE") == True
+    assert exist(copy.deepcopy(board), "ABCB") == False
+    # single cell
+    assert exist([["A"]], "A") == True
+    assert exist([["A"]], "B") == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

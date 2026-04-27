@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-You're given `n` balloons in a row, each with a value `nums[i]`. Bursting balloon `i` gives you `nums[i, 1] * nums[i] * nums[i + 1]` coins (treating out-of-bounds indices as having value 1). After bursting, neighbors become adjacent. Return the maximum coins.
+You're given `n` balloons in a row, each with a value `nums[i]`. Bursting balloon `i` gives you `nums[i - 1] * nums[i] * nums[i + 1]` coins (treating out-of-bounds indices as having value 1). After bursting, neighbors become adjacent. Return the maximum coins.
 
 **Example**
 - `nums = [3, 1, 5, 8]` → `167`
@@ -32,27 +32,38 @@ Pad `nums` with 1's on both sides. Let `dp[i][j]` = max coins from bursting *all
 
 ```python
 def max_coins(nums):
-    nums = [1] + nums + [1]
-    n = len(nums)
-    dp = [[0] * n for _ in range(n)]
+    nums = [1] + nums + [1]                          # L1: O(n) pad with sentinel 1s
+    n = len(nums)                                    # L2: O(1) (n is now original_n + 2)
+    dp = [[0] * n for _ in range(n)]                 # L3: O(n^2) table init
 
-    # length here is the distance between i and j (j, i)
-    for length in range(2, n):
-        for i in range(n, length):
-            j = i + length
-            best = 0
-            for k in range(i + 1, j):
-                coins = nums[i] * nums[k] * nums[j] + dp[i][k] + dp[k][j]
-                if coins > best:
-                    best = coins
-            dp[i][j] = best
+    for length in range(2, n + 1):                   # L4: O(n) loop over interval lengths
+        for i in range(n - length + 1):              # L5: O(n) loop over left endpoints
+            j = i + length - 1                       # L6: O(1) compute right endpoint
+            for k in range(i + 1, j):                # L7: O(n) try each last-burst k
+                coins = nums[i] * nums[k] * nums[j] + dp[i][k] + dp[k][j]  # L8: O(1)
+                if coins > dp[i][j]:
+                    dp[i][j] = coins                 # L9: O(1) update best
 
-    return dp[0][n, 1]
+    return dp[0][n - 1]                              # L10: O(1) answer (full interval)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums) after padding (original length + 2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init) | O(n) or O(n^2) | 1 | O(n^2) |
+| L4 (length loop) | O(1) | n | O(n) outer |
+| L5 (left endpoint loop) | O(1) | O(n) per length | O(n^2) combined |
+| **L7 (last-burst k loop)** | **O(1) body** | **O(n) per (i,j) pair** | **O(n^3)** ← dominates |
+| L8-L9 (coin calc + update) | O(1) | once per (i,j,k) triple | included above |
+
+The three nested loops at L4/L5/L7 iterate over all O(n^3) triples `(i, j, k)`. Each triple does O(1) work, so the total is O(n^3).
+
 **Complexity**
-- **Time:** O(n³).
-- **Space:** O(n²).
+- **Time:** O(n^3), driven by L4/L5/L7 (the three nested loops over all interval triples).
+- **Space:** O(n^2) for the DP table.
 
 ### Why "last to burst"
 When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and between `k` and `j`, has already been bursted. Those sub-intervals are independent subproblems, clean recurrence. Trying "first to burst" instead, the subproblems are not independent (their boundaries shift).
@@ -63,9 +74,44 @@ When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and be
 | --- | --- | --- | --- |
 | Enumerate orderings | O(n!) | O(n) | Infeasible |
 | Naive recursion ("first to burst") | - | - | Wrong framing |
-| **Interval DP ("last to burst")** | **O(n³)** | **O(n²)** | Canonical |
+| **Interval DP ("last to burst")** | **O(n^3)** | **O(n^2)** | Canonical |
 
 Interval DP is a major pattern, same template solves Matrix Chain Multiplication and Minimum Cost Tree From Leaf Values (1130).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_312.py and run.
+# Uses the canonical implementation (Approach 3: interval DP).
+
+def max_coins(nums):
+    nums = [1] + nums + [1]
+    n = len(nums)
+    dp = [[0] * n for _ in range(n)]
+    for length in range(2, n + 1):
+        for i in range(n - length + 1):
+            j = i + length - 1
+            for k in range(i + 1, j):
+                coins = nums[i] * nums[k] * nums[j] + dp[i][k] + dp[k][j]
+                if coins > dp[i][j]:
+                    dp[i][j] = coins
+    return dp[0][n - 1]
+
+def _run_tests():
+    # problem statement examples
+    assert max_coins([3, 1, 5, 8]) == 167
+    assert max_coins([1, 5]) == 10
+    # edge: single balloon
+    assert max_coins([5]) == 5
+    # edge: two balloons, all equal
+    assert max_coins([3, 3]) == 12
+    # all ones
+    assert max_coins([1, 1, 1]) == 3
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

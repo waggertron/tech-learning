@@ -35,31 +35,41 @@ class Twitter:
         self.follows = defaultdict(set)   # follower -> set(followees)
 
     def postTweet(self, userId, tweetId):
-        self.tweets[userId].append((self.time, tweetId))
+        self.tweets[userId].append((self.time, tweetId))  # L1: O(1) append
         self.time += 1
 
     def follow(self, followerId, followeeId):
-        self.follows[followerId].add(followeeId)
+        self.follows[followerId].add(followeeId)           # L2: O(1) set add
 
     def unfollow(self, followerId, followeeId):
-        self.follows[followerId].discard(followeeId)
+        self.follows[followerId].discard(followeeId)       # L3: O(1) set discard
 
     def getNewsFeed(self, userId):
         users = self.follows[userId] | {userId}
         feed = []
         for u in users:
-            feed.extend(self.tweets[u])
-        feed.sort(reverse=True)
+            feed.extend(self.tweets[u])                    # L4: O(T) collect all
+        feed.sort(reverse=True)                            # L5: O(T log T) sort
         return [t for _, t in feed[:10]]
 ```
 
+**Where the time goes, line by line**
+
+*Variables: k = number of users being followed, T = total tweets across those users.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (postTweet/follow/unfollow) | O(1) | 1 per call | O(1) |
+| L4 (collect all tweets) | O(T) | 1 per getNewsFeed | O(T) |
+| **L5 (sort feed)** | **O(T log T)** | **1 per getNewsFeed** | **O(T log T)** ← dominates getNewsFeed |
+
 **Complexity**
-- `getNewsFeed`: O(T log T) where T is total tweets across followed users.
+- `getNewsFeed`: O(T log T) where T is total tweets across followed users (L5).
 - Others: O(1).
 
 ## Approach 2: Per-user sorted list + k-way merge with a heap (optimal)
 
-Store each user's tweets as a list (append-only, so it's naturally sorted by time). On `getNewsFeed`, k-way-merge the latest 10 from each followed user using a max-heap of size ≤ (followees + 1).
+Store each user's tweets as a list (append-only, so it's naturally sorted by time). On `getNewsFeed`, k-way-merge the latest 10 from each followed user using a max-heap of size at most k + 1.
 
 ```python
 from collections import defaultdict
@@ -72,39 +82,51 @@ class Twitter:
         self.follows = defaultdict(set)
 
     def postTweet(self, userId, tweetId):
-        self.tweets[userId].append((self.time, tweetId))
+        self.tweets[userId].append((self.time, tweetId))   # L1: O(1)
         self.time += 1
 
     def follow(self, followerId, followeeId):
-        self.follows[followerId].add(followeeId)
+        self.follows[followerId].add(followeeId)            # L2: O(1)
 
     def unfollow(self, followerId, followeeId):
-        self.follows[followerId].discard(followeeId)
+        self.follows[followerId].discard(followeeId)        # L3: O(1)
 
     def getNewsFeed(self, userId):
         users = self.follows[userId] | {userId}
         heap = []
         # Seed the heap with the latest tweet from each user
-        for u in users:
+        for u in users:                                     # L4: O(k) seed
             if self.tweets[u]:
-                i = len(self.tweets[u]), 1
+                i = len(self.tweets[u]) - 1
                 t, tid = self.tweets[u][i]
                 heap.append((-t, u, i, tid))
-        heapq.heapify(heap)
+        heapq.heapify(heap)                                 # L5: O(k) heapify
 
         feed = []
-        while heap and len(feed) < 10:
-            neg_t, u, i, tid = heapq.heappop(heap)
+        while heap and len(feed) < 10:                     # L6: at most 10 iters
+            neg_t, u, i, tid = heapq.heappop(heap)        # L7: O(log k) pop
             feed.append(tid)
             if i > 0:
                 i -= 1
                 t2, tid2 = self.tweets[u][i]
-                heapq.heappush(heap, (-t2, u, i, tid2))
+                heapq.heappush(heap, (-t2, u, i, tid2))   # L8: O(log k) push
         return feed
 ```
 
+**Where the time goes, line by line**
+
+*Variables: k = number of users being followed (heap size at most k + 1).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (postTweet/follow/unfollow) | O(1) | 1 per call | O(1) |
+| L4-L5 (seed + heapify) | O(k) | 1 per getNewsFeed | O(k) |
+| **L6-L8 (drain 10 from heap)** | **O(log k) each** | **10** | **O(10 log k) = O(log k)** ← dominates getNewsFeed |
+
+The heap never exceeds k + 1 entries. Each of the 10 pops and up to 10 pushes costs O(log k). The seed phase at L4-L5 is O(k).
+
 **Complexity**
-- `getNewsFeed`: O(10 · log k) where k = number of followed users.
+- `getNewsFeed`: O(k + 10 log k) = O(k) for seeding + O(log k) for draining (L4-L8).
 - Others: O(1) amortized.
 
 Same pattern as problem 23 (Merge k Sorted Lists).
@@ -122,6 +144,77 @@ If each user only ever needs the last 10 tweets, truncate the per-user list to l
 - Others: O(1).
 
 Lower memory if you don't need long-term history.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_355.py and run.
+# Uses the heap k-way merge approach (Approach 2).
+import heapq
+from collections import defaultdict
+
+class Twitter:
+    def __init__(self):
+        self.time = 0
+        self.tweets = defaultdict(list)
+        self.follows = defaultdict(set)
+
+    def postTweet(self, userId, tweetId):
+        self.tweets[userId].append((self.time, tweetId))
+        self.time += 1
+
+    def follow(self, followerId, followeeId):
+        self.follows[followerId].add(followeeId)
+
+    def unfollow(self, followerId, followeeId):
+        self.follows[followerId].discard(followeeId)
+
+    def getNewsFeed(self, userId):
+        users = self.follows[userId] | {userId}
+        heap = []
+        for u in users:
+            if self.tweets[u]:
+                i = len(self.tweets[u]) - 1
+                t, tid = self.tweets[u][i]
+                heap.append((-t, u, i, tid))
+        heapq.heapify(heap)
+        feed = []
+        while heap and len(feed) < 10:
+            neg_t, u, i, tid = heapq.heappop(heap)
+            feed.append(tid)
+            if i > 0:
+                i -= 1
+                t2, tid2 = self.tweets[u][i]
+                heapq.heappush(heap, (-t2, u, i, tid2))
+        return feed
+
+def _run_tests():
+    t = Twitter()
+    t.postTweet(1, 5)
+    assert t.getNewsFeed(1) == [5]
+
+    t.follow(1, 2)
+    t.postTweet(2, 6)
+    # user 1 follows user 2; most recent is tweet 6, then 5
+    assert t.getNewsFeed(1) == [6, 5]
+
+    t.unfollow(1, 2)
+    # after unfollow, user 1 only sees their own tweet
+    assert t.getNewsFeed(1) == [5]
+
+    # User sees own tweets even without explicit self-follow
+    t2 = Twitter()
+    for i in range(12):
+        t2.postTweet(1, i)
+    feed = t2.getNewsFeed(1)
+    assert len(feed) == 10
+    assert feed == list(range(11, 1, -1))  # most recent 10: 11,10,...,2
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

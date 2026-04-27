@@ -24,7 +24,7 @@ Enumerate all 2^(2n) strings over `{(, )}`, keep the valid ones.
 
 ```python
 def generate_parenthesis(n: int) -> list[str]:
-    def is_valid(s):
+    def is_valid(s):                               # helper: O(n) per call
         balance = 0
         for ch in s:
             balance += 1 if ch == "(" else -1
@@ -33,19 +33,30 @@ def generate_parenthesis(n: int) -> list[str]:
         return balance == 0
 
     result = []
-    def rec(s):
-        if len(s) == 2 * n:
-            if is_valid(s):
+    def rec(s):                                    # L1: recursive enumeration
+        if len(s) == 2 * n:                        # L2: O(1) base-case check
+            if is_valid(s):                        # L3: O(n) validation
                 result.append(s)
             return
-        rec(s + "(")
-        rec(s + ")")
+        rec(s + "(")                               # L4: recurse with open
+        rec(s + ")")                               # L5: recurse with close
     rec("")
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of pairs, C(n) = n-th Catalan number.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1-L5 (full enumeration)** | **O(n) at leaves** | **4^n nodes** | **O(4^n · n)** ← dominates |
+| L3 (is_valid at leaf) | O(n) | 4^n leaves | O(4^n · n) |
+
+The recursion tree has 4^n leaves (all 2n-length strings of `(` and `)`); each is validated in O(n).
+
 **Complexity**
-- **Time:** O(2^(2n) · n). Exponentially many strings, each validated in O(n).
+- **Time:** O(2^(2n) · n), driven by L1-L5 (exponentially many strings, each validated in O(n)).
 - **Space:** O(n) recursion depth (plus output).
 
 ## Approach 2: Prune invalid strings during generation
@@ -55,27 +66,93 @@ Track running balance during the recursion. Abort a branch as soon as `close > o
 ```python
 def generate_parenthesis(n: int) -> list[str]:
     result = []
-    def rec(s, opens, closes):
-        if opens > n or closes > opens:
+    def rec(s, opens, closes):                     # L1: pruned recursion
+        if opens > n or closes > opens:            # L2: O(1) prune check
             return
-        if len(s) == 2 * n:
+        if len(s) == 2 * n:                        # L3: O(1) base case
             result.append(s)
             return
-        rec(s + "(", opens + 1, closes)
-        rec(s + ")", opens, closes + 1)
+        rec(s + "(", opens + 1, closes)            # L4: try open
+        rec(s + ")", opens, closes + 1)            # L5: try close
     rec("", 0, 0)
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of pairs, C(n) = n-th Catalan number.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (prune check) | O(1) | at each node | reduces tree to ~4·C(n) nodes |
+| **L4, L5 (recurse)** | **O(n) at leaves** | **C(n) leaves** | **O(C(n) · n)** ← dominates |
+
+Pruning reduces the explored space from 4^n to the Catalan number C(n) ≈ 4^n / (n^(3/2) · sqrt(pi)).
+
 **Complexity**
 - **Time:** O(4^n / sqrt(n)), the n-th Catalan number times a linear factor. Much smaller than the brute-force 4^n.
-- **Space:** O(n) recursion.
+- **Space:** O(n) recursion depth.
 
 ## Approach 3: Backtracking with the exact open/close invariant (optimal)
 
 Same idea, phrased so the invariants are explicit: at each step you can add `(` if `opens < n`, and `)` if `closes < opens`.
 
 ```python
+def generate_parenthesis(n: int) -> list[str]:
+    result = []                                    # L1: O(1)
+    path = []                                      # L2: O(1) shared path buffer
+
+    def backtrack(opens, closes):
+        if opens == n and closes == n:             # L3: O(1) done check
+            result.append("".join(path))           # L4: O(n) join at leaf
+            return
+        if opens < n:                              # L5: O(1)
+            path.append("(")                       # L6: O(1) amortized
+            backtrack(opens + 1, closes)           # L7: recurse
+            path.pop()                             # L8: O(1) undo
+        if closes < opens:                         # L9: O(1)
+            path.append(")")                       # L10: O(1) amortized
+            backtrack(opens, closes + 1)           # L11: recurse
+            path.pop()                             # L12: O(1) undo
+
+    backtrack(0, 0)
+    return result
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of pairs, C(n) = n-th Catalan number.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3-L4 (base case + join) | O(n) | C(n) leaves | O(C(n) · n) |
+| L5-L12 (append/recurse/pop) | O(1) amortized | ~4·C(n) nodes | O(C(n)) |
+| **Total** | | | **O(C(n) · n)** ← dominates |
+
+Using a single `path` list with `append`/`pop` avoids O(n) string concatenation on each internal node; the join cost O(n) is paid only at the C(n) leaves.
+
+**Complexity**
+- **Time:** O(4^n / sqrt(n)), driven by L4/L7/L11 (Catalan-many recursive calls). Same asymptotic as Approach 2; the count of well-formed sequences is the n-th Catalan number.
+- **Space:** O(n) recursion depth + output.
+
+Using a single `path` list with `append`/`pop` avoids string concatenation (O(n) per append); the final join happens only on full paths.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Enumerate all + validate | O(2^(2n) · n) | O(n) |
+| Prune during generation | O(4^n / sqrt(n)) | O(n) |
+| **Backtracking with invariants** | **O(4^n / sqrt(n))** | **O(n)** |
+
+Approach 3 is the canonical answer and the cleanest expression of the idea. The output is inherently exponential, so you can't beat the Catalan bound.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_generate_parentheses.py and run.
+# Uses the canonical implementation (Approach 3: backtracking with invariants).
+
 def generate_parenthesis(n: int) -> list[str]:
     result = []
     path = []
@@ -95,23 +172,17 @@ def generate_parenthesis(n: int) -> list[str]:
 
     backtrack(0, 0)
     return result
+
+def _run_tests():
+    assert sorted(generate_parenthesis(1)) == ["()"]
+    assert sorted(generate_parenthesis(2)) == sorted(["(())", "()()"])
+    assert sorted(generate_parenthesis(3)) == sorted(["((()))","(()())","(())()","()(())","()()()"])
+    assert len(generate_parenthesis(4)) == 14   # 4th Catalan number
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(4^n / sqrt(n)). Same asymptotic as Approach 2; the count of well-formed sequences is the n-th Catalan number.
-- **Space:** O(n) recursion + output.
-
-Using a single `path` list with `append`/`pop` avoids string concatenation (O(n) per append); the final join happens only on full paths.
-
-## Summary
-
-| Approach | Time | Space |
-| --- | --- | --- |
-| Enumerate all + validate | O(2^(2n) · n) | O(n) |
-| Prune during generation | O(4^n / √n) | O(n) |
-| **Backtracking with invariants** | **O(4^n / √n)** | **O(n)** |
-
-Approach 3 is the canonical answer and the cleanest expression of the idea. The output is inherently exponential, so you can't beat the Catalan bound.
 
 ## Related data structures
 

@@ -24,22 +24,34 @@ LeetCode 45 · [Link](https://leetcode.com/problems/jump-game-ii/) · *Medium*
 
 ```python
 def jump(nums):
-    n = len(nums)
+    n = len(nums)                           # L1: O(1)
     INF = float('inf')
-    dp = [INF] * n
-    dp[0] = 0
-    for i in range(n):
+    dp = [INF] * n                          # L2: O(n)
+    dp[0] = 0                               # L3: O(1)
+    for i in range(n):                      # L4: outer loop, n iterations
         if dp[i] == INF:
             continue
-        furthest = min(i + nums[i], n, 1)
-        for j in range(i + 1, furthest + 1):
-            dp[j] = min(dp[j], dp[i] + 1)
-    return dp[n, 1]
+        furthest = min(i + nums[i], n - 1)  # L5: O(1)
+        for j in range(i + 1, furthest + 1):# L6: inner loop, up to n per i
+            dp[j] = min(dp[j], dp[i] + 1)  # L7: O(1)
+    return dp[n - 1]
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init dp) | O(1) | n | O(n) |
+| L4 (outer loop) | O(1) | n | O(n) |
+| **L6, L7 (inner loop)** | **O(1)** | **up to n per i** | **O(n²)** ← dominates |
+
+L6 is the bottleneck: for each index `i` we may scan up to `nums[i]` forward positions. In the worst case (e.g., `nums = [n, n, n, ...]`) each outer iteration scans nearly the entire remaining array, giving O(n²) total.
+
 **Complexity**
-- **Time:** O(n²).
-- **Space:** O(n).
+- **Time:** O(n²), driven by L6/L7 (the inner scan for reachable positions).
+- **Space:** O(n) for the dp array.
 
 ## Approach 2: BFS on jump levels
 
@@ -47,31 +59,44 @@ Treat each jump as a BFS level. All positions reachable in `k` jumps form level 
 
 ```python
 def jump(nums):
-    n = len(nums)
+    n = len(nums)                                   # L1: O(1)
     if n <= 1:
         return 0
-    visited = [False] * n
+    visited = [False] * n                           # L2: O(n)
     visited[0] = True
-    level = 0
-    frontier = [0]
-    while frontier:
+    level = 0                                       # L3: O(1)
+    frontier = [0]                                  # L4: O(1)
+    while frontier:                                 # L5: outer loop, one per jump level
         level += 1
         next_frontier = []
-        for i in frontier:
-            for k in range(1, nums[i] + 1):
+        for i in frontier:                          # L6: iterate current frontier
+            for k in range(1, nums[i] + 1):         # L7: try each reachable step
                 j = i + k
-                if j >= n, 1:
+                if j >= n - 1:
                     return level
                 if not visited[j]:
                     visited[j] = True
-                    next_frontier.append(j)
+                    next_frontier.append(j)         # L8: O(1) amortized
         frontier = next_frontier
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init visited) | O(1) | n | O(n) |
+| L5 (BFS level loop) | O(1) | up to n levels | O(n) |
+| **L6, L7 (frontier scan)** | **O(1)** | **up to n² total** | **O(n²)** ← dominates |
+| L8 (append) | O(1) amortized | up to n | O(n) |
+
+Each node is visited at most once (the `visited` guard), so total work across all levels is bounded by total edges, which is O(n²) worst case (when each node points to all following nodes).
+
 **Complexity**
-- **Time:** O(n²) worst case.
-- **Space:** O(n).
+- **Time:** O(n²) worst case, driven by L6/L7.
+- **Space:** O(n) for visited and frontier arrays.
 
 ## Approach 3: Greedy with current-end + farthest (optimal)
 
@@ -79,19 +104,32 @@ Track the rightmost index reachable within the current jump (`current_end`) and 
 
 ```python
 def jump(nums):
-    jumps = 0
-    current_end = 0
-    farthest = 0
-    for i in range(len(nums), 1):
-        farthest = max(farthest, i + nums[i])
-        if i == current_end:
+    jumps = 0                                   # L1: O(1)
+    current_end = 0                             # L2: O(1)
+    farthest = 0                                # L3: O(1)
+    for i in range(1, len(nums)):               # L4: single pass, n-1 iterations
+        farthest = max(farthest, i + nums[i])   # L5: O(1) per step
+        if i == current_end:                    # L6: O(1) per step
             jumps += 1
             current_end = farthest
     return jumps
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init) | O(1) | 1 | O(1) |
+| **L4 (loop)** | **O(1)** | **n-1** | **O(n)** ← dominates |
+| L5 (update farthest) | O(1) | n-1 | O(n) |
+| L6 (commit jump) | O(1) | at most n-1 | O(n) |
+
+Every line executes exactly once per index. The whole algorithm is a single linear scan with O(1) work per step.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L4 (single linear scan).
 - **Space:** O(1).
 
 ### Intuition
@@ -106,6 +144,35 @@ This is BFS collapsed into a linear scan: the "frontier" of a BFS level is impli
 | **Greedy with farthest** | **O(n)** | **O(1)** |
 
 One of the cleanest greedy collapses of a BFS structure.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_045.py and run.
+# Uses the canonical implementation (Approach 3: greedy).
+
+def jump(nums):
+    jumps = 0
+    current_end = 0
+    farthest = 0
+    for i in range(1, len(nums)):
+        farthest = max(farthest, i + nums[i])
+        if i == current_end:
+            jumps += 1
+            current_end = farthest
+    return jumps
+
+def _run_tests():
+    assert jump([2, 3, 1, 1, 4]) == 2
+    assert jump([2, 3, 0, 1, 4]) == 2
+    assert jump([1]) == 0          # single element, already at end
+    assert jump([1, 1, 1, 1]) == 3
+    assert jump([5, 4, 3, 2, 1, 0]) == 1  # jump over everything in one step
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

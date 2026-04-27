@@ -24,16 +24,27 @@ LeetCode 62 · [Link](https://leetcode.com/problems/unique-paths/) · *Medium*
 
 ```python
 def unique_paths(m, n):
-    def f(r, c):
-        if r == 0 or c == 0:
+    def f(r, c):                          # L1: define recursive helper
+        if r == 0 or c == 0:              # L2: O(1) base case (edge row/col)
             return 1
-        return f(r, 1, c) + f(r, c, 1)
-    return f(m, 1, n, 1)
+        return f(r - 1, c) + f(r, c - 1) # L3: two recursive calls
+    return f(m - 1, n - 1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = number of grid rows, n = number of grid columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (base case) | O(1) | once per leaf call | O(1) each |
+| **L3 (two recursive calls)** | **O(1) work + 2 calls** | **O(2^(m+n)) call tree** | **O(2^(m+n))** ← dominates |
+
+Without caching, the same `(r, c)` is recomputed at every node of a binary tree of depth `m + n`. The exponential blowup is identical to naive Fibonacci.
+
 **Complexity**
-- **Time:** O(2^(m + n)).
-- **Space:** O(m + n) recursion.
+- **Time:** O(2^(m + n)), driven by L3's double branching without memoization.
+- **Space:** O(m + n) recursion depth.
 
 ## Approach 2: 2-D bottom-up DP
 
@@ -41,16 +52,29 @@ def unique_paths(m, n):
 
 ```python
 def unique_paths(m, n):
-    dp = [[1] * n for _ in range(m)]
-    for r in range(1, m):
-        for c in range(1, n):
-            dp[r][c] = dp[r, 1][c] + dp[r][c, 1]
-    return dp[m, 1][n, 1]
+    dp = [[1] * n for _ in range(m)]   # L1: O(m*n) init, all 1s (edges are base cases)
+    for r in range(1, m):              # L2: outer loop O(m)
+        for c in range(1, n):          # L3: inner loop O(n)
+            dp[r][c] = dp[r - 1][c] + dp[r][c - 1]  # L4: O(1) recurrence
+    return dp[m - 1][n - 1]            # L5: O(1) read answer
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = number of grid rows, n = number of grid columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (table init) | O(1) per cell | m · n | O(m · n) |
+| **L2+L3 (double loop)** | **O(1) body** | **(m-1) · (n-1)** | **O(m · n)** ← dominates |
+| L4 (recurrence fill) | O(1) | (m-1) · (n-1) | O(m · n) |
+| L5 (answer read) | O(1) | 1 | O(1) |
+
+Every cell is visited once; each fill is a single addition. The double loop is the only work.
+
 **Complexity**
-- **Time:** O(m · n).
-- **Space:** O(m · n).
+- **Time:** O(m · n), driven by L2+L3+L4 (the full grid traversal).
+- **Space:** O(m · n) for the DP table.
 
 ## Approach 3: 1-D rolling array (optimal space)
 
@@ -58,19 +82,31 @@ def unique_paths(m, n):
 
 ```python
 def unique_paths(m, n):
-    dp = [1] * n
-    for _ in range(1, m):
-        for c in range(1, n):
-            dp[c] += dp[c, 1]
-    return dp[n, 1]
+    dp = [1] * n          # L1: O(n) init (first row, all paths = 1)
+    for _ in range(1, m): # L2: outer loop O(m)
+        for c in range(1, n):          # L3: inner loop O(n)
+            dp[c] += dp[c - 1]         # L4: O(1) in-place update
+    return dp[n - 1]      # L5: O(1) read answer
 ```
 
+**Where the time goes, line by line**
+
+*Variables: m = number of grid rows, n = number of grid columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) per element | n | O(n) |
+| **L2+L3 (double loop)** | **O(1) body** | **(m-1) · (n-1)** | **O(m · n)** ← dominates |
+| L4 (rolling update) | O(1) | (m-1) · (n-1) | O(m · n) |
+
+Same time complexity as 2-D DP but the space drops from O(m · n) to O(n) by reusing one array. `dp[c]` before the update is `dp[r-1][c]` (from the previous row); `dp[c-1]` just updated is `dp[r][c-1]` from the current row. The rolling update is sound because we traverse left to right.
+
 **Complexity**
-- **Time:** O(m · n).
-- **Space:** O(n).
+- **Time:** O(m · n), driven by L2+L3+L4.
+- **Space:** O(n) for the single rolling row.
 
 ### Closed-form (math variant)
-The answer is `C(m + n, 2, m, 1)`, choose which `m, 1` of the `m + n, 2` total moves are "down." O(min(m, n)) using iterative factorial.
+The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` total moves are "down." O(min(m, n)) using iterative factorial.
 
 ## Summary
 
@@ -82,6 +118,37 @@ The answer is `C(m + n, 2, m, 1)`, choose which `m, 1` of the `m + n, 2` total m
 | Closed-form | O(min(m, n)) | O(1) |
 
 The 1-D rolling array is the standard interview answer. The closed-form is a neat math flex when permitted.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_062.py and run.
+# Uses the canonical implementation (Approach 3: 1-D rolling DP).
+
+def unique_paths(m, n):
+    dp = [1] * n
+    for _ in range(1, m):
+        for c in range(1, n):
+            dp[c] += dp[c - 1]
+    return dp[n - 1]
+
+def _run_tests():
+    # problem statement examples
+    assert unique_paths(3, 7) == 28
+    assert unique_paths(3, 2) == 3
+    # edge: 1x1 grid
+    assert unique_paths(1, 1) == 1
+    # edge: single row (only one path: all right)
+    assert unique_paths(1, 5) == 1
+    # edge: single column (only one path: all down)
+    assert unique_paths(5, 1) == 1
+    # larger case
+    assert unique_paths(3, 3) == 6
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

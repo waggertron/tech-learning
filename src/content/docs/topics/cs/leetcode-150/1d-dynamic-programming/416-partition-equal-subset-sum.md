@@ -24,22 +24,35 @@ Try every subset; test whether it sums to `total / 2`.
 
 ```python
 def can_partition(nums):
-    total = sum(nums)
-    if total % 2:
+    total = sum(nums)                              # L1: O(n)
+    if total % 2:                                  # L2: O(1)
         return False
-    target = total // 2
+    target = total // 2                            # L3: O(1)
     def f(i, cur):
-        if cur == target:
+        if cur == target:                          # L4: O(1)
             return True
-        if i == len(nums) or cur > target:
+        if i == len(nums) or cur > target:         # L5: O(1)
             return False
-        return f(i + 1, cur + nums[i]) or f(i + 1, cur)
+        return f(i + 1, cur + nums[i]) or f(i + 1, cur)  # L6: two recursive calls
     return f(0, 0)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), S = sum(nums) (we target S/2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (sum) | O(n) | 1 | O(n) |
+| L2, L3 (parity check) | O(1) | 1 | O(1) |
+| L4, L5 (base cases) | O(1) | per call | O(2ⁿ) |
+| **L6 (two recursive calls)** | **O(1)** | **up to 2ⁿ** | **O(2ⁿ)** ← dominates |
+
+Each item is either included or not, producing a full binary recursion tree of depth n. No memoization means identical subproblems are recomputed.
+
 **Complexity**
-- **Time:** O(2ⁿ).
-- **Space:** O(n).
+- **Time:** O(2ⁿ), driven by L6 (the binary branching at every element).
+- **Space:** O(n) for the recursion stack.
 
 ## Approach 2: Top-down memoized
 
@@ -49,25 +62,38 @@ Cache by `(i, cur)`.
 from functools import lru_cache
 
 def can_partition(nums):
-    total = sum(nums)
-    if total % 2:
+    total = sum(nums)                    # L1: O(n)
+    if total % 2:                        # L2: O(1)
         return False
-    target = total // 2
+    target = total // 2                  # L3: O(1)
 
     @lru_cache(maxsize=None)
     def f(i, cur):
-        if cur == target:
+        if cur == target:                # L4: O(1)
             return True
-        if i == len(nums) or cur > target:
+        if i == len(nums) or cur > target:  # L5: O(1)
             return False
-        return f(i + 1, cur + nums[i]) or f(i + 1, cur)
+        return f(i + 1, cur + nums[i]) or f(i + 1, cur)  # L6: cached calls
 
     return f(0, 0)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), S = sum(nums) (we target S/2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (sum) | O(n) | 1 | O(n) |
+| L2, L3 (parity check) | O(1) | 1 | O(1) |
+| L4, L5 (base cases) | O(1) | per unique (i, cur) | O(n · target) |
+| **L6 (recursive calls)** | **O(1) amortized** | **n · target unique states** | **O(n · target)** ← dominates |
+
+With memoization, each `(i, cur)` pair is computed at most once. There are n indices and at most target+1 possible `cur` values, giving n · (target+1) unique states.
+
 **Complexity**
-- **Time:** O(n · target).
-- **Space:** O(n · target).
+- **Time:** O(n · target), driven by L6 (unique state count bounds total work).
+- **Space:** O(n · target) for the memo table plus O(n) for the call stack.
 
 ## Approach 3: Bottom-up 1-D DP (canonical, optimal space)
 
@@ -75,21 +101,35 @@ def can_partition(nums):
 
 ```python
 def can_partition(nums):
-    total = sum(nums)
-    if total % 2:
+    total = sum(nums)                        # L1: O(n)
+    if total % 2:                            # L2: O(1)
         return False
-    target = total // 2
-    dp = [False] * (target + 1)
-    dp[0] = True
-    for x in nums:
-        for s in range(target, x, 1, -1):
-            dp[s] = dp[s] or dp[s, x]
-    return dp[target]
+    target = total // 2                      # L3: O(1)
+    dp = [False] * (target + 1)              # L4: O(target)
+    dp[0] = True                             # L5: O(1)
+    for x in nums:                           # L6: outer loop, n iterations
+        for s in range(target, x - 1, -1):  # L7: inner loop, up to target iterations
+            dp[s] = dp[s] or dp[s - x]      # L8: O(1) per cell
+    return dp[target]                        # L9: O(1)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), S = sum(nums) (we target S/2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (sum) | O(n) | 1 | O(n) |
+| L4 (allocate dp) | O(target) | 1 | O(target) |
+| L6 (outer loop) | O(1) | n | O(n) |
+| **L7, L8 (inner loop + update)** | **O(1)** | **n × target** | **O(n · target)** ← dominates |
+| L9 (return) | O(1) | 1 | O(1) |
+
+The double loop visits each of the n items against each of the target possible sums. The high-to-low sweep on L7 is not extra work; it is the same O(target) range traversed in reverse.
+
 **Complexity**
-- **Time:** O(n · target).
-- **Space:** O(target).
+- **Time:** O(n · target), driven by L7/L8 (the double loop).
+- **Space:** O(target) for the dp array.
 
 ### Why iterate from high to low
 In 0/1 knapsack, iterating `s` low-to-high would let an item be included more than once in the same outer iteration. Going high-to-low uses only values that haven't yet been updated this round, preserving the 0/1 semantics.
@@ -103,6 +143,37 @@ In 0/1 knapsack, iterating `s` low-to-high would let an item be included more th
 | **Bottom-up 1-D DP** | **O(n · target)** | **O(target)** |
 
 Template for every 0/1 knapsack problem, Target Sum (494), Last Stone Weight II (1049), etc.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_416.py and run.
+# Uses the canonical implementation (Approach 3: bottom-up 1-D DP).
+
+def can_partition(nums):
+    total = sum(nums)
+    if total % 2:
+        return False
+    target = total // 2
+    dp = [False] * (target + 1)
+    dp[0] = True
+    for x in nums:
+        for s in range(target, x - 1, -1):
+            dp[s] = dp[s] or dp[s - x]
+    return dp[target]
+
+def _run_tests():
+    assert can_partition([1, 5, 11, 5]) == True   # LeetCode example 1
+    assert can_partition([1, 2, 3, 5]) == False   # LeetCode example 2
+    assert can_partition([1]) == False             # single element, odd total
+    assert can_partition([2, 2]) == True           # single element each side
+    assert can_partition([1, 2, 5]) == False       # total=8, target=4, no subset
+    assert can_partition([3, 3, 3, 4, 5]) == True  # target=9, subset [3,3,3]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

@@ -23,11 +23,23 @@ LeetCode 191 · [Link](https://leetcode.com/problems/number-of-1-bits/) · *Easy
 ```python
 def hamming_weight(n):
     count = 0
-    while n:
-        count += n & 1
-        n >>= 1
+    while n:                        # L1: loop up to B iterations (B = bit width)
+        count += n & 1              # L2: O(1), test LSB
+        n >>= 1                     # L3: O(1), shift right
     return count
 ```
+
+**Where the time goes, line by line**
+
+*Variables: B = number of bits in n (32 for this problem).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1-L3 (shift loop)** | **O(1)** | **B** | **O(B) = O(1)** ← dominates (constant) |
+| L2 (test LSB) | O(1) | B | O(B) |
+| L3 (shift right) | O(1) | B | O(B) |
+
+The loop runs at most B = 32 iterations regardless of input value.
 
 **Complexity**
 - **Time:** O(B) where B = number of bits (32 for this problem).
@@ -35,16 +47,27 @@ def hamming_weight(n):
 
 ## Approach 2: Brian Kernighan's trick (canonical)
 
-`n & (n, 1)` clears the lowest set bit. Loop until `n == 0`.
+`n & (n - 1)` clears the lowest set bit. Loop until `n == 0`.
 
 ```python
 def hamming_weight(n):
     count = 0
-    while n:
-        n &= n, 1
-        count += 1
+    while n:                        # L1: loop popcount(n) times
+        n &= n - 1                  # L2: O(1), clear lowest set bit
+        count += 1                  # L3: O(1)
     return count
 ```
+
+**Where the time goes, line by line**
+
+*Variables: B = number of set bits in the input (32 max).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1-L3 (Kernighan loop)** | **O(1)** | **popcount(n)** | **O(popcount)** ← dominates |
+| L2 (clear lowest bit) | O(1) | popcount(n) | O(popcount) |
+
+The loop runs exactly popcount(n) times, not B times. For sparse inputs this is much faster than Approach 1.
 
 **Complexity**
 - **Time:** O(popcount). Iterations = number of set bits.
@@ -58,8 +81,18 @@ Modern hardware has popcount instructions. Python's `bin(n).count('1')` or `n.bi
 
 ```python
 def hamming_weight(n):
-    return n.bit_count()
+    return n.bit_count()            # L1: O(1) on modern hardware
 ```
+
+**Where the time goes, line by line**
+
+*Variables: B = number of bits (32 max for this problem).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (bit_count)** | **O(1) hardware** | **1** | **O(1)** ← dominates |
+
+On CPUs with a POPCNT instruction this compiles to a single instruction.
 
 **Complexity**
 - **Time:** O(1) on most modern hardware, O(B) worst.
@@ -70,10 +103,36 @@ def hamming_weight(n):
 | Approach | Time | Space |
 | --- | --- | --- |
 | Shift + test | O(B) | O(1) |
-| **Kernighan (`n &= n, 1`)** | **O(popcount)** | **O(1)** |
+| **Kernighan (`n &= n - 1`)** | **O(popcount)** | **O(1)** |
 | Built-in `bit_count` | O(1) on modern HW | O(1) |
 
 Kernighan's is the interview-canonical trick. Know it for problem 338 and any "count bits" variant.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_191.py and run.
+# Uses the canonical implementation (Approach 2: Kernighan's trick).
+
+def hamming_weight(n):
+    count = 0
+    while n:
+        n &= n - 1
+        count += 1
+    return count
+
+def _run_tests():
+    assert hamming_weight(0b1011) == 3
+    assert hamming_weight(0b10000000) == 1
+    assert hamming_weight(0) == 0                # edge: zero has no set bits
+    assert hamming_weight(0xFFFFFFFF) == 32      # edge: all 32 bits set
+    assert hamming_weight(1) == 1
+    assert hamming_weight(0b10110111) == 6
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

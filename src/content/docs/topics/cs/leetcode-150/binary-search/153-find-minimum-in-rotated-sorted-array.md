@@ -23,11 +23,21 @@ LeetCode 153 · [Link](https://leetcode.com/problems/find-minimum-in-rotated-sor
 
 ```python
 def find_min(nums: list[int]) -> int:
-    return min(nums)
+    return min(nums)    # L1: O(n) linear scan to find minimum
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (min scan)** | **O(n)** | **1** | **O(n)** ← dominates |
+
+Python's `min()` scans all n elements unconditionally.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1 (linear scan ignoring the rotated-sorted structure).
 - **Space:** O(1).
 
 Correct but violates the O(log n) constraint.
@@ -38,14 +48,24 @@ If the array is rotated, the minimum is at the first drop. Scan linearly.
 
 ```python
 def find_min(nums: list[int]) -> int:
-    for i in range(1, len(nums)):
-        if nums[i] < nums[i, 1]:
+    for i in range(1, len(nums)):          # L1: scan, up to n-1 steps
+        if nums[i] < nums[i - 1]:          # L2: O(1) drop check
             return nums[i]
-    return nums[0]   # not rotated
+    return nums[0]   # not rotated (or rotated by n), first element is minimum
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1/L2 (scan for drop)** | **O(1)** | **up to n-1** | **O(n)** ← dominates |
+
+Stops at the first drop, so best case is O(1) (minimum at index 1), worst case O(n) (not rotated, must scan the whole array).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1 (linear scan for the rotation point).
 - **Space:** O(1).
 
 Same Big-O as Approach 1 but makes the structural observation that drives the binary search.
@@ -61,18 +81,30 @@ When `lo == hi`, you're at the minimum.
 
 ```python
 def find_min(nums: list[int]) -> int:
-    lo, hi = 0, len(nums), 1
-    while lo < hi:
-        mid = (lo + hi) // 2
-        if nums[mid] > nums[hi]:
-            lo = mid + 1
+    lo, hi = 0, len(nums) - 1      # L1: O(1)
+    while lo < hi:                  # L2: loop, O(log n) iterations
+        mid = (lo + hi) // 2       # L3: O(1) midpoint
+        if nums[mid] > nums[hi]:    # L4: O(1) compare to right boundary
+            lo = mid + 1           # L5: O(1) min is in right half
         else:
-            hi = mid
+            hi = mid               # L6: O(1) min is mid or left of mid
     return nums[lo]
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| **L2/L3/L4 (loop body)** | **O(1)** | **log n** | **O(log n)** ← dominates |
+| L5 or L6 (narrow) | O(1) | log n | O(log n) |
+
+Each iteration eliminates half the range. Unlike standard binary search, the loop condition is `lo < hi` (not `lo <= hi`) because we keep `hi` as a possible answer when the min could be at `mid`.
+
 **Complexity**
-- **Time:** O(log n).
+- **Time:** O(log n), driven by L2 (loop halves the search space each step).
 - **Space:** O(1).
 
 ### Why compare to `hi`, not `lo`?
@@ -87,6 +119,35 @@ Comparing `nums[mid]` to `nums[lo]` is subtler because a not-rotated segment `[l
 | **Binary search** | **O(log n)** | **O(1)** |
 
 The "compare to `nums[hi]`" trick is the key insight; it transfers directly to problem 33 (Search in Rotated Sorted Array).
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_153.py and run.
+# Uses the optimal Approach 3 implementation.
+
+def find_min(nums: list) -> int:
+    lo, hi = 0, len(nums) - 1
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if nums[mid] > nums[hi]:
+            lo = mid + 1
+        else:
+            hi = mid
+    return nums[lo]
+
+def _run_tests():
+    assert find_min([3, 4, 5, 1, 2]) == 1
+    assert find_min([4, 5, 6, 7, 0, 1, 2]) == 0
+    assert find_min([11, 13, 15, 17]) == 11    # not rotated
+    assert find_min([1]) == 1                  # single element
+    assert find_min([2, 1]) == 1               # two elements, rotated
+    assert find_min([1, 2]) == 1               # two elements, not rotated
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

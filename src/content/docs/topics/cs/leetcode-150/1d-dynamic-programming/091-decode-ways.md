@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Problem
 
-A digit string can be decoded to letters using `A=1, B=2, ..., Z=26`. Given a digit string, return the number of ways to decode it. `0` cannot start a code (no letter maps to `0` or to `01`, `02`, …).
+A digit string can be decoded to letters using `A=1, B=2, ..., Z=26`. Given a digit string, return the number of ways to decode it. `0` cannot start a code (no letter maps to `0` or to `01`, `02`, ...}.
 
 **Example**
 - `s = "12"` → `2` (`"AB"`, `"L"`)
@@ -21,25 +21,37 @@ LeetCode 91 · [Link](https://leetcode.com/problems/decode-ways/) · *Medium*
 
 ## Approach 1: Recursive, try single and double digit
 
-At position `i`, try decoding 1 digit (if ≠ '0') and/or 2 digits (if in `[10, 26]`).
+At position `i`, try decoding 1 digit (if != '0') and/or 2 digits (if in `[10, 26]`).
 
 ```python
 def num_decodings(s):
     def f(i):
-        if i == len(s):
+        if i == len(s):                                      # L1: O(1) base case
             return 1
-        if s[i] == '0':
+        if s[i] == '0':                                      # L2: O(1) invalid check
             return 0
-        ways = f(i + 1)
-        if i + 1 < len(s) and 10 <= int(s[i:i + 2]) <= 26:
-            ways += f(i + 2)
+        ways = f(i + 1)                                      # L3: recurse on single digit
+        if i + 1 < len(s) and 10 <= int(s[i:i + 2]) <= 26: # L4: O(1) two-digit check
+            ways += f(i + 2)                                 # L5: recurse on two digits
         return ways
     return f(0)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1, L2 (base/guard) | O(1) | once per call | O(1) per call |
+| L3 (single-digit branch) | O(1) + recursive subtree | up to 2^n leaf paths | -- |
+| **L4, L5 (two-digit branch)** | **O(1) + recursive subtree** | **up to 2^n** | **O(2^n)** ← dominates |
+
+Each call spawns up to two recursive calls, and there is no memoization, so the call tree is a full binary tree of depth n. The total number of calls is O(2^n).
+
 **Complexity**
-- **Time:** O(2ⁿ).
-- **Space:** O(n).
+- **Time:** O(2^n), driven by L3/L5 (each position branches into at most two sub-calls with no deduplication).
+- **Space:** O(n) for the call stack.
 
 ## Approach 2: Top-down memoized
 
@@ -49,26 +61,87 @@ from functools import lru_cache
 def num_decodings(s):
     @lru_cache(maxsize=None)
     def f(i):
-        if i == len(s):
+        if i == len(s):                                      # L1: O(1) base case
             return 1
-        if s[i] == '0':
+        if s[i] == '0':                                      # L2: O(1) invalid check
             return 0
-        ways = f(i + 1)
-        if i + 1 < len(s) and 10 <= int(s[i:i + 2]) <= 26:
-            ways += f(i + 2)
+        ways = f(i + 1)                                      # L3: O(1) cached lookup
+        if i + 1 < len(s) and 10 <= int(s[i:i + 2]) <= 26: # L4: O(1) two-digit check
+            ways += f(i + 2)                                 # L5: O(1) cached lookup
         return ways
     return f(0)
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1, L2 (base/guard) | O(1) | n+1 unique calls | O(n) |
+| **L3 (single-digit call)** | **O(1) with cache** | **n unique calls** | **O(n)** ← dominates |
+| L4, L5 (two-digit call) | O(1) with cache | up to n calls | O(n) |
+
+With memoization, each of the n+1 unique indices is computed exactly once. Both recursive calls at L3 and L5 hit the cache on every repeated access, reducing total work to O(n). The cache itself holds at most n+1 entries.
+
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(n).
+- **Time:** O(n), driven by L3/L5 (n unique subproblems, each solved once and cached).
+- **Space:** O(n) for the call stack and the cache.
 
 ## Approach 3: Bottom-up with two variables (optimal)
 
 `dp[i]` = ways to decode prefix of length `i`. `dp[0] = 1`, `dp[i] = (one-digit ok ? dp[i-1] : 0) + (two-digit ok ? dp[i-2] : 0)`.
 
 ```python
+def num_decodings(s):
+    if not s or s[0] == '0':                   # L1: O(1) early exit
+        return 0
+    prev2, prev1 = 1, 1                        # L2: O(1) base cases dp[0]=1, dp[1]=1
+    for i in range(1, len(s)):                 # L3: O(n) loop over positions
+        cur = 0                                # L4: O(1)
+        if s[i] != '0':                        # L5: O(1) one-digit valid check
+            cur += prev1                       # L6: O(1)
+        two = int(s[i - 1:i + 1])             # L7: O(1) parse two-char window
+        if 10 <= two <= 26:                    # L8: O(1) two-digit valid check
+            cur += prev2                       # L9: O(1)
+        prev2, prev1 = prev1, cur              # L10: O(1) slide window
+    return prev1
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (early exit) | O(1) | 1 | O(1) |
+| L2 (init) | O(1) | 1 | O(1) |
+| **L3 (loop)** | **O(1)** | **n-1** | **O(n)** ← dominates |
+| L5, L7, L8 (checks inside loop) | O(1) each | n-1 each | O(n) |
+| L10 (slide window) | O(1) | n-1 | O(n) |
+
+Every position is visited exactly once. The two-variable rolling window replaces the O(n) dp array: `prev1` holds `dp[i]` and `prev2` holds `dp[i-1]`, so no array is needed at all.
+
+**Complexity**
+- **Time:** O(n), driven by L3 (single pass through the string).
+- **Space:** O(1), two scalar variables instead of an array.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Naive recursion | O(2^n) | O(n) |
+| Memoized | O(n) | O(n) |
+| **Bottom-up, two vars** | **O(n)** | **O(1)** |
+
+Index-DP on strings with local transition rules, template for Unique BSTs, Partition DP, and similar problems.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_091.py and run.
+# Uses the canonical implementation (Approach 3: bottom-up two variables).
+
 def num_decodings(s):
     if not s or s[0] == '0':
         return 0
@@ -77,26 +150,28 @@ def num_decodings(s):
         cur = 0
         if s[i] != '0':
             cur += prev1
-        two = int(s[i, 1:i + 1])
+        two = int(s[i - 1:i + 1])
         if 10 <= two <= 26:
             cur += prev2
         prev2, prev1 = prev1, cur
     return prev1
+
+
+def _run_tests():
+    # LeetCode examples
+    assert num_decodings("12") == 2
+    assert num_decodings("226") == 3
+    assert num_decodings("06") == 0
+    # Edge cases
+    assert num_decodings("0") == 0
+    assert num_decodings("1") == 1
+    # Larger case
+    assert num_decodings("11106") == 2
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(n).
-- **Space:** O(1).
-
-## Summary
-
-| Approach | Time | Space |
-| --- | --- | --- |
-| Naive recursion | O(2ⁿ) | O(n) |
-| Memoized | O(n) | O(n) |
-| **Bottom-up, two vars** | **O(n)** | **O(1)** |
-
-Index-DP on strings with local transition rules, template for Unique BSTs, Partition DP, and similar problems.
 
 ## Related data structures
 

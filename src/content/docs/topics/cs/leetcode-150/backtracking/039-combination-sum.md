@@ -33,7 +33,7 @@ def combination_sum(candidates, target):
             return
         for c in candidates:
             path.append(c)
-            rec(remaining, c, path)
+            rec(remaining - c, path)
             path.pop()
     rec(target, [])
     return [list(t) for t in found]
@@ -47,7 +47,7 @@ Wasteful; every combination is re-found under every permutation.
 
 ## Approach 2: Backtracking with `start` index (canonical)
 
-Enforce an ordering: once you "use" index `i`, later recursive calls can only consider indices `≥ i`. This guarantees each combination is built in sorted candidate order exactly once.
+Enforce an ordering: once you "use" index `i`, later recursive calls can only consider indices >= `i`. This guarantees each combination is built in sorted candidate order exactly once.
 
 Because we can reuse the same candidate, we pass `i` (not `i + 1`) when recursing after including.
 
@@ -58,22 +58,34 @@ def combination_sum(candidates, target):
 
     def backtrack(start, remaining):
         if remaining == 0:
-            result.append(path[:])
+            result.append(path[:])     # L1: O(k) copy at leaf
             return
         if remaining < 0:
             return
         for i in range(start, len(candidates)):
-            path.append(candidates[i])
-            backtrack(i, remaining, candidates[i])   # note: i, not i + 1
-            path.pop()
+            path.append(candidates[i])           # L2: O(1) push
+            backtrack(i, remaining - candidates[i])   # L3: recurse (reuse allowed)
+            path.pop()                           # L4: O(1) pop
 
     backtrack(0, target)
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(candidates), k = solution length (target / min(candidates)).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (copy path) | O(k) | one per solution | O(solutions · k) |
+| L2/L4 (push/pop) | O(1) | one per node | O(tree nodes) |
+| **L3 (recurse)** | **O(1) dispatch** | **tree nodes** | **O(n^k)** ← dominates |
+
+The recursion tree has branching factor n and maximum depth k = target / min(candidates). The number of nodes is bounded by O(n^k).
+
 **Complexity**
-- **Time:** Exponential in the depth of the search tree. Bounded by O(n^(target / min(candidates))).
-- **Space:** O(target / min(candidates)) recursion.
+- **Time:** Exponential in the depth of the search tree, bounded by O(n^(target / min(candidates))).
+- **Space:** O(k) recursion, where k = target / min(candidates).
 
 ## Approach 3: Sort + early termination (optimization)
 
@@ -81,28 +93,40 @@ Sort candidates ascending. When iterating, break the loop as soon as `candidates
 
 ```python
 def combination_sum(candidates, target):
-    candidates.sort()
+    candidates.sort()                  # L1: O(n log n) sort once
     result = []
     path = []
 
     def backtrack(start, remaining):
         if remaining == 0:
-            result.append(path[:])
+            result.append(path[:])     # L2: O(k) copy at leaf
             return
         for i in range(start, len(candidates)):
             if candidates[i] > remaining:
-                break    # sorted: all remaining are too large
-            path.append(candidates[i])
-            backtrack(i, remaining, candidates[i])
-            path.pop()
+                break                  # L3: O(1) prune entire suffix
+            path.append(candidates[i])         # L4: O(1) push
+            backtrack(i, remaining - candidates[i])  # L5: recurse
+            path.pop()                         # L6: O(1) pop
 
     backtrack(0, target)
     return result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(candidates), k = solution length (target / min(candidates)).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (sort) | O(n log n) | 1 | O(n log n) |
+| L3 (prune) | O(1) | pruned nodes | O(pruned) |
+| **L5 (recurse)** | **O(1) dispatch** | **surviving nodes** | **O(n^k) worst** ← dominates |
+
+Sorting enables L3 to cut entire subtrees. The asymptotic bound is the same, but the practical speedup on mixed-size inputs is substantial.
+
 **Complexity**
-- **Time:** Same worst-case Big-O; practical speedup from pruning is substantial on inputs with mixed sizes.
-- **Space:** O(target / min(candidates)).
+- **Time:** Same worst-case Big-O as Approach 2; practical speedup from pruning is substantial on inputs with mixed sizes.
+- **Space:** O(k) recursion, where k = target / min(candidates).
 
 ## Summary
 
@@ -113,6 +137,41 @@ def combination_sum(candidates, target):
 | **Sort + prune** | same Big-O, faster in practice | same |
 
 The `start` index is the critical idea, same template solves Combination Sum II (40) and Subsets II (90) with a small tweak for duplicates.
+
+## Test cases
+
+```python
+def combination_sum(candidates, target):
+    candidates.sort()
+    result = []
+    path = []
+    def backtrack(start, remaining):
+        if remaining == 0:
+            result.append(path[:])
+            return
+        for i in range(start, len(candidates)):
+            if candidates[i] > remaining:
+                break
+            path.append(candidates[i])
+            backtrack(i, remaining - candidates[i])
+            path.pop()
+    backtrack(0, target)
+    return result
+
+def _run_tests():
+    r = combination_sum([2, 3, 6, 7], 7)
+    assert sorted(map(tuple, r)) == sorted([tuple([2,2,3]), tuple([7])])
+    r2 = combination_sum([2, 3, 5], 8)
+    assert sorted(map(tuple, r2)) == sorted([tuple([2,2,2,2]), tuple([2,3,3]), tuple([3,5])])
+    # single candidate
+    assert combination_sum([3], 9) == [[3, 3, 3]]
+    # no solution
+    assert combination_sum([5], 3) == []
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

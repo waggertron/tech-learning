@@ -30,23 +30,35 @@ def least_interval(tasks, n):
     counts = Counter(tasks)
     cooldown = {t: 0 for t in counts}
     time = 0
-    while any(c > 0 for c in counts.values()):
+    while any(c > 0 for c in counts.values()):  # L1: T outer iterations
         picked = None
         best_count = 0
-        for t, c in counts.items():
+        for t, c in counts.items():              # L2: scan up to 26 tasks
             if c > 0 and cooldown[t] <= time and c > best_count:
                 picked = t
                 best_count = c
         if picked:
-            counts[picked] -= 1
-            cooldown[picked] = time + n + 1
+            counts[picked] -= 1                  # L3: O(1) decrement
+            cooldown[picked] = time + n + 1      # L4: O(1) set cooldown
         time += 1
     return time
 ```
 
+**Where the time goes, line by line**
+
+*Variables: T = total time units in the answer, t = number of distinct task types (at most 26).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) | T | O(T) |
+| **L2 (scan tasks)** | **O(t)** | **T** | **O(T · t)** ← dominates |
+| L3-L4 (update) | O(1) | up to T | O(T) |
+
+At each time step we scan all task types (at most 26). Since t is bounded by 26, O(T · 26) = O(T).
+
 **Complexity**
-- **Time:** O(T · 26) where T is the answer. Correct but slow on big inputs.
-- **Space:** O(26).
+- **Time:** O(T · t) = O(T) since t ≤ 26. Correct but slow on large T (L2 scan).
+- **Space:** O(t) = O(26).
 
 Choosing highest-remaining-count is key, otherwise you strand long runs.
 
@@ -60,24 +72,38 @@ from collections import Counter, deque
 
 def least_interval(tasks, n):
     heap = [-c for c in Counter(tasks).values()]
-    heapq.heapify(heap)
+    heapq.heapify(heap)                          # L1: O(t) heapify
     cooldown = deque()   # (ready_time, negated_count_remaining)
     time = 0
-    while heap or cooldown:
+    while heap or cooldown:                       # L2: T iterations total
         time += 1
         if heap:
-            c = heapq.heappop(heap) + 1    # heap is negated counts
+            c = heapq.heappop(heap) + 1          # L3: O(log t) pop
             if c < 0:
-                cooldown.append((time + n, c))
+                cooldown.append((time + n, c))   # L4: O(1) enqueue
         if cooldown and cooldown[0][0] == time:
             _, c = cooldown.popleft()
-            heapq.heappush(heap, c)
+            heapq.heappush(heap, c)              # L5: O(log t) push
     return time
 ```
 
+**Where the time goes, line by line**
+
+*Variables: T = total time units in the answer, t = number of distinct task types (at most 26).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (heapify) | O(t) | 1 | O(t) |
+| L2 (outer loop) | O(1) | T | O(T) |
+| **L3 (heappop)** | **O(log t)** | **up to T** | **O(T log t)** ← dominates |
+| L4 (enqueue) | O(1) | up to T | O(T) |
+| L5 (heappush) | O(log t) | up to T | O(T log t) |
+
+Since t ≤ 26, O(T log t) = O(T log 26) = O(T).
+
 **Complexity**
-- **Time:** O(T log 26) = O(T).
-- **Space:** O(26).
+- **Time:** O(T log t) = O(T) since t ≤ 26 (L3/L5 dominate).
+- **Space:** O(t) = O(26).
 
 Cleaner than the brute force; a natural fit for "greedy scheduling with recurring cooldowns."
 
@@ -86,24 +112,67 @@ Cleaner than the brute force; a natural fit for "greedy scheduling with recurrin
 Let `max_count` be the count of the most-frequent task and `ties` be the number of tasks that hit `max_count`. The answer is:
 
 ```
-max(len(tasks), (max_count, 1) * (n + 1) + ties)
+max(len(tasks), (max_count - 1) * (n + 1) + ties)
 ```
 
-Intuition: build a skeleton of `max_count, 1` "rows" of width `n + 1`, plus a tail row with `ties` slots. Other tasks slot into the idle spaces. If there are more tasks than that schedule provides for, the total time is just `len(tasks)` (no idle needed).
+Intuition: build a skeleton of `max_count - 1` "rows" of width `n + 1`, plus a tail row with `ties` slots. Other tasks slot into the idle spaces. If there are more tasks than that schedule provides for, the total time is just `len(tasks)` (no idle needed).
 
 ```python
+from collections import Counter
+
+def least_interval(tasks, n):
+    counts = Counter(tasks)                              # L1: O(T) build counter
+    max_count = max(counts.values())                     # L2: O(t) find max
+    ties = sum(1 for c in counts.values() if c == max_count)  # L3: O(t) count ties
+    return max(len(tasks), (max_count - 1) * (n + 1) + ties)  # L4: O(1) formula
+```
+
+**Where the time goes, line by line**
+
+*Variables: T = len(tasks) (total tasks), t = number of distinct task types (at most 26).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (Counter)** | **O(T)** | **1** | **O(T)** ← dominates |
+| L2 (max) | O(t) | 1 | O(t) |
+| L3 (count ties) | O(t) | 1 | O(t) |
+| L4 (formula) | O(1) | 1 | O(1) |
+
+Building the Counter at L1 touches every task once. The remaining steps scan at most 26 entries. The formula at L4 is a single expression: no simulation, no heap.
+
+**Complexity**
+- **Time:** O(T) where T = len(tasks), driven by L1 (Counter construction).
+- **Space:** O(t) = O(26).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_621.py and run.
+# Uses the closed-form math approach (Approach 3).
 from collections import Counter
 
 def least_interval(tasks, n):
     counts = Counter(tasks)
     max_count = max(counts.values())
     ties = sum(1 for c in counts.values() if c == max_count)
-    return max(len(tasks), (max_count, 1) * (n + 1) + ties)
-```
+    return max(len(tasks), (max_count - 1) * (n + 1) + ties)
 
-**Complexity**
-- **Time:** O(T) where T = len(tasks) (to build the Counter).
-- **Space:** O(26).
+def _run_tests():
+    # Examples from problem statement
+    assert least_interval(["A","A","A","B","B","B"], 2) == 8
+    assert least_interval(["A","A","A","B","B","B"], 0) == 6
+    assert least_interval(["A","A","A","A","A","A","B","C","D","E","F","G"], 2) == 16
+    # No idle needed: enough variety to fill cooldown
+    assert least_interval(["A","B","C","D","A","B","C","D"], 2) == 8
+    # Single task type
+    assert least_interval(["A","A","A"], 3) == 9   # A _ _ _ A _ _ _ A
+    # n=0: no cooldown, answer = len(tasks)
+    assert least_interval(["A","A","A"], 0) == 3
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

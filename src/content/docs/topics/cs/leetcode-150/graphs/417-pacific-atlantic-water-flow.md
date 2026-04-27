@@ -24,9 +24,9 @@ For each cell, run two DFSes ("can I reach Pacific?", "can I reach Atlantic?"). 
 
 ```python
 def pacific_atlantic(heights):
-    rows, cols = len(heights), len(heights[0])
+    rows, cols = len(heights), len(heights[0])   # L1: read grid dimensions
 
-    def dfs(r, c, visited):
+    def dfs(r, c, visited):                       # L2: DFS, returns True if ocean reached
         if (r, c) in visited:
             return False
         visited.add((r, c))
@@ -50,6 +50,117 @@ Reverse the problem: for each ocean, walk **upward** (to higher or equal heights
 
 ```python
 def pacific_atlantic(heights):
+    if not heights:                                            # L1: guard empty input
+        return []
+    rows, cols = len(heights), len(heights[0])                # L2: O(1)
+    pac = set()                                               # L3: Pacific reachability set
+    atl = set()                                               # L4: Atlantic reachability set
+
+    def dfs(r, c, visited):                                   # L5: recursive DFS
+        if (r, c) in visited:                                 # L6: O(1) set lookup
+            return
+        visited.add((r, c))                                   # L7: O(1) set insert
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):    # L8: 4 neighbors
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and heights[nr][nc] >= heights[r][c]:
+                dfs(nr, nc, visited)                          # L9: recurse uphill
+
+    for c in range(cols):
+        dfs(0, c, pac)             # L10: top row seeds Pacific
+        dfs(rows - 1, c, atl)     # L11: bottom row seeds Atlantic
+    for r in range(rows):
+        dfs(r, 0, pac)             # L12: left column seeds Pacific
+        dfs(r, cols - 1, atl)     # L13: right column seeds Atlantic
+
+    return [[r, c] for (r, c) in pac & atl]                  # L14: set intersection
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = grid rows, n = grid cols.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L10-L13 (border seeds) | O(1) | 2(m + n) | O(m + n) |
+| L6 (visited lookup) | O(1) | at most m·n per ocean | O(m·n) |
+| L7 (visited insert) | O(1) | at most m·n per ocean | O(m·n) |
+| L8-L9 (neighbor recurse) | O(1) per neighbor | 4 × m·n total | O(m·n) |
+| **L5-L9 (full DFS, both oceans)** | **O(1) per cell** | **2 × m·n** | **O(m·n)** ← dominates |
+| L14 (set intersection) | O(m·n) | 1 | O(m·n) |
+
+Each cell is added to `pac` at most once and to `atl` at most once: once it is in `visited`, the L6 guard short-circuits any future visit. Two full passes over the grid give O(2·m·n) = O(m·n) total. The set intersection at L14 is also O(m·n) but adds no extra asymptotic cost.
+
+**Complexity**
+- **Time:** O(m · n), driven by L5-L9 (each cell visited at most twice, once per ocean).
+- **Space:** O(m · n) for the visited sets and the recursion stack.
+
+## Approach 3: BFS from the oceans inward
+
+Same reverse-walk idea with a queue.
+
+```python
+from collections import deque
+
+def pacific_atlantic(heights):
+    if not heights:                                                      # L1: guard
+        return []
+    rows, cols = len(heights), len(heights[0])                           # L2: O(1)
+
+    def bfs(starts):                                                     # L3: BFS kernel
+        visited = set(starts)                                            # L4: seed visited
+        q = deque(starts)                                                # L5: seed queue
+        while q:                                                         # L6: loop until empty
+            r, c = q.popleft()                                           # L7: O(1) dequeue
+            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):           # L8: 4 neighbors
+                nr, nc = r + dr, c + dc
+                if (0 <= nr < rows and 0 <= nc < cols and
+                        (nr, nc) not in visited and
+                        heights[nr][nc] >= heights[r][c]):
+                    visited.add((nr, nc))                                # L9: O(1) insert
+                    q.append((nr, nc))                                   # L10: O(1) enqueue
+        return visited
+
+    pac = bfs([(0, c) for c in range(cols)] + [(r, 0) for r in range(rows)])           # L11: Pacific seeds
+    atl = bfs([(rows - 1, c) for c in range(cols)] + [(r, cols - 1) for r in range(rows)])  # L12: Atlantic seeds
+    return [[r, c] for (r, c) in pac & atl]                             # L13: intersection
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = grid rows, n = grid cols.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L4-L5 (seed visited + queue) | O(m + n) | 2 (once per ocean) | O(m + n) |
+| L7 (dequeue) | O(1) | at most m·n per ocean | O(m·n) |
+| L8 (neighbor scan) | O(1) per neighbor | 4 × m·n per ocean | O(m·n) |
+| L9, L10 (insert + enqueue) | O(1) | at most m·n per ocean | O(m·n) |
+| **L6-L10 (BFS body, both oceans)** | **O(1) per cell** | **2 × m·n** | **O(m·n)** ← dominates |
+| L13 (intersection) | O(m·n) | 1 | O(m·n) |
+
+BFS and DFS have identical asymptotic cost here. Every cell enters the queue at most once per ocean (the `not in visited` guard at L8 enforces this), so the total work across both BFS calls is O(2·m·n).
+
+**Complexity**
+- **Time:** O(m · n), driven by L6-L10 (each cell dequeued at most once per ocean).
+- **Space:** O(m · n) for the visited sets and the queue.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| DFS from every cell to each ocean | O((m · n)²) | O(m · n) |
+| **DFS from ocean borders inward** | **O(m · n)** | **O(m · n)** |
+| BFS from ocean borders | O(m · n) | O(m · n) |
+
+The "reverse the direction" trick is the key insight, it avoids redundant work by computing both reachability sets once. Same pattern solves problem 130 (Surrounded Regions).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_417.py and run.
+# Uses the canonical implementation (Approach 2, DFS from borders).
+
+def pacific_atlantic(heights):
     if not heights:
         return []
     rows, cols = len(heights), len(heights[0])
@@ -66,63 +177,45 @@ def pacific_atlantic(heights):
                 dfs(nr, nc, visited)
 
     for c in range(cols):
-        dfs(0, c, pac)            # top row, Pacific
-        dfs(rows, 1, c, atl)      # bottom row, Atlantic
+        dfs(0, c, pac)
+        dfs(rows - 1, c, atl)
     for r in range(rows):
-        dfs(r, 0, pac)            # left column, Pacific
-        dfs(r, cols, 1, atl)      # right column, Atlantic
+        dfs(r, 0, pac)
+        dfs(r, cols - 1, atl)
 
-    return [[r, c] for (r, c) in pac & atl]
+    return sorted([r, c] for (r, c) in pac & atl)
+
+
+def _run_tests():
+    # LeetCode example
+    h1 = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
+    assert pacific_atlantic(h1) == [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+
+    # Single cell: touches all borders, always flows to both
+    assert pacific_atlantic([[5]]) == [[0, 0]]
+
+    # Flat grid: every cell can flow to both oceans
+    h2 = [[1, 1], [1, 1]]
+    result2 = pacific_atlantic(h2)
+    assert sorted(result2) == [[0,0],[0,1],[1,0],[1,1]]
+
+    # Strictly increasing left-to-right: only rightmost column reaches Atlantic
+    # and only leftmost reaches Pacific via top/left border
+    h3 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    r3 = pacific_atlantic(h3)
+    # All cells can reach Pacific (top-left). Atlantic reachable by tracing uphill
+    # from bottom-right. The intersection includes at least the corners.
+    assert [2, 2] in r3  # bottom-right corner touches both borders directly
+
+    # Empty input guard
+    assert pacific_atlantic([]) == []
+
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(m · n). Each cell visited at most twice (once per ocean).
-- **Space:** O(m · n) for the visited sets.
-
-## Approach 3: BFS from the oceans inward
-
-Same reverse-walk idea with a queue.
-
-```python
-from collections import deque
-
-def pacific_atlantic(heights):
-    if not heights:
-        return []
-    rows, cols = len(heights), len(heights[0])
-
-    def bfs(starts):
-        visited = set(starts)
-        q = deque(starts)
-        while q:
-            r, c = q.popleft()
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nr, nc = r + dr, c + dc
-                if (0 <= nr < rows and 0 <= nc < cols and
-                        (nr, nc) not in visited and
-                        heights[nr][nc] >= heights[r][c]):
-                    visited.add((nr, nc))
-                    q.append((nr, nc))
-        return visited
-
-    pac = bfs([(0, c) for c in range(cols)] + [(r, 0) for r in range(rows)])
-    atl = bfs([(rows, 1, c) for c in range(cols)] + [(r, cols, 1) for r in range(rows)])
-    return [[r, c] for (r, c) in pac & atl]
-```
-
-**Complexity**
-- **Time:** O(m · n).
-- **Space:** O(m · n).
-
-## Summary
-
-| Approach | Time | Space |
-| --- | --- | --- |
-| DFS from every cell to each ocean | O((m · n)²) | O(m · n) |
-| **DFS from ocean borders inward** | **O(m · n)** | **O(m · n)** |
-| BFS from ocean borders | O(m · n) | O(m · n) |
-
-The "reverse the direction" trick is the key insight, it avoids redundant work by computing both reachability sets once. Same pattern solves problem 130 (Surrounded Regions).
 
 ## Related data structures
 

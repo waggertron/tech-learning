@@ -29,39 +29,52 @@ class Codec:
         if not root:
             return ""
         parts = []
-        q = deque([root])
+        q = deque([root])                     # L1: O(1) init
         while q:
-            node = q.popleft()
+            node = q.popleft()                # L2: O(1) dequeue
             if node:
-                parts.append(str(node.val))
-                q.append(node.left)
-                q.append(node.right)
+                parts.append(str(node.val))   # L3: O(1) append value
+                q.append(node.left)           # L4: enqueue left (may be None)
+                q.append(node.right)          # L5: enqueue right (may be None)
             else:
-                parts.append("#")
-        return ",".join(parts)
+                parts.append("#")             # L6: O(1) append null marker
+        return ",".join(parts)                # L7: O(n) join
 
     def deserialize(self, data):
         if not data:
             return None
-        tokens = data.split(",")
+        tokens = data.split(",")              # L8: O(n) split
         root = TreeNode(int(tokens[0]))
         q = deque([root])
         i = 1
         while q and i < len(tokens):
-            node = q.popleft()
+            node = q.popleft()                # L9: O(1) dequeue
             if tokens[i] != "#":
                 node.left = TreeNode(int(tokens[i]))
-                q.append(node.left)
+                q.append(node.left)           # L10: O(1) wire left
             i += 1
             if i < len(tokens) and tokens[i] != "#":
                 node.right = TreeNode(int(tokens[i]))
-                q.append(node.right)
+                q.append(node.right)          # L11: O(1) wire right
             i += 1
         return root
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height, w = max tree width.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2/L3/L4/L5/L6 (per token) | O(1) | 2n+1 tokens | O(n) |
+| **L7 (join)** | **O(n)** | **1** | **O(n)** ← dominates (all lines tie) |
+| L8 (split) | O(n) | 1 | O(n) |
+| L9/L10/L11 (deserialize) | O(1) | n | O(n) |
+
+Every node produces exactly one value token and both missing children produce `#` tokens. A tree with n nodes has 2n+1 tokens total (n values + n+1 nulls).
+
 **Complexity**
-- **Time:** O(n) for both.
+- **Time:** O(n) for both serialize and deserialize, driven by L7/L8.
 - **Space:** O(n) output + O(w) queue.
 
 The LeetCode's own serialization format uses this approach; it's the easiest to debug visually.
@@ -71,6 +84,155 @@ The LeetCode's own serialization format uses this approach; it's the easiest to 
 Recursive serialize in preorder, emitting `"#"` for missing children. Deserialize recursively consuming tokens from an iterator.
 
 ```python
+class Codec:
+    def serialize(self, root):
+        parts = []
+        def rec(node):
+            if not node:
+                parts.append("#")             # L1: O(1) emit null
+                return
+            parts.append(str(node.val))       # L2: O(1) emit value
+            rec(node.left)                    # L3: recurse left
+            rec(node.right)                   # L4: recurse right
+        rec(root)
+        return ",".join(parts)                # L5: O(n) join
+
+    def deserialize(self, data):
+        tokens = iter(data.split(","))        # L6: O(n) split + iterator
+        def rec():
+            val = next(tokens)
+            if val == "#":
+                return None                   # L7: null marker
+            node = TreeNode(int(val))
+            node.left = rec()                 # L8: recurse left
+            node.right = rec()                # L9: recurse right
+            return node
+        return rec()
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2 (emit) | O(1) | 2n+1 | O(n) |
+| L3/L4 (recurse) | O(1) dispatch | n | O(n) |
+| **L5 (join)** | **O(n)** | **1** | **O(n)** ← dominates (all lines tie) |
+| L6 (split) | O(n) | 1 | O(n) |
+| L8/L9 (recurse) | O(1) dispatch | n | O(n) |
+
+**Complexity**
+- **Time:** O(n).
+- **Space:** O(n) output + O(h) recursion.
+
+Shortest correct answer and arguably the cleanest.
+
+## Approach 3: Postorder DFS with null markers
+
+Symmetric to preorder but emits children before the parent. Deserialize by consuming tokens right-to-left.
+
+```python
+class Codec:
+    def serialize(self, root):
+        parts = []
+        def rec(node):
+            if not node:
+                parts.append("#")
+                return
+            rec(node.left)                    # L1: recurse left first
+            rec(node.right)                   # L2: recurse right
+            parts.append(str(node.val))       # L3: emit parent last
+        rec(root)
+        return ",".join(parts)
+
+    def deserialize(self, data):
+        tokens = data.split(",")
+        def rec():
+            val = tokens.pop()                # L4: consume right-to-left
+            if val == "#":
+                return None
+            node = TreeNode(int(val))
+            # NB: right child is deserialized before left because we pop from the end
+            node.right = rec()               # L5: right before left
+            node.left = rec()
+            return node
+        return rec()
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the tree, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2/L3 (recurse + emit) | O(1) | n | O(n) |
+| **L4 (pop)** | **O(1)** | **2n+1** | **O(n)** ← dominates (all lines tie) |
+| L5 (recurse) | O(1) dispatch | n | O(n) |
+
+**Complexity**
+- **Time:** O(n).
+- **Space:** O(n) + O(h).
+
+Less common in practice; included to show the symmetry.
+
+## Summary
+
+| Approach | Time | Space | Notes |
+| --- | --- | --- | --- |
+| **BFS with null markers** | O(n) | O(n) + O(w) | Matches LeetCode's own display format |
+| **Preorder DFS** | O(n) | O(n) + O(h) | Shortest and cleanest |
+| Postorder DFS | O(n) | O(n) + O(h) | Symmetric curiosity |
+
+Preorder DFS is the interview-favorite. BFS is easier to eyeball-debug.
+
+### Aside: size of the serialization
+With null markers, every internal node contributes 1 value token and every leaf contributes 1 value + 2 nulls. A tree with `n` nodes has `n + 1` null slots (the external "holes"), giving a total of `2n + 1` tokens, linear in `n`.
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    from collections import deque
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def tree_to_list(root):
+    from collections import deque
+    if not root: return []
+    result, q = [], deque([root])
+    while q:
+        node = q.popleft()
+        if node:
+            result.append(node.val)
+            q.append(node.left)
+            q.append(node.right)
+        else:
+            result.append(None)
+    while result and result[-1] is None:
+        result.pop()
+    return result
+
+# Using Preorder DFS Codec
 class Codec:
     def serialize(self, root):
         parts = []
@@ -95,64 +257,25 @@ class Codec:
             node.right = rec()
             return node
         return rec()
+
+def _run_tests():
+    codec = Codec()
+    # example from problem
+    t = build_tree([1, 2, 3, None, None, 4, 5])
+    assert tree_to_list(codec.deserialize(codec.serialize(t))) == [1, 2, 3, None, None, 4, 5]
+    # empty tree
+    assert codec.deserialize(codec.serialize(None)) is None
+    # single node
+    t2 = build_tree([42])
+    assert codec.deserialize(codec.serialize(t2)).val == 42
+    # left-skewed
+    t3 = build_tree([1, 2, None, 3])
+    assert tree_to_list(codec.deserialize(codec.serialize(t3))) == [1, 2, None, 3]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(n).
-- **Space:** O(n) output + O(h) recursion.
-
-Shortest correct answer and arguably the cleanest.
-
-## Approach 3: Postorder DFS with null markers
-
-Symmetric to preorder but emits children before the parent. Deserialize by consuming tokens right-to-left.
-
-```python
-class Codec:
-    def serialize(self, root):
-        parts = []
-        def rec(node):
-            if not node:
-                parts.append("#")
-                return
-            rec(node.left)
-            rec(node.right)
-            parts.append(str(node.val))
-        rec(root)
-        return ",".join(parts)
-
-    def deserialize(self, data):
-        tokens = data.split(",")
-        def rec():
-            val = tokens.pop()
-            if val == "#":
-                return None
-            node = TreeNode(int(val))
-            # NB: right child is deserialized before left because we pop from the end
-            node.right = rec()
-            node.left = rec()
-            return node
-        return rec()
-```
-
-**Complexity**
-- **Time:** O(n).
-- **Space:** O(n) + O(h).
-
-Less common in practice; included to show the symmetry.
-
-## Summary
-
-| Approach | Time | Space | Notes |
-| --- | --- | --- | --- |
-| **BFS with null markers** | O(n) | O(n) + O(w) | Matches LeetCode's own display format |
-| **Preorder DFS** | O(n) | O(n) + O(h) | Shortest and cleanest |
-| Postorder DFS | O(n) | O(n) + O(h) | Symmetric curiosity |
-
-Preorder DFS is the interview-favorite. BFS is easier to eyeball-debug.
-
-### Aside: size of the serialization
-With null markers, every internal node contributes 1 value token and every leaf contributes 1 value + 2 nulls. A tree with `n` nodes has `n + 1` null slots (the external "holes"), giving a total of `2n + 1` tokens, linear in `n`.
 
 ## Related data structures
 

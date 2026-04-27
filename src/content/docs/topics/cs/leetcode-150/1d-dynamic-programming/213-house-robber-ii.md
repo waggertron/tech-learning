@@ -35,41 +35,69 @@ Special-case `n == 1`.
 
 ```python
 def rob(nums):
-    def rob_linear(arr):
-        prev2, prev1 = 0, 0
-        for x in arr:
-            prev2, prev1 = prev1, max(prev1, prev2 + x)
-        return prev1
+    def rob_linear(arr):                         # L1: define helper
+        prev2, prev1 = 0, 0                      # L2: O(1) init
+        for x in arr:                            # L3: loop over slice length (n-1)
+            prev2, prev1 = prev1, max(prev1, prev2 + x)  # L4: O(1) per step
+        return prev1                             # L5: O(1) return
 
-    if len(nums) == 1:
+    if len(nums) == 1:                           # L6: O(1) edge case
         return nums[0]
-    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))  # L7: two O(n) calls
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init) | O(1) | 2 (one per call) | O(1) |
+| L3 (loop header) | O(1) | 2(n-1) iterations total | O(n) |
+| **L4 (update vars)** | **O(1)** | **2(n-1)** | **O(n)** ← dominates |
+| L6 (edge case) | O(1) | 1 | O(1) |
+| L7 (two calls + slices) | O(n) slicing + O(n) each call | 1 | O(n) |
+
+Two passes of length n-1 over the input, plus O(n) memory for the two slices. Total work is 2(n-1) iterations = O(n).
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L4 across two calls (L7).
 - **Space:** O(n) for slicing (or O(1) if you pass indices).
 
 ## Approach 3: Two-pointer range DP, avoid slicing (optimal space)
 
-Same idea, but iterate with explicit start/end indices instead of creating sliced copies.
+Same idea, but iterate with explicit start/end indices instead of creating sliced copies. Drop first house by calling `rob_range(1, n)`, drop last by calling `rob_range(0, n-1)`.
 
 ```python
 def rob(nums):
-    def rob_range(lo, hi):
-        prev2, prev1 = 0, 0
-        for i in range(lo, hi + 1):
-            prev2, prev1 = prev1, max(prev1, prev2 + nums[i])
-        return prev1
+    def rob_range(lo, hi):                           # L1: define helper, args are indices
+        prev2, prev1 = 0, 0                          # L2: O(1) init
+        for i in range(lo, hi):                      # L3: loop hi-lo iterations
+            prev2, prev1 = prev1, max(prev1, prev2 + nums[i])  # L4: O(1) per step
+        return prev1                                 # L5: O(1) return
 
-    if len(nums) == 1:
+    if len(nums) == 1:                               # L6: O(1) edge case
         return nums[0]
-    return max(rob_range(0, len(nums), 2), rob_range(1, len(nums), 1))
+    return max(rob_range(0, len(nums) - 1), rob_range(1, len(nums)))  # L7: two O(n) calls
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init) | O(1) | 2 (one per call) | O(1) |
+| L3 (loop header) | O(1) | 2(n-1) iterations total | O(n) |
+| **L4 (update vars)** | **O(1)** | **2(n-1)** | **O(n)** ← dominates |
+| L6 (edge case) | O(1) | 1 | O(1) |
+| L7 (two calls, no slices) | O(n) each call | 1 | O(n) |
+
+Identical time to Approach 2, but the two index arguments replace the two O(n) slice allocations. The only memory used is the two scalar variables inside each `rob_range` call.
+
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(1).
+- **Time:** O(n), driven by L4 across two calls (L7).
+- **Space:** O(1), no slice copies; only scalar vars.
 
 ## Summary
 
@@ -80,6 +108,36 @@ def rob(nums):
 | **Two HouseRobber runs by index** | **O(n)** | **O(1)** |
 
 The "split the circle by fixing one house in/out" trick is common in circular-array DP.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_213_house_robber_ii.py and run.
+# Uses the canonical implementation (Approach 3: range-based, O(1) space).
+
+def rob(nums):
+    def rob_range(lo, hi):
+        prev2, prev1 = 0, 0
+        for i in range(lo, hi):
+            prev2, prev1 = prev1, max(prev1, prev2 + nums[i])
+        return prev1
+
+    if len(nums) == 1:
+        return nums[0]
+    return max(rob_range(0, len(nums) - 1), rob_range(1, len(nums)))
+
+def _run_tests():
+    assert rob([2, 3, 2]) == 3           # LeetCode example 1: can't rob both end houses
+    assert rob([1, 2, 3, 1]) == 4        # LeetCode example 2: rob houses 0 and 2
+    assert rob([1, 2, 3]) == 3           # LeetCode example 3: rob last house
+    assert rob([5]) == 5                  # single house
+    assert rob([1, 3]) == 3              # two houses, take larger
+    assert rob([2, 7, 9, 3, 1]) == 11   # skip adjacency: 2+9=11 vs 7+3=10 vs 7+1=8
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

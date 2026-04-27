@@ -24,12 +24,21 @@ Works in Python because `int` is arbitrary-precision.
 
 ```python
 def plus_one(digits):
-    n = int("".join(map(str, digits))) + 1
-    return [int(d) for d in str(n)]
+    n = int("".join(map(str, digits))) + 1  # L1: O(n) join + convert
+    return [int(d) for d in str(n)]         # L2: O(n) convert back
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(digits).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (join + int convert)** | **O(n)** | **1** | **O(n)** ← dominates |
+| L2 (str convert + list) | O(n) | 1 | O(n) |
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1/L2 (string conversion passes over all digits).
 - **Space:** O(n).
 
 Fails in languages with fixed integer widths past ~10 digits.
@@ -40,16 +49,28 @@ Standard grade-school addition, handling the all-nines case.
 
 ```python
 def plus_one(digits):
-    for i in range(len(digits), 1, -1, -1):
-        if digits[i] < 9:
-            digits[i] += 1
+    for i in range(len(digits) - 1, -1, -1):    # L1: walk right to left
+        if digits[i] < 9:                        # L2: O(1)
+            digits[i] += 1                       # L3: O(1), no carry needed
             return digits
-        digits[i] = 0
-    return [1] + digits
+        digits[i] = 0                            # L4: O(1), carry continues
+    return [1] + digits                          # L5: O(n), all nines case
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(digits).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (walk loop)** | **O(1)** | **up to n** | **O(n)** ← dominates |
+| L2-L4 (carry logic) | O(1) | up to n | O(n) |
+| L5 (prepend 1, all-nines) | O(n) | at most 1 | O(n) |
+
+Best case: one step (last digit < 9). Worst case: all nines, walk all n digits then prepend.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L1/L2/L3/L4 (right-to-left carry walk).
 - **Space:** O(1) extra (worst case one extra digit).
 
 ## Summary
@@ -60,6 +81,33 @@ def plus_one(digits):
 | **Digit-by-digit carry** | **O(n)** | **O(1)** |
 
 The digit-carry approach is language-agnostic and generalizes to problems like Add Binary (67) and Plus One Linked List (369).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_066.py and run.
+# Uses the canonical implementation (Approach 2: right-to-left carry).
+
+def plus_one(digits):
+    for i in range(len(digits) - 1, -1, -1):
+        if digits[i] < 9:
+            digits[i] += 1
+            return digits
+        digits[i] = 0
+    return [1] + digits
+
+def _run_tests():
+    assert plus_one([1, 2, 3]) == [1, 2, 4]
+    assert plus_one([9, 9, 9]) == [1, 0, 0, 0]
+    assert plus_one([0]) == [1]                   # single zero
+    assert plus_one([9]) == [1, 0]                # single nine
+    assert plus_one([1, 0, 9]) == [1, 1, 0]       # carry in middle
+    assert plus_one([4, 3, 2, 1]) == [4, 3, 2, 2] # no carry
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 

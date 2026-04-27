@@ -27,16 +27,28 @@ Walk the list, storing each node in a hash set. If you encounter a node you've s
 def has_cycle(head) -> bool:
     seen = set()
     cur = head
-    while cur:
-        if cur in seen:
+    while cur:                   # L1: walk until end or revisit
+        if cur in seen:          # L2: O(1) set lookup
             return True
-        seen.add(cur)
+        seen.add(cur)            # L3: O(1) set insert
         cur = cur.next
     return False
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the list (or nodes before cycle closes).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop) | O(1) | up to n | O(n) |
+| **L2 (set lookup)** | **O(1)** | **up to n** | **O(n)** ← dominates |
+| L3 (set insert) | O(1) | up to n | O(n) |
+
+In the acyclic case all n nodes are visited; in a cyclic case we stop when we revisit the cycle entry. Either way, at most n + cycle_length iterations before returning.
+
 **Complexity**
-- **Time:** O(n).
+- **Time:** O(n), driven by L2/L3.
 - **Space:** O(n).
 
 Simple and correct but uses linear extra memory.
@@ -52,16 +64,28 @@ Two pointers: `slow` moves one step, `fast` moves two. If there's a cycle, they'
 ```python
 def has_cycle(head) -> bool:
     slow = fast = head
-    while fast and fast.next:
-        slow = slow.next
-        fast = fast.next.next
-        if slow is fast:
+    while fast and fast.next:      # L1: guard against end of list
+        slow = slow.next           # L2: O(1) advance slow by 1
+        fast = fast.next.next      # L3: O(1) advance fast by 2
+        if slow is fast:           # L4: O(1) meeting check
             return True
     return False
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes in the list, c = length of cycle (0 if acyclic).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (guard) | O(1) | up to n + c | O(n) |
+| **L2-L3 (advance pointers)** | **O(1)** | **up to n + c** | **O(n)** ← dominates |
+| L4 (meeting check) | O(1) | up to n + c | O(n) |
+
+In the acyclic case `fast` exits in n/2 iterations. In the cyclic case `fast` enters the cycle after at most n steps; once both pointers are in the cycle of length c, they meet within c more steps. Total: O(n + c) = O(n).
+
 **Complexity**
-- **Time:** O(n). In a cycle of length k, the pointers meet within k steps of entering it.
+- **Time:** O(n). In a cycle of length c, the pointers meet within c steps of entering it (L2-L3).
 - **Space:** O(1).
 
 ### Why it works
@@ -69,6 +93,59 @@ Once both pointers are inside the cycle, the gap between them decreases by 1 eac
 
 ### Follow-up (problem 142)
 If you need the cycle *start*, not just existence, reset `slow` to head after the meet, then advance both by one step until they meet again. They meet at the cycle start. (Proof is a bit of modular arithmetic; trust the procedure.)
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_141.py and run.
+# Uses Floyd's tortoise and hare (Approach 3).
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def has_cycle(head) -> bool:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False
+
+def _run_tests():
+    # No cycle, empty
+    assert has_cycle(None) == False
+
+    # No cycle, single node
+    assert has_cycle(ListNode(1)) == False
+
+    # No cycle, multiple nodes
+    n1 = ListNode(1)
+    n2 = ListNode(2)
+    n3 = ListNode(3)
+    n1.next = n2; n2.next = n3
+    assert has_cycle(n1) == False
+
+    # Cycle: tail connects to index 1
+    a = ListNode(3)
+    b = ListNode(2)
+    c = ListNode(0)
+    d = ListNode(-4)
+    a.next = b; b.next = c; c.next = d; d.next = b  # cycle at b
+    assert has_cycle(a) == True
+
+    # Cycle: single node pointing to itself
+    x = ListNode(1)
+    x.next = x
+    assert has_cycle(x) == True
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Summary
 

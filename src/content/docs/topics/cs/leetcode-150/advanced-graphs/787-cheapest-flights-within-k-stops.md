@@ -27,28 +27,42 @@ from collections import defaultdict
 from functools import lru_cache
 
 def find_cheapest_price(n, flights, src, dst, k):
-    graph = defaultdict(list)
+    graph = defaultdict(list)                          # L1: build adjacency list, O(E)
     for u, v, w in flights:
-        graph[u].append((v, w))
+        graph[u].append((v, w))                        # L2: O(1) per edge
 
     @lru_cache(maxsize=None)
-    def dfs(city, stops_left):
+    def dfs(city, stops_left):                         # L3: memoized over V*K states
         if city == dst:
             return 0
         if stops_left < 0:
             return float('inf')
         best = float('inf')
-        for nb, cost in graph[city]:
-            best = min(best, cost + dfs(nb, stops_left, 1))
+        for nb, cost in graph[city]:                   # L4: iterate neighbors, O(deg)
+            best = min(best, cost + dfs(nb, stops_left - 1))  # L5: recurse, O(1) if cached
         return best
 
-    result = dfs(src, k + 1)
+    result = dfs(src, k + 1)                           # L6: O(V*K*avg_deg) total
     return -1 if result == float('inf') else result
 ```
 
+**Where the time goes, line by line**
+
+*Variables: V = n (cities), E = len(flights), K = the stops parameter.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (build graph) | O(1) per edge | E | O(E) |
+| L3 (unique memoized states) | - | V * (K+1) distinct | - |
+| L4 (neighbor iteration) | O(deg(city)) | once per state | O(E * K) total |
+| **L5 (recurse/lookup)** | **O(1) amortized (cache hit)** | **V * K * avg_deg** | **O(E * K)** ← dominates |
+| L6 (initial call) | O(V * K * avg_deg) | 1 | O(E * K) |
+
+Each `(city, stops_left)` pair is computed exactly once; its neighbors are iterated once. Total states: V * (K+1). Each state visits avg_deg neighbors, and sum of degrees = E, so total work is O(E * K).
+
 **Complexity**
-- **Time:** O(n · k · avg_degree).
-- **Space:** O(n · k).
+- **Time:** O(E * K), driven by L4/L5 (each memoized state visits its neighbors once).
+- **Space:** O(E + V * K) for the graph and memo cache.
 
 ## Approach 2: Modified Dijkstra with (cost, node, stops_remaining)
 
@@ -59,24 +73,39 @@ import heapq
 from collections import defaultdict
 
 def find_cheapest_price(n, flights, src, dst, k):
-    graph = defaultdict(list)
+    graph = defaultdict(list)                          # L1: build adjacency list, O(E)
     for u, v, w in flights:
-        graph[u].append((v, w))
+        graph[u].append((v, w))                        # L2: O(1) per edge
     # (cost, city, stops_left)
-    heap = [(0, src, k + 1)]
-    while heap:
-        cost, city, stops = heapq.heappop(heap)
+    heap = [(0, src, k + 1)]                           # L3: seed heap, O(1)
+    while heap:                                        # L4: outer loop, up to E*K pushes
+        cost, city, stops = heapq.heappop(heap)        # L5: O(log(heap_size))
         if city == dst:
             return cost
         if stops > 0:
-            for nb, w in graph[city]:
-                heapq.heappush(heap, (cost + w, nb, stops, 1))
+            for nb, w in graph[city]:                  # L6: iterate neighbors
+                heapq.heappush(heap, (cost + w, nb, stops - 1))  # L7: O(log(heap_size))
     return -1
 ```
 
+**Where the time goes, line by line**
+
+*Variables: V = n (cities), E = len(flights), K = the stops parameter.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (build graph) | O(1) per edge | E | O(E) |
+| L3 (init heap) | O(1) | 1 | O(1) |
+| L4 (loop) | O(1) | up to E*K | O(E*K) |
+| **L5 (pop)** | **O(log(E*K))** | **up to E*K** | **O(E*K*log(E*K))** ← dominates |
+| L6 (neighbors) | O(deg) | once per pop | O(E*K) total |
+| L7 (push) | O(log(E*K)) | up to E*K | O(E*K*log(E*K)) |
+
+The heap can hold up to O(E*K) entries because each edge can be pushed once per remaining-stop level. Each push/pop is O(log(E*K)). Unlike classic Dijkstra, this does not deduplicate by (node, stops) so the same city may be popped multiple times.
+
 **Complexity**
-- **Time:** O(E · k · log(V · k)).
-- **Space:** O(V · k).
+- **Time:** O(E * K * log(E * K)), driven by L5/L7 (heap operations on a queue that can grow to E*K entries).
+- **Space:** O(E + V * K) for the graph and heap.
 
 Works but may re-expand nodes with fewer stops and higher cost.
 
@@ -85,6 +114,56 @@ Works but may re-expand nodes with fewer stops and higher cost.
 Run Bellman-Ford exactly `k + 1` iterations (each iteration = one more hop allowed). Snapshot distances each round to avoid using this-round relaxations.
 
 ```python
+def find_cheapest_price(n, flights, src, dst, k):
+    INF = float('inf')
+    dist = [INF] * n                                   # L1: init distances, O(V)
+    dist[src] = 0                                      # L2: source costs zero
+    for _ in range(k + 1):                             # L3: outer loop, K+1 rounds
+        new_dist = dist.copy()                         # L4: snapshot, O(V)
+        for u, v, w in flights:                        # L5: scan all edges, O(E)
+            if dist[u] != INF and dist[u] + w < new_dist[v]:  # L6: relax if better
+                new_dist[v] = dist[u] + w              # L7: O(1) update
+        dist = new_dist                                # L8: commit snapshot
+    return -1 if dist[dst] == INF else dist[dst]       # L9: O(1) lookup
+```
+
+**Where the time goes, line by line**
+
+*Variables: V = n (cities), E = len(flights), K = the stops parameter.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (init) | O(V) | 1 | O(V) |
+| L3 (outer loop) | O(1) | K+1 | O(K) |
+| L4 (snapshot) | O(V) | K+1 | O(V*K) |
+| **L5-L7 (edge scan + relax)** | **O(1) per edge** | **E per round, K+1 rounds** | **O(E*K)** ← dominates |
+| L8-L9 (commit + lookup) | O(1) | K+1 | O(K) |
+
+The double loop is exactly (K+1) rounds times E edges. The snapshot at L4 is the critical correctness detail: it prevents a chain `u -> v -> x` from consuming two hops in a single round.
+
+**Complexity**
+- **Time:** O(K * E), driven by L5-L7 (the inner edge scan across all K+1 rounds).
+- **Space:** O(V) for two distance arrays (dist and new_dist).
+
+### Why the snapshot matters
+Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately used by `v -> x` in the same iteration, that's two hops in one "hop budget" slot, corrupting the answer.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| DFS + memo | O(E * K) | O(E + V * K) |
+| Modified Dijkstra | O(E * K * log(E * K)) | O(E + V * K) |
+| **Bellman-Ford + hop cap** | **O(K * E)** | **O(V)** |
+
+Bellman-Ford with a hop cap is the cleanest solution for this shape of problem, the hop count is exactly `k + 1` iterations. Same pattern applies to any "at-most-k-edges" shortest-path variant.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_787.py and run.
+# Uses the canonical implementation (Approach 3: Bellman-Ford with hop limit).
+
 def find_cheapest_price(n, flights, src, dst, k):
     INF = float('inf')
     dist = [INF] * n
@@ -96,24 +175,26 @@ def find_cheapest_price(n, flights, src, dst, k):
                 new_dist[v] = dist[u] + w
         dist = new_dist
     return -1 if dist[dst] == INF else dist[dst]
+
+def _run_tests():
+    flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]]
+    # Example: k=1 -> 0->1->3 costs 700
+    assert find_cheapest_price(4, flights, 0, 3, 1) == 700
+    # k=0 means no stops, no direct flight from 0 to 3
+    assert find_cheapest_price(4, flights, 0, 3, 0) == -1
+    # k=2 -> 0->1->2->3 costs 400
+    assert find_cheapest_price(4, flights, 0, 3, 2) == 400
+    # Single flight, reachable with 0 stops
+    assert find_cheapest_price(2, [[0,1,500]], 0, 1, 0) == 500
+    # src == dst -> cost 0
+    assert find_cheapest_price(3, [[0,1,100],[1,2,50]], 1, 1, 1) == 0
+    # Unreachable destination
+    assert find_cheapest_price(3, [[0,1,100]], 0, 2, 5) == -1
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
 ```
-
-**Complexity**
-- **Time:** O(k · E).
-- **Space:** O(V).
-
-### Why the snapshot matters
-Without copying, a flight `u → v` relaxed in iteration `i` could be immediately used by `v → x` in the same iteration, that's two hops in one "hop budget" slot, corrupting the answer.
-
-## Summary
-
-| Approach | Time | Space |
-| --- | --- | --- |
-| DFS + memo | O(V · k · avg_deg) | O(V · k) |
-| Modified Dijkstra | O(E · k · log(V · k)) | O(V · k) |
-| **Bellman-Ford + hop cap** | **O(k · E)** | **O(V)** |
-
-Bellman-Ford with a hop cap is the cleanest solution for this shape of problem, the hop count is exactly `k + 1` iterations. Same pattern applies to any "at-most-k-edges" shortest-path variant.
 
 ## Related data structures
 

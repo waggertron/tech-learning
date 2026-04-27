@@ -27,15 +27,28 @@ Enumerate every substring and check uniqueness.
 def length_of_longest_substring(s: str) -> int:
     best = 0
     n = len(s)
-    for i in range(n):
-        for j in range(i, n):
-            if len(set(s[i:j + 1])) == j, i + 1:
-                best = max(best, j, i + 1)
+    for i in range(n):                               # L1: outer loop, n iterations
+        for j in range(i, n):                        # L2: inner loop, up to n-i iterations
+            if len(set(s[i:j + 1])) == j - i + 1:   # L3: slice + set construction, O(n) each
+                best = max(best, j - i + 1)          # L4: O(1)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s), k = number of distinct characters in s (≤ alphabet size).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) | n | O(n) |
+| L2 (inner loop) | O(1) | O(n²) total | O(n²) |
+| **L3 (slice + set)** | **O(n)** | **O(n²)** | **O(n³)** ← dominates |
+| L4 (max update) | O(1) | O(n²) | O(n²) |
+
+L3 is the culprit: `s[i:j+1]` allocates a new string of length up to n, then `set(...)` scans it character by character. Both are O(n), and we do this O(n²) times.
+
 **Complexity**
-- **Time:** O(n³). O(n²) substrings × O(n) uniqueness check.
+- **Time:** O(n³), driven by L3 (slice + set on every substring pair).
 - **Space:** O(n) for the set per check.
 
 ## Approach 2: Expanding window with set (check uniqueness incrementally)
@@ -46,18 +59,31 @@ For each starting index, expand rightward while the next character isn't already
 def length_of_longest_substring(s: str) -> int:
     n = len(s)
     best = 0
-    for i in range(n):
-        seen = set()
-        for j in range(i, n):
-            if s[j] in seen:
+    for i in range(n):                # L1: outer loop, n iterations
+        seen = set()                   # L2: new set each start, O(1)
+        for j in range(i, n):         # L3: inner loop, up to n-i iterations
+            if s[j] in seen:          # L4: O(1) set membership
                 break
-            seen.add(s[j])
-        best = max(best, len(seen))
+            seen.add(s[j])            # L5: O(1) amortized
+        best = max(best, len(seen))   # L6: O(1)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s), k = number of distinct characters in s (≤ alphabet size).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) | n | O(n) |
+| L2 (set init) | O(1) | n | O(n) |
+| **L3/L4/L5 (inner loop)** | **O(1) each** | **O(n²) total** | **O(n²)** ← dominates |
+| L6 (best update) | O(1) | n | O(n) |
+
+This is better than Approach 1 because there's no slice allocation or full-set rebuild inside the inner loop: each `s[j] in seen` and `seen.add(s[j])` is O(1), so the total is purely the O(n²) loop iterations.
+
 **Complexity**
-- **Time:** O(n²). Outer loop × inner linear work.
+- **Time:** O(n²), driven by L3/L4/L5 (the O(n²) inner loop iterations).
 - **Space:** O(k) where k = distinct characters (≤ alphabet size).
 
 Better than brute force, still not optimal.
@@ -68,19 +94,34 @@ Maintain `left` (start of the current valid window) and a hash map `last_seen[ch
 
 ```python
 def length_of_longest_substring(s: str) -> int:
-    last_seen = {}
-    left = 0
-    best = 0
-    for right, ch in enumerate(s):
-        if ch in last_seen and last_seen[ch] >= left:
-            left = last_seen[ch] + 1
-        last_seen[ch] = right
-        best = max(best, right, left + 1)
+    last_seen = {}                                        # L1: O(1)
+    left = 0                                             # L2: O(1)
+    best = 0                                             # L3: O(1)
+    for right, ch in enumerate(s):                       # L4: outer loop, n iterations
+        if ch in last_seen and last_seen[ch] >= left:    # L5: O(1) hash lookup
+            left = last_seen[ch] + 1                     # L6: O(1) jump left
+        last_seen[ch] = right                            # L7: O(1) update map
+        best = max(best, right - left + 1)               # L8: O(1)
     return best
 ```
 
+**Where the time goes, line by line**
+
+*Variables: n = len(s), k = number of distinct characters in s (≤ alphabet size).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init) | O(1) | 1 | O(1) |
+| **L4 (loop)** | **O(1) body** | **n** | **O(n)** ← dominates |
+| L5 (hash lookup) | O(1) | n | O(n) |
+| L6 (jump left) | O(1) | at most n total | O(n) |
+| L7 (map update) | O(1) | n | O(n) |
+| L8 (best update) | O(1) | n | O(n) |
+
+The critical insight: `left` only ever moves forward. Across the entire run, `left` advances at most n times total, so all of L6 combined is O(n), not O(n) per iteration. Each character is visited by `right` exactly once and by `left` at most once.
+
 **Complexity**
-- **Time:** O(n). One pass; every index visited once.
+- **Time:** O(n), driven by L4/L5/L7 (the single linear pass).
 - **Space:** O(k). Hash map bounded by alphabet size.
 
 ## Summary
@@ -92,6 +133,36 @@ def length_of_longest_substring(s: str) -> int:
 | **Sliding window + last-seen** | **O(n)** | **O(k)** |
 
 The optimal approach is a variable-size sliding window whose invariant (no repeats in `[left, right]`) is preserved by jumping `left` instead of decrementing. Same pattern solves many substring problems.
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_003.py and run.
+# Uses the optimal Approach 3 implementation.
+
+def length_of_longest_substring(s: str) -> int:
+    last_seen = {}
+    left = 0
+    best = 0
+    for right, ch in enumerate(s):
+        if ch in last_seen and last_seen[ch] >= left:
+            left = last_seen[ch] + 1
+        last_seen[ch] = right
+        best = max(best, right - left + 1)
+    return best
+
+def _run_tests():
+    assert length_of_longest_substring("abcabcbb") == 3   # "abc"
+    assert length_of_longest_substring("bbbbb") == 1      # "b"
+    assert length_of_longest_substring("pwwkew") == 3     # "wke"
+    assert length_of_longest_substring("") == 0           # empty string
+    assert length_of_longest_substring("a") == 1          # single char
+    assert length_of_longest_substring("abcdef") == 6     # all unique
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
 
 ## Related data structures
 
