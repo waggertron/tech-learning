@@ -65,3 +65,12 @@ Complexity sections use standard Big-O notation. `n` is the input size unless ot
 - [NeetCode roadmap](https://neetcode.io/roadmap), organized by pattern
 - [Grind 75](https://www.techinterviewhandbook.org/grind75), alternative curated list, includes many overlapping problems
 - [Blind 75](https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU), the subset that started it all
+
+## Related posts
+
+- [Data structure complexity cheat sheet](../../../posts/2026-04-27-data-structure-complexity-cheat-sheet/), operation-level big-O across every structure these problems use.
+- [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), Dijkstra, Kahn, Kruskal, Tarjan, KMP, quickselect, with canonical implementations.
+
+## Related topics
+
+- [Data structures](../data-structures/), the longer-form reference for the structures referenced in every solution.

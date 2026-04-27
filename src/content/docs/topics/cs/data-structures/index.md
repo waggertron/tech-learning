@@ -56,3 +56,13 @@ A rough decision flow:
 - [NeetCode 150 Roadmap](https://neetcode.io/roadmap)
 - [Blind 75 list](https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU)
 - [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)
+
+## Related posts
+
+- [Data structure complexity cheat sheet](../../../posts/2026-04-27-data-structure-complexity-cheat-sheet/), the operations and big-O for every structure on this page, with Python-specific gotchas (`list.pop(0)` is O(n), etc.).
+- [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), Dijkstra, Kahn, Kruskal, Tarjan, Floyd, KMP, quickselect, Union-Find, with canonical implementations and decision matrix.
+
+## Related topics
+
+- [LeetCode 150](../leetcode-150/), problems organized by the patterns these structures unlock.
+- [Functional core, imperative shell](../functional-core-imperative-shell/), how immutability shapes architecture.
