@@ -80,6 +80,71 @@ In schoolbook multiplication, the product of two digits at positions `i` (from n
 
 O(n^log₂3) ≈ O(n^1.585). Rarely worth the code in an interview but known as "the first better-than-quadratic integer multiplication."
 
+The trick: split each number in half (`x = x_hi · 10^m + x_lo`, similarly for `y`). Schoolbook would do four multiplications:
+
+```
+xy = x_hi y_hi · 10^(2m) + (x_hi y_lo + x_lo y_hi) · 10^m + x_lo y_lo
+```
+
+Karatsuba does **three** by computing `M = (x_hi + x_lo)(y_hi + y_lo)` and recovering the cross terms as `M - x_hi y_hi - x_lo y_lo`.
+
+```python
+def multiply(num1, num2):
+    if num1 == "0" or num2 == "0":
+        return "0"
+
+    def add_strs(a, b):
+        i, j, carry, out = len(a) - 1, len(b) - 1, 0, []
+        while i >= 0 or j >= 0 or carry:
+            x = int(a[i]) if i >= 0 else 0
+            y = int(b[j]) if j >= 0 else 0
+            total = x + y + carry
+            out.append(str(total % 10)); carry = total // 10
+            i -= 1; j -= 1
+        return "".join(reversed(out))
+
+    def sub_strs(a, b):                          # a >= b
+        i, j, borrow, out = len(a) - 1, len(b) - 1, 0, []
+        while i >= 0:
+            x = int(a[i]) - borrow
+            y = int(b[j]) if j >= 0 else 0
+            if x < y: x += 10; borrow = 1
+            else:     borrow = 0
+            out.append(str(x - y))
+            i -= 1; j -= 1
+        return "".join(reversed(out)).lstrip("0") or "0"
+
+    def shift(s, n):
+        return s + "0" * n if s != "0" else "0"
+
+    def kar(x, y):
+        if len(x) == 1 and len(y) == 1:
+            return str(int(x) * int(y))
+        if x == "0" or y == "0":
+            return "0"
+        n = max(len(x), len(y))
+        m = n // 2
+        x_hi = x[:-m] if len(x) > m else "0"
+        x_lo = x[-m:].lstrip("0") or "0"
+        y_hi = y[:-m] if len(y) > m else "0"
+        y_lo = y[-m:].lstrip("0") or "0"
+        z2 = kar(x_hi, y_hi)                                                      # x_hi · y_hi
+        z0 = kar(x_lo, y_lo)                                                      # x_lo · y_lo
+        z1 = sub_strs(kar(add_strs(x_hi, x_lo), add_strs(y_hi, y_lo)),
+                      add_strs(z2, z0))                                            # cross term
+        result = add_strs(shift(z2, 2 * m), shift(z1, m))
+        result = add_strs(result, z0)
+        return result.lstrip("0") or "0"
+
+    return kar(num1, num2)
+```
+
+The recursion does T(n) = 3T(n/2) + O(n), which solves to O(n^log₂3). Helpers do string-level addition and subtraction so we never cast the full input to int.
+
+**Complexity**
+- **Time:** O(n^1.585).
+- **Space:** O(n) for the recursion stack and intermediate string results.
+
 ## Summary
 
 | Approach | Time | Space |

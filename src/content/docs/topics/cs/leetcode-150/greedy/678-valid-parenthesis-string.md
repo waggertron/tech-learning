@@ -24,6 +24,34 @@ LeetCode 678 · [Link](https://leetcode.com/problems/valid-parenthesis-string/) 
 
 Enumerate 3^(count of `*`) interpretations; test each as a plain parenthesis string. Exponential, skip past tiny inputs.
 
+```python
+from itertools import product
+
+def check_valid_string(s):
+    star_positions = [i for i, ch in enumerate(s) if ch == '*']
+    # Each star can be '(', ')', or '' (empty)
+    for assignment in product('()_', repeat=len(star_positions)):       # L1: 3^k combos
+        candidate = list(s)
+        for pos, ch in zip(star_positions, assignment):
+            candidate[pos] = '' if ch == '_' else ch
+        # Validate as plain parens
+        balance = 0
+        ok = True
+        for c in candidate:
+            if not c: continue
+            balance += 1 if c == '(' else -1
+            if balance < 0: ok = False; break
+        if ok and balance == 0:
+            return True
+    return False
+```
+
+For each of the 3^k assignments to k stars, run a linear validation. Total O(3^k · n). The DP and two-pointer approaches below are dramatically better.
+
+**Complexity**
+- **Time:** O(3^k · n), where k = number of `*`.
+- **Space:** O(n).
+
 ## Approach 2: Top-down DP on (index, open_count)
 
 State: position and currently unclosed `(` count. Transitions depend on the character.

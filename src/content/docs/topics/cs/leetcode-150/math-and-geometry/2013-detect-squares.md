@@ -29,7 +29,37 @@ LeetCode 2013 · [Link](https://leetcode.com/problems/detect-squares/) · *Mediu
 
 ## Approach 1: Brute force, pairwise check
 
-On `count(p)`, scan every stored point pair and test whether they form a square with `p`.
+On `count(p)`, scan every ordered pair of stored points; test if one is q's column-mate and the other is q's row-mate, with equal side lengths. The diagonal corner is `(bx, ay)`; add its multiplicity.
+
+```python
+from collections import defaultdict
+
+class DetectSquares:
+    def __init__(self):
+        self.counts = defaultdict(int)
+        self.points_list = []                     # stored with duplicates
+
+    def add(self, point):
+        p = tuple(point)
+        self.counts[p] += 1
+        self.points_list.append(p)
+
+    def count(self, point):
+        qx, qy = point
+        total = 0
+        for ax, ay in self.points_list:           # A: column-mate of q (ax == qx)
+            for bx, by in self.points_list:       # B: row-mate of q (by == qy)
+                if ax != qx or by != qy:
+                    continue
+                if ay == qy or bx == qx:          # collapsed square
+                    continue
+                if abs(ay - qy) != abs(bx - qx):  # not equal sides
+                    continue
+                total += self.counts[(bx, ay)]    # diagonal multiplicity
+        return total
+```
+
+Iterating `points_list` with duplicates means the multiplicities of A and B are baked in implicitly; only D's multiplicity is read from `counts`. Each square formed by (q, A, B, D) is counted exactly once.
 
 **Complexity**
 - `count`: O(n²).

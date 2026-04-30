@@ -25,6 +25,19 @@ LeetCode 300 · [Link](https://leetcode.com/problems/longest-increasing-subseque
 
 Enumerate all 2ⁿ subsequences; keep the longest strictly increasing.
 
+```python
+def length_of_lis(nums):
+    n = len(nums)
+    best = 0
+    for mask in range(1 << n):                                  # L1: 2^n bitmasks
+        subseq = [nums[i] for i in range(n) if mask & (1 << i)]
+        if all(subseq[i] < subseq[i + 1] for i in range(len(subseq) - 1)):
+            best = max(best, len(subseq))
+    return best
+```
+
+Bitmask enumerates all subsequences; for each, checking strict-increase is O(n). Total O(2^n · n). Don't run this past n ≈ 20.
+
 **Complexity**
 - **Time:** O(2ⁿ · n).
 - **Space:** O(n).

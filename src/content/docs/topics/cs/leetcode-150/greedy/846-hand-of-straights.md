@@ -20,7 +20,31 @@ LeetCode 846 · [Link](https://leetcode.com/problems/hand-of-straights/) · *Med
 
 ## Approach 1: Brute force, try every partitioning
 
-Exponential. Skip.
+Recursively pick `group_size` indices, check they form a consecutive run, then recurse on the rest.
+
+```python
+from itertools import combinations
+
+def is_n_straight_hand(hand, group_size):
+    if len(hand) % group_size != 0:
+        return False
+    if not hand:
+        return True
+    n = len(hand)
+    for indices in combinations(range(n), group_size):              # L1: C(n, k) groups to try
+        group = sorted(hand[i] for i in indices)
+        if all(group[i] - group[i - 1] == 1 for i in range(1, len(group))):
+            remaining = [hand[i] for i in range(n) if i not in set(indices)]
+            if is_n_straight_hand(remaining, group_size):           # L2: recurse on rest
+                return True
+    return False
+```
+
+Each level tries C(n, k) groups; the recursion has n/k levels. Total combinatorial blow-up. Skip.
+
+**Complexity**
+- **Time:** exponential.
+- **Space:** O(n) recursion.
 
 ## Approach 2: Sort + per-smallest consumption (canonical greedy)
 

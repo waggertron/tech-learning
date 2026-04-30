@@ -62,9 +62,31 @@ class KthLargest:
 
 ## Approach 2: Keep a full heap
 
-Maintain a min-heap of all values; the top is the smallest, not what we want. We'd need a max-heap or inverted indexing. Doesn't beat sorting asymptotically.
+Maintain a max-heap of all values (Python: store negatives in a min-heap). On each `add`, push, then pop the top k-1 to peek the kth, then put them back.
 
-Skip, the meaningful optimization is Approach 3.
+```python
+import heapq
+
+class KthLargest:
+    def __init__(self, k, nums):
+        self.k = k
+        self.max_heap = [-x for x in nums]
+        heapq.heapify(self.max_heap)                 # L1: O(n) build
+
+    def add(self, val):
+        heapq.heappush(self.max_heap, -val)          # L2: O(log n)
+        popped = []
+        for _ in range(self.k - 1):                   # L3: pop k-1 largest
+            popped.append(heapq.heappop(self.max_heap))
+        result = -self.max_heap[0]                    # L4: peek the kth
+        for x in popped:
+            heapq.heappush(self.max_heap, x)          # L5: put them back
+        return result
+```
+
+This works but each `add` is O(k log n), worse than the size-K heap (Approach 3) which is O(log k). The "full heap" stores everything you've ever seen (O(n) space) instead of just the K candidates.
+
+The meaningful optimization is Approach 3.
 
 ## Approach 3: Size-K min-heap (optimal)
 

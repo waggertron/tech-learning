@@ -75,9 +75,54 @@ For each of the V edges we remove, we rebuild the graph and run a full DFS, both
 
 ## Approach 2: DFS to find the cycle, pick the last edge on it
 
-Build the graph incrementally. When adding an edge creates a cycle, mark it and report the last such edge.
+Build the full graph; run a DFS that finds a back edge, walk the parent chain to collect all edges on the cycle, then iterate the input edges in reverse and return the first one whose index is in the cycle.
+
+```python
+from collections import defaultdict
+
+def find_redundant_connection(edges):
+    graph = defaultdict(list)
+    for ei, (u, v) in enumerate(edges):
+        graph[u].append((v, ei))                          # edge-indexed neighbors
+        graph[v].append((u, ei))
+
+    cycle_edges = set()
+    visited = set()
+    parent_edge = {}                                       # node -> edge index used to reach it
+    parent_node = {}                                       # node -> parent node
+
+    def dfs(node, came_from):                              # `came_from` is an edge index, not a node
+        visited.add(node)
+        for nb, ei in graph[node]:
+            if ei == came_from:
+                continue                                   # don't revisit the same edge
+            if nb in visited:
+                cycle_edges.add(ei)
+                cur = node
+                while cur != nb:                           # walk parents back to nb
+                    cycle_edges.add(parent_edge[cur])
+                    cur = parent_node[cur]
+                return True
+            parent_edge[nb] = ei
+            parent_node[nb] = node
+            if dfs(nb, ei):
+                return True
+        return False
+
+    dfs(1, -1)
+    for i in range(len(edges) - 1, -1, -1):                # last edge on the cycle wins
+        if i in cycle_edges:
+            return edges[i]
+    return []
+```
+
+The "ignore parent" trick has to track the **edge index** rather than the parent node, otherwise multi-edges (e.g., `[[1,2],[1,2]]`) would falsely pass through.
 
 This is really just a special case of Approach 3, with more bookkeeping.
+
+**Complexity**
+- **Time:** O(V + E).
+- **Space:** O(V + E) for the graph and recursion stack.
 
 ## Approach 3: Union-Find (canonical)
 

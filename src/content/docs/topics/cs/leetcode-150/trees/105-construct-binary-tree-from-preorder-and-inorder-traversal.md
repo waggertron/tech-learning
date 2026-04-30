@@ -96,7 +96,37 @@ We consume the preorder from left to right, but we must process the left subtree
 
 ## Approach 3: Iterative with a stack
 
-More code; rarely preferred unless recursion depth is a specific concern. The iterative form pushes preorder values while walking the inorder until the top matches; then pops and assigns to the next preorder root. Pattern is subtle; I'll skip the full implementation in favor of the cleaner recursive hash-map version.
+More code; rarely preferred unless recursion depth is a specific concern. The iterative form pushes preorder values while walking the inorder until the top matches; then pops and assigns to the next preorder root.
+
+```python
+def build_tree(preorder, inorder):
+    if not preorder:
+        return None
+    root = TreeNode(preorder[0])
+    stack = [root]
+    in_idx = 0
+    for i in range(1, len(preorder)):
+        node = TreeNode(preorder[i])
+        if stack[-1].val != inorder[in_idx]:
+            # Top hasn't been "completed" by inorder yet → current is its left child
+            stack[-1].left = node
+        else:
+            # Pop while top matches inorder cursor (we've walked past their subtrees)
+            popped = None
+            while stack and stack[-1].val == inorder[in_idx]:
+                popped = stack.pop()
+                in_idx += 1
+            # The last popped node is the parent whose right subtree starts here
+            popped.right = node
+        stack.append(node)
+    return root
+```
+
+The invariant: the stack holds the current path of "left-child ancestors." When the top matches the inorder cursor, we've finished a left subtree, and the next preorder value belongs to a **right** child further up the path. The pop-while loop walks up to find which one.
+
+**Complexity**
+- **Time:** O(n). Each node is pushed and popped once.
+- **Space:** O(n) for the stack.
 
 ## Summary
 

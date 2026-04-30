@@ -22,6 +22,20 @@ LeetCode 1851 · [Link](https://leetcode.com/problems/minimum-interval-to-includ
 
 For each query, iterate intervals and track the smallest containing length.
 
+```python
+def min_interval(intervals, queries):
+    result = []
+    for q in queries:                         # L1: q iterations
+        best = float('inf')
+        for s, e in intervals:                # L2: n iterations per query
+            if s <= q <= e:
+                best = min(best, e - s + 1)
+        result.append(best if best != float('inf') else -1)
+    return result
+```
+
+Each query independently scans every interval. No state shared across queries.
+
 **Complexity**
 - **Time:** O(n · q).
 - **Space:** O(q).
@@ -78,7 +92,48 @@ Processing queries out of order turns a "for each query, find the best interval"
 
 ## Approach 3: Segment tree / merge sort tree
 
-More powerful and more code. Used in competitive programming for online variants. Skip unless the interviewer asks for O(log n) per query online.
+More powerful and more code. Used in competitive programming for online variants. The shape: coordinate-compress the endpoints, then for each interval do a **range-min update** of its length over `[start, end]`. Each query is a **point query** for the minimum length covering that coordinate.
+
+```python
+def min_interval(intervals, queries):
+    # Coordinate compression
+    coords = sorted(set([s for s, _ in intervals]
+                        + [e for _, e in intervals]
+                        + list(queries)))
+    coord_idx = {c: i for i, c in enumerate(coords)}
+    n = len(coords)
+    INF = float('inf')
+    tree = [INF] * (4 * max(n, 1))
+
+    def update(node, lo, hi, l, r, val):
+        if r < lo or hi < l:
+            return
+        if l <= lo and hi <= r:
+            tree[node] = min(tree[node], val)
+            return
+        mid = (lo + hi) // 2
+        update(2*node, lo, mid, l, r, val)
+        update(2*node+1, mid+1, hi, l, r, val)
+
+    def query(node, lo, hi, idx):
+        if lo == hi:
+            return tree[node]
+        mid = (lo + hi) // 2
+        if idx <= mid:
+            return min(tree[node], query(2*node, lo, mid, idx))
+        return min(tree[node], query(2*node+1, mid+1, hi, idx))
+
+    for s, e in intervals:
+        update(1, 0, n - 1, coord_idx[s], coord_idx[e], e - s + 1)
+
+    result = []
+    for q in queries:
+        ans = query(1, 0, n - 1, coord_idx[q])
+        result.append(ans if ans != INF else -1)
+    return result
+```
+
+Skip unless the interviewer asks for O(log n) per query online.
 
 ## Summary
 

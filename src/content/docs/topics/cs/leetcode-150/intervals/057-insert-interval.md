@@ -22,6 +22,21 @@ LeetCode 57 · [Link](https://leetcode.com/problems/insert-interval/) · *Medium
 
 Add to list, sort, run Merge Intervals.
 
+```python
+def insert(intervals, new_interval):
+    intervals = [list(iv) for iv in intervals] + [list(new_interval)]
+    intervals.sort(key=lambda x: x[0])              # L1: O(n log n)
+    result = []
+    for iv in intervals:                             # L2: O(n) sweep
+        if result and iv[0] <= result[-1][1]:
+            result[-1][1] = max(result[-1][1], iv[1])
+        else:
+            result.append(list(iv))
+    return result
+```
+
+The sort is the load-bearing step. After sort, the linear merge is the same template as LeetCode 56.
+
 **Complexity**
 - **Time:** O(n log n).
 - **Space:** O(n).
@@ -29,6 +44,31 @@ Add to list, sort, run Merge Intervals.
 ## Approach 2: Binary search for insertion point + left-merge + right-merge
 
 Find where `newInterval` goes; then walk left and right, merging overlaps.
+
+```python
+import bisect
+
+def insert(intervals, new_interval):
+    intervals = [list(iv) for iv in intervals]
+    starts = [iv[0] for iv in intervals]
+    idx = bisect.bisect_left(starts, new_interval[0])  # L1: O(log n) search
+    intervals.insert(idx, list(new_interval))           # L2: O(n) shift
+
+    # Merge leftward while previous overlaps
+    while idx > 0 and intervals[idx - 1][1] >= intervals[idx][0]:
+        intervals[idx - 1][1] = max(intervals[idx - 1][1], intervals[idx][1])
+        intervals.pop(idx)
+        idx -= 1
+
+    # Merge rightward while next overlaps
+    while idx + 1 < len(intervals) and intervals[idx][1] >= intervals[idx + 1][0]:
+        intervals[idx][1] = max(intervals[idx][1], intervals[idx + 1][1])
+        intervals.pop(idx + 1)
+
+    return intervals
+```
+
+The binary search saves work on the search, but the `insert` and `pop` calls are O(n) shifts, so the worst case is the same as a single linear pass.
 
 Same O(n) in the worst case.
 

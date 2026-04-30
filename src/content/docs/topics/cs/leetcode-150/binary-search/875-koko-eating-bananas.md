@@ -57,7 +57,24 @@ In the worst case k must reach max(piles) before succeeding. Each check scans al
 
 Starting from `k = max(piles)` and decrementing doesn't help, we'd still do O(max) iterations.
 
+```python
+from math import ceil
+
+def min_eating_speed(piles, h):
+    for k in range(max(piles), 0, -1):                  # L1: M iterations downward
+        hours = sum(ceil(p / k) for p in piles)         # L2: O(n) feasibility check
+        if hours > h:                                   # first failure → previous k was the answer
+            return k + 1
+    return 1
+```
+
+`max(piles)` always works (h ≥ n is guaranteed by the problem), so we walk down until the first speed that fails. Same O(n · M) profile as Approach 1; just goes the other direction.
+
 A genuine middle tier is the **realization that feasibility is monotonic**: if speed `k` works, every `k' > k` also works. That monotonicity is the signal for binary search.
+
+**Complexity**
+- **Time:** O(n · max(piles)).
+- **Space:** O(1).
 
 ## Approach 3: Binary search on the answer (optimal)
 

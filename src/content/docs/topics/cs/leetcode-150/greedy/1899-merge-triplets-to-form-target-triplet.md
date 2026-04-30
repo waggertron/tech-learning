@@ -21,7 +21,30 @@ LeetCode 1899 · [Link](https://leetcode.com/problems/merge-triplets-to-form-tar
 
 ## Approach 1: Brute force, enumerate subsets
 
-Check the element-wise max of every subset. Exponential, skip.
+Check the element-wise max of every subset.
+
+```python
+from itertools import combinations
+
+def merge_triplets(triplets, target):
+    n = len(triplets)
+    for r in range(1, n + 1):                              # L1: every subset size
+        for subset in combinations(triplets, r):           # L2: 2^n total subsets
+            mx = [0, 0, 0]
+            for t in subset:
+                for i in range(3):
+                    if t[i] > mx[i]:
+                        mx[i] = t[i]
+            if mx == list(target):
+                return True
+    return False
+```
+
+There are 2^n subsets; each costs O(n) to combine. Total O(n · 2^n). Skip past tiny inputs.
+
+**Complexity**
+- **Time:** O(n · 2^n).
+- **Space:** O(n).
 
 ## Approach 2: Greedy channel-wise (canonical)
 

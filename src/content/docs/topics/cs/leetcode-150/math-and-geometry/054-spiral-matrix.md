@@ -109,7 +109,22 @@ The `if top <= bottom` / `if left <= right` guards handle the last single row or
 
 ## Approach 3: Recursive peel + rotate
 
-Append the top row, then recurse on the transpose-reversed inner matrix. Elegant but mutates the input.
+Append the top row, then **rotate** the rest of the matrix 90° counterclockwise (each column becomes a row, then reverse the row order). Recurse on the rotated remainder.
+
+```python
+def spiral_order(matrix):
+    if not matrix or not matrix[0]:
+        return []
+    result = list(matrix[0])
+    rest = matrix[1:]
+    if not rest:
+        return result
+    # Rotate rest 90° CCW: take its columns, reverse the order
+    rotated = [list(col) for col in list(zip(*rest))[::-1]]
+    return result + spiral_order(rotated)
+```
+
+The rotation lines up the next clockwise side as the new "top row," so the same `peel-the-top-row` rule produces the spiral. Elegant but allocates rotated matrices at each level.
 
 **Complexity**
 - **Time:** O(m · n).

@@ -22,9 +22,55 @@ LeetCode 312 · [Link](https://leetcode.com/problems/burst-balloons/) · *Hard*
 
 `n!` orderings. Feasible only for tiny inputs.
 
+```python
+from itertools import permutations
+
+def max_coins(nums):
+    n = len(nums)
+    best = 0
+    for perm in permutations(range(n)):                # L1: n! orderings
+        active = [True] * n
+        coins = 0
+        for idx in perm:                                # L2: simulate this order
+            left = 1
+            for i in range(idx - 1, -1, -1):
+                if active[i]: left = nums[i]; break
+            right = 1
+            for i in range(idx + 1, n):
+                if active[i]: right = nums[i]; break
+            coins += left * nums[idx] * right
+            active[idx] = False
+        best = max(best, coins)
+    return best
+```
+
+For each permutation, scan inward to find the active left and right neighbors at burst time.
+
+**Complexity**
+- **Time:** O(n! · n²).
+- **Space:** O(n).
+
 ## Approach 2: Recursive, pick the "first to burst" in each subproblem (wrong framing)
 
 Picking the first to burst leaves a dependency where the next step depends on which balloons are gone, messy. The trick is to reframe.
+
+```python
+def max_coins(nums):
+    if not nums:
+        return 0
+    best = 0
+    for i in range(len(nums)):                          # L1: pick first to burst
+        left = nums[i - 1] if i > 0 else 1
+        right = nums[i + 1] if i + 1 < len(nums) else 1
+        coins = left * nums[i] * right
+        coins += max_coins(nums[:i] + nums[i + 1:])     # L2: recurse on remainder
+        best = max(best, coins)
+    return best
+```
+
+Correct, but the subproblem state is "the actual remaining sequence," which has exponentially many distinct values. Memoization on the **list itself** is unwieldy, and the recurrence doesn't simplify into a clean (i, j) pair the way "last to burst" does. Exponential time without memoization, and even with memoization the state space blows up.
+
+This is why Approach 3 reverses the framing.
 
 ## Approach 3: Interval DP, pick the **last** balloon to burst in each interval (canonical)
 

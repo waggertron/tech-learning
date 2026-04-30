@@ -23,6 +23,33 @@ LeetCode 269 (premium) · [Link](https://leetcode.com/problems/alien-dictionary/
 
 For each permutation of the distinct letters, test whether the given words are lexicographically ordered under it. Return the first permutation that works.
 
+```python
+from itertools import permutations
+
+def alien_order(words):
+    chars = set(c for w in words for c in w)
+    for perm in permutations(sorted(chars)):                    # L1: K! orderings
+        rank = {ch: i for i, ch in enumerate(perm)}
+        valid = True
+        for w1, w2 in zip(words, words[1:]):                    # L2: W-1 adjacent pairs
+            cmp_done = False
+            for a, b in zip(w1, w2):
+                if a != b:
+                    if rank[a] > rank[b]:
+                        valid = False
+                    cmp_done = True
+                    break
+            if not cmp_done and len(w1) > len(w2):              # prefix contradiction
+                valid = False
+            if not valid:
+                break
+        if valid:
+            return "".join(perm)
+    return ""
+```
+
+Different valid orderings exist for the same input; this returns the first one found in lexicographic permutation order. Don't compare against a specific canonical answer; verify it satisfies the constraints instead.
+
 **Where the time goes, line by line**
 
 *Variables: W = number of words, L = max word length, K = unique characters across all words (<=26).*

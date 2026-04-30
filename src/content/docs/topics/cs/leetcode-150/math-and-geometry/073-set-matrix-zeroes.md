@@ -20,7 +20,23 @@ LeetCode 73 · [Link](https://leetcode.com/problems/set-matrix-zeroes/) · *Medi
 
 ## Approach 1: Brute force, make a copy
 
-Create a copy; read from the copy while writing zeroes to the original.
+Snapshot the matrix; identify zero rows and columns from the snapshot; then write zeroes back into the original.
+
+```python
+def set_zeroes(matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    snapshot = [row[:] for row in matrix]
+    zero_rows = {r for r in range(rows)
+                 if any(snapshot[r][c] == 0 for c in range(cols))}
+    zero_cols = {c for c in range(cols)
+                 if any(snapshot[r][c] == 0 for r in range(rows))}
+    for r in range(rows):
+        for c in range(cols):
+            if r in zero_rows or c in zero_cols:
+                matrix[r][c] = 0
+```
+
+The snapshot is what makes it correct: without it, the in-place writes would propagate ("a zero I just wrote would trigger more zero-outs"). With a snapshot, the writes only depend on the original state.
 
 **Complexity**
 - **Time:** O(m · n).

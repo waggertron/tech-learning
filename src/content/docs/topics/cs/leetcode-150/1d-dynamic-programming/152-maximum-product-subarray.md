@@ -55,6 +55,26 @@ Every pair `(i, j)` is visited exactly once. No early exit is possible because t
 
 First instinct: `dp[i] = max(nums[i], dp[i - 1] * nums[i])`. This fails when a large negative product meets a negative number, the product becomes large positive.
 
+```python
+def max_product(nums):
+    dp_prev = nums[0]
+    best = dp_prev
+    for x in nums[1:]:
+        dp_prev = max(x, dp_prev * x)            # WRONG: throws away the running min
+        best = max(best, dp_prev)
+    return best
+```
+
+**Counter-example:** `[-2, 3, -4]`. The correct answer is `24` (multiply all three). This wrong DP gives `3`:
+
+```
+dp_prev = -2,  best = -2
+x=3:  dp_prev = max(3, -2*3=-6) = 3       best = 3
+x=-4: dp_prev = max(-4, 3*-4=-12) = -4    best = 3
+```
+
+The bug: when `x = -4` arrives, the *most useful* running value is `-2 * 3 = -6` (a big negative that becomes a big positive after multiplying by `-4`). But we threw it away in favor of the running max `3`. To capture this, we need to keep the running **min** too.
+
 Not a valid approach. Included to motivate Approach 3.
 
 ## Approach 3: DP tracking both max AND min at each position (canonical)

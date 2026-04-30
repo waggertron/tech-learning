@@ -22,6 +22,24 @@ LeetCode 763 · [Link](https://leetcode.com/problems/partition-labels/) · *Medi
 
 For each candidate split, verify that every character on the left never appears on the right. Quadratic.
 
+```python
+def partition_labels(s):
+    if not s:
+        return []
+    n = len(s)
+    # Find the smallest k such that s[:k] and s[k:] share no character
+    for k in range(1, n + 1):
+        if not (set(s[:k]) & set(s[k:])):                  # L1: O(n) per k
+            return [k] + partition_labels(s[k:])           # L2: recurse on the rest
+    return [n]
+```
+
+Building both sets is O(n) per candidate cut, and we try up to n cuts → O(n²) total.
+
+**Complexity**
+- **Time:** O(n²).
+- **Space:** O(n).
+
 ## Approach 2: Precompute last-seen index + greedy extension (canonical)
 
 Precompute `last[ch]`, the final index of each character. Walk the string; maintain a running `end` = the max `last[ch]` seen so far. When the walking index reaches `end`, the current window is the smallest valid partition ending at `end`.
@@ -62,6 +80,28 @@ The moment the walking index equals `end`, every character in `[start, end]` is 
 ## Approach 3: Union-Find / interval-merge formulation (conceptually equivalent)
 
 Each character's first and last occurrence form an interval. Merge overlapping intervals; the merged sizes are the answer. Same O(n) via the same last-index trick, included as a conceptual map to problem 56 (Merge Intervals).
+
+```python
+def partition_labels(s):
+    first, last = {}, {}
+    for i, ch in enumerate(s):
+        first.setdefault(ch, i)
+        last[ch] = i
+    intervals = sorted((first[ch], last[ch]) for ch in first)        # L1: O(k log k), k ≤ 26
+    merged = []
+    for a, b in intervals:                                            # L2: linear sweep
+        if merged and a <= merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], b))
+        else:
+            merged.append((a, b))
+    return [b - a + 1 for a, b in merged]
+```
+
+Same answer, derived as the canonical "sort + sweep" merge-intervals template applied to per-character ranges. With a fixed alphabet (e.g., 26 letters), the sort is constant.
+
+**Complexity**
+- **Time:** O(n) given the bounded alphabet.
+- **Space:** O(1) extra (alphabet-sized).
 
 ## Summary
 

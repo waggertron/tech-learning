@@ -22,6 +22,28 @@ LeetCode 56 · [Link](https://leetcode.com/problems/merge-intervals/) · *Medium
 
 Repeatedly find any pair of overlapping intervals and merge them until none remain.
 
+```python
+def merge(intervals):
+    intervals = [list(iv) for iv in intervals]
+    changed = True
+    while changed:                         # L1: outer fixed-point loop
+        changed = False
+        result = []
+        for iv in intervals:               # L2: scan every interval
+            for existing in result:        # L3: against every kept one
+                if iv[0] <= existing[1] and existing[0] <= iv[1]:
+                    existing[0] = min(existing[0], iv[0])
+                    existing[1] = max(existing[1], iv[1])
+                    changed = True
+                    break
+            else:
+                result.append(iv)
+        intervals = result
+    return intervals
+```
+
+Each outer pass touches every pair (L2 × L3 = O(n²)). The outer loop runs until a pass produces no merges; in the worst case (a chain like `[[1,2],[2,3],[3,4],...]`) that's another O(n) factor → O(n³) overall.
+
 **Complexity**
 - **Time:** O(n²) or worse.
 - **Space:** O(n).
@@ -63,7 +85,34 @@ L1 dominates: sorting requires O(n log n) comparisons, and the linear sweep that
 
 ## Approach 3: Bucket sort (when values are bounded)
 
-If interval endpoints are bounded (e.g., within [0, 10⁴]), use a boolean array with start/end markers in O(max_value). Rarely worth it in practice.
+If interval endpoints are bounded (e.g., within [0, 10⁴]), tally start and end events into counter arrays, then sweep tracking open intervals. Each closed run produces one merged interval.
+
+```python
+def merge(intervals):
+    if not intervals:
+        return []
+    max_v = max(e for _, e in intervals)
+    starts = [0] * (max_v + 2)
+    ends = [0] * (max_v + 2)
+    for s, e in intervals:
+        starts[s] += 1
+        ends[e] += 1
+
+    result = []
+    open_count = 0
+    cur_start = None
+    for i in range(max_v + 2):
+        if starts[i] > 0 and open_count == 0:
+            cur_start = i
+        open_count += starts[i]                # process starts before ends so touching merges
+        if ends[i] > 0:
+            open_count -= ends[i]
+            if open_count == 0:
+                result.append([cur_start, i])
+    return result
+```
+
+Rarely worth it in practice; the constant factors and the array allocation only pay off for tiny bounded ranges.
 
 **Complexity**
 - **Time:** O(max_value).

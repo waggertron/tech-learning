@@ -21,7 +21,28 @@ LeetCode 213 · [Link](https://leetcode.com/problems/house-robber-ii/) · *Mediu
 
 ## Approach 1: Brute force, enumerate all non-adjacent subsets
 
-Generate every subset with no two adjacent (including circular adjacency). Impractical past n ≈ 25.
+Generate every subset with no two adjacent (including circular adjacency, where house 0 and house n-1 cannot both be picked). Impractical past n ≈ 25.
+
+```python
+def rob(nums):
+    n = len(nums)
+    if n == 1:
+        return nums[0]
+    best = 0
+    for mask in range(1 << n):                              # L1: 2^n subsets
+        chosen = [i for i in range(n) if mask & (1 << i)]
+        valid = True
+        for i in range(len(chosen) - 1):
+            if chosen[i + 1] - chosen[i] == 1:              # linear adjacency
+                valid = False; break
+        if valid and 0 in chosen and (n - 1) in chosen:     # circular adjacency
+            valid = False
+        if valid:
+            best = max(best, sum(nums[i] for i in chosen))
+    return best
+```
+
+The bitmask enumeration touches 2^n subsets; for each, validating non-adjacency and summing is O(n). Total O(2^n · n).
 
 **Complexity**
 - **Time:** O(2ⁿ).

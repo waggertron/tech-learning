@@ -22,6 +22,20 @@ LeetCode 253 (premium) · [Link](https://leetcode.com/problems/meeting-rooms-ii/
 
 For every time t from 0 to max_end, count active meetings. Max over all t is the answer.
 
+```python
+def min_meeting_rooms(intervals):
+    if not intervals:
+        return 0
+    max_end = max(e for _, e in intervals)
+    best = 0
+    for t in range(max_end + 1):                       # L1: T iterations
+        active = sum(1 for s, e in intervals if s <= t < e)  # L2: O(n) per tick
+        best = max(best, active)
+    return best
+```
+
+Direct but quadratic in (T · n). Useful as a sanity-check oracle, never as a real solution.
+
 **Complexity**
 - **Time:** O(T · n). Infeasible on big time ranges.
 - **Space:** O(1).

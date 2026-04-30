@@ -57,6 +57,22 @@ Simple and correct but uses linear extra memory.
 
 Mutate each visited node to a sentinel value, detect on revisit. Trashes the list, not acceptable if the caller still needs it. Included only to contrast with the optimal.
 
+```python
+def has_cycle(head) -> bool:
+    SENTINEL = object()              # unique marker; can't collide with real values
+    cur = head
+    while cur:
+        if cur.val is SENTINEL:      # revisit detected
+            return True
+        cur.val = SENTINEL
+        cur = cur.next
+    return False
+```
+
+O(n) time, O(1) extra space, but the list is now wrecked: every visited node's value is overwritten with the sentinel.
+
+A non-mutating O(1)-space alternative is Approach 3 below.
+
 ## Approach 3: Floyd's tortoise and hare (optimal)
 
 Two pointers: `slow` moves one step, `fast` moves two. If there's a cycle, they'll meet inside it; if there's no cycle, `fast` reaches the end.

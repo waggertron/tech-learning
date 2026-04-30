@@ -20,7 +20,44 @@ LeetCode 1584 · [Link](https://leetcode.com/problems/min-cost-to-connect-all-po
 
 ## Approach 1: Brute force, try all spanning trees
 
-Generate every spanning tree by enumerating edge subsets. Infeasible past n ≈ 8.
+Generate every (n-1)-subset of edges; check if each forms a spanning tree (acyclic and connects all nodes). Track the minimum total weight.
+
+```python
+from itertools import combinations
+
+def min_cost_connect_points(points):
+    n = len(points)
+    if n <= 1:
+        return 0
+    edges = []
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = abs(points[i][0] - points[j][0]) + abs(points[i][1] - points[j][1])
+            edges.append((d, i, j))
+
+    best = float('inf')
+    for combo in combinations(edges, n - 1):              # L1: C(E, n-1) subsets
+        parent = list(range(n))
+        def find(x):
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+        total = 0
+        ok = True
+        for d, i, j in combo:                              # L2: check acyclic via Union-Find
+            ri, rj = find(i), find(j)
+            if ri == rj:
+                ok = False
+                break
+            parent[ri] = rj
+            total += d
+        if ok:                                             # connected if no cycle and exactly n-1 edges
+            best = min(best, total)
+    return best
+```
+
+By Cayley's formula, K_n has n^(n-2) spanning trees, so this explodes past n ≈ 8.
 
 **Complexity**
 - **Time:** exponential in edges.
