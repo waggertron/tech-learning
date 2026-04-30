@@ -148,7 +148,7 @@ Keep those three boundaries clean and most of the distributed-systems ugliness s
 
 ## See also
 
-- [Django Part 9, Async and background tasks](../topics/web/django/part-09-async-and-background-tasks/), Celery + Channels depth
-- [OR-Tools VRP with skill constraints](./2026-04-24-or-tools-vrp-with-skill-constraints/), the task that runs inside this pipeline
-- [ML re-ranker inside an OR-Tools objective](./2026-04-24-ml-reranker-inside-or-tools-objective/), what else is in the worker
+- [Django Part 9, Async and background tasks](../../topics/web/django/part-09-async-and-background-tasks/), Celery + Channels depth
+- [OR-Tools VRP with skill constraints](../2026-04-24-or-tools-vrp-with-skill-constraints/), the task that runs inside this pipeline
+- [ML re-ranker inside an OR-Tools objective](../2026-04-24-ml-reranker-inside-or-tools-objective/), what else is in the worker
 - Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton), architecture doc has the full sequence diagrams

@@ -153,6 +153,6 @@ OR does hard constraints well. ML does soft preferences well. Putting them in th
 
 ## See also
 
-- [Vehicle Routing Problem, topic](../topics/cs/vehicle-routing/), the VRP background
-- [OR-Tools VRP with skill constraints](./2026-04-24-or-tools-vrp-with-skill-constraints/), the solver setup this post plugs into
+- [Vehicle Routing Problem, topic](../../topics/cs/vehicle-routing/), the VRP background
+- [OR-Tools VRP with skill constraints](../2026-04-24-or-tools-vrp-with-skill-constraints/), the solver setup this post plugs into
 - Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton), code in `apps/api/scheduling/ranker.py` and `apps/api/scheduling/vrp.py`

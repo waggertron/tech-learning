@@ -153,7 +153,7 @@ Hash tables appear in 34 NeetCode 150 problems across 14 categories.
 - [133. Clone Graph](../../leetcode-150/graphs/133-clone-graph/)
 - [207. Course Schedule](../../leetcode-150/graphs/207-course-schedule/), adjacency list
 - [269. Alien Dictionary](../../leetcode-150/graphs/269-alien-dictionary/)
-- [329. Longest Increasing Path in a Matrix](../../leetcode-150/graphs/329-longest-increasing-path-in-a-matrix/), memoization cache
+- [329. Longest Increasing Path in a Matrix](../../leetcode-150/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/), memoization cache
 - [417. Pacific Atlantic Water Flow](../../leetcode-150/graphs/417-pacific-atlantic-water-flow/), reachability sets
 
 **1-D Dynamic Programming:**

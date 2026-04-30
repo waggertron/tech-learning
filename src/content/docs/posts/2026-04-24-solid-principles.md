@@ -119,5 +119,5 @@ Four of five are really about one thing: minimizing ripple effects. That's the w
 
 ## Related topics and posts
 
-- [Composition over inheritance](./2026-04-24-composition-over-inheritance/), how to do what inheritance promised without its pathologies
-- [Functional Core, Imperative Shell](../topics/cs/functional-core-imperative-shell/), an architectural pattern that subsumes much of DIP
+- [Composition over inheritance](../2026-04-24-composition-over-inheritance/), how to do what inheritance promised without its pathologies
+- [Functional Core, Imperative Shell](../../topics/cs/functional-core-imperative-shell/), an architectural pattern that subsumes much of DIP

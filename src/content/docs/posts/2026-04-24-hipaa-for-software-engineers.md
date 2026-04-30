@@ -252,7 +252,7 @@ Stripped to essentials:
 
 ### Data segregation (multi-tenant)
 
-- Row-level tenancy enforced at the ORM or database level. See the [Multi-tenant Django post](./2026-04-24-multi-tenant-django-fails-closed/) for one pattern.
+- Row-level tenancy enforced at the ORM or database level. See the [Multi-tenant Django post](../2026-04-24-multi-tenant-django-fails-closed/) for one pattern.
 - Cross-tenant requests return 404, not 403. Don't confirm existence.
 - Tenant context in every query path (middleware, background jobs, exports).
 
@@ -317,7 +317,7 @@ That's the shape. Execution takes 6–12 months for a real compliance posture.
 
 ## Related topics and posts
 
-- [Multi-tenant Django that fails closed](./2026-04-24-multi-tenant-django-fails-closed/), the tenancy pattern HIPAA effectively forces
-- [Django Part 10, Production](../topics/web/django/part-10-production/), the hardening that covers most HIPAA technical safeguards
-- [SOC 2 for software engineers](./2026-04-24-soc-2-for-software-engineers/), the audit that enterprise customers ask for alongside HIPAA
-- [OASIS in home-health software](./2026-04-24-oasis-in-home-health-software/), the domain-specific data model that HIPAA governs in this context
+- [Multi-tenant Django that fails closed](../2026-04-24-multi-tenant-django-fails-closed/), the tenancy pattern HIPAA effectively forces
+- [Django Part 10, Production](../../topics/web/django/part-10-production/), the hardening that covers most HIPAA technical safeguards
+- [SOC 2 for software engineers](../2026-04-24-soc-2-for-software-engineers/), the audit that enterprise customers ask for alongside HIPAA
+- [OASIS in home-health software](../2026-04-24-oasis-in-home-health-software/), the domain-specific data model that HIPAA governs in this context

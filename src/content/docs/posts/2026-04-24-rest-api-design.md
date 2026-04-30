@@ -221,7 +221,7 @@ REST doesn't dictate how to authenticate, but idiomatic choices:
 
 Avoid auth via query parameters. Query strings end up in access logs and browser history.
 
-See the companion [sessions, JWTs, and cookies post](./2026-04-24-sessions-jwts-cookies/) for the security tradeoffs.
+See the companion [sessions, JWTs, and cookies post](../2026-04-24-sessions-jwts-cookies/) for the security tradeoffs.
 
 ## Rate limiting
 
@@ -234,7 +234,7 @@ X-RateLimit-Reset: 1714065600
 Retry-After: 30
 ```
 
-Actual rate limiting is its own topic, see the [throttling and rate-limiting post](./2026-04-24-throttling-and-rate-limiting/).
+Actual rate limiting is its own topic, see the [throttling and rate-limiting post](../2026-04-24-throttling-and-rate-limiting/).
 
 ## Idempotency keys
 
@@ -346,7 +346,7 @@ Four decisions. Every other design question (casing, verbs, status codes) has a 
 
 ## Related topics and posts
 
-- [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [Stateless auth](./2026-04-24-stateless-auth/)
-- [Sessions, JWTs, and cookies, security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
-- [Django Part 6, DRF basics](../topics/web/django/part-06-drf-basics/)
+- [Throttling and rate limiting](../2026-04-24-throttling-and-rate-limiting/)
+- [Stateless auth](../2026-04-24-stateless-auth/)
+- [Sessions, JWTs, and cookies, security and tradeoffs](../2026-04-24-sessions-jwts-cookies/)
+- [Django Part 6, DRF basics](../../topics/web/django/part-06-drf-basics/)

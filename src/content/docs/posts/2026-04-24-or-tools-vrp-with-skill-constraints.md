@@ -144,6 +144,6 @@ Full code in [`home-health-provider-skeleton`](https://github.com/waggertron/hom
 
 ## See also
 
-- [Vehicle Routing Problem topic](../topics/cs/vehicle-routing/), full background on CVRP, VRPTW, PDP
-- [Haversine Distance](../topics/cs/haversine-distance/), the matrix this VRP consumes
-- [Django Part 9, Async and background tasks](../topics/web/django/part-09-async-and-background-tasks/), Celery and Channels
+- [Vehicle Routing Problem topic](../../topics/cs/vehicle-routing/), full background on CVRP, VRPTW, PDP
+- [Haversine Distance](../../topics/cs/haversine-distance/), the matrix this VRP consumes
+- [Django Part 9, Async and background tasks](../../topics/web/django/part-09-async-and-background-tasks/), Celery and Channels

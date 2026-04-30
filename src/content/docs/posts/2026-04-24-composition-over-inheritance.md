@@ -217,5 +217,5 @@ If most answers point away from inheritance, refactor. If most point toward, lea
 
 ## Related topics and posts
 
-- [SOLID principles](./2026-04-24-solid-principles/), LSP and OCP are deeply tied to this choice
-- [Functional Core, Imperative Shell](../topics/cs/functional-core-imperative-shell/), composition writ large
+- [SOLID principles](../2026-04-24-solid-principles/), LSP and OCP are deeply tied to this choice
+- [Functional Core, Imperative Shell](../../topics/cs/functional-core-imperative-shell/), composition writ large

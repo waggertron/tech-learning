@@ -226,7 +226,7 @@ Every edit to an OASIS item by every user needs a log. Not nice-to-have, regulat
 
 ### PHI everywhere
 
-OASIS data is PHI. All of it. See the [HIPAA post](./2026-04-24-hipaa-for-software-engineers/) for the full treatment. Specific to OASIS:
+OASIS data is PHI. All of it. See the [HIPAA post](../2026-04-24-hipaa-for-software-engineers/) for the full treatment. Specific to OASIS:
 
 - Submission XML files contain raw PHI. Storage and transit are encrypted.
 - Export features (CSV, PDF) need audit logging and access controls.
@@ -283,7 +283,7 @@ Most operational tooling in home health (dispatch, routing, patient engagement) 
 
 ## Related topics and posts
 
-- [HIPAA for software engineers](./2026-04-24-hipaa-for-software-engineers/), how OASIS data must be protected
-- [SOC 2 for software engineers](./2026-04-24-soc-2-for-software-engineers/), the audit that sits alongside HIPAA
-- [Vehicle Routing Problem topic](../topics/cs/vehicle-routing/), the operational layer that sits on top of OASIS-driven scheduling
-- [Multi-tenant Django that fails closed](./2026-04-24-multi-tenant-django-fails-closed/), the tenancy pattern for multi-agency OASIS software
+- [HIPAA for software engineers](../2026-04-24-hipaa-for-software-engineers/), how OASIS data must be protected
+- [SOC 2 for software engineers](../2026-04-24-soc-2-for-software-engineers/), the audit that sits alongside HIPAA
+- [Vehicle Routing Problem topic](../../topics/cs/vehicle-routing/), the operational layer that sits on top of OASIS-driven scheduling
+- [Multi-tenant Django that fails closed](../2026-04-24-multi-tenant-django-fails-closed/), the tenancy pattern for multi-agency OASIS software

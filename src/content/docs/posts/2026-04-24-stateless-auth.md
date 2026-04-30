@@ -228,7 +228,7 @@ Three rules worth internalizing:
 - **Put large mutable state in the JWT.** Tokens bloat; stale data serves for the life of the token.
 - **Not verifying `aud`/`iss`.** Tokens intended for service A accepted by service B is a privilege-escalation vulnerability.
 - **Using HS256 when RS256/ES256 is available.** Symmetric keys don't scale across service boundaries.
-- **Storing JWTs in `localStorage`.** XSS-readable. See the [sessions/JWTs/cookies post](./2026-04-24-sessions-jwts-cookies/).
+- **Storing JWTs in `localStorage`.** XSS-readable. See the [sessions/JWTs/cookies post](../2026-04-24-sessions-jwts-cookies/).
 - **Never rotating signing keys.** A leaked key is valid forever.
 - **Missing `exp`.** Rare in practice, catastrophic when it happens.
 - **Trusting claims without verification.** Base64-decoding a JWT without verifying the signature reads whatever the attacker wants it to read.
@@ -255,7 +255,7 @@ JWTs are great when their model fits. They're not a default.
 
 ## Related topics and posts
 
-- [Sessions, JWTs, and cookies, security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
-- [REST API design](./2026-04-24-rest-api-design/)
-- [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/)
+- [Sessions, JWTs, and cookies, security and tradeoffs](../2026-04-24-sessions-jwts-cookies/)
+- [REST API design](../2026-04-24-rest-api-design/)
+- [Throttling and rate limiting](../2026-04-24-throttling-and-rate-limiting/)
+- [Django Part 5, Authentication](../../topics/web/django/part-05-authentication/)

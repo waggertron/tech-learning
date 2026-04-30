@@ -108,5 +108,5 @@ Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-healt
 
 ## See also
 
-- [Django Part 1, Setup and MVT](../topics/web/django/part-01-setup-and-mvt/), settings, management commands
-- [Django Part 10, Production](../topics/web/django/part-10-production/), why seed scripts aren't backups
+- [Django Part 1, Setup and MVT](../../topics/web/django/part-01-setup-and-mvt/), settings, management commands
+- [Django Part 10, Production](../../topics/web/django/part-10-production/), why seed scripts aren't backups

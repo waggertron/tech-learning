@@ -9,7 +9,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-27-common-al
 
 ## What's in here
 
-Most interviews and most real systems pull from a small set of named algorithms. This is the reference for that set: what each one does, when to pick it, the canonical implementation, and the failure modes. Sister post: [Data structure complexity cheat sheet](./2026-04-27-data-structure-complexity-cheat-sheet/).
+Most interviews and most real systems pull from a small set of named algorithms. This is the reference for that set: what each one does, when to pick it, the canonical implementation, and the failure modes. Sister post: [Data structure complexity cheat sheet](../2026-04-27-data-structure-complexity-cheat-sheet/).
 
 Each algorithm has the same shape: **what, when, how, complexity, gotchas.**
 
@@ -636,7 +636,7 @@ If you can name the shape, you can quote the bound. Half the interview battle is
 
 ## Related topics
 
-- [Data structure complexity cheat sheet](./2026-04-27-data-structure-complexity-cheat-sheet/), the structures these algorithms run on.
-- [LeetCode 150](../topics/cs/leetcode-150/), problems organized by pattern, with solutions citing these algorithms.
-- [Graphs](../topics/cs/data-structures/graphs/), the longer-form data-structure page.
-- [Heaps and priority queues](../topics/cs/data-structures/heaps/), the structure underneath Dijkstra and Prim.
+- [Data structure complexity cheat sheet](../2026-04-27-data-structure-complexity-cheat-sheet/), the structures these algorithms run on.
+- [LeetCode 150](../../topics/cs/leetcode-150/), problems organized by pattern, with solutions citing these algorithms.
+- [Graphs](../../topics/cs/data-structures/graphs/), the longer-form data-structure page.
+- [Heaps and priority queues](../../topics/cs/data-structures/heaps/), the structure underneath Dijkstra and Prim.

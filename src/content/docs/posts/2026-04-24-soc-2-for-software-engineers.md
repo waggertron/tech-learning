@@ -233,7 +233,7 @@ Treat SOC 2 as the floor, not the ceiling. A team serious about security does mo
 
 ## Related topics and posts
 
-- [Django Part 10, Production](../topics/web/django/part-10-production/), the technical hardening side
-- [GitOps](../topics/ops/gitops/), provides an audit trail almost for free
-- [Multi-tenant Django that fails closed](./2026-04-24-multi-tenant-django-fails-closed/), isolation as a control
-- Posts on [HIPAA](./2026-04-24-hipaa-for-software-engineers/) and [OASIS](./2026-04-24-oasis-in-home-health-software/), the healthcare compliance companions
+- [Django Part 10, Production](../../topics/web/django/part-10-production/), the technical hardening side
+- [GitOps](../../topics/ops/gitops/), provides an audit trail almost for free
+- [Multi-tenant Django that fails closed](../2026-04-24-multi-tenant-django-fails-closed/), isolation as a control
+- Posts on [HIPAA](../2026-04-24-hipaa-for-software-engineers/) and [OASIS](../2026-04-24-oasis-in-home-health-software/), the healthcare compliance companions

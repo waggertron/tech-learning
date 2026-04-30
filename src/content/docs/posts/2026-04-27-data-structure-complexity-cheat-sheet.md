@@ -261,7 +261,7 @@ If you can match a problem to one of these shapes, you can quote the complexity 
 
 ## Related topics
 
-- [Data structures](../topics/cs/data-structures/), the longer-form pages, one per structure.
-- [LeetCode 150](../topics/cs/leetcode-150/), problems organized by pattern, with complexity in every solution.
-- [Heaps and priority queues](../topics/cs/data-structures/heaps/), why `heapify` is O(n) and not O(n log n).
-- [Stacks](../topics/cs/data-structures/stacks/), the LIFO discipline and where it shows up.
+- [Data structures](../../topics/cs/data-structures/), the longer-form pages, one per structure.
+- [LeetCode 150](../../topics/cs/leetcode-150/), problems organized by pattern, with complexity in every solution.
+- [Heaps and priority queues](../../topics/cs/data-structures/heaps/), why `heapify` is O(n) and not O(n log n).
+- [Stacks](../../topics/cs/data-structures/stacks/), the LIFO discipline and where it shows up.

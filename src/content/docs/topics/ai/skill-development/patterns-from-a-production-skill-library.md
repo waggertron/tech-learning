@@ -225,7 +225,7 @@ A library of forty skills is not the goal. A library where every entry earns its
 ## Related topics
 
 - [AI Skill Development, overview](./), the parent topic
-- [Writing a first skill](./writing-a-first-skill/), the minimal viable skill
-- [Frontmatter and discovery](./frontmatter-and-discovery/), how descriptions become routing signals
-- [Skill vs tool vs agent](./skill-vs-tool-vs-agent/), which knowledge goes into which unit
-- [AI Coding Tool Blindspots](../coding-tool-blindspots/), the failure modes skills are written against
+- [Writing a first skill](../writing-a-first-skill/), the minimal viable skill
+- [Frontmatter and discovery](../frontmatter-and-discovery/), how descriptions become routing signals
+- [Skill vs tool vs agent](../skill-vs-tool-vs-agent/), which knowledge goes into which unit
+- [AI Coding Tool Blindspots](../../coding-tool-blindspots/), the failure modes skills are written against

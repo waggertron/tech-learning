@@ -61,7 +61,7 @@ Client stores JWT in `localStorage` or in-memory. Sends it in `Authorization: Be
 | Token location | `localStorage` or JS memory |
 | XSS risk on token | **High**, any XSS exfiltrates it |
 | CSRF risk | **No**, no automatic attach; attacker must actively send the header |
-| Revocation | Hard, see [stateless auth post](./2026-04-24-stateless-auth/) |
+| Revocation | Hard, see [stateless auth post](../2026-04-24-stateless-auth/) |
 | Scale | No session store needed for verification |
 | Good for | Mobile apps, CLI tools, SPAs with strong CSP |
 
@@ -205,7 +205,7 @@ For any new authenticated product:
 - [ ] Short access-token lifetime (5–15 minutes).
 - [ ] Logout actually invalidates, delete session / add to denylist.
 - [ ] Max session length, force re-auth after N hours.
-- [ ] Rate limit login (see [throttling post](./2026-04-24-throttling-and-rate-limiting/)).
+- [ ] Rate limit login (see [throttling post](../2026-04-24-throttling-and-rate-limiting/)).
 - [ ] Audit log every auth decision (login, token refresh, logout, revocation).
 
 ## References
@@ -221,8 +221,8 @@ For any new authenticated product:
 
 ## Related topics and posts
 
-- [Stateless auth](./2026-04-24-stateless-auth/), the broader JWT discussion
-- [REST API design](./2026-04-24-rest-api-design/)
-- [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [Modern browser security concerns](./2026-04-24-modern-browser-security/)
-- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/)
+- [Stateless auth](../2026-04-24-stateless-auth/), the broader JWT discussion
+- [REST API design](../2026-04-24-rest-api-design/)
+- [Throttling and rate limiting](../2026-04-24-throttling-and-rate-limiting/)
+- [Modern browser security concerns](../2026-04-24-modern-browser-security/)
+- [Django Part 5, Authentication](../../topics/web/django/part-05-authentication/)

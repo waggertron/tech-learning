@@ -311,6 +311,6 @@ Ship that on day one; tune on day N.
 
 ## Related topics and posts
 
-- [REST API design](./2026-04-24-rest-api-design/), where rate-limit headers fit in
-- [Stateless auth](./2026-04-24-stateless-auth/), identifying the rate-limited client
-- [Modern browser security concerns](./2026-04-24-modern-browser-security/)
+- [REST API design](../2026-04-24-rest-api-design/), where rate-limit headers fit in
+- [Stateless auth](../2026-04-24-stateless-auth/), identifying the rate-limited client
+- [Modern browser security concerns](../2026-04-24-modern-browser-security/)

@@ -9,7 +9,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-vehicle-r
 
 ## Context
 
-Spent an afternoon reading through [Google OR-Tools' routing docs](https://developers.google.com/optimization/routing/vrp) and some surrounding papers. Writing up the shape of the problem and a few things that surprised me. Full structured notes are in my [Vehicle Routing topic](../topics/cs/vehicle-routing/); this post is the narrative version.
+Spent an afternoon reading through [Google OR-Tools' routing docs](https://developers.google.com/optimization/routing/vrp) and some surrounding papers. Writing up the shape of the problem and a few things that surprised me. Full structured notes are in my [Vehicle Routing topic](../../topics/cs/vehicle-routing/); this post is the narrative version.
 
 ## The one-line summary
 
@@ -75,11 +75,11 @@ For learning: OR-Tools is the right first tool. It's free, Python-accessible, th
 
 If you want to go deeper:
 
-- [VRP hub](../topics/cs/vehicle-routing/), concept, modeling primitives, when VRP is (and isn't) the right frame
-- [CVRP](../topics/cs/vehicle-routing/capacitated/), capacity constraint, full OR-Tools code sketch
-- [VRPTW](../topics/cs/vehicle-routing/time-windows/), time windows, Solomon benchmarks, why it's harder than it looks
-- [Pickup and Delivery](../topics/cs/vehicle-routing/pickup-and-delivery/), pairing constraints, ride-sharing applications
-- [Solution approaches](../topics/cs/vehicle-routing/solution-approaches/), all the metaheuristic machinery, OR-Tools API, when to upgrade
+- [VRP hub](../../topics/cs/vehicle-routing/), concept, modeling primitives, when VRP is (and isn't) the right frame
+- [CVRP](../../topics/cs/vehicle-routing/capacitated/), capacity constraint, full OR-Tools code sketch
+- [VRPTW](../../topics/cs/vehicle-routing/time-windows/), time windows, Solomon benchmarks, why it's harder than it looks
+- [Pickup and Delivery](../../topics/cs/vehicle-routing/pickup-and-delivery/), pairing constraints, ride-sharing applications
+- [Solution approaches](../../topics/cs/vehicle-routing/solution-approaches/), all the metaheuristic machinery, OR-Tools API, when to upgrade
 
 ## References I used
 

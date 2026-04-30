@@ -135,6 +135,6 @@ The line where a library starts earning its keep is around five state machines, 
 
 ## See also
 
-- [Django Part 6, DRF basics](../topics/web/django/part-06-drf-basics/), serializers, viewsets, custom actions
-- [Django Part 7, Advanced ORM](../topics/web/django/part-07-advanced-orm/), transactional updates
+- [Django Part 6, DRF basics](../../topics/web/django/part-06-drf-basics/), serializers, viewsets, custom actions
+- [Django Part 7, Advanced ORM](../../topics/web/django/part-07-advanced-orm/), transactional updates
 - Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton), full Visit state machine in `apps/api/visits/services.py`

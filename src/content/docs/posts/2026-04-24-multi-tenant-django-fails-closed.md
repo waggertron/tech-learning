@@ -93,6 +93,6 @@ I built this into a portfolio project ([`home-health-provider-skeleton`](https:/
 
 ## See also
 
-- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/), custom user models and JWT
-- [Django Part 7, Advanced ORM](../topics/web/django/part-07-advanced-orm/), managers, Q, and query composition
-- [Django Part 10, Production](../topics/web/django/part-10-production/), security headers and deployment hardening
+- [Django Part 5, Authentication](../../topics/web/django/part-05-authentication/), custom user models and JWT
+- [Django Part 7, Advanced ORM](../../topics/web/django/part-07-advanced-orm/), managers, Q, and query composition
+- [Django Part 10, Production](../../topics/web/django/part-10-production/), security headers and deployment hardening

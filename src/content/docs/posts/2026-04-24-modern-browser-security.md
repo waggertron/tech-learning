@@ -298,8 +298,8 @@ Before shipping a public site:
 
 ## Related topics and posts
 
-- [Sessions, JWTs, and cookies, security and tradeoffs](./2026-04-24-sessions-jwts-cookies/)
-- [Stateless auth](./2026-04-24-stateless-auth/)
-- [REST API design](./2026-04-24-rest-api-design/)
-- [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [AI Coding Tool Blindspots, Slopsquatting](../topics/ai/coding-tool-blindspots/slopsquatting/), an emerging supply-chain vector
+- [Sessions, JWTs, and cookies, security and tradeoffs](../2026-04-24-sessions-jwts-cookies/)
+- [Stateless auth](../2026-04-24-stateless-auth/)
+- [REST API design](../2026-04-24-rest-api-design/)
+- [Throttling and rate limiting](../2026-04-24-throttling-and-rate-limiting/)
+- [AI Coding Tool Blindspots, Slopsquatting](../../topics/ai/coding-tool-blindspots/slopsquatting/), an emerging supply-chain vector
