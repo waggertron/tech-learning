@@ -177,12 +177,30 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     height: 100%;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.85rem;
+    line-height: 1.4;
   }
   .pyrepl__editor-host :global(.cm-editor.cm-focused) {
     outline: none;
   }
   .pyrepl__editor-host :global(.cm-scroller) {
-    line-height: 1.45;
+    line-height: 1.4;
+  }
+  /* Starlight's content CSS adds vertical margin to direct child elements;
+     reset that inside the editor so each .cm-line isn't double-spaced. */
+  .pyrepl__editor-host :global(.cm-content),
+  .pyrepl__editor-host :global(.cm-content > *),
+  .pyrepl__editor-host :global(.cm-line),
+  .pyrepl__editor-host :global(.cm-gutter),
+  .pyrepl__editor-host :global(.cm-gutterElement) {
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .pyrepl__editor-host :global(.cm-line) {
+    padding: 0 4px;
+  }
+  .pyrepl__editor-host :global(.cm-gutterElement) {
+    line-height: 1.4;
   }
   .pyrepl__output {
     margin: 0;
