@@ -56,6 +56,30 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     return pyodidePromise;
   }
 
+  // CodeMirror theme-injected overrides with the right specificity to beat
+  // Starlight's content CSS (which would otherwise add vertical margin to
+  // every .cm-line and balloon the gutter line-height).
+  const tightLines = EditorView.theme({
+    '&': { fontSize: '0.85rem' },
+    '.cm-content': {
+      lineHeight: '1.4',
+      padding: '4px 0',
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    },
+    '.cm-line': {
+      lineHeight: '1.4',
+      padding: '0 4px',
+      margin: '0',
+    },
+    '.cm-gutters': { borderRight: 'none' },
+    '.cm-gutterElement': {
+      lineHeight: '1.4',
+      padding: '0 8px 0 4px',
+      margin: '0',
+    },
+    '.cm-scroller': { lineHeight: '1.4' },
+  });
+
   function makeEditor(host: HTMLElement, initialCode: string): EditorView {
     return new EditorView({
       doc: initialCode,
@@ -69,6 +93,7 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         python(),
         oneDark,
+        tightLines,
         keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
         EditorState.tabSize.of(4),
       ],
