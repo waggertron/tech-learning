@@ -1,0 +1,55 @@
+class Node:
+    __slots__ = ('key', 'val', 'prev', 'next')
+
+    def __init__(self, key=0, val=0):
+        self.key = key
+        self.val = val
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        pass  # TODO: implement
+
+    def _remove(self, node):
+        pass  # TODO: implement
+
+    def _add_to_front(self, node):
+        pass  # TODO: implement
+
+    def get(self, key: int) -> int:
+        pass  # TODO: implement
+
+    def put(self, key: int, value: int) -> None:
+        pass  # TODO: implement
+
+def _run_tests():
+    cache = LRUCache(2)
+    cache.put(1, 1)
+    cache.put(2, 2)
+    assert cache.get(1) == 1
+    cache.put(3, 3)
+    assert cache.get(2) == -1
+    cache.put(4, 4)
+    assert cache.get(1) == -1
+    assert cache.get(3) == 3
+    assert cache.get(4) == 4
+    c1 = LRUCache(1)
+    c1.put(1, 10)
+    assert c1.get(1) == 10
+    c1.put(2, 20)
+    assert c1.get(1) == -1
+    assert c1.get(2) == 20
+    c2 = LRUCache(2)
+    c2.put(1, 1)
+    c2.put(2, 2)
+    c2.put(1, 100)
+    c2.put(3, 3)
+    assert c2.get(1) == 100
+    assert c2.get(2) == -1
+    assert c2.get(3) == 3
+    print('all tests pass')
+
+if __name__ == '__main__':
+    _run_tests()
