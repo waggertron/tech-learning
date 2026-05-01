@@ -1,0 +1,170 @@
+---
+title: "53. Maximum Subarray (Medium)"
+description: Find the contiguous subarray with the largest sum, Kadane's algorithm.
+parent: greedy
+tags: [leetcode, neetcode-150, greedy, dp, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './053-maximum-subarray.py?raw';
+
+## Problem
+
+Given an integer array `nums`, find the contiguous subarray (at least one element) with the largest sum, and return its sum.
+
+**Example**
+- `nums = [-2,1,-3,4,-1,2,1,-5,4]` → `6` (subarray `[4,-1,2,1]`)
+- `nums = [1]` → `1`
+- `nums = [5,4,-1,7,8]` → `23`
+
+LeetCode 53 · [Link](https://leetcode.com/problems/maximum-subarray/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `053-maximum-subarray.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="maximum-subarray" />
+
+## Approach 1: Brute force, every subarray
+
+```python
+def max_subarray(nums):
+    best = nums[0]                      # L1: O(1)
+    for i in range(len(nums)):          # L2: outer loop, n iterations
+        total = 0
+        for j in range(i, len(nums)):   # L3: inner loop, n-i iterations
+            total += nums[j]            # L4: O(1)
+            best = max(best, total)     # L5: O(1)
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L3, L4, L5 (inner loop)** | **O(1)** | **n(n+1)/2 total** | **O(n²)** ← dominates |
+
+Every (i, j) subarray pair is visited exactly once; there are n(n+1)/2 such pairs.
+
+**Complexity**
+- **Time:** O(n²), driven by L3/L4/L5 (the nested loop over all start/end pairs).
+- **Space:** O(1).
+
+## Approach 2: Divide and conquer
+
+Split in half; combine: max is entirely left, entirely right, or spans the midpoint (compute best suffix of left + best prefix of right).
+
+```python
+def max_subarray(nums):
+    def helper(lo, hi):                             # L1: called O(n) times total
+        if lo == hi:
+            return nums[lo]                         # L2: O(1) base case
+        mid = (lo + hi) // 2                        # L3: O(1)
+        left_max = helper(lo, mid)                  # L4: recurse left half
+        right_max = helper(mid + 1, hi)             # L5: recurse right half
+
+        left_suffix = right_prefix = float('-inf')
+        total = 0
+        for i in range(mid, lo - 1, -1):            # L6: scan left half O(n/2)
+            total += nums[i]
+            left_suffix = max(left_suffix, total)
+        total = 0
+        for i in range(mid + 1, hi + 1):            # L7: scan right half O(n/2)
+            total += nums[i]
+            right_prefix = max(right_prefix, total)
+
+        return max(left_max, right_max, left_suffix + right_prefix)
+    return helper(0, len(nums) - 1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L4, L5 (recursion) | T(n/2) each | log n levels | drives recurrence |
+| **L6, L7 (cross-sum scan)** | **O(n)** | **at each level** | **O(n log n)** ← dominates |
+
+The recurrence is T(n) = 2T(n/2) + O(n), which solves to O(n log n) by the Master Theorem (case 2).
+
+**Complexity**
+- **Time:** O(n log n), driven by L6/L7 (the cross-midpoint scan repeated at each recursion level).
+- **Space:** O(log n) recursion stack depth.
+
+## Approach 3: Kadane's algorithm (optimal greedy)
+
+Keep a running sum. If it goes negative, reset to 0, no point carrying negative baggage forward.
+
+```python
+def max_subarray(nums):
+    best = cur = nums[0]        # L1: O(1)
+    for x in nums[1:]:          # L2: single pass, n-1 iterations
+        cur = max(x, cur + x)   # L3: greedy choice: extend or restart
+        best = max(best, cur)   # L4: track global best
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| **L2, L3, L4 (loop)** | **O(1)** | **n-1** | **O(n)** ← dominates |
+
+A single pass; each element is touched exactly once.
+
+**Complexity**
+- **Time:** O(n), driven by L2/L3/L4 (the single linear scan).
+- **Space:** O(1).
+
+### Why greedy works
+At each position, the best subarray ending here is either "extend the previous best" or "start fresh from here." That's it, a greedy choice (restart vs. extend) at every index suffices, because a negative running total can only hurt future extensions.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Every subarray | O(n²) | O(1) |
+| Divide and conquer | O(n log n) | O(log n) |
+| **Kadane's algorithm** | **O(n)** | **O(1)** |
+
+Kadane's is the canonical answer. Same template: Maximum Product Subarray (152) needs a twist (track max AND min); Best Time to Buy/Sell Stock (121) is Kadane on price *differences*.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_053.py and run.
+# Uses the canonical implementation (Approach 3: Kadane's algorithm).
+
+def max_subarray(nums):
+    best = cur = nums[0]
+    for x in nums[1:]:
+        cur = max(x, cur + x)
+        best = max(best, cur)
+    return best
+
+def _run_tests():
+    assert max_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6
+    assert max_subarray([1]) == 1
+    assert max_subarray([5, 4, -1, 7, 8]) == 23
+    assert max_subarray([-1]) == -1                # all negative, single element
+    assert max_subarray([-2, -3, -1, -5]) == -1    # all negative, pick least bad
+    assert max_subarray([1, 2, 3, 4, 5]) == 15     # all positive, whole array
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Arrays](../../../data-structures/arrays/), input; running sum

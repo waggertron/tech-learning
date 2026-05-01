@@ -1,5 +1,3 @@
-from collections import Counter
-
 def is_n_straight_hand(hand, group_size):
     pass  # TODO: implement
 

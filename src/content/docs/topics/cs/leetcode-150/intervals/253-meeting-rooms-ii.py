@@ -1,5 +1,3 @@
-import heapq
-
 def min_meeting_rooms(intervals):
     pass  # TODO: implement
 

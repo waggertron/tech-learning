@@ -1,5 +1,3 @@
-from collections import defaultdict, deque
-
 def ladder_length(beginWord, endWord, wordList):
     pass  # TODO: implement
 

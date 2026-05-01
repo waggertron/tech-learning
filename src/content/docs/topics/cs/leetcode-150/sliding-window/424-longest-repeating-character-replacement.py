@@ -1,5 +1,3 @@
-from collections import Counter
-
 def character_replacement(s: str, k: int) -> int:
     pass  # TODO: implement
 

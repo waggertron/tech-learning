@@ -1,0 +1,169 @@
+---
+title: "121. Best Time to Buy and Sell Stock (Easy)"
+description: Maximize profit from one buy and one sell, given an array of daily prices.
+parent: sliding-window
+tags: [leetcode, neetcode-150, arrays, sliding-window, easy]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './121-best-time-to-buy-and-sell-stock.py?raw';
+
+## Problem
+
+Given an array `prices` where `prices[i]` is the price of a stock on day `i`, choose a single day to buy and a later day to sell to maximize profit. Return the maximum profit you can achieve; if no profit is possible, return 0.
+
+**Example**
+- `prices = [7, 1, 5, 3, 6, 4]` → `5` (buy at 1, sell at 6)
+- `prices = [7, 6, 4, 3, 1]` → `0`
+
+LeetCode 121 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) · *Easy*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `121-best-time-to-buy-and-sell-stock.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="best-time-to-buy-and-sell-stock" />
+
+## Approach 1: Brute force, every pair
+
+Try all `(buy_day, sell_day)` with `buy_day < sell_day`.
+
+```python
+def max_profit(prices: list[int]) -> int:
+    n = len(prices)
+    best = 0
+    for i in range(n):                               # L1: outer loop, n iterations
+        for j in range(i + 1, n):                   # L2: inner loop, up to n-i-1 iterations
+            best = max(best, prices[j] - prices[i]) # L3: O(1) arithmetic + max
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(prices).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) | n | O(n) |
+| **L2/L3 (inner loop)** | **O(1)** | **n(n-1)/2** | **O(n²)** ← dominates |
+
+Every pair (buy_day, sell_day) with buy_day \< sell_day is evaluated once. There are n(n-1)/2 such pairs, giving the O(n²) total.
+
+**Complexity**
+- **Time:** O(n²), driven by L2/L3 (the O(n²) inner loop pairs).
+- **Space:** O(1).
+
+Clear, correct, slow.
+
+## Approach 2: Prefix min array
+
+Precompute, for each day, the minimum price seen so far. Then one pass to compute the max of `prices[i], min_so_far[i]`.
+
+```python
+def max_profit(prices: list[int]) -> int:
+    n = len(prices)
+    if n < 2:
+        return 0
+    min_so_far = [prices[0]] * n           # L1: O(n) allocation
+    for i in range(1, n):                  # L2: first pass, n-1 iterations
+        min_so_far[i] = min(min_so_far[i - 1], prices[i])  # L3: O(1) per step
+    return max(prices[i] - min_so_far[i] for i in range(n))  # L4: O(n) second pass
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(prices).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (allocate array) | O(n) | 1 | O(n) |
+| **L2/L3 (prefix min pass)** | **O(1)** | **n-1** | **O(n)** ← tied for dominance |
+| **L4 (max profit pass)** | **O(1)** | **n** | **O(n)** ← tied for dominance |
+
+Two linear scans of the same array. The O(n) space for `min_so_far` is the only cost beyond O(1).
+
+**Complexity**
+- **Time:** O(n), driven by L2/L3 and L4 (two linear passes).
+- **Space:** O(n) for the prefix array.
+
+## Approach 3: Single pass with running min (optimal)
+
+Track the minimum price seen so far and the best profit, in one pass.
+
+```python
+def max_profit(prices: list[int]) -> int:
+    lowest = float('inf')             # L1: O(1)
+    best = 0                          # L2: O(1)
+    for price in prices:              # L3: single loop, n iterations
+        if price < lowest:            # L4: O(1) comparison
+            lowest = price            # L5: O(1) update buy candidate
+        else:
+            best = max(best, price - lowest)  # L6: O(1) profit check
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(prices).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1/L2 (init) | O(1) | 1 | O(1) |
+| **L3 (loop)** | **O(1) body** | **n** | **O(n)** ← dominates |
+| L4/L5 (update min) | O(1) | at most n | O(n) |
+| L6 (profit check) | O(1) | at most n | O(n) |
+
+One pass, two variables. L5 and L6 are mutually exclusive per iteration (either we found a cheaper buy, or we try a sell), so neither has hidden costs.
+
+**Complexity**
+- **Time:** O(n), driven by L3 (one linear pass).
+- **Space:** O(1).
+
+### Why it's a sliding window
+`left` marks the buy day (always the minimum seen so far); `right` sweeps forward. When a better buy day appears, `left` jumps to it. Each day is visited once; the window width is variable.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Every pair | O(n²) | O(1) |
+| Prefix min array | O(n) | O(n) |
+| **Running min + profit** | **O(n)** | **O(1)** |
+
+The single-pass template generalizes to many "best X after running min/max" problems (including Maximum Subarray, also known as Kadane's).
+
+## Test cases
+
+```python
+# Quick smoke tests - paste into a REPL or save as test_121.py and run.
+# Uses the optimal Approach 3 implementation.
+
+def max_profit(prices: list) -> int:
+    lowest = float('inf')
+    best = 0
+    for price in prices:
+        if price < lowest:
+            lowest = price
+        else:
+            best = max(best, price - lowest)
+    return best
+
+def _run_tests():
+    assert max_profit([7, 1, 5, 3, 6, 4]) == 5    # buy at 1, sell at 6
+    assert max_profit([7, 6, 4, 3, 1]) == 0        # strictly decreasing, no profit
+    assert max_profit([1]) == 0                    # single price, can't sell
+    assert max_profit([1, 2]) == 1                 # two prices, simple profit
+    assert max_profit([2, 4, 1]) == 2              # profit before the new low
+    assert max_profit([3, 3, 3]) == 0              # all same price
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Arrays](../../../data-structures/arrays/), input; running-min sliding window

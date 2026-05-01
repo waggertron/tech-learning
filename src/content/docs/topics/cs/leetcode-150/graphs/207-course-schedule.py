@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 def can_finish(num_courses, prerequisites):
     pass  # TODO: implement
 

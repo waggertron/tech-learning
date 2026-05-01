@@ -1,5 +1,3 @@
-from collections import Counter
-
 def least_interval(tasks, n):
     pass  # TODO: implement
 

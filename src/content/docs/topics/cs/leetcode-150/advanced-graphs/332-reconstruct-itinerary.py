@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 def find_itinerary(tickets):
     pass  # TODO: implement
 

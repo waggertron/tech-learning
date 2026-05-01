@@ -1,0 +1,168 @@
+---
+title: "125. Valid Palindrome (Easy)"
+description: Determine if a string is a palindrome, considering only alphanumeric characters and ignoring case.
+parent: two-pointers
+tags: [leetcode, neetcode-150, strings, two-pointers, easy]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './125-valid-palindrome.py?raw';
+
+## Problem
+
+Given a string `s`, return `true` if it reads the same forwards and backwards **after** removing non-alphanumeric characters and lowercasing the rest.
+
+**Examples**
+- `s = "A man, a plan, a canal: Panama"` → `true`
+- `s = "race a car"` → `false`
+- `s = " "` → `true` (empty after cleaning)
+
+LeetCode 125 · [Link](https://leetcode.com/problems/valid-palindrome/) · *Easy*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `125-valid-palindrome.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="valid-palindrome" />
+
+## Approach 1: Brute force, clean, then compare to reverse
+
+Filter to alphanumerics, lowercase, and compare to the reversed string.
+
+```python
+def is_palindrome(s: str) -> bool:
+    cleaned = "".join(ch.lower() for ch in s if ch.isalnum())  # L1: O(n) filter+join
+    return cleaned == cleaned[::-1]                             # L2: O(n) reverse+compare
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (filter + join)** | **O(n)** | **1** | **O(n)** ← dominates |
+| L2 (reverse + compare) | O(n) | 1 | O(n) |
+
+Both steps are linear; neither dominates asymptotically.
+
+**Complexity**
+- **Time:** O(n), driven by L1/L2 (two linear passes).
+- **Space:** O(n). The cleaned string and its reverse.
+
+Direct and clear, but uses an extra O(n) allocation where O(1) is achievable.
+
+## Approach 2: Clean, then two pointers
+
+Build the cleaned string, then walk from both ends. Same asymptotics as Approach 1 with an early-exit on the first mismatch.
+
+```python
+def is_palindrome(s: str) -> bool:
+    cleaned = [ch.lower() for ch in s if ch.isalnum()]  # L1: O(n) filter
+    l, r = 0, len(cleaned) - 1                          # L2: O(1) init pointers
+    while l < r:                                         # L3: at most n/2 iterations
+        if cleaned[l] != cleaned[r]:                     # L4: O(1) compare
+            return False                                 # L5: O(1) early exit
+        l, r = l + 1, r - 1                             # L6: O(1) advance both
+    return True
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (filter)** | **O(n)** | **1** | **O(n)** ← dominates |
+| L2 (init pointers) | O(1) | 1 | O(1) |
+| L3-L6 (two-pointer scan) | O(1) | at most n/2 | O(n) |
+
+The filter pass dominates; the pointer scan is at most half the cleaned length.
+
+**Complexity**
+- **Time:** O(n), driven by L1 (filter) and L3/L4 (scan). Best case O(1) (first mismatch).
+- **Space:** O(n). The cleaned list.
+
+## Approach 3: Two pointers, skip non-alphanumerics in-place (optimal)
+
+Walk both ends of the original string, skipping over non-alphanumeric characters on the fly. No extra allocation.
+
+```python
+def is_palindrome(s: str) -> bool:
+    l, r = 0, len(s) - 1                # L1: O(1) init pointers
+    while l < r:                         # L2: at most n steps total
+        while l < r and not s[l].isalnum():  # L3: skip non-alnum on left
+            l += 1                       # L4: O(1)
+        while l < r and not s[r].isalnum():  # L5: skip non-alnum on right
+            r -= 1                       # L6: O(1)
+        if s[l].lower() != s[r].lower():  # L7: O(1) compare
+            return False                  # L8: O(1) early exit
+        l, r = l + 1, r - 1             # L9: O(1) advance both
+    return True
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init) | O(1) | 1 | O(1) |
+| L2 (outer loop) | O(1) | at most n | O(n) |
+| **L3-L6 (skip non-alnum)** | **O(1) per step** | **n total** | **O(n)** ← dominates |
+| L7-L9 (compare + advance) | O(1) | at most n/2 | O(n) |
+
+Each character in `s` is touched at most once (either skipped in L3/L5 or compared in L7). Total work is O(n).
+
+**Complexity**
+- **Time:** O(n), driven by L3-L6 (each character visited once). Each index is visited at most once.
+- **Space:** O(1). No auxiliary structures.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Clean + reverse compare | O(n) | O(n) |
+| Clean + two pointers | O(n) | O(n) |
+| **Two pointers in place** | **O(n)** | **O(1)** |
+
+Same Big-O on time, but the in-place two-pointer version is the canonical "optimal-space" answer.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_valid_palindrome.py and run.
+# Uses the canonical implementation (Approach 3: two pointers in place).
+
+def is_palindrome(s: str) -> bool:
+    l, r = 0, len(s) - 1
+    while l < r:
+        while l < r and not s[l].isalnum():
+            l += 1
+        while l < r and not s[r].isalnum():
+            r -= 1
+        if s[l].lower() != s[r].lower():
+            return False
+        l, r = l + 1, r - 1
+    return True
+
+def _run_tests():
+    assert is_palindrome("A man, a plan, a canal: Panama") == True
+    assert is_palindrome("race a car") == False
+    assert is_palindrome(" ") == True
+    assert is_palindrome("") == True
+    assert is_palindrome("a") == True
+    assert is_palindrome("aa") == True
+    assert is_palindrome("ab") == False
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Strings](../../../data-structures/strings/), input; in-place traversal with `isalnum`

@@ -1,7 +1,3 @@
-import heapq
-
-from collections import defaultdict
-
 class Twitter:
 
     def __init__(self):

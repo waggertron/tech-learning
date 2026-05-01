@@ -1,5 +1,3 @@
-import heapq
-
 def min_interval(intervals, queries):
     pass  # TODO: implement
 

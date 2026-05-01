@@ -1,5 +1,3 @@
-from collections import defaultdict, deque
-
 def alien_order(words):
     pass  # TODO: implement
 

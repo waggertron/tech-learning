@@ -1,5 +1,3 @@
-from collections import deque
-
 def max_sliding_window(nums: list, k: int) -> list:
     pass  # TODO: implement
 

@@ -1,0 +1,157 @@
+---
+title: "198. House Robber (Medium)"
+description: Maximum money you can rob without alerting any two adjacent houses.
+parent: 1d-dynamic-programming
+tags: [leetcode, neetcode-150, dp, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './198-house-robber.py?raw';
+
+## Problem
+
+Given `nums[i]` = money at house `i`, return the maximum amount you can rob without robbing two adjacent houses.
+
+**Example**
+- `nums = [1, 2, 3, 1]` → `4` (rob houses 0 and 2)
+- `nums = [2, 7, 9, 3, 1]` → `12` (rob 0, 2, 4)
+
+LeetCode 198 · [Link](https://leetcode.com/problems/house-robber/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `198-house-robber.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="house-robber" />
+
+## Approach 1: Recursive with take/skip
+
+`f(i) = max(nums[i] + f(i+2), f(i+1))`.
+
+```python
+def rob(nums):
+    def f(i):                              # L1: define recursive helper
+        if i >= len(nums):                 # L2: O(1) base case check
+            return 0
+        return max(nums[i] + f(i + 2), f(i + 1))  # L3: two recursive calls each time
+    return f(0)                            # L4: O(1) entry call
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (base case) | O(1) | O(2ⁿ) unique + repeated calls | O(2ⁿ) |
+| **L3 (two recursive branches)** | **O(1) + subtree cost** | **O(2ⁿ) calls** | **O(2ⁿ)** ← dominates |
+| L4 (entry) | O(1) | 1 | O(1) |
+
+Every call fans out into two subproblems with no memoization, so the call tree is a full binary tree of depth n. Total nodes: O(2ⁿ).
+
+**Complexity**
+- **Time:** O(2ⁿ), driven by L3 (unbounded branching without caching).
+- **Space:** O(n) for the recursion stack at depth n.
+
+## Approach 2: Memoized
+
+```python
+from functools import lru_cache
+
+def rob(nums):
+    n = len(nums)
+    @lru_cache(maxsize=None)               # L1: O(1) decoration
+    def f(i):
+        if i >= n:                         # L2: O(1) base case check
+            return 0
+        return max(nums[i] + f(i + 2), f(i + 1))  # L3: O(1) per unique call (cache hits after)
+    return f(0)                            # L4: O(1) entry call
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (lru_cache setup) | O(1) | 1 | O(1) |
+| L2 (base case) | O(1) | n+1 unique calls | O(n) |
+| **L3 (compute + cache store)** | **O(1)** | **n unique calls** | **O(n)** ← dominates |
+| L4 (entry) | O(1) | 1 | O(1) |
+
+Each index `i` is computed exactly once; subsequent calls return a cached result in O(1). The n subproblems each do O(1) work, giving O(n) total.
+
+**Complexity**
+- **Time:** O(n), driven by L3 (n unique subproblems, each computed once).
+- **Space:** O(n) for the cache and recursion stack.
+
+## Approach 3: Bottom-up with two variables (optimal)
+
+`prev2 = dp[i-2]`, `prev1 = dp[i-1]`. `dp[i] = max(prev1, prev2 + nums[i])`.
+
+```python
+def rob(nums):
+    prev2, prev1 = 0, 0                    # L1: O(1) initialization
+    for x in nums:                         # L2: loop over n elements
+        prev2, prev1 = prev1, max(prev1, prev2 + x)  # L3: O(1) per iteration
+    return prev1                           # L4: O(1) return
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init vars) | O(1) | 1 | O(1) |
+| L2 (loop header) | O(1) | n+1 (including exit test) | O(n) |
+| **L3 (update vars)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L4 (return) | O(1) | 1 | O(1) |
+
+The entire DP table is collapsed to two scalars. Each step only needs the previous two values, so we discard everything else. No array allocation, no recursion overhead.
+
+**Complexity**
+- **Time:** O(n), driven by L3 (single pass over nums).
+- **Space:** O(1), only two scalar variables regardless of input size.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Naive take/skip | O(2ⁿ) | O(n) |
+| Memoized | O(n) | O(n) |
+| **Bottom-up, two vars** | **O(n)** | **O(1)** |
+
+This is the canonical "take or skip" DP pattern. Reappears in Paint House, Delete and Earn, and Best Time to Buy/Sell with Cooldown.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_198_house_robber.py and run.
+# Uses the canonical implementation (Approach 3: bottom-up two variables).
+
+def rob(nums):
+    prev2, prev1 = 0, 0
+    for x in nums:
+        prev2, prev1 = prev1, max(prev1, prev2 + x)
+    return prev1
+
+def _run_tests():
+    assert rob([1, 2, 3, 1]) == 4        # LeetCode example 1: rob houses 0 and 2
+    assert rob([2, 7, 9, 3, 1]) == 12    # LeetCode example 2: rob houses 0, 2, 4
+    assert rob([0]) == 0                  # single house with zero value
+    assert rob([5]) == 5                  # single house
+    assert rob([2, 1]) == 2              # two houses, take the larger
+    assert rob([1, 3, 1, 3, 100]) == 103 # skip to last big value
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Arrays](../../../data-structures/arrays/), input; collapsed DP

@@ -1,0 +1,189 @@
+---
+title: "139. Word Break (Medium)"
+description: Determine whether a string can be segmented into space-separated words from a given dictionary.
+parent: 1d-dynamic-programming
+tags: [leetcode, neetcode-150, dp, strings, hash-tables, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './139-word-break.py?raw';
+
+## Problem
+
+Given a string `s` and a dictionary of strings `wordDict`, return `true` if `s` can be segmented into a space-separated sequence of one or more dictionary words.
+
+**Example**
+- `s = "leetcode"`, `wordDict = ["leet", "code"]` → `true`
+- `s = "applepenapple"`, `wordDict = ["apple", "pen"]` → `true`
+- `s = "catsandog"`, `wordDict = ["cats", "dog", "sand", "and", "cat"]` → `false`
+
+LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `139-word-break.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="word-break" />
+
+## Approach 1: Recursive, try every prefix
+
+```python
+def word_break(s, word_dict):
+    words = set(word_dict)                        # L1: O(W) to build set
+    def f(start):
+        if start == len(s):                       # L2: base case, O(1)
+            return True
+        for end in range(start + 1, len(s) + 1): # L3: try every prefix from start
+            if s[start:end] in words and f(end):  # L4: O(L) slice + O(L) hash lookup
+                return True
+        return False
+    return f(0)                                   # L5: initial call
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s), W = number of words in wordDict, L = max word length.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (build set) | O(W · L) | 1 | O(W · L) |
+| L2 (base case) | O(1) | once per call | O(calls) |
+| L3 (range loop) | O(n) iterations | once per call | O(n · calls) |
+| **L4 (slice + lookup)** | **O(L)** | **O(n) per call, O(2ⁿ) calls** | **O(2ⁿ · n · L)** ← dominates |
+| L5 (initial call) | O(1) | 1 | O(1) |
+
+Without memoization, the same suffix can be recomputed from scratch every time a different prefix reaches it. In the worst case (e.g., `s = "aaaaaa"`, `wordDict = ["a", "aa", ...]`) the number of distinct recursive calls doubles with each character, producing exponential blowup.
+
+**Complexity**
+- **Time:** O(2ⁿ), driven by L4 (exponential re-computation of identical subproblems).
+- **Space:** O(n) for the call stack.
+
+## Approach 2: Top-down memoized
+
+Cache by start index.
+
+```python
+from functools import lru_cache
+
+def word_break(s, word_dict):
+    words = set(word_dict)                        # L1: O(W · L) to build set
+    @lru_cache(maxsize=None)
+    def f(start):
+        if start == len(s):                       # L2: base case, O(1)
+            return True
+        for end in range(start + 1, len(s) + 1): # L3: try every split point
+            if s[start:end] in words and f(end):  # L4: O(L) slice + O(L) hash lookup
+                return True
+        return False
+    return f(0)                                   # L5: initial call
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s), W = number of words in wordDict, L = max word length.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (build set) | O(W · L) | 1 | O(W · L) |
+| L2 (base case) | O(1) | at most n + 1 | O(n) |
+| L3 (range loop) | O(n) iterations | n unique start values | O(n²) total iters |
+| **L4 (slice + lookup)** | **O(L)** | **O(n²) total** | **O(n² · L)** ← dominates |
+| L5 (initial call) | O(1) | 1 | O(1) |
+
+Memoization limits `f` to at most `n + 1` unique `start` values. Each unique call does O(n) iterations of the inner loop, each costing O(L) for the slice. Total: O(n² · L).
+
+**Complexity**
+- **Time:** O(n² · L), driven by L4 across all memoized calls.
+- **Space:** O(n) for the cache and call stack.
+
+## Approach 3: Bottom-up DP (canonical)
+
+`dp[i] = True` iff `s[:i]` can be segmented. `dp[0] = True`; `dp[i] = any(dp[j] and s[j:i] in words for j < i)`.
+
+```python
+def word_break(s, word_dict):
+    words = set(word_dict)              # L1: O(W · L) to build set
+    n = len(s)                          # L2: O(1)
+    dp = [False] * (n + 1)             # L3: O(n) allocation
+    dp[0] = True                        # L4: base case, O(1)
+    for i in range(1, n + 1):          # L5: outer loop, n iterations
+        for j in range(i):             # L6: inner loop, i iterations
+            if dp[j] and s[j:i] in words:  # L7: O(L) slice + O(L) hash lookup
+                dp[i] = True           # L8: O(1)
+                break
+    return dp[n]                        # L9: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s), W = number of words in wordDict, L = max word length.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (build set) | O(W · L) | 1 | O(W · L) |
+| L2, L3, L4 (init) | O(n) total | 1 | O(n) |
+| L5 (outer loop) | O(1) | n | O(n) |
+| L6 (inner loop) | O(1) | 0+1+...+(n-1) | O(n²) iters total |
+| **L7 (slice + lookup)** | **O(L)** | **O(n²) worst case** | **O(n² · L)** ← dominates |
+| L8, L9 (assignments) | O(1) | at most n | O(n) |
+
+The early `break` in L8 short-circuits once a valid `j` is found, but the worst case still touches all O(n²) pairs. Each pair costs O(L) for the string slice and hash lookup, giving O(n² · L) overall. When dictionary words are short relative to `n`, bounding the inner loop to `j >= i - max_word_length` reduces practical runtime significantly.
+
+**Complexity**
+- **Time:** O(n² · L), driven by L7 across all (i, j) pairs.
+- **Space:** O(n) for the dp array.
+
+### Optimization
+Limit the inner loop to `j >= i - max_word_length`. Saves time when dictionary words are short relative to `s`.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Naive recursion | O(2ⁿ) | O(n) |
+| Top-down memo | O(n² · L) | O(n) |
+| **Bottom-up DP** | **O(n² · L)** | **O(n)** |
+
+The "partition a string into dictionary pieces" template applies to Word Break II (140, which enumerates all segmentations) and Concatenated Words (472).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_word_break.py and run.
+# Uses the canonical implementation (Approach 3: bottom-up DP).
+
+def word_break(s, word_dict):
+    words = set(word_dict)
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True
+    for i in range(1, n + 1):
+        for j in range(i):
+            if dp[j] and s[j:i] in words:
+                dp[i] = True
+                break
+    return dp[n]
+
+def _run_tests():
+    # LeetCode examples
+    assert word_break("leetcode", ["leet", "code"]) == True
+    assert word_break("applepenapple", ["apple", "pen"]) == True
+    assert word_break("catsandog", ["cats", "dog", "sand", "and", "cat"]) == False
+    # Edge cases
+    assert word_break("a", ["a"]) == True
+    assert word_break("a", ["b"]) == False
+    # Word reuse
+    assert word_break("aaaa", ["a", "aa"]) == True
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Strings](../../../data-structures/strings/), prefix DP
+- [Hash Tables](../../../data-structures/hash-tables/), O(1) dictionary membership

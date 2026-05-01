@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 def is_match(s, p):
     pass  # TODO: implement
 

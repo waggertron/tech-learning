@@ -1,0 +1,179 @@
+---
+title: "1143. Longest Common Subsequence (Medium)"
+description: Find the length of the longest common subsequence of two strings.
+parent: 2d-dynamic-programming
+tags: [leetcode, neetcode-150, dp, strings, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './1143-longest-common-subsequence.py?raw';
+
+## Problem
+
+Given two strings `text1` and `text2`, return the length of their longest common subsequence (LCS). A subsequence is a sequence that can be derived from another by deleting zero or more elements without changing relative order.
+
+**Example**
+- `text1 = "abcde"`, `text2 = "ace"` → `3` (`"ace"`)
+- `text1 = "abc"`, `text2 = "abc"` → `3`
+- `text1 = "abc"`, `text2 = "def"` → `0`
+
+LeetCode 1143 · [Link](https://leetcode.com/problems/longest-common-subsequence/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `1143-longest-common-subsequence.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="longest-common-subsequence" />
+
+## Approach 1: Recursive
+
+`f(i, j)` = LCS of `text1[i:]` and `text2[j:]`.
+
+```python
+def longest_common_subsequence(text1, text2):
+    def f(i, j):
+        if i == len(text1) or j == len(text2):  # L1: O(1) base case
+            return 0
+        if text1[i] == text2[j]:                # L2: O(1) char match
+            return 1 + f(i + 1, j + 1)          # L3: one recursive call (diagonal)
+        return max(f(i + 1, j), f(i, j + 1))   # L4: two recursive calls
+    return f(0, 0)
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(text1), n = len(text2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (base + match check) | O(1) | per call | O(1) each |
+| L3 (one call on match) | O(1) work + 1 call | per match | included below |
+| **L4 (two calls on mismatch)** | **O(1) work + 2 calls** | **worst case every call** | **O(2^(m+n))** ← dominates |
+
+Every mismatch doubles the call tree. Without memoization the same `(i, j)` is recomputed at every overlapping node.
+
+**Complexity**
+- **Time:** O(2^(m + n)), driven by L4 double-branching on mismatches.
+- **Space:** O(m + n) recursion depth.
+
+## Approach 2: 2-D bottom-up DP (canonical)
+
+`dp[i][j]` = LCS of `text1[:i]` and `text2[:j]`. `dp[i][j]` depends on `dp[i-1][j-1]`, `dp[i-1][j]`, `dp[i][j-1]`.
+
+```python
+def longest_common_subsequence(text1, text2):
+    m, n = len(text1), len(text2)                        # L1: O(1)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]          # L2: O(m*n) table init (zeros = base cases)
+    for i in range(1, m + 1):                            # L3: outer loop O(m)
+        for j in range(1, n + 1):                        # L4: inner loop O(n)
+            if text1[i - 1] == text2[j - 1]:            # L5: O(1) char match
+                dp[i][j] = 1 + dp[i - 1][j - 1]        # L6: O(1) diagonal + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])  # L7: O(1) max of up/left
+    return dp[m][n]                                      # L8: O(1) answer
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(text1), n = len(text2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (init) | O(1) or O(m·n) | 1 | O(m · n) |
+| **L3+L4 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
+| L5-L7 (cell fill) | O(1) | once per cell | included above |
+
+Each cell fill is a single comparison plus one or two table lookups, all O(1). The double loop at L3/L4 drives the total.
+
+**Complexity**
+- **Time:** O(m · n), driven by L3/L4 (the full double loop).
+- **Space:** O(m · n) for the DP table.
+
+## Approach 3: 1-D rolling array (optimal space)
+
+Keep two rows, current and previous. Or one row with a diagonal scratch scalar.
+
+```python
+def longest_common_subsequence(text1, text2):
+    m, n = len(text1), len(text2)         # L1: O(1)
+    if m < n:                             # L2: O(1) ensure text1 is longer (minimize space)
+        text1, text2 = text2, text1
+        m, n = n, m
+    prev = [0] * (n + 1)                  # L3: O(n) init previous row
+    for i in range(1, m + 1):            # L4: outer loop O(m)
+        curr = [0] * (n + 1)             # L5: O(n) allocate current row
+        for j in range(1, n + 1):        # L6: inner loop O(n)
+            if text1[i - 1] == text2[j - 1]:     # L7: O(1) char match
+                curr[j] = 1 + prev[j - 1]         # L8: O(1) diagonal + 1
+            else:
+                curr[j] = max(prev[j], curr[j - 1])  # L9: O(1) max of up/left
+        prev = curr                       # L10: O(1) roll the row
+    return prev[n]                        # L11: O(1) answer
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(text1), n = len(text2) (after the swap so m >= n).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L3 (init) | O(n) | 1 | O(n) |
+| L5 (row alloc) | O(n) | m | O(m · n) |
+| **L4+L6 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
+| L7-L9 (cell fill) | O(1) | once per cell | included above |
+
+Same time as 2-D DP but space is O(n) (two rows of size n). The swap at L2 ensures we allocate the shorter dimension.
+
+**Complexity**
+- **Time:** O(m · n), driven by L4/L6 (the double loop).
+- **Space:** O(min(m, n)) for the two rolling rows.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Recursive | O(2^(m+n)) | O(m+n) |
+| 2-D DP | O(m · n) | O(m · n) |
+| **1-D rolling DP** | **O(m · n)** | **O(min(m, n))** |
+
+LCS is the prototype of the "compare two sequences" DP. Its recurrence pattern, `if match then diagonal+1 else max(up, left)`, shows up in Edit Distance, Shortest Common Supersequence, Minimum ASCII Delete Sum.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_1143.py and run.
+# Uses the canonical implementation (Approach 2: 2-D bottom-up DP).
+
+def longest_common_subsequence(text1, text2):
+    m, n = len(text1), len(text2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if text1[i - 1] == text2[j - 1]:
+                dp[i][j] = 1 + dp[i - 1][j - 1]
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[m][n]
+
+def _run_tests():
+    # problem statement examples
+    assert longest_common_subsequence("abcde", "ace") == 3
+    assert longest_common_subsequence("abc", "abc") == 3
+    assert longest_common_subsequence("abc", "def") == 0
+    # edge: empty strings
+    assert longest_common_subsequence("", "abc") == 0
+    assert longest_common_subsequence("abc", "") == 0
+    # single char match
+    assert longest_common_subsequence("a", "a") == 1
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Strings](../../../data-structures/strings/), sequence alignment DP

@@ -1,0 +1,299 @@
+---
+title: "146. LRU Cache (Medium)"
+description: Design a Least-Recently-Used cache with O(1) get and put.
+parent: linked-list
+tags: [leetcode, neetcode-150, linked-lists, hash-tables, design, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './146-lru-cache.py?raw';
+
+## Problem
+
+Design an LRU cache supporting:
+
+- `get(key)`, return the value if present, else `-1`. Accessing a key marks it most-recently used.
+- `put(key, value)`, insert or update. If the cache is full, evict the least-recently used entry.
+
+Both operations must run in **O(1)**.
+
+**Example**
+```
+LRUCache(capacity=2)
+put(1, 1); put(2, 2)
+get(1)      // 1
+put(3, 3)   // evicts key 2
+get(2)      // -1
+```
+
+LeetCode 146 · [Link](https://leetcode.com/problems/lru-cache/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `146-lru-cache.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="lru-cache" />
+
+## Approach 1: Brute force, list + dict, O(n) on access
+
+Keep a dict for values and a list for recency order. Every get/put moves the key to the end of the list, O(n) to find and remove.
+
+```python
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.data = {}
+        self.order = []   # least recent first
+
+    def get(self, key: int) -> int:
+        if key not in self.data:
+            return -1
+        self.order.remove(key)    # L1: O(n) linear scan to find key
+        self.order.append(key)    # L2: O(1) append
+        return self.data[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.data:
+            self.order.remove(key)          # L3: O(n) remove existing
+        elif len(self.data) >= self.cap:
+            evict = self.order.pop(0)       # L4: O(n) shift all elements
+            del self.data[evict]
+        self.data[key] = value
+        self.order.append(key)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of entries currently in the cache (at most capacity).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (list.remove)** | **O(n)** | **1 per get** | **O(n)** ← dominates get |
+| L2 (append) | O(1) | 1 per get | O(1) |
+| **L3 (list.remove)** | **O(n)** | **1 per put** | **O(n)** ← dominates put |
+| **L4 (list.pop(0))** | **O(n)** | **1 per eviction** | **O(n)** ← dominates eviction |
+
+Both L1/L3 scan the entire list to find the key. L4 shifts every element left after popping index 0. All three are O(n) worst case.
+
+**Complexity**
+- **Get/put:** O(n) due to L1 (list.remove) and L4 (list.pop(0)).
+- **Space:** O(capacity).
+
+Fails the O(1) requirement.
+
+## Approach 2: Python `collections.OrderedDict`
+
+`OrderedDict.move_to_end` is O(1); `popitem(last=False)` evicts the oldest in O(1).
+
+```python
+from collections import OrderedDict
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = OrderedDict()
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        self.cache.move_to_end(key)   # L1: O(1) splice in doubly linked list
+        return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.move_to_end(key)      # L2: O(1) splice
+        self.cache[key] = value
+        if len(self.cache) > self.cap:
+            self.cache.popitem(last=False)   # L3: O(1) pop LRU end
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of entries in the cache (at most capacity).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (move_to_end)** | **O(1)** | **1 per get** | **O(1)** ← dominates get |
+| **L2 (move_to_end)** | **O(1)** | **1 per put** | **O(1)** ← dominates put |
+| L3 (popitem) | O(1) | 1 per eviction | O(1) |
+
+`OrderedDict` is a doubly linked list + hash map internally. `move_to_end` and `popitem` both splice one pointer, O(1) true worst case.
+
+**Complexity**
+- **Get/put:** O(1) amortized (L1/L2/L3).
+- **Space:** O(capacity).
+
+Production-correct. The interview follow-up is usually "implement the underlying data structure yourself."
+
+## Approach 3: Hash map + doubly linked list (optimal, language-agnostic)
+
+The canonical LRU implementation. A doubly linked list maintains recency order (head = most recent, tail = least recent). A hash map gives O(1) node lookup by key. Put/get involve finding the node, splicing it out, and re-inserting at the head.
+
+```python
+class Node:
+    __slots__ = ("key", "val", "prev", "next")
+    def __init__(self, key=0, val=0):
+        self.key = key
+        self.val = val
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = {}   # key -> Node
+        # dummy head/tail sentinels
+        self.head = Node()
+        self.tail = Node()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove(self, node: Node) -> None:
+        node.prev.next = node.next            # L1: O(1) unlink
+        node.next.prev = node.prev            # L2: O(1) unlink
+
+    def _add_to_front(self, node: Node) -> None:
+        node.prev = self.head
+        node.next = self.head.next
+        self.head.next.prev = node            # L3: O(1) insert at head
+        self.head.next = node                 # L4: O(1) insert at head
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        node = self.cache[key]               # L5: O(1) hash lookup
+        self._remove(node)                   # L6: O(1) splice out
+        self._add_to_front(node)             # L7: O(1) insert at front
+        return node.val
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            node = self.cache[key]
+            node.val = value
+            self._remove(node)               # L8: O(1) splice out
+            self._add_to_front(node)         # L9: O(1) re-insert
+            return
+        if len(self.cache) >= self.cap:
+            lru = self.tail.prev
+            self._remove(lru)               # L10: O(1) evict LRU
+            del self.cache[lru.key]
+        node = Node(key, value)
+        self.cache[key] = node
+        self._add_to_front(node)            # L11: O(1) insert new node
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of entries in the cache (at most capacity).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L5 (hash lookup) | O(1) | 1 per get/put | O(1) |
+| **L6-L7 (_remove + _add_to_front)** | **O(1) each** | **1 per get** | **O(1)** ← get total |
+| **L8-L9 or L10-L11 (splice ops)** | **O(1) each** | **1 per put** | **O(1)** ← put total |
+
+Every operation reduces to at most 4 pointer assignments (L1-L4) plus one hash lookup (L5). No scanning, no shifting, no rebalancing. This is true O(1) worst case, not amortized.
+
+**Complexity**
+- **Get/put:** O(1) worst case (L5-L11 are all pure pointer ops).
+- **Space:** O(capacity).
+
+### Why both data structures are needed
+The hash map gives O(1) lookup *by key*; the doubly linked list gives O(1) removal *given a node reference* and ordering. Either alone can't do both, hence the composite.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_146.py and run.
+# Uses the hash map + doubly linked list approach (Approach 3).
+
+class Node:
+    __slots__ = ("key", "val", "prev", "next")
+    def __init__(self, key=0, val=0):
+        self.key = key; self.val = val
+        self.prev = None; self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = {}
+        self.head = Node(); self.tail = Node()
+        self.head.next = self.tail; self.tail.prev = self.head
+
+    def _remove(self, node):
+        node.prev.next = node.next; node.next.prev = node.prev
+
+    def _add_to_front(self, node):
+        node.prev = self.head; node.next = self.head.next
+        self.head.next.prev = node; self.head.next = node
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        node = self.cache[key]
+        self._remove(node); self._add_to_front(node)
+        return node.val
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            node = self.cache[key]; node.val = value
+            self._remove(node); self._add_to_front(node); return
+        if len(self.cache) >= self.cap:
+            lru = self.tail.prev
+            self._remove(lru); del self.cache[lru.key]
+        node = Node(key, value)
+        self.cache[key] = node; self._add_to_front(node)
+
+def _run_tests():
+    # Example from problem statement
+    cache = LRUCache(2)
+    cache.put(1, 1)
+    cache.put(2, 2)
+    assert cache.get(1) == 1       # returns 1
+    cache.put(3, 3)                # evicts key 2
+    assert cache.get(2) == -1      # returns -1 (not found)
+    cache.put(4, 4)                # evicts key 1
+    assert cache.get(1) == -1      # returns -1 (not found)
+    assert cache.get(3) == 3       # returns 3
+    assert cache.get(4) == 4       # returns 4
+
+    # Capacity 1: every put evicts
+    c1 = LRUCache(1)
+    c1.put(1, 10)
+    assert c1.get(1) == 10
+    c1.put(2, 20)
+    assert c1.get(1) == -1
+    assert c1.get(2) == 20
+
+    # Update existing key should not evict
+    c2 = LRUCache(2)
+    c2.put(1, 1); c2.put(2, 2)
+    c2.put(1, 100)   # update, no eviction
+    c2.put(3, 3)     # evicts 2 (LRU), not 1
+    assert c2.get(1) == 100
+    assert c2.get(2) == -1
+    assert c2.get(3) == 3
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Summary
+
+| Approach | get / put | Space | Notes |
+| --- | --- | --- | --- |
+| List + dict | O(n) | O(cap) | Fails the requirement |
+| OrderedDict | **O(1)** amortized | O(cap) | Pythonic; real-world answer |
+| **Hash map + doubly linked list** | **O(1)** worst case | O(cap) | Canonical interview answer |
+
+Implement this one from memory. It's the template for LFU cache (460), and for any "fast access + fast removal by reference" pattern.
+
+## Related data structures
+
+- [Linked Lists](../../../data-structures/linked-lists/), doubly linked list for O(1) splicing
+- [Hash Tables](../../../data-structures/hash-tables/), O(1) lookup of nodes by key

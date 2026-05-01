@@ -1,5 +1,3 @@
-from collections import Counter
-
 def check_inclusion(s1: str, s2: str) -> bool:
     pass  # TODO: implement
 

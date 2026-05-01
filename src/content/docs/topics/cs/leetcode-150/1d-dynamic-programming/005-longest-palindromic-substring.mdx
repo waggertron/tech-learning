@@ -1,0 +1,202 @@
+---
+title: "5. Longest Palindromic Substring (Medium)"
+description: Find the longest palindromic substring in a string.
+parent: 1d-dynamic-programming
+tags: [leetcode, neetcode-150, dp, strings, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './005-longest-palindromic-substring.py?raw';
+
+## Problem
+
+Given a string `s`, return the longest palindromic substring in `s`.
+
+**Example**
+- `s = "babad"` → `"bab"` (or `"aba"`)
+- `s = "cbbd"` → `"bb"`
+
+LeetCode 5 · [Link](https://leetcode.com/problems/longest-palindromic-substring/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `005-longest-palindromic-substring.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="longest-palindromic-substring" />
+
+## Approach 1: Brute force, check every substring
+
+For each substring, verify it's a palindrome.
+
+```python
+def longest_palindrome(s):
+    def is_pal(t):
+        return t == t[::-1]          # L1: O(len(t)) reversal + compare
+    best = ""
+    for i in range(len(s)):          # L2: outer loop over start indices
+        for j in range(i, len(s)):   # L3: inner loop over end indices
+            if is_pal(s[i:j + 1]) and j - i + 1 > len(best):  # L4: O(n) slice + is_pal
+                best = s[i:j + 1]   # L5: O(n) slice copy
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (is_pal reversal) | O(k) where k = substring length | once per (i,j) pair | O(n) amortized per outer i |
+| L2 (outer loop) | O(1) | n | O(n) |
+| L3 (inner loop) | O(1) | O(n) per outer i | O(n²) iterations total |
+| **L4 (slice + is_pal)** | **O(n)** | **O(n²) times** | **O(n³)** ← dominates |
+| L5 (best update) | O(n) | at most n times | O(n²) worst case |
+
+The bottleneck is L4: each of the O(n²) substring pairs triggers an O(n) palindrome check via slice and reversal. Slicing `s[i:j+1]` already copies O(n) characters before the comparison even starts.
+
+**Complexity**
+- **Time:** O(n³), driven entirely by L4 (O(n) palindrome check across O(n²) pairs).
+- **Space:** O(n) for the slice copies.
+
+## Approach 2: Expand around center (canonical)
+
+Every palindrome has a center, a single character (odd length) or a pair (even length). For each of `2n - 1` centers, expand outward.
+
+```python
+def longest_palindrome(s):
+    def expand(l, r):
+        while l >= 0 and r < len(s) and s[l] == s[r]:  # L1: O(1) per iteration, up to n/2 iters
+            l -= 1                                       # L2: O(1)
+            r += 1                                       # L3: O(1)
+        return s[l + 1:r]                               # L4: O(length of palindrome found)
+
+    best = ""
+    for i in range(len(s)):                             # L5: outer loop, n iterations
+        for cand in (expand(i, i), expand(i, i + 1)):  # L6: two expand calls per center
+            if len(cand) > len(best):                   # L7: O(1)
+                best = cand                             # L8: O(1) reference copy
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L5 (outer loop) | O(1) | n | O(n) |
+| L6 (two expand calls) | varies | 2n total | see L1 |
+| **L1 (expand while loop)** | **O(1) per step** | **O(n) total across all centers** | **O(n²)** ← dominates |
+| L4 (slice result) | O(k) | 2n calls | O(n) total amortized |
+| L7, L8 (best update) | O(1) | 2n | O(n) |
+
+The key insight is that all expand calls together do at most O(n²) work: each character can be the boundary of at most O(n) distinct palindromes, and boundaries are never revisited per center. In the worst case (e.g., `"aaaa...a"`), every center expands all the way out, giving exactly O(n²) character comparisons total.
+
+**Complexity**
+- **Time:** O(n²), driven by L1 (total expand steps across all 2n-1 centers).
+- **Space:** O(1) auxiliary (the returned slice is unavoidable output, not overhead).
+
+Most interview-friendly. Short code, easy to reason about.
+
+## Approach 3: DP table of palindrome flags
+
+`dp[i][j] = True` iff `s[i:j+1]` is a palindrome. Fill by length: `dp[i][j] = (s[i] == s[j])` and (length \<= 2 or `dp[i+1][j-1]`).
+
+```python
+def longest_palindrome(s):
+    n = len(s)                                                # L1: O(1)
+    if n <= 1:
+        return s
+    dp = [[False] * n for _ in range(n)]                     # L2: O(n²) table allocation
+    best = s[0]
+
+    for i in range(n):                                        # L3: O(n) diagonal init
+        dp[i][i] = True                                       # L4: O(1)
+
+    for length in range(2, n + 1):                            # L5: outer loop over substring length
+        for i in range(n - length + 1):                       # L6: inner loop over start index
+            j = i + length - 1                               # L7: O(1)
+            if s[i] == s[j] and (length == 2 or dp[i + 1][j - 1]):  # L8: O(1) DP lookup
+                dp[i][j] = True                              # L9: O(1)
+                if length > len(best):
+                    best = s[i:j + 1]                        # L10: O(n) slice copy
+    return best
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (table allocation) | O(n²) | 1 | O(n²) |
+| L3 (diagonal init) | O(1) | n | O(n) |
+| L5 (length loop) | O(1) | n-1 | O(n) |
+| **L6 (start loop) + L8 (DP check)** | **O(1)** | **O(n²) total (i,j) pairs** | **O(n²)** ← dominates |
+| L10 (best update slice) | O(n) | at most n updates | O(n²) worst case |
+
+The O(n²) work is spread evenly: each of the O(n²) substrings gets a constant-time DP cell fill (L8). The space cost is also O(n²) for the table, which is why this approach loses to expand-around-center on space despite matching it on time. It earns its keep when the problem needs every `dp[i][j]` answer (e.g., problem 131 Palindrome Partitioning).
+
+**Complexity**
+- **Time:** O(n²), driven by the O(n²) DP cell fills at L6/L8.
+- **Space:** O(n²) for the boolean table.
+
+Worse on space than Approach 2; useful when you also need answers for *every* `(i, j)` (e.g., problem 131 Palindrome Partitioning).
+
+### Optional: Manacher's O(n)
+Manacher's algorithm solves the problem in O(n); it's rarely expected in interviews but worth knowing.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| All substrings | O(n³) | O(n) |
+| **Expand around center** | **O(n²)** | **O(1)** |
+| DP table | O(n²) | O(n²) |
+| Manacher's | O(n) | O(n) |
+
+Expand-around-center is the canonical interview answer. Same template solves problem 647 (Palindromic Substrings).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_005.py and run.
+# Uses the canonical implementation (Approach 2: expand around center).
+
+def longest_palindrome(s):
+    def expand(l, r):
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            l -= 1
+            r += 1
+        return s[l + 1:r]
+
+    best = ""
+    for i in range(len(s)):
+        for cand in (expand(i, i), expand(i, i + 1)):
+            if len(cand) > len(best):
+                best = cand
+    return best
+
+
+def _run_tests():
+    # LeetCode examples
+    assert longest_palindrome("babad") in ("bab", "aba")
+    assert longest_palindrome("cbbd") == "bb"
+    # Edge cases
+    assert longest_palindrome("a") == "a"
+    assert longest_palindrome("ac") in ("a", "c")
+    # Larger cases
+    assert longest_palindrome("racecar") == "racecar"
+    assert longest_palindrome("abacaba") == "abacaba"
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Strings](../../../data-structures/strings/), palindrome-around-center traversal

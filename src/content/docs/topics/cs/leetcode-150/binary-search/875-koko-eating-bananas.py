@@ -1,5 +1,3 @@
-from math import ceil
-
 def min_eating_speed(piles: list, h: int) -> int:
     pass  # TODO: implement
 

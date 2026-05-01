@@ -1,5 +1,3 @@
-from collections import Counter
-
 def min_window(s: str, t: str) -> str:
     pass  # TODO: implement
 

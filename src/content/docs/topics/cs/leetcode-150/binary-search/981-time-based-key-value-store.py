@@ -1,7 +1,3 @@
-from collections import defaultdict
-
-from bisect import bisect_right
-
 class TimeMap:
 
     def __init__(self):

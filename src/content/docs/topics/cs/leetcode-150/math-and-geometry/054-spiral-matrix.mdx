@@ -1,0 +1,196 @@
+---
+title: "54. Spiral Matrix (Medium)"
+description: Return all elements of an m×n matrix in spiral order.
+parent: math-and-geometry
+tags: [leetcode, neetcode-150, matrix, medium]
+status: draft
+created: 2026-04-23
+updated: 2026-04-23
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './054-spiral-matrix.py?raw';
+
+## Problem
+
+Return all elements of an `m × n` matrix in spiral order (clockwise, starting from the top-left).
+
+**Example**
+- `matrix = [[1,2,3],[4,5,6],[7,8,9]]` → `[1,2,3,6,9,8,7,4,5]`
+- `matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]` → `[1,2,3,4,8,12,11,10,9,5,6,7]`
+
+LeetCode 54 · [Link](https://leetcode.com/problems/spiral-matrix/) · *Medium*
+
+## Try it yourself
+
+The editor below is preloaded with the practice scaffold from `054-spiral-matrix.py`. Fill in the body and click **Run tests** to execute. The first run downloads Python in the browser (~10 MB, one time per browser).
+
+<PythonRepl code={practiceCode} id="spiral-matrix" />
+
+## Approach 1: Visited-set DFS / walking with direction
+
+Walk, turning when you hit a visited cell or the boundary.
+
+```python
+def spiral_order(matrix):
+    if not matrix:
+        return []
+    rows, cols = len(matrix), len(matrix[0])    # L1: O(1)
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    result = []
+    visited = [[False] * cols for _ in range(rows)]  # L2: O(m·n)
+    r = c = d = 0
+    for _ in range(rows * cols):                # L3: loop m·n times
+        result.append(matrix[r][c])             # L4: O(1) amortized
+        visited[r][c] = True                    # L5: O(1)
+        dr, dc = directions[d]
+        nr, nc = r + dr, c + dc
+        if not (0 <= nr < rows and 0 <= nc < cols and not visited[nr][nc]):
+            d = (d + 1) % 4                     # L6: O(1) turn
+            dr, dc = directions[d]
+            nr, nc = r + dr, c + dc
+        r, c = nr, nc
+    return result
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = number of rows, n = number of columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init visited) | O(1) | m·n | O(m·n) |
+| **L3-L6 (walk loop)** | **O(1)** | **m·n** | **O(m·n)** ← dominates |
+| L4 (append) | O(1) amortized | m·n | O(m·n) |
+
+Every cell is visited exactly once.
+
+**Complexity**
+- **Time:** O(m · n), driven by L3/L4/L5/L6 (one pass over all cells).
+- **Space:** O(m · n) visited array.
+
+## Approach 2: Shrinking boundaries (canonical, optimal space)
+
+Maintain `top`, `bottom`, `left`, `right`. Walk each layer: right along `top`, down along `right`, left along `bottom`, up along `left`. After each side, shrink the boundary.
+
+```python
+def spiral_order(matrix):
+    if not matrix:
+        return []
+    result = []
+    top, bottom = 0, len(matrix) - 1           # L1: O(1)
+    left, right = 0, len(matrix[0]) - 1        # L2: O(1)
+
+    while top <= bottom and left <= right:      # L3: outer loop, min(m,n)/2 rounds
+        for c in range(left, right + 1):        # L4: walk top row
+            result.append(matrix[top][c])       # L5: O(1) amortized
+        top += 1                                # L6: shrink
+        for r in range(top, bottom + 1):        # L7: walk right col
+            result.append(matrix[r][right])
+        right -= 1
+        if top <= bottom:
+            for c in range(right, left - 1, -1):# L8: walk bottom row (fixed typo)
+                result.append(matrix[bottom][c])
+            bottom -= 1
+        if left <= right:
+            for r in range(bottom, top - 1, -1):# L9: walk left col (fixed typo)
+                result.append(matrix[r][left])
+            left += 1
+    return result
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = number of rows, n = number of columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3 (outer loop) | O(1) | min(m,n)/2 rounds | O(min(m,n)) |
+| **L4-L9 (four-side walks)** | **O(1) per cell** | **m·n total** | **O(m·n)** ← dominates |
+
+All four side-walks together visit each cell exactly once across all rounds.
+
+**Complexity**
+- **Time:** O(m · n), driven by L4-L9 (visiting every cell in every layer).
+- **Space:** O(1) extra.
+
+The `if top <= bottom` / `if left <= right` guards handle the last single row or column in non-square matrices.
+
+## Approach 3: Recursive peel + rotate
+
+Append the top row, then **rotate** the rest of the matrix 90° counterclockwise (each column becomes a row, then reverse the row order). Recurse on the rotated remainder.
+
+```python
+def spiral_order(matrix):
+    if not matrix or not matrix[0]:
+        return []
+    result = list(matrix[0])
+    rest = matrix[1:]
+    if not rest:
+        return result
+    # Rotate rest 90° CCW: take its columns, reverse the order
+    rotated = [list(col) for col in list(zip(*rest))[::-1]]
+    return result + spiral_order(rotated)
+```
+
+The rotation lines up the next clockwise side as the new "top row," so the same `peel-the-top-row` rule produces the spiral. Elegant but allocates rotated matrices at each level.
+
+**Complexity**
+- **Time:** O(m · n).
+- **Space:** O(min(m, n)) recursion.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Visited + direction | O(m · n) | O(m · n) |
+| **Shrinking boundaries** | **O(m · n)** | **O(1)** |
+| Recursive peel | O(m · n) | O(min(m, n)) |
+
+The boundary-shrink template works for Spiral Matrix II (fill), III (starting offset), and IV (multiple passes).
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_054.py and run.
+# Uses the canonical implementation (Approach 2: shrinking boundaries).
+
+def spiral_order(matrix):
+    if not matrix:
+        return []
+    result = []
+    top, bottom = 0, len(matrix) - 1
+    left, right = 0, len(matrix[0]) - 1
+    while top <= bottom and left <= right:
+        for c in range(left, right + 1):
+            result.append(matrix[top][c])
+        top += 1
+        for r in range(top, bottom + 1):
+            result.append(matrix[r][right])
+        right -= 1
+        if top <= bottom:
+            for c in range(right, left - 1, -1):
+                result.append(matrix[bottom][c])
+            bottom -= 1
+        if left <= right:
+            for r in range(bottom, top - 1, -1):
+                result.append(matrix[r][left])
+            left += 1
+    return result
+
+def _run_tests():
+    assert spiral_order([[1,2,3],[4,5,6],[7,8,9]]) == [1,2,3,6,9,8,7,4,5]
+    assert spiral_order([[1,2,3,4],[5,6,7,8],[9,10,11,12]]) == [1,2,3,4,8,12,11,10,9,5,6,7]
+    assert spiral_order([[1]]) == [1]                      # 1x1
+    assert spiral_order([[1,2],[3,4]]) == [1,2,4,3]        # 2x2
+    assert spiral_order([[1],[2],[3]]) == [1,2,3]          # single column
+    assert spiral_order([[1,2,3]]) == [1,2,3]              # single row
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related data structures
+
+- [Arrays](../../../data-structures/arrays/), 2D matrix traversal
