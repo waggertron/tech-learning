@@ -1,0 +1,165 @@
+---
+interface Props {
+  code: string;
+  /** Optional unique-ish id for this REPL instance on the page. */
+  id?: string;
+}
+const { code, id = 'pyrepl' } = Astro.props;
+const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="pyrepl" data-repl-id={replId}>
+  <div class="pyrepl__header">
+    <button class="pyrepl__run" type="button">▶ Run tests</button>
+    <button class="pyrepl__reset" type="button" title="Reset to original">↻ Reset</button>
+    <span class="pyrepl__status" data-status>idle</span>
+  </div>
+  <textarea
+    class="pyrepl__editor"
+    spellcheck="false"
+    autocomplete="off"
+    autocapitalize="off"
+    data-original={code}>{code}</textarea>
+  <pre class="pyrepl__output" data-output>Click <strong>Run tests</strong> to execute. First run downloads Python (~10 MB, cached after that).</pre>
+</div>
+
+<script>
+  const PYODIDE_VERSION = '0.27.2';
+  const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+
+  // Module-scoped: the Pyodide instance is shared across all REPLs on the page.
+  let pyodidePromise: Promise<any> | null = null;
+
+  async function loadPyodideOnce() {
+    if (!pyodidePromise) {
+      pyodidePromise = (async () => {
+        if (!(window as any).loadPyodide) {
+          await new Promise<void>((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = PYODIDE_BASE + 'pyodide.js';
+            s.onload = () => resolve();
+            s.onerror = () => reject(new Error('Failed to load pyodide.js'));
+            document.head.appendChild(s);
+          });
+        }
+        return await (window as any).loadPyodide({ indexURL: PYODIDE_BASE });
+      })();
+    }
+    return pyodidePromise;
+  }
+
+  function attachRepl(root: HTMLElement) {
+    const runBtn = root.querySelector<HTMLButtonElement>('.pyrepl__run')!;
+    const resetBtn = root.querySelector<HTMLButtonElement>('.pyrepl__reset')!;
+    const editor = root.querySelector<HTMLTextAreaElement>('.pyrepl__editor')!;
+    const output = root.querySelector<HTMLElement>('[data-output]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+
+    resetBtn.addEventListener('click', () => {
+      editor.value = editor.dataset.original ?? '';
+      output.textContent = '(reset)';
+      status.textContent = 'idle';
+    });
+
+    runBtn.addEventListener('click', async () => {
+      runBtn.disabled = true;
+      output.textContent = '';
+      status.textContent = pyodidePromise ? 'running…' : 'loading Python…';
+
+      let stdout = '';
+      let stderr = '';
+      try {
+        const pyodide = await loadPyodideOnce();
+        status.textContent = 'running…';
+        pyodide.setStdout({ batched: (s: string) => { stdout += s + '\n'; } });
+        pyodide.setStderr({ batched: (s: string) => { stderr += s + '\n'; } });
+
+        try {
+          await pyodide.runPythonAsync(editor.value);
+          const text = (stdout || '(no output)') + (stderr ? `\n--- stderr ---\n${stderr}` : '');
+          output.textContent = text;
+          status.textContent = stderr ? 'done (with stderr)' : 'done';
+        } catch (err: any) {
+          const msg = err?.message ?? String(err);
+          output.textContent = `${stdout}${stderr ? `\n${stderr}` : ''}\n${msg}`;
+          status.textContent = 'error';
+        }
+      } catch (err: any) {
+        output.textContent = `Failed to load Python runtime: ${err?.message ?? err}`;
+        status.textContent = 'load failed';
+      } finally {
+        runBtn.disabled = false;
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('.pyrepl').forEach(attachRepl);
+</script>
+
+<style>
+  .pyrepl {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    margin: 1.25rem 0;
+    overflow: hidden;
+    background: var(--sl-color-bg);
+  }
+  .pyrepl__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--sl-color-gray-6);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+  .pyrepl__run, .pyrepl__reset {
+    border: 1px solid var(--sl-color-gray-4);
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    padding: 0.35rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .pyrepl__run {
+    background: var(--sl-color-accent, #6750a4);
+    color: white;
+    border-color: transparent;
+  }
+  .pyrepl__run:disabled { opacity: 0.6; cursor: wait; }
+  .pyrepl__status {
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .pyrepl__editor {
+    width: 100%;
+    min-height: 280px;
+    padding: 0.75rem;
+    border: none;
+    outline: none;
+    background: var(--sl-color-gray-7, #1e1e1e);
+    color: var(--sl-color-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    resize: vertical;
+    tab-size: 4;
+    box-sizing: border-box;
+    display: block;
+  }
+  .pyrepl__output {
+    margin: 0;
+    padding: 0.75rem;
+    background: var(--sl-color-black, #0d0d0d);
+    color: var(--sl-color-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    border-top: 1px solid var(--sl-color-gray-5);
+    max-height: 280px;
+    overflow: auto;
+    white-space: pre-wrap;
+  }
+</style>
