@@ -22,7 +22,7 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
   import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
   import { EditorState } from '@codemirror/state';
   import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands';
-  import { python } from '@codemirror/lang-python';
+  import { python, globalCompletion, localCompletionSource } from '@codemirror/lang-python';
   import { oneDark } from '@codemirror/theme-one-dark';
   import {
     syntaxHighlighting,
@@ -31,6 +31,12 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     bracketMatching,
     indentUnit,
   } from '@codemirror/language';
+  import {
+    autocompletion,
+    completionKeymap,
+    closeBrackets,
+    closeBracketsKeymap,
+  } from '@codemirror/autocomplete';
 
   const PYODIDE_VERSION = '0.27.2';
   const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
@@ -81,6 +87,7 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
   });
 
   function makeEditor(host: HTMLElement, initialCode: string): EditorView {
+    const pythonSupport = python();
     return new EditorView({
       doc: initialCode,
       extensions: [
@@ -89,12 +96,29 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
         history(),
         indentOnInput(),
         bracketMatching(),
+        closeBrackets(),
         indentUnit.of('    '),
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-        python(),
+        pythonSupport,
+        // Built-in Python keyword + builtin completion (print, len, range, ...)
+        // and local-symbol completion (functions / variables defined in the
+        // user's own code).
+        pythonSupport.language.data.of({
+          autocomplete: globalCompletion,
+        }),
+        pythonSupport.language.data.of({
+          autocomplete: localCompletionSource,
+        }),
+        autocompletion({ activateOnTyping: true }),
         oneDark,
         tightLines,
-        keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
+        keymap.of([
+          indentWithTab,
+          ...closeBracketsKeymap,
+          ...completionKeymap,
+          ...defaultKeymap,
+          ...historyKeymap,
+        ]),
         EditorState.tabSize.of(4),
       ],
       parent: host,
