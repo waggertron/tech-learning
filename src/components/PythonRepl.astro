@@ -8,22 +8,30 @@ const { code, id = 'pyrepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<div class="pyrepl" data-repl-id={replId}>
+<div class="pyrepl" data-repl-id={replId} data-original={code}>
   <div class="pyrepl__header">
     <button class="pyrepl__run" type="button">▶ Run tests</button>
     <button class="pyrepl__reset" type="button" title="Reset to original">↻ Reset</button>
     <span class="pyrepl__status" data-status>idle</span>
   </div>
-  <textarea
-    class="pyrepl__editor"
-    spellcheck="false"
-    autocomplete="off"
-    autocapitalize="off"
-    data-original={code}>{code}</textarea>
+  <div class="pyrepl__editor-host" data-editor></div>
   <pre class="pyrepl__output" data-output>Click <strong>Run tests</strong> to execute. First run downloads Python (~10 MB, cached after that).</pre>
 </div>
 
 <script>
+  import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
+  import { EditorState } from '@codemirror/state';
+  import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands';
+  import { python } from '@codemirror/lang-python';
+  import { oneDark } from '@codemirror/theme-one-dark';
+  import {
+    syntaxHighlighting,
+    defaultHighlightStyle,
+    indentOnInput,
+    bracketMatching,
+    indentUnit,
+  } from '@codemirror/language';
+
   const PYODIDE_VERSION = '0.27.2';
   const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 
@@ -48,15 +56,40 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     return pyodidePromise;
   }
 
+  function makeEditor(host: HTMLElement, initialCode: string): EditorView {
+    return new EditorView({
+      doc: initialCode,
+      extensions: [
+        lineNumbers(),
+        highlightActiveLine(),
+        history(),
+        indentOnInput(),
+        bracketMatching(),
+        indentUnit.of('    '),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        python(),
+        oneDark,
+        keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
+        EditorState.tabSize.of(4),
+      ],
+      parent: host,
+    });
+  }
+
   function attachRepl(root: HTMLElement) {
     const runBtn = root.querySelector<HTMLButtonElement>('.pyrepl__run')!;
     const resetBtn = root.querySelector<HTMLButtonElement>('.pyrepl__reset')!;
-    const editor = root.querySelector<HTMLTextAreaElement>('.pyrepl__editor')!;
+    const host = root.querySelector<HTMLElement>('[data-editor]')!;
     const output = root.querySelector<HTMLElement>('[data-output]')!;
     const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const original = root.dataset.original ?? '';
+
+    const view = makeEditor(host, original);
 
     resetBtn.addEventListener('click', () => {
-      editor.value = editor.dataset.original ?? '';
+      view.dispatch({
+        changes: { from: 0, to: view.state.doc.length, insert: original },
+      });
       output.textContent = '(reset)';
       status.textContent = 'idle';
     });
@@ -74,8 +107,9 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
         pyodide.setStdout({ batched: (s: string) => { stdout += s + '\n'; } });
         pyodide.setStderr({ batched: (s: string) => { stderr += s + '\n'; } });
 
+        const code = view.state.doc.toString();
         try {
-          await pyodide.runPythonAsync(editor.value);
+          await pyodide.runPythonAsync(code);
           const text = (stdout || '(no output)') + (stderr ? `\n--- stderr ---\n${stderr}` : '');
           output.textContent = text;
           status.textContent = stderr ? 'done (with stderr)' : 'done';
@@ -133,21 +167,22 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     font-size: 0.85rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
-  .pyrepl__editor {
-    width: 100%;
+  .pyrepl__editor-host {
+    /* CodeMirror styles itself; this just sizes the host. */
     min-height: 280px;
-    padding: 0.75rem;
-    border: none;
-    outline: none;
-    background: var(--sl-color-gray-7, #1e1e1e);
-    color: var(--sl-color-text);
+    max-height: 560px;
+    overflow: auto;
+  }
+  .pyrepl__editor-host :global(.cm-editor) {
+    height: 100%;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.85rem;
+  }
+  .pyrepl__editor-host :global(.cm-editor.cm-focused) {
+    outline: none;
+  }
+  .pyrepl__editor-host :global(.cm-scroller) {
     line-height: 1.45;
-    resize: vertical;
-    tab-size: 4;
-    box-sizing: border-box;
-    display: block;
   }
   .pyrepl__output {
     margin: 0;
