@@ -196,8 +196,8 @@ For completeness, the algorithm side of the table.
 
 | Output type | Time | Space | Example |
 |---|---|---|---|
-| All subsets (2^n) | O(2^n · n) | O(n) recursion | LeetCode 78 |
-| All permutations (n!) | O(n! · n) | O(n) recursion | LeetCode 46 |
+| All subsets (2^n) | O(2^n · n) | O(n) recursion | [LeetCode 78](../topics/cs/leetcode-150/backtracking/078-subsets/) |
+| All permutations (n!) | O(n! · n) | O(n) recursion | [LeetCode 46](../topics/cs/leetcode-150/backtracking/046-permutations/) |
 | All k-combinations | O(C(n,k) · k) | O(k) | LeetCode 77 |
 
 ---

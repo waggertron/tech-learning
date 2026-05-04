@@ -327,7 +327,7 @@ def find_all_itineraries(flights, start, destination, earliest_depart=0, min_con
 ## Concepts in this problem
 
 - **Temporal graphs / time-respecting paths.** A path in a temporal graph must traverse edges in non-decreasing time. Standard graph algorithms don't apply directly; you either use the time-expanded reduction or modify the algorithm to carry time as part of the state.
-- **State expansion.** When the textbook state space (`airport`) is insufficient, expand it (`(airport, time)` or `(airport, hops)`). This is the same trick used in K-stops shortest path (LeetCode 787) and in dynamic programming with multiple dimensions.
+- **State expansion.** When the textbook state space (`airport`) is insufficient, expand it (`(airport, time)` or `(airport, hops)`). This is the same trick used in K-stops shortest path ([LeetCode 787](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/)) and in dynamic programming with multiple dimensions.
 - **Dominance pruning.** Two states `(airport, t1)` and `(airport, t2)` with `t1 < t2` and identical airport: `t2` is strictly dominated; you never need to expand it. Critical to keeping BFS/Dijkstra polynomial.
 - **Why standard Dijkstra works here.** The cost (arrival time) is non-decreasing along any path because flights have positive duration and waiting has non-negative cost. No negative edges, so Dijkstra is correct without modification.
 - **Why DFS visited-set is subtle.** You can revisit airports; the right "visited" key is the flight (each flight used at most once per itinerary), not the airport.
