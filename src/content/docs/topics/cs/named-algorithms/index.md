@@ -15,11 +15,13 @@ The aim isn't comprehensiveness, it's pattern recognition: when you hear "runnin
 ## Algorithms
 
 - [Kadane's algorithm](./kadane/), maximum contiguous subarray sum in O(n), and its product / stock-price variants
+- [Dijkstra's algorithm](./dijkstra/), single-source shortest paths on non-negative weighted graphs in O((V + E) log V)
+- [Breadth-First Search](./bfs/), level-by-level graph and grid traversal; shortest path in unweighted graphs
+- [Depth-First Search](./dfs/), commit-and-backtrack traversal; cycle detection, topological sort, connected components
 
 ## Coming soon
 
 - Floyd's tortoise and hare, cycle detection in O(1) space
-- Dijkstra's algorithm, shortest paths with non-negative weights
 - Bellman-Ford, shortest paths with negative weights and cycle detection
 - Kahn's algorithm, topological sort via BFS
 - Tarjan's SCC, strongly connected components in one DFS
