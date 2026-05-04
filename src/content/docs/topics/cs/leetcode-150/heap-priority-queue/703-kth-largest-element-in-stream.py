@@ -36,6 +36,15 @@ def _run_tests():
     assert kl3.add(0) == 1   # 3rd largest among [1,2,0] would be 0; kth=2nd=1
     assert kl3.add(3) == 2   # [0,1,2,3] kth=2nd=2
 
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    kl_big = KthLargest(100, list(range(500)))
+    for i in range(1000):
+        kl_big.add(i * 7 % 10000)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf KthLargest 1000 add ops: {_ms:.1f}ms')
+
     print("all tests pass")
 
 if __name__ == "__main__":

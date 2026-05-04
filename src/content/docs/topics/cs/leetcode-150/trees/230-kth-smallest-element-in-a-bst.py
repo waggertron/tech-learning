@@ -31,6 +31,17 @@ def _run_tests():
     assert kth_smallest(build_tree([5, 3, 6, 2, 4, None, None, 1]), 3) == 3
     assert kth_smallest(build_tree([1]), 1) == 1
     assert kth_smallest(build_tree([3, 1, 4, None, 2]), 4) == 4
+    # --- large-input timing ---
+    import time as _t
+    # build a sorted right-chain BST of 1000 nodes
+    _bst_nodes = [TreeNode(i) for i in range(1000)]
+    for _i in range(999):
+        _bst_nodes[_i].right = _bst_nodes[_i + 1]
+    _bst_root = _bst_nodes[0]
+    _t0 = _t.perf_counter()
+    kth_smallest(_bst_root, 500)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf kth_smallest (k=500) on 1000-node BST chain: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

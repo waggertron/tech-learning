@@ -40,6 +40,22 @@ def _run_tests():
     assert lowest_common_ancestor(t, find_node(t, 0), find_node(t, 5)).val == 2
     t2 = build_tree([4, 2, 6, 1, 3, 5, 7])
     assert lowest_common_ancestor(t2, find_node(t2, 5), find_node(t2, 7)).val == 6
+    # --- large-input timing ---
+    import time as _t
+    def _make_tree(n):
+        if not n: return None
+        nodes = [TreeNode(i) for i in range(n)]
+        for i in range(n):
+            if 2*i+1 < n: nodes[i].left = nodes[2*i+1]
+            if 2*i+2 < n: nodes[i].right = nodes[2*i+2]
+        return nodes[0]
+    _root = _make_tree(1000)
+    _p = _root.left
+    _q = _root.right
+    _t0 = _t.perf_counter()
+    lowest_common_ancestor(_root, _p, _q)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf lowest_common_ancestor on 1000-node tree: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

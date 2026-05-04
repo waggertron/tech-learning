@@ -8,6 +8,14 @@ def _run_tests():
     assert insert([[1, 2], [3, 5]], [7, 9]) == [[1, 2], [3, 5], [7, 9]]
     assert insert([[1, 2], [3, 4], [5, 6]], [0, 10]) == [[0, 10]]
     assert insert([], [1, 5]) == [[1, 5]]
+
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    insert([[2 * i, 2 * i + 1] for i in range(1000)], [999, 1000])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf insert 1000 intervals: {_ms:.1f}ms')
+
     print('all tests pass')
 
 if __name__ == '__main__':

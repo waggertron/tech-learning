@@ -8,6 +8,13 @@ def _run_tests():
     assert search([5], 3) == -1
     assert search([-1, 0, 3, 5, 9, 12], -1) == 0
     assert search([-1, 0, 3, 5, 9, 12], 12) == 5
+    # --- large-input timing ---
+    import time as _t
+    _arr = list(range(100000))
+    _t0 = _t.perf_counter()
+    search(_arr, 99999)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf binary search n=100000: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

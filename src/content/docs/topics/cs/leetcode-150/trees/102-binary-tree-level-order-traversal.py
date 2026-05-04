@@ -32,6 +32,20 @@ def _run_tests():
     assert level_order(None) == []
     t = TreeNode(1, TreeNode(2, TreeNode(3)))
     assert level_order(t) == [[1], [2], [3]]
+    # --- large-input timing ---
+    import time as _t
+    def _make_tree(n):
+        if not n: return None
+        nodes = [TreeNode(i) for i in range(n)]
+        for i in range(n):
+            if 2*i+1 < n: nodes[i].left = nodes[2*i+1]
+            if 2*i+2 < n: nodes[i].right = nodes[2*i+2]
+        return nodes[0]
+    _root = _make_tree(1000)
+    _t0 = _t.perf_counter()
+    level_order(_root)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf level_order on 1000-node complete tree: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

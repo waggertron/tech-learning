@@ -49,6 +49,17 @@ def _run_tests():
     assert c2.get(1) == 100
     assert c2.get(2) == -1
     assert c2.get(3) == 3
+    # --- large-input timing ---
+    import time as _t
+    _cache = LRUCache(500)
+    _t0 = _t.perf_counter()
+    for _i in range(2000):
+        if _i % 2 == 0:
+            _cache.put(_i % 600, _i)
+        else:
+            _cache.get(_i % 600)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf LRUCache(capacity=500, 2000 get/put ops): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

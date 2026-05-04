@@ -33,6 +33,20 @@ def _run_tests():
     assert is_balanced(build_tree([1])) == True
     t = TreeNode(1, TreeNode(2, TreeNode(3, TreeNode(4))))
     assert is_balanced(t) == False
+    # --- large-input timing ---
+    import time as _t
+    def _make_tree(n):
+        if not n: return None
+        nodes = [TreeNode(i) for i in range(n)]
+        for i in range(n):
+            if 2*i+1 < n: nodes[i].left = nodes[2*i+1]
+            if 2*i+2 < n: nodes[i].right = nodes[2*i+2]
+        return nodes[0]
+    _root = _make_tree(1000)
+    _t0 = _t.perf_counter()
+    is_balanced(_root)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf is_balanced on 1000-node complete tree: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

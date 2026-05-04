@@ -8,6 +8,12 @@ def _run_tests():
     r2 = subsets([0])
     assert sorted(map(tuple, r2)) == [(), (0,)]
     assert subsets([]) == [[]]
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    subsets(list(range(12)))
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf subsets(n=12): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

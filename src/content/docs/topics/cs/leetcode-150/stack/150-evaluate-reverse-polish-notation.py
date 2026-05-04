@@ -9,6 +9,13 @@ def _run_tests():
     assert eval_rpn(['6', '2', '/']) == 3
     assert eval_rpn(['7', '2', '/']) == 3
     assert eval_rpn(['-7', '2', '/']) == -3
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    _tokens = ['1'] * 2500 + ['+'] * 2499
+    eval_rpn(_tokens)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf 4999-token RPN expression: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

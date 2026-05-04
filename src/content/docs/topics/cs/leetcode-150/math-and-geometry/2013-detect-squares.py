@@ -26,6 +26,17 @@ def _run_tests():
     d3.add([0, 2])
     d3.add([2, 2])
     assert d3.count([0, 0]) == 1
+
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    d_big = DetectSquares()
+    for i in range(1000):
+        d_big.add([i % 32, i % 32])
+        d_big.count([i % 32, (i + 1) % 32])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf DetectSquares 1000 add+count ops: {_ms:.1f}ms')
+
     print('all tests pass')
 
 if __name__ == '__main__':

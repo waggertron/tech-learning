@@ -33,6 +33,24 @@ def _run_tests():
     assert is_valid_bst(None) == True
     assert is_valid_bst(build_tree([3, 1, 5, 0, 2, 4, 6])) == True
     assert is_valid_bst(build_tree([5, 4, 6, None, None, 3, 7])) == False
+    # --- large-input timing ---
+    import time as _t
+    def _make_tree(n):
+        if not n: return None
+        nodes = [TreeNode(i) for i in range(n)]
+        for i in range(n):
+            if 2*i+1 < n: nodes[i].left = nodes[2*i+1]
+            if 2*i+2 < n: nodes[i].right = nodes[2*i+2]
+        return nodes[0]
+    # build a sorted left-chain BST of 1000 nodes (valid BST)
+    _bst_nodes = [TreeNode(i) for i in range(1000)]
+    for _i in range(999):
+        _bst_nodes[_i].right = _bst_nodes[_i + 1]
+    _bst_root = _bst_nodes[0]
+    _t0 = _t.perf_counter()
+    is_valid_bst(_bst_root)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf validate_bst on 1000-node sorted BST: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

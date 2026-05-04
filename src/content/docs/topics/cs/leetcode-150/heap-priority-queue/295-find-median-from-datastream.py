@@ -48,6 +48,16 @@ def _run_tests():
     # sorted: [2,4,6,8] -> median = (4+6)/2 = 5.0
     assert mf4.findMedian() == 5.0
 
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    mf_big = MedianFinder()
+    for i in range(1000):
+        mf_big.addNum(i)
+        mf_big.findMedian()
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf MedianFinder 1000 addNum+findMedian: {_ms:.1f}ms')
+
     print("all tests pass")
 
 if __name__ == "__main__":

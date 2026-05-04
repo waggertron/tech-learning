@@ -36,6 +36,21 @@ def _run_tests():
     assert is_subtree(t, t) == True
     assert is_subtree(build_tree([1, 2, 3]), build_tree([2])) == True
     assert is_subtree(build_tree([1, 2, 3]), build_tree([4])) == False
+    # --- large-input timing ---
+    import time as _t
+    def _make_tree(n):
+        if not n: return None
+        nodes = [TreeNode(i) for i in range(n)]
+        for i in range(n):
+            if 2*i+1 < n: nodes[i].left = nodes[2*i+1]
+            if 2*i+2 < n: nodes[i].right = nodes[2*i+2]
+        return nodes[0]
+    _root = _make_tree(1000)
+    _sub = _make_tree(50)
+    _t0 = _t.perf_counter()
+    is_subtree(_root, _sub)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf is_subtree (1000-node root, 50-node subtree): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

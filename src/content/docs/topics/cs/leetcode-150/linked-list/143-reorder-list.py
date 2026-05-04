@@ -35,6 +35,19 @@ def _run_tests():
     h = from_list([1, 2])
     reorder_list(h)
     assert to_list(h) == [1, 2]
+    # --- large-input timing ---
+    import time as _t
+    def _make_list(vals):
+        if not vals: return None
+        head = ListNode(vals[0])
+        cur = head
+        for v in vals[1:]: cur.next = ListNode(v); cur = cur.next
+        return head
+    _head = _make_list(list(range(1000)))
+    _t0 = _t.perf_counter()
+    reorder_list(_head)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf reorder_list(1000 nodes): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

@@ -7,6 +7,12 @@ def _run_tests():
     assert merge_triplets([[3, 4, 5]], [2, 5, 8]) == False
     assert merge_triplets([[1, 1, 1]], [1, 1, 1]) == True
     assert merge_triplets([[1, 0, 0], [0, 1, 0], [0, 0, 1]], [1, 1, 1]) == True
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    merge_triplets([[i % 5 + 1, i % 7 + 1, i % 3 + 1] for i in range(10000)], [5, 7, 3])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf merge_triplets(n=10000): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

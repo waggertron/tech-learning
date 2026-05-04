@@ -30,6 +30,18 @@ def _run_tests():
     feed = t2.getNewsFeed(1)
     assert len(feed) == 10
     assert feed == list(range(11, 1, -1))
+
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    t_big = Twitter()
+    for i in range(1000):
+        t_big.postTweet(i % 10, i)
+        t_big.follow(0, i % 10)
+        t_big.getNewsFeed(0)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf Twitter 1000 mixed ops: {_ms:.1f}ms')
+
     print('all tests pass')
 
 if __name__ == '__main__':

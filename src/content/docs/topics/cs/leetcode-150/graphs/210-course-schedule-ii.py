@@ -13,6 +13,12 @@ def _run_tests():
     result = find_order(3, [])
     assert set(result) == {0, 1, 2}
     assert find_order(3, [[0, 1], [1, 2], [2, 0]]) == []
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    find_order(200, [[i + 1, i] for i in range(199)])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf find-order 200 courses DAG chain: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

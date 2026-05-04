@@ -15,6 +15,13 @@ def _run_tests():
     assert normalize(r4) == [['abc', 'bca', 'cab']]
     r5 = group_anagrams(['a', 'b', 'c'])
     assert normalize(r5) == [['a'], ['b'], ['c']]
+    # --- large-input timing ---
+    import time as _t
+    _big = [''.join(['a'] * (i % 5 + 1)) for i in range(10000)]
+    _t0 = _t.perf_counter()
+    group_anagrams(_big)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf group_anagrams n=10000 strings: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

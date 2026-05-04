@@ -8,6 +8,12 @@ def _run_tests():
     assert is_valid_sudoku(dup_row) == False
     empty = [['.'] * 9 for _ in range(9)]
     assert is_valid_sudoku(empty) == True
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    is_valid_sudoku([['.'] * 9 for _ in range(9)])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf is_valid_sudoku 9x9 empty board: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

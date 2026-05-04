@@ -58,6 +58,21 @@ def _run_tests():
     assert codec.deserialize(codec.serialize(t2)).val == 42
     t3 = build_tree([1, 2, None, 3])
     assert tree_to_list(codec.deserialize(codec.serialize(t3))) == [1, 2, None, 3]
+    # --- large-input timing ---
+    import time as _t
+    def _make_tree(n):
+        if not n: return None
+        nodes = [TreeNode(i) for i in range(n)]
+        for i in range(n):
+            if 2*i+1 < n: nodes[i].left = nodes[2*i+1]
+            if 2*i+2 < n: nodes[i].right = nodes[2*i+2]
+        return nodes[0]
+    _root = _make_tree(1000)
+    _codec = Codec()
+    _t0 = _t.perf_counter()
+    _codec.deserialize(_codec.serialize(_root))
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf serialize+deserialize round-trip on 1000-node tree: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

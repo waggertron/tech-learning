@@ -7,6 +7,12 @@ def _run_tests():
     assert two_sum([3, 3], 6) == [0, 1]
     assert two_sum([1, 2, 3, 4, 5], 9) == [3, 4]
     assert two_sum([0, 4], 4) == [0, 1]
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    two_sum(list(range(10000)), 19997)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf two_sum n=10000: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

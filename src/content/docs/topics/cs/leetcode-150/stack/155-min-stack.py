@@ -35,6 +35,15 @@ def _run_tests():
     ms3.push(5)
     assert ms3.top() == 5
     assert ms3.getMin() == 5
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    _ms_stack = MinStack()
+    for _i in range(5000):
+        _ms_stack.push(_i)
+    _ms_stack.getMin()
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf 5000-element push + getMin: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

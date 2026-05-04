@@ -45,6 +45,16 @@ def _run_tests():
     assert set(visited.keys()) == {1, 2, 3, 4}
     for orig in nodes:
         assert orig not in visited.values()
+    # --- large-input timing ---
+    import time as _t
+    big_nodes = [Node(i) for i in range(200)]
+    for i in range(199):
+        big_nodes[i].neighbors = [big_nodes[i + 1]]
+        big_nodes[i + 1].neighbors = [big_nodes[i]]
+    _t0 = _t.perf_counter()
+    clone_graph(big_nodes[0])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf clone-graph 200-node chain: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

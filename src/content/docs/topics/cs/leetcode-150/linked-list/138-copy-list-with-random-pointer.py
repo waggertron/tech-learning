@@ -47,6 +47,17 @@ def _run_tests():
     while cur:
         assert id(cur) not in orig_nodes
         cur = cur.next
+    # --- large-input timing ---
+    import time as _t
+    _nodes = [Node(i) for i in range(1000)]
+    for i in range(len(_nodes) - 1):
+        _nodes[i].next = _nodes[i + 1]
+    for i in range(len(_nodes)):
+        _nodes[i].random = _nodes[i % 7]
+    _t0 = _t.perf_counter()
+    copy_random_list(_nodes[0])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf copy_random_list(1000 nodes with random pointers): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

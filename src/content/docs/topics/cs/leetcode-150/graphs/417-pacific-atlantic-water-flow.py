@@ -12,6 +12,13 @@ def _run_tests():
     r3 = pacific_atlantic(h3)
     assert [2, 2] in r3
     assert pacific_atlantic([]) == []
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    big = [[i + j for j in range(30)] for i in range(30)]
+    pacific_atlantic(big)
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf pacific-atlantic 30x30 grid: {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

@@ -7,6 +7,12 @@ def _run_tests():
     assert change(0, [1, 2, 5]) == 1
     assert change(10, [5]) == 1
     assert change(10, [1, 5, 10]) == 4
+    # --- large-input timing ---
+    import time as _t
+    _t0 = _t.perf_counter()
+    change(5000, [1, 2, 5, 10, 25, 50])
+    _ms = (_t.perf_counter() - _t0) * 1000
+    print(f'perf change(5000, [1,2,5,10,25,50]): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':
