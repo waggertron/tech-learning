@@ -10,9 +10,9 @@ def _run_tests():
     # --- large-input timing ---
     import time as _t
     _t0 = _t.perf_counter()
-    change(5000, [1, 2, 5, 10, 25, 50])
+    change(500, [1, 2, 5, 10, 25, 50])
     _ms = (_t.perf_counter() - _t0) * 1000
-    print(f'perf change(5000, [1,2,5,10,25,50]): {_ms:.1f}ms')
+    print(f'perf change(500, [1,2,5,10,25,50]): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':

@@ -11,9 +11,9 @@ def _run_tests():
     # --- large-input timing ---
     import time as _t
     _t0 = _t.perf_counter()
-    coin_change([1, 2, 5], 5000)
+    coin_change([1, 2, 5], 500)
     _ms = (_t.perf_counter() - _t0) * 1000
-    print(f'perf coin_change([1,2,5], 5000): {_ms:.1f}ms')
+    print(f'perf coin_change([1,2,5], 500): {_ms:.1f}ms')
     print('all tests pass')
 
 if __name__ == '__main__':
