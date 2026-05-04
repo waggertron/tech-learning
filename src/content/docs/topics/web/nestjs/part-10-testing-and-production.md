@@ -1,5 +1,5 @@
 ---
-title: "Part 10, Testing and production"
+title: "Part 10: Testing and production"
 description: "Unit-test NestJS with Jest and createTestingModule, write e2e tests with Supertest, mock providers cleanly, generate Swagger/OpenAPI docs with @nestjs/swagger, containerize with Docker, and add health checks via @nestjs/terminus."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

@@ -1,5 +1,5 @@
 ---
-title: "Part 2, Dependency injection"
+title: "Part 2: Dependency injection"
 description: "How NestJS's IoC container works: providers, @Injectable(), @Inject(), module imports and exports, forwardRef for circular dependencies, and the three provider scopes (DEFAULT, REQUEST, TRANSIENT)."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

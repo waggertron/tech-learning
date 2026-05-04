@@ -1,5 +1,5 @@
 ---
-title: "Part 4, Context and reducers"
+title: "Part 4: Context and reducers"
 description: "The Context API, useContext, and useReducer. How to share state across a tree without prop drilling, and when not to reach for context at all."
 parent: react
 tags: [react, javascript, typescript, web, frontend, intermediate]

@@ -1,5 +1,5 @@
 ---
-title: "Part 9, Performance"
+title: "Part 9: Performance"
 description: "React.memo, useMemo, and useCallback done right. React.lazy and Suspense for code splitting, the React Profiler for finding what is actually slow."
 parent: react
 tags: [react, javascript, typescript, web, frontend, advanced]

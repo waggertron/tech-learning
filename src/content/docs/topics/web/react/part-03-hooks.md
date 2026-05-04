@@ -1,5 +1,5 @@
 ---
-title: "Part 3, Hooks"
+title: "Part 3: Hooks"
 description: "useEffect with cleanup, useRef, useCallback, useMemo, and custom hooks. The full hooks toolkit and the rules that keep them predictable."
 parent: react
 tags: [react, javascript, typescript, web, frontend, intermediate]

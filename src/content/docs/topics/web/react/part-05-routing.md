@@ -1,5 +1,5 @@
 ---
-title: "Part 5, Routing"
+title: "Part 5: Routing"
 description: "React Router v7: defining routes, nested layouts, data loaders, navigation, and protected routes. The modern file-based and config-based approaches side by side."
 parent: react
 tags: [react, javascript, typescript, web, frontend, intermediate]

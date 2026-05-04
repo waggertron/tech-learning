@@ -1,5 +1,5 @@
 ---
-title: "Part 9, Testing"
+title: "Part 9: Testing"
 description: "Integration tests with Jest and Supertest, mocking dependencies, test database setup, and coverage. Tests that verify HTTP behavior end-to-end without spinning up a real server."
 parent: express
 tags: [express, nodejs, javascript, web, backend, testing, jest, supertest]

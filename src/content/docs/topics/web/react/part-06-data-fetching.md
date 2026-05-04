@@ -1,5 +1,5 @@
 ---
-title: "Part 6, Data fetching"
+title: "Part 6: Data fetching"
 description: "The fetch + useEffect baseline, then TanStack Query for caching, background updates, and mutations. Loading and error states that don't require boilerplate."
 parent: react
 tags: [react, javascript, typescript, web, frontend, intermediate]

@@ -1,5 +1,5 @@
 ---
-title: "Part 5, Authentication"
+title: "Part 5: Authentication"
 description: "JWT with jsonwebtoken, middleware-based auth guards, bcrypt for password hashing, refresh tokens, and the session vs stateless tradeoff."
 parent: express
 tags: [express, nodejs, javascript, web, backend, auth, jwt, security]

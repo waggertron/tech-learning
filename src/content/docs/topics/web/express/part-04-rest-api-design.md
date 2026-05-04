@@ -1,5 +1,5 @@
 ---
-title: "Part 4, REST API design"
+title: "Part 4: REST API design"
 description: "Resource-based routes, splitting into router files, Express Router, API versioning with /api/v1/, CORS setup, and helmet for security headers."
 parent: express
 tags: [express, nodejs, javascript, web, backend, rest, api]

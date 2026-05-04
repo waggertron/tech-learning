@@ -1,5 +1,5 @@
 ---
-title: "Part 2, State and events"
+title: "Part 2: State and events"
 description: "useState, event handlers, controlled inputs, and lifting state up. How React components respond to user actions and share data with their neighbors."
 parent: react
 tags: [react, javascript, typescript, web, frontend, beginner]

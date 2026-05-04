@@ -1,5 +1,5 @@
 ---
-title: "Part 10, Production"
+title: "Part 10: Production"
 description: "Testing with Vitest and React Testing Library, TypeScript patterns specific to React, deployment to Vercel and Netlify, and a first look at server-side rendering with Next.js."
 parent: react
 tags: [react, javascript, typescript, web, frontend, advanced]

@@ -1,5 +1,5 @@
 ---
-title: "Part 1, Project setup and the MVT pattern"
+title: "Part 1: Project setup and the MVT pattern"
 description: Install Django, start a project, run the dev server, and understand how a request flows through URLs → views → templates. The MVT pattern and where each piece lives.
 parent: django
 tags: [django, python, web, beginner]

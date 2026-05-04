@@ -1,5 +1,5 @@
 ---
-title: "Part 8, File uploads"
+title: "Part 8: File uploads"
 description: "Multer for multipart/form-data, file size and type validation, serving static files, and streaming large files to avoid memory exhaustion."
 parent: express
 tags: [express, nodejs, javascript, web, backend, uploads, multer, files]

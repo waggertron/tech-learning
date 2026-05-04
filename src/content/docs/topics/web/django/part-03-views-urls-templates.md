@@ -1,5 +1,5 @@
 ---
-title: "Part 3, Views, URLs, and templates"
+title: "Part 3: Views, URLs, and templates"
 description: Function-based vs class-based views, URL routing with `path()`/`re_path()`/`include()`, the Django template language, and how to render data cleanly.
 parent: django
 tags: [django, views, urls, templates, beginner]

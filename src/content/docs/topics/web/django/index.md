@@ -18,16 +18,16 @@ Each part is standalone enough to read on its own, but later parts assume you un
 
 ## The parts
 
-1. [Part 1, Project setup and the MVT pattern](./part-01-setup-and-mvt/) *(beginner)*
-2. [Part 2, Models, migrations, and the ORM](./part-02-models-and-orm/) *(beginner)*
-3. [Part 3, Views, URLs, and templates](./part-03-views-urls-templates/) *(beginner)*
-4. [Part 4, Forms and user input](./part-04-forms-and-user-input/) *(beginner → intermediate)*
-5. [Part 5, Authentication and authorization](./part-05-authentication/) *(intermediate)*
-6. [Part 6, Django REST Framework basics](./part-06-drf-basics/) *(intermediate)*
-7. [Part 7, Advanced ORM: QuerySets, Q/F, prefetching, aggregation](./part-07-advanced-orm/) *(intermediate → advanced)*
-8. [Part 8, Caching, performance, and the N+1 problem](./part-08-caching-and-performance/) *(advanced)*
-9. [Part 9, Async Django, Channels, and Celery](./part-09-async-and-background-tasks/) *(advanced)*
-10. [Part 10, Production: deployment, security, observability](./part-10-production/) *(expert)*
+1. [Part 1: Project setup and the MVT pattern](./part-01-setup-and-mvt/) *(beginner)*
+2. [Part 2: Models, migrations, and the ORM](./part-02-models-and-orm/) *(beginner)*
+3. [Part 3: Views, URLs, and templates](./part-03-views-urls-templates/) *(beginner)*
+4. [Part 4: Forms and user input](./part-04-forms-and-user-input/) *(beginner → intermediate)*
+5. [Part 5: Authentication and authorization](./part-05-authentication/) *(intermediate)*
+6. [Part 6: Django REST Framework basics](./part-06-drf-basics/) *(intermediate)*
+7. [Part 7: Advanced ORM: QuerySets, Q/F, prefetching, aggregation](./part-07-advanced-orm/) *(intermediate → advanced)*
+8. [Part 8: Caching, performance, and the N+1 problem](./part-08-caching-and-performance/) *(advanced)*
+9. [Part 9: Async Django, Channels, and Celery](./part-09-async-and-background-tasks/) *(advanced)*
+10. [Part 10: Production: deployment, security, observability](./part-10-production/) *(expert)*
 
 ## Versions this series targets
 

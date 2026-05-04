@@ -1,5 +1,5 @@
 ---
-title: "Part 7, Validation and error handling"
+title: "Part 7: Validation and error handling"
 description: "Input validation with Zod, centralized error handler middleware, HTTP error classes, and async error propagation with express-async-errors."
 parent: express
 tags: [express, nodejs, javascript, web, backend, validation, errors, zod]

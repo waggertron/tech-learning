@@ -1,5 +1,5 @@
 ---
-title: "Part 6, Database integration"
+title: "Part 6: Database integration"
 description: "PostgreSQL with node-postgres (pg), parameterized queries, connection pooling, Prisma ORM basics, and transactions."
 parent: express
 tags: [express, nodejs, javascript, web, backend, postgresql, prisma, database]

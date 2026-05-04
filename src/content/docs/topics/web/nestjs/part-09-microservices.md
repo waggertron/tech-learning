@@ -1,5 +1,5 @@
 ---
-title: "Part 9, Microservices"
+title: "Part 9: Microservices"
 description: "Break a NestJS app into services with @nestjs/microservices: TCP and Redis/RabbitMQ transports, @MessagePattern for request-reply, @EventPattern for fire-and-forget, ClientProxy for sending messages, and hybrid HTTP plus microservice apps."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

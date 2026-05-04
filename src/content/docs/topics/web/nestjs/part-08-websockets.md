@@ -1,5 +1,5 @@
 ---
-title: "Part 8, WebSockets"
+title: "Part 8: WebSockets"
 description: "Add real-time communication to a NestJS app with @WebSocketGateway and Socket.io: handle messages with @SubscribeMessage, manage rooms, broadcast events, and use gateway lifecycle hooks."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

@@ -1,5 +1,5 @@
 ---
-title: "Part 2, Middleware"
+title: "Part 2: Middleware"
 description: "The middleware concept, app.use(), execution order, express.json(), morgan for logging, writing custom middleware, and the next() function."
 parent: express
 tags: [express, nodejs, javascript, web, backend, middleware]

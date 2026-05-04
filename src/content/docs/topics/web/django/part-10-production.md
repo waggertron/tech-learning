@@ -1,5 +1,5 @@
 ---
-title: "Part 10, Production: deployment, security, observability"
+title: "Part 10: Production: deployment, security, observability"
 description: The checklist that separates a toy Django app from a production one, settings hardening, ASGI/WSGI servers, static files, zero-downtime migrations, logging, Sentry, and the security headers you forget until someone else tells you to add them.
 parent: django
 tags: [django, production, deployment, security, observability, expert]

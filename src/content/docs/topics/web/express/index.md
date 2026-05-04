@@ -19,16 +19,16 @@ Each part is standalone enough to read on its own, but later parts assume you un
 
 ## The parts
 
-1. [Part 1, Setup and routing](./part-01-setup-and-routing/) *(beginner)*
-2. [Part 2, Middleware](./part-02-middleware/) *(beginner)*
-3. [Part 3, Request and response](./part-03-request-response/) *(beginner)*
-4. [Part 4, REST API design](./part-04-rest-api-design/) *(beginner → intermediate)*
-5. [Part 5, Authentication](./part-05-authentication/) *(intermediate)*
-6. [Part 6, Database integration](./part-06-database/) *(intermediate)*
-7. [Part 7, Validation and error handling](./part-07-validation-and-errors/) *(intermediate)*
-8. [Part 8, File uploads](./part-08-file-uploads/) *(intermediate)*
-9. [Part 9, Testing](./part-09-testing/) *(intermediate → advanced)*
-10. [Part 10, Production](./part-10-production/) *(advanced)*
+1. [Part 1: Setup and routing](./part-01-setup-and-routing/) *(beginner)*
+2. [Part 2: Middleware](./part-02-middleware/) *(beginner)*
+3. [Part 3: Request and response](./part-03-request-response/) *(beginner)*
+4. [Part 4: REST API design](./part-04-rest-api-design/) *(beginner → intermediate)*
+5. [Part 5: Authentication](./part-05-authentication/) *(intermediate)*
+6. [Part 6: Database integration](./part-06-database/) *(intermediate)*
+7. [Part 7: Validation and error handling](./part-07-validation-and-errors/) *(intermediate)*
+8. [Part 8: File uploads](./part-08-file-uploads/) *(intermediate)*
+9. [Part 9: Testing](./part-09-testing/) *(intermediate → advanced)*
+10. [Part 10: Production](./part-10-production/) *(advanced)*
 
 ## Versions this series targets
 

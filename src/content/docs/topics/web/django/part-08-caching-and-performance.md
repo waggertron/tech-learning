@@ -1,5 +1,5 @@
 ---
-title: "Part 8, Caching, performance, and the N+1 problem"
+title: "Part 8: Caching, performance, and the N+1 problem"
 description: How to find the slow queries, fix them with `select_related`/`prefetch_related`, add per-view and fragment caching, pick a cache backend, and profile a Django app in production.
 parent: django
 tags: [django, performance, caching, n-plus-1, redis, advanced]

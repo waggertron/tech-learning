@@ -1,5 +1,5 @@
 ---
-title: "Part 7, Interceptors and filters"
+title: "Part 7: Interceptors and filters"
 description: "Build logging and response-transformation interceptors with @UseInterceptors, catch exceptions with @UseFilters and a global HttpExceptionFilter, and understand where middleware, guards, interceptors, pipes, and filters sit in the request pipeline."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

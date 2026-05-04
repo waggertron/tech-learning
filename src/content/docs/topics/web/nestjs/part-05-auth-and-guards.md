@@ -1,5 +1,5 @@
 ---
-title: "Part 5, Auth and guards"
+title: "Part 5: Auth and guards"
 description: "Add JWT authentication with @nestjs/passport and @nestjs/jwt, protect routes with AuthGuard, write custom guards, and implement role-based access control using @SetMetadata and a custom decorator."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

@@ -1,5 +1,5 @@
 ---
-title: "Part 1, Architecture and setup"
+title: "Part 1: Architecture and setup"
 description: "Install the Nest CLI, scaffold a project, understand the modules/controllers/providers triangle, and trace a request through the NestJS lifecycle from incoming HTTP to outgoing response."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

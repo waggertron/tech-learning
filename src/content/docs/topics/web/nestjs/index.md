@@ -18,16 +18,16 @@ Each part is self-contained enough to read on its own, but later parts assume th
 
 ## The parts
 
-1. [Part 1, Architecture and setup](./part-01-architecture-and-setup/) *(beginner)*
-2. [Part 2, Dependency injection](./part-02-dependency-injection/) *(beginner)*
-3. [Part 3, REST controllers](./part-03-rest-controllers/) *(beginner)*
-4. [Part 4, Database with TypeORM](./part-04-database-typeorm/) *(beginner to intermediate)*
-5. [Part 5, Auth and guards](./part-05-auth-and-guards/) *(intermediate)*
-6. [Part 6, Validation and pipes](./part-06-validation-and-pipes/) *(intermediate)*
-7. [Part 7, Interceptors and filters](./part-07-interceptors-and-filters/) *(intermediate)*
-8. [Part 8, WebSockets](./part-08-websockets/) *(advanced)*
-9. [Part 9, Microservices](./part-09-microservices/) *(advanced)*
-10. [Part 10, Testing and production](./part-10-testing-and-production/) *(expert)*
+1. [Part 1: Architecture and setup](./part-01-architecture-and-setup/) *(beginner)*
+2. [Part 2: Dependency injection](./part-02-dependency-injection/) *(beginner)*
+3. [Part 3: REST controllers](./part-03-rest-controllers/) *(beginner)*
+4. [Part 4: Database with TypeORM](./part-04-database-typeorm/) *(beginner to intermediate)*
+5. [Part 5: Auth and guards](./part-05-auth-and-guards/) *(intermediate)*
+6. [Part 6: Validation and pipes](./part-06-validation-and-pipes/) *(intermediate)*
+7. [Part 7: Interceptors and filters](./part-07-interceptors-and-filters/) *(intermediate)*
+8. [Part 8: WebSockets](./part-08-websockets/) *(advanced)*
+9. [Part 9: Microservices](./part-09-microservices/) *(advanced)*
+10. [Part 10: Testing and production](./part-10-testing-and-production/) *(expert)*
 
 ## Versions this series targets
 

@@ -1,5 +1,5 @@
 ---
-title: "Part 6, Validation and pipes"
+title: "Part 6: Validation and pipes"
 description: "Validate and transform request data with class-validator and class-transformer, apply ValidationPipe globally, write custom pipes, and use built-in pipes like ParseIntPipe and ParseUUIDPipe."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

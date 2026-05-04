@@ -1,5 +1,5 @@
 ---
-title: "Part 1, Setup and routing"
+title: "Part 1: Setup and routing"
 description: "npm init, installing Express, the app object, and every HTTP method handler. Route params, query strings, and sending responses with res.json, res.send, and res.status."
 parent: express
 tags: [express, nodejs, javascript, web, backend, beginner]

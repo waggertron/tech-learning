@@ -1,5 +1,5 @@
 ---
-title: "Part 8, Forms"
+title: "Part 8: Forms"
 description: "Controlled forms from scratch, React Hook Form for complex cases, Zod for schema validation, and submission patterns that handle errors gracefully."
 parent: react
 tags: [react, javascript, typescript, web, frontend, intermediate]

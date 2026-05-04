@@ -1,5 +1,5 @@
 ---
-title: "Part 7, Advanced ORM: QuerySets, Q/F, prefetching, aggregation"
+title: "Part 7: Advanced ORM: QuerySets, Q/F, prefetching, aggregation"
 description: The tools that separate senior Django devs from beginners, `Q` and `F` expressions, `select_related` vs `prefetch_related`, annotations, subqueries with `OuterRef`, and when to drop down to raw SQL.
 parent: django
 tags: [django, orm, queryset, advanced]

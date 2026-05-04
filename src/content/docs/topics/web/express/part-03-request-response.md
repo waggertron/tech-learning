@@ -1,5 +1,5 @@
 ---
-title: "Part 3, Request and response"
+title: "Part 3: Request and response"
 description: "Every req and res property you will actually use: body, params, query, headers, cookies, IP. Response chaining, status codes, content negotiation, and streaming."
 parent: express
 tags: [express, nodejs, javascript, web, backend, http]

@@ -1,5 +1,5 @@
 ---
-title: "Part 7, State management"
+title: "Part 7: State management"
 description: "Zustand for lightweight global state, Redux Toolkit for larger apps. The heuristic for when you actually need either, and how slices and actions work."
 parent: react
 tags: [react, javascript, typescript, web, frontend, intermediate]

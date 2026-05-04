@@ -1,5 +1,5 @@
 ---
-title: "Part 4, Database with TypeORM"
+title: "Part 4: Database with TypeORM"
 description: "Integrate TypeORM into NestJS: install @nestjs/typeorm, define entities, use the Repository pattern, wire up OneToMany and ManyToOne relations, run migrations, and handle transactions."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

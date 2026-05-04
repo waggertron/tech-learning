@@ -18,16 +18,16 @@ Each part is standalone enough to read on its own, but later parts assume you un
 
 ## The parts
 
-1. [Part 1, JSX and components](./part-01-jsx-and-components/) *(beginner)*
-2. [Part 2, State and events](./part-02-state-and-events/) *(beginner)*
-3. [Part 3, Hooks](./part-03-hooks/) *(beginner → intermediate)*
-4. [Part 4, Context and reducers](./part-04-context-and-reducers/) *(intermediate)*
-5. [Part 5, Routing](./part-05-routing/) *(intermediate)*
-6. [Part 6, Data fetching](./part-06-data-fetching/) *(intermediate)*
-7. [Part 7, State management](./part-07-state-management/) *(intermediate → advanced)*
-8. [Part 8, Forms](./part-08-forms/) *(intermediate)*
-9. [Part 9, Performance](./part-09-performance/) *(advanced)*
-10. [Part 10, Production](./part-10-production/) *(expert)*
+1. [Part 1: JSX and components](./part-01-jsx-and-components/) *(beginner)*
+2. [Part 2: State and events](./part-02-state-and-events/) *(beginner)*
+3. [Part 3: Hooks](./part-03-hooks/) *(beginner → intermediate)*
+4. [Part 4: Context and reducers](./part-04-context-and-reducers/) *(intermediate)*
+5. [Part 5: Routing](./part-05-routing/) *(intermediate)*
+6. [Part 6: Data fetching](./part-06-data-fetching/) *(intermediate)*
+7. [Part 7: State management](./part-07-state-management/) *(intermediate → advanced)*
+8. [Part 8: Forms](./part-08-forms/) *(intermediate)*
+9. [Part 9: Performance](./part-09-performance/) *(advanced)*
+10. [Part 10: Production](./part-10-production/) *(expert)*
 
 ## Versions this series targets
 

@@ -1,5 +1,5 @@
 ---
-title: "Part 3, REST controllers"
+title: "Part 3: REST controllers"
 description: "Everything the @Controller decorator gives you: route params, query strings, request bodies, HTTP status codes, response headers, and how NestJS serializes responses automatically."
 parent: nestjs
 tags: [nestjs, typescript, nodejs, web, backend, api]

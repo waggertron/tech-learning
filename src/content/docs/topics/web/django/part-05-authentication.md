@@ -1,5 +1,5 @@
 ---
-title: "Part 5, Authentication and authorization"
+title: "Part 5: Authentication and authorization"
 description: Django's built-in auth system, the `User` model, login/logout views, permissions and groups, and when to customize the User model.
 parent: django
 tags: [django, auth, users, permissions, intermediate]

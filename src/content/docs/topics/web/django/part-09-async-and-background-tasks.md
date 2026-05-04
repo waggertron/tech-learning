@@ -1,5 +1,5 @@
 ---
-title: "Part 9, Async Django, Channels, and Celery"
+title: "Part 9: Async Django, Channels, and Celery"
 description: Async views and the async ORM, Channels for WebSockets, and Celery for background jobs. Three tools that handle the work that shouldn't block an HTTP request.
 parent: django
 tags: [django, async, channels, celery, websockets, advanced]

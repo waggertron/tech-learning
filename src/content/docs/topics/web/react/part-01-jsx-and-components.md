@@ -1,5 +1,5 @@
 ---
-title: "Part 1, JSX and components"
+title: "Part 1: JSX and components"
 description: "Scaffold a Vite + React project, understand JSX syntax, write functional components, pass props, and render lists. The mental model that everything else builds on."
 parent: react
 tags: [react, javascript, typescript, web, frontend, beginner]
