@@ -31,6 +31,7 @@ The aim isn't comprehensiveness, it's pattern recognition: when you hear "runnin
 
 ## Related topics
 
+- [Graph Theory](../graph-theory/), deep dive into graph terminology, types, components, SCCs, DAGs, and weighted-graph problem modeling
 - [Data Structures](../data-structures/), the structures these algorithms operate on
 - [LeetCode 150 (NeetCode)](../leetcode-150/), the problem catalog where these algorithms get exercised
 - [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), shorter reference card style

@@ -12,6 +12,7 @@ description: Computer science fundamentals, data structures, NeetCode 150 walkth
 - [Functional Core, Imperative Shell](./functional-core-imperative-shell/), Gary Bernhardt's architecture pattern: pure logic at the center, I/O at the edges
 - [Flight Itinerary with Transfers](./flight-itinerary/), find a valid trip through a flight graph with departure and arrival times: DFS, BFS for fewest layovers, Dijkstra for earliest arrival, plus the time-expanded graph framework that subsumes all three
 - [Named Algorithms](./named-algorithms/), the canon worth knowing by sight: Kadane's, Floyd's, Dijkstra's, KMP, and the rest
+- [Graph Theory](./graph-theory/), deep dive into terminology, graph types, components, SCCs, DAGs, bipartite graphs, weighted-graph problem modeling
 
 ## How the topics connect
 

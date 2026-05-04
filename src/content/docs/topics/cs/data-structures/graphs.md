@@ -177,6 +177,17 @@ Graphs appear in 18 NeetCode 150 problems across 2 categories (13 Graphs + 5 Adv
 
 *More coming soon, Advanced Graphs (Dijkstra, MST, Bellman-Ford).*
 
+## Related topics
+
+- [Graph theory deep dive](../../graph-theory/), full coverage of terminology, graph types, components, SCCs, DAGs, bipartite graphs, and problem modeling with weighted edges
+- [Named algorithms: BFS](../../named-algorithms/bfs/), level-by-level traversal and shortest path in unweighted graphs
+- [Named algorithms: DFS](../../named-algorithms/dfs/), commit-and-backtrack traversal, cycle detection, topological sort
+- [Named algorithms: Dijkstra's](../../named-algorithms/dijkstra/), single-source shortest paths on non-negative weighted graphs
+- [Named algorithms: Bellman-Ford](../../named-algorithms/bellman-ford/), shortest paths with negative weights
+- [Named algorithms: Kahn's](../../named-algorithms/kahns/), topological sort via BFS
+- [Named algorithms: Tarjan's](../../named-algorithms/tarjans/), strongly connected components in one DFS pass
+- [LeetCode graphs category](../../leetcode-150/graphs/)
+
 ## References
 
 - [Graph theory, Wikipedia](https://en.wikipedia.org/wiki/Graph_theory)
