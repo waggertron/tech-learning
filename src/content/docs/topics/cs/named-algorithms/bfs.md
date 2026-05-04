@@ -181,7 +181,7 @@ def multi_source_bfs(graph, sources):
     return dist
 ```
 
-**Pattern:** Rotting Oranges (LeetCode 994). Every rotten orange is a source. Push them all at minute 0. The BFS then spreads rot simultaneously from all of them, so `dist[cell]` tells you the first minute the orange at that cell goes rotten. If any fresh orange remains unreachable, return -1.
+**Pattern:** Rotting Oranges ([LeetCode 994](../leetcode-150/graphs/994-rotting-oranges/)). Every rotten orange is a source. Push them all at minute 0. The BFS then spreads rot simultaneously from all of them, so `dist[cell]` tells you the first minute the orange at that cell goes rotten. If any fresh orange remains unreachable, return -1.
 
 ```python
 from collections import deque
@@ -275,9 +275,9 @@ Use BFS when the problem structure rewards level-by-level processing:
 
 **Shortest path in an unweighted graph or grid.** DFS finds *a* path, not necessarily the shortest one. BFS guarantees the first time you reach the target, you've taken the fewest steps. This is the single biggest reason to reach for BFS.
 
-**Minimum number of operations.** "Minimum word transformations" (Word Ladder, LeetCode 127), "minimum number of mutations," "minimum moves to solve a puzzle": any time the question asks for a minimum count of discrete steps, model the state space as a graph and run BFS.
+**Minimum number of operations.** "Minimum word transformations" (Word Ladder, [LeetCode 127](../leetcode-150/graphs/127-word-ladder/)), "minimum number of mutations," "minimum moves to solve a puzzle": any time the question asks for a minimum count of discrete steps, model the state space as a graph and run BFS.
 
-**Level-by-level output.** Binary tree level order traversal (LeetCode 102) needs BFS because you process an entire level, emit it, then move to the next. DFS would require tracking depth explicitly.
+**Level-by-level output.** Binary tree level order traversal ([LeetCode 102](../leetcode-150/trees/102-binary-tree-level-order-traversal/)) needs BFS because you process an entire level, emit it, then move to the next. DFS would require tracking depth explicitly.
 
 **Detecting if a graph is bipartite.** BFS naturally assigns layers; if any edge connects two nodes in the same layer, the graph has an odd cycle and is not bipartite. DFS works too, but BFS makes the coloring intuitive.
 

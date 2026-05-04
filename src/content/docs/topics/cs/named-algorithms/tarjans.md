@@ -274,7 +274,7 @@ Look for these patterns in the problem statement:
 
 ### Course Schedule (207 / 210)
 
-LeetCode 207 asks whether you can finish all courses given prerequisites (cycle detection). LeetCode 210 asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
+[LeetCode 207](../leetcode-150/graphs/207-course-schedule/) asks whether you can finish all courses given prerequisites (cycle detection). [LeetCode 210](../leetcode-150/graphs/210-course-schedule-ii/) asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
 
 Tarjan technically answers these: if any SCC has size > 1, a cycle exists (207 returns false; 210 returns empty). But Tarjan is overkill here. The problems don't require knowing *which* vertices form cycles, only *whether* any exist. A plain DFS with `VISITING/VISITED` coloring, or Kahn's algorithm for topological sort, is simpler and equally fast.
 

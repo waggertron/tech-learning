@@ -14,7 +14,7 @@ Given a **directed acyclic graph (DAG)**, produce a linear ordering of all verti
 
 The canonical framing: you have courses, each with a list of prerequisites. You need to find an order to take all courses so that you never take a course before completing its prerequisites. That is a topological sort problem.
 
-Named after Arthur B. Kahn, who described the algorithm in 1962. It is the standard BFS-based answer to LeetCode 207 (Course Schedule) and 210 (Course Schedule II), and it appears in every build system, package manager, and task scheduler worth naming.
+Named after Arthur B. Kahn, who described the algorithm in 1962. It is the standard BFS-based answer to [LeetCode 207 (Course Schedule)](../leetcode-150/graphs/207-course-schedule/) and 210 (Course Schedule II), and it appears in every build system, package manager, and task scheduler worth naming.
 
 Topological sort is only possible on a DAG: a directed graph with no cycles. If a cycle exists, there is no valid ordering (course A requires B, B requires C, C requires A). Kahn's algorithm detects this condition automatically.
 
@@ -350,7 +350,7 @@ def topological_sort_lex(num_nodes, edges):
 
 The only change: `deque.popleft()` becomes `heapq.heappop()`, and `queue.append()` becomes `heapq.heappush()`. Complexity changes from O(V + E) to O((V + E) log V) because each heap operation costs O(log V).
 
-This variant appears in LeetCode 269 (Alien Dictionary), where you reconstruct a lexicographic character ordering from sorted word pairs.
+This variant appears in [LeetCode 269 (Alien Dictionary)](../leetcode-150/graphs/269-alien-dictionary/), where you reconstruct a lexicographic character ordering from sorted word pairs.
 
 ## When Kahn's is the answer
 
@@ -358,8 +358,8 @@ Reach for Kahn's when you see:
 
 - **"Given dependencies, find a valid processing order"**: courses, packages, build targets, tasks with prerequisites.
 - **"Detect circular dependencies"**: import graphs, configuration dependencies, lock-order validation.
-- **"Is this ordering possible?"** (LeetCode 207): run Kahn's, check `len(order) == V`.
-- **"Find a valid ordering"** (LeetCode 210): run Kahn's, return `order` or `[]`.
+- **"Is this ordering possible?"** ([LeetCode 207](../leetcode-150/graphs/207-course-schedule/)): run Kahn's, check `len(order) == V`.
+- **"Find a valid ordering"** ([LeetCode 210](../leetcode-150/graphs/210-course-schedule-ii/)): run Kahn's, return `order` or `[]`.
 - **"Lexicographically smallest ordering"**: Kahn's with a min-heap.
 - **"How many valid orderings exist?"**: Kahn's with a counter: when `len(queue) > 1`, multiply the count by the number of choices at that step. This gives the total count of valid topological orderings.
 

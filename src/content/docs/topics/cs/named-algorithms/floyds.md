@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Given a linked list (or any structure you can model as a sequence of pointer hops), determine whether the sequence eventually loops back on itself, and if so, find the exact node where the cycle begins.
 
-Named after Robert W. Floyd, who described the algorithm in unpublished work around 1967. It appears in Knuth's *The Art of Computer Programming* (1969) and is the canonical answer to LeetCode 141 (Linked List Cycle) and 142 (Linked List Cycle II).
+Named after Robert W. Floyd, who described the algorithm in unpublished work around 1967. It appears in Knuth's *The Art of Computer Programming* (1969) and is the canonical answer to [LeetCode 141 (Linked List Cycle)](../leetcode-150/linked-list/141-linked-list-cycle/) and 142 (Linked List Cycle II).
 
 The algorithm runs two passes:
 
@@ -196,7 +196,7 @@ This is O(n) time but also O(n) space: in the worst case you store every node be
 
 The O(1) constraint also matters for very large lists where heap pressure is a real concern, and for embedded or memory-constrained environments where allocating a variable-size set isn't acceptable.
 
-## Application 1: find the duplicate number (LeetCode 287)
+## Application 1: find the duplicate number ([LeetCode 287](../leetcode-150/linked-list/287-find-the-duplicate-number/))
 
 The problem: given an array `nums` of `n+1` integers where each value is in `[1, n]`, find the one duplicate. You must not modify the array and must use O(1) extra space.
 

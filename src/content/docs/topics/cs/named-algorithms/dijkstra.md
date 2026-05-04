@@ -214,7 +214,7 @@ def dijkstra_multi_source(n, adj, sources):
     return dist
 ```
 
-This runs in the same O((V + E) log V) as single-source. LeetCode 994 (Rotting Oranges) is essentially a multi-source BFS, which is the unweighted version of this.
+This runs in the same O((V + E) log V) as single-source. [LeetCode 994 (Rotting Oranges)](../leetcode-150/graphs/994-rotting-oranges/) is essentially a multi-source BFS, which is the unweighted version of this.
 
 ## Variant: maximum probability / minimum bottleneck path
 

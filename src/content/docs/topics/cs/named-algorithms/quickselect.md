@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Given an unsorted array and a target rank `k`, Quickselect returns the `k`th smallest element in **expected O(n) time** without fully sorting the array.
 
-It's the canonical answer to "find the kth largest" interview questions and is the engine behind LeetCode 215 and 973. Named after Tony Hoare (also the inventor of Quicksort), who published it in 1961.
+It's the canonical answer to "find the kth largest" interview questions and is the engine behind [LeetCode 215](../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/) and 973. Named after Tony Hoare (also the inventor of Quicksort), who published it in 1961.
 
 The key insight: you do not need a sorted array to know where one element ranks. A single partition operation places the pivot in its final sorted position and tells you instantly whether the target rank is to the left, to the right, or right here.
 
@@ -210,7 +210,7 @@ For learning and interviews, Lomuto is the one to know cold. In production libra
 
 The Dutch National Flag variant (three-way partition) handles duplicates efficiently: it partitions into `[< pivot | == pivot | > pivot]`. If your array has many repeated elements and the target rank falls in the equal segment, you are done immediately.
 
-## Application: LeetCode 215, Kth Largest Element in an Array
+## Application: [LeetCode 215](../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/), Kth Largest Element in an Array
 
 "Find the kth largest element in an unsorted array."
 
@@ -252,7 +252,7 @@ Example: `nums = [3, 2, 1, 5, 6, 4]`, `k = 2`. The 2nd largest is `5`. Target in
 
 Detailed walkthrough: [LeetCode 215, Kth Largest Element in an Array](../leetcode-150/heap-priority-queue/215-kth-larget-element-in-an-array/).
 
-## Application: LeetCode 973, K Closest Points to Origin
+## Application: [LeetCode 973](../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/), K Closest Points to Origin
 
 "Given a list of points, return the k closest to the origin."
 

@@ -458,7 +458,7 @@ def label_components(adj, n):
     return label, component_id  # label[v] = component id; component_id = total count
 ```
 
-This exact pattern solves LeetCode 200 (Number of Islands), 323 (Number of Connected Components), and 547 (Number of Provinces). The graph is implicit in the grid or the adjacency list; the loop-and-DFS structure is identical.
+This exact pattern solves [LeetCode 200 (Number of Islands)](../leetcode-150/graphs/200-number-of-islands/), 323 (Number of Connected Components), and 547 (Number of Provinces). The graph is implicit in the grid or the adjacency list; the loop-and-DFS structure is identical.
 
 ---
 

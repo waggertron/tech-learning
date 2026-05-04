@@ -223,9 +223,9 @@ SPFA is the algorithm to reach for when:
 
 Use standard Bellman-Ford when you need simple, predictable O(V \* E) behavior or when you're implementing the K-stops variant (see below).
 
-## Application: LeetCode 787, Cheapest Flights Within K Stops
+## Application: [LeetCode 787](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/), Cheapest Flights Within K Stops
 
-LeetCode 787 asks: given a directed weighted graph of flights (source, destination, price), find the cheapest path from `src` to `dst` using **at most K stops** (K+1 edges).
+[LeetCode 787](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/) asks: given a directed weighted graph of flights (source, destination, price), find the cheapest path from `src` to `dst` using **at most K stops** (K+1 edges).
 
 Dijkstra handles this with state `(cost, node, stops_remaining)`, but the Bellman-Ford framing is cleaner and more instructive: **run exactly K+1 passes of Bellman-Ford** (not V-1), because K stops means K+1 edges means K+1 relaxation passes.
 
