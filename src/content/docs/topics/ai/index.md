@@ -1,6 +1,6 @@
 ---
 title: AI
-description: Topics in artificial intelligence, prompt engineering, harness development, RAG, skill development, coding-tool blindspots, and the DESIGN.md spec for agents.
+description: Topics in artificial intelligence, prompt engineering, harness development, RAG, skill development, coding-tool blindspots, context development lifecycle, and the DESIGN.md spec for agents.
 ---
 
 ## Topics
@@ -11,6 +11,7 @@ description: Topics in artificial intelligence, prompt engineering, harness deve
 - [AI Skill Development](./skill-development/), packaged, invocable capabilities loaded on demand
 - [AI Coding Tool Blindspots](./coding-tool-blindspots/), predictable failure modes of modern AI coding assistants
 - [DESIGN.md](./design-md/), Google Labs' open-source file format for teaching coding agents your visual identity
+- [Context Development Lifecycle](./context-development-lifecycle/), Patrick Debois's framework for treating organizational context as a managed artifact with its own generate-evaluate-distribute-observe loop
 - [LLM reasoning benchmarks and metrics](./benchmarks/), 8-part series on what the leaderboard numbers actually mean
 
 Each topic has a hub overview, subtopics for deeper dives, and references to authoritative external resources.
