@@ -8,10 +8,12 @@ const { code, id = 'pyrepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<div class="pyrepl" data-repl-id={replId} data-original={code}>
+<div class="pyrepl not-content" data-repl-id={replId} data-original={code}>
   <div class="pyrepl__header">
-    <button class="pyrepl__run" type="button">▶ Run tests</button>
-    <button class="pyrepl__reset" type="button" title="Reset to original">↻ Reset</button>
+    <div class="pyrepl__btn-group">
+      <button class="pyrepl__run" type="button">▶ Run tests</button>
+      <button class="pyrepl__reset" type="button" title="Reset to original">↻ Reset</button>
+    </div>
     <span class="pyrepl__status" data-status>idle</span>
   </div>
   <div class="pyrepl__editor-host" data-editor></div>
@@ -195,15 +197,24 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     background: var(--sl-color-gray-6);
     border-bottom: 1px solid var(--sl-color-gray-5);
   }
+  .pyrepl__btn-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
   .pyrepl__run, .pyrepl__reset {
+    display: flex;
+    align-items: center;
     border: 1px solid var(--sl-color-gray-4);
-    background: var(--sl-color-bg);
+    background: var(--sl-color-gray-5);
     color: var(--sl-color-text);
     padding: 0.35rem 0.8rem;
     border-radius: 4px;
     font-size: 0.875rem;
     font-weight: 600;
+    line-height: 1;
     cursor: pointer;
+    white-space: nowrap;
   }
   .pyrepl__run {
     background: var(--sl-color-accent, #6750a4);
