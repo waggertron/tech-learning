@@ -18,6 +18,7 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
   </div>
   <div class="pyrepl__editor-host" data-editor></div>
   <pre class="pyrepl__output" data-output>Click <strong>Run tests</strong> to execute. First run downloads Python (~10 MB, cached after that).</pre>
+  <div class="pyrepl__timing" data-timing></div>
 </div>
 
 <script>
@@ -132,9 +133,11 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     const resetBtn = root.querySelector<HTMLButtonElement>('.pyrepl__reset')!;
     const host = root.querySelector<HTMLElement>('[data-editor]')!;
     const output = root.querySelector<HTMLElement>('[data-output]')!;
+    const timing = root.querySelector<HTMLElement>('[data-timing]')!;
     const status = root.querySelector<HTMLElement>('[data-status]')!;
     const original = root.dataset.original ?? '';
 
+    const runtimes: number[] = [];
     const view = makeEditor(host, original);
 
     resetBtn.addEventListener('click', () => {
@@ -143,11 +146,13 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
       });
       output.textContent = '(reset)';
       status.textContent = 'idle';
+      timing.textContent = '';
     });
 
     runBtn.addEventListener('click', async () => {
       runBtn.disabled = true;
       output.textContent = '';
+      timing.textContent = '';
       status.textContent = pyodidePromise ? 'running…' : 'loading Python…';
 
       let stdout = '';
@@ -160,10 +165,17 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
 
         const code = view.state.doc.toString();
         try {
+          const t0 = performance.now();
           await pyodide.runPythonAsync(code);
+          const ms = performance.now() - t0;
+          runtimes.push(ms);
           const text = (stdout || '(no output)') + (stderr ? `\n--- stderr ---\n${stderr}` : '');
           output.textContent = text;
           status.textContent = stderr ? 'done (with stderr)' : 'done';
+          const avg = runtimes.reduce((a, b) => a + b, 0) / runtimes.length;
+          timing.textContent = runtimes.length === 1
+            ? `Runtime: ${ms.toFixed(1)}ms`
+            : `Runtime: ${ms.toFixed(1)}ms  |  avg ${avg.toFixed(1)}ms over ${runtimes.length} runs`;
         } catch (err: any) {
           const msg = err?.message ?? String(err);
           output.textContent = `${stdout}${stderr ? `\n${stderr}` : ''}\n${msg}`;
@@ -178,7 +190,84 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     });
   }
 
+  function attachCodeBlockRunner(figure: HTMLElement) {
+    const pre = figure.querySelector<HTMLElement>('pre[data-language="python"]');
+    if (!pre) return;
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-run-toolbar';
+
+    const runBtn = document.createElement('button');
+    runBtn.className = 'code-run-btn';
+    runBtn.textContent = '▶ Run';
+    toolbar.append(runBtn);
+
+    const statusEl = document.createElement('span');
+    statusEl.className = 'code-run-status';
+    toolbar.append(statusEl);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-run-output';
+    wrapper.hidden = true;
+    const outputEl = document.createElement('pre');
+    outputEl.className = 'code-run-output__text';
+    const timingEl = document.createElement('div');
+    timingEl.className = 'code-run-output__timing';
+    wrapper.append(outputEl, timingEl);
+
+    // Insert toolbar above the EC block, output below
+    const ec = figure.closest('.expressive-code') ?? figure;
+    ec.before(toolbar);
+    ec.after(wrapper);
+
+    const runtimes: number[] = [];
+
+    runBtn.addEventListener('click', async () => {
+      // Append test harness from the page's REPL scaffold so execution times are meaningful
+      const scaffold = document.querySelector<HTMLElement>('[data-original]')?.dataset.original ?? '';
+      const testSnippet = scaffold.match(/\ndef _run_tests[\s\S]*/)?.[0]?.trim() ?? '';
+      const code = pre.innerText + (testSnippet ? '\n\n' + testSnippet : '');
+      runBtn.disabled = true;
+      statusEl.textContent = pyodidePromise ? 'running…' : 'loading Python…';
+      outputEl.textContent = '';
+      timingEl.textContent = '';
+      wrapper.hidden = false;
+
+      let stdout = '';
+      let stderr = '';
+      try {
+        const pyodide = await loadPyodideOnce();
+        statusEl.textContent = 'running…';
+        pyodide.setStdout({ batched: (s: string) => { stdout += s + '\n'; } });
+        pyodide.setStderr({ batched: (s: string) => { stderr += s + '\n'; } });
+
+        try {
+          const t0 = performance.now();
+          await pyodide.runPythonAsync(code);
+          const ms = performance.now() - t0;
+          runtimes.push(ms);
+          outputEl.textContent = (stdout || '(no output)') + (stderr ? `\n--- stderr ---\n${stderr}` : '');
+          statusEl.textContent = stderr ? 'done (with stderr)' : 'done';
+          const avg = runtimes.reduce((a, b) => a + b, 0) / runtimes.length;
+          timingEl.textContent = runtimes.length === 1
+            ? `Runtime: ${ms.toFixed(1)}ms`
+            : `Runtime: ${ms.toFixed(1)}ms  |  avg ${avg.toFixed(1)}ms over ${runtimes.length} runs`;
+        } catch (err: any) {
+          const msg = err?.message ?? String(err);
+          outputEl.textContent = `${stdout}${stderr ? `\n${stderr}` : ''}\n${msg}`;
+          statusEl.textContent = 'error';
+        }
+      } catch (err: any) {
+        outputEl.textContent = `Failed to load Python runtime: ${err?.message ?? err}`;
+        statusEl.textContent = 'load failed';
+      } finally {
+        runBtn.disabled = false;
+      }
+    });
+  }
+
   document.querySelectorAll<HTMLElement>('.pyrepl').forEach(attachRepl);
+  document.querySelectorAll<HTMLElement>('figure.frame').forEach(attachCodeBlockRunner);
 </script>
 
 <style>
@@ -274,5 +363,17 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     max-height: 280px;
     overflow: auto;
     white-space: pre-wrap;
+  }
+  .pyrepl__timing {
+    padding: 0.35rem 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    background: var(--sl-color-black, #0d0d0d);
+    border-top: 1px solid var(--sl-color-gray-6);
+    min-height: 0;
+  }
+  .pyrepl__timing:empty {
+    display: none;
   }
 </style>

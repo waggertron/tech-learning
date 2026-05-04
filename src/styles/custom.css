@@ -5,3 +5,72 @@
   --sl-content-width: 65rem;
 }
 
+/* Toolbar inserted above each Python code block */
+.code-run-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-gray-5);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+
+/* Remove top border-radius from EC block when toolbar is above it */
+.code-run-toolbar + .expressive-code figure {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+.code-run-btn {
+  display: inline-flex;
+  align-items: center;
+  background: var(--sl-color-accent, #6750a4);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  line-height: 1;
+}
+.code-run-btn:hover { opacity: 0.9; }
+.code-run-btn:disabled { opacity: 0.6; cursor: wait; }
+.code-run-status {
+  color: var(--sl-color-gray-3);
+  font-size: 0.85rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Output panel that appears below the toolbar after running */
+.code-run-output {
+  border: 1px solid var(--sl-color-gray-5);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+  margin-top: -1.25rem;
+  margin-bottom: 1.25rem;
+}
+.code-run-output__text {
+  margin: 0;
+  padding: 0.75rem;
+  background: var(--sl-color-black, #0d0d0d);
+  color: var(--sl-color-text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow: auto;
+}
+.code-run-output__timing {
+  padding: 0.3rem 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  color: var(--sl-color-gray-3);
+  background: var(--sl-color-black, #0d0d0d);
+  border-top: 1px solid var(--sl-color-gray-6);
+}
+.code-run-output__timing:empty { display: none; }
+
