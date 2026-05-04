@@ -37,3 +37,4 @@ CLAUDE.md
 !.claude/skills/quiz/SKILL.md
 .claude/skills/learning/*
 !.claude/skills/learning/SKILL.md
+__pycache__/
