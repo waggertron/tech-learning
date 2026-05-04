@@ -18,13 +18,12 @@ The aim isn't comprehensiveness, it's pattern recognition: when you hear "runnin
 - [Dijkstra's algorithm](./dijkstra/), single-source shortest paths on non-negative weighted graphs in O((V + E) log V)
 - [Breadth-First Search](./bfs/), level-by-level graph and grid traversal; shortest path in unweighted graphs
 - [Depth-First Search](./dfs/), commit-and-backtrack traversal; cycle detection, topological sort, connected components
+- [Floyd's tortoise and hare](./floyds/), cycle detection and cycle-start location in O(n) time and O(1) space
+- [Bellman-Ford](./bellman-ford/), shortest paths with negative edge weights and negative-cycle detection
+- [Kahn's algorithm](./kahns/), topological sort via BFS; cycle detection falls out naturally
+- [Tarjan's algorithm](./tarjans/), strongly connected components in a single DFS pass
 
 ## Coming soon
-
-- Floyd's tortoise and hare, cycle detection in O(1) space
-- Bellman-Ford, shortest paths with negative weights and cycle detection
-- Kahn's algorithm, topological sort via BFS
-- Tarjan's SCC, strongly connected components in one DFS
 - Karatsuba multiplication, sub-quadratic integer multiplication
 - Knuth-Morris-Pratt (KMP), substring search in linear time
 - Quickselect, kth-smallest in expected O(n)
