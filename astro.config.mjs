@@ -6,6 +6,14 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
   site: 'https://waggertron.github.io',
   base: '/tech-learning',
+  vite: {
+    server: {
+      headers: {
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+      },
+    },
+  },
   integrations: [
     starlight({
       title: 'Here Be Dragons',
