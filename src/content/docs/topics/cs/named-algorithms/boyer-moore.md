@@ -139,7 +139,7 @@ def majority_element_verified(nums):
     return None   # no majority element exists
 ```
 
-LeetCode 169 guarantees a majority element exists, so the verification pass is not needed there. In production code, assume nothing and always verify.
+[LeetCode 169](https://leetcode.com/problems/majority-element/) guarantees a majority element exists, so the verification pass is not needed there. In production code, assume nothing and always verify.
 
 The two-pass version is still O(n) time, O(1) space. The second pass is just a linear count, no extra storage.
 
@@ -163,7 +163,7 @@ Compare to the hash map approach:
 
 Boyer-Moore dominates for space. It is the only approach that hits both O(n) time and O(1) space simultaneously.
 
-## Variant: elements appearing more than n/3 times (LeetCode 229)
+## Variant: elements appearing more than n/3 times ([LeetCode 229](https://leetcode.com/problems/majority-element-ii/))
 
 [LeetCode 229 (Majority Element II)](https://leetcode.com/problems/majority-element-ii/) asks for all elements appearing more than `n/3` times.
 
