@@ -220,7 +220,7 @@ This runs in the same O((V + E) log V) as single-source. [LeetCode 994 (Rotting 
 
 Dijkstra isn't limited to sum of weights. Any monotone combination where "taking more steps can only make things worse" admits a Dijkstra-style solution.
 
-**Maximum probability path (LeetCode 1514):** edges have probabilities. You want to maximize the product of probabilities along the path. Swap `<` for `>`, initialize with 0.0 everywhere and 1.0 at source, and use a max-heap (`heapq` negates for max):
+**Maximum probability path ([LeetCode 1514](https://leetcode.com/problems/path-with-maximum-probability/)):** edges have probabilities. You want to maximize the product of probabilities along the path. Swap `<` for `>`, initialize with 0.0 everywhere and 1.0 at source, and use a max-heap (`heapq` negates for max):
 
 ```python
 def max_prob_path(n, edges, probs, src, dst):

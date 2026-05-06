@@ -264,7 +264,7 @@ def merge_lists(l1, l2):
     return dummy.next
 ```
 
-The merge re-links existing nodes: no `append`, no auxiliary list. This is why merge sort is the canonical algorithm for linked list sorting. LeetCode 148 (Sort List) is the standard exercise.
+The merge re-links existing nodes: no `append`, no auxiliary list. This is why merge sort is the canonical algorithm for linked list sorting. [LeetCode 148 (Sort List)](https://leetcode.com/problems/sort-list/) is the standard exercise.
 
 ## Application: counting inversions
 
@@ -327,8 +327,8 @@ The merge step appears directly or in generalized form across several problems:
 
 - [Merge Two Sorted Lists (021)](../leetcode-150/linked-list/021-merge-two-sorted-lists/) is the `merge_lists` function in isolation. If you can write that function from memory, the linked-list sort above follows immediately.
 - [Merge k Sorted Lists (023)](../leetcode-150/linked-list/023-merge-k-sorted-lists/) generalizes the two-way merge to k inputs. The standard approach uses a min-heap to pick the smallest front element across all k lists in O(log k) per step, giving O(n log k) total. Alternatively, you can apply the two-way merge pairwise in log k rounds, which also gives O(n log k).
-- LeetCode 148 (Sort List) is the full linked-list merge sort above.
-- LeetCode 315 (Count of Smaller Numbers After Self) is a per-element inversion count, solved with the counting-inversions technique.
+- [LeetCode 148 (Sort List)](https://leetcode.com/problems/sort-list/) is the full linked-list merge sort above.
+- [LeetCode 315 (Count of Smaller Numbers After Self)](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) is a per-element inversion count, solved with the counting-inversions technique.
 
 ## Test cases
 

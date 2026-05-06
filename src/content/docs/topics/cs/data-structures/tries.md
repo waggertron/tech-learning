@@ -140,5 +140,5 @@ Tries drive all 3 NeetCode 150 problems in the Tries category.
 - [Trie, Wikipedia](https://en.wikipedia.org/wiki/Trie)
 - [Radix tree / Patricia trie, Wikipedia](https://en.wikipedia.org/wiki/Radix_tree)
 - [Tries for string processing, cp-algorithms](https://cp-algorithms.com/string/aho_corasick.html)
-- [Implement Trie, LeetCode 208](https://leetcode.com/problems/implement-trie-prefix-tree/)
-- [Word Search II, LeetCode 212 (trie + DFS)](https://leetcode.com/problems/word-search-ii/)
+- [Implement Trie, LeetCode 208](../../leetcode-150/tries/208-implement-trie/)
+- [Word Search II, LeetCode 212 (trie + DFS)](../../leetcode-150/tries/212-word-search-ii/)

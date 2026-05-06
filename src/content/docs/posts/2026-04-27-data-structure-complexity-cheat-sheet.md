@@ -198,7 +198,7 @@ For completeness, the algorithm side of the table.
 |---|---|---|---|
 | All subsets (2^n) | O(2^n · n) | O(n) recursion | [LeetCode 78](../topics/cs/leetcode-150/backtracking/078-subsets/) |
 | All permutations (n!) | O(n! · n) | O(n) recursion | [LeetCode 46](../topics/cs/leetcode-150/backtracking/046-permutations/) |
-| All k-combinations | O(C(n,k) · k) | O(k) | LeetCode 77 |
+| All k-combinations | O(C(n,k) · k) | O(k) | [LeetCode 77](https://leetcode.com/problems/combinations/) |
 
 ---
 

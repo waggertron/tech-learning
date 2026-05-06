@@ -265,7 +265,7 @@ def shortest_repeating_unit(s):
 # "ABCD"    -> lps[-1]=0, unit_len=4-4=4 -- wait, 4%4==0 is True but unit is whole string
 ```
 
-This is the basis of LeetCode 459 (Repeated Substring Pattern).
+This is the basis of [LeetCode 459 (Repeated Substring Pattern)](https://leetcode.com/problems/repeated-substring-pattern/).
 
 ### Checking if one string is a rotation of another
 
@@ -296,7 +296,7 @@ This works because every rotation of `S1` is a contiguous substring of `S1 + S1`
 
 **When to use KMP:**
 
-- Interview problems asking you to implement substring search (LeetCode 28).
+- Interview problems asking you to implement substring search ([LeetCode 28](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/)).
 - When you need guaranteed worst-case O(n) and don't want to reason about hash collisions (Rabin-Karp) or Boyer-Moore's complex bad-character and good-suffix tables.
 - When the pattern contains many repeated characters (the adversarial case for naive; KMP handles it cleanly).
 
@@ -318,9 +318,9 @@ The Z-algorithm builds a Z-array where `Z[i]` is the length of the longest subst
 
 Most string matching problems on LeetCode accept built-in `str.find()` or `in` operator in Python solutions, which call the underlying C implementation of a search algorithm. KMP shows up explicitly in:
 
-- **LeetCode 28 (Find the Index of the First Occurrence in a String)**: the canonical "implement strstr" problem. KMP is the expected O(n + m) solution when the interviewer bans built-ins.
-- **LeetCode 459 (Repeated Substring Pattern)**: determine if a string can be made by repeating a substring. Solvable directly from the LPS array (see the repeating unit section above) in O(n) with no search step needed.
-- **LeetCode 686 (Repeated String Match)**: find how many times you must repeat `A` so that `B` is a substring. Build `A` repeated enough times and run KMP search. The LPS preprocessing saves time when `B` is much longer than `A`.
+- **[LeetCode 28 (Find the Index of the First Occurrence in a String)](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/)**: the canonical "implement strstr" problem. KMP is the expected O(n + m) solution when the interviewer bans built-ins.
+- **[LeetCode 459 (Repeated Substring Pattern)](https://leetcode.com/problems/repeated-substring-pattern/)**: determine if a string can be made by repeating a substring. Solvable directly from the LPS array (see the repeating unit section above) in O(n) with no search step needed.
+- **[LeetCode 686 (Repeated String Match)](https://leetcode.com/problems/repeated-string-match/)**: find how many times you must repeat `A` so that `B` is a substring. Build `A` repeated enough times and run KMP search. The LPS preprocessing saves time when `B` is much longer than `A`.
 
 None of these pages may exist yet in this site's catalog; they live in the leetcode-150 subtopic tree.
 

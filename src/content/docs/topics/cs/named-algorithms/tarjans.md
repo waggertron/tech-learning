@@ -282,9 +282,9 @@ Use these as conceptual bridges: the DFS structure in course-schedule solutions 
 
 ### Problems where Tarjan is the intended solution
 
-- **LeetCode 1192 (Critical Connections in a Network)**: find all bridges in an undirected graph. This is the bridge-finding variant of Tarjan. The `low[v] > disc[u]` condition is the answer.
+- **[LeetCode 1192 (Critical Connections in a Network)](https://leetcode.com/problems/critical-connections-in-a-network/)**: find all bridges in an undirected graph. This is the bridge-finding variant of Tarjan. The `low[v] > disc[u]` condition is the answer.
 
-- **LeetCode 1489 (Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree)**: uses bridge detection as part of the solution.
+- **[LeetCode 1489 (Find Critical and Pseudo-Critical Edges in Minimum Spanning Tree)](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/)**: uses bridge detection as part of the solution.
 
 - **Graph problems with "same group" / "mutual dependency" phrasing**: if a problem gives you a directed graph and asks whether certain vertices must be processed together or are interchangeable, that's SCC decomposition.
 

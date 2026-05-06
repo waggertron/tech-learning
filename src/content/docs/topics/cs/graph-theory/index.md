@@ -678,7 +678,7 @@ def is_bipartite(adj, n):
 - **Job matching / assignment**: L = workers, R = jobs. Edges = eligible assignments. Maximum bipartite matching (Hungarian algorithm) finds the maximum number of assignments.
 - **Recommendation systems**: L = users, R = items. Edges = interactions. Collaborative filtering is often framed as bipartite link prediction.
 - **Scheduling**: L = tasks, R = time slots. Feasible schedules = matchings.
-- **Checking validity**: LeetCode 886 (Possible Bipartition), LeetCode 785 (Is Graph Bipartite?).
+- **Checking validity**: [LeetCode 886 (Possible Bipartition)](https://leetcode.com/problems/possible-bipartition/), [LeetCode 785 (Is Graph Bipartite?)](https://leetcode.com/problems/is-graph-bipartite/).
 
 ---
 

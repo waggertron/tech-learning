@@ -250,7 +250,7 @@ def middle_node(head):
 
 When `fast` exits the loop (hits `None` or a node with no `next`), `slow` has traveled half as far: the middle node.
 
-For even-length lists this returns the second of the two middle nodes, which is what LeetCode 876 expects. If you need the first middle node, check `fast.next` and `fast.next.next` separately and stop one step earlier.
+For even-length lists this returns the second of the two middle nodes, which is what [LeetCode 876](https://leetcode.com/problems/middle-of-the-linked-list/) expects. If you need the first middle node, check `fast.next` and `fast.next.next` separately and stop one step earlier.
 
 This same "slow at half-speed" idea underlies k-th-from-end problems (offset the pointers by `k` and then move together until `fast` hits the end).
 

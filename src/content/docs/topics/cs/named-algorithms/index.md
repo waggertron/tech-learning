@@ -22,12 +22,12 @@ The aim isn't comprehensiveness, it's pattern recognition: when you hear "runnin
 - [Bellman-Ford](./bellman-ford/), shortest paths with negative edge weights and negative-cycle detection
 - [Kahn's algorithm](./kahns/), topological sort via BFS; cycle detection falls out naturally
 - [Tarjan's algorithm](./tarjans/), strongly connected components in a single DFS pass
+- [KMP](./kmp/), linear-time substring search via the failure function; never re-inspects a character
+- [Quickselect](./quickselect/), kth smallest in expected O(n) by partitioning like quicksort but recursing only one side
+- [Merge sort](./merge-sort/), O(n log n) guaranteed stable sort; the only sensible algorithm for sorting a linked list
 
-## Coming soon
-- Karatsuba multiplication, sub-quadratic integer multiplication
-- Knuth-Morris-Pratt (KMP), substring search in linear time
-- Quickselect, kth-smallest in expected O(n)
-- Boyer-Moore majority vote, find the >n/2 element in O(1) space
+- [Karatsuba multiplication](./karatsuba/), sub-quadratic integer multiplication in O(n^1.585) via a 3-multiplication split
+- [Boyer-Moore majority vote](./boyer-moore/), find the element appearing more than n/2 times in O(n) time and O(1) space
 
 ## Related topics
 
