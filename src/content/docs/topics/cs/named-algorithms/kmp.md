@@ -324,6 +324,91 @@ Most string matching problems on LeetCode accept built-in `str.find()` or `in` o
 
 None of these pages may exist yet in this site's catalog; they live in the leetcode-150 subtopic tree.
 
+## Multiple uses
+
+**Find all occurrences (not just first).** Standard KMP search but don't stop at the first match: when the pattern matches at position `i - m`, record the position and reset `j` using `lps[m-1]` to keep searching for overlapping hits. Total cost stays O(n + m) for all occurrences.
+
+```python
+def kmp_find_all(text, pattern):
+    n, m = len(text), len(pattern)
+    if m == 0:
+        return []
+    lps = build_lps(pattern)
+    results = []
+    i = j = 0
+    while i < n:
+        if text[i] == pattern[j]:
+            i += 1
+            j += 1
+        else:
+            if j != 0:
+                j = lps[j - 1]
+            else:
+                i += 1
+        if j == m:
+            results.append(i - m)   # record instead of returning
+            j = lps[j - 1]          # reset to keep searching
+    return results
+
+# kmp_find_all("AAAA", "AA") -> [0, 1, 2]  (overlapping matches)
+```
+
+**Circular string rotation check.** Is string B a rotation of string A? This is equivalent to asking whether B is a substring of A + A. KMP search on the doubled string answers this in O(n), no extra case analysis needed.
+
+```python
+def is_rotation(a, b):
+    if len(a) != len(b):
+        return False
+    doubled = a + a
+    return bool(kmp_find_all(doubled, b))
+
+# is_rotation("abcde", "cdeab") -> True
+# is_rotation("abcde", "abced") -> False
+```
+
+**Shortest period of a string.** The shortest repeating unit of string s has length `n - lps[n-1]` if that divides n evenly, otherwise the period is n itself. Read directly from the LPS array with no search step. O(n) to build the array, then O(1) to read the answer.
+
+```python
+def shortest_period(s):
+    lps = build_lps(s)
+    n = len(s)
+    unit_len = n - lps[n - 1]
+    if n % unit_len == 0:
+        return s[:unit_len]
+    return s   # no proper repeating unit; whole string is the period
+
+# shortest_period("ABABABAB") -> "AB"    (lps[-1]=6, unit_len=2)
+# shortest_period("ABCABC")  -> "ABC"   (lps[-1]=3, unit_len=3)
+# shortest_period("ABCD")    -> "ABCD"  (lps[-1]=0, unit_len=4, 4%4==0 so whole string)
+```
+
+**Find all anagram positions (sliding window + KMP hybrid note).** For a fixed-length pattern, maintain a character frequency window over the text and slide it one position at a time. This is O(n) like KMP but uses the sliding window approach rather than the LPS table. KMP proper is the better fit when the pattern length varies or when the alphabet is large and frequency maps are expensive.
+
+```python
+from collections import Counter
+
+def find_anagram_positions(text, pattern):
+    n, m = len(text), len(pattern)
+    if m > n:
+        return []
+    need = Counter(pattern)
+    window = Counter(text[:m])
+    results = []
+    if window == need:
+        results.append(0)
+    for i in range(m, n):
+        window[text[i]] += 1
+        old_char = text[i - m]
+        window[old_char] -= 1
+        if window[old_char] == 0:
+            del window[old_char]
+        if window == need:
+            results.append(i - m + 1)
+    return results
+
+# find_anagram_positions("cbaebabacd", "abc") -> [0, 6]
+```
+
 ## Test cases
 
 ```python

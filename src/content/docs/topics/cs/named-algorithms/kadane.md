@@ -201,6 +201,69 @@ The unifying mental model: **at each step, decide whether to extend the local op
 
 If "contiguous" or "consecutive" doesn't appear in the problem, Kadane probably isn't the answer.
 
+## Multiple uses
+
+**Circular array maximum subarray** - The circular variant wraps around so the subarray can span the boundary between the end and the start. Key insight: circular max = max(normal Kadane, total sum minus the minimum subarray). The minimum subarray is Kadane run with signs flipped.
+
+```python
+def kadane_max(nums):
+    best = cur = nums[0]
+    for x in nums[1:]:
+        cur = max(x, cur + x)
+        best = max(best, cur)
+    return best
+
+def kadane_min(nums):
+    worst = cur = nums[0]
+    for x in nums[1:]:
+        cur = min(x, cur + x)
+        worst = min(worst, cur)
+    return worst
+
+def max_circular_subarray(nums):
+    total = sum(nums)
+    max_normal = kadane_max(nums)
+    min_sub = kadane_min(nums)          # Kadane but tracking minimum
+    if total == min_sub:                # all negative: circular can't help
+        return max_normal
+    return max(max_normal, total - min_sub)
+```
+
+**Best profit with at most two transactions (LC 123 variant)** - Track four states: after first buy, after first sell, after second buy, after second sell. Each state update is a max(extend, restart), the same structure as Kadane applied to sequential decisions.
+
+```python
+def max_profit_two_transactions(prices):
+    buy1 = buy2 = float('-inf')
+    sell1 = sell2 = 0
+    for p in prices:
+        buy1  = max(buy1,  -p)           # best "have bought once"
+        sell1 = max(sell1,  buy1 + p)    # best "have sold once"
+        buy2  = max(buy2,   sell1 - p)   # best "have bought twice"
+        sell2 = max(sell2,  buy2 + p)    # best "have sold twice"
+    return sell2
+```
+
+**Maximum sum submatrix** - For each pair of rows (r1, r2), collapse the 2D problem into a 1D Kadane on column sums. The column sum at index `c` is the sum of `matrix[r][c]` for `r` in `[r1, r2]`. One Kadane pass over those column sums gives the best rectangle bounded by those two rows. Iterating all row pairs is O(n^2) and each Kadane pass is O(m), for O(n^2 * m) total.
+
+```python
+def max_sum_submatrix(matrix):
+    n, m = len(matrix), len(matrix[0])
+    best = float('-inf')
+    for r1 in range(n):
+        col_sums = [0] * m
+        for r2 in range(r1, n):
+            for c in range(m):
+                col_sums[c] += matrix[r2][c]
+            # Kadane on col_sums
+            cur = col_sums[0]
+            row_best = cur
+            for s in col_sums[1:]:
+                cur = max(s, cur + s)
+                row_best = max(row_best, cur)
+            best = max(best, row_best)
+    return best
+```
+
 ## Test cases
 
 ```python

@@ -328,6 +328,123 @@ If the problem asks for the top-k elements (not just one), Quickselect still app
 - [215, Kth Largest Element in an Array](../leetcode-150/heap-priority-queue/215-kth-larget-element-in-an-array/)
 - [973, K Closest Points to Origin](../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
 
+## Multiple uses
+
+**K closest points to origin** - Compute squared distances (no sqrt needed), Quickselect to rank k, return all points with rank less than k. O(n) expected vs O(n log n) naive sort.
+
+```python
+import random
+
+def k_closest(points, k):
+    def dist_sq(p):
+        return p[0] ** 2 + p[1] ** 2
+
+    def partition(lo, hi):
+        rand_idx = random.randint(lo, hi)
+        points[rand_idx], points[hi] = points[hi], points[rand_idx]
+        pivot_d = dist_sq(points[hi])
+        store = lo
+        for j in range(lo, hi):
+            if dist_sq(points[j]) <= pivot_d:
+                points[store], points[j] = points[j], points[store]
+                store += 1
+        points[store], points[hi] = points[hi], points[store]
+        return store
+
+    lo, hi, target = 0, len(points) - 1, k - 1
+    while lo < hi:
+        idx = partition(lo, hi)
+        if idx == target:
+            break
+        elif target < idx:
+            hi = idx - 1
+        else:
+            lo = idx + 1
+    return points[:k]
+
+# Example: points=[[1,3],[-2,2]], k=1 -> [[-2,2]]
+```
+
+**Kth largest in a stream** - If the stream has settled to n elements, Quickselect on the array gives O(n) expected. Compare to the heap approach O(n log k): Quickselect wins when k is large relative to n.
+
+```python
+import random
+
+def kth_largest(nums, k):
+    # Convert: kth largest = (n-k)th smallest (0-indexed)
+    target = len(nums) - k
+    arr = nums[:]
+
+    def partition(lo, hi):
+        rand_idx = random.randint(lo, hi)
+        arr[rand_idx], arr[hi] = arr[hi], arr[rand_idx]
+        pivot, store = arr[hi], lo
+        for j in range(lo, hi):
+            if arr[j] <= pivot:
+                arr[store], arr[j] = arr[j], arr[store]
+                store += 1
+        arr[store], arr[hi] = arr[hi], arr[store]
+        return store
+
+    lo, hi = 0, len(arr) - 1
+    while lo < hi:
+        idx = partition(lo, hi)
+        if idx == target:
+            return arr[idx]
+        elif target < idx:
+            hi = idx - 1
+        else:
+            lo = idx + 1
+    return arr[lo]
+
+# Example: nums=[3,2,1,5,6,4], k=2 -> 5
+```
+
+**Median of an unsorted array** - For odd length, Quickselect at index `n//2`. For even length, two Quickselect calls at `n//2` and `n//2 - 1`, average the results. O(n) expected vs O(n log n) sort.
+
+```python
+import random
+
+def find_median(nums):
+    arr = nums[:]
+    n = len(arr)
+
+    def partition(lo, hi):
+        rand_idx = random.randint(lo, hi)
+        arr[rand_idx], arr[hi] = arr[hi], arr[rand_idx]
+        pivot, store = arr[hi], lo
+        for j in range(lo, hi):
+            if arr[j] <= pivot:
+                arr[store], arr[j] = arr[j], arr[store]
+                store += 1
+        arr[store], arr[hi] = arr[hi], arr[store]
+        return store
+
+    def select(k):
+        lo, hi = 0, len(arr) - 1
+        while lo < hi:
+            idx = partition(lo, hi)
+            if idx == k:
+                return arr[idx]
+            elif k < idx:
+                hi = idx - 1
+            else:
+                lo = idx + 1
+        return arr[lo]
+
+    mid = n // 2
+    if n % 2 == 1:
+        return float(select(mid))
+    else:
+        # select modifies arr in place, so call higher index first
+        hi_val = select(mid)
+        lo_val = select(mid - 1)
+        return (lo_val + hi_val) / 2
+
+# Example: [3, 1, 4, 1, 5] -> 3.0
+# Example: [3, 1, 4, 1] -> 2.0
+```
+
 ## Test cases
 
 ```python

@@ -330,6 +330,124 @@ The merge step appears directly or in generalized form across several problems:
 - [LeetCode 148 (Sort List)](https://leetcode.com/problems/sort-list/) is the full linked-list merge sort above.
 - [LeetCode 315 (Count of Smaller Numbers After Self)](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) is a per-element inversion count, solved with the counting-inversions technique.
 
+## Multiple uses
+
+**Count inversions.** An inversion is a pair (i, j) where i < j but arr[i] > arr[j]. During the merge step, when you take an element from the right half while the left half still has elements remaining, every remaining left element forms an inversion with that right element. Add `len(left) - i` to the count at that moment. O(n log n), same cost as the sort itself.
+
+```python
+def count_inversions(arr):
+    if len(arr) <= 1:
+        return arr, 0
+    mid = len(arr) // 2
+    left,  left_inv  = count_inversions(arr[:mid])
+    right, right_inv = count_inversions(arr[mid:])
+    merged = []
+    inversions = left_inv + right_inv
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            merged.append(left[i])
+            i += 1
+        else:
+            inversions += len(left) - i   # all remaining left elements > right[j]
+            merged.append(right[j])
+            j += 1
+    merged.extend(left[i:])
+    merged.extend(right[j:])
+    return merged, inversions
+
+# count_inversions([3, 1, 2]) -> ([1, 2, 3], 2)   pairs: (3,1) and (3,2)
+# count_inversions([1, 2, 3]) -> ([1, 2, 3], 0)
+```
+
+**Sort a linked list.** Find the midpoint with slow/fast pointers, sort both halves recursively, then merge by re-linking `next` pointers instead of copying into an auxiliary array. No auxiliary array needed. O(n log n) time, O(log n) stack space. Merge sort is the only major comparison sort that works efficiently on linked lists without random access.
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def sort_list(head):
+    if not head or not head.next:
+        return head
+    slow, fast = head, head.next
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    mid = slow.next
+    slow.next = None          # split into two independent lists
+    left  = sort_list(head)
+    right = sort_list(mid)
+    return merge_lists(left, right)
+
+def merge_lists(l1, l2):
+    dummy = ListNode(0)
+    cur = dummy
+    while l1 and l2:
+        if l1.val <= l2.val:
+            cur.next = l1
+            l1 = l1.next
+        else:
+            cur.next = l2
+            l2 = l2.next
+        cur = cur.next
+    cur.next = l1 or l2
+    return dummy.next
+```
+
+**External sort (disk-based).** When data exceeds RAM, write sorted chunks to disk and merge k sorted runs using a k-way merge with a min-heap over the chunk heads. Database systems use this for ORDER BY on tables that don't fit in memory. The sequential read pattern is critical: spinning disks and SSDs both deliver highest throughput on sequential I/O, which is exactly what merge sort's access pattern provides.
+
+```python
+import heapq
+
+def k_way_merge(sorted_chunks):
+    """Merge k sorted lists (stand-in for k sorted disk runs)."""
+    heap = []
+    iterators = [iter(chunk) for chunk in sorted_chunks]
+    result = []
+
+    # Seed the heap with the first element from each chunk.
+    for chunk_id, it in enumerate(iterators):
+        val = next(it, None)
+        if val is not None:
+            heapq.heappush(heap, (val, chunk_id))
+
+    while heap:
+        val, chunk_id = heapq.heappop(heap)
+        result.append(val)
+        nxt = next(iterators[chunk_id], None)
+        if nxt is not None:
+            heapq.heappush(heap, (nxt, chunk_id))
+
+    return result
+
+# k_way_merge([[1, 4, 7], [2, 5, 8], [3, 6, 9]]) -> [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+**Stable sort for multi-key sort.** Sort by the secondary key first, then sort by the primary key using a stable sort. Stability guarantees that equal primary keys preserve the secondary order established by the first pass. Python's `sorted()` uses Timsort (a merge sort variant) and is stable, so this pattern works out of the box.
+
+```python
+# Sort transactions by date (primary), then by amount (secondary) within each date.
+transactions = [
+    {"date": "2024-01-02", "amount": 50},
+    {"date": "2024-01-01", "amount": 30},
+    {"date": "2024-01-01", "amount": 10},
+    {"date": "2024-01-02", "amount": 20},
+]
+
+# Step 1: sort by secondary key (amount).
+step1 = sorted(transactions, key=lambda t: t["amount"])
+# step1 order: 10, 20, 30, 50
+
+# Step 2: stable sort by primary key (date).
+# Equal dates keep the amount order from step 1.
+step2 = sorted(step1, key=lambda t: t["date"])
+
+# Result: 2024-01-01/10, 2024-01-01/30, 2024-01-02/20, 2024-01-02/50
+# Within each date, amounts are ascending because the stable sort preserved step1's order.
+```
+
 ## Test cases
 
 ```python

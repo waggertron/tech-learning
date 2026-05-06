@@ -308,6 +308,107 @@ The pattern: Bellman-Ford's O(V \* E) is only worth paying when (a) negative wei
 
 Note on 743: all edge weights are positive. Dijkstra runs in O((V + E) log V) and is the intended solution. Bellman-Ford gives the correct answer at O(V \* E) cost. Use 743 for Dijkstra practice; use 787 for Bellman-Ford practice.
 
+## Multiple uses
+
+**Detecting arbitrage in currency exchange:** Model exchange rates as edge weights using the log of each rate. A positive-weight cycle in the log graph represents an arbitrage opportunity. Run Bellman-Ford and check whether any weight still improves on pass V.
+
+```python
+import math
+
+def find_arbitrage(currencies, rates):
+    n = len(currencies)
+    # Use negative log so we can find negative cycles with standard BF
+    edges = []
+    for i in range(n):
+        for j in range(n):
+            if i != j:
+                edges.append((i, j, -math.log(rates[i][j])))
+
+    dist = [float('inf')] * n
+    dist[0] = 0
+
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+
+    # V-th pass: any improvement means a negative cycle (arbitrage)
+    for u, v, w in edges:
+        if dist[u] + w < dist[v]:
+            return True  # arbitrage exists
+
+    return False
+```
+
+**Cheapest flights within K stops:** Run exactly K+1 Bellman-Ford passes rather than V-1. Use a snapshot copy of `dist` at the start of each pass to prevent chaining edges from the same pass, which would allow more hops than the budget permits.
+
+```python
+def cheapest_flights_k_stops(n, flights, src, dst, k):
+    dist = [float('inf')] * n
+    dist[src] = 0
+
+    for _ in range(k + 1):          # k stops = k+1 edges = k+1 passes
+        temp = dist[:]              # snapshot: read from here, write to dist
+        for u, v, w in flights:
+            if temp[u] != float('inf') and temp[u] + w < dist[v]:
+                dist[v] = temp[u] + w
+
+    return dist[dst] if dist[dst] != float('inf') else -1
+```
+
+**Shortest path with at most i edges (pass-count as constraint):** Bellman-Ford naturally separates "paths using at most i edges" by counting passes: after pass i, `dist[v]` holds the shortest path using at most i edges. Dijkstra cannot express this constraint cleanly because it finalizes nodes greedily without tracking hop count.
+
+```python
+def shortest_path_at_most_i_edges(n, edges, src, dst, max_edges):
+    dist = [float('inf')] * n
+    dist[src] = 0
+
+    for _ in range(max_edges):
+        temp = dist[:]
+        for u, v, w in edges:
+            if temp[u] != float('inf') and temp[u] + w < dist[v]:
+                dist[v] = temp[u] + w
+
+    return dist[dst] if dist[dst] != float('inf') else -1
+```
+
+**Negative cycle reachability:** After V-1 passes, run one more. Any node whose distance still improves lies on or downstream of a negative cycle. BFS or DFS from those nodes finds every vertex reachable through a negative cycle.
+
+```python
+from collections import deque
+
+def negative_cycle_reachable(n, edges, src):
+    dist = [float('inf')] * n
+    dist[src] = 0
+
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if dist[u] != float('inf') and dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+
+    # Collect nodes that still improve on the V-th pass
+    seeds = set()
+    for u, v, w in edges:
+        if dist[u] != float('inf') and dist[u] + w < dist[v]:
+            seeds.add(v)
+
+    # BFS to find all nodes reachable from those seeds
+    adj = [[] for _ in range(n)]
+    for u, v, w in edges:
+        adj[u].append(v)
+
+    reachable = set(seeds)
+    queue = deque(seeds)
+    while queue:
+        node = queue.popleft()
+        for nb in adj[node]:
+            if nb not in reachable:
+                reachable.add(nb)
+                queue.append(nb)
+
+    return reachable
+```
+
 ## Test cases
 
 ```python

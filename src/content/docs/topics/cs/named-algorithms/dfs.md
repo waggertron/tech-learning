@@ -351,6 +351,89 @@ Memory limited, deep graph?   -> DFS
 | [210. Course Schedule II](../leetcode-150/graphs/210-course-schedule-ii/) | Topological sort via DFS post-order |
 | [79. Word Search](../leetcode-150/backtracking/079-word-search/) | Grid DFS with backtracking, path state restoration |
 
+## Multiple uses
+
+**Count islands / connected components.** For each unvisited '1' cell, DFS marks the whole island visited. The number of DFS calls from the outer loop equals the number of components.
+
+```python
+def count_islands(grid):
+    if not grid:
+        return 0
+    rows, cols = len(grid), len(grid[0])
+    count = 0
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
+            return
+        grid[r][c] = '#'
+        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1)
+
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                dfs(r, c)
+                count += 1
+    return count
+```
+
+**Flood fill.** Same as island counting but replace the starting cell's value throughout the component. Used in paint-bucket tools.
+
+```python
+def flood_fill(image, sr, sc, color):
+    orig = image[sr][sc]
+    if orig == color:
+        return image
+    rows, cols = len(image), len(image[0])
+
+    def dfs(r, c):
+        if r < 0 or r >= rows or c < 0 or c >= cols or image[r][c] != orig:
+            return
+        image[r][c] = color
+        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1)
+
+    dfs(sr, sc)
+    return image
+```
+
+**Detect cycle in a directed graph (3-color DFS).** WHITE/GRAY/BLACK states: gray means "currently on the call stack." A back edge to a gray node signals a cycle. The node goes BLACK when all descendants are done (post-order).
+
+```python
+def has_cycle_directed(graph):
+    WHITE, GRAY, BLACK = 0, 1, 2
+    color = {node: WHITE for node in graph}
+
+    def dfs(u):
+        color[u] = GRAY
+        for v in graph[u]:
+            if color[v] == GRAY:
+                return True      # back edge to an active ancestor: cycle
+            if color[v] == WHITE and dfs(v):
+                return True
+        color[u] = BLACK
+        return False
+
+    return any(dfs(u) for u in graph if color[u] == WHITE)
+```
+
+**All paths from source to target.** DFS with backtracking: push the current node to path, recurse to neighbors, pop when done. Collect all paths that reach the target. O(2^V x V) in worst case (all subsets of nodes are valid paths in a complete graph).
+
+```python
+def all_paths(graph, source, target):
+    results = []
+
+    def dfs(node, path):
+        if node == target:
+            results.append(list(path))
+            return
+        for neighbor in graph[node]:
+            path.append(neighbor)
+            dfs(neighbor, path)
+            path.pop()          # backtrack: undo the choice
+
+    dfs(source, [source])
+    return results
+```
+
 ## Test cases
 
 ```python

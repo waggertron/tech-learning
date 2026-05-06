@@ -310,6 +310,109 @@ Quick decision rule: if the problem says "shortest," reach for BFS. If it says "
 | 127. Word Ladder | BFS on implicit state graph, shortest transformation | [127 Word Ladder](../leetcode-150/graphs/127-word-ladder/) |
 | 207. Course Schedule | Kahn's algorithm (BFS topological sort) | [207 Course Schedule](../leetcode-150/graphs/207-course-schedule/) |
 
+## Multiple uses
+
+**Bipartite graph check (BFS 2-coloring).** Assign alternating colors as you traverse. If you ever need to assign both colors to a node, the graph is not bipartite. O(V+E).
+
+```python
+from collections import deque
+
+def is_bipartite(graph):
+    color = {}
+    for start in graph:
+        if start in color:
+            continue
+        queue = deque([start])
+        color[start] = 0
+        while queue:
+            node = queue.popleft()
+            for neighbor in graph[node]:
+                if neighbor not in color:
+                    color[neighbor] = 1 - color[node]
+                    queue.append(neighbor)
+                elif color[neighbor] == color[node]:
+                    return False
+    return True
+```
+
+**Shortest path with obstacles on a grid (0/1 BFS).** When edge weights are only 0 or 1, use a deque instead of a heap. Weight-0 edges go to the front (`deque.appendleft`), weight-1 edges go to the back. O(V+E) instead of O((V+E) log V).
+
+```python
+from collections import deque
+
+def zero_one_bfs(graph, start):
+    """graph: dict[node, list[(neighbor, weight)] where weight in {0, 1}]"""
+    dist = {start: 0}
+    dq = deque([start])
+    while dq:
+        node = dq.popleft()
+        for neighbor, weight in graph[node]:
+            new_dist = dist[node] + weight
+            if neighbor not in dist or new_dist < dist[neighbor]:
+                dist[neighbor] = new_dist
+                if weight == 0:
+                    dq.appendleft(neighbor)  # free edge: process immediately
+                else:
+                    dq.append(neighbor)      # cost-1 edge: process later
+    return dist
+```
+
+**Word ladder (BFS on implicit graph).** Each word is a node; two words are adjacent if they differ by one character. BFS gives the minimum transformation steps. The graph is never explicitly built; neighbors are generated on the fly.
+
+```python
+from collections import deque
+
+def word_ladder(begin_word, end_word, word_list):
+    word_set = set(word_list)
+    if end_word not in word_set:
+        return 0
+    queue = deque([(begin_word, 1)])
+    visited = {begin_word}
+    while queue:
+        word, steps = queue.popleft()
+        for i in range(len(word)):
+            for ch in 'abcdefghijklmnopqrstuvwxyz':
+                candidate = word[:i] + ch + word[i+1:]
+                if candidate == end_word:
+                    return steps + 1
+                if candidate in word_set and candidate not in visited:
+                    visited.add(candidate)
+                    queue.append((candidate, steps + 1))
+    return 0
+```
+
+**Minimum steps to spread (multi-source BFS).** Rotting oranges style: all initial sources pushed at time=0, BFS propagates outward. The answer is the time when the last reachable node is visited.
+
+```python
+from collections import deque
+
+def min_steps_to_spread(grid):
+    """grid cells: 0=empty, 1=fresh, 2=source. Returns time for all fresh to be reached, -1 if impossible."""
+    rows, cols = len(grid), len(grid[0])
+    queue = deque()
+    fresh = 0
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 2:
+                queue.append((r, c, 0))
+            elif grid[r][c] == 1:
+                fresh += 1
+    if fresh == 0:
+        return 0
+    directions = [(0,1),(0,-1),(1,0),(-1,0)]
+    time = 0
+    while queue:
+        r, c, t = queue.popleft()
+        for dr, dc in directions:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                grid[nr][nc] = 2
+                fresh -= 1
+                time = t + 1
+                queue.append((nr, nc, t + 1))
+    return time if fresh == 0 else -1
+```
+
 ## Test cases
 
 ```python

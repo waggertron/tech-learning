@@ -234,6 +234,63 @@ It is not in the Blind 75 / LeetCode 150 core list, but it appears frequently in
 
 [LeetCode 229 (Majority Element II)](https://leetcode.com/problems/majority-element-ii/) is the n/3 variant, covered in the section above.
 
+## Multiple uses
+
+**Streaming majority vote** - Process a stream of votes in real time without storing them. Classic use case: live election tallying where you cannot store every vote. Run the single-pass Boyer-Moore loop as votes arrive; the final candidate is the majority if one exists.
+
+```python
+def streaming_majority_vote(vote_stream):
+    candidate = None
+    count = 0
+    for vote in vote_stream:          # vote_stream can be a generator
+        if count == 0:
+            candidate = vote
+        if vote == candidate:
+            count += 1
+        else:
+            count -= 1
+    return candidate                  # verify with a second pass if existence is not guaranteed
+```
+
+**Finding elements appearing more than n/3 times (at most two exist)** - Two-candidate extension: maintain two (candidate, count) pairs. The first pass finds the surviving candidates using the same cancellation logic, extended to three-way cancellation. The second pass verifies both, because the first pass does not confirm frequency.
+
+```python
+def majority_n3(nums):
+    c1, c2 = None, None
+    k1, k2 = 0, 0
+    for x in nums:
+        if x == c1:
+            k1 += 1
+        elif x == c2:
+            k2 += 1
+        elif k1 == 0:
+            c1, k1 = x, 1
+        elif k2 == 0:
+            c2, k2 = x, 1
+        else:
+            k1 -= 1          # cancel one of each candidate against the new element
+            k2 -= 1
+    # Verification pass
+    threshold = len(nums) // 3
+    return [c for c in (c1, c2) if c is not None and nums.count(c) > threshold]
+```
+
+**Safe message delivery with majority confirmation** - Distributed systems pattern: if a message is acknowledged by more than half the nodes, it must be the message the majority agreed on. Boyer-Moore is the algorithm behind the intuition. Run the vote loop over acknowledgment messages as they arrive; the surviving candidate is the message that, if a majority exists, the quorum confirmed.
+
+```python
+def majority_ack(ack_stream):
+    candidate = None
+    count = 0
+    for msg in ack_stream:
+        if count == 0:
+            candidate = msg
+        if msg == candidate:
+            count += 1
+        else:
+            count -= 1
+    return candidate   # if quorum is guaranteed, this is the agreed message
+```
+
 ## Test cases
 
 ```python

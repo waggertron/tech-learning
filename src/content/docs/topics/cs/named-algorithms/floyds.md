@@ -272,6 +272,72 @@ This same "slow at half-speed" idea underlies k-th-from-end problems (offset the
 
 Start with 141 to get the detection loop clean, then move to 142 to cement the phase-2 reset. Do 287 last: it tests whether you can see the array-as-linked-list framing, which is the creative leap.
 
+## Multiple uses
+
+**Detect duplicate in array (no extra space)** - Treat the array as a linked list where index i points to `nums[i]`. A duplicate value means two indices point to the same next node, creating a cycle. Floyd's finds the entry point, which is the duplicate. O(n) time, O(1) space.
+
+```python
+def find_duplicate(nums):
+    slow = fast = nums[0]
+    while True:
+        slow = nums[slow]
+        fast = nums[nums[fast]]
+        if slow == fast:
+            break
+    slow = nums[0]
+    while slow != fast:
+        slow = nums[slow]
+        fast = nums[fast]
+    return slow
+
+# Example: [1, 3, 4, 2, 2] -> 2
+```
+
+**Find middle of linked list** - Fast pointer moves 2x, slow moves 1x. When fast reaches the end, slow is at the middle. Used as a subroutine in merge sort on linked lists.
+
+```python
+def middle_node(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+
+# For [1, 2, 3, 4, 5], returns node with val 3.
+# For even length, returns the second of the two middle nodes.
+```
+
+**Palindrome linked list check** - Find middle with Floyd's, reverse the second half, compare both halves node by node. Restore the list if needed. O(n) time, O(1) space.
+
+```python
+def is_palindrome(head):
+    # Step 1: find middle
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+    # Step 2: reverse second half
+    prev, curr = None, slow
+    while curr:
+        curr.next, prev, curr = prev, curr, curr.next
+    right = prev  # reversed second half
+
+    # Step 3: compare
+    left = head
+    result = True
+    while right:
+        if left.val != right.val:
+            result = False
+            break
+        left = left.next
+        right = right.next
+    return result
+
+# Example: 1 -> 2 -> 2 -> 1 returns True
+# Example: 1 -> 2 -> 3 returns False
+```
+
 ## Test cases
 
 ```python

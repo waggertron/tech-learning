@@ -371,6 +371,117 @@ Counter-clues: if the graph has undirected edges, or if you need to find strongl
 - [210, Course Schedule II](../leetcode-150/graphs/210-course-schedule-ii/): return a valid course order, or `[]` if impossible.
 - [269, Alien Dictionary](../leetcode-150/graphs/269-alien-dictionary/): reconstruct a character ordering from a sorted alien word list. Lexicographic Kahn's with a min-heap.
 
+## Multiple uses
+
+**Course schedule ordering**: each prerequisite pair (a, b) is a directed edge a -> b. Kahn's BFS on in-degrees gives a valid course order. If any course is never enqueued (in-degree never reaches 0), a cycle exists and no valid order exists.
+
+```python
+from collections import deque
+
+def can_finish(num_courses, prerequisites):
+    adj = [[] for _ in range(num_courses)]
+    in_degree = [0] * num_courses
+    for a, b in prerequisites:
+        adj[a].append(b)
+        in_degree[b] += 1
+    queue = deque(i for i in range(num_courses) if in_degree[i] == 0)
+    count = 0
+    while queue:
+        node = queue.popleft()
+        count += 1
+        for neighbor in adj[node]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+    return count == num_courses  # False if any course was never enqueued (cycle)
+```
+
+**Alien dictionary (reconstruct alphabet order)**: compare adjacent words to extract letter ordering constraints as edges, then topological sort. The sorted order is the alien alphabet. Kahn's cycle detection catches invalid inputs.
+
+```python
+from collections import deque, defaultdict
+
+def alien_order(words):
+    adj = defaultdict(set)
+    in_degree = {c: 0 for word in words for c in word}
+
+    for i in range(len(words) - 1):
+        w1, w2 = words[i], words[i + 1]
+        min_len = min(len(w1), len(w2))
+        if len(w1) > len(w2) and w1[:min_len] == w2[:min_len]:
+            return ""  # invalid: prefix word appears after longer word
+        for j in range(min_len):
+            if w1[j] != w2[j]:
+                if w2[j] not in adj[w1[j]]:
+                    adj[w1[j]].add(w2[j])
+                    in_degree[w2[j]] += 1
+                break
+
+    queue = deque(c for c in in_degree if in_degree[c] == 0)
+    result = []
+    while queue:
+        c = queue.popleft()
+        result.append(c)
+        for neighbor in adj[c]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+
+    return "".join(result) if len(result) == len(in_degree) else ""
+```
+
+**Parallel task scheduling with dependency levels**: modified Kahn's that tracks the level (time step) at which each node is processed. Nodes with in-degree 0 at the same time can run in parallel. The number of levels equals the critical path length.
+
+```python
+from collections import deque
+
+def min_time_to_finish(num_tasks, edges):
+    adj = [[] for _ in range(num_tasks)]
+    in_degree = [0] * num_tasks
+    for u, v in edges:
+        adj[u].append(v)
+        in_degree[v] += 1
+
+    level = [0] * num_tasks
+    queue = deque(i for i in range(num_tasks) if in_degree[i] == 0)
+
+    while queue:
+        node = queue.popleft()
+        for neighbor in adj[node]:
+            in_degree[neighbor] -= 1
+            level[neighbor] = max(level[neighbor], level[node] + 1)
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+
+    return max(level) + 1  # critical path length (number of sequential levels)
+```
+
+**Deadlock detection in a resource allocation graph**: processes and resources are nodes; edges represent holds and waits. After Kahn's topological sort, nodes remaining in the graph (never reached in-degree 0) are involved in a deadlock cycle.
+
+```python
+from collections import deque
+
+def find_deadlocked_nodes(num_nodes, edges):
+    adj = [[] for _ in range(num_nodes)]
+    in_degree = [0] * num_nodes
+    for u, v in edges:
+        adj[u].append(v)
+        in_degree[v] += 1
+
+    queue = deque(i for i in range(num_nodes) if in_degree[i] == 0)
+    visited = set()
+    while queue:
+        node = queue.popleft()
+        visited.add(node)
+        for neighbor in adj[node]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+
+    # Nodes never freed are stuck in (or blocked by) a deadlock cycle
+    return [i for i in range(num_nodes) if i not in visited]
+```
+
 ## Test cases
 
 ```python

@@ -295,6 +295,122 @@ On grids specifically, edges are implicit (four or eight neighbors), edge weight
 | [778 Swim in Rising Water](../leetcode-150/advanced-graphs/778-swim-in-rising-water/) | Grid, edge weight = max of two cell values | Minimum bottleneck path; Dijkstra on implicit grid graph |
 | [1584 Min Cost to Connect All Points](../leetcode-150/advanced-graphs/1584-min-cost-to-connect-all-points/) | Minimum spanning tree (Prim's), not shortest path | Same heap structure as Dijkstra but picks cheapest new edge, not shortest path |
 
+## Multiple uses
+
+**Minimum cost to reach all nodes (network delay time):** Run Dijkstra from the source, then return `max(dist)`. If any node is still at infinity, return -1. This is the canonical single-source, all-destinations application.
+
+```python
+import heapq
+
+def network_delay_time(times, n, k):
+    adj = [[] for _ in range(n + 1)]
+    for u, v, w in times:
+        adj[u].append((v, w))
+
+    dist = [float('inf')] * (n + 1)
+    dist[k] = 0
+    heap = [(0, k)]
+
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist[u]:
+            continue
+        for v, w in adj[u]:
+            nd = dist[u] + w
+            if nd < dist[v]:
+                dist[v] = nd
+                heapq.heappush(heap, (nd, v))
+
+    ans = max(dist[1:])
+    return ans if ans < float('inf') else -1
+```
+
+**Grid shortest path with weighted cells:** Cells have a cost to enter. Build an implicit adjacency list: from `(r, c)`, edges go to 4 neighbors with weight equal to the neighbor's cell value. Dijkstra finds the minimum-cost path through the grid.
+
+```python
+import heapq
+
+def min_cost_grid(grid):
+    rows, cols = len(grid), len(grid[0])
+    dist = [[float('inf')] * cols for _ in range(rows)]
+    dist[0][0] = grid[0][0]
+    heap = [(grid[0][0], 0, 0)]
+
+    while heap:
+        d, r, c = heapq.heappop(heap)
+        if d > dist[r][c]:
+            continue
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols:
+                nd = dist[r][c] + grid[nr][nc]
+                if nd < dist[nr][nc]:
+                    dist[nr][nc] = nd
+                    heapq.heappush(heap, (nd, nr, nc))
+
+    return dist[rows-1][cols-1]
+```
+
+**Maximum probability path:** Maximize the product of probabilities instead of minimizing a sum. Use a max-heap (negate probabilities), start with probability 1.0 at source, and multiply along edges. The relax condition flips: update if `new_prob > dist[v]`.
+
+```python
+import heapq
+
+def max_probability(n, edges, prob, src, dst):
+    adj = [[] for _ in range(n)]
+    for i, (u, v) in enumerate(edges):
+        adj[u].append((v, prob[i]))
+        adj[v].append((u, prob[i]))
+
+    p = [0.0] * n
+    p[src] = 1.0
+    heap = [(-1.0, src)]
+
+    while heap:
+        neg_p, u = heapq.heappop(heap)
+        cur = -neg_p
+        if cur < p[u]:
+            continue
+        for v, w in adj[u]:
+            np_ = p[u] * w
+            if np_ > p[v]:
+                p[v] = np_
+                heapq.heappush(heap, (-np_, v))
+
+    return p[dst]
+```
+
+**Shortest path with expanded state (K refuels or K stops):** Add a dimension to the state, such as refuels used or stops taken. Run Dijkstra over the expanded state graph `(cost, node, k_remaining)`. Each additional resource consumed adds a dimension, but the algorithm is otherwise identical to standard Dijkstra.
+
+```python
+import heapq
+
+def min_cost_with_k_refuels(n, adj, src, dst, fuel_stations, k):
+    # State: (cost, node, refuels_used)
+    dist = [[float('inf')] * (k + 1) for _ in range(n)]
+    dist[src][0] = 0
+    heap = [(0, src, 0)]
+
+    while heap:
+        cost, u, refuels = heapq.heappop(heap)
+        if cost > dist[u][refuels]:
+            continue
+        for v, w in adj[u]:
+            nc = cost + w
+            nr = refuels
+            if nc < dist[v][nr]:
+                dist[v][nr] = nc
+                heapq.heappush(heap, (nc, v, nr))
+            # Option: refuel here if a station and budget allows
+            if u in fuel_stations and refuels < k:
+                nr2 = refuels + 1
+                if nc < dist[v][nr2]:
+                    dist[v][nr2] = nc
+                    heapq.heappush(heap, (nc, v, nr2))
+
+    return min(dist[dst])
+```
+
 ## Test cases
 
 ```python

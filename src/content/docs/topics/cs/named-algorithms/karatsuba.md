@@ -340,6 +340,138 @@ The mental model: **if you have two sub-results and you can get a third sub-resu
 - Not greedy: no locally optimal choice; the split is fixed at n/2
 - Not O(n log n): that requires FFT. Karatsuba is strictly slower than Schönhage-Strassen for very large n
 
+## Multiple uses
+
+**Polynomial multiplication** - Two polynomials of degree n are coefficient lists of length n+1. Multiply using the same split-and-combine strategy. Karatsuba reduces 4 sub-multiplications to 3, giving O(n^1.585) vs O(n^2) naive convolution (for sizes where FFT isn't worth it).
+
+```python
+def poly_karatsuba(a, b):
+    """Multiply two polynomials represented as coefficient lists (index = degree).
+    Returns coefficient list of the product."""
+    n, m = len(a), len(b)
+    if n == 1:
+        return [a[0] * bj for bj in b]
+    if m == 1:
+        return [b[0] * ai for ai in a]
+
+    half = max(n, m) // 2
+    # Split: a = a_hi * x^half + a_lo
+    a_lo, a_hi = a[:half], a[half:]
+    b_lo, b_hi = b[:half], b[half:]
+
+    # Pad shorter halves with zeros so addition is element-wise
+    def pad(p, length):
+        return p + [0] * (length - len(p))
+
+    size = max(len(a_lo), len(a_hi), len(b_lo), len(b_hi))
+    a_lo, a_hi = pad(a_lo, size), pad(a_hi, size)
+    b_lo, b_hi = pad(b_lo, size), pad(b_hi, size)
+
+    z0 = poly_karatsuba(a_lo, b_lo)
+    z2 = poly_karatsuba(a_hi, b_hi)
+    a_sum = [x + y for x, y in zip(a_lo, a_hi)]
+    b_sum = [x + y for x, y in zip(b_lo, b_hi)]
+    z1_raw = poly_karatsuba(a_sum, b_sum)
+    # z1 = z1_raw - z2 - z0
+    def poly_sub(p, q):
+        result = list(p)
+        for i, v in enumerate(q):
+            if i < len(result):
+                result[i] -= v
+            else:
+                result.append(-v)
+        return result
+    z1 = poly_sub(poly_sub(z1_raw, z2), z0)
+
+    # Combine: result[i] += z0[i], result[i+half] += z1[i], result[i+2*half] += z2[i]
+    size_out = n + m - 1
+    result = [0] * size_out
+    for i, v in enumerate(z0):
+        if i < size_out:
+            result[i] += v
+    for i, v in enumerate(z1):
+        if i + half < size_out:
+            result[i + half] += v
+    for i, v in enumerate(z2):
+        if i + 2 * half < size_out:
+            result[i + 2 * half] += v
+    return result
+
+# (1 + 2x)(3 + 4x) = 3 + 10x + 8x^2
+# poly_karatsuba([1, 2], [3, 4]) -> [3, 10, 8]
+```
+
+**Big integer exponentiation (modular)** - RSA and other crypto systems need modular exponentiation of 2048-bit numbers. The repeated squaring loop calls big-integer multiplication at each step; Karatsuba makes each multiplication faster.
+
+```python
+def karatsuba(x, y):
+    if x < 10 or y < 10:
+        return x * y
+    m = max(len(str(x)), len(str(y))) // 2
+    power = 10 ** m
+    a, b = divmod(x, power)
+    c, d = divmod(y, power)
+    z2 = karatsuba(a, c)
+    z0 = karatsuba(b, d)
+    z1 = karatsuba(a + b, c + d) - z2 - z0
+    return z2 * (power ** 2) + z1 * power + z0
+
+def mod_pow(base, exp, mod):
+    """Modular exponentiation using repeated squaring.
+    Each squaring step uses Karatsuba internally for large bases."""
+    result = 1
+    base = base % mod
+    while exp > 0:
+        if exp % 2 == 1:
+            result = karatsuba(result, base) % mod
+        exp //= 2
+        base = karatsuba(base, base) % mod
+    return result
+
+# Example: RSA-style computation with large primes
+# mod_pow(base=123456789, exp=65537, mod=10**18 + 9)
+```
+
+**Matrix multiplication of polynomial-entry matrices** - Matrices where each entry is a polynomial (common in coding theory and error correction). Karatsuba applies to each scalar multiplication inside the matrix product.
+
+```python
+def poly_mul_naive(a, b):
+    """Naive O(n^2) polynomial multiply, for comparison."""
+    result = [0] * (len(a) + len(b) - 1)
+    for i, ai in enumerate(a):
+        for j, bj in enumerate(b):
+            result[i + j] += ai * bj
+    return result
+
+def poly_add(a, b):
+    size = max(len(a), len(b))
+    result = [0] * size
+    for i, v in enumerate(a):
+        result[i] += v
+    for i, v in enumerate(b):
+        result[i] += v
+    return result
+
+def matrix_poly_mul(A, B):
+    """Multiply two matrices whose entries are polynomials.
+    A is (r x n), B is (n x c). Each entry is a coefficient list."""
+    r, n, c = len(A), len(B), len(B[0])
+    C = [[[] for _ in range(c)] for _ in range(r)]
+    for i in range(r):
+        for j in range(c):
+            acc = [0]
+            for k in range(n):
+                # Use Karatsuba for each entry multiplication
+                product = poly_karatsuba(A[i][k], B[k][j])
+                acc = poly_add(acc, product)
+            C[i][j] = acc
+    return C
+
+# A = [[[1, 1], [0, 1]]]  (1x2 matrix, entries are polynomials)
+# B = [[[1, 0]], [[1, 1]]]  (2x1 matrix)
+# C = A @ B uses Karatsuba for each polynomial product
+```
+
 ## Test cases
 
 ```python

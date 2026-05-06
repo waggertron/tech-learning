@@ -290,6 +290,222 @@ Use these as conceptual bridges: the DFS structure in course-schedule solutions 
 
 Full SCC decomposition problems are less common on LeetCode than cycle detection problems, but they appear at Hard difficulty and in contest problems. The pattern recognition is the hard part: once you see "directed graph + mutual reachability + grouping," the code is mechanical.
 
+## Multiple uses
+
+**Finding bridges (critical connections)**: a bridge is an edge whose removal disconnects the graph. In Tarjan's, an edge (u, v) is a bridge if `low[v] > disc[u]` (the subtree rooted at v cannot reach u or any earlier node without using this edge).
+
+```python
+def find_bridges(n, edges):
+    adj = [[] for _ in range(n)]
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)
+
+    disc = [-1] * n
+    low = [0] * n
+    timer = [0]
+    bridges = []
+
+    def dfs(u, parent):
+        disc[u] = low[u] = timer[0]
+        timer[0] += 1
+        for v in adj[u]:
+            if disc[v] == -1:
+                dfs(v, u)
+                low[u] = min(low[u], low[v])
+                if low[v] > disc[u]:      # v's subtree cannot reach back to u
+                    bridges.append((u, v))
+            elif v != parent:
+                low[u] = min(low[u], disc[v])
+
+    for u in range(n):
+        if disc[u] == -1:
+            dfs(u, -1)
+
+    return bridges
+```
+
+**Finding articulation points**: a node u is an articulation point if (a) u is the root of the DFS tree and has 2 or more children, or (b) u is not the root and has a child v with `low[v] >= disc[u]`. Same DFS pass, one additional condition.
+
+```python
+def find_articulation_points(n, edges):
+    adj = [[] for _ in range(n)]
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)
+
+    disc = [-1] * n
+    low = [0] * n
+    timer = [0]
+    ap = set()
+
+    def dfs(u, parent):
+        disc[u] = low[u] = timer[0]
+        timer[0] += 1
+        children = 0
+        for v in adj[u]:
+            if disc[v] == -1:
+                children += 1
+                dfs(v, u)
+                low[u] = min(low[u], low[v])
+                # Non-root: removing u would cut off v's subtree
+                if parent != -1 and low[v] >= disc[u]:
+                    ap.add(u)
+            elif v != parent:
+                low[u] = min(low[u], disc[v])
+        # Root with 2+ children: removing it disconnects them
+        if parent == -1 and children >= 2:
+            ap.add(u)
+
+    for u in range(n):
+        if disc[u] == -1:
+            dfs(u, -1)
+
+    return list(ap)
+```
+
+**2-SAT (Boolean satisfiability with 2 literals per clause)**: model each clause (A or B) as two implications (not A -> B) and (not B -> A). Find SCCs with Tarjan's. If a variable and its negation are in the same SCC, the formula is unsatisfiable. Otherwise, assign based on reverse topological order of the condensation DAG.
+
+```python
+def two_sat(n, clauses):
+    # Variable i: node i (true), node i+n (false/negation)
+    size = 2 * n
+    adj = [[] for _ in range(size)]
+
+    def add_implication(u, v):
+        adj[u].append(v)
+
+    for a, b in clauses:
+        # Clause (a or b) means: (not a -> b) and (not b -> a)
+        # Positive literal i = i, negative literal i = i + n
+        not_a = (a + n) if a < n else (a - n)
+        not_b = (b + n) if b < n else (b - n)
+        add_implication(not_a, b)
+        add_implication(not_b, a)
+
+    # Tarjan's SCC on the implication graph
+    disc = [-1] * size
+    low = [0] * size
+    on_stack = [False] * size
+    stack = []
+    timer = [0]
+    comp = [-1] * size   # SCC ID for each node
+
+    scc_id = [0]
+
+    def dfs(u):
+        disc[u] = low[u] = timer[0]
+        timer[0] += 1
+        stack.append(u)
+        on_stack[u] = True
+        for v in adj[u]:
+            if disc[v] == -1:
+                dfs(v)
+                low[u] = min(low[u], low[v])
+            elif on_stack[v]:
+                low[u] = min(low[u], disc[v])
+        if low[u] == disc[u]:
+            while True:
+                w = stack.pop()
+                on_stack[w] = False
+                comp[w] = scc_id[0]
+                if w == u:
+                    break
+            scc_id[0] += 1
+
+    for u in range(size):
+        if disc[u] == -1:
+            dfs(u)
+
+    for i in range(n):
+        if comp[i] == comp[i + n]:
+            return None  # unsatisfiable: variable and its negation in same SCC
+
+    # Assign: higher SCC ID in reverse topo order means "true"
+    assignment = [comp[i] > comp[i + n] for i in range(n)]
+    return assignment
+```
+
+**Condensation DAG for reachability**: compress each SCC into a single super-node to produce a DAG. Dynamic programming on the condensation DAG answers "from node u, what is the maximum value reachable?" in O(V+E) instead of O(V^2).
+
+```python
+def max_value_reachable(graph, values):
+    n = len(values)
+
+    # Step 1: Tarjan's SCC to get component IDs
+    disc = [-1] * n
+    low = [0] * n
+    on_stack = [False] * n
+    stack = []
+    timer = [0]
+    comp = [-1] * n
+    scc_id = [0]
+
+    def dfs(u):
+        disc[u] = low[u] = timer[0]
+        timer[0] += 1
+        stack.append(u)
+        on_stack[u] = True
+        for v in graph.get(u, []):
+            if disc[v] == -1:
+                dfs(v)
+                low[u] = min(low[u], low[v])
+            elif on_stack[v]:
+                low[u] = min(low[u], disc[v])
+        if low[u] == disc[u]:
+            while True:
+                w = stack.pop()
+                on_stack[w] = False
+                comp[w] = scc_id[0]
+                if w == u:
+                    break
+            scc_id[0] += 1
+
+    for u in range(n):
+        if disc[u] == -1:
+            dfs(u)
+
+    num_sccs = scc_id[0]
+
+    # Step 2: build condensation DAG and aggregate values per SCC
+    scc_val = [0] * num_sccs
+    dag = [set() for _ in range(num_sccs)]
+    in_degree = [0] * num_sccs
+
+    for u in range(n):
+        scc_val[comp[u]] += values[u]
+        for v in graph.get(u, []):
+            if comp[u] != comp[v]:
+                if comp[v] not in dag[comp[u]]:
+                    dag[comp[u]].add(comp[v])
+                    in_degree[comp[v]] += 1
+
+    # Step 3: DP on condensation DAG (topological order via Kahn's)
+    from collections import deque
+    dp = list(scc_val)  # max reachable value starting from each SCC
+    queue = deque(i for i in range(num_sccs) if in_degree[i] == 0)
+
+    # Process in reverse order: Tarjan emits SCCs in reverse topological order
+    # so scc_id 0 is the "last" SCC. We propagate from sinks to sources.
+    topo = []
+    temp_in = list(in_degree)
+    q2 = deque(i for i in range(num_sccs) if temp_in[i] == 0)
+    while q2:
+        u = q2.popleft()
+        topo.append(u)
+        for v in dag[u]:
+            temp_in[v] -= 1
+            if temp_in[v] == 0:
+                q2.append(v)
+
+    for u in reversed(topo):
+        for v in dag[u]:
+            dp[u] = max(dp[u], scc_val[u] + dp[v])
+
+    # Return per-original-node result
+    return [dp[comp[u]] for u in range(n)]
+```
+
 ## Test cases
 
 ```python
