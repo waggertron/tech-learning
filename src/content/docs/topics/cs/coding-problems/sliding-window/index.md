@@ -1,11 +1,11 @@
 ---
 title: Sliding Window
-description: 6 problems that teach the sliding-window pattern, maintaining a dynamic contiguous range over an array or string to reduce O(n²) to O(n).
+description: "8 problems that teach the sliding-window pattern, maintaining a dynamic contiguous range over an array or string to reduce O(n²) to O(n)."
 parent: coding-problems
 tags: [leetcode, neetcode-150, sliding-window]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview
@@ -26,6 +26,11 @@ There are two flavors:
 5. [76. Minimum Window Substring (Hard)](./076-minimum-window-substring/)
 6. [239. Sliding Window Maximum (Hard)](./239-sliding-window-maximum/)
 
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [28. Find the Index of the First Occurrence in a String (Easy)](./028-find-the-index-of-the-first-occurrence/) -- O(n*m) sliding window over character windows.
+- [560. Subarray Sum Equals K (Medium)](./560-subarray-sum-equals-k/) -- prefix sum + hash map; the window isn't contiguous in the traditional sense but uses the same "complement in a map" idea.
+
 ## Key patterns unlocked here
 
 - **Running best + single pass**, Buy/Sell Stock; the "one-pass min-tracking" template.
@@ -34,3 +39,4 @@ There are two flavors:
 - **Anagram detection with matching counters**, Permutation in String.
 - **Two-counter tracking (have vs. need)**, Minimum Window Substring.
 - **Monotonic deque for window min/max**, Sliding Window Maximum.
+- **Prefix sum + hash map for subarray sum problems**, Subarray Sum Equals K.

@@ -1,52 +1,56 @@
 ---
 title: Coding Problems
-description: "NeetCode 150 plus bonus problems, organized by pattern category. Brute-force, improved, and optimal Python approaches with complexity analysis for each."
+description: "180+ LeetCode problems organized by pattern category: NeetCode 150 as the core, plus bonus problems drawn from data-structure and algorithm deep dives."
 category: cs
 tags: [leetcode, interviews, neetcode-150, algorithms]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview
 
-The [NeetCode 150](https://neetcode.io/roadmap) is the de facto curated problem set for modern tech interview prep, a superset of Blind 75 organized by pattern. This topic walks through each problem with three tiers of solution:
+This section covers 180+ LeetCode problems organized by pattern category. The core set is the [NeetCode 150](https://neetcode.io/roadmap), the de facto modern interview prep list and a superset of Blind 75. Beyond that, each category includes bonus problems drawn from the data-structure and algorithm pages on this site -- problems that reinforce the same patterns but fall outside the curated 150.
 
-1. **Brute force**, the most direct, often O(n²) or worse; always runs and always correct.
-2. **Improved**, a standard optimization: sorting, a single hash map, two pointers.
-3. **Optimized**, the interview-level answer: best time and space complexity the problem admits.
+**NeetCode 150 problems** are tagged `neetcode-150` in their frontmatter. **Bonus problems** appear in the same category directories without that tag.
 
-Each problem page includes the prompt, all three approaches with working Python, and a complexity summary table.
+Every problem page includes:
+
+1. **Brute force**: the most direct approach, always correct, often O(n²) or worse.
+2. **Improved / optimal**: the interview-level answer, best achievable time and space.
+
+Each approach has working Python, line-labeled code, and a per-line complexity table. Many pages also include a **How to recognize this pattern** section covering the signal in the problem statement, a counterexample that breaks the tempting-but-wrong approach, and a table of related problems with the same shape.
 
 ## Categories
 
-1. [Arrays & Hashing](./arrays-and-hashing/) (9 problems)
-2. [Two Pointers](./two-pointers/) (5 problems)
-3. [Sliding Window](./sliding-window/) (6 problems)
-4. [Stack](./stack/) (7 problems)
-5. [Binary Search](./binary-search/) (7 problems)
-6. [Linked List](./linked-list/) (11 problems)
-7. [Trees](./trees/) (15 problems)
-8. [Heap / Priority Queue](./heap-priority-queue/) (7 problems)
-9. [Backtracking](./backtracking/) (9 problems)
-10. [Tries](./tries/) (3 problems)
-11. [Graphs](./graphs/) (13 problems)
-12. [Advanced Graphs](./advanced-graphs/) (5 problems)
-13. [1-D Dynamic Programming](./1d-dynamic-programming/) (12 problems)
-14. [2-D Dynamic Programming](./2d-dynamic-programming/) (11 problems)
-15. [Greedy](./greedy/) (8 problems)
-16. [Intervals](./intervals/) (6 problems)
-17. [Math & Geometry](./math-and-geometry/) (8 problems)
-18. [Bit Manipulation](./bit-manipulation/) (7 problems)
-19. [Matrix](./matrix/) (4 problems)
+| Category | Problems |
+| --- | --- |
+| [Arrays & Hashing](./arrays-and-hashing/) | 15 |
+| [Two Pointers](./two-pointers/) | 5 |
+| [Sliding Window](./sliding-window/) | 8 |
+| [Stack](./stack/) | 16 |
+| [Binary Search](./binary-search/) | 8 |
+| [Linked List](./linked-list/) | 14 |
+| [Trees](./trees/) | 17 |
+| [Heap / Priority Queue](./heap-priority-queue/) | 7 |
+| [Backtracking](./backtracking/) | 9 |
+| [Tries](./tries/) | 3 |
+| [Graphs](./graphs/) | 19 |
+| [Advanced Graphs](./advanced-graphs/) | 8 |
+| [1-D Dynamic Programming](./1d-dynamic-programming/) | 12 |
+| [2-D Dynamic Programming](./2d-dynamic-programming/) | 11 |
+| [Greedy](./greedy/) | 8 |
+| [Intervals](./intervals/) | 6 |
+| [Math & Geometry](./math-and-geometry/) | 8 |
+| [Bit Manipulation](./bit-manipulation/) | 7 |
 
 ## Browse by difficulty
 
-Pattern-grouping is the default; difficulty is the orthogonal axis when you want to ramp up gradually or save the hard set for last.
+Pattern-grouping is the default. Difficulty is the orthogonal axis when you want to ramp up gradually or save the hard set for last.
 
-- [Easy problems](./by-difficulty/easy/) (28 problems)
-- [Medium problems](./by-difficulty/medium/) (99 problems)
-- [Hard problems](./by-difficulty/hard/) (22 problems)
+- [Easy problems](./by-difficulty/easy/) (36 problems)
+- [Medium problems](./by-difficulty/medium/) (118 problems)
+- [Hard problems](./by-difficulty/hard/) (26 problems)
 - [By-difficulty hub](./by-difficulty/), all three together
 
 ## How to use
@@ -55,7 +59,8 @@ Work through a category end-to-end. Within each problem:
 
 - **Read the prompt.** Try to solve without scrolling.
 - **If stuck, read only Approach 1 (brute force).** Reimplement yourself.
-- **Compare your solution with Approach 3.** Understand *why* the gap closes, usually a hash map, a monotonic structure, or a clever invariant.
+- **Compare your solution with the optimal approach.** Understand *why* the gap closes: usually a hash map, a monotonic structure, or a clever invariant.
+- **Check the "How to recognize this pattern" section** if the page has one. It contains the signal to look for and the counterexample that breaks the wrong approach.
 
 Complexity sections use standard Big-O notation. `n` is the input size unless otherwise noted.
 
@@ -63,14 +68,12 @@ Complexity sections use standard Big-O notation. `n` is the input size unless ot
 
 - [NeetCode 150, official list](https://neetcode.io/practice)
 - [NeetCode roadmap](https://neetcode.io/roadmap), organized by pattern
+- [NeetCode YouTube channel](https://www.youtube.com/@NeetCode), video walkthroughs for every problem
 - [Grind 75](https://www.techinterviewhandbook.org/grind75), alternative curated list, includes many overlapping problems
 - [Blind 75](https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU), the subset that started it all
-
-## Related posts
-
-- [Data structure complexity cheat sheet](../../../posts/2026-04-27-data-structure-complexity-cheat-sheet/), operation-level big-O across every structure these problems use.
-- [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), Dijkstra, Kahn, Kruskal, Tarjan, KMP, quickselect, with canonical implementations.
+- [LeetCode patterns](https://seanprashad.com/leetcode-patterns/), problem list organized by common patterns
 
 ## Related topics
 
-- [Data structures](../data-structures/), the longer-form reference for the structures referenced in every solution.
+- [Data structures](../data-structures/), the longer-form reference for the structures used in every solution.
+- [Named algorithms](../named-algorithms/), the canonical algorithms that show up inside these problems: Dijkstra, Tarjan, KMP, Floyd's, and more.

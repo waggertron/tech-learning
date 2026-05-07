@@ -1,11 +1,11 @@
 ---
 title: Advanced Graphs
-description: 5 problems covering Eulerian paths, MST (Prim/Kruskal), Dijkstra, Bellman-Ford, and modified Dijkstra on grids.
+description: "8 problems covering Eulerian paths, MST (Prim/Kruskal), Dijkstra, Bellman-Ford, modified Dijkstra on grids, and Tarjan's bridge finding."
 parent: coding-problems
 tags: [leetcode, neetcode-150, graphs, dijkstra, mst, bellman-ford]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview
@@ -28,6 +28,12 @@ The Graphs category taught BFS/DFS/Union-Find/topo sort. This category adds the 
 
 *Note: [269. Alien Dictionary](../graphs/269-alien-dictionary/) is sometimes categorized here. This site places it in the Graphs category since it's a topological-sort variant.*
 
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [1192. Critical Connections in a Network (Hard)](./1192-critical-connections/) -- Tarjan's bridge algorithm using low values and discovery times.
+- [1489. Critical and Pseudo-Critical Edges in MST (Hard)](./1489-critical-and-pseudo-critical-edges-in-mst/) -- Kruskal skip/force pattern to classify MST edges.
+- [1514. Path with Maximum Probability (Medium)](./1514-path-with-max-probability/) -- Dijkstra with a max-heap and negated (or inverted) probabilities.
+
 ## Key patterns unlocked here
 
 - **Hierholzer's algorithm for Eulerian paths**, Reconstruct Itinerary.
@@ -35,3 +41,6 @@ The Graphs category taught BFS/DFS/Union-Find/topo sort. This category adds the 
 - **Dijkstra with heap**, Network Delay Time.
 - **Bellman-Ford with hop limit**, Cheapest Flights Within K Stops.
 - **Modified Dijkstra for min-max edge**, Swim in Rising Water.
+- **Tarjan's bridge finding (low values and discovery times)**, Critical Connections.
+- **MST manipulation with Kruskal skip/force pattern**, Critical and Pseudo-Critical Edges.
+- **Dijkstra with maximization (negate weights or use max-heap)**, Path with Max Probability.

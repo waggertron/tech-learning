@@ -1,11 +1,11 @@
 ---
 title: Linked List
-description: 11 problems covering pointer manipulation, cycle detection, two-pointer distance tricks, composite structures (LRU), and divide-and-conquer merges.
+description: "14 problems covering pointer manipulation, cycle detection, two-pointer distance tricks, composite structures (LRU), and divide-and-conquer merges."
 parent: coding-problems
 tags: [leetcode, neetcode-150, linked-lists]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview

@@ -1,11 +1,11 @@
 ---
 title: Binary Search
-description: 7 problems that teach binary search in all its forms, on sorted arrays, on rotated arrays, on the answer space, and on partitioned structures.
+description: "8 problems that teach binary search in all its forms: on sorted arrays, on rotated arrays, on the answer space, and on partitioned structures."
 parent: coding-problems
 tags: [leetcode, neetcode-150, binary-search]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview
@@ -23,9 +23,12 @@ Binary search is deceptively simple: halve the search space using a comparison. 
 3. [875. Koko Eating Bananas (Medium)](./875-koko-eating-bananas/)
 4. [153. Find Minimum in Rotated Sorted Array (Medium)](./153-find-minimum-in-rotated-sorted-array/)
 5. [33. Search in Rotated Sorted Array (Medium)](./033-search-in-rotated-sorted-array/)
-6. [162. Find Peak Element (Medium)](./162-find-peak-element/)
-7. [981. Time Based Key-Value Store (Medium)](./981-time-based-key-value-store/)
-8. [4. Median of Two Sorted Arrays (Hard)](./004-median-of-two-sorted-arrays/)
+6. [981. Time Based Key-Value Store (Medium)](./981-time-based-key-value-store/)
+7. [4. Median of Two Sorted Arrays (Hard)](./004-median-of-two-sorted-arrays/)
+
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [162. Find Peak Element (Medium)](./162-find-peak-element/) -- binary search on a non-sorted array using local slope direction.
 
 ## Key patterns unlocked here
 
@@ -35,3 +38,4 @@ Binary search is deceptively simple: halve the search space using a comparison. 
 - **Detecting the sorted half**, 153 and 33.
 - **Per-key timeline binary search**, 981 (`bisect` on timestamps).
 - **Partition search on two arrays**, 4 (the canonical hard binary-search problem).
+- **Slope-direction binary search on unimodal arrays**, 162.

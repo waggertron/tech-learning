@@ -1,11 +1,11 @@
 ---
 title: Graphs
-description: 13 problems covering BFS, DFS, multi-source BFS, topological sort, union-find, and the most common modeling tricks (grids as graphs, words as graphs).
+description: "19 problems covering BFS, DFS, multi-source BFS, topological sort, union-find, and the most common modeling tricks (grids as graphs, words as graphs)."
 parent: coding-problems
 tags: [leetcode, neetcode-150, graphs]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview
@@ -33,6 +33,15 @@ Graphs are the most flexible category in the list, many problems that don't obvi
 12. [127. Word Ladder (Hard)](./127-word-ladder/)
 13. [269. Alien Dictionary (Hard)](./269-alien-dictionary/)
 
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [542. 01 Matrix (Medium)](./542-01-matrix/) -- multi-source BFS seeded from all 0-cells simultaneously.
+- [547. Number of Provinces (Medium)](./547-number-of-provinces/) -- DFS or Union-Find on an adjacency matrix.
+- [721. Accounts Merge (Medium)](./721-accounts-merge/) -- Union-Find with emails as graph nodes.
+- [785. Is Graph Bipartite? (Medium)](./785-is-graph-bipartite/) -- 2-coloring BFS to detect odd cycles.
+- [886. Possible Bipartition (Medium)](./886-possible-bipartition/) -- bipartite check on a dislikes graph.
+- [1091. Shortest Path in Binary Matrix (Medium)](./1091-shortest-path-in-binary-matrix/) -- BFS with 8-directional movement.
+
 ## Key patterns unlocked here
 
 - **Grid DFS / BFS for connected components**, Number of Islands, Max Area of Island.
@@ -43,3 +52,6 @@ Graphs are the most flexible category in the list, many problems that don't obvi
 - **Union-Find for incremental connectivity**, Redundant Connection, Graph Valid Tree, Number of Connected Components.
 - **Word graphs and BFS on implicit edges**, Word Ladder.
 - **Topological sort from ordering constraints**, Alien Dictionary.
+- **Multi-source BFS from all 0s simultaneously**, 01 Matrix.
+- **2-coloring for bipartite detection**, Is Graph Bipartite, Possible Bipartition.
+- **Union-Find on non-obvious nodes (emails as graph nodes)**, Accounts Merge.

@@ -1,11 +1,11 @@
 ---
 title: Trees
-description: 15 problems covering binary trees and BSTs, traversals, recursion over subtrees, tree DP, BST invariants, and serialization.
+description: "17 problems covering binary trees and BSTs, traversals, recursion over subtrees, tree DP, BST invariants, and serialization."
 parent: coding-problems
 tags: [leetcode, neetcode-150, trees, bst]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-07
 ---
 
 ## Overview
@@ -36,6 +36,11 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 14. [124. Binary Tree Maximum Path Sum (Hard)](./124-binary-tree-maximum-path-sum/)
 15. [297. Serialize and Deserialize Binary Tree (Hard)](./297-serialize-and-deserialize-binary-tree/)
 
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [337. House Robber III (Medium)](./337-house-robber-iii/) -- tree DP returning a (rob, skip) tuple from each subtree.
+- [968. Binary Tree Cameras (Hard)](./968-binary-tree-cameras/) -- greedy post-order traversal with three states (covered, uncovered, has-camera).
+
 ## Key patterns unlocked here
 
 - **Recursive mirror operation**, Invert Binary Tree.
@@ -46,6 +51,8 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 - **Path-DP DFS**, Count Good Nodes, Max Path Sum.
 - **Traversal-pair reconstruction**, Build Tree from Preorder+Inorder.
 - **DFS with null markers**, Serialize and Deserialize.
+- **Tree DP returning tuples (rob/skip pairs)**, House Robber III.
+- **Greedy post-order with state propagation**, Binary Tree Cameras.
 
 ## BFS level-separation techniques
 
