@@ -1,0 +1,123 @@
+---
+title: "735. Asteroid Collision (Medium)"
+description: "Simulate asteroid collisions using a stack: positive asteroids move right, negative move left, and the stack holds all survivors."
+parent: stack
+tags: [leetcode, stacks, simulation, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './735-asteroid-collision.py?raw';
+
+## Problem
+
+You are given an integer array `asteroids` representing asteroids in a row. For each asteroid, the absolute value is its size and the sign is its direction: positive means right, negative means left. All asteroids move at the same speed.
+
+Find the state of the asteroids after all collisions. When two asteroids meet, the smaller one explodes. If equal size, both explode. Two asteroids moving in the same direction never collide.
+
+**Example**
+- `[5, 10, -5]` → `[5, 10]` (the -5 collides with 10 and explodes)
+- `[8, -8]` → `[]` (equal size, both explode)
+- `[10, 2, -5]` → `[10]` (-5 destroys 2, then collides with 10 and explodes)
+- `[-2, -1, 1, 2]` → `[-2, -1, 1, 2]` (left-movers and right-movers never meet)
+
+LeetCode 735 · [Link](https://leetcode.com/problems/asteroid-collision/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="asteroid-collision" />
+
+## Approach: Stack of survivors
+
+A right-moving asteroid (positive) can only collide with asteroids to its right that are left-moving (negative). When you process left to right, a right-moving asteroid has no collision yet -- it pushes onto the stack as a potential future victim. A left-moving asteroid immediately threatens the most recent right-mover on the stack.
+
+The stack holds asteroids that are still alive and moving rightward (or left-movers that have already passed through without collision).
+
+```python
+def asteroid_collision(asteroids: list[int]) -> list[int]:
+    stack = []                                          # L1: survivors so far
+
+    for asteroid in asteroids:                          # L2: n iterations
+        alive = True                                    # L3: assume current survives
+
+        while alive and stack and asteroid < 0 < stack[-1]:  # L4: collision condition
+            if stack[-1] < -asteroid:                   # L5: right one smaller
+                stack.pop()                             # L6: right one explodes, keep checking
+            elif stack[-1] == -asteroid:                # L7: equal size
+                stack.pop()                             # L8: right one explodes
+                alive = False                           # L9: left one also explodes
+            else:                                       # L10: left one smaller
+                alive = False                           # L11: left one explodes
+
+        if alive:                                       # L12: survived all collisions
+            stack.append(asteroid)                      # L13: O(1) push
+
+    return stack                                        # L14: O(1)
+```
+
+**Collision condition (L4):** `asteroid < 0 < stack[-1]` means the current asteroid is left-moving AND the top of the stack is right-moving. These two are on a collision course. Any other combination never collides:
+- Both positive: moving same direction (right)
+- Both negative: moving same direction (left)
+- Stack top negative, current positive: moving apart
+
+**Tracing `[10, 2, -5]`:**
+
+```
+asteroid  stack before  collision?  outcome        stack after
+10        []            no          push            [10]
+2         [10]          no          push            [10, 2]
+-5        [10, 2]       yes (2>0)   2 < 5, pop      [10]
+                        yes (10>0)  10 > 5, alive=F [10]
+```
+
+Return `[10]`.
+
+**Tracing `[8, -8]`:**
+
+```
+asteroid  stack before  collision?  outcome         stack after
+8         []            no          push             [8]
+-8        [8]           yes         8 == 8, pop      []
+                                    alive = False
+```
+
+Return `[]`.
+
+**Where the time goes, line by line**
+
+*Variable: n = len(asteroids).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L4-L11 (while loop)** | **O(1) per iteration** | **at most n total** | **O(n)** ← amortized |
+| L13 (push) | O(1) | at most n | O(n) |
+| L14 (return) | O(1) | 1 | O(1) |
+
+The while loop looks nested but each asteroid is pushed at most once and popped at most once across the entire run. Total push + pop operations = O(n).
+
+**Complexity**
+- **Time:** O(n), amortized: each asteroid is pushed once and popped at most once.
+- **Space:** O(n) for the stack (all asteroids survive in the worst case).
+
+## Common mistakes
+
+**Forgetting the `alive` flag.** Without it, after a left-mover destroys a right-mover and then gets destroyed by a larger right-mover, you might still push the left-mover onto the stack. `alive = False` on any destruction (L9, L11) ensures the current asteroid doesn't get pushed.
+
+**Wrong collision condition.** Only `asteroid < 0 < stack[-1]` causes a collision. If you check just `asteroid < 0` or just `stack[-1] > 0`, you'll miss the "moving apart" case (`[-1, 1]` should not collide -- they move away from each other).
+
+**Using `abs()` inconsistently.** The comparison `stack[-1] < -asteroid` negates the left-mover to compare magnitudes. `abs(asteroid)` works equally well but be consistent.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| **Stack of survivors** | **O(n)** | **O(n)** |
+
+## Related topics
+
+- [20. Valid Parentheses (Easy)](./020-valid-parentheses/), same "unresolved pending item" stack model
+- [739. Daily Temperatures (Medium)](./739-daily-temperatures/), another simulation where the stack holds items waiting to be resolved
+- [Stacks](../../../data-structures/stacks/), LIFO data structure

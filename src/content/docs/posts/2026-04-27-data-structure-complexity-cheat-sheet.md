@@ -196,8 +196,8 @@ For completeness, the algorithm side of the table.
 
 | Output type | Time | Space | Example |
 |---|---|---|---|
-| All subsets (2^n) | O(2^n · n) | O(n) recursion | [LeetCode 78](../topics/cs/leetcode-150/backtracking/078-subsets/) |
-| All permutations (n!) | O(n! · n) | O(n) recursion | [LeetCode 46](../topics/cs/leetcode-150/backtracking/046-permutations/) |
+| All subsets (2^n) | O(2^n · n) | O(n) recursion | [LeetCode 78](../topics/cs/coding-problems/backtracking/078-subsets/) |
+| All permutations (n!) | O(n! · n) | O(n) recursion | [LeetCode 46](../topics/cs/coding-problems/backtracking/046-permutations/) |
 | All k-combinations | O(C(n,k) · k) | O(k) | [LeetCode 77](https://leetcode.com/problems/combinations/) |
 
 ---
@@ -262,6 +262,6 @@ If you can match a problem to one of these shapes, you can quote the complexity 
 ## Related topics
 
 - [Data structures](../../topics/cs/data-structures/), the longer-form pages, one per structure.
-- [LeetCode 150](../../topics/cs/leetcode-150/), problems organized by pattern, with complexity in every solution.
+- [LeetCode 150](../../topics/cs/coding-problems/), problems organized by pattern, with complexity in every solution.
 - [Heaps and priority queues](../../topics/cs/data-structures/heaps/), why `heapify` is O(n) and not O(n log n).
 - [Stacks](../../topics/cs/data-structures/stacks/), the LIFO discipline and where it shows up.

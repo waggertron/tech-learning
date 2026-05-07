@@ -322,7 +322,7 @@ Most string matching problems on LeetCode accept built-in `str.find()` or `in` o
 - **[LeetCode 459 (Repeated Substring Pattern)](https://leetcode.com/problems/repeated-substring-pattern/)**: determine if a string can be made by repeating a substring. Solvable directly from the LPS array (see the repeating unit section above) in O(n) with no search step needed.
 - **[LeetCode 686 (Repeated String Match)](https://leetcode.com/problems/repeated-string-match/)**: find how many times you must repeat `A` so that `B` is a substring. Build `A` repeated enough times and run KMP search. The LPS preprocessing saves time when `B` is much longer than `A`.
 
-None of these pages may exist yet in this site's catalog; they live in the leetcode-150 subtopic tree.
+None of these pages may exist yet in this site's catalog; they live in the coding-problems subtopic tree.
 
 ## Multiple uses
 

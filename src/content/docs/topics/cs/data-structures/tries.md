@@ -131,14 +131,14 @@ def find_words(board, words):
 Tries drive all 3 NeetCode 150 problems in the Tries category.
 
 **Tries:**
-- [208. Implement Trie (Prefix Tree)](../../leetcode-150/tries/208-implement-trie/)
-- [211. Design Add and Search Words Data Structure](../../leetcode-150/tries/211-design-add-and-search-words-data-structure/), trie + wildcard DFS
-- [212. Word Search II](../../leetcode-150/tries/212-word-search-ii/), trie + grid DFS
+- [208. Implement Trie (Prefix Tree)](../../coding-problems/tries/208-implement-trie/)
+- [211. Design Add and Search Words Data Structure](../../coding-problems/tries/211-design-add-and-search-words-data-structure/), trie + wildcard DFS
+- [212. Word Search II](../../coding-problems/tries/212-word-search-ii/), trie + grid DFS
 
 ## References
 
 - [Trie, Wikipedia](https://en.wikipedia.org/wiki/Trie)
 - [Radix tree / Patricia trie, Wikipedia](https://en.wikipedia.org/wiki/Radix_tree)
 - [Tries for string processing, cp-algorithms](https://cp-algorithms.com/string/aho_corasick.html)
-- [Implement Trie, LeetCode 208](../../leetcode-150/tries/208-implement-trie/)
-- [Word Search II, LeetCode 212 (trie + DFS)](../../leetcode-150/tries/212-word-search-ii/)
+- [Implement Trie, LeetCode 208](../../coding-problems/tries/208-implement-trie/)
+- [Word Search II, LeetCode 212 (trie + DFS)](../../coding-problems/tries/212-word-search-ii/)

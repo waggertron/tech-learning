@@ -223,9 +223,9 @@ SPFA is the algorithm to reach for when:
 
 Use standard Bellman-Ford when you need simple, predictable O(V \* E) behavior or when you're implementing the K-stops variant (see below).
 
-## Application: [LeetCode 787](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/), [[Cheapest Flights Within K Stops](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/) Within K Stops](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/)
+## Application: [LeetCode 787](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/), [[Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
 
-[LeetCode 787](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/) asks: given a directed weighted graph of flights (source, destination, price), find the cheapest path from `src` to `dst` using **at most K stops** (K+1 edges).
+[LeetCode 787](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) asks: given a directed weighted graph of flights (source, destination, price), find the cheapest path from `src` to `dst` using **at most K stops** (K+1 edges).
 
 Dijkstra handles this with state `(cost, node, stops_remaining)`, but the Bellman-Ford framing is cleaner and more instructive: **run exactly K+1 passes of Bellman-Ford** (not V-1), because K stops means K+1 edges means K+1 relaxation passes.
 
@@ -303,8 +303,8 @@ The pattern: Bellman-Ford's O(V \* E) is only worth paying when (a) negative wei
 
 | Problem | Notes |
 | ------- | ----- |
-| [787 Cheapest Flights Within K Stops](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/) | The canonical Bellman-Ford exercise: K+1 passes with snapshot copy |
-| [743 Network Delay Time](../leetcode-150/advanced-graphs/743-network-delay-time/) | Easier with Dijkstra (no negative weights), but solvable with Bellman-Ford as practice |
+| [787 Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) | The canonical Bellman-Ford exercise: K+1 passes with snapshot copy |
+| [743 Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/) | Easier with Dijkstra (no negative weights), but solvable with Bellman-Ford as practice |
 
 Note on 743: all edge weights are positive. Dijkstra runs in O((V + E) log V) and is the intended solution. Bellman-Ford gives the correct answer at O(V \* E) cost. Use 743 for Dijkstra practice; use 787 for Bellman-Ford practice.
 
@@ -494,4 +494,4 @@ if __name__ == "__main__":
 
 - [Dijkstra's algorithm](./dijkstra/), the faster single-source algorithm for non-negative weights
 - [BFS](./bfs/), the O(V + E) shortest-path algorithm for unweighted graphs
-- [Advanced Graphs](../leetcode-150/advanced-graphs/), the problem category where both Dijkstra and Bellman-Ford appear
+- [Advanced Graphs](../coding-problems/advanced-graphs/), the problem category where both Dijkstra and Bellman-Ford appear

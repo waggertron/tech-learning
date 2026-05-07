@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Given a linked list (or any structure you can model as a sequence of pointer hops), determine whether the sequence eventually loops back on itself, and if so, find the exact node where the cycle begins.
 
-Named after Robert W. Floyd, who described the algorithm in unpublished work around 1967. It appears in Knuth's *The Art of Computer Programming* (1969) and is the canonical answer to [LeetCode 141 (Linked List Cycle)](../leetcode-150/linked-list/141-linked-list-cycle/) and 142 ([Linked List Cycle](../leetcode-150/linked-list/141-linked-list-cycle/) II).
+Named after Robert W. Floyd, who described the algorithm in unpublished work around 1967. It appears in Knuth's *The Art of Computer Programming* (1969) and is the canonical answer to [LeetCode 141 (Linked List Cycle)](../coding-problems/linked-list/141-linked-list-cycle/) and 142 ([Linked List Cycle](../coding-problems/linked-list/141-linked-list-cycle/) II).
 
 The algorithm runs two passes:
 
@@ -196,7 +196,7 @@ This is O(n) time but also O(n) space: in the worst case you store every node be
 
 The O(1) constraint also matters for very large lists where heap pressure is a real concern, and for embedded or memory-constrained environments where allocating a variable-size set isn't acceptable.
 
-## Application 1: find the duplicate number ([LeetCode 287](../leetcode-150/linked-list/287-find-the-duplicate-number/))
+## Application 1: find the duplicate number ([LeetCode 287](../coding-problems/linked-list/287-find-the-duplicate-number/))
 
 The problem: given an array `nums` of `n+1` integers where each value is in `[1, n]`, find the one duplicate. You must not modify the array and must use O(1) extra space.
 
@@ -266,9 +266,9 @@ This same "slow at half-speed" idea underlies k-th-from-end problems (offset the
 
 | Problem | Link | What to practice |
 | ------- | ---- | ---------------- |
-| 141. Linked List Cycle | [../leetcode-150/linked-list/141-linked-list-cycle/](../leetcode-150/linked-list/141-linked-list-cycle/) | Phase 1 only |
+| 141. Linked List Cycle | [../coding-problems/linked-list/141-linked-list-cycle/](../coding-problems/linked-list/141-linked-list-cycle/) | Phase 1 only |
 | 142. Linked List Cycle II | Phase 2 + math | Find cycle entrance |
-| 287. [Find the Duplicate Number](../leetcode-150/linked-list/287-find-the-duplicate-number/) | [../leetcode-150/linked-list/287-find-the-duplicate-number/](../leetcode-150/linked-list/287-find-the-duplicate-number/) | Implicit linked list via array |
+| 287. [Find the Duplicate Number](../coding-problems/linked-list/287-find-the-duplicate-number/) | [../coding-problems/linked-list/287-find-the-duplicate-number/](../coding-problems/linked-list/287-find-the-duplicate-number/) | Implicit linked list via array |
 
 Start with 141 to get the detection loop clean, then move to 142 to cement the phase-2 reset. Do 287 last: it tests whether you can see the array-as-linked-list framing, which is the creative leap.
 
@@ -455,5 +455,5 @@ if __name__ == "__main__":
 
 - [BFS](./bfs/), graph traversal that also detects structure reachable from a start node
 - [DFS](./dfs/), finds back edges (and thus cycles) in arbitrary directed graphs with color marking
-- [LeetCode 150, linked-list problems](../leetcode-150/linked-list/), the exercise set that uses Floyd's most often
+- [LeetCode 150, linked-list problems](../coding-problems/linked-list/), the exercise set that uses Floyd's most often
 - [Data structures](../data-structures/), for the linked-list mechanics Floyd's operates on

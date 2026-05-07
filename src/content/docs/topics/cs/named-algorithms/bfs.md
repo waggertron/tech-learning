@@ -181,7 +181,7 @@ def multi_source_bfs(graph, sources):
     return dist
 ```
 
-**Pattern:** [Rotting Oranges](../leetcode-150/graphs/994-rotting-oranges/) ([LeetCode 994](../leetcode-150/graphs/994-rotting-oranges/)). Every rotten orange is a source. Push them all at minute 0. The BFS then spreads rot simultaneously from all of them, so `dist[cell]` tells you the first minute the orange at that cell goes rotten. If any fresh orange remains unreachable, return -1.
+**Pattern:** [Rotting Oranges](../coding-problems/graphs/994-rotting-oranges/) ([LeetCode 994](../coding-problems/graphs/994-rotting-oranges/)). Every rotten orange is a source. Push them all at minute 0. The BFS then spreads rot simultaneously from all of them, so `dist[cell]` tells you the first minute the orange at that cell goes rotten. If any fresh orange remains unreachable, return -1.
 
 ```python
 from collections import deque
@@ -275,9 +275,9 @@ Use BFS when the problem structure rewards level-by-level processing:
 
 **Shortest path in an unweighted graph or grid.** DFS finds *a* path, not necessarily the shortest one. BFS guarantees the first time you reach the target, you've taken the fewest steps. This is the single biggest reason to reach for BFS.
 
-**Minimum number of operations.** "Minimum word transformations" ([Word Ladder](../leetcode-150/graphs/127-word-ladder/), [LeetCode 127](../leetcode-150/graphs/127-word-ladder/)), "minimum number of mutations," "minimum moves to solve a puzzle": any time the question asks for a minimum count of discrete steps, model the state space as a graph and run BFS.
+**Minimum number of operations.** "Minimum word transformations" ([Word Ladder](../coding-problems/graphs/127-word-ladder/), [LeetCode 127](../coding-problems/graphs/127-word-ladder/)), "minimum number of mutations," "minimum moves to solve a puzzle": any time the question asks for a minimum count of discrete steps, model the state space as a graph and run BFS.
 
-**Level-by-level output.** Binary tree level order traversal ([LeetCode 102](../leetcode-150/trees/102-binary-tree-level-order-traversal/)) needs BFS because you process an entire level, emit it, then move to the next. DFS would require tracking depth explicitly.
+**Level-by-level output.** Binary tree level order traversal ([LeetCode 102](../coding-problems/trees/102-binary-tree-level-order-traversal/)) needs BFS because you process an entire level, emit it, then move to the next. DFS would require tracking depth explicitly.
 
 **Detecting if a graph is bipartite.** BFS naturally assigns layers; if any edge connects two nodes in the same layer, the graph has an odd cycle and is not bipartite. DFS works too, but BFS makes the coloring intuitive.
 
@@ -305,10 +305,10 @@ Quick decision rule: if the problem says "shortest," reach for BFS. If it says "
 
 | Problem | Pattern | Link |
 | ------- | ------- | ---- |
-| 200. [Number of Islands](../leetcode-150/graphs/200-number-of-islands/) | BFS flood fill, connected components | [200 Number of Islands](../leetcode-150/graphs/200-number-of-islands/) |
-| 994. Rotting Oranges | Multi-source BFS, simultaneous spread | [994 Rotting Oranges](../leetcode-150/graphs/994-rotting-oranges/) |
-| 127. Word Ladder | BFS on implicit state graph, shortest transformation | [127 Word Ladder](../leetcode-150/graphs/127-word-ladder/) |
-| 207. [Course Schedule](../leetcode-150/graphs/207-course-schedule/) | Kahn's algorithm (BFS topological sort) | [207 Course Schedule](../leetcode-150/graphs/207-course-schedule/) |
+| 200. [Number of Islands](../coding-problems/graphs/200-number-of-islands/) | BFS flood fill, connected components | [200 Number of Islands](../coding-problems/graphs/200-number-of-islands/) |
+| 994. Rotting Oranges | Multi-source BFS, simultaneous spread | [994 Rotting Oranges](../coding-problems/graphs/994-rotting-oranges/) |
+| 127. Word Ladder | BFS on implicit state graph, shortest transformation | [127 Word Ladder](../coding-problems/graphs/127-word-ladder/) |
+| 207. [Course Schedule](../coding-problems/graphs/207-course-schedule/) | Kahn's algorithm (BFS topological sort) | [207 Course Schedule](../coding-problems/graphs/207-course-schedule/) |
 
 ## Multiple uses
 
@@ -562,5 +562,5 @@ if __name__ == '__main__':
 
 - [Depth-First Search](./dfs/), the stack-based alternative and when to use it over BFS
 - [Dijkstra's Algorithm](./dijkstra/), BFS extended to weighted graphs with a priority queue
-- [Graphs (LeetCode 150)](../leetcode-150/graphs/), the problem set where BFS appears most often
+- [Graphs (LeetCode 150)](../coding-problems/graphs/), the problem set where BFS appears most often
 - [Data Structures](../data-structures/), queues, sets, and adjacency representations that BFS depends on

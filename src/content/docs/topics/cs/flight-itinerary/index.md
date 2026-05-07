@@ -327,7 +327,7 @@ def find_all_itineraries(flights, start, destination, earliest_depart=0, min_con
 ## Concepts in this problem
 
 - **Temporal graphs / time-respecting paths.** A path in a temporal graph must traverse edges in non-decreasing time. Standard graph algorithms don't apply directly; you either use the time-expanded reduction or modify the algorithm to carry time as part of the state.
-- **State expansion.** When the textbook state space (`airport`) is insufficient, expand it (`(airport, time)` or `(airport, hops)`). This is the same trick used in K-stops shortest path ([LeetCode 787](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/)) and in dynamic programming with multiple dimensions.
+- **State expansion.** When the textbook state space (`airport`) is insufficient, expand it (`(airport, time)` or `(airport, hops)`). This is the same trick used in K-stops shortest path ([LeetCode 787](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)) and in dynamic programming with multiple dimensions.
 - **Dominance pruning.** Two states `(airport, t1)` and `(airport, t2)` with `t1 < t2` and identical airport: `t2` is strictly dominated; you never need to expand it. Critical to keeping BFS/Dijkstra polynomial.
 - **Why standard Dijkstra works here.** The cost (arrival time) is non-decreasing along any path because flights have positive duration and waiting has non-negative cost. No negative edges, so Dijkstra is correct without modification.
 - **Why DFS visited-set is subtle.** You can revisit airports; the right "visited" key is the flight (each flight used at most once per itinerary), not the airport.
@@ -452,8 +452,8 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Dijkstra's algorithm](../leetcode-150/advanced-graphs/743-network-delay-time/) (Network Delay Time), the textbook implementation we adapt here
-- [Cheapest Flights Within K Stops](../leetcode-150/advanced-graphs/787-cheapest-flights-within-k-stops/), the most direct LeetCode analog (different objective, similar state expansion)
-- [Reconstruct Itinerary](../leetcode-150/advanced-graphs/332-reconstruct-itinerary/), Eulerian path on a flight graph (different problem, easy to confuse)
+- [Dijkstra's algorithm](../coding-problems/advanced-graphs/743-network-delay-time/) (Network Delay Time), the textbook implementation we adapt here
+- [Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/), the most direct LeetCode analog (different objective, similar state expansion)
+- [Reconstruct Itinerary](../coding-problems/advanced-graphs/332-reconstruct-itinerary/), Eulerian path on a flight graph (different problem, easy to confuse)
 - [Heaps / Priority Queues](../data-structures/heaps/), the data structure underneath Dijkstra
 - [Graphs](../data-structures/graphs/), adjacency lists, BFS, DFS, the basics we extend with timing

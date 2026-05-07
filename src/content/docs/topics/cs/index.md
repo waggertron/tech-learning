@@ -6,7 +6,7 @@ description: Computer science fundamentals, data structures, NeetCode 150 walkth
 ## Topics
 
 - [Data Structures](./data-structures/), the top 10 data structures that show up in coding interviews, with time complexity tables, 5 common DSA uses, and Python code for each
-- [LeetCode 150 (NeetCode)](./leetcode-150/), walkthroughs of all 150 NeetCode problems across 18 categories, each with brute-force, improved, and optimal approaches in Python
+- [Coding Problems](./coding-problems/), walkthroughs of all 150 NeetCode problems across 18 categories, each with brute-force, improved, and optimal approaches in Python
 - [Haversine Distance](./haversine-distance/), great-circle distance between lat/lon points, with Python/SQL/JavaScript implementations and notes on when to upgrade to Vincenty or Karney
 - [Vehicle Routing Problem](./vehicle-routing/), CVRP, VRPTW, pickup-and-delivery, and what Google OR-Tools actually does
 - [Functional Core, Imperative Shell](./functional-core-imperative-shell/), Gary Bernhardt's architecture pattern: pure logic at the center, I/O at the edges

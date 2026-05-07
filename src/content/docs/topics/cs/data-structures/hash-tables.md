@@ -39,13 +39,13 @@ A **hash set** is a hash table that stores only keys. Use it for "have I seen th
 
 ## Common uses in DSA
 
-1. **O(1) membership / frequency lookup**, Two Sum, Contains Duplicate, First Unique Character, Intersection of Two Arrays.
+1. **O(1) membership / frequency lookup**, [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), First Unique Character, Intersection of Two Arrays.
 2. **Complement / pair-finding**, Two Sum variants, 4Sum II (two-sum on pair sums), Pairs of Songs With Total Durations Divisible by 60.
-3. **Frequency counting**, Top K Frequent Elements (with a heap), Valid Anagram, Ransom Note, Majority Element.
+3. **Frequency counting**, [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/) (with a heap), Valid Anagram, Ransom Note, Majority Element.
 4. **Prefix sum with hash**, Subarray Sum Equals K, Continuous Subarray Sum, Contiguous Array (count of 0s = 1s).
-5. **Deduplication and grouping**, Group Anagrams (key by sorted string or char-count tuple), Longest Consecutive Sequence, Longest Substring Without Repeating Characters.
+5. **Deduplication and grouping**, [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/) (key by sorted string or char-count tuple), [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), Longest Substring Without Repeating Characters.
 
-**Canonical LeetCode problems:** #1 Two Sum, #49 Group Anagrams, #128 Longest Consecutive Sequence, #146 LRU Cache, #217 Contains Duplicate, #347 Top K Frequent Elements, #560 Subarray Sum Equals K.
+**Canonical LeetCode problems:** #1 [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), #49 [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/), #128 [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), #146 LRU Cache, #217 [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), #347 [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), #560 Subarray Sum Equals K.
 
 ## Python example
 
@@ -108,64 +108,64 @@ def longest_consecutive(nums):
 Hash tables appear in 34 NeetCode 150 problems across 14 categories.
 
 **Arrays & Hashing:**
-- [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
-- [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
-- [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
-- [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
-- [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
-- [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
-- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
+- [1. Two Sum](../../coding-problems/arrays-and-hashing/001-two-sum/)
+- [36. Valid Sudoku](../../coding-problems/arrays-and-hashing/036-valid-sudoku/)
+- [49. Group Anagrams](../../coding-problems/arrays-and-hashing/049-group-anagrams/)
+- [128. Longest Consecutive Sequence](../../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/)
+- [217. Contains Duplicate](../../coding-problems/arrays-and-hashing/217-contains-duplicate/)
+- [242. Valid Anagram](../../coding-problems/arrays-and-hashing/242-valid-anagram/)
+- [347. Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/)
 
 **Two Pointers:**
-- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/), hash-set variant for inner two-sum
+- [15. 3Sum](../../coding-problems/two-pointers/015-3sum/), hash-set variant for inner two-sum
 
 **Sliding Window:**
-- [3. Longest Substring Without Repeating Characters](../../leetcode-150/sliding-window/003-longest-substring-without-repeating-characters/)
-- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
-- [424. Longest Repeating Character Replacement](../../leetcode-150/sliding-window/424-longest-repeating-character-replacement/)
-- [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
+- [3. Longest Substring Without Repeating Characters](../../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/)
+- [76. Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/)
+- [424. Longest Repeating Character Replacement](../../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
+- [567. Permutation in String](../../coding-problems/sliding-window/567-permutation-in-string/)
 
 **Stack:**
-- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
+- [20. Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/)
 
 **Binary Search:**
-- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/)
+- [981. Time Based Key-Value Store](../../coding-problems/binary-search/981-time-based-key-value-store/)
 
 **Linked List:**
-- [138. Copy List with Random Pointer](../../leetcode-150/linked-list/138-copy-list-with-random-pointer/)
-- [146. LRU Cache](../../leetcode-150/linked-list/146-lru-cache/), hash map + doubly linked list
+- [138. Copy List with Random Pointer](../../coding-problems/linked-list/138-copy-list-with-random-pointer/)
+- [146. LRU Cache](../../coding-problems/linked-list/146-lru-cache/), hash map + doubly linked list
 
 **Trees:**
-- [105. Construct Binary Tree from Preorder and Inorder](../../leetcode-150/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
+- [105. Construct Binary Tree from Preorder and Inorder](../../coding-problems/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
 
 **Heap / Priority Queue:**
-- [355. Design Twitter](../../leetcode-150/heap-priority-queue/355-design-twitter/)
-- [621. Task Scheduler](../../leetcode-150/heap-priority-queue/621-task-scheduler/)
+- [355. Design Twitter](../../coding-problems/heap-priority-queue/355-design-twitter/)
+- [621. Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/)
 
 **Backtracking:**
-- [17. Letter Combinations of a Phone Number](../../leetcode-150/backtracking/017-letter-combinations-of-a-phone-number/)
-- [51. N-Queens](../../leetcode-150/backtracking/051-n-queens/), columns/diagonals as sets
-- [79. Word Search](../../leetcode-150/backtracking/079-word-search/), Counter pruning
-- [90. Subsets II](../../leetcode-150/backtracking/090-subsets-ii/)
+- [17. Letter Combinations of a Phone Number](../../coding-problems/backtracking/017-letter-combinations-of-a-phone-number/)
+- [51. N-Queens](../../coding-problems/backtracking/051-n-queens/), columns/diagonals as sets
+- [79. Word Search](../../coding-problems/backtracking/079-word-search/), Counter pruning
+- [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
 
 **Graphs:**
-- [127. Word Ladder](../../leetcode-150/graphs/127-word-ladder/), pattern-bucket adjacency
-- [133. Clone Graph](../../leetcode-150/graphs/133-clone-graph/)
-- [207. Course Schedule](../../leetcode-150/graphs/207-course-schedule/), adjacency list
-- [269. Alien Dictionary](../../leetcode-150/graphs/269-alien-dictionary/)
-- [329. Longest Increasing Path in a Matrix](../../leetcode-150/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/), memoization cache
-- [417. Pacific Atlantic Water Flow](../../leetcode-150/graphs/417-pacific-atlantic-water-flow/), reachability sets
+- [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/), pattern-bucket adjacency
+- [133. Clone Graph](../../coding-problems/graphs/133-clone-graph/)
+- [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/), adjacency list
+- [269. Alien Dictionary](../../coding-problems/graphs/269-alien-dictionary/)
+- [329. Longest Increasing Path in a Matrix](../../coding-problems/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/), memoization cache
+- [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/), reachability sets
 
 **1-D Dynamic Programming:**
-- [139. Word Break](../../leetcode-150/1d-dynamic-programming/139-word-break/)
+- [139. Word Break](../../coding-problems/1d-dynamic-programming/139-word-break/)
 
 **Greedy:**
-- [763. Partition Labels](../../leetcode-150/greedy/763-partition-labels/)
-- [846. Hand of Straights](../../leetcode-150/greedy/846-hand-of-straights/)
+- [763. Partition Labels](../../coding-problems/greedy/763-partition-labels/)
+- [846. Hand of Straights](../../coding-problems/greedy/846-hand-of-straights/)
 
 **Math & Geometry:**
-- [202. Happy Number](../../leetcode-150/math-and-geometry/202-happy-number/), seen-set variant
-- [2013. Detect Squares](../../leetcode-150/math-and-geometry/2013-detect-squares/)
+- [202. Happy Number](../../coding-problems/math-and-geometry/202-happy-number/), seen-set variant
+- [2013. Detect Squares](../../coding-problems/math-and-geometry/2013-detect-squares/)
 
 ## References
 

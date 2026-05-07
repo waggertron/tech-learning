@@ -458,7 +458,7 @@ def label_components(adj, n):
     return label, component_id  # label[v] = component id; component_id = total count
 ```
 
-This exact pattern solves [LeetCode 200 (Number of Islands)](../leetcode-150/graphs/200-number-of-islands/), 323 (Number of Connected Components), and 547 (Number of Provinces). The graph is implicit in the grid or the adjacency list; the loop-and-DFS structure is identical.
+This exact pattern solves [LeetCode 200 (Number of Islands)](../coding-problems/graphs/200-number-of-islands/), 323 (Number of Connected Components), and 547 (Number of Provinces). The graph is implicit in the grid or the adjacency list; the loop-and-DFS structure is identical.
 
 ---
 
@@ -882,8 +882,8 @@ Pattern recognition saves time. When you see a certain problem shape, you should
 4. **Dependencies = DAG**: build the graph from the constraint list; Kahn's for order; cycle detection is a freebie (len(order) < n).
 
 For the LeetCode problems themselves:
-- Graph problems: [../leetcode-150/graphs/](../leetcode-150/graphs/)
-- Advanced graph problems: [../leetcode-150/advanced-graphs/](../leetcode-150/advanced-graphs/)
+- Graph problems: [../coding-problems/graphs/](../coding-problems/graphs/)
+- Advanced graph problems: [../coding-problems/advanced-graphs/](../coding-problems/advanced-graphs/)
 
 ---
 
@@ -906,5 +906,5 @@ For the LeetCode problems themselves:
 - [Bellman-Ford](../named-algorithms/bellman-ford/): shortest paths with negative edge weights, negative cycle detection
 - [Tarjan's algorithm](../named-algorithms/tarjans/): SCCs and bridges in O(V + E)
 - [Graphs (data structures)](../data-structures/graphs/): implementations and algorithm complexity table
-- [LeetCode 150: Graphs](../leetcode-150/graphs/): the 13 standard graph problems
-- [LeetCode 150: Advanced Graphs](../leetcode-150/advanced-graphs/): Dijkstra, MST, Bellman-Ford problems
+- [LeetCode 150: Graphs](../coding-problems/graphs/): the 13 standard graph problems
+- [LeetCode 150: Advanced Graphs](../coding-problems/advanced-graphs/): Dijkstra, MST, Bellman-Ford problems

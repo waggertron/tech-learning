@@ -38,13 +38,13 @@ Multi-dimensional arrays are rows-of-rows (C-style), or use strides for O(1) sli
 
 ## Common uses in DSA
 
-1. **Two-pointer problems**, Two Sum II (sorted), Valid Palindrome, 3Sum, Container With Most Water.
+1. **Two-pointer problems**, Two Sum II (sorted), Valid Palindrome, [3Sum](../coding-problems/two-pointers/015-3sum/), [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/).
 2. **Sliding window**, Longest Substring Without Repeating Characters, Maximum Sum Subarray of Size K, Minimum Size Subarray Sum.
 3. **Binary search on an array or on the answer**, Search in Rotated Sorted Array, Find Peak Element, Koko Eating Bananas, Median of Two Sorted Arrays.
-4. **Prefix sums / difference arrays**, Range Sum Query, Subarray Sum Equals K, Product of Array Except Self.
+4. **Prefix sums / difference arrays**, Range Sum Query, Subarray Sum Equals K, [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
 5. **In-place rearrangement and sorting**, Dutch National Flag (Sort Colors), Move Zeroes, Rotate Array, Next Permutation.
 
-**Canonical LeetCode problems:** #1 Two Sum, #11 Container With Most Water, #15 3Sum, #42 Trapping Rain Water, #53 Maximum Subarray, #56 Merge Intervals, #238 Product of Array Except Self.
+**Canonical LeetCode problems:** #1 [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), #11 [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/), #15 [3Sum](../coding-problems/two-pointers/015-3sum/), #42 [Trapping Rain Water](../coding-problems/two-pointers/042-trapping-rain-water/), #53 [Maximum Subarray](../coding-problems/greedy/053-maximum-subarray/), #56 [Merge Intervals](../coding-problems/intervals/056-merge-intervals/), #238 [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
 
 ## Python example
 
@@ -111,112 +111,112 @@ def range_sum_array(nums):
 Arrays are the most referenced data structure in the NeetCode 150, 74 problems across 17 categories.
 
 **Arrays & Hashing:**
-- [1. Two Sum](../../leetcode-150/arrays-and-hashing/001-two-sum/)
-- [36. Valid Sudoku](../../leetcode-150/arrays-and-hashing/036-valid-sudoku/)
-- [128. Longest Consecutive Sequence](../../leetcode-150/arrays-and-hashing/128-longest-consecutive-sequence/)
-- [217. Contains Duplicate](../../leetcode-150/arrays-and-hashing/217-contains-duplicate/)
-- [238. Product of Array Except Self](../../leetcode-150/arrays-and-hashing/238-product-of-array-except-self/)
-- [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
-- [347. Top K Frequent Elements](../../leetcode-150/arrays-and-hashing/347-top-k-frequent-elements/)
+- [1. Two Sum](../../coding-problems/arrays-and-hashing/001-two-sum/)
+- [36. Valid Sudoku](../../coding-problems/arrays-and-hashing/036-valid-sudoku/)
+- [128. Longest Consecutive Sequence](../../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/)
+- [217. Contains Duplicate](../../coding-problems/arrays-and-hashing/217-contains-duplicate/)
+- [238. Product of Array Except Self](../../coding-problems/arrays-and-hashing/238-product-of-array-except-self/)
+- [271. Encode and Decode Strings](../../coding-problems/arrays-and-hashing/271-encode-and-decode-strings/)
+- [347. Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/)
 
 **Two Pointers:**
-- [11. Container With Most Water](../../leetcode-150/two-pointers/011-container-with-most-water/)
-- [15. 3Sum](../../leetcode-150/two-pointers/015-3sum/)
-- [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/)
-- [167. Two Sum II, Input Array Is Sorted](../../leetcode-150/two-pointers/167-two-sum-ii/)
+- [11. Container With Most Water](../../coding-problems/two-pointers/011-container-with-most-water/)
+- [15. 3Sum](../../coding-problems/two-pointers/015-3sum/)
+- [42. Trapping Rain Water](../../coding-problems/two-pointers/042-trapping-rain-water/)
+- [167. Two Sum II, Input Array Is Sorted](../../coding-problems/two-pointers/167-two-sum-ii/)
 
 **Sliding Window:**
-- [121. Best Time to Buy and Sell Stock](../../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/)
-- [239. Sliding Window Maximum](../../leetcode-150/sliding-window/239-sliding-window-maximum/)
+- [121. Best Time to Buy and Sell Stock](../../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/)
+- [239. Sliding Window Maximum](../../coding-problems/sliding-window/239-sliding-window-maximum/)
 
 **Stack:**
-- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/)
-- [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/)
-- [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
+- [84. Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/)
+- [739. Daily Temperatures](../../coding-problems/stack/739-daily-temperatures/)
+- [853. Car Fleet](../../coding-problems/stack/853-car-fleet/)
 
 **Binary Search:**
-- [4. Median of Two Sorted Arrays](../../leetcode-150/binary-search/004-median-of-two-sorted-arrays/)
-- [33. Search in Rotated Sorted Array](../../leetcode-150/binary-search/033-search-in-rotated-sorted-array/)
-- [74. Search a 2D Matrix](../../leetcode-150/binary-search/074-search-a-2d-matrix/)
-- [153. Find Minimum in Rotated Sorted Array](../../leetcode-150/binary-search/153-find-minimum-in-rotated-sorted-array/)
-- [704. Binary Search](../../leetcode-150/binary-search/704-binary-search/)
-- [875. Koko Eating Bananas](../../leetcode-150/binary-search/875-koko-eating-bananas/)
-- [981. Time Based Key-Value Store](../../leetcode-150/binary-search/981-time-based-key-value-store/)
+- [4. Median of Two Sorted Arrays](../../coding-problems/binary-search/004-median-of-two-sorted-arrays/)
+- [33. Search in Rotated Sorted Array](../../coding-problems/binary-search/033-search-in-rotated-sorted-array/)
+- [74. Search a 2D Matrix](../../coding-problems/binary-search/074-search-a-2d-matrix/)
+- [153. Find Minimum in Rotated Sorted Array](../../coding-problems/binary-search/153-find-minimum-in-rotated-sorted-array/)
+- [704. Binary Search](../../coding-problems/binary-search/704-binary-search/)
+- [875. Koko Eating Bananas](../../coding-problems/binary-search/875-koko-eating-bananas/)
+- [981. Time Based Key-Value Store](../../coding-problems/binary-search/981-time-based-key-value-store/)
 
 **Linked List:**
-- [287. Find the Duplicate Number](../../leetcode-150/linked-list/287-find-the-duplicate-number/), array indexed as implicit linked list
+- [287. Find the Duplicate Number](../../coding-problems/linked-list/287-find-the-duplicate-number/), array indexed as implicit linked list
 
 **Heap / Priority Queue:**
-- [215. Kth Largest Element in an Array](../../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/)
-- [973. K Closest Points to Origin](../../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
+- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
+- [973. K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
 
 **Backtracking:**
-- [39. Combination Sum](../../leetcode-150/backtracking/039-combination-sum/)
-- [40. Combination Sum II](../../leetcode-150/backtracking/040-combination-sum-ii/)
-- [46. Permutations](../../leetcode-150/backtracking/046-permutations/)
-- [51. N-Queens](../../leetcode-150/backtracking/051-n-queens/), board as array
-- [78. Subsets](../../leetcode-150/backtracking/078-subsets/)
-- [79. Word Search](../../leetcode-150/backtracking/079-word-search/), grid DFS + in-place visited
-- [90. Subsets II](../../leetcode-150/backtracking/090-subsets-ii/)
-- [131. Palindrome Partitioning](../../leetcode-150/backtracking/131-palindrome-partitioning/), 2-D palindrome DP table
+- [39. Combination Sum](../../coding-problems/backtracking/039-combination-sum/)
+- [40. Combination Sum II](../../coding-problems/backtracking/040-combination-sum-ii/)
+- [46. Permutations](../../coding-problems/backtracking/046-permutations/)
+- [51. N-Queens](../../coding-problems/backtracking/051-n-queens/), board as array
+- [78. Subsets](../../coding-problems/backtracking/078-subsets/)
+- [79. Word Search](../../coding-problems/backtracking/079-word-search/), grid DFS + in-place visited
+- [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
+- [131. Palindrome Partitioning](../../coding-problems/backtracking/131-palindrome-partitioning/), 2-D palindrome DP table
 
 **Tries:**
-- [212. Word Search II](../../leetcode-150/tries/212-word-search-ii/), grid with in-place visited marker
+- [212. Word Search II](../../coding-problems/tries/212-word-search-ii/), grid with in-place visited marker
 
 **Graphs:**
-- [130. Surrounded Regions](../../leetcode-150/graphs/130-surrounded-regions/)
-- [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/)
-- [417. Pacific Atlantic Water Flow](../../leetcode-150/graphs/417-pacific-atlantic-water-flow/)
-- [695. Max Area of Island](../../leetcode-150/graphs/695-max-area-of-island/)
-- [994. Rotting Oranges](../../leetcode-150/graphs/994-rotting-oranges/)
+- [130. Surrounded Regions](../../coding-problems/graphs/130-surrounded-regions/)
+- [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/)
+- [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/)
+- [695. Max Area of Island](../../coding-problems/graphs/695-max-area-of-island/)
+- [994. Rotting Oranges](../../coding-problems/graphs/994-rotting-oranges/)
 
 **Advanced Graphs:**
-- [778. Swim in Rising Water](../../leetcode-150/advanced-graphs/778-swim-in-rising-water/), grid with modified Dijkstra
+- [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/), grid with modified Dijkstra
 
 **1-D Dynamic Programming:**
-- [70. Climbing Stairs](../../leetcode-150/1d-dynamic-programming/070-climbing-stairs/)
-- [152. Maximum Product Subarray](../../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/)
-- [198. House Robber](../../leetcode-150/1d-dynamic-programming/198-house-robber/)
-- [213. House Robber II](../../leetcode-150/1d-dynamic-programming/213-house-robber-ii/)
-- [300. Longest Increasing Subsequence](../../leetcode-150/1d-dynamic-programming/300-longest-increasing-subsequence/)
-- [322. Coin Change](../../leetcode-150/1d-dynamic-programming/322-coin-change/)
-- [416. Partition Equal Subset Sum](../../leetcode-150/1d-dynamic-programming/416-partition-equal-subset-sum/)
-- [746. Min Cost Climbing Stairs](../../leetcode-150/1d-dynamic-programming/746-min-cost-climbing-stairs/)
+- [70. Climbing Stairs](../../coding-problems/1d-dynamic-programming/070-climbing-stairs/)
+- [152. Maximum Product Subarray](../../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/)
+- [198. House Robber](../../coding-problems/1d-dynamic-programming/198-house-robber/)
+- [213. House Robber II](../../coding-problems/1d-dynamic-programming/213-house-robber-ii/)
+- [300. Longest Increasing Subsequence](../../coding-problems/1d-dynamic-programming/300-longest-increasing-subsequence/)
+- [322. Coin Change](../../coding-problems/1d-dynamic-programming/322-coin-change/)
+- [416. Partition Equal Subset Sum](../../coding-problems/1d-dynamic-programming/416-partition-equal-subset-sum/)
+- [746. Min Cost Climbing Stairs](../../coding-problems/1d-dynamic-programming/746-min-cost-climbing-stairs/)
 
 **2-D Dynamic Programming:**
-- [62. Unique Paths](../../leetcode-150/2d-dynamic-programming/062-unique-paths/)
-- [309. Best Time to Buy and Sell Stock with Cooldown](../../leetcode-150/2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
-- [312. Burst Balloons](../../leetcode-150/2d-dynamic-programming/312-burst-balloons/), interval DP
-- [329. Longest Increasing Path in a Matrix](../../leetcode-150/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/)
-- [494. Target Sum](../../leetcode-150/2d-dynamic-programming/494-target-sum/)
-- [518. Coin Change II](../../leetcode-150/2d-dynamic-programming/518-coin-change-ii/)
+- [62. Unique Paths](../../coding-problems/2d-dynamic-programming/062-unique-paths/)
+- [309. Best Time to Buy and Sell Stock with Cooldown](../../coding-problems/2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
+- [312. Burst Balloons](../../coding-problems/2d-dynamic-programming/312-burst-balloons/), interval DP
+- [329. Longest Increasing Path in a Matrix](../../coding-problems/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/)
+- [494. Target Sum](../../coding-problems/2d-dynamic-programming/494-target-sum/)
+- [518. Coin Change II](../../coding-problems/2d-dynamic-programming/518-coin-change-ii/)
 
 **Greedy:**
-- [45. Jump Game II](../../leetcode-150/greedy/045-jump-game-ii/)
-- [53. Maximum Subarray](../../leetcode-150/greedy/053-maximum-subarray/)
-- [55. Jump Game](../../leetcode-150/greedy/055-jump-game/)
-- [134. Gas Station](../../leetcode-150/greedy/134-gas-station/)
-- [1899. Merge Triplets to Form Target Triplet](../../leetcode-150/greedy/1899-merge-triplets-to-form-target-triplet/)
+- [45. Jump Game II](../../coding-problems/greedy/045-jump-game-ii/)
+- [53. Maximum Subarray](../../coding-problems/greedy/053-maximum-subarray/)
+- [55. Jump Game](../../coding-problems/greedy/055-jump-game/)
+- [134. Gas Station](../../coding-problems/greedy/134-gas-station/)
+- [1899. Merge Triplets to Form Target Triplet](../../coding-problems/greedy/1899-merge-triplets-to-form-target-triplet/)
 
 **Intervals:**
-- [56. Merge Intervals](../../leetcode-150/intervals/056-merge-intervals/)
-- [57. Insert Interval](../../leetcode-150/intervals/057-insert-interval/)
-- [252. Meeting Rooms](../../leetcode-150/intervals/252-meeting-rooms/)
-- [253. Meeting Rooms II](../../leetcode-150/intervals/253-meeting-rooms-ii/)
-- [435. Non-overlapping Intervals](../../leetcode-150/intervals/435-non-overlapping-intervals/)
-- [1851. Minimum Interval to Include Each Query](../../leetcode-150/intervals/1851-minimum-interval-to-include-each-query/)
+- [56. Merge Intervals](../../coding-problems/intervals/056-merge-intervals/)
+- [57. Insert Interval](../../coding-problems/intervals/057-insert-interval/)
+- [252. Meeting Rooms](../../coding-problems/intervals/252-meeting-rooms/)
+- [253. Meeting Rooms II](../../coding-problems/intervals/253-meeting-rooms-ii/)
+- [435. Non-overlapping Intervals](../../coding-problems/intervals/435-non-overlapping-intervals/)
+- [1851. Minimum Interval to Include Each Query](../../coding-problems/intervals/1851-minimum-interval-to-include-each-query/)
 
 **Math & Geometry:**
-- [43. Multiply Strings](../../leetcode-150/math-and-geometry/043-multiply-strings/), digit array accumulator
-- [48. Rotate Image](../../leetcode-150/math-and-geometry/048-rotate-image/)
-- [50. Pow(x, n)](../../leetcode-150/math-and-geometry/050-pow-x-n/)
-- [54. Spiral Matrix](../../leetcode-150/math-and-geometry/054-spiral-matrix/)
-- [66. Plus One](../../leetcode-150/math-and-geometry/066-plus-one/)
-- [73. Set Matrix Zeroes](../../leetcode-150/math-and-geometry/073-set-matrix-zeroes/)
+- [43. Multiply Strings](../../coding-problems/math-and-geometry/043-multiply-strings/), digit array accumulator
+- [48. Rotate Image](../../coding-problems/math-and-geometry/048-rotate-image/)
+- [50. Pow(x, n)](../../coding-problems/math-and-geometry/050-pow-x-n/)
+- [54. Spiral Matrix](../../coding-problems/math-and-geometry/054-spiral-matrix/)
+- [66. Plus One](../../coding-problems/math-and-geometry/066-plus-one/)
+- [73. Set Matrix Zeroes](../../coding-problems/math-and-geometry/073-set-matrix-zeroes/)
 
 **Bit Manipulation:**
-- [136. Single Number](../../leetcode-150/bit-manipulation/136-single-number/)
-- [338. Counting Bits](../../leetcode-150/bit-manipulation/338-counting-bits/)
+- [136. Single Number](../../coding-problems/bit-manipulation/136-single-number/)
+- [338. Counting Bits](../../coding-problems/bit-manipulation/338-counting-bits/)
 
 ## References
 

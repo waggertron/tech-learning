@@ -637,6 +637,6 @@ If you can name the shape, you can quote the bound. Half the interview battle is
 ## Related topics
 
 - [Data structure complexity cheat sheet](../2026-04-27-data-structure-complexity-cheat-sheet/), the structures these algorithms run on.
-- [LeetCode 150](../../topics/cs/leetcode-150/), problems organized by pattern, with solutions citing these algorithms.
+- [LeetCode 150](../../topics/cs/coding-problems/), problems organized by pattern, with solutions citing these algorithms.
 - [Graphs](../../topics/cs/data-structures/graphs/), the longer-form data-structure page.
 - [Heaps and priority queues](../../topics/cs/data-structures/heaps/), the structure underneath Dijkstra and Prim.

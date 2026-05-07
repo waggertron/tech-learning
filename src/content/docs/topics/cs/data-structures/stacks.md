@@ -39,13 +39,13 @@ A stack is also the memory model for function calls (the call stack): every recu
 
 ## Common uses in DSA
 
-1. **Balanced brackets / parsing**, Valid Parentheses, Decode String, Remove All Adjacent Duplicates In String, Simplify Path.
-2. **Monotonic stack**, Next Greater Element I/II, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water, Sum of Subarray Minimums.
+1. **Balanced brackets / parsing**, [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), Decode String, Remove All Adjacent Duplicates In String, Simplify Path.
+2. **Monotonic stack**, Next Greater Element I/II, [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), Trapping Rain Water, Sum of Subarray Minimums.
 3. **Iterative DFS / traversal without recursion**, Binary Tree Inorder/Preorder/Postorder Traversal (iterative), DFS on graph with an explicit stack.
-4. **Expression evaluation and calculators**, Evaluate Reverse Polish Notation, Basic Calculator I/II/III, Min Stack.
+4. **Expression evaluation and calculators**, [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), Basic Calculator I/II/III, Min Stack.
 5. **Undo history / backtracking state**, classical undo buffers, browser history, game-state rewind, maze solvers.
 
-**Canonical LeetCode problems:** #20 Valid Parentheses, #84 Largest Rectangle in Histogram, #150 Evaluate Reverse Polish Notation, #224 Basic Calculator, #739 Daily Temperatures, #853 Car Fleet, #1249 Minimum Remove to Make Valid Parentheses.
+**Canonical LeetCode problems:** #20 [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), #84 [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), #150 [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), #224 Basic Calculator, #739 [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), #853 [Car Fleet](../coding-problems/stack/853-car-fleet/), #1249 Minimum Remove to Make Valid Parentheses.
 
 ## What clues you in
 
@@ -94,11 +94,11 @@ When two structures both seem to fit, ask: *do I ever need to access anything ot
 
 Curated kin where the recognition skill above is exercised. Each adds one twist on the basic pattern:
 
-- **20. Valid Parentheses** — the canonical LIFO match. Push openers, pop on closers.
-- **150. Evaluate Reverse Polish Notation** — push numbers, on operator pop two and combine.
+- **[20. Valid Parentheses](../coding-problems/stack/020-valid-parentheses/)** — the canonical LIFO match. Push openers, pop on closers.
+- **[150. Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/)** — push numbers, on operator pop two and combine.
 - **155. Min Stack** — stack of `(value, running_min)` to keep `min()` at O(1).
-- **739. Daily Temperatures** — monotonic decreasing stack of indices; pop while top is colder than current.
-- **84. Largest Rectangle in Histogram** — monotonic increasing stack; on each pop, current bar is the right boundary, the new top is the left boundary.
+- **[739. Daily Temperatures](../coding-problems/stack/739-daily-temperatures/)** — monotonic decreasing stack of indices; pop while top is colder than current.
+- **[84. Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/)** — monotonic increasing stack; on each pop, current bar is the right boundary, the new top is the left boundary.
 - **22. Generate Parentheses** — recursion = implicit stack of partial strings; the call-stack *is* the data structure.
 - **224 / 227 / 772. Basic Calculator** — operator/operand stacks with precedence, the parser-by-hand variant.
 - **42. Trapping Rain Water** — monotonic stack alternative to two-pointer; for each popped bar, water is bounded by current and new top.
@@ -187,26 +187,26 @@ class MinStack:
 Stacks appear in 12 NeetCode 150 problems across 5 categories.
 
 **Two Pointers:**
-- [42. Trapping Rain Water](../../leetcode-150/two-pointers/042-trapping-rain-water/), monotonic-stack alternative
+- [42. Trapping Rain Water](../../coding-problems/two-pointers/042-trapping-rain-water/), monotonic-stack alternative
 
 **Stack:**
-- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
-- [22. Generate Parentheses](../../leetcode-150/stack/022-generate-parentheses/), recursion stack
-- [84. Largest Rectangle in Histogram](../../leetcode-150/stack/084-largest-rectangle-in-histogram/), monotonic increasing
-- [150. Evaluate Reverse Polish Notation](../../leetcode-150/stack/150-evaluate-reverse-polish-notation/)
-- [155. Min Stack](../../leetcode-150/stack/155-min-stack/)
-- [739. Daily Temperatures](../../leetcode-150/stack/739-daily-temperatures/), monotonic decreasing
-- [853. Car Fleet](../../leetcode-150/stack/853-car-fleet/)
+- [20. Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/)
+- [22. Generate Parentheses](../../coding-problems/stack/022-generate-parentheses/), recursion stack
+- [84. Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/), monotonic increasing
+- [150. Evaluate Reverse Polish Notation](../../coding-problems/stack/150-evaluate-reverse-polish-notation/)
+- [155. Min Stack](../../coding-problems/stack/155-min-stack/)
+- [739. Daily Temperatures](../../coding-problems/stack/739-daily-temperatures/), monotonic decreasing
+- [853. Car Fleet](../../coding-problems/stack/853-car-fleet/)
 
 **Trees:**
-- [230. Kth Smallest Element in a BST](../../leetcode-150/trees/230-kth-smallest-element-in-a-bst/), iterative inorder
-- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/), DFS recursion stack
+- [230. Kth Smallest Element in a BST](../../coding-problems/trees/230-kth-smallest-element-in-a-bst/), iterative inorder
+- [297. Serialize and Deserialize Binary Tree](../../coding-problems/trees/297-serialize-and-deserialize-binary-tree/), DFS recursion stack
 
 **Graphs:**
-- [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/), iterative DFS variant
+- [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/), iterative DFS variant
 
 **Greedy:**
-- [678. Valid Parenthesis String](../../leetcode-150/greedy/678-valid-parenthesis-string/), two-stack alternative
+- [678. Valid Parenthesis String](../../coding-problems/greedy/678-valid-parenthesis-string/), two-stack alternative
 
 ## References
 

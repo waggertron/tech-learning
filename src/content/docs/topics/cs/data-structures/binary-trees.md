@@ -45,11 +45,11 @@ Vanilla BSTs degrade to O(n) on sorted input (they become a linked list). **Self
 
 1. **Hierarchical data modeling**, file systems, DOM, ASTs, expression trees.
 2. **Ordered map / sorted set operations**, `TreeMap`, `std::map`, `SortedList` for "give me the next-largest key" and range queries.
-3. **Recursive subtree problems**, Maximum Depth, Invert Binary Tree, Diameter, Symmetric Tree, Path Sum.
-4. **Lowest Common Ancestor**, LCA of a Binary Tree, LCA of a BST.
-5. **Tree DP and serialization**, House Robber III, Binary Tree Cameras, Serialize and Deserialize Binary Tree.
+3. **Recursive subtree problems**, [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), [Diameter](../coding-problems/trees/543-diameter-of-binary-tree/), Symmetric Tree, Path Sum.
+4. **Lowest Common Ancestor**, LCA of a Binary Tree, [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/).
+5. **Tree DP and serialization**, House Robber III, Binary Tree Cameras, [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/).
 
-**Canonical LeetCode problems:** #98 Validate BST, #104 Maximum Depth, #226 Invert Binary Tree, #235 LCA of a BST, #297 Serialize and Deserialize Binary Tree, #543 Diameter of Binary Tree, #572 Subtree of Another Tree.
+**Canonical LeetCode problems:** #98 [Validate BST](../coding-problems/trees/098-validate-binary-search-tree/), #104 [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), #226 [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), #235 [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/), #297 [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/), #543 [Diameter of Binary Tree](../coding-problems/trees/543-diameter-of-binary-tree/), #572 [Subtree of Another Tree](../coding-problems/trees/572-subtree-of-another-tree/).
 
 ## Python example
 
@@ -112,21 +112,21 @@ def lca(root, p, q):
 Binary trees (and BSTs) drive all 15 NeetCode 150 problems in the Trees category.
 
 **Trees:**
-- [226. Invert Binary Tree](../../leetcode-150/trees/226-invert-binary-tree/)
-- [104. Maximum Depth of Binary Tree](../../leetcode-150/trees/104-maximum-depth-of-binary-tree/)
-- [543. Diameter of Binary Tree](../../leetcode-150/trees/543-diameter-of-binary-tree/), height + accumulator DFS
-- [110. Balanced Binary Tree](../../leetcode-150/trees/110-balanced-binary-tree/), bottom-up DFS with sentinel
-- [100. Same Tree](../../leetcode-150/trees/100-same-tree/)
-- [572. Subtree of Another Tree](../../leetcode-150/trees/572-subtree-of-another-tree/)
-- [235. Lowest Common Ancestor of a BST](../../leetcode-150/trees/235-lowest-common-ancestor-of-a-bst/), iterative BST walk
-- [102. Binary Tree Level Order Traversal](../../leetcode-150/trees/102-binary-tree-level-order-traversal/)
-- [199. Binary Tree Right Side View](../../leetcode-150/trees/199-binary-tree-right-side-view/)
-- [1448. Count Good Nodes in Binary Tree](../../leetcode-150/trees/1448-count-good-nodes-in-binary-tree/), path-state DFS
-- [98. Validate Binary Search Tree](../../leetcode-150/trees/098-validate-binary-search-tree/), recursive bounds
-- [230. Kth Smallest Element in a BST](../../leetcode-150/trees/230-kth-smallest-element-in-a-bst/), iterative inorder
-- [105. Construct Binary Tree from Preorder and Inorder](../../leetcode-150/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
-- [124. Binary Tree Maximum Path Sum](../../leetcode-150/trees/124-binary-tree-maximum-path-sum/), tree DP with accumulator
-- [297. Serialize and Deserialize Binary Tree](../../leetcode-150/trees/297-serialize-and-deserialize-binary-tree/)
+- [226. Invert Binary Tree](../../coding-problems/trees/226-invert-binary-tree/)
+- [104. Maximum Depth of Binary Tree](../../coding-problems/trees/104-maximum-depth-of-binary-tree/)
+- [543. Diameter of Binary Tree](../../coding-problems/trees/543-diameter-of-binary-tree/), height + accumulator DFS
+- [110. Balanced Binary Tree](../../coding-problems/trees/110-balanced-binary-tree/), bottom-up DFS with sentinel
+- [100. Same Tree](../../coding-problems/trees/100-same-tree/)
+- [572. Subtree of Another Tree](../../coding-problems/trees/572-subtree-of-another-tree/)
+- [235. Lowest Common Ancestor of a BST](../../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/), iterative BST walk
+- [102. Binary Tree Level Order Traversal](../../coding-problems/trees/102-binary-tree-level-order-traversal/)
+- [199. Binary Tree Right Side View](../../coding-problems/trees/199-binary-tree-right-side-view/)
+- [1448. Count Good Nodes in Binary Tree](../../coding-problems/trees/1448-count-good-nodes-in-binary-tree/), path-state DFS
+- [98. Validate Binary Search Tree](../../coding-problems/trees/098-validate-binary-search-tree/), recursive bounds
+- [230. Kth Smallest Element in a BST](../../coding-problems/trees/230-kth-smallest-element-in-a-bst/), iterative inorder
+- [105. Construct Binary Tree from Preorder and Inorder](../../coding-problems/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
+- [124. Binary Tree Maximum Path Sum](../../coding-problems/trees/124-binary-tree-maximum-path-sum/), tree DP with accumulator
+- [297. Serialize and Deserialize Binary Tree](../../coding-problems/trees/297-serialize-and-deserialize-binary-tree/)
 
 ## References
 

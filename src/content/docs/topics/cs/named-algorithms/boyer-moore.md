@@ -230,7 +230,7 @@ If the problem says "find all elements with count > X" for arbitrary or unknown 
 
 [LeetCode 169 (Majority Element)](https://leetcode.com/problems/majority-element/) is the canonical exercise. The problem guarantees a majority exists, so no verification pass is needed and the single-pass version is accepted.
 
-It is not in the Blind 75 / LeetCode 150 core list, but it appears frequently in interviews and is a natural companion to the arrays-and-hashing problems in the [Arrays and Hashing](../leetcode-150/arrays-and-hashing/) section.
+It is not in the Blind 75 / LeetCode 150 core list, but it appears frequently in interviews and is a natural companion to the arrays-and-hashing problems in the [Arrays and Hashing](../coding-problems/arrays-and-hashing/) section.
 
 [LeetCode 229 (Majority Element II)](https://leetcode.com/problems/majority-element-ii/) is the n/3 variant, covered in the section above.
 

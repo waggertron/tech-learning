@@ -325,8 +325,8 @@ The sorted output is a free byproduct. You pay the same O(n log n) cost as merge
 
 The merge step appears directly or in generalized form across several problems:
 
-- [Merge Two Sorted Lists (021)](../leetcode-150/linked-list/021-merge-two-sorted-lists/) is the `merge_lists` function in isolation. If you can write that function from memory, the linked-list sort above follows immediately.
-- [Merge k Sorted Lists (023)](../leetcode-150/linked-list/023-merge-k-sorted-lists/) generalizes the two-way merge to k inputs. The standard approach uses a min-heap to pick the smallest front element across all k lists in O(log k) per step, giving O(n log k) total. Alternatively, you can apply the two-way merge pairwise in log k rounds, which also gives O(n log k).
+- [Merge Two Sorted Lists (021)](../coding-problems/linked-list/021-merge-two-sorted-lists/) is the `merge_lists` function in isolation. If you can write that function from memory, the linked-list sort above follows immediately.
+- [Merge k Sorted Lists (023)](../coding-problems/linked-list/023-merge-k-sorted-lists/) generalizes the two-way merge to k inputs. The standard approach uses a min-heap to pick the smallest front element across all k lists in O(log k) per step, giving O(n log k) total. Alternatively, you can apply the two-way merge pairwise in log k rounds, which also gives O(n log k).
 - [LeetCode 148 (Sort List)](https://leetcode.com/problems/sort-list/) is the full linked-list merge sort above.
 - [LeetCode 315 (Count of Smaller Numbers After Self)](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) is a per-element inversion count, solved with the counting-inversions technique.
 
@@ -534,5 +534,5 @@ if __name__ == "__main__":
 ## Related topics
 
 - [Quickselect](./quickselect/), a partition-based algorithm from the same divide-and-conquer family, with O(n) average time for order statistics
-- [Linked list problems (LeetCode 150)](../leetcode-150/linked-list/), where merge sort's pointer-relinking advantage is most visible
+- [Linked list problems (LeetCode 150)](../coding-problems/linked-list/), where merge sort's pointer-relinking advantage is most visible
 - [Data structures](../data-structures/), for the array and linked list structures merge sort operates on

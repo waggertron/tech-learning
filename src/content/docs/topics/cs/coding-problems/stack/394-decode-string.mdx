@@ -1,0 +1,117 @@
+---
+title: "394. Decode String (Medium)"
+description: "Decode a string encoded as k[encoded_string] using a stack to handle arbitrary nesting depth."
+parent: stack
+tags: [leetcode, stacks, strings, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './394-decode-string.py?raw';
+
+## Problem
+
+Given an encoded string, return its decoded form. The encoding rule is `k[encoded_string]`, meaning `encoded_string` repeated `k` times. You may assume the input is always valid and nesting is possible.
+
+**Example**
+- `"3[a]2[bc]"` → `"aaabcbc"`
+- `"3[a2[c]]"` → `"accaccacc"`
+- `"2[abc]3[cd]ef"` → `"abcabccdcdcdef"`
+
+LeetCode 394 · [Link](https://leetcode.com/problems/decode-string/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="decode-string" />
+
+## Approach: Stack of (count, prefix) pairs
+
+The core challenge is nesting: `"3[a2[c]]"` means you must finish decoding `2[c]` before you can repeat the outer `a2[c]` three times. That "finish inner before outer" structure is LIFO -- a stack.
+
+Track two running values: `current_count` (digits accumulated so far) and `current_string` (letters accumulated so far). When you see `[`, freeze both onto the stack and reset. When you see `]`, pop and reassemble.
+
+```python
+def decode_string(s: str) -> str:
+    stack = []          # L1: each entry is (count, prefix_string)
+    current_string = "" # L2: characters accumulated at current nesting level
+    current_count = 0   # L3: number being parsed digit by digit
+
+    for ch in s:                                        # L4: n iterations
+        if ch.isdigit():                                # L5: O(1)
+            current_count = current_count * 10 + int(ch)  # L6: handles multi-digit like "12["
+        elif ch == "[":                                 # L7: O(1)
+            stack.append((current_count, current_string))  # L8: freeze state
+            current_count = 0                          # L9: reset for inner level
+            current_string = ""                        # L10: reset for inner level
+        elif ch == "]":                                 # L11: O(1)
+            count, prefix = stack.pop()                # L12: restore outer state
+            current_string = prefix + count * current_string  # L13: expand and attach
+        else:                                           # L14: regular letter
+            current_string += ch                       # L15: O(1) amortized
+
+    return current_string                              # L16: O(1)
+```
+
+**Tracing `"3[a2[c]]"`**
+
+```
+ch   current_count  current_string  stack
+3    3              ""              []
+[    0              ""              [(3, "")]
+a    0              "a"             [(3, "")]
+2    2              "a"             [(3, "")]
+[    0              ""              [(3, ""), (2, "a")]
+c    0              "c"             [(3, ""), (2, "a")]
+]    0              "a"+"cc"="acc"  [(3, "")]       pop (2, "a")
+]    0              ""+"accaccacc"  []              pop (3, "")
+```
+
+Return `"accaccacc"`.
+
+**Multi-digit counts.** `current_count = current_count * 10 + int(ch)` accumulates `"12"` as `1*10 + 2 = 12`. If you just did `int(ch)` you would only get single-digit counts.
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s), D = length of decoded output.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L4 (loop) | O(1) | n | O(n) |
+| L6 (digit accumulate) | O(1) | at most n | O(n) |
+| L8, L12 (push/pop) | O(1) | at most n/2 each | O(n) |
+| **L13 (string expand)** | **O(D)** | **once per `]`** | **O(D)** ← dominates |
+| L15 (append letter) | O(1) amortized | at most n | O(n) |
+
+String concatenation at L13 dominates: each character of the final output is written once.
+
+**Complexity**
+- **Time:** O(D), where D is the length of the decoded string. In the worst case (`"10000[a]"`) this is much larger than n.
+- **Space:** O(n + D) for the stack entries and current_string at each nesting level.
+
+## Key insight: "pending business" model
+
+The stack holds work that is waiting to be resolved. When you enter `[`, you push "I owe this prefix, repeated this many times, once I see the matching `]`." When you see `]`, you settle the debt. This is identical to the Valid Parentheses insight: the stack tracks unresolved structure.
+
+## Common mistakes
+
+**Forgetting multi-digit counts.** `"12[a]"` is twelve `a`s, not one `a` followed by `2[a]`. Always accumulate with `current_count * 10 + int(ch)`.
+
+**Forgetting to reset after `[`.** If you don't reset `current_count` and `current_string` after pushing, the inner level inherits the outer level's state.
+
+**Treating `]` as "repeat current_string"** without attaching the popped prefix. `current_string = prefix + count * current_string` -- the prefix goes first.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| **Stack of (count, prefix)** | **O(D)** | **O(n + D)** |
+
+This is the canonical O(D) single-pass approach. Recursive DFS on the string is equivalent and has the same complexity.
+
+## Related topics
+
+- [20. Valid Parentheses (Easy)](./020-valid-parentheses/), same "pending business" stack model for nested structure
+- [84. Largest Rectangle in Histogram (Hard)](./084-largest-rectangle-in-histogram/), another problem where the stack holds unresolved state
+- [Stacks](../../../data-structures/stacks/), LIFO data structure underlying this pattern

@@ -345,11 +345,11 @@ Memory limited, deep graph?   -> DFS
 
 | Problem | What to practice |
 | --- | --- |
-| [200. Number of Islands](../leetcode-150/graphs/200-number-of-islands/) | Grid DFS, flood fill, in-place marking |
-| [130. Surrounded Regions](../leetcode-150/graphs/130-surrounded-regions/) | Border-anchored flood fill, inverse marking |
-| [207. Course Schedule](../leetcode-150/graphs/207-course-schedule/) | Cycle detection in directed graph, gray-node coloring |
-| [210. Course Schedule II](../leetcode-150/graphs/210-course-schedule-ii/) | Topological sort via DFS post-order |
-| [79. Word Search](../leetcode-150/backtracking/079-word-search/) | Grid DFS with backtracking, path state restoration |
+| [200. Number of Islands](../coding-problems/graphs/200-number-of-islands/) | Grid DFS, flood fill, in-place marking |
+| [130. Surrounded Regions](../coding-problems/graphs/130-surrounded-regions/) | Border-anchored flood fill, inverse marking |
+| [207. Course Schedule](../coding-problems/graphs/207-course-schedule/) | Cycle detection in directed graph, gray-node coloring |
+| [210. Course Schedule II](../coding-problems/graphs/210-course-schedule-ii/) | Topological sort via DFS post-order |
+| [79. Word Search](../coding-problems/backtracking/079-word-search/) | Grid DFS with backtracking, path state restoration |
 
 ## Multiple uses
 
@@ -643,6 +643,6 @@ if __name__ == '__main__':
 
 - [Breadth-First Search](./bfs/), the level-order counterpart: use BFS when shortest path or level distance matters
 - [Dijkstra's algorithm](./dijkstra/), DFS/BFS generalization with weighted edges and a priority queue
-- [LeetCode 150: Graphs](../leetcode-150/graphs/), the canonical graph problems including islands, course schedule, and surrounded regions
-- [LeetCode 150: Backtracking](../leetcode-150/backtracking/), DFS with state restoration: word search, N-queens, permutations
+- [LeetCode 150: Graphs](../coding-problems/graphs/), the canonical graph problems including islands, course schedule, and surrounded regions
+- [LeetCode 150: Backtracking](../coding-problems/backtracking/), DFS with state restoration: word search, N-queens, permutations
 - [Data Structures](../data-structures/), stacks (what the iterative version uses explicitly), sets (visited tracking), and adjacency lists (graph representation)

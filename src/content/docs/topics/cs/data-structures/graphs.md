@@ -49,13 +49,13 @@ Many algorithms behave differently on directed graphs. Topological sort requires
 
 ## Common uses in DSA
 
-1. **Connected components and connectivity**, Number of Islands, Friend Circles / Number of Provinces, Accounts Merge, Graph Valid Tree.
-2. **Shortest path**, unweighted via BFS (Word Ladder, Shortest Path in Binary Matrix), weighted via Dijkstra (Network Delay Time, Cheapest Flights), negative via Bellman-Ford.
-3. **Topological ordering**, Course Schedule I and II, Alien Dictionary, Parallel Courses.
+1. **Connected components and connectivity**, [Number of Islands](../coding-problems/graphs/200-number-of-islands/), Friend Circles / Number of Provinces, Accounts Merge, [Graph Valid Tree](../coding-problems/graphs/261-graph-valid-tree/).
+2. **Shortest path**, unweighted via BFS ([Word Ladder](../coding-problems/graphs/127-word-ladder/), Shortest Path in Binary Matrix), weighted via Dijkstra ([Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/), Cheapest Flights), negative via Bellman-Ford.
+3. **Topological ordering**, [Course Schedule](../coding-problems/graphs/207-course-schedule/) I and II, [Alien Dictionary](../coding-problems/graphs/269-alien-dictionary/), Parallel Courses.
 4. **Cycle detection**, directed (via white/gray/black DFS), undirected (via union-find or DFS with parent tracking).
 5. **Minimum spanning tree and network design**, Kruskal's (edge list + union-find), Prim's (priority queue).
 
-**Canonical LeetCode problems:** #127 Word Ladder, #133 Clone Graph, #200 Number of Islands, #207 Course Schedule, #210 Course Schedule II, #261 Graph Valid Tree, #269 Alien Dictionary, #417 Pacific Atlantic Water Flow, #743 Network Delay Time.
+**Canonical LeetCode problems:** #127 [Word Ladder](../coding-problems/graphs/127-word-ladder/), #133 [Clone Graph](../coding-problems/graphs/133-clone-graph/), #200 [Number of Islands](../coding-problems/graphs/200-number-of-islands/), #207 [Course Schedule](../coding-problems/graphs/207-course-schedule/), #210 Course Schedule II, #261 [Graph Valid Tree](../coding-problems/graphs/261-graph-valid-tree/), #269 [Alien Dictionary](../coding-problems/graphs/269-alien-dictionary/), #417 [Pacific Atlantic Water Flow](../coding-problems/graphs/417-pacific-atlantic-water-flow/), #743 [Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/).
 
 ## Python example
 
@@ -161,19 +161,19 @@ class UnionFind:
 Graphs appear in 18 NeetCode 150 problems across 2 categories (13 Graphs + 5 Advanced Graphs).
 
 **Graphs:**
-- [200. Number of Islands](../../leetcode-150/graphs/200-number-of-islands/), DFS/BFS/Union-Find
-- [695. Max Area of Island](../../leetcode-150/graphs/695-max-area-of-island/)
-- [133. Clone Graph](../../leetcode-150/graphs/133-clone-graph/)
-- [994. Rotting Oranges](../../leetcode-150/graphs/994-rotting-oranges/), multi-source BFS
-- [417. Pacific Atlantic Water Flow](../../leetcode-150/graphs/417-pacific-atlantic-water-flow/), reverse DFS from borders
-- [130. Surrounded Regions](../../leetcode-150/graphs/130-surrounded-regions/)
-- [207. Course Schedule](../../leetcode-150/graphs/207-course-schedule/), cycle detection
-- [210. Course Schedule II](../../leetcode-150/graphs/210-course-schedule-ii/), topological sort
-- [684. Redundant Connection](../../leetcode-150/graphs/684-redundant-connection/), Union-Find
-- [261. Graph Valid Tree](../../leetcode-150/graphs/261-graph-valid-tree/)
-- [323. Number of Connected Components](../../leetcode-150/graphs/323-number-of-connected-components-in-an-undirected-graph/)
-- [127. Word Ladder](../../leetcode-150/graphs/127-word-ladder/), bidirectional BFS
-- [269. Alien Dictionary](../../leetcode-150/graphs/269-alien-dictionary/), topological sort from word-pair constraints
+- [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/), DFS/BFS/Union-Find
+- [695. Max Area of Island](../../coding-problems/graphs/695-max-area-of-island/)
+- [133. Clone Graph](../../coding-problems/graphs/133-clone-graph/)
+- [994. Rotting Oranges](../../coding-problems/graphs/994-rotting-oranges/), multi-source BFS
+- [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/), reverse DFS from borders
+- [130. Surrounded Regions](../../coding-problems/graphs/130-surrounded-regions/)
+- [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/), cycle detection
+- [210. Course Schedule II](../../coding-problems/graphs/210-course-schedule-ii/), topological sort
+- [684. Redundant Connection](../../coding-problems/graphs/684-redundant-connection/), Union-Find
+- [261. Graph Valid Tree](../../coding-problems/graphs/261-graph-valid-tree/)
+- [323. Number of Connected Components](../../coding-problems/graphs/323-number-of-connected-components-in-an-undirected-graph/)
+- [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/), bidirectional BFS
+- [269. Alien Dictionary](../../coding-problems/graphs/269-alien-dictionary/), topological sort from word-pair constraints
 
 *More coming soon, Advanced Graphs (Dijkstra, MST, Bellman-Ford).*
 
@@ -186,7 +186,7 @@ Graphs appear in 18 NeetCode 150 problems across 2 categories (13 Graphs + 5 Adv
 - [Named algorithms: Bellman-Ford](../../named-algorithms/bellman-ford/), shortest paths with negative weights
 - [Named algorithms: Kahn's](../../named-algorithms/kahns/), topological sort via BFS
 - [Named algorithms: Tarjan's](../../named-algorithms/tarjans/), strongly connected components in one DFS pass
-- [LeetCode graphs category](../../leetcode-150/graphs/)
+- [LeetCode graphs category](../../coding-problems/graphs/)
 
 ## References
 

@@ -42,12 +42,12 @@ A string is a sequence of characters, usually stored as an array of bytes (C), a
 ## Common uses in DSA
 
 1. **Anagrams and character frequency**, Valid Anagram, Group Anagrams, Find All Anagrams in a String.
-2. **Palindrome detection**, Valid Palindrome, Longest Palindromic Substring (expand around center or Manacher's), Palindromic Substrings.
+2. **Palindrome detection**, [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/) (expand around center or Manacher's), Palindromic Substrings.
 3. **Pattern matching**, Implement strStr() (needle in haystack), Repeated Substring Pattern, Find the Index of the First Occurrence.
-4. **Sliding window on strings**, Longest Substring Without Repeating Characters, Minimum Window Substring, Longest Repeating Character Replacement.
+4. **Sliding window on strings**, [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), Longest Repeating Character Replacement.
 5. **Edit distance and string DP**, Edit Distance, Longest Common Subsequence, Regular Expression Matching, Wildcard Matching.
 
-**Canonical LeetCode problems:** #3 Longest Substring Without Repeating Characters, #5 Longest Palindromic Substring, #20 Valid Parentheses, #49 Group Anagrams, #76 Minimum Window Substring, #125 Valid Palindrome, #242 Valid Anagram.
+**Canonical LeetCode problems:** #3 [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), #5 [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/), #20 Valid Parentheses, #49 Group Anagrams, #76 [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), #125 [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), #242 Valid Anagram.
 
 ## Python example
 
@@ -109,45 +109,45 @@ def group_anagrams(words):
 Strings appear in 23 NeetCode 150 problems across 9 categories.
 
 **Arrays & Hashing:**
-- [49. Group Anagrams](../../leetcode-150/arrays-and-hashing/049-group-anagrams/)
-- [242. Valid Anagram](../../leetcode-150/arrays-and-hashing/242-valid-anagram/)
-- [271. Encode and Decode Strings](../../leetcode-150/arrays-and-hashing/271-encode-and-decode-strings/)
+- [49. Group Anagrams](../../coding-problems/arrays-and-hashing/049-group-anagrams/)
+- [242. Valid Anagram](../../coding-problems/arrays-and-hashing/242-valid-anagram/)
+- [271. Encode and Decode Strings](../../coding-problems/arrays-and-hashing/271-encode-and-decode-strings/)
 
 **Two Pointers:**
-- [125. Valid Palindrome](../../leetcode-150/two-pointers/125-valid-palindrome/)
+- [125. Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/)
 
 **Sliding Window:**
-- [3. Longest Substring Without Repeating Characters](../../leetcode-150/sliding-window/003-longest-substring-without-repeating-characters/)
-- [76. Minimum Window Substring](../../leetcode-150/sliding-window/076-minimum-window-substring/)
-- [424. Longest Repeating Character Replacement](../../leetcode-150/sliding-window/424-longest-repeating-character-replacement/)
-- [567. Permutation in String](../../leetcode-150/sliding-window/567-permutation-in-string/)
+- [3. Longest Substring Without Repeating Characters](../../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/)
+- [76. Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/)
+- [424. Longest Repeating Character Replacement](../../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
+- [567. Permutation in String](../../coding-problems/sliding-window/567-permutation-in-string/)
 
 **Stack:**
-- [20. Valid Parentheses](../../leetcode-150/stack/020-valid-parentheses/)
+- [20. Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/)
 
 **Backtracking:**
-- [17. Letter Combinations of a Phone Number](../../leetcode-150/backtracking/017-letter-combinations-of-a-phone-number/)
-- [131. Palindrome Partitioning](../../leetcode-150/backtracking/131-palindrome-partitioning/)
+- [17. Letter Combinations of a Phone Number](../../coding-problems/backtracking/017-letter-combinations-of-a-phone-number/)
+- [131. Palindrome Partitioning](../../coding-problems/backtracking/131-palindrome-partitioning/)
 
 **1-D Dynamic Programming:**
-- [5. Longest Palindromic Substring](../../leetcode-150/1d-dynamic-programming/005-longest-palindromic-substring/)
-- [91. Decode Ways](../../leetcode-150/1d-dynamic-programming/091-decode-ways/)
-- [139. Word Break](../../leetcode-150/1d-dynamic-programming/139-word-break/)
-- [647. Palindromic Substrings](../../leetcode-150/1d-dynamic-programming/647-palindromic-substrings/)
+- [5. Longest Palindromic Substring](../../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/)
+- [91. Decode Ways](../../coding-problems/1d-dynamic-programming/091-decode-ways/)
+- [139. Word Break](../../coding-problems/1d-dynamic-programming/139-word-break/)
+- [647. Palindromic Substrings](../../coding-problems/1d-dynamic-programming/647-palindromic-substrings/)
 
 **2-D Dynamic Programming:**
-- [10. Regular Expression Matching](../../leetcode-150/2d-dynamic-programming/010-regular-expression-matching/)
-- [72. Edit Distance](../../leetcode-150/2d-dynamic-programming/072-edit-distance/)
-- [97. Interleaving String](../../leetcode-150/2d-dynamic-programming/097-interleaving-string/)
-- [115. Distinct Subsequences](../../leetcode-150/2d-dynamic-programming/115-distinct-subsequences/)
-- [1143. Longest Common Subsequence](../../leetcode-150/2d-dynamic-programming/1143-longest-common-subsequence/)
+- [10. Regular Expression Matching](../../coding-problems/2d-dynamic-programming/010-regular-expression-matching/)
+- [72. Edit Distance](../../coding-problems/2d-dynamic-programming/072-edit-distance/)
+- [97. Interleaving String](../../coding-problems/2d-dynamic-programming/097-interleaving-string/)
+- [115. Distinct Subsequences](../../coding-problems/2d-dynamic-programming/115-distinct-subsequences/)
+- [1143. Longest Common Subsequence](../../coding-problems/2d-dynamic-programming/1143-longest-common-subsequence/)
 
 **Greedy:**
-- [678. Valid Parenthesis String](../../leetcode-150/greedy/678-valid-parenthesis-string/)
-- [763. Partition Labels](../../leetcode-150/greedy/763-partition-labels/)
+- [678. Valid Parenthesis String](../../coding-problems/greedy/678-valid-parenthesis-string/)
+- [763. Partition Labels](../../coding-problems/greedy/763-partition-labels/)
 
 **Math & Geometry:**
-- [43. Multiply Strings](../../leetcode-150/math-and-geometry/043-multiply-strings/)
+- [43. Multiply Strings](../../coding-problems/math-and-geometry/043-multiply-strings/)
 
 ## References
 

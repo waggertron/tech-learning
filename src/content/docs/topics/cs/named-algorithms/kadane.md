@@ -12,7 +12,7 @@ updated: 2026-05-01
 
 Given an integer array `nums`, find the contiguous subarray (at least one element) with the **largest sum**, in a single pass.
 
-Named after Jay Kadane, who described it in 1977. It's the canonical answer to [LeetCode 53 (Maximum Subarray)](../leetcode-150/greedy/053-maximum-subarray/) and the prototype for an entire family of "best contiguous something" problems.
+Named after Jay Kadane, who described it in 1977. It's the canonical answer to [LeetCode 53 (Maximum Subarray)](../coding-problems/greedy/053-maximum-subarray/) and the prototype for an entire family of "best contiguous something" problems.
 
 ## The core idea, in one sentence
 
@@ -84,7 +84,7 @@ Kadane is the template for **"best contiguous something"** problems. The mental 
 
 Once you internalize that, you start seeing it everywhere.
 
-## Variant 1: [Maximum Product Subarray](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/) ([LeetCode 152](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/))
+## Variant 1: [Maximum Product Subarray](../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/) ([LeetCode 152](../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/))
 
 **The twist:** sums and products behave differently. With sums, a negative running total is always worse than zero. With products, a *big negative* is one multiplication away from being a *big positive*.
 
@@ -125,9 +125,9 @@ The min `-6` was the bridge: holding it across the sign flip captured the `-2 ·
 
 **Same shape as Kadane.** Same O(n) single pass. Same `extend or restart` choice. Just two running scalars instead of one because multiplication's symmetry forces it.
 
-Detailed walkthrough: [LeetCode 152, Maximum Product Subarray](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/).
+Detailed walkthrough: [LeetCode 152, Maximum Product Subarray](../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/).
 
-## Variant 2: [Best Time to Buy and Sell Stock](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/) ([LeetCode 121](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/))
+## Variant 2: [Best Time to Buy and Sell Stock](../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/) ([LeetCode 121](../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/))
 
 **The twist:** at first glance this isn't a subarray-sum problem at all. You're given prices and asked for the max profit from one buy and one sell (sell after buy).
 
@@ -180,7 +180,7 @@ Answer: `5` (buy at 1, sell at 6).
 
 **Same shape as Kadane.** Single pass. `extend or restart` at every step. The only difference is the input is *implied*: instead of operating on the array directly, you operate on the consecutive-difference array, which you compute on the fly.
 
-Detailed walkthrough: [LeetCode 121, Best Time to Buy and Sell Stock](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/).
+Detailed walkthrough: [LeetCode 121, Best Time to Buy and Sell Stock](../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/).
 
 ## Quick comparison of the three
 
@@ -295,8 +295,8 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [LeetCode 53, Maximum Subarray](../leetcode-150/greedy/053-maximum-subarray/), the canonical exercise
-- [LeetCode 152, Maximum Product Subarray](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/), the product variant with min/max swap
-- [LeetCode 121, Best Time to Buy and Sell Stock](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/), Kadane on consecutive differences
+- [LeetCode 53, Maximum Subarray](../coding-problems/greedy/053-maximum-subarray/), the canonical exercise
+- [LeetCode 152, Maximum Product Subarray](../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/), the product variant with min/max swap
+- [LeetCode 121, Best Time to Buy and Sell Stock](../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/), Kadane on consecutive differences
 - [Arrays](../data-structures/arrays/), the data structure these problems operate on
-- [1-D Dynamic Programming](../leetcode-150/1d-dynamic-programming/), the broader family Kadane sits inside
+- [1-D Dynamic Programming](../coding-problems/1d-dynamic-programming/), the broader family Kadane sits inside

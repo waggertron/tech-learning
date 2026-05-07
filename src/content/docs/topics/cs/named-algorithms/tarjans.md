@@ -272,9 +272,9 @@ Look for these patterns in the problem statement:
 
 ## LeetCode: where this shows up
 
-### [Course Schedule](../leetcode-150/graphs/207-course-schedule/) (207 / 210)
+### [Course Schedule](../coding-problems/graphs/207-course-schedule/) (207 / 210)
 
-[LeetCode 207](../leetcode-150/graphs/207-course-schedule/) asks whether you can finish all courses given prerequisites (cycle detection). [LeetCode 210](../leetcode-150/graphs/210-course-schedule-ii/) asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
+[LeetCode 207](../coding-problems/graphs/207-course-schedule/) asks whether you can finish all courses given prerequisites (cycle detection). [LeetCode 210](../coding-problems/graphs/210-course-schedule-ii/) asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
 
 Tarjan technically answers these: if any SCC has size > 1, a cycle exists (207 returns false; 210 returns empty). But Tarjan is overkill here. The problems don't require knowing *which* vertices form cycles, only *whether* any exist. A plain DFS with `VISITING/VISITED` coloring, or Kahn's algorithm for topological sort, is simpler and equally fast.
 
@@ -602,5 +602,5 @@ if __name__ == "__main__":
 
 - [Depth-first search](./dfs/), the traversal that Tarjan's algorithm is built on top of
 - [Kahn's algorithm](./kahns/), for topological sort of the condensation DAG you get after SCC decomposition
-- [Graphs (LeetCode 150)](../leetcode-150/graphs/), cycle detection and directed graph traversal exercises
-- [Advanced Graphs (LeetCode 150)](../leetcode-150/advanced-graphs/), where full SCC problems appear at Hard difficulty
+- [Graphs (LeetCode 150)](../coding-problems/graphs/), cycle detection and directed graph traversal exercises
+- [Advanced Graphs (LeetCode 150)](../coding-problems/advanced-graphs/), where full SCC problems appear at Hard difficulty

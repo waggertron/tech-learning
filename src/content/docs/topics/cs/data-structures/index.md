@@ -64,5 +64,5 @@ A rough decision flow:
 
 ## Related topics
 
-- [LeetCode 150](../leetcode-150/), problems organized by the patterns these structures unlock.
+- [LeetCode 150](../coding-problems/), problems organized by the patterns these structures unlock.
 - [Functional core, imperative shell](../functional-core-imperative-shell/), how immutability shapes architecture.
