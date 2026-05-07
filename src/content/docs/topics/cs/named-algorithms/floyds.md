@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Given a linked list (or any structure you can model as a sequence of pointer hops), determine whether the sequence eventually loops back on itself, and if so, find the exact node where the cycle begins.
 
-Named after Robert W. Floyd, who described the algorithm in unpublished work around 1967. It appears in Knuth's *The Art of Computer Programming* (1969) and is the canonical answer to [LeetCode 141 (Linked List Cycle)](../leetcode-150/linked-list/141-linked-list-cycle/) and 142 (Linked List Cycle II).
+Named after Robert W. Floyd, who described the algorithm in unpublished work around 1967. It appears in Knuth's *The Art of Computer Programming* (1969) and is the canonical answer to [LeetCode 141 (Linked List Cycle)](../leetcode-150/linked-list/141-linked-list-cycle/) and 142 ([Linked List Cycle](../leetcode-150/linked-list/141-linked-list-cycle/) II).
 
 The algorithm runs two passes:
 
@@ -268,7 +268,7 @@ This same "slow at half-speed" idea underlies k-th-from-end problems (offset the
 | ------- | ---- | ---------------- |
 | 141. Linked List Cycle | [../leetcode-150/linked-list/141-linked-list-cycle/](../leetcode-150/linked-list/141-linked-list-cycle/) | Phase 1 only |
 | 142. Linked List Cycle II | Phase 2 + math | Find cycle entrance |
-| 287. Find the Duplicate Number | [../leetcode-150/linked-list/287-find-the-duplicate-number/](../leetcode-150/linked-list/287-find-the-duplicate-number/) | Implicit linked list via array |
+| 287. [Find the Duplicate Number](../leetcode-150/linked-list/287-find-the-duplicate-number/) | [../leetcode-150/linked-list/287-find-the-duplicate-number/](../leetcode-150/linked-list/287-find-the-duplicate-number/) | Implicit linked list via array |
 
 Start with 141 to get the detection loop clean, then move to 142 to cement the phase-2 reset. Do 287 last: it tests whether you can see the array-as-linked-list framing, which is the creative leap.
 

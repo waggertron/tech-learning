@@ -14,7 +14,7 @@ Given a **directed acyclic graph (DAG)**, produce a linear ordering of all verti
 
 The canonical framing: you have courses, each with a list of prerequisites. You need to find an order to take all courses so that you never take a course before completing its prerequisites. That is a topological sort problem.
 
-Named after Arthur B. Kahn, who described the algorithm in 1962. It is the standard BFS-based answer to [LeetCode 207 (Course Schedule)](../leetcode-150/graphs/207-course-schedule/) and 210 (Course Schedule II), and it appears in every build system, package manager, and task scheduler worth naming.
+Named after Arthur B. Kahn, who described the algorithm in 1962. It is the standard BFS-based answer to [LeetCode 207 (Course Schedule)](../leetcode-150/graphs/207-course-schedule/) and 210 ([[Course Schedule](../leetcode-150/graphs/207-course-schedule/) II](../leetcode-150/graphs/210-course-schedule-ii/)), and it appears in every build system, package manager, and task scheduler worth naming.
 
 Topological sort is only possible on a DAG: a directed graph with no cycles. If a cycle exists, there is no valid ordering (course A requires B, B requires C, C requires A). Kahn's algorithm detects this condition automatically.
 

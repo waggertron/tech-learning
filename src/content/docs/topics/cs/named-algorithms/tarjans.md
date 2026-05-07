@@ -272,7 +272,7 @@ Look for these patterns in the problem statement:
 
 ## LeetCode: where this shows up
 
-### Course Schedule (207 / 210)
+### [Course Schedule](../leetcode-150/graphs/207-course-schedule/) (207 / 210)
 
 [LeetCode 207](../leetcode-150/graphs/207-course-schedule/) asks whether you can finish all courses given prerequisites (cycle detection). [LeetCode 210](../leetcode-150/graphs/210-course-schedule-ii/) asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
 

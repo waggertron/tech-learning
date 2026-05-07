@@ -84,7 +84,7 @@ Kadane is the template for **"best contiguous something"** problems. The mental 
 
 Once you internalize that, you start seeing it everywhere.
 
-## Variant 1: Maximum Product Subarray ([LeetCode 152](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/))
+## Variant 1: [Maximum Product Subarray](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/) ([LeetCode 152](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/))
 
 **The twist:** sums and products behave differently. With sums, a negative running total is always worse than zero. With products, a *big negative* is one multiplication away from being a *big positive*.
 
@@ -127,7 +127,7 @@ The min `-6` was the bridge: holding it across the sign flip captured the `-2 ·
 
 Detailed walkthrough: [LeetCode 152, Maximum Product Subarray](../leetcode-150/1d-dynamic-programming/152-maximum-product-subarray/).
 
-## Variant 2: Best Time to Buy and Sell Stock ([LeetCode 121](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/))
+## Variant 2: [Best Time to Buy and Sell Stock](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/) ([LeetCode 121](../leetcode-150/sliding-window/121-best-time-to-buy-and-sell-stock/))
 
 **The twist:** at first glance this isn't a subarray-sum problem at all. You're given prices and asked for the max profit from one buy and one sell (sell after buy).
 

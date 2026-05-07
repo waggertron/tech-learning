@@ -210,7 +210,7 @@ For learning and interviews, Lomuto is the one to know cold. In production libra
 
 The Dutch National Flag variant (three-way partition) handles duplicates efficiently: it partitions into `[< pivot | == pivot | > pivot]`. If your array has many repeated elements and the target rank falls in the equal segment, you are done immediately.
 
-## Application: [LeetCode 215](../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/), Kth Largest Element in an Array
+## Application: [LeetCode 215](../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/), [[Kth Largest Element in an Array](../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/) in an Array](../leetcode-150/heap-priority-queue/215-kth-largest-element-in-an-array/)
 
 "Find the kth largest element in an unsorted array."
 
@@ -252,7 +252,7 @@ Example: `nums = [3, 2, 1, 5, 6, 4]`, `k = 2`. The 2nd largest is `5`. Target in
 
 Detailed walkthrough: [LeetCode 215, Kth Largest Element in an Array](../leetcode-150/heap-priority-queue/215-kth-larget-element-in-an-array/).
 
-## Application: [LeetCode 973](../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/), K Closest Points to Origin
+## Application: [LeetCode 973](../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/), [[K Closest Points to Origin](../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/) to Origin](../leetcode-150/heap-priority-queue/973-k-closest-points-to-origin/)
 
 "Given a list of points, return the k closest to the origin."
 
