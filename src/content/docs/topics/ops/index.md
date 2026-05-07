@@ -17,6 +17,10 @@ description: The disciplines that turn working code into running systems, Kubern
 - [ArgoCD](./argocd/), the reference GitOps controller for Kubernetes; Applications, sync waves, the footguns
 - [Gitflow](./gitflow/), Vincent Driessen's 2010 branching model, when it fits, and what people use instead
 
+### Security
+
+- [Tokens, Keys, Secrets, and Environment Variables](./secrets-keys-tokens/), what each credential type is, how they differ, where they live, and the mistakes that expose them
+
 ### Domain-specific
 
 - [MLOps](./mlops/), the engineering discipline around getting ML models into production and keeping them useful
