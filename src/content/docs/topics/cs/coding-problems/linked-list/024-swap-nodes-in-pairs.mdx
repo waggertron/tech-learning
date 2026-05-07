@@ -1,0 +1,181 @@
+---
+title: "24. Swap Nodes in Pairs (Medium)"
+description: "Swap every two adjacent nodes in a linked list by rewiring pointers, not by swapping values."
+parent: linked-list
+tags: [leetcode, linked-list, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './024-swap-nodes-in-pairs.py?raw';
+
+## Problem
+
+Given the head of a linked list, swap every two adjacent nodes and return the head. You must swap the nodes themselves, not their values.
+
+**Example**
+- `head = [1,2,3,4]` → `[2,1,4,3]`
+- `head = []` → `[]`
+- `head = [1]` → `[1]`
+
+LeetCode 24 · [Link](https://leetcode.com/problems/swap-nodes-in-pairs/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="swap-nodes-in-pairs" />
+
+## Approach 1: Brute force, collect values and rebuild
+
+Collect all node values into a list, swap adjacent pairs, rebuild.
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def swap_pairs(head):
+    vals = []
+    cur = head
+    while cur:                                # L1: O(n) collect
+        vals.append(cur.val)
+        cur = cur.next
+    for i in range(0, len(vals) - 1, 2):     # L2: swap adjacent pairs in-place
+        vals[i], vals[i + 1] = vals[i + 1], vals[i]
+    dummy = ListNode()
+    tail = dummy
+    for v in vals:                            # L3: O(n) rebuild
+        tail.next = ListNode(v)
+        tail = tail.next
+    return dummy.next
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (collect)** | **O(1)** | **n** | **O(n)** |
+| L2 (swap values) | O(1) | n/2 | O(n) |
+| L3 (rebuild) | O(1) | n | O(n) |
+
+Correct but allocates O(n) extra space and new nodes. Violates the "swap nodes not values" spirit of the problem.
+
+**Complexity**
+- **Time:** O(n)
+- **Space:** O(n)
+
+## Approach 2: Iterative dummy-head pointer rewiring (optimal)
+
+Use a dummy head so the first pair has a predecessor to link into. Maintain `prev` pointing at the node before the current pair and `cur` pointing at the first node of the pair.
+
+```
+Before: prev -> cur -> cur.next -> next_pair -> ...
+After:  prev -> cur.next -> cur -> next_pair -> ...
+```
+
+```python
+def swap_pairs(head):
+    dummy = ListNode(0, head)               # L1: O(1) sentinel before head
+    prev, cur = dummy, head
+    while cur and cur.next:                 # L2: at least two nodes remain
+        next_pair = cur.next.next           # L3: O(1) save remainder
+        prev.next = cur.next               # L4: O(1) link prev to second node
+        cur.next.next = cur               # L5: O(1) second node points back to first
+        cur.next = next_pair              # L6: O(1) first node points to remainder
+        prev = cur                         # L7: O(1) advance prev to first of swapped pair
+        cur = next_pair                    # L8: O(1) advance cur to start of next pair
+    return dummy.next
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (dummy) | O(1) | 1 | O(1) |
+| L2 (loop guard) | O(1) | n/2 | O(n) |
+| **L3-L8 (rewire + advance)** | **O(1) each** | **n/2** | **O(n)** ← dominates |
+
+Four pointer assignments per pair, n/2 pairs total. No allocation beyond the dummy head.
+
+**Complexity**
+- **Time:** O(n), driven by L3-L8 (one pass, constant work per pair).
+- **Space:** O(1).
+
+### Pointer diagram for `[1, 2, 3, 4]`
+
+```
+Step 1 (cur=1, next_pair=3):
+  dummy -> 1 -> 2 -> 3 -> 4
+  After:  dummy -> 2 -> 1 -> 3 -> 4
+  prev=1, cur=3
+
+Step 2 (cur=3, next_pair=None):
+  dummy -> 2 -> 1 -> 3 -> 4
+  After:  dummy -> 2 -> 1 -> 4 -> 3
+  prev=3, cur=None  (loop exits)
+```
+
+## Key takeaways
+
+- Always draw the before/after pointer diagram before coding; the four assignments (L4-L6) have one correct order.
+- The dummy head eliminates the "is this the first node?" special case.
+- `prev = cur` (not `prev = cur.next`) because after the swap, `cur` is the second of the two in the output order, and the next pair starts at `next_pair`.
+- This pattern generalizes directly to 25 (Reverse Nodes in k-Group), which does the same rewiring over a window of k nodes.
+
+## Test cases
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def to_list(head):
+    out = []
+    while head:
+        out.append(head.val)
+        head = head.next
+    return out
+
+def from_list(vals):
+    dummy = ListNode()
+    cur = dummy
+    for v in vals:
+        cur.next = ListNode(v)
+        cur = cur.next
+    return dummy.next
+
+def swap_pairs(head):
+    dummy = ListNode(0, head)
+    prev, cur = dummy, head
+    while cur and cur.next:
+        next_pair = cur.next.next
+        prev.next = cur.next
+        cur.next.next = cur
+        cur.next = next_pair
+        prev = cur
+        cur = next_pair
+    return dummy.next
+
+def _run_tests():
+    assert to_list(swap_pairs(from_list([1, 2, 3, 4]))) == [2, 1, 4, 3]
+    assert to_list(swap_pairs(from_list([]))) == []
+    assert to_list(swap_pairs(from_list([1]))) == [1]
+    assert to_list(swap_pairs(from_list([1, 2, 3]))) == [2, 1, 3]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [206. Reverse Linked List](./206-reverse-linked-list/), the foundational pointer-reversal pattern
+- [25. Reverse Nodes in k-Group](./025-reverse-nodes-in-k-group/), generalization of this problem to k nodes
+- [19. Remove Nth Node from End of List](./019-remove-nth-node-from-end-of-list/), another dummy-head pattern

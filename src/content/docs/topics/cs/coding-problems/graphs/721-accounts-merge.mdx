@@ -1,0 +1,187 @@
+---
+title: "721. Accounts Merge (Medium)"
+description: "Merge accounts that share at least one email address, returning sorted deduplicated email lists per person."
+parent: graphs
+tags: [leetcode, graphs, union-find, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './721-accounts-merge.py?raw';
+
+## Problem
+
+You are given a list of accounts where each element is a list: `[name, email1, email2, ...]`. Two accounts belong to the same person if they share at least one email. Merge all accounts belonging to the same person. The output order of accounts and emails within accounts does not matter, but emails within an account must be sorted.
+
+**Example**
+
+```
+accounts = [
+    ["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+    ["John", "johnsmith@mail.com", "john00@mail.com"],
+    ["Mary", "mary@mail.com"],
+    ["John", "johnnybravo@mail.com"],
+]
+```
+
+Output (order may vary):
+
+```
+[
+    ["John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"],
+    ["Mary", "mary@mail.com"],
+    ["John", "johnnybravo@mail.com"],
+]
+```
+
+LeetCode 721 · [Link](https://leetcode.com/problems/accounts-merge/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="accounts-merge" />
+
+## Approach: Union-Find on emails
+
+The core observation: two accounts are the same person iff they share at least one email. Treat emails as graph nodes; union every email in an account under that account's first email. Then group all emails by their root, attach the name, and sort.
+
+```python
+def accounts_merge(accounts):
+    parent = {}                                             # L1: email -> parent email
+
+    def find(x):                                           # L2: path-compressed find
+        if parent[x] != x:
+            parent[x] = find(parent[x])                   # L3: full path compression
+        return parent[x]
+
+    def union(a, b):
+        parent[find(a)] = find(b)                         # L4: O(alpha) link roots
+
+    email_to_name = {}                                     # L5: email -> account owner name
+
+    for account in accounts:                               # L6: O(n) over all accounts
+        name = account[0]
+        for email in account[1:]:                          # L7: O(k) per account
+            if email not in parent:
+                parent[email] = email                      # L8: O(1) init new email
+            email_to_name[email] = name                   # L9: O(1) record owner
+            union(account[1], email)                       # L10: O(alpha) union under first email
+
+    from collections import defaultdict
+    groups = defaultdict(list)                             # L11: root -> list of emails
+    for email in parent:                                   # L12: O(n*k) over all emails
+        groups[find(email)].append(email)                  # L13: O(alpha) find + O(1) append
+
+    result = []
+    for root, emails in groups.items():                    # L14: O(n*k) iterate groups
+        result.append([email_to_name[root]] + sorted(emails))  # L15: O(k log k) sort per group
+
+    return result
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of accounts, k = average emails per account.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L6 (account loop) | O(1) | n | O(n) |
+| L7 (email loop) | O(1) | n * k total | O(n * k) |
+| L8 (init parent) | O(1) | n * k | O(n * k) |
+| **L10 (union)** | **O(alpha)** | **n * k** | **O(n * k * alpha) ← dominates** |
+| L12 (group pass) | O(alpha) per find | n * k | O(n * k * alpha) |
+| **L15 (sort)** | **O(k log k)** | **n groups** | **O(n * k * log k) ← dominates** |
+
+The sort in L15 dominates the Union-Find operations because alpha is effectively constant while log k grows. Total email count is n * k, and sorting all emails across all groups costs O(n * k * log k).
+
+**Complexity**
+- **Time:** O(n * k * log k), driven by L15 (sorting emails within each merged group).
+- **Space:** O(n * k) for the `parent` and `email_to_name` maps.
+
+### Why union under the first email?
+
+Every email in an account must be reachable from every other email in that account (they all belong to the same person). Unioning each email with `account[1]` (the first email) creates a star topology centered on the first email. Path compression flattens this during subsequent finds, so the root correctly represents the merged group.
+
+## Summary
+
+| Step | Cost |
+| --- | --- |
+| Build Union-Find (all union calls) | O(n * k * alpha) |
+| Group emails by root | O(n * k * alpha) |
+| Sort each group | O(n * k * log k) |
+| **Total** | **O(n * k * log k)** |
+
+## Test cases
+
+```python
+from collections import defaultdict
+
+def accounts_merge(accounts):
+    parent = {}
+
+    def find(x):
+        if parent[x] != x:
+            parent[x] = find(parent[x])
+        return parent[x]
+
+    def union(a, b):
+        parent[find(a)] = find(b)
+
+    email_to_name = {}
+
+    for account in accounts:
+        name = account[0]
+        for email in account[1:]:
+            if email not in parent:
+                parent[email] = email
+            email_to_name[email] = name
+            union(account[1], email)
+
+    groups = defaultdict(list)
+    for email in parent:
+        groups[find(email)].append(email)
+
+    return [[email_to_name[root]] + sorted(emails) for root, emails in groups.items()]
+
+
+def _run_tests():
+    def normalize(result):
+        return sorted([row[0:1] + sorted(row[1:]) for row in result])
+
+    # Example from problem: two Johns merge, one John and Mary stay separate
+    a1 = [
+        ["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+        ["John", "johnsmith@mail.com", "john00@mail.com"],
+        ["Mary", "mary@mail.com"],
+        ["John", "johnnybravo@mail.com"],
+    ]
+    r1 = normalize(accounts_merge(a1))
+    expected1 = normalize([
+        ["John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"],
+        ["Mary", "mary@mail.com"],
+        ["John", "johnnybravo@mail.com"],
+    ])
+    assert r1 == expected1, f"Expected {expected1}, got {r1}"
+
+    # Single account
+    a2 = [["Alice", "a@x.com"]]
+    assert normalize(accounts_merge(a2)) == [["Alice", "a@x.com"]]
+
+    # All accounts share one email, all merge
+    a3 = [["A", "x@y.com", "a@b.com"], ["A", "x@y.com", "c@d.com"]]
+    r3 = normalize(accounts_merge(a3))
+    assert r3 == [["A", "a@b.com", "c@d.com", "x@y.com"]]
+
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Number of Provinces](./547-number-of-provinces/), Union-Find to count connected components
+- [Graph Valid Tree](./261-graph-valid-tree/), Union-Find to detect cycles and single component
+- [Redundant Connection](./684-redundant-connection/), Union-Find to find the cycle-forming edge

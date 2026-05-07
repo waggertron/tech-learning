@@ -1,0 +1,125 @@
+---
+title: "1249. Minimum Remove to Make Valid Parentheses (Medium)"
+description: "Use a stack to track unmatched parenthesis indices, then rebuild the string skipping those positions."
+parent: stack
+tags: [leetcode, stacks, strings, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './1249-minimum-remove-valid-parens.py?raw';
+
+## Problem
+
+Given a string `s` of `'('`, `')'`, and lowercase letters, remove the **minimum** number of parentheses to make the string valid. A valid parenthesis string has every `'('` matched by a corresponding `')'` in correct order.
+
+Return **any** valid result (not necessarily unique).
+
+**Examples**
+- `"lee(t(c)o)de)"` → `"lee(t(c)o)de"` (remove last `')'`)
+- `"a)b(c)d"` → `"ab(c)d"` (remove first `')'`)
+- `"))(("` → `""` (remove all four)
+- `"(a(b(c)d)"` → `"a(b(c)d)"` or `"(a(bc)d)"` (either is valid)
+
+LeetCode 1249 · [Link](https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="minimum-remove-valid-parens" />
+
+## Approach 1: Two-pass stack of indices
+
+**Pass 1:** Scan left to right. Use a stack to track the *indices* of unmatched `'('`. When a `')'` is seen:
+- If the stack is non-empty, pop the top (the `'('` is matched).
+- Otherwise, mark this `')'` index for removal (it has no opening partner).
+
+After pass 1, all indices remaining in the stack are unmatched `'('` that also need removal.
+
+**Pass 2:** Build the result, skipping any index that was marked.
+
+```python
+def min_remove_to_make_valid(s: str) -> str:
+    stack = []          # L1: indices of unmatched '('
+    remove = set()      # L2: indices to remove
+
+    for i, ch in enumerate(s):              # L3: n iterations (pass 1)
+        if ch == "(":
+            stack.append(i)                 # L4: O(1) push index of '('
+        elif ch == ")":
+            if stack:
+                stack.pop()                 # L5: O(1) matched pair
+            else:
+                remove.add(i)              # L6: O(1) unmatched ')'
+
+    remove.update(stack)                   # L7: O(k) remaining '(' are unmatched
+
+    result = []
+    for i, ch in enumerate(s):             # L8: n iterations (pass 2)
+        if i not in remove:                # L9: O(1) set lookup
+            result.append(ch)              # L10: O(1) keep character
+    return "".join(result)                 # L11: O(n) join
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3-L6 (pass 1, stack ops) | O(1) amortized | n | O(n) |
+| L7 (update remove set) | O(k) where k = remaining stack | 1 | O(n) worst |
+| **L8-L10 (pass 2, rebuild)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L11 (join) | O(n) | 1 | O(n) |
+
+**Complexity**
+- **Time:** O(n), two linear passes.
+- **Space:** O(n) for the stack, remove set, and result buffer.
+
+## Pass 1 illustrated
+
+```
+s = "lee(t(c)o)de)"
+     0123456789...
+
+i=3  '(': push 3.   stack=[3]
+i=5  '(': push 5.   stack=[3,5]
+i=7  ')': stack non-empty, pop 5 (matched).  stack=[3]
+i=9  ')': stack non-empty, pop 3 (matched).  stack=[]
+i=13 ')': stack empty, remove.add(13).       stack=[]
+
+After pass 1: stack=[], remove={13}
+Pass 2: skip index 13.
+Result: "lee(t(c)o)de"
+```
+
+```
+s = "))(("
+i=0 ')': stack empty, remove.add(0).  stack=[]
+i=1 ')': stack empty, remove.add(1).  stack=[]
+i=2 '(': push 2.   stack=[2]
+i=3 '(': push 3.   stack=[2,3]
+
+After pass 1: stack=[2,3], remove={0,1}
+remove.update([2,3]) -> remove={0,1,2,3}
+Pass 2: all skipped.
+Result: ""
+```
+
+## Why store indices instead of characters
+
+The unmatched `')'` are identified immediately (no stack to pop). But unmatched `'('` are only known to be unmatched *after* the full scan: maybe a matching `')'` appears later. Storing the index lets us come back and mark them after the scan completes. Storing characters would lose position information.
+
+## Key takeaways
+
+- Stack of indices (not characters) is the right representation whenever you need to mark positions for removal after a full scan.
+- Unmatched `')'` (no opener on the stack) are caught in pass 1 immediately. Unmatched `'('` (stack still non-empty after pass 1) are caught by draining the stack into the remove set.
+- Using a set for `remove` gives O(1) lookup in pass 2.
+- Any valid answer is accepted, so the two-pass approach (remove minimum, keep order) always produces one correct answer.
+
+## Related topics
+
+- [Valid Parentheses](./020-valid-parentheses/), stack for matched-pair validation
+- [Remove All Adjacent Duplicates](./1047-remove-all-adjacent-duplicates/), stack for character cancellation
+- [Stacks](../../../data-structures/stacks/), underlying data structure

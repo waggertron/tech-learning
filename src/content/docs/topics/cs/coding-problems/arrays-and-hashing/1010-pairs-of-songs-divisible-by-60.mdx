@@ -1,0 +1,134 @@
+---
+title: "1010. Pairs of Songs With Total Durations Divisible by 60 (Medium)"
+description: "Count pairs of songs whose combined duration is divisible by 60."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, hash-tables, math, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './1010-pairs-of-songs-divisible-by-60.py?raw';
+
+## Problem
+
+You are given a list of song durations in seconds. Count the number of pairs `(i, j)` where `i < j` and `(time[i] + time[j]) % 60 == 0`.
+
+**Example**
+- `time = [30,20,150,100,40]` → `3`
+  - `(30, 150)`: 30 + 150 = 180 = 3 * 60
+  - `(20, 100)`: 20 + 100 = 120 = 2 * 60
+  - `(20, 40)`: 20 + 40 = 60 = 1 * 60
+- `time = [60,60,60]` → `3` (all three pairs work, since 60 + 60 = 120)
+
+LeetCode 1010 · [Link](https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="pairs-of-songs-divisible-by-60" />
+
+## The key insight: Two Sum mod 60
+
+This problem is structurally identical to [Two Sum](./001-two-sum/). Instead of looking for `a + b == target`, we look for `(a + b) % 60 == 0`. That means we need `b % 60 == (60 - a % 60) % 60`.
+
+The `% 60` wrapper around `(60 - a % 60)` handles the edge case where `a % 60 == 0`: `60 - 0 = 60`, which we wrap back to `0` (since a multiple of 60 pairs with another multiple of 60).
+
+## Approach: Remainder frequency map
+
+For each song, compute its remainder mod 60. Look up how many previously seen songs have the complementary remainder. Then record this song's remainder.
+
+```python
+def num_pairs_divisible_by60(time: list[int]) -> int:
+    remainders = [0] * 60          # L1: O(1), at most 60 distinct remainders
+    result = 0                     # L2: O(1)
+    for t in time:                 # L3: loop, n iterations
+        complement = (60 - t % 60) % 60   # L4: O(1) compute complement remainder
+        result += remainders[complement]  # L5: O(1) lookup
+        remainders[t % 60] += 1          # L6: O(1) record this song's remainder
+    return result                  # L7: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(time).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init array) | O(1) | 1 | O(1) |
+| L2 (init result) | O(1) | 1 | O(1) |
+| **L3 (loop)** | **O(1) body** | **n** | **O(n)** ← dominates |
+| L4 (mod + complement) | O(1) | n | O(n) |
+| L5 (array lookup) | O(1) | n | O(n) |
+| L6 (array update) | O(1) | n | O(n) |
+| L7 (return) | O(1) | 1 | O(1) |
+
+**Complexity**
+- **Time:** O(n), driven by L3-L6 (single pass, all operations O(1)).
+- **Space:** O(1). The `remainders` array is always exactly 60 entries regardless of `n`.
+
+## Why record after looking up?
+
+The order matters: we look up `complement` first, then record the current song. This ensures we only count pairs `(i, j)` with `i < j`, because when we process song `j`, we have only recorded songs `0` through `j-1`.
+
+If we recorded first and then looked up, we might count a song as its own pair partner.
+
+## Worked example
+
+`time = [30, 20, 150, 100, 40]`
+
+```
+remainders = [0]*60, result = 0
+
+t=30:  complement = (60-30)%60 = 30
+       result += remainders[30] = 0   -> result=0
+       remainders[30] += 1            -> remainders[30]=1
+
+t=20:  complement = (60-20)%60 = 40
+       result += remainders[40] = 0   -> result=0
+       remainders[20] += 1
+
+t=150: 150%60 = 30, complement = (60-30)%60 = 30
+       result += remainders[30] = 1   -> result=1   (pair: 30+150=180)
+       remainders[30] += 1            -> remainders[30]=2
+
+t=100: 100%60 = 40, complement = (60-40)%60 = 20
+       result += remainders[20] = 1   -> result=2   (pair: 20+100=120)
+       remainders[40] += 1
+
+t=40:  complement = (60-40)%60 = 20
+       result += remainders[20] = 1   -> result=3   (pair: 20+40=60)
+       remainders[40] += 1
+
+return 3
+```
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_1010.py and run.
+
+def num_pairs_divisible_by60(time: list[int]) -> int:
+    remainders = [0] * 60
+    result = 0
+    for t in time:
+        complement = (60 - t % 60) % 60
+        result += remainders[complement]
+        remainders[t % 60] += 1
+    return result
+
+def _run_tests():
+    assert num_pairs_divisible_by60([30,20,150,100,40]) == 3
+    assert num_pairs_divisible_by60([60,60,60]) == 3
+    assert num_pairs_divisible_by60([10,50,90,30]) == 2
+    assert num_pairs_divisible_by60([1]) == 0
+    assert num_pairs_divisible_by60([60]) == 0   # single song, no pairs
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Two Sum](./001-two-sum/), the same "store what you've seen, look up the complement" pattern applied to modular arithmetic

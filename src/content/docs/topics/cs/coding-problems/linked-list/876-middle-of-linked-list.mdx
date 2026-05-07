@@ -1,0 +1,164 @@
+---
+title: "876. Middle of the Linked List (Easy)"
+description: "Return the middle node of a linked list; if two middles exist, return the second one."
+parent: linked-list
+tags: [leetcode, linked-list, two-pointers, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './876-middle-of-linked-list.py?raw';
+
+## Problem
+
+Given the head of a singly linked list, return the middle node. If there are two middle nodes (even-length list), return the second middle node.
+
+**Example**
+- `head = [1,2,3,4,5]` → node `3` (middle of 5 nodes)
+- `head = [1,2,3,4,5,6]` → node `4` (second of the two middle nodes)
+
+LeetCode 876 · [Link](https://leetcode.com/problems/middle-of-the-linked-list/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="middle-of-linked-list" />
+
+## Approach 1: Brute force, two passes
+
+First pass: count nodes. Second pass: walk to the middle index.
+
+```python
+def middle_node(head):
+    n, cur = 0, head
+    while cur:                         # L1: O(n) count
+        n += 1
+        cur = cur.next
+    cur = head
+    for _ in range(n // 2):           # L2: O(n/2) walk to middle
+        cur = cur.next
+    return cur
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (count pass)** | **O(1)** | **n** | **O(n)** |
+| L2 (walk to middle) | O(1) | n/2 | O(n) |
+
+**Complexity**
+- **Time:** O(n), two passes
+- **Space:** O(1)
+
+Correct but walks the list twice.
+
+## Approach 2: Slow and fast pointers (optimal)
+
+`slow` advances one step per iteration; `fast` advances two. When `fast` reaches the end of the list, `slow` is at the middle. For even-length lists, `fast` runs off the end after the second-to-last node, leaving `slow` at the second middle (which is what the problem requires).
+
+```python
+def middle_node(head):
+    slow = fast = head
+    while fast and fast.next:          # L1: fast needs current and next node
+        slow = slow.next              # L2: O(1) advance slow by 1
+        fast = fast.next.next         # L3: O(1) advance fast by 2
+    return slow                        # L4: slow is at the middle
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop guard) | O(1) | n/2 | O(n) |
+| **L2/L3 (advance pointers)** | **O(1)** | **n/2** | **O(n)** ← dominates |
+| L4 (return) | O(1) | 1 | O(1) |
+
+The loop runs exactly floor(n/2) times (for odd n) or n/2 times (for even n). One pass, constant space.
+
+**Complexity**
+- **Time:** O(n), driven by L2/L3 (one pass with two pointers).
+- **Space:** O(1).
+
+### Step-by-step trace
+
+```
+[1, 2, 3, 4, 5]  (odd, n=5)
+
+Start:   slow=1, fast=1
+Step 1:  slow=2, fast=3
+Step 2:  slow=3, fast=5
+fast.next is None -> exit
+Return slow = node(3)  correct: middle of 5
+
+[1, 2, 3, 4, 5, 6]  (even, n=6)
+
+Start:   slow=1, fast=1
+Step 1:  slow=2, fast=3
+Step 2:  slow=3, fast=5
+Step 3:  slow=4, fast=None (fast.next.next)
+fast is None -> exit
+Return slow = node(4)  correct: second middle of 6
+```
+
+## Key takeaways
+
+- The 2:1 speed ratio means slow travels half the distance fast travels. When fast hits the end, slow is at the midpoint.
+- The loop condition `fast and fast.next` guards against two scenarios: `fast` is `None` (even-length list just exhausted) and `fast.next` is `None` (odd-length list at last node, about to overrun).
+- This pattern is the first half of Reorder List (143), which finds the middle, reverses the second half, and interleaves.
+
+## Test cases
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def to_list(head):
+    out = []
+    while head:
+        out.append(head.val)
+        head = head.next
+    return out
+
+def from_list(vals):
+    dummy = ListNode()
+    cur = dummy
+    for v in vals:
+        cur.next = ListNode(v)
+        cur = cur.next
+    return dummy.next
+
+def middle_node(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow
+
+def _run_tests():
+    # Odd length: middle is the true center
+    assert middle_node(from_list([1, 2, 3, 4, 5])).val == 3
+    # Even length: second middle
+    assert middle_node(from_list([1, 2, 3, 4, 5, 6])).val == 4
+    # Two nodes: second node is the middle
+    assert middle_node(from_list([1, 2])).val == 2
+    # Single node
+    assert middle_node(from_list([1])).val == 1
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [141. Linked List Cycle](./141-linked-list-cycle/), Floyd's slow/fast pointer for cycle detection
+- [143. Reorder List](./143-reorder-list/), uses middle-finding as its first step
+- [206. Reverse Linked List](./206-reverse-linked-list/), pointer fundamentals

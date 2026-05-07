@@ -1,0 +1,155 @@
+---
+title: "162. Find Peak Element (Medium)"
+description: "Find any index where the element is strictly greater than its neighbors, in O(log n) time."
+parent: binary-search
+tags: [leetcode, binary-search, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './162-find-peak-element.py?raw';
+
+## Problem
+
+A peak element is an element that is strictly greater than its neighbors. Given a 0-indexed integer array `nums`, find a peak element and return its index. If the array contains multiple peaks, return the index of any one of them.
+
+You may assume `nums[-1] = nums[n] = -infinity`, meaning the first and last elements only need to beat one neighbor.
+
+The algorithm must run in O(log n) time.
+
+**Example**
+- `nums = [1,2,3,1]` → `2` (element 3 is greater than both neighbors)
+- `nums = [1,2,1,3,5,6,4]` → `1` or `5` (either peak is acceptable)
+
+LeetCode 162 · [Link](https://leetcode.com/problems/find-peak-element/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="find-peak-element" />
+
+## Approach 1: Brute force, linear scan
+
+Walk left to right and return the first index where `nums[i] > nums[i+1]` (a local descent). The element at `i` must be higher than both neighbors because we only get here if `nums[i-1] < nums[i]` (we didn't stop earlier).
+
+```python
+def find_peak_element(nums: list[int]) -> int:
+    for i in range(len(nums) - 1):         # L1: scan left to right
+        if nums[i] > nums[i + 1]:          # L2: O(1) compare
+            return i
+    return len(nums) - 1                   # L3: last element is a peak
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1/L2 (linear scan)** | **O(1)** | **up to n-1** | **O(n)** ← dominates |
+| L3 (fallback) | O(1) | at most 1 | O(1) |
+
+**Complexity**
+- **Time:** O(n)
+- **Space:** O(1)
+
+Correct but fails the O(log n) requirement.
+
+## Approach 2: Binary search on slope direction (optimal)
+
+Key insight: if `nums[mid] < nums[mid + 1]`, the slope is rising to the right, so a peak must exist in `[mid+1, hi]`. If `nums[mid] > nums[mid + 1]`, the slope is falling to the right (or `mid` itself is a peak), so a peak exists in `[lo, mid]`. Binary search on this condition converges to a peak in O(log n) steps.
+
+```python
+def find_peak_element(nums: list[int]) -> int:
+    lo, hi = 0, len(nums) - 1
+    while lo < hi:                              # L1: loop until lo == hi (one element)
+        mid = (lo + hi) // 2                   # L2: O(1) midpoint
+        if nums[mid] < nums[mid + 1]:          # L3: O(1) slope check
+            lo = mid + 1                        # L4: peak is to the right
+        else:
+            hi = mid                            # L5: peak is at mid or left
+    return lo                                   # L6: lo == hi, this is a peak
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop guard) | O(1) | log n | O(log n) |
+| **L2/L3 (midpoint + compare)** | **O(1)** | **log n** | **O(log n)** ← dominates |
+| L4 or L5 (narrow) | O(1) | log n | O(log n) |
+| L6 (return) | O(1) | 1 | O(1) |
+
+Each iteration halves the search space. After log2(n) iterations, lo == hi and we have found a peak.
+
+**Complexity**
+- **Time:** O(log n), driven by L1 (log n loop iterations, O(1) work each).
+- **Space:** O(1).
+
+### Why `hi = mid` not `hi = mid - 1`
+
+When `nums[mid] >= nums[mid + 1]`, `mid` itself could be the peak, so we keep it in the search window. Using `hi = mid - 1` would discard a valid answer. Using `lo < hi` (strict) as the loop condition ensures we exit when lo and hi converge rather than crossing.
+
+### Visualizing the invariant
+
+```
+nums = [1, 2, 1, 3, 5, 6, 4]
+         0  1  2  3  4  5  6
+
+Step 1: lo=0, hi=6, mid=3, nums[3]=3, nums[4]=5 -> 3 < 5, so lo=4
+Step 2: lo=4, hi=6, mid=5, nums[5]=6, nums[6]=4 -> 6 > 4, so hi=5
+Step 3: lo=4, hi=5, mid=4, nums[4]=5, nums[5]=6 -> 5 < 6, so lo=5
+Step 4: lo=5 == hi=5, return 5 (nums[5]=6 is a peak)
+```
+
+## Key takeaways
+
+- Any array has at least one peak given the -infinity boundary conditions; binary search is guaranteed to find one.
+- The slope direction check (`nums[mid] < nums[mid + 1]`) tells you which half must contain a peak without knowing where the peak is.
+- Use `lo < hi` (not `lo <= hi`) with `hi = mid` (not `hi = mid - 1`) to avoid infinite loops and premature exclusion of `mid`.
+
+## Test cases
+
+```python
+def find_peak_element(nums: list[int]) -> int:
+    lo, hi = 0, len(nums) - 1
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if nums[mid] < nums[mid + 1]:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo
+
+def _run_tests():
+    # Single peak on the right
+    result = find_peak_element([1, 2, 3, 1])
+    assert result == 2, result
+
+    # Multiple peaks, accept any valid one
+    result = find_peak_element([1, 2, 1, 3, 5, 6, 4])
+    assert result in (1, 5), result
+
+    # Single element is always a peak
+    assert find_peak_element([1]) == 0
+
+    # Strictly ascending: last element is a peak
+    assert find_peak_element([1, 2, 3]) == 2
+
+    # Strictly descending: first element is a peak
+    assert find_peak_element([3, 2, 1]) == 0
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [33. Search in Rotated Sorted Array](./033-search-in-rotated-sorted-array/), binary search using slope/sorted-half reasoning
+- [153. Find Minimum in Rotated Sorted Array](./153-find-minimum-in-rotated-sorted-array/), similar invariant-based binary search
+- [704. Binary Search](./704-binary-search/), canonical binary search template

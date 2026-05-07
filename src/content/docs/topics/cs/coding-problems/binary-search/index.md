@@ -23,8 +23,9 @@ Binary search is deceptively simple: halve the search space using a comparison. 
 3. [875. Koko Eating Bananas (Medium)](./875-koko-eating-bananas/)
 4. [153. Find Minimum in Rotated Sorted Array (Medium)](./153-find-minimum-in-rotated-sorted-array/)
 5. [33. Search in Rotated Sorted Array (Medium)](./033-search-in-rotated-sorted-array/)
-6. [981. Time Based Key-Value Store (Medium)](./981-time-based-key-value-store/)
-7. [4. Median of Two Sorted Arrays (Hard)](./004-median-of-two-sorted-arrays/)
+6. [162. Find Peak Element (Medium)](./162-find-peak-element/)
+7. [981. Time Based Key-Value Store (Medium)](./981-time-based-key-value-store/)
+8. [4. Median of Two Sorted Arrays (Hard)](./004-median-of-two-sorted-arrays/)
 
 ## Key patterns unlocked here
 

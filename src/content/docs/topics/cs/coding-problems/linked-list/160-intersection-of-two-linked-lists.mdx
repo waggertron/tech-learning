@@ -1,0 +1,153 @@
+---
+title: "160. Intersection of Two Linked Lists (Easy)"
+description: "Find the node where two singly linked lists first intersect, or return null if they do not."
+parent: linked-list
+tags: [leetcode, linked-list, two-pointers, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './160-intersection-of-two-linked-lists.py?raw';
+
+## Problem
+
+Given the heads of two singly linked lists, return the node at which the two lists intersect. If the two lists have no intersection, return `None`. The lists must remain structurally intact after the function returns.
+
+**Example**
+- `listA = [4,1,8,4,5]`, `listB = [5,6,1,8,4,5]`, intersect at node with val `8` → node `8`
+- `listA = [2,6,4]`, `listB = [1,5]`, no intersection → `None`
+
+LeetCode 160 · [Link](https://leetcode.com/problems/intersection-of-two-linked-lists/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="intersection-of-two-linked-lists" />
+
+## Approach 1: Brute force, hash set of visited nodes
+
+Walk list A and store every node object in a set. Walk list B and return the first node found in the set.
+
+```python
+def get_intersection_node(headA, headB):
+    visited = set()
+    cur = headA
+    while cur:                    # L1: O(m) walk list A
+        visited.add(cur)          # L2: O(1) store node reference
+        cur = cur.next
+    cur = headB
+    while cur:                    # L3: O(n) walk list B
+        if cur in visited:        # L4: O(1) set lookup
+            return cur
+        cur = cur.next
+    return None
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(listA), n = len(listB).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1/L2 (walk A)** | **O(1)** | **m** | **O(m)** |
+| **L3/L4 (walk B)** | **O(1)** | **n** | **O(n)** |
+
+**Complexity**
+- **Time:** O(m + n)
+- **Space:** O(m) for the visited set
+
+Correct but uses O(m) extra memory.
+
+## Approach 2: Two pointers, equal-distance trick (optimal)
+
+Two pointers `pA` and `pB` start at `headA` and `headB`. When either reaches the end of its list, redirect it to the other list's head. They meet at the intersection after at most m + n steps.
+
+Why it works: if the lists intersect, `pA` travels `a + c + b` total steps and `pB` travels `b + c + a` total steps (where `a` = len of A before shared tail, `b` = len of B before shared tail, `c` = shared tail length). Both totals equal `a + b + c`, so they arrive at the intersection simultaneously.
+
+If there is no intersection, both pointers reach `None` at the same time (each having traveled `a + b` steps), ending the loop.
+
+```python
+def get_intersection_node(headA, headB):
+    pA, pB = headA, headB
+    while pA is not pB:              # L1: loop until equal (both None, or shared node)
+        pA = pA.next if pA else headB  # L2: O(1) advance; redirect at end
+        pB = pB.next if pB else headA  # L3: O(1) advance; redirect at end
+    return pA                         # L4: intersection node, or None
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(listA), n = len(listB).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop guard) | O(1) | at most m+n | O(m+n) |
+| **L2/L3 (advance + redirect)** | **O(1)** | **at most m+n** | **O(m+n)** ← dominates |
+| L4 (return) | O(1) | 1 | O(1) |
+
+**Complexity**
+- **Time:** O(m + n), each pointer traverses at most m + n nodes before meeting.
+- **Space:** O(1).
+
+### Path diagram
+
+```
+List A: a1 -> a2 -> c1 -> c2 -> c3
+List B:       b1 -> b2 -> b3 -> c1 -> c2 -> c3
+
+pA path: a1, a2, c1, c2, c3, b1, b2, b3, [c1]  <- meet here
+pB path: b1, b2, b3, c1, c2, c3, a1, a2, [c1]  <- meet here
+```
+
+Both pointers travel 8 steps (a=2, b=3, c=3: 2+3+3=8) before landing on c1 simultaneously.
+
+## Key takeaways
+
+- The trick is that both pointers travel the same total distance (m + n) regardless of where the intersection is.
+- No length calculation needed; the redirect handles the alignment automatically.
+- The `pA is not pB` check works for the no-intersection case: both pointers become `None` at step m + n and the loop exits.
+
+## Test cases
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def get_intersection_node(headA, headB):
+    pA, pB = headA, headB
+    while pA is not pB:
+        pA = pA.next if pA else headB
+        pB = pB.next if pB else headA
+    return pA
+
+def _run_tests():
+    # Shared tail: A=[4,1,8,4,5], B=[5,6,1,8,4,5], intersect at 8
+    shared = ListNode(8, ListNode(4, ListNode(5)))
+    headA = ListNode(4, ListNode(1, shared))
+    headB = ListNode(5, ListNode(6, ListNode(1, shared)))
+    assert get_intersection_node(headA, headB) is shared
+
+    # No intersection
+    a = ListNode(2, ListNode(6, ListNode(4)))
+    b = ListNode(1, ListNode(5))
+    assert get_intersection_node(a, b) is None
+
+    # Both empty
+    assert get_intersection_node(None, None) is None
+
+    # One empty
+    assert get_intersection_node(ListNode(1), None) is None
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [141. Linked List Cycle](./141-linked-list-cycle/), another two-pointer trick on linked lists
+- [206. Reverse Linked List](./206-reverse-linked-list/), pointer fundamentals

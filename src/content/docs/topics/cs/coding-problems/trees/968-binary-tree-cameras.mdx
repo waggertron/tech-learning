@@ -1,0 +1,210 @@
+---
+title: "968. Binary Tree Cameras (Hard)"
+description: "Place the minimum number of cameras on tree nodes to cover every node. A camera covers its parent, itself, and its immediate children."
+parent: trees
+tags: [leetcode, trees, greedy, hard]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './968-binary-tree-cameras.py?raw';
+
+## Problem
+
+Given a binary tree, place cameras on some nodes. A camera at node `u` monitors `u`, its parent, and its immediate children. Return the **minimum** number of cameras needed to monitor all nodes.
+
+**Example**
+- `root = [0,0,null,0,0]` → `1` (camera on root covers all)
+- `root = [0,0,null,0,null,0,null,null,0]` → `2`
+
+LeetCode 968 · [Link](https://leetcode.com/problems/binary-tree-cameras/) · *Hard*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="binary-tree-cameras" />
+
+## Approach: Greedy post-order DFS
+
+**Key insight:** cameras are most efficient when placed as high as possible. Leaves almost never need cameras since placing a camera on a leaf only covers the leaf and its parent -- placing it on the parent covers the parent, the leaf, and the sibling too. So we delay placing cameras until forced.
+
+Process nodes bottom-up (post-order). Each node returns one of three states:
+
+```
+0 = not covered (needs a camera from its parent)
+1 = has a camera (covers parent, self, children)
+2 = covered (no camera, but some child has one)
+```
+
+**Decision rules at each node:**
+
+```
+if any child is 0 (not covered):
+    place camera here -> return 1
+
+elif any child is 1 (has camera, so this node is covered):
+    return 2
+
+else (all children are 2, covered but no camera):
+    return 0  (uncovered, let parent handle it)
+```
+
+After the DFS, if the root returns 0, add one more camera at the root.
+
+```python
+def min_camera_cover(root):
+    cameras = 0                                # L1: O(1) counter
+
+    def dfs(node):
+        nonlocal cameras
+        if not node:                           # L2: null nodes are trivially covered
+            return 2
+        left = dfs(node.left)                  # L3: O(1) dispatch
+        right = dfs(node.right)                # L4: O(1) dispatch
+        if left == 0 or right == 0:            # L5: a child needs coverage
+            cameras += 1                       # L6: O(1) place camera here
+            return 1
+        if left == 1 or right == 1:            # L7: a child has camera, covers this node
+            return 2
+        return 0                               # L8: children covered, but not this node
+
+    if dfs(root) == 0:                         # L9: root uncovered, place one camera
+        cameras += 1
+    return cameras
+```
+
+**Why null nodes return 2 (covered):** Null is not a real node and does not need coverage. If we returned 0, every leaf would place a camera -- that is too eager. Returning 2 lets leaves return 0 (not covered), which pushes camera placement up to the leaf's parent where it covers more nodes.
+
+**Where the time goes, line by line**
+
+*Variables: n = number of nodes, h = tree height.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init counter) | O(1) | 1 | O(1) |
+| L2 (null base case) | O(1) | up to n+1 | O(n) |
+| **L3/L4 (recurse)** | **O(1) dispatch** | **n** | **O(n)** ← dominates |
+| L5/L6 (place camera) | O(1) | n | O(n) |
+| L7/L8 (return state) | O(1) | n | O(n) |
+| L9 (root check) | O(1) | 1 | O(1) |
+
+Each node is visited exactly once. Every decision is O(1) based on two child states. No memoization needed since we process bottom-up with no revisits.
+
+**Complexity**
+- **Time:** O(n). Each node visited once in post-order, driven by L3/L4.
+- **Space:** O(h) for the recursion stack.
+
+### Trace on `[0,0,null,0,0]`
+
+```
+        A
+       /
+      B
+     / \
+    C   D
+```
+
+```
+dfs(C) -> no children -> left=2, right=2 -> return 0  (not covered)
+dfs(D) -> no children -> left=2, right=2 -> return 0  (not covered)
+dfs(B) -> left=0 (C not covered) -> place camera! cameras=1, return 1
+dfs(A) -> left=1 (B has camera) -> return 2  (A is covered by B)
+root returns 2 -> no extra camera
+Answer: 1
+```
+
+### Trace on `[0,0,null,0,null,0,null,null,0]`
+
+```
+        A
+       /
+      B
+     /
+    C
+   /
+  D
+   \
+    E
+```
+
+```
+dfs(E) -> return 0
+dfs(D) -> left=2, right=0 -> place camera! cameras=1, return 1
+dfs(C) -> left=1 -> return 2
+dfs(B) -> left=2, right=2 -> return 0  (not covered!)
+dfs(A) -> left=0 -> place camera! cameras=2, return 1
+root returns 1 -> no extra camera
+Answer: 2
+```
+
+## Summary
+
+| Strategy | Cameras placed | Why |
+| --- | --- | --- |
+| Camera on every leaf | O(n/2) | Too many, leaves have little coverage |
+| Camera on every parent of leaf | Optimal or near | Covers leaf, sibling, parent itself |
+| **Greedy post-order DFS** | **Minimum** | **Forces delay until unavoidable** |
+
+The greedy works because tree structure is acyclic: once we commit to a post-order decision it cannot invalidate earlier decisions (no back edges).
+
+## Test cases
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build_tree(vals):
+    if not vals: return None
+    root = TreeNode(vals[0])
+    q = [root]
+    i = 1
+    while q and i < len(vals):
+        node = q.pop(0)
+        if i < len(vals) and vals[i] is not None:
+            node.left = TreeNode(vals[i])
+            q.append(node.left)
+        i += 1
+        if i < len(vals) and vals[i] is not None:
+            node.right = TreeNode(vals[i])
+            q.append(node.right)
+        i += 1
+    return root
+
+def min_camera_cover(root):
+    cameras = 0
+    def dfs(node):
+        nonlocal cameras
+        if not node:
+            return 2
+        left = dfs(node.left)
+        right = dfs(node.right)
+        if left == 0 or right == 0:
+            cameras += 1
+            return 1
+        if left == 1 or right == 1:
+            return 2
+        return 0
+    if dfs(root) == 0:
+        cameras += 1
+    return cameras
+
+def _run_tests():
+    assert min_camera_cover(build_tree([0, 0, None, 0, 0])) == 1
+    assert min_camera_cover(build_tree([0, 0, None, 0, None, 0, None, None, 0])) == 2
+    assert min_camera_cover(build_tree([0])) == 1
+    assert min_camera_cover(build_tree([0, 0])) == 1
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [House Robber III](./337-house-robber-iii/), post-order DFS with per-node state
+- [Validate BST](./098-validate-binary-search-tree/), post-order pattern on trees
+- [Binary Tree Maximum Path Sum](./124-binary-tree-maximum-path-sum/), DFS returning local info to parent

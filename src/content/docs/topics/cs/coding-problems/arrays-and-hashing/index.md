@@ -17,12 +17,13 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 1. [217. Contains Duplicate (Easy)](./217-contains-duplicate/)
 2. [242. Valid Anagram (Easy)](./242-valid-anagram/)
 3. [1. Two Sum (Easy)](./001-two-sum/)
-4. [49. Group Anagrams (Medium)](./049-group-anagrams/)
-5. [347. Top K Frequent Elements (Medium)](./347-top-k-frequent-elements/)
-6. [238. Product of Array Except Self (Medium)](./238-product-of-array-except-self/)
-7. [36. Valid Sudoku (Medium)](./036-valid-sudoku/)
-8. [271. Encode and Decode Strings (Medium)](./271-encode-and-decode-strings/) (LC premium, also appears as #659)
-9. [128. Longest Consecutive Sequence (Medium)](./128-longest-consecutive-sequence/)
+4. [303. Range Sum Query - Immutable (Easy)](./303-range-sum-query-immutable/)
+5. [49. Group Anagrams (Medium)](./049-group-anagrams/)
+6. [347. Top K Frequent Elements (Medium)](./347-top-k-frequent-elements/)
+7. [238. Product of Array Except Self (Medium)](./238-product-of-array-except-self/)
+8. [36. Valid Sudoku (Medium)](./036-valid-sudoku/)
+9. [271. Encode and Decode Strings (Medium)](./271-encode-and-decode-strings/) (LC premium, also appears as #659)
+10. [128. Longest Consecutive Sequence (Medium)](./128-longest-consecutive-sequence/)
 
 ## Key patterns unlocked here
 

@@ -1,0 +1,90 @@
+---
+title: "349. Intersection of Two Arrays (Easy)"
+description: "Return an array of unique elements that appear in both input arrays."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, hash-tables, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './349-intersection-of-two-arrays.py?raw';
+
+## Problem
+
+Given two integer arrays `nums1` and `nums2`, return an array of their intersection. Each element in the result must be **unique**, and you may return the result in any order.
+
+**Example**
+- `nums1 = [1,2,2,1]`, `nums2 = [2,2]` → `[2]`
+- `nums1 = [4,9,5]`, `nums2 = [9,4,9,8,4]` → `[9,4]`
+
+LeetCode 349 · [Link](https://leetcode.com/problems/intersection-of-two-arrays/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="intersection-of-two-arrays" />
+
+## Approach: Set intersection
+
+Convert both arrays to sets (deduplication in O(n)), then compute the intersection using Python's `&` operator.
+
+```python
+def intersection(nums1: list[int], nums2: list[int]) -> list[int]:
+    s1 = set(nums1)          # L1: O(m) build set from nums1
+    s2 = set(nums2)          # L2: O(n) build set from nums2
+    return list(s1 & s2)     # L3: O(min(m, n)) intersection, O(k) list convert
+```
+
+Or collapsed to one line (equivalent, same complexity):
+
+```python
+def intersection(nums1: list[int], nums2: list[int]) -> list[int]:
+    return list(set(nums1) & set(nums2))
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = len(nums1), n = len(nums2), k = size of intersection.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (set(nums1))** | **O(m)** | **1** | **O(m)** |
+| **L2 (set(nums2))** | **O(n)** | **1** | **O(n)** |
+| L3 (intersection + list) | O(min(m, n)) | 1 | O(min(m, n)) |
+
+Building both sets dominates. The `&` operation iterates the smaller set and checks membership in the larger (hash lookup, O(1) average per element).
+
+**Complexity**
+- **Time:** O(m + n), driven by L1/L2 (constructing the two sets).
+- **Space:** O(m + n) in the worst case, storing both sets plus the result.
+
+## Why sets work here
+
+The problem says each element in the result must be unique. Sets enforce uniqueness automatically: `set([2,2])` is `{2}`. The `&` operator then finds common elements across two sets of distinct values, so no deduplication is needed on the output.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_349.py and run.
+
+def intersection(nums1: list[int], nums2: list[int]) -> list[int]:
+    return list(set(nums1) & set(nums2))
+
+def _run_tests():
+    assert sorted(intersection([1,2,2,1], [2,2])) == [2]
+    assert sorted(intersection([4,9,5], [9,4,9,8,4])) == [4, 9]
+    assert intersection([1,2,3], [4,5,6]) == []
+    assert sorted(intersection([1,1,1], [1,1,1])) == [1]
+    assert sorted(intersection([1,2,3,4,5], [3,4,5,6,7])) == [3, 4, 5]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Two Sum](./001-two-sum/), set/hash-map pattern for complement lookup
+- [Contains Duplicate](./217-contains-duplicate/), single-set membership check
+- [Group Anagrams](./049-group-anagrams/), grouping elements by a hash key

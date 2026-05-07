@@ -1,0 +1,138 @@
+---
+title: "542. 01 Matrix (Medium)"
+description: "Return a matrix of distances to the nearest 0 for each cell in a binary matrix."
+parent: graphs
+tags: [leetcode, graphs, bfs, matrix, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './542-01-matrix.py?raw';
+
+## Problem
+
+Given an `m x n` binary matrix `mat`, return a matrix of the same size where each cell contains the distance to the nearest `0`. Distance is measured as the number of steps (4-directional, no diagonals).
+
+**Example**
+- `mat = [[0,0,0],[0,1,0],[0,0,0]]` → `[[0,0,0],[0,1,0],[0,0,0]]`
+- `mat = [[0,0,0],[0,1,0],[1,1,1]]` → `[[0,0,0],[0,1,0],[1,2,1]]`
+
+LeetCode 542 · [Link](https://leetcode.com/problems/01-matrix/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="01-matrix" />
+
+## Approach: Multi-source BFS from all zeros simultaneously
+
+The key insight is to seed the BFS queue with every `0` cell at distance 0, then expand outward. Because BFS explores by distance levels, the first time a `1` cell is reached it has the shortest possible distance to any `0`. Running a separate BFS from each `0` would be O((m*n)^2) in the worst case; seeding all zeros at once keeps it O(m*n).
+
+```python
+from collections import deque
+
+def update_matrix(mat):
+    rows, cols = len(mat), len(mat[0])                     # L1: grid dimensions
+    dist = [[float('inf')] * cols for _ in range(rows)]   # L2: O(m*n) distance matrix
+    q = deque()
+
+    for r in range(rows):                                  # L3: seed queue with all 0-cells
+        for c in range(cols):
+            if mat[r][c] == 0:
+                dist[r][c] = 0                             # L4: O(1) distance for 0-cells
+                q.append((r, c))                           # L5: O(1) enqueue
+
+    while q:                                               # L6: BFS main loop
+        r, c = q.popleft()                                 # L7: O(1) dequeue
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == float('inf'):
+                dist[nr][nc] = dist[r][c] + 1             # L8: O(1) update distance
+                q.append((nr, nc))                         # L9: O(1) enqueue neighbor
+
+    return dist                                            # L10: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: m = grid rows, n = grid cols.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init dist) | O(1) per cell | m * n | O(m * n) |
+| L3 (seed scan) | O(1) per cell | m * n | O(m * n) |
+| L5 (enqueue 0-cells) | O(1) | up to m * n | O(m * n) |
+| **L7 (dequeue)** | **O(1)** | **once per cell** | **O(m * n) ← dominates** |
+| L8 (update dist) | O(1) | once per 1-cell | O(m * n) |
+| **L9 (enqueue)** | **O(1)** | **once per 1-cell** | **O(m * n) ← dominates** |
+
+Each cell enters the queue at most once (the `dist == inf` guard in the neighbor check prevents re-enqueueing). The seed scan in L3 and the BFS body in L6 together visit every cell a constant number of times.
+
+**Complexity**
+- **Time:** O(m * n), driven by L7/L9 (each cell enqueued and dequeued at most once).
+- **Space:** O(m * n) for the distance matrix (L2) and worst-case queue size.
+
+### Why multi-source BFS works
+
+Treat all `0` cells as a single virtual source at distance 0. BFS explores in shells: all cells at distance 1 before distance 2, etc. The first time any `1` cell is dequeued, its recorded distance is the true shortest path to the nearest `0`. This is the same principle as Rotting Oranges (994) and Walls and Gates (286).
+
+## Summary
+
+| Approach | Time | Space | Notes |
+| --- | --- | --- | --- |
+| BFS from each 0 separately | O((m * n)^2) | O(m * n) | Too slow |
+| **Multi-source BFS** | **O(m * n)** | **O(m * n)** | **Canonical** |
+
+## Test cases
+
+```python
+from collections import deque
+
+def update_matrix(mat):
+    rows, cols = len(mat), len(mat[0])
+    dist = [[float('inf')] * cols for _ in range(rows)]
+    q = deque()
+    for r in range(rows):
+        for c in range(cols):
+            if mat[r][c] == 0:
+                dist[r][c] = 0
+                q.append((r, c))
+    while q:
+        r, c = q.popleft()
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] == float('inf'):
+                dist[nr][nc] = dist[r][c] + 1
+                q.append((nr, nc))
+    return dist
+
+
+def _run_tests():
+    # Example 1: center 1-cell is distance 1 from any neighbor
+    assert update_matrix([[0,0,0],[0,1,0],[0,0,0]]) == [[0,0,0],[0,1,0],[0,0,0]]
+
+    # Example 2: bottom row has no 0, distances computed correctly
+    assert update_matrix([[0,0,0],[0,1,0],[1,1,1]]) == [[0,0,0],[0,1,0],[1,2,1]]
+
+    # Edge: all zeros
+    assert update_matrix([[0,0],[0,0]]) == [[0,0],[0,0]]
+
+    # Edge: single zero
+    assert update_matrix([[0]]) == [[0]]
+
+    # Edge: single one surrounded by zeros
+    assert update_matrix([[0,0,0],[0,0,0],[0,0,1]]) == [[0,0,0],[0,0,0],[0,0,1]]
+
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Number of Islands](./200-number-of-islands/), same BFS-on-grid template
+- [Shortest Path in Binary Matrix](./1091-shortest-path-in-binary-matrix/), BFS shortest path through 0-cells
+- [Rotting Oranges](./994-rotting-oranges/), multi-source BFS spreading pattern

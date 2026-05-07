@@ -1,0 +1,143 @@
+---
+title: "459. Repeated Substring Pattern (Easy)"
+description: "Check whether a string can be constructed by repeating one of its substrings multiple times."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, strings, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './459-repeated-substring-pattern.py?raw';
+
+## Problem
+
+Given a string `s`, return `True` if it can be constructed by taking a substring of it and appending multiple copies of the substring together. Return `False` otherwise.
+
+**Example**
+- `s = "abab"` → `True` (`"ab"` repeated twice)
+- `s = "aba"` → `False`
+- `s = "abcabcabcabc"` → `True` (`"abc"` repeated four times)
+
+LeetCode 459 · [Link](https://leetcode.com/problems/repeated-substring-pattern/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="repeated-substring-pattern" />
+
+## Approach 1: Try all divisor lengths
+
+A repeated pattern of length `p` can only work if `p` divides `n = len(s)`. Try every valid period length and check.
+
+```python
+def repeated_substring_pattern(s: str) -> bool:
+    n = len(s)                                   # L1: O(1)
+    for p in range(1, n // 2 + 1):              # L2: loop, n/2 iterations
+        if n % p != 0:                           # L3: O(1) divisibility check
+            continue
+        if s[:p] * (n // p) == s:               # L4: O(n) build + compare
+            return True                          # L5: O(1)
+    return False                                 # L6: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (length) | O(1) | 1 | O(1) |
+| L2 (loop) | O(1) | n/2 | O(n) |
+| L3 (mod check) | O(1) | n/2 | O(n) |
+| **L4 (build + compare)** | **O(n)** | **up to n/2** | **O(n^2)** ← dominates |
+| L5, L6 (returns) | O(1) | 1 | O(1) |
+
+The string construction `s[:p] * (n // p)` allocates and fills a string of length `n`, then the `==` comparison scans all `n` characters. Done at up to n/2 positions, that is O(n^2) total.
+
+**Complexity**
+- **Time:** O(n^2), driven by L4 (the O(n) build-and-compare inside an O(n) loop).
+- **Space:** O(n) for the constructed candidate string at each step.
+
+## Approach 2: The (s + s)[1:-1] trick
+
+If `s` is built from a repeating pattern, then doubling it (`s + s`) and removing the first and last characters still contains `s` somewhere in the middle. If `s` is *not* a repeated pattern, removing those boundary characters breaks any interior copy.
+
+```python
+def repeated_substring_pattern(s: str) -> bool:
+    doubled = (s + s)[1:-1]    # L1: O(n) concatenate and slice
+    return s in doubled         # L2: O(n) substring search
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (s + s then slice)** | **O(n)** | **1** | **O(n)** |
+| **L2 (substring search)** | **O(n)** | **1** | **O(n)** ← dominates |
+
+Python's `in` operator for strings uses an optimized search (similar to Boyer-Moore-Horspool). Both lines are O(n).
+
+**Complexity**
+- **Time:** O(n), driven by L1/L2 (linear string operations).
+- **Space:** O(n) for `doubled`.
+
+### Why this works
+
+Suppose `s = "abab"` (pattern `"ab"` repeated twice).
+
+```
+s + s = "abababab"
+(s + s)[1:-1] = "bababab"
+
+Does "abab" appear in "bababab"? Yes, at index 1.
+```
+
+Now suppose `s = "aba"` (not a repeated pattern):
+
+```
+s + s = "abaaba"
+(s + s)[1:-1] = "baab"
+
+Does "aba" appear in "baab"? No. Correctly returns False.
+```
+
+Removing the first character breaks the leading copy of `s`; removing the last breaks the trailing copy. Any remaining occurrence of `s` must be an internal one, which only exists when `s` is genuinely periodic.
+
+Note: with KMP for the substring search inside L2, the full algorithm is O(n) with no hidden constant. See [KMP](../../../named-algorithms/kmp/) for details.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Try all divisors | O(n^2) | O(n) |
+| **(s+s)[1:-1] trick** | **O(n)** | O(n) |
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_459.py and run.
+# Uses Approach 2.
+
+def repeated_substring_pattern(s: str) -> bool:
+    return s in (s + s)[1:-1]
+
+def _run_tests():
+    assert repeated_substring_pattern("abab") == True
+    assert repeated_substring_pattern("aba") == False
+    assert repeated_substring_pattern("abcabcabcabc") == True
+    assert repeated_substring_pattern("a") == False
+    assert repeated_substring_pattern("aa") == True
+    assert repeated_substring_pattern("abaaba") == True
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [KMP algorithm](../../../named-algorithms/kmp/), O(n) substring search used inside approach 2
+- [Find the Index of the First Occurrence in a String](../sliding-window/028-find-the-index-of-the-first-occurrence/), substring search problem

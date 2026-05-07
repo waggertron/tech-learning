@@ -1,0 +1,160 @@
+---
+title: "303. Range Sum Query - Immutable (Easy)"
+description: "Precompute prefix sums so each range-sum query over a fixed array runs in O(1)."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, prefix-sum, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './303-range-sum-query-immutable.py?raw';
+
+## Problem
+
+Given an integer array `nums`, handle multiple queries of the form `sumRange(left, right)`, which returns the sum of elements between indices `left` and `right` inclusive. The array does not change after initialization, and `sumRange` may be called many times.
+
+**Example**
+
+```
+nums = [-2, 0, 3, -5, 2, -1]
+sumRange(0, 2) ->  1   (-2 + 0 + 3)
+sumRange(2, 5) -> -1   (3 + -5 + 2 + -1)
+sumRange(0, 5) -> -3   (-2 + 0 + 3 + -5 + 2 + -1)
+```
+
+LeetCode 303 · [Link](https://leetcode.com/problems/range-sum-query-immutable/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="range-sum-query-immutable" />
+
+## Approach 1: Brute force, sum on every query
+
+Sum `nums[left..right]` from scratch on each query call.
+
+```python
+class NumArray:
+    def __init__(self, nums: list[int]):
+        self.nums = nums                             # L1: O(n) store
+
+    def sum_range(self, left: int, right: int) -> int:
+        return sum(self.nums[left:right + 1])        # L2: O(n) per query
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), q = number of queries.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (store) | O(n) | 1 | O(n) build |
+| **L2 (sum slice)** | **O(n)** | **q** | **O(q * n)** ← dominates for many queries |
+
+**Complexity**
+- **Build:** O(n)
+- **Query:** O(n) per call, O(q * n) total
+- **Space:** O(n)
+
+Adequate for one or two queries, but each additional query costs another O(n) pass.
+
+## Approach 2: Prefix sums (optimal)
+
+Build a prefix array `prefix` of length n + 1 where `prefix[i]` = sum of `nums[0..i-1]` (i.e., `prefix[0] = 0`). Then:
+
+```
+sumRange(l, r) = prefix[r + 1] - prefix[l]
+```
+
+This works because `prefix[r+1]` is the sum of the first `r+1` elements, and subtracting `prefix[l]` removes the first `l` elements, leaving exactly `nums[l..r]`.
+
+```python
+class NumArray:
+    def __init__(self, nums: list[int]):
+        self.prefix = [0] * (len(nums) + 1)          # L1: O(n) allocate
+        for i, v in enumerate(nums):                  # L2: O(n) build prefix
+            self.prefix[i + 1] = self.prefix[i] + v  # L3: O(1) per step
+
+    def sum_range(self, left: int, right: int) -> int:
+        return self.prefix[right + 1] - self.prefix[left]  # L4: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), q = number of queries.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (allocate) | O(n) | 1 | O(n) |
+| **L2/L3 (build prefix)** | **O(1)** | **n** | **O(n)** ← build dominates |
+| **L4 (query)** | **O(1)** | **q** | **O(q)** ← query is O(1) each |
+
+**Complexity**
+- **Build:** O(n), driven by L2/L3.
+- **Query:** O(1), driven by L4 (single subtraction).
+- **Space:** O(n) for the prefix array.
+
+### Prefix array walkthrough
+
+```
+nums   = [-2,  0,  3, -5,  2, -1]
+index     0    1   2   3   4   5
+
+prefix[0] = 0
+prefix[1] = 0 + (-2) = -2
+prefix[2] = -2 + 0   = -2
+prefix[3] = -2 + 3   =  1
+prefix[4] = 1 + (-5) = -4
+prefix[5] = -4 + 2   = -2
+prefix[6] = -2 + (-1)= -3
+
+sumRange(0, 2) = prefix[3] - prefix[0] = 1 - 0 = 1
+sumRange(2, 5) = prefix[6] - prefix[2] = -3 - (-2) = -1
+sumRange(0, 5) = prefix[6] - prefix[0] = -3 - 0 = -3
+```
+
+## Key takeaways
+
+- The prefix array is 1-indexed (length n + 1, first element 0) to avoid the special case `left == 0`.
+- The formula `prefix[r+1] - prefix[l]` handles any valid `[l, r]` including `l == 0` and `r == n-1`.
+- Prefix sums appear in dozens of other problems: subarray sum equals k (560), range sum in a 2D matrix (304), and as a building block in many DP formulations.
+- The pattern generalizes: replace sum with XOR, product, or any associative invertible operation.
+
+## Test cases
+
+```python
+class NumArray:
+    def __init__(self, nums: list[int]):
+        self.prefix = [0] * (len(nums) + 1)
+        for i, v in enumerate(nums):
+            self.prefix[i + 1] = self.prefix[i] + v
+
+    def sum_range(self, left: int, right: int) -> int:
+        return self.prefix[right + 1] - self.prefix[left]
+
+def _run_tests():
+    na = NumArray([-2, 0, 3, -5, 2, -1])
+    assert na.sum_range(0, 2) == 1
+    assert na.sum_range(2, 5) == -1
+    assert na.sum_range(0, 5) == -3
+
+    # Single element
+    na2 = NumArray([5])
+    assert na2.sum_range(0, 0) == 5
+
+    # All negative
+    na3 = NumArray([-1, -2, -3])
+    assert na3.sum_range(0, 2) == -6
+    assert na3.sum_range(1, 2) == -5
+
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [238. Product of Array Except Self](./238-product-of-array-except-self/), prefix and suffix products; closely related pattern
+- [128. Longest Consecutive Sequence](./128-longest-consecutive-sequence/), array preprocessing for efficient lookups

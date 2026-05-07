@@ -1,0 +1,165 @@
+---
+title: "886. Possible Bipartition (Medium)"
+description: "Determine if n people can be split into two groups where no two people who dislike each other are in the same group."
+parent: graphs
+tags: [leetcode, graphs, bfs, bipartite, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './886-possible-bipartition.py?raw';
+
+## Problem
+
+Given `n` people (labeled `1` to `n`) and a list of dislikes where `dislikes[i] = [a, b]` means person `a` and person `b` cannot be in the same group, determine if it is possible to split everyone into two groups such that no two people who dislike each other are in the same group.
+
+**Example**
+- `n = 4, dislikes = [[1,2],[1,3],[2,4]]` → `True` (group A: {1,4}, group B: {2,3})
+- `n = 3, dislikes = [[1,2],[1,3],[2,3]]` → `False` (triangle: 1,2,3 all dislike each other)
+- `n = 5, dislikes = [[1,2],[2,3],[3,4],[4,5],[1,5]]` → `False` (odd cycle of length 5)
+
+LeetCode 886 · [Link](https://leetcode.com/problems/possible-bipartition/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="possible-bipartition" />
+
+## Approach: Build dislikes graph, then check bipartiteness
+
+This is exactly the bipartite check from problem 785, applied to the dislikes relationship. Two people who dislike each other must be in different groups, which is the same constraint as "adjacent nodes must have different colors." So: build an undirected graph from `dislikes`, then run BFS 2-coloring.
+
+```python
+from collections import defaultdict, deque
+
+def possible_bipartition(n, dislikes):
+    graph = defaultdict(list)                              # L1: O(e) adjacency list
+    for a, b in dislikes:                                  # L2: O(e) build undirected graph
+        graph[a].append(b)                                 # L3: O(1) edge a->b
+        graph[b].append(a)                                 # L4: O(1) edge b->a
+
+    color = {}                                             # L5: person -> color (0 or 1)
+
+    for start in range(1, n + 1):                          # L6: handle disconnected components
+        if start in color:
+            continue                                       # L7: skip already-colored nodes
+        color[start] = 0                                   # L8: O(1) seed color
+        q = deque([start])                                 # L9: O(1) seed queue
+
+        while q:                                           # L10: BFS loop
+            person = q.popleft()                           # L11: O(1) dequeue
+            for neighbor in graph[person]:                 # L12: O(deg) check neighbors
+                if neighbor not in color:
+                    color[neighbor] = 1 - color[person]   # L13: O(1) assign opposite color
+                    q.append(neighbor)                     # L14: O(1) enqueue
+                elif color[neighbor] == color[person]:
+                    return False                           # L15: O(1) conflict, odd cycle
+
+    return True                                            # L16: O(1) no conflict found
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = number of people, e = number of dislikes pairs.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (build graph) | O(1) per edge | e | O(e) |
+| L6 (outer loop) | O(1) | n | O(n) |
+| **L11 (dequeue)** | **O(1)** | **once per person** | **O(n)** |
+| **L12 (neighbor scan)** | **O(deg)** | **once per person** | **O(n + e) ← dominates** |
+| L13, L14 (color + enqueue) | O(1) | once per unvisited neighbor | O(n) |
+
+Each person is dequeued at most once (L13 only fires when `neighbor not in color`). Each dislike edge is examined twice (once from each endpoint), so L12 totals O(e) across the full BFS.
+
+**Complexity**
+- **Time:** O(n + e), driven by L12 (each edge examined twice, each node dequeued once).
+- **Space:** O(n + e) for the adjacency list (L1) and color map (L5).
+
+### Connection to 785
+
+This problem is structurally identical to [Is Graph Bipartite? (785)](./785-is-graph-bipartite/). The only difference is the graph representation: 785 gives an adjacency list directly, while 886 gives an edge list that you must convert first. The BFS 2-coloring logic is unchanged.
+
+```
+Dislikes: [[1,2],[1,3],[2,4]]
+
+Graph built (undirected):
+  1 -- 2
+  |    |
+  3    4
+
+BFS from 1: color[1]=0, color[2]=1, color[3]=1
+  from 2: color[4]=0
+  Check: no conflicts -> True
+  Groups: {1,4} vs {2,3}
+```
+
+## Summary
+
+| Step | Cost |
+| --- | --- |
+| Build adjacency list | O(e) |
+| BFS 2-coloring | O(n + e) |
+| **Total** | **O(n + e)** |
+
+## Test cases
+
+```python
+from collections import defaultdict, deque
+
+def possible_bipartition(n, dislikes):
+    graph = defaultdict(list)
+    for a, b in dislikes:
+        graph[a].append(b)
+        graph[b].append(a)
+
+    color = {}
+
+    for start in range(1, n + 1):
+        if start in color:
+            continue
+        color[start] = 0
+        q = deque([start])
+        while q:
+            person = q.popleft()
+            for neighbor in graph[person]:
+                if neighbor not in color:
+                    color[neighbor] = 1 - color[person]
+                    q.append(neighbor)
+                elif color[neighbor] == color[person]:
+                    return False
+
+    return True
+
+
+def _run_tests():
+    # Example 1: possible split
+    assert possible_bipartition(4, [[1,2],[1,3],[2,4]]) == True
+
+    # Example 2: triangle, impossible
+    assert possible_bipartition(3, [[1,2],[1,3],[2,3]]) == False
+
+    # Example 3: odd cycle of 5
+    assert possible_bipartition(5, [[1,2],[2,3],[3,4],[4,5],[1,5]]) == False
+
+    # No dislikes: trivially possible
+    assert possible_bipartition(4, []) == True
+
+    # Two isolated groups that are each bipartite
+    assert possible_bipartition(4, [[1,2],[3,4]]) == True
+
+    # Single person
+    assert possible_bipartition(1, []) == True
+
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Is Graph Bipartite?](./785-is-graph-bipartite/), identical algorithm on a directly given adjacency list
+- [Number of Provinces](./547-number-of-provinces/), connected components with DFS/Union-Find

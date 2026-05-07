@@ -1,0 +1,219 @@
+---
+title: "1489. Find Critical and Pseudo-Critical Edges in MST (Hard)"
+description: "Classify edges of a weighted undirected graph as critical (removal increases MST weight) or pseudo-critical (in some MST but not all). Uses Kruskal with Union-Find."
+parent: advanced-graphs
+tags: [leetcode, advanced-graphs, minimum-spanning-tree, hard]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './1489-critical-and-pseudo-critical-edges.py?raw';
+
+## Problem
+
+Given a weighted undirected connected graph with `n` nodes and `edges[i] = [u, v, weight]`, find:
+
+1. **Critical edges**: removing the edge increases the MST weight (or disconnects the graph).
+2. **Pseudo-critical edges**: the edge appears in at least one MST but not in every MST.
+
+Return `[critical_list, pseudo_critical_list]` as lists of original edge indices.
+
+**Example**
+- `n=5`, edges: `[0,1,1],[1,2,1],[2,3,2],[0,3,2],[0,4,3],[3,4,3],[1,4,6]`
+- Critical: `[0,1]` (edges with weight 1)
+- Pseudo-critical: `[2,3,4,5]` (any of the weight-2 or weight-3 edges can be swapped)
+
+LeetCode 1489 · [Link](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/) · *Hard*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="critical-and-pseudo-critical-edges" />
+
+## Background: Kruskal's algorithm and Union-Find
+
+Kruskal builds an MST by sorting edges by weight and greedily adding each edge if it doesn't form a cycle. Cycle detection uses Union-Find with path compression.
+
+```python
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))      # each node is its own root
+        self.rank = [0] * n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry:
+            return False                  # already same component, cycle!
+        if self.rank[rx] < self.rank[ry]:
+            rx, ry = ry, rx
+        self.parent[ry] = rx
+        if self.rank[rx] == self.rank[ry]:
+            self.rank[rx] += 1
+        return True                       # merged successfully
+```
+
+## Approach: Brute force per-edge classification
+
+For each edge `e` (indexed in sorted order), run two modified Kruskal passes:
+
+1. **Critical test:** build MST excluding `e`. If MST weight increases or graph disconnects, `e` is critical.
+2. **Pseudo-critical test:** build MST forcing `e` in first. If the resulting MST weight equals the base MST weight, `e` is pseudo-critical.
+
+```python
+def find_critical_and_pseudo_critical_edges(n, edges):
+    # attach original indices before sorting
+    indexed = [(w, u, v, i) for i, (u, v, w) in enumerate(edges)]  # L1: O(E)
+    indexed.sort()                                                   # L2: O(E log E)
+
+    def kruskal(n, edges, skip=-1, force=-1):                        # L3: helper
+        uf = UnionFind(n)
+        weight = 0
+        count = 0
+        if force != -1:                                              # L4: force edge in first
+            w, u, v, _ = edges[force]
+            uf.union(u, v)
+            weight += w
+            count += 1
+        for idx, (w, u, v, orig) in enumerate(edges):               # L5: O(E) Kruskal
+            if idx == skip:                                          # L6: skip this edge
+                continue
+            if uf.union(u, v):                                       # L7: no cycle
+                weight += w
+                count += 1
+        if count < n - 1:                                            # L8: disconnected
+            return float('inf')
+        return weight
+
+    base = kruskal(n, indexed)                                       # L9: O(E alpha(V))
+    critical = []
+    pseudo = []
+
+    for i in range(len(indexed)):                                    # L10: O(E) outer loop
+        # critical test: exclude edge i
+        if kruskal(n, indexed, skip=i) > base:                      # L11: O(E alpha(V))
+            critical.append(indexed[i][3])
+        # pseudo-critical test: force edge i
+        elif kruskal(n, indexed, force=i) == base:                  # L12: O(E alpha(V))
+            pseudo.append(indexed[i][3])
+
+    critical.sort()                                                  # L13: O(E log E)
+    pseudo.sort()
+    return [critical, pseudo]
+```
+
+**Where the time goes, line by line**
+
+*Variables: V = n (nodes), E = number of edges, alpha = inverse Ackermann (near-constant).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (index + sort) | O(E log E) | 1 | O(E log E) |
+| L9 (base Kruskal) | O(E alpha(V)) | 1 | O(E alpha(V)) |
+| **L10 (outer loop)** | O(1) | E | O(E) |
+| **L11/L12 (Kruskal calls)** | **O(E alpha(V))** | **2E** | **O(E^2 alpha(V))** ← dominates |
+| L13 (sort results) | O(E log E) | 1 | O(E log E) |
+
+For each of E edges, we run two O(E alpha(V)) Kruskal passes, giving O(E^2 alpha(V)) total. Since alpha(V) is effectively constant (< 5 for all practical inputs), this is essentially O(E^2).
+
+**Complexity**
+- **Time:** O(E^2 alpha(V)), driven by L11/L12 (two Kruskal passes per edge).
+- **Space:** O(V + E) for the Union-Find and edge list.
+
+### Why not O(E log E) for the whole problem?
+
+We run Kruskal O(E) times (once per edge, twice per test). Each Kruskal is O(E alpha(V)). There is no known algorithm better than O(E^2) for this problem in the general case, though matroid intersection theory can improve it in practice.
+
+### Classifying edge types visually
+
+```
+Sorted edges: [w=1, e0], [w=1, e1], [w=2, e2], [w=2, e3], [w=3, e4], [w=3, e5]
+
+Base MST picks e0, e1, then one of {e2, e3}, then one of {e4, e5}.
+Weight = 1+1+2+3 = 7.
+
+Test e0 (exclude): remaining edges can't achieve weight 7 -> CRITICAL.
+Test e2 (exclude): e3 steps in with same weight -> MST weight still 7.
+  Force e2 (include): MST weight = 7 -> PSEUDO-CRITICAL.
+```
+
+## Summary
+
+| Step | Operation | Purpose |
+| --- | --- | --- |
+| Sort edges | O(E log E) | Kruskal prerequisite |
+| Base MST | O(E alpha(V)) | Reference weight |
+| Critical test | Kruskal excluding edge | Weight increases? |
+| Pseudo-critical test | Kruskal forcing edge | Weight stays same? |
+
+The pattern: establish a baseline, then test each candidate by modifying the baseline construction. This same "remove one, rebuild" pattern appears in sensitivity analysis for many combinatorial optimization problems.
+
+## Test cases
+
+```python
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    def union(self, x, y):
+        rx, ry = self.find(x), self.find(y)
+        if rx == ry: return False
+        if self.rank[rx] < self.rank[ry]: rx, ry = ry, rx
+        self.parent[ry] = rx
+        if self.rank[rx] == self.rank[ry]: self.rank[rx] += 1
+        return True
+
+def find_critical_and_pseudo_critical_edges(n, edges):
+    indexed = [(w, u, v, i) for i, (u, v, w) in enumerate(edges)]
+    indexed.sort()
+
+    def kruskal(skip=-1, force=-1):
+        uf = UnionFind(n)
+        weight = 0
+        count = 0
+        if force != -1:
+            w, u, v, _ = indexed[force]
+            uf.union(u, v)
+            weight += w
+            count += 1
+        for idx, (w, u, v, orig) in enumerate(indexed):
+            if idx == skip: continue
+            if uf.union(u, v):
+                weight += w
+                count += 1
+        return float('inf') if count < n - 1 else weight
+
+    base = kruskal()
+    critical, pseudo = [], []
+    for i in range(len(indexed)):
+        if kruskal(skip=i) > base:
+            critical.append(indexed[i][3])
+        elif kruskal(force=i) == base:
+            pseudo.append(indexed[i][3])
+    critical.sort()
+    pseudo.sort()
+    return [critical, pseudo]
+
+def _run_tests():
+    assert find_critical_and_pseudo_critical_edges(5, [[0,1,1],[1,2,1],[2,3,2],[0,3,2],[0,4,3],[3,4,3],[1,4,6]]) == [[0,1],[2,3,4,5]]
+    assert find_critical_and_pseudo_critical_edges(4, [[0,1,1],[1,2,1],[2,3,1],[0,3,1]]) == [[],[0,1,2,3]]
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Critical Connections in a Network](./1192-critical-connections/), bridge-finding via Tarjan's algorithm
+- [Network Delay Time](./743-network-delay-time/), weighted graph shortest paths
+- [Min Cost to Connect All Points](./1584-min-cost-to-connect-all-points/), Kruskal/Prim for MST

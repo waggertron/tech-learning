@@ -1,0 +1,92 @@
+---
+title: "71. Simplify Path (Medium)"
+description: "Split a Unix path on slashes and use a stack to resolve dots and double-dots into a canonical path."
+parent: stack
+tags: [leetcode, stacks, strings, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './071-simplify-path.py?raw';
+
+## Problem
+
+Given a string `path` representing an absolute Unix file system path (starting with `'/'`), convert it to its simplified canonical form.
+
+The rules:
+- A single period `'.'` refers to the current directory (no change).
+- A double period `'..'` moves up one level (pop the stack if non-empty).
+- Multiple consecutive slashes are treated as one.
+- Any other component is a valid directory name and gets pushed.
+
+The result must start with `'/'` and must not end with `'/'` (unless it is the root itself).
+
+**Examples**
+- `"/home/"` → `"/home"`
+- `"/home//foo/"` → `"/home/foo"`
+- `"/home/user/Documents/../Pictures"` → `"/home/user/Pictures"`
+- `"/../"` → `"/"` (cannot go above root)
+- `"/a/./b/../../c/"` → `"/c"`
+
+LeetCode 71 · [Link](https://leetcode.com/problems/simplify-path/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="simplify-path" />
+
+## Approach 1: Split on slash, stack for components
+
+Split the path on `'/'` to get individual components. For each component:
+- Skip empty strings (consecutive slashes or leading/trailing slash produce these).
+- Skip `'.'` (current directory, no movement).
+- On `'..'`, pop the top of the stack if non-empty (move up one level).
+- Anything else is a directory name: push it.
+
+Join the stack with `'/'` and prepend `'/'` for the result.
+
+```python
+def simplify_path(path: str) -> str:
+    parts = path.split("/")          # L1: O(n) split into components
+    stack = []                       # L2: O(1) init
+    for part in parts:               # L3: iterate each component
+        if not part or part == ".":  # L4: skip empty string and current-dir dot
+            continue
+        elif part == "..":           # L5: go up one level
+            if stack:                # L6: O(1) non-empty check
+                stack.pop()          # L7: O(1) amortized pop
+        else:
+            stack.append(part)       # L8: O(1) push directory name
+    return "/" + "/".join(stack)     # L9: O(n) join result
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(path), k = number of components after splitting.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (split) | O(n) | 1 | O(n) |
+| L3 (loop) | O(1) | k | O(k) |
+| **L4-L8 (per-component stack ops)** | **O(1)** | **k** | **O(k)** |
+| L9 (join) | O(n) | 1 | O(n) |
+
+k is at most n (each char could be its own component), so both O(k) terms collapse into O(n).
+
+**Complexity**
+- **Time:** O(n), driven by the split and join (L1, L9).
+- **Space:** O(n) for the stack and parts list.
+
+## Key takeaways
+
+- Split on `'/'` first: it handles all slash-count variants in one step. No need to manually scan.
+- Empty string components come from leading `'/'`, trailing `'/'`, and multiple consecutive slashes; ignoring them is the cleanest way to handle all three cases at once.
+- The `'..'` rule only pops if the stack is non-empty: attempting to go above root is silently ignored, matching Unix behavior.
+- Joining with `'/'` and prepending a single `'/'` handles the root case (`stack == []` gives `"/" + "" == "/"`).
+
+## Related topics
+
+- [Valid Parentheses](./020-valid-parentheses/), another stack-as-pending-context problem
+- [Decode String](./394-decode-string/), nested structure resolved with a stack
+- [Stacks](../../../data-structures/stacks/), underlying data structure

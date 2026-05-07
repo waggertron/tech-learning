@@ -1,0 +1,126 @@
+---
+title: "454. 4Sum II (Medium)"
+description: "Count tuples (i,j,k,l) such that the sum of one element from each of four arrays equals zero."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, hash-tables, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './454-4sum-ii.py?raw';
+
+## Problem
+
+Given four integer arrays `nums1`, `nums2`, `nums3`, and `nums4`, all of length `n`, return the number of tuples `(i, j, k, l)` such that:
+
+```
+nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
+```
+
+**Example**
+- `nums1 = [1,2]`, `nums2 = [-2,-1]`, `nums3 = [-1,2]`, `nums4 = [0,2]` → `2`
+  - Tuples: `(0,0,0,0)` gives `1 + (-2) + (-1) + 0 = -2` ... working out: `(0,1,0,0)` and `(1,0,0,0)` are the two valid ones.
+- `nums1 = [0]`, `nums2 = [0]`, `nums3 = [0]`, `nums4 = [0]` → `1`
+
+LeetCode 454 · [Link](https://leetcode.com/problems/4sum-ii/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="4sum-ii" />
+
+## Approach 1: Brute force (four nested loops)
+
+Try every combination of one element from each array.
+
+```python
+def four_sum_count(nums1, nums2, nums3, nums4):
+    count = 0
+    for a in nums1:
+        for b in nums2:
+            for c in nums3:
+                for d in nums4:
+                    if a + b + c + d == 0:
+                        count += 1
+    return count
+```
+
+**Complexity:** O(n^4) time, O(1) space. Completely impractical for n > 50.
+
+## Approach 2: Hash map on pairwise sums (optimal)
+
+Split the four arrays into two pairs. Enumerate all `a + b` sums from `nums1` and `nums2` and store them in a frequency map. Then for each `c + d` from `nums3` and `nums4`, check whether `-(c + d)` exists in the map. If so, add its count to the result.
+
+```python
+from collections import defaultdict
+
+def four_sum_count(nums1: list[int], nums2: list[int],
+                   nums3: list[int], nums4: list[int]) -> int:
+    ab_counts = defaultdict(int)              # L1: O(1)
+    for a in nums1:                           # L2: outer loop, n iterations
+        for b in nums2:                       # L3: inner loop, n iterations
+            ab_counts[a + b] += 1            # L4: O(1) hash insert/update
+    result = 0                                # L5: O(1)
+    for c in nums3:                           # L6: outer loop, n iterations
+        for d in nums4:                       # L7: inner loop, n iterations
+            result += ab_counts[-(c + d)]    # L8: O(1) hash lookup
+    return result                             # L9: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len of each array.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init map) | O(1) | 1 | O(1) |
+| L2 (outer loop) | O(1) | n | O(n) |
+| **L3, L4 (inner loop + insert)** | **O(1)** | **n^2** | **O(n^2)** ← dominates first half |
+| L5 (init result) | O(1) | 1 | O(1) |
+| L6 (outer loop) | O(1) | n | O(n) |
+| **L7, L8 (inner loop + lookup)** | **O(1)** | **n^2** | **O(n^2)** ← dominates second half |
+| L9 (return) | O(1) | 1 | O(1) |
+
+Two separate O(n^2) passes rather than one O(n^4). The hash map bridges the two halves.
+
+**Complexity**
+- **Time:** O(n^2), driven by L3/L4 and L7/L8 (two double-loops over n * n pairs each).
+- **Space:** O(n^2). The map stores at most n^2 distinct `a + b` sums.
+
+## Why split 4 into 2+2?
+
+Brute force is O(n^4). Splitting into two pairs brings that to O(n^2) + O(n^2) = O(n^2). This is the same "meet in the middle" idea used in many combinatorial problems: hashing half the work lets you look it up instead of re-computing it.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_454.py and run.
+
+from collections import defaultdict
+
+def four_sum_count(nums1, nums2, nums3, nums4):
+    ab_counts = defaultdict(int)
+    for a in nums1:
+        for b in nums2:
+            ab_counts[a + b] += 1
+    result = 0
+    for c in nums3:
+        for d in nums4:
+            result += ab_counts[-(c + d)]
+    return result
+
+def _run_tests():
+    assert four_sum_count([1,2], [-2,-1], [-1,2], [0,2]) == 2
+    assert four_sum_count([0], [0], [0], [0]) == 1
+    assert four_sum_count([-1,-1], [-1,1], [-1,1], [1,-1]) == 6
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Two Sum](./001-two-sum/), the same "store what you've seen, look up the complement" pattern
+- [3Sum](../two-pointers/015-3sum/), three-array variant using two pointers

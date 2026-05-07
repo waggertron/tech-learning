@@ -1,0 +1,166 @@
+---
+title: "1091. Shortest Path in Binary Matrix (Medium)"
+description: "Return the length of the shortest clear path from top-left to bottom-right in a binary grid, or -1 if none exists."
+parent: graphs
+tags: [leetcode, graphs, bfs, matrix, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './1091-shortest-path-in-binary-matrix.py?raw';
+
+## Problem
+
+Given an `n x n` binary grid, a clear path goes from the top-left cell `(0, 0)` to the bottom-right cell `(n-1, n-1)` through cells with value `0`, moving in any of 8 directions (including diagonals). The length of the path is the number of cells visited. Return the length of the shortest clear path, or `-1` if no such path exists.
+
+**Example**
+- `grid = [[0,1],[1,0]]` → `2` (path: (0,0) -> (1,1))
+- `grid = [[0,0,0],[1,1,0],[1,1,0]]` → `4` (path: (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2), length 4... wait, that's 5. Correct: (0,0)->(0,1)->(0,2)->(1,2) is 4 cells -- but (2,2) isn't reached. Path: (0,0)->(0,1)->(1,2)->(2,2) = 4 cells.)
+- `grid = [[1,0,0],[1,1,0],[1,1,0]]` → `-1` (start blocked)
+
+LeetCode 1091 · [Link](https://leetcode.com/problems/shortest-path-in-binary-matrix/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="shortest-path-in-binary-matrix" />
+
+## Approach: BFS from top-left, 8 directions
+
+BFS guarantees the first time we reach the destination, it is via the shortest path. Mark cells as visited by setting `grid[r][c] = 1` in place to avoid a separate visited set. Return -1 immediately if the start or end is blocked.
+
+```python
+from collections import deque
+
+def shortest_path_binary_matrix(grid):
+    n = len(grid)                                              # L1: grid is n x n
+    if grid[0][0] == 1 or grid[n-1][n-1] == 1:
+        return -1                                              # L2: O(1) start or end blocked
+
+    if n == 1:
+        return 1                                               # L3: O(1) single cell
+
+    q = deque([(0, 0, 1)])                                     # L4: O(1) seed (row, col, dist)
+    grid[0][0] = 1                                             # L5: O(1) mark start visited
+
+    DIRS = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]  # L6: 8 directions
+
+    while q:                                                   # L7: BFS loop
+        r, c, dist = q.popleft()                               # L8: O(1) dequeue
+        for dr, dc in DIRS:                                    # L9: O(1) per direction (8 total)
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 0:
+                if nr == n - 1 and nc == n - 1:
+                    return dist + 1                            # L10: O(1) reached destination
+                grid[nr][nc] = 1                               # L11: O(1) mark visited
+                q.append((nr, nc, dist + 1))                  # L12: O(1) enqueue
+
+    return -1                                                  # L13: O(1) destination unreachable
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = grid side length, so n^2 = total cells.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2, L3 (guards) | O(1) | 1 | O(1) |
+| L4 (seed queue) | O(1) | 1 | O(1) |
+| **L8 (dequeue)** | **O(1)** | **at most n^2** | **O(n^2)** |
+| **L9 (direction loop)** | **O(1) * 8** | **once per dequeued cell** | **O(n^2) ← dominates** |
+| L11 (mark visited) | O(1) | at most n^2 | O(n^2) |
+| L12 (enqueue) | O(1) | at most n^2 | O(n^2) |
+
+Each cell enters the queue at most once (L11 marks it visited before L12 enqueues it). The direction constant 8 is absorbed into the O notation.
+
+**Complexity**
+- **Time:** O(n^2), driven by L8/L9 (each cell dequeued at most once, 8 directions checked).
+- **Space:** O(n^2) queue worst case (all cells 0 and BFS frontier fills the grid).
+
+### Why in-place mutation for visited
+
+Setting `grid[nr][nc] = 1` at L11 serves as the visited marker. Without it, the same 0-cell could be enqueued multiple times from different neighbors, causing O(n^2 * 8) enqueue operations instead of O(n^2). Mark before enqueue, not after dequeue.
+
+### 8-direction vs 4-direction
+
+```
+4-direction (no diagonals):      8-direction (with diagonals):
+      N                              NW  N  NE
+      |                               \ | /
+  W --+-- E                        W --+-- E
+      |                               / | \
+      S                              SW  S  SE
+```
+
+This problem uses 8-direction movement. The neighbor formula adds `(-1,-1)` through `(1,1)` excluding `(0,0)`.
+
+## Summary
+
+| Approach | Time | Space | Notes |
+| --- | --- | --- | --- |
+| DFS | O(n^2) | O(n^2) | Does not guarantee shortest path |
+| **BFS** | **O(n^2)** | **O(n^2)** | **Canonical, guarantees shortest** |
+
+Always use BFS (not DFS) for shortest path on unweighted graphs.
+
+## Test cases
+
+```python
+from collections import deque
+
+def shortest_path_binary_matrix(grid):
+    n = len(grid)
+    if grid[0][0] == 1 or grid[n-1][n-1] == 1:
+        return -1
+    if n == 1:
+        return 1
+    q = deque([(0, 0, 1)])
+    grid[0][0] = 1
+    DIRS = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
+    while q:
+        r, c, dist = q.popleft()
+        for dr, dc in DIRS:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 0:
+                if nr == n - 1 and nc == n - 1:
+                    return dist + 1
+                grid[nr][nc] = 1
+                q.append((nr, nc, dist + 1))
+    return -1
+
+
+def _run_tests():
+    # Example 1: diagonal shortcut
+    assert shortest_path_binary_matrix([[0,1],[1,0]]) == 2
+
+    # Example 2: longer path
+    assert shortest_path_binary_matrix([[0,0,0],[1,1,0],[1,1,0]]) == 4
+
+    # Start blocked
+    assert shortest_path_binary_matrix([[1,0,0],[1,1,0],[1,1,0]]) == -1
+
+    # End blocked
+    assert shortest_path_binary_matrix([[0,0,0],[0,0,0],[0,0,1]]) == -1
+
+    # Single clear cell
+    assert shortest_path_binary_matrix([[0]]) == 1
+
+    # Single blocked cell
+    assert shortest_path_binary_matrix([[1]]) == -1
+
+    # All clear 2x2: path length 2 (diagonal)
+    assert shortest_path_binary_matrix([[0,0],[0,0]]) == 2
+
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [01 Matrix](./542-01-matrix/), multi-source BFS on a binary grid for distances
+- [Number of Islands](./200-number-of-islands/), BFS-on-grid component template
+- [Rotting Oranges](./994-rotting-oranges/), multi-source BFS spreading on a grid

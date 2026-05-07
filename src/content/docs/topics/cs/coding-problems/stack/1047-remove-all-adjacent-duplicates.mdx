@@ -1,0 +1,121 @@
+---
+title: "1047. Remove All Adjacent Duplicates In String (Easy)"
+description: "Push characters onto a stack and cancel each one against the top if they match, leaving no adjacent duplicates in the result."
+parent: stack
+tags: [leetcode, stacks, strings, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './1047-remove-all-adjacent-duplicates.py?raw';
+
+## Problem
+
+Given a string `s`, repeatedly remove all adjacent duplicate pairs until no more adjacent duplicates exist. Return the final string.
+
+Adjacent duplicate removal is applied to the entire string simultaneously on each pass (like popping bubbles). The order of removal does not matter: the result is always unique.
+
+**Examples**
+- `"abbaca"` → `"ca"`
+  - Remove `bb`: `"aaca"`
+  - Remove `aa`: `"ca"`
+- `"azxxzy"` → `"ay"`
+  - Remove `xx`: `"azzy"`
+  - Remove `zz`: `"ay"`
+
+LeetCode 1047 · [Link](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="remove-all-adjacent-duplicates" />
+
+## Approach 1: Repeated scanning
+
+Scan the string repeatedly, removing any adjacent duplicate pair on each pass. Stop when no pair is found.
+
+```python
+def remove_duplicates(s: str) -> str:
+    changed = True
+    while changed:                           # L1: up to n/2 passes
+        changed = False
+        result = []
+        i = 0
+        while i < len(s):                   # L2: O(n) per pass
+            if i + 1 < len(s) and s[i] == s[i + 1]:  # L3: O(1) compare
+                i += 2                      # L4: skip the pair
+                changed = True
+            else:
+                result.append(s[i])
+                i += 1
+        s = "".join(result)                 # L5: O(n) join
+    return s
+```
+
+**Complexity**
+- **Time:** O(n²), up to n/2 passes each taking O(n).
+- **Space:** O(n) for result buffer.
+
+## Approach 2: Stack cancel (optimal)
+
+Process each character once. If the stack is non-empty and the top equals the current character, they cancel (pop). Otherwise push. The stack accumulates the surviving characters in order.
+
+```python
+def remove_duplicates(s: str) -> str:
+    stack = []                               # L1: O(1) init
+    for ch in s:                             # L2: n iterations
+        if stack and stack[-1] == ch:        # L3: O(1) compare top
+            stack.pop()                      # L4: O(1) cancel pair
+        else:
+            stack.append(ch)                 # L5: O(1) no match, push
+    return "".join(stack)                    # L6: O(n) join survivors
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (loop) | O(1) | n | O(n) |
+| **L3-L5 (compare + push/pop)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L6 (join) | O(n) | 1 | O(n) |
+
+Each character is pushed once and popped at most once. Total: O(n).
+
+**Complexity**
+- **Time:** O(n), one pass with O(1) per character.
+- **Space:** O(n) for the stack (at most n characters survive).
+
+## Why one pass is enough
+
+The multi-pass intuition is that removing one pair might expose a new adjacent pair. The stack handles this automatically: after a pop, the new top of the stack is now adjacent to the next character to process. If they match, the next iteration catches it immediately.
+
+```
+s = "azxxzy"
+
+Push a:  stack = ['a']
+Push z:  stack = ['a','z']
+Push x:  stack = ['a','z','x']
+Push x:  top='x' == 'x', pop.          stack = ['a','z']
+Push z:  top='z' == 'z', pop.          stack = ['a']
+Push y:  stack = ['a','y']
+
+Result: "ay"
+```
+
+The two `z` characters only became adjacent *after* the `xx` pair was removed. The stack handles this in the same pass because popping `xx` immediately puts `z` at the top.
+
+## Key takeaways
+
+- The stack simulates all cascading removals in a single pass. Each pop is equivalent to one full pass of the naive approach.
+- The pattern (push; if top equals current, pop instead) appears in several string cancellation problems.
+- `"".join(stack)` at the end is O(n); calling it inside the loop would make the approach quadratic.
+- This is the building block for the harder variant (1209. Remove All Adjacent Duplicates in String II), where k-length runs are removed.
+
+## Related topics
+
+- [Valid Parentheses](./020-valid-parentheses/), stack for matched-pair cancellation
+- [Minimum Remove to Make Valid Parentheses](./1249-minimum-remove-valid-parens/), stack tracks indices for removal
+- [Stacks](../../../data-structures/stacks/), underlying data structure

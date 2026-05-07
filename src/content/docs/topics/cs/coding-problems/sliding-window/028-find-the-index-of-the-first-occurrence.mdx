@@ -1,0 +1,116 @@
+---
+title: "28. Find the Index of the First Occurrence in a String (Easy)"
+description: "Given strings haystack and needle, return the index of the first occurrence of needle in haystack, or -1 if not found."
+parent: sliding-window
+tags: [leetcode, sliding-window, strings, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './028-find-the-index-of-the-first-occurrence.py?raw';
+
+## Problem
+
+Given two strings `haystack` and `needle`, return the index of the first occurrence of `needle` in `haystack`, or `-1` if `needle` is not part of `haystack`.
+
+**Example**
+- `haystack = "sadbutsad"`, `needle = "sad"` → `0`
+- `haystack = "leetcode"`, `needle = "leeto"` → `-1`
+- `haystack = "hello"`, `needle = "ll"` → `2`
+
+LeetCode 28 · [Link](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="find-the-index-of-the-first-occurrence" />
+
+## Approach 1: Brute force sliding window
+
+Slide a window of length `len(needle)` one character at a time over `haystack`. At each position, compare the window against `needle`. Return the first position where they match.
+
+```python
+def str_str(haystack: str, needle: str) -> int:
+    n, m = len(haystack), len(needle)    # L1: O(1)
+    for i in range(n - m + 1):          # L2: loop, n-m+1 iterations
+        if haystack[i:i + m] == needle:  # L3: slice + compare, O(m) each
+            return i                     # L4: O(1) return
+    return -1                            # L5: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(haystack), m = len(needle).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (lengths) | O(1) | 1 | O(1) |
+| L2 (loop) | O(1) | n - m + 1 | O(n) |
+| **L3 (slice + compare)** | **O(m)** | **up to n - m + 1** | **O(n * m)** |
+| L4 (return) | O(1) | 1 | O(1) |
+| L5 (return -1) | O(1) | 1 | O(1) |
+
+The slice `haystack[i:i+m]` allocates a new string of length `m` and the `==` comparison scans up to `m` characters. Done at each of the ~n positions, that is O(n * m) total.
+
+**Complexity**
+- **Time:** O(n * m), driven by L3 (window comparison at every position).
+- **Space:** O(m) for the slice allocated at each step.
+
+## Approach 2: Python built-in (interview-acceptable)
+
+Python's `str.find()` uses an optimized algorithm under the hood (similar to Boyer-Moore-Horspool). In an interview, returning `haystack.find(needle)` is explicitly acceptable for this problem.
+
+```python
+def str_str(haystack: str, needle: str) -> int:
+    return haystack.find(needle)
+```
+
+This is O(n) in the average case and O(n * m) in the worst case, but the constant factor is far lower than a hand-rolled Python loop because the inner comparison runs in C.
+
+## Note on KMP
+
+The Knuth-Morris-Pratt algorithm solves this in O(n + m) time and O(m) space by precomputing a failure function over `needle` that allows the search to skip redundant comparisons. See [KMP](../../../named-algorithms/kmp/) for the full walkthrough.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Brute sliding window | O(n * m) | O(m) |
+| Python built-in | O(n) avg | O(1) |
+| KMP | O(n + m) | O(m) |
+
+The brute approach is the clearest to reason about and fine for small inputs. Use the built-in in Python interviews unless the interviewer specifically asks for the algorithm. KMP is the canonical O(n) solution.
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_028.py and run.
+# Uses the brute sliding window implementation.
+
+def str_str(haystack: str, needle: str) -> int:
+    n, m = len(haystack), len(needle)
+    for i in range(n - m + 1):
+        if haystack[i:i + m] == needle:
+            return i
+    return -1
+
+def _run_tests():
+    assert str_str("sadbutsad", "sad") == 0
+    assert str_str("leetcode", "leeto") == -1
+    assert str_str("hello", "ll") == 2
+    assert str_str("a", "a") == 0
+    assert str_str("mississippi", "issip") == 4
+    assert str_str("abc", "") == 0       # empty needle
+    assert str_str("", "a") == -1        # empty haystack
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [KMP algorithm](../../../named-algorithms/kmp/), the O(n + m) solution to this exact problem
+- [Permutation in String](./567-permutation-in-string/), fixed-size sliding window on strings
+- [Longest Substring Without Repeating Characters](./003-longest-substring-without-repeating-characters/), variable sliding window

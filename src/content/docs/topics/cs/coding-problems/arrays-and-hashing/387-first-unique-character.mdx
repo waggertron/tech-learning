@@ -1,0 +1,104 @@
+---
+title: "387. First Unique Character in a String (Easy)"
+description: "Return the index of the first non-repeating character in a string, or -1 if every character repeats."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, hash-tables, strings, easy]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './387-first-unique-character.py?raw';
+
+## Problem
+
+Given a string `s`, find the first non-repeating character and return its index. Return `-1` if no such character exists.
+
+**Example**
+- `s = "leetcode"` → `0` (character `'l'`)
+- `s = "loveleetcode"` → `2` (character `'v'`)
+- `s = "aabb"` → `-1`
+
+LeetCode 387 · [Link](https://leetcode.com/problems/first-unique-character-in-a-string/) · *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="first-unique-character" />
+
+## Approach: Two-pass frequency count
+
+**Pass 1:** build a frequency map (count of each character).
+**Pass 2:** scan left to right and return the first index whose count is exactly 1.
+
+```python
+from collections import Counter
+
+def first_uniq_char(s: str) -> int:
+    counts = Counter(s)              # L1: O(n) scan, build frequency map
+    for i, ch in enumerate(s):      # L2: O(n) second scan
+        if counts[ch] == 1:         # L3: O(1) lookup
+            return i                 # L4: O(1) return
+    return -1                        # L5: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s), k = number of distinct characters (at most 26 for lowercase letters).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (Counter)** | **O(n)** | **1** | **O(n)** |
+| **L2 (second scan)** | **O(1) body** | **n** | **O(n)** ← ties L1 |
+| L3 (lookup) | O(1) | n | O(n) |
+| L4 (return) | O(1) | 1 | O(1) |
+| L5 (return -1) | O(1) | 1 | O(1) |
+
+Both passes are O(n). The total is O(n) even though we traverse the string twice.
+
+**Complexity**
+- **Time:** O(n), driven by L1 (Counter) and L2 (second scan). Two linear passes.
+- **Space:** O(1). The `Counter` holds at most 26 entries for lowercase Latin letters regardless of `n`.
+
+The space bound is O(1) because the problem constrains `s` to lowercase English letters: the alphabet is fixed at 26 characters. No matter how long the string is, the frequency map never exceeds 26 entries.
+
+## Summary
+
+| Step | Cost |
+| --- | --- |
+| Build Counter | O(n) |
+| Scan for first count == 1 | O(n) |
+| **Total** | **O(n) time, O(1) space** |
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_387.py and run.
+
+from collections import Counter
+
+def first_uniq_char(s: str) -> int:
+    counts = Counter(s)
+    for i, ch in enumerate(s):
+        if counts[ch] == 1:
+            return i
+    return -1
+
+def _run_tests():
+    assert first_uniq_char("leetcode") == 0
+    assert first_uniq_char("loveleetcode") == 2
+    assert first_uniq_char("aabb") == -1
+    assert first_uniq_char("z") == 0
+    assert first_uniq_char("aab") == 2
+    assert first_uniq_char("cc") == -1
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Group Anagrams](./049-group-anagrams/), frequency maps over character counts
+- [Valid Anagram](./242-valid-anagram/), comparing character frequency maps
+- [Two Sum](./001-two-sum/), hash-map lookup pattern

@@ -1,0 +1,120 @@
+---
+title: "224. Basic Calculator (Hard)"
+description: "Evaluate an expression with +, -, and parentheses by using a stack to save and restore sign context across nesting levels."
+parent: stack
+tags: [leetcode, stacks, math, hard]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './224-basic-calculator.py?raw';
+
+## Problem
+
+Given a string `s` representing a valid mathematical expression containing non-negative integers, `'+'`, `'-'`, `'('`, `')'`, and spaces, evaluate it and return the result.
+
+You may **not** use `eval()`.
+
+**Examples**
+- `"1 + 1"` → `2`
+- `" 2-1 + 2 "` → `3`
+- `"(1+(4+5+2)-3)+(6+8)"` → `23`
+- `"- (3 + (4 + 5))"` → `-12`
+
+LeetCode 224 · [Link](https://leetcode.com/problems/basic-calculator/) · *Hard*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="basic-calculator" />
+
+## Approach 1: Stack to save and restore sign context
+
+The key insight: parentheses do not change the arithmetic, they change the *sign context*. A `'-'` before a `'('` flips every sign inside. Rather than evaluating recursively, use a stack to save `(result, sign)` when entering a parenthesis and restore it on `')'`.
+
+Track two state variables:
+- `result`: running total for the current nesting level.
+- `sign`: `+1` or `-1`, the sign that will apply to the next number.
+
+On `'('`: push `(result, sign)` onto the stack and reset both to `0` and `+1`.
+On `')'`: pop `(prev_result, prev_sign)` and compute `prev_result + prev_sign * result`.
+On a digit: accumulate the full multi-digit number.
+On `'+'` or `'-'`: apply `sign * num` to `result`, then update `sign` for the next number.
+
+```python
+def calculate(s: str) -> int:
+    stack = []           # L1: stores (result, sign) on open paren
+    result = 0           # L2: running total for this nesting level
+    sign = 1             # L3: +1 or -1, applies to next number
+    num = 0              # L4: accumulates multi-digit number
+
+    for ch in s:                              # L5: iterate characters, O(n)
+        if ch.isdigit():
+            num = num * 10 + int(ch)          # L6: O(1) accumulate digit
+        elif ch in "+-":
+            result += sign * num              # L7: O(1) apply pending number
+            num = 0                           # L8: reset accumulator
+            sign = 1 if ch == "+" else -1    # L9: update sign for next number
+        elif ch == "(":
+            stack.append((result, sign))      # L10: O(1) save context
+            result = 0                        # L11: fresh sub-expression result
+            sign = 1                          # L12: sub-expression starts positive
+            num = 0                           # L13: clear accumulator
+        elif ch == ")":
+            result += sign * num              # L14: O(1) flush last number in parens
+            num = 0                           # L15: clear accumulator
+            prev_result, prev_sign = stack.pop()  # L16: O(1) restore context
+            result = prev_result + prev_sign * result  # L17: combine levels
+
+    return result + sign * num               # L18: flush any trailing number
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L5 (loop) | O(1) | n | O(n) |
+| **L6-L17 (per-char work)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L18 (flush trailing number) | O(1) | 1 | O(1) |
+
+Each character triggers exactly one branch, all O(1). Each `'('` causes one push and each `')'` causes one pop, so total stack work is O(n).
+
+**Complexity**
+- **Time:** O(n), one pass through the string.
+- **Space:** O(n) stack depth (at most n/2 open parens).
+
+## Sign context illustrated
+
+```
+Expression: (1+(4+5+2)-3)+(6+8)
+
+Enter (: push (result=0, sign=+1), reset result=0, sign=+1
+  See 1:  result=1
+  Enter (: push (1, +1), reset result=0, sign=+1
+    See 4+5+2: result=11
+  See ): pop -> prev_result=1, prev_sign=+1
+          result = 1 + 1*11 = 12
+  See -3: result = 12 - 3 = 9
+See ): pop -> prev_result=0, prev_sign=+1
+        result = 0 + 1*9 = 9
+Enter (: push (9, +1), reset result=0, sign=+1
+  See 6+8: result=14
+See ): pop -> prev_result=9, prev_sign=+1
+        result = 9 + 1*14 = 23
+```
+
+## Key takeaways
+
+- The stack saves "where we were before this parenthesis opened," not the parenthesis contents themselves. This is the same pattern as Decode String.
+- `sign` must be applied to the accumulated `num` whenever you see a `'+'`, `'-'`, `'('`, or `')'`, not only at the end. Forgetting to flush `num` is the most common bug.
+- A leading `'-'` (like `"-(3+5)"`) works automatically: `sign` starts at `+1`, then `'-'` sets `sign = -1` before the `'('`. On `'('`, that `-1` gets saved as `prev_sign`. On `')'`, `result = 0 + (-1)*8 = -8`.
+- No multiplication or division here; if those appear (LC 227), the stack approach needs shunting-yard or operator precedence handling.
+
+## Related topics
+
+- [Evaluate Reverse Polish Notation](./150-evaluate-reverse-polish-notation/), postfix evaluation, simpler operator handling
+- [Decode String](./394-decode-string/), same stack-saves-context pattern for nested brackets
+- [Stacks](../../../data-structures/stacks/), underlying data structure

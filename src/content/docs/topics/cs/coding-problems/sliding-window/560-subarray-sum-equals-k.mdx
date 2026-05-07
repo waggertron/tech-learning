@@ -1,0 +1,158 @@
+---
+title: "560. Subarray Sum Equals K (Medium)"
+description: "Return the number of subarrays whose elements sum to a target value k."
+parent: sliding-window
+tags: [leetcode, sliding-window, prefix-sum, hash-tables, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './560-subarray-sum-equals-k.py?raw';
+
+## Problem
+
+Given an array of integers `nums` and an integer `k`, return the total number of subarrays whose sum equals `k`.
+
+A subarray is a contiguous non-empty sequence of elements within the array.
+
+**Example**
+- `nums = [1,1,1]`, `k = 2` → `2` (subarrays `[1,1]` at index 0-1 and 1-2)
+- `nums = [1,2,3]`, `k = 3` → `2` (subarrays `[3]` at index 2, and `[1,2]` at index 0-1)
+
+LeetCode 560 · [Link](https://leetcode.com/problems/subarray-sum-equals-k/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="subarray-sum-equals-k" />
+
+## Approach 1: Brute force, check every subarray
+
+Enumerate every start index `i` and accumulate the sum as we extend `j`. Reset for each new start.
+
+```python
+def subarray_sum(nums: list[int], k: int) -> int:
+    count = 0
+    n = len(nums)
+    for i in range(n):              # L1: outer loop, n iterations
+        total = 0
+        for j in range(i, n):       # L2: inner loop, n-i iterations
+            total += nums[j]         # L3: O(1) accumulate
+            if total == k:           # L4: O(1) check
+                count += 1           # L5: O(1)
+    return count
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | O(1) | n | O(n) |
+| **L2, L3, L4 (inner loop)** | **O(1)** | **n^2 / 2** | **O(n^2)** ← dominates |
+| L5 (increment) | O(1) | at most n^2/2 | O(n^2) |
+
+**Complexity**
+- **Time:** O(n^2), driven by L2/L3/L4 (all pairs of start and end indices).
+- **Space:** O(1).
+
+## Approach 2: Prefix sums with a hash map (optimal)
+
+Define `prefix[i]` = sum of `nums[0..i-1]`. The sum of subarray `nums[i..j]` equals `prefix[j+1] - prefix[i]`. We want this difference to equal `k`, i.e., `prefix[j+1] - k` must equal some earlier prefix sum `prefix[i]`.
+
+Scan left to right, maintaining a running prefix sum and a frequency map `count` of all prefix sums seen so far. Initialize `count[0] = 1` to account for subarrays that start at index 0.
+
+```python
+from collections import defaultdict
+
+def subarray_sum(nums: list[int], k: int) -> int:
+    count = defaultdict(int)      # L1: O(1)
+    count[0] = 1                  # L2: O(1), seed for subarrays starting at index 0
+    prefix = 0                    # L3: O(1)
+    result = 0                    # L4: O(1)
+    for x in nums:                # L5: loop, n iterations
+        prefix += x               # L6: O(1) extend prefix sum
+        result += count[prefix - k]   # L7: O(1) hash lookup: how many times has (prefix-k) appeared?
+        count[prefix] += 1        # L8: O(1) record this prefix sum
+    return result                 # L9: O(1)
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L4 (init) | O(1) | 1 | O(1) |
+| **L5 (loop)** | **O(1) body** | **n** | **O(n)** ← dominates |
+| L6 (prefix update) | O(1) | n | O(n) |
+| L7 (hash lookup) | O(1) avg | n | O(n) |
+| L8 (hash insert) | O(1) avg | n | O(n) |
+| L9 (return) | O(1) | 1 | O(1) |
+
+**Complexity**
+- **Time:** O(n), driven by L5-L8 (single pass, all operations O(1) average).
+- **Space:** O(n). The frequency map stores at most n distinct prefix sums.
+
+### Why `count[0] = 1`?
+
+If the subarray starting at index 0 sums to `k`, then `prefix - k = 0` at that point. We need `count[0]` to be 1 so that L7 adds 1 to the result. Without the seed, subarrays that begin at the array's start would be missed.
+
+### Worked example
+
+`nums = [1,1,1]`, `k = 2`
+
+```
+count = {0: 1}, prefix = 0, result = 0
+
+x=1: prefix=1, result += count[1-2=−1]=0 → result=0, count={0:1, 1:1}
+x=1: prefix=2, result += count[2-2=0]=1  → result=1, count={0:1, 1:1, 2:1}
+x=1: prefix=3, result += count[3-2=1]=1  → result=2, count={0:1, 1:1, 2:1, 3:1}
+
+return 2
+```
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Brute force | O(n^2) | O(1) |
+| **Prefix sums + hash map** | **O(n)** | O(n) |
+
+## Test cases
+
+```python
+# Quick smoke tests, paste into a REPL or save as test_560.py and run.
+
+from collections import defaultdict
+
+def subarray_sum(nums: list[int], k: int) -> int:
+    count = defaultdict(int)
+    count[0] = 1
+    prefix = 0
+    result = 0
+    for x in nums:
+        prefix += x
+        result += count[prefix - k]
+        count[prefix] += 1
+    return result
+
+def _run_tests():
+    assert subarray_sum([1,1,1], 2) == 2
+    assert subarray_sum([1,2,3], 3) == 2
+    assert subarray_sum([1], 0) == 0
+    assert subarray_sum([1], 1) == 1
+    assert subarray_sum([-1,-1,1], 0) == 1
+    assert subarray_sum([0,0,0,0], 0) == 10   # C(4,2) + 4 single-element zeros
+    print("all tests pass")
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Range Sum Query Immutable](../arrays-and-hashing/303-range-sum-query-immutable/), prefix sums for static range queries
+- [Two Sum](../arrays-and-hashing/001-two-sum/), same "store what you've seen, look up the complement" pattern

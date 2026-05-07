@@ -1,0 +1,150 @@
+---
+title: "785. Is Graph Bipartite? (Medium)"
+description: "Determine if an undirected graph can be 2-colored so that no two adjacent nodes share a color."
+parent: graphs
+tags: [leetcode, graphs, bfs, medium]
+status: draft
+created: 2026-05-07
+updated: 2026-05-07
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './785-is-graph-bipartite.py?raw';
+
+## Problem
+
+Given an undirected graph represented as an adjacency list `graph` where `graph[u]` contains all nodes adjacent to node `u`, determine if the graph is bipartite. A graph is bipartite if you can split its nodes into two independent sets A and B such that every edge connects a node in A to a node in B (no edge connects two nodes in the same set).
+
+**Example**
+- `graph = [[1,2,3],[0,2],[0,1,3],[0,2]]` → `False` (odd cycle: 0-1-2-0)
+- `graph = [[1,3],[0,2],[1,3],[0,2]]` → `True` (A={0,2}, B={1,3})
+
+LeetCode 785 · [Link](https://leetcode.com/problems/is-graph-bipartite/) · *Medium*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="is-graph-bipartite" />
+
+## Approach: BFS 2-coloring
+
+Assign colors 0 and 1 to nodes. For each unvisited node, assign color 0 and BFS outward, alternating colors for neighbors. If a neighbor already has the same color as the current node, the graph is not bipartite (there is an odd cycle).
+
+```python
+from collections import deque
+
+def is_bipartite(graph):
+    n = len(graph)                                         # L1: number of nodes
+    color = [-1] * n                                       # L2: O(n) color array, -1 = unvisited
+
+    for start in range(n):                                 # L3: handle disconnected components
+        if color[start] != -1:
+            continue                                       # L4: skip already-colored nodes
+        color[start] = 0                                   # L5: O(1) seed color
+        q = deque([start])                                 # L6: O(1) seed queue
+
+        while q:                                           # L7: BFS loop
+            node = q.popleft()                             # L8: O(1) dequeue
+            for neighbor in graph[node]:                   # L9: O(deg) check each neighbor
+                if color[neighbor] == -1:
+                    color[neighbor] = 1 - color[node]     # L10: O(1) assign opposite color
+                    q.append(neighbor)                     # L11: O(1) enqueue
+                elif color[neighbor] == color[node]:
+                    return False                           # L12: O(1) conflict detected
+
+    return True                                            # L13: O(1) all nodes colored without conflict
+```
+
+**Where the time goes, line by line**
+
+*Variables: V = number of nodes, E = number of edges.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (init color) | O(1) per node | V | O(V) |
+| L3 (outer loop) | O(1) | V | O(V) |
+| **L8 (dequeue)** | **O(1)** | **once per node** | **O(V)** |
+| **L9 (neighbor scan)** | **O(deg(node))** | **once per node** | **O(E) total ← dominates** |
+| L10, L11 (color + enqueue) | O(1) | once per unvisited neighbor | O(V) |
+
+Each node enters the queue at most once (L10 only runs when `color == -1`). Each edge is examined twice (once from each endpoint), so L9 totals O(E) across the entire BFS.
+
+**Complexity**
+- **Time:** O(V + E), driven by L9 (each edge examined twice, each node dequeued once).
+- **Space:** O(V) color array plus O(V) queue.
+
+### Why 2-coloring detects odd cycles
+
+A graph is bipartite if and only if it contains no odd-length cycle. BFS assigns layers: layer 0 gets color 0, layer 1 gets color 1, layer 2 gets color 0, etc. An odd cycle forces two same-layer (same-color) nodes to be adjacent, which L12 catches immediately.
+
+```
+Even cycle (bipartite):        Odd cycle (not bipartite):
+  0 -- 1                         0 -- 1
+  |    |                         |  /
+  3 -- 2                         2
+colors: 0-1-0-1 (OK)            colors: 0-1-0, but 0-2 conflict
+```
+
+## Summary
+
+| Approach | Time | Space | Notes |
+| --- | --- | --- | --- |
+| **BFS 2-coloring** | O(V + E) | O(V) | Canonical |
+| DFS 2-coloring | O(V + E) | O(V) | Identical complexity, recursive stack |
+
+## Test cases
+
+```python
+from collections import deque
+
+def is_bipartite(graph):
+    n = len(graph)
+    color = [-1] * n
+
+    for start in range(n):
+        if color[start] != -1:
+            continue
+        color[start] = 0
+        q = deque([start])
+        while q:
+            node = q.popleft()
+            for neighbor in graph[node]:
+                if color[neighbor] == -1:
+                    color[neighbor] = 1 - color[node]
+                    q.append(neighbor)
+                elif color[neighbor] == color[node]:
+                    return False
+
+    return True
+
+
+def _run_tests():
+    # Odd cycle: not bipartite
+    assert is_bipartite([[1,2,3],[0,2],[0,1,3],[0,2]]) == False
+
+    # Even cycle: bipartite
+    assert is_bipartite([[1,3],[0,2],[1,3],[0,2]]) == True
+
+    # Single node, no edges
+    assert is_bipartite([[]] ) == True
+
+    # Two nodes connected: bipartite
+    assert is_bipartite([[1],[0]]) == True
+
+    # Triangle (odd cycle)
+    assert is_bipartite([[1,2],[0,2],[0,1]]) == False
+
+    # Disconnected bipartite components
+    assert is_bipartite([[1],[0],[3],[2]]) == True
+
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+## Related topics
+
+- [Possible Bipartition](./886-possible-bipartition/), same bipartite check on a dislikes graph
+- [Number of Islands](./200-number-of-islands/), BFS-on-graph component template
+- [Number of Provinces](./547-number-of-provinces/), connected components via DFS/Union-Find
