@@ -100,6 +100,8 @@ Topics are the durable knowledge base. Each topic lives at `topics/<category>/<s
 ## System Design
 
 - [System Design, category overview](./system-design/)
+- [Interview Framework](./system-design/interview-framework/), 4-step approach with time allocations, clarifying questions, and what interviewers score
+- [Back-of-Envelope Estimation](./system-design/estimation/), latency numbers, storage units, QPS formulas, worked examples
 - [Scalability](./system-design/scalability/), vertical vs horizontal scaling, stateless services, the scale cube
 - [Load Balancing](./system-design/load-balancing/), algorithms, L4 vs L7, health checks, sticky sessions
 - [Caching](./system-design/caching/), cache-aside, read-through, write-through, eviction, CDN, invalidation
@@ -109,6 +111,18 @@ Topics are the durable knowledge base. Each topic lives at `topics/<category>/<s
 - [Rate Limiting](./system-design/rate-limiting/), token bucket, leaky bucket, sliding window, where to enforce
 - [CAP Theorem](./system-design/cap-theorem/), consistency vs availability under partition, PACELC
 - [Consistent Hashing](./system-design/consistent-hashing/), the ring, virtual nodes, minimal key remapping on resize
+- [Case Studies](./system-design/case-studies/), end-to-end interview walkthroughs for six canonical systems
+  - [URL Shortener](./system-design/case-studies/url-shortener/), ID generation, base62, redirect caching, analytics
+  - [Social Feed](./system-design/case-studies/social-feed/), fanout strategies, hybrid push/pull, celebrity problem
+  - [Video Streaming](./system-design/case-studies/video-streaming/), chunked upload, transcoding, adaptive bitrate, CDN
+  - [Chat System](./system-design/case-studies/chat-system/), message ordering, WebSocket routing, exactly-once delivery
+  - [Notification System](./system-design/case-studies/notification-system/), multi-channel delivery, priority queues, deduplication
+  - [Ride Sharing](./system-design/case-studies/ride-sharing/), geospatial indexing, matching, real-time tracking, surge pricing
+- [Microservices vs Monolith](./system-design/microservices/), Conway's Law, domain boundaries, modular monolith
+- [Circuit Breaker and Resilience](./system-design/circuit-breaker/), state machine, bulkhead, retry with jitter
+- [Event Sourcing and CQRS](./system-design/event-sourcing/), append-only event log, projections, read/write model separation
+- [Distributed Locking](./system-design/distributed-locking/), Redis SETNX, Redlock, ZooKeeper, fencing tokens
+- [Saga Pattern](./system-design/saga-pattern/), choreography vs orchestration, compensating transactions
 
 ## Web
 

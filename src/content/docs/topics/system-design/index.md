@@ -12,7 +12,12 @@ System design interviews ask you to architect a real-world system from scratch, 
 
 The same skills matter in production. A system that starts as a single process eventually needs to handle more traffic, store more data, and survive more failures. Understanding the canonical building blocks means you can reach for the right tool without reinventing it every time.
 
-## Core topics
+## Interview prep
+
+- [Interview Framework](./interview-framework/), the 4-step approach: requirements, estimation, high-level design, deep dives, with time allocations and what interviewers score
+- [Back-of-Envelope Estimation](./estimation/), latency table, storage units, QPS and bandwidth formulas, fully worked examples for Twitter, YouTube, and WhatsApp
+
+## Core building blocks
 
 - [Scalability](./scalability/), vertical vs horizontal scaling, stateless services, the scale cube, auto-scaling
 - [Load Balancing](./load-balancing/), algorithms, L4 vs L7, health checks, sticky sessions
@@ -23,6 +28,25 @@ The same skills matter in production. A system that starts as a single process e
 - [Rate Limiting](./rate-limiting/), token bucket, leaky bucket, sliding window, where to enforce
 - [CAP Theorem](./cap-theorem/), consistency vs availability under network partition, PACELC
 - [Consistent Hashing](./consistent-hashing/), the ring, virtual nodes, resharding without full remapping
+
+## Case studies
+
+End-to-end walkthroughs of six canonical interview problems, each with clarifying questions, estimation, high-level design, deep dives, failure modes, and key takeaways.
+
+- [URL Shortener](./case-studies/url-shortener/), ID generation, base62 encoding, redirect caching, analytics pipeline
+- [Social Feed](./case-studies/social-feed/), fanout strategies, hybrid push/pull, the celebrity problem, ML ranking
+- [Video Streaming](./case-studies/video-streaming/), chunked upload, transcoding pipeline, adaptive bitrate, CDN strategy
+- [Chat System](./case-studies/chat-system/), message ordering, WebSocket routing, exactly-once delivery, group chat
+- [Notification System](./case-studies/notification-system/), multi-channel delivery, priority queues, deduplication, per-user rate limiting
+- [Ride Sharing](./case-studies/ride-sharing/), geospatial indexing at scale, matching, real-time tracking, surge pricing
+
+## Advanced patterns
+
+- [Microservices vs Monolith](./microservices/), Conway's Law, domain-driven boundaries, the modular monolith, Strangler Fig migration
+- [Circuit Breaker and Resilience](./circuit-breaker/), circuit breaker state machine, bulkhead isolation, retry with jitter, composing patterns
+- [Event Sourcing and CQRS](./event-sourcing/), append-only event log, projections, snapshots, separating read and write models
+- [Distributed Locking](./distributed-locking/), Redis SETNX, Redlock, ZooKeeper ephemeral nodes, fencing tokens
+- [Saga Pattern](./saga-pattern/), choreography vs orchestration, compensating transactions, pivotal transactions, isolation problems
 
 ## The system design interview format
 
