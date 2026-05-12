@@ -86,7 +86,39 @@ Each index `i` is computed exactly once; subsequent calls return a cached result
 - **Time:** O(n), driven by L3 (n unique subproblems, each computed once).
 - **Space:** O(n) for the cache and recursion stack.
 
-## Approach 3: Bottom-up with two variables (optimal)
+## Approach 3: Bottom-up DP array
+
+`dp[i]` = max money robbing houses `0..i`. `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`.
+
+```python
+def rob(nums):
+    n = len(nums)
+    if n == 1:
+        return nums[0]
+    dp = [0] * n                              # L1: O(n) allocation
+    dp[0] = nums[0]                           # L2: base case
+    dp[1] = max(nums[0], nums[1])             # L3: base case
+    for i in range(2, n):                     # L4: loop n-2 times
+        dp[i] = max(dp[i-1], dp[i-2] + nums[i])  # L5: O(1) recurrence
+    return dp[n-1]                            # L6: O(1) return
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (allocate dp) | O(n) | 1 | O(n) |
+| L2, L3 (base cases) | O(1) | 1 each | O(1) |
+| **L4, L5 (loop + recurrence)** | **O(1)** | **n - 2** | **O(n)** ← dominates |
+| L6 (return) | O(1) | 1 | O(1) |
+
+**Complexity**
+- **Time:** O(n), driven by L4/L5 (n - 2 iterations).
+- **Space:** O(n) for the dp array.
+
+## Approach 4: Bottom-up with two variables (optimal)
 
 `prev2 = dp[i-2]`, `prev1 = dp[i-1]`. `dp[i] = max(prev1, prev2 + nums[i])`.
 
@@ -121,6 +153,7 @@ The entire DP table is collapsed to two scalars. Each step only needs the previo
 | --- | --- | --- |
 | Naive take/skip | O(2ⁿ) | O(n) |
 | Memoized | O(n) | O(n) |
+| Bottom-up, dp array | O(n) | O(n) |
 | **Bottom-up, two vars** | **O(n)** | **O(1)** |
 
 This is the canonical "take or skip" DP pattern. Reappears in Paint House, Delete and Earn, and Best Time to Buy/Sell with Cooldown.
@@ -129,7 +162,7 @@ This is the canonical "take or skip" DP pattern. Reappears in Paint House, Delet
 
 ```python
 # Quick smoke tests, paste into a REPL or save as test_198_house_robber.py and run.
-# Uses the canonical implementation (Approach 3: bottom-up two variables).
+# Uses the canonical implementation (Approach 4: bottom-up two variables).
 
 def rob(nums):
     prev2, prev1 = 0, 0

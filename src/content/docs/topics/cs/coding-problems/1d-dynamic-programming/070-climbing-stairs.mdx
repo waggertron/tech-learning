@@ -80,7 +80,37 @@ Each unique `n` is computed once and cached. After that, every subsequent call h
 - **Time:** O(n), driven by L2 (n unique states, each computed once).
 - **Space:** O(n) cache + recursion stack.
 
-## Approach 3: Bottom-up with two variables (optimal)
+## Approach 3: Bottom-up DP array
+
+Build the full Fibonacci sequence in a dp array, one cell per step.
+
+```python
+def climb_stairs(n):
+    if n <= 2:                          # L1: base case
+        return n
+    dp = [0] * (n + 1)                 # L2: O(n) allocation
+    dp[1], dp[2] = 1, 2                # L3: seed base cases
+    for i in range(3, n + 1):          # L4: loop n-2 times
+        dp[i] = dp[i - 1] + dp[i - 2] # L5: O(1) recurrence
+    return dp[n]                        # L6: O(1) return
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = the input integer.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (allocate dp) | O(n) | 1 | O(n) |
+| L3 (seed) | O(1) | 1 | O(1) |
+| **L4, L5 (loop + recurrence)** | **O(1)** | **n - 2** | **O(n)** ← dominates |
+| L6 (return) | O(1) | 1 | O(1) |
+
+**Complexity**
+- **Time:** O(n), driven by L4/L5 (n - 2 iterations).
+- **Space:** O(n) for the dp array.
+
+## Approach 4: Bottom-up with two variables (optimal)
 
 Only the last two values are needed.
 
@@ -117,6 +147,7 @@ The loop runs exactly n - 2 times; each iteration is a fixed-cost swap-and-add. 
 | --- | --- | --- |
 | Naive recursion | O(2ⁿ) | O(n) |
 | Memoized recursion | O(n) | O(n) |
+| Bottom-up, dp array | O(n) | O(n) |
 | **Bottom-up, two vars** | **O(n)** | **O(1)** |
 
 Template for every Fibonacci-shape DP (House Robber, Min Cost Climbing Stairs, Tribonacci, etc.).
@@ -125,7 +156,7 @@ Template for every Fibonacci-shape DP (House Robber, Min Cost Climbing Stairs, T
 
 ```python
 # Quick smoke tests, paste into a REPL or save as test_climbing_stairs.py and run.
-# Uses the canonical implementation (Approach 3: bottom-up two variables).
+# Uses the canonical implementation (Approach 4: bottom-up two variables).
 
 def climb_stairs(n):
     if n <= 2:
@@ -150,4 +181,4 @@ if __name__ == "__main__":
 
 ## Related data structures
 
-- [Arrays](../../../data-structures/arrays/), conceptual DP array (here collapsed to two scalars)
+- [Arrays](../../data-structures/arrays/), conceptual DP array (here collapsed to two scalars)
