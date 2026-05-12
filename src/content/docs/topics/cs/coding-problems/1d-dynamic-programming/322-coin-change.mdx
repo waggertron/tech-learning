@@ -134,6 +134,12 @@ The double loop at L4/L5 is the whole story. Every `(amount, coin)` pair is visi
 ### Unbounded vs. 0/1 knapsack
 Coin Change is **unbounded**, each coin can be used infinitely. The outer loop over amounts lets the DP "re-use" a coin naturally. Compare with 0/1 knapsack (problem 416 Partition Equal Subset Sum), where each item is used at most once and loop order matters.
 
+### The sentinel choice
+
+`INF = amount + 1` works because you can never need more than `amount` coins of denomination 1. Any reachable amount costs at most `amount` coins, so `amount + 1` is guaranteed larger than any valid answer. The `min()` recurrence will always prefer a real path over the sentinel, and the final check `dp[amount] != INF` cleanly separates reachable from unreachable.
+
+`float('inf')` works too, but `amount + 1` stays an integer and gives a tighter bound. See [Sentinel Values](../../sentinel-values/) for the general pattern across DP, shortest-path, and search problems.
+
 ## Summary
 
 | Approach | Time | Space |
@@ -173,6 +179,7 @@ if __name__ == "__main__":
     _run_tests()
 ```
 
-## Related data structures
+## Related topics
 
-- [Arrays](../../../data-structures/arrays/), DP table indexed by amount
+- [Arrays](../../data-structures/arrays/), DP table indexed by amount
+- [Sentinel Values](../../sentinel-values/), the general pattern for "impossible" placeholders in algorithms
