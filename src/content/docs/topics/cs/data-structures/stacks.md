@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A stack is a **LIFO** (last-in, first-out) collection. You push elements onto the top and pop them off the top; both operations are O(1). Stacks are the natural fit for any problem involving **nesting**, **backtracking**, or needing to process elements in **reverse order** relative to insertion. They also underlie recursion itself, the call stack is a stack.
+A stack is a **LIFO** (last-in, first-out) collection. You push elements onto the top and pop them off the top. Both operations are O(1). Stacks are the natural fit for any problem involving **nesting**, **backtracking**, or needing to process elements in **reverse order** relative to insertion. They also underlie recursion itself, the call stack is a stack.
 
 ## In-depth description
 
@@ -20,10 +20,10 @@ The most powerful and interview-relevant pattern is the **monotonic stack**, a s
 
 Other frequent stack patterns:
 
-- **Parentheses / delimiter matching**, push on open, pop and compare on close.
-- **Iterative DFS**, replace the system recursion stack with an explicit stack to avoid stack-overflow on deep trees/graphs.
-- **Expression evaluation**, Reverse Polish Notation, Shunting-yard, Basic Calculator, stacks handle the operand/operator precedence.
-- **Undo history and backtracking**, push decisions, pop to revert.
+- **Parentheses / delimiter matching**: push on open, pop and compare on close.
+- **Iterative DFS**: replace the system recursion stack with an explicit stack to avoid stack-overflow on deep trees/graphs.
+- **Expression evaluation**: Reverse Polish Notation, Shunting-yard, Basic Calculator, stacks handle the operand/operator precedence.
+- **Undo history and backtracking**: push decisions, pop to revert.
 
 A stack is also the memory model for function calls (the call stack): every recursion problem can be rewritten with an explicit stack, and sometimes must be (for very deep recursion in languages without tail-call elimination).
 
@@ -39,11 +39,11 @@ A stack is also the memory model for function calls (the call stack): every recu
 
 ## Common uses in DSA
 
-1. **Balanced brackets / parsing**, [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), Decode String, Remove All Adjacent Duplicates In String, Simplify Path.
-2. **Monotonic stack**, Next Greater Element I/II, [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), Trapping Rain Water, Sum of Subarray Minimums.
-3. **Iterative DFS / traversal without recursion**, Binary Tree Inorder/Preorder/Postorder Traversal (iterative), DFS on graph with an explicit stack.
-4. **Expression evaluation and calculators**, [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), Basic Calculator I/II/III, Min Stack.
-5. **Undo history / backtracking state**, classical undo buffers, browser history, game-state rewind, maze solvers.
+1. **Balanced brackets / parsing**: [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), Decode String, Remove All Adjacent Duplicates In String, Simplify Path.
+2. **Monotonic stack**: Next Greater Element I/II, [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), Trapping Rain Water, Sum of Subarray Minimums.
+3. **Iterative DFS / traversal without recursion**: Binary Tree Inorder/Preorder/Postorder Traversal (iterative), DFS on graph with an explicit stack.
+4. **Expression evaluation and calculators**: [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), Basic Calculator I/II/III, Min Stack.
+5. **Undo history / backtracking state**: classical undo buffers, browser history, game-state rewind, maze solvers.
 
 **Canonical LeetCode problems:** #20 [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), #84 [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), #150 [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), #224 Basic Calculator, #739 [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), #853 [Car Fleet](../coding-problems/stack/853-car-fleet/), #1249 Minimum Remove to Make Valid Parentheses.
 

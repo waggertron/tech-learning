@@ -10,30 +10,30 @@ updated: 2026-04-23
 
 ## Intro
 
-A **graph** is a set of nodes (vertices) connected by edges. Edges can be directed or undirected, weighted or unweighted. Graphs generalize trees (a tree is a connected acyclic graph) and linked lists (a linear graph). Many real-world modeling problems, social networks, dependency resolution, routing, pipelines, reduce to graph problems. Graphs are the most general and the hardest data structure category in interviews; the effort pays off.
+A **graph** is a set of nodes (vertices) connected by edges. Edges can be directed or undirected, weighted or unweighted. Graphs generalize trees (a tree is a connected acyclic graph) and linked lists (a linear graph). Many real-world modeling problems, social networks, dependency resolution, routing, pipelines, reduce to graph problems. Graphs are the most general and the hardest data structure category in interviews. The effort pays off.
 
 ## In-depth description
 
 ### Representations
 
-- **Adjacency list**, map from node to list of neighbors. `defaultdict(list)` in Python. O(V + E) space, efficient for sparse graphs (most real-world graphs).
-- **Adjacency matrix**, `V × V` boolean or weight matrix. O(V²) space, O(1) edge lookup. Good for dense graphs or where you need fast edge queries.
-- **Edge list**, list of `(u, v, weight)` tuples. Compact; used by Kruskal's MST and Bellman-Ford.
+- **Adjacency list**: map from node to list of neighbors. `defaultdict(list)` in Python. O(V + E) space, efficient for sparse graphs (most real-world graphs).
+- **Adjacency matrix**: `V × V` boolean or weight matrix. O(V²) space, O(1) edge lookup. Good for dense graphs or where you need fast edge queries.
+- **Edge list**: list of `(u, v, weight)` tuples. Compact; used by Kruskal's MST and Bellman-Ford.
 
 ### Core algorithms
 
-- **BFS**, O(V + E). Shortest path in an unweighted graph, level-based exploration. Uses a queue.
-- **DFS**, O(V + E). Cycle detection, topological sort, connected components, path existence. Uses recursion or an explicit stack.
-- **Dijkstra's algorithm**, O((V + E) log V) with a binary heap. Single-source shortest path with non-negative weights.
-- **Bellman-Ford**, O(V · E). Single-source shortest path allowing negative weights; detects negative cycles.
-- **Floyd-Warshall**, O(V³). All-pairs shortest paths via DP over intermediate nodes.
-- **Union-Find (Disjoint Set Union)**, nearly O(1) per op with path compression and union by rank. Connectivity, cycle detection in undirected graphs, Kruskal's MST.
-- **Topological sort**, O(V + E). Kahn's algorithm (BFS on zero-in-degree nodes) or DFS post-order reversed. Only defined on DAGs.
-- **Kruskal's / Prim's MST**, minimum spanning tree. Kruskal's uses edge list + union-find; Prim's uses a priority queue.
+- **BFS**: O(V + E). Shortest path in an unweighted graph, level-based exploration. Uses a queue.
+- **DFS**: O(V + E). Cycle detection, topological sort, connected components, path existence. Uses recursion or an explicit stack.
+- **Dijkstra's algorithm**: O((V + E) log V) with a binary heap. Single-source shortest path with non-negative weights.
+- **Bellman-Ford**: O(V · E). Single-source shortest path allowing negative weights; detects negative cycles.
+- **Floyd-Warshall**: O(V³). All-pairs shortest paths via DP over intermediate nodes.
+- **Union-Find (Disjoint Set Union)**: nearly O(1) per op with path compression and union by rank. Connectivity, cycle detection in undirected graphs, Kruskal's MST.
+- **Topological sort**: O(V + E). Kahn's algorithm (BFS on zero-in-degree nodes) or DFS post-order reversed. Only defined on DAGs.
+- **Kruskal's / Prim's MST**: minimum spanning tree. Kruskal's uses edge list + union-find; Prim's uses a priority queue.
 
 ### Directed vs. undirected, a trap
 
-Many algorithms behave differently on directed graphs. Topological sort requires a DAG. Cycle detection in a directed graph needs three-color marking (white/gray/black); in an undirected graph, union-find or a "don't revisit parent" trick works.
+Many algorithms behave differently on directed graphs. Topological sort requires a DAG. Cycle detection in a directed graph needs three-color marking (white/gray/black). In an undirected graph, union-find or a "don't revisit parent" trick works.
 
 ## Time complexity (adjacency list)
 
@@ -49,11 +49,11 @@ Many algorithms behave differently on directed graphs. Topological sort requires
 
 ## Common uses in DSA
 
-1. **Connected components and connectivity**, [Number of Islands](../coding-problems/graphs/200-number-of-islands/), Friend Circles / Number of Provinces, Accounts Merge, [Graph Valid Tree](../coding-problems/graphs/261-graph-valid-tree/).
-2. **Shortest path**, unweighted via BFS ([Word Ladder](../coding-problems/graphs/127-word-ladder/), Shortest Path in Binary Matrix), weighted via Dijkstra ([Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/), Cheapest Flights), negative via Bellman-Ford.
-3. **Topological ordering**, [Course Schedule](../coding-problems/graphs/207-course-schedule/) I and II, [Alien Dictionary](../coding-problems/graphs/269-alien-dictionary/), Parallel Courses.
-4. **Cycle detection**, directed (via white/gray/black DFS), undirected (via union-find or DFS with parent tracking).
-5. **Minimum spanning tree and network design**, Kruskal's (edge list + union-find), Prim's (priority queue).
+1. **Connected components and connectivity**: [Number of Islands](../coding-problems/graphs/200-number-of-islands/), Friend Circles / Number of Provinces, Accounts Merge, [Graph Valid Tree](../coding-problems/graphs/261-graph-valid-tree/).
+2. **Shortest path**: unweighted via BFS ([Word Ladder](../coding-problems/graphs/127-word-ladder/), Shortest Path in Binary Matrix), weighted via Dijkstra ([Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/), Cheapest Flights), negative via Bellman-Ford.
+3. **Topological ordering**: [Course Schedule](../coding-problems/graphs/207-course-schedule/) I and II, [Alien Dictionary](../coding-problems/graphs/269-alien-dictionary/), Parallel Courses.
+4. **Cycle detection**: directed (via white/gray/black DFS), undirected (via union-find or DFS with parent tracking).
+5. **Minimum spanning tree and network design**: Kruskal's (edge list + union-find), Prim's (priority queue).
 
 **Canonical LeetCode problems:** #127 [Word Ladder](../coding-problems/graphs/127-word-ladder/), #133 [Clone Graph](../coding-problems/graphs/133-clone-graph/), #200 [Number of Islands](../coding-problems/graphs/200-number-of-islands/), #207 [Course Schedule](../coding-problems/graphs/207-course-schedule/), #210 Course Schedule II, #261 [Graph Valid Tree](../coding-problems/graphs/261-graph-valid-tree/), #269 [Alien Dictionary](../coding-problems/graphs/269-alien-dictionary/), #417 [Pacific Atlantic Water Flow](../coding-problems/graphs/417-pacific-atlantic-water-flow/), #743 [Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/).
 

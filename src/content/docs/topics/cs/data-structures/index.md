@@ -29,10 +29,10 @@ A data structure is a way of organizing data so the operations you need on it ar
 
 Every subtopic follows a consistent structure so they're easy to scan:
 
-- **Intro**, what it is and why it exists
-- **In-depth description**, how it's typically implemented and the key invariants
-- **Time complexity**, average- and worst-case for the main operations
-- **Common uses in DSA**, five interview-relevant problem patterns it unlocks
+- **Intro**: what it is and why it exists
+- **In-depth description**: how it's typically implemented and the key invariants
+- **Time complexity**: average- and worst-case for the main operations
+- **Common uses in DSA**: five interview-relevant problem patterns it unlocks
 
 ## Picking the right structure
 

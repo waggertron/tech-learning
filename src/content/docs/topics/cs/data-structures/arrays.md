@@ -18,9 +18,9 @@ A **static array** has a fixed size chosen at allocation time (C `int a[10]`). A
 
 Because elements are contiguous, inserting or deleting in the middle requires shifting everything after that index, O(n). If the array is sorted, binary search reduces lookup to O(log n). Many interview problems exploit one of three array-specific patterns:
 
-- **Two pointers**, walk from both ends or at different speeds; common when the array is sorted or when pairing elements.
-- **Sliding window**, maintain a contiguous range `[left, right]` and move the boundaries to satisfy a constraint; converts many O(n²) brute forces to O(n).
-- **Prefix sums**, precompute `prefix[i] = sum of elements up to i` once, then answer any range-sum query in O(1).
+- **Two pointers**: walk from both ends or at different speeds; common when the array is sorted or when pairing elements.
+- **Sliding window**: maintain a contiguous range `[left, right]` and move the boundaries to satisfy a constraint; converts many O(n²) brute forces to O(n).
+- **Prefix sums**: precompute `prefix[i] = sum of elements up to i` once, then answer any range-sum query in O(1).
 
 Multi-dimensional arrays are rows-of-rows (C-style), or use strides for O(1) slicing (NumPy). In-place algorithms (Dutch National Flag, reverse, rotate) are a frequent source of interview questions because they force careful pointer bookkeeping.
 
@@ -38,11 +38,11 @@ Multi-dimensional arrays are rows-of-rows (C-style), or use strides for O(1) sli
 
 ## Common uses in DSA
 
-1. **Two-pointer problems**, Two Sum II (sorted), Valid Palindrome, [3Sum](../coding-problems/two-pointers/015-3sum/), [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/).
-2. **Sliding window**, Longest Substring Without Repeating Characters, Maximum Sum Subarray of Size K, Minimum Size Subarray Sum.
-3. **Binary search on an array or on the answer**, Search in Rotated Sorted Array, Find Peak Element, Koko Eating Bananas, Median of Two Sorted Arrays.
-4. **Prefix sums / difference arrays**, Range Sum Query, Subarray Sum Equals K, [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
-5. **In-place rearrangement and sorting**, Dutch National Flag (Sort Colors), Move Zeroes, Rotate Array, Next Permutation.
+1. **Two-pointer problems**: Two Sum II (sorted), Valid Palindrome, [3Sum](../coding-problems/two-pointers/015-3sum/), [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/).
+2. **Sliding window**: Longest Substring Without Repeating Characters, Maximum Sum Subarray of Size K, Minimum Size Subarray Sum.
+3. **Binary search on an array or on the answer**: Search in Rotated Sorted Array, Find Peak Element, Koko Eating Bananas, Median of Two Sorted Arrays.
+4. **Prefix sums / difference arrays**: Range Sum Query, Subarray Sum Equals K, [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
+5. **In-place rearrangement and sorting**: Dutch National Flag (Sort Colors), Move Zeroes, Rotate Array, Next Permutation.
 
 **Canonical LeetCode problems:** #1 [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), #11 [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/), #15 [3Sum](../coding-problems/two-pointers/015-3sum/), #42 [Trapping Rain Water](../coding-problems/two-pointers/042-trapping-rain-water/), #53 [Maximum Subarray](../coding-problems/greedy/053-maximum-subarray/), #56 [Merge Intervals](../coding-problems/intervals/056-merge-intervals/), #238 [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
 

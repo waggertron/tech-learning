@@ -22,11 +22,11 @@ A **doubly linked list** has `prev` and `next` on each node. The extra pointer e
 
 Core interview techniques:
 
-- **Reversal**, iterative (three-pointer: prev, curr, next) and recursive; a fundamental building block.
-- **Floyd's cycle detection** (tortoise and hare), two pointers at different speeds detect cycles in O(n) with O(1) space; also finds cycle start and array-as-linked-list duplicates.
-- **Two-pointer (slow/fast)**, find the middle in one pass, find the n-th from end, etc.
-- **Dummy head nodes**, prepend a sentinel to simplify edge cases around the head.
-- **Merge**, classic two-pointer merge of sorted lists; basis of merge sort on lists.
+- **Reversal**: iterative (three-pointer: prev, curr, next) and recursive; a fundamental building block.
+- **Floyd's cycle detection** (tortoise and hare): two pointers at different speeds detect cycles in O(n) with O(1) space; also finds cycle start and array-as-linked-list duplicates.
+- **Two-pointer (slow/fast)**: find the middle in one pass, find the n-th from end, etc.
+- **Dummy head nodes**: prepend a sentinel to simplify edge cases around the head.
+- **Merge**: classic two-pointer merge of sorted lists; basis of merge sort on lists.
 
 ## Time complexity
 
@@ -41,11 +41,11 @@ Core interview techniques:
 
 ## Common uses in DSA
 
-1. **Pointer manipulation / reversal**, Reverse Linked List, Reverse Nodes in k-Group, Swap Nodes in Pairs, Reorder List.
-2. **Cycle detection and related**, Linked List Cycle (has cycle?), Linked List Cycle II (find cycle start), Find the Duplicate Number (array-as-list).
-3. **Merging and sorting**, Merge Two Sorted Lists, Merge k Sorted Lists (heap + list), Sort List (merge sort on list).
-4. **Two-pointer distance problems**, Remove Nth Node From End, Middle of the Linked List, Intersection of Two Linked Lists.
-5. **LRU cache**, Doubly linked list + hash map for O(1) get/put; canonical interview composite problem.
+1. **Pointer manipulation / reversal**: Reverse Linked List, Reverse Nodes in k-Group, Swap Nodes in Pairs, Reorder List.
+2. **Cycle detection and related**: Linked List Cycle (has cycle?), Linked List Cycle II (find cycle start), Find the Duplicate Number (array-as-list).
+3. **Merging and sorting**: Merge Two Sorted Lists, Merge k Sorted Lists (heap + list), Sort List (merge sort on list).
+4. **Two-pointer distance problems**: Remove Nth Node From End, Middle of the Linked List, Intersection of Two Linked Lists.
+5. **LRU cache**: Doubly linked list + hash map for O(1) get/put; canonical interview composite problem.
 
 **Canonical LeetCode problems:** #19 Remove Nth Node From End, #21 Merge Two Sorted Lists, #138 Copy List with Random Pointer, #141 Linked List Cycle, #142 Linked List Cycle II, #143 Reorder List, #146 LRU Cache, #206 Reverse Linked List, #287 Find the Duplicate Number.
 

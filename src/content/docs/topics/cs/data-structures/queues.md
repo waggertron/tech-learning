@@ -18,9 +18,9 @@ A queue can be implemented with a **linked list** (head and tail pointers) or a 
 
 Key variants:
 
-- **Deque** (double-ended queue), O(1) push/pop at both ends. The substrate for the **monotonic deque** pattern, which solves sliding-window maximum / minimum in O(n) instead of the naive O(n·k).
-- **Priority queue**, dequeues elements by priority, not arrival order. Usually implemented with a heap (see [Heaps](../heaps/)).
-- **Circular buffer**, fixed-size array with wrap-around head and tail indices; used for ring buffers, rate limiters, and streaming windows.
+- **Deque** (double-ended queue): O(1) push/pop at both ends. The substrate for the **monotonic deque** pattern, which solves sliding-window maximum / minimum in O(n) instead of the naive O(n·k).
+- **Priority queue**: dequeues elements by priority, not arrival order. Usually implemented with a heap (see [Heaps](../heaps/)).
+- **Circular buffer**: fixed-size array with wrap-around head and tail indices; used for ring buffers, rate limiters, and streaming windows.
 
 Queues are the engine of **BFS**, which in turn solves:
 
@@ -40,11 +40,11 @@ Queues are the engine of **BFS**, which in turn solves:
 
 ## Common uses in DSA
 
-1. **BFS / level-order traversal**, Binary Tree Level Order Traversal, Number of Islands, Shortest Path in Binary Matrix, Word Ladder.
-2. **Sliding window maximum / minimum**, via a monotonic deque, O(n).
-3. **Multi-source BFS**, Rotten Oranges, Walls and Gates, 01 Matrix (seed queue with all sources at distance 0).
-4. **Task scheduling and interval problems**, Task Scheduler, Design Hit Counter, Moving Average from Data Stream.
-5. **Producer-consumer / streaming buffers**, circular buffers for rate limiters, ring buffers in systems code, bounded channels.
+1. **BFS / level-order traversal**: Binary Tree Level Order Traversal, Number of Islands, Shortest Path in Binary Matrix, Word Ladder.
+2. **Sliding window maximum / minimum**: via a monotonic deque, O(n).
+3. **Multi-source BFS**: Rotten Oranges, Walls and Gates, 01 Matrix (seed queue with all sources at distance 0).
+4. **Task scheduling and interval problems**: Task Scheduler, Design Hit Counter, Moving Average from Data Stream.
+5. **Producer-consumer / streaming buffers**: circular buffers for rate limiters, ring buffers in systems code, bounded channels.
 
 **Canonical LeetCode problems:** #200 [Number of Islands](../coding-problems/graphs/200-number-of-islands/), #239 [Sliding Window Maximum](../coding-problems/sliding-window/239-sliding-window-maximum/), #542 01 Matrix, #621 Task Scheduler, #994 Rotting Oranges.
 

@@ -14,10 +14,10 @@ A hash table (also: hash map, dictionary, associative array) stores key-value pa
 
 ## In-depth description
 
-A hash function maps keys of arbitrary type to integers in some bucket range. Each bucket points to zero or more entries; **collisions** happen when two keys hash to the same bucket. The two standard collision-handling approaches:
+A hash function maps keys of arbitrary type to integers in some bucket range. Each bucket points to zero or more entries. **Collisions** happen when two keys hash to the same bucket. The two standard collision-handling approaches:
 
-- **Separate chaining**, each bucket holds a linked list (or small array/tree) of entries. Simple, degrades gracefully.
-- **Open addressing**, on collision, probe to another bucket (linear, quadratic, or double hashing). Better cache locality; requires tombstones for deletion.
+- **Separate chaining**: each bucket holds a linked list (or small array/tree) of entries. Simple, degrades gracefully.
+- **Open addressing**: on collision, probe to another bucket (linear, quadratic, or double hashing). Better cache locality. Requires tombstones for deletion.
 
 The **load factor** (entries / buckets) determines collision likelihood. Most implementations resize and rehash when the load factor exceeds a threshold (~0.75 for Java HashMap, ~0.5 for open addressing). Resizing is amortized O(1) per insert.
 
@@ -39,11 +39,11 @@ A **hash set** is a hash table that stores only keys. Use it for "have I seen th
 
 ## Common uses in DSA
 
-1. **O(1) membership / frequency lookup**, [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), First Unique Character, Intersection of Two Arrays.
-2. **Complement / pair-finding**, Two Sum variants, 4Sum II (two-sum on pair sums), Pairs of Songs With Total Durations Divisible by 60.
-3. **Frequency counting**, [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/) (with a heap), Valid Anagram, Ransom Note, Majority Element.
-4. **Prefix sum with hash**, Subarray Sum Equals K, Continuous Subarray Sum, Contiguous Array (count of 0s = 1s).
-5. **Deduplication and grouping**, [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/) (key by sorted string or char-count tuple), [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), Longest Substring Without Repeating Characters.
+1. **O(1) membership / frequency lookup**: [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), First Unique Character, Intersection of Two Arrays.
+2. **Complement / pair-finding**: Two Sum variants, 4Sum II (two-sum on pair sums), Pairs of Songs With Total Durations Divisible by 60.
+3. **Frequency counting**: [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/) (with a heap), Valid Anagram, Ransom Note, Majority Element.
+4. **Prefix sum with hash**: Subarray Sum Equals K, Continuous Subarray Sum, Contiguous Array (count of 0s = 1s).
+5. **Deduplication and grouping**: [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/) (key by sorted string or char-count tuple), [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), Longest Substring Without Repeating Characters.
 
 **Canonical LeetCode problems:** #1 [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), #49 [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/), #128 [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), #146 LRU Cache, #217 [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), #347 [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), #560 Subarray Sum Equals K.
 

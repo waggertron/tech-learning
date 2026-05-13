@@ -16,20 +16,20 @@ A **binary tree** is a hierarchical structure where each node has up to two chil
 
 **Traversals** are the starting point:
 
-- **Preorder** (root → left → right), useful for serializing the structure itself.
-- **Inorder** (left → root → right), on a BST, yields values in sorted order. Critical insight.
-- **Postorder** (left → right → root), useful for subtree computations (delete, aggregate up).
-- **Level-order** (BFS), traverse by depth using a queue; used for level-dependent problems.
+- **Preorder** (root → left → right): useful for serializing the structure itself.
+- **Inorder** (left → root → right): on a BST, yields values in sorted order. Critical insight.
+- **Postorder** (left → right → root): useful for subtree computations (delete, aggregate up).
+- **Level-order** (BFS): traverse by depth using a queue; used for level-dependent problems.
 
 Vanilla BSTs degrade to O(n) on sorted input (they become a linked list). **Self-balancing variants**, AVL, red-black trees, B-trees, maintain O(log n) depth via rotations. Java's `TreeMap`/`TreeSet` and C++'s `std::map`/`std::set` are red-black trees. Python has no built-in balanced BST; use `sortedcontainers.SortedList` or build workarounds.
 
 **Interview patterns:**
 
-- **Recursion on subtrees**, define `f(node)` in terms of `f(node.left)` and `f(node.right)`. Max Depth, Diameter, Symmetric, Invert are all one-liners in this form.
-- **Returning tuples from recursion**, when you need multiple pieces of info about a subtree (e.g., "max depth *and* whether balanced"), return a tuple.
-- **Tree DP**, when a decision at a node depends on decisions at its children; e.g., House Robber III, Binary Tree Cameras.
-- **Iterative traversal**, replace recursion with an explicit stack (prevents stack overflow on deep trees).
-- **LCA (Lowest Common Ancestor)**, recursive case analysis; a staple.
+- **Recursion on subtrees**: define `f(node)` in terms of `f(node.left)` and `f(node.right)`. Max Depth, Diameter, Symmetric, Invert are all one-liners in this form.
+- **Returning tuples from recursion**: when you need multiple pieces of info about a subtree (e.g., "max depth *and* whether balanced"), return a tuple.
+- **Tree DP**: when a decision at a node depends on decisions at its children; e.g., House Robber III, Binary Tree Cameras.
+- **Iterative traversal**: replace recursion with an explicit stack (prevents stack overflow on deep trees).
+- **LCA (Lowest Common Ancestor)**: recursive case analysis; a staple.
 
 ## Time complexity
 
@@ -43,11 +43,11 @@ Vanilla BSTs degrade to O(n) on sorted input (they become a linked list). **Self
 
 ## Common uses in DSA
 
-1. **Hierarchical data modeling**, file systems, DOM, ASTs, expression trees.
-2. **Ordered map / sorted set operations**, `TreeMap`, `std::map`, `SortedList` for "give me the next-largest key" and range queries.
-3. **Recursive subtree problems**, [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), [Diameter](../coding-problems/trees/543-diameter-of-binary-tree/), Symmetric Tree, Path Sum.
-4. **Lowest Common Ancestor**, LCA of a Binary Tree, [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/).
-5. **Tree DP and serialization**, House Robber III, Binary Tree Cameras, [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/).
+1. **Hierarchical data modeling**: file systems, DOM, ASTs, expression trees.
+2. **Ordered map / sorted set operations**: `TreeMap`, `std::map`, `SortedList` for "give me the next-largest key" and range queries.
+3. **Recursive subtree problems**: [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), [Diameter](../coding-problems/trees/543-diameter-of-binary-tree/), Symmetric Tree, Path Sum.
+4. **Lowest Common Ancestor**: LCA of a Binary Tree, [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/).
+5. **Tree DP and serialization**: House Robber III, Binary Tree Cameras, [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/).
 
 **Canonical LeetCode problems:** #98 [Validate BST](../coding-problems/trees/098-validate-binary-search-tree/), #104 [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), #226 [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), #235 [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/), #297 [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/), #543 [Diameter of Binary Tree](../coding-problems/trees/543-diameter-of-binary-tree/), #572 [Subtree of Another Tree](../coding-problems/trees/572-subtree-of-another-tree/).
 

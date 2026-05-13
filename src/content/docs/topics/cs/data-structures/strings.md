@@ -20,10 +20,10 @@ A string is a sequence of characters, usually stored as an array of bytes (C), a
 
 **String matching algorithms** come up occasionally:
 
-- **KMP (Knuth-Morris-Pratt)**, O(n + m) with a precomputed failure function.
-- **Rabin-Karp**, polynomial rolling hash for fast multi-pattern and approximate matching.
-- **Z-algorithm**, computes prefix-match lengths in O(n), simpler than KMP for some problems.
-- **Manacher's algorithm**, finds the longest palindromic substring in O(n) (the O(n²) expand-around-center version is interview-standard).
+- **KMP (Knuth-Morris-Pratt)**: O(n + m) with a precomputed failure function.
+- **Rabin-Karp**: polynomial rolling hash for fast multi-pattern and approximate matching.
+- **Z-algorithm**: computes prefix-match lengths in O(n), simpler than KMP for some problems.
+- **Manacher's algorithm**: finds the longest palindromic substring in O(n) (the O(n²) expand-around-center version is interview-standard).
 
 **String DP**, edit distance, LCS, regex matching, is a recurring theme and one of the hardest interview topic areas.
 
@@ -41,11 +41,11 @@ A string is a sequence of characters, usually stored as an array of bytes (C), a
 
 ## Common uses in DSA
 
-1. **Anagrams and character frequency**, Valid Anagram, Group Anagrams, Find All Anagrams in a String.
-2. **Palindrome detection**, [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/) (expand around center or Manacher's), Palindromic Substrings.
-3. **Pattern matching**, Implement strStr() (needle in haystack), Repeated Substring Pattern, Find the Index of the First Occurrence.
-4. **Sliding window on strings**, [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), Longest Repeating Character Replacement.
-5. **Edit distance and string DP**, Edit Distance, Longest Common Subsequence, Regular Expression Matching, Wildcard Matching.
+1. **Anagrams and character frequency**: Valid Anagram, Group Anagrams, Find All Anagrams in a String.
+2. **Palindrome detection**: [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/) (expand around center or Manacher's), Palindromic Substrings.
+3. **Pattern matching**: Implement strStr() (needle in haystack), Repeated Substring Pattern, Find the Index of the First Occurrence.
+4. **Sliding window on strings**: [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), Longest Repeating Character Replacement.
+5. **Edit distance and string DP**: Edit Distance, Longest Common Subsequence, Regular Expression Matching, Wildcard Matching.
 
 **Canonical LeetCode problems:** #3 [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), #5 [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/), #20 Valid Parentheses, #49 Group Anagrams, #76 [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), #125 [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), #242 Valid Anagram.
 
