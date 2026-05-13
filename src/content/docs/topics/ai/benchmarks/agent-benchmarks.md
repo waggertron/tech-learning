@@ -5,7 +5,7 @@ parent: benchmarks
 tags: [agents, tau-bench, osworld, webarena, gaia, bfcl, benchmarks]
 status: draft
 created: 2026-04-24
-updated: 2026-05-04
+updated: 2026-05-13
 ---
 
 ## What agent benchmarks measure
@@ -18,6 +18,18 @@ Two structural differences from QA benchmarks:
 - **Environment-dependent.** The benchmark is a simulator (or a real environment) that the agent drives. Scores depend heavily on the exact scaffold, tool set, and success-detection heuristic.
 
 Both properties make agent benchmarks uniquely gameable. [Berkeley's RDI team has shown](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/) that nearly every major agent benchmark can be hacked to near-100% by adversarially exploiting environment bugs, file-system tricks, or success-detection loopholes. Read scores carefully.
+
+## Why agent benchmarks exist
+
+**The behavior gap problem (2022-2023).** After GPT-4's release, labs made qualitative claims about agents: "it can browse the web," "it can use a computer," "it can write and run code." These claims were true in demos. They were hard to verify at scale. Researchers needed benchmarks that produced a number rather than a video.
+
+**WebArena (2023): reproducibility first.** The WebArena authors' core design goal was reproducibility. Evaluating web agents on live websites produces non-reproducible results (the website changes). WebArena self-hosts exact replicas of Shopify, Reddit, GitLab, and OpenStreetMap. Every evaluation runs against the same snapshot. This sacrifices ecological validity (real websites are messier) for scientific rigor.
+
+**OSWorld (2024): the computer-use problem.** Computer-use agents needed a benchmark that didn't just test browser navigation but full desktop operation: file management, GUI applications, cross-app workflows. OSWorld was created to cover this space across Ubuntu, macOS, and Windows. The emphasis on GUI screenshot-based navigation distinguished it from terminal-only benchmarks.
+
+**TAU-bench (2024): enterprise deployment.** Sierra built TAU-bench to answer a specific question their customers were asking: "can I trust this agent to handle customer service interactions?" Academic benchmarks didn't measure policy compliance, multi-turn consistency, or reliability. TAU-bench was designed by a company that had deployed agents in production and knew which failure modes mattered.
+
+**GAIA (2023): assistant-like generalism.** GAIA was explicitly motivated by the question "what does it mean to be a good general-purpose assistant?" rather than "what does it mean to solve coding problems?" The task set was curated to require common-sense orchestration of multiple tools: search, file reading, computation. The three difficulty levels were designed to span the range from "any capable model should get this" to "current models reliably fail this."
 
 ## SWE-bench and its variants
 
@@ -63,6 +75,18 @@ Released by Sierra in 2024. Evaluates agents in simulated real-world enterprise 
 
 **Reading TAU scores.** Two axes: pass@1 (did the task complete once?) and pass^k (did it complete reliably across k repeated runs?). Reliability matters in production; TAU measures it explicitly. An 80% pass@1 with 40% pass^4 means the agent is half-working, not production-ready.
 
+### How TAU-bench tasks fail in practice
+
+The three most common TAU-bench failure modes (in order of frequency):
+
+1. **Policy misapplication**: The agent applies the wrong policy tier. A customer marked as "Gold" in the system gets standard refund rules (14-day window) instead of Gold rules (30-day window). The agent reads the policy document but misidentifies which clause applies to the specific customer tier.
+
+2. **State loss across turns**: A multi-turn conversation about rebooking a flight loses the original flight details by turn 6. The agent re-confirms information the user already provided, fails to track that the user already agreed to the change fee, and asks the user to repeat steps they completed earlier.
+
+3. **Ambiguous instruction handling**: The simulated user says "book me something in the afternoon." The agent interprets this as any flight after 12pm and books a 11:58pm departure. This is technically in the afternoon by some definitions; the task scores it as failure because the user's intent was clearly a reasonable afternoon (2-5pm) departure.
+
+Pass^4 drops so sharply (relative to pass@1) because all three failure modes are stochastic. A run that happens to present the policy clearly, with no ambiguous user phrasing, and with good working memory will pass. The next run with slightly different phrasing fails. The reliability gap measures this variance.
+
 ## OSWorld
 
 Released by University of Hong Kong / Salesforce, 2024. 369 cross-application tasks on Ubuntu, Windows, and macOS. Tasks span browsers, office suites, code editors, and file managers. Execution-based evaluation: the scorer actually runs the agent's actions and checks the final desktop state.
@@ -83,6 +107,16 @@ Released by University of Hong Kong / Salesforce, 2024. 369 cross-application ta
 | Frontier specialist agents | 30-50% |
 
 **Why it's so hard.** GUI navigation requires vision (read a screenshot), planning (decide what to click), low-level control (mouse position, keystrokes), and resilience to slight UI changes. All are current weak spots.
+
+### OSWorld failure modes (why 30-50% is hard to push higher)
+
+Most OSWorld failures fall into one of three categories:
+
+- **Screenshot misread**: The agent produces a correct plan ("click the Save button") but clicks the wrong element on screen because two buttons are visually similar. Resolution matters: a button that looks "obvious" at 1080p may be ambiguous in a compressed screenshot.
+
+- **App-state assumption**: The agent assumes a fresh app state but the benchmark environment has a pre-loaded file or partially completed form. The agent overwrites existing data assuming it's starting fresh.
+
+- **Multi-application handoff**: Tasks that require passing data from one application to another (copy from LibreOffice Calc, paste into a web form) fail because the clipboard state is not preserved correctly between the agent's commands, or the agent tries to type the copied value from memory rather than paste.
 
 ## WebArena
 
@@ -108,6 +142,18 @@ Released by CMU, 2023. 812 realistic long-horizon tasks on 5 self-hosted website
 **Variants.** VisualWebArena (visual tasks with images embedded in pages), WebArena-Lite (smaller held-out subset for faster iteration).
 
 **Key failure pattern.** Most task failures are not on step 1. An agent navigates to the right page, finds the right filter, and then produces a malformed form submission 8 steps in. Cascading error accumulation is the dominant failure mode.
+
+### Where WebArena tasks fail (approximate distribution from published analyses)
+
+| Failure point | % of total failures |
+|---|---|
+| Navigation to correct page | ~15% |
+| Correct page, wrong filter or search | ~25% |
+| Correct data found, wrong form entry | ~30% |
+| Correct form entry, submission error | ~20% |
+| Success detected incorrectly (false pass) | ~10% |
+
+The largest failure category is "correct data found, wrong form entry" -- the agent navigates correctly and extracts the right information but then enters it in the wrong field, with wrong formatting, or misses a required field. This is the gap that better form-filling and UI-understanding capabilities address.
 
 ## WebVoyager
 
@@ -142,6 +188,26 @@ Companion to WebArena but harder in a different direction. 643 tasks on 15 real,
 - Level 1: "What is the capital of the country that has the most UNESCO World Heritage Sites as of 2023?"
 - Level 2: "The attached Excel file contains quarterly revenue for three subsidiaries. Which subsidiary had the highest YoY growth in Q3 2022, and by what percentage?"
 - Level 3: "Find the primary author of the 2019 paper that first described the 'double descent' phenomenon in neural networks. What institution were they at when they published it?"
+
+### Expanded GAIA examples by difficulty level
+
+**Level 1 example (tool use, single step):**
+
+> What is the population of Iceland according to the most recent World Bank data?
+
+The agent must call a web search or use a browser, find the World Bank data page, and report the number. Simple retrieval. Frontier models score ~90% on Level 1.
+
+**Level 2 example (multi-step, file handling):**
+
+> The attached spreadsheet contains monthly sales figures for 2022 and 2023. In which month did YoY growth first exceed 15%? Report the month name and the exact growth percentage.
+
+The agent must read the file, compute YoY growth for each month, find the first that exceeds 15%, and format the answer. Requires file reading, arithmetic, and result extraction. Frontier models score ~65-70% on Level 2.
+
+**Level 3 example (synthesis, multiple sources):**
+
+> The paper that introduced the term "attention is all you need" was published at a specific conference. Find the exact venue name, the acceptance rate for that venue in the year the paper was accepted, and the number of papers from Google Brain among the accepted papers that year.
+
+This requires: (1) identifying "Attention Is All You Need" as a NeurIPS 2017 paper, (2) finding NeurIPS 2017's acceptance rate (678 accepted / 3240 submitted = ~20.9%), (3) counting Google Brain affiliations among NeurIPS 2017 papers. Each step requires a separate search or database lookup, and the combination is unlikely to be answered in one source. Frontier models score ~35-45% on Level 3.
 
 **What it measures.** "Assistant-like" task completion. The agent must decide which tools to use, when to search, how to handle file attachments, and how to synthesize a clean final answer.
 
@@ -242,6 +308,20 @@ Broad evaluation framework covering 8 environments: OS, database, Knowledge Grap
 - **HAL (Hackers And Lawyers).** Legal and compliance agent scenarios.
 
 These are domain-specialized benchmarks. Useful for hiring decisions ("will this model do my team's work?") but rarely on headline charts.
+
+## How agent architectures advanced
+
+**ReAct (2022): the first structured agent loop.** Yao et al. introduced ReAct (Reason + Act), a prompting pattern that interleaved reasoning steps ("I need to find the product page") with tool calls ("search for X"). Before ReAct, models produced a sequence of actions without explicit reasoning. ReAct made the reasoning visible and correctable. WebArena and similar benchmarks showed ReAct agents at 10-20% task success rates in early 2023.
+
+**Function calling / tool use (2023).** OpenAI's function-calling API formalized tool use: models emitted structured JSON calls rather than text that a parser had to interpret. This reduced scaffolding complexity and improved reliability. Models could be fine-tuned specifically on tool-calling patterns. BFCL (Berkeley Function Calling Leaderboard) was created to measure this capability directly.
+
+**Multi-step planning with memory (2023-2024).** Agents that maintained an explicit task plan (stored outside the context window and updated after each step) outperformed purely reactive agents on long-horizon tasks. OSWorld tasks requiring 20+ actions benefited most: the agent could check its plan after each step rather than relying on context length alone.
+
+**Context-window-length scaling (2024).** Claude 2's 100K context and Gemini 1.5's 1M context enabled agents to hold entire codebases or multi-session histories in context. SWE-bench performance improved when agents could see more of the codebase without selective retrieval. The tradeoff: longer context meant higher cost and "lost in the middle" degradation.
+
+**Computer use models (2024).** Anthropic's Claude Computer Use and OpenAI's Operator introduced models specifically trained to operate GUIs via screenshot observation. These models were fine-tuned on human demonstrations of computer tasks: click here, type there, scroll until you see. OSWorld scores improved from ~10% (generic model plus scaffold) to ~38-44% (computer-use specialized model). The gap to human performance (~90%+) reflects remaining weaknesses in visual grounding and error recovery.
+
+**Multi-agent collaboration (2025).** Current state-of-the-art agent systems use multiple agents in structured roles: a planner that breaks tasks into subtasks, executors that handle each subtask, a reviewer that checks outputs, and a coordinator that manages the workflow. GAIA Level 3 scores above 60% require this kind of orchestration. Single-agent approaches plateau earlier because any single agent's context and working memory is bounded.
 
 ## The benchmark-is-reward-hackable problem
 

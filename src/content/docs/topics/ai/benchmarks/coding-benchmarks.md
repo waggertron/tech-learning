@@ -5,7 +5,7 @@ parent: benchmarks
 tags: [coding, swe-bench, humaneval, livecodebench, benchmarks]
 status: draft
 created: 2026-04-24
-updated: 2026-05-04
+updated: 2026-05-13
 ---
 
 ## A decade-long arc
@@ -17,6 +17,16 @@ Coding benchmarks went through three generations:
 3. **2024+, "Fix this real issue in this real repo."** SWE-bench, SWE-bench Verified, SWE-bench Pro, Terminal-Bench. Multi-file, tool-using, long-horizon.
 
 Each generation started unsaturated and ended near 90%. Each transition required a new benchmark because the old one stopped differentiating.
+
+## Why this benchmark family exists
+
+**The "can it code?" problem (2021).** Before HumanEval, coding ability was evaluated qualitatively ("it seems to write okay Python sometimes") or via BLEU score on code (which is nearly meaningless -- BLEU measures token overlap, and two correct implementations of the same function share almost no tokens). OpenAI's Codex paper created HumanEval specifically to answer the question quantitatively: given a docstring, does the generated function body pass the tests?
+
+**The contamination crisis (2022-2023).** Within 18 months of HumanEval's release, its 164 problems were being solved by models at 65%+. The problems appeared in blog posts, YouTube tutorials, and training corpora. Models were reciting solutions, not generating them. The community needed a benchmark that refreshed continuously with problems that couldn't be memorized. LiveCodeBench answered this by scraping problems released after each model's training cutoff.
+
+**The "write a function" ceiling (2023).** Even contamination-free, HumanEval-style benchmarks measured a specific skill: complete a docstring. Real software engineering involves finding the bug, understanding a multi-file codebase, writing the test, and making the right architectural decision. SWE-bench was created to measure this. It used real GitHub issues from production repos -- not synthetic problems -- because real issues have the ambiguity and context-dependence that actually characterizes engineering work.
+
+**The scaffold revelation (2024).** Early SWE-bench results (2-4% for GPT-4 without scaffolding) made it look like coding agents were far from useful. When Claude 3.5 Sonnet was given a scaffold (shell access, ability to run tests, ability to read files) the score jumped to 49%. The benchmark revealed that raw model capability and scaffolded agent capability are very different things. SWE-bench became as much a benchmark of agent design as of model capability.
 
 ## HumanEval
 
@@ -43,6 +53,55 @@ def has_close_elements(numbers: List[float], threshold: float) -> bool:
 
 The model must fill in the body. The original Codex (2021) solved roughly 28% of the 164 problems with a single attempt. That was the state of the art at the time.
 
+### More example problems (increasing difficulty)
+
+**Example 2 (moderate -- string manipulation):**
+
+```python
+def longest_common_prefix(strs: List[str]) -> str:
+    """ Find the longest common prefix string amongst a list of strings.
+    If there is no common prefix, return an empty string "".
+    >>> longest_common_prefix(["flower","flow","flight"])
+    'fl'
+    >>> longest_common_prefix(["dog","racecar","car"])
+    ''
+    >>> longest_common_prefix(["interview","interpret","internal"])
+    'inter'
+    """
+```
+
+This is harder than `has_close_elements` because the optimal solution (vertical scanning or divide-and-conquer) isn't the first approach most developers reach for. A common wrong approach: zip the strings and check character-by-character, forgetting to handle an empty list or a single string.
+
+**Example 3 (harder -- recursive data structures):**
+
+```python
+def flatten(lst: List) -> List:
+    """ Flatten a potentially nested list of integers and lists.
+    >>> flatten([1, [2, 3], [4, [5, 6]]])
+    [1, 2, 3, 4, 5, 6]
+    >>> flatten([1, 2, 3])
+    [1, 2, 3]
+    >>> flatten([[1, [2]], [[3, 4], 5]])
+    [1, 2, 3, 4, 5]
+    """
+```
+
+**Example 4 (tricky -- bit manipulation):**
+
+```python
+def count_bits_to_flip(a: int, b: int) -> int:
+    """ Count the number of bits that need to be flipped to convert integer a to integer b.
+    >>> count_bits_to_flip(29, 15)
+    2
+    >>> count_bits_to_flip(0, 0)
+    0
+    >>> count_bits_to_flip(7, 0)
+    3
+    """
+```
+
+Hint: XOR `a` and `b` to get the bits that differ, then count set bits in the result. This requires two insights: (1) XOR reveals differing bits, (2) counting set bits (popcount) is a standard technique. Models that don't recognize the XOR step write more verbose but correct solutions.
+
 ### Score progression
 
 | Model / Era | pass@1 (HumanEval) |
@@ -55,6 +114,25 @@ The model must fill in the body. The original Codex (2021) solved roughly 28% of
 | o3-mini / frontier models, early 2025 | 95%+ |
 
 **Saturation.** Fully saturated. GPT-4 hit 90% in 2023; every frontier model passes it now. Still appears as a smoke test. Contaminated: solutions are all over the web.
+
+### Coding benchmark frontier progression
+
+```
+Coding benchmark frontier performance: 2021 to 2026
+=====================================================
+
+                   HumanEval   SWE-bench Verified   LiveCodeBench
+2021 (Codex):        ~28%           --                  --
+2022 (GPT-3.5):      ~57%           --                  --
+2023 (GPT-4):        ~67%          ~4%                  --
+2024 Q1:             ~85%          ~13%                ~40%
+2024 Q3:             ~90%          ~49%                ~55%
+2025 Q1:             ~95%          ~65%                ~70%
+2026 Q1:             ~97%          ~85%                ~90%
+Human (SWE-bench):    N/A          ~100%                N/A
+
+Note: SWE-bench numbers assume best-available scaffold.
+```
 
 **HumanEval+ caveat.** The EvalPlus team expanded each of the 164 problems to roughly 80x more test cases. Models that score 90%+ on the original often drop 5-10 points on HumanEval+ because edge cases their generated code misses are now covered. The original 164 tests are too weak to discriminate quality.
 
@@ -91,6 +169,18 @@ A representative medium-hard problem from the platform:
 > Given an array of integers, find the maximum length subsequence such that no two adjacent elements differ by more than K. Return the length.
 
 This is not a famous LeetCode problem with a well-known solution: it was posted after most models' training cutoffs, so performance reflects actual reasoning ability rather than recall.
+
+**Example 2 (hard -- graph + dynamic programming, post-cutoff):**
+
+> Given a directed graph with n nodes and weighted edges, find the minimum cost path from node 0 to node n-1 such that you visit exactly k distinct nodes (including start and end). Return -1 if no such path exists.
+
+This combines shortest-path (Dijkstra) with a state-space extension (tracking which k nodes are visited). The optimal approach is DP with bitmask if n is small, or layered Dijkstra if k is small. Distinguishing which approach to use based on the constraints -- the problem statement gives bounds -- is the key reasoning step.
+
+**Example 3 (competition-tier -- string + number theory):**
+
+> You are given a string s consisting of digits. Find the number of non-empty substrings of s such that the number represented by the substring is divisible by all of its non-zero digits.
+
+This requires iterating over all O(n²) substrings, but doing so naively is too slow for large n. The insight is that the digit 0 resets divisibility analysis and the dividend grows fast -- the LCM of digits 1-9 is 2520, which bounds how far you need to look. Post-cutoff problems like this have no worked solution online; the model must reason through the bound.
 
 ### The four evaluation scenarios
 
@@ -144,6 +234,24 @@ A representative instance from the benchmark:
 
 This requires reading multiple files (session handling, redirect logic, cookie jar), understanding how they interact, forming a hypothesis about the root cause, and writing a surgical fix. No single-function stub fills this gap.
 
+**Example 2 (Django repo):**
+
+> **Repository:** `django`
+> **Issue:** "`annotate()` followed by `.values()` drops the annotation from the queryset when chained with `distinct()`."
+> **Setup:** Full Django source at the issue's git SHA, the issue text, and shell access.
+> **Goal:** Produce a diff that makes the provided regression test pass without breaking the existing 2,000+ Django tests.
+
+This requires understanding how Django's ORM builds SQL query state internally -- specifically how annotation state is preserved or dropped when `ValuesQuerySet` calls `distinct()`. The fix is typically a one-to-five line change buried in `django/db/models/sql/query.py` or `compiler.py`. Finding the right file requires reading across the ORM internals, not just grepping for the obvious function name.
+
+**Example 3 (scikit-learn repo):**
+
+> **Repository:** `scikit-learn`
+> **Issue:** "`GridSearchCV` with `refit=False` raises `NotFittedError` when calling `.best_estimator_` but the error message doesn't mention that `refit=False` is the cause."
+> **Setup:** Full scikit-learn source at issue SHA, shell access.
+> **Goal:** Improve the error message and make the provided test pass.
+
+This is a simpler task (error message quality) but still requires understanding the class hierarchy (`GridSearchCV` inherits from `BaseSearchCV`), finding where `best_estimator_` is defined, and writing the conditional error message correctly.
+
 ### Score progression
 
 | Model + harness configuration | SWE-bench Verified resolve rate |
@@ -157,6 +265,25 @@ This requires reading multiple files (session handling, redirect logic, cookie j
 | Claude Opus 4.6, 2025-2026 | ~80.8% |
 
 **The scaffold lesson.** The jump from 13% to 49% for Claude 3.5 Sonnet is almost entirely scaffolding, not a model update. Scaffold design (how the agent searches the codebase, how it runs tests, how it decides when to stop) matters as much as raw model capability. Most state-of-the-art numbers use complex multi-agent harnesses, not bare API calls.
+
+### SWE-bench Verified resolve rate progression
+
+```
+SWE-bench Verified resolve rate progression
+============================================
+
+Model (best scaffold available at the time):
+
+GPT-4, no scaffold (2024):                    ██ 4%
+Claude 3.5 Sonnet, no scaffold (2024):        ████████████ 13%
+Claude 3.5 Sonnet + scaffold (Jan 2025):      ██████████████████████████ 49%
+o1 + scaffold (2025):                         █████████████████████████████████ 64%
+Claude 3.7 Sonnet + scaffold (2025):          ███████████████████████████████████ 70%
+Gemini 3 Pro + Live-SWE-agent (Nov 2025):     ████████████████████████████████████████ 77%
+Claude Opus 4.6 (2025-2026):                  █████████████████████████████████████████ 80%
+
+Each █ = ~2%
+```
 
 **Saturation (April 2026).** Top configurations are in the 80-90% range. Saturation is approaching.
 
@@ -185,6 +312,20 @@ The model must read compiler output, trace it back to a specific line in `setup.
 **Score (April 2026).** GPT-5.3 Codex reached ~77.3% on Terminal-Bench. Claude top models are in a similar range. Still differentiates.
 
 **Why it's distinct from SWE-bench.** SWE-bench measures code change. Terminal-Bench measures systems-level ability: running tests, reading logs, installing missing deps, navigating the filesystem. Different failure modes surface. A model can score high on SWE-bench while struggling with environment setup tasks.
+
+## How model architectures advanced on coding
+
+**Codex (2021): code-specialized pretraining.** The Codex models were GPT-3 variants fine-tuned on a large corpus of publicly available code from GitHub. This was the first demonstration that a general-purpose architecture could be specialized for code by training data. HumanEval pass@1 of 28% was remarkable for 2021 but would be considered weak today.
+
+**Larger code corpora and instruction tuning (2022-2023).** GPT-4 and similar models were trained on vastly larger code corpora and instruction-tuned to follow coding requests reliably. Pass@1 on HumanEval jumped to 67-87%. The key advance was not architectural but data: more high-quality code in pretraining and more coding instruction-following examples in fine-tuning.
+
+**Tool use and function calling (2023).** OpenAI's function-calling API (June 2023) enabled models to invoke structured tools: search a codebase, run a test suite, read a file. This wasn't a model architecture change but an inference-time change. The model learned to emit structured JSON calls, and a scaffolding layer executed them. This bridged the gap between "generate code" and "act on a codebase."
+
+**Scaffolded coding agents (2024).** Frameworks like SWE-agent, Aider, OpenHands, and eventually Claude Code gave models a structured loop: read, plan, edit, run tests, observe output, iterate. The scaffold provided what single-shot code generation couldn't: error recovery. If the generated code has a syntax error, the agent reads the error output and retries. SWE-bench Verified scores jumped from 2-4% (no scaffold) to 49-65% (scaffold) for comparable base models. The scaffold is now an inseparable part of what "coding performance" means.
+
+**Reasoning mode for debugging (2024-2025).** Models with extended thinking produce substantially better debugging traces. When a test fails, a reasoning model can follow a structured fault-isolation process: hypothesize the root cause, form a targeted test, check the hypothesis, revise. Non-reasoning models tend to make a random fix and hope it works. Reasoning mode improved SWE-bench scores by 8-15 points for models where both modes were tested.
+
+**Multi-agent coding (2025).** The current frontier uses multi-agent architectures: one agent writes code, another reviews it, a third runs the test suite and reports failures. This mirrors how human engineering teams work. Early results (Opus 4.6 at ~80% on SWE-bench Verified) are partly attributable to multi-agent designs that allow self-correction and peer review within a single benchmark run.
 
 ## CRUXEval and DevOps-focused benchmarks
 
