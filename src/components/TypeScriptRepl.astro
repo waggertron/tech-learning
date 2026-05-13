@@ -1,0 +1,316 @@
+---
+interface Props {
+  code: string;
+  /** Optional unique-ish id for this REPL instance on the page. */
+  id?: string;
+}
+const { code, id = 'tsrepl' } = Astro.props;
+const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="tsrepl not-content" data-repl-id={replId} data-original={code}>
+  <div class="tsrepl__header">
+    <div class="tsrepl__btn-group">
+      <button class="tsrepl__run" type="button">▶ Run TS</button>
+      <button class="tsrepl__reset" type="button" title="Reset to original">↻ Reset</button>
+    </div>
+    <span class="tsrepl__status" data-status>idle</span>
+  </div>
+  <div class="tsrepl__editor-host" data-editor></div>
+  <pre class="tsrepl__output" data-output>Click <strong>Run TS</strong> to execute. First run downloads Babel (~400 KB, cached after that).</pre>
+  <div class="tsrepl__timing" data-timing></div>
+</div>
+
+<script>
+  import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
+  import { EditorState } from '@codemirror/state';
+  import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands';
+  import { javascript } from '@codemirror/lang-javascript';
+  import { oneDark } from '@codemirror/theme-one-dark';
+  import {
+    syntaxHighlighting,
+    defaultHighlightStyle,
+    indentOnInput,
+    bracketMatching,
+    indentUnit,
+  } from '@codemirror/language';
+  import {
+    autocompletion,
+    completionKeymap,
+    closeBrackets,
+    closeBracketsKeymap,
+  } from '@codemirror/autocomplete';
+
+  const BABEL_CDN = 'https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js';
+
+  // Module-scoped: Babel is loaded once and shared across all TS REPLs on the page.
+  let babelPromise: Promise<void> | null = null;
+
+  async function loadBabelOnce(): Promise<void> {
+    if (!babelPromise) {
+      babelPromise = new Promise<void>((resolve, reject) => {
+        if ((window as any).Babel) { resolve(); return; }
+        const s = document.createElement('script');
+        s.src = BABEL_CDN;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('Failed to load Babel'));
+        document.head.appendChild(s);
+      });
+    }
+    return babelPromise;
+  }
+
+  interface RunResult {
+    lines: string[];
+    ms: number;
+    error: boolean;
+  }
+
+  function runTypeScript(code: string): RunResult {
+    const Babel = (window as any).Babel;
+    let transpiled: string;
+    try {
+      const result = Babel.transform(code, {
+        presets: ['typescript'],
+        filename: 'code.ts',
+      });
+      transpiled = result.code ?? '';
+    } catch (e: any) {
+      return { lines: [e.message ?? String(e)], ms: 0, error: true };
+    }
+
+    const lines: string[] = [];
+    const origLog = console.log;
+    const origError = console.error;
+    const origWarn = console.warn;
+    console.log = (...args: unknown[]) => lines.push(args.map(String).join(' '));
+    console.error = (...args: unknown[]) => lines.push('Error: ' + args.map(String).join(' '));
+    console.warn = (...args: unknown[]) => lines.push('Warning: ' + args.map(String).join(' '));
+
+    const t0 = performance.now();
+    let error = false;
+    try {
+      // eslint-disable-next-line no-new-func
+      new Function(transpiled)();
+    } catch (e: any) {
+      lines.push(e.message ?? String(e));
+      error = true;
+    } finally {
+      console.log = origLog;
+      console.error = origError;
+      console.warn = origWarn;
+    }
+
+    return { lines, ms: performance.now() - t0, error };
+  }
+
+  const tightLines = EditorView.theme({
+    '&': { fontSize: '0.85rem' },
+    '.cm-content': {
+      lineHeight: '1.4',
+      padding: '4px 0',
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    },
+    '.cm-line': {
+      lineHeight: '1.4',
+      padding: '0 4px',
+      margin: '0',
+    },
+    '.cm-gutters': { borderRight: 'none' },
+    '.cm-gutterElement': {
+      lineHeight: '1.4',
+      padding: '0 8px 0 4px',
+      margin: '0',
+    },
+    '.cm-scroller': { lineHeight: '1.4' },
+  });
+
+  function makeEditor(host: HTMLElement, initialCode: string): EditorView {
+    return new EditorView({
+      doc: initialCode,
+      extensions: [
+        lineNumbers(),
+        highlightActiveLine(),
+        history(),
+        indentOnInput(),
+        bracketMatching(),
+        closeBrackets(),
+        indentUnit.of('  '),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        javascript({ typescript: true }),
+        autocompletion({ activateOnTyping: true }),
+        oneDark,
+        tightLines,
+        keymap.of([
+          indentWithTab,
+          ...closeBracketsKeymap,
+          ...completionKeymap,
+          ...defaultKeymap,
+          ...historyKeymap,
+        ]),
+        EditorState.tabSize.of(2),
+      ],
+      parent: host,
+    });
+  }
+
+  function attachRepl(root: HTMLElement) {
+    const runBtn = root.querySelector<HTMLButtonElement>('.tsrepl__run')!;
+    const resetBtn = root.querySelector<HTMLButtonElement>('.tsrepl__reset')!;
+    const host = root.querySelector<HTMLElement>('[data-editor]')!;
+    const output = root.querySelector<HTMLElement>('[data-output]')!;
+    const timing = root.querySelector<HTMLElement>('[data-timing]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const original = root.dataset.original ?? '';
+
+    const runtimes: number[] = [];
+    const view = makeEditor(host, original);
+
+    resetBtn.addEventListener('click', () => {
+      view.dispatch({
+        changes: { from: 0, to: view.state.doc.length, insert: original },
+      });
+      output.textContent = '(reset)';
+      status.textContent = 'idle';
+      timing.textContent = '';
+    });
+
+    runBtn.addEventListener('click', async () => {
+      runBtn.disabled = true;
+      output.textContent = '';
+      timing.textContent = '';
+      status.textContent = babelPromise ? 'running…' : 'loading Babel…';
+
+      try {
+        await loadBabelOnce();
+        status.textContent = 'running…';
+
+        const code = view.state.doc.toString();
+        const result = runTypeScript(code);
+
+        output.textContent = result.lines.length > 0 ? result.lines.join('\n') : '(no output)';
+        status.textContent = result.error ? 'error' : 'done';
+
+        if (!result.error) {
+          runtimes.push(result.ms);
+          const avg = runtimes.reduce((a, b) => a + b, 0) / runtimes.length;
+          timing.textContent = runtimes.length === 1
+            ? `Runtime: ${result.ms.toFixed(1)}ms`
+            : `Runtime: ${result.ms.toFixed(1)}ms  |  avg ${avg.toFixed(1)}ms over ${runtimes.length} runs`;
+        }
+      } catch (err: any) {
+        output.textContent = `Failed to load Babel: ${err?.message ?? err}`;
+        status.textContent = 'load failed';
+      } finally {
+        runBtn.disabled = false;
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('.tsrepl').forEach(attachRepl);
+</script>
+
+<style>
+  .tsrepl {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    margin: 1.25rem 0;
+    overflow: hidden;
+    background: var(--sl-color-bg);
+  }
+  .tsrepl__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--sl-color-gray-6);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+  .tsrepl__btn-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .tsrepl__run, .tsrepl__reset {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--sl-color-gray-4);
+    background: var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+    padding: 0.35rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .tsrepl__run {
+    background: #3178c6;
+    color: white;
+    border-color: transparent;
+  }
+  .tsrepl__run:disabled { opacity: 0.6; cursor: wait; }
+  .tsrepl__status {
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .tsrepl__editor-host {
+    min-height: 280px;
+    max-height: 560px;
+    overflow: auto;
+  }
+  .tsrepl__editor-host :global(.cm-editor) {
+    height: 100%;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .tsrepl__editor-host :global(.cm-editor.cm-focused) {
+    outline: none;
+  }
+  .tsrepl__editor-host :global(.cm-scroller) {
+    line-height: 1.4;
+  }
+  .tsrepl__editor-host :global(.cm-content),
+  .tsrepl__editor-host :global(.cm-content > *),
+  .tsrepl__editor-host :global(.cm-line),
+  .tsrepl__editor-host :global(.cm-gutter),
+  .tsrepl__editor-host :global(.cm-gutterElement) {
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .tsrepl__editor-host :global(.cm-line) {
+    padding: 0 4px;
+  }
+  .tsrepl__editor-host :global(.cm-gutterElement) {
+    line-height: 1.4;
+  }
+  .tsrepl__output {
+    margin: 0;
+    padding: 0.75rem;
+    background: var(--sl-color-black, #0d0d0d);
+    color: var(--sl-color-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    border-top: 1px solid var(--sl-color-gray-5);
+    max-height: 280px;
+    overflow: auto;
+    white-space: pre-wrap;
+  }
+  .tsrepl__timing {
+    padding: 0.35rem 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    background: var(--sl-color-black, #0d0d0d);
+    border-top: 1px solid var(--sl-color-gray-6);
+    min-height: 0;
+  }
+  .tsrepl__timing:empty {
+    display: none;
+  }
+</style>
