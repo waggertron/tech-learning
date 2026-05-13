@@ -5,11 +5,18 @@ parent: tries
 tags: [leetcode, neetcode-150, tries, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-13
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './208-implement-trie.py?raw';
+import practiceCodeTs from './208-implement-trie.ts?raw';
+import approach2PyCode from './208-implement-trie-approach2.py?raw';
+import approach2TsCode from './208-implement-trie-approach2.ts?raw';
+import approach3PyCode from './208-implement-trie-approach3.py?raw';
+import approach3TsCode from './208-implement-trie-approach3.ts?raw';
 
 ## Problem
 
@@ -34,12 +41,21 @@ LeetCode 208 · [Link](https://leetcode.com/problems/implement-trie-prefix-tree/
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="implement-trie" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="implement-trie-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="implement-trie-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, hash set of words, linear prefix check
 
 `insert` adds the word to a set; `startsWith` scans the set.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class Trie:
     def __init__(self):
@@ -54,6 +70,30 @@ class Trie:
     def startsWith(self, prefix):
         return any(w.startswith(prefix) for w in self.words)  # L3: O(W · L) scan
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Trie {
+    private words: Set<string> = new Set();
+
+    insert(word: string): void {
+        this.words.add(word);            // L1: O(L) hash + store
+    }
+
+    search(word: string): boolean {
+        return this.words.has(word);     // L2: O(L) hash lookup
+    }
+
+    startsWith(prefix: string): boolean {
+        for (const w of this.words) {
+            if (w.startsWith(prefix)) return true;  // L3: O(W · L) scan
+        }
+        return false;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -77,6 +117,8 @@ Fails when there are many words, the whole point of a trie is to make `startsWit
 
 Each node has a `dict` of children and a boolean "is end of word."
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TrieNode:
     def __init__(self):
@@ -110,6 +152,49 @@ class Trie:
             node = node.children[ch]         # L10: O(1) descend
         return node
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    isEnd: boolean = false;
+}
+
+class Trie {
+    private root = new TrieNode();
+
+    insert(word: string): void {
+        let node = this.root;
+        for (const ch of word) {                    // L1: iterate over L characters
+            if (!node.children.has(ch))
+                node.children.set(ch, new TrieNode()); // L2: O(1) create node
+            node = node.children.get(ch)!;          // L3: O(1) descend
+        }
+        node.isEnd = true;                          // L4: O(1) mark end
+    }
+
+    search(word: string): boolean {
+        const node = this._walk(word);              // L5: O(L) walk
+        return node !== null && node.isEnd;         // L6: O(1) check
+    }
+
+    startsWith(prefix: string): boolean {
+        return this._walk(prefix) !== null;         // L7: O(L) walk
+    }
+
+    private _walk(s: string): TrieNode | null {
+        let node = this.root;
+        for (const ch of s) {                      // L8: iterate over L characters
+            if (!node.children.has(ch))             // L9: O(1) map lookup
+                return null;
+            node = node.children.get(ch)!;          // L10: O(1) descend
+        }
+        return node;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -129,10 +214,23 @@ Each method is dominated by the loop over the word/prefix characters. Hash-map c
 
 Works for arbitrary alphabets.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="implement-trie-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="implement-trie-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Array of 26 children (tighter for lowercase-only)
 
 Replace the `dict` with a fixed 26-element array.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TrieNode:
     __slots__ = ("children", "is_end")
@@ -169,6 +267,50 @@ class Trie:
             node = node.children[i]     # L8: O(1) descend
         return node
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: (TrieNode | null)[] = new Array(26).fill(null); // L1: O(1) allocation
+    isEnd: boolean = false;
+}
+
+class Trie {
+    private root = new TrieNode();
+
+    insert(word: string): void {
+        let node = this.root;
+        for (const ch of word) {                  // L2: iterate over L characters
+            const i = ch.charCodeAt(0) - 97;     // L3: O(1) index computation
+            if (!node.children[i])
+                node.children[i] = new TrieNode(); // L4: O(1) create node
+            node = node.children[i]!;             // L5: O(1) descend
+        }
+        node.isEnd = true;
+    }
+
+    search(word: string): boolean {
+        const node = this._walk(word);
+        return node !== null && node.isEnd;
+    }
+
+    startsWith(prefix: string): boolean {
+        return this._walk(prefix) !== null;
+    }
+
+    private _walk(s: string): TrieNode | null {
+        let node = this.root;
+        for (const ch of s) {                    // L6: iterate over L characters
+            const i = ch.charCodeAt(0) - 97;     // L7: O(1) index
+            if (!node.children[i]) return null;
+            node = node.children[i]!;             // L8: O(1) descend
+        }
+        return node;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -188,6 +330,17 @@ The 26-slot array replaces dict lookup (L9 in Approach 2) with direct index acce
 
 Slightly faster constant factors; restricted to lowercase. Use when the problem guarantees a fixed small alphabet.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="implement-trie-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="implement-trie-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | insert | search | startsWith | Space |
@@ -200,6 +353,8 @@ The hash-children trie is the canonical interview implementation and the buildin
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_208.py and run.
 # Uses the canonical Approach 2 implementation (hash-map children).
@@ -251,6 +406,54 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    isEnd: boolean = false;
+}
+
+class Trie {
+    private root = new TrieNode();
+    insert(word: string): void {
+        let node = this.root;
+        for (const ch of word) {
+            if (!node.children.has(ch)) node.children.set(ch, new TrieNode());
+            node = node.children.get(ch)!;
+        }
+        node.isEnd = true;
+    }
+    search(word: string): boolean {
+        const node = this._walk(word);
+        return node !== null && node.isEnd;
+    }
+    startsWith(prefix: string): boolean {
+        return this._walk(prefix) !== null;
+    }
+    private _walk(s: string): TrieNode | null {
+        let node = this.root;
+        for (const ch of s) {
+            if (!node.children.has(ch)) return null;
+            node = node.children.get(ch)!;
+        }
+        return node;
+    }
+}
+
+const trie = new Trie();
+trie.insert("apple");
+console.assert(trie.search("apple") === true);
+console.assert(trie.search("app") === false);
+console.assert(trie.startsWith("app") === true);
+trie.insert("app");
+console.assert(trie.search("app") === true);
+console.assert(trie.search("ap") === false);
+console.assert(trie.startsWith("b") === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 
