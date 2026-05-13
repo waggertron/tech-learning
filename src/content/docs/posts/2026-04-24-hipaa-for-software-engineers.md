@@ -11,8 +11,8 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-hipaa-for
 
 The **Health Insurance Portability and Accountability Act of 1996** is a US federal law. Enforced by the Department of Health and Human Services' **Office for Civil Rights (OCR)**. Two parts matter for software engineers:
 
-- **Privacy Rule** (2003), governs who can see Protected Health Information (PHI) and for what purposes.
-- **Security Rule** (2005), governs how PHI is protected *electronically* (ePHI).
+- **Privacy Rule** (2003): governs who can see Protected Health Information (PHI) and for what purposes.
+- **Security Rule** (2005): governs how PHI is protected *electronically* (ePHI).
 
 The **HITECH Act (2009)** amended HIPAA to extend direct liability to Business Associates (software vendors), add the Breach Notification Rule, and dramatically increase penalties.
 
@@ -20,8 +20,8 @@ Violations can run from **$137 per incident up to $2.07M per year** per violatio
 
 HIPAA **only applies** to:
 
-- **Covered Entities (CEs):** health plans, health-care clearinghouses, health-care providers that bill electronically.
-- **Business Associates (BAs):** anyone who creates, receives, maintains, or transmits PHI on behalf of a CE. This is where most software companies land.
+- **Covered Entities (CEs)**: health plans, health-care clearinghouses, health-care providers that bill electronically.
+- **Business Associates (BAs)**: anyone who creates, receives, maintains, or transmits PHI on behalf of a CE. This is where most software companies land.
 
 Consumer fitness apps, direct-to-consumer mental-wellness apps, nutrition trackers without a clinical partner, **none of these are HIPAA-regulated.** They might be subject to the FTC Health Breach Notification Rule and various state laws, but not HIPAA.
 
@@ -74,10 +74,10 @@ Five required standards:
 
 #### 1. Access Control (§164.312(a))
 
-- **Unique User Identification**, every person has their own account. No shared logins. Ever.
-- **Emergency Access**, a break-glass procedure to get into PHI during an incident.
-- **Automatic Logoff** (addressable), idle sessions time out. Typical: 15 minutes for admin consoles; 30 minutes or less for clinical interfaces.
-- **Encryption and Decryption** (addressable), if you implement encryption, it must be proper encryption. (See more below.)
+- **Unique User Identification**: every person has their own account. No shared logins. Ever.
+- **Emergency Access**: a break-glass procedure to get into PHI during an incident.
+- **Automatic Logoff** (addressable): idle sessions time out. Typical: 15 minutes for admin consoles; 30 minutes or less for clinical interfaces.
+- **Encryption and Decryption** (addressable): if you implement encryption, it must be proper encryption. (See more below.)
 
 Implementation in a typical SaaS:
 
@@ -159,11 +159,11 @@ Encrypt PHI in transit. TLS 1.2 minimum; 1.3 preferred. No plain HTTP, no unencr
 
 These are process, but engineers often implement or enable them:
 
-- **Workforce training**, annual HIPAA training for anyone who touches PHI.
-- **Access management procedures**, how access is granted, reviewed, revoked.
-- **Security Risk Analysis**, annual. Required. Document it or OCR finds you have nothing.
-- **Incident response procedures**, who responds, what they do, how it's documented.
-- **Contingency plan**, DR + backups + testing.
+- **Workforce training**: annual HIPAA training for anyone who touches PHI.
+- **Access management procedures**: how access is granted, reviewed, revoked.
+- **Security Risk Analysis**: annual. Required. Document it or OCR finds you have nothing.
+- **Incident response procedures**: who responds, what they do, how it's documented.
+- **Contingency plan**: DR + backups + testing.
 
 ### Physical safeguards
 
@@ -193,11 +193,11 @@ Major cloud providers publish lists of **HIPAA-eligible services**, the services
 
 ### Beyond the big three
 
-- **Snowflake, Databricks, MongoDB Atlas**, BAA-available for enterprise plans.
-- **Twilio**, BAA-available for specific products (SMS, Voice, Email). **Free-tier Twilio is not BAA-eligible.**
-- **SendGrid**, BAA via a specific compliance offering.
-- **OpenAI, Anthropic**, BAAs available on enterprise plans; check current terms before sending PHI to an LLM.
-- **Slack, Zoom, Google Workspace**, Enterprise plans with BAA only. The free and mid-tier versions are **not** BAA-covered.
+- **Snowflake, Databricks, MongoDB Atlas**: BAA-available for enterprise plans.
+- **Twilio**: BAA-available for specific products (SMS, Voice, Email). **Free-tier Twilio is not BAA-eligible.**
+- **SendGrid**: BAA via a specific compliance offering.
+- **OpenAI, Anthropic**: BAAs available on enterprise plans; check current terms before sending PHI to an LLM.
+- **Slack, Zoom, Google Workspace**: Enterprise plans with BAA only. The free and mid-tier versions are **not** BAA-covered.
 
 ### The practical implication
 
@@ -209,10 +209,10 @@ A breach = unauthorized acquisition, access, use, or disclosure of unsecured PHI
 
 Required notifications:
 
-- **Affected individuals**, within 60 days of discovery.
-- **HHS**, within 60 days; immediately if 500+ individuals are affected.
-- **Media**, if 500+ individuals in a single state or jurisdiction.
-- **Business Associate to Covered Entity**, usually contractually 10 days, sometimes less.
+- **Affected individuals**: within 60 days of discovery.
+- **HHS**: within 60 days; immediately if 500+ individuals are affected.
+- **Media**: if 500+ individuals in a single state or jurisdiction.
+- **Business Associate to Covered Entity**: usually contractually 10 days, sometimes less.
 
 "Unsecured" is the key word. PHI protected by encryption that meets NIST guidance is **not** considered "unsecured" for breach purposes. This is the most important reason to encrypt everything, everywhere: a stolen encrypted laptop that meets NIST is a bad day, not a mandatory breach notification.
 
@@ -300,10 +300,10 @@ That's the shape. Execution takes 6–12 months for a real compliance posture.
 
 ## When HIPAA doesn't apply but adjacent rules do
 
-- **GDPR / UK GDPR**, if EU patients are involved. Stricter in many dimensions; breach notifications are 72 hours.
-- **State laws**, California's CMIA, Texas HB 300, New York's SHIELD Act. Often stricter than HIPAA; the state-law delta is a separate analysis.
-- **FTC Health Breach Notification Rule**, for non-HIPAA health apps. Expanded scope in 2024.
-- **21st Century Cures Act**, specifically addresses information blocking; a different compliance concern for certain EHR-adjacent products.
+- **GDPR / UK GDPR**: if EU patients are involved. Stricter in many dimensions; breach notifications are 72 hours.
+- **State laws**: California's CMIA, Texas HB 300, New York's SHIELD Act. Often stricter than HIPAA; the state-law delta is a separate analysis.
+- **FTC Health Breach Notification Rule**: for non-HIPAA health apps. Expanded scope in 2024.
+- **21st Century Cures Act**: specifically addresses information blocking; a different compliance concern for certain EHR-adjacent products.
 
 ## References
 

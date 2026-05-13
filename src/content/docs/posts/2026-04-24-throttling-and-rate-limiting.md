@@ -11,9 +11,9 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-throttlin
 
 Every public endpoint faces three different threats at the same time:
 
-- **Abuse**, scrapers, credential stuffers, and API-draining bots.
-- **Overload**, legitimate traffic briefly spiking past capacity.
-- **Noisy neighbors**, one customer's runaway integration eating everyone else's quota.
+- **Abuse**: scrapers, credential stuffers, and API-draining bots.
+- **Overload**: legitimate traffic briefly spiking past capacity.
+- **Noisy neighbors**: one customer's runaway integration eating everyone else's quota.
 
 Rate limiting addresses all three but with different parameters. A login endpoint wants a strict per-IP burst limit (abuse). A long-running read endpoint wants a fair-share queue (overload + neighbors). A write endpoint usually wants a per-account quota (neighbors).
 
@@ -196,9 +196,9 @@ Everything in a single Lua script, atomic on Redis, no race between check and de
 
 Clients need three things:
 
-1. **HTTP 429 Too Many Requests**, the status code.
-2. **`Retry-After` header**, seconds until retry, or an HTTP-date.
-3. **Current limit state** (optional but kind), `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.
+1. **HTTP 429 Too Many Requests**: the status code.
+2. **`Retry-After` header**: seconds until retry, or an HTTP-date.
+3. **Current limit state** (optional but kind): `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`.
 
 ```
 HTTP/1.1 429 Too Many Requests
@@ -217,11 +217,11 @@ Clients can back off intelligently; support can debug.
 
 The key you count against is a design decision:
 
-- **By IP**, robust but imperfect (NAT, shared networks, CGNAT). Still the only option for unauthenticated endpoints.
-- **By API key**, clean for B2B APIs.
-- **By user ID**, the correct unit for authenticated user-facing APIs.
-- **By session / cookie**, roughly equivalent to user ID.
-- **By tenant / account**, the unit that matters for per-customer quotas.
+- **By IP**: robust but imperfect (NAT, shared networks, CGNAT). Still the only option for unauthenticated endpoints.
+- **By API key**: clean for B2B APIs.
+- **By user ID**: the correct unit for authenticated user-facing APIs.
+- **By session / cookie**: roughly equivalent to user ID.
+- **By tenant / account**: the unit that matters for per-customer quotas.
 
 Most production systems do **authenticated → user, unauthenticated → IP**. The public login endpoint almost always needs IP-level limits because that's all you have.
 
@@ -232,8 +232,8 @@ A multi-node API with local per-process counters can't enforce a global rate lim
 Options:
 
 1. **Centralize state in Redis** (as above). Cheap and correct.
-2. **Sticky routing by key**, route all requests from a user to one pod. Works but loses the redundancy benefits of multiple pods.
-3. **Probabilistic approaches**, each pod approximates the limit locally; sample-broadcast to sync. Used at hyperscale.
+2. **Sticky routing by key**: route all requests from a user to one pod. Works but loses the redundancy benefits of multiple pods.
+3. **Probabilistic approaches**: each pod approximates the limit locally; sample-broadcast to sync. Used at hyperscale.
 
 Centralized Redis handles most teams' needs up to six-figure RPS. Beyond that, consider specialized services like [Envoy's global rate limit service](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/ratelimit) or [Stripe's custom approach](https://stripe.com/blog/rate-limiters).
 

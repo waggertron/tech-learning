@@ -86,14 +86,14 @@ This hybrid is popular. It gives you the cookie security model without needing a
 
 For any cookie carrying auth:
 
-- **`HttpOnly`**, not readable from JavaScript. Block XSS from reading it.
-- **`Secure`**, only sent over HTTPS. Always in prod.
-- **`SameSite=Lax`** (default for most browsers now), cookie sent on top-level cross-site navigations (link clicks), but not on cross-site POSTs or iframe subresources. Blocks the nastiest CSRF.
-- **`SameSite=Strict`**, cookie never sent cross-site. Maximally safe, but breaks top-level navigations (you're logged out when you click a link from email).
-- **`SameSite=None`**, cookie sent on all cross-site requests. Requires `Secure`. Only for third-party contexts (embedded widgets, analytics pixels).
-- **`Domain`**, scope. Tight scoping reduces the attack surface.
-- **`Path`**, narrow it to the auth path if the cookie is only meant for that.
-- **`Max-Age` / `Expires`**, don't issue "forever" cookies unless you really mean it.
+- **`HttpOnly`**: not readable from JavaScript. Block XSS from reading it.
+- **`Secure`**: only sent over HTTPS. Always in prod.
+- **`SameSite=Lax`** (default for most browsers now): cookie sent on top-level cross-site navigations (link clicks), but not on cross-site POSTs or iframe subresources. Blocks the nastiest CSRF.
+- **`SameSite=Strict`**: cookie never sent cross-site. Maximally safe, but breaks top-level navigations (you're logged out when you click a link from email).
+- **`SameSite=None`**: cookie sent on all cross-site requests. Requires `Secure`. Only for third-party contexts (embedded widgets, analytics pixels).
+- **`Domain`**: scope. Tight scoping reduces the attack surface.
+- **`Path`**: narrow it to the auth path if the cookie is only meant for that.
+- **`Max-Age` / `Expires`**: don't issue "forever" cookies unless you really mean it.
 
 Python example with Django:
 

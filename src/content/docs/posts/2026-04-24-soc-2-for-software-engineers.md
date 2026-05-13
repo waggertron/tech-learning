@@ -9,7 +9,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-soc-2-for
 
 ## What SOC 2 is (and isn't)
 
-**SOC 2**, Service Organization Control 2, is an audit framework from the AICPA (the US accounting standards body). It's the compliance artifact most B2B SaaS enterprise buyers demand before they sign a contract. Every year around renewal time, a CPA firm audits your company and issues a report.
+**SOC 2** (Service Organization Control 2) is an audit framework from the AICPA (the US accounting standards body). It's the compliance artifact most B2B SaaS enterprise buyers demand before they sign a contract. Every year around renewal time, a CPA firm audits your company and issues a report.
 
 It is **not**:
 
@@ -37,8 +37,8 @@ Most Series A SaaS companies scope **Security + Availability + Confidentiality**
 
 ## Type 1 vs Type 2
 
-- **Type 1**, "these controls *existed* on this date." A point-in-time snapshot. Faster, cheaper, but buyers barely look at it anymore.
-- **Type 2**, "these controls *operated effectively* over this period (usually 6–12 months)." The real artifact. This is what enterprise procurement wants.
+- **Type 1**: "these controls *existed* on this date." A point-in-time snapshot. Faster, cheaper, but buyers barely look at it anymore.
+- **Type 2**: "these controls *operated effectively* over this period (usually 6–12 months)." The real artifact. This is what enterprise procurement wants.
 
 Path for most startups: Type 1 in Q1, Type 2 covering the following 6–12 months. After the first Type 2, you renew annually.
 
@@ -46,15 +46,15 @@ Path for most startups: Type 1 in Q1, Type 2 covering the following 6–12 month
 
 The Common Criteria (CC-series) has ~60 criteria grouped into nine areas:
 
-- **CC1**, control environment (org structure, ethics, HR hiring/termination)
-- **CC2**, communication and information (internal comms, vendor comms)
-- **CC3**, risk assessment (risk register, threat modeling)
-- **CC4**, monitoring activities (internal audit, continuous monitoring)
-- **CC5**, control activities (the actual technical controls)
-- **CC6**, logical and physical access
-- **CC7**, system operations (incident response, change management)
-- **CC8**, change management
-- **CC9**, risk mitigation (vendor risk, insurance)
+- **CC1**: control environment (org structure, ethics, HR hiring/termination)
+- **CC2**: communication and information (internal comms, vendor comms)
+- **CC3**: risk assessment (risk register, threat modeling)
+- **CC4**: monitoring activities (internal audit, continuous monitoring)
+- **CC5**: control activities (the actual technical controls)
+- **CC6**: logical and physical access
+- **CC7**: system operations (incident response, change management)
+- **CC8**: change management
+- **CC9**: risk mitigation (vendor risk, insurance)
 
 You don't implement each criterion as a line-item. You implement **controls** that cover one or more criteria, document them, and the auditor maps your controls to the criteria.
 
@@ -196,7 +196,7 @@ The AICPA framework doesn't mandate zero-trust architecture. But it is the easie
 
 The most common SOC 2 exceptions:
 
-1. **Access review signed late**, quarterly review that slipped to 100 days.
+1. **Access review signed late**: quarterly review that slipped to 100 days.
 2. **Terminated user still has access.** Even a revoked SSO account can leave residue (API tokens, GitHub outside collaborator).
 3. **Policy not reviewed this year.** Auditor sees last update date > 12 months ago.
 4. **Critical CVE not patched within SLA.** Snyk shows a `critical` CVE older than your own policy allows.

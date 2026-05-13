@@ -53,8 +53,8 @@ routing.SetArcCostEvaluatorOfAllVehicles(transit_cb)
 
 Two practical notes:
 
-- **Callbacks use node indices, not IDs.** Keep the mapping between your domain model IDs and the solver's 0-based indices in one place.
-- **Integer seconds, not floats.** OR-Tools internally uses integer arithmetic for determinism. Multiply by 100 if you need sub-second precision.
+- **Callbacks use node indices, not IDs**: keep the mapping between your domain model IDs and the solver's 0-based indices in one place.
+- **Integer seconds, not floats**: OR-Tools internally uses integer arithmetic for determinism. Multiply by 100 if you need sub-second precision.
 
 ## Time windows (the "TW" in VRPTW)
 
@@ -125,9 +125,9 @@ search.time_limit.seconds = 10
 solution = routing.SolveWithParameters(search)
 ```
 
-- **`PATH_CHEAPEST_ARC`** for the initial solution, greedy but fast. Gets you to "feasible" quickly.
-- **`GUIDED_LOCAL_SEARCH`** for improvement, the best general-purpose metaheuristic for VRP. Happy to run until your time budget runs out.
-- **`time_limit`**, hard wall. 10 seconds for this size (25 clinicians × 80 visits). Production VRP solvers often run 30–60 seconds.
+- **`PATH_CHEAPEST_ARC`**: for the initial solution, greedy but fast. Gets you to "feasible" quickly.
+- **`GUIDED_LOCAL_SEARCH`**: for improvement, the best general-purpose metaheuristic for VRP. Happy to run until your time budget runs out.
+- **`time_limit`**: hard wall. 10 seconds for this size (25 clinicians × 80 visits). Production VRP solvers often run 30–60 seconds.
 
 ## What OR-Tools doesn't solve for you
 

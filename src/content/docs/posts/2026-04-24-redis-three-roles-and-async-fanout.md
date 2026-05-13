@@ -60,9 +60,9 @@ def optimize_day(self, tenant_id: int, date: str):
 
 Three observations worth calling out:
 
-- **`@shared_task(bind=True)`**, `bind=True` gives the task access to `self`, which you need for retries and logging.
-- **`max_retries=2`**, the VRP solver is deterministic; a failure is almost always a code bug or a missing row, not a transient issue. Two retries is a safety net, not a recovery strategy.
-- **`with tenant_context(...)`**, Celery tasks don't run through the HTTP middleware, so the tenant context has to be set explicitly. This is the #1 bug source in multi-tenant Celery code.
+- **`@shared_task(bind=True)`**: `bind=True` gives the task access to `self`, which you need for retries and logging.
+- **`max_retries=2`**: the VRP solver is deterministic; a failure is almost always a code bug or a missing row, not a transient issue. Two retries is a safety net, not a recovery strategy.
+- **`with tenant_context(...)`**: Celery tasks don't run through the HTTP middleware, so the tenant context has to be set explicitly. This is the #1 bug source in multi-tenant Celery code.
 
 ### 3. The pub/sub side-effect
 
@@ -124,9 +124,9 @@ No polling. Dispatchers see the new routes appear within ~300ms of the Celery ta
 
 Three tools, three jobs:
 
-- **Django async views**, good for concurrent external HTTP during a single request. Bad for any CPU-bound work (GIL) or anything that outlives the request.
-- **Python `threading`**, good for I/O concurrency in a synchronous program. Bad for anything that should survive a process restart or run off the request path.
-- **Celery**, good for "I need this to happen eventually, I don't care which worker, I need retries and a job ID." The VRP solve is CPU-bound (≈10s), outlives the request, and benefits from retries. Textbook Celery.
+- **Django async views**: good for concurrent external HTTP during a single request. Bad for any CPU-bound work (GIL) or anything that outlives the request.
+- **Python `threading`**: good for I/O concurrency in a synchronous program. Bad for anything that should survive a process restart or run off the request path.
+- **Celery**: good for "I need this to happen eventually, I don't care which worker, I need retries and a job ID." The VRP solve is CPU-bound (≈10s), outlives the request, and benefits from retries. Textbook Celery.
 
 Async views are fine for a dashboard endpoint fanning out to Stripe + an analytics API. They're not a replacement for a task queue.
 
@@ -140,9 +140,7 @@ Async views are fine for a dashboard endpoint fanning out to Stripe + an analyti
 
 ## The surprisingly simple mental model
 
-HTTP requests: sync, short, bounded response time, return JSON.
-Background tasks: async, minutes-long OK, retries allowed, side-effect via pub/sub.
-WebSockets: long-lived, read-only, updated by pub/sub messages, never queried by clients for state.
+Three roles, three clear boundaries: HTTP requests are sync, short, and bounded in response time. Background tasks are async, can run for minutes, and signal completion via pub/sub. WebSockets are long-lived and read-only, updated by those pub/sub messages rather than queried by clients for state.
 
 Keep those three boundaries clean and most of the distributed-systems ugliness stays manageable.
 

@@ -163,9 +163,9 @@ Virtual dispatch via inheritance is sometimes cheaper than composition's indirec
 
 ## The "rule" most teams need
 
-- **First choice:** composition. Hold an instance.
-- **Second choice:** an interface / protocol / trait / mixin.
-- **Third choice:** inheritance, only for genuine is-a relationships, with a shallow hierarchy (< 3 deep), from a base class you control.
+- **First choice**: composition. Hold an instance.
+- **Second choice**: an interface / protocol / trait / mixin.
+- **Third choice**: inheritance, only for genuine is-a relationships, with a shallow hierarchy (< 3 deep), from a base class you control.
 
 If your design doc says "X extends Y" and you can't name a genuine is-a relationship, change it to composition.
 

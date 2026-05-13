@@ -29,18 +29,18 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEyMyIsImV4cCI6MTcxNDA2NTY
 
 Three parts:
 
-- **Header**, `{ "alg": "HS256", "typ": "JWT" }`. The algorithm.
-- **Payload**, claims. `sub`, `exp`, `iat`, custom claims.
-- **Signature**, HMAC or RSA/ECDSA signature of the header+payload.
+- **Header**: `{ "alg": "HS256", "typ": "JWT" }`. The algorithm.
+- **Payload**: claims. `sub`, `exp`, `iat`, custom claims.
+- **Signature**: HMAC or RSA/ECDSA signature of the header+payload.
 
 The server verifies the signature, trusts the claims, and proceeds.
 
 ### Why JWTs are popular
 
-- **Signed by issuer.** Anyone with the public key (RS256/ES256) or shared secret (HS256) can verify without calling the issuer.
-- **Encoded claims.** User ID, roles, scopes all ride inside. No server-side lookup required to know who the caller is.
-- **Standardized.** Every language has a JWT library.
-- **Cross-domain.** An OIDC-issued JWT can be used by any service that knows the issuer's keys.
+- **Signed by issuer**: anyone with the public key (RS256/ES256) or shared secret (HS256) can verify without calling the issuer.
+- **Encoded claims**: user ID, roles, scopes all ride inside. No server-side lookup required to know who the caller is.
+- **Standardized**: every language has a JWT library.
+- **Cross-domain**: an OIDC-issued JWT can be used by any service that knows the issuer's keys.
 
 ### What "stateless" doesn't mean
 
@@ -56,8 +56,8 @@ Three responses:
 
 The common pattern:
 
-- **Access token**, JWT, 5–15 minutes, stateless.
-- **Refresh token**, opaque, longer-lived (hours to days), stored server-side, used to mint new access tokens.
+- **Access token**: JWT, 5–15 minutes, stateless.
+- **Refresh token**: opaque, longer-lived (hours to days), stored server-side, used to mint new access tokens.
 
 The access token doesn't need revocation because it expires quickly. The refresh token is server-managed and can be revoked (delete the row).
 

@@ -78,8 +78,8 @@ Avoid mixing: having some actions as verbs (`/cancel`) and some as body fields m
 | PATCH | Partial update | No* | No | Yes |
 | DELETE | Remove | Yes | No | Usually no |
 
-- **Safe** = no observable state change. GET and HEAD.
-- **Idempotent** = repeating the request yields the same result as one request. GET, PUT, DELETE. POST is not idempotent; PATCH is sometimes idempotent, sometimes not.
+- **Safe**: no observable state change. GET and HEAD.
+- **Idempotent**: repeating the request yields the same result as one request. GET, PUT, DELETE. POST is not idempotent; PATCH is sometimes idempotent, sometimes not.
 
 Two practical consequences:
 
@@ -90,22 +90,22 @@ Two practical consequences:
 
 The minimum set you must know:
 
-- **200 OK**, success with a body.
-- **201 Created**, POST success with a new resource; include `Location` header.
-- **204 No Content**, success with no body (DELETE, sometimes PATCH).
-- **301 / 302 / 307 / 308**, redirects (308 permanent, 307 temporary, strict method preservation; 301/302 have legacy method-change behavior).
-- **400 Bad Request**, malformed request (bad JSON, missing required field).
-- **401 Unauthorized**, no or bad credentials. (Really means "unauthenticated.")
-- **403 Forbidden**, authenticated but not allowed.
-- **404 Not Found**, resource doesn't exist (or you shouldn't reveal it).
-- **405 Method Not Allowed**, wrong verb on a valid URL.
-- **409 Conflict**, state conflict (illegal state transition, version mismatch, duplicate).
-- **410 Gone**, existed, now permanently removed.
-- **415 Unsupported Media Type**, wrong content-type.
-- **422 Unprocessable Entity**, syntactically valid but semantically wrong (DRF's default for validation errors).
-- **429 Too Many Requests**, rate limit. Include `Retry-After`.
-- **500 Internal Server Error**, generic blow-up. You should rarely see this in logs without a corresponding alert.
-- **503 Service Unavailable**, temporary outage; include `Retry-After` if you can predict it.
+- **200 OK**: success with a body.
+- **201 Created**: POST success with a new resource; include `Location` header.
+- **204 No Content**: success with no body (DELETE, sometimes PATCH).
+- **301 / 302 / 307 / 308**: redirects (308 permanent, 307 temporary, strict method preservation; 301/302 have legacy method-change behavior).
+- **400 Bad Request**: malformed request (bad JSON, missing required field).
+- **401 Unauthorized**: no or bad credentials. (Really means "unauthenticated.")
+- **403 Forbidden**: authenticated but not allowed.
+- **404 Not Found**: resource doesn't exist (or you shouldn't reveal it).
+- **405 Method Not Allowed**: wrong verb on a valid URL.
+- **409 Conflict**: state conflict (illegal state transition, version mismatch, duplicate).
+- **410 Gone**: existed, now permanently removed.
+- **415 Unsupported Media Type**: wrong content-type.
+- **422 Unprocessable Entity**: syntactically valid but semantically wrong (DRF's default for validation errors).
+- **429 Too Many Requests**: rate limit. Include `Retry-After`.
+- **500 Internal Server Error**: generic blow-up. You should rarely see this in logs without a corresponding alert.
+- **503 Service Unavailable**: temporary outage; include `Retry-After` if you can predict it.
 
 Pick codes deliberately. Returning 200 with `{"error": "..."}` breaks every HTTP tool (caching, monitoring, tracing, retries).
 
@@ -303,10 +303,10 @@ paths:
 
 Spec-first is the modern default: write the OpenAPI doc, generate types on both sides, implement to match. Tools:
 
-- **[drf-spectacular](https://drf-spectacular.readthedocs.io/)**, Django REST Framework's generator.
-- **[FastAPI](https://fastapi.tiangolo.com/)**, spec is generated from code.
-- **[Stoplight](https://stoplight.io/)** / **[Redocly](https://redocly.com/)**, spec-first design tools.
-- **[openapi-typescript](https://openapi-ts.dev/)**, generate TS types from a spec.
+- **[drf-spectacular](https://drf-spectacular.readthedocs.io/)**: Django REST Framework's generator.
+- **[FastAPI](https://fastapi.tiangolo.com/)**: spec is generated from code.
+- **[Stoplight](https://stoplight.io/)** / **[Redocly](https://redocly.com/)**: spec-first design tools.
+- **[openapi-typescript](https://openapi-ts.dev/)**: generate TS types from a spec.
 
 ## Common mistakes
 

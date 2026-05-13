@@ -11,12 +11,12 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-modern-br
 
 Modern browsers enforce **a lot** of security without developer involvement:
 
-- **Same-Origin Policy (SOP)**, page from `a.com` can't read the DOM or response bodies of `b.com`. This is the foundation.
-- **Mixed-content blocking**, HTTPS pages can't load `http://` resources.
-- **Sandboxed iframes**, a cross-origin iframe can't touch the parent, and vice versa, beyond explicit `postMessage`.
-- **Site isolation**, since 2018, Chrome puts each site in its own process to contain Spectre-class attacks.
-- **Default `SameSite=Lax`** on cookies, blocks the most common CSRF scenarios automatically.
-- **Automatic HTTPS upgrade**, HSTS preloading, plain `http://` navigation is actively warned against.
+- **Same-Origin Policy (SOP)**: page from `a.com` can't read the DOM or response bodies of `b.com`. This is the foundation.
+- **Mixed-content blocking**: HTTPS pages can't load `http://` resources.
+- **Sandboxed iframes**: a cross-origin iframe can't touch the parent, and vice versa, beyond explicit `postMessage`.
+- **Site isolation**: since 2018, Chrome puts each site in its own process to contain Spectre-class attacks.
+- **Default `SameSite=Lax`** on cookies: blocks the most common CSRF scenarios automatically.
+- **Automatic HTTPS upgrade**: HSTS preloading, plain `http://` navigation is actively warned against.
 
 If you do nothing else, your site is substantially harder to attack than it was in 2010. Still, "default" isn't "done." There's a dozen headers and features you should layer on.
 
@@ -28,41 +28,41 @@ Modern browser threats, roughly in order of prevalence and impact:
 
 Attacker-controlled HTML or JS runs in your origin. Has full access to cookies (if not `HttpOnly`), localStorage, the DOM, and any same-origin API your app can call.
 
-**Where it enters:** user inputs reflected without escaping, `innerHTML` / `dangerouslySetInnerHTML` with untrusted data, untrusted URLs in `href`, event handlers derived from input.
+**Where it enters**: user inputs reflected without escaping, `innerHTML` / `dangerouslySetInnerHTML` with untrusted data, untrusted URLs in `href`, event handlers derived from input.
 
-**Blast radius:** complete account takeover if any auth material is JS-readable.
+**Blast radius**: complete account takeover if any auth material is JS-readable.
 
 ### 2. Cross-Site Request Forgery (CSRF)
 
 Attacker's site makes the victim's browser send an authenticated request to yours. The browser attaches cookies automatically.
 
-**Mitigation:** `SameSite=Lax` (default), CSRF tokens, check `Origin` / `Referer` for sensitive endpoints.
+**Mitigation**: `SameSite=Lax` (default), CSRF tokens, check `Origin` / `Referer` for sensitive endpoints.
 
 ### 3. Clickjacking
 
 Attacker embeds your site in an iframe and tricks the user into clicking something invisible.
 
-**Mitigation:** `Content-Security-Policy: frame-ancestors 'none'` or `X-Frame-Options: DENY`.
+**Mitigation**: `Content-Security-Policy: frame-ancestors 'none'` or `X-Frame-Options: DENY`.
 
 ### 4. Supply-chain compromise
 
 Your site loads a compromised third-party script: analytics, ad networks, a bundled npm dependency.
 
-**Blast radius:** same as XSS, the attacker's code runs in your origin.
+**Blast radius**: same as XSS, the attacker's code runs in your origin.
 
-**Mitigation:** CSP, Subresource Integrity (SRI), careful dependency review, minimal third-party scripts.
+**Mitigation**: CSP, Subresource Integrity (SRI), careful dependency review, minimal third-party scripts.
 
 ### 5. Session and token theft
 
 Cookie or JWT exfiltrated via XSS, man-in-the-middle on insecure pages, or malicious extensions.
 
-**Mitigation:** `HttpOnly; Secure; SameSite`, HTTPS everywhere, short token lifetimes.
+**Mitigation**: `HttpOnly; Secure; SameSite`, HTTPS everywhere, short token lifetimes.
 
 ### 6. Cookie tossing / subdomain attacks
 
 A compromised subdomain (`blog.acme.com`) sets cookies readable by `*.acme.com`, poisoning the main app.
 
-**Mitigation:** scope cookies tightly (`Domain=acme.com` only when necessary), use `__Host-` cookie prefix.
+**Mitigation**: scope cookies tightly (`Domain=acme.com` only when necessary), use `__Host-` cookie prefix.
 
 ### 7. Prototype pollution and other client-side injection
 
@@ -86,7 +86,7 @@ A checklist for every production HTML response:
 
 ### Content-Security-Policy
 
-The most powerful single header. Restricts which scripts, styles, images, fonts, iframes, and connections the browser allows.
+The single most effective header. Restricts which scripts, styles, images, fonts, iframes, and connections the browser allows.
 
 Minimum viable policy:
 
@@ -101,10 +101,10 @@ Content-Security-Policy: default-src 'self';
   form-action 'self';
 ```
 
-- `default-src 'self'`, everything same-origin unless overridden.
-- `script-src 'self' 'nonce-...'`, only your scripts + inline scripts with matching nonce. **No `unsafe-inline`**, no `unsafe-eval` for JS.
-- `frame-ancestors 'none'`, no one can iframe you. Replaces `X-Frame-Options`.
-- `base-uri 'self'`, stops `<base>` tag injection from redirecting relative URLs.
+- `default-src 'self'`: everything same-origin unless overridden.
+- `script-src 'self' 'nonce-...'`: only your scripts + inline scripts with matching nonce. **No `unsafe-inline`**, no `unsafe-eval` for JS.
+- `frame-ancestors 'none'`: no one can iframe you. Replaces `X-Frame-Options`.
+- `base-uri 'self'`: stops `<base>` tag injection from redirecting relative URLs.
 
 Start with `Content-Security-Policy-Report-Only` + a reporting endpoint. Fix violations. Then promote to enforcing.
 
@@ -211,7 +211,7 @@ CORS relaxes the Same-Origin Policy for specific cases. Critical correctness poi
 - **CORS is not access control.** It protects *the user's browser* from reading a response. It doesn't protect your API. Always enforce auth on the server.
 - **`Access-Control-Allow-Origin: *` disallows credentials.** If you need cookies / auth, echo the specific origin and set `Access-Control-Allow-Credentials: true`.
 - **Never reflect arbitrary origins.** `Access-Control-Allow-Origin: <request.Origin>` without validation makes your API accessible to *every* website with user credentials. Validate against a whitelist.
-- **Preflight requests**, browsers issue an OPTIONS request before non-simple requests. Handle it server-side; return the right `Access-Control-Allow-*` headers.
+- **Preflight requests**: browsers issue an OPTIONS request before non-simple requests. Handle it server-side; return the right `Access-Control-Allow-*` headers.
 
 ## Dependency supply chain
 
@@ -250,7 +250,7 @@ The browser platform has been getting safer without much fanfare:
 - **Privacy Sandbox.** Chrome-led replacement for third-party cookies, Topics API, FLEDGE / Protected Audience, Attribution Reporting. Controversial, but reshapes ads without direct tracking.
 - **Post-quantum TLS.** Chrome and Firefox ship Kyber / ML-KEM hybrid key exchanges. Long-term plan for the cryptography transition.
 - **Storage Partitioning.** Cross-site iframes now get their own storage keyed to the top-level site, not the iframe's origin. Breaks some legacy trackers.
-- **Declarative Net Request**, ad-blocker / extension API in MV3, tighter sandboxing of extension behavior.
+- **Declarative Net Request**: ad-blocker / extension API in MV3, tighter sandboxing of extension behavior.
 - **Credential management and passkeys.** WebAuthn / passkey UX now feasible as the primary auth method on many properties.
 - **Fenced Frames.** A stronger iframe with additional isolation, one of the Privacy Sandbox primitives.
 

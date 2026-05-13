@@ -9,15 +9,15 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-oasis-in-
 
 ## What OASIS is
 
-**OASIS, Outcome and Assessment Information Set**, is a standardized patient assessment dataset required by the Centers for Medicare & Medicaid Services (CMS) for every Medicare- or Medicaid-certified home health agency (HHA) in the United States.
+**OASIS (Outcome and Assessment Information Set)** is a standardized patient assessment dataset required by the Centers for Medicare & Medicaid Services (CMS) for every Medicare- or Medicaid-certified home health agency (HHA) in the United States.
 
 It's **required**. Not "used by most agencies", legally required. An HHA cannot bill Medicare without submitting an OASIS assessment for each patient.
 
 It's used for three distinct purposes, each important to different parts of the industry:
 
-1. **Payment**, the Patient-Driven Groupings Model (PDGM) maps OASIS responses to HIPPS payment codes.
-2. **Quality reporting**, Home Health Value-Based Purchasing, Home Health Compare star ratings, and the Home Health Quality Reporting Program all compute measures from OASIS.
-3. **Care planning**, clinicians use the assessment to build the patient's plan of care.
+1. **Payment**: the Patient-Driven Groupings Model (PDGM) maps OASIS responses to HIPPS payment codes.
+2. **Quality reporting**: Home Health Value-Based Purchasing, Home Health Compare star ratings, and the Home Health Quality Reporting Program all compute measures from OASIS.
+3. **Care planning**: clinicians use the assessment to build the patient's plan of care.
 
 Any software that touches home-health operations, EHRs, clinical documentation, billing, routing, ops consoles, interacts with OASIS somehow.
 
@@ -63,13 +63,13 @@ OASIS items are identified by alphanumeric codes. The bulk are **M-items** (e.g.
 
 OASIS-E added new prefixes:
 
-- **GG-items**, functional abilities (self-care, mobility), aligned with other post-acute settings
-- **A-items**, patient admit info
-- **B-items**, hearing, speech, vision
-- **C-items**, cognitive patterns
-- **D-items**, mood (PHQ-2/9)
-- **J-items**, pain
-- **O-items**, admission / medication reconciliation
+- **GG-items**: functional abilities (self-care, mobility), aligned with other post-acute settings
+- **A-items**: patient admit info
+- **B-items**: hearing, speech, vision
+- **C-items**: cognitive patterns
+- **D-items**: mood (PHQ-2/9)
+- **J-items**: pain
+- **O-items**: admission / medication reconciliation
 
 That's **90+ items on a full Start-of-Care**. Every response has a controlled vocabulary, usually a fixed list of integer codes like `0 = Never, 1 = Once a day, ...`. Most items carry a set of skip rules: answering one question a certain way means skipping downstream items.
 
@@ -132,20 +132,20 @@ OASIS is submitted as **XML**, not JSON, not CSV. The schema is published by CMS
 
 Key gotchas:
 
-- **Dates are `YYYYMMDD`**, no separators. Common bug.
+- **Dates are `YYYYMMDD`**: no separators. Common bug.
 - **All item codes are prefixed with the M-code** (e.g. `<M0030_START_CARE_DT>`).
-- **Empty / skipped items must be present with a specific skip indicator**, depending on item rules. Missing elements fail schema validation.
-- **Character encoding is strict UTF-8**, and certain characters (tabs, angle brackets, some emojis) must be entity-escaped.
-- **One submission can contain multiple assessments.** Each wrapped in an `<ASSESSMENT>` element.
+- **Empty / skipped items must be present with a specific skip indicator**: depending on item rules. Missing elements fail schema validation.
+- **Character encoding is strict UTF-8**: certain characters (tabs, angle brackets, some emojis) must be entity-escaped.
+- **One submission can contain multiple assessments**: each wrapped in an `<ASSESSMENT>` element.
 
 ### Validation and correction
 
 iQIES runs multi-pass validation:
 
-1. **Schema validation**, is the XML well-formed and matches the XSD?
-2. **Edit validation**, are the skip-logic rules satisfied? Are code values valid for the item?
-3. **Consistency validation**, do dates make sense (SOC before ROC before Discharge)?
-4. **Timing**, was the assessment submitted within the required 30-day window?
+1. **Schema validation**: is the XML well-formed and matches the XSD?
+2. **Edit validation**: are the skip-logic rules satisfied? Are code values valid for the item?
+3. **Consistency validation**: do dates make sense (SOC before ROC before Discharge)?
+4. **Timing**: was the assessment submitted within the required 30-day window?
 
 Validation errors are returned as a list of item codes and error codes. Your software has to surface them to the clinician, let them correct the assessment, and resubmit, often as a correction (`TRANS_TYPE_CD=02` with matching `CORRECTION_NUM` and `CORRECTION_AUTH_CD`).
 
@@ -177,9 +177,9 @@ Most home-health EHRs include a PDGM calculator that recomputes HIPPS codes live
 
 Quality measures computed from OASIS feed:
 
-- **Home Health Compare**, public-facing star ratings at [medicare.gov](https://www.medicare.gov/care-compare/)
-- **Home Health Value-Based Purchasing (HHVBP)**, payment adjustments based on quality scores
-- **Home Health Quality Reporting Program (HHQRP)**, publishing requirement with a 2% Medicare pay cut for non-reporters
+- **Home Health Compare**: public-facing star ratings at [medicare.gov](https://www.medicare.gov/care-compare/)
+- **Home Health Value-Based Purchasing (HHVBP)**: payment adjustments based on quality scores
+- **Home Health Quality Reporting Program (HHQRP)**: publishing requirement with a 2% Medicare pay cut for non-reporters
 
 Measures are computed by CMS from submitted OASIS; your software doesn't compute them directly. But your software's accuracy directly determines the agency's stars.
 
@@ -213,10 +213,10 @@ OASIS asks brutal questions. A clinician enters 100+ items per patient, sometime
 
 OASIS doesn't live alone:
 
-- **ICD-10 coding system**, `M1021` etc.
-- **Plan of Care (Form CMS-485)**, separate artifact, often regenerated from OASIS responses.
-- **Billing**, claim creation consumes the HIPPS code from OASIS.
-- **Physician orders**, some OASIS items reference physician orders which live elsewhere.
+- **ICD-10 coding system**: `M1021` etc.
+- **Plan of Care (Form CMS-485)**: separate artifact, often regenerated from OASIS responses.
+- **Billing**: claim creation consumes the HIPPS code from OASIS.
+- **Physician orders**: some OASIS items reference physician orders which live elsewhere.
 
 A siloed OASIS module is less useful than one integrated into the clinician's charting workflow.
 
@@ -236,12 +236,12 @@ OASIS data is PHI. All of it. See the [HIPAA post](../2026-04-24-hipaa-for-softw
 
 The major commercial home-health EHRs:
 
-- **HCHB (Homecare Homebase)**, large market share
-- **WellSky Home Health**, formerly Kinnser
-- **Axxess**, widely used in mid-sized HHAs
-- **Netsmart myUnity**, both clinical and financial
-- **Alora Home Health**, smaller, cloud-first
-- **MatrixCare**, part of ResMed, broader post-acute
+- **HCHB (Homecare Homebase)**: large market share
+- **WellSky Home Health**: formerly Kinnser
+- **Axxess**: widely used in mid-sized HHAs
+- **Netsmart myUnity**: both clinical and financial
+- **Alora Home Health**: smaller, cloud-first
+- **MatrixCare**: part of ResMed, broader post-acute
 
 Plus a long tail of smaller vendors and in-house tools at large HHAs.
 

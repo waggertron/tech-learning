@@ -36,7 +36,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 | Queue (deque) | n/a | O(n) | O(1) enqueue | O(1) dequeue | O(n) | FIFO; Python `collections.deque` is doubly linked |
 | Circular buffer | O(1) | O(n) | O(1) | O(1) | O(n) | Fixed-size queue; oldest evicted on overflow |
 
-**Gotchas:**
+**Gotchas**:
 
 - Dynamic arrays are O(1) **at the end** and O(n) **in the middle**. `list.pop()` is fast; `list.pop(0)` shifts every other element. Use `collections.deque` if you need O(1) at both ends.
 - Linked lists are O(1) to insert *given a node reference*. Finding that node is O(n). LeetCode problems usually hand you the node, hiding the search cost.
@@ -52,7 +52,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 | Hash set | O(1) avg | O(1) avg | O(1) avg | O(n) | O(n) worst |
 | Counter / multiset (Python `Counter`) | O(1) avg | O(1) avg | O(1) avg | O(distinct) | Same as hash map |
 
-**Gotchas:**
+**Gotchas**:
 
 - The O(1) amortized claim depends on a good hash function. With adversarial keys (or `__hash__` you wrote yourself badly), every key collides and everything degrades to O(n).
 - Resizing the table is O(n) and happens when load factor crosses a threshold. Most of the time it's invisible; occasionally an insert is unexpectedly slow.
@@ -73,7 +73,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 | Fenwick tree (BIT) | n/a | O(log n) prefix | O(log n) point update | n/a | O(n) | Smaller and faster constants than segment tree |
 | Binary heap | O(1) peek root | O(n) general search | O(log n) push | O(log n) pop top | O(n) | Top-K, priority queue, scheduler |
 
-**Gotchas:**
+**Gotchas**:
 
 - "Binary search tree" by itself usually means *unbalanced*. The O(log n) bound only applies to **balanced** BSTs (AVL, red-black, treap, ...). On adversarial sorted input, an unbalanced BST is O(n).
 - Tries trade space for time. A trie of all English words wastes a lot of nodes; a compressed trie (radix tree) saves space.
@@ -109,7 +109,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 | Suffix array | construction | O(n log n) | O(n) | Substring queries, longest common substring |
 | Suffix tree | construction | O(n) | O(n) | More memory than suffix array; faster queries |
 
-**Gotchas:**
+**Gotchas**:
 
 - Union-Find without path compression and union by rank is O(log n), not O(α(n)). Both optimizations matter.
 - Bloom filters trade certainty for space. They tell you **definitely not in the set** or **probably in the set**. False positives are by design.
