@@ -72,11 +72,11 @@ Each context has its own model, its own DB, and ideally its own service. The bou
 
 Microservices trade local complexity for distributed complexity. Every RPC between services introduces:
 
-**Latency**: a local function call takes nanoseconds; a network call takes 500 microseconds to 50 milliseconds. A request that chains 10 service calls serially can take 500ms just in network overhead.
+**Latency**: a local function call takes nanoseconds. A network call takes 500 microseconds to 50 milliseconds. A request that chains 10 service calls serially can take 500ms just in network overhead.
 
-**Failure modes**: a local call cannot fail from a network timeout; an RPC can. Every service call introduces a new failure mode that must be handled (timeouts, retries, circuit breakers).
+**Failure modes**: a local call cannot fail from a network timeout. An RPC can. Every service call introduces a new failure mode that must be handled (timeouts, retries, circuit breakers).
 
-**Data consistency**: a single database transaction is ACID; distributed transactions across services are not. Maintaining consistency across services requires eventual consistency, Saga patterns, or complex coordination.
+**Data consistency**: a single database transaction is ACID. Distributed transactions across services are not. Maintaining consistency across services requires eventual consistency, Saga patterns, or complex coordination.
 
 **Operational complexity**: 10 services means 10 deployment pipelines, 10 monitoring dashboards, 10 sets of logs to correlate. Distributed tracing becomes mandatory.
 

@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-CAP theorem states that a distributed data store can guarantee at most two of three properties simultaneously: Consistency, Availability, and Partition Tolerance. Eric Brewer introduced it in 2000; Gilbert and Lynch formally proved it in 2002.
+CAP theorem states that a distributed data store can guarantee at most two of three properties simultaneously: Consistency, Availability, and Partition Tolerance. Eric Brewer introduced it in 2000. Gilbert and Lynch formally proved it in 2002.
 
 ## The three properties
 
@@ -147,7 +147,7 @@ Even without a partition, you trade consistency for latency. Synchronous replica
 
 ## Real system implications
 
-**Building a shopping cart (AP)**: users expect the cart to always work. If two devices add items concurrently, merge both; never reject an add. Stale cart data is acceptable; returning an error is not.
+**Building a shopping cart (AP)**: users expect the cart to always work. If two devices add items concurrently, merge both. Never reject an add. Stale cart data is acceptable. Returning an error is not.
 
 **Building a distributed lock (CP)**: two services must not hold the same lock simultaneously. During a partition, reject lock acquisition rather than risk double-granting the lock.
 

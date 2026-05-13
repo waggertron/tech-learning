@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-System design interviews ask you to architect a real-world system from scratch, usually in 45 minutes. Unlike coding interviews, there is no single correct answer; the job is to reason through trade-offs clearly, ask the right clarifying questions, and make defensible decisions under constraints.
+System design interviews ask you to architect a real-world system from scratch, usually in 45 minutes. Unlike coding interviews, there is no single correct answer. The job is to reason through trade-offs clearly, ask the right clarifying questions, and make defensible decisions under constraints.
 
 The same skills matter in production. A system that starts as a single process eventually needs to handle more traffic, store more data, and survive more failures. Understanding the canonical building blocks means you can reach for the right tool without reinventing it every time.
 
@@ -75,7 +75,7 @@ Rule of thumb: memory is 1000x faster than SSD, SSD is 1000x faster than HDD. An
 
 ## How to use this section
 
-Each page covers one building block: the concept, the trade-offs, and when to pick it. They cross-link heavily because the topics are interconnected. Your caching strategy depends on your consistency model; your consistency model is constrained by CAP; your storage choice affects how you shard; your sharding strategy determines whether consistent hashing applies.
+Each page covers one building block: the concept, the trade-offs, and when to pick it. They cross-link heavily because the topics are interconnected. Your caching strategy depends on your consistency model, which is constrained by CAP. Your storage choice affects how you shard, and your sharding strategy determines whether consistent hashing applies.
 
 For interview prep, read in order. For production reference, jump to the relevant building block.
 

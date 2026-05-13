@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-A cache stores the result of an expensive operation so the next request can get it cheaply. The expense may be a database query, a remote API call, a computation, or even a DNS lookup. Caching is the single highest-leverage performance optimization in most web systems because it reduces latency by orders of magnitude.
+A cache stores the result of an expensive operation so the next request can get it cheaply. The expense may be a database query, a remote API call, a computation, or even a DNS lookup. Caching is the single most effective performance optimization in most web systems because it reduces latency by orders of magnitude.
 
 ## Why caching works: the latency cliff
 

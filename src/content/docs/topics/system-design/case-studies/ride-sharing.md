@@ -293,7 +293,7 @@ Each transition is a DB update + event publication. The trip state is stored in 
 
 **WebSocket gateway crash**: drivers and riders on that gateway are disconnected. Clients reconnect to any available gateway. Trip state is in Redis/PostgreSQL, so reconnecting clients can restore their view. Drivers resume sending location updates; the trip service reconnects the location-to-rider pipeline.
 
-**Surge pricing Flink job failure**: surge prices become stale (Redis TTL expires; all prices default to 1.0). This means no surge pricing -- acceptable as a degraded mode. Alert and restart the Flink job.
+**Surge pricing Flink job failure**: surge prices become stale (Redis TTL expires, all prices default to 1.0). This means no surge pricing -- acceptable as a degraded mode. Alert and restart the Flink job.
 
 ## Key takeaways
 
@@ -301,7 +301,7 @@ Each transition is a DB update + event publication. The trip state is stored in 
 
 **Partition the driver location store by city, not globally.** A single global sorted set with 3M drivers works (300 MB), but partitioning by city keeps each set small, makes horizontal sharding natural, and enables city-specific availability logic. The extra complexity is worth it at scale.
 
-**ETA beats GPS distance for matching quality.** A driver 0.5 km away on a highway may have a 5-minute ETA; a driver 1 km away on clear streets may have a 2-minute ETA. Sorting by ETA instead of distance directly improves match quality. But ETA computation is expensive -- use approximate pre-computed ETAs for filtering, precise routing for final selection.
+**ETA beats GPS distance for matching quality.** A driver 0.5 km away on a highway may have a 5-minute ETA. A driver 1 km away on clear streets may have a 2-minute ETA. Sorting by ETA instead of distance directly improves match quality. ETA computation is expensive, though -- use approximate pre-computed ETAs for filtering, precise routing for final selection.
 
 **The trip state machine is the financial source of truth.** The COMPLETED transition triggers the payment charge. It must happen exactly once. This means PostgreSQL (not Redis) with ACID transactions for trip state, and an idempotency key for the payment service call.
 

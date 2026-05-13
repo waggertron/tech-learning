@@ -184,7 +184,7 @@ class BookingOrchestrator:
 
 ## The pivotal transaction
 
-In a saga, the **pivotal transaction** is the step after which compensation becomes impractical or impossible. Everything before the pivot can be cleanly rolled back; everything after cannot.
+In a saga, the **pivotal transaction** is the step after which compensation becomes impractical or impossible. Everything before the pivot can be cleanly rolled back. Everything after cannot.
 
 In a payment saga, the payment charge is typically the pivot. Before charging, you can cancel reservations cleanly. After charging, you can refund but you cannot pretend the charge never happened.
 
@@ -207,7 +207,7 @@ Mitigations:
 
 **Sagas give you eventual consistency, not ACID consistency.** Intermediate saga states are visible to other processes. Design your system to tolerate this: use "pending" states, idempotent compensations, and defensive read logic.
 
-**Choreography is simpler for simple flows; orchestration is better for complex ones.** Two or three steps with clear trigger events are fine with choreography. Five or more steps with conditional branches, timeouts, and complex compensations should use an orchestrator.
+**Choreography is simpler for simple flows. Orchestration is better for complex ones.** Two or three steps with clear trigger events are fine with choreography. Five or more steps with conditional branches, timeouts, and complex compensations should use an orchestrator.
 
 **Every forward step must have a defined compensation.** If you cannot define the compensation before implementing the step, you have not thought through the failure mode. Compensating transactions are first-class design artifacts, not afterthoughts.
 

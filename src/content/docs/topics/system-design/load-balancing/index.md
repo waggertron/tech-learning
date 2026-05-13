@@ -74,7 +74,7 @@ Pick two servers at random, send to the one with fewer active connections. Appro
 
 ## L4 vs L7 load balancing
 
-**Layer 4 (transport layer)**: operates on TCP/UDP. Sees IP addresses and ports, not the request content. Fast; makes routing decisions in microseconds. Cannot route based on URL path, cookies, or headers.
+**Layer 4 (transport layer)**: operates on TCP/UDP. Sees IP addresses and ports, not the request content. Fast: makes routing decisions in microseconds. Cannot route based on URL path, cookies, or headers.
 
 **Layer 7 (application layer)**: operates on HTTP/HTTPS. Can inspect headers, cookies, URL paths, and request bodies. Enables content-based routing (route `/api/` to the API pool, `/static/` to the CDN origin). Slower than L4 because it must parse the full HTTP request.
 

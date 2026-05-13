@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-A notification system is a classic fan-out problem: one event triggers one or many notifications to one or many users across one or many channels. It appears as a standalone interview question and as a component in nearly every other system design (social feed, ride sharing, e-commerce). The interesting design decisions are around priority (OTPs must arrive in seconds; marketing emails can wait hours), channel selection (which channel to use for which user under which circumstances), and correctness (a duplicated OTP is a security problem; a duplicated marketing email is just annoying).
+A notification system is a classic fan-out problem: one event triggers one or many notifications to one or many users across one or many channels. It appears as a standalone interview question and as a component in nearly every other system design (social feed, ride sharing, e-commerce). The interesting design decisions are around priority (OTPs must arrive in seconds, marketing emails can wait hours), channel selection (which channel to use for which user under which circumstances), and correctness (a duplicated OTP is a security problem, while a duplicated marketing email is just annoying).
 
 ## Clarifying questions
 
@@ -253,7 +253,7 @@ Stale tokens accumulate silently otherwise. A notification system that never cle
 
 **FCM / APNs unreachable**: push delivery fails. Retry with exponential backoff (1s, 2s, 4s, max 3 retries). After max retries, log as failed and optionally fall back to email for critical events.
 
-**Email ESP rate limit**: if a single SendGrid API key is rate-limited, requests fail. Mitigate with multiple API keys and key rotation. Monitor delivery rate per key; rotate to a fresh key when rate-limited.
+**Email ESP rate limit**: if a single SendGrid API key is rate-limited, requests fail. Mitigate with multiple API keys and key rotation. Monitor delivery rate per key and rotate to a fresh key when rate-limited.
 
 **Kafka consumer lag**: if marketing workers fall behind (e.g. a large marketing campaign queues 100M notifications), the marketing Kafka topic grows. Standard and critical workers are on separate topics and are unaffected. Alert when marketing consumer lag exceeds 4 hours (the SLA).
 

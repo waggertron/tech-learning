@@ -202,7 +202,7 @@ def checkout(order):
     return process_results(payment_result, fraud_result, inventory_result)
 ```
 
-**Semaphore bulkhead**: instead of separate thread pools, use semaphores to limit concurrent calls to each service. Simpler to implement; does not require managing threads.
+**Semaphore bulkhead**: instead of separate thread pools, use semaphores to limit concurrent calls to each service. Simpler to implement and does not require managing threads.
 
 **Kubernetes resource limits**: at the container level, CPU and memory limits per service are a bulkhead -- one service cannot consume all node resources.
 

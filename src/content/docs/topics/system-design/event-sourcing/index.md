@@ -138,7 +138,7 @@ Read side (Query):
   (fast, denormalized, optimized for the specific query)
 ```
 
-Without CQRS, the same model serves both reads and writes. This creates pressure: writes need normalized data to maintain consistency; reads need denormalized data to be fast. CQRS resolves this tension by allowing each side to optimize independently.
+Without CQRS, the same model serves both reads and writes. This creates pressure: writes need normalized data to maintain consistency, while reads need denormalized data to be fast. CQRS resolves this tension by allowing each side to optimize independently.
 
 **Projections**: a projection subscribes to the event stream and builds a read model optimized for a specific query.
 
@@ -201,7 +201,7 @@ Event sourcing is not appropriate everywhere. It adds significant complexity and
 
 ## Key takeaways
 
-**The event store is the source of truth; the read model is a cache.** The read model can always be discarded and rebuilt from the event store. This makes schema migrations painless -- change the projection logic and replay.
+**The event store is the source of truth. The read model is a cache.** The read model can always be discarded and rebuilt from the event store. This makes schema migrations painless: change the projection logic and replay.
 
 **Optimistic concurrency on the version number prevents lost writes.** The unique constraint on `(aggregate_id, version)` is the mechanism that prevents two concurrent writes from corrupting each other. This replaces database row-level locking for the write path.
 

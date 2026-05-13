@@ -28,7 +28,7 @@ Step 4: Deep dives (10-25 min)
   Go deep on 2-3 specific components. Let the interviewer guide you here.
 ```
 
-The time ranges are guidelines. A senior-level interview spends more time on deep dives; a mid-level interview may spend more time on the high-level design. Read the room.
+The time ranges are guidelines. A senior-level interview spends more time on deep dives. A mid-level interview may spend more time on the high-level design. Read the room.
 
 ## Step 1: Requirements
 
@@ -154,7 +154,7 @@ Conclusion: storage (91 TB) is the constraint, not bandwidth or CPU. This drives
 
 ### What to say during estimation
 
-Narrate your assumptions: "I'm assuming 100M URLs created per day -- is that in the right ballpark?" Interviewers will correct you if it's wrong. A corrected estimate is fine; an unspoken assumption that leads to a wrong design is not.
+Narrate your assumptions: "I'm assuming 100M URLs created per day -- is that in the right ballpark?" Interviewers will correct you if it's wrong. A corrected estimate is fine. An unspoken assumption that leads to a wrong design is not.
 
 ## Step 3: High-level design
 
@@ -210,7 +210,7 @@ urls
   expires_at  TIMESTAMP
 ```
 
-Showing the schema demonstrates that you think about data before components. Most candidates skip this; doing it stands out.
+Showing the schema shows that you think about data before components. Most candidates skip this. Doing it stands out.
 
 ## Step 4: Deep dives
 
@@ -251,9 +251,9 @@ Never say "I would just use X." Always explain why X is better than the alternat
 
 **Jumping to a specific technology.** "I'll use Kafka" before establishing that you need async processing. Technology choices should follow from requirements, not precede them.
 
-**Designing for maximum scale from the start.** You do not need a globally distributed, multi-region active-active setup for a system handling 1000 QPS. Design for the stated scale; mention what would change at 10x.
+**Designing for maximum scale from the start.** You do not need a globally distributed, multi-region active-active setup for a system handling 1000 QPS. Design for the stated scale. Mention what would change at 10x.
 
-**Not going deep.** Staying at the box-drawing level for 45 minutes. Deep dives are where senior performance is demonstrated.
+**Not going deep.** Staying at the box-drawing level for 45 minutes. Deep dives are where senior performance shows.
 
 **Ignoring failure modes.** What happens if the cache is cold? If the DB primary fails? If the message queue falls behind? Great candidates bring these up without prompting.
 

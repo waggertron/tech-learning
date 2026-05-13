@@ -72,7 +72,7 @@ for i in range(15):
 
 Requests enter a FIFO queue (the "bucket"). The queue drains at a fixed rate. If the queue is full, new requests are dropped. Requests are processed at a constant rate regardless of arrival pattern.
 
-**Properties**: produces perfectly smooth output. No bursting. A flood of requests does not cause a flood of processing; excess requests are queued or dropped.
+**Properties**: produces perfectly smooth output. No bursting. A flood of requests does not cause a flood of processing. Excess requests are queued or dropped.
 
 **Best for**: rate-limiting outgoing requests to a downstream API that enforces a strict per-second limit.
 

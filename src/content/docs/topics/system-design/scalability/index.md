@@ -30,7 +30,7 @@ Most large systems start vertical (it's simpler), then move to horizontal once t
 
 ## Stateless design is a prerequisite for horizontal scaling
 
-If each server stores session state locally (in memory or on disk), you cannot route a request to any server; it must go to the same one that handled the previous request. This is called **sticky sessions** and it kills your ability to scale out freely.
+If each server stores session state locally (in memory or on disk), you cannot route a request to any server. It must go to the same one that handled the previous request. This is called **sticky sessions** and it kills your ability to scale out freely.
 
 The solution is to externalize all state:
 

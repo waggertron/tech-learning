@@ -256,7 +256,7 @@ If each message is delivered to 1.5 recipients on average:
 
 **Underestimating media.** Text is cheap. Images, audio, and video dominate storage costs by orders of magnitude. Always calculate text and media separately.
 
-**Not stating assumptions.** An estimate with no stated assumptions is wrong. State each assumption; interviewers will correct you if they disagree, which is the point.
+**Not stating assumptions.** An estimate with no stated assumptions is wrong. State each assumption. Interviewers will correct you if they disagree, which is the point.
 
 **Getting stuck on precision.** "Is it 3 servers or 4?" does not matter. "Is it 3 servers or 300?" does. Estimation rounds to the nearest order of magnitude.
 

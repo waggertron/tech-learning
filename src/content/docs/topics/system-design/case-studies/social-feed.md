@@ -48,7 +48,7 @@ Image storage (assume 50% of posts, 3 MB compressed):
   15M/day * 3 MB = 45 TB/day = 16.4 PB/year
 ```
 
-**Conclusion**: 208:1 read/write ratio means caching and pre-computation are the primary architectural levers. The system must serve 208K feed reads per second; the 1K post writes per second is not a scaling concern. Design for reads, not writes.
+**Conclusion**: 208:1 read/write ratio means caching and pre-computation are the primary architectural levers. The system must serve 208K feed reads per second. The 1K post writes per second is not a scaling concern. Design for reads, not writes.
 
 ## High-level design
 
@@ -194,7 +194,7 @@ Upload flow (direct-to-S3, bypassing app servers):
 4. Server: create post record with media references
 ```
 
-This keeps app servers out of the upload data path. S3 handles the bandwidth; app servers only handle metadata.
+This keeps app servers out of the upload data path. S3 handles the bandwidth. App servers only handle metadata.
 
 After upload, a media processing pipeline (Lambda/event trigger) generates thumbnails (150px, 640px, 1200px), runs content moderation, and updates the media record status to `ready`. The post is not visible in feeds until media processing completes.
 
@@ -216,11 +216,11 @@ This is what Instagram, TikTok, and Twitter's "For You" feed do. The feed become
 
 ## Failure modes
 
-**Fanout worker falls behind**: a viral post triggers a flood of writes. Kafka buffers the fanout jobs; workers process them sequentially. Users see a delay of seconds to minutes before the post appears in all feeds. This is acceptable for most social feeds.
+**Fanout worker falls behind**: a viral post triggers a flood of writes. Kafka buffers the fanout jobs and workers process them sequentially. Users see a delay of seconds to minutes before the post appears in all feeds. This is acceptable for most social feeds.
 
 **Redis node failure**: consistent hashing redistributes keys to adjacent nodes. Affected users see a cold feed (falls back to pull model) until their feed is rebuilt. Redis Cluster handles this automatically.
 
-**Post DB overload during cold start**: a user who has not logged in for 60 days logs back in; their Redis feed is empty; the pull-model cold start queries all their followees' recent posts. If 10,000 users simultaneously do this, the DB is flooded. Mitigate with a queue-based cold-start rebuild (fanout worker priority queue for active but cache-evicted users).
+**Post DB overload during cold start**: a user who has not logged in for 60 days logs back in. Their Redis feed is empty, so the pull-model cold start queries all their followees' recent posts. If 10,000 users simultaneously do this, the DB is flooded. Mitigate with a queue-based cold-start rebuild (fanout worker priority queue for active but cache-evicted users).
 
 **Image CDN failure**: posts still show but images fail. App must handle gracefully (placeholder images, retry logic). Multi-CDN routing (Cloudflare + CloudFront) provides failover.
 
