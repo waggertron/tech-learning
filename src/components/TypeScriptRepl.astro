@@ -219,6 +219,77 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
   document.querySelectorAll<HTMLElement>('.tsrepl').forEach(attachRepl);
+
+  // Add a "▶ Run TS" button to every TypeScript code block, mirroring the
+  // Python code-block runner in PythonRepl.astro.
+  function attachTsCodeBlockRunner(figure: HTMLElement) {
+    const pre = figure.querySelector<HTMLElement>('pre[data-language="typescript"]');
+    if (!pre) return;
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-run-toolbar';
+
+    const runBtn = document.createElement('button');
+    runBtn.className = 'code-run-btn ts-run-btn';
+    runBtn.textContent = '▶ Run TS';
+    toolbar.append(runBtn);
+
+    const statusEl = document.createElement('span');
+    statusEl.className = 'code-run-status';
+    toolbar.append(statusEl);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-run-output';
+    wrapper.hidden = true;
+    const outputEl = document.createElement('pre');
+    outputEl.className = 'code-run-output__text';
+    const timingEl = document.createElement('div');
+    timingEl.className = 'code-run-output__timing';
+    wrapper.append(outputEl, timingEl);
+
+    const ec = figure.closest('.expressive-code') ?? figure;
+    ec.before(toolbar);
+    ec.after(wrapper);
+
+    const runtimes: number[] = [];
+
+    runBtn.addEventListener('click', async () => {
+      // Grab _runTests from the page's TypeScript REPL scaffold so the
+      // approach code (which provides the implementation) can be tested.
+      const tsScaffold = document.querySelector<HTMLElement>('.tsrepl[data-original]')?.dataset.original ?? '';
+      const testMatch = tsScaffold.match(/function _runTests[\s\S]*/);
+      const testSnippet = testMatch?.[0]?.trim() ?? '';
+      const code = pre.innerText + (testSnippet ? '\n\n' + testSnippet : '');
+
+      runBtn.disabled = true;
+      statusEl.textContent = babelPromise ? 'running…' : 'loading Babel…';
+      outputEl.textContent = '';
+      timingEl.textContent = '';
+      wrapper.hidden = false;
+
+      try {
+        await loadBabelOnce();
+        statusEl.textContent = 'running…';
+        const result = runTypeScript(code);
+        outputEl.textContent = result.lines.length > 0 ? result.lines.join('\n') : '(no output)';
+        statusEl.textContent = result.error ? 'error' : 'done';
+        if (!result.error) {
+          runtimes.push(result.ms);
+          const avg = runtimes.reduce((a, b) => a + b, 0) / runtimes.length;
+          timingEl.textContent = runtimes.length === 1
+            ? `Runtime: ${result.ms.toFixed(1)}ms`
+            : `Runtime: ${result.ms.toFixed(1)}ms  |  avg ${avg.toFixed(1)}ms over ${runtimes.length} runs`;
+        }
+      } catch (err: any) {
+        outputEl.textContent = `Failed to load Babel: ${err?.message ?? err}`;
+        statusEl.textContent = 'load failed';
+      } finally {
+        runBtn.disabled = false;
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('figure.frame').forEach(attachTsCodeBlockRunner);
 </script>
 
 <style>
