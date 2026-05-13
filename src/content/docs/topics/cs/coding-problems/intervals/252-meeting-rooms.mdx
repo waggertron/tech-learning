@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './252-meeting-rooms.py?raw';
 import practiceCodeTs from './252-meeting-rooms.ts?raw';
+import practiceCodeGo from './252-meeting-rooms.go?raw';
 import approach2PyCode from './252-meeting-rooms-approach2.py?raw';
 import approach2TsCode from './252-meeting-rooms-approach2.ts?raw';
+import approach2GoCode from './252-meeting-rooms-approach2.go?raw';
 import approach3PyCode from './252-meeting-rooms-approach3.py?raw';
 import approach3TsCode from './252-meeting-rooms-approach3.ts?raw';
+import approach3GoCode from './252-meeting-rooms-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 252 (premium) Â· [Link](https://leetcode.com/problems/meeting-rooms/) Â
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="meeting-rooms-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="meeting-rooms-go" />
   </TabItem>
 </Tabs>
 
@@ -67,6 +74,20 @@ function canAttendMeetings(intervals: number[][]): boolean {
         }
     }
     return true;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func canAttendMeetings(intervals [][]int) bool {
+    n := len(intervals)                                // L1: O(1)
+    for i := 0; i < n; i++ {                          // L2: outer loop, n iterations
+        for j := i + 1; j < n; j++ {                  // L3: inner loop, up to n-1 iterations
+            a, b := intervals[i], intervals[j]         // L4: O(1) unpack
+            if a[0] < b[1] && b[0] < a[1] { return false }  // L5: overlap check, O(1)
+        }
+    }
+    return true
 }
 ```
 </TabItem>
@@ -115,6 +136,19 @@ function canAttendMeetings(intervals: number[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func canAttendMeetings(intervals [][]int) bool {
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][0] < intervals[j][0]  // L1: O(n log n)
+    })
+    for i := 1; i < len(intervals); i++ {         // L2: linear scan, n-1 iterations
+        if intervals[i][0] < intervals[i-1][1] { return false }  // L3: adjacent overlap check, O(1)
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -141,6 +175,9 @@ Once sorted by start time, only adjacent pairs can overlap: if interval i and in
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="meeting-rooms-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="meeting-rooms-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -183,6 +220,28 @@ function canAttendMeetings(intervals: number[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func canAttendMeetings(intervals [][]int) bool {
+    type event struct{ time, delta int }
+    events := make([]event, 0, len(intervals)*2)  // L1: O(1)
+    for _, iv := range intervals {                 // L2: build events, O(n)
+        events = append(events, event{iv[0], 1})  // L3: start event
+        events = append(events, event{iv[1], -1}) // L4: end event
+    }
+    sort.Slice(events, func(i, j int) bool {       // L5: sort 2n events, O(n log n)
+        if events[i].time != events[j].time { return events[i].time < events[j].time }
+        return events[i].delta < events[j].delta
+    })
+    cur := 0                                       // L6: O(1)
+    for _, e := range events {                     // L7: scan events, 2n iterations
+        cur += e.delta                             // L8: O(1) update
+        if cur > 1 { return false }                // L9: overlap if 2 active at once
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -211,6 +270,9 @@ Useful when the next problem (Meeting Rooms II) extends the counting.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="meeting-rooms-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="meeting-rooms-approach3-go" />
   </TabItem>
 </Tabs>
 

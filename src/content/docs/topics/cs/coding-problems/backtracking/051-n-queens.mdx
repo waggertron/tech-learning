@@ -11,10 +11,13 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './051-n-queens.py?raw';
 import practiceCodeTs from './051-n-queens.ts?raw';
+import practiceCodeGo from './051-n-queens.go?raw';
 import approach3PyCode from './051-n-queens-approach3.py?raw';
 import approach3TsCode from './051-n-queens-approach3.ts?raw';
+import approach3GoCode from './051-n-queens-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 51 · [Link](https://leetcode.com/problems/n-queens/) · *Hard*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="n-queens-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="n-queens-go" />
   </TabItem>
 </Tabs>
 
@@ -171,6 +177,50 @@ function solveNQueens(n: number): string[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func solveNQueens(n int) [][]string {
+    result := [][]string{}
+    colsUsed := map[int]bool{}
+    diag1 := map[int]bool{} // row + col
+    diag2 := map[int]bool{} // row - col
+    placement := make([]int, n)
+    for i := range placement { placement[i] = -1 }
+
+    var backtrack func(r int)
+    backtrack = func(r int) {
+        if r == n {
+            board := make([]string, n)
+            for i := 0; i < n; i++ {
+                row := make([]byte, n)
+                for j := 0; j < n; j++ {
+                    if placement[i] == j { row[j] = 'Q' } else { row[j] = '.' }
+                }
+                board[i] = string(row) // L1: O(n^2) build board
+            }
+            result = append(result, board)
+            return
+        }
+        for c := 0; c < n; c++ {
+            if colsUsed[c] || diag1[r+c] || diag2[r-c] {
+                continue // L2: O(1) conflict check
+            }
+            colsUsed[c] = true   // L3: O(1) mark column
+            diag1[r+c] = true    // L4: O(1) mark anti-diag
+            diag2[r-c] = true    // L5: O(1) mark main diag
+            placement[r] = c
+            backtrack(r + 1)     // L6: recurse to next row
+            delete(colsUsed, c)  // L7: O(1) unmark
+            delete(diag1, r+c)
+            delete(diag2, r-c)
+        }
+    }
+
+    backtrack(0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -202,6 +252,9 @@ Cells on the same anti-diagonal share `row + col` (constant along the up-right d
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="n-queens-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="n-queens-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -296,6 +349,42 @@ console.assert(solveNQueens(5).length === 10);
 console.assert(solveNQueens(2).length === 0);
 console.assert(solveNQueens(3).length === 0);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func solveNQueens(n int) [][]string {
+    result := [][]string{}
+    colsUsed := map[int]bool{}
+    diag1 := map[int]bool{}
+    diag2 := map[int]bool{}
+    placement := make([]int, n)
+    for i := range placement { placement[i] = -1 }
+    var backtrack func(r int)
+    backtrack = func(r int) {
+        if r == n {
+            board := make([]string, n)
+            for i := 0; i < n; i++ {
+                row := make([]byte, n)
+                for j := 0; j < n; j++ {
+                    if placement[i] == j { row[j] = 'Q' } else { row[j] = '.' }
+                }
+                board[i] = string(row)
+            }
+            result = append(result, board)
+            return
+        }
+        for c := 0; c < n; c++ {
+            if colsUsed[c] || diag1[r+c] || diag2[r-c] { continue }
+            colsUsed[c] = true; diag1[r+c] = true; diag2[r-c] = true
+            placement[r] = c
+            backtrack(r + 1)
+            delete(colsUsed, c); delete(diag1, r+c); delete(diag2, r-c)
+        }
+    }
+    backtrack(0)
+    return result
+}
 ```
 </TabItem>
 </Tabs>

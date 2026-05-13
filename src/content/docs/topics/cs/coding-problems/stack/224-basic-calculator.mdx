@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './224-basic-calculator.py?raw';
 import practiceCodeTs from './224-basic-calculator.ts?raw';
+import practiceCodeGo from './224-basic-calculator.go?raw';
 import approach2TsCode from './224-basic-calculator-approach2.ts?raw';
+import approach2GoCode from './224-basic-calculator-approach2.go?raw';
 
 ## Problem
 
@@ -37,6 +40,9 @@ LeetCode 224 · [Link](https://leetcode.com/problems/basic-calculator/) · *Hard
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="basic-calculator-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="basic-calculator-go" />
   </TabItem>
 </Tabs>
 

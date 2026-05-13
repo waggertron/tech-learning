@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './015-3sum.py?raw';
 import practiceCodeTs from './015-3sum.ts?raw';
+import practiceCodeGo from './015-3sum.go?raw';
 import approach2PyCode from './015-3sum-approach2.py?raw';
 import approach2TsCode from './015-3sum-approach2.ts?raw';
+import approach2GoCode from './015-3sum-approach2.go?raw';
 import approach3PyCode from './015-3sum-approach3.py?raw';
 import approach3TsCode from './015-3sum-approach3.ts?raw';
+import approach3GoCode from './015-3sum-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 15 · [Link](https://leetcode.com/problems/3sum/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="3sum-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="3sum-go" />
   </TabItem>
 </Tabs>
 
@@ -76,6 +83,31 @@ function threeSum(nums: number[]): number[][] {
     }
     for (const key of found) result.push(key.split(',').map(Number)); // L8: O(m)
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func threeSum(nums []int) [][]int {
+    n := len(nums)                                         // L1: O(1)
+    type key [3]int
+    found := map[key]bool{}                                // L2: O(1)
+    for i := 0; i < n; i++ {                              // L3: outer loop
+        for j := i + 1; j < n; j++ {                      // L4: middle loop
+            for k := j + 1; k < n; k++ {                  // L5: inner loop
+                if nums[i]+nums[j]+nums[k] == 0 {          // L6: O(1) check
+                    t := [3]int{nums[i], nums[j], nums[k]}
+                    sort.Ints(t[:])
+                    found[t] = true                        // L7: O(1) add
+                }
+            }
+        }
+    }
+    result := [][]int{}
+    for t := range found {
+        result = append(result, []int{t[0], t[1], t[2]})  // L8: O(m)
+    }
+    return result
 }
 ```
 </TabItem>
@@ -151,6 +183,34 @@ function threeSum(nums: number[]): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func threeSum(nums []int) [][]int {
+    sort.Ints(nums)                                // L1: O(n log n)
+    n := len(nums)                                 // L2: O(1)
+    result := [][]int{}                            // L3: O(1)
+    for i := 0; i < n-2; i++ {                    // L4: outer loop, n-2 iters
+        if i > 0 && nums[i] == nums[i-1] {         // L5: O(1) skip duplicate anchor
+            continue
+        }
+        seen := map[int]bool{}                     // L6: O(1) fresh set per anchor
+        j := i + 1                                 // L7: O(1)
+        for j < n {                                // L8: inner scan
+            need := -nums[i] - nums[j]             // L9: O(1) complement
+            if seen[need] {                        // L10: O(1) lookup
+                result = append(result, []int{nums[i], need, nums[j]}) // L11: O(1)
+                for j+1 < n && nums[j+1] == nums[j] { // L12: skip j-dupes
+                    j++
+                }
+            }
+            seen[nums[j]] = true                   // L13: O(1)
+            j++                                    // L14: O(1)
+        }
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -177,6 +237,9 @@ The sort is O(n log n); the double loop is O(n²). The loop dominates for large 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="3sum-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="3sum-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -241,6 +304,39 @@ function threeSum(nums: number[]): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func threeSum(nums []int) [][]int {
+    sort.Ints(nums)                                    // L1: O(n log n)
+    n := len(nums)                                     // L2: O(1)
+    result := [][]int{}                                // L3: O(1)
+    for i := 0; i < n-2; i++ {                        // L4: outer loop
+        if nums[i] > 0 {                               // L5: O(1) prune
+            break
+        }
+        if i > 0 && nums[i] == nums[i-1] {             // L6: O(1) skip duplicate anchor
+            continue
+        }
+        l, r := i+1, n-1                               // L7: O(1) init pointers
+        for l < r {                                    // L8: two-pointer scan
+            s := nums[i] + nums[l] + nums[r]           // L9: O(1) sum
+            if s < 0 {                                 // L10: O(1)
+                l++                                    // L11: O(1)
+            } else if s > 0 {                          // L12: O(1)
+                r--                                    // L13: O(1)
+            } else {
+                result = append(result, []int{nums[i], nums[l], nums[r]}) // L14
+                l++                                    // L15
+                r--                                    // L16
+                for l < r && nums[l] == nums[l-1] { l++ } // L17: skip l-dupes
+                for l < r && nums[r] == nums[r+1] { r-- } // L18: skip r-dupes
+            }
+        }
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -267,6 +363,9 @@ Each outer iteration does at most one linear pass of the suffix (l and r converg
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="3sum-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="3sum-approach3-go" />
   </TabItem>
 </Tabs>
 

@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './139-word-break.py?raw';
 import practiceCodeTs from './139-word-break.ts?raw';
+import practiceCodeGo from './139-word-break.go?raw';
 import approach2PyCode from './139-word-break-approach2.py?raw';
 import approach2TsCode from './139-word-break-approach2.ts?raw';
+import approach2GoCode from './139-word-break-approach2.go?raw';
 import approach3PyCode from './139-word-break-approach3.py?raw';
 import approach3TsCode from './139-word-break-approach3.ts?raw';
+import approach3GoCode from './139-word-break-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="word-break-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="word-break-go" />
   </TabItem>
 </Tabs>
 
@@ -84,6 +91,29 @@ function wordBreak(s: string, wordDict: string[]): boolean {
         return false;
     }
     return f(0);                                           // L5: initial call
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func wordBreak(s string, wordDict []string) bool {
+    words := map[string]bool{}
+    for _, w := range wordDict {
+        words[w] = true                                    // L1: O(W) to build set
+    }
+    var f func(start int) bool
+    f = func(start int) bool {
+        if start == len(s) {                               // L2: base case, O(1)
+            return true
+        }
+        for end := start + 1; end <= len(s); end++ {      // L3: try every prefix from start
+            if words[s[start:end]] && f(end) {             // L4: O(L) slice + O(L) hash lookup
+                return true
+            }
+        }
+        return false
+    }
+    return f(0)                                            // L5: initial call
 }
 ```
 </TabItem>
@@ -150,6 +180,35 @@ function wordBreak(s: string, wordDict: string[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func wordBreak(s string, wordDict []string) bool {
+    words := map[string]bool{}
+    for _, w := range wordDict {
+        words[w] = true                                    // L1: O(W · L) to build set
+    }
+    memo := map[int]bool{}
+    var f func(start int) bool
+    f = func(start int) bool {
+        if start == len(s) {                               // L2: base case, O(1)
+            return true
+        }
+        if v, ok := memo[start]; ok {
+            return v
+        }
+        for end := start + 1; end <= len(s); end++ {      // L3: try every split point
+            if words[s[start:end]] && f(end) {             // L4: O(L) slice + O(L) hash lookup
+                memo[start] = true
+                return true
+            }
+        }
+        memo[start] = false
+        return false
+    }
+    return f(0)                                            // L5: initial call
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -178,6 +237,9 @@ Memoization limits `f` to at most `n + 1` unique `start` values. Each unique cal
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="word-break-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="word-break-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -220,6 +282,28 @@ function wordBreak(s: string, wordDict: string[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func wordBreak(s string, wordDict []string) bool {
+    words := map[string]bool{}
+    for _, w := range wordDict {
+        words[w] = true                           // L1: O(W · L) to build set
+    }
+    n := len(s)                                   // L2: O(1)
+    dp := make([]bool, n+1)                       // L3: O(n) allocation
+    dp[0] = true                                  // L4: base case, O(1)
+    for i := 1; i <= n; i++ {                    // L5: outer loop, n iterations
+        for j := 0; j < i; j++ {                 // L6: inner loop, i iterations
+            if dp[j] && words[s[j:i]] {           // L7: O(L) slice + O(L) hash lookup
+                dp[i] = true                      // L8: O(1)
+                break
+            }
+        }
+    }
+    return dp[n]                                  // L9: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -252,6 +336,9 @@ Limit the inner loop to `j ≥ i - max_word_length`. Saves time when dictionary 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="word-break-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="word-break-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -326,6 +413,54 @@ console.assert(wordBreak('a', ['a']) === true);
 console.assert(wordBreak('a', ['b']) === false);
 console.assert(wordBreak('aaaa', ['a', 'aa']) === true);
 console.log('all tests pass');
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func assert(condition bool, msgs ...string) {
+	if !condition {
+		msg := "assertion failed"
+		if len(msgs) > 0 {
+			msg = msgs[0]
+		}
+		panic(msg)
+	}
+}
+
+func wordBreak(s string, wordDict []string) bool {
+	words := map[string]bool{}
+	for _, w := range wordDict {
+		words[w] = true
+	}
+	n := len(s)
+	dp := make([]bool, n+1)
+	dp[0] = true
+	for i := 1; i <= n; i++ {
+		for j := 0; j < i; j++ {
+			if dp[j] && words[s[j:i]] {
+				dp[i] = true
+				break
+			}
+		}
+	}
+	return dp[n]
+}
+
+func runTests() {
+	assert(wordBreak("leetcode", []string{"leet", "code"}))
+	assert(wordBreak("applepenapple", []string{"apple", "pen"}))
+	assert(!wordBreak("catsandog", []string{"cats", "dog", "sand", "and", "cat"}))
+	assert(wordBreak("a", []string{"a"}))
+	assert(!wordBreak("a", []string{"b"}))
+	assert(wordBreak("aaaa", []string{"a", "aa"}))
+	fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>

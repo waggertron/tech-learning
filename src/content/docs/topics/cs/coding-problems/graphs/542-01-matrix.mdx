@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './542-01-matrix.py?raw';
 import practiceCodeTs from './542-01-matrix.ts?raw';
+import practiceCodeGo from './542-01-matrix.go?raw';
 import approach2PyCode from './542-01-matrix-approach2.py?raw';
 import approach2TsCode from './542-01-matrix-approach2.ts?raw';
+import approach2GoCode from './542-01-matrix-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 542 · [Link](https://leetcode.com/problems/01-matrix/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="01-matrix-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="01-matrix-go" />
   </TabItem>
 </Tabs>
 
@@ -134,6 +140,9 @@ Treat all `0` cells as a single virtual source at distance 0. BFS explores in sh
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="01-matrix-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="01-matrix-approach2-go" />
   </TabItem>
 </Tabs>
 

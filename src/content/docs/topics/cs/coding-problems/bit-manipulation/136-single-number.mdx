@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './136-single-number.py?raw';
 import practiceCodeTs from './136-single-number.ts?raw';
+import practiceCodeGo from './136-single-number.go?raw';
 import approach2PyCode from './136-single-number-approach2.py?raw';
 import approach2TsCode from './136-single-number-approach2.ts?raw';
+import approach2GoCode from './136-single-number-approach2.go?raw';
 import approach3PyCode from './136-single-number-approach3.py?raw';
 import approach3TsCode from './136-single-number-approach3.ts?raw';
+import approach3GoCode from './136-single-number-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 136 · [Link](https://leetcode.com/problems/single-number/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="single-number-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="single-number-go" />
   </TabItem>
 </Tabs>
 
@@ -66,6 +73,24 @@ function singleNumber(nums: number[]): number {
         else seen.add(x);                   // L4: O(1) amortized
     }
     return seen.values().next().value;      // L5: O(1)
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func singleNumber(nums []int) int {
+    seen := make(map[int]bool)              // L1: O(1)
+    for _, x := range nums {               // L2: single pass, n iterations
+        if seen[x] {
+            delete(seen, x)                // L3: O(1) amortized
+        } else {
+            seen[x] = true                 // L4: O(1) amortized
+        }
+    }
+    for k := range seen {                  // L5: O(1), only one key remains
+        return k
+    }
+    return 0
 }
 ```
 </TabItem>
@@ -112,6 +137,21 @@ function singleNumber(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import "sort"
+
+func singleNumber(nums []int) int {
+    sort.Ints(nums)                             // L1: O(n log n)
+    for i := 0; i < len(nums)-1; i += 2 {      // L2: scan in steps of 2
+        if nums[i] != nums[i+1] {              // L3: O(1)
+            return nums[i]
+        }
+    }
+    return nums[len(nums)-1]                    // L4: last element is single
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -135,6 +175,9 @@ function singleNumber(nums: number[]): number {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="single-number-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="single-number-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -168,6 +211,17 @@ function singleNumber(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func singleNumber(nums []int) int {
+    result := 0                             // L1: O(1)
+    for _, x := range nums {               // L2: single pass, n iterations
+        result ^= x                         // L3: O(1), XOR accumulate
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -193,6 +247,9 @@ A single pass; each element is XORed in once.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="single-number-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="single-number-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -248,6 +305,17 @@ console.assert(singleNumber([0, 0, 99]) === 99);
 console.assert(singleNumber([-1, -1, 42]) === 42);
 console.assert(singleNumber([2 ** 31 - 1]) === 2 ** 31 - 1);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func singleNumber(nums []int) int {
+    result := 0
+    for _, x := range nums {
+        result ^= x
+    }
+    return result
+}
 ```
 </TabItem>
 </Tabs>

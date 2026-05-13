@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './011-container-with-most-water.py?raw';
 import practiceCodeTs from './011-container-with-most-water.ts?raw';
+import practiceCodeGo from './011-container-with-most-water.go?raw';
 import approach2PyCode from './011-container-with-most-water-approach2.py?raw';
 import approach2TsCode from './011-container-with-most-water-approach2.ts?raw';
+import approach2GoCode from './011-container-with-most-water-approach2.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 11 · [Link](https://leetcode.com/problems/container-with-most-water/) 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="container-with-most-water-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="container-with-most-water-go" />
   </TabItem>
 </Tabs>
 
@@ -68,6 +74,23 @@ function maxArea(height: number[]): number {
         }
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxArea(height []int) int {
+    n := len(height)                                   // L1: O(1)
+    best := 0                                          // L2: O(1)
+    for l := 0; l < n; l++ {                          // L3: outer loop, n iterations
+        for r := l + 1; r < n; r++ {                  // L4: inner loop, n-l-1 iterations
+            h := height[l]
+            if height[r] < h { h = height[r] }
+            area := h * (r - l)                        // L5: O(1) area computation
+            if area > best { best = area }             // L6: O(1) update
+        }
+    }
+    return best
 }
 ```
 </TabItem>
@@ -126,6 +149,26 @@ function maxArea(height: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxArea(height []int) int {
+    l, r := 0, len(height)-1             // L1: O(1) init pointers
+    best := 0                            // L2: O(1)
+    for l < r {                          // L3: loop, at most n iterations total
+        h := height[l]
+        if height[r] < h { h = height[r] }
+        area := h * (r - l)              // L4: O(1) area
+        if area > best { best = area }   // L5: O(1) update
+        if height[l] < height[r] {       // L6: O(1) compare
+            l++                          // L7: O(1) advance left
+        } else {
+            r--                          // L8: O(1) advance right
+        }
+    }
+    return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -156,6 +199,9 @@ At each step the container has width `r - l` and height `min(height[l], height[r
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="container-with-most-water-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="container-with-most-water-approach2-go" />
   </TabItem>
 </Tabs>
 

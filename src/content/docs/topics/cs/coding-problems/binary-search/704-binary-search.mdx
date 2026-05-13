@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './704-binary-search.py?raw';
 import practiceCodeTs from './704-binary-search.ts?raw';
+import practiceCodeGo from './704-binary-search.go?raw';
 import approach2PyCode from './704-binary-search-approach2.py?raw';
 import approach2TsCode from './704-binary-search-approach2.ts?raw';
+import approach2GoCode from './704-binary-search-approach2.go?raw';
 import approach3PyCode from './704-binary-search-approach3.py?raw';
 import approach3TsCode from './704-binary-search-approach3.ts?raw';
+import approach3GoCode from './704-binary-search-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 704 · [Link](https://leetcode.com/problems/binary-search/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="binary-search-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="binary-search-go" />
   </TabItem>
 </Tabs>
 
@@ -60,6 +67,18 @@ function search(nums: number[], target: number): number {
         if (nums[i] === target) return i;     // L2: O(1) compare
     }
     return -1;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func search(nums []int, target int) int {
+    for i, x := range nums {  // L1: scan every element, up to n iterations
+        if x == target {      // L2: O(1) compare
+            return i
+        }
+    }
+    return -1
 }
 ```
 </TabItem>
@@ -115,6 +134,27 @@ function search(nums: number[], target: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func search(nums []int, target int) int {
+    var helper func(lo, hi int) int
+    helper = func(lo, hi int) int {
+        if lo > hi {                          // L1: base case, O(1)
+            return -1
+        }
+        mid := (lo + hi) / 2               // L2: O(1)
+        if nums[mid] == target {            // L3: O(1) compare
+            return mid
+        }
+        if nums[mid] < target {             // L4: O(1) compare
+            return helper(mid+1, hi)        // L5: recurse on right half
+        }
+        return helper(lo, mid-1)            // L6: recurse on left half
+    }
+    return helper(0, len(nums)-1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -140,6 +180,9 @@ Each recursive call handles a half-size subproblem, so there are at most log n s
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="binary-search-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="binary-search-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -177,6 +220,25 @@ function search(nums: number[], target: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func search(nums []int, target int) int {
+    lo, hi := 0, len(nums)-1             // L1: O(1)
+    for lo <= hi {                        // L2: loop, at most log n iterations
+        mid := (lo + hi) / 2            // L3: O(1) midpoint
+        if nums[mid] == target {         // L4: O(1) compare
+            return mid
+        }
+        if nums[mid] < target {          // L5: O(1) compare
+            lo = mid + 1                 // L6: O(1) narrow right
+        } else {
+            hi = mid - 1                 // L7: O(1) narrow left
+        }
+    }
+    return -1
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -206,6 +268,9 @@ In languages where integer overflow is a concern (C, C++, Java `int`), prefer `m
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="binary-search-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="binary-search-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -272,6 +337,39 @@ console.assert(search([5], 3) === -1);                       // single element n
 console.assert(search([-1, 0, 3, 5, 9, 12], -1) === 0);    // first element
 console.assert(search([-1, 0, 3, 5, 9, 12], 12) === 5);    // last element
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func search(nums []int, target int) int {
+    lo, hi := 0, len(nums)-1
+    for lo <= hi {
+        mid := (lo + hi) / 2
+        if nums[mid] == target {
+            return mid
+        }
+        if nums[mid] < target {
+            lo = mid + 1
+        } else {
+            hi = mid - 1
+        }
+    }
+    return -1
+}
+
+func main() {
+    if search([]int{-1, 0, 3, 5, 9, 12}, 9) != 4     { panic("test 1") }
+    if search([]int{-1, 0, 3, 5, 9, 12}, 2) != -1    { panic("test 2") } // not present
+    if search([]int{5}, 5) != 0                        { panic("test 3") } // single element found
+    if search([]int{5}, 3) != -1                       { panic("test 4") } // single element not found
+    if search([]int{-1, 0, 3, 5, 9, 12}, -1) != 0    { panic("test 5") } // first element
+    if search([]int{-1, 0, 3, 5, 9, 12}, 12) != 5    { panic("test 6") } // last element
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

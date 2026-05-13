@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1047-remove-all-adjacent-duplicates.py?raw';
 import practiceCodeTs from './1047-remove-all-adjacent-duplicates.ts?raw';
+import practiceCodeGo from './1047-remove-all-adjacent-duplicates.go?raw';
 import approach2TsCode from './1047-remove-all-adjacent-duplicates-approach2.ts?raw';
+import approach2GoCode from './1047-remove-all-adjacent-duplicates-approach2.go?raw';
 
 ## Problem
 
@@ -39,6 +42,9 @@ LeetCode 1047 · [Link](https://leetcode.com/problems/remove-all-adjacent-duplic
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="remove-all-adjacent-duplicates-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="remove-all-adjacent-duplicates-go" />
   </TabItem>
 </Tabs>
 
@@ -88,6 +94,29 @@ function removeDuplicates(s: string): string {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func removeDuplicates(s string) string {
+    changed := true
+    for changed {                                      // L1: up to n/2 passes
+        changed = false
+        result := []byte{}
+        i := 0
+        for i < len(s) {                              // L2: O(n) per pass
+            if i+1 < len(s) && s[i] == s[i+1] {      // L3: O(1) compare
+                i += 2                                 // L4: skip the pair
+                changed = true
+            } else {
+                result = append(result, s[i])
+                i++
+            }
+        }
+        s = string(result)                             // L5: O(n) join
+    }
+    return s
+}
+```
+</TabItem>
 </Tabs>
 
 **Complexity**
@@ -126,6 +155,22 @@ function removeDuplicates(s: string): string {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func removeDuplicates(s string) string {
+    stack := []byte{}                        // L1: O(1) init
+    for i := 0; i < len(s); i++ {           // L2: n iterations
+        ch := s[i]
+        if len(stack) > 0 && stack[len(stack)-1] == ch { // L3: O(1) compare top
+            stack = stack[:len(stack)-1]     // L4: O(1) cancel pair
+        } else {
+            stack = append(stack, ch)        // L5: O(1) no match, push
+        }
+    }
+    return string(stack)                     // L6: O(n) convert to string
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -152,6 +197,9 @@ Each character is pushed once and popped at most once. Total: O(n).
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="remove-all-adjacent-duplicates-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="remove-all-adjacent-duplicates-approach2-go" />
   </TabItem>
 </Tabs>
 

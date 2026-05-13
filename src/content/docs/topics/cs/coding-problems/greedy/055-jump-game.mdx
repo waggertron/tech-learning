@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './055-jump-game.py?raw';
 import practiceCodeTs from './055-jump-game.ts?raw';
+import practiceCodeGo from './055-jump-game.go?raw';
 import approach2PyCode from './055-jump-game-approach2.py?raw';
 import approach2TsCode from './055-jump-game-approach2.ts?raw';
+import approach2GoCode from './055-jump-game-approach2.go?raw';
 import approach3PyCode from './055-jump-game-approach3.py?raw';
 import approach3TsCode from './055-jump-game-approach3.ts?raw';
+import approach3GoCode from './055-jump-game-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 55 · [Link](https://leetcode.com/problems/jump-game/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="jump-game-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="jump-game-go" />
   </TabItem>
 </Tabs>
 
@@ -66,6 +73,21 @@ function canJump(nums: number[]): boolean {
         return false;
     }
     return f(0);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func canJump(nums []int) bool {
+    var f func(i int) bool
+    f = func(i int) bool {                              // L1: called exponential times naively
+        if i >= len(nums)-1 { return true }             // L2: base case O(1)
+        for step := 1; step <= nums[i]; step++ {        // L3: try each step
+            if f(i + step) { return true }              // L4: recursive call
+        }
+        return false
+    }
+    return f(0)
 }
 ```
 </TabItem>
@@ -125,6 +147,23 @@ function canJump(nums: number[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func canJump(nums []int) bool {
+    n := len(nums)                                         // L1: O(1)
+    dp := make([]bool, n)                                  // L2: O(n)
+    dp[n-1] = true                                         // L3: O(1)
+    for i := n - 2; i >= 0; i-- {                         // L4: outer loop, n-1 iterations
+        furthest := i + nums[i]
+        if furthest > n-1 { furthest = n - 1 }
+        for j := i + 1; j <= furthest; j++ {              // L5: inner loop, up to n per i
+            if dp[j] { dp[i] = true; break }
+        }
+    }
+    return dp[0]
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -151,6 +190,9 @@ The inner scan at each `i` can range over the entire remaining array in the wors
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="jump-game-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="jump-game-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -185,6 +227,19 @@ function canJump(nums: number[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func canJump(nums []int) bool {
+    maxReach := 0                                          // L1: O(1)
+    for i, x := range nums {                              // L2: single pass, n iterations
+        if i > maxReach { return false }                   // L3: O(1)
+        if i+x > maxReach { maxReach = i + x }            // L4: O(1), update reach
+        if maxReach >= len(nums)-1 { return true }         // L5: O(1), early exit
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -216,6 +271,9 @@ If the furthest reachable index is `R`, every position `i ≤ R` is reachable. S
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="jump-game-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="jump-game-approach3-go" />
+  </TabItem>
 </Tabs>
 
 ## Summary
@@ -231,6 +289,19 @@ Monotone-invariant greedy, `max_reach` is non-decreasing; the algorithm fails fa
 ## Test cases
 
 <Tabs>
+<TabItem label="Go">
+```go
+func canJump(nums []int) bool {
+    maxReach := 0
+    for i, x := range nums {
+        if i > maxReach { return false }
+        if i+x > maxReach { maxReach = i + x }
+        if maxReach >= len(nums)-1 { return true }
+    }
+    return true
+}
+```
+</TabItem>
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_055.py and run.

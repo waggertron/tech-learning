@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './239-sliding-window-maximum.py?raw';
 import practiceCodeTs from './239-sliding-window-maximum.ts?raw';
+import practiceCodeGo from './239-sliding-window-maximum.go?raw';
 import approach2TsCode from './239-sliding-window-maximum-approach2.ts?raw';
+import approach2GoCode from './239-sliding-window-maximum-approach2.go?raw';
 import approach3TsCode from './239-sliding-window-maximum-approach3.ts?raw';
+import approach3GoCode from './239-sliding-window-maximum-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +38,9 @@ LeetCode 239 · [Link](https://leetcode.com/problems/sliding-window-maximum/) ·
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="sliding-window-maximum-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="sliding-window-maximum-go" />
   </TabItem>
 </Tabs>
 
@@ -58,6 +65,24 @@ function maxSlidingWindow(nums: number[], k: number): number[] {
         result.push(Math.max(...nums.slice(i, i + k)));        // L1: O(k) per window
     }
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxSlidingWindow(nums []int, k int) []int {
+	n := len(nums)
+	result := []int{}
+	for i := 0; i <= n-k; i++ {                               // L1: n-k+1 iterations
+		maxVal := nums[i]
+		for j := i + 1; j < i+k; j++ {                       // L1: O(k) per window
+			if nums[j] > maxVal {
+				maxVal = nums[j]
+			}
+		}
+		result = append(result, maxVal)
+	}
+	return result
 }
 ```
 </TabItem>
@@ -118,6 +143,25 @@ function maxSlidingWindow(nums: number[], k: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxSlidingWindow(nums []int, k int) []int {
+	// max-heap stores [-value, index] pairs
+	h := &maxHeap{}
+	result := []int{}
+	for i, x := range nums {                  // L1: outer loop, n iterations
+		heap.Push(h, [2]int{-x, i})           // L2: O(log n) push
+		if i >= k-1 {
+			for (*h)[0][1] <= i-k {           // L3: lazy eviction loop
+				heap.Pop(h)                   // L4: O(log n) per eviction
+			}
+			result = append(result, -(*h)[0][0]) // L5: O(1) read top
+		}
+	}
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -144,6 +188,9 @@ Good enough to pass but noticeably slower than the optimal.
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="sliding-window-max-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="sliding-window-max-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -197,6 +244,27 @@ function maxSlidingWindow(nums: number[], k: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxSlidingWindow(nums []int, k int) []int {
+	dq := []int{} // stores indices; front = index of current window max
+	result := []int{}
+	for i, x := range nums {                              // L1: outer loop, n iterations
+		for len(dq) > 0 && dq[0] <= i-k {               // L2: evict expired front
+			dq = dq[1:]                                  // L3: O(1) amortized
+		}
+		for len(dq) > 0 && nums[dq[len(dq)-1]] < x {   // L4: remove dominated back
+			dq = dq[:len(dq)-1]                          // L5: O(1)
+		}
+		dq = append(dq, i)                               // L6: O(1) push
+		if i >= k-1 {
+			result = append(result, nums[dq[0]])         // L7: O(1) read front
+		}
+	}
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -225,6 +293,9 @@ If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max on
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="sliding-window-max-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="sliding-window-max-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -293,6 +364,27 @@ console.assert(JSON.stringify(maxSlidingWindow([1, -1], 1)) === JSON.stringify([
 console.assert(JSON.stringify(maxSlidingWindow([9, 8, 7, 6, 5], 3)) === JSON.stringify([9, 8, 7]));
 console.assert(JSON.stringify(maxSlidingWindow([1, 2, 3, 4, 5], 3)) === JSON.stringify([3, 4, 5]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxSlidingWindow(nums []int, k int) []int {
+	dq := []int{}
+	result := []int{}
+	for i, x := range nums {
+		for len(dq) > 0 && dq[0] <= i-k {
+			dq = dq[1:]
+		}
+		for len(dq) > 0 && nums[dq[len(dq)-1]] < x {
+			dq = dq[:len(dq)-1]
+		}
+		dq = append(dq, i)
+		if i >= k-1 {
+			result = append(result, nums[dq[0]])
+		}
+	}
+	return result
+}
 ```
 </TabItem>
 </Tabs>

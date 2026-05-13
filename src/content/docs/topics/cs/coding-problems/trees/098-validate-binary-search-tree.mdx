@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './098-validate-binary-search-tree.py?raw';
 import practiceCodeTs from './098-validate-binary-search-tree.ts?raw';
+import practiceCodeGo from './098-validate-binary-search-tree.go?raw';
 import approach2PyCode from './098-validate-binary-search-tree-approach2.py?raw';
 import approach2TsCode from './098-validate-binary-search-tree-approach2.ts?raw';
+import approach2GoCode from './098-validate-binary-search-tree-approach2.go?raw';
 import approach3PyCode from './098-validate-binary-search-tree-approach3.py?raw';
 import approach3TsCode from './098-validate-binary-search-tree-approach3.ts?raw';
+import approach3GoCode from './098-validate-binary-search-tree-approach3.go?raw';
 
 ## Problem
 
@@ -40,6 +44,9 @@ LeetCode 98 · [Link](https://leetcode.com/problems/validate-binary-search-tree/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="validate-binary-search-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="validate-binary-search-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -92,6 +99,39 @@ function isValidBST(root: TreeNode | null): boolean {
          && allGreater(root.right, root.val)       // L4: O(n) subtree walk
          && isValidBST(root.left)                  // L5: recurse left
          && isValidBST(root.right));               // L6: recurse right
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func allLess(node *TreeNode, val int) bool {      // L1: walk subtree checking < val
+    if node == nil {
+        return true
+    }
+    return node.Val < val && allLess(node.Left, val) && allLess(node.Right, val)
+}
+
+func allGreater(node *TreeNode, val int) bool {   // L2: walk subtree checking > val
+    if node == nil {
+        return true
+    }
+    return node.Val > val && allGreater(node.Left, val) && allGreater(node.Right, val)
+}
+
+func isValidBST(root *TreeNode) bool {
+    if root == nil {
+        return true
+    }
+    return allLess(root.Left, root.Val) &&        // L3: O(n) subtree walk
+        allGreater(root.Right, root.Val) &&        // L4: O(n) subtree walk
+        isValidBST(root.Left) &&                   // L5: recurse left
+        isValidBST(root.Right)                     // L6: recurse right
 }
 ```
 </TabItem>
@@ -155,6 +195,36 @@ function isValidBST(root: TreeNode | null): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func isValidBST(root *TreeNode) bool {
+    prev := -1 << 62
+    hasPrev := false
+    var inorder func(*TreeNode) bool
+    inorder = func(node *TreeNode) bool {
+        if node == nil {
+            return true
+        }
+        if !inorder(node.Left) {                 // L2: recurse left, O(h) stack depth
+            return false
+        }
+        if hasPrev && node.Val <= prev {
+            return false                          // L3: O(1) monotonicity check
+        }
+        prev = node.Val                           // L4: O(1) update
+        hasPrev = true
+        return inorder(node.Right)               // L5: recurse right
+    }
+    return inorder(root)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -184,6 +254,9 @@ Elegant; the BST's defining property makes this a one-liner-ish implementation.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="validate-binary-search-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="validate-binary-search-tree-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -218,6 +291,30 @@ function isValidBST(root: TreeNode | null): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func isValidBST(root *TreeNode) bool {
+    var validate func(*TreeNode, int, int) bool
+    validate = func(node *TreeNode, low, high int) bool {
+        if node == nil {
+            return true
+        }
+        if !(low < node.Val && node.Val < high) {
+            return false                                        // L1: O(1) bounds check
+        }
+        return validate(node.Left, low, node.Val) &&           // L2: tighten high
+            validate(node.Right, node.Val, high)               // L3: tighten low
+    }
+    return validate(root, -1<<62, 1<<62)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -243,6 +340,9 @@ Each node is visited exactly once, with O(1) work per node. The bounds are passe
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="validate-binary-search-tree-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="validate-binary-search-tree-approach3-go" />
   </TabItem>
 </Tabs>
 

@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './110-balanced-binary-tree.py?raw';
 import practiceCodeTs from './110-balanced-binary-tree.ts?raw';
+import practiceCodeGo from './110-balanced-binary-tree.go?raw';
 import approach2PyCode from './110-balanced-binary-tree-approach2.py?raw';
 import approach2TsCode from './110-balanced-binary-tree-approach2.ts?raw';
+import approach2GoCode from './110-balanced-binary-tree-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 110 · [Link](https://leetcode.com/problems/balanced-binary-tree/) · *
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="balanced-binary-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="balanced-binary-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -75,6 +81,39 @@ function isBalanced(root: TreeNode | null): boolean {
     if (!root) return true;
     if (Math.abs(height(root.left) - height(root.right)) > 1) return false;  // L2: O(n) height checks
     return isBalanced(root.left) && isBalanced(root.right);                   // L3: recurse children
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func height(node *TreeNode) int {
+    if node == nil {
+        return 0
+    }
+    l := height(node.Left)
+    r := height(node.Right)
+    if l > r {
+        return 1 + l                              // L1: O(n) subtree walk
+    }
+    return 1 + r
+}
+
+func isBalanced(root *TreeNode) bool {
+    if root == nil {
+        return true
+    }
+    l, r := height(root.Left), height(root.Right)
+    diff := l - r
+    if diff < -1 || diff > 1 {
+        return false                              // L2: O(n) height checks
+    }
+    return isBalanced(root.Left) && isBalanced(root.Right)  // L3: recurse children
 }
 ```
 </TabItem>
@@ -138,6 +177,41 @@ function isBalanced(root: TreeNode | null): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func heightCheck(node *TreeNode) int {
+    if node == nil {
+        return 0
+    }
+    lh := heightCheck(node.Left)               // L1: recurse left
+    if lh == -1 {
+        return -1                              // L2: propagate failure up
+    }
+    rh := heightCheck(node.Right)              // L3: recurse right
+    if rh == -1 {
+        return -1                              // L4: propagate failure up
+    }
+    diff := lh - rh
+    if diff < -1 || diff > 1 {
+        return -1                              // L5: O(1) balance check
+    }
+    if lh > rh {
+        return 1 + lh                          // L6: O(1) return height
+    }
+    return 1 + rh
+}
+
+func isBalanced(root *TreeNode) bool {
+    return heightCheck(root) != -1
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -170,6 +244,9 @@ An alternative is to return a tuple `(balanced: bool, height: int)`, same comple
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="balanced-binary-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="balanced-binary-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

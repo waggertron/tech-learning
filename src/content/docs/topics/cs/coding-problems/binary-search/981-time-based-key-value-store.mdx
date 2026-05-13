@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './981-time-based-key-value-store.py?raw';
 import practiceCodeTs from './981-time-based-key-value-store.ts?raw';
+import practiceCodeGo from './981-time-based-key-value-store.go?raw';
 import approach2PyCode from './981-time-based-key-value-store-approach2.py?raw';
 import approach2TsCode from './981-time-based-key-value-store-approach2.ts?raw';
+import approach2GoCode from './981-time-based-key-value-store-approach2.go?raw';
 import approach3PyCode from './981-time-based-key-value-store-approach3.py?raw';
 import approach3TsCode from './981-time-based-key-value-store-approach3.ts?raw';
+import approach3GoCode from './981-time-based-key-value-store-approach3.go?raw';
 
 ## Problem
 
@@ -47,6 +51,9 @@ LeetCode 981 · [Link](https://leetcode.com/problems/time-based-key-value-store/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="time-based-key-value-store-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="time-based-key-value-store-go" />
   </TabItem>
 </Tabs>
 
@@ -95,6 +102,33 @@ class TimeMap {
         }
         return best;
     }
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TimeMap struct {
+    data map[string][][2]interface{}           // L1: O(1) init
+}
+
+func NewTimeMap() *TimeMap {
+    return &TimeMap{data: make(map[string][][2]interface{})}
+}
+
+func (t *TimeMap) Set(key, value string, timestamp int) {
+    t.data[key] = append(t.data[key], [2]interface{}{timestamp, value})  // L2: O(1) amortized
+}
+
+func (t *TimeMap) Get(key string, timestamp int) string {
+    best := ""
+    for _, e := range t.data[key] {                // L3: scan all entries, O(n)
+        if e[0].(int) <= timestamp {               // L4: O(1) compare
+            best = e[1].(string)
+        } else {
+            break                                  // L5: early exit (timestamps sorted)
+        }
+    }
+    return best
 }
 ```
 </TabItem>
@@ -174,6 +208,42 @@ class TimeMap {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type entry struct {
+    timestamp int
+    value     string
+}
+
+type TimeMap struct {
+    data map[string][]entry
+}
+
+func NewTimeMap() *TimeMap {
+    return &TimeMap{data: make(map[string][]entry)}
+}
+
+func (t *TimeMap) Set(key, value string, timestamp int) {
+    t.data[key] = append(t.data[key], entry{timestamp, value})  // L1: O(1) amortized
+}
+
+func (t *TimeMap) Get(key string, timestamp int) string {
+    entries := t.data[key]
+    lo, hi := 0, len(entries)-1                // L2: O(1)
+    result := ""
+    for lo <= hi {                             // L3: binary search, O(log n) steps
+        mid := (lo + hi) / 2                  // L4: O(1) midpoint
+        if entries[mid].timestamp <= timestamp { // L5: O(1) compare timestamp
+            result = entries[mid].value        // L6: O(1) record candidate
+            lo = mid + 1                       // L7: O(1) look for larger ts
+        } else {
+            hi = mid - 1                       // L8: O(1) too late, go earlier
+        }
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -201,6 +271,9 @@ Since timestamps for each key are strictly increasing (guaranteed by the problem
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="time-based-key-value-store-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="time-based-key-value-store-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -262,6 +335,43 @@ class TimeMap {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TimeMap struct {
+    timestamps map[string][]int
+    values     map[string][]string
+}
+
+func NewTimeMap() *TimeMap {
+    return &TimeMap{
+        timestamps: make(map[string][]int),
+        values:     make(map[string][]string),
+    }
+}
+
+func (t *TimeMap) Set(key, value string, timestamp int) {
+    t.timestamps[key] = append(t.timestamps[key], timestamp)  // L1: O(1) amortized
+    t.values[key] = append(t.values[key], value)              // L2: O(1) amortized
+}
+
+func (t *TimeMap) Get(key string, timestamp int) string {
+    ts := t.timestamps[key]
+    // bisect_right equivalent
+    lo, hi := 0, len(ts)
+    for lo < hi {                          // L3: O(log n) binary search
+        mid := (lo + hi) / 2
+        if ts[mid] <= timestamp {
+            lo = mid + 1
+        } else {
+            hi = mid
+        }
+    }
+    i := lo - 1                           // L4: rightmost index <= timestamp
+    if i < 0 { return "" }               // L5: no entry before query
+    return t.values[key][i]              // L6: O(1) index lookup
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -291,6 +401,9 @@ class TimeMap {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="time-based-key-value-store-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="time-based-key-value-store-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -386,6 +499,59 @@ console.assert(store.get("foo", 5) === "bar2");
 console.assert(store.get("foo", 0) === "");        // before any entry
 console.assert(store.get("missing", 1) === "");    // key never set
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TimeMap struct {
+    timestamps map[string][]int
+    values     map[string][]string
+}
+
+func NewTimeMap() *TimeMap {
+    return &TimeMap{
+        timestamps: make(map[string][]int),
+        values:     make(map[string][]string),
+    }
+}
+
+func (t *TimeMap) Set(key, value string, timestamp int) {
+    t.timestamps[key] = append(t.timestamps[key], timestamp)
+    t.values[key] = append(t.values[key], value)
+}
+
+func (t *TimeMap) Get(key string, timestamp int) string {
+    ts := t.timestamps[key]
+    lo, hi := 0, len(ts)
+    for lo < hi {
+        mid := (lo + hi) / 2
+        if ts[mid] <= timestamp {
+            lo = mid + 1
+        } else {
+            hi = mid
+        }
+    }
+    i := lo - 1
+    if i < 0 { return "" }
+    return t.values[key][i]
+}
+
+func main() {
+    store := NewTimeMap()
+    store.Set("foo", "bar", 1)
+    if store.Get("foo", 1) != "bar"  { panic("test 1") }
+    if store.Get("foo", 3) != "bar"  { panic("test 2") } // no entry at 3, returns closest before
+    store.Set("foo", "bar2", 4)
+    if store.Get("foo", 4) != "bar2" { panic("test 3") }
+    if store.Get("foo", 5) != "bar2" { panic("test 4") }
+    if store.Get("foo", 0) != ""     { panic("test 5") } // before any entry
+    if store.Get("missing", 1) != "" { panic("test 6") } // key never set
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './025-reverse-nodes-in-k-group.py?raw';
 import practiceCodeTs from './025-reverse-nodes-in-k-group.ts?raw';
+import practiceCodeGo from './025-reverse-nodes-in-k-group.go?raw';
 import approach2TsCode from './025-reverse-nodes-in-k-group-approach2.ts?raw';
+import approach2GoCode from './025-reverse-nodes-in-k-group-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 25 Â· [Link](https://leetcode.com/problems/reverse-nodes-in-k-group/) Â
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="reverse-nodes-in-k-group-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="reverse-nodes-in-k-group-go" />
   </TabItem>
 </Tabs>
 
@@ -90,6 +96,29 @@ function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
     let tail = dummy;
     for (const v of values) { tail.next = new ListNode(v); tail = tail.next; }  // L3
     return dummy.next;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func reverseKGroup(head *ListNode, k int) *ListNode {
+    var values []int
+    cur := head
+    for cur != nil { values = append(values, cur.Val); cur = cur.Next } // L1: O(1) per node
+    n := len(values)
+    for i := 0; i+k <= n; i += k {                                      // L2: O(k) per group
+        lo, hi := i, i+k-1
+        for lo < hi { values[lo], values[hi] = values[hi], values[lo]; lo++; hi-- }
+    }
+    dummy := &ListNode{}
+    tail := dummy
+    for _, v := range values { tail.Next = &ListNode{Val: v}; tail = tail.Next } // L3
+    return dummy.Next
 }
 ```
 </TabItem>
@@ -180,6 +209,43 @@ function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func reverseKGroup(head *ListNode, k int) *ListNode {
+    dummy := &ListNode{Next: head}
+    groupPrev := dummy
+
+    for {
+        // 1. Find the k-th node from groupPrev
+        kth := groupPrev
+        for i := 0; i < k; i++ {            // L1: advance k steps to find group end
+            kth = kth.Next
+            if kth == nil { return dummy.Next }
+        }
+        groupNext := kth.Next
+
+        // 2. Reverse this group of k nodes
+        prev, curr := groupNext, groupPrev.Next
+        for curr != groupNext {              // L2: reverse k links
+            nxt := curr.Next
+            curr.Next = prev                 // L3: O(1) pointer reversal
+            prev = curr
+            curr = nxt
+        }
+
+        // 3. Reattach
+        tmp := groupPrev.Next
+        groupPrev.Next = kth                // L4: O(1) stitch to prior chunk
+        groupPrev = tmp
+    }
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -209,6 +275,9 @@ Each node is touched twice: once during the "find k-th" scan (L1) and once durin
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="reverse-nodes-in-k-group-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="reverse-nodes-in-k-group-approach2-go" />
   </TabItem>
 </Tabs>
 

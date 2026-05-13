@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './127-word-ladder.py?raw';
 import practiceCodeTs from './127-word-ladder.ts?raw';
+import practiceCodeGo from './127-word-ladder.go?raw';
 import approach2PyCode from './127-word-ladder-approach2.py?raw';
 import approach2TsCode from './127-word-ladder-approach2.ts?raw';
+import approach2GoCode from './127-word-ladder-approach2.go?raw';
 
 ## Problem
 
@@ -40,6 +43,9 @@ LeetCode 127 · [Link](https://leetcode.com/problems/word-ladder/) · *Hard*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="word-ladder-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="word-ladder-go" />
   </TabItem>
 </Tabs>
 
@@ -223,6 +229,9 @@ The bottleneck is the preprocessing (L4-L6) plus the BFS neighbor lookups (L13).
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="word-ladder-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="word-ladder-approach2-go" />
   </TabItem>
 </Tabs>
 

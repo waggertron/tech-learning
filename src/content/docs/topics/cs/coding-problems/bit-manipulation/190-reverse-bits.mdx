@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './190-reverse-bits.py?raw';
 import practiceCodeTs from './190-reverse-bits.ts?raw';
+import practiceCodeGo from './190-reverse-bits.go?raw';
 import approach2PyCode from './190-reverse-bits-approach2.py?raw';
 import approach2TsCode from './190-reverse-bits-approach2.ts?raw';
+import approach2GoCode from './190-reverse-bits-approach2.go?raw';
 import approach3PyCode from './190-reverse-bits-approach3.py?raw';
 import approach3TsCode from './190-reverse-bits-approach3.ts?raw';
+import approach3GoCode from './190-reverse-bits-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 190 · [Link](https://leetcode.com/problems/reverse-bits/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="reverse-bits-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="reverse-bits-go" />
   </TabItem>
 </Tabs>
 
@@ -61,6 +68,18 @@ function reverseBits(n: number): number {
         n >>>= 1;                            // L3: O(1), shift input right (unsigned)
     }
     return result >>> 0;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func reverseBits(n uint32) uint32 {
+    var result uint32
+    for i := 0; i < 32; i++ {              // L1: always 32 iterations
+        result = (result << 1) | (n & 1)   // L2: O(1), shift result and OR in LSB
+        n >>= 1                            // L3: O(1), shift input right
+    }
+    return result
 }
 ```
 </TabItem>
@@ -98,6 +117,24 @@ function reverseBits(n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import (
+    "fmt"
+    "strconv"
+)
+
+func reverseBits(n uint32) uint32 {
+    s := fmt.Sprintf("%032b", n)                    // L1: O(32) format to binary string
+    runes := []rune(s)
+    for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+        runes[i], runes[j] = runes[j], runes[i]    // L2: O(32) reverse in place
+    }
+    val, _ := strconv.ParseUint(string(runes), 2, 32) // L3: O(32) parse
+    return uint32(val)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -122,6 +159,9 @@ Clear and short, but doesn't show bit mechanics.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="reverse-bits-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="reverse-bits-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -153,6 +193,18 @@ function reverseBits(n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func reverseBits(n uint32) uint32 {
+    n = (n >> 16) | (n << 16)                                    // L1: swap 16-bit halves
+    n = ((n & 0xFF00FF00) >> 8) | ((n & 0x00FF00FF) << 8)       // L2: swap bytes
+    n = ((n & 0xF0F0F0F0) >> 4) | ((n & 0x0F0F0F0F) << 4)       // L3: swap nibbles
+    n = ((n & 0xCCCCCCCC) >> 2) | ((n & 0x33333333) << 2)       // L4: swap pairs
+    n = ((n & 0xAAAAAAAA) >> 1) | ((n & 0x55555555) << 1)       // L5: swap individual bits
+    return n
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -177,6 +229,9 @@ Five constant-time bitwise operations regardless of input value.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="reverse-bits-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="reverse-bits-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -234,6 +289,18 @@ console.assert(reverseBits(0) === 0);
 console.assert(reverseBits(4294967295) === 4294967295);
 console.assert(reverseBits(1) === 2147483648);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func reverseBits(n uint32) uint32 {
+    var result uint32
+    for i := 0; i < 32; i++ {
+        result = (result << 1) | (n & 1)
+        n >>= 1
+    }
+    return result
+}
 ```
 </TabItem>
 </Tabs>

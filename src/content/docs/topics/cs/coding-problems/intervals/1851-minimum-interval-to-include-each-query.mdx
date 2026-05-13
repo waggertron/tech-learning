@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1851-minimum-interval-to-include-each-query.py?raw';
 import practiceCodeTs from './1851-minimum-interval-to-include-each-query.ts?raw';
+import practiceCodeGo from './1851-minimum-interval-to-include-each-query.go?raw';
 import approach2PyCode from './1851-minimum-interval-to-include-each-query-approach2.py?raw';
 import approach2TsCode from './1851-minimum-interval-to-include-each-query-approach2.ts?raw';
+import approach2GoCode from './1851-minimum-interval-to-include-each-query-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 1851 · [Link](https://leetcode.com/problems/minimum-interval-to-includ
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="minimum-interval-to-include-each-query-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="minimum-interval-to-include-each-query-go" />
   </TabItem>
 </Tabs>
 
@@ -67,6 +73,24 @@ function minInterval(intervals: number[][], queries: number[]): number[] {
         result.push(best === Infinity ? -1 : best);
     }
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func minInterval(intervals [][]int, queries []int) []int {
+    result := make([]int, len(queries))
+    for qi, q := range queries {              // L1: q iterations
+        best := math.MaxInt64
+        for _, iv := range intervals {        // L2: n iterations per query
+            if iv[0] <= q && q <= iv[1] {
+                length := iv[1] - iv[0] + 1
+                if length < best { best = length }
+            }
+        }
+        if best == math.MaxInt64 { result[qi] = -1 } else { result[qi] = best }
+    }
+    return result
 }
 ```
 </TabItem>
@@ -163,6 +187,38 @@ function minInterval(intervals: number[][], queries: number[]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func minInterval(intervals [][]int, queries []int) []int {
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][0] < intervals[j][0]  // L1: O(n log n)
+    })
+    type iq struct{ val, idx int }
+    sortedQueries := make([]iq, len(queries))
+    for i, q := range queries { sortedQueries[i] = iq{q, i} }
+    sort.Slice(sortedQueries, func(i, j int) bool {
+        return sortedQueries[i].val < sortedQueries[j].val  // L2: O(q log q)
+    })
+
+    result := make([]int, len(queries))            // L3: O(q)
+    h := &MinHeap{}                                // L4: O(1)
+    heap.Init(h)
+    i := 0                                         // L5: O(1)
+
+    for _, sq := range sortedQueries {             // L6: O(q) outer loop
+        q := sq.val
+        for i < len(intervals) && intervals[i][0] <= q {  // L7: O(1) per check
+            s, e := intervals[i][0], intervals[i][1]
+            heap.Push(h, entry{e - s + 1, e})     // L8: O(log n) per push
+            i++
+        }
+        for h.Len() > 0 && (*h)[0].end < q { heap.Pop(h) }  // L9/L10: O(log n) per pop
+        if h.Len() > 0 { result[sq.idx] = (*h)[0].length } else { result[sq.idx] = -1 }  // L11: O(1)
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -196,6 +252,9 @@ Processing queries out of order turns a "for each query, find the best interval"
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="minimum-interval-to-include-each-query-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="minimum-interval-to-include-each-query-approach2-go" />
   </TabItem>
 </Tabs>
 

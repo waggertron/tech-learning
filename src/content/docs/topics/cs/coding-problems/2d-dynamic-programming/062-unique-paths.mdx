@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './062-unique-paths.py?raw';
 import practiceCodeTs from './062-unique-paths.ts?raw';
+import practiceCodeGo from './062-unique-paths.go?raw';
 import approach2PyCode from './062-unique-paths-approach2.py?raw';
 import approach2TsCode from './062-unique-paths-approach2.ts?raw';
+import approach2GoCode from './062-unique-paths-approach2.go?raw';
 import approach3PyCode from './062-unique-paths-approach3.py?raw';
 import approach3TsCode from './062-unique-paths-approach3.ts?raw';
+import approach3GoCode from './062-unique-paths-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 62 · [Link](https://leetcode.com/problems/unique-paths/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="unique-paths-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="unique-paths-go" />
   </TabItem>
 </Tabs>
 
@@ -62,6 +69,18 @@ function uniquePaths(m: number, n: number): number {
         return f(r - 1, c) + f(r, c - 1);       // L3: two recursive calls
     }
     return f(m - 1, n - 1);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func uniquePaths(m int, n int) int {
+    var f func(r, c int) int              // L1: define recursive helper
+    f = func(r, c int) int {
+        if r == 0 || c == 0 { return 1 } // L2: O(1) base case (edge row/col)
+        return f(r-1, c) + f(r, c-1)     // L3: two recursive calls
+    }
+    return f(m-1, n-1)
 }
 ```
 </TabItem>
@@ -110,6 +129,23 @@ function uniquePaths(m: number, n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func uniquePaths(m int, n int) int {
+    dp := make([][]int, m)                   // L1: O(m*n) init, all 1s
+    for i := range dp {
+        dp[i] = make([]int, n)
+        for j := range dp[i] { dp[i][j] = 1 }
+    }
+    for r := 1; r < m; r++ {                // L2: outer loop O(m)
+        for c := 1; c < n; c++ {            // L3: inner loop O(n)
+            dp[r][c] = dp[r-1][c] + dp[r][c-1]  // L4: O(1) recurrence
+        }
+    }
+    return dp[m-1][n-1]                     // L5: O(1) read answer
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -138,6 +174,9 @@ Every cell is visited once; each fill is a single addition. The double loop is t
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="unique-paths-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="unique-paths-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: 1-D rolling array (optimal space)
@@ -165,6 +204,20 @@ function uniquePaths(m: number, n: number): number {
         }
     }
     return dp[n - 1];                           // L5: O(1) read answer
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func uniquePaths(m int, n int) int {
+    dp := make([]int, n)             // L1: O(n) init (first row, all paths = 1)
+    for i := range dp { dp[i] = 1 }
+    for r := 1; r < m; r++ {        // L2: outer loop O(m)
+        for c := 1; c < n; c++ {    // L3: inner loop O(n)
+            dp[c] += dp[c-1]        // L4: O(1) in-place update
+        }
+    }
+    return dp[n-1]                  // L5: O(1) read answer
 }
 ```
 </TabItem>
@@ -197,6 +250,9 @@ The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` tot
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="unique-paths-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="unique-paths-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -261,6 +317,34 @@ console.assert(uniquePaths(1, 5) === 1);
 console.assert(uniquePaths(5, 1) === 1);
 console.assert(uniquePaths(3, 3) === 6);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func uniquePaths(m int, n int) int {
+    dp := make([]int, n)
+    for i := range dp { dp[i] = 1 }
+    for r := 1; r < m; r++ {
+        for c := 1; c < n; c++ {
+            dp[c] += dp[c-1]
+        }
+    }
+    return dp[n-1]
+}
+
+func main() {
+    if uniquePaths(3, 7) != 28 { panic("fail") }
+    if uniquePaths(3, 2) != 3 { panic("fail") }
+    if uniquePaths(1, 1) != 1 { panic("fail") }
+    if uniquePaths(1, 5) != 1 { panic("fail") }
+    if uniquePaths(5, 1) != 1 { panic("fail") }
+    if uniquePaths(3, 3) != 6 { panic("fail") }
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

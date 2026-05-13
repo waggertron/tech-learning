@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './150-evaluate-reverse-polish-notation.py?raw';
 import practiceCodeTs from './150-evaluate-reverse-polish-notation.ts?raw';
+import practiceCodeGo from './150-evaluate-reverse-polish-notation.go?raw';
 import approach2TsCode from './150-evaluate-reverse-polish-notation-approach2.ts?raw';
+import approach2GoCode from './150-evaluate-reverse-polish-notation-approach2.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 150 · [Link](https://leetcode.com/problems/evaluate-reverse-polish-not
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="evaluate-rpn-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="evaluate-rpn-go" />
   </TabItem>
 </Tabs>
 
@@ -79,6 +85,31 @@ function evalRpn(tokens: string[]): number {
         }
     }
     return stack[0];                                     // L12: O(1)
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func evalRPN(tokens []string) int {
+    stack := []int{}                              // L1: O(1)
+    for _, tok := range tokens {                  // L2: n iterations
+        switch tok {                              // L3: O(1) check
+        case "+", "-", "*", "/":
+            b := stack[len(stack)-1]              // L4: O(1) pop
+            a := stack[len(stack)-2]              // L5: O(1) pop
+            stack = stack[:len(stack)-2]
+            switch tok {
+            case "+": stack = append(stack, a+b) // L7: O(1)
+            case "-": stack = append(stack, a-b) // L8: O(1)
+            case "*": stack = append(stack, a*b) // L9: O(1)
+            case "/": stack = append(stack, int(float64(a)/float64(b))) // L10: truncate toward zero
+            }
+        default:
+            n, _ := strconv.Atoi(tok)
+            stack = append(stack, n)              // L11: O(1) parse + push
+        }
+    }
+    return stack[0]                               // L12: O(1)
 }
 ```
 </TabItem>
@@ -148,6 +179,31 @@ function evalRpn(tokens: string[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func evalRPN(tokens []string) int {
+    ops := map[string]func(int, int) int{           // L1: O(1) constant map
+        "+": func(a, b int) int { return a + b },
+        "-": func(a, b int) int { return a - b },
+        "*": func(a, b int) int { return a * b },
+        "/": func(a, b int) int { return int(float64(a) / float64(b)) }, // truncate toward zero
+    }
+    stack := []int{}                                // L2: O(1)
+    for _, tok := range tokens {                    // L3: n iterations
+        if fn, ok := ops[tok]; ok {                 // L4: O(1) map lookup
+            b := stack[len(stack)-1]               // L5: O(1)
+            a := stack[len(stack)-2]               // L6: O(1)
+            stack = stack[:len(stack)-2]
+            stack = append(stack, fn(a, b))        // L7: O(1) apply
+        } else {
+            n, _ := strconv.Atoi(tok)
+            stack = append(stack, n)               // L8: O(1) parse + push
+        }
+    }
+    return stack[0]                                // L9: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -175,6 +231,9 @@ Functionally identical to Approach 1; easier to extend (new operators) and easie
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="evaluate-rpn-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="evaluate-rpn-approach2-go" />
   </TabItem>
 </Tabs>
 

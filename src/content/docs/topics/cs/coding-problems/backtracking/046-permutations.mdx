@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './046-permutations.py?raw';
 import practiceCodeTs from './046-permutations.ts?raw';
+import practiceCodeGo from './046-permutations.go?raw';
 import approach2PyCode from './046-permutations-approach2.py?raw';
 import approach2TsCode from './046-permutations-approach2.ts?raw';
+import approach2GoCode from './046-permutations-approach2.go?raw';
 import approach3PyCode from './046-permutations-approach3.py?raw';
 import approach3TsCode from './046-permutations-approach3.ts?raw';
+import approach3GoCode from './046-permutations-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 46 · [Link](https://leetcode.com/problems/permutations/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="permutations-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="permutations-go" />
   </TabItem>
 </Tabs>
 
@@ -122,6 +129,39 @@ function permute(nums: number[]): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func permute(nums []int) [][]int {
+    result := [][]int{}
+    n := len(nums)
+    used := make([]bool, n)
+    path := []int{}
+
+    var backtrack func()
+    backtrack = func() {
+        if len(path) == n {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp)  // L1: O(n) copy at leaf
+            return
+        }
+        for i := 0; i < n; i++ {
+            if used[i] {
+                continue                 // L2: O(1) skip used
+            }
+            used[i] = true               // L3: O(1) mark used
+            path = append(path, nums[i]) // L4: O(1) push
+            backtrack()                  // L5: recurse
+            path = path[:len(path)-1]    // L6: O(1) pop
+            used[i] = false              // L7: O(1) unmark
+        }
+    }
+
+    backtrack()
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -150,6 +190,9 @@ The clearest expression of the backtracking template for permutations.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="permutations-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="permutations-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -199,6 +242,33 @@ function permute(nums: number[]): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func permute(nums []int) [][]int {
+    result := [][]int{}
+    arr := make([]int, len(nums))
+    copy(arr, nums)
+
+    var backtrack func(start int)
+    backtrack = func(start int) {
+        if start == len(arr) {
+            cp := make([]int, len(arr))
+            copy(cp, arr)
+            result = append(result, cp)              // L1: O(n) copy
+            return
+        }
+        for i := start; i < len(arr); i++ {
+            arr[start], arr[i] = arr[i], arr[start] // L2: O(1) swap
+            backtrack(start + 1)                     // L3: recurse
+            arr[start], arr[i] = arr[i], arr[start] // L4: O(1) undo swap
+        }
+    }
+
+    backtrack(0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -225,6 +295,9 @@ Saves the `used` array. Slightly less readable; mutates input.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="permutations-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="permutations-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -308,6 +381,35 @@ console.assert(norm(r) === norm([[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]
 console.assert(norm(permute([0,1])) === norm([[0,1],[1,0]]));
 console.assert(JSON.stringify(permute([1])) === JSON.stringify([[1]]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func permute(nums []int) [][]int {
+    result := [][]int{}
+    n := len(nums)
+    used := make([]bool, n)
+    path := []int{}
+    var backtrack func()
+    backtrack = func() {
+        if len(path) == n {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp)
+            return
+        }
+        for i := 0; i < n; i++ {
+            if used[i] { continue }
+            used[i] = true
+            path = append(path, nums[i])
+            backtrack()
+            path = path[:len(path)-1]
+            used[i] = false
+        }
+    }
+    backtrack()
+    return result
+}
 ```
 </TabItem>
 </Tabs>

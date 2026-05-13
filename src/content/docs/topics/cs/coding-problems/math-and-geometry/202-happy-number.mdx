@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './202-happy-number.py?raw';
 import practiceCodeTs from './202-happy-number.ts?raw';
+import practiceCodeGo from './202-happy-number.go?raw';
 import approach2PyCode from './202-happy-number-approach2.py?raw';
 import approach2TsCode from './202-happy-number-approach2.ts?raw';
+import approach2GoCode from './202-happy-number-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 202 · [Link](https://leetcode.com/problems/happy-number/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="happy-number-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="happy-number-go" />
   </TabItem>
 </Tabs>
 
@@ -67,6 +73,23 @@ function isHappy(n: number): boolean {
         n = nextN(n);                              // L4: O(log n)
     }
     return n === 1;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func isHappy(n int) bool {
+    nextN := func(x int) int {
+        total := 0
+        for x != 0 { d := x % 10; total += d * d; x /= 10 }  // L1: O(log x)
+        return total
+    }
+    seen := map[int]bool{}
+    for n != 1 && !seen[n] {                       // L2: loop k iterations
+        seen[n] = true                             // L3: O(1) amortized
+        n = nextN(n)                               // L4: O(log n)
+    }
+    return n == 1
 }
 ```
 </TabItem>
@@ -135,6 +158,24 @@ function isHappy(n: number): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isHappy(n int) bool {
+    nextN := func(x int) int {
+        total := 0
+        for x != 0 { d := x % 10; total += d * d; x /= 10 }  // L1: O(log x)
+        return total
+    }
+    slow, fast := n, n
+    for {
+        slow = nextN(slow)              // L2: one step
+        fast = nextN(nextN(fast))       // L3: two steps
+        if fast == 1 { return true }    // L4: happy
+        if slow == fast { return false } // L5: cycle detected
+    }
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -161,6 +202,9 @@ Same asymptotic cost as Approach 1; the win is space, not time.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="happy-number-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="happy-number-approach2-go" />
   </TabItem>
 </Tabs>
 

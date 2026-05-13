@@ -11,12 +11,16 @@ updated: 2026-05-13
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './208-implement-trie.py?raw';
 import practiceCodeTs from './208-implement-trie.ts?raw';
+import practiceCodeGo from './208-implement-trie.go?raw';
 import approach2PyCode from './208-implement-trie-approach2.py?raw';
 import approach2TsCode from './208-implement-trie-approach2.ts?raw';
+import approach2GoCode from './208-implement-trie-approach2.go?raw';
 import approach3PyCode from './208-implement-trie-approach3.py?raw';
 import approach3TsCode from './208-implement-trie-approach3.ts?raw';
+import approach3GoCode from './208-implement-trie-approach3.go?raw';
 
 ## Problem
 
@@ -47,6 +51,9 @@ LeetCode 208 · [Link](https://leetcode.com/problems/implement-trie-prefix-tree/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="implement-trie-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="implement-trie-go" />
   </TabItem>
 </Tabs>
 
@@ -91,6 +98,44 @@ class Trie {
         return false;
     }
 }
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type Trie struct {
+    words map[string]bool
+}
+
+func NewTrie() *Trie { return &Trie{words: make(map[string]bool)} }
+
+func (t *Trie) Insert(word string) {
+    t.words[word] = true               // L1: O(L) hash + store
+}
+
+func (t *Trie) Search(word string) bool {
+    return t.words[word]               // L2: O(L) hash lookup
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+    for w := range t.words {
+        if len(w) >= len(prefix) && w[:len(prefix)] == prefix { // L3: O(W · L) scan
+            return true
+        }
+    }
+    return false
+}
+
+func runTests() {
+    t := NewTrie()
+    t.Insert("apple")
+    fmt.Println(t.Search("apple"), t.Search("app"), t.StartsWith("app"))
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>
@@ -194,6 +239,77 @@ class Trie {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    IsEnd    bool
+}
+
+type Trie struct{ Root *TrieNode }
+
+func NewTrie() *Trie { return &Trie{Root: &TrieNode{}} }
+
+func (t *Trie) Insert(word string) {
+    node := t.Root
+    for _, ch := range word {               // L1: iterate over L characters
+        i := ch - 'a'
+        if node.Children[i] == nil {
+            node.Children[i] = &TrieNode{} // L2: O(1) create node
+        }
+        node = node.Children[i]            // L3: O(1) descend
+    }
+    node.IsEnd = true                      // L4: O(1) mark end
+}
+
+func (t *Trie) Search(word string) bool {
+    node := t.walk(word)                   // L5: O(L) walk
+    return node != nil && node.IsEnd       // L6: O(1) check
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+    return t.walk(prefix) != nil           // L7: O(L) walk
+}
+
+func (t *Trie) walk(s string) *TrieNode {
+    node := t.Root
+    for _, ch := range s {                 // L8: iterate over L characters
+        i := ch - 'a'
+        if node.Children[i] == nil {       // L9: O(1) array lookup
+            return nil
+        }
+        node = node.Children[i]            // L10: O(1) descend
+    }
+    return node
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    t := NewTrie()
+    t.Insert("apple")
+    assert(t.Search("apple") == true)
+    assert(t.Search("app") == false)
+    assert(t.StartsWith("app") == true)
+    t.Insert("app")
+    assert(t.Search("app") == true)
+    assert(t.StartsWith("b") == false)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -222,6 +338,9 @@ Works for arbitrary alphabets.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="implement-trie-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="implement-trie-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -310,6 +429,79 @@ class Trie {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+// Go's [26]*TrieNode is already the array approach -- this is the canonical Go form.
+
+type TrieNode struct {
+    Children [26]*TrieNode            // L1: O(1) allocation (26 pointers)
+    IsEnd    bool
+}
+
+type Trie struct{ Root *TrieNode }
+
+func NewTrie() *Trie { return &Trie{Root: &TrieNode{}} }
+
+func (t *Trie) Insert(word string) {
+    node := t.Root
+    for _, ch := range word {        // L2: iterate over L characters
+        i := ch - 'a'               // L3: O(1) index computation
+        if node.Children[i] == nil {
+            node.Children[i] = &TrieNode{} // L4: O(1) create node
+        }
+        node = node.Children[i]    // L5: O(1) descend
+    }
+    node.IsEnd = true
+}
+
+func (t *Trie) Search(word string) bool {
+    node := t.walk(word)
+    return node != nil && node.IsEnd
+}
+
+func (t *Trie) StartsWith(prefix string) bool {
+    return t.walk(prefix) != nil
+}
+
+func (t *Trie) walk(s string) *TrieNode {
+    node := t.Root
+    for _, ch := range s {          // L6: iterate over L characters
+        i := ch - 'a'              // L7: O(1) index
+        if node.Children[i] == nil {
+            return nil
+        }
+        node = node.Children[i]    // L8: O(1) descend
+    }
+    return node
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    t := NewTrie()
+    t.Insert("apple")
+    assert(t.Search("apple") == true)
+    assert(t.Search("app") == false)
+    assert(t.StartsWith("app") == true)
+    t.Insert("app")
+    assert(t.Search("app") == true)
+    assert(t.StartsWith("b") == false)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -338,6 +530,9 @@ Slightly faster constant factors; restricted to lowercase. Use when the problem 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="implement-trie-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="implement-trie-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -451,6 +646,72 @@ console.assert(trie.search("app") === true);
 console.assert(trie.search("ap") === false);
 console.assert(trie.startsWith("b") === false);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    IsEnd    bool
+}
+
+type Trie struct{ Root *TrieNode }
+
+func NewTrie() *Trie { return &Trie{Root: &TrieNode{}} }
+
+func (t *Trie) Insert(word string) {
+    node := t.Root
+    for _, ch := range word {
+        i := ch - 'a'
+        if node.Children[i] == nil { node.Children[i] = &TrieNode{} }
+        node = node.Children[i]
+    }
+    node.IsEnd = true
+}
+
+func (t *Trie) Search(word string) bool {
+    node := t.walk(word)
+    return node != nil && node.IsEnd
+}
+
+func (t *Trie) StartsWith(prefix string) bool { return t.walk(prefix) != nil }
+
+func (t *Trie) walk(s string) *TrieNode {
+    node := t.Root
+    for _, ch := range s {
+        i := ch - 'a'
+        if node.Children[i] == nil { return nil }
+        node = node.Children[i]
+    }
+    return node
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    trie := NewTrie()
+    trie.Insert("apple")
+    assert(trie.Search("apple") == true)
+    assert(trie.Search("app") == false)     // not inserted, only prefix
+    assert(trie.StartsWith("app") == true)
+    trie.Insert("app")
+    assert(trie.Search("app") == true)
+    assert(trie.Search("ap") == false)      // only prefix, not word
+    assert(trie.StartsWith("b") == false)   // no words with prefix "b"
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>

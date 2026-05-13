@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './338-counting-bits.py?raw';
 import practiceCodeTs from './338-counting-bits.ts?raw';
+import practiceCodeGo from './338-counting-bits.go?raw';
 import approach2PyCode from './338-counting-bits-approach2.py?raw';
 import approach2TsCode from './338-counting-bits-approach2.ts?raw';
+import approach2GoCode from './338-counting-bits-approach2.go?raw';
 import approach3PyCode from './338-counting-bits-approach3.py?raw';
 import approach3TsCode from './338-counting-bits-approach3.ts?raw';
+import approach3GoCode from './338-counting-bits-approach3.go?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 338 · [Link](https://leetcode.com/problems/counting-bits/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="counting-bits-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="counting-bits-go" />
   </TabItem>
 </Tabs>
 
@@ -70,6 +77,25 @@ function countBits(n: number): number[] {
         return count;
     }
     return Array.from({ length: n + 1 }, (_, i) => popcount(i)); // L3: n+1 calls
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func countBits(n int) []int {
+    popcount := func(x int) int {
+        count := 0
+        for x != 0 {                    // L1: loop popcount(x) times
+            x &= x - 1                  // L2: O(1), clear lowest set bit
+            count++
+        }
+        return count
+    }
+    result := make([]int, n+1)
+    for i := 0; i <= n; i++ {           // L3: n+1 calls
+        result[i] = popcount(i)
+    }
+    return result
 }
 ```
 </TabItem>
@@ -115,6 +141,17 @@ function countBits(n: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func countBits(n int) []int {
+    dp := make([]int, n+1)              // L1: O(n)
+    for i := 1; i <= n; i++ {          // L2: single pass, n iterations
+        dp[i] = dp[i>>1] + (i & 1)     // L3: O(1) per i
+    }
+    return dp
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -144,6 +181,9 @@ Each entry is computed in O(1) from a previously computed entry; total work is O
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="counting-bits-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="counting-bits-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: DP via `i & (i - 1)`
@@ -168,6 +208,17 @@ function countBits(n: number): number[] {
         dp[i] = dp[i & (i - 1)] + 1;           // L3: O(1) per i
     }
     return dp;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func countBits(n int) []int {
+    dp := make([]int, n+1)              // L1: O(n)
+    for i := 1; i <= n; i++ {          // L2: single pass, n iterations
+        dp[i] = dp[i&(i-1)] + 1        // L3: O(1) per i
+    }
+    return dp
 }
 ```
 </TabItem>
@@ -196,6 +247,9 @@ Same complexity as Approach 2; `i & (i - 1)` clears the lowest set bit, giving a
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="counting-bits-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="counting-bits-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -249,6 +303,17 @@ console.assert(JSON.stringify(countBits(0)) === JSON.stringify([0]));
 console.assert(JSON.stringify(countBits(1)) === JSON.stringify([0, 1]));
 console.assert(JSON.stringify(countBits(8)) === JSON.stringify([0, 1, 1, 2, 1, 2, 2, 3, 1]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func countBits(n int) []int {
+    dp := make([]int, n+1)
+    for i := 1; i <= n; i++ {
+        dp[i] = dp[i>>1] + (i & 1)
+    }
+    return dp
+}
 ```
 </TabItem>
 </Tabs>

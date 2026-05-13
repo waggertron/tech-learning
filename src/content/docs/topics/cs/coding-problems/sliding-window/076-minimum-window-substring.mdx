@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './076-minimum-window-substring.py?raw';
 import practiceCodeTs from './076-minimum-window-substring.ts?raw';
+import practiceCodeGo from './076-minimum-window-substring.go?raw';
 import approach3TsCode from './076-minimum-window-substring-approach3.ts?raw';
+import approach3GoCode from './076-minimum-window-substring-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 76 Â· [Link](https://leetcode.com/problems/minimum-window-substring/) Â
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="minimum-window-substring-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="minimum-window-substring-go" />
   </TabItem>
 </Tabs>
 
@@ -82,6 +88,38 @@ function minWindow(s: string, t: string): string {
         }
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func minWindow(s string, t string) string {
+	if s == "" || t == "" {
+		return ""
+	}
+	need := make(map[byte]int)
+	for i := 0; i < len(t); i++ {
+		need[t[i]]++
+	}
+	n := len(s)
+	best := ""
+	for i := 0; i < n; i++ {                              // L2: outer loop
+		window := make(map[byte]int)
+		for j := i + len(t); j <= n; j++ {               // L3: inner loop
+			window[s[j-1]]++                              // L4: build window incrementally
+			valid := true
+			for ch, cnt := range need {                   // L5: O(k) check
+				if window[ch] < cnt {
+					valid = false
+					break
+				}
+			}
+			if valid && (best == "" || j-i < len(best)) {
+				best = s[i:j]                             // L6: O(n) slice
+			}
+		}
+	}
+	return best
 }
 ```
 </TabItem>
@@ -156,6 +194,41 @@ function minWindow(s: string, t: string): string {
         }
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func minWindow(s string, t string) string {
+	if s == "" || t == "" {
+		return ""
+	}
+	need := make(map[byte]int)
+	for i := 0; i < len(t); i++ {
+		need[t[i]]++
+	}
+	window := make(map[byte]int)                          // L2: O(1)
+	left := 0
+	best := ""
+	valid := func() bool {                               // L5: O(k) per check
+		for ch, cnt := range need {
+			if window[ch] < cnt {
+				return false
+			}
+		}
+		return true
+	}
+	for right := 0; right < len(s); right++ {            // L3: outer loop
+		window[s[right]]++                               // L4: O(1)
+		for valid() {
+			if best == "" || right-left+1 < len(best) {
+				best = s[left : right+1]                 // L6: O(n) slice
+			}
+			window[s[left]]--                            // L7: O(1)
+			left++                                       // L8: O(1)
+		}
+	}
+	return best
 }
 ```
 </TabItem>
@@ -249,6 +322,50 @@ function minWindow(s: string, t: string): string {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func minWindow(s string, t string) string {
+	if s == "" || t == "" {
+		return ""
+	}
+	need := make(map[byte]int)                             // L1: O(|t|)
+	for i := 0; i < len(t); i++ {
+		need[t[i]]++
+	}
+	needed := len(need)                                    // L2: O(1)
+	window := make(map[byte]int)                           // L3: O(1)
+	have := 0                                              // L4: O(1)
+	left := 0
+	bestLen := 1<<63 - 1                                   // L5: O(1)
+	bestL, bestR := 0, 0
+
+	for right := 0; right < len(s); right++ {             // L6: outer loop, n iterations
+		ch := s[right]
+		window[ch]++                                       // L7: O(1)
+		if cnt, ok := need[ch]; ok && window[ch] == cnt { // L8: O(1)
+			have++                                         // L9: O(1)
+		}
+		for have == needed {                               // L10: O(1) guard; shrink loop
+			if right-left+1 < bestLen {
+				bestLen = right - left + 1                 // L11: O(1)
+				bestL = left
+				bestR = right
+			}
+			lch := s[left]
+			window[lch]--                                  // L12: O(1)
+			if cnt, ok := need[lch]; ok && window[lch] < cnt {
+				have--                                     // L13: O(1)
+			}
+			left++                                         // L14: O(1)
+		}
+	}
+	if bestLen == 1<<63-1 {
+		return ""
+	}
+	return s[bestL : bestR+1]
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -273,6 +390,9 @@ The key upgrade over Approach 2: `have` is an integer that tracks how many disti
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="minimum-window-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="minimum-window-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -367,6 +487,48 @@ console.assert(minWindow("", "a") === "");
 console.assert(minWindow("abc", "") === "");
 console.assert(minWindow("aa", "aa") === "aa");
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func minWindow(s string, t string) string {
+	if s == "" || t == "" {
+		return ""
+	}
+	need := make(map[byte]int)
+	for i := 0; i < len(t); i++ {
+		need[t[i]]++
+	}
+	needed := len(need)
+	window := make(map[byte]int)
+	have, left := 0, 0
+	bestLen := 1<<63 - 1
+	bestL, bestR := 0, 0
+	for right := 0; right < len(s); right++ {
+		ch := s[right]
+		window[ch]++
+		if cnt, ok := need[ch]; ok && window[ch] == cnt {
+			have++
+		}
+		for have == needed {
+			if right-left+1 < bestLen {
+				bestLen = right - left + 1
+				bestL = left
+				bestR = right
+			}
+			lch := s[left]
+			window[lch]--
+			if cnt, ok := need[lch]; ok && window[lch] < cnt {
+				have--
+			}
+			left++
+		}
+	}
+	if bestLen == 1<<63-1 {
+		return ""
+	}
+	return s[bestL : bestR+1]
+}
 ```
 </TabItem>
 </Tabs>

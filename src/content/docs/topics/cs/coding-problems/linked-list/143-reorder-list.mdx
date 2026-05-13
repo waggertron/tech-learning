@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './143-reorder-list.py?raw';
 import practiceCodeTs from './143-reorder-list.ts?raw';
+import practiceCodeGo from './143-reorder-list.go?raw';
 import approach3TsCode from './143-reorder-list-approach3.ts?raw';
+import approach3GoCode from './143-reorder-list-approach3.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 143 · [Link](https://leetcode.com/problems/reorder-list/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="reorder-list-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="reorder-list-go" />
   </TabItem>
 </Tabs>
 

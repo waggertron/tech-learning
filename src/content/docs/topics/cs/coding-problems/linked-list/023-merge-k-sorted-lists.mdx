@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './023-merge-k-sorted-lists.py?raw';
 import practiceCodeTs from './023-merge-k-sorted-lists.ts?raw';
+import practiceCodeGo from './023-merge-k-sorted-lists.go?raw';
 import approach3aTsCode from './023-merge-k-sorted-lists-approach3a.ts?raw';
+import approach3aGoCode from './023-merge-k-sorted-lists-approach3a.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 23 · [Link](https://leetcode.com/problems/merge-k-sorted-lists/) · *H
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="merge-k-sorted-lists-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="merge-k-sorted-lists-go" />
   </TabItem>
 </Tabs>
 
@@ -89,6 +95,34 @@ function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
         tail = tail.next;
     }
     return dummy.next;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+import "sort"
+
+func mergeKLists(lists []*ListNode) *ListNode {
+    var values []int
+    for _, head := range lists {
+        for head != nil {
+            values = append(values, head.Val) // L1: O(1) per node, N total
+            head = head.Next
+        }
+    }
+    sort.Ints(values)                         // L2: O(N log N)
+    dummy := &ListNode{}
+    tail := dummy
+    for _, v := range values {
+        tail.Next = &ListNode{Val: v}         // L3: O(1) per node
+        tail = tail.Next
+    }
+    return dummy.Next
 }
 ```
 </TabItem>
@@ -161,6 +195,33 @@ function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func mergeTwo(l1, l2 *ListNode) *ListNode {
+    dummy := &ListNode{}
+    tail := dummy
+    for l1 != nil && l2 != nil {
+        if l1.Val <= l2.Val { tail.Next = l1; l1 = l1.Next } else { tail.Next = l2; l2 = l2.Next }
+        tail = tail.Next
+    }
+    if l1 != nil { tail.Next = l1 } else { tail.Next = l2 }
+    return dummy.Next
+}
+
+func mergeKLists(lists []*ListNode) *ListNode {
+    var result *ListNode
+    for _, head := range lists {           // L1: k iterations
+        result = mergeTwo(result, head)    // L2: each merge is O(current size)
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -217,6 +278,29 @@ function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func mergeKLists(lists []*ListNode) *ListNode {
+    if len(lists) == 0 { return nil }
+    for len(lists) > 1 {                      // L1: log k rounds
+        var merged []*ListNode
+        for i := 0; i < len(lists); i += 2 { // L2: pair up adjacent lists
+            a := lists[i]
+            var b *ListNode
+            if i+1 < len(lists) { b = lists[i+1] }
+            merged = append(merged, mergeTwo(a, b)) // L3: merge each pair
+        }
+        lists = merged
+    }
+    return lists[0]
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -240,6 +324,9 @@ At each round, the total work across all pairwise merges is O(N) (every node is 
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3aTsCode} id="merge-k-sorted-lists-approach3a-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3aGoCode} id="merge-k-sorted-lists-approach3a-go" />
   </TabItem>
 </Tabs>
 

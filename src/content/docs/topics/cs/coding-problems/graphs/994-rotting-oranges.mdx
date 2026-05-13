@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './994-rotting-oranges.py?raw';
 import practiceCodeTs from './994-rotting-oranges.ts?raw';
+import practiceCodeGo from './994-rotting-oranges.go?raw';
 import approach2PyCode from './994-rotting-oranges-approach2.py?raw';
 import approach2TsCode from './994-rotting-oranges-approach2.ts?raw';
+import approach2GoCode from './994-rotting-oranges-approach2.go?raw';
 
 ## Problem
 
@@ -41,6 +44,9 @@ LeetCode 994 · [Link](https://leetcode.com/problems/rotting-oranges/) · *Mediu
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="rotting-oranges-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="rotting-oranges-go" />
   </TabItem>
 </Tabs>
 
@@ -227,6 +233,9 @@ function orangesRotting(grid: number[][]): number {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="rotting-oranges-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="rotting-oranges-approach2-go" />
   </TabItem>
 </Tabs>
 

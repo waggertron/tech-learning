@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './347-top-k-frequent-elements.py?raw';
 import practiceCodeTs from './347-top-k-frequent-elements.ts?raw';
+import practiceCodeGo from './347-top-k-frequent-elements.go?raw';
 import approach2PyCode from './347-top-k-frequent-elements-approach2.py?raw';
 import approach2TsCode from './347-top-k-frequent-elements-approach2.ts?raw';
+import approach2GoCode from './347-top-k-frequent-elements-approach2.go?raw';
 import approach3PyCode from './347-top-k-frequent-elements-approach3.py?raw';
 import approach3TsCode from './347-top-k-frequent-elements-approach3.ts?raw';
+import approach3GoCode from './347-top-k-frequent-elements-approach3.go?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 347 Â· [Link](https://leetcode.com/problems/top-k-frequent-elements/) Â
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="top-k-frequent-elements-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="top-k-frequent-elements-go" />
   </TabItem>
 </Tabs>
 
@@ -64,6 +71,23 @@ function topKFrequent(nums: number[], k: number): number[] {
         .sort((a, b) => b[1] - a[1])               // L2: O(n log n) sort
         .slice(0, k)
         .map(([num]) => num);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "sort"
+
+func topKFrequent(nums []int, k int) []int {
+	counts := make(map[int]int)                      // L1: O(n) build counter
+	for _, n := range nums { counts[n]++ }
+	type pair struct{ num, cnt int }
+	entries := make([]pair, 0, len(counts))
+	for num, cnt := range counts { entries = append(entries, pair{num, cnt}) }
+	sort.Slice(entries, func(i, j int) bool { return entries[i].cnt > entries[j].cnt }) // L2: O(n log n)
+	result := make([]int, k)
+	for i := 0; i < k; i++ { result[i] = entries[i].num }
+	return result
 }
 ```
 </TabItem>
@@ -117,6 +141,36 @@ function topKFrequent(nums: number[], k: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import (
+	"container/heap"
+)
+
+type pair struct{ cnt, num int }
+type minHeap []pair
+
+func (h minHeap) Len() int            { return len(h) }
+func (h minHeap) Less(i, j int) bool  { return h[i].cnt < h[j].cnt }
+func (h minHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *minHeap) Push(x interface{}) { *h = append(*h, x.(pair)) }
+func (h *minHeap) Pop() interface{}   { old := *h; x := old[len(old)-1]; *h = old[:len(old)-1]; return x }
+
+func topKFrequent(nums []int, k int) []int {
+	counts := make(map[int]int)                       // L1: O(n) build counter
+	for _, n := range nums { counts[n]++ }
+	h := &minHeap{}
+	heap.Init(h)
+	for num, cnt := range counts {                    // L3: loop over d distinct elements
+		heap.Push(h, pair{cnt, num})                  // L4: O(log k) per push
+		if h.Len() > k { heap.Pop(h) }               // L5-L6: O(log k) pop
+	}
+	result := make([]int, h.Len())
+	for i := range result { result[i] = (*h)[i].num } // L7: O(k)
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -147,6 +201,9 @@ When `k` is small relative to `n`, this is noticeably faster than the O(n log n)
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="top-k-frequent-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="top-k-frequent-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -193,6 +250,26 @@ function topKFrequent(nums: number[], k: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func topKFrequent(nums []int, k int) []int {
+	counts := make(map[int]int)                        // L1: O(n) build counter
+	for _, n := range nums { counts[n]++ }
+	buckets := make([][]int, len(nums)+1)              // L2: O(n) n+1 buckets
+	for num, cnt := range counts {
+		buckets[cnt] = append(buckets[cnt], num)       // L3-L4: O(1) append
+	}
+	result := []int{}
+	for cnt := len(buckets) - 1; cnt > 0; cnt-- {     // L5: scan high-to-low
+		for _, num := range buckets[cnt] {             // L6: visit elements
+			result = append(result, num)               // L7: O(1)
+			if len(result) == k { return result }      // L8-L9: early return
+		}
+	}
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -220,6 +297,9 @@ Every distinct element is bucketed once and visited at most once during the scan
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="top-k-frequent-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="top-k-frequent-approach3-go" />
   </TabItem>
 </Tabs>
 

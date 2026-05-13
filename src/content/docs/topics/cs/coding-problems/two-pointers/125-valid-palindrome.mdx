@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './125-valid-palindrome.py?raw';
 import practiceCodeTs from './125-valid-palindrome.ts?raw';
+import practiceCodeGo from './125-valid-palindrome.go?raw';
 import approach2PyCode from './125-valid-palindrome-approach2.py?raw';
 import approach2TsCode from './125-valid-palindrome-approach2.ts?raw';
+import approach2GoCode from './125-valid-palindrome-approach2.go?raw';
 import approach3PyCode from './125-valid-palindrome-approach3.py?raw';
 import approach3TsCode from './125-valid-palindrome-approach3.ts?raw';
+import approach3GoCode from './125-valid-palindrome-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 125 · [Link](https://leetcode.com/problems/valid-palindrome/) · *Easy
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="valid-palindrome-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="valid-palindrome-go" />
   </TabItem>
 </Tabs>
 
@@ -60,6 +67,24 @@ function isPalindrome(s: string): boolean {
         .map(ch => ch.toLowerCase())
         .join('');                                    // L1: O(n) filter+join
     return cleaned === cleaned.split('').reverse().join(''); // L2: O(n) reverse+compare
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func isPalindrome(s string) bool {
+    cleaned := []rune{}
+    for _, ch := range s {
+        if unicode.IsLetter(ch) || unicode.IsDigit(ch) {
+            cleaned = append(cleaned, unicode.ToLower(ch))
+        }
+    }
+    for l, r := 0, len(cleaned)-1; l < r; l, r = l+1, r-1 {
+        if cleaned[l] != cleaned[r] {
+            return false
+        }
+    }
+    return true
 }
 ```
 </TabItem>
@@ -113,6 +138,27 @@ function isPalindrome(s: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isPalindrome(s string) bool {
+    cleaned := []rune{}
+    for _, ch := range s {
+        if unicode.IsLetter(ch) || unicode.IsDigit(ch) {
+            cleaned = append(cleaned, unicode.ToLower(ch)) // L1: O(n) filter
+        }
+    }
+    l, r := 0, len(cleaned)-1                             // L2: O(1) init pointers
+    for l < r {                                            // L3: at most n/2 iterations
+        if cleaned[l] != cleaned[r] {                      // L4: O(1) compare
+            return false                                   // L5: O(1) early exit
+        }
+        l++                                                // L6: O(1) advance both
+        r--
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -139,6 +185,9 @@ The filter pass dominates; the pointer scan is at most half the cleaned length.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="valid-palindrome-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="valid-palindrome-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -178,6 +227,28 @@ function isPalindrome(s: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isPalindrome(s string) bool {
+    runes := []rune(s)
+    l, r := 0, len(runes)-1                              // L1: O(1) init pointers
+    for l < r {                                           // L2: at most n steps total
+        for l < r && !unicode.IsLetter(runes[l]) && !unicode.IsDigit(runes[l]) {
+            l++                                           // L3/L4: skip non-alnum on left
+        }
+        for l < r && !unicode.IsLetter(runes[r]) && !unicode.IsDigit(runes[r]) {
+            r--                                           // L5/L6: skip non-alnum on right
+        }
+        if unicode.ToLower(runes[l]) != unicode.ToLower(runes[r]) { // L7: O(1) compare
+            return false                                  // L8: O(1) early exit
+        }
+        l++                                               // L9: O(1) advance both
+        r--
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -205,6 +276,9 @@ Each character in `s` is touched at most once (either skipped in L3/L5 or compar
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="valid-palindrome-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="valid-palindrome-approach3-go" />
   </TabItem>
 </Tabs>
 

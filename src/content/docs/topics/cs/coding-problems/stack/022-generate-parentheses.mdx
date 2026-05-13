@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './022-generate-parentheses.py?raw';
 import practiceCodeTs from './022-generate-parentheses.ts?raw';
+import practiceCodeGo from './022-generate-parentheses.go?raw';
 import approach2TsCode from './022-generate-parentheses-approach2.ts?raw';
+import approach2GoCode from './022-generate-parentheses-approach2.go?raw';
 import approach3TsCode from './022-generate-parentheses-approach3.ts?raw';
+import approach3GoCode from './022-generate-parentheses-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +38,9 @@ LeetCode 22 · [Link](https://leetcode.com/problems/generate-parentheses/) · *M
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="generate-parentheses-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="generate-parentheses-go" />
   </TabItem>
 </Tabs>
 
@@ -90,6 +97,32 @@ function generateParenthesis(n: number): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func generateParenthesis(n int) []string {
+    isValid := func(s string) bool {
+        balance := 0
+        for _, ch := range s {
+            if ch == '(' { balance++ } else { balance-- }
+            if balance < 0 { return false }
+        }
+        return balance == 0
+    }
+    result := []string{}
+    var rec func(s string)
+    rec = func(s string) {                         // L1: recursive enumeration
+        if len(s) == 2*n {                         // L2: O(1) base-case check
+            if isValid(s) { result = append(result, s) } // L3: O(n) validation
+            return
+        }
+        rec(s + "(")                               // L4: recurse with open
+        rec(s + ")")                               // L5: recurse with close
+    }
+    rec("")
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -143,6 +176,22 @@ function generateParenthesis(n: number): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func generateParenthesis(n int) []string {
+    result := []string{}
+    var rec func(s string, opens, closes int)
+    rec = func(s string, opens, closes int) {      // L1: pruned recursion
+        if opens > n || closes > opens { return }  // L2: O(1) prune check
+        if len(s) == 2*n { result = append(result, s); return } // L3: O(1) base case
+        rec(s+"(", opens+1, closes)                // L4: try open
+        rec(s+")", opens, closes+1)                // L5: try close
+    }
+    rec("", 0, 0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -168,6 +217,9 @@ Pruning reduces the explored space from 4^n to the Catalan number C(n) ≈ 4^n /
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="generate-parentheses-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="generate-parentheses-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -227,6 +279,33 @@ function generateParenthesis(n: number): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func generateParenthesis(n int) []string {
+    result := []string{}                           // L1: O(1)
+    path := []string{}                             // L2: O(1) shared path buffer
+    var backtrack func(opens, closes int)
+    backtrack = func(opens, closes int) {
+        if opens == n && closes == n {             // L3: O(1) done check
+            result = append(result, strings.Join(path, "")) // L4: O(n) join at leaf
+            return
+        }
+        if opens < n {                             // L5: O(1)
+            path = append(path, "(")              // L6: O(1) amortized
+            backtrack(opens+1, closes)             // L7: recurse
+            path = path[:len(path)-1]             // L8: O(1) undo
+        }
+        if closes < opens {                        // L9: O(1)
+            path = append(path, ")")              // L10: O(1) amortized
+            backtrack(opens, closes+1)             // L11: recurse
+            path = path[:len(path)-1]             // L12: O(1) undo
+        }
+    }
+    backtrack(0, 0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -255,6 +334,9 @@ Using a single `path` list with `append`/`pop` avoids string concatenation (O(n)
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="generate-parentheses-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="generate-parentheses-approach3-go" />
   </TabItem>
 </Tabs>
 

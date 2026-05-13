@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './907-sum-of-subarray-minimums.py?raw';
 import practiceCodeTs from './907-sum-of-subarray-minimums.ts?raw';
+import practiceCodeGo from './907-sum-of-subarray-minimums.go?raw';
 import approach2TsCode from './907-sum-of-subarray-minimums-approach2.ts?raw';
+import approach2GoCode from './907-sum-of-subarray-minimums-approach2.go?raw';
 
 ## Problem
 
@@ -39,6 +42,9 @@ LeetCode 907 · [Link](https://leetcode.com/problems/sum-of-subarray-minimums/) 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="sum-of-subarray-minimums-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="sum-of-subarray-minimums-go" />
   </TabItem>
 </Tabs>
 

@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './138-copy-list-with-random-pointer.py?raw';
 import practiceCodeTs from './138-copy-list-with-random-pointer.ts?raw';
+import practiceCodeGo from './138-copy-list-with-random-pointer.go?raw';
 import approach2TsCode from './138-copy-list-with-random-pointer-approach2.ts?raw';
+import approach2GoCode from './138-copy-list-with-random-pointer-approach2.go?raw';
 
 ## Problem
 
@@ -29,6 +32,9 @@ LeetCode 138 · [Link](https://leetcode.com/problems/copy-list-with-random-point
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="copy-list-with-random-pointer-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="copy-list-with-random-pointer-go" />
   </TabItem>
 </Tabs>
 

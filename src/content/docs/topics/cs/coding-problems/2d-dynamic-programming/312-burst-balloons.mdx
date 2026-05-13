@@ -11,10 +11,13 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './312-burst-balloons.py?raw';
 import practiceCodeTs from './312-burst-balloons.ts?raw';
+import practiceCodeGo from './312-burst-balloons.go?raw';
 import approach3PyCode from './312-burst-balloons-approach3.py?raw';
 import approach3TsCode from './312-burst-balloons-approach3.ts?raw';
+import approach3GoCode from './312-burst-balloons-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 312 · [Link](https://leetcode.com/problems/burst-balloons/) · *Hard*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="burst-balloons-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="burst-balloons-go" />
   </TabItem>
 </Tabs>
 
@@ -133,6 +139,28 @@ function maxCoins(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxCoins(nums []int) int {
+    padded := make([]int, len(nums)+2)               // L1: O(n) pad with sentinel 1s
+    padded[0], padded[len(padded)-1] = 1, 1
+    for i, v := range nums { padded[i+1] = v }
+    n := len(padded)                                 // L2: O(1)
+    dp := make([][]int, n)
+    for i := range dp { dp[i] = make([]int, n) }    // L3: O(n^2) table init
+    for length := 2; length <= n; length++ {         // L4: O(n) length loop
+        for i := 0; i <= n-length; i++ {             // L5: O(n) left endpoint
+            j := i + length - 1                      // L6: O(1) right endpoint
+            for k := i + 1; k < j; k++ {             // L7: O(n) last-burst k
+                coins := padded[i]*padded[k]*padded[j] + dp[i][k] + dp[k][j] // L8
+                if coins > dp[i][j] { dp[i][j] = coins } // L9: O(1) update best
+            }
+        }
+    }
+    return dp[0][n-1]                                // L10: O(1) answer
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -164,6 +192,9 @@ When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and be
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="burst-balloons-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="burst-balloons-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -237,6 +268,41 @@ console.assert(maxCoins([5]) === 5);
 console.assert(maxCoins([3, 3]) === 12);
 console.assert(maxCoins([1, 1, 1]) === 3);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func maxCoins(nums []int) int {
+    padded := make([]int, len(nums)+2)
+    padded[0], padded[len(padded)-1] = 1, 1
+    for i, v := range nums { padded[i+1] = v }
+    n := len(padded)
+    dp := make([][]int, n)
+    for i := range dp { dp[i] = make([]int, n) }
+    for length := 2; length <= n; length++ {
+        for i := 0; i <= n-length; i++ {
+            j := i + length - 1
+            for k := i + 1; k < j; k++ {
+                coins := padded[i]*padded[k]*padded[j] + dp[i][k] + dp[k][j]
+                if coins > dp[i][j] { dp[i][j] = coins }
+            }
+        }
+    }
+    return dp[0][n-1]
+}
+
+func main() {
+    if maxCoins([]int{3, 1, 5, 8}) != 167 { panic("fail") }
+    if maxCoins([]int{1, 5}) != 10 { panic("fail") }
+    if maxCoins([]int{5}) != 5 { panic("fail") }
+    if maxCoins([]int{3, 3}) != 12 { panic("fail") }
+    if maxCoins([]int{1, 1, 1}) != 3 { panic("fail") }
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './042-trapping-rain-water.py?raw';
 import practiceCodeTs from './042-trapping-rain-water.ts?raw';
+import practiceCodeGo from './042-trapping-rain-water.go?raw';
 import approach2PyCode from './042-trapping-rain-water-approach2.py?raw';
 import approach2TsCode from './042-trapping-rain-water-approach2.ts?raw';
+import approach2GoCode from './042-trapping-rain-water-approach2.go?raw';
 import approach3PyCode from './042-trapping-rain-water-approach3.py?raw';
 import approach3TsCode from './042-trapping-rain-water-approach3.ts?raw';
+import approach3GoCode from './042-trapping-rain-water-approach3.go?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 42 · [Link](https://leetcode.com/problems/trapping-rain-water/) · *Ha
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="trapping-rain-water-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="trapping-rain-water-go" />
   </TabItem>
 </Tabs>
 
@@ -71,6 +78,28 @@ function trap(height: number[]): number {
         total += Math.min(leftMax, rightMax) - height[i]; // L6: O(1) contribution
     }
     return total;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func trap(height []int) int {
+    n := len(height)                                   // L1: O(1)
+    total := 0                                         // L2: O(1)
+    for i := 0; i < n; i++ {                          // L3: outer loop, n iterations
+        leftMax := 0
+        for j := 0; j <= i; j++ {
+            if height[j] > leftMax { leftMax = height[j] } // L4: O(i) scan
+        }
+        rightMax := 0
+        for j := i; j < n; j++ {
+            if height[j] > rightMax { rightMax = height[j] } // L5: O(n-i) scan
+        }
+        lm := leftMax
+        if rightMax < lm { lm = rightMax }
+        total += lm - height[i]                        // L6: O(1) contribution
+    }
+    return total
 }
 ```
 </TabItem>
@@ -141,6 +170,36 @@ function trap(height: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func trap(height []int) int {
+    n := len(height)                                   // L1: O(1)
+    if n == 0 {                                        // L2: O(1) guard
+        return 0
+    }
+    leftMax := make([]int, n)                          // L3: O(n)
+    rightMax := make([]int, n)                         // L4: O(n)
+
+    leftMax[0] = height[0]                             // L5: O(1)
+    for i := 1; i < n; i++ {                          // L6: forward pass
+        if height[i] > leftMax[i-1] { leftMax[i] = height[i] } else { leftMax[i] = leftMax[i-1] } // L7
+    }
+
+    rightMax[n-1] = height[n-1]                       // L8: O(1)
+    for i := n - 2; i >= 0; i-- {                     // L9: backward pass
+        if height[i] > rightMax[i+1] { rightMax[i] = height[i] } else { rightMax[i] = rightMax[i+1] } // L10
+    }
+
+    total := 0
+    for i := 0; i < n; i++ {                          // L11: O(n)
+        lm := leftMax[i]
+        if rightMax[i] < lm { lm = rightMax[i] }
+        total += lm - height[i]
+    }
+    return total
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -170,6 +229,9 @@ Clean, easy to reason about, the right answer when memory isn't constrained.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="trapping-rain-water-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="trapping-rain-water-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -225,6 +287,33 @@ function trap(height: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func trap(height []int) int {
+    l, r := 0, len(height)-1          // L1: O(1) init pointers
+    leftMax, rightMax := 0, 0         // L2: O(1) running maxes
+    total := 0                        // L3: O(1)
+    for l < r {                       // L4: loop, n iterations total
+        if height[l] < height[r] {    // L5: O(1) compare sides
+            if height[l] >= leftMax { // L6: O(1)
+                leftMax = height[l]   // L7: O(1) update max
+            } else {
+                total += leftMax - height[l] // L8: O(1) collect water
+            }
+            l++                       // L9: O(1) advance left
+        } else {
+            if height[r] >= rightMax { // L10: O(1)
+                rightMax = height[r]  // L11: O(1) update max
+            } else {
+                total += rightMax - height[r] // L12: O(1) collect water
+            }
+            r--                       // L13: O(1) advance right
+        }
+    }
+    return total
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -272,6 +361,9 @@ def trap_stack(height: list[int]) -> int:
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="trapping-rain-water-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="trapping-rain-water-approach3-go" />
   </TabItem>
 </Tabs>
 

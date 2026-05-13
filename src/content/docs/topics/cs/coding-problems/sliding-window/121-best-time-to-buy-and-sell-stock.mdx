@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './121-best-time-to-buy-and-sell-stock.py?raw';
 import practiceCodeTs from './121-best-time-to-buy-and-sell-stock.ts?raw';
+import practiceCodeGo from './121-best-time-to-buy-and-sell-stock.go?raw';
 import approach3TsCode from './121-best-time-to-buy-and-sell-stock-approach3.ts?raw';
+import approach3GoCode from './121-best-time-to-buy-and-sell-stock-approach3.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 121 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-s
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="best-time-to-buy-and-sell-stock-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="best-time-to-buy-and-sell-stock-go" />
   </TabItem>
 </Tabs>
 
@@ -63,6 +69,22 @@ function maxProfit(prices: number[]): number {
         }
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+	n := len(prices)
+	best := 0
+	for i := 0; i < n; i++ {                              // L1: outer loop, n iterations
+		for j := i + 1; j < n; j++ {                      // L2: inner loop, up to n-i-1
+			if prices[j]-prices[i] > best {               // L3: O(1) arithmetic + max
+				best = prices[j] - prices[i]
+			}
+		}
+	}
+	return best
 }
 ```
 </TabItem>
@@ -119,6 +141,32 @@ function maxProfit(prices: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+	n := len(prices)
+	if n < 2 {
+		return 0
+	}
+	minSoFar := make([]int, n)                        // L1: O(n) allocation
+	minSoFar[0] = prices[0]
+	for i := 1; i < n; i++ {                          // L2: first pass, n-1 iterations
+		if prices[i] < minSoFar[i-1] {               // L3: O(1) per step
+			minSoFar[i] = prices[i]
+		} else {
+			minSoFar[i] = minSoFar[i-1]
+		}
+	}
+	best := 0
+	for i := 0; i < n; i++ {                          // L4: O(n) second pass
+		if prices[i]-minSoFar[i] > best {
+			best = prices[i] - minSoFar[i]
+		}
+	}
+	return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -171,6 +219,22 @@ function maxProfit(prices: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+	lowest := 1<<63 - 1                      // L1: O(1)
+	best := 0                                // L2: O(1)
+	for _, price := range prices {           // L3: single loop, n iterations
+		if price < lowest {                  // L4: O(1) comparison
+			lowest = price                   // L5: O(1) update buy candidate
+		} else if price-lowest > best {      // L6: O(1) profit check
+			best = price - lowest
+		}
+	}
+	return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -198,6 +262,9 @@ One pass, two variables. L5 and L6 are mutually exclusive per iteration (either 
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="best-time-to-buy-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="best-time-to-buy-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -261,6 +328,22 @@ console.assert(maxProfit([1, 2]) === 1);
 console.assert(maxProfit([2, 4, 1]) === 2);
 console.assert(maxProfit([3, 3, 3]) === 0);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+	lowest := 1<<63 - 1
+	best := 0
+	for _, price := range prices {
+		if price < lowest {
+			lowest = price
+		} else if price-lowest > best {
+			best = price - lowest
+		}
+	}
+	return best
+}
 ```
 </TabItem>
 </Tabs>

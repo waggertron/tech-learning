@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './017-letter-combinations-of-a-phone-number.py?raw';
 import practiceCodeTs from './017-letter-combinations-of-a-phone-number.ts?raw';
+import practiceCodeGo from './017-letter-combinations-of-a-phone-number.go?raw';
 import approach2PyCode from './017-letter-combinations-of-a-phone-number-approach2.py?raw';
 import approach2TsCode from './017-letter-combinations-of-a-phone-number-approach2.ts?raw';
+import approach2GoCode from './017-letter-combinations-of-a-phone-number-approach2.go?raw';
 import approach3PyCode from './017-letter-combinations-of-a-phone-number-approach3.py?raw';
 import approach3TsCode from './017-letter-combinations-of-a-phone-number-approach3.ts?raw';
+import approach3GoCode from './017-letter-combinations-of-a-phone-number-approach3.go?raw';
 
 ## Problem
 
@@ -42,6 +46,9 @@ LeetCode 17 · [Link](https://leetcode.com/problems/letter-combinations-of-a-pho
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="letter-combinations-of-a-phone-number-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="letter-combinations-of-a-phone-number-go" />
   </TabItem>
 </Tabs>
 
@@ -85,6 +92,31 @@ function letterCombinations(digits: string): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func letterCombinations(digits string) []string {
+    if len(digits) == 0 {
+        return []string{}
+    }
+    mapping := map[byte]string{
+        '2': "abc", '3': "def", '4': "ghi", '5': "jkl",
+        '6': "mno", '7': "pqrs", '8': "tuv", '9': "wxyz",
+    }
+    result := []string{""}
+    for i := 0; i < len(digits); i++ {            // L1: loop over n digits
+        letters := mapping[digits[i]]
+        next := []string{}
+        for _, prefix := range result {
+            for _, ch := range letters {
+                next = append(next, prefix+string(ch)) // L2: O(k^n · n) total
+            }
+        }
+        result = next
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -110,6 +142,9 @@ After processing digit i, `result` has k^i entries each of length i. The compreh
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="letter-combinations-approach1-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="letter-combinations-approach1-go" />
   </TabItem>
 </Tabs>
 
@@ -169,6 +204,37 @@ function letterCombinations(digits: string): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func letterCombinations(digits string) []string {
+    if len(digits) == 0 {
+        return []string{}
+    }
+    mapping := map[byte]string{
+        '2': "abc", '3': "def", '4': "ghi", '5': "jkl",
+        '6': "mno", '7': "pqrs", '8': "tuv", '9': "wxyz",
+    }
+    result := []string{}
+    path := []byte{}
+
+    var backtrack func(i int)
+    backtrack = func(i int) {
+        if i == len(digits) {
+            result = append(result, string(path)) // L1: O(n) join when complete
+            return
+        }
+        for _, ch := range mapping[digits[i]] { // L2: loop over letters for digit i
+            path = append(path, byte(ch))        // L3: O(1) push
+            backtrack(i + 1)                     // L4: recurse
+            path = path[:len(path)-1]            // L5: O(1) pop
+        }
+    }
+
+    backtrack(0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -195,6 +261,9 @@ The recursion tree has k^n leaves (one per combination) and n levels. Most work 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="letter-combinations-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="letter-combinations-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -303,6 +372,35 @@ console.assert(JSON.stringify(letterCombinations('2').sort()) === JSON.stringify
 console.assert(JSON.stringify(letterCombinations('7').sort()) === JSON.stringify(['p','q','r','s']));
 console.assert(letterCombinations('22').length === 9);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func letterCombinations(digits string) []string {
+    if len(digits) == 0 {
+        return []string{}
+    }
+    mapping := map[byte]string{
+        '2': "abc", '3': "def", '4': "ghi", '5': "jkl",
+        '6': "mno", '7': "pqrs", '8': "tuv", '9': "wxyz",
+    }
+    result := []string{}
+    path := []byte{}
+    var backtrack func(i int)
+    backtrack = func(i int) {
+        if i == len(digits) {
+            result = append(result, string(path))
+            return
+        }
+        for _, ch := range mapping[digits[i]] {
+            path = append(path, byte(ch))
+            backtrack(i + 1)
+            path = path[:len(path)-1]
+        }
+    }
+    backtrack(0)
+    return result
+}
 ```
 </TabItem>
 </Tabs>

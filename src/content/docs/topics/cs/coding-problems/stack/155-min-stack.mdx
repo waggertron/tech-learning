@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './155-min-stack.py?raw';
 import practiceCodeTs from './155-min-stack.ts?raw';
+import practiceCodeGo from './155-min-stack.go?raw';
 import approach2TsCode from './155-min-stack-approach2.ts?raw';
+import approach2GoCode from './155-min-stack-approach2.go?raw';
 import approach3TsCode from './155-min-stack-approach3.ts?raw';
+import approach3GoCode from './155-min-stack-approach3.go?raw';
 
 ## Problem
 
@@ -40,6 +44,9 @@ LeetCode 155 · [Link](https://leetcode.com/problems/min-stack/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="min-stack-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="min-stack-go" />
   </TabItem>
 </Tabs>
 
@@ -71,6 +78,32 @@ class MinStack {
     pop(): void { this.stack.pop(); }                      // L3: O(1)
     top(): number { return this.stack[this.stack.length - 1]; }  // L4: O(1)
     getMin(): number { return Math.min(...this.stack); }   // L5: O(n) full scan
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type MinStack struct {
+    stack []int                                    // L1: O(1)
+}
+
+func Constructor() MinStack { return MinStack{} }
+
+func (ms *MinStack) Push(val int) {
+    ms.stack = append(ms.stack, val)               // L2: O(1) amortized
+}
+func (ms *MinStack) Pop() {
+    ms.stack = ms.stack[:len(ms.stack)-1]          // L3: O(1)
+}
+func (ms *MinStack) Top() int {
+    return ms.stack[len(ms.stack)-1]               // L4: O(1)
+}
+func (ms *MinStack) GetMin() int {
+    m := ms.stack[0]
+    for _, v := range ms.stack {                   // L5: O(n) full scan
+        if v < m { m = v }
+    }
+    return m
 }
 ```
 </TabItem>
@@ -145,6 +178,35 @@ class MinStack {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type MinStack struct {
+    stack []int                                    // L1: O(1)
+    mins  []int                                    // L2: O(1) parallel min-stack
+}
+
+func Constructor() MinStack { return MinStack{} }
+
+func (ms *MinStack) Push(val int) {
+    ms.stack = append(ms.stack, val)               // L3: O(1)
+    if len(ms.mins) == 0 || val < ms.mins[len(ms.mins)-1] {
+        ms.mins = append(ms.mins, val)             // L4: O(1)
+    } else {
+        ms.mins = append(ms.mins, ms.mins[len(ms.mins)-1])
+    }
+}
+func (ms *MinStack) Pop() {
+    ms.stack = ms.stack[:len(ms.stack)-1]          // L5: O(1)
+    ms.mins = ms.mins[:len(ms.mins)-1]             // L6: O(1)
+}
+func (ms *MinStack) Top() int {
+    return ms.stack[len(ms.stack)-1]               // L7: O(1)
+}
+func (ms *MinStack) GetMin() int {
+    return ms.mins[len(ms.mins)-1]                 // L8: O(1) top of min-stack
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -172,6 +234,9 @@ Every operation is O(1); the mins stack mirrors every push/pop.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="min-stack-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="min-stack-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -218,6 +283,37 @@ class MinStack {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type frame struct {
+    val    int
+    curMin int
+}
+
+type MinStack struct {
+    stack []frame                                  // L1: O(1) list of {val, curMin}
+}
+
+func Constructor() MinStack { return MinStack{} }
+
+func (ms *MinStack) Push(val int) {
+    curMin := val                                  // L2: O(1)
+    if len(ms.stack) > 0 && ms.stack[len(ms.stack)-1].curMin < curMin {
+        curMin = ms.stack[len(ms.stack)-1].curMin
+    }
+    ms.stack = append(ms.stack, frame{val, curMin}) // L3: O(1) amortized
+}
+func (ms *MinStack) Pop() {
+    ms.stack = ms.stack[:len(ms.stack)-1]          // L4: O(1)
+}
+func (ms *MinStack) Top() int {
+    return ms.stack[len(ms.stack)-1].val           // L5: O(1)
+}
+func (ms *MinStack) GetMin() int {
+    return ms.stack[len(ms.stack)-1].curMin        // L6: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -248,6 +344,9 @@ A third variant pushes to the aux min-stack **only** when a new minimum is estab
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="min-stack-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="min-stack-approach3-go" />
   </TabItem>
 </Tabs>
 

@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1091-shortest-path-in-binary-matrix.py?raw';
 import practiceCodeTs from './1091-shortest-path-in-binary-matrix.ts?raw';
+import practiceCodeGo from './1091-shortest-path-in-binary-matrix.go?raw';
 import approach2PyCode from './1091-shortest-path-in-binary-matrix-approach2.py?raw';
 import approach2TsCode from './1091-shortest-path-in-binary-matrix-approach2.ts?raw';
+import approach2GoCode from './1091-shortest-path-in-binary-matrix-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 1091 · [Link](https://leetcode.com/problems/shortest-path-in-binary-ma
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="shortest-path-in-binary-matrix-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="shortest-path-in-binary-matrix-go" />
   </TabItem>
 </Tabs>
 
@@ -149,6 +155,9 @@ This problem uses 8-direction movement. The neighbor formula adds `(-1,-1)` thro
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="shortest-path-in-binary-matrix-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="shortest-path-in-binary-matrix-approach2-go" />
   </TabItem>
 </Tabs>
 

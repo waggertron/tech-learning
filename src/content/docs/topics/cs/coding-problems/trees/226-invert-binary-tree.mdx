@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './226-invert-binary-tree.py?raw';
 import practiceCodeTs from './226-invert-binary-tree.ts?raw';
+import practiceCodeGo from './226-invert-binary-tree.go?raw';
 import approach2PyCode from './226-invert-binary-tree-approach2.py?raw';
 import approach2TsCode from './226-invert-binary-tree-approach2.ts?raw';
+import approach2GoCode from './226-invert-binary-tree-approach2.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 226 · [Link](https://leetcode.com/problems/invert-binary-tree/) · *Ea
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="invert-binary-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="invert-binary-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -69,6 +75,23 @@ function invertTree(root: TreeNode | null): TreeNode | null {
     if (!root) return null;
     [root.left, root.right] = [invertTree(root.right), invertTree(root.left)];  // L1: swap + recurse
     return root;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func invertTree(root *TreeNode) *TreeNode {
+    if root == nil {
+        return nil
+    }
+    root.Left, root.Right = invertTree(root.Right), invertTree(root.Left) // L1: swap + recurse
+    return root
 }
 ```
 </TabItem>
@@ -128,6 +151,34 @@ function invertTree(root: TreeNode | null): TreeNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func invertTree(root *TreeNode) *TreeNode {
+    if root == nil {
+        return nil
+    }
+    q := []*TreeNode{root}             // L1: O(1) init
+    for len(q) > 0 {
+        node := q[0]
+        q = q[1:]                      // L2: O(1) dequeue
+        node.Left, node.Right = node.Right, node.Left  // L3: O(1) swap
+        if node.Left != nil {
+            q = append(q, node.Left)   // L4: O(1) enqueue
+        }
+        if node.Right != nil {
+            q = append(q, node.Right)  // L5: O(1) enqueue
+        }
+    }
+    return root
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -152,6 +203,9 @@ function invertTree(root: TreeNode | null): TreeNode | null {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="invert-binary-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="invert-binary-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

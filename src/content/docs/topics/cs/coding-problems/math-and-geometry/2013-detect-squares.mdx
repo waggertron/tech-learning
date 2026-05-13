@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './2013-detect-squares.py?raw';
 import practiceCodeTs from './2013-detect-squares.ts?raw';
+import practiceCodeGo from './2013-detect-squares.go?raw';
 import approach2PyCode from './2013-detect-squares-approach2.py?raw';
 import approach2TsCode from './2013-detect-squares-approach2.ts?raw';
+import approach2GoCode from './2013-detect-squares-approach2.go?raw';
 
 ## Problem
 
@@ -43,6 +46,9 @@ LeetCode 2013 · [Link](https://leetcode.com/problems/detect-squares/) · *Mediu
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="detect-squares-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="detect-squares-go" />
   </TabItem>
 </Tabs>
 
@@ -152,6 +158,42 @@ class DetectSquares {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type DetectSquares struct {
+    counts map[[2]int]int  // L1: O(1)
+    points [][2]int        // L2: O(1), distinct points for iteration
+    seen   map[[2]int]bool
+}
+
+func Constructor() DetectSquares {
+    return DetectSquares{counts: make(map[[2]int]int), seen: make(map[[2]int]bool)}
+}
+
+func (ds *DetectSquares) Add(point []int) {
+    p := [2]int{point[0], point[1]}
+    ds.counts[p]++                              // L3: O(1) amortized
+    if !ds.seen[p] { ds.seen[p] = true; ds.points = append(ds.points, p) }  // L4: O(1) amortized
+}
+
+func (ds *DetectSquares) Count(point []int) int {
+    qx, qy := point[0], point[1]
+    total := 0
+    for _, p := range ds.points {              // L5: iterate all distinct points, O(n)
+        x, y := p[0], p[1]
+        dx, dy := x-qx, y-qy
+        if dx < 0 { dx = -dx }
+        if dy < 0 { dy = -dy }
+        if dx == dy && x != qx && y != qy {    // L6: O(1)
+            total += ds.counts[[2]int{x, y}] *
+                ds.counts[[2]int{x, qy}] *
+                ds.counts[[2]int{qx, y}]       // L7: O(1)
+        }
+    }
+    return total
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -178,6 +220,9 @@ class DetectSquares {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="detect-squares-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="detect-squares-approach2-go" />
   </TabItem>
 </Tabs>
 

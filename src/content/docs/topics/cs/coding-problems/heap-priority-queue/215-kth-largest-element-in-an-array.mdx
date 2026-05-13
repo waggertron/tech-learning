@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './215-kth-larget-element-in-an-array.py?raw';
 import practiceCodeTs from './215-kth-larget-element-in-an-array.ts?raw';
+import practiceCodeGo from './215-kth-larget-element-in-an-array.go?raw';
 import approach2TsCode from './215-kth-largest-element-in-an-array-approach2.ts?raw';
+import approach2GoCode from './215-kth-largest-element-in-an-array-approach2.go?raw';
 import approach3TsCode from './215-kth-largest-element-in-an-array-approach3.ts?raw';
+import approach3GoCode from './215-kth-largest-element-in-an-array-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 215 · [Link](https://leetcode.com/problems/kth-largest-element-in-an-a
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="kth-largest-element-in-an-array-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="kth-largest-element-in-an-array-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, sort, index
@@ -54,6 +61,18 @@ def find_kth_largest(nums, k):
 function findKthLargest(nums: number[], k: number): number {
     const arr = [...nums].sort((a, b) => a - b);  // L1: O(n log n)
     return arr[arr.length - k];                    // L2: O(1) index
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "sort"
+
+func findKthLargest(nums []int, k int) int {
+    arr := make([]int, len(nums))
+    copy(arr, nums)
+    sort.Ints(arr)        // L1: O(n log n)
+    return arr[len(arr)-k] // L2: O(1) index
 }
 ```
 </TabItem>
@@ -142,6 +161,52 @@ function findKthLargest(nums: number[], k: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import (
+    "container/heap"
+    "fmt"
+)
+
+type MinHeap []int
+func (h MinHeap) Len() int            { return len(h) }
+func (h MinHeap) Less(i, j int) bool  { return h[i] < h[j] }
+func (h MinHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *MinHeap) Push(x any)         { *h = append(*h, x.(int)) }
+func (h *MinHeap) Pop() any {
+    old := *h; n := len(old); x := old[n-1]; *h = old[:n-1]; return x
+}
+
+func findKthLargest(nums []int, k int) int {
+    h := &MinHeap{}
+    heap.Init(h)
+    for _, x := range nums {  // L1: iterate n elements
+        heap.Push(h, x)        // L2: O(log k) push
+        if h.Len() > k {
+            heap.Pop(h)        // L3: O(log k) pop to keep size k
+        }
+    }
+    return (*h)[0]
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition { msg := "assertion failed"; if len(msgs) > 0 { msg = msgs[0] }; panic(msg) }
+}
+
+func runTests() {
+    assert(findKthLargest([]int{3, 2, 1, 5, 6, 4}, 2) == 5)
+    assert(findKthLargest([]int{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4) == 4)
+    assert(findKthLargest([]int{1}, 1) == 1)
+    assert(findKthLargest([]int{2, 2, 2, 2}, 2) == 2)
+    assert(findKthLargest([]int{5, 3, 1, 4, 2}, 5) == 1)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -165,6 +230,9 @@ The heap never exceeds k entries. Every push and pop costs O(log k). Since we pr
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="kth-largest-element-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="kth-largest-element-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -246,6 +314,53 @@ function findKthLargest(nums: number[], k: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import (
+    "fmt"
+    "math/rand"
+)
+
+func findKthLargest(nums []int, k int) int {
+    arr := make([]int, len(nums))
+    copy(arr, nums)
+    target := len(arr) - k
+
+    partition := func(lo, hi int) (int, int) {
+        pivot := arr[lo+rand.Intn(hi-lo+1)] // L1: O(1) random pivot
+        left, right, i := lo, hi, lo
+        for i <= right { // L2: three-way partition
+            if arr[i] < pivot { arr[left], arr[i] = arr[i], arr[left]; left++; i++ } else if arr[i] > pivot { arr[right], arr[i] = arr[i], arr[right]; right-- } else { i++ }
+        }
+        return left, right
+    }
+
+    lo, hi := 0, len(arr)-1
+    for {
+        if lo == hi { return arr[lo] }
+        l, r := partition(lo, hi) // L3: O(hi - lo) per call
+        if l <= target && target <= r { return arr[target] } else if target < l { hi = l - 1 } else { lo = r + 1 }
+    }
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition { msg := "assertion failed"; if len(msgs) > 0 { msg = msgs[0] }; panic(msg) }
+}
+
+func runTests() {
+    assert(findKthLargest([]int{3, 2, 1, 5, 6, 4}, 2) == 5)
+    assert(findKthLargest([]int{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4) == 4)
+    assert(findKthLargest([]int{1}, 1) == 1)
+    assert(findKthLargest([]int{2, 2, 2, 2}, 2) == 2)
+    assert(findKthLargest([]int{5, 3, 1, 4, 2}, 5) == 1)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -271,6 +386,9 @@ The three-way partition handles duplicate values efficiently, important when the
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="kth-largest-element-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="kth-largest-element-approach3-go" />
   </TabItem>
 </Tabs>
 

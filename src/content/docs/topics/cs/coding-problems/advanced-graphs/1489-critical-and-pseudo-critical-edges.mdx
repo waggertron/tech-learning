@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1489-critical-and-pseudo-critical-edges.py?raw';
 import practiceCodeTs from './1489-critical-and-pseudo-critical-edges.ts?raw';
+import practiceCodeGo from './1489-critical-and-pseudo-critical-edges.go?raw';
 import approach2PyCode from './1489-critical-and-pseudo-critical-edges-approach2.py?raw';
 import approach2TsCode from './1489-critical-and-pseudo-critical-edges-approach2.ts?raw';
+import approach2GoCode from './1489-critical-and-pseudo-critical-edges-approach2.go?raw';
 
 ## Problem
 
@@ -40,6 +43,9 @@ LeetCode 1489 · [Link](https://leetcode.com/problems/find-critical-and-pseudo-c
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="critical-and-pseudo-critical-edges-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="critical-and-pseudo-critical-edges-go" />
   </TabItem>
 </Tabs>
 
@@ -93,6 +99,29 @@ class UnionFind {
         if (this.rank[rx] === this.rank[ry]) this.rank[rx]++;
         return true;                      // merged successfully
     }
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// See 1489-critical-and-pseudo-critical-edges-approach2.go for the Go UnionFind type.
+type UF1489 struct { parent, rank []int }
+func newUF1489(n int) *UF1489 {
+    uf := &UF1489{parent: make([]int, n), rank: make([]int, n)}
+    for i := range uf.parent { uf.parent[i] = i }
+    return uf
+}
+func (uf *UF1489) find(x int) int {
+    for uf.parent[x] != x { uf.parent[x] = uf.parent[uf.parent[x]]; x = uf.parent[x] }
+    return x
+}
+func (uf *UF1489) union(x, y int) bool {
+    rx, ry := uf.find(x), uf.find(y)
+    if rx == ry { return false }           // already same component, cycle!
+    if uf.rank[rx] < uf.rank[ry] { rx, ry = ry, rx }
+    uf.parent[ry] = rx
+    if uf.rank[rx] == uf.rank[ry] { uf.rank[rx]++ }
+    return true                            // merged successfully
 }
 ```
 </TabItem>
@@ -186,6 +215,42 @@ function findCriticalAndPseudoCriticalEdges(n: number, edges: number[][]): numbe
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 1489-critical-and-pseudo-critical-edges-approach2.go for the full runnable program.
+func findCriticalAndPseudoCriticalEdges(n int, edges [][]int) [][]int {
+    type IndexedEdge struct{ w, u, v, orig int }
+    indexed := make([]IndexedEdge, len(edges))
+    for i, e := range edges { indexed[i] = IndexedEdge{e[2], e[0], e[1], i} }  // L1: O(E)
+    sort.Slice(indexed, func(i, j int) bool { return indexed[i].w < indexed[j].w })  // L2: O(E log E)
+
+    kruskal := func(skip, force int) int {                         // L3: helper
+        uf := newUF1489(n)
+        weight, count := 0, 0
+        if force != -1 {                                           // L4: force edge in first
+            e := indexed[force]; uf.union(e.u, e.v); weight += e.w; count++
+        }
+        for idx, e := range indexed {                              // L5: O(E) Kruskal
+            if idx == skip { continue }                            // L6: skip this edge
+            if uf.union(e.u, e.v) { weight += e.w; count++ }      // L7: no cycle
+        }
+        if count < n-1 { return 1<<31 - 1 }                       // L8: disconnected
+        return weight
+    }
+
+    base := kruskal(-1, -1)                                        // L9: O(E alpha(V))
+    var critical, pseudo []int
+    for i, e := range indexed {                                    // L10: O(E) outer loop
+        if kruskal(i, -1) > base { critical = append(critical, e.orig) }       // L11
+        else if kruskal(-1, i) == base { pseudo = append(pseudo, e.orig) }     // L12
+    }
+    sort.Ints(critical); sort.Ints(pseudo)                         // L13: O(E log E)
+    if critical == nil { critical = []int{} }
+    if pseudo == nil { pseudo = []int{} }
+    return [][]int{critical, pseudo}
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -214,6 +279,9 @@ For each of E edges, we run two O(E alpha(V)) Kruskal passes, giving O(E^2 alpha
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="critical-and-pseudo-critical-edges-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="critical-and-pseudo-critical-edges-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -362,6 +430,11 @@ function findCriticalAndPseudoCriticalEdges(n: number, edges: number[][]): numbe
 console.assert(JSON.stringify(findCriticalAndPseudoCriticalEdges(5, [[0,1,1],[1,2,1],[2,3,2],[0,3,2],[0,4,3],[3,4,3],[1,4,6]])) === JSON.stringify([[0,1],[2,3,4,5]]));
 console.assert(JSON.stringify(findCriticalAndPseudoCriticalEdges(4, [[0,1,1],[1,2,1],[2,3,1],[0,3,1]])) === JSON.stringify([[],[0,1,2,3]]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// Uses Kruskal with UF. Full runnable program: 1489-critical-and-pseudo-critical-edges-approach2.go
 ```
 </TabItem>
 </Tabs>

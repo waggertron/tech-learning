@@ -11,10 +11,13 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './090-subsets-ii.py?raw';
 import practiceCodeTs from './090-subsets-ii.ts?raw';
+import practiceCodeGo from './090-subsets-ii.go?raw';
 import approach2PyCode from './090-subsets-ii-approach2.py?raw';
 import approach2TsCode from './090-subsets-ii-approach2.ts?raw';
+import approach2GoCode from './090-subsets-ii-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 90 · [Link](https://leetcode.com/problems/subsets-ii/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="subsets-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="subsets-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -116,6 +122,33 @@ function subsetsWithDup(nums: number[]): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func subsetsWithDup(nums []int) [][]int {
+    sort.Ints(nums)            // L1: O(n log n) sort
+    result := [][]int{}
+    path := []int{}
+
+    var backtrack func(start int)
+    backtrack = func(start int) {
+        cp := make([]int, len(path))
+        copy(cp, path)
+        result = append(result, cp) // L2: O(k) copy at every node (not just leaves)
+        for i := start; i < len(nums); i++ {
+            if i > start && nums[i] == nums[i-1] {
+                continue              // L3: O(1) skip same-level duplicate
+            }
+            path = append(path, nums[i]) // L4: O(1) push
+            backtrack(i + 1)             // L5: recurse
+            path = path[:len(path)-1]    // L6: O(1) pop
+        }
+    }
+
+    backtrack(0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -146,6 +179,9 @@ Every node in the recursion tree emits a result (unlike Combination Sum where on
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="subsets-ii-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="subsets-ii-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -257,6 +293,29 @@ console.assert(norm(subsetsWithDup([1, 2, 2])) === norm([[], [1], [2], [1,2], [2
 console.assert(norm(subsetsWithDup([0])) === norm([[], [0]]));
 console.assert(norm(subsetsWithDup([2, 2, 2])) === norm([[], [2], [2,2], [2,2,2]]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func subsetsWithDup(nums []int) [][]int {
+    sort.Ints(nums)
+    result := [][]int{}
+    path := []int{}
+    var backtrack func(start int)
+    backtrack = func(start int) {
+        cp := make([]int, len(path))
+        copy(cp, path)
+        result = append(result, cp)
+        for i := start; i < len(nums); i++ {
+            if i > start && nums[i] == nums[i-1] { continue }
+            path = append(path, nums[i])
+            backtrack(i + 1)
+            path = path[:len(path)-1]
+        }
+    }
+    backtrack(0)
+    return result
+}
 ```
 </TabItem>
 </Tabs>

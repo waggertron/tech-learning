@@ -11,10 +11,13 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './303-range-sum-query-immutable.py?raw';
 import practiceCodeTs from './303-range-sum-query-immutable.ts?raw';
+import practiceCodeGo from './303-range-sum-query-immutable.go?raw';
 import approach2PyCode from './303-range-sum-query-immutable-approach2.py?raw';
 import approach2TsCode from './303-range-sum-query-immutable-approach2.ts?raw';
+import approach2GoCode from './303-range-sum-query-immutable-approach2.go?raw';
 
 ## Problem
 
@@ -39,6 +42,9 @@ LeetCode 303 · [Link](https://leetcode.com/problems/range-sum-query-immutable/)
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="range-sum-query-immutable-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="range-sum-query-immutable-go" />
   </TabItem>
 </Tabs>
 
@@ -69,6 +75,21 @@ class NumArray {
         for (let i = left; i <= right; i++) s += this.nums[i]; // L2: O(n) per query
         return s;
     }
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type NumArray struct{ nums []int }
+
+func constructor(nums []int) NumArray {
+	return NumArray{nums: nums}                      // L1: O(n) store
+}
+
+func (na *NumArray) sumRange(left int, right int) int {
+	s := 0
+	for i := left; i <= right; i++ { s += na.nums[i] } // L2: O(n) per query
+	return s
 }
 ```
 </TabItem>
@@ -128,6 +149,23 @@ class NumArray {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type NumArray struct{ prefix []int }
+
+func constructor(nums []int) NumArray {
+	prefix := make([]int, len(nums)+1)                // L1: O(n) allocate
+	for i, v := range nums {                          // L2: O(n) build prefix
+		prefix[i+1] = prefix[i] + v                  // L3: O(1) per step
+	}
+	return NumArray{prefix: prefix}
+}
+
+func (na *NumArray) sumRange(left int, right int) int {
+	return na.prefix[right+1] - na.prefix[left]      // L4: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -153,6 +191,9 @@ class NumArray {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="range-sum-query-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="range-sum-query-approach2-go" />
   </TabItem>
 </Tabs>
 

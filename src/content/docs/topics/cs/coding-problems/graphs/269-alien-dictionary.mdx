@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './269-alien-dictionary.py?raw';
 import practiceCodeTs from './269-alien-dictionary.ts?raw';
+import practiceCodeGo from './269-alien-dictionary.go?raw';
 import approach2PyCode from './269-alien-dictionary-approach2.py?raw';
 import approach2TsCode from './269-alien-dictionary-approach2.ts?raw';
+import approach2GoCode from './269-alien-dictionary-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 269 (premium) · [Link](https://leetcode.com/problems/alien-dictionary/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="alien-dictionary-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="alien-dictionary-go" />
   </TabItem>
 </Tabs>
 
@@ -233,6 +239,9 @@ function alienOrder(words: string[]): string {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="alien-dictionary-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="alien-dictionary-approach2-go" />
   </TabItem>
 </Tabs>
 

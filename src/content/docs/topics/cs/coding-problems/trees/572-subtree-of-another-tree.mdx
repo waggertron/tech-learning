@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './572-subtree-of-another-tree.py?raw';
 import practiceCodeTs from './572-subtree-of-another-tree.ts?raw';
+import practiceCodeGo from './572-subtree-of-another-tree.go?raw';
 import approach2PyCode from './572-subtree-of-another-tree-approach2.py?raw';
 import approach2TsCode from './572-subtree-of-another-tree-approach2.ts?raw';
+import approach2GoCode from './572-subtree-of-another-tree-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 572 · [Link](https://leetcode.com/problems/subtree-of-another-tree/) �
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="subtree-of-another-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="subtree-of-another-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -78,6 +84,35 @@ function isSubtree(root: TreeNode | null, subRoot: TreeNode | null): boolean {
     if (!root) return false;
     if (isSameTree(root, subRoot)) return true;          // L1: O(m) check at each node
     return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);  // L2: recurse
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+    if p == nil && q == nil {
+        return true
+    }
+    if p == nil || q == nil || p.Val != q.Val {
+        return false
+    }
+    return isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
+}
+
+func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
+    if root == nil {
+        return false
+    }
+    if isSameTree(root, subRoot) {
+        return true                                      // L1: O(m) check at each node
+    }
+    return isSubtree(root.Left, subRoot) || isSubtree(root.Right, subRoot)  // L2: recurse
 }
 ```
 </TabItem>
@@ -126,6 +161,28 @@ function isSubtree(root: TreeNode | null, subRoot: TreeNode | null): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import "strings"
+
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
+    var serialize func(*TreeNode) string
+    serialize = func(node *TreeNode) string {
+        if node == nil {
+            return "#"
+        }
+        return fmt.Sprintf(",%d,(%s)(%s)", node.Val, serialize(node.Left), serialize(node.Right))  // L1: O(n) build
+    }
+    return strings.Contains(serialize(root), serialize(subRoot))  // L2: O((m+n)²) or O(m+n) with KMP
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -154,6 +211,9 @@ Without unique delimiters, `serialize(subRoot)` could match a substring of `seri
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="subtree-of-another-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="subtree-of-another-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

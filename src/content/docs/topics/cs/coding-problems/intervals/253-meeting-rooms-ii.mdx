@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './253-meeting-rooms-ii.py?raw';
 import practiceCodeTs from './253-meeting-rooms-ii.ts?raw';
+import practiceCodeGo from './253-meeting-rooms-ii.go?raw';
 import approach2PyCode from './253-meeting-rooms-ii-approach2.py?raw';
 import approach2TsCode from './253-meeting-rooms-ii-approach2.ts?raw';
+import approach2GoCode from './253-meeting-rooms-ii-approach2.go?raw';
 import approach3PyCode from './253-meeting-rooms-ii-approach3.py?raw';
 import approach3TsCode from './253-meeting-rooms-ii-approach3.ts?raw';
+import approach3GoCode from './253-meeting-rooms-ii-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 253 (premium) · [Link](https://leetcode.com/problems/meeting-rooms-ii/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="meeting-rooms-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="meeting-rooms-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -68,6 +75,26 @@ function minMeetingRooms(intervals: number[][]): number {
         best = Math.max(best, active);
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func minMeetingRooms(intervals [][]int) int {
+    if len(intervals) == 0 { return 0 }
+    maxEnd := 0
+    for _, iv := range intervals {
+        if iv[1] > maxEnd { maxEnd = iv[1] }
+    }
+    best := 0
+    for t := 0; t <= maxEnd; t++ {             // L1: T iterations
+        active := 0
+        for _, iv := range intervals {          // L2: O(n) per tick
+            if iv[0] <= t && t < iv[1] { active++ }
+        }
+        if active > best { best = active }
+    }
+    return best
 }
 ```
 </TabItem>
@@ -116,6 +143,25 @@ function minMeetingRooms(intervals: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func minMeetingRooms(intervals [][]int) int {
+    if len(intervals) == 0 { return 0 }
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][0] < intervals[j][0]  // L1: O(n log n)
+    })
+    h := &MinHeap{}                               // L2: O(1)
+    heap.Init(h)
+    for _, iv := range intervals {                // L3: outer loop, n iterations
+        if h.Len() > 0 && (*h)[0] <= iv[0] {
+            heap.Pop(h)                           // L4/L5: O(log n) free a room
+        }
+        heap.Push(h, iv[1])                       // L6: O(log n) book a room
+    }
+    return h.Len()                                // L7: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -146,6 +192,9 @@ L1 (sort) and L6 (n pushes) both contribute O(n log n); neither strictly dominat
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="meeting-rooms-ii-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="meeting-rooms-ii-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -192,6 +241,30 @@ function minMeetingRooms(intervals: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func minMeetingRooms(intervals [][]int) int {
+    if len(intervals) == 0 { return 0 }
+    starts := make([]int, len(intervals))
+    ends := make([]int, len(intervals))
+    for i, iv := range intervals { starts[i], ends[i] = iv[0], iv[1] }
+    sort.Ints(starts)  // L1: O(n log n)
+    sort.Ints(ends)    // L2: O(n log n)
+    i, j, used, best := 0, 0, 0, 0  // L3, L4: O(1)
+    for i < len(intervals) {         // L5: outer loop, n iterations
+        if starts[i] < ends[j] {     // L6: O(1) comparison
+            used++                   // L7: O(1)
+            if used > best { best = used }  // L8: O(1)
+            i++                      // L9: O(1)
+        } else {
+            used--                   // L10: O(1)
+            j++                      // L11: O(1)
+        }
+    }
+    return best                      // L12: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -224,6 +297,9 @@ Intuitively: whenever a meeting's start comes before the earliest current end, w
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="meeting-rooms-ii-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="meeting-rooms-ii-approach3-go" />
   </TabItem>
 </Tabs>
 

@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './261-graph-valid-tree.py?raw';
 import practiceCodeTs from './261-graph-valid-tree.ts?raw';
+import practiceCodeGo from './261-graph-valid-tree.go?raw';
 import approach2PyCode from './261-graph-valid-tree-approach2.py?raw';
 import approach2TsCode from './261-graph-valid-tree-approach2.ts?raw';
+import approach2GoCode from './261-graph-valid-tree-approach2.go?raw';
 
 ## Problem
 
@@ -40,6 +43,9 @@ LeetCode 261 (premium, equivalent in 323 context) · [Link](https://leetcode.com
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="graph-valid-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="graph-valid-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -97,6 +103,30 @@ function validTree(n: number, edges: number[][]): boolean {
     }
 
     return dfs(0, -1) && visited.size === n;   // L13: connectivity check
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func validTree(n int, edges [][]int) bool {
+    if len(edges) != n-1 { return false }        // L1: O(1) early exit
+    graph := make([][]int, n)
+    for _, e := range edges {                    // L3: O(E) to build
+        graph[e[0]] = append(graph[e[0]], e[1]) // L4
+        graph[e[1]] = append(graph[e[1]], e[0]) // L5
+    }
+    visited := map[int]bool{}                    // L6
+    var dfs func(node, parent int) bool
+    dfs = func(node, parent int) bool {
+        if visited[node] { return false }        // L8: cycle detected
+        visited[node] = true                     // L9
+        for _, nb := range graph[node] {         // L10
+            if nb == parent { continue }         // L11: skip parent edge
+            if !dfs(nb, node) { return false }  // L12
+        }
+        return true
+    }
+    return dfs(0, -1) && len(visited) == n       // L13
 }
 ```
 </TabItem>
@@ -169,6 +199,31 @@ function validTree(n: number, edges: number[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func validTree(n int, edges [][]int) bool {
+    if len(edges) != n-1 { return false }        // L1: O(1) early exit
+    parent := make([]int, n)
+    for i := range parent { parent[i] = i }     // L2: O(n) init
+
+    var find func(x int) int
+    find = func(x int) int {                     // L3: path-compressed find
+        for parent[x] != x {
+            parent[x] = parent[parent[x]]        // L4: path halving
+            x = parent[x]                        // L5
+        }
+        return x
+    }
+
+    for _, e := range edges {                    // L6: O(E) edge loop
+        ru, rv := find(e[0]), find(e[1])         // L7
+        if ru == rv { return false }             // L8: cycle
+        parent[ru] = rv                          // L9: union
+    }
+    return true                                  // L10
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -193,6 +248,9 @@ function validTree(n: number, edges: number[][]): boolean {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="graph-valid-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="graph-valid-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

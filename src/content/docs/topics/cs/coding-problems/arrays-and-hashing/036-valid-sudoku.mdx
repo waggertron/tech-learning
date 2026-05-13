@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './036-valid-sudoku.py?raw';
 import practiceCodeTs from './036-valid-sudoku.ts?raw';
+import practiceCodeGo from './036-valid-sudoku.go?raw';
 import approach2PyCode from './036-valid-sudoku-approach2.py?raw';
 import approach2TsCode from './036-valid-sudoku-approach2.ts?raw';
+import approach2GoCode from './036-valid-sudoku-approach2.go?raw';
 import approach3PyCode from './036-valid-sudoku-approach3.py?raw';
 import approach3TsCode from './036-valid-sudoku-approach3.ts?raw';
+import approach3GoCode from './036-valid-sudoku-approach3.go?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 36 · [Link](https://leetcode.com/problems/valid-sudoku/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="valid-sudoku-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="valid-sudoku-go" />
   </TabItem>
 </Tabs>
 
@@ -125,6 +132,47 @@ function isValidSudoku(board: string[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isValidSudoku(board [][]byte) bool {
+	// Rows
+	for r := 0; r < 9; r++ {                          // L1: 9 rows
+		seen := make(map[byte]struct{})                // L2: fresh set
+		for c := 0; c < 9; c++ {                      // L3: 9 chars per row
+			ch := board[r][c]
+			if ch == '.' { continue }                  // L4: skip
+			if _, ok := seen[ch]; ok { return false }  // L5: set lookup
+			seen[ch] = struct{}{}                      // L6: set insert
+		}
+	}
+	// Columns
+	for c := 0; c < 9; c++ {                          // L7: 9 columns
+		seen := make(map[byte]struct{})
+		for r := 0; r < 9; r++ {                      // L8: 9 rows per column
+			ch := board[r][c]
+			if ch == '.' { continue }
+			if _, ok := seen[ch]; ok { return false }
+			seen[ch] = struct{}{}
+		}
+	}
+	// 3x3 boxes
+	for br := 0; br < 9; br += 3 {                    // L9: 3 box-row offsets
+		for bc := 0; bc < 9; bc += 3 {                // L10: 3 box-col offsets
+			seen := make(map[byte]struct{})
+			for r := br; r < br+3; r++ {              // L11: 3 rows per box
+				for c := bc; c < bc+3; c++ {          // L12: 3 cols per box
+					ch := board[r][c]
+					if ch == '.' { continue }
+					if _, ok := seen[ch]; ok { return false }
+					seen[ch] = struct{}{}
+				}
+			}
+		}
+	}
+	return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -194,6 +242,35 @@ function isValidSudoku(board: string[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isValidSudoku(board [][]byte) bool {
+	rows := make([]map[byte]struct{}, 9)
+	cols := make([]map[byte]struct{}, 9)
+	boxes := make([]map[byte]struct{}, 9)
+	for i := 0; i < 9; i++ {
+		rows[i] = make(map[byte]struct{})   // L1: O(1), 9 empty maps
+		cols[i] = make(map[byte]struct{})   // L2: O(1)
+		boxes[i] = make(map[byte]struct{})  // L3: O(1)
+	}
+	for r := 0; r < 9; r++ {                              // L4: 9 rows
+		for c := 0; c < 9; c++ {                          // L5: 9 cols each
+			ch := board[r][c]                              // L6: O(1)
+			if ch == '.' { continue }                      // L7: skip
+			b := (r/3)*3 + (c / 3)                        // L8: O(1) box index
+			_, inRow := rows[r][ch]
+			_, inCol := cols[c][ch]
+			_, inBox := boxes[b][ch]
+			if inRow || inCol || inBox { return false }    // L9: O(1) x3 lookups
+			rows[r][ch] = struct{}{}                       // L10
+			cols[c][ch] = struct{}{}                       // L11
+			boxes[b][ch] = struct{}{}                      // L12
+		}
+	}
+	return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -220,6 +297,9 @@ One pass, constant work per cell, short-circuits on the first conflict.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="valid-sudoku-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="valid-sudoku-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -274,6 +354,28 @@ function isValidSudoku(board: string[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isValidSudoku(board [][]byte) bool {
+	var rows, cols, boxes [9]int               // L1-L3: O(1), 9 integers each
+	for r := 0; r < 9; r++ {                  // L4: 9 rows
+		for c := 0; c < 9; c++ {              // L5: 9 cols each
+			ch := board[r][c]                  // L6
+			if ch == '.' { continue }          // L7: skip
+			bit := 1 << (ch - '1')            // L8: O(1) bitmask
+			b := (r/3)*3 + (c / 3)            // L9: O(1) box index
+			if rows[r]&bit != 0 || cols[c]&bit != 0 || boxes[b]&bit != 0 {
+				return false                   // L10: O(1) AND
+			}
+			rows[r] |= bit                     // L11
+			cols[c] |= bit                     // L12
+			boxes[b] |= bit                    // L13
+		}
+	}
+	return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -300,6 +402,9 @@ Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at t
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="valid-sudoku-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="valid-sudoku-approach3-go" />
   </TabItem>
 </Tabs>
 

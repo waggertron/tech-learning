@@ -11,11 +11,15 @@ updated: 2026-05-13
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './211-design-add-and-search-words-data-structure.py?raw';
+import practiceCodeGo from './211-design-add-and-search-words-data-structure.go?raw';
 import approach2PyCode from './211-design-add-and-search-words-data-structure-approach2.py?raw';
 import approach2TsCode from './211-design-add-and-search-words-data-structure-approach2.ts?raw';
+import approach2GoCode from './211-design-add-and-search-words-data-structure-approach2.go?raw';
 import approach3PyCode from './211-design-add-and-search-words-data-structure-approach3.py?raw';
 import approach3TsCode from './211-design-add-and-search-words-data-structure-approach3.ts?raw';
+import approach3GoCode from './211-design-add-and-search-words-data-structure-approach3.go?raw';
 
 ## Problem
 
@@ -41,6 +45,9 @@ LeetCode 211 · [Link](https://leetcode.com/problems/design-add-and-search-words
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="design-add-and-search-words-data-structure-py" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="design-add-and-search-words-data-structure-go" />
   </TabItem>
 </Tabs>
 
@@ -79,6 +86,44 @@ class WordDictionary {
         return this.words.some(w => pattern.test(w));  // L3: O(W · L) scan
     }
 }
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import (
+    "fmt"
+    "regexp"
+)
+
+type WordDictionary struct {
+    words []string
+}
+
+func NewWordDictionary() *WordDictionary { return &WordDictionary{} }
+
+func (wd *WordDictionary) AddWord(word string) {
+    wd.words = append(wd.words, word)           // L1: O(1) amortized append
+}
+
+func (wd *WordDictionary) Search(word string) bool {
+    pattern := regexp.MustCompile("^" + word + "$") // L2: O(L) compile
+    for _, w := range wd.words {
+        if pattern.MatchString(w) {             // L3: O(W · L) scan
+            return true
+        }
+    }
+    return false
+}
+
+func runTests() {
+    wd := NewWordDictionary()
+    wd.AddWord("bad"); wd.AddWord("dad"); wd.AddWord("mad")
+    fmt.Println(wd.Search("pad"), wd.Search("bad"), wd.Search(".ad"))
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>
@@ -145,6 +190,63 @@ class WordDictionary {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type WordDictionary struct {
+    byLen map[int][]string
+}
+
+func NewWordDictionary() *WordDictionary {
+    return &WordDictionary{byLen: make(map[int][]string)}
+}
+
+func (wd *WordDictionary) AddWord(word string) {
+    wd.byLen[len(word)] = append(wd.byLen[len(word)], word) // L1: O(1) amortized append
+}
+
+func (wd *WordDictionary) Search(word string) bool {
+    for _, w := range wd.byLen[len(word)] {             // L2: scan same-length words, O(W_L)
+        match := true
+        for i := 0; i < len(word); i++ {
+            if word[i] != '.' && word[i] != w[i] {     // L3: O(L) char compare
+                match = false
+                break
+            }
+        }
+        if match {
+            return true
+        }
+    }
+    return false
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    wd := NewWordDictionary()
+    wd.AddWord("bad"); wd.AddWord("dad"); wd.AddWord("mad")
+    assert(wd.Search("pad") == false)
+    assert(wd.Search("bad") == true)
+    assert(wd.Search(".ad") == true)
+    assert(wd.Search("b..") == true)
+    assert(wd.Search("...") == true)
+    assert(wd.Search("....") == false)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -173,6 +275,9 @@ Reasonable for small L and small W_L.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="design-add-and-search-words-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="design-add-and-search-words-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -251,6 +356,82 @@ class WordDictionary {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    IsEnd    bool
+}
+
+type WordDictionary struct {
+    Root *TrieNode
+}
+
+func NewWordDictionary() *WordDictionary { return &WordDictionary{Root: &TrieNode{}} }
+
+func (wd *WordDictionary) AddWord(word string) {
+    node := wd.Root
+    for _, ch := range word {                    // L1: iterate L characters
+        i := ch - 'a'
+        if node.Children[i] == nil {
+            node.Children[i] = &TrieNode{}      // L2: O(1) create node
+        }
+        node = node.Children[i]                 // L3: O(1) descend
+    }
+    node.IsEnd = true                           // L4: O(1) mark end
+}
+
+func (wd *WordDictionary) Search(word string) bool {
+    return wd.dfs(0, wd.Root, word)
+}
+
+func (wd *WordDictionary) dfs(idx int, node *TrieNode, word string) bool {
+    if idx == len(word) {
+        return node.IsEnd                       // L5: base case
+    }
+    ch := word[idx]
+    if ch == '.' {                             // L6: wildcard: try all children
+        for _, child := range node.Children {
+            if child != nil && wd.dfs(idx+1, child, word) { // L7: up to 26 branches
+                return true
+            }
+        }
+        return false
+    }
+    i := ch - 'a'
+    if node.Children[i] == nil {
+        return false                            // L8: O(1) exact match check
+    }
+    return wd.dfs(idx+1, node.Children[i], word) // L9: recurse one path
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    wd := NewWordDictionary()
+    wd.AddWord("bad"); wd.AddWord("dad"); wd.AddWord("mad")
+    assert(wd.Search("pad") == false)
+    assert(wd.Search("bad") == true)
+    assert(wd.Search(".ad") == true)
+    assert(wd.Search("b..") == true)
+    assert(wd.Search("...") == true)
+    assert(wd.Search("....") == false)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -280,6 +461,9 @@ The wildcard branches are where performance can degrade: a query like `"......"`
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="design-add-and-search-words-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="design-add-and-search-words-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -390,6 +574,72 @@ console.assert(wd.search("b..") === true);
 console.assert(wd.search("...") === true);
 console.assert(wd.search("....") === false);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    IsEnd    bool
+}
+
+type WordDictionary struct{ Root *TrieNode }
+
+func NewWordDictionary() *WordDictionary { return &WordDictionary{Root: &TrieNode{}} }
+
+func (wd *WordDictionary) AddWord(word string) {
+    node := wd.Root
+    for _, ch := range word {
+        i := ch - 'a'
+        if node.Children[i] == nil { node.Children[i] = &TrieNode{} }
+        node = node.Children[i]
+    }
+    node.IsEnd = true
+}
+
+func (wd *WordDictionary) Search(word string) bool {
+    return wd.dfs(0, wd.Root, word)
+}
+
+func (wd *WordDictionary) dfs(idx int, node *TrieNode, word string) bool {
+    if idx == len(word) { return node.IsEnd }
+    ch := word[idx]
+    if ch == '.' {
+        for _, child := range node.Children {
+            if child != nil && wd.dfs(idx+1, child, word) { return true }
+        }
+        return false
+    }
+    i := ch - 'a'
+    if node.Children[i] == nil { return false }
+    return wd.dfs(idx+1, node.Children[i], word)
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    wd := NewWordDictionary()
+    wd.AddWord("bad"); wd.AddWord("dad"); wd.AddWord("mad")
+    assert(wd.Search("pad") == false)
+    assert(wd.Search("bad") == true)
+    assert(wd.Search(".ad") == true)    // matches bad, dad, mad
+    assert(wd.Search("b..") == true)    // matches bad
+    assert(wd.Search("...") == true)    // matches any 3-letter word
+    assert(wd.Search("....") == false)  // no 4-letter words
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>

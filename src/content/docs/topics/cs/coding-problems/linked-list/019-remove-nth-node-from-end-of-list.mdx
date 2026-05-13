@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './019-remove-nth-node-from-end-of-list.py?raw';
 import practiceCodeTs from './019-remove-nth-node-from-end-of-list.ts?raw';
+import practiceCodeGo from './019-remove-nth-node-from-end-of-list.go?raw';
 import approach3TsCode from './019-remove-nth-node-from-end-of-list-approach3.ts?raw';
+import approach3GoCode from './019-remove-nth-node-from-end-of-list-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 19 · [Link](https://leetcode.com/problems/remove-nth-node-from-end-of-
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="remove-nth-node-from-end-of-list-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="remove-nth-node-from-end-of-list-go" />
   </TabItem>
 </Tabs>
 
@@ -81,6 +87,27 @@ function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
     }
     prev.next = prev.next!.next;            // L5: O(1) splice
     return dummy.next;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+    dummy := &ListNode{Next: head}
+    L := 0
+    cur := head
+    for cur != nil { L++; cur = cur.Next } // L1-L2: first pass, count length
+    prev := dummy
+    for i := 0; i < L-n; i++ {             // L3-L4: second pass, advance L-n steps
+        prev = prev.Next
+    }
+    prev.Next = prev.Next.Next              // L5: O(1) splice
+    return dummy.Next
 }
 ```
 </TabItem>
@@ -141,6 +168,29 @@ function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+    dummy := &ListNode{Next: head}
+    var rec func(node *ListNode) int
+    rec = func(node *ListNode) int {
+        if node == nil { return 0 }          // L1: base case
+        k := rec(node.Next) + 1             // L2: recurse deeper, O(1) on return
+        if k == n+1 {
+            node.Next = node.Next.Next       // L3: O(1) splice at right depth
+        }
+        return k
+    }
+    rec(dummy)
+    return dummy.Next
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -198,6 +248,28 @@ function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+    dummy := &ListNode{Next: head}
+    slow, fast := dummy, dummy
+    for i := 0; i <= n; i++ {           // L1-L2: advance fast n+1 steps
+        fast = fast.Next
+    }
+    for fast != nil {                    // L3: walk both until fast falls off
+        slow = slow.Next                 // L4: O(1) per step
+        fast = fast.Next                 // L5: O(1) per step
+    }
+    slow.Next = slow.Next.Next           // L6: O(1) splice
+    return dummy.Next
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -224,6 +296,9 @@ When `n == L` (removing the head), the `slow` pointer needs to land "one before 
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="remove-nth-node-from-end-of-list-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="remove-nth-node-from-end-of-list-approach3-go" />
   </TabItem>
 </Tabs>
 

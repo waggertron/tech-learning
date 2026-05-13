@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './242-valid-anagram.py?raw';
 import practiceCodeTs from './242-valid-anagram.ts?raw';
+import practiceCodeGo from './242-valid-anagram.go?raw';
 import approach2PyCode from './242-valid-anagram-approach2.py?raw';
 import approach2TsCode from './242-valid-anagram-approach2.ts?raw';
+import approach2GoCode from './242-valid-anagram-approach2.go?raw';
 import approach3PyCode from './242-valid-anagram-approach3.py?raw';
 import approach3TsCode from './242-valid-anagram-approach3.ts?raw';
+import approach3GoCode from './242-valid-anagram-approach3.go?raw';
 
 ## Problem
 
@@ -39,6 +43,9 @@ LeetCode 242 · [Link](https://leetcode.com/problems/valid-anagram/) · *Easy*
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="valid-anagram-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="valid-anagram-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, sort both strings
@@ -60,6 +67,18 @@ function isAnagram(s: string, t: string): boolean {
     if (s.length !== t.length) return false;            // L1: O(1) length guard
     return s.split('').sort().join('') ===
            t.split('').sort().join('');                 // L2: O(n log n) sort each
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func isAnagram(s string, t string) bool {
+	if len(s) != len(t) { return false }           // L1: O(1) length guard
+	rs := []rune(s)
+	rt := []rune(t)
+	sort.Slice(rs, func(i, j int) bool { return rs[i] < rs[j] })
+	sort.Slice(rt, func(i, j int) bool { return rt[i] < rt[j] })
+	return string(rs) == string(rt)                // L2: O(n log n) sort each
 }
 ```
 </TabItem>
@@ -109,6 +128,21 @@ function isAnagram(s: string, t: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isAnagram(s string, t string) bool {
+	cs := make(map[rune]int)
+	ct := make(map[rune]int)
+	for _, ch := range s { cs[ch]++ }             // L1: O(n) build
+	for _, ch := range t { ct[ch]++ }             // L1: O(n) build
+	if len(cs) != len(ct) { return false }
+	for ch, cnt := range cs {                     // O(k) compare
+		if ct[ch] != cnt { return false }
+	}
+	return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -135,6 +169,9 @@ Clean, correct, Unicode-safe. This is usually the right production answer.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="valid-anagram-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="valid-anagram-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -175,6 +212,21 @@ function isAnagram(s: string, t: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isAnagram(s string, t string) bool {
+	if len(s) != len(t) { return false }              // L1: O(1) guard
+	var counts [26]int                                 // L2: O(1), fixed 26-slot array
+	for _, ch := range s { counts[ch-'a']++ }         // L3, L4: O(1) per char
+	for _, ch := range t {                             // L5: loop n iterations
+		idx := ch - 'a'                                // L6: O(1)
+		counts[idx]--                                  // L7: O(1)
+		if counts[idx] < 0 { return false }            // L8: O(1) early exit
+	}
+	return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -204,6 +256,9 @@ For Unicode input, substitute a `dict` (which is equivalent to the Counter appro
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="valid-anagram-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="valid-anagram-approach3-go" />
   </TabItem>
 </Tabs>
 

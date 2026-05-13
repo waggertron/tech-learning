@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './332-reconstruct-itinerary.py?raw';
 import practiceCodeTs from './332-reconstruct-itinerary.ts?raw';
+import practiceCodeGo from './332-reconstruct-itinerary.go?raw';
 import approach2PyCode from './332-reconstruct-itinerary-approach2.py?raw';
 import approach2TsCode from './332-reconstruct-itinerary-approach2.ts?raw';
+import approach2GoCode from './332-reconstruct-itinerary-approach2.go?raw';
 import approach3PyCode from './332-reconstruct-itinerary-approach3.py?raw';
 import approach3TsCode from './332-reconstruct-itinerary-approach3.ts?raw';
+import approach3GoCode from './332-reconstruct-itinerary-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 332 · [Link](https://leetcode.com/problems/reconstruct-itinerary/) · 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="reconstruct-itinerary-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="reconstruct-itinerary-go" />
   </TabItem>
 </Tabs>
 
@@ -104,6 +111,40 @@ function findItinerary(tickets: string[][]): string[] {
     }
 
     return dfs('JFK', ['JFK']) ?? [];
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func findItinerary(tickets [][]string) []string {
+    graph := make(map[string][]*string)
+    sorted := make([][]string, len(tickets))
+    copy(sorted, tickets)
+    sort.Slice(sorted, func(i, j int) bool {           // L1: O(E log E) sort
+        if sorted[i][0] != sorted[j][0] { return sorted[i][0] < sorted[j][0] }
+        return sorted[i][1] < sorted[j][1]
+    })
+    for _, t := range sorted {                         // L2: O(1) amortized per append
+        dst := t[1]
+        graph[t[0]] = append(graph[t[0]], &dst)
+    }
+    targetLen := len(tickets) + 1                      // L3: O(1)
+    var result []string
+    var dfs func(node string, path []string) bool
+    dfs = func(node string, path []string) bool {
+        if len(path) == targetLen { result = append([]string{}, path...); return true } // L4
+        for i, nb := range graph[node] {               // L5: iterate over neighbors
+            if nb == nil { continue }
+            graph[node][i] = nil                       // L6: O(1) mark used
+            path = append(path, *nb)                   // L7: O(1) amortized
+            if dfs(*nb, path) { return true }          // L8: recurse
+            path = path[:len(path)-1]                  // L9: O(1) backtrack
+            graph[node][i] = nb                        // L10: O(1) restore
+        }
+        return false
+    }
+    dfs("JFK", []string{"JFK"})
+    return result
 }
 ```
 </TabItem>
@@ -176,6 +217,35 @@ function findItinerary(tickets: string[][]): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 332-reconstruct-itinerary-approach2.go for the full runnable program.
+// Core function uses container/heap StringHeap for lexicographic neighbor selection.
+func findItinerary(tickets [][]string) []string {
+    graph := make(map[string]*StringHeap)
+    for _, t := range tickets {
+        src, dst := t[0], t[1]
+        if graph[src] == nil { graph[src] = &StringHeap{}; heap.Init(graph[src]) }
+        heap.Push(graph[src], dst)                   // L1: O(log E) per push; total O(E log E)
+    }
+    var itinerary []string
+    var dfs func(node string)
+    dfs = func(node string) {
+        for graph[node] != nil && graph[node].Len() > 0 {  // L2: loop until no more edges
+            nb := heap.Pop(graph[node]).(string)     // L3: O(log E) pop smallest neighbor
+            dfs(nb)                                  // L4: recurse; each edge once
+        }
+        itinerary = append(itinerary, node)          // L5: O(1), post-order append
+    }
+    dfs("JFK")
+    // reverse                                       // L6: O(E)
+    for i, j := 0, len(itinerary)-1; i < j; i, j = i+1, j-1 {
+        itinerary[i], itinerary[j] = itinerary[j], itinerary[i]
+    }
+    return itinerary
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -208,6 +278,9 @@ In an Eulerian path, you may hit dead ends along the way. Hierholzer's handles t
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="reconstruct-itinerary-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="reconstruct-itinerary-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -264,6 +337,36 @@ function findItinerary(tickets: string[][]): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 332-reconstruct-itinerary-approach3.go for the full runnable program.
+// Core function: sort descending, pop from end = lexicographically smallest.
+func findItinerary(tickets [][]string) []string {
+    graph := make(map[string][]string)
+    sort.Slice(tickets, func(i, j int) bool {          // L1: O(E log E) for sort
+        if tickets[i][0] != tickets[j][0] { return tickets[i][0] > tickets[j][0] }
+        return tickets[i][1] > tickets[j][1]
+    })
+    for _, t := range tickets { graph[t[0]] = append(graph[t[0]], t[1]) }
+    var itinerary []string
+    stack := []string{"JFK"}                           // L2: O(1), explicit stack
+    for len(stack) > 0 {                               // L3: outer loop, runs E+1 times total
+        top := stack[len(stack)-1]
+        if nb := graph[top]; len(nb) > 0 {
+            stack = append(stack, nb[len(nb)-1])       // L5: O(1) list pop from end + stack push
+            graph[top] = nb[:len(nb)-1]
+        } else {
+            itinerary = append(itinerary, stack[len(stack)-1])  // L6: O(1)
+            stack = stack[:len(stack)-1]
+        }
+    }
+    for i, j := 0, len(itinerary)-1; i < j; i, j = i+1, j-1 {
+        itinerary[i], itinerary[j] = itinerary[j], itinerary[i]  // L7: O(E) reverse
+    }
+    return itinerary
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -294,6 +397,9 @@ Iterative form avoids recursion depth concerns.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="reconstruct-itinerary-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="reconstruct-itinerary-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -378,6 +484,11 @@ console.assert(JSON.stringify(findItinerary([['JFK','ATL']])) === JSON.stringify
 console.assert(JSON.stringify(findItinerary([['JFK','A'],['A','B'],['B','C']])) === JSON.stringify(['JFK','A','B','C']));
 console.assert(JSON.stringify(findItinerary([['JFK','ATL'],['ATL','JFK']])) === JSON.stringify(['JFK','ATL','JFK']));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// Uses Hierholzer's iterative (Approach 3). Full runnable program: 332-reconstruct-itinerary-approach3.go
 ```
 </TabItem>
 </Tabs>

@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './206-reverse-linked-list.py?raw';
 import practiceCodeTs from './206-reverse-linked-list.ts?raw';
+import practiceCodeGo from './206-reverse-linked-list.go?raw';
 import approach2TsCode from './206-reverse-linked-list-approach2.ts?raw';
+import approach2GoCode from './206-reverse-linked-list-approach2.go?raw';
 import approach3TsCode from './206-reverse-linked-list-approach3.ts?raw';
+import approach3GoCode from './206-reverse-linked-list-approach3.go?raw';
 
 ## Problem
 
@@ -35,6 +39,9 @@ LeetCode 206 · [Link](https://leetcode.com/problems/reverse-linked-list/) · *E
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="reverse-linked-list-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="reverse-linked-list-go" />
   </TabItem>
 </Tabs>
 
@@ -85,6 +92,30 @@ function reverseList(head: ListNode | null): ListNode | null {
         tail = tail.next;
     }
     return dummy.next;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func reverseList(head *ListNode) *ListNode {
+    values := []int{}
+    cur := head
+    for cur != nil {
+        values = append(values, cur.Val) // L1: O(1) per node
+        cur = cur.Next
+    }
+    dummy := &ListNode{}
+    tail := dummy
+    for i := len(values) - 1; i >= 0; i-- {
+        tail.Next = &ListNode{Val: values[i]} // L2: O(1) per node, new allocation
+        tail = tail.Next
+    }
+    return dummy.Next
 }
 ```
 </TabItem>
@@ -139,6 +170,26 @@ function reverseList(head: ListNode | null): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func reverseList(head *ListNode) *ListNode {
+    var prev *ListNode
+    curr := head
+    for curr != nil {              // L1: one pass over n nodes
+        nxt := curr.Next           // L2: O(1) save next
+        curr.Next = prev           // L3: O(1) reverse pointer
+        prev = curr                // L4: O(1) advance prev
+        curr = nxt                 // L5: O(1) advance curr
+    }
+    return prev
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -161,6 +212,9 @@ Four O(1) operations per iteration for exactly n iterations. The canonical inter
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="reverse-linked-list-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="reverse-linked-list-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -191,6 +245,24 @@ function reverseList(head: ListNode | null): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func reverseList(head *ListNode) *ListNode {
+    if head == nil || head.Next == nil { // L1: base case
+        return head
+    }
+    newHead := reverseList(head.Next)   // L2: recurse on tail
+    head.Next.Next = head               // L3: O(1) flip link
+    head.Next = nil                     // L4: O(1) cut old link
+    return newHead
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -216,6 +288,9 @@ Elegant but uses stack frames proportional to n, can stack-overflow for very lon
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="reverse-linked-list-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="reverse-linked-list-approach3-go" />
   </TabItem>
 </Tabs>
 

@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './048-rotate-image.py?raw';
 import practiceCodeTs from './048-rotate-image.ts?raw';
+import practiceCodeGo from './048-rotate-image.go?raw';
 import approach2PyCode from './048-rotate-image-approach2.py?raw';
 import approach2TsCode from './048-rotate-image-approach2.ts?raw';
+import approach2GoCode from './048-rotate-image-approach2.go?raw';
 import approach3PyCode from './048-rotate-image-approach3.py?raw';
 import approach3TsCode from './048-rotate-image-approach3.ts?raw';
+import approach3GoCode from './048-rotate-image-approach3.go?raw';
 
 ## Problem
 
@@ -35,6 +39,9 @@ LeetCode 48 · [Link](https://leetcode.com/problems/rotate-image/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="rotate-image-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="rotate-image-go" />
   </TabItem>
 </Tabs>
 
@@ -66,6 +73,21 @@ function rotate(matrix: number[][]): void {
         }
     }
     for (let i = 0; i < n; i++) matrix[i] = neu[i];     // L6: O(n) per row copy
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func rotate(matrix [][]int) {
+    n := len(matrix)                                      // L1: O(1)
+    neu := make([][]int, n)
+    for i := range neu { neu[i] = make([]int, n) }        // L2: O(n²)
+    for i := 0; i < n; i++ {                              // L3: outer loop, n iterations
+        for j := 0; j < n; j++ {                          // L4: inner loop, n iterations
+            neu[j][n-1-i] = matrix[i][j]                  // L5: O(1) coordinate remap
+        }
+    }
+    for i := 0; i < n; i++ { matrix[i] = neu[i] }         // L6: O(n) per row copy
 }
 ```
 </TabItem>
@@ -123,6 +145,22 @@ function rotate(matrix: number[][]): void {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func rotate(matrix [][]int) {
+    n := len(matrix)                                   // L1: O(1)
+    for r := 0; r < n/2; r++ {                        // L2: n/2 rings
+        for c := r; c < n-r-1; c++ {                  // L3: n-2r-1 cells per ring
+            tmp := matrix[r][c]                        // L4: save top-left
+            matrix[r][c] = matrix[n-1-c][r]           // L5: left -> top
+            matrix[n-1-c][r] = matrix[n-1-r][n-1-c]  // L6: bottom -> left
+            matrix[n-1-r][n-1-c] = matrix[c][n-1-r]  // L7: right -> bottom
+            matrix[c][n-1-r] = tmp                    // L8: top -> right
+        }
+    }
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -148,6 +186,9 @@ Each of the n²/4 non-center cells is visited once in the four-cell swap; the fo
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="rotate-image-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="rotate-image-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -186,6 +227,25 @@ function rotate(matrix: number[][]): void {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func rotate(matrix [][]int) {
+    n := len(matrix)
+    // Transpose
+    for i := 0; i < n; i++ {                              // L1: outer loop, n iterations
+        for j := i + 1; j < n; j++ {                      // L2: upper-triangle only
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]  // L3: O(1) swap
+        }
+    }
+    // Reverse each row
+    for _, row := range matrix {                           // L4: n rows
+        for lo, hi := 0, len(row)-1; lo < hi; lo, hi = lo+1, hi-1 {
+            row[lo], row[hi] = row[hi], row[lo]            // L5: O(n) per row
+        }
+    }
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -213,6 +273,9 @@ Shortest and easiest to remember. Counter-clockwise = transpose + reverse each c
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="rotate-image-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="rotate-image-approach3-go" />
   </TabItem>
 </Tabs>
 

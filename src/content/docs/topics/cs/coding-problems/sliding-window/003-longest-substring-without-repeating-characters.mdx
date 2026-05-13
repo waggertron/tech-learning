@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './003-longest-substring-without-repeating-characters.py?raw';
 import practiceCodeTs from './003-longest-substring-without-repeating-characters.ts?raw';
+import practiceCodeGo from './003-longest-substring-without-repeating-characters.go?raw';
 import approach3TsCode from './003-longest-substring-without-repeating-characters-approach3.ts?raw';
+import approach3GoCode from './003-longest-substring-without-repeating-characters-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 3 · [Link](https://leetcode.com/problems/longest-substring-without-rep
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="longest-substring-without-repeating-characters-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="longest-substring-without-repeating-characters-go" />
   </TabItem>
 </Tabs>
 
@@ -68,6 +74,24 @@ function lengthOfLongestSubstring(s: string): number {
         }
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func lengthOfLongestSubstring(s string) int {
+	best := 0
+	n := len(s)
+	for i := 0; i < n; i++ {                          // L1: outer loop, n iterations
+		seen := make(map[byte]bool)
+		for j := i; j < n; j++ {                      // L2: inner loop, up to n-i iterations
+			seen[s[j]] = true
+			if len(seen) == j-i+1 && j-i+1 > best {  // L3: set size check, O(1) amortized
+				best = j - i + 1                      // L4: O(1)
+			}
+		}
+	}
+	return best
 }
 ```
 </TabItem>
@@ -124,6 +148,27 @@ function lengthOfLongestSubstring(s: string): number {
         best = Math.max(best, seen.size);      // L6: O(1)
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func lengthOfLongestSubstring(s string) int {
+	n := len(s)
+	best := 0
+	for i := 0; i < n; i++ {                    // L1: outer loop, n iterations
+		seen := make(map[byte]bool)              // L2: new map each start, O(1)
+		for j := i; j < n; j++ {               // L3: inner loop, up to n-i iterations
+			if seen[s[j]] {                     // L4: O(1) map membership
+				break
+			}
+			seen[s[j]] = true                   // L5: O(1) amortized
+		}
+		if len(seen) > best {                   // L6: O(1)
+			best = len(seen)
+		}
+	}
+	return best
 }
 ```
 </TabItem>
@@ -185,6 +230,25 @@ function lengthOfLongestSubstring(s: string): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func lengthOfLongestSubstring(s string) int {
+	lastSeen := make(map[rune]int)                       // L1: O(1)
+	left := 0                                            // L2: O(1)
+	best := 0                                            // L3: O(1)
+	for right, ch := range s {                           // L4: outer loop, n iterations
+		if idx, ok := lastSeen[ch]; ok && idx >= left { // L5: O(1) map lookup
+			left = idx + 1                               // L6: O(1) jump left
+		}
+		lastSeen[ch] = right                             // L7: O(1) update map
+		if right-left+1 > best {                         // L8: O(1)
+			best = right - left + 1
+		}
+	}
+	return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -211,6 +275,9 @@ The critical insight: `left` only ever moves forward. Across the entire run, `le
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="longest-substring-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="longest-substring-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -280,6 +347,25 @@ console.assert(lengthOfLongestSubstring("") === 0);
 console.assert(lengthOfLongestSubstring("a") === 1);
 console.assert(lengthOfLongestSubstring("abcdef") === 6);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func lengthOfLongestSubstring(s string) int {
+	lastSeen := make(map[rune]int)
+	left := 0
+	best := 0
+	for right, ch := range s {
+		if idx, ok := lastSeen[ch]; ok && idx >= left {
+			left = idx + 1
+		}
+		lastSeen[ch] = right
+		if right-left+1 > best {
+			best = right - left + 1
+		}
+	}
+	return best
+}
 ```
 </TabItem>
 </Tabs>

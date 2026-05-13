@@ -11,11 +11,15 @@ updated: 2026-05-13
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './212-word-search-ii.py?raw';
+import practiceCodeGo from './212-word-search-ii.go?raw';
 import approach2PyCode from './212-word-search-ii-approach2.py?raw';
 import approach2TsCode from './212-word-search-ii-approach2.ts?raw';
+import approach2GoCode from './212-word-search-ii-approach2.go?raw';
 import approach3PyCode from './212-word-search-ii-approach3.py?raw';
 import approach3TsCode from './212-word-search-ii-approach3.ts?raw';
+import approach3GoCode from './212-word-search-ii-approach3.go?raw';
 
 ## Problem
 
@@ -33,6 +37,9 @@ LeetCode 212 · [Link](https://leetcode.com/problems/word-search-ii/) · *Hard*
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="word-search-ii-py" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="word-search-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -93,6 +100,53 @@ function findWords(board: string[][], words: string[]): string[] {
 
     return words.filter(w => exist(w));                            // L7: run exist() W times
 }
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func findWords(board [][]byte, words []string) []string {
+    rows, cols := len(board), len(board[0])
+
+    var exist func(word string) bool
+    exist = func(word string) bool {
+        var dfs func(r, c, i int) bool
+        dfs = func(r, c, i int) bool {
+            if i == len(word) { return true }                  // L1: base case
+            if r < 0 || r >= rows || c < 0 || c >= cols ||
+                board[r][c] != word[i] { return false }        // L2: bounds + match
+            saved := board[r][c]
+            board[r][c] = '#'                                  // L3: mark visited
+            found := dfs(r+1, c, i+1) || dfs(r-1, c, i+1) ||
+                dfs(r, c+1, i+1) || dfs(r, c-1, i+1)         // L4: 4 directions
+            board[r][c] = saved                                // L5: unmark
+            return found
+        }
+        for r := 0; r < rows; r++ {                           // L6: iterate over m·n cells
+            for c := 0; c < cols; c++ {
+                if dfs(r, c, 0) { return true }
+            }
+        }
+        return false
+    }
+
+    var result []string
+    for _, w := range words {                                  // L7: run exist() W times
+        if exist(w) { result = append(result, w) }
+    }
+    return result
+}
+
+func runTests() {
+    board1 := [][]byte{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}}
+    r1 := findWords(board1, []string{"oath","pea","eat","rain"})
+    fmt.Println(r1)
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>
@@ -203,6 +257,67 @@ function findWords(board: string[][], words: string[]): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    Word     string // non-empty at terminal nodes
+}
+
+func findWords(board [][]byte, words []string) []string {
+    root := &TrieNode{}
+    for _, w := range words {                   // L1: build trie
+        node := root
+        for _, ch := range w {
+            i := ch - 'a'
+            if node.Children[i] == nil { node.Children[i] = &TrieNode{} }
+            node = node.Children[i]
+        }
+        node.Word = w
+    }
+
+    rows, cols := len(board), len(board[0])
+    var found []string
+
+    var dfs func(r, c int, node *TrieNode)
+    dfs = func(r, c int, node *TrieNode) {
+        if r < 0 || r >= rows || c < 0 || c >= cols { return }
+        ch := board[r][c]
+        if ch == '#' { return }
+        i := ch - 'a'
+        if node.Children[i] == nil { return }  // L2: O(1) trie lookup prune
+        next := node.Children[i]
+        if next.Word != "" {
+            found = append(found, next.Word)
+            next.Word = ""                      // L3: dedup
+        }
+        board[r][c] = '#'                       // L4: mark visited
+        dfs(r+1, c, next); dfs(r-1, c, next)   // L5: 4-way DFS
+        dfs(r, c+1, next); dfs(r, c-1, next)
+        board[r][c] = ch                        // L6: unmark
+    }
+
+    for r := 0; r < rows; r++ {                // L7: launch from every cell
+        for c := 0; c < cols; c++ {
+            dfs(r, c, root)
+        }
+    }
+    return found
+}
+
+func runTests() {
+    board1 := [][]byte{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}}
+    r1 := findWords(board1, []string{"oath","pea","eat","rain"})
+    fmt.Println(r1)
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -230,6 +345,9 @@ The key improvement over Approach 1: all W words are searched simultaneously. Wh
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="word-search-ii-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="word-search-ii-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -323,6 +441,77 @@ function findWords(board: string[][], words: string[]): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    Word     string
+}
+
+func allNil(children [26]*TrieNode) bool {
+    for _, c := range children {
+        if c != nil { return false }
+    }
+    return true
+}
+
+func findWords(board [][]byte, words []string) []string {
+    root := &TrieNode{}
+    for _, w := range words {
+        node := root
+        for _, ch := range w {
+            i := ch - 'a'
+            if node.Children[i] == nil { node.Children[i] = &TrieNode{} }
+            node = node.Children[i]
+        }
+        node.Word = w
+    }
+
+    rows, cols := len(board), len(board[0])
+    var found []string
+
+    var dfs func(r, c int, node *TrieNode)
+    dfs = func(r, c int, node *TrieNode) {
+        if r < 0 || r >= rows || c < 0 || c >= cols { return }
+        ch := board[r][c]
+        if ch == '#' { return }
+        i := ch - 'a'
+        if node.Children[i] == nil { return }
+        next := node.Children[i]
+        if next.Word != "" {
+            found = append(found, next.Word)
+            next.Word = ""
+        }
+        board[r][c] = '#'
+        dfs(r+1, c, next); dfs(r-1, c, next)
+        dfs(r, c+1, next); dfs(r, c-1, next)
+        board[r][c] = ch
+        if next.Word == "" && allNil(next.Children) { // L8: prune empty subtree
+            node.Children[i] = nil                    // L9: O(1) nil assignment
+        }
+    }
+
+    for r := 0; r < rows; r++ {
+        for c := 0; c < cols; c++ {
+            dfs(r, c, root)
+        }
+    }
+    return found
+}
+
+func runTests() {
+    board1 := [][]byte{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}}
+    r1 := findWords(board1, []string{"oath","pea","eat","rain"})
+    fmt.Println(r1)
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -348,6 +537,9 @@ Big-O is unchanged: O(m · n · 4^L) in the absolute worst case. In practice, on
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="word-search-ii-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="word-search-ii-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -473,6 +665,81 @@ const board2 = [["a","b"],["c","d"]];
 const r2 = new Set(findWords(board2, ["ab","cd","abdc"]));
 console.assert(r2.has("ab") && r2.has("cd") && r2.has("abdc") && r2.size === 3);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import (
+    "fmt"
+    "sort"
+)
+
+type TrieNode struct {
+    Children [26]*TrieNode
+    Word     string
+}
+
+func findWords(board [][]byte, words []string) []string {
+    root := &TrieNode{}
+    for _, w := range words {
+        node := root
+        for _, ch := range w {
+            i := ch - 'a'
+            if node.Children[i] == nil { node.Children[i] = &TrieNode{} }
+            node = node.Children[i]
+        }
+        node.Word = w
+    }
+    rows, cols := len(board), len(board[0])
+    var found []string
+    var dfs func(r, c int, node *TrieNode)
+    dfs = func(r, c int, node *TrieNode) {
+        if r < 0 || r >= rows || c < 0 || c >= cols { return }
+        ch := board[r][c]
+        if ch == '#' { return }
+        i := ch - 'a'
+        if node.Children[i] == nil { return }
+        next := node.Children[i]
+        if next.Word != "" { found = append(found, next.Word); next.Word = "" }
+        board[r][c] = '#'
+        dfs(r+1, c, next); dfs(r-1, c, next)
+        dfs(r, c+1, next); dfs(r, c-1, next)
+        board[r][c] = ch
+    }
+    for r := 0; r < rows; r++ {
+        for c := 0; c < cols; c++ { dfs(r, c, root) }
+    }
+    return found
+}
+
+func setsEqual(a, b []string) bool {
+    if len(a) != len(b) { return false }
+    sort.Strings(a); sort.Strings(b)
+    for i := range a { if a[i] != b[i] { return false } }
+    return true
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition {
+        msg := "assertion failed"
+        if len(msgs) > 0 { msg = msgs[0] }
+        panic(msg)
+    }
+}
+
+func runTests() {
+    board1 := [][]byte{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}}
+    assert(setsEqual(findWords(board1, []string{"oath","pea","eat","rain"}), []string{"eat","oath"}))
+    assert(setsEqual(findWords([][]byte{{'a'}}, []string{"a"}), []string{"a"}))
+    assert(setsEqual(findWords([][]byte{{'a'}}, []string{"b"}), []string{}))
+    board2 := [][]byte{{'a','b'},{'c','d'}}
+    assert(setsEqual(findWords(board2, []string{"ab","cd","abdc"}), []string{"ab","abdc","cd"}))
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>

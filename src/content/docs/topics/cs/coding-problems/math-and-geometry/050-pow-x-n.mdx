@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './050-pow-x-n.py?raw';
 import practiceCodeTs from './050-pow-x-n.ts?raw';
+import practiceCodeGo from './050-pow-x-n.go?raw';
 import approach2PyCode from './050-pow-x-n-approach2.py?raw';
 import approach2TsCode from './050-pow-x-n-approach2.ts?raw';
+import approach2GoCode from './050-pow-x-n-approach2.go?raw';
 import approach3PyCode from './050-pow-x-n-approach3.py?raw';
 import approach3TsCode from './050-pow-x-n-approach3.ts?raw';
+import approach3GoCode from './050-pow-x-n-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 50 · [Link](https://leetcode.com/problems/powx-n/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="pow-x-n-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="pow-x-n-go" />
   </TabItem>
 </Tabs>
 
@@ -61,6 +68,16 @@ function myPow(x: number, n: number): number {
     let result = 1.0;
     for (let i = 0; i < n; i++) result *= x;  // L4, L5: loop |n| times
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func myPow(x float64, n int) float64 {
+    if n < 0 { x = 1 / x; n = -n }   // L1-L3: O(1)
+    result := 1.0
+    for i := 0; i < n; i++ { result *= x }  // L4, L5: loop |n| times
+    return result
 }
 ```
 </TabItem>
@@ -125,6 +142,24 @@ function myPow(x: number, n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func myPow(x float64, n int) float64 {
+    if n < 0 {                           // L1: O(1)
+        x = 1 / x                        // L2: O(1)
+        n = -n                           // L3: O(1)
+    }
+    var helper func(base float64, exp int) float64
+    helper = func(base float64, exp int) float64 {
+        if exp == 0 { return 1 }         // L4: base case O(1)
+        half := helper(base, exp/2)      // L5: recurse on half exponent
+        if exp%2 == 0 { return half * half }  // L6: O(1)
+        return half * half * base        // L7: O(1) for odd exp
+    }
+    return helper(x, n)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -151,6 +186,9 @@ Each recursive call halves the exponent; there are log n levels, each doing O(1)
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="pow-x-n-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="pow-x-n-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -189,6 +227,23 @@ function myPow(x: number, n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func myPow(x float64, n int) float64 {
+    if n < 0 {               // L1: O(1)
+        x = 1 / x            // L2: O(1)
+        n = -n               // L3: O(1)
+    }
+    result := 1.0            // L4: O(1)
+    for n != 0 {             // L5: loop log n times
+        if n&1 == 1 { result *= x }  // L6: O(1), multiply in if odd bit
+        x *= x               // L7: O(1), square x each iteration
+        n >>= 1              // L8: O(1), shift to next bit
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -219,6 +274,9 @@ Every integer `n` has a binary expansion. `x^n = prod(x^(2^k))` over the bit pos
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="pow-x-n-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="pow-x-n-approach3-go" />
   </TabItem>
 </Tabs>
 

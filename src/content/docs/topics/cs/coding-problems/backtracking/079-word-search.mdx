@@ -11,10 +11,13 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './079-word-search.py?raw';
 import practiceCodeTs from './079-word-search.ts?raw';
+import practiceCodeGo from './079-word-search.go?raw';
 import approach2PyCode from './079-word-search-approach2.py?raw';
 import approach2TsCode from './079-word-search-approach2.ts?raw';
+import approach2GoCode from './079-word-search-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 79 · [Link](https://leetcode.com/problems/word-search/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="word-search-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="word-search-go" />
   </TabItem>
 </Tabs>
 
@@ -130,6 +136,37 @@ function exist(board: string[][], word: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func exist(board [][]byte, word string) bool {
+    rows := len(board)
+    cols := len(board[0])
+
+    var dfs func(r, c, i int) bool
+    dfs = func(r, c, i int) bool {
+        if i == len(word) {
+            return true // L1: full match
+        }
+        if r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] != word[i] {
+            return false // L2: boundary / mismatch
+        }
+        saved := board[r][c]
+        board[r][c] = '#'                                              // L3: O(1) mark in-place
+        found := dfs(r+1, c, i+1) || dfs(r-1, c, i+1) ||
+            dfs(r, c+1, i+1) || dfs(r, c-1, i+1)                     // L4: 4 recursive calls
+        board[r][c] = saved                                            // L5: O(1) restore
+        return found
+    }
+
+    for r := 0; r < rows; r++ {
+        for c := 0; c < cols; c++ {
+            if dfs(r, c, 0) { return true }
+        }
+    }
+    return false
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -158,6 +195,9 @@ Standard interview answer. The "restore on backtrack" is the essential pattern.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="word-search-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="word-search-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -281,6 +321,30 @@ console.assert(exist(b(), 'ABCB') === false);
 console.assert(exist([['A']], 'A') === true);
 console.assert(exist([['A']], 'B') === false);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func exist(board [][]byte, word string) bool {
+    rows := len(board)
+    cols := len(board[0])
+    var dfs func(r, c, i int) bool
+    dfs = func(r, c, i int) bool {
+        if i == len(word) { return true }
+        if r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] != word[i] { return false }
+        saved := board[r][c]
+        board[r][c] = '#'
+        found := dfs(r+1,c,i+1) || dfs(r-1,c,i+1) || dfs(r,c+1,i+1) || dfs(r,c-1,i+1)
+        board[r][c] = saved
+        return found
+    }
+    for r := 0; r < rows; r++ {
+        for c := 0; c < cols; c++ {
+            if dfs(r, c, 0) { return true }
+        }
+    }
+    return false
+}
 ```
 </TabItem>
 </Tabs>

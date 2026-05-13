@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './024-swap-nodes-in-pairs.py?raw';
 import practiceCodeTs from './024-swap-nodes-in-pairs.ts?raw';
+import practiceCodeGo from './024-swap-nodes-in-pairs.go?raw';
 import approach2TsCode from './024-swap-nodes-in-pairs-approach2.ts?raw';
+import approach2GoCode from './024-swap-nodes-in-pairs-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 24 · [Link](https://leetcode.com/problems/swap-nodes-in-pairs/) · *Me
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="swap-nodes-in-pairs-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="swap-nodes-in-pairs-go" />
   </TabItem>
 </Tabs>
 
@@ -86,6 +92,27 @@ function swapPairs(head: ListNode | null): ListNode | null {
         tail = tail.next;
     }
     return dummy.next;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func swapPairs(head *ListNode) *ListNode {
+    var vals []int
+    cur := head
+    for cur != nil { vals = append(vals, cur.Val); cur = cur.Next } // L1: O(n) collect
+    for i := 0; i < len(vals)-1; i += 2 {                          // L2: swap adjacent pairs
+        vals[i], vals[i+1] = vals[i+1], vals[i]
+    }
+    dummy := &ListNode{}
+    tail := dummy
+    for _, v := range vals { tail.Next = &ListNode{Val: v}; tail = tail.Next } // L3: O(n) rebuild
+    return dummy.Next
 }
 ```
 </TabItem>
@@ -150,6 +177,28 @@ function swapPairs(head: ListNode | null): ListNode | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func swapPairs(head *ListNode) *ListNode {
+    dummy := &ListNode{Next: head}          // L1: O(1) sentinel before head
+    prev, cur := dummy, head
+    for cur != nil && cur.Next != nil {     // L2: at least two nodes remain
+        nextPair := cur.Next.Next           // L3: O(1) save remainder
+        prev.Next = cur.Next               // L4: O(1) link prev to second node
+        cur.Next.Next = cur               // L5: O(1) second node points back to first
+        cur.Next = nextPair               // L6: O(1) first node points to remainder
+        prev = cur                          // L7: O(1) advance prev
+        cur = nextPair                      // L8: O(1) advance cur
+    }
+    return dummy.Next
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -187,6 +236,9 @@ Step 2 (cur=3, nextPair=None):
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="swap-nodes-in-pairs-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="swap-nodes-in-pairs-approach2-go" />
   </TabItem>
 </Tabs>
 

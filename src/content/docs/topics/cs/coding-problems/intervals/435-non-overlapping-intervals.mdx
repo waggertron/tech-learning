@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './435-non-overlapping-intervals.py?raw';
 import practiceCodeTs from './435-non-overlapping-intervals.ts?raw';
+import practiceCodeGo from './435-non-overlapping-intervals.go?raw';
 import approach2PyCode from './435-non-overlapping-intervals-approach2.py?raw';
 import approach2TsCode from './435-non-overlapping-intervals-approach2.ts?raw';
+import approach2GoCode from './435-non-overlapping-intervals-approach2.go?raw';
 import approach3PyCode from './435-non-overlapping-intervals-approach3.py?raw';
 import approach3TsCode from './435-non-overlapping-intervals-approach3.ts?raw';
+import approach3GoCode from './435-non-overlapping-intervals-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 435 · [Link](https://leetcode.com/problems/non-overlapping-intervals/)
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="non-overlapping-intervals-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="non-overlapping-intervals-go" />
   </TabItem>
 </Tabs>
 
@@ -72,6 +79,28 @@ function eraseOverlapIntervals(intervals: number[][]): number {
         }
     }
     return n - Math.max(...dp, 0);                   // L8: O(n) scan dp
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func eraseOverlapIntervals(intervals [][]int) int {
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][0] < intervals[j][0]  // L1: O(n log n)
+    })
+    n := len(intervals)                            // L2: O(1)
+    dp := make([]int, n)
+    for i := range dp { dp[i] = 1 }               // L3: O(n)
+    for i := 1; i < n; i++ {                       // L4: outer loop, n-1 iterations
+        for j := 0; j < i; j++ {                   // L5: inner loop, up to i iterations
+            if intervals[j][1] <= intervals[i][0] {  // L6: O(1) overlap check
+                if dp[j]+1 > dp[i] { dp[i] = dp[j] + 1 }  // L7: O(1) update
+            }
+        }
+    }
+    best := 0
+    for _, v := range dp { if v > best { best = v } }  // L8: O(n) scan dp
+    return n - best
 }
 ```
 </TabItem>
@@ -132,6 +161,25 @@ function eraseOverlapIntervals(intervals: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func eraseOverlapIntervals(intervals [][]int) int {
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][1] < intervals[j][1]  // L1: O(n log n)
+    })
+    count := 0                                    // L2: O(1)
+    end := math.MinInt64                          // L3: O(1)
+    for _, iv := range intervals {                // L4: outer loop, n iterations
+        if iv[0] >= end {                         // L5: O(1) non-overlap check
+            end = iv[1]                           // L6: O(1) keep this interval
+        } else {
+            count++                               // L7: O(1) remove this interval
+        }
+    }
+    return count                                  // L8: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -163,6 +211,9 @@ Keeping the interval with the smallest end frees the most room for subsequent in
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="non-overlapping-intervals-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="non-overlapping-intervals-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -204,6 +255,26 @@ function eraseOverlapIntervals(intervals: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func eraseOverlapIntervals(intervals [][]int) int {
+    sort.Slice(intervals, func(i, j int) bool {
+        return intervals[i][0] < intervals[j][0]  // L1: O(n log n)
+    })
+    count := 0                                    // L2: O(1)
+    prevEnd := math.MinInt64                      // L3: O(1)
+    for _, iv := range intervals {                // L4: outer loop, n iterations
+        if iv[0] >= prevEnd {                     // L5: O(1) non-overlap check
+            prevEnd = iv[1]                       // L6: O(1) accept interval
+        } else {
+            count++                               // L7: O(1) remove this interval
+            if iv[1] < prevEnd { prevEnd = iv[1] }  // L8: O(1) keep the smaller end
+        }
+    }
+    return count                                  // L9: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -232,6 +303,9 @@ Identical cost structure to Approach 2. The difference is the sort key (start vs
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="non-overlapping-intervals-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="non-overlapping-intervals-approach3-go" />
   </TabItem>
 </Tabs>
 

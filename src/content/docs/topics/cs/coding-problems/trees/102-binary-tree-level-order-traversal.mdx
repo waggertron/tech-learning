@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './102-binary-tree-level-order-traversal.py?raw';
 import practiceCodeTs from './102-binary-tree-level-order-traversal.ts?raw';
+import practiceCodeGo from './102-binary-tree-level-order-traversal.go?raw';
 import approach2PyCode from './102-binary-tree-level-order-traversal-approach2.py?raw';
 import approach2TsCode from './102-binary-tree-level-order-traversal-approach2.ts?raw';
+import approach2GoCode from './102-binary-tree-level-order-traversal-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 102 · [Link](https://leetcode.com/problems/binary-tree-level-order-tra
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="binary-tree-level-order-traversal-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="binary-tree-level-order-traversal-go" />
   </TabItem>
 </Tabs>
 
@@ -90,6 +96,40 @@ function levelOrder(root: TreeNode | null): number[][] {
         result.push(level);                    // L7: O(1) amortized
     }
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func levelOrder(root *TreeNode) [][]int {
+    if root == nil {
+        return nil
+    }
+    result := [][]int{}
+    q := []*TreeNode{root}              // L1: O(1) init
+    for len(q) > 0 {
+        level := []int{}
+        levelSize := len(q)             // L2: snapshot current level size
+        for i := 0; i < levelSize; i++ {
+            node := q[0]
+            q = q[1:]                   // L3: O(1) dequeue
+            level = append(level, node.Val)  // L4: O(1) record value
+            if node.Left != nil {
+                q = append(q, node.Left)     // L5: O(1) enqueue left
+            }
+            if node.Right != nil {
+                q = append(q, node.Right)    // L6: O(1) enqueue right
+            }
+        }
+        result = append(result, level)   // L7: O(1) amortized
+    }
+    return result
 }
 ```
 </TabItem>
@@ -150,6 +190,33 @@ function levelOrder(root: TreeNode | null): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func levelOrder(root *TreeNode) [][]int {
+    result := [][]int{}
+    var dfs func(*TreeNode, int)
+    dfs = func(node *TreeNode, depth int) {
+        if node == nil {
+            return
+        }
+        if depth == len(result) {
+            result = append(result, []int{})   // L1: first visit at this depth
+        }
+        result[depth] = append(result[depth], node.Val)  // L2: O(1) append
+        dfs(node.Left, depth+1)                          // L3: recurse left
+        dfs(node.Right, depth+1)                         // L4: recurse right
+    }
+    dfs(root, 0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -176,6 +243,9 @@ Elegant; good when you already have a DFS template you want to reuse.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="binary-tree-level-order-traversal-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="binary-tree-level-order-traversal-approach2-go" />
   </TabItem>
 </Tabs>
 

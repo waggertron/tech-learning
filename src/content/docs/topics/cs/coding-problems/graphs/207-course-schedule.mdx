@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './207-course-schedule.py?raw';
 import practiceCodeTs from './207-course-schedule.ts?raw';
+import practiceCodeGo from './207-course-schedule.go?raw';
 import approach2PyCode from './207-course-schedule-approach2.py?raw';
 import approach2TsCode from './207-course-schedule-approach2.ts?raw';
+import approach2GoCode from './207-course-schedule-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 207 · [Link](https://leetcode.com/problems/course-schedule/) · *Mediu
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="course-schedule-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="course-schedule-go" />
   </TabItem>
 </Tabs>
 
@@ -96,6 +102,37 @@ function canFinish(numCourses: number, prerequisites: number[][]): boolean {
         if (hasCycle(c)) return false;
     }
     return true;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func canFinish(numCourses int, prerequisites [][]int) bool {
+    graph := make([][]int, numCourses)
+    for _, p := range prerequisites {             // L1: O(E) build adjacency list
+        graph[p[1]] = append(graph[p[1]], p[0])
+    }
+
+    var hasCycle func(start int) bool
+    hasCycle = func(start int) bool {
+        onPath := map[int]bool{}                  // L2: O(1) init per call
+        var dfs func(n int) bool
+        dfs = func(n int) bool {
+            if onPath[n] { return true }          // L3: O(1) membership check
+            onPath[n] = true                      // L4: O(1)
+            for _, nb := range graph[n] {         // L5: iterate neighbors
+                if dfs(nb) { return true }        // L6: recurse
+            }
+            delete(onPath, n)                     // L7: O(1) backtrack
+            return false
+        }
+        return dfs(start)
+    }
+
+    for c := 0; c < numCourses; c++ {             // L8: call hasCycle for every node
+        if hasCycle(c) { return false }
+    }
+    return true
 }
 ```
 </TabItem>
@@ -185,6 +222,35 @@ function canFinish(numCourses: number, prerequisites: number[][]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func canFinish(numCourses int, prerequisites [][]int) bool {
+    graph := make([][]int, numCourses)
+    for _, p := range prerequisites {             // L1: O(E) build graph
+        graph[p[1]] = append(graph[p[1]], p[0])
+    }
+    const white, gray, black = 0, 1, 2
+    color := make([]int, numCourses)              // L2: O(V) init color array
+
+    var dfs func(n int) bool
+    dfs = func(n int) bool {
+        if color[n] == gray { return false }      // L3: back-edge check (cycle)
+        if color[n] == black { return true }      // L4: already done
+        color[n] = gray                           // L5: mark in-progress
+        for _, nb := range graph[n] {             // L6: iterate neighbors
+            if !dfs(nb) { return false }          // L7: recurse
+        }
+        color[n] = black                          // L8: mark complete
+        return true
+    }
+
+    for c := 0; c < numCourses; c++ {             // L9: outer loop
+        if !dfs(c) { return false }
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -213,6 +279,9 @@ The BLACK check at L4 is the memoization that makes this O(V + E) instead of O(V
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="course-schedule-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="course-schedule-approach2-go" />
   </TabItem>
 </Tabs>
 

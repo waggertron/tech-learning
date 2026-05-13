@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './073-set-matrix-zeroes.py?raw';
 import practiceCodeTs from './073-set-matrix-zeroes.ts?raw';
+import practiceCodeGo from './073-set-matrix-zeroes.go?raw';
 import approach2PyCode from './073-set-matrix-zeroes-approach2.py?raw';
 import approach2TsCode from './073-set-matrix-zeroes-approach2.ts?raw';
+import approach2GoCode from './073-set-matrix-zeroes-approach2.go?raw';
 import approach3PyCode from './073-set-matrix-zeroes-approach3.py?raw';
 import approach3TsCode from './073-set-matrix-zeroes-approach3.ts?raw';
+import approach3GoCode from './073-set-matrix-zeroes-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 73 · [Link](https://leetcode.com/problems/set-matrix-zeroes/) · *Medi
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="set-matrix-zeroes-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="set-matrix-zeroes-go" />
   </TabItem>
 </Tabs>
 
@@ -115,6 +122,32 @@ function setZeroes(matrix: number[][]): void {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func setZeroes(matrix [][]int) {
+    rows, cols := len(matrix), len(matrix[0])    // L1: O(1)
+    zeroRows := make([]bool, rows)               // L2: O(m)
+    zeroCols := make([]bool, cols)               // L3: O(n)
+
+    for r := 0; r < rows; r++ {                 // L4: first pass, m*n iterations
+        for c := 0; c < cols; c++ {
+            if matrix[r][c] == 0 {
+                zeroRows[r] = true               // L5: O(1)
+                zeroCols[c] = true               // L6: O(1)
+            }
+        }
+    }
+
+    for r := 0; r < rows; r++ {                 // L7: second pass, m*n iterations
+        for c := 0; c < cols; c++ {
+            if zeroRows[r] || zeroCols[c] {
+                matrix[r][c] = 0                 // L8: O(1)
+            }
+        }
+    }
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -141,6 +174,9 @@ Two full passes over the matrix, each O(m·n).
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="set-matrix-zeroes-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="set-matrix-zeroes-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -208,6 +244,39 @@ function setZeroes(matrix: number[][]): void {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func setZeroes(matrix [][]int) {
+    rows, cols := len(matrix), len(matrix[0])
+    firstRowZero := false
+    for c := 0; c < cols; c++ { if matrix[0][c] == 0 { firstRowZero = true; break } }  // L1: O(n)
+    firstColZero := false
+    for r := 0; r < rows; r++ { if matrix[r][0] == 0 { firstColZero = true; break } }  // L2: O(m)
+
+    // Use first row/col as markers
+    for r := 1; r < rows; r++ {                    // L3: mark pass
+        for c := 1; c < cols; c++ {
+            if matrix[r][c] == 0 {
+                matrix[r][0] = 0                   // L4: O(1)
+                matrix[0][c] = 0                   // L5: O(1)
+            }
+        }
+    }
+
+    // Zero based on markers
+    for r := 1; r < rows; r++ {                    // L6: apply pass
+        for c := 1; c < cols; c++ {
+            if matrix[r][0] == 0 || matrix[0][c] == 0 {
+                matrix[r][c] = 0                   // L7: O(1)
+            }
+        }
+    }
+
+    if firstRowZero { for c := 0; c < cols; c++ { matrix[0][c] = 0 } }  // L8: O(n)
+    if firstColZero { for r := 0; r < rows; r++ { matrix[r][0] = 0 } }  // L9: O(m)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -235,6 +304,9 @@ Three linear passes total; two of them are O(m·n), two are O(m + n).
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="set-matrix-zeroes-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="set-matrix-zeroes-approach3-go" />
   </TabItem>
 </Tabs>
 

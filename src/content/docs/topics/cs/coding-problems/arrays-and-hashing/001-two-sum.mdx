@@ -11,12 +11,16 @@ updated: 2026-05-01
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './001-two-sum.py?raw';
 import practiceCodeTs from './001-two-sum.ts?raw';
+import practiceCodeGo from './001-two-sum.go?raw';
 import approach2PyCode from './001-two-sum-approach2.py?raw';
 import approach2TsCode from './001-two-sum-approach2.ts?raw';
+import approach2GoCode from './001-two-sum-approach2.go?raw';
 import approach3PyCode from './001-two-sum-approach3.py?raw';
 import approach3TsCode from './001-two-sum-approach3.ts?raw';
+import approach3GoCode from './001-two-sum-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 1 · [Link](https://leetcode.com/problems/two-sum/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="two-sum-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="two-sum-go" />
   </TabItem>
 </Tabs>
 
@@ -67,6 +74,21 @@ function twoSum(nums: number[], target: number): number[] {
         }
     }
     return [];
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func twoSum(nums []int, target int) []int {
+	n := len(nums)                             // L1: O(1)
+	for i := 0; i < n; i++ {                  // L2: outer loop, n iterations
+		for j := i + 1; j < n; j++ {          // L3: inner loop, up to n-i-1 iterations
+			if nums[i]+nums[j] == target {     // L4: O(1) check
+				return []int{i, j}             // L5: O(1) return
+			}
+		}
+	}
+	return []int{}
 }
 ```
 </TabItem>
@@ -127,6 +149,33 @@ function twoSum(nums: number[], target: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func twoSum(nums []int, target int) []int {
+	type iv struct{ idx, val int }
+	indexed := make([]iv, len(nums))
+	for i, v := range nums {
+		indexed[i] = iv{i, v}
+	}
+	sort.Slice(indexed, func(i, j int) bool { return indexed[i].val < indexed[j].val }) // L1: O(n log n)
+	l, r := 0, len(indexed)-1                              // L2: O(1)
+	for l < r {                                             // L3: at most n iterations
+		s := indexed[l].val + indexed[r].val               // L4: O(1) sum
+		if s == target {                                    // L5: O(1) check
+			result := []int{indexed[l].idx, indexed[r].idx}
+			sort.Ints(result)
+			return result                                   // L6: O(1)
+		}
+		if s < target {                                     // L7: O(1)
+			l++                                             // L8: O(1)
+		} else {
+			r--                                             // L9: O(1)
+		}
+	}
+	return []int{}
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -155,6 +204,9 @@ This is the right approach for LeetCode **167. Two Sum II** (input already sorte
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="two-sum-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="two-sum-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -189,6 +241,21 @@ function twoSum(nums: number[], target: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func twoSum(nums []int, target int) []int {
+	seen := make(map[int]int)          // L1: O(1), empty map
+	for i, x := range nums {           // L2: loop, n iterations
+		complement := target - x       // L3: O(1) arithmetic
+		if j, ok := seen[complement]; ok { // L4: O(1) average hash lookup
+			return []int{j, i}         // L5: O(1) return
+		}
+		seen[x] = i                    // L6: O(1) average hash insert
+	}
+	return []int{}
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -218,6 +285,9 @@ Every operation is O(1) average per iteration. One pass over n elements gives O(
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="two-sum-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="two-sum-approach3-go" />
   </TabItem>
 </Tabs>
 

@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './128-longest-consecutive-sequence.py?raw';
 import practiceCodeTs from './128-longest-consecutive-sequence.ts?raw';
+import practiceCodeGo from './128-longest-consecutive-sequence.go?raw';
 import approach2PyCode from './128-longest-consecutive-sequence-approach2.py?raw';
 import approach2TsCode from './128-longest-consecutive-sequence-approach2.ts?raw';
+import approach2GoCode from './128-longest-consecutive-sequence-approach2.go?raw';
 import approach3PyCode from './128-longest-consecutive-sequence-approach3.py?raw';
 import approach3TsCode from './128-longest-consecutive-sequence-approach3.ts?raw';
+import approach3GoCode from './128-longest-consecutive-sequence-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 128 · [Link](https://leetcode.com/problems/longest-consecutive-sequenc
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="longest-consecutive-sequence-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="longest-consecutive-sequence-go" />
   </TabItem>
 </Tabs>
 
@@ -72,6 +79,30 @@ function longestConsecutive(nums: number[]): number {
         best = Math.max(best, length);                 // L8: O(1)
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func longestConsecutive(nums []int) int {
+	best := 0                                          // L1: O(1)
+	for _, x := range nums {                           // L2: outer loop, n iterations
+		cur := x                                       // L3: O(1)
+		length := 1                                    // L4: O(1)
+		for contains(nums, cur+1) {                    // L5: O(n) membership per call
+			cur++                                      // L6: O(1)
+			length++                                   // L7: O(1)
+		}
+		if length > best { best = length }             // L8: O(1)
+	}
+	return best
+}
+
+func contains(nums []int, v int) bool {
+	for _, n := range nums {
+		if n == v { return true }
+	}
+	return false
 }
 ```
 </TabItem>
@@ -134,6 +165,28 @@ function longestConsecutive(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func longestConsecutive(nums []int) int {
+	if len(nums) == 0 { return 0 }              // L1: O(1) guard
+	seen := make(map[int]struct{})
+	for _, n := range nums { seen[n] = struct{}{} }
+	unique := make([]int, 0, len(seen))
+	for n := range seen { unique = append(unique, n) }
+	sort.Ints(unique)                            // L2: O(n log n) sort after dedup
+	best, cur := 1, 1                            // L3: O(1)
+	for i := 1; i < len(unique); i++ {          // L4: loop, n iterations
+		if unique[i] == unique[i-1]+1 {          // L5: O(1) comparison
+			cur++                                // L6: O(1)
+			if cur > best { best = cur }         // L7: O(1)
+		} else {
+			cur = 1                              // L8: O(1) reset
+		}
+	}
+	return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -161,6 +214,9 @@ Correct and simple, but violates the explicit O(n) constraint in the prompt.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="longest-consecutive-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="longest-consecutive-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -207,6 +263,27 @@ function longestConsecutive(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func longestConsecutive(nums []int) int {
+	numSet := make(map[int]struct{})
+	for _, n := range nums { numSet[n] = struct{}{} } // L1: O(n) set construction
+	best := 0                                          // L2: O(1)
+	for x := range numSet {                            // L3: outer loop, n iterations
+		if _, ok := numSet[x-1]; ok { continue }      // L4: O(1) set lookup, skip non-starts
+		cur := x                                       // L5: O(1)
+		length := 1                                    // L6: O(1)
+		for {
+			if _, ok := numSet[cur+1]; !ok { break }  // L7: O(1) set lookup per call
+			cur++                                      // L8: O(1)
+			length++                                   // L9: O(1)
+		}
+		if length > best { best = length }             // L10: O(1)
+	}
+	return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -235,6 +312,9 @@ L4's guard ensures each element is walked from its run-start exactly once. Even 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="longest-consecutive-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="longest-consecutive-approach3-go" />
   </TabItem>
 </Tabs>
 

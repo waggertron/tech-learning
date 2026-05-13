@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './043-multiply-strings.py?raw';
 import practiceCodeTs from './043-multiply-strings.ts?raw';
+import practiceCodeGo from './043-multiply-strings.go?raw';
 import approach2PyCode from './043-multiply-strings-approach2.py?raw';
 import approach2TsCode from './043-multiply-strings-approach2.ts?raw';
+import approach2GoCode from './043-multiply-strings-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 43 · [Link](https://leetcode.com/problems/multiply-strings/) · *Mediu
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="multiply-strings-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="multiply-strings-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Big-integer via int() (cheating)
@@ -52,6 +58,17 @@ def multiply(num1, num2):
 ```typescript
 function multiply(num1: string, num2: string): string {
     return String(BigInt(num1) * BigInt(num2));
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "strconv"
+
+func multiply(num1 string, num2 string) string {
+    n1, _ := strconv.ParseInt(num1, 10, 64)
+    n2, _ := strconv.ParseInt(num2, 10, 64)
+    return strconv.FormatInt(n1*n2, 10)
 }
 ```
 </TabItem>
@@ -109,6 +126,37 @@ function multiply(num1: string, num2: string): string {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import "strconv"
+
+func multiply(num1 string, num2 string) string {
+    if num1 == "0" || num2 == "0" {              // L1: O(1) early exit
+        return "0"
+    }
+    n, m := len(num1), len(num2)                 // L2: O(1)
+    result := make([]int, n+m)                   // L3: O(n + m)
+    for i := n - 1; i >= 0; i-- {               // L4: outer loop, n iterations
+        for j := m - 1; j >= 0; j-- {           // L5: inner loop, m iterations
+            prod := int(num1[i]-'0') * int(num2[j]-'0')  // L6: O(1)
+            p1, p2 := i+j, i+j+1                // L7: O(1)
+            total := prod + result[p2]           // L8: O(1)
+            result[p2] = total % 10              // L9: O(1)
+            result[p1] += total / 10             // L10: O(1)
+        }
+    }
+    start := 0
+    for start < len(result) && result[start] == 0 {
+        start++                                  // L11: O(n + m)
+    }
+    out := ""
+    for _, d := range result[start:] {
+        out += strconv.Itoa(d)                   // L12: O(n + m)
+    }
+    return out
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -139,6 +187,9 @@ In schoolbook multiplication, the product of two digits at positions `i` (from n
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="multiply-strings-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="multiply-strings-approach2-go" />
   </TabItem>
 </Tabs>
 

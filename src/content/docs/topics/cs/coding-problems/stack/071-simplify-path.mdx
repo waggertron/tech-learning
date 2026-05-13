@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './071-simplify-path.py?raw';
 import practiceCodeTs from './071-simplify-path.ts?raw';
+import practiceCodeGo from './071-simplify-path.go?raw';
 import approach2TsCode from './071-simplify-path-approach2.ts?raw';
+import approach2GoCode from './071-simplify-path-approach2.go?raw';
 
 ## Problem
 
@@ -44,6 +47,9 @@ LeetCode 71 · [Link](https://leetcode.com/problems/simplify-path/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="simplify-path-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="simplify-path-go" />
   </TabItem>
 </Tabs>
 
@@ -91,6 +97,26 @@ function simplifyPath(path: string): string {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func simplifyPath(path string) string {
+    parts := strings.Split(path, "/")        // L1: O(n) split into components
+    stack := []string{}                      // L2: O(1) init
+    for _, part := range parts {             // L3: iterate each component
+        if part == "" || part == "." {       // L4: skip empty and current-dir dot
+            continue
+        } else if part == ".." {             // L5: go up one level
+            if len(stack) > 0 {             // L6: O(1) non-empty check
+                stack = stack[:len(stack)-1] // L7: O(1) pop
+            }
+        } else {
+            stack = append(stack, part)      // L8: O(1) push directory name
+        }
+    }
+    return "/" + strings.Join(stack, "/")    // L9: O(n) join result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -118,6 +144,9 @@ k is at most n (each char could be its own component), so both O(k) terms collap
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="simplify-path-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="simplify-path-approach2-go" />
   </TabItem>
 </Tabs>
 

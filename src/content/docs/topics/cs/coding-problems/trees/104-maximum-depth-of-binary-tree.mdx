@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './104-maximum-depth-of-binary-tree.py?raw';
 import practiceCodeTs from './104-maximum-depth-of-binary-tree.ts?raw';
+import practiceCodeGo from './104-maximum-depth-of-binary-tree.go?raw';
 import approach2PyCode from './104-maximum-depth-of-binary-tree-approach2.py?raw';
 import approach2TsCode from './104-maximum-depth-of-binary-tree-approach2.ts?raw';
+import approach2GoCode from './104-maximum-depth-of-binary-tree-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 104 · [Link](https://leetcode.com/problems/maximum-depth-of-binary-tre
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="maximum-depth-of-binary-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="maximum-depth-of-binary-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -62,6 +68,27 @@ class TreeNode {
 function maxDepth(root: TreeNode | null): number {
     if (!root) return 0;                                              // L1: base case
     return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));  // L2: recurse both children
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func maxDepth(root *TreeNode) int {
+    if root == nil {
+        return 0                                                  // L1: base case
+    }
+    left := maxDepth(root.Left)
+    right := maxDepth(root.Right)
+    if left > right {
+        return 1 + left                                           // L2: recurse both children
+    }
+    return 1 + right
 }
 ```
 </TabItem>
@@ -126,6 +153,38 @@ function maxDepth(root: TreeNode | null): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func maxDepth(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    q := []*TreeNode{root}  // L1: O(1) init
+    depth := 0
+    for len(q) > 0 {
+        depth++                              // L2: O(1) increment per level
+        levelSize := len(q)
+        for i := 0; i < levelSize; i++ {
+            node := q[0]
+            q = q[1:]                        // L3: O(1) dequeue
+            if node.Left != nil {
+                q = append(q, node.Left)     // L4: O(1) enqueue
+            }
+            if node.Right != nil {
+                q = append(q, node.Right)    // L5: O(1) enqueue
+            }
+        }
+    }
+    return depth
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -152,6 +211,9 @@ Useful when recursion depth is a concern; also the starting point for level-orde
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="maximum-depth-of-binary-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="maximum-depth-of-binary-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

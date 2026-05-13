@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1514-path-with-maximum-probability.py?raw';
 import practiceCodeTs from './1514-path-with-maximum-probability.ts?raw';
+import practiceCodeGo from './1514-path-with-maximum-probability.go?raw';
 import approach2PyCode from './1514-path-with-maximum-probability-approach2.py?raw';
 import approach2TsCode from './1514-path-with-maximum-probability-approach2.ts?raw';
+import approach2GoCode from './1514-path-with-maximum-probability-approach2.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 1514 · [Link](https://leetcode.com/problems/path-with-maximum-probabil
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="path-with-maximum-probability-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="path-with-maximum-probability-go" />
   </TabItem>
 </Tabs>
 
@@ -86,6 +92,28 @@ function maxProbability(n: number, edges: number[][], succProb: number[], start:
         if (!updated) break;                  // L7: O(1) early exit
     }
     return prob[end];                         // L8: O(1)
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProbability(n int, edges [][]int, succProb []float64, start int, end int) float64 {
+    prob := make([]float64, n)                    // L1: O(V) init
+    prob[start] = 1.0                             // L2: O(1) seed
+    for round := 0; round < n-1; round++ {        // L3: at most V-1 rounds
+        updated := false
+        for i, e := range edges {                 // L4: O(E) per round
+            u, v, p := e[0], e[1], succProb[i]
+            if prob[u]*p > prob[v] {              // L5: O(1) relax u->v
+                prob[v] = prob[u] * p; updated = true
+            }
+            if prob[v]*p > prob[u] {              // L6: O(1) relax v->u (undirected)
+                prob[u] = prob[v] * p; updated = true
+            }
+        }
+        if !updated { break }                     // L7: O(1) early exit
+    }
+    return prob[end]                              // L8: O(1)
 }
 ```
 </TabItem>
@@ -182,6 +210,38 @@ function maxProbability(n: number, edges: number[][], succProb: number[], start:
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 1514-path-with-maximum-probability-approach2.go for the full runnable program.
+// Core function uses container/heap with negated probability for max-heap behavior.
+func maxProbability(n int, edges [][]int, succProb []float64, start int, end int) float64 {
+    graph := make([][]struct{ v int; prob float64 }, n)
+    for i, e := range edges {                           // L2: O(E) build adjacency
+        u, v := e[0], e[1]
+        graph[u] = append(graph[u], struct{ v int; prob float64 }{v, succProb[i]})
+        graph[v] = append(graph[v], struct{ v int; prob float64 }{u, succProb[i]})
+    }
+    prob := make([]float64, n)
+    prob[start] = 1.0                                   // L4: O(1) seed
+    h := &MinHeap1514{{negP: -1.0, node: start}}
+    heap.Init(h)                                        // L5: O(1) seed heap
+    for h.Len() > 0 {                                   // L6: main loop
+        item := heap.Pop(h).(Item1514)
+        p, u := -item.negP, item.node                   // L7: O(log V) pop best prob
+        if p < prob[u] { continue }                     // L8: O(1) stale check
+        if u == end { return p }                        // L9: O(1) early exit
+        for _, edge := range graph[u] {                 // L10: O(deg(u)) neighbors
+            newP := p * edge.prob                       // L11: O(1) path prob
+            if newP > prob[edge.v] {                    // L12: O(1) improvement check
+                prob[edge.v] = newP                     // L13: O(1) update
+                heap.Push(h, Item1514{negP: -newP, node: edge.v})  // L14: O(log V) push
+            }
+        }
+    }
+    return prob[end]                                    // L15: O(1) result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -241,6 +301,9 @@ Pop (-0.25, 2), p=0.25: u==end -> return 0.25
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="path-with-maximum-probability-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="path-with-maximum-probability-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -360,6 +423,11 @@ console.assert(Math.abs(maxProbability(3, [[0,1],[1,2],[0,2]], [0.5,0.5,0.3], 0,
 console.assert(maxProbability(3, [[0,1]], [0.5], 0, 2) === 0.0);
 console.assert(Math.abs(maxProbability(2, [[0,1]], [0.9], 0, 1) - 0.9) < 1e-5);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// Uses modified Dijkstra (Approach 2). Full runnable program: 1514-path-with-maximum-probability-approach2.go
 ```
 </TabItem>
 </Tabs>

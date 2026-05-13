@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './152-maximum-product-subarray.py?raw';
 import practiceCodeTs from './152-maximum-product-subarray.ts?raw';
+import practiceCodeGo from './152-maximum-product-subarray.go?raw';
 import approach3PyCode from './152-maximum-product-subarray-approach3.py?raw';
 import approach3TsCode from './152-maximum-product-subarray-approach3.ts?raw';
+import approach3GoCode from './152-maximum-product-subarray-approach3.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 152 · [Link](https://leetcode.com/problems/maximum-product-subarray/) 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="maximum-product-subarray-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="maximum-product-subarray-go" />
   </TabItem>
 </Tabs>
 
@@ -67,6 +73,23 @@ function maxProduct(nums: number[]): number {
         }
     }
     return best;                                // L7: O(1)
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProduct(nums []int) int {
+    best := nums[0]                              // L1: O(1) init
+    for i := 0; i < len(nums); i++ {           // L2: outer loop, n iterations
+        prod := 1                               // L3: O(1) reset
+        for j := i; j < len(nums); j++ {       // L4: inner loop, n-i iterations
+            prod *= nums[j]                     // L5: O(1) multiply
+            if prod > best {
+                best = prod                     // L6: O(1) update
+            }
+        }
+    }
+    return best                                 // L7: O(1)
 }
 ```
 </TabItem>
@@ -118,6 +141,26 @@ function maxProduct(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxProduct(nums []int) int {
+    dpPrev := nums[0]
+    best := dpPrev
+    for k := 1; k < len(nums); k++ {
+        x := nums[k]
+        cand := dpPrev * x
+        if x > cand {
+            cand = x                             // WRONG: throws away the running min
+        }
+        dpPrev = cand
+        if dpPrev > best {
+            best = dpPrev
+        }
+    }
+    return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Counter-example:** `[-2, 3, -4]`. The correct answer is `24` (multiply all three). This wrong DP gives `3`:
@@ -165,6 +208,33 @@ function maxProduct(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxProduct(nums []int) int {
+    maxHere, minHere, best := nums[0], nums[0], nums[0]        // L1: O(1) init
+    for k := 1; k < len(nums); k++ {                           // L2: single pass, n-1 iters
+        x := nums[k]
+        if x < 0 {
+            maxHere, minHere = minHere, maxHere                // L3: O(1) swap on sign flip
+        }
+        if x > maxHere*x {                                     // L4: extend or restart max
+            maxHere = x
+        } else {
+            maxHere = maxHere * x
+        }
+        if x < minHere*x {                                     // L5: extend or restart min
+            minHere = x
+        } else {
+            minHere = minHere * x
+        }
+        if maxHere > best {
+            best = maxHere                                     // L6: track global best
+        }
+    }
+    return best                                                // L7: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -196,6 +266,9 @@ When `x < 0`, multiplying by `x` flips order: the previous max becomes the small
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="maximum-product-subarray-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="maximum-product-subarray-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -264,6 +337,59 @@ console.assert(maxProduct([0]) === 0);
 console.assert(maxProduct([-3]) === -3);
 console.assert(maxProduct([-2, -3]) === 6);
 console.log('all tests pass');
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func assert(condition bool, msgs ...string) {
+	if !condition {
+		msg := "assertion failed"
+		if len(msgs) > 0 {
+			msg = msgs[0]
+		}
+		panic(msg)
+	}
+}
+
+func maxProduct(nums []int) int {
+	maxHere, minHere, best := nums[0], nums[0], nums[0]
+	for k := 1; k < len(nums); k++ {
+		x := nums[k]
+		if x < 0 {
+			maxHere, minHere = minHere, maxHere
+		}
+		if x > maxHere*x {
+			maxHere = x
+		} else {
+			maxHere = maxHere * x
+		}
+		if x < minHere*x {
+			minHere = x
+		} else {
+			minHere = minHere * x
+		}
+		if maxHere > best {
+			best = maxHere
+		}
+	}
+	return best
+}
+
+func runTests() {
+	assert(maxProduct([]int{2, 3, -2, 4}) == 6)
+	assert(maxProduct([]int{-2, 0, -1}) == 0)
+	assert(maxProduct([]int{-2, 3, -4}) == 24)
+	assert(maxProduct([]int{0}) == 0)
+	assert(maxProduct([]int{-3}) == -3)
+	assert(maxProduct([]int{-2, -3}) == 6)
+	fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
 ```
 </TabItem>
 </Tabs>

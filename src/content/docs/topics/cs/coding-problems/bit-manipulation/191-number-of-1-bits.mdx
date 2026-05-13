@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './191-number-of-1-bits.py?raw';
 import practiceCodeTs from './191-number-of-1-bits.ts?raw';
+import practiceCodeGo from './191-number-of-1-bits.go?raw';
 import approach2PyCode from './191-number-of-1-bits-approach2.py?raw';
 import approach2TsCode from './191-number-of-1-bits-approach2.ts?raw';
+import approach2GoCode from './191-number-of-1-bits-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 191 · [Link](https://leetcode.com/problems/number-of-1-bits/) · *Easy
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="number-of-1-bits-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="number-of-1-bits-go" />
   </TabItem>
 </Tabs>
 
@@ -59,6 +65,18 @@ function hammingWeight(n: number): number {
         n >>>= 1;                   // L3: O(1), shift right (unsigned)
     }
     return count;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func hammingWeight(n uint32) int {
+    count := 0
+    for n != 0 {                    // L1: loop up to B iterations (B = bit width)
+        count += int(n & 1)         // L2: O(1), test LSB
+        n >>= 1                     // L3: O(1), shift right
+    }
+    return count
 }
 ```
 </TabItem>
@@ -107,6 +125,18 @@ function hammingWeight(n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func hammingWeight(n uint32) int {
+    count := 0
+    for n != 0 {                    // L1: loop popcount(n) times
+        n &= n - 1                  // L2: O(1), clear lowest set bit
+        count++                     // L3: O(1)
+    }
+    return count
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -134,6 +164,9 @@ Faster than Approach 1 when the integer has few set bits.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="number-of-1-bits-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="number-of-1-bits-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -216,6 +249,18 @@ console.assert(hammingWeight(4294967295) === 32);
 console.assert(hammingWeight(1) === 1);
 console.assert(hammingWeight(183) === 6);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func hammingWeight(n uint32) int {
+    count := 0
+    for n != 0 {
+        n &= n - 1
+        count++
+    }
+    return count
+}
 ```
 </TabItem>
 </Tabs>

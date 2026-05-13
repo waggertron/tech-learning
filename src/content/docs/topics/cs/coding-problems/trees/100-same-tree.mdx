@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './100-same-tree.py?raw';
 import practiceCodeTs from './100-same-tree.ts?raw';
+import practiceCodeGo from './100-same-tree.go?raw';
 import approach2PyCode from './100-same-tree-approach2.py?raw';
 import approach2TsCode from './100-same-tree-approach2.ts?raw';
+import approach2GoCode from './100-same-tree-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 100 · [Link](https://leetcode.com/problems/same-tree/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="same-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="same-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -69,6 +75,27 @@ function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
     return (p.val === q.val                         // L3: O(1) value compare
          && isSameTree(p.left, q.left)              // L4: recurse left
          && isSameTree(p.right, q.right));          // L5: recurse right
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+    if p == nil && q == nil {
+        return true                  // L1: both null = same
+    }
+    if p == nil || q == nil {
+        return false                 // L2: one null = different structure
+    }
+    return p.Val == q.Val &&         // L3: O(1) value compare
+        isSameTree(p.Left, q.Left) && // L4: recurse left
+        isSameTree(p.Right, q.Right)  // L5: recurse right
 }
 ```
 </TabItem>
@@ -128,6 +155,35 @@ function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+type pair struct{ a, b *TreeNode }
+
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+    queue := []pair{{p, q}}                        // L1: O(1) init
+    for len(queue) > 0 {
+        pr := queue[0]
+        queue = queue[1:]                          // L2: O(1) dequeue
+        a, b := pr.a, pr.b
+        if a == nil && b == nil {
+            continue                               // L3: both null, OK
+        }
+        if a == nil || b == nil || a.Val != b.Val {
+            return false                           // L4: O(1) check
+        }
+        queue = append(queue, pair{a.Left, b.Left})   // L5: O(1) enqueue
+        queue = append(queue, pair{a.Right, b.Right}) // L6: O(1) enqueue
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -154,6 +210,9 @@ Same O(n) total; queue holds at most O(w) pairs where w is the max tree width.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="same-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="same-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

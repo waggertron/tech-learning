@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './002-add-two-numbers.py?raw';
 import practiceCodeTs from './002-add-two-numbers.ts?raw';
+import practiceCodeGo from './002-add-two-numbers.go?raw';
 import approach2TsCode from './002-add-two-numbers-approach2.ts?raw';
+import approach2GoCode from './002-add-two-numbers-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 2 · [Link](https://leetcode.com/problems/add-two-numbers/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="add-two-numbers-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="add-two-numbers-go" />
   </TabItem>
 </Tabs>
 
@@ -100,6 +106,38 @@ function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | nul
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+    decode := func(head *ListNode) int { // L1: helper, O(n) total
+        num, place := 0, 1
+        for head != nil {
+            num += head.Val * place      // L2: O(1) per digit
+            place *= 10
+            head = head.Next
+        }
+        return num
+    }
+    total := decode(l1) + decode(l2)    // L3: O(n + m) combined
+    if total == 0 {
+        return &ListNode{Val: 0}
+    }
+    dummy := &ListNode{}
+    tail := dummy
+    for total > 0 {
+        tail.Next = &ListNode{Val: total % 10} // L4: O(1) per output digit
+        tail = tail.Next
+        total /= 10
+    }
+    return dummy.Next
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -163,6 +201,33 @@ function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | nul
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+    dummy := &ListNode{}
+    tail := dummy
+    carry := 0
+    for l1 != nil || l2 != nil || carry != 0 { // L1: up to max(n,m)+1 times
+        v := carry                              // L2: O(1) reset accumulator
+        if l1 != nil {
+            v += l1.Val; l1 = l1.Next          // L3: O(1) consume l1 digit
+        }
+        if l2 != nil {
+            v += l2.Val; l2 = l2.Next          // L4: O(1) consume l2 digit
+        }
+        carry = v / 10                          // L5: O(1) split carry
+        tail.Next = &ListNode{Val: v % 10}      // L6: O(1) append to output
+        tail = tail.Next
+    }
+    return dummy.Next
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -187,6 +252,9 @@ Every line is O(1) per iteration; the loop runs at most max(n, m) + 1 times (the
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="add-two-numbers-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="add-two-numbers-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -229,6 +297,31 @@ function addTwoNumbers(
     const node = new ListNode(v % 10);      // L5: O(1) allocate output node
     node.next = addTwoNumbers(nxt1, nxt2, Math.floor(v / 10));  // L6: recurse
     return node;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+    return addHelper(l1, l2, 0)
+}
+
+func addHelper(l1, l2 *ListNode, carry int) *ListNode {
+    if l1 == nil && l2 == nil && carry == 0 { // L1: base case, O(1)
+        return nil
+    }
+    v := carry                                 // L2: O(1)
+    var nxt1, nxt2 *ListNode
+    if l1 != nil { v += l1.Val; nxt1 = l1.Next } // L3: O(1)
+    if l2 != nil { v += l2.Val; nxt2 = l2.Next } // L4: O(1)
+    node := &ListNode{Val: v % 10}             // L5: O(1) allocate output node
+    node.Next = addHelper(nxt1, nxt2, v/10)   // L6: recurse
+    return node
 }
 ```
 </TabItem>

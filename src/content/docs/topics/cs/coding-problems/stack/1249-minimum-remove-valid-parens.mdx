@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1249-minimum-remove-valid-parens.py?raw';
 import practiceCodeTs from './1249-minimum-remove-valid-parens.ts?raw';
+import practiceCodeGo from './1249-minimum-remove-valid-parens.go?raw';
 import approach2TsCode from './1249-minimum-remove-valid-parens-approach2.ts?raw';
+import approach2GoCode from './1249-minimum-remove-valid-parens-approach2.go?raw';
 
 ## Problem
 
@@ -37,6 +40,9 @@ LeetCode 1249 · [Link](https://leetcode.com/problems/minimum-remove-to-make-val
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="minimum-remove-valid-parens-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="minimum-remove-valid-parens-go" />
   </TabItem>
 </Tabs>
 
@@ -103,6 +109,33 @@ function minRemoveToMakeValid(s: string): string {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func minRemoveToMakeValid(s string) string {
+    stack := []int{}           // L1: indices of unmatched '('
+    remove := map[int]bool{}   // L2: indices to remove
+
+    for i, ch := range s {     // L3: n iterations (pass 1)
+        if ch == '(' {
+            stack = append(stack, i)      // L4: O(1) push index of '('
+        } else if ch == ')' {
+            if len(stack) > 0 {
+                stack = stack[:len(stack)-1]  // L5: O(1) matched pair
+            } else {
+                remove[i] = true          // L6: O(1) unmatched ')'
+            }
+        }
+    }
+    for _, i := range stack { remove[i] = true } // L7: remaining '(' unmatched
+
+    result := []byte{}
+    for i := 0; i < len(s); i++ {       // L8: n iterations (pass 2)
+        if !remove[i] { result = append(result, s[i]) } // L9-L10: O(1) keep
+    }
+    return string(result)                // L11: O(n) convert
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -128,6 +161,9 @@ function minRemoveToMakeValid(s: string): string {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="minimum-remove-valid-parens-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="minimum-remove-valid-parens-approach2-go" />
   </TabItem>
 </Tabs>
 

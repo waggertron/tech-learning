@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './146-lru-cache.py?raw';
 import practiceCodeTs from './146-lru-cache.ts?raw';
+import practiceCodeGo from './146-lru-cache.go?raw';
 import approach3TsCode from './146-lru-cache-approach3.ts?raw';
+import approach3GoCode from './146-lru-cache-approach3.go?raw';
 
 ## Problem
 
@@ -43,6 +46,9 @@ LeetCode 146 · [Link](https://leetcode.com/problems/lru-cache/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="lru-cache-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="lru-cache-go" />
   </TabItem>
 </Tabs>
 

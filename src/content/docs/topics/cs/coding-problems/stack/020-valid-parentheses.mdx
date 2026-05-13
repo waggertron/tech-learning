@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './020-valid-parentheses.py?raw';
 import practiceCodeTs from './020-valid-parentheses.ts?raw';
+import practiceCodeGo from './020-valid-parentheses.go?raw';
 import approach2TsCode from './020-valid-parentheses-approach2.ts?raw';
+import approach2GoCode from './020-valid-parentheses-approach2.go?raw';
 import approach3TsCode from './020-valid-parentheses-approach3.ts?raw';
+import approach3GoCode from './020-valid-parentheses-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 20 · [Link](https://leetcode.com/problems/valid-parentheses/) · *Easy
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="valid-parentheses-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="valid-parentheses-go" />
   </TabItem>
 </Tabs>
 
@@ -59,6 +66,18 @@ function isValid(s: string): boolean {
         s = s.replace('()', '').replace('[]', '').replace('{}', '');     // L2: O(n) per replace
     }
     return s === '';                                                      // L3: O(n) comparison
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func isValid(s string) bool {
+    for strings.Contains(s, "()") || strings.Contains(s, "[]") || strings.Contains(s, "{}") {
+        s = strings.ReplaceAll(s, "()", "")
+        s = strings.ReplaceAll(s, "[]", "")
+        s = strings.ReplaceAll(s, "{}", "")
+    }
+    return s == ""
 }
 ```
 </TabItem>
@@ -124,6 +143,29 @@ function isValid(s: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isValid(s string) bool {
+    stack := []byte{}                          // L1: O(1) empty stack
+    for i := 0; i < len(s); i++ {             // L2: n iterations
+        ch := s[i]
+        if ch == '(' || ch == '[' || ch == '{' { // L3: O(1) check
+            stack = append(stack, ch)          // L4: O(1) push
+        } else {
+            if len(stack) == 0 { return false } // L5: O(1) empty check
+            top := stack[len(stack)-1]
+            stack = stack[:len(stack)-1]       // L6: O(1) pop
+            if (ch == ')' && top != '(') ||
+                (ch == ']' && top != '[') ||
+                (ch == '}' && top != '{') {    // L7: O(1) type check
+                return false
+            }
+        }
+    }
+    return len(stack) == 0                     // L8: O(1) all opens matched
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -151,6 +193,9 @@ Each character is pushed or popped exactly once.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="valid-parentheses-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="valid-parentheses-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -189,6 +234,26 @@ function isValid(s: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isValid(s string) bool {
+    pairs := map[byte]byte{')': '(', ']': '[', '}': '{'} // L1: O(1) map
+    stack := []byte{}                                      // L2: O(1)
+    for i := 0; i < len(s); i++ {                         // L3: n iterations
+        ch := s[i]
+        if ch == '(' || ch == '[' || ch == '{' {           // L4: O(1) check
+            stack = append(stack, ch)                      // L5: O(1) push
+        } else {
+            if len(stack) == 0 || stack[len(stack)-1] != pairs[ch] { // L6: O(1) pop+lookup
+                return false
+            }
+            stack = stack[:len(stack)-1]
+        }
+    }
+    return len(stack) == 0                                 // L7: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -216,6 +281,9 @@ Same O(n) work, but the pair-map removes all branching.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="valid-parentheses-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="valid-parentheses-approach3-go" />
   </TabItem>
 </Tabs>
 

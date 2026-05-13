@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './072-edit-distance.py?raw';
 import practiceCodeTs from './072-edit-distance.ts?raw';
+import practiceCodeGo from './072-edit-distance.go?raw';
 import approach2PyCode from './072-edit-distance-approach2.py?raw';
 import approach2TsCode from './072-edit-distance-approach2.ts?raw';
+import approach2GoCode from './072-edit-distance-approach2.go?raw';
 import approach3PyCode from './072-edit-distance-approach3.py?raw';
 import approach3TsCode from './072-edit-distance-approach3.ts?raw';
+import approach3GoCode from './072-edit-distance-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 72 · [Link](https://leetcode.com/problems/edit-distance/) · *Hard*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="edit-distance-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="edit-distance-go" />
   </TabItem>
 </Tabs>
 
@@ -73,6 +80,24 @@ function minDistance(word1: string, word2: string): number {
         return 1 + Math.min(f(i + 1, j), f(i, j + 1), f(i + 1, j + 1));  // L6: three calls
     }
     return f(0, 0);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func minDistance(word1 string, word2 string) int {
+    min3 := func(a, b, c int) int {
+        if a < b { if a < c { return a }; return c }
+        if b < c { return b }; return c
+    }
+    var f func(i, j int) int
+    f = func(i, j int) int {
+        if i == len(word1) { return len(word2) - j } // L2: base: word1 exhausted
+        if j == len(word2) { return len(word1) - i } // L3: base: word2 exhausted
+        if word1[i] == word2[j] { return f(i+1, j+1) } // L4+L5: char match
+        return 1 + min3(f(i+1, j), f(i, j+1), f(i+1, j+1)) // L6: three recursive calls
+    }
+    return f(0, 0)
 }
 ```
 </TabItem>
@@ -165,6 +190,9 @@ Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pair
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="edit-distance-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="edit-distance-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Bottom-up 2-D DP (canonical)
@@ -212,6 +240,33 @@ function minDistance(word1: string, word2: string): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func minDistance(word1 string, word2 string) int {
+    min3 := func(a, b, c int) int {
+        if a < b { if a < c { return a }; return c }
+        if b < c { return b }; return c
+    }
+    m, n := len(word1), len(word2)
+    dp := make([][]int, m+1)
+    for i := range dp {
+        dp[i] = make([]int, n+1)
+        dp[i][0] = i                              // L3: O(m) base: word2 empty
+    }
+    for j := 0; j <= n; j++ { dp[0][j] = j }    // L4: O(n) base: word1 empty
+    for i := 1; i <= m; i++ {                    // L5: outer loop O(m)
+        for j := 1; j <= n; j++ {                // L6: inner loop O(n)
+            if word1[i-1] == word2[j-1] {
+                dp[i][j] = dp[i-1][j-1]          // L8: O(1) diagonal copy
+            } else {
+                dp[i][j] = 1 + min3(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) // L9
+            }
+        }
+    }
+    return dp[m][n]                              // L10: O(1) answer
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -240,6 +295,9 @@ Every cell of the DP table is filled in O(1) via three table lookups. The double
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="edit-distance-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="edit-distance-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -318,6 +376,44 @@ console.assert(minDistance("abc", "") === 3);
 console.assert(minDistance("", "abc") === 3);
 console.assert(minDistance("abc", "abc") === 0);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func minDistance(word1 string, word2 string) int {
+    min3 := func(a, b, c int) int {
+        if a < b { if a < c { return a }; return c }
+        if b < c { return b }; return c
+    }
+    m, n := len(word1), len(word2)
+    dp := make([][]int, m+1)
+    for i := range dp { dp[i] = make([]int, n+1); dp[i][0] = i }
+    for j := 0; j <= n; j++ { dp[0][j] = j }
+    for i := 1; i <= m; i++ {
+        for j := 1; j <= n; j++ {
+            if word1[i-1] == word2[j-1] {
+                dp[i][j] = dp[i-1][j-1]
+            } else {
+                dp[i][j] = 1 + min3(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+            }
+        }
+    }
+    return dp[m][n]
+}
+
+func main() {
+    if minDistance("horse", "ros") != 3 { panic("fail") }
+    if minDistance("intention", "execution") != 5 { panic("fail") }
+    if minDistance("", "") != 0 { panic("fail") }
+    if minDistance("abc", "") != 3 { panic("fail") }
+    if minDistance("", "abc") != 3 { panic("fail") }
+    if minDistance("abc", "abc") != 0 { panic("fail") }
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

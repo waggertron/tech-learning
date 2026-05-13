@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1046-last-stone-weight.py?raw';
 import practiceCodeTs from './1046-last-stone-weight.ts?raw';
+import practiceCodeGo from './1046-last-stone-weight.go?raw';
 import approach2TsCode from './1046-last-stone-weight-approach2.ts?raw';
+import approach2GoCode from './1046-last-stone-weight-approach2.go?raw';
 
 ## Problem
 
@@ -89,6 +92,9 @@ Returns `0`. Notice how the two pushed `1`s collide in the next round, an emerge
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="last-stone-weight-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="last-stone-weight-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, sort each round
@@ -120,6 +126,27 @@ function lastStoneWeight(stones: number[]): number {
             arr.push(y - x);         // L5: O(1) amortized
     }
     return arr.length > 0 ? arr[0] : 0;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "sort"
+
+func lastStoneWeight(stones []int) int {
+    arr := make([]int, len(stones))
+    copy(arr, stones)
+    for len(arr) > 1 {           // L1: outer loop, runs up to n-1 times
+        sort.Ints(arr)           // L2: O(n log n) per round
+        y := arr[len(arr)-1]    // L3: O(1) pop from end
+        x := arr[len(arr)-2]    // L4: O(1) pop from end
+        arr = arr[:len(arr)-2]
+        if x != y {
+            arr = append(arr, y-x) // L5: O(1) amortized
+        }
+    }
+    if len(arr) > 0 { return arr[0] }
+    return 0
 }
 ```
 </TabItem>
@@ -211,6 +238,54 @@ function lastStoneWeight(stones: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import (
+    "container/heap"
+    "fmt"
+)
+
+type MaxHeap []int
+func (h MaxHeap) Len() int            { return len(h) }
+func (h MaxHeap) Less(i, j int) bool  { return h[i] > h[j] }
+func (h MaxHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *MaxHeap) Push(x any)         { *h = append(*h, x.(int)) }
+func (h *MaxHeap) Pop() any {
+    old := *h; n := len(old); x := old[n-1]; *h = old[:n-1]; return x
+}
+
+func lastStoneWeight(stones []int) int {
+    h := make(MaxHeap, len(stones))
+    copy(h, stones)
+    heap.Init(&h)                        // L1+L2: O(n) build max-heap
+    for h.Len() > 1 {                    // L3: outer loop, up to n-1 rounds
+        y := heap.Pop(&h).(int)          // L4: O(log n) pop largest
+        x := heap.Pop(&h).(int)          // L5: O(log n) pop second largest
+        if x != y { heap.Push(&h, y-x) } // L6: O(log n) push remainder
+    }
+    if h.Len() > 0 { return h[0] }
+    return 0
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition { msg := "assertion failed"; if len(msgs) > 0 { msg = msgs[0] }; panic(msg) }
+}
+
+func runTests() {
+    assert(lastStoneWeight([]int{2, 7, 4, 1, 8, 1}) == 1)
+    assert(lastStoneWeight([]int{1}) == 1)
+    assert(lastStoneWeight([]int{31, 26, 33, 21, 40}) == 9)
+    assert(lastStoneWeight([]int{9, 3, 2, 10}) == 0)
+    assert(lastStoneWeight([]int{2, 2}) == 0)
+    assert(lastStoneWeight([]int{1, 3}) == 2)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -241,6 +316,9 @@ Since we do n-1 rounds and each round is O(log n), the running total is **O(n lo
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="last-stone-weight-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="last-stone-weight-approach2-go" />
   </TabItem>
 </Tabs>
 

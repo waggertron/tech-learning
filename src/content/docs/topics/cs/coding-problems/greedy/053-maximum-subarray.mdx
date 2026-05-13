@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './053-maximum-subarray.py?raw';
 import practiceCodeTs from './053-maximum-subarray.ts?raw';
+import practiceCodeGo from './053-maximum-subarray.go?raw';
 import approach2PyCode from './053-maximum-subarray-approach2.py?raw';
 import approach2TsCode from './053-maximum-subarray-approach2.ts?raw';
+import approach2GoCode from './053-maximum-subarray-approach2.go?raw';
 import approach3PyCode from './053-maximum-subarray-approach3.py?raw';
 import approach3TsCode from './053-maximum-subarray-approach3.ts?raw';
+import approach3GoCode from './053-maximum-subarray-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 53 · [Link](https://leetcode.com/problems/maximum-subarray/) · *Mediu
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="maximum-subarray-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="maximum-subarray-go" />
   </TabItem>
 </Tabs>
 
@@ -67,6 +74,22 @@ function maxSubarray(nums: number[]): number {
         }
     }
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxSubArray(nums []int) int {
+    max := func(a, b int) int { if a > b { return a }; return b }
+    best := nums[0]                      // L1: O(1)
+    for i := 0; i < len(nums); i++ {    // L2: outer loop, n iterations
+        total := 0
+        for j := i; j < len(nums); j++ { // L3: inner loop, n-i iterations
+            total += nums[j]             // L4: O(1)
+            best = max(best, total)      // L5: O(1)
+        }
+    }
+    return best
 }
 ```
 </TabItem>
@@ -143,6 +166,34 @@ function maxSubarray(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxSubArray(nums []int) int {
+    max := func(a, b int) int { if a > b { return a }; return b }
+    var helper func(lo, hi int) int
+    helper = func(lo, hi int) int {                     // L1: called O(n) times total
+        if lo == hi { return nums[lo] }                 // L2: O(1) base case
+        mid := (lo + hi) / 2                            // L3: O(1)
+        leftMax := helper(lo, mid)                      // L4: recurse left half
+        rightMax := helper(mid+1, hi)                   // L5: recurse right half
+        leftSuffix := -1 << 62
+        total := 0
+        for i := mid; i >= lo; i-- {                    // L6: scan left half O(n/2)
+            total += nums[i]
+            leftSuffix = max(leftSuffix, total)
+        }
+        rightPrefix := -1 << 62
+        total = 0
+        for i := mid + 1; i <= hi; i++ {                // L7: scan right half O(n/2)
+            total += nums[i]
+            rightPrefix = max(rightPrefix, total)
+        }
+        return max(max(leftMax, rightMax), leftSuffix+rightPrefix)
+    }
+    return helper(0, len(nums)-1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -168,6 +219,9 @@ The recurrence is T(n) = 2T(n/2) + O(n), which solves to O(n log n) by the Maste
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="maximum-subarray-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="maximum-subarray-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -200,6 +254,20 @@ function maxSubarray(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func maxSubArray(nums []int) int {
+    max := func(a, b int) int { if a > b { return a }; return b }
+    best := nums[0]                       // L1: O(1)
+    cur := nums[0]
+    for _, x := range nums[1:] {          // L2: single pass, n-1 iterations
+        cur = max(x, cur+x)               // L3: greedy choice: extend or restart
+        best = max(best, cur)             // L4: track global best
+    }
+    return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -229,6 +297,9 @@ At each position, the best subarray ending here is either "extend the previous b
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="maximum-subarray-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="maximum-subarray-approach3-go" />
+  </TabItem>
 </Tabs>
 
 ## Summary
@@ -244,6 +315,20 @@ Kadane's is the canonical answer. Same template: Maximum Product Subarray (152) 
 ## Test cases
 
 <Tabs>
+<TabItem label="Go">
+```go
+func maxSubArray(nums []int) int {
+    max := func(a, b int) int { if a > b { return a }; return b }
+    best := nums[0]
+    cur := nums[0]
+    for _, x := range nums[1:] {
+        cur = max(x, cur+x)
+        best = max(best, cur)
+    }
+    return best
+}
+```
+</TabItem>
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_053.py and run.

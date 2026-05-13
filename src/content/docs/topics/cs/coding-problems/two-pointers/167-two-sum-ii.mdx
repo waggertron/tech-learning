@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './167-two-sum-ii.py?raw';
 import practiceCodeTs from './167-two-sum-ii.ts?raw';
+import practiceCodeGo from './167-two-sum-ii.go?raw';
 import approach2PyCode from './167-two-sum-ii-approach2.py?raw';
 import approach2TsCode from './167-two-sum-ii-approach2.ts?raw';
+import approach2GoCode from './167-two-sum-ii-approach2.go?raw';
 import approach3PyCode from './167-two-sum-ii-approach3.py?raw';
 import approach3TsCode from './167-two-sum-ii-approach3.ts?raw';
+import approach3GoCode from './167-two-sum-ii-approach3.go?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 167 · [Link](https://leetcode.com/problems/two-sum-ii-input-array-is-s
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="two-sum-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="two-sum-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -66,6 +73,21 @@ function twoSum(numbers: number[], target: number): number[] {
         }
     }
     return [];
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func twoSum(numbers []int, target int) []int {
+    n := len(numbers)                                   // L1: O(1)
+    for i := 0; i < n; i++ {                           // L2: outer loop, n iterations
+        for j := i + 1; j < n; j++ {                   // L3: inner loop
+            if numbers[i]+numbers[j] == target {        // L4: O(1) check
+                return []int{i + 1, j + 1}              // L5: O(1) return (1-indexed)
+            }
+        }
+    }
+    return []int{}
 }
 ```
 </TabItem>
@@ -129,6 +151,21 @@ function twoSum(numbers: number[], target: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func twoSum(numbers []int, target int) []int {
+    n := len(numbers)                                   // L1: O(1)
+    for i := 0; i < n; i++ {                           // L2: outer loop, n iterations
+        need := target - numbers[i]                     // L3: O(1) complement
+        j := sort.SearchInts(numbers[i+1:], need) + i + 1 // L4: O(log n) binary search
+        if j < n && numbers[j] == need {                // L5: O(1) verify
+            return []int{i + 1, j + 1}                  // L6: O(1) return
+        }
+    }
+    return []int{}
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -155,6 +192,9 @@ Uses the sort structure, but not optimally.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="two-sum-ii-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="two-sum-ii-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -193,6 +233,25 @@ function twoSum(numbers: number[], target: number): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func twoSum(numbers []int, target int) []int {
+    l, r := 0, len(numbers)-1             // L1: O(1) init pointers
+    for l < r {                           // L2: at most n iterations
+        s := numbers[l] + numbers[r]      // L3: O(1) sum
+        if s == target {                  // L4: O(1) check
+            return []int{l + 1, r + 1}    // L5: O(1) return (1-indexed)
+        }
+        if s < target {                   // L6: O(1)
+            l++                           // L7: O(1) advance left
+        } else {
+            r--                           // L8: O(1) advance right
+        }
+    }
+    return []int{}
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -223,6 +282,9 @@ At any point, `numbers[l] + numbers[r]` is the sum under consideration. If it's 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="two-sum-ii-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="two-sum-ii-approach3-go" />
   </TabItem>
 </Tabs>
 

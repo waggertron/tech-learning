@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1448-count-good-nodes-in-binary-tree.py?raw';
 import practiceCodeTs from './1448-count-good-nodes-in-binary-tree.ts?raw';
+import practiceCodeGo from './1448-count-good-nodes-in-binary-tree.go?raw';
 import approach2PyCode from './1448-count-good-nodes-in-binary-tree-approach2.py?raw';
 import approach2TsCode from './1448-count-good-nodes-in-binary-tree-approach2.ts?raw';
+import approach2GoCode from './1448-count-good-nodes-in-binary-tree-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 1448 · [Link](https://leetcode.com/problems/count-good-nodes-in-binary
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="count-good-nodes-in-binary-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="count-good-nodes-in-binary-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -121,6 +127,34 @@ function goodNodes(root: TreeNode | null): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func goodNodes(root *TreeNode) int {
+    var dfs func(*TreeNode, int) int
+    dfs = func(node *TreeNode, maxSoFar int) int {
+        if node == nil {
+            return 0
+        }
+        good := 0
+        if node.Val >= maxSoFar {
+            good = 1                                       // L1: O(1) check
+        }
+        newMax := maxSoFar
+        if node.Val > newMax {
+            newMax = node.Val                              // L2: O(1) update
+        }
+        return good + dfs(node.Left, newMax) + dfs(node.Right, newMax)  // L3: recurse
+    }
+    return dfs(root, -1<<31)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -150,6 +184,9 @@ Carry a running invariant (max, min, sum, seen-set) as a parameter. Works for ev
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="count-good-nodes-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="count-good-nodes-approach2-go" />
   </TabItem>
 </Tabs>
 

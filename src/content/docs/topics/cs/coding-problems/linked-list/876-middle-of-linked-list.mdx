@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './876-middle-of-linked-list.py?raw';
 import practiceCodeTs from './876-middle-of-linked-list.ts?raw';
+import practiceCodeGo from './876-middle-of-linked-list.go?raw';
 import approach2TsCode from './876-middle-of-linked-list-approach2.ts?raw';
+import approach2GoCode from './876-middle-of-linked-list-approach2.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 876 · [Link](https://leetcode.com/problems/middle-of-the-linked-list/)
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="middle-of-linked-list-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="middle-of-linked-list-go" />
   </TabItem>
 </Tabs>
 

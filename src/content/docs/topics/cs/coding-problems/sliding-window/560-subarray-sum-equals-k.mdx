@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './560-subarray-sum-equals-k.py?raw';
 import practiceCodeTs from './560-subarray-sum-equals-k.ts?raw';
+import practiceCodeGo from './560-subarray-sum-equals-k.go?raw';
 import approach2TsCode from './560-subarray-sum-equals-k-approach2.ts?raw';
+import approach2GoCode from './560-subarray-sum-equals-k-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 560 · [Link](https://leetcode.com/problems/subarray-sum-equals-k/) · 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="subarray-sum-equals-k-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="subarray-sum-equals-k-go" />
   </TabItem>
 </Tabs>
 
@@ -70,6 +76,24 @@ function subarraySum(nums: number[], k: number): number {
         }
     }
     return count;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func subarraySum(nums []int, k int) int {
+	count := 0
+	n := len(nums)
+	for i := 0; i < n; i++ {              // L1: outer loop, n iterations
+		total := 0
+		for j := i; j < n; j++ {         // L2: inner loop, n-i iterations
+			total += nums[j]              // L3: O(1) accumulate
+			if total == k {              // L4: O(1) check
+				count++                  // L5: O(1)
+			}
+		}
+	}
+	return count
 }
 ```
 </TabItem>
@@ -128,6 +152,22 @@ function subarraySum(nums: number[], k: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func subarraySum(nums []int, k int) int {
+	count := make(map[int]int)    // L1: O(1)
+	count[0] = 1                  // L2: O(1), seed for subarrays starting at index 0
+	prefix := 0                   // L3: O(1)
+	result := 0                   // L4: O(1)
+	for _, x := range nums {      // L5: loop, n iterations
+		prefix += x               // L6: O(1) extend prefix sum
+		result += count[prefix-k] // L7: O(1) map lookup
+		count[prefix]++           // L8: O(1) record
+	}
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -170,6 +210,9 @@ return 2
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="subarray-sum-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="subarray-sum-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -234,6 +277,21 @@ console.assert(subarraySum([1], 1) === 1);
 console.assert(subarraySum([-1, -1, 1], 0) === 1);
 console.assert(subarraySum([0, 0, 0, 0], 0) === 10);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func subarraySum(nums []int, k int) int {
+	count := make(map[int]int)
+	count[0] = 1
+	prefix, result := 0, 0
+	for _, x := range nums {
+		prefix += x
+		result += count[prefix-k]
+		count[prefix]++
+	}
+	return result
+}
 ```
 </TabItem>
 </Tabs>

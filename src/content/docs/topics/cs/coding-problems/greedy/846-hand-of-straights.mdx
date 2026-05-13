@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './846-hand-of-straights.py?raw';
 import practiceCodeTs from './846-hand-of-straights.ts?raw';
+import practiceCodeGo from './846-hand-of-straights.go?raw';
 import approach2PyCode from './846-hand-of-straights-approach2.py?raw';
 import approach2TsCode from './846-hand-of-straights-approach2.ts?raw';
+import approach2GoCode from './846-hand-of-straights-approach2.go?raw';
 import approach3PyCode from './846-hand-of-straights-approach3.py?raw';
 import approach3TsCode from './846-hand-of-straights-approach3.ts?raw';
+import approach3GoCode from './846-hand-of-straights-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 846 · [Link](https://leetcode.com/problems/hand-of-straights/) · *Med
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="hand-of-straights-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="hand-of-straights-go" />
   </TabItem>
 </Tabs>
 
@@ -91,6 +98,38 @@ function isNStraightHand(hand: number[], groupSize: number): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isNStraightHand(hand []int, groupSize int) bool {
+    if len(hand)%groupSize != 0 { return false }
+    if len(hand) == 0 { return true }
+    n := len(hand)
+    var comb func(start, k int, chosen []int) bool
+    comb = func(start, k int, chosen []int) bool {
+        if k == 0 {
+            group := make([]int, len(chosen))
+            copy(group, chosen)
+            sort.Ints(group)                                        // L1: C(n, k) groups
+            for i := 1; i < len(group); i++ {
+                if group[i]-group[i-1] != 1 { return false }
+            }
+            var rem []int
+            used := map[int]bool{}
+            for _, idx := range chosen { used[idx] = true }
+            for i := 0; i < n; i++ {
+                if !used[i] { rem = append(rem, hand[i]) }
+            }
+            return isNStraightHand(rem, groupSize)                  // L2: recurse on rest
+        }
+        for i := start; i <= n-k; i++ {
+            if comb(i+1, k-1, append(chosen, i)) { return true }
+        }
+        return false
+    }
+    return comb(0, groupSize, nil)
+}
+```
+</TabItem>
 </Tabs>
 
 Each level tries C(n, k) groups; the recursion has n/k levels. Total combinatorial blow-up. Skip.
@@ -143,6 +182,27 @@ function isNStraightHand(hand: number[], groupSize: number): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isNStraightHand(hand []int, groupSize int) bool {
+    if len(hand)%groupSize != 0 { return false }                    // L1: O(1) quick reject
+    counts := make(map[int]int)
+    for _, v := range hand { counts[v]++ }                          // L2: O(n)
+    keys := make([]int, 0, len(counts))
+    for k := range counts { keys = append(keys, k) }
+    sort.Ints(keys)                                                 // L3: O(u log u)
+    for _, x := range keys {
+        c := counts[x]                                              // L4: O(1)
+        if c == 0 { continue }
+        for k := 0; k < groupSize; k++ {                           // L5: O(group_size) per value
+            if counts[x+k] < c { return false }                    // L6: O(1)
+            counts[x+k] -= c                                       // L7: O(1)
+        }
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -169,6 +229,9 @@ Sorting the distinct values is O(u log u) where u ≤ n, so O(n log n). The inne
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="hand-of-straights-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="hand-of-straights-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -224,6 +287,28 @@ function isNStraightHandHeap(hand: number[], groupSize: number): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isNStraightHandHeap(hand []int, groupSize int) bool {
+    if len(hand)%groupSize != 0 { return false }                    // L1: O(1)
+    counts := make(map[int]int)
+    for _, v := range hand { counts[v]++ }                          // L2: O(n)
+    keys := make([]int, 0, len(counts))
+    for k := range counts { keys = append(keys, k) }
+    sort.Ints(keys)                                                 // L3: O(u)
+    ki := 0
+    for ki < len(keys) {                                            // L5: outer loop
+        x := keys[ki]
+        if counts[x] == 0 { ki++; continue }                       // L7: skip exhausted
+        for k := 0; k < groupSize; k++ {                           // L8: O(group_size) per start
+            if counts[x+k] == 0 { return false }
+            counts[x+k]--                                          // L9: O(1)
+        }
+    }
+    return true
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -252,6 +337,9 @@ Heap pops cost O(log u) and happen at most u times; consumption loops cost O(gro
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="hand-of-straights-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="hand-of-straights-approach3-go" />
+  </TabItem>
 </Tabs>
 
 ## Summary
@@ -267,6 +355,27 @@ The greedy choice, always start the next group from the smallest remaining value
 ## Test cases
 
 <Tabs>
+<TabItem label="Go">
+```go
+func isNStraightHand(hand []int, groupSize int) bool {
+    if len(hand)%groupSize != 0 { return false }
+    counts := make(map[int]int)
+    for _, v := range hand { counts[v]++ }
+    keys := make([]int, 0, len(counts))
+    for k := range counts { keys = append(keys, k) }
+    sort.Ints(keys)
+    for _, x := range keys {
+        c := counts[x]
+        if c == 0 { continue }
+        for k := 0; k < groupSize; k++ {
+            if counts[x+k] < c { return false }
+            counts[x+k] -= c
+        }
+    }
+    return true
+}
+```
+</TabItem>
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_846.py and run.

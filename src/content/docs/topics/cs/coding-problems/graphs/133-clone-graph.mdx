@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './133-clone-graph.py?raw';
 import practiceCodeTs from './133-clone-graph.ts?raw';
+import practiceCodeGo from './133-clone-graph.go?raw';
 import approach2PyCode from './133-clone-graph-approach2.py?raw';
 import approach2TsCode from './133-clone-graph-approach2.ts?raw';
+import approach2GoCode from './133-clone-graph-approach2.go?raw';
 
 ## Problem
 
@@ -30,6 +33,9 @@ LeetCode 133 · [Link](https://leetcode.com/problems/clone-graph/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="clone-graph-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="clone-graph-go" />
   </TabItem>
 </Tabs>
 
@@ -88,6 +94,31 @@ function cloneGraph(node: Node | null): Node | null {
     }
 
     return dfs(node);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func cloneGraph(node *Node) *Node {
+    if node == nil {                             // L1: O(1) null guard
+        return nil
+    }
+    oldToNew := map[*Node]*Node{}               // L2: O(1) init map
+
+    var dfs func(n *Node) *Node
+    dfs = func(n *Node) *Node {
+        if c, ok := oldToNew[n]; ok {           // L3: O(1) already cloned
+            return c
+        }
+        copy := &Node{Val: n.Val}               // L4: O(1) create clone
+        oldToNew[n] = copy                      // L5: O(1) register before recursing
+        for _, nb := range n.Neighbors {
+            copy.Neighbors = append(copy.Neighbors, dfs(nb)) // L6: recurse each neighbor
+        }
+        return copy
+    }
+
+    return dfs(node)
 }
 ```
 </TabItem>
@@ -158,6 +189,28 @@ function cloneGraph(node: Node | null): Node | null {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func cloneGraph(node *Node) *Node {
+    if node == nil {                                       // L1: O(1) null guard
+        return nil
+    }
+    oldToNew := map[*Node]*Node{node: {Val: node.Val}}    // L2: O(1) seed map with root
+    queue := []*Node{node}                                // L3: O(1) init queue
+    for len(queue) > 0 {                                  // L4: loop until queue empty
+        cur := queue[0]; queue = queue[1:]                // L5: O(1) dequeue
+        for _, nb := range cur.Neighbors {                // L6: O(degree) per node
+            if _, ok := oldToNew[nb]; !ok {
+                oldToNew[nb] = &Node{Val: nb.Val}         // L7: O(1) create clone once
+                queue = append(queue, nb)                 // L8: O(1) enqueue for later
+            }
+            oldToNew[cur].Neighbors = append(oldToNew[cur].Neighbors, oldToNew[nb]) // L9: wire edge
+        }
+    }
+    return oldToNew[node]
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -186,6 +239,9 @@ Each node is enqueued and dequeued exactly once. Each edge is wired at L9 exactl
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="clone-graph-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="clone-graph-approach2-go" />
   </TabItem>
 </Tabs>
 

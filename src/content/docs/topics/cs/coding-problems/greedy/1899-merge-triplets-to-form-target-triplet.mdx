@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1899-merge-triplets-to-form-target-triplet.py?raw';
 import practiceCodeTs from './1899-merge-triplets-to-form-target-triplet.ts?raw';
+import practiceCodeGo from './1899-merge-triplets-to-form-target-triplet.go?raw';
 import approach2PyCode from './1899-merge-triplets-to-form-target-triplet-approach2.py?raw';
 import approach2TsCode from './1899-merge-triplets-to-form-target-triplet-approach2.ts?raw';
+import approach2GoCode from './1899-merge-triplets-to-form-target-triplet-approach2.go?raw';
 import approach3PyCode from './1899-merge-triplets-to-form-target-triplet-approach3.py?raw';
 import approach3TsCode from './1899-merge-triplets-to-form-target-triplet-approach3.ts?raw';
+import approach3GoCode from './1899-merge-triplets-to-form-target-triplet-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 1899 · [Link](https://leetcode.com/problems/merge-triplets-to-form-tar
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="merge-triplets-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="merge-triplets-go" />
   </TabItem>
 </Tabs>
 
@@ -90,6 +97,33 @@ function mergeTriplets(triplets: number[][], target: number[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func mergeTriplets(triplets [][]int, target []int) bool {
+    n := len(triplets)
+    var comb func(start, r int, chosen [][]int) bool
+    comb = func(start, r int, chosen [][]int) bool {
+        if r == 0 {
+            mx := [3]int{}
+            for _, t := range chosen {                     // L2: 2^n total subsets
+                for i := 0; i < 3; i++ {
+                    if t[i] > mx[i] { mx[i] = t[i] }
+                }
+            }
+            return mx[0] == target[0] && mx[1] == target[1] && mx[2] == target[2]
+        }
+        for i := start; i <= n-r; i++ {                   // L1: every subset size
+            if comb(i+1, r-1, append(chosen, triplets[i])) { return true }
+        }
+        return false
+    }
+    for r := 1; r <= n; r++ {
+        if comb(0, r, nil) { return true }
+    }
+    return false
+}
+```
+</TabItem>
 </Tabs>
 
 There are 2^n subsets; each costs O(n) to combine. Total O(n · 2^n). Skip past tiny inputs.
@@ -132,6 +166,20 @@ function mergeTriplets(triplets: number[][], target: number[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func mergeTriplets(triplets [][]int, target []int) bool {
+    hit := [3]bool{}                                               // L1: O(1)
+    for _, t := range triplets {                                   // L2: single pass, n iterations
+        if t[0] > target[0] || t[1] > target[1] || t[2] > target[2] { continue } // L3: O(1)
+        for i := 0; i < 3; i++ {                                  // L4: O(1), constant 3 channels
+            if t[i] == target[i] { hit[i] = true }                // L5: O(1)
+        }
+    }
+    return hit[0] && hit[1] && hit[2]                             // L6: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -161,6 +209,9 @@ Element-wise max is monotone, once a channel equals the target, subsequent usabl
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="merge-triplets-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="merge-triplets-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -199,6 +250,21 @@ function mergeTripletsEarly(triplets: number[][], target: number[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func mergeTripletsEarly(triplets [][]int, target []int) bool {
+    hit := 0                                                       // L1: O(1), bitmask
+    for _, t := range triplets {                                   // L2: single pass, n iterations
+        if t[0] > target[0] || t[1] > target[1] || t[2] > target[2] { continue } // L3: O(1)
+        for i := 0; i < 3; i++ {                                  // L4: O(1)
+            if t[i] == target[i] { hit |= 1 << i }                // L5: O(1)
+        }
+        if hit == 0b111 { return true }                            // L6: O(1) early exit
+    }
+    return hit == 0b111
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -224,6 +290,9 @@ Same asymptotic complexity as Approach 2 with a constant-factor speedup on lucky
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="merge-triplets-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="merge-triplets-approach3-go" />
+  </TabItem>
 </Tabs>
 
 ## Summary
@@ -238,6 +307,20 @@ The "filter then hit each dimension" greedy pattern generalizes to K channels.
 ## Test cases
 
 <Tabs>
+<TabItem label="Go">
+```go
+func mergeTriplets(triplets [][]int, target []int) bool {
+    hit := [3]bool{}
+    for _, t := range triplets {
+        if t[0] > target[0] || t[1] > target[1] || t[2] > target[2] { continue }
+        for i := 0; i < 3; i++ {
+            if t[i] == target[i] { hit[i] = true }
+        }
+    }
+    return hit[0] && hit[1] && hit[2]
+}
+```
+</TabItem>
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_1899.py and run.

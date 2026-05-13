@@ -11,10 +11,13 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './153-find-minimum-in-rotated-sorted-array.py?raw';
 import practiceCodeTs from './153-find-minimum-in-rotated-sorted-array.ts?raw';
+import practiceCodeGo from './153-find-minimum-in-rotated-sorted-array.go?raw';
 import approach3PyCode from './153-find-minimum-in-rotated-sorted-array-approach3.py?raw';
 import approach3TsCode from './153-find-minimum-in-rotated-sorted-array-approach3.ts?raw';
+import approach3GoCode from './153-find-minimum-in-rotated-sorted-array-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 153 · [Link](https://leetcode.com/problems/find-minimum-in-rotated-sor
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="find-minimum-in-rotated-sorted-array-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="find-minimum-in-rotated-sorted-array-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, `min(nums)`
@@ -51,6 +57,19 @@ def find_min(nums: list[int]) -> int:
 ```typescript
 function findMin(nums: number[]): number {
     return Math.min(...nums);    // L1: O(n) linear scan to find minimum
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func findMin(nums []int) int {
+    m := nums[0]                // L1: O(n) linear scan to find minimum
+    for _, x := range nums[1:] {
+        if x < m {
+            m = x
+        }
+    }
+    return m
 }
 ```
 </TabItem>
@@ -93,6 +112,18 @@ function findMin(nums: number[]): number {
         if (nums[i] < nums[i - 1]) return nums[i];  // L2: O(1) drop check
     }
     return nums[0];   // not rotated (or rotated by n), first element is minimum
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func findMin(nums []int) int {
+    for i := 1; i < len(nums); i++ {    // L1: scan, up to n-1 steps
+        if nums[i] < nums[i-1] {        // L2: O(1) drop check
+            return nums[i]
+        }
+    }
+    return nums[0]  // not rotated (or rotated by n), first element is minimum
 }
 ```
 </TabItem>
@@ -150,6 +181,22 @@ function findMin(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func findMin(nums []int) int {
+    lo, hi := 0, len(nums)-1      // L1: O(1)
+    for lo < hi {                  // L2: loop, O(log n) iterations
+        mid := (lo + hi) / 2     // L3: O(1) midpoint
+        if nums[mid] > nums[hi] { // L4: O(1) compare to right boundary
+            lo = mid + 1         // L5: O(1) min is in right half
+        } else {
+            hi = mid             // L6: O(1) min is mid or left of mid
+        }
+    }
+    return nums[lo]
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -179,6 +226,9 @@ Comparing `nums[mid]` to `nums[lo]` is subtler because a not-rotated segment `[l
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="find-minimum-in-rotated-sorted-array-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="find-minimum-in-rotated-sorted-array-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -242,6 +292,36 @@ console.assert(findMin([1]) === 1);                   // single element
 console.assert(findMin([2, 1]) === 1);                // two elements, rotated
 console.assert(findMin([1, 2]) === 1);                // two elements, not rotated
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func findMin(nums []int) int {
+    lo, hi := 0, len(nums)-1
+    for lo < hi {
+        mid := (lo + hi) / 2
+        if nums[mid] > nums[hi] {
+            lo = mid + 1
+        } else {
+            hi = mid
+        }
+    }
+    return nums[lo]
+}
+
+func main() {
+    if findMin([]int{3, 4, 5, 1, 2}) != 1     { panic("test 1") }
+    if findMin([]int{4, 5, 6, 7, 0, 1, 2}) != 0 { panic("test 2") }
+    if findMin([]int{11, 13, 15, 17}) != 11   { panic("test 3") } // not rotated
+    if findMin([]int{1}) != 1                  { panic("test 4") } // single element
+    if findMin([]int{2, 1}) != 1               { panic("test 5") } // two elements, rotated
+    if findMin([]int{1, 2}) != 1               { panic("test 6") } // two elements, not rotated
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

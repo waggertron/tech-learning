@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './131-palindrome-partitioning.py?raw';
 import practiceCodeTs from './131-palindrome-partitioning.ts?raw';
+import practiceCodeGo from './131-palindrome-partitioning.go?raw';
 import approach2PyCode from './131-palindrome-partitioning-approach2.py?raw';
 import approach2TsCode from './131-palindrome-partitioning-approach2.ts?raw';
+import approach2GoCode from './131-palindrome-partitioning-approach2.go?raw';
 import approach3PyCode from './131-palindrome-partitioning-approach3.py?raw';
 import approach3TsCode from './131-palindrome-partitioning-approach3.ts?raw';
+import approach3GoCode from './131-palindrome-partitioning-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 131 Â· [Link](https://leetcode.com/problems/palindrome-partitioning/) Â
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="palindrome-partitioning-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="palindrome-partitioning-go" />
   </TabItem>
 </Tabs>
 
@@ -151,6 +158,44 @@ function partition(s: string): string[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func partition(s string) [][]string {
+    result := [][]string{}
+    path := []string{}
+    n := len(s)
+
+    isPal := func(l, r int) bool {
+        for l < r {
+            if s[l] != s[r] { return false }
+            l++
+            r-- // L1: O(k) two-pointer check
+        }
+        return true
+    }
+
+    var backtrack func(start int)
+    backtrack = func(start int) {
+        if start == n {
+            cp := make([]string, len(path))
+            copy(cp, path)
+            result = append(result, cp) // L2: O(n) copy
+            return
+        }
+        for end := start; end < n; end++ {
+            if isPal(start, end) {
+                path = append(path, s[start:end+1]) // L3: O(k) slice for result
+                backtrack(end + 1)                  // L4: recurse
+                path = path[:len(path)-1]
+            }
+        }
+    }
+
+    backtrack(0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -175,6 +220,9 @@ function partition(s: string): string[][] {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="palindrome-partitioning-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="palindrome-partitioning-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -251,6 +299,50 @@ function partition(s: string): string[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func partition(s string) [][]string {
+    n := len(s)
+    // isPal[i][j] = true iff s[i:j+1] is a palindrome
+    isPal := make([][]bool, n)
+    for i := range isPal {
+        isPal[i] = make([]bool, n)
+        isPal[i][i] = true // L1: single chars are palindromes
+    }
+    for length := 2; length <= n; length++ {
+        for i := 0; i <= n-length; i++ {
+            j := i + length - 1
+            if s[i] == s[j] && (length == 2 || isPal[i+1][j-1]) {
+                isPal[i][j] = true // L2: O(1) DP recurrence
+            }
+        }
+    }
+
+    result := [][]string{}
+    path := []string{}
+
+    var backtrack func(start int)
+    backtrack = func(start int) {
+        if start == n {
+            cp := make([]string, len(path))
+            copy(cp, path)
+            result = append(result, cp) // L3: O(n) copy
+            return
+        }
+        for end := start; end < n; end++ {
+            if isPal[start][end] {              // L4: O(1) table lookup
+                path = append(path, s[start:end+1]) // L5: O(k) slice for result
+                backtrack(end + 1)                   // L6: recurse
+                path = path[:len(path)-1]
+            }
+        }
+    }
+
+    backtrack(0)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -277,6 +369,9 @@ The O(n^2) DP preprocessing pays off when there are many palindrome checks; each
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="palindrome-partitioning-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="palindrome-partitioning-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -366,6 +461,46 @@ console.assert(JSON.stringify(partition('a')) === JSON.stringify([['a']]));
 console.assert(norm(partition('aaa')) === norm([['a','a','a'],['a','aa'],['aa','a'],['aaa']]));
 console.assert(norm(partition('abc')) === norm([['a','b','c']]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func partition(s string) [][]string {
+    n := len(s)
+    isPal := make([][]bool, n)
+    for i := range isPal {
+        isPal[i] = make([]bool, n)
+        isPal[i][i] = true
+    }
+    for length := 2; length <= n; length++ {
+        for i := 0; i <= n-length; i++ {
+            j := i + length - 1
+            if s[i] == s[j] && (length == 2 || isPal[i+1][j-1]) {
+                isPal[i][j] = true
+            }
+        }
+    }
+    result := [][]string{}
+    path := []string{}
+    var backtrack func(start int)
+    backtrack = func(start int) {
+        if start == n {
+            cp := make([]string, len(path))
+            copy(cp, path)
+            result = append(result, cp)
+            return
+        }
+        for end := start; end < n; end++ {
+            if isPal[start][end] {
+                path = append(path, s[start:end+1])
+                backtrack(end + 1)
+                path = path[:len(path)-1]
+            }
+        }
+    }
+    backtrack(0)
+    return result
+}
 ```
 </TabItem>
 </Tabs>

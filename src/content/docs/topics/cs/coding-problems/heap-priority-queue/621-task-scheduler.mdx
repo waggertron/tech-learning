@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './621-task-scheduler.py?raw';
 import practiceCodeTs from './621-task-scheduler.ts?raw';
+import practiceCodeGo from './621-task-scheduler.go?raw';
 import approach2TsCode from './621-task-scheduler-approach2.ts?raw';
+import approach2GoCode from './621-task-scheduler-approach2.go?raw';
 import approach3TsCode from './621-task-scheduler-approach3.ts?raw';
+import approach3GoCode from './621-task-scheduler-approach3.go?raw';
 
 ## Problem
 
@@ -35,6 +39,9 @@ LeetCode 621 · [Link](https://leetcode.com/problems/task-scheduler/) · *Medium
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="task-scheduler-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="task-scheduler-go" />
   </TabItem>
 </Tabs>
 
@@ -89,6 +96,33 @@ function leastInterval(tasks: string[], n: number): number {
         time++;
     }
     return time;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func leastInterval(tasks []byte, n int) int {
+    counts := make(map[byte]int)
+    for _, t := range tasks { counts[t]++ }
+    cooldown := make(map[byte]int)
+    for t := range counts { cooldown[t] = 0 }
+
+    time := 0
+    for {
+        anyLeft := false
+        for _, c := range counts { if c > 0 { anyLeft = true; break } }
+        if !anyLeft { break }
+        var picked byte = 0; bestCount := 0 // L1: T outer iterations
+        for t, c := range counts { // L2: scan up to 26 tasks
+            if c > 0 && cooldown[t] <= time && c > bestCount { picked = t; bestCount = c }
+        }
+        if bestCount > 0 {
+            counts[picked]--              // L3: O(1) decrement
+            cooldown[picked] = time + n + 1 // L4: O(1) set cooldown
+        }
+        time++
+    }
+    return time
 }
 ```
 </TabItem>
@@ -201,6 +235,64 @@ function leastInterval(tasks: string[], n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import (
+    "container/heap"
+    "fmt"
+)
+
+type MaxHeap []int
+func (h MaxHeap) Len() int            { return len(h) }
+func (h MaxHeap) Less(i, j int) bool  { return h[i] > h[j] }
+func (h MaxHeap) Swap(i, j int)       { h[i], h[j] = h[j], h[i] }
+func (h *MaxHeap) Push(x any)         { *h = append(*h, x.(int)) }
+func (h *MaxHeap) Pop() any {
+    old := *h; n := len(old); x := old[n-1]; *h = old[:n-1]; return x
+}
+
+func leastInterval(tasks []byte, n int) int {
+    freq := make(map[byte]int)
+    for _, t := range tasks { freq[t]++ }
+    h := &MaxHeap{}
+    heap.Init(h)
+    for _, c := range freq { heap.Push(h, c) } // L1: O(t) build heap
+    type item struct{ readyTime, count int }
+    cooldown := []item{}
+    time := 0
+    for h.Len() > 0 || len(cooldown) > 0 { // L2: T iterations total
+        time++
+        if h.Len() > 0 {
+            c := heap.Pop(h).(int) - 1 // L3: O(log t) pop
+            if c > 0 { cooldown = append(cooldown, item{time + n, c}) } // L4: O(1)
+        }
+        if len(cooldown) > 0 && cooldown[0].readyTime == time {
+            heap.Push(h, cooldown[0].count) // L5: O(log t) push
+            cooldown = cooldown[1:]
+        }
+    }
+    return time
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition { msg := "assertion failed"; if len(msgs) > 0 { msg = msgs[0] }; panic(msg) }
+}
+
+func runTests() {
+    assert(leastInterval([]byte{'A','A','A','B','B','B'}, 2) == 8)
+    assert(leastInterval([]byte{'A','A','A','B','B','B'}, 0) == 6)
+    assert(leastInterval([]byte{'A','A','A','A','A','A','B','C','D','E','F','G'}, 2) == 16)
+    assert(leastInterval([]byte{'A','B','C','D','A','B','C','D'}, 2) == 8)
+    assert(leastInterval([]byte{'A','A','A'}, 3) == 9)
+    assert(leastInterval([]byte{'A','A','A'}, 0) == 3)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -228,6 +320,9 @@ Cleaner than the brute force; a natural fit for "greedy scheduling with recurrin
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="task-scheduler-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="task-scheduler-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -269,6 +364,41 @@ function leastInterval(tasks: string[], n: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func leastInterval(tasks []byte, n int) int {
+    freq := make(map[byte]int)
+    for _, t := range tasks { freq[t]++ } // L1: O(T) build counter
+    maxCount := 0
+    for _, c := range freq { if c > maxCount { maxCount = c } } // L2: O(t)
+    ties := 0
+    for _, c := range freq { if c == maxCount { ties++ } } // L3: O(t)
+    result := (maxCount-1)*(n+1) + ties // L4: O(1) formula
+    if len(tasks) > result { return len(tasks) }
+    return result
+}
+
+func assert(condition bool, msgs ...string) {
+    if !condition { msg := "assertion failed"; if len(msgs) > 0 { msg = msgs[0] }; panic(msg) }
+}
+
+func runTests() {
+    assert(leastInterval([]byte{'A','A','A','B','B','B'}, 2) == 8)
+    assert(leastInterval([]byte{'A','A','A','B','B','B'}, 0) == 6)
+    assert(leastInterval([]byte{'A','A','A','A','A','A','B','C','D','E','F','G'}, 2) == 16)
+    assert(leastInterval([]byte{'A','B','C','D','A','B','C','D'}, 2) == 8)
+    assert(leastInterval([]byte{'A','A','A'}, 3) == 9)
+    assert(leastInterval([]byte{'A','A','A'}, 0) == 3)
+    fmt.Println("all tests pass")
+}
+
+func main() { runTests() }
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -293,6 +423,9 @@ Building the Counter at L1 touches every task once. The remaining steps scan at 
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="task-scheduler-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="task-scheduler-approach3-go" />
   </TabItem>
 </Tabs>
 

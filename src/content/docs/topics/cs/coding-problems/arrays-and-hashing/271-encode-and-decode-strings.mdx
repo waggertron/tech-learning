@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './271-encode-and-decode-strings.py?raw';
 import practiceCodeTs from './271-encode-and-decode-strings.ts?raw';
+import practiceCodeGo from './271-encode-and-decode-strings.go?raw';
 import approach2PyCode from './271-encode-and-decode-strings-approach2.py?raw';
 import approach2TsCode from './271-encode-and-decode-strings-approach2.ts?raw';
+import approach2GoCode from './271-encode-and-decode-strings-approach2.go?raw';
 import approach3PyCode from './271-encode-and-decode-strings-approach3.py?raw';
 import approach3TsCode from './271-encode-and-decode-strings-approach3.ts?raw';
+import approach3GoCode from './271-encode-and-decode-strings-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 271 (premium; free equivalent exists as **LC 659 / 1923**) · [Link](ht
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="encode-and-decode-strings-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="encode-and-decode-strings-go" />
   </TabItem>
 </Tabs>
 
@@ -63,6 +70,31 @@ function encode(strs: string[]): string {
 
 function decode(s: string): string[] {
     return s.split('\x1f').map(p => p.replace(/\\u/g, '\x1f').replace(/\\\\/g, '\\'));
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "strings"
+
+func encode(strs []string) string {
+	escaped := make([]string, len(strs))
+	for i, s := range strs {
+		s = strings.ReplaceAll(s, "\\", "\\\\")
+		s = strings.ReplaceAll(s, "\x1f", "\\u")
+		escaped[i] = s
+	}
+	return strings.Join(escaped, "\x1f")
+}
+
+func decode(s string) []string {
+	parts := strings.Split(s, "\x1f")
+	for i, p := range parts {
+		p = strings.ReplaceAll(p, "\\u", "\x1f")
+		p = strings.ReplaceAll(p, "\\\\", "\\")
+		parts[i] = p
+	}
+	return parts
 }
 ```
 </TabItem>
@@ -112,6 +144,22 @@ function decode(s: string): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import "encoding/json"
+
+func encode(strs []string) string {
+	b, _ := json.Marshal(strs)     // L1: O(N) JSON encode
+	return string(b)
+}
+
+func decode(s string) []string {
+	var result []string
+	json.Unmarshal([]byte(s), &result) // L2: O(N) JSON decode
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -139,6 +187,9 @@ Correct and robust. Not typically accepted on LeetCode because the problem wants
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="encode-decode-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="encode-decode-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -181,6 +232,36 @@ function decode(s: string): string[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+import (
+	"strconv"
+	"strings"
+)
+
+func encode(strs []string) string {
+	var sb strings.Builder
+	for _, s := range strs {
+		sb.WriteString(strconv.Itoa(len(s))) // L1: O(N) one pass
+		sb.WriteByte('#')
+		sb.WriteString(s)
+	}
+	return sb.String()
+}
+
+func decode(s string) []string {
+	result := []string{}
+	i := 0                                   // L2: O(1) init
+	for i < len(s) {                         // L3: loop
+		j := strings.Index(s[i:], "#") + i  // L4: O(len_digits) scan
+		length, _ := strconv.Atoi(s[i:j])   // L5: O(len_digits) parse
+		result = append(result, s[j+1:j+1+length]) // L6: O(length) slice
+		i = j + 1 + length                   // L7: O(1) advance
+	}
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -212,6 +293,9 @@ This works for any character content, including the `#` delimiter, because the l
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="encode-decode-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="encode-decode-approach3-go" />
   </TabItem>
 </Tabs>
 

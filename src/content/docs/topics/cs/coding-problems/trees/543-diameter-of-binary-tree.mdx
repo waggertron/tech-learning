@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './543-diameter-of-binary-tree.py?raw';
 import practiceCodeTs from './543-diameter-of-binary-tree.ts?raw';
+import practiceCodeGo from './543-diameter-of-binary-tree.go?raw';
 import approach2PyCode from './543-diameter-of-binary-tree-approach2.py?raw';
 import approach2TsCode from './543-diameter-of-binary-tree-approach2.ts?raw';
+import approach2GoCode from './543-diameter-of-binary-tree-approach2.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 543 Â· [Link](https://leetcode.com/problems/diameter-of-binary-tree/) Â
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="diameter-of-binary-tree-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="diameter-of-binary-tree-go" />
   </TabItem>
 </Tabs>
 
@@ -85,6 +91,46 @@ function diameterOfBinaryTree(root: TreeNode | null): number {
     }
     visit(root);
     return best;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func treeHeight(node *TreeNode) int {
+    if node == nil {
+        return 0
+    }
+    l := treeHeight(node.Left)
+    r := treeHeight(node.Right)
+    if l > r {
+        return 1 + l                              // L1: O(n) subtree walk
+    }
+    return 1 + r
+}
+
+func diameterOfBinaryTree(root *TreeNode) int {
+    best := 0
+    var visit func(*TreeNode)
+    visit = func(node *TreeNode) {
+        if node == nil {
+            return
+        }
+        l := treeHeight(node.Left)
+        r := treeHeight(node.Right)
+        if l+r > best {
+            best = l + r                          // L2: O(n) per node
+        }
+        visit(node.Left)                          // L3: recurse
+        visit(node.Right)
+    }
+    visit(root)
+    return best
 }
 ```
 </TabItem>
@@ -146,6 +192,36 @@ function diameterOfBinaryTree(root: TreeNode | null): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type TreeNode struct {
+    Val   int
+    Left  *TreeNode
+    Right *TreeNode
+}
+
+func diameterOfBinaryTree(root *TreeNode) int {
+    best := 0
+    var heightFn func(*TreeNode) int
+    heightFn = func(node *TreeNode) int {
+        if node == nil {
+            return 0
+        }
+        left := heightFn(node.Left)               // L1: recurse left
+        right := heightFn(node.Right)             // L2: recurse right
+        if left+right > best {
+            best = left + right                   // L3: O(1) update diameter
+        }
+        if left > right {
+            return 1 + left                       // L4: O(1) return height to parent
+        }
+        return 1 + right
+    }
+    heightFn(root)
+    return best
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -175,6 +251,9 @@ This is the template for a whole class of tree problems, including 124 Max Path 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="diameter-of-binary-tree-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="diameter-of-binary-tree-approach2-go" />
   </TabItem>
 </Tabs>
 

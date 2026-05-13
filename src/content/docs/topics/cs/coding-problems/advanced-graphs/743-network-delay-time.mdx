@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './743-network-delay-time.py?raw';
 import practiceCodeTs from './743-network-delay-time.ts?raw';
+import practiceCodeGo from './743-network-delay-time.go?raw';
 import approach2PyCode from './743-network-delay-time-approach2.py?raw';
 import approach2TsCode from './743-network-delay-time-approach2.ts?raw';
+import approach2GoCode from './743-network-delay-time-approach2.go?raw';
 import approach3PyCode from './743-network-delay-time-approach3.py?raw';
 import approach3TsCode from './743-network-delay-time-approach3.ts?raw';
+import approach3GoCode from './743-network-delay-time-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 743 · [Link](https://leetcode.com/problems/network-delay-time/) · *Me
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="network-delay-time-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="network-delay-time-go" />
   </TabItem>
 </Tabs>
 
@@ -73,6 +80,30 @@ function networkDelayTime(times: number[][], n: number, k: number): number {
     }
     const m = Math.max(...dist.slice(1));      // L6: O(V)
     return m === INF ? -1 : m;                 // L7: O(1)
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func networkDelayTime(times [][]int, n int, k int) int {
+    const INF = 1<<31 - 1
+    dist := make([]int, n+1)          // L1: O(V) init
+    for i := range dist { dist[i] = INF }
+    dist[k] = 0                       // L2: O(1)
+    for round := 0; round < n-1; round++ {  // L3: outer loop, V-1 rounds
+        for _, t := range times {     // L4: iterate all edges, O(E) per round
+            u, v, w := t[0], t[1], t[2]
+            if dist[u] != INF && dist[u]+w < dist[v] {
+                dist[v] = dist[u] + w // L5: O(1) relaxation
+            }
+        }
+    }
+    m := 0
+    for _, d := range dist[1:] {      // L6: O(V)
+        if d == INF { return -1 }
+        if d > m { m = d }
+    }
+    return m                          // L7: O(1)
 }
 ```
 </TabItem>
@@ -140,6 +171,40 @@ function networkDelayTime(times: number[][], n: number, k: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func networkDelayTime(times [][]int, n int, k int) int {
+    const INF = 1<<31 - 1
+    dist := make([][]int, n+1)                          // L1: O(V²) init
+    for i := range dist {
+        dist[i] = make([]int, n+1)
+        for j := range dist[i] {
+            if i == j { dist[i][j] = 0 } else { dist[i][j] = INF }
+        }
+    }
+    for _, t := range times {                           // L3: O(E) seed edges
+        u, v, w := t[0], t[1], t[2]
+        if w < dist[u][v] { dist[u][v] = w }
+    }
+    for mid := 1; mid <= n; mid++ {                     // L4: outer pivot loop, V iters
+        for i := 1; i <= n; i++ {                       // L5: row loop, V iters
+            for j := 1; j <= n; j++ {                   // L6: col loop, V iters
+                if dist[i][mid] != INF && dist[mid][j] != INF &&
+                    dist[i][mid]+dist[mid][j] < dist[i][j] {
+                    dist[i][j] = dist[i][mid] + dist[mid][j] // L7: O(1) relax
+                }
+            }
+        }
+    }
+    m := 0
+    for j := 1; j <= n; j++ {                          // L8: O(V)
+        if dist[k][j] == INF { return -1 }
+        if dist[k][j] > m { m = dist[k][j] }
+    }
+    return m                                            // L9: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -172,6 +237,9 @@ Single-source only needs `V²`; Floyd-Warshall is wasteful here.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="network-delay-time-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="network-delay-time-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -238,6 +306,43 @@ function networkDelayTime(times: number[][], n: number, k: number): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 743-network-delay-time-approach3.go for the full runnable program.
+// Core function:
+func networkDelayTime(times [][]int, n int, k int) int {
+    graph := make(map[int][][2]int)
+    for _, t := range times {                      // L2: O(E) build adjacency
+        u, v, w := t[0], t[1], t[2]
+        graph[u] = append(graph[u], [2]int{v, w})
+    }
+    dist := make(map[int]int)
+    dist[k] = 0                                    // L3: O(1) seed source
+    h := &MinHeap743{{node: k, dist: 0}}
+    heap.Init(h)                                   // L4: O(1) seed heap
+    for h.Len() > 0 {                              // L5: loop until heap empty
+        item := heap.Pop(h).(Item743)
+        d, u := item.dist, item.node               // L6: O(log V) pop min
+        if best, ok := dist[u]; ok && d > best {   // L7: O(1) stale check
+            continue
+        }
+        for _, edge := range graph[u] {            // L8: O(deg(u)) neighbor scan
+            v, w := edge[0], edge[1]
+            nd := d + w
+            if best, ok := dist[v]; !ok || nd < best {
+                dist[v] = nd                       // L9: O(1) update dist
+                heap.Push(h, Item743{node: v, dist: nd})  // L10: O(log V) push
+                heap.Fix(h, h.Len()-1)
+            }
+        }
+    }
+    if len(dist) != n { return -1 }               // L11: O(1) reachability check
+    m := 0
+    for _, v := range dist { if v > m { m = v } }
+    return m                                       // L12: O(V)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -269,6 +374,9 @@ Each edge can produce at most one push (L10), so the heap holds at most E entrie
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="network-delay-time-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="network-delay-time-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -393,6 +501,11 @@ console.assert(networkDelayTime([[1,2,1]], 2, 2) === -1);
 console.assert(networkDelayTime([], 1, 1) === 0);
 console.assert(networkDelayTime([[1,2,1],[1,2,5]], 2, 1) === 1);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// Uses Dijkstra (Approach 3). Full runnable program: 743-network-delay-time-approach3.go
 ```
 </TabItem>
 </Tabs>

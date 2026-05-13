@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './230-kth-smallest-element-in-a-bst.py?raw';
 import practiceCodeTs from './230-kth-smallest-element-in-a-bst.ts?raw';
+import practiceCodeGo from './230-kth-smallest-element-in-a-bst.go?raw';
 import approach2PyCode from './230-kth-smallest-element-in-a-bst-approach2.py?raw';
 import approach2TsCode from './230-kth-smallest-element-in-a-bst-approach2.ts?raw';
+import approach2GoCode from './230-kth-smallest-element-in-a-bst-approach2.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 230 · [Link](https://leetcode.com/problems/kth-smallest-element-in-a-b
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="kth-smallest-element-in-a-bst-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="kth-smallest-element-in-a-bst-go" />
   </TabItem>
 </Tabs>
 

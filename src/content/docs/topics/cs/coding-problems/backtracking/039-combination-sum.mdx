@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './039-combination-sum.py?raw';
 import practiceCodeTs from './039-combination-sum.ts?raw';
+import practiceCodeGo from './039-combination-sum.go?raw';
 import approach2PyCode from './039-combination-sum-approach2.py?raw';
 import approach2TsCode from './039-combination-sum-approach2.ts?raw';
+import approach2GoCode from './039-combination-sum-approach2.go?raw';
 import approach3PyCode from './039-combination-sum-approach3.py?raw';
 import approach3TsCode from './039-combination-sum-approach3.ts?raw';
+import approach3GoCode from './039-combination-sum-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 39 · [Link](https://leetcode.com/problems/combination-sum/) · *Medium
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="combination-sum-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="combination-sum-go" />
   </TabItem>
 </Tabs>
 
@@ -118,6 +125,35 @@ function combinationSum(candidates: number[], target: number): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func combinationSum(candidates []int, target int) [][]int {
+    result := [][]int{}
+    path := []int{}
+
+    var backtrack func(start, remaining int)
+    backtrack = func(start, remaining int) {
+        if remaining == 0 {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp) // L1: O(k) copy at leaf
+            return
+        }
+        if remaining < 0 {
+            return
+        }
+        for i := start; i < len(candidates); i++ {
+            path = append(path, candidates[i])        // L2: O(1) push
+            backtrack(i, remaining-candidates[i])     // L3: recurse (reuse allowed)
+            path = path[:len(path)-1]                 // L4: O(1) pop
+        }
+    }
+
+    backtrack(0, target)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -144,6 +180,9 @@ The recursion tree has branching factor n and maximum depth k = target / min(can
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="combination-sum-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="combination-sum-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -199,6 +238,36 @@ function combinationSum(candidates: number[], target: number): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func combinationSum(candidates []int, target int) [][]int {
+    sort.Ints(candidates)              // L1: O(n log n) sort once
+    result := [][]int{}
+    path := []int{}
+
+    var backtrack func(start, remaining int)
+    backtrack = func(start, remaining int) {
+        if remaining == 0 {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp) // L2: O(k) copy at leaf
+            return
+        }
+        for i := start; i < len(candidates); i++ {
+            if candidates[i] > remaining {
+                break                               // L3: O(1) prune entire suffix
+            }
+            path = append(path, candidates[i])      // L4: O(1) push
+            backtrack(i, remaining-candidates[i])   // L5: recurse
+            path = path[:len(path)-1]               // L6: O(1) pop
+        }
+    }
+
+    backtrack(0, target)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -225,6 +294,9 @@ Sorting enables L3 to cut entire subtrees. The asymptotic bound is the same, but
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="combination-sum-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="combination-sum-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -302,6 +374,32 @@ console.assert(norm(combinationSum([2, 3, 5], 8)) === norm([[2,2,2,2],[2,3,3],[3
 console.assert(norm(combinationSum([3], 9)) === norm([[3,3,3]]));
 console.assert(combinationSum([5], 3).length === 0);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func combinationSum(candidates []int, target int) [][]int {
+    sort.Ints(candidates)
+    result := [][]int{}
+    path := []int{}
+    var backtrack func(start, remaining int)
+    backtrack = func(start, remaining int) {
+        if remaining == 0 {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp)
+            return
+        }
+        for i := start; i < len(candidates); i++ {
+            if candidates[i] > remaining { break }
+            path = append(path, candidates[i])
+            backtrack(i, remaining-candidates[i])
+            path = path[:len(path)-1]
+        }
+    }
+    backtrack(0, target)
+    return result
+}
 ```
 </TabItem>
 </Tabs>

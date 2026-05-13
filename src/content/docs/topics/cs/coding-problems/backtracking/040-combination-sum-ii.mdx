@@ -11,10 +11,13 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './040-combination-sum-ii.py?raw';
 import practiceCodeTs from './040-combination-sum-ii.ts?raw';
+import practiceCodeGo from './040-combination-sum-ii.go?raw';
 import approach3PyCode from './040-combination-sum-ii-approach3.py?raw';
 import approach3TsCode from './040-combination-sum-ii-approach3.ts?raw';
+import approach3GoCode from './040-combination-sum-ii-approach3.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 40 · [Link](https://leetcode.com/problems/combination-sum-ii/) · *Med
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="combination-sum-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="combination-sum-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -145,6 +151,39 @@ function combinationSum2(candidates: number[], target: number): number[][] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func combinationSum2(candidates []int, target int) [][]int {
+    sort.Ints(candidates)              // L1: O(n log n) sort
+    result := [][]int{}
+    path := []int{}
+
+    var backtrack func(start, remaining int)
+    backtrack = func(start, remaining int) {
+        if remaining == 0 {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp) // L2: O(k) copy
+            return
+        }
+        for i := start; i < len(candidates); i++ {
+            if candidates[i] > remaining {
+                break                                           // L3: O(1) prune
+            }
+            if i > start && candidates[i] == candidates[i-1] {
+                continue                                        // L4: O(1) skip same-level duplicate
+            }
+            path = append(path, candidates[i])                 // L5: O(1) push
+            backtrack(i+1, remaining-candidates[i])            // L6: recurse (no reuse)
+            path = path[:len(path)-1]                          // L7: O(1) pop
+        }
+    }
+
+    backtrack(0, target)
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -172,6 +211,9 @@ Sorting enables both L3 (early termination) and L4 (same-level duplicate skip). 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="combination-sum-ii-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="combination-sum-ii-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -252,6 +294,33 @@ console.assert(norm(combinationSum2([2,5,2,1,2], 5)) === norm([[1,2,2],[5]]));
 console.assert(combinationSum2([1,2], 10).length === 0);
 console.assert(norm(combinationSum2([3,3], 3)) === norm([[3]]));
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func combinationSum2(candidates []int, target int) [][]int {
+    sort.Ints(candidates)
+    result := [][]int{}
+    path := []int{}
+    var backtrack func(start, remaining int)
+    backtrack = func(start, remaining int) {
+        if remaining == 0 {
+            cp := make([]int, len(path))
+            copy(cp, path)
+            result = append(result, cp)
+            return
+        }
+        for i := start; i < len(candidates); i++ {
+            if candidates[i] > remaining { break }
+            if i > start && candidates[i] == candidates[i-1] { continue }
+            path = append(path, candidates[i])
+            backtrack(i+1, remaining-candidates[i])
+            path = path[:len(path)-1]
+        }
+    }
+    backtrack(0, target)
+    return result
+}
 ```
 </TabItem>
 </Tabs>

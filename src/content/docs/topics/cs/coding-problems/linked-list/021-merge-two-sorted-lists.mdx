@@ -11,10 +11,14 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './021-merge-two-sorted-lists.py?raw';
 import practiceCodeTs from './021-merge-two-sorted-lists.ts?raw';
+import practiceCodeGo from './021-merge-two-sorted-lists.go?raw';
 import approach2TsCode from './021-merge-two-sorted-lists-approach2.ts?raw';
+import approach2GoCode from './021-merge-two-sorted-lists-approach2.go?raw';
 import approach3TsCode from './021-merge-two-sorted-lists-approach3.ts?raw';
+import approach3GoCode from './021-merge-two-sorted-lists-approach3.go?raw';
 
 ## Problem
 
@@ -35,6 +39,9 @@ LeetCode 21 · [Link](https://leetcode.com/problems/merge-two-sorted-lists/) · 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="merge-two-sorted-lists-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="merge-two-sorted-lists-go" />
   </TabItem>
 </Tabs>
 
@@ -88,6 +95,34 @@ function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | nul
         tail = tail.next;
     }
     return dummy.next;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+import "sort"
+
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+    var values []int
+    for _, head := range []*ListNode{l1, l2} {
+        for head != nil {
+            values = append(values, head.Val) // L1: O(1) per node
+            head = head.Next
+        }
+    }
+    sort.Ints(values)                         // L2: O((n+m) log(n+m))
+    dummy := &ListNode{}
+    tail := dummy
+    for _, v := range values {
+        tail.Next = &ListNode{Val: v}         // L3: O(1) per value
+        tail = tail.Next
+    }
+    return dummy.Next
 }
 ```
 </TabItem>
@@ -151,6 +186,35 @@ function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | nul
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+    dummy := &ListNode{}
+    tail := dummy
+    for l1 != nil && l2 != nil {           // L1: loop while both non-empty
+        if l1.Val <= l2.Val {
+            tail.Next = l1                 // L2: splice l1 node
+            l1 = l1.Next
+        } else {
+            tail.Next = l2                 // L3: splice l2 node
+            l2 = l2.Next
+        }
+        tail = tail.Next                   // L4: advance tail
+    }
+    if l1 != nil {
+        tail.Next = l1                     // L5: O(1) attach remainder
+    } else {
+        tail.Next = l2
+    }
+    return dummy.Next
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -175,6 +239,9 @@ The loop exits as soon as either list is exhausted (after min(n, m) steps), then
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="merge-two-sorted-lists-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="merge-two-sorted-lists-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -211,6 +278,25 @@ function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | nul
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+type ListNode struct {
+    Val  int
+    Next *ListNode
+}
+
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+    if l1 == nil { return l2 }                              // L1: base case
+    if l2 == nil { return l1 }                              // L2: base case
+    if l1.Val <= l2.Val {
+        l1.Next = mergeTwoLists(l1.Next, l2)               // L3: recurse with l1 advanced
+        return l1
+    }
+    l2.Next = mergeTwoLists(l1, l2.Next)                   // L4: recurse with l2 advanced
+    return l2
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -235,6 +321,9 @@ Elegant; stack-space trade-off.
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="merge-two-sorted-lists-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="merge-two-sorted-lists-approach3-go" />
   </TabItem>
 </Tabs>
 

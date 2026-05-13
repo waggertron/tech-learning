@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './097-interleaving-string.py?raw';
 import practiceCodeTs from './097-interleaving-string.ts?raw';
+import practiceCodeGo from './097-interleaving-string.go?raw';
 import approach2PyCode from './097-interleaving-string-approach2.py?raw';
 import approach2TsCode from './097-interleaving-string-approach2.ts?raw';
+import approach2GoCode from './097-interleaving-string-approach2.go?raw';
 import approach3PyCode from './097-interleaving-string-approach3.py?raw';
 import approach3TsCode from './097-interleaving-string-approach3.ts?raw';
+import approach3GoCode from './097-interleaving-string-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 97 · [Link](https://leetcode.com/problems/interleaving-string/) · *Me
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="interleaving-string-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="interleaving-string-go" />
   </TabItem>
 </Tabs>
 
@@ -73,6 +80,22 @@ function isInterleave(s1: string, s2: string, s3: string): boolean {
         return false;
     }
     return f(0, 0);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func isInterleave(s1 string, s2 string, s3 string) bool {
+    if len(s1)+len(s2) != len(s3) { return false } // L1: O(1) length guard
+    var f func(i, j int) bool
+    f = func(i, j int) bool {
+        k := i + j                                              // L2: O(1) current s3 index
+        if k == len(s3) { return true }                        // L3: O(1) base case
+        if i < len(s1) && s1[i] == s3[k] && f(i+1, j) { return true } // L4: try s1
+        if j < len(s2) && s2[j] == s3[k] && f(i, j+1) { return true } // L5: try s2
+        return false
+    }
+    return f(0, 0)
 }
 ```
 </TabItem>
@@ -164,6 +187,9 @@ With memoization each `(i, j)` is computed once. Short-circuit evaluation means 
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="interleaving-string-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="interleaving-string-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Bottom-up 2-D DP
@@ -213,6 +239,26 @@ function isInterleave(s1: string, s2: string, s3: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func isInterleave(s1 string, s2 string, s3 string) bool {
+    m, n := len(s1), len(s2)
+    if m+n != len(s3) { return false }              // L2: O(1) length guard
+    dp := make([][]bool, m+1)
+    for i := range dp { dp[i] = make([]bool, n+1) } // L3: O(m*n) table init
+    dp[0][0] = true                                  // L4: O(1) base case
+    for i := 0; i <= m; i++ {                        // L5: outer loop O(m)
+        for j := 0; j <= n; j++ {                    // L6: inner loop O(n)
+            if i == 0 && j == 0 { continue }
+            k := i + j - 1                           // L7: O(1) s3 index
+            if i > 0 && s1[i-1] == s3[k] && dp[i-1][j] { dp[i][j] = true } // L8
+            if !dp[i][j] && j > 0 && s2[j-1] == s3[k] && dp[i][j-1] { dp[i][j] = true } // L9
+        }
+    }
+    return dp[m][n]                                  // L10: O(1) answer
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -239,6 +285,9 @@ Each cell requires at most two O(1) lookups. The double loop at L5/L6 drives the
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="interleaving-string-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="interleaving-string-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -315,6 +364,40 @@ console.assert(isInterleave("a", "", "a") === true);
 console.assert(isInterleave("", "b", "b") === true);
 console.assert(isInterleave("a", "b", "abc") === false);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func isInterleave(s1 string, s2 string, s3 string) bool {
+    m, n := len(s1), len(s2)
+    if m+n != len(s3) { return false }
+    dp := make([][]bool, m+1)
+    for i := range dp { dp[i] = make([]bool, n+1) }
+    dp[0][0] = true
+    for i := 0; i <= m; i++ {
+        for j := 0; j <= n; j++ {
+            if i == 0 && j == 0 { continue }
+            k := i + j - 1
+            if i > 0 && s1[i-1] == s3[k] && dp[i-1][j] { dp[i][j] = true }
+            if !dp[i][j] && j > 0 && s2[j-1] == s3[k] && dp[i][j-1] { dp[i][j] = true }
+        }
+    }
+    return dp[m][n]
+}
+
+func main() {
+    if !isInterleave("aabcc", "dbbca", "aadbbcbcac") { panic("fail") }
+    if isInterleave("aabcc", "dbbca", "aadbbbaccc") { panic("fail") }
+    if !isInterleave("", "", "") { panic("fail") }
+    if !isInterleave("a", "", "a") { panic("fail") }
+    if !isInterleave("", "b", "b") { panic("fail") }
+    if isInterleave("a", "b", "abc") { panic("fail") }
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

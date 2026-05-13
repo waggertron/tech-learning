@@ -11,14 +11,19 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1584-min-cost-to-connect-all-points.py?raw';
 import practiceCodeTs from './1584-min-cost-to-connect-all-points.ts?raw';
+import practiceCodeGo from './1584-min-cost-to-connect-all-points.go?raw';
 import approach2PyCode from './1584-min-cost-to-connect-all-points-approach2.py?raw';
 import approach2TsCode from './1584-min-cost-to-connect-all-points-approach2.ts?raw';
+import approach2GoCode from './1584-min-cost-to-connect-all-points-approach2.go?raw';
 import approach3PyCode from './1584-min-cost-to-connect-all-points-approach3.py?raw';
 import approach3TsCode from './1584-min-cost-to-connect-all-points-approach3.ts?raw';
+import approach3GoCode from './1584-min-cost-to-connect-all-points-approach3.go?raw';
 import approach4PyCode from './1584-min-cost-to-connect-all-points-approach4.py?raw';
 import approach4TsCode from './1584-min-cost-to-connect-all-points-approach4.ts?raw';
+import approach4GoCode from './1584-min-cost-to-connect-all-points-approach4.go?raw';
 
 ## Problem
 
@@ -38,6 +43,9 @@ LeetCode 1584 · [Link](https://leetcode.com/problems/min-cost-to-connect-all-po
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="min-cost-to-connect-all-points-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="min-cost-to-connect-all-points-go" />
   </TabItem>
 </Tabs>
 
@@ -123,6 +131,12 @@ function minCostConnectPoints(points: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// Brute force: enumerate all (n-1)-subsets of edges. Exponential -- skip for n > 8.
+// See 1584-min-cost-to-connect-all-points.go for the stub to implement.
+```
+</TabItem>
 </Tabs>
 
 By Cayley's formula, K_n has n^(n-2) spanning trees, so this explodes past n ≈ 8.
@@ -200,6 +214,41 @@ function minCostConnectPoints(points: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 1584-min-cost-to-connect-all-points-approach2.go for the full runnable program.
+func minCostConnectPoints(points [][]int) int {
+    n := len(points)                                                           // L1: O(1)
+    type Edge struct{ d, i, j int }
+    var edges []Edge                                                           // L2: O(1)
+    for i := 0; i < n; i++ {                                                  // L3: outer loop
+        for j := i + 1; j < n; j++ {                                         // L4: inner loop
+            d := abs(points[i][0]-points[j][0]) + abs(points[i][1]-points[j][1])  // L5: O(1)
+            edges = append(edges, Edge{d, i, j})                              // L6: O(1) amortized
+        }
+    }
+    sort.Slice(edges, func(a, b int) bool { return edges[a].d < edges[b].d }) // L7: O(E log E)
+    parent := make([]int, n)                                                   // L8: O(n)
+    for i := range parent { parent[i] = i }
+    var find func(int) int
+    find = func(x int) int {
+        for parent[x] != x { parent[x] = parent[parent[x]]; x = parent[x] }  // L9: path compression
+        return x
+    }
+    total, added := 0, 0
+    for _, e := range edges {                                                  // L10: iterate sorted edges
+        ri, rj := find(e.i), find(e.j)                                        // L11: O(alpha(n)) per find
+        if ri != rj {
+            parent[ri] = rj                                                    // L12: O(1) union
+            total += e.d                                                       // L13: O(1)
+            added++
+            if added == n-1 { break }                                         // L14: early exit
+        }
+    }
+    return total
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -229,6 +278,9 @@ Sorting E = O(V²) edges costs O(V² log V² ) = O(V² log V). The union-find lo
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="min-cost-to-connect-all-points-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="min-cost-to-connect-all-points-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -289,6 +341,33 @@ function minCostConnectPoints(points: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 1584-min-cost-to-connect-all-points-approach3.go for the full runnable program.
+func minCostConnectPoints(points [][]int) int {
+    n := len(points)                                                   // L1: O(1)
+    visited := make([]bool, n)                                         // L2: O(n)
+    h := &MinHeap1584{{d: 0, u: 0}}
+    heap.Init(h)                                                       // L3: O(1), seed with node 0 at cost 0
+    total, count := 0, 0
+    for h.Len() > 0 && count < n {                                     // L4: loop runs until all nodes added
+        item := heap.Pop(h).(Item1584)
+        d, u := item.d, item.u                                         // L5: O(log(heap size)) per pop
+        if visited[u] { continue }                                     // L6: skip stale entries
+        visited[u] = true                                              // L7: O(1)
+        total += d                                                     // L8: O(1)
+        count++
+        for v := 0; v < n; v++ {                                       // L9: scan all nodes for neighbors
+            if !visited[v] {
+                dist := abs(points[u][0]-points[v][0]) + abs(points[u][1]-points[v][1])  // L10: O(1)
+                heap.Push(h, Item1584{d: dist, u: v})                  // L11: O(log(heap size)) per push
+            }
+        }
+    }
+    return total
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -319,6 +398,9 @@ For dense graphs (complete graphs like this one), a simpler O(V²) Prim's varian
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="min-cost-to-connect-all-points-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="min-cost-to-connect-all-points-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -376,6 +458,34 @@ function minCostConnectPoints(points: number[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 1584-min-cost-to-connect-all-points-approach4.go for the full runnable program.
+func minCostConnectPoints(points [][]int) int {
+    n := len(points)                                                   // L1: O(1)
+    inMst := make([]bool, n)                                           // L2: O(n)
+    minDist := make([]int, n)                                          // L3: O(n)
+    for i := range minDist { minDist[i] = 1<<31 - 1 }
+    minDist[0] = 0
+    total := 0
+    for range points {                                                 // L4: outer loop, n iterations
+        u := -1
+        for v := 0; v < n; v++ {                                       // L5: linear scan, O(n)
+            if !inMst[v] && (u == -1 || minDist[v] < minDist[u]) { u = v }
+        }
+        inMst[u] = true                                                // L6: O(1)
+        total += minDist[u]                                            // L7: O(1)
+        for v := 0; v < n; v++ {                                       // L8: update minDist
+            if !inMst[v] {
+                d := abs(points[u][0]-points[v][0]) + abs(points[u][1]-points[v][1])  // L9: O(1)
+                if d < minDist[v] { minDist[v] = d }                  // L10: O(1)
+            }
+        }
+    }
+    return total
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -404,6 +514,9 @@ No heap needed. The inner scans at L5 and L8 each visit all V nodes once per out
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach4TsCode} id="min-cost-to-connect-all-points-approach4-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach4GoCode} id="min-cost-to-connect-all-points-approach4-go" />
   </TabItem>
 </Tabs>
 
@@ -494,6 +607,11 @@ console.assert(minCostConnectPoints([[0,0]]) === 0);
 console.assert(minCostConnectPoints([[0,0],[1,1]]) === 2);
 console.assert(minCostConnectPoints([[0,0],[1,0],[2,0],[3,0]]) === 3);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// Uses array-based Prim's (Approach 4). Full runnable program: 1584-min-cost-to-connect-all-points-approach4.go
 ```
 </TabItem>
 </Tabs>

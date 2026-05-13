@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './054-spiral-matrix.py?raw';
 import practiceCodeTs from './054-spiral-matrix.ts?raw';
+import practiceCodeGo from './054-spiral-matrix.go?raw';
 import approach2PyCode from './054-spiral-matrix-approach2.py?raw';
 import approach2TsCode from './054-spiral-matrix-approach2.ts?raw';
+import approach2GoCode from './054-spiral-matrix-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 54 · [Link](https://leetcode.com/problems/spiral-matrix/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="spiral-matrix-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="spiral-matrix-go" />
   </TabItem>
 </Tabs>
 
@@ -86,6 +92,31 @@ function spiralOrder(matrix: number[][]): number[] {
         c += dirs[d][1];
     }
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func spiralOrder(matrix [][]int) []int {
+    if len(matrix) == 0 { return []int{} }
+    rows, cols := len(matrix), len(matrix[0])               // L1: O(1)
+    dirs := [][2]int{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}
+    result := []int{}
+    visited := make([][]bool, rows)
+    for i := range visited { visited[i] = make([]bool, cols) }  // L2: O(m·n)
+    r, c, d := 0, 0, 0
+    for i := 0; i < rows*cols; i++ {                        // L3: loop m·n times
+        result = append(result, matrix[r][c])               // L4: O(1) amortized
+        visited[r][c] = true                                // L5: O(1)
+        dr, dc := dirs[d][0], dirs[d][1]
+        nr, nc := r+dr, c+dc
+        if nr < 0 || nr >= rows || nc < 0 || nc >= cols || visited[nr][nc] {
+            d = (d + 1) % 4                                 // L6: O(1) turn
+        }
+        r += dirs[d][0]
+        c += dirs[d][1]
+    }
+    return result
 }
 ```
 </TabItem>
@@ -169,6 +200,40 @@ function spiralOrder(matrix: number[][]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func spiralOrder(matrix [][]int) []int {
+    if len(matrix) == 0 { return []int{} }
+    result := []int{}
+    top, bottom := 0, len(matrix)-1              // L1: O(1)
+    left, right := 0, len(matrix[0])-1           // L2: O(1)
+
+    for top <= bottom && left <= right {          // L3: outer loop, min(m,n)/2 rounds
+        for c := left; c <= right; c++ {          // L4: walk top row
+            result = append(result, matrix[top][c])  // L5: O(1) amortized
+        }
+        top++                                     // L6: shrink
+        for r := top; r <= bottom; r++ {          // L7: walk right col
+            result = append(result, matrix[r][right])
+        }
+        right--
+        if top <= bottom {
+            for c := right; c >= left; c-- {      // L8: walk bottom row
+                result = append(result, matrix[bottom][c])
+            }
+            bottom--
+        }
+        if left <= right {
+            for r := bottom; r >= top; r-- {      // L9: walk left col
+                result = append(result, matrix[r][left])
+            }
+            left++
+        }
+    }
+    return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -196,6 +261,9 @@ The `if top <= bottom` / `if left <= right` guards handle the last single row or
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="spiral-matrix-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="spiral-matrix-approach2-go" />
   </TabItem>
 </Tabs>
 

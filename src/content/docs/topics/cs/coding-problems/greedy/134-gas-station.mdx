@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './134-gas-station.py?raw';
 import practiceCodeTs from './134-gas-station.ts?raw';
+import practiceCodeGo from './134-gas-station.go?raw';
 import approach2PyCode from './134-gas-station-approach2.py?raw';
 import approach2TsCode from './134-gas-station-approach2.ts?raw';
+import approach2GoCode from './134-gas-station-approach2.go?raw';
 
 ## Problem
 
@@ -36,6 +39,9 @@ LeetCode 134 · [Link](https://leetcode.com/problems/gas-station/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="gas-station-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="gas-station-go" />
   </TabItem>
 </Tabs>
 
@@ -75,6 +81,24 @@ function canCompleteCircuit(gas: number[], cost: number[]): number {
         if (ok) return start;
     }
     return -1;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func canCompleteCircuit(gas []int, cost []int) int {
+    n := len(gas)                                           // L1: O(1)
+    for start := 0; start < n; start++ {                   // L2: outer loop, n starts
+        tank := 0
+        ok := true
+        for i := 0; i < n; i++ {                           // L3: inner loop, n steps per start
+            idx := (start + i) % n                         // L4: O(1)
+            tank += gas[idx] - cost[idx]                   // L5: O(1)
+            if tank < 0 { ok = false; break }
+        }
+        if ok { return start }
+    }
+    return -1
 }
 ```
 </TabItem>
@@ -137,6 +161,26 @@ function canCompleteCircuit(gas: number[], cost: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func canCompleteCircuit(gas []int, cost []int) int {
+    totalGas, totalCost := 0, 0
+    for _, g := range gas { totalGas += g }
+    for _, c := range cost { totalCost += c }
+    if totalGas < totalCost { return -1 }                  // L1: O(n) feasibility check
+    tank := 0                                              // L2: O(1)
+    start := 0                                             // L3: O(1)
+    for i := range gas {                                   // L4: single pass, n iterations
+        tank += gas[i] - cost[i]                           // L5: O(1)
+        if tank < 0 {                                      // L6: O(1)
+            start = i + 1
+            tank = 0
+        }
+    }
+    return start
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -166,6 +210,9 @@ If you run out of gas between stations `start` and `j`, then no station in `[sta
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="gas-station-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="gas-station-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Summary
@@ -180,6 +227,23 @@ Classic "skip impossible prefixes" greedy.
 ## Test cases
 
 <Tabs>
+<TabItem label="Go">
+```go
+func canCompleteCircuit(gas []int, cost []int) int {
+    totalGas, totalCost := 0, 0
+    for _, g := range gas { totalGas += g }
+    for _, c := range cost { totalCost += c }
+    if totalGas < totalCost { return -1 }
+    tank := 0
+    start := 0
+    for i := range gas {
+        tank += gas[i] - cost[i]
+        if tank < 0 { start = i + 1; tank = 0 }
+    }
+    return start
+}
+```
+</TabItem>
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_134.py and run.

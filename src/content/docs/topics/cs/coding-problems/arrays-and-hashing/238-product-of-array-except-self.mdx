@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './238-product-of-array-except-self.py?raw';
 import practiceCodeTs from './238-product-of-array-except-self.ts?raw';
+import practiceCodeGo from './238-product-of-array-except-self.go?raw';
 import approach2PyCode from './238-product-of-array-except-self-approach2.py?raw';
 import approach2TsCode from './238-product-of-array-except-self-approach2.ts?raw';
+import approach2GoCode from './238-product-of-array-except-self-approach2.go?raw';
 import approach3PyCode from './238-product-of-array-except-self-approach3.py?raw';
 import approach3TsCode from './238-product-of-array-except-self-approach3.ts?raw';
+import approach3GoCode from './238-product-of-array-except-self-approach3.go?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 238 · [Link](https://leetcode.com/problems/product-of-array-except-sel
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="product-of-array-except-self-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="product-of-array-except-self-go" />
   </TabItem>
 </Tabs>
 
@@ -73,6 +80,22 @@ function productExceptSelf(nums: number[]): number[] {
         answer[i] = prod;                          // L8: O(1) assign
     }
     return answer;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func productExceptSelf(nums []int) []int {
+	n := len(nums)                               // L1: O(1)
+	answer := make([]int, n)                     // L2: O(n)
+	for i := 0; i < n; i++ {                    // L3: outer loop, n iterations
+		prod := 1                                // L4: O(1) reset
+		for j := 0; j < n; j++ {               // L5: inner loop, n iterations
+			if j != i { prod *= nums[j] }       // L6-L7: O(1) guard + multiply
+		}
+		answer[i] = prod                         // L8: O(1) assign
+	}
+	return answer
 }
 ```
 </TabItem>
@@ -137,6 +160,28 @@ function productExceptSelf(nums: number[]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func productExceptSelf(nums []int) []int {
+	n := len(nums)                              // L1: O(1)
+	prefix := make([]int, n)                    // L2: O(n)
+	suffix := make([]int, n)                    // L3: O(n)
+	prefix[0] = 1
+	for i := 1; i < n; i++ {                   // L4: forward pass, n-1 steps
+		prefix[i] = prefix[i-1] * nums[i-1]    // L5: O(1)
+	}
+	suffix[n-1] = 1
+	for i := n - 2; i >= 0; i-- {             // L6: backward pass, n-1 steps
+		suffix[i] = suffix[i+1] * nums[i+1]    // L7: O(1)
+	}
+	result := make([]int, n)
+	for i := 0; i < n; i++ {
+		result[i] = prefix[i] * suffix[i]      // L8: O(n)
+	}
+	return result
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -164,6 +209,9 @@ Three linear passes, each O(n). All three contribute equally; none dominates asy
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="product-except-self-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="product-except-self-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -212,6 +260,26 @@ function productExceptSelf(nums: number[]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func productExceptSelf(nums []int) []int {
+	n := len(nums)                           // L1: O(1)
+	answer := make([]int, n)                 // L2: O(n) output array
+	answer[0] = 1
+	// First pass: answer[i] = product of all elements left of i
+	for i := 1; i < n; i++ {               // L3: n-1 steps
+		answer[i] = answer[i-1] * nums[i-1] // L4: O(1)
+	}
+	// Second pass: multiply by product of all elements right of i
+	suffix := 1                              // L5: O(1) running scalar
+	for i := n - 1; i >= 0; i-- {          // L6: n steps, right to left
+		answer[i] *= suffix                  // L7: O(1) multiply-in-place
+		suffix *= nums[i]                    // L8: O(1) extend suffix product
+	}
+	return answer
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -239,6 +307,9 @@ Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the ne
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="product-except-self-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="product-except-self-approach3-go" />
   </TabItem>
 </Tabs>
 

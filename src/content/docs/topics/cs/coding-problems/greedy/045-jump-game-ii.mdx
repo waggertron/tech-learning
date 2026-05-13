@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './045-jump-game-ii.py?raw';
 import practiceCodeTs from './045-jump-game-ii.ts?raw';
+import practiceCodeGo from './045-jump-game-ii.go?raw';
 import approach2PyCode from './045-jump-game-ii-approach2.py?raw';
 import approach2TsCode from './045-jump-game-ii-approach2.ts?raw';
+import approach2GoCode from './045-jump-game-ii-approach2.go?raw';
 import approach3PyCode from './045-jump-game-ii-approach3.py?raw';
 import approach3TsCode from './045-jump-game-ii-approach3.ts?raw';
+import approach3GoCode from './045-jump-game-ii-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 45 · [Link](https://leetcode.com/problems/jump-game-ii/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="jump-game-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="jump-game-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -74,6 +81,26 @@ function jump(nums: number[]): number {
         }
     }
     return dp[n - 1];
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func jump(nums []int) int {
+    n := len(nums)                                          // L1: O(1)
+    const INF = 1<<62
+    dp := make([]int, n)                                    // L2: O(n)
+    for i := range dp { dp[i] = INF }
+    dp[0] = 0                                               // L3: O(1)
+    for i := 0; i < n; i++ {                               // L4: outer loop, n iterations
+        if dp[i] == INF { continue }
+        furthest := i + nums[i]                             // L5: O(1)
+        if furthest > n-1 { furthest = n - 1 }
+        for j := i + 1; j <= furthest; j++ {               // L6: inner loop, up to n per i
+            if dp[i]+1 < dp[j] { dp[j] = dp[i] + 1 }     // L7: O(1)
+        }
+    }
+    return dp[n-1]
 }
 ```
 </TabItem>
@@ -153,6 +180,34 @@ function jump(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func jump(nums []int) int {
+    n := len(nums)                                          // L1: O(1)
+    if n <= 1 { return 0 }
+    visited := make([]bool, n)                              // L2: O(n)
+    visited[0] = true
+    level := 0                                              // L3: O(1)
+    frontier := []int{0}                                    // L4: O(1)
+    for len(frontier) > 0 {                                 // L5: outer loop, one per jump level
+        level++
+        var nextFrontier []int
+        for _, i := range frontier {                        // L6: iterate current frontier
+            for k := 1; k <= nums[i]; k++ {                // L7: try each reachable step
+                j := i + k
+                if j >= n-1 { return level }
+                if !visited[j] {
+                    visited[j] = true
+                    nextFrontier = append(nextFrontier, j)  // L8: O(1) amortized
+                }
+            }
+        }
+        frontier = nextFrontier
+    }
+    return -1
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -180,6 +235,9 @@ Each node is visited at most once (the `visited` guard), so total work across al
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="jump-game-ii-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="jump-game-ii-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -219,6 +277,23 @@ function jump(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func jump(nums []int) int {
+    jumps := 0                                              // L1: O(1)
+    currentEnd := 0                                        // L2: O(1)
+    farthest := 0                                          // L3: O(1)
+    for i := 1; i < len(nums); i++ {                       // L4: single pass, n-1 iterations
+        if i+nums[i] > farthest { farthest = i + nums[i] } // L5: O(1) per step
+        if i == currentEnd {                               // L6: O(1) per step
+            jumps++
+            currentEnd = farthest
+        }
+    }
+    return jumps
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -250,6 +325,9 @@ This is BFS collapsed into a linear scan: the "frontier" of a BFS level is impli
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="jump-game-ii-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="jump-game-ii-approach3-go" />
+  </TabItem>
 </Tabs>
 
 ## Summary
@@ -265,6 +343,23 @@ One of the cleanest greedy collapses of a BFS structure.
 ## Test cases
 
 <Tabs>
+<TabItem label="Go">
+```go
+func jump(nums []int) int {
+    jumps := 0
+    currentEnd := 0
+    farthest := 0
+    for i := 1; i < len(nums); i++ {
+        if i+nums[i] > farthest { farthest = i + nums[i] }
+        if i == currentEnd {
+            jumps++
+            currentEnd = farthest
+        }
+    }
+    return jumps
+}
+```
+</TabItem>
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_045.py and run.

@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './115-distinct-subsequences.py?raw';
 import practiceCodeTs from './115-distinct-subsequences.ts?raw';
+import practiceCodeGo from './115-distinct-subsequences.go?raw';
 import approach2PyCode from './115-distinct-subsequences-approach2.py?raw';
 import approach2TsCode from './115-distinct-subsequences-approach2.ts?raw';
+import approach2GoCode from './115-distinct-subsequences-approach2.go?raw';
 import approach3PyCode from './115-distinct-subsequences-approach3.py?raw';
 import approach3TsCode from './115-distinct-subsequences-approach3.ts?raw';
+import approach3GoCode from './115-distinct-subsequences-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 115 · [Link](https://leetcode.com/problems/distinct-subsequences/) · 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="distinct-subsequences-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="distinct-subsequences-go" />
   </TabItem>
 </Tabs>
 
@@ -74,6 +81,22 @@ function numDistinct(s: string, t: string): number {
         return f(i + 1, j);                         // L5: one call (must skip)
     }
     return f(0, 0);
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func numDistinct(s string, t string) int {
+    var f func(i, j int) int
+    f = func(i, j int) int {
+        if j == len(t) { return 1 }               // L1: O(1) base: t fully matched
+        if i == len(s) { return 0 }               // L2: O(1) base: s exhausted
+        if s[i] == t[j] {                         // L3: O(1) char match check
+            return f(i+1, j+1) + f(i+1, j)       // L4: two calls (use or skip)
+        }
+        return f(i+1, j)                           // L5: one call (must skip)
+    }
+    return f(0, 0)
 }
 ```
 </TabItem>
@@ -163,6 +186,9 @@ Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pair
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="distinct-subsequences-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="distinct-subsequences-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Bottom-up 2-D DP + rolling to 1-D (optimal space)
@@ -198,6 +224,23 @@ function numDistinct(s: string, t: string): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func numDistinct(s string, t string) int {
+    m, n := len(s), len(t)
+    dp := make([]int, n+1)   // L2: O(n) 1-D table init
+    dp[0] = 1                // L3: O(1) base: empty t matched by any prefix
+    for i := 0; i < m; i++ {        // L4: outer loop over s O(m)
+        for j := n; j >= 1; j-- {   // L5: inner loop over t, right-to-left O(n)
+            if s[i] == t[j-1] {     // L6: O(1) char match check
+                dp[j] += dp[j-1]    // L7: O(1) accumulate ways
+            }
+        }
+    }
+    return dp[n]             // L8: O(1) answer
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -224,6 +267,9 @@ The right-to-left inner loop is critical: it prevents an `s[i]` character from b
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="distinct-subsequences-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="distinct-subsequences-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -290,6 +336,35 @@ console.assert(numDistinct("", "a") === 0);
 console.assert(numDistinct("abc", "abc") === 1);
 console.assert(numDistinct("aaa", "b") === 0);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func numDistinct(s string, t string) int {
+    m, n := len(s), len(t)
+    dp := make([]int, n+1)
+    dp[0] = 1
+    for i := 0; i < m; i++ {
+        for j := n; j >= 1; j-- {
+            if s[i] == t[j-1] { dp[j] += dp[j-1] }
+        }
+    }
+    return dp[n]
+}
+
+func main() {
+    if numDistinct("rabbbit", "rabbit") != 3 { panic("fail") }
+    if numDistinct("babgbag", "bag") != 5 { panic("fail") }
+    if numDistinct("abc", "") != 1 { panic("fail") }
+    if numDistinct("", "a") != 0 { panic("fail") }
+    if numDistinct("abc", "abc") != 1 { panic("fail") }
+    if numDistinct("aaa", "b") != 0 { panic("fail") }
+    fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>

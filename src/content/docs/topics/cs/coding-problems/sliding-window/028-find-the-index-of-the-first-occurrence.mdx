@@ -11,9 +11,12 @@ updated: 2026-05-07
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './028-find-the-index-of-the-first-occurrence.py?raw';
 import practiceCodeTs from './028-find-the-index-of-the-first-occurrence.ts?raw';
+import practiceCodeGo from './028-find-the-index-of-the-first-occurrence.go?raw';
 import approach2TsCode from './028-find-the-index-of-the-first-occurrence-approach2.ts?raw';
+import approach2GoCode from './028-find-the-index-of-the-first-occurrence-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 28 · [Link](https://leetcode.com/problems/find-the-index-of-the-first-
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="find-the-index-of-the-first-occurrence-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="find-the-index-of-the-first-occurrence-go" />
   </TabItem>
 </Tabs>
 
@@ -62,6 +68,19 @@ function strStr(haystack: string, needle: string): number {
         }
     }
     return -1;                                      // L5: O(1)
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func strStr(haystack string, needle string) int {
+	n, m := len(haystack), len(needle)      // L1: O(1)
+	for i := 0; i <= n-m; i++ {            // L2: loop, n-m+1 iterations
+		if haystack[i:i+m] == needle {      // L3: slice + compare, O(m) each
+			return i                        // L4: O(1) return
+		}
+	}
+	return -1                               // L5: O(1)
 }
 ```
 </TabItem>
@@ -103,6 +122,13 @@ function strStr(haystack: string, needle: string): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func strStr(haystack string, needle string) int {
+	return strings.Index(haystack, needle)
+}
+```
+</TabItem>
 </Tabs>
 
 This is O(n) in the average case and O(n * m) in the worst case, but the constant factor is far lower than a hand-rolled loop because the inner comparison runs in native code.
@@ -112,6 +138,9 @@ This is O(n) in the average case and O(n * m) in the worst case, but the constan
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="find-first-occurrence-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="find-first-occurrence-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -176,6 +205,19 @@ console.assert(strStr("mississippi", "issip") === 4);
 console.assert(strStr("abc", "") === 0);
 console.assert(strStr("", "a") === -1);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func strStr(haystack string, needle string) int {
+	n, m := len(haystack), len(needle)
+	for i := 0; i <= n-m; i++ {
+		if haystack[i:i+m] == needle {
+			return i
+		}
+	}
+	return -1
+}
 ```
 </TabItem>
 </Tabs>

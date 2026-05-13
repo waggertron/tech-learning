@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './200-number-of-islands.py?raw';
 import practiceCodeTs from './200-number-of-islands.ts?raw';
+import practiceCodeGo from './200-number-of-islands.go?raw';
 import approach2PyCode from './200-number-of-islands-approach2.py?raw';
 import approach2TsCode from './200-number-of-islands-approach2.ts?raw';
+import approach2GoCode from './200-number-of-islands-approach2.go?raw';
 
 ## Problem
 
@@ -34,6 +37,9 @@ LeetCode 200 · [Link](https://leetcode.com/problems/number-of-islands/) · *Med
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="number-of-islands-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="number-of-islands-go" />
   </TabItem>
 </Tabs>
 
@@ -86,6 +92,36 @@ function numIslands(grid: string[][]): number {
         }
     }
     return count;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func numIslands(grid [][]byte) int {
+    if len(grid) == 0 {                                                // L1: guard empty input
+        return 0
+    }
+    rows, cols := len(grid), len(grid[0])                             // L2: O(1)
+    count := 0                                                        // L3: O(1)
+
+    var dfs func(r, c int)
+    dfs = func(r, c int) {
+        if r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] != '1' { // L4: boundary check
+            return
+        }
+        grid[r][c] = '0'                                              // L5: O(1) mark visited
+        dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)          // L6: recurse 4 neighbors
+    }
+
+    for r := 0; r < rows; r++ {                                       // L7: outer scan loop
+        for c := 0; c < cols; c++ {                                   // L8: inner scan loop
+            if grid[r][c] == '1' {
+                count++
+                dfs(r, c)                                             // L9: DFS from new island root
+            }
+        }
+    }
+    return count
 }
 ```
 </TabItem>
@@ -177,6 +213,43 @@ function numIslands(grid: string[][]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func numIslands(grid [][]byte) int {
+    if len(grid) == 0 {                                               // L1: guard empty input
+        return 0
+    }
+    rows, cols := len(grid), len(grid[0])                            // L2: O(1)
+    count := 0                                                       // L3: O(1)
+    dirs := [][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+
+    bfs := func(r, c int) {
+        queue := [][2]int{{r, c}}                                    // L4: O(1) seed queue
+        grid[r][c] = '0'                                             // L5: O(1) mark root visited
+        for len(queue) > 0 {                                         // L6: process until queue empty
+            cur := queue[0]; queue = queue[1:]                       // L7: O(1) dequeue
+            for _, d := range dirs {
+                nr, nc := cur[0]+d[0], cur[1]+d[1]
+                if nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == '1' {
+                    grid[nr][nc] = '0'                               // L8: O(1) mark visited
+                    queue = append(queue, [2]int{nr, nc})            // L9: O(1) enqueue neighbor
+                }
+            }
+        }
+    }
+
+    for r := 0; r < rows; r++ {                                      // L10: outer scan
+        for c := 0; c < cols; c++ {                                  // L11: inner scan
+            if grid[r][c] == '1' {
+                count++
+                bfs(r, c)                                            // L12: BFS from new island root
+            }
+        }
+    }
+    return count
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -204,6 +277,9 @@ The queue holds at most min(m, n) cells at any instant (the BFS frontier cannot 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="number-of-islands-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="number-of-islands-approach2-go" />
   </TabItem>
 </Tabs>
 

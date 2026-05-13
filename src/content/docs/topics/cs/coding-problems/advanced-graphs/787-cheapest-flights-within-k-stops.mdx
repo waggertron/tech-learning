@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './787-cheapest-flights-within-k-stops.py?raw';
 import practiceCodeTs from './787-cheapest-flights-within-k-stops.ts?raw';
+import practiceCodeGo from './787-cheapest-flights-within-k-stops.go?raw';
 import approach2PyCode from './787-cheapest-flights-within-k-stops-approach2.py?raw';
 import approach2TsCode from './787-cheapest-flights-within-k-stops-approach2.ts?raw';
+import approach2GoCode from './787-cheapest-flights-within-k-stops-approach2.go?raw';
 import approach3PyCode from './787-cheapest-flights-within-k-stops-approach3.py?raw';
 import approach3TsCode from './787-cheapest-flights-within-k-stops-approach3.ts?raw';
+import approach3GoCode from './787-cheapest-flights-within-k-stops-approach3.go?raw';
 
 ## Problem
 
@@ -36,6 +40,9 @@ LeetCode 787 · [Link](https://leetcode.com/problems/cheapest-flights-within-k-s
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="cheapest-flights-within-k-stops-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="cheapest-flights-within-k-stops-go" />
   </TabItem>
 </Tabs>
 
@@ -96,6 +103,36 @@ function findCheapestPrice(n: number, flights: number[][], src: number, dst: num
 
     const result = dfs(src, k + 1);                   // L6: O(V*K*avg_deg) total
     return result === Infinity ? -1 : result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
+    graph := make(map[int][][2]int)
+    for _, f := range flights {                        // L1: build adjacency list, O(E)
+        u, v, w := f[0], f[1], f[2]
+        graph[u] = append(graph[u], [2]int{v, w})     // L2: O(1) per edge
+    }
+    memo := make(map[[2]int]int)
+    var dfs func(city, stopsLeft int) int
+    dfs = func(city, stopsLeft int) int {              // L3: memoized over V*K states
+        if city == dst { return 0 }
+        if stopsLeft < 0 { return 1<<31 - 1 }
+        key := [2]int{city, stopsLeft}
+        if v, ok := memo[key]; ok { return v }
+        best := 1<<31 - 1
+        for _, edge := range graph[city] {             // L4: iterate neighbors, O(deg)
+            nb, cost := edge[0], edge[1]
+            sub := dfs(nb, stopsLeft-1)                // L5: recurse, O(1) if cached
+            if sub != 1<<31-1 && cost+sub < best { best = cost + sub }
+        }
+        memo[key] = best
+        return best
+    }
+    result := dfs(src, k+1)                           // L6: O(V*K*avg_deg) total
+    if result == 1<<31-1 { return -1 }
+    return result
 }
 ```
 </TabItem>
@@ -168,6 +205,33 @@ function findCheapestPrice(n: number, flights: number[][], src: number, dst: num
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+// See 787-cheapest-flights-within-k-stops-approach2.go for the full runnable program.
+// Core function uses container/heap with Item787{cost, city, stops int}.
+func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
+    graph := make(map[int][][2]int)
+    for _, f := range flights {                         // L1: build adjacency list, O(E)
+        u, v, w := f[0], f[1], f[2]
+        graph[u] = append(graph[u], [2]int{v, w})      // L2: O(1) per edge
+    }
+    h := &MinHeap787{{cost: 0, city: src, stops: k+1}}
+    heap.Init(h)                                        // L3: seed heap, O(1)
+    for h.Len() > 0 {                                   // L4: outer loop, up to E*K pushes
+        item := heap.Pop(h).(Item787)
+        cost, city, stops := item.cost, item.city, item.stops  // L5: O(log(heap_size))
+        if city == dst { return cost }
+        if stops > 0 {
+            for _, edge := range graph[city] {          // L6: iterate neighbors
+                nb, w := edge[0], edge[1]
+                heap.Push(h, Item787{cost: cost+w, city: nb, stops: stops-1})  // L7
+            }
+        }
+    }
+    return -1
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -199,6 +263,9 @@ Works but may re-expand nodes with fewer stops and higher cost.
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="cheapest-flights-within-k-stops-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="cheapest-flights-within-k-stops-approach2-go" />
   </TabItem>
 </Tabs>
 
@@ -241,6 +308,29 @@ function findCheapestPrice(n: number, flights: number[][], src: number, dst: num
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
+    const INF = 1<<31 - 1
+    dist := make([]int, n)                              // L1: init distances, O(V)
+    for i := range dist { dist[i] = INF }
+    dist[src] = 0                                       // L2: source costs zero
+    for i := 0; i <= k; i++ {                          // L3: outer loop, K+1 rounds
+        newDist := make([]int, n)
+        copy(newDist, dist)                             // L4: snapshot, O(V)
+        for _, f := range flights {                     // L5: scan all edges, O(E)
+            u, v, w := f[0], f[1], f[2]
+            if dist[u] != INF && dist[u]+w < newDist[v] {  // L6: relax if better
+                newDist[v] = dist[u] + w                // L7: O(1) update
+            }
+        }
+        dist = newDist                                  // L8: commit snapshot
+    }
+    if dist[dst] == INF { return -1 }
+    return dist[dst]                                    // L9: O(1) lookup
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -272,6 +362,9 @@ Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="cheapest-flights-within-k-stops-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="cheapest-flights-within-k-stops-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -349,6 +442,11 @@ console.assert(findCheapestPrice(2, [[0,1,500]], 0, 1, 0) === 500);
 console.assert(findCheapestPrice(3, [[0,1,100],[1,2,50]], 1, 1, 1) === 0);
 console.assert(findCheapestPrice(3, [[0,1,100]], 0, 2, 5) === -1);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+// Uses Bellman-Ford with hop cap (Approach 3). Full runnable program: 787-cheapest-flights-within-k-stops-approach3.go
 ```
 </TabItem>
 </Tabs>

@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './066-plus-one.py?raw';
 import practiceCodeTs from './066-plus-one.ts?raw';
+import practiceCodeGo from './066-plus-one.go?raw';
 import approach2PyCode from './066-plus-one-approach2.py?raw';
 import approach2TsCode from './066-plus-one-approach2.ts?raw';
+import approach2GoCode from './066-plus-one-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 66 · [Link](https://leetcode.com/problems/plus-one/) · *Easy*
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="plus-one-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="plus-one-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Convert to int, add, reconvert
@@ -54,6 +60,25 @@ def plus_one(digits):
 function plusOne(digits: number[]): number[] {
     const n = BigInt(digits.join('')) + 1n;   // L1: O(n) join + convert
     return String(n).split('').map(Number);   // L2: O(n) convert back
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import (
+    "strconv"
+    "strings"
+)
+
+func plusOne(digits []int) []int {
+    parts := make([]string, len(digits))
+    for i, d := range digits { parts[i] = strconv.Itoa(d) }
+    n, _ := strconv.ParseInt(strings.Join(parts, ""), 10, 64)  // L1: O(n)
+    n++
+    s := strconv.FormatInt(n, 10)
+    result := make([]int, len(s))
+    for i, ch := range s { result[i] = int(ch - '0') }        // L2: O(n)
+    return result
 }
 ```
 </TabItem>
@@ -104,6 +129,20 @@ function plusOne(digits: number[]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func plusOne(digits []int) []int {
+    for i := len(digits) - 1; i >= 0; i-- {    // L1: walk right to left
+        if digits[i] < 9 {                      // L2: O(1)
+            digits[i]++                         // L3: O(1), no carry needed
+            return digits
+        }
+        digits[i] = 0                           // L4: O(1), carry continues
+    }
+    return append([]int{1}, digits...)          // L5: O(n), all nines case
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -130,6 +169,9 @@ Best case: one step (last digit &lt; 9). Worst case: all nines, walk all n digit
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="plus-one-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="plus-one-approach2-go" />
   </TabItem>
 </Tabs>
 

@@ -11,12 +11,16 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './268-missing-number.py?raw';
 import practiceCodeTs from './268-missing-number.ts?raw';
+import practiceCodeGo from './268-missing-number.go?raw';
 import approach2PyCode from './268-missing-number-approach2.py?raw';
 import approach2TsCode from './268-missing-number-approach2.ts?raw';
+import approach2GoCode from './268-missing-number-approach2.go?raw';
 import approach3PyCode from './268-missing-number-approach3.py?raw';
 import approach3TsCode from './268-missing-number-approach3.ts?raw';
+import approach3GoCode from './268-missing-number-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 268 · [Link](https://leetcode.com/problems/missing-number/) · *Easy*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="missing-number-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="missing-number-go" />
   </TabItem>
 </Tabs>
 
@@ -63,6 +70,22 @@ function missingNumber(nums: number[]): number {
         if (!s.has(i)) return i;            // L3: O(1) amortized
     }
     return -1;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func missingNumber(nums []int) int {
+    s := make(map[int]bool)                 // L1: O(n)
+    for _, x := range nums {
+        s[x] = true
+    }
+    for i := 0; i <= len(nums); i++ {       // L2: scan 0..n
+        if !s[i] {                          // L3: O(1) amortized
+            return i
+        }
+    }
+    return -1
 }
 ```
 </TabItem>
@@ -101,6 +124,19 @@ function missingNumber(nums: number[]): number {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func missingNumber(nums []int) int {
+    n := len(nums)                          // L1: O(1)
+    expected := n * (n + 1) / 2            // L2: O(1), Gauss formula
+    actual := 0
+    for _, x := range nums {               // L3: O(n), sum all elements
+        actual += x
+    }
+    return expected - actual               // L4: O(1)
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -127,6 +163,9 @@ Risk of overflow in fixed-width languages for large n (not an issue in Python or
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="missing-number-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="missing-number-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: XOR of indices and values (optimal, overflow-safe)
@@ -151,6 +190,17 @@ function missingNumber(nums: number[]): number {
         result ^= i ^ nums[i];              // L3: O(1), cancel paired values
     }
     return result;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func missingNumber(nums []int) int {
+    result := len(nums)                     // L1: O(1), start with n
+    for i, x := range nums {               // L2: single pass, n iterations
+        result ^= i ^ x                    // L3: O(1), cancel paired values
+    }
+    return result
 }
 ```
 </TabItem>
@@ -182,6 +232,9 @@ Result starts at `n`. We XOR in every index 0..n-1 and every value from `nums`. 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="missing-number-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="missing-number-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -235,6 +288,17 @@ console.assert(missingNumber([0]) === 1);
 console.assert(missingNumber([1]) === 0);
 console.assert(missingNumber([0, 1, 2, 4, 5]) === 3);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func missingNumber(nums []int) int {
+    result := len(nums)
+    for i, x := range nums {
+        result ^= i ^ x
+    }
+    return result
+}
 ```
 </TabItem>
 </Tabs>

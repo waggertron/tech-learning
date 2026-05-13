@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './210-course-schedule-ii.py?raw';
 import practiceCodeTs from './210-course-schedule-ii.ts?raw';
+import practiceCodeGo from './210-course-schedule-ii.go?raw';
 import approach2PyCode from './210-course-schedule-ii-approach2.py?raw';
 import approach2TsCode from './210-course-schedule-ii-approach2.ts?raw';
+import approach2GoCode from './210-course-schedule-ii-approach2.go?raw';
 
 ## Problem
 
@@ -35,6 +38,9 @@ LeetCode 210 · [Link](https://leetcode.com/problems/course-schedule-ii/) · *Me
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="course-schedule-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="course-schedule-ii-go" />
   </TabItem>
 </Tabs>
 
@@ -119,6 +125,38 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func findOrder(numCourses int, prerequisites [][]int) []int {
+    graph := make([][]int, numCourses)
+    for _, p := range prerequisites { graph[p[1]] = append(graph[p[1]], p[0]) } // L1-L3
+
+    const white, gray, black = 0, 1, 2
+    color := make([]int, numCourses)              // L5: O(V) array
+    order := []int{}                              // L6: result
+    hasCycle := false                             // L7: flag
+
+    var dfs func(n int)
+    dfs = func(n int) {
+        if hasCycle { return }                    // L9: early exit
+        color[n] = gray                           // L10: mark in-progress
+        for _, nb := range graph[n] {             // L11: visit neighbors
+            if color[nb] == white { dfs(nb) }     // L12: recurse on unvisited
+            if color[nb] == gray { hasCycle = true; return } // L13: cycle
+        }
+        color[n] = black                          // L14: mark done
+        order = append(order, n)                  // L15
+    }
+
+    for c := 0; c < numCourses; c++ {             // L16
+        if color[c] == white { dfs(c) }           // L17
+    }
+    if hasCycle { return []int{} }
+    for i, j := 0, len(order)-1; i < j; i, j = i+1, j-1 { order[i], order[j] = order[j], order[i] } // L18
+    return order
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -198,6 +236,33 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func findOrder(numCourses int, prerequisites [][]int) []int {
+    graph := make([][]int, numCourses)
+    inDeg := make([]int, numCourses)              // L2: O(V) in-degree array
+    for _, p := range prerequisites {             // L3: O(E) to populate
+        graph[p[1]] = append(graph[p[1]], p[0])  // L4
+        inDeg[p[0]]++                             // L5
+    }
+    queue := []int{}
+    for i := 0; i < numCourses; i++ {             // L6: seed queue
+        if inDeg[i] == 0 { queue = append(queue, i) }
+    }
+    order := []int{}                              // L7
+    for len(queue) > 0 {                          // L8
+        n := queue[0]; queue = queue[1:]          // L9
+        order = append(order, n)                  // L10
+        for _, nb := range graph[n] {             // L11
+            inDeg[nb]--                           // L12
+            if inDeg[nb] == 0 { queue = append(queue, nb) } // L13
+        }
+    }
+    if len(order) == numCourses { return order }  // L14
+    return []int{}
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -226,6 +291,9 @@ Each node enters the queue at most once (when its in-degree hits zero), and each
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="course-schedule-ii-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="course-schedule-ii-approach2-go" />
   </TabItem>
 </Tabs>
 

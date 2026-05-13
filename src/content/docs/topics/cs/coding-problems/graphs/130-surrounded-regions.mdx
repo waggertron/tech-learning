@@ -11,10 +11,13 @@ updated: 2026-05-12
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './130-surrounded-regions.py?raw';
 import practiceCodeTs from './130-surrounded-regions.ts?raw';
+import practiceCodeGo from './130-surrounded-regions.go?raw';
 import approach2PyCode from './130-surrounded-regions-approach2.py?raw';
 import approach2TsCode from './130-surrounded-regions-approach2.ts?raw';
+import approach2GoCode from './130-surrounded-regions-approach2.go?raw';
 
 ## Problem
 
@@ -48,6 +51,9 @@ LeetCode 130 · [Link](https://leetcode.com/problems/surrounded-regions/) · *Me
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="surrounded-regions-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="surrounded-regions-go" />
   </TabItem>
 </Tabs>
 
@@ -225,6 +231,9 @@ function solve(board: string[][]): void {
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="surrounded-regions-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="surrounded-regions-approach2-go" />
   </TabItem>
 </Tabs>
 

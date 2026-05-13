@@ -11,9 +11,12 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './567-permutation-in-string.py?raw';
 import practiceCodeTs from './567-permutation-in-string.ts?raw';
+import practiceCodeGo from './567-permutation-in-string.go?raw';
 import approach3TsCode from './567-permutation-in-string-approach3.ts?raw';
+import approach3GoCode from './567-permutation-in-string-approach3.go?raw';
 
 ## Problem
 
@@ -33,6 +36,9 @@ LeetCode 567 · [Link](https://leetcode.com/problems/permutation-in-string/) · 
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="permutation-in-string-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="permutation-in-string-go" />
   </TabItem>
 </Tabs>
 
@@ -66,6 +72,32 @@ function checkInclusion(s1: string, s2: string): boolean {
         if (s2.includes(p.join(''))) return true;           // L2: O(n) join + O(m) search
     }
     return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func checkInclusion(s1 string, s2 string) bool {
+	var perms func(arr []byte) [][]byte
+	perms = func(arr []byte) [][]byte {                    // L1: n! permutations
+		if len(arr) <= 1 {
+			return [][]byte{arr}
+		}
+		var result [][]byte
+		for i, ch := range arr {
+			rest := append(append([]byte{}, arr[:i]...), arr[i+1:]...)
+			for _, p := range perms(rest) {
+				result = append(result, append([]byte{ch}, p...))
+			}
+		}
+		return result
+	}
+	for _, p := range perms([]byte(s1)) {
+		if strings.Contains(s2, string(p)) {               // L2: O(n) join + O(m) search
+			return true
+		}
+	}
+	return false
 }
 ```
 </TabItem>
@@ -127,6 +159,41 @@ function checkInclusion(s1: string, s2: string): boolean {
         if (mapsEqual(window, target)) return true;
     }
     return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func checkInclusion(s1 string, s2 string) bool {
+	n, m := len(s1), len(s2)
+	if n > m {
+		return false
+	}
+	target := make(map[byte]int)
+	for i := 0; i < n; i++ {
+		target[s1[i]]++                                   // L1: O(n)
+	}
+	mapsEqual := func(a, b map[byte]int) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for k, v := range a {
+			if b[k] != v {
+				return false
+			}
+		}
+		return true
+	}
+	for i := n; i <= m; i++ {                            // L2: m-n+1 windows
+		window := make(map[byte]int)
+		for j := i - n; j < i; j++ {                    // L3: O(n) Counter
+			window[s2[j]]++
+		}
+		if mapsEqual(window, target) {
+			return true
+		}
+	}
+	return false
 }
 ```
 </TabItem>
@@ -204,6 +271,50 @@ function checkInclusion(s1: string, s2: string): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func checkInclusion(s1 string, s2 string) bool {
+	n, m := len(s1), len(s2)
+	if n > m {
+		return false
+	}
+	target := make(map[byte]int)                         // L1: O(n)
+	for i := 0; i < n; i++ {
+		target[s1[i]]++
+	}
+	window := make(map[byte]int)                         // L2: O(n) initial window
+	for i := 0; i < n; i++ {
+		window[s2[i]]++
+	}
+	mapsEqual := func(a, b map[byte]int) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for k, v := range a {
+			if b[k] != v {
+				return false
+			}
+		}
+		return true
+	}
+	if mapsEqual(window, target) {                       // L3: O(k) compare
+		return true
+	}
+	for i := n; i < m; i++ {                            // L4: slide m - n steps
+		window[s2[i]]++                                  // L5: O(1) add new char
+		outCh := s2[i-n]
+		window[outCh]--                                  // L6: O(1) remove old char
+		if window[outCh] == 0 {
+			delete(window, outCh)                        // L7: O(1) cleanup
+		}
+		if mapsEqual(window, target) {                   // L8: O(k) compare
+			return true
+		}
+	}
+	return false
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -232,6 +343,9 @@ Instead of comparing full counters every step, maintain a `matches` integer that
 <Tabs>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="permutation-in-string-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="permutation-in-string-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -320,6 +434,50 @@ console.assert(checkInclusion("a", "b") === false);
 console.assert(checkInclusion("abc", "ab") === false);
 console.assert(checkInclusion("aab", "aabc") === true);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func checkInclusion(s1 string, s2 string) bool {
+	n, m := len(s1), len(s2)
+	if n > m {
+		return false
+	}
+	target := make(map[byte]int)
+	for i := 0; i < n; i++ {
+		target[s1[i]]++
+	}
+	window := make(map[byte]int)
+	for i := 0; i < n; i++ {
+		window[s2[i]]++
+	}
+	mapsEqual := func(a, b map[byte]int) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for k, v := range a {
+			if b[k] != v {
+				return false
+			}
+		}
+		return true
+	}
+	if mapsEqual(window, target) {
+		return true
+	}
+	for i := n; i < m; i++ {
+		window[s2[i]]++
+		outCh := s2[i-n]
+		window[outCh]--
+		if window[outCh] == 0 {
+			delete(window, outCh)
+		}
+		if mapsEqual(window, target) {
+			return true
+		}
+	}
+	return false
+}
 ```
 </TabItem>
 </Tabs>
