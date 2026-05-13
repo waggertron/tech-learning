@@ -40,7 +40,8 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     closeBracketsKeymap,
   } from '@codemirror/autocomplete';
 
-  const GO_PLAYGROUND_URL = 'https://go.dev/play/compile?version=2';
+  // Form-encoded POST avoids the CORS preflight that JSON triggers.
+  const GO_PLAYGROUND_URL = 'https://play.golang.org/compile';
 
   interface RunResult {
     lines: string[];
@@ -54,8 +55,8 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     try {
       resp = await fetch(GO_PLAYGROUND_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body: code, version: 2 }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ version: '2', body: code }).toString(),
       });
     } catch (e: any) {
       return { lines: [`Network error: ${e?.message ?? e}`], ms: 0, error: true };
