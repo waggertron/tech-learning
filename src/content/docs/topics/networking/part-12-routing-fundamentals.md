@@ -174,7 +174,7 @@ These terms are frequently confused:
 - **Routed protocol**: the protocol being forwarded. IPv4 and IPv6 are routed protocols. They carry user data from source to destination.
 - **Routing protocol**: the protocol that builds the routing table. OSPF, EIGRP, RIP, and BGP are routing protocols. They exchange topology information between routers so each router knows where to forward routed protocol packets.
 
-The distinction matters: OSPF routes IP packets, but OSPF itself runs over IP. RIP carries information about IP networks in UDP packets. Routing protocols are infrastructure; routed protocols are what the infrastructure serves.
+The distinction matters: OSPF routes IP packets, but OSPF itself runs over IP. RIP carries information about IP networks in UDP packets. Routing protocols are infrastructure. Routed protocols are what the infrastructure serves.
 
 ## Connected and local routes
 

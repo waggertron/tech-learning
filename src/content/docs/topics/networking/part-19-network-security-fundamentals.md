@@ -8,7 +8,7 @@ created: 2026-05-13
 updated: 2026-05-13
 ---
 
-A network that moves data but cannot protect it is a liability. Security is not a feature you bolt on after the network is built; it is a set of decisions made at every layer of the design. This part covers the threat landscape, the conceptual frameworks that organize defensive thinking, and the specific Cisco IOS features you configure to harden a network.
+A network that moves data but cannot protect it is a liability. Security is not a feature you bolt on after the network is built. It is a set of decisions made at every layer of the design. This part covers the threat landscape, the conceptual frameworks that organize defensive thinking, and the specific Cisco IOS features you configure to harden a network.
 
 ## Why it matters
 
@@ -203,7 +203,7 @@ Phase 2 (IPsec SA):
 
 **AH (Authentication Header)**: provides authentication and integrity; does not encrypt. Incompatible with NAT (modifies IP header, breaking AH hash).
 
-**ESP (Encapsulating Security Payload)**: provides authentication, integrity, and encryption. NAT-compatible in NAT-T mode. ESP is standard in modern deployments; AH is rarely used.
+**ESP (Encapsulating Security Payload)**: provides authentication, integrity, and encryption. NAT-compatible in NAT-T mode. ESP is standard in modern deployments. AH is rarely used.
 
 ### Remote access VPN
 

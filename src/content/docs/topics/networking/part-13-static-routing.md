@@ -44,7 +44,7 @@ The router performs a recursive lookup: it looks up 10.0.0.2 in its own routing 
 R1(config)# ip route 192.168.2.0 255.255.255.0 GigabitEthernet0/1
 ```
 
-No recursive lookup needed; the router sends traffic out that interface directly. On point-to-point serial links this is fine. On Ethernet, this creates a problem (see Gotchas below).
+No recursive lookup needed. The router sends traffic out that interface directly. On point-to-point serial links this is fine. On Ethernet, this creates a problem (see Gotchas below).
 
 **Both exit interface and next-hop IP:**
 

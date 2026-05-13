@@ -116,7 +116,7 @@ R1(config)# interface GigabitEthernet0/1
 R1(config-if)# ip nat outside
 ```
 
-ACL 1 matches the entire 192.168.0.0/16 space. Every matching inside host shares GigabitEthernet0/1's public IP. The `overload` keyword is what enables PAT; without it, dynamic NAT would attempt a one-to-one pool mapping.
+ACL 1 matches the entire 192.168.0.0/16 space. Every matching inside host shares GigabitEthernet0/1's public IP. The `overload` keyword is what enables PAT. Without it, dynamic NAT would attempt a one-to-one pool mapping.
 
 You can also PAT to a specific public IP address instead of an interface:
 

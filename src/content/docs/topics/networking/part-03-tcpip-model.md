@@ -14,7 +14,7 @@ The TCP/IP model is not a reference model for protocol designers. It is the prot
 
 The US Department of Defense funded ARPANET in the late 1960s to build a network that could survive partial failures and still route traffic. The result was a packet-switched network and a protocol suite designed around the idea that the network itself is unreliable: endpoints (hosts) are responsible for reliability, not the network core.
 
-TCP/IP predates the OSI model. It was not designed to fit OSI layers; OSI was designed after TCP/IP existed, as a vendor-neutral generalization. The practical result is a mismatch between the two models that engineers have argued about ever since.
+TCP/IP predates the OSI model. It was not designed to fit OSI layers. OSI was designed after TCP/IP existed, as a vendor-neutral generalization. The practical result is a mismatch between the two models that engineers have argued about ever since.
 
 ## The four layers
 

@@ -227,7 +227,7 @@ System serial number            : FDO2101A0BC
 
 **Duplex mismatch does not take the link down.** The interface shows as up/up. The only evidence is degraded throughput and rising collision counters. Operators sometimes chase routing or application issues for hours before checking duplex.
 
-**The CAM table has finite capacity.** High-end chassis switches hold hundreds of thousands of entries; lower-end access switches may hold only 8,000-16,000. A MAC flooding attack (sending frames with millions of random source MACs) can fill the table and force the switch into hub mode, forwarding all frames out all ports. Mitigating controls: port security (limit MACs per port), 802.1X authentication.
+**The CAM table has finite capacity.** High-end chassis switches hold hundreds of thousands of entries. Lower-end access switches may hold only 8,000-16,000. A MAC flooding attack (sending frames with millions of random source MACs) can fill the table and force the switch into hub mode, forwarding all frames out all ports. Mitigating controls: port security (limit MACs per port), 802.1X authentication.
 
 **Broadcast storms are possible without STP.** If you connect two switches with two cables and Spanning Tree Protocol is not running (or misconfigured), a loop forms. Broadcasts circulate forever, consuming all bandwidth. STP is covered in Part 10.
 

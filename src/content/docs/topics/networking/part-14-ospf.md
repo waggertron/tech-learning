@@ -144,7 +144,7 @@ The `network` command uses a wildcard mask (inverse of subnet mask). The router 
 
 The process ID (1 in `router ospf 1`) is locally significant only. Two routers with different process IDs can still become OSPF neighbors. It has no effect on adjacency formation.
 
-**Passive interface** suppresses OSPF hello packets on that interface. The network attached to the interface is still advertised into OSPF; it just does not send or receive hellos. Use this on interfaces connected to end hosts or stub segments where no OSPF neighbor will ever exist. Sending hellos on user-facing ports wastes bandwidth and can confuse hosts.
+**Passive interface** suppresses OSPF hello packets on that interface. The network attached to the interface is still advertised into OSPF. It just does not send or receive hellos. Use this on interfaces connected to end hosts or stub segments where no OSPF neighbor will ever exist. Sending hellos on user-facing ports wastes bandwidth and can confuse hosts.
 
 ## Redistributing a default route
 

@@ -170,7 +170,7 @@ Gi0/24      10,20,30
 
 ## VTP (VLAN Trunking Protocol)
 
-VTP is a Cisco proprietary protocol that synchronizes the VLAN database across switches. One switch acts as VTP server; others are VTP clients that receive VLAN updates automatically.
+VTP is a Cisco proprietary protocol that synchronizes the VLAN database across switches. One switch acts as VTP server. Others are VTP clients that receive VLAN updates automatically.
 
 VTP modes:
 

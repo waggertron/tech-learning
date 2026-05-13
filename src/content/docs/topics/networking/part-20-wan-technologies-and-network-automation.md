@@ -68,7 +68,7 @@ PPP is the WAN data-link protocol used on serial links. It replaced the older HD
 - **Multilink PPP**: bond multiple serial links for increased bandwidth.
 - **Compression**: reduce bandwidth consumption on slow links.
 
-CHAP is preferred over PAP; PAP is only used when the remote device cannot support CHAP.
+CHAP is preferred over PAP. PAP is only used when the remote device cannot support CHAP.
 
 ### VPN types on WAN
 
@@ -160,7 +160,7 @@ with ConnectHandler(**device) as conn:
     print(output)
 ```
 
-Netmiko parses prompts and handles enable mode automatically. The limitation is that output comes back as unstructured text; you must parse it with string methods or libraries like TextFSM.
+Netmiko parses prompts and handles enable mode automatically. The limitation is that output comes back as unstructured text. You must parse it with string methods or libraries like TextFSM.
 
 ### Ansible for network automation
 

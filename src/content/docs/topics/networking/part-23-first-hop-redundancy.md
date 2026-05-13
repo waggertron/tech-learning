@@ -8,7 +8,7 @@ created: 2026-05-13
 updated: 2026-05-13
 ---
 
-A host sends every off-subnet packet to its default gateway. That gateway is a single IP address configured statically (or via DHCP). If that router fails, the host has no fallback -- it does not know another router exists. First Hop Redundancy Protocols (FHRPs) solve this by presenting a virtual IP and virtual MAC address shared between two or more routers. Hosts send traffic to the virtual IP; whichever router is currently active accepts it.
+A host sends every off-subnet packet to its default gateway. That gateway is a single IP address configured statically (or via DHCP). If that router fails, the host has no fallback -- it does not know another router exists. First Hop Redundancy Protocols (FHRPs) solve this by presenting a virtual IP and virtual MAC address shared between two or more routers. Hosts send traffic to the virtual IP. Whichever router is currently active accepts it.
 
 ## Why it matters
 
@@ -48,9 +48,9 @@ With an FHRP, `192.168.1.1` is a virtual IP owned by neither router alone. R1 is
 
 ### HSRP (Hot Standby Router Protocol)
 
-Cisco proprietary. One router is Active, one is Standby. The active router forwards traffic and responds to ARP for the virtual IP. The standby router monitors hello messages; if the active goes silent, the standby promotes itself.
+Cisco proprietary. One router is Active, one is Standby. The active router forwards traffic and responds to ARP for the virtual IP. The standby router monitors hello messages. If the active goes silent, the standby promotes itself.
 
-HSRP v1 supports group numbers 0-255 and uses a virtual MAC of `0000.0C07.ACxx` (where xx is the group number in hex). HSRP v2 supports groups 0-4095, uses `0000.0C9F.Fxxx`, and adds millisecond timers and IPv6 support. v1 and v2 are not compatible; both routers in a group must run the same version.
+HSRP v1 supports group numbers 0-255 and uses a virtual MAC of `0000.0C07.ACxx` (where xx is the group number in hex). HSRP v2 supports groups 0-4095, uses `0000.0C9F.Fxxx`, and adds millisecond timers and IPv6 support. v1 and v2 are not compatible. Both routers in a group must run the same version.
 
 **HSRP states (in order):**
 
@@ -111,7 +111,7 @@ R1(config-if)# vrrp 1 priority 110
 R1(config-if)# vrrp 1 preempt
 ```
 
-VRRP group numbers map directly to the virtual MAC (`0000.5E00.01xx` where xx is the group number in hex). VRRP preemption is on by default; the `no vrrp 1 preempt` command disables it if needed.
+VRRP group numbers map directly to the virtual MAC (`0000.5E00.01xx` where xx is the group number in hex). VRRP preemption is on by default. The `no vrrp 1 preempt` command disables it if needed.
 
 ## Failover scenario
 

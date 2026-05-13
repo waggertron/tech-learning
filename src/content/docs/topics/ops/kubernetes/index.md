@@ -54,17 +54,17 @@ The mental model: **everything is an API object in etcd. Every component is eith
 
 ### Key control-plane components
 
-- **`kube-apiserver`**, the only thing that talks to etcd. Everything else talks to the API server. If it's down, no new work happens (running workloads continue).
-- **`etcd`**, distributed key-value store. The cluster's database. Loss of etcd = loss of the cluster.
-- **`kube-scheduler`**, assigns unscheduled Pods to Nodes based on resource requests, taints, affinities.
-- **`kube-controller-manager`**, runs built-in controllers (Deployment, ReplicaSet, Node, Service, etc.). Each controller reconciles its objects.
-- **`cloud-controller-manager`**, talks to the cloud provider (AWS, GCP, Azure) for LoadBalancers, volumes, routes.
+- **`kube-apiserver`**: the only thing that talks to etcd. Everything else talks to the API server. If it's down, no new work happens (running workloads continue).
+- **`etcd`**: distributed key-value store. The cluster's database. Loss of etcd = loss of the cluster.
+- **`kube-scheduler`**: assigns unscheduled Pods to Nodes based on resource requests, taints, affinities.
+- **`kube-controller-manager`**: runs built-in controllers (Deployment, ReplicaSet, Node, Service, etc.). Each controller reconciles its objects.
+- **`cloud-controller-manager`**: talks to the cloud provider (AWS, GCP, Azure) for LoadBalancers, volumes, routes.
 
 ### Key node components
 
-- **`kubelet`**, the agent on every node. Watches the API for Pods assigned to its node, starts/stops them, reports status.
-- **`kube-proxy`**, programs iptables or IPVS rules so `Service` IPs resolve to Pod IPs.
-- **Container runtime**, `containerd` in most production clusters; the actual "run this container" layer.
+- **`kubelet`**: the agent on every node. Watches the API for Pods assigned to its node, starts/stops them, reports status.
+- **`kube-proxy`**: programs iptables or IPVS rules so `Service` IPs resolve to Pod IPs.
+- **Container runtime**: `containerd` in most production clusters; the actual "run this container" layer.
 
 ## The object model
 
@@ -84,11 +84,11 @@ status:
   # what is
 ```
 
-- **`apiVersion`** / **`kind`**, the type.
-- **`metadata.name`**, unique within its namespace and kind.
-- **`metadata.labels`**, key/value pairs. Used for selection.
-- **`spec`**, your desired state.
-- **`status`**, populated by the controller to report reality.
+- **`apiVersion`** / **`kind`**: the type.
+- **`metadata.name`**: unique within its namespace and kind.
+- **`metadata.labels`**: key/value pairs. Used for selection.
+- **`spec`**: your desired state.
+- **`status`**: populated by the controller to report reality.
 
 You write `spec`. The controller writes `status`. If they don't match, the controller is either working on it or stuck.
 
@@ -149,8 +149,8 @@ One Pod per Node (or per selected Node). For node-level agents: log forwarders, 
 
 ### Job / CronJob
 
-- **`Job`**, run N pods to completion. Retries on failure.
-- **`CronJob`**, schedule Jobs on a crontab. Every `@hourly`, every `0 2 * * *`, etc.
+- **`Job`**: run N pods to completion. Retries on failure.
+- **`CronJob`**: schedule Jobs on a crontab. Every `@hourly`, every `0 2 * * *`, etc.
 
 Gotcha: CronJobs can skip or pile up if the previous run hasn't finished. Set `concurrencyPolicy: Forbid` unless overlap is safe.
 
@@ -164,10 +164,10 @@ A Pod is 1+ containers sharing:
 
 Typical patterns:
 
-- **Single-container Pod**, 95% of cases.
-- **Sidecar**, a second container that augments the main one (e.g. Envoy, log collector, cloud-SQL proxy).
-- **Init containers**, run to completion before the main containers start. Setup, permissions, schema migrations.
-- **Ephemeral containers**, injected at runtime for debugging. `kubectl debug`.
+- **Single-container Pod**: 95% of cases.
+- **Sidecar**: a second container that augments the main one (e.g. Envoy, log collector, cloud-SQL proxy).
+- **Init containers**: run to completion before the main containers start. Setup, permissions, schema migrations.
+- **Ephemeral containers**: injected at runtime for debugging. `kubectl debug`.
 
 Pods are cattle, not pets. They die; new ones take their place with new IPs. Never assume a Pod is long-lived.
 
@@ -245,9 +245,9 @@ Requires a CNI that enforces them (Calico, Cilium). Without one, NetworkPolicy o
 
 Three related concepts:
 
-- **`PersistentVolume`** (PV), a chunk of storage, cluster-level.
-- **`PersistentVolumeClaim`** (PVC), a request for storage from a workload.
-- **`StorageClass`**, "how to dynamically provision PVs." Ties into a CSI driver.
+- **`PersistentVolume`** (PV): a chunk of storage, cluster-level.
+- **`PersistentVolumeClaim`** (PVC): a request for storage from a workload.
+- **`StorageClass`**: "how to dynamically provision PVs." Ties into a CSI driver.
 
 Workflow:
 
@@ -262,8 +262,8 @@ The Container Storage Interface (CSI) is the standard API between Kubernetes and
 
 ## Config and secrets
 
-- **`ConfigMap`**, non-sensitive config. Mounted as files or env vars.
-- **`Secret`**, base64 encoded (not encrypted!). Same usage shape.
+- **`ConfigMap`**: non-sensitive config. Mounted as files or env vars.
+- **`Secret`**: base64 encoded (not encrypted!). Same usage shape.
 
 Plain Kubernetes Secrets are only base64, not secret. Solutions:
 
@@ -277,10 +277,10 @@ See the [GitOps topic](../gitops/) for the secret-management patterns.
 
 Four primary objects:
 
-- **`Role`**, a set of allowed verbs on resources, namespace-scoped.
-- **`ClusterRole`**, the same, but cluster-scoped.
-- **`RoleBinding`**, binds a Role to a subject (user, group, ServiceAccount) in a namespace.
-- **`ClusterRoleBinding`**, cluster-scope version.
+- **`Role`**: a set of allowed verbs on resources, namespace-scoped.
+- **`ClusterRole`**: the same, but cluster-scoped.
+- **`RoleBinding`**: binds a Role to a subject (user, group, ServiceAccount) in a namespace.
+- **`ClusterRoleBinding`**: cluster-scope version.
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -314,9 +314,9 @@ Every Pod runs as a ServiceAccount. Lock down what each ServiceAccount can do; d
 
 Three orthogonal autoscalers:
 
-- **HPA (Horizontal Pod Autoscaler)**, more Pods. Triggered by CPU, memory, or custom metrics.
-- **VPA (Vertical Pod Autoscaler)**, bigger Pods. Mostly used in `recommend` mode because active mode restarts Pods.
-- **Cluster Autoscaler / Karpenter**, more Nodes. CA is the old guard; Karpenter is the modern AWS-native replacement with better bin-packing and Spot support.
+- **HPA (Horizontal Pod Autoscaler)**: more Pods. Triggered by CPU, memory, or custom metrics.
+- **VPA (Vertical Pod Autoscaler)**: bigger Pods. Mostly used in `recommend` mode because active mode restarts Pods.
+- **Cluster Autoscaler / Karpenter**: more Nodes. CA is the old guard; Karpenter is the modern AWS-native replacement with better bin-packing and Spot support.
 
 ```yaml
 apiVersion: autoscaling/v2
@@ -390,16 +390,16 @@ This is how Kubernetes extends to almost anything, Prometheus Operator, cert-man
 
 ## Namespaces, labels, selectors
 
-- **Namespaces**, logical partitions. Most resources live in one. RBAC is usually per-namespace.
-- **Labels**, `metadata.labels`. Key/value tags. The selection mechanism.
-- **Selectors**, how one object references others by labels.
+- **Namespaces**: logical partitions. Most resources live in one. RBAC is usually per-namespace.
+- **Labels**: `metadata.labels`. Key/value tags. The selection mechanism.
+- **Selectors**: how one object references others by labels.
 
 There is no "foreign key" to a Pod; Services select Pods by label match. This is decoupling as an architectural principle, and a footgun if your labels drift.
 
 ## Ingress controllers, service meshes, and the "what do I actually need" question
 
-- **Ingress controller or Gateway API**, Pick one. NGINX, Traefik, HAProxy, cloud-native (ALB controller). Needed as soon as you have public-facing HTTP.
-- **Service mesh** (Istio, Linkerd, Cilium Service Mesh), inter-service mTLS, retries, circuit breaking, fine-grained traffic routing. Adds real operational weight. Don't adopt it until you have a concrete need, multi-tenant clusters, strict compliance requirements, or advanced traffic-shaping for canaries.
+- **Ingress controller or Gateway API**: pick one. NGINX, Traefik, HAProxy, cloud-native (ALB controller). Needed as soon as you have public-facing HTTP.
+- **Service mesh** (Istio, Linkerd, Cilium Service Mesh): inter-service mTLS, retries, circuit breaking, fine-grained traffic routing. Adds real operational weight. Don't adopt it until you have a concrete need -- multi-tenant clusters, strict compliance requirements, or advanced traffic-shaping for canaries.
 
 Most teams never graduate past ingress + network policies.
 
@@ -421,27 +421,27 @@ Most teams never graduate past ingress + network policies.
 
 When something's broken:
 
-1. **`kubectl describe pod <pod>`**, events section almost always names the problem.
-2. **`kubectl logs <pod> -c <container>`**, with `-p` for the previous crash.
-3. **`kubectl get events --sort-by=.lastTimestamp`**, cluster-wide recent events.
-4. **`kubectl rollout status deployment/<name>`**, is the rollout stuck?
-5. **`kubectl exec -it <pod> -- sh`**, shell in to poke around.
-6. **`kubectl debug node/<node> -it --image=busybox`**, node-level debug container.
-7. **`kubectl top pods`** / **`kubectl top nodes`**, live resource usage (needs metrics-server).
+1. **`kubectl describe pod <pod>`**: events section almost always names the problem.
+2. **`kubectl logs <pod> -c <container>`**: with `-p` for the previous crash.
+3. **`kubectl get events --sort-by=.lastTimestamp`**: cluster-wide recent events.
+4. **`kubectl rollout status deployment/<name>`**: is the rollout stuck?
+5. **`kubectl exec -it <pod> -- sh`**: shell in to poke around.
+6. **`kubectl debug node/<node> -it --image=busybox`**: node-level debug container.
+7. **`kubectl top pods`** / **`kubectl top nodes`**: live resource usage (needs metrics-server).
 
 ## Production essentials
 
 A minimally professional production cluster has:
 
-- **Metrics stack**, Prometheus + Grafana, or a managed equivalent (Datadog, Dynatrace).
-- **Log aggregation**, Loki, Elasticsearch, or cloud-native (CloudWatch, Stackdriver).
-- **Distributed tracing**, OpenTelemetry → Jaeger / Tempo / Datadog APM.
-- **Secret management**, External Secrets Operator or similar.
-- **RBAC scoped per team**, with tools like Kyverno or OPA Gatekeeper for policy enforcement.
-- **Cluster autoscaling**, Karpenter (AWS) or Cluster Autoscaler elsewhere.
-- **Backups**, Velero for cluster state + PVC snapshots.
-- **Ingress + cert-manager**, automated TLS via Let's Encrypt or private CA.
-- **GitOps**, ArgoCD or Flux. See the [GitOps topic](../gitops/).
+- **Metrics stack**: Prometheus + Grafana, or a managed equivalent (Datadog, Dynatrace).
+- **Log aggregation**: Loki, Elasticsearch, or cloud-native (CloudWatch, Stackdriver).
+- **Distributed tracing**: OpenTelemetry → Jaeger / Tempo / Datadog APM.
+- **Secret management**: External Secrets Operator or similar.
+- **RBAC scoped per team**: with tools like Kyverno or OPA Gatekeeper for policy enforcement.
+- **Cluster autoscaling**: Karpenter (AWS) or Cluster Autoscaler elsewhere.
+- **Backups**: Velero for cluster state + PVC snapshots.
+- **Ingress + cert-manager**: automated TLS via Let's Encrypt or private CA.
+- **GitOps**: ArgoCD or Flux. See the [GitOps topic](../gitops/).
 
 That's the baseline. Everything beyond (service mesh, multi-cluster federation, progressive delivery) is a specialization you add when it earns its weight.
 

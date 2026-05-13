@@ -53,7 +53,7 @@ More non-overlapping channels (up to 25 in the US, depending on regulatory domai
 
 ### 6 GHz (Wi-Fi 6E)
 
-Available only on Wi-Fi 6E hardware. Even more non-overlapping channels. No legacy devices competing for the band. Shortest range of the three; best suited for dense environments where APs are close together.
+Available only on Wi-Fi 6E hardware. Even more non-overlapping channels. No legacy devices competing for the band. Shortest range of the three. Best suited for dense environments where APs are close together.
 
 ## WLAN components
 
@@ -108,7 +108,7 @@ Two UDP tunnels:
 | Control | UDP 5246 | Configuration, management, AP state          |
 | Data    | UDP 5247 | Client data frames forwarded to WLC          |
 
-The control tunnel is DTLS-encrypted by default. The data tunnel is optionally DTLS-encrypted; encryption is disabled by default on many platforms for performance reasons.
+The control tunnel is DTLS-encrypted by default. The data tunnel is optionally DTLS-encrypted. Encryption is disabled by default on many platforms for performance reasons.
 
 ### AP discovery sequence
 
@@ -147,13 +147,13 @@ Do not use. RC4-based encryption with a static shared key and a broken IV scheme
 
 ### WPA (Wi-Fi Protected Access)
 
-Interim standard introduced before 802.11i was finalized. Uses TKIP (Temporal Key Integrity Protocol), which patches WEP's RC4 weakness with per-packet key mixing. Still deprecated; TKIP was itself broken.
+Interim standard introduced before 802.11i was finalized. Uses TKIP (Temporal Key Integrity Protocol), which patches WEP's RC4 weakness with per-packet key mixing. Still deprecated. TKIP was itself broken.
 
 ### WPA2 (802.11i)
 
 Current minimum acceptable standard. Uses AES-CCMP for encryption: a block cipher mode that provides both confidentiality and integrity. Two variants:
 
-**WPA2-Personal (WPA2-PSK):** A pre-shared key is configured on the AP and all clients. The 4-way handshake derives per-session keys from the PSK. Simple to deploy; problematic at scale because all clients share the same secret.
+**WPA2-Personal (WPA2-PSK):** A pre-shared key is configured on the AP and all clients. The 4-way handshake derives per-session keys from the PSK. Simple to deploy. Problematic at scale because all clients share the same secret.
 
 **WPA2-Enterprise:** Clients authenticate with individual credentials via 802.1X and a RADIUS server. The AP acts as an authenticator, relaying EAP messages between the client (supplicant) and the RADIUS server (authentication server). Each client gets unique session keys. Compromise of one client credential does not expose others.
 

@@ -177,7 +177,7 @@ R1(config)# snmp-server host 10.0.0.100 version 2c PUBLIC
 R1(config)# snmp-server enable traps
 ```
 
-`snmp-server community PUBLIC ro` defines the read-only community string. `snmp-server host` tells the device where to send traps. `snmp-server enable traps` enables all trap types; you can narrow this to specific events (for example, `snmp-server enable traps ospf`).
+`snmp-server community PUBLIC ro` defines the read-only community string. `snmp-server host` tells the device where to send traps. `snmp-server enable traps` enables all trap types. You can narrow this to specific events (for example, `snmp-server enable traps ospf`).
 
 SNMPv3 (preferred):
 

@@ -39,7 +39,7 @@ Topology describes the physical or logical arrangement of devices and the paths 
 
 ### Bus
 
-All devices share a single cable segment. A signal travels the length of the bus; every device sees every frame. Collisions are common. Largely obsolete.
+All devices share a single cable segment. A signal travels the length of the bus. Every device sees every frame. Collisions are common. Largely obsolete.
 
 ```
  [A]---[B]---[C]---[D]
@@ -109,7 +109,7 @@ Intermediary devices move data between end devices and between networks:
 - **Switch:** operates at Layer 2. Forwards frames based on MAC addresses within a LAN. Modern managed switches support VLANs, QoS, and STP.
 - **Router:** operates at Layer 3. Routes packets between different IP networks using routing tables. The boundary between your LAN and the internet is a router.
 - **Firewall:** inspects and filters traffic based on rules. May operate at Layer 3-7 depending on capability. Can be hardware or software.
-- **Access Point (AP):** bridges wireless clients onto a wired LAN. The AP itself is an intermediary device; the wireless link is the medium.
+- **Access Point (AP):** bridges wireless clients onto a wired LAN. The AP itself is an intermediary device. The wireless link is the medium.
 - **Modem:** modulates/demodulates signals for transmission over telephone lines or cable infrastructure. Converts between the ISP's medium and Ethernet.
 
 ### Network media
@@ -141,7 +141,7 @@ A protocol is a set of rules that define how devices communicate: message format
 
 Key organizations:
 
-- **IEEE (Institute of Electrical and Electronics Engineers):** defines LAN and wireless standards. 802.3 is Ethernet; 802.11 is Wi-Fi.
+- **IEEE (Institute of Electrical and Electronics Engineers):** defines LAN and wireless standards. 802.3 is Ethernet. 802.11 is Wi-Fi.
 - **IETF (Internet Engineering Task Force):** publishes RFCs that define TCP/IP protocols. TCP, IP, HTTP, DNS, and OSPF are all IETF standards.
 - **ISO (International Organization for Standardization):** defines the OSI reference model (covered in Part 2).
 - **IANA (Internet Assigned Numbers Authority):** manages IP address allocation and port number assignments.
@@ -154,7 +154,7 @@ Open standards let devices from different vendors interoperate. A Cisco switch a
 - **Topology vs cost:** full mesh gives maximum redundancy but the number of links grows as n(n-1)/2. Four nodes need 6 links; eight nodes need 28. Most designs use partial mesh at the core and star at the edges.
 - **P2P scale ceiling:** peer-to-peer works fine for two or three machines sharing a printer. At 20 machines it becomes unmanageable. The crossover point is low.
 - **Converged network risk:** putting voice on the same network as data requires disciplined QoS configuration. A poorly configured converged network is worse than separate infrastructure because voice calls degrade visibly under load.
-- **WLAN vs LAN conflation:** on the CCNA exam, WLAN specifically means the wireless portion. A device connected via Wi-Fi is still on the LAN; WLAN describes the wireless access method.
+- **WLAN vs LAN conflation:** on the CCNA exam, WLAN specifically means the wireless portion. A device connected via Wi-Fi is still on the LAN. WLAN describes the wireless access method.
 
 ## References
 

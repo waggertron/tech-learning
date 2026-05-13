@@ -136,7 +136,7 @@ Assume Host A (192.168.1.10) wants to send a packet to Host B (192.168.1.20) and
 4. Host A stores B_MAC in its ARP cache and sends the original packet.
 ```
 
-The ARP reply is unicast; the request is broadcast. This is a key distinction for exam questions.
+The ARP reply is unicast. The request is broadcast. This is a key distinction for exam questions.
 
 ### ARP table on Cisco IOS
 

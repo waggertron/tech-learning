@@ -104,7 +104,7 @@ Container model:
 | Portability | Less portable (OS coupling) | Highly portable |
 | Overhead | Higher | Lower |
 
-The shared kernel is the critical tradeoff. A kernel vulnerability affects every container on the host. VMs are isolated by the hypervisor; a guest OS compromise does not reach other VMs in the same way.
+The shared kernel is the critical tradeoff. A kernel vulnerability affects every container on the host. VMs are isolated by the hypervisor. A guest OS compromise does not reach other VMs in the same way.
 
 ### Docker and Kubernetes
 
@@ -220,7 +220,7 @@ Infrastructure Layer
 
 ### SDN does not eliminate the data plane
 
-A common misconception: SDN centralizes control, but packets still move through physical (or virtual) switches. The switches still forward traffic at line rate using their ASICs. The controller only programs the forwarding tables. If the controller goes down, existing forwarding state persists in the switches; new flows may fail, but established ones continue.
+A common misconception: SDN centralizes control, but packets still move through physical (or virtual) switches. The switches still forward traffic at line rate using their ASICs. The controller only programs the forwarding tables. If the controller goes down, existing forwarding state persists in the switches. New flows may fail, but established ones continue.
 
 ---
 

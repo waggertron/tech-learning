@@ -18,7 +18,7 @@ EtherChannel also provides sub-second failover. If one member link fails, traffi
 
 ## Protocols and modes
 
-Three options exist for forming an EtherChannel. Two use negotiation protocols; one does not.
+Three options exist for forming an EtherChannel. Two use negotiation protocols. One does not.
 
 **LACP (Link Aggregation Control Protocol)**
 IEEE 802.3ad standard. Works between Cisco and non-Cisco equipment.
@@ -28,7 +28,7 @@ IEEE 802.3ad standard. Works between Cisco and non-Cisco equipment.
 | active  | Initiates LACP negotiation; forms with active or passive |
 | passive | Waits for LACP negotiation; forms with active only       |
 
-Two passive sides will not form a channel; neither initiates.
+Two passive sides will not form a channel. Neither initiates.
 
 **PAgP (Port Aggregation Protocol)**
 Cisco proprietary. Only works between Cisco devices.
@@ -141,7 +141,7 @@ Available methods (platform-dependent):
 | dst-ip       | Good when many destination IPs                |
 | src-dst-ip   | Best general-purpose choice for routed traffic|
 
-A single flow always uses the same member link. EtherChannel does not per-packet load balance; it per-flow load balances. Two hosts talking to each other will never exceed the speed of one physical link.
+A single flow always uses the same member link. EtherChannel does not per-packet load balance. It per-flow load balances. Two hosts talking to each other will never exceed the speed of one physical link.
 
 Check the current method:
 
@@ -205,7 +205,7 @@ If EtherChannel fails to form because of a misconfiguration, STP falls back to i
 
 **Configuring physical interfaces instead of the port-channel.** Set trunk and VLAN config on `interface port-channel 1`. Commands applied directly to member interfaces may conflict and cause the channel to drop.
 
-**Max member ports.** LACP supports up to 16 ports per group; 8 are active and up to 8 are hot-standby. PAgP supports up to 8. Verify your platform limits.
+**Max member ports.** LACP supports up to 16 ports per group: 8 are active and up to 8 are hot-standby. PAgP supports up to 8. Verify your platform limits.
 
 ## References
 

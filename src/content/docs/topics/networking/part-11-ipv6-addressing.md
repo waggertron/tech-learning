@@ -104,7 +104,7 @@ Prefix FF00::/8. IPv6 multicast replaces both broadcast and IPv4 multicast. Key 
 
 ### Anycast (one-to-nearest)
 
-The same address assigned to multiple interfaces. The router sends the packet to whichever is topologically nearest. Used for DNS servers, CDN edge nodes, and mobile anycast routing. Anycast addresses look identical to unicast addresses; the distinction is purely administrative.
+The same address assigned to multiple interfaces. The router sends the packet to whichever is topologically nearest. Used for DNS servers, CDN edge nodes, and mobile anycast routing. Anycast addresses look identical to unicast addresses. The distinction is purely administrative.
 
 ## EUI-64 interface ID generation
 
@@ -256,7 +256,7 @@ R1# show ipv6 route
 
 ## Dual-stack
 
-Dual-stack means running IPv4 and IPv6 simultaneously on the same interface and router. Both protocol stacks operate independently; the router maintains separate routing tables for each.
+Dual-stack means running IPv4 and IPv6 simultaneously on the same interface and router. Both protocol stacks operate independently. The router maintains separate routing tables for each.
 
 ```
 +------------------+

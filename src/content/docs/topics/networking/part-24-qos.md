@@ -35,7 +35,7 @@ QoS tools address each of these at different points in the forwarding path.
 
 ### Best-effort
 
-No QoS. Every packet is treated identically. First in, first out. This is the default behavior on Cisco IOS interfaces without any QoS policy applied. Fine for data-only networks; not appropriate when voice or video share the link.
+No QoS. Every packet is treated identically. First in, first out. This is the default behavior on Cisco IOS interfaces without any QoS policy applied. Fine for data-only networks. Not appropriate when voice or video share the link.
 
 ### IntServ (Integrated Services)
 
@@ -88,7 +88,7 @@ DSCP occupies the first 6 bits of the IP header's ToS (Type of Service) byte. Va
 
 ### Trust boundary
 
-The trust boundary is the point in the network where DSCP or CoS markings are accepted as legitimate. Endpoints (PCs) can set any DSCP value; accepting those markings at the campus edge would let any user claim VoIP priority for arbitrary traffic.
+The trust boundary is the point in the network where DSCP or CoS markings are accepted as legitimate. Endpoints (PCs) can set any DSCP value. Accepting those markings at the campus edge would let any user claim VoIP priority for arbitrary traffic.
 
 ```text
 IP Phone --> Access switch port (trust boundary here)
@@ -115,7 +115,7 @@ Four static queues: High, Medium, Normal, Low. The scheduler always drains the h
 
 ### CBWFQ (Class-Based Weighted Fair Queuing)
 
-Assigns guaranteed minimum bandwidth to each class. If a class is not using its allocation, other classes can borrow. No strict priority; every class eventually gets service. Good for data classes, not ideal for voice because latency is not bounded.
+Assigns guaranteed minimum bandwidth to each class. If a class is not using its allocation, other classes can borrow. No strict priority. Every class eventually gets service. Good for data classes, not ideal for voice because latency is not bounded.
 
 ### LLQ (Low Latency Queuing)
 

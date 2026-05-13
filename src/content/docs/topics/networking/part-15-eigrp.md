@@ -59,7 +59,7 @@ Metric = 256 * ((10^7 / min_bandwidth_kbps) + sum_of_delays_in_tens_of_microseco
 
 By default EIGRP uses only bandwidth (of the slowest link on the path) and delay (cumulative). Load, reliability, and MTU are part of the K-value formula but are disabled by default (K1=1, K2=0, K3=1, K4=0, K5=0). Never enable them in production: they cause constant metric fluctuation and neighbor resets.
 
-Delay is configured per interface with `delay <value>` (in tens of microseconds). Bandwidth is configured with `bandwidth <kbps>`. These are logical values EIGRP reads; they do not control actual interface speed.
+Delay is configured per interface with `delay <value>` (in tens of microseconds). Bandwidth is configured with `bandwidth <kbps>`. These are logical values EIGRP reads. They do not control actual interface speed.
 
 ## EIGRP tables
 
@@ -99,7 +99,7 @@ The `network` command uses a wildcard mask. EIGRP activates on interfaces whose 
 
 `no auto-summary` is critical. Auto-summary causes EIGRP to advertise classful network boundaries instead of the actual subnets. In a discontiguous network (same major network split across multiple locations), auto-summary creates routing black holes. Disable it always in modern configurations. It is off by default in IOS 15 and later, but the safe habit is to disable it explicitly.
 
-`passive-interface` suppresses EIGRP hello packets on that interface. The network is still advertised; no neighbor forms on that segment.
+`passive-interface` suppresses EIGRP hello packets on that interface. The network is still advertised. No neighbor forms on that segment.
 
 ## Configuration: named mode
 
