@@ -27,9 +27,9 @@ def backtrack(path, choices):
 
 The three moving parts:
 
-- **The path**, a mutable list of choices made so far. Use `append`/`pop`; passing the path avoids O(n) slicing per call.
-- **The choices**, a list of options at the current level.
-- **The pruning**, predicates that skip dead branches. Pruning is usually what distinguishes a fast backtracking solution from a slow one.
+- **The path**: a mutable list of choices made so far. Use `append`/`pop`; passing the path avoids O(n) slicing per call.
+- **The choices**: a list of options at the current level.
+- **The pruning**: predicates that skip dead branches. Pruning is usually what distinguishes a fast backtracking solution from a slow one.
 
 Classic patterns: subsets, combinations, permutations, grid DFS, and constraint-satisfaction problems like N-Queens.
 
@@ -47,11 +47,11 @@ Classic patterns: subsets, combinations, permutations, grid DFS, and constraint-
 
 ## Key patterns unlocked here
 
-- **Include/exclude recursion**, Subsets.
-- **Target-sum with start index (no reuse vs. with reuse)**, Combination Sum I and II.
-- **Permutation with "used" array or in-place swap**, Permutations.
-- **Dedup via sort + skip-at-same-level**, Subsets II, Combination Sum II.
-- **Grid DFS with mutation-as-visited**, Word Search.
-- **Backtracking + precomputed palindrome DP**, Palindrome Partitioning.
-- **Cartesian-product DFS**, Letter Combinations.
-- **Constraint satisfaction with conflict sets**, N-Queens.
+- **Include/exclude recursion**: Subsets.
+- **Target-sum with start index (no reuse vs. with reuse)**: Combination Sum I and II.
+- **Permutation with "used" array or in-place swap**: Permutations.
+- **Dedup via sort + skip-at-same-level**: Subsets II, Combination Sum II.
+- **Grid DFS with mutation-as-visited**: Word Search.
+- **Backtracking + precomputed palindrome DP**: Palindrome Partitioning.
+- **Cartesian-product DFS**: Letter Combinations.
+- **Constraint satisfaction with conflict sets**: N-Queens.

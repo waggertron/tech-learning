@@ -12,11 +12,11 @@ updated: 2026-05-07
 
 Linked lists aren't dominant in production code anymore, dynamic arrays have better cache behavior, but they remain the workhorse of pointer-manipulation interviews. Mastering them means internalizing five patterns:
 
-- **Reversal** (iterative and recursive), the building block under everything else.
-- **Two-pointer slow/fast**, middle, cycle detection, n-from-end.
-- **Dummy head node**, simplifies edge cases at the head.
-- **Merging**, pointer splicing of sorted sequences.
-- **Composite structures**, hash map + doubly linked list (LRU cache).
+- **Reversal** (iterative and recursive): the building block under everything else.
+- **Two-pointer slow/fast**: middle, cycle detection, n-from-end.
+- **Dummy head node**: simplifies edge cases at the head.
+- **Merging**: pointer splicing of sorted sequences.
+- **Composite structures**: hash map + doubly linked list (LRU cache).
 
 ## Problems
 
@@ -37,13 +37,13 @@ Linked lists aren't dominant in production code anymore, dynamic arrays have bet
 
 ## Key patterns unlocked here
 
-- **Three-pointer reversal**, 206 (iterative and recursive).
-- **Two-pointer merge**, 21.
-- **Floyd's tortoise and hare**, 141 (linked list), 287 (array-as-linked-list).
-- **Find middle + reverse + interleave**, 143.
-- **Offset-n two pointers**, 19.
-- **Interwoven-copy technique for auxiliary pointers**, 138.
-- **Digit-by-digit addition with carry**, 2.
-- **Hash map + doubly linked list (LRU cache template)**, 146.
-- **Divide-and-conquer merge or min-heap of heads**, 23.
-- **Reverse-in-segments with bookkeeping**, 25.
+- **Three-pointer reversal**: 206 (iterative and recursive).
+- **Two-pointer merge**: 21.
+- **Floyd's tortoise and hare**: 141 (linked list), 287 (array-as-linked-list).
+- **Find middle + reverse + interleave**: 143.
+- **Offset-n two pointers**: 19.
+- **Interwoven-copy technique for auxiliary pointers**: 138.
+- **Digit-by-digit addition with carry**: 2.
+- **Hash map + doubly linked list (LRU cache template)**: 146.
+- **Divide-and-conquer merge or min-heap of heads**: 23.
+- **Reverse-in-segments with bookkeeping**: 25.

@@ -12,10 +12,10 @@ updated: 2026-05-07
 
 Graphs are the most flexible category in the list, many problems that don't obviously look graph-shaped become tractable once modeled as one (grids are graphs; words are graphs; courses are a DAG). Master four algorithms and their variants:
 
-- **BFS**, shortest path in unweighted graphs; multi-source BFS for "fire spreads from K starting points"; level-order traversal.
-- **DFS**, connected components, cycle detection, topological sort (post-order).
-- **Topological sort**, BFS (Kahn's, in-degree) or DFS (post-order reversed). DAG only.
-- **Union-Find**, connectivity, incremental component merging, cycle detection in undirected graphs.
+- **BFS**: shortest path in unweighted graphs; multi-source BFS for "fire spreads from K starting points"; level-order traversal.
+- **DFS**: connected components, cycle detection, topological sort (post-order).
+- **Topological sort**: BFS (Kahn's, in-degree) or DFS (post-order reversed). DAG only.
+- **Union-Find**: connectivity, incremental component merging, cycle detection in undirected graphs.
 
 ## Problems
 
@@ -44,14 +44,14 @@ Graphs are the most flexible category in the list, many problems that don't obvi
 
 ## Key patterns unlocked here
 
-- **Grid DFS / BFS for connected components**, Number of Islands, Max Area of Island.
-- **Copy-graph via old→new map**, Clone Graph.
-- **Multi-source BFS**, Rotting Oranges.
-- **Reverse-direction BFS / DFS**, Pacific Atlantic, Surrounded Regions.
-- **Cycle detection + topological sort**, Course Schedule I/II.
-- **Union-Find for incremental connectivity**, Redundant Connection, Graph Valid Tree, Number of Connected Components.
-- **Word graphs and BFS on implicit edges**, Word Ladder.
-- **Topological sort from ordering constraints**, Alien Dictionary.
-- **Multi-source BFS from all 0s simultaneously**, 01 Matrix.
-- **2-coloring for bipartite detection**, Is Graph Bipartite, Possible Bipartition.
-- **Union-Find on non-obvious nodes (emails as graph nodes)**, Accounts Merge.
+- **Grid DFS / BFS for connected components**: Number of Islands, Max Area of Island.
+- **Copy-graph via old→new map**: Clone Graph.
+- **Multi-source BFS**: Rotting Oranges.
+- **Reverse-direction BFS / DFS**: Pacific Atlantic, Surrounded Regions.
+- **Cycle detection + topological sort**: Course Schedule I/II.
+- **Union-Find for incremental connectivity**: Redundant Connection, Graph Valid Tree, Number of Connected Components.
+- **Word graphs and BFS on implicit edges**: Word Ladder.
+- **Topological sort from ordering constraints**: Alien Dictionary.
+- **Multi-source BFS from all 0s simultaneously**: 01 Matrix.
+- **2-coloring for bipartite detection**: Is Graph Bipartite, Possible Bipartition.
+- **Union-Find on non-obvious nodes (emails as graph nodes)**: Accounts Merge.

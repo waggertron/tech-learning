@@ -12,11 +12,11 @@ updated: 2026-05-07
 
 The largest NeetCode category for a reason: trees reward recursive thinking, and most tree problems reduce to "define a function on a node, recurse into the subtrees, combine the results." Master the following patterns and most of the set falls out:
 
-- **Four traversals**, preorder, inorder, postorder, level-order (BFS).
-- **Subtree recursion**, compute something for `root` from results on `root.left` and `root.right`.
-- **Tree DP**, when each node's answer needs multiple pieces of info from its children, return a tuple.
-- **BST invariants**, in-order gives sorted order; bounds propagate down during validation.
-- **Serialization**, DFS (usually preorder with null markers) or BFS encodes the shape.
+- **Four traversals**: preorder, inorder, postorder, level-order (BFS).
+- **Subtree recursion**: compute something for `root` from results on `root.left` and `root.right`.
+- **Tree DP**: when each node's answer needs multiple pieces of info from its children, return a tuple.
+- **BST invariants**: in-order gives sorted order; bounds propagate down during validation.
+- **Serialization**: DFS (usually preorder with null markers) or BFS encodes the shape.
 
 ## Problems
 
@@ -43,16 +43,16 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 
 ## Key patterns unlocked here
 
-- **Recursive mirror operation**, Invert Binary Tree.
-- **Height DFS**, Max Depth, Diameter (height + side-effect accumulator), Balanced.
-- **Simultaneous structural comparison**, Same Tree, Subtree of Another.
-- **BST-specific shortcuts**, LCA of BST, Validate BST, Kth Smallest.
-- **BFS template**, Level Order, Right Side View (last of each level).
-- **Path-DP DFS**, Count Good Nodes, Max Path Sum.
-- **Traversal-pair reconstruction**, Build Tree from Preorder+Inorder.
-- **DFS with null markers**, Serialize and Deserialize.
-- **Tree DP returning tuples (rob/skip pairs)**, House Robber III.
-- **Greedy post-order with state propagation**, Binary Tree Cameras.
+- **Recursive mirror operation**: Invert Binary Tree.
+- **Height DFS**: Max Depth, Diameter (height + side-effect accumulator), Balanced.
+- **Simultaneous structural comparison**: Same Tree, Subtree of Another.
+- **BST-specific shortcuts**: LCA of BST, Validate BST, Kth Smallest.
+- **BFS template**: Level Order, Right Side View (last of each level).
+- **Path-DP DFS**: Count Good Nodes, Max Path Sum.
+- **Traversal-pair reconstruction**: Build Tree from Preorder+Inorder.
+- **DFS with null markers**: Serialize and Deserialize.
+- **Tree DP returning tuples (rob/skip pairs)**: House Robber III.
+- **Greedy post-order with state propagation**: Binary Tree Cameras.
 
 ## BFS level-separation techniques
 

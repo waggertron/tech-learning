@@ -14,8 +14,8 @@ A sliding window is a pair of indices `[left, right]` that defines a contiguous 
 
 There are two flavors:
 
-- **Variable-size window**, common for "longest/shortest substring satisfying X." Expand `right`; when the invariant breaks, contract `left` until it holds again.
-- **Fixed-size window**, common for "max/min over every window of size k." Slide `right` forward by one and `left` forward by one in lockstep.
+- **Variable-size window**: common for "longest/shortest substring satisfying X." Expand `right`; when the invariant breaks, contract `left` until it holds again.
+- **Fixed-size window**: common for "max/min over every window of size k." Slide `right` forward by one and `left` forward by one in lockstep.
 
 ## Problems
 
@@ -33,10 +33,10 @@ There are two flavors:
 
 ## Key patterns unlocked here
 
-- **Running best + single pass**, Buy/Sell Stock; the "one-pass min-tracking" template.
-- **Hash set / map as window state**, Longest Substring Without Repeating.
-- **Window + frequency count with max-freq invariant**, Longest Repeating Character Replacement.
-- **Anagram detection with matching counters**, Permutation in String.
-- **Two-counter tracking (have vs. need)**, Minimum Window Substring.
-- **Monotonic deque for window min/max**, Sliding Window Maximum.
-- **Prefix sum + hash map for subarray sum problems**, Subarray Sum Equals K.
+- **Running best + single pass**: Buy/Sell Stock; the "one-pass min-tracking" template.
+- **Hash set / map as window state**: Longest Substring Without Repeating.
+- **Window + frequency count with max-freq invariant**: Longest Repeating Character Replacement.
+- **Anagram detection with matching counters**: Permutation in String.
+- **Two-counter tracking (have vs. need)**: Minimum Window Substring.
+- **Monotonic deque for window min/max**: Sliding Window Maximum.
+- **Prefix sum + hash map for subarray sum problems**: Subarray Sum Equals K.

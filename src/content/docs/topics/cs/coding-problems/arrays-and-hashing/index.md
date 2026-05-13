@@ -35,10 +35,10 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 
 ## Key patterns unlocked here
 
-- **Hash set for dedup / membership**, Contains Duplicate, Longest Consecutive Sequence.
-- **Frequency counting**, Valid Anagram, Group Anagrams, Top K Frequent Elements.
-- **Complement lookup (one-pass hash)**, Two Sum, and dozens of variants downstream.
-- **Prefix / suffix products or sums**, Product of Array Except Self.
-- **Encoding state into a hashable key**, Group Anagrams (char-count tuple), Valid Sudoku (row/col/box keys).
-- **Prefix sums for O(1) range queries**, Range Sum Query.
-- **Modular arithmetic for pair counting**, Pairs of Songs Divisible by 60.
+- **Hash set for dedup / membership**: Contains Duplicate, Longest Consecutive Sequence.
+- **Frequency counting**: Valid Anagram, Group Anagrams, Top K Frequent Elements.
+- **Complement lookup (one-pass hash)**: Two Sum, and dozens of variants downstream.
+- **Prefix / suffix products or sums**: Product of Array Except Self.
+- **Encoding state into a hashable key**: Group Anagrams (char-count tuple), Valid Sudoku (row/col/box keys).
+- **Prefix sums for O(1) range queries**: Range Sum Query.
+- **Modular arithmetic for pair counting**: Pairs of Songs Divisible by 60.

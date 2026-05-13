@@ -14,9 +14,9 @@ updated: 2026-04-23
 
 Three pointer movements cover almost all problems:
 
-- **Converging**, one pointer from each end, move the one whose value fails an invariant inward.
-- **Same-direction**, both pointers advance left-to-right; "slow" marks a write position, "fast" marks a read position. Often overlaps with sliding window.
-- **Trailing**, a second pointer lags behind the first by a fixed offset (Remove Nth From End of a linked list).
+- **Converging**: one pointer from each end, move the one whose value fails an invariant inward.
+- **Same-direction**: both pointers advance left-to-right; "slow" marks a write position, "fast" marks a read position. Often overlaps with sliding window.
+- **Trailing**: a second pointer lags behind the first by a fixed offset (Remove Nth From End of a linked list).
 
 ## Problems
 
@@ -28,8 +28,8 @@ Three pointer movements cover almost all problems:
 
 ## Key patterns unlocked here
 
-- **Symmetric check with converging pointers**, Valid Palindrome.
-- **Sorted-array complement search**, Two Sum II. The pattern that generalizes to 3Sum and 4Sum.
-- **Sort + fixed anchor + two pointers**, 3Sum; the bread and butter of n-sum problems.
-- **Greedy movement on the shorter side**, Container With Most Water; the "why two pointers work" proof case.
-- **Bidirectional max tracking**, Trapping Rain Water (classic two-pointer alternative to prefix/suffix-max arrays).
+- **Symmetric check with converging pointers**: Valid Palindrome.
+- **Sorted-array complement search**: Two Sum II. The pattern that generalizes to 3Sum and 4Sum.
+- **Sort + fixed anchor + two pointers**: 3Sum; the bread and butter of n-sum problems.
+- **Greedy movement on the shorter side**: Container With Most Water; the "why two pointers work" proof case.
+- **Bidirectional max tracking**: Trapping Rain Water (classic two-pointer alternative to prefix/suffix-max arrays).

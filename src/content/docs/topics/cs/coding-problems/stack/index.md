@@ -12,10 +12,10 @@ updated: 2026-04-23
 
 A stack is LIFO, you push and pop from the same end. In interviews it shows up in four distinct patterns:
 
-- **Matched delimiters**, push opens, pop and compare on closes.
-- **Expression evaluation**, operands on the stack, apply operator when you see one (RPN) or use the shunting-yard idea (infix).
-- **Backtracking / combinatorial generation**, the call stack plus local state acts as the stack; recursion is the natural expression.
-- **Monotonic stack**, maintain a stack whose values are monotonically increasing or decreasing. Each element is pushed and popped once, so problems like "next greater element" become O(n).
+- **Matched delimiters**: push opens, pop and compare on closes.
+- **Expression evaluation**: operands on the stack, apply operator when you see one (RPN) or use the shunting-yard idea (infix).
+- **Backtracking / combinatorial generation**: the call stack plus local state acts as the stack; recursion is the natural expression.
+- **Monotonic stack**: maintain a stack whose values are monotonically increasing or decreasing. Each element is pushed and popped once, so problems like "next greater element" become O(n).
 
 ## Problems
 
@@ -34,12 +34,12 @@ A stack is LIFO, you push and pop from the same end. In interviews it shows up i
 
 ## Key patterns unlocked here
 
-- **Open/close matching**, Valid Parentheses.
-- **Composite stack state**, Min Stack (each entry carries running aggregate).
-- **Postfix evaluation**, Evaluate Reverse Polish Notation.
-- **Recursive backtracking with an open/close invariant**, Generate Parentheses.
-- **Monotonic decreasing stack for next-greater**, Daily Temperatures.
-- **Sort + monotonic stack**, Car Fleet.
-- **Monotonic stack for max-rectangle**, Largest Rectangle in Histogram (canonical hard stack problem).
-- **Nested structure decoding**, Decode String (stack of count + prefix pairs).
-- **Collision simulation**, Asteroid Collision (stack of survivors).
+- **Open/close matching**: Valid Parentheses.
+- **Composite stack state**: Min Stack (each entry carries running aggregate).
+- **Postfix evaluation**: Evaluate Reverse Polish Notation.
+- **Recursive backtracking with an open/close invariant**: Generate Parentheses.
+- **Monotonic decreasing stack for next-greater**: Daily Temperatures.
+- **Sort + monotonic stack**: Car Fleet.
+- **Monotonic stack for max-rectangle**: Largest Rectangle in Histogram (canonical hard stack problem).
+- **Nested structure decoding**: Decode String (stack of count + prefix pairs).
+- **Collision simulation**: Asteroid Collision (stack of survivors).

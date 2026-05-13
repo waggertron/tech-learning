@@ -12,9 +12,9 @@ updated: 2026-04-23
 
 When the state needs two indices, usually "position in A × position in B" or "row × column in a grid", you get a 2-D DP table. The mental moves are the same as 1-D, just on a plane:
 
-- **State**, `dp[i][j]` capturing some property of prefixes or a cell.
-- **Recurrence**, usually `dp[i][j]` depends on `dp[i-1][j]`, `dp[i][j-1]`, or `dp[i-1][j-1]`.
-- **Space optimization**, when `dp[i]` depends only on `dp[i-1]`, collapse to one row.
+- **State**: `dp[i][j]` capturing some property of prefixes or a cell.
+- **Recurrence**: usually `dp[i][j]` depends on `dp[i-1][j]`, `dp[i][j-1]`, or `dp[i-1][j-1]`.
+- **Space optimization**: when `dp[i]` depends only on `dp[i-1]`, collapse to one row.
 
 ## Problems
 
@@ -32,11 +32,11 @@ When the state needs two indices, usually "position in A × position in B" or "r
 
 ## Key patterns unlocked here
 
-- **Grid path DP**, Unique Paths.
-- **LCS family**, Longest Common Subsequence, Edit Distance, Distinct Subsequences, Interleaving String.
-- **State machine DP**, Stock with Cooldown.
-- **Unbounded knapsack (counting)**, Coin Change II.
-- **Sign-partition to subset-sum DP**, Target Sum.
-- **Interval DP**, Burst Balloons.
-- **Regex / pattern DP**, Regular Expression Matching.
-- **Memoized DFS on a matrix**, Longest Increasing Path.
+- **Grid path DP**: Unique Paths.
+- **LCS family**: Longest Common Subsequence, Edit Distance, Distinct Subsequences, Interleaving String.
+- **State machine DP**: Stock with Cooldown.
+- **Unbounded knapsack (counting)**: Coin Change II.
+- **Sign-partition to subset-sum DP**: Target Sum.
+- **Interval DP**: Burst Balloons.
+- **Regex / pattern DP**: Regular Expression Matching.
+- **Memoized DFS on a matrix**: Longest Increasing Path.

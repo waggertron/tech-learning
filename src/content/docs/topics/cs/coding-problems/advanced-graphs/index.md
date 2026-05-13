@@ -12,11 +12,11 @@ updated: 2026-05-07
 
 The Graphs category taught BFS/DFS/Union-Find/topo sort. This category adds the **weighted** variants and a few niche algorithms:
 
-- **Eulerian path**, visit every edge once (Reconstruct Itinerary, Hierholzer's).
-- **Minimum spanning tree (MST)**, Prim's (priority queue) or Kruskal's (sort + union-find).
-- **Single-source shortest path with non-negative weights**, Dijkstra.
-- **Single-source shortest path with negative weights or bounded hops**, Bellman-Ford.
-- **Dijkstra on implicit graphs**, grid "minimum max edge" problems.
+- **Eulerian path**: visit every edge once (Reconstruct Itinerary, Hierholzer's).
+- **Minimum spanning tree (MST)**: Prim's (priority queue) or Kruskal's (sort + union-find).
+- **Single-source shortest path with non-negative weights**: Dijkstra.
+- **Single-source shortest path with negative weights or bounded hops**: Bellman-Ford.
+- **Dijkstra on implicit graphs**: grid "minimum max edge" problems.
 
 ## Problems
 
@@ -36,11 +36,11 @@ The Graphs category taught BFS/DFS/Union-Find/topo sort. This category adds the 
 
 ## Key patterns unlocked here
 
-- **Hierholzer's algorithm for Eulerian paths**, Reconstruct Itinerary.
-- **Prim's MST with a priority queue**, Min Cost to Connect All Points.
-- **Dijkstra with heap**, Network Delay Time.
-- **Bellman-Ford with hop limit**, Cheapest Flights Within K Stops.
-- **Modified Dijkstra for min-max edge**, Swim in Rising Water.
-- **Tarjan's bridge finding (low values and discovery times)**, Critical Connections.
-- **MST manipulation with Kruskal skip/force pattern**, Critical and Pseudo-Critical Edges.
-- **Dijkstra with maximization (negate weights or use max-heap)**, Path with Max Probability.
+- **Hierholzer's algorithm for Eulerian paths**: Reconstruct Itinerary.
+- **Prim's MST with a priority queue**: Min Cost to Connect All Points.
+- **Dijkstra with heap**: Network Delay Time.
+- **Bellman-Ford with hop limit**: Cheapest Flights Within K Stops.
+- **Modified Dijkstra for min-max edge**: Swim in Rising Water.
+- **Tarjan's bridge finding (low values and discovery times)**: Critical Connections.
+- **MST manipulation with Kruskal skip/force pattern**: Critical and Pseudo-Critical Edges.
+- **Dijkstra with maximization (negate weights or use max-heap)**: Path with Max Probability.

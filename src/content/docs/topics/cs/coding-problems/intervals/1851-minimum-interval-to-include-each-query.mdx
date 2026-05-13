@@ -201,7 +201,7 @@ Processing queries out of order turns a "for each query, find the best interval"
 
 ## Approach 3: Segment tree / merge sort tree
 
-More powerful and more code. Used in competitive programming for online variants. The shape: coordinate-compress the endpoints, then for each interval do a **range-min update** of its length over `[start, end]`. Each query is a **point query** for the minimum length covering that coordinate.
+More code and more flexibility. Used in competitive programming for online variants. The shape: coordinate-compress the endpoints, then for each interval do a **range-min update** of its length over `[start, end]`. Each query is a **point query** for the minimum length covering that coordinate.
 
 ```python
 def min_interval(intervals, queries):

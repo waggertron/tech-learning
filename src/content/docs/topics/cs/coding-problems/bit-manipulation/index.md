@@ -10,12 +10,12 @@ updated: 2026-04-23
 
 ## Overview
 
-Bit manipulation is a small but powerful toolkit. Memorize the primitives:
+Bit manipulation is a small but useful toolkit. Memorize the primitives:
 
-- **XOR identities**, `a ^ a = 0`, `a ^ 0 = a`, XOR is commutative and associative. Used for "find the unique element."
-- **Brian Kernighan's trick**, `n & (n, 1)` clears the lowest set bit. Counts set bits in O(popcount).
-- **Bit-wise iteration**, `n & 1` tests the LSB; `n >>= 1` shifts right.
-- **Sum without `+`**, `a ^ b` is sum-without-carry, `(a & b) << 1` is the carry. Loop until carry = 0.
+- **XOR identities**: `a ^ a = 0`, `a ^ 0 = a`, XOR is commutative and associative. Used for "find the unique element."
+- **Brian Kernighan's trick**: `n & (n, 1)` clears the lowest set bit. Counts set bits in O(popcount).
+- **Bit-wise iteration**: `n & 1` tests the LSB; `n >>= 1` shifts right.
+- **Sum without `+`**: `a ^ b` is sum-without-carry, `(a & b) << 1` is the carry. Loop until carry = 0.
 
 ## Problems
 
@@ -29,10 +29,10 @@ Bit manipulation is a small but powerful toolkit. Memorize the primitives:
 
 ## Key patterns unlocked here
 
-- **XOR of all elements**, Single Number.
-- **Popcount via shift or Kernighan**, Number of 1 Bits.
-- **DP using `popcount(i) = popcount(i >> 1) + (i & 1)`**, Counting Bits.
-- **Bit-by-bit reversal**, Reverse Bits.
-- **XOR-of-indices-XOR-of-values**, Missing Number.
-- **XOR + carry for `+`**, Sum of Two Integers (language-dependent).
-- **Digit-by-digit with overflow check**, Reverse Integer.
+- **XOR of all elements**: Single Number.
+- **Popcount via shift or Kernighan**: Number of 1 Bits.
+- **DP using `popcount(i) = popcount(i >> 1) + (i & 1)`**: Counting Bits.
+- **Bit-by-bit reversal**: Reverse Bits.
+- **XOR-of-indices-XOR-of-values**: Missing Number.
+- **XOR + carry for `+`**: Sum of Two Integers (language-dependent).
+- **Digit-by-digit with overflow check**: Reverse Integer.

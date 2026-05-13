@@ -12,10 +12,10 @@ updated: 2026-04-23
 
 A heap is the right data structure whenever you need:
 
-- **Top-K anything**, maintain a size-K heap. The heap gives O(n log K) instead of O(n log n) sorting.
-- **Streaming order statistics**, kth smallest/largest, running median, sliding-window extremes.
-- **Scheduling with dynamic priorities**, reorganize, task scheduling, meeting rooms.
-- **Greedy selection**, always take the best (cheapest, earliest, largest) element, then update.
+- **Top-K anything**: maintain a size-K heap. The heap gives O(n log K) instead of O(n log n) sorting.
+- **Streaming order statistics**: kth smallest/largest, running median, sliding-window extremes.
+- **Scheduling with dynamic priorities**: reorganize, task scheduling, meeting rooms.
+- **Greedy selection**: always take the best (cheapest, earliest, largest) element, then update.
 
 Python: `heapq` is a min-heap on a list. Negate values for max-heap. Heaps don't support efficient arbitrary key lookup, pair with a hash map for "delete or update by key" (see Twitter).
 
@@ -31,10 +31,10 @@ Python: `heapq` is a min-heap on a list. Negate values for max-heap. Heaps don't
 
 ## Key patterns unlocked here
 
-- **Size-K min-heap for online top-K**, 703.
-- **Greedy selection with max-heap**, 1046.
-- **Size-K heap by distance**, 973.
-- **Quickselect vs. heap**, 215 (classic time vs. space trade-off).
-- **Greedy scheduling with a counter and a max-heap**, 621.
-- **Heap merge across per-user feeds**, 355.
-- **Two heaps balancing a median**, 295 (canonical).
+- **Size-K min-heap for online top-K**: 703.
+- **Greedy selection with max-heap**: 1046.
+- **Size-K heap by distance**: 973.
+- **Quickselect vs. heap**: 215 (classic time vs. space trade-off).
+- **Greedy scheduling with a counter and a max-heap**: 621.
+- **Heap merge across per-user feeds**: 355.
+- **Two heaps balancing a median**: 295 (canonical).

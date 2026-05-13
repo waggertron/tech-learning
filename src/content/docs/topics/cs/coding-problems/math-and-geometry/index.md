@@ -12,11 +12,11 @@ updated: 2026-04-23
 
 Math & Geometry is a grab-bag of problems where the algorithmic insight is often a specific math identity or matrix trick rather than a general pattern. Common techniques:
 
-- **In-place matrix operations**, rotate via transpose + reverse; spiral walking with boundary shrinking.
-- **Cycle detection on digit sequences**, Happy Number (Floyd's tortoise and hare).
-- **Fast exponentiation**, Pow(x, n) by squaring.
-- **Big-integer arithmetic on strings / grids**, Multiply Strings, Plus One.
-- **Counting point configurations**, Detect Squares.
+- **In-place matrix operations**: rotate via transpose + reverse; spiral walking with boundary shrinking.
+- **Cycle detection on digit sequences**: Happy Number (Floyd's tortoise and hare).
+- **Fast exponentiation**: Pow(x, n) by squaring.
+- **Big-integer arithmetic on strings / grids**: Multiply Strings, Plus One.
+- **Counting point configurations**: Detect Squares.
 
 ## Problems
 
@@ -31,11 +31,11 @@ Math & Geometry is a grab-bag of problems where the algorithmic insight is often
 
 ## Key patterns unlocked here
 
-- **Transpose + row-reverse**, Rotate Image.
-- **Boundary-shrinking traversal**, Spiral Matrix.
-- **Using first row/column as markers**, Set Matrix Zeroes (O(1) space).
-- **Floyd's on numeric sequence**, Happy Number.
-- **Digit-by-digit carry**, Plus One.
-- **Exponentiation by squaring**, Pow(x, n).
-- **Schoolbook multiplication on digit arrays**, Multiply Strings.
-- **Point counting with hash map**, Detect Squares.
+- **Transpose + row-reverse**: Rotate Image.
+- **Boundary-shrinking traversal**: Spiral Matrix.
+- **Using first row/column as markers**: Set Matrix Zeroes (O(1) space).
+- **Floyd's on numeric sequence**: Happy Number.
+- **Digit-by-digit carry**: Plus One.
+- **Exponentiation by squaring**: Pow(x, n).
+- **Schoolbook multiplication on digit arrays**: Multiply Strings.
+- **Point counting with hash map**: Detect Squares.

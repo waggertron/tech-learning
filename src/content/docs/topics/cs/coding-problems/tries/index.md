@@ -20,6 +20,6 @@ A trie stores a set of strings as a tree, where each edge is a character and a p
 
 ## Key patterns unlocked here
 
-- **Canonical trie insert/search/startsWith**, 208.
-- **Wildcard search via trie DFS**, 211 (backtrack on `.`).
-- **Trie + grid DFS with trie-pruning**, 212 (the hard payoff).
+- **Canonical trie insert/search/startsWith**: 208.
+- **Wildcard search via trie DFS**: 211 (backtrack on `.`).
+- **Trie + grid DFS with trie-pruning**: 212 (the hard payoff).

@@ -14,8 +14,8 @@ A greedy algorithm makes the locally-optimal choice at each step, betting that l
 
 Two classic proof structures:
 
-- **Exchange argument**, show that any optimal solution can be rewritten to use the greedy choice without worsening its value.
-- **Monotone invariant**, show that a scalar (running max reach, sum, remaining count) strictly dominates the future.
+- **Exchange argument**: show that any optimal solution can be rewritten to use the greedy choice without worsening its value.
+- **Monotone invariant**: show that a scalar (running max reach, sum, remaining count) strictly dominates the future.
 
 ## Problems
 
@@ -30,11 +30,11 @@ Two classic proof structures:
 
 ## Key patterns unlocked here
 
-- **Kadane's algorithm**, Maximum Subarray.
-- **Running max reach**, Jump Game.
-- **BFS-like level expansion**, Jump Game II.
-- **Negative-prefix skip**, Gas Station.
-- **Sorted frequencies + rolling consumption**, Hand of Straights.
-- **Channel-wise feasibility check**, Merge Triplets.
-- **Last-seen index sliding**, Partition Labels.
-- **Range tracking of possible `(` counts**, Valid Parenthesis String.
+- **Kadane's algorithm**: Maximum Subarray.
+- **Running max reach**: Jump Game.
+- **BFS-like level expansion**: Jump Game II.
+- **Negative-prefix skip**: Gas Station.
+- **Sorted frequencies + rolling consumption**: Hand of Straights.
+- **Channel-wise feasibility check**: Merge Triplets.
+- **Last-seen index sliding**: Partition Labels.
+- **Range tracking of possible `(` counts**: Valid Parenthesis String.
