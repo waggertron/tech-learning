@@ -10,7 +10,7 @@ updated: 2026-04-24
 
 ## What Helm is
 
-**Helm is a package manager for Kubernetes.** A "chart" is a parameterized bundle of Kubernetes manifests. You install a chart with a set of values; Helm renders the templates into concrete YAML and applies it to the cluster. You get:
+**Helm is a package manager for Kubernetes.** A "chart" is a parameterized bundle of Kubernetes manifests. You install a chart with a set of values. Helm renders the templates into concrete YAML and applies it to the cluster. You get:
 
 - Reusable, versioned packages.
 - A single command to deploy complex apps (`helm install`).
@@ -150,7 +150,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 ```
 
-Call them from `.yaml` templates with `{{ include "mychart.labels" . }}`. Keep naming and labeling logic here; don't repeat it in every manifest.
+Call them from `.yaml` templates with `{{ include "mychart.labels" . }}`. Keep naming and labeling logic here. Don't repeat it in every manifest.
 
 ## The release lifecycle
 
@@ -204,7 +204,7 @@ helm template home-health ./chart -f values.yaml -f values-prod.yaml > rendered.
 # inspect rendered.yaml; verify the output is what you expect
 ```
 
-`helm template` is a powerful debugging tool. Render locally, diff, commit the diff in your PR. You catch misconfigurations before they become events in a cluster.
+`helm template` is a good debugging tool. Render locally, diff, commit the diff in your PR. You catch misconfigurations before they become events in a cluster.
 
 ## Dependencies and subcharts
 
@@ -235,9 +235,9 @@ postgresql:
     database: home_health
 ```
 
-**Umbrella chart**, your chart's only job is to wire together dependencies. `templates/` is nearly empty.
+**Umbrella chart**: your chart's only job is to wire together dependencies. `templates/` is nearly empty.
 
-**Library chart**, a chart of only helpers (no resources). `type: library` in `Chart.yaml`. Other charts depend on it to share `_helpers.tpl`-style partials. Useful when you have 10 service charts that all need the same labels, probes, and image-pull config.
+**Library chart**: a chart of only helpers (no resources). `type: library` in `Chart.yaml`. Other charts depend on it to share `_helpers.tpl`-style partials. Useful when you have 10 service charts that all need the same labels, probes, and image-pull config.
 
 ## The ConfigMap hash pattern, how to roll Pods on config changes
 
@@ -299,7 +299,7 @@ spec:
   restartPolicy: Never
 ```
 
-Run after install: `helm test home-health`. Good for smoke tests; won't catch much beyond that.
+Run after install: `helm test home-health`. Good for smoke tests. Won't catch much beyond that.
 
 ## Repositories
 
@@ -336,11 +336,11 @@ Most production stacks pick Helm for third-party apps and Kustomize for their ow
 
 ## Common footguns
 
-- **Template whitespace.** Go templates render literal newlines; YAML is sensitive. Use `{{- ... -}}` and `nindent` religiously, or your output has blank lines or trailing garbage.
+- **Template whitespace.** Go templates render literal newlines. YAML is sensitive. Use `{{- ... -}}` and `nindent` religiously, or your output has blank lines or trailing garbage.
 - **The `.` reassignment.** Inside a `range`, `.` changes. Save the outer scope at the top (`{{ $ := . }}`) or use `$` directly.
 - **Secrets in values.** `helm install --set password=...` persists in the release Secret. Not ideal. Use external secret management.
-- **`helm install` vs `helm upgrade --install`.** The latter is idempotent; use it in CI. The former fails if the release already exists.
-- **Breaking values changes without a `version` bump.** Consumers upgrade and suddenly their values don't work. Bump `version` (the chart version) on every breaking change; document migration.
+- **`helm install` vs `helm upgrade --install`.** The latter is idempotent. Use it in CI. The former fails if the release already exists.
+- **Breaking values changes without a `version` bump.** Consumers upgrade and suddenly their values don't work. Bump `version` (the chart version) on every breaking change. Document the migration.
 - **Missing the `values.schema.json`.** Users pass wrong types, Helm renders nonsense, and you find out at `kubectl apply` time. Schemas catch misuse at `helm template`.
 - **Overly clever helper functions.** Helm template debugging is hard. `helm template --debug` is your friend. Keep helpers simple and well-tested.
 - **Subcharts that override each other's values.** Two dependencies each define a key named `service`, whichever loads last wins. Use aliases (`alias: db`) to namespace.

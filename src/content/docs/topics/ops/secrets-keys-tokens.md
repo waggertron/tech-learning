@@ -25,7 +25,7 @@ Env vars have no built-in access control, encryption, or audit log. They are vis
 
 ### Secret
 
-Any value that must not be exposed: passwords, private keys, connection strings, cryptographic seeds. "Secret" is the category; the others are types of secret.
+Any value that must not be exposed: passwords, private keys, connection strings, cryptographic seeds. "Secret" is the category. The others are types of secret.
 
 Secrets need:
 - **Encryption at rest** (not just Base64)
@@ -73,7 +73,7 @@ A refresh token is a longer-lived credential used to get new access tokens. It i
 
 A cryptographic key used to sign or verify data (HMAC, RSA, ECDSA). It is never sent over the wire -- it lives server-side and is used to produce or verify signatures.
 
-JWT signing keys are a common example: the server signs tokens with a private key; clients (or other servers) verify with the corresponding public key. If the signing key leaks, an attacker can forge any token the key would sign.
+JWT signing keys are a common example: the server signs tokens with a private key. Clients (or other servers) verify with the corresponding public key. If the signing key leaks, an attacker can forge any token the key would sign.
 
 Signing keys are secrets with an even stricter rotation requirement than API keys.
 
@@ -151,7 +151,7 @@ ${{ secrets.DATABASE_URL }}
 }
 ```
 
-The application code reads `process.env.DATABASE_URL` (or `os.environ["DATABASE_URL"]`) in all environments. The source of truth changes per environment; the application does not.
+The application code reads `process.env.DATABASE_URL` (or `os.environ["DATABASE_URL"]`) in all environments. The source of truth changes per environment. The application does not.
 
 ## References
 

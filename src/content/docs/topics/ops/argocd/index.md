@@ -46,11 +46,11 @@ One `Application` = one deployable unit. ArgoCD reads the manifests at `path` in
 
 Key fields:
 
-- **`source`**, where the manifests live. Can be plain YAML, Kustomize, Helm, or Jsonnet.
-- **`destination`**, where to apply them. Same cluster as ArgoCD (`kubernetes.default.svc`) or a registered remote cluster.
-- **`syncPolicy.automated.prune`**, delete resources that are no longer in Git.
-- **`syncPolicy.automated.selfHeal`**, revert live changes that drift from Git.
-- **`syncOptions.ServerSideApply=true`**, use Kubernetes server-side apply, which handles field ownership better than the legacy client-side apply.
+- **`source`**: where the manifests live. Can be plain YAML, Kustomize, Helm, or Jsonnet.
+- **`destination`**: where to apply them. Same cluster as ArgoCD (`kubernetes.default.svc`) or a registered remote cluster.
+- **`syncPolicy.automated.prune`**: delete resources that are no longer in Git.
+- **`syncPolicy.automated.selfHeal`**: revert live changes that drift from Git.
+- **`syncOptions.ServerSideApply=true`**: use Kubernetes server-side apply, which handles field ownership better than the legacy client-side apply.
 
 ## How it actually works
 
@@ -75,8 +75,8 @@ Three loops running continuously:
 
 An Application has two axes of status:
 
-- **Sync status**, does the live cluster match the repo? (`Synced` / `OutOfSync`)
-- **Health status**, is the live resource healthy? (`Healthy` / `Progressing` / `Degraded` / `Missing`)
+- **Sync status**: does the live cluster match the repo? (`Synced` / `OutOfSync`)
+- **Health status**: is the live resource healthy? (`Healthy` / `Progressing` / `Degraded` / `Missing`)
 
 A `Deployment` rollout that's mid-flight is `Synced` and `Progressing`. A crashlooping pod is `Synced` and `Degraded`. A pending PVC is `OutOfSync` or `Healthy` depending on whether the PVC exists yet. Learn to read both columns together.
 
@@ -118,10 +118,10 @@ metadata:
 
 Hook types:
 
-- **`PreSync`**, runs before the main sync. DB migrations, schema changes.
-- **`Sync`**, runs as part of the sync. Rarely useful.
-- **`PostSync`**, runs after sync completes. Smoke tests, cache warmup.
-- **`SyncFail`**, runs if sync fails. Rollback hooks, paging.
+- **`PreSync`**: runs before the main sync. DB migrations, schema changes.
+- **`Sync`**: runs as part of the sync. Rarely useful.
+- **`PostSync`**: runs after sync completes. Smoke tests, cache warmup.
+- **`SyncFail`**: runs if sync fails. Rollback hooks, paging.
 
 `hook-delete-policy` controls when the Job is cleaned up. `HookSucceeded` is almost always what you want.
 
@@ -147,7 +147,7 @@ spec:
       selfHeal: true
 ```
 
-The `bootstrap/apps/` directory in the repo contains more `Application` YAMLs. Each of those Applications deploys an actual workload. You apply the root Application once, by hand. It applies all the children. Adding a new workload = `git add bootstrap/apps/new-thing.yaml`; no kubectl.
+The `bootstrap/apps/` directory in the repo contains more `Application` YAMLs. Each of those Applications deploys an actual workload. You apply the root Application once, by hand. It applies all the children. Adding a new workload = `git add bootstrap/apps/new-thing.yaml`. No kubectl.
 
 ## ApplicationSet, generators for apps
 
@@ -196,20 +196,20 @@ If present, ArgoCD auto-syncs on every detected diff. If absent, you click Sync 
 
 ### `prune`
 
-When `true`, resources removed from the repo get deleted from the cluster. When `false`, removed resources linger (ArgoCD marks them `OutOfSync` but doesn't touch them). Turn on for most apps; be careful for resources with attached data (PVCs).
+When `true`, resources removed from the repo get deleted from the cluster. When `false`, removed resources linger (ArgoCD marks them `OutOfSync` but doesn't touch them). Turn on for most apps. Be careful with resources that have attached data (PVCs).
 
 ### `selfHeal`
 
-When `true`, drift gets auto-reverted. Someone `kubectl edit`s your Deployment to change replicas? ArgoCD puts it back within ~3 minutes. Essential for preventing config drift; annoying during incident response.
+When `true`, drift gets auto-reverted. Someone `kubectl edit`s your Deployment to change replicas? ArgoCD puts it back within ~3 minutes. Essential for preventing config drift. Annoying during incident response.
 
 ### `syncOptions`
 
 A grab-bag:
 
-- **`CreateNamespace=true`**, create the destination namespace if missing.
-- **`ServerSideApply=true`**, use server-side apply. Handles controllers that own fields (HPAs, Karpenter).
-- **`ApplyOutOfSyncOnly=true`**, skip applying unchanged resources. Faster large syncs.
-- **`Replace=true`**, use `kubectl replace` instead of apply. Dangerous, don't use without a reason.
+- **`CreateNamespace=true`**: create the destination namespace if missing.
+- **`ServerSideApply=true`**: use server-side apply. Handles controllers that own fields (HPAs, Karpenter).
+- **`ApplyOutOfSyncOnly=true`**: skip applying unchanged resources. Faster large syncs.
+- **`Replace=true`**: use `kubectl replace` instead of apply. Dangerous, don't use without a reason.
 
 ## `ignoreDifferences`, telling ArgoCD to stop complaining
 
@@ -247,9 +247,9 @@ ArgoCD can manage clusters other than the one it's running in. Register each clu
 argocd cluster add <kubecontext> --name prod-us-east
 ```
 
-Under the hood ArgoCD creates a Secret in the `argocd` namespace storing the kubeconfig. Applications target remote clusters by setting `destination.server` to the registered cluster URL. The control plane runs in one cluster; the apps run across many.
+Under the hood ArgoCD creates a Secret in the `argocd` namespace storing the kubeconfig. Applications target remote clusters by setting `destination.server` to the registered cluster URL. The control plane runs in one cluster. The apps run across many.
 
-A common topology: one "mgmt" cluster runs ArgoCD, Flux, observability, and CI; application workloads run in per-environment clusters.
+A common topology: one "mgmt" cluster runs ArgoCD, Flux, observability, and CI. Application workloads run in per-environment clusters.
 
 ## `AppProject`, scoping and RBAC
 
@@ -310,9 +310,9 @@ Rollout replaces Deployment; ArgoCD manages the Rollout resource. Analysis templ
 - **Default `automated: {}` without `prune: true`.** Silent drift, you delete a resource from the repo, it stays in the cluster, nothing yells.
 - **CRD and CRD-instance in the same Application.** Race condition: the instance applies before the CRD is established. Split into two Applications with sync waves.
 - **Large Helm charts with server-side apply disabled.** Field ownership conflicts everywhere. Turn on `ServerSideApply=true`.
-- **`ApplyOutOfSyncOnly=true` with Helm.** Sometimes Helm values change in a way that affects many resources; this option can skip apparently-unchanged ones. Test carefully.
+- **`ApplyOutOfSyncOnly=true` with Helm.** Sometimes Helm values change in a way that affects many resources. This option can skip apparently-unchanged ones. Test carefully.
 - **Sync hooks that don't terminate.** A migration Job that hangs will stall the sync forever. Set `activeDeadlineSeconds`.
-- **RBAC on `argocd` namespace.** ArgoCD stores Application secrets there. Give it tight RBAC; many teams leave it wide open.
+- **RBAC on `argocd` namespace.** ArgoCD stores Application secrets there. Give it tight RBAC. Many teams leave it wide open.
 - **Image tag as `latest`.** Breaks GitOps's "the repo is the source of truth." Always pin.
 
 ## Debugging checklist

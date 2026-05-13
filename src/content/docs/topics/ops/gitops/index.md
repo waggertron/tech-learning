@@ -18,10 +18,10 @@ Everything else, tooling, debates about push vs pull, specific controllers, foll
 
 The [OpenGitOps Working Group](https://opengitops.dev/) formalized four principles in 2022. They're short enough to memorize:
 
-1. **Declarative**, the system's desired state is expressed declaratively.
-2. **Versioned and immutable**, the desired state is stored in a way that enforces versioning and retains complete version history (i.e., Git).
-3. **Pulled automatically**, approved changes to the desired state are automatically applied to the system.
-4. **Continuously reconciled**, software agents continuously ensure the actual state matches the desired state, and alert on drift.
+1. **Declarative**: the system's desired state is expressed declaratively.
+2. **Versioned and immutable**: the desired state is stored in a way that enforces versioning and retains complete version history (i.e., Git).
+3. **Pulled automatically**: approved changes to the desired state are automatically applied to the system.
+4. **Continuously reconciled**: software agents continuously ensure the actual state matches the desired state, and alert on drift.
 
 If any one of the four is missing, it's not GitOps, just "Git plus deploys."
 
@@ -98,8 +98,8 @@ Not just YAML. The whole **desired state** of the system:
 
 The two-repo pattern is common:
 
-- **`infra/`**, Terraform for VPC, EKS, IAM, RDS, etc. Applied via Terraform Cloud or Atlantis.
-- **`manifests/`**, Kubernetes manifests, applied by ArgoCD.
+- **`infra/`**: Terraform for VPC, EKS, IAM, RDS, etc. Applied via Terraform Cloud or Atlantis.
+- **`manifests/`**: Kubernetes manifests, applied by ArgoCD.
 
 The boundary is "things that exist before you can deploy anything" (infra) vs "things you deploy all day" (manifests).
 
@@ -137,7 +137,7 @@ The controller fetches the actual secret and materializes it as a `Secret` objec
 
 ### SOPS (Mozilla)
 
-Encrypt files in-place with age, GPG, or a KMS key. Git sees ciphertext; the controller decrypts on apply.
+Encrypt files in-place with age, GPG, or a KMS key. Git sees ciphertext. The controller decrypts on apply.
 
 Pick one. Don't mix them.
 
@@ -175,7 +175,7 @@ Promotion to staging is a commit that bumps `envs/staging/kustomization.yaml` to
 
 ### 3. Trunk per environment
 
-Separate branches (`env/dev`, `env/prod`) each track their own tip. Cherry-pick or merge to promote. Less popular now, branches drift; dir-per-env is clearer.
+Separate branches (`env/dev`, `env/prod`) each track their own tip. Cherry-pick or merge to promote. Less popular now. Branches drift. Dir-per-env is clearer.
 
 ## Drift detection, the underrated feature
 
@@ -185,13 +185,13 @@ GitOps controllers don't just apply on change. They **continuously reconcile**. 
 - Depending on sync policy, it'll either auto-revert the change or page you.
 - The fix is either to commit the change or to revert to the repo state.
 
-This is the feature that turns GitOps from "automated deploys" into "continuously enforced reality." Drift isn't an oops someone discovers in a post-mortem; it's a diff the controller flagged at 14:02.
+This is the feature that turns GitOps from "automated deploys" into "continuously enforced reality." Drift isn't an oops someone discovers in a post-mortem. It's a diff the controller flagged at 14:02.
 
 ## Where GitOps doesn't fit (as well)
 
-- **Data migrations.** Schemas evolve with data. Committing "drop this column" as a manifest is fine; executing it safely is a different problem. Most teams keep migrations in their app's deploy pipeline, not in the GitOps repo.
-- **Stateful certbot-style renewals.** Things that change themselves. GitOps wants the repo to be the source of truth; self-rotating resources fight that. Solution: the controller (cert-manager, ESO) is the source of truth for the rotating value; the repo only declares the *policy*.
-- **Imperative cluster operations.** "Restart this pod." "Cordon this node." These are operational, not intent. You still `kubectl` them; the GitOps controller just won't fight you for transient operations.
+- **Data migrations.** Schemas evolve with data. Committing "drop this column" as a manifest is fine. Executing it safely is a different problem. Most teams keep migrations in their app's deploy pipeline, not in the GitOps repo.
+- **Stateful certbot-style renewals.** Things that change themselves. GitOps wants the repo to be the source of truth. Self-rotating resources fight that. Solution: the controller (cert-manager, ESO) is the source of truth for the rotating value. The repo only declares the *policy*.
+- **Imperative cluster operations.** "Restart this pod." "Cordon this node." These are operational, not intent. You still `kubectl` them. The GitOps controller won't fight you for transient operations.
 
 ## Getting started, minimally
 

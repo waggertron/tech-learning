@@ -10,13 +10,13 @@ updated: 2026-04-24
 
 ## What Terraform is
 
-**Terraform is declarative infrastructure-as-code.** You write HCL (HashiCorp Configuration Language) describing cloud resources you want; Terraform figures out what's already there, computes a plan, and applies the difference.
+**Terraform is declarative infrastructure-as-code.** You write HCL (HashiCorp Configuration Language) describing cloud resources you want. Terraform figures out what's already there, computes a plan, and applies the difference.
 
 - Written in Go, originally by HashiCorp, open-sourced in 2014.
 - Supports hundreds of providers, AWS, GCP, Azure, Kubernetes, GitHub, PagerDuty, Datadog, Cloudflare, essentially any API worth talking to.
-- **License changed in 2023** from MPL 2.0 to BUSL 1.1. The community forked to [OpenTofu](https://opentofu.org/) (Linux Foundation, MPL 2.0). For most teams the two are interchangeable today; OpenTofu is the long-term safe choice if licensing matters.
+- **License changed in 2023** from MPL 2.0 to BUSL 1.1. The community forked to [OpenTofu](https://opentofu.org/) (Linux Foundation, MPL 2.0). For most teams the two are interchangeable today. OpenTofu is the long-term safe choice if licensing matters.
 
-This page uses "Terraform" throughout; every pattern applies to OpenTofu.
+This page uses "Terraform" throughout. Every pattern applies to OpenTofu.
 
 ## The mental model
 
@@ -117,7 +117,7 @@ data "aws_availability_zones" "available" {
 }
 ```
 
-- Read-only lookup. Terraform doesn't manage these; it just reads them.
+- Read-only lookup. Terraform doesn't manage these. It just reads them.
 - Used for "find the VPC ID of the network someone else provisioned."
 
 ### Variables
@@ -369,8 +369,8 @@ Terragrunt is worth it once you have more than three environments or want module
 
 ### Monorepo vs polyrepo
 
-- **Monorepo**, `infra/` contains all environments and all modules. Easier to refactor; everyone sees everyone's changes.
-- **Polyrepo**, separate repos for network, shared services, per-app. Harder to coordinate; cleaner access control.
+- **Monorepo**: `infra/` contains all environments and all modules. Easier to refactor. Everyone sees everyone's changes.
+- **Polyrepo**: separate repos for network, shared services, per-app. Harder to coordinate. Cleaner access control.
 
 Start monorepo. Split later if team boundaries demand it.
 
@@ -426,7 +426,7 @@ module "dns" {
 
 ## Drift detection
 
-**Drift** is when reality diverges from the state. Someone clicks in the AWS console; Terraform doesn't know.
+**Drift** is when reality diverges from the state. Someone clicks in the AWS console. Terraform doesn't know.
 
 ```bash
 terraform plan -refresh-only
@@ -463,11 +463,11 @@ Apply step requires manual approval or runs on merge to main.
 
 ### Atlantis
 
-[Atlantis](https://www.runatlantis.io/) is a GitHub app that runs `terraform plan` on every PR, posts the plan as a comment, and applies on a PR comment like `atlantis apply`. Open-source; the original way to do Terraform GitOps.
+[Atlantis](https://www.runatlantis.io/) is a GitHub app that runs `terraform plan` on every PR, posts the plan as a comment, and applies on a PR comment like `atlantis apply`. Open-source. The original way to do Terraform GitOps.
 
 ### Terraform Cloud / Spacelift / Env0
 
-Managed services that do the same plus UI, RBAC, policy-as-code (OPA, Sentinel), cost estimation. Pay-to-play; the time savings are real.
+Managed services that do the same plus UI, RBAC, policy-as-code (OPA, Sentinel), cost estimation. Pay-to-play. The time savings are real.
 
 ## Alternatives
 
@@ -487,23 +487,23 @@ Managed services that do the same plus UI, RBAC, policy-as-code (OPA, Sentinel),
 - **Forgetting `lifecycle { prevent_destroy = true }` on critical resources.** The person who types `terraform destroy` in the wrong directory has ruined many days.
 - **Module version drift.** A floating module version updates on `terraform init` and your next plan shows 400 changes. Pin everything.
 - **`count = var.enabled ? 1 : 0` in modules.** Works, but accessing `module.thing[0].output` is awkward. Use the new-style `count = var.enabled ? 1 : 0` at the module level only when necessary.
-- **Using `terraform apply` in production without a saved plan.** Two people running apply race; state corrupts. Always `-out=tfplan`.
+- **Using `terraform apply` in production without a saved plan.** Two people running apply race and state corrupts. Always `-out=tfplan`.
 - **Secrets in `.tf` files.** They end up in Git. Use `random_password` + AWS Secrets Manager, or inject via CI from a vault.
 - **`terraform destroy` on shared state.** If many projects share one state, `destroy` nukes everything. Partition state.
 - **Importing incorrectly.** `terraform import` tells Terraform "you manage this." If the config differs from reality, the next plan will "fix" it, which might mean destroy and recreate. Import with an exact matching config.
-- **Provider drift between plan and apply.** Providers update between the two runs; plan becomes stale. Use `-out=tfplan` and apply promptly.
+- **Provider drift between plan and apply.** Providers update between the two runs. The plan becomes stale. Use `-out=tfplan` and apply promptly.
 - **Cyclic dependencies between modules.** Terraform's DAG refuses. Usually a sign you should merge or restructure the modules.
 - **Terraform state in a public S3 bucket.** It's happened. Block Public Access on every state bucket.
 
 ## Operational patterns worth stealing
 
-- **Two-repo architecture**, `infra/` for Terraform, `manifests/` for Kubernetes GitOps. Infra changes rarely; manifests change constantly. Different review cadences.
+- **Two-repo architecture**: `infra/` for Terraform, `manifests/` for Kubernetes GitOps. Infra changes rarely. Manifests change constantly. Different review cadences.
 - **Small state files.** Split infra into layers (network, data, apps) with their own state. Smaller plans, faster iterations, blast radius per layer.
 - **Pre-commit hooks.** `terraform fmt`, `terraform validate`, `tflint`, `tfsec` or `checkov`. Cheap, catches most common mistakes.
 - **Policy-as-code.** Sentinel (Terraform Cloud), OPA (Conftest), or Spacelift policies. Enforce "no public S3 buckets," "all resources tagged," etc. at plan time.
 - **Cost estimation.** Infracost in CI. Shows the delta cost of every PR.
 - **`lifecycle { create_before_destroy = true }`** on stateful resources. Avoids brief outages during replacements.
-- **State file backups.** S3 versioning + cross-region replication. States occasionally corrupt; restore from the last good version.
+- **State file backups.** S3 versioning + cross-region replication. States occasionally corrupt. Restore from the last good version.
 
 ## Debugging
 

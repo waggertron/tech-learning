@@ -87,7 +87,7 @@ The problems start when you apply Gitflow to **continuous delivery**.
 - **`--no-ff` merges produce a dense, bubble-heavy history** that's hard to read.
 - **Hotfixes can't easily cherry-pick through.** If `main` and `develop` have diverged, a hotfix that lands on `main` may not merge cleanly to `develop`.
 
-Continuous delivery doesn't want an integration branch. It wants *the* branch to be shippable at all times. Gitflow's model assumes releases are events; CD assumes they're non-events.
+Continuous delivery doesn't want an integration branch. It wants *the* branch to be shippable at all times. Gitflow's model assumes releases are events. CD assumes they're non-events.
 
 ## The alternatives
 
@@ -122,7 +122,7 @@ This is how high-volume teams (Google, Amazon SRE org, stripes of Facebook) oper
 
 ### GitLab Flow
 
-A middle ground: short-lived feature branches merged to `main`, plus optional per-environment branches (`production`, `staging`) that track what's currently deployed. A commit ships to staging on merge to `main`; promotion to `production` is a merge from `main` to `production`.
+A middle ground: short-lived feature branches merged to `main`, plus optional per-environment branches (`production`, `staging`) that track what's currently deployed. A commit ships to staging on merge to `main`. Promotion to `production` is a merge from `main` to `production`.
 
 Borrows from Gitflow (environment branches) and GitHub Flow (short-lived features).
 
@@ -158,9 +158,9 @@ Used inside Azure DevOps. Short-lived topic branches merged to `main` via PR. Re
 Regardless of workflow, two conventions almost always survive:
 
 - **Tags on `main`** (or the equivalent) mark releases. `v1.4.2`, `v2.0.0-beta.1`. Tags are immutable pointers to the commit that shipped.
-- **[Semantic versioning](https://semver.org/)**, `MAJOR.MINOR.PATCH`. Major for breaking, minor for additive, patch for fixes. Tooling (npm, pip, cargo) depends on it.
+- **[Semantic versioning](https://semver.org/)**: `MAJOR.MINOR.PATCH`. Major for breaking, minor for additive, patch for fixes. Tooling (npm, pip, cargo) depends on it.
 
-Gitflow enforces tagging at `main` merges; GitHub Flow often leaves it implicit. Either way, tag your releases. Rollback, bisection, and changelog generation all depend on them.
+Gitflow enforces tagging at `main` merges. GitHub Flow often leaves it implicit. Either way, tag your releases. Rollback, bisection, and changelog generation all depend on them.
 
 ## The `git-flow` CLI tool
 
@@ -176,7 +176,7 @@ git flow hotfix start 1.1.1          # creates hotfix/1.1.1 from main
 git flow hotfix finish 1.1.1         # merges to main + develop, tags, deletes branch
 ```
 
-Useful if you're committed to Gitflow; otherwise, the raw Git commands are more flexible.
+Useful if you're committed to Gitflow. Otherwise, the raw Git commands are more flexible.
 
 ## Practical patterns you can steal even without Gitflow
 
@@ -185,17 +185,17 @@ Even if you don't adopt Gitflow wholesale, these patterns from it are genuinely 
 - **A "ship" branch separate from `main`.** Some teams use `prod` or `production` to track deployed state, with `main` as integration. Clean separation without the `develop` ceremony.
 - **Hotfix lanes.** A named pattern (`hotfix/*` or a PR label) for urgent fixes that skip the normal review depth. Make the exception explicit.
 - **Tagged releases on `main`.** Every deploy gets a tag. Bisection and rollback both need this.
-- **`--no-ff` for long-lived features.** Preserves the history of *why* a chunk of commits exists. Worth it on features that span a few days; overkill for single-commit PRs.
+- **`--no-ff` for long-lived features.** Preserves the history of *why* a chunk of commits exists. Worth it on features that span a few days. Overkill for single-commit PRs.
 - **Release branches for supported versions.** If you ship `v1.x` and `v2.x` concurrently, a persistent `release/1.x` branch is how bugfixes stay isolated from `v2.x` changes.
 
 ## Common mistakes (across workflows)
 
-- **Long-lived feature branches in any model.** The branch diverges from the integration point; the merge gets ugly. Keep features under a week.
-- **Merging `develop` into `main` directly.** Skips the release-branch buffer; suddenly `main` has unreleased changes. In Gitflow, always go through a `release/*`.
+- **Long-lived feature branches in any model.** The branch diverges from the integration point. The merge gets ugly. Keep features under a week.
+- **Merging `develop` into `main` directly.** Skips the release-branch buffer. Suddenly `main` has unreleased changes. In Gitflow, always go through a `release/*`.
 - **Hotfixes that aren't merged back.** The fix lands on `main`, nobody merges it to `develop`, the bug reappears in the next release. Hotfixes always merge both directions.
 - **Trunk-based without feature flags.** Small branches + direct-to-trunk + no flags = broken trunk. The flags are load-bearing.
 - **Rebasing shared branches.** `main` and `develop` are never rebased. Feature branches can be, if you own them solo.
-- **Squashing when the history matters.** Squashing losses the narrative of how a change was developed. For exploration or review iterations, squash is fine; for cross-team features, preserve the history.
+- **Squashing when the history matters.** Squashing loses the narrative of how a change was developed. For exploration or review iterations, squash is fine. For cross-team features, preserve the history.
 
 ## The cultural reality
 

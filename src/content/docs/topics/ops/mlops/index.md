@@ -32,7 +32,7 @@ Every arrow is a place where things go wrong. The whole discipline is about turn
 
 ## The five layers of an MLOps stack
 
-Real-world MLOps platforms break into five layers. You don't need all of them on day one; the point is to know which are missing.
+Real-world MLOps platforms break into five layers. You don't need all of them on day one. The point is to know which are missing.
 
 ### 1. Experiment tracking
 
@@ -146,10 +146,10 @@ Add `/healthz`, `/metrics`, request/response logging, input validation, everythi
 
 **Solution:** monitor four things, in addition to normal service health:
 
-- **Data drift**, has the input distribution changed? KS test, population stability index, or Evidently AI.
-- **Prediction drift**, has the output distribution changed? Often easier to detect than data drift.
-- **Calibration**, do predicted probabilities match observed frequencies?
-- **Ground-truth latency**, how long until you find out whether a prediction was correct? Some problems have same-day ground truth; others take weeks.
+- **Data drift**: has the input distribution changed? KS test, population stability index, or Evidently AI.
+- **Prediction drift**: has the output distribution changed? Often easier to detect than data drift.
+- **Calibration**: do predicted probabilities match observed frequencies?
+- **Ground-truth latency**: how long until you find out whether a prediction was correct? Some problems have same-day ground truth; others take weeks.
 
 **Tools:**
 
@@ -164,10 +164,10 @@ Dashboards alone aren't enough. Wire drift into **alerts** that page when the PS
 
 Applied to ML, CI/CD fragments into three pipelines:
 
-- **CI**, code changes. Unit tests, lint, type checks. Same as any service.
-- **CT (continuous training)**, data or schedule changes. Re-run the training pipeline when fresh data arrives or on a cron. Produce a new model version; don't auto-promote.
-- **CD**, deploy a *specific* model version to production. Usually a manual promotion after evaluation against a holdout set.
-- **CM (continuous monitoring)**, drift and performance monitoring triggering retraining or rollbacks.
+- **CI**: code changes. Unit tests, lint, type checks. Same as any service.
+- **CT (continuous training)**: data or schedule changes. Re-run the training pipeline when fresh data arrives or on a cron. Produce a new model version. Don't auto-promote.
+- **CD**: deploy a *specific* model version to production. Usually a manual promotion after evaluation against a holdout set.
+- **CM (continuous monitoring)**: drift and performance monitoring triggering retraining or rollbacks.
 
 Keep CI and CT separate. A flaky code change shouldn't eat GPU hours retraining a model.
 
@@ -176,7 +176,7 @@ Keep CI and CT separate. A flaky code change shouldn't eat GPU hours retraining 
 Google's well-known [MLOps levels](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning) offer a useful gradient:
 
 - **Level 0, manual process.** Data scientists hand models over to engineers. No automation, no monitoring. Most teams start here.
-- **Level 1, ML pipeline automation.** The training pipeline is a DAG that runs on a schedule or trigger. CT is automated; CD is manual.
+- **Level 1, ML pipeline automation.** The training pipeline is a DAG that runs on a schedule or trigger. CT is automated. CD is manual.
 - **Level 2, CI/CD pipeline automation.** Training *code* changes trigger the pipeline. Model versions are promoted automatically based on evaluation metrics. Full MLOps maturity.
 
 Most production systems live at Level 1. Level 2 requires high data volume and an experiment cadence that justifies the infrastructure.
@@ -189,7 +189,7 @@ A trained model is a pickled or ONNX blob + the feature schema + the training co
 
 ### GitOps for ML
 
-ML deployments are GitOps too: a repo holds manifests that reference model versions. Promoting a model means bumping a tag in a Kustomize overlay, which ArgoCD picks up. Same principles as [GitOps](../gitops/); the payload is a pickle instead of a Docker image.
+ML deployments are GitOps too: a repo holds manifests that reference model versions. Promoting a model means bumping a tag in a Kustomize overlay, which ArgoCD picks up. Same principles as [GitOps](../gitops/). The payload is a pickle instead of a Docker image.
 
 ### Batch vs online
 
@@ -203,21 +203,21 @@ A new model runs in parallel with the current one and logs predictions without a
 
 Everything above was built for classical ML (gradient boosting, random forests, small neural nets). LLMs introduce new concerns:
 
-- **Prompt versioning**, prompts are code; treat them like it.
-- **Evaluation**, LLM quality is harder to measure than a regression MAE. Use LLM-as-judge, golden datasets, and human evals.
-- **Cost monitoring**, per-request cost varies with input/output tokens. Track it.
-- **Retrieval**, RAG stacks have their own failure modes (index staleness, chunking drift). See the [RAG topic](../../ai/rag/).
-- **Latency**, LLM latency is dominated by the provider, not your code. Build in streaming, fallback models, and circuit breakers.
+- **Prompt versioning**: prompts are code. Treat them like it.
+- **Evaluation**: LLM quality is harder to measure than a regression MAE. Use LLM-as-judge, golden datasets, and human evals.
+- **Cost monitoring**: per-request cost varies with input/output tokens. Track it.
+- **Retrieval**: RAG stacks have their own failure modes (index staleness, chunking drift). See the [RAG topic](../../ai/rag/).
+- **Latency**: LLM latency is dominated by the provider, not your code. Build in streaming, fallback models, and circuit breakers.
 
 Tools specifically for LLM ops: [LangSmith](https://smith.langchain.com/), [Helicone](https://www.helicone.ai/), [PromptLayer](https://promptlayer.com/), [Humanloop](https://humanloop.com/), [Braintrust](https://www.braintrust.dev/).
 
 ## Common failure modes
 
 - **Training-serving skew.** The feature computed in training is subtly different from the one in serving. Feature store + schema validation prevents most of it.
-- **Data leakage.** Features that wouldn't be available at prediction time sneak into training. Validation accuracy looks amazing; production accuracy is terrible.
+- **Data leakage.** Features that wouldn't be available at prediction time sneak into training. Validation accuracy looks amazing. Production accuracy is terrible.
 - **Silent quality regression.** Accuracy drops 10% after a data-source change. Nobody notices because no alerts fire. Drift monitoring is the fix.
 - **Unreproducible runs.** "What did we train two months ago?" Full reproducibility = code SHA + data hash + hyperparameters + env.
-- **Model registry as filesystem.** Someone promotes a model to prod by copying a pickle file. The registry exists; it just isn't the source of truth. Enforce it via deploy pipeline.
+- **Model registry as filesystem.** Someone promotes a model to prod by copying a pickle file. The registry exists. It just isn't the source of truth. Enforce it via deploy pipeline.
 - **Retraining without revalidation.** The retraining pipeline runs, registers a new model, autopromotes. It's worse than the current one but nobody checked. Always require evaluation against a recent holdout before promotion.
 - **Feedback loops.** The model's predictions become part of the training data. Small biases amplify. Hard to detect without careful experiment design.
 
@@ -225,7 +225,7 @@ Tools specifically for LLM ops: [LangSmith](https://smith.langchain.com/), [Heli
 
 If you're setting up MLOps from scratch on a small team:
 
-1. **MLflow** for tracking + registry (self-hosted; file backend is fine).
+1. **MLflow** for tracking + registry (self-hosted, file backend is fine).
 2. **DVC** or **lakeFS** for dataset versioning, or just a well-structured S3 layout with version suffixes.
 3. **Shared Python package** for feature engineering, no full feature store yet.
 4. **FastAPI + joblib** for serving, deployed like any other service.
