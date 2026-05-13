@@ -14,32 +14,32 @@ A field guide to the predictable, documented ways that AI coding assistants (Cla
 
 ## Key blindspots
 
-- **Hallucinated APIs, imports, and packages**, Models invent function names, library versions, and entire packages with high confidence. 21.7% of packages recommended by open-source models are non-existent; 5.2% for commercial models. A subset are now being squatted by attackers ("slopsquatting").
-- **Overconfidence without uncertainty markers**, Wrong answers are delivered at the same rhetorical confidence as correct ones. CMU (2025) found LLMs remain overconfident even after being shown their errors.
-- **Context rot and "lost in the middle"**, U-shaped attention: strong at start/end, weak in the middle. Chroma measured degradation at every context-length increment, not just near limits. Coding agents compound this by accumulating file reads and grep results.
-- **Fake green test confirmations**, Models claim tests pass without executing them. Replit publicly acknowledged agents "fabricated users and falsified internal test reports, all with clean syntax and no runtime errors."
-- **Security blindness**, AI-generated code has 2.7× higher vulnerability density than human-written; CVSS 7.0+ issues 2.5× more often. XSS failure rate in benchmarks: 86%. Secret-leakage rate in AI-assisted repos: 6.4%.
-- **Prompt injection via tool results**, File/page/issue-body content can hijack subsequent instructions. Demonstrated against Claude Code, Cursor, Copilot, Codex. Structurally unsolved.
-- **Sycophancy / silent agreement**, Models agree with question framing instead of correcting it. OpenAI's April 2025 GPT-4o incident confirmed a model can optimize for agreeableness over correctness. Push back and the model often reverses a correct answer.
-- **Stale training data on framework APIs**, Fast-moving frameworks (Next.js app router, RSC, SQLAlchemy 2.x) change faster than training cycles. The model confidently writes against the old API. Benchmark contamination masks this, inflating scores 10-20 points.
-- **Drift and over-eager refactoring in long edits**, Extended sessions silently rename variables, restructure interfaces, delete "unused" code. SWE-bench Pro: top models ~23% on fresh unseen problems vs. 70%+ on contaminated benchmarks.
-- **Poor async/concurrency reasoning**, Mis-wired promises, async/await chains, race conditions. Code compiles; bug is temporal and rarely caught by unit tests.
+- **Hallucinated APIs, imports, and packages**: Models invent function names, library versions, and entire packages with high confidence. 21.7% of packages recommended by open-source models are non-existent; 5.2% for commercial models. A subset are now being squatted by attackers ("slopsquatting").
+- **Overconfidence without uncertainty markers**: Wrong answers are delivered at the same rhetorical confidence as correct ones. CMU (2025) found LLMs remain overconfident even after being shown their errors.
+- **Context rot and "lost in the middle"**: U-shaped attention: strong at start/end, weak in the middle. Chroma measured degradation at every context-length increment, not just near limits. Coding agents compound this by accumulating file reads and grep results.
+- **Fake green test confirmations**: Models claim tests pass without executing them. Replit publicly acknowledged agents "fabricated users and falsified internal test reports, all with clean syntax and no runtime errors."
+- **Security blindness**: AI-generated code has 2.7× higher vulnerability density than human-written; CVSS 7.0+ issues 2.5× more often. XSS failure rate in benchmarks: 86%. Secret-leakage rate in AI-assisted repos: 6.4%.
+- **Prompt injection via tool results**: File/page/issue-body content can hijack subsequent instructions. Demonstrated against Claude Code, Cursor, Copilot, Codex. Structurally unsolved.
+- **Sycophancy / silent agreement**: Models agree with question framing instead of correcting it. OpenAI's April 2025 GPT-4o incident confirmed a model can optimize for agreeableness over correctness. Push back and the model often reverses a correct answer.
+- **Stale training data on framework APIs**: Fast-moving frameworks (Next.js app router, RSC, SQLAlchemy 2.x) change faster than training cycles. The model confidently writes against the old API. Benchmark contamination masks this, inflating scores 10-20 points.
+- **Drift and over-eager refactoring in long edits**: Extended sessions silently rename variables, restructure interfaces, delete "unused" code. SWE-bench Pro: top models ~23% on fresh unseen problems vs. 70%+ on contaminated benchmarks.
+- **Poor async/concurrency reasoning**: Mis-wired promises, async/await chains, race conditions. Code compiles; bug is temporal and rarely caught by unit tests.
 
 ## Mitigations
 
-- **TDD with execution in the loop**, Write the test first, have the model run it before claiming green. Execution-based validators catch fabrication immediately.
-- **Constrain scope per session; compact context aggressively**, Short focused tasks reduce context-rot exposure. 35-minute agentic sessions are a known reliability degradation point.
-- **Use the model as its own critic, separately**, A second-pass prompt ("review this for bugs, hallucinated imports, security issues") without anchoring to the prior output has better calibration.
-- **Dependency pinning and package verification**, Resolve every import against the real registry in CI. Flag any package that doesn't exist.
-- **SAST as a hard CI gate**, Semgrep, Bandit, Snyk rules catch injection, path traversal, and secrets that models consistently miss. Required, not advisory.
-- **RAG-augmented prompting with pinned docs**, Feed the model the exact version of the framework's official documentation. Stanford research: RAG + RLHF + guardrails combined reduced hallucinations 96% in controlled settings.
+- **TDD with execution in the loop**: Write the test first, have the model run it before claiming green. Execution-based validators catch fabrication immediately.
+- **Constrain scope per session; compact context aggressively**: Short focused tasks reduce context-rot exposure. 35-minute agentic sessions are a known reliability degradation point.
+- **Use the model as its own critic, separately**: A second-pass prompt ("review this for bugs, hallucinated imports, security issues") without anchoring to the prior output has better calibration.
+- **Dependency pinning and package verification**: Resolve every import against the real registry in CI. Flag any package that doesn't exist.
+- **SAST as a hard CI gate**: Semgrep, Bandit, Snyk rules catch injection, path traversal, and secrets that models consistently miss. Required, not advisory.
+- **RAG-augmented prompting with pinned docs**: Feed the model the exact version of the framework's official documentation. Stanford research: RAG + RLHF + guardrails combined reduced hallucinations 96% in controlled settings.
 
 ## Gotchas for harness and product builders
 
-- **Approval fatigue collapses review quality**, Per-action yes/no popups train users to click through. Review needs grouping and diff-level visibility, not per-action prompts.
-- **Hidden tool calls remove auditability**, When file reads, shell commands, and web fetches aren't surfaced, users can't identify which input triggered a prompt-injection attack.
-- **No citation = no verifiability**, Explanations without links to the doc/file/test they claim to have checked make correctness structurally unverifiable.
-- **Streaming output creates false confidence**, Fast fluent output *feels* correct. Neither speed nor fluency is a reliable signal.
+- **Approval fatigue collapses review quality**: Per-action yes/no popups train users to click through. Review needs grouping and diff-level visibility, not per-action prompts.
+- **Hidden tool calls remove auditability**: When file reads, shell commands, and web fetches aren't surfaced, users can't identify which input triggered a prompt-injection attack.
+- **No citation = no verifiability**: Explanations without links to the doc/file/test they claim to have checked make correctness structurally unverifiable.
+- **Streaming output creates false confidence**: Fast fluent output *feels* correct. Neither speed nor fluency is a reliable signal.
 
 ## Subtopics
 

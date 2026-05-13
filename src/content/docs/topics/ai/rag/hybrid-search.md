@@ -14,11 +14,11 @@ Dense retrieval (cosine over embeddings) is great at semantic match but weak on 
 
 ## Key ideas
 
-- **BM25 basics**, Classic lexical ranker scoring documents by term frequency (with diminishing returns) and inverse document frequency. Still the baseline to beat on keyword-heavy retrieval.
-- **Reciprocal Rank Fusion (RRF)**, Merge two ranked lists by summing `1/(k + rank_i)` for each document across lists (typically k=60). Hyperparameter-free, robust, and fast.
-- **When dense wins**, Paraphrased queries, synonyms, cross-lingual, concept-level match ("how do I authenticate" vs. a doc titled "login flow").
-- **When sparse wins**, Exact identifiers, error messages, rare entities, code symbols. Dense embeddings smear these into near-neighbors of unrelated text.
-- **Tooling**, Elasticsearch, OpenSearch, Weaviate, Vespa all offer first-class hybrid. pgvector + `tsvector` in Postgres is a viable low-dep option.
+- **BM25 basics**: Classic lexical ranker scoring documents by term frequency (with diminishing returns) and inverse document frequency. Still the baseline to beat on keyword-heavy retrieval.
+- **Reciprocal Rank Fusion (RRF)**: Merge two ranked lists by summing `1/(k + rank_i)` for each document across lists (typically k=60). Hyperparameter-free, robust, and fast.
+- **When dense wins**: Paraphrased queries, synonyms, cross-lingual, concept-level match ("how do I authenticate" vs. a doc titled "login flow").
+- **When sparse wins**: Exact identifiers, error messages, rare entities, code symbols. Dense embeddings smear these into near-neighbors of unrelated text.
+- **Tooling**: Elasticsearch, OpenSearch, Weaviate, Vespa all offer first-class hybrid. pgvector + `tsvector` in Postgres is a viable low-dep option.
 
 ## References
 

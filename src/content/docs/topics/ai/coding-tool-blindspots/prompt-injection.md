@@ -14,12 +14,12 @@ Tool outputs are model inputs. When an agent reads a file, web page, issue body,
 
 ## Key ideas
 
-- **The lethal trifecta** (Simon Willison), Prompt injection becomes catastrophic when an agent has *all three*: access to private data, exposure to untrusted content, and the ability to exfiltrate externally. Remove any one edge and the worst-case is neutralized.
+- **The lethal trifecta** (Simon Willison): Prompt injection becomes catastrophic when an agent has *all three*: access to private data, exposure to untrusted content, and the ability to exfiltrate externally. Remove any one edge and the worst-case is neutralized.
 - **Real exploits have been demonstrated** against Claude Code, Cursor, Copilot, Codex. These aren't theoretical.
-- **Least privilege per tool**, A web-fetch tool shouldn't also be able to commit or send email. Partitioning the tool set is the most effective structural defense.
-- **Human-in-the-loop for irreversible actions**, Approval gates on writes, deploys, sends, destructive reads. Pair with UX that resists rubber-stamping.
-- **Content provenance labels**, Tagging tool output as "untrusted source" helps at the margin but doesn't prevent injection.
-- **Deterministic output channels**, Avoid auto-rendered URLs, auto-executed shell, image-tag fetches, or any side-channel that can exfiltrate data the model has seen.
+- **Least privilege per tool**: A web-fetch tool shouldn't also be able to commit or send email. Partitioning the tool set is the most effective structural defense.
+- **Human-in-the-loop for irreversible actions**: Approval gates on writes, deploys, sends, destructive reads. Pair with UX that resists rubber-stamping.
+- **Content provenance labels**: Tagging tool output as "untrusted source" helps at the margin but doesn't prevent injection.
+- **Deterministic output channels**: Avoid auto-rendered URLs, auto-executed shell, image-tag fetches, or any side-channel that can exfiltrate data the model has seen.
 
 ## References
 

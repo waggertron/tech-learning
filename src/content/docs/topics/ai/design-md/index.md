@@ -249,7 +249,7 @@ The recommended prompt pattern, from Google Labs' docs and early adopter agent s
 
 Concrete integrations in the wild:
 
-- **Stitch MCP server**, Google ships an [Agent Skills library](https://blog.google/innovation-and-ai/models-and-research/google-labs/stitch-design-md/) compatible with Claude Code, Cursor, Gemini CLI, and Antigravity.
+- **Stitch MCP server**: Google ships an [Agent Skills library](https://blog.google/innovation-and-ai/models-and-research/google-labs/stitch-design-md/) compatible with Claude Code, Cursor, Gemini CLI, and Antigravity.
 - **Claude Code / Cursor rules**, drop a rule telling the agent to consult `DESIGN.md` before writing JSX, CSS, or Tailwind classes.
 - **CI gate**, run `npx @google/design.md lint` on every PR to stop drift.
 

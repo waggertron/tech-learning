@@ -14,10 +14,10 @@ New users of agent frameworks often conflate these four concepts. They're distin
 
 ## Key ideas
 
-- **Prompt (CLAUDE.md / system prompt)**, Always-on behavior. Small, stable, every session. Use for persistent values, house style, repo-wide conventions.
-- **Tool (MCP / function-calling)**, An atomic, executable function with side effects. The model picks when to call; the harness runs the code. Use for "do a thing", read a file, query a DB, hit an API.
-- **Skill**, A packaged, named *procedure* (instructions + optional scripts/assets). Loaded on demand via description match. Use for "how to do a multi-step thing reliably", review a PR, write a changelog, run a deploy.
-- **Agent (sub-agent / specialized persona)**, An autonomous executor with its own context, system prompt, and tool access. The orchestrator delegates scoped work. Use for work that needs isolation or a different model/persona (a "critic," a "planner," a "security reviewer").
+- **Prompt (CLAUDE.md / system prompt)**: Always-on behavior. Small, stable, every session. Use for persistent values, house style, repo-wide conventions.
+- **Tool (MCP / function-calling)**: An atomic, executable function with side effects. The model picks when to call; the harness runs the code. Use for "do a thing" — read a file, query a DB, hit an API.
+- **Skill**: A packaged, named *procedure* (instructions + optional scripts/assets). Loaded on demand via description match. Use for "how to do a multi-step thing reliably" — review a PR, write a changelog, run a deploy.
+- **Agent (sub-agent / specialized persona)**: An autonomous executor with its own context, system prompt, and tool access. The orchestrator delegates scoped work. Use for work that needs isolation or a different model/persona (a "critic," a "planner," a "security reviewer").
 
 | | Side effects? | Always loaded? | Multi-step? | Isolated context? |
 |---|---|---|---|---|

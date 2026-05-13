@@ -209,7 +209,7 @@ Key observations from the table:
 
 - HumanEval and MBPP are fully saturated: they no longer separate top models.
 - LiveCodeBench is still informative because post-cutoff problems block memorization.
-- SWE-bench Verified scores look high but contamination noise inflates them; SWE-bench Pro scores are lower and cleaner.
+- SWE-bench Verified scores look high but contamination noise inflates them. SWE-bench Pro scores are lower and cleaner.
 - Terminal-Bench covers a distinct skill (systems operation) that the others miss entirely.
 
 ## Reading a coding leaderboard in 2026

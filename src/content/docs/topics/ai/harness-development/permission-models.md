@@ -14,11 +14,11 @@ An agent harness needs a policy layer that decides, per tool call, whether to ex
 
 ## Key ideas
 
-- **Fail-safe defaults**, Unmatched tool calls should default to `ask`, not `allow`. New tools added to a harness must not gain silent execution privilege automatically.
-- **Deny always wins**, In a deny/ask/allow ACL, a matching deny rule short-circuits everything. This lets you express hard prohibitions (`rm -rf /`, `git push --force main`) that no prompt can override.
-- **Grouping over per-call prompts**, Per-tool-call yes/no fatigue trains users to click through. Prefer batch previews ("here are the 8 files I'm about to edit") or diff-level review.
-- **Sandboxing complements permissions**, An editor tool restricted to a repo root, a shell tool with a locked-down PATH, or a VM/container boundary reduces blast radius if the policy layer is bypassed.
-- **Scoped auth**, For tools that hit external services, issue scoped, short-lived credentials rather than the user's full creds. A compromised agent should lose as little as possible.
+- **Fail-safe defaults**: Unmatched tool calls should default to `ask`, not `allow`. New tools added to a harness must not gain silent execution privilege automatically.
+- **Deny always wins**: In a deny/ask/allow ACL, a matching deny rule short-circuits everything. This lets you express hard prohibitions (`rm -rf /`, `git push --force main`) that no prompt can override.
+- **Grouping over per-call prompts**: Per-tool-call yes/no fatigue trains users to click through. Prefer batch previews ("here are the 8 files I'm about to edit") or diff-level review.
+- **Sandboxing complements permissions**: An editor tool restricted to a repo root, a shell tool with a locked-down PATH, or a VM/container boundary reduces blast radius if the policy layer is bypassed.
+- **Scoped auth**: For tools that hit external services, issue scoped, short-lived credentials rather than the user's full creds. A compromised agent should lose as little as possible.
 
 ## References
 

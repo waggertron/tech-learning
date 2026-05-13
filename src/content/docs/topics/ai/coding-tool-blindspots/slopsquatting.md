@@ -14,11 +14,11 @@ LLMs routinely invent package names that sound real. 21.7% of packages recommend
 
 ## Key ideas
 
-- **Hallucination rate varies by model and domain**, Worse on lower-resource languages and niche ecosystems; better on JS/Python popular packages. No model is immune.
-- **Stability across prompts matters**, A hallucinated name that the model re-emits consistently across users/prompts is more valuable to attackers than a one-off. Research finds many hallucinations *are* stable.
-- **CI-time verification is the practical mitigation**, Resolve every import in AI-suggested code against the real registry. Flag unknown packages before they reach install.
-- **Don't trust `pip install`/`npm install` from an agent transcript**, Even if the code is correct elsewhere, the install line may reference a hallucinated package.
-- **Pin and review**, Lockfiles, provenance attestations (npm provenance, Sigstore), and version pinning all help contain damage from a successful install.
+- **Hallucination rate varies by model and domain**: Worse on lower-resource languages and niche ecosystems; better on JS/Python popular packages. No model is immune.
+- **Stability across prompts matters**: A hallucinated name that the model re-emits consistently across users/prompts is more valuable to attackers than a one-off. Research finds many hallucinations *are* stable.
+- **CI-time verification is the practical mitigation**: Resolve every import in AI-suggested code against the real registry. Flag unknown packages before they reach install.
+- **Don't trust `pip install`/`npm install` from an agent transcript**: Even if the code is correct elsewhere, the install line may reference a hallucinated package.
+- **Pin and review**: Lockfiles, provenance attestations (npm provenance, Sigstore), and version pinning all help contain damage from a successful install.
 
 ## References
 

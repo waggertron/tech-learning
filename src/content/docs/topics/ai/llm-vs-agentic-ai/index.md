@@ -101,7 +101,7 @@ A deployed system that runs on a schedule, polls a GitHub repository for new iss
 
 **"The agent" vs. "the model"** are confused when a model is described as having goals or intentions. The model predicts tokens; the agent (the surrounding system) has goals. If a coding agent takes a wrong action, the question of whether the LLM "misbehaved" or the agent "was misconfigured" matters for debugging and for safety analysis.
 
-**"Agentic mode" vs. "AI agent"** are confused because many products use both terms. Claude Code in a single interactive exchange is not an agent in the fullest sense; Claude Code running /autopilot on a multi-file refactor is operating agentically. The same tool at different levels of autonomy.
+**"Agentic mode" vs. "AI agent"** are confused because many products use both terms. Claude Code in a single interactive exchange is not an agent in the fullest sense. Claude Code running /autopilot on a multi-file refactor is operating agentically. The same tool at different levels of autonomy.
 
 **"Autonomous" vs. "agentic"** are often used interchangeably. Agentic just means the loop-plus-tools architecture. Autonomous means the loop runs without human approval at each step. All fully autonomous AI systems are agentic, but agentic systems can still require human-in-the-loop approval for each action.
 

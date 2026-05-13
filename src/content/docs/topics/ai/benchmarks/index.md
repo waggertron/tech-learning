@@ -17,13 +17,13 @@ This series is a map of the benchmark landscape in 2026. What each one measures,
 ## The series
 
 1. **[Overview](./)**, this page.
-2. **[Knowledge and reasoning](./knowledge-and-reasoning/)**, MMLU, MMLU-Pro, GPQA Diamond, Humanity's Last Exam, ARC-AGI / ARC-AGI-2, HellaSwag, TruthfulQA.
-3. **[Math benchmarks](./math-benchmarks/)**, GSM8K, MATH, AIME, FrontierMath, OlympiadBench.
-4. **[Coding benchmarks](./coding-benchmarks/)**, HumanEval, MBPP, LiveCodeBench, APPS, CodeContests, SWE-bench and SWE-bench Verified / Pro.
-5. **[Agent benchmarks](./agent-benchmarks/)**, Terminal-Bench, TAU-bench, OSWorld, WebArena, GAIA, BrowseComp.
-6. **[Long-context benchmarks](./long-context/)**, NIAH, RULER, LongBench, U-NIAH.
-7. **[Multimodal benchmarks](./multimodal/)**, MMMU, MathVista, ChartQA, DocVQA.
-8. **[Evaluation methodology and metrics](./evaluation-and-methods/)**, LMArena, LLM-as-judge, pass@k, contamination detection, golden sets, preference elicitation.
+2. **[Knowledge and reasoning](./knowledge-and-reasoning/)**: MMLU, MMLU-Pro, GPQA Diamond, Humanity's Last Exam, ARC-AGI / ARC-AGI-2, HellaSwag, TruthfulQA.
+3. **[Math benchmarks](./math-benchmarks/)**: GSM8K, MATH, AIME, FrontierMath, OlympiadBench.
+4. **[Coding benchmarks](./coding-benchmarks/)**: HumanEval, MBPP, LiveCodeBench, APPS, CodeContests, SWE-bench and SWE-bench Verified / Pro.
+5. **[Agent benchmarks](./agent-benchmarks/)**: Terminal-Bench, TAU-bench, OSWorld, WebArena, GAIA, BrowseComp.
+6. **[Long-context benchmarks](./long-context/)**: NIAH, RULER, LongBench, U-NIAH.
+7. **[Multimodal benchmarks](./multimodal/)**: MMMU, MathVista, ChartQA, DocVQA.
+8. **[Evaluation methodology and metrics](./evaluation-and-methods/)**: LMArena, LLM-as-judge, pass@k, contamination detection, golden sets, preference elicitation.
 
 ## How benchmarks go wrong
 

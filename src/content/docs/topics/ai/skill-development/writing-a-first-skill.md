@@ -14,12 +14,12 @@ The fastest way to internalize the skills model is to write a small one, confirm
 
 ## Key ideas
 
-- **Directory layout**, `.claude/skills/<skill-name>/SKILL.md` for project skills (committed); `~/.claude/skills/<skill-name>/SKILL.md` for personal.
-- **Minimum viable `SKILL.md`**, Frontmatter with `name` + `description` + a short markdown body with numbered steps. That's it.
-- **Test auto-invocation**, Open a fresh session, phrase a user message that should match the description. If Claude loads the skill, you see it mention the skill by name. If not, sharpen the description's trigger phrase.
-- **Test direct invocation**, Type `/skill-name` to confirm the skill loads and the steps work end-to-end.
-- **Add a supporting file**, Move a long reference section (API snippets, long examples) into `SKILL.md`'s sibling file, link from `SKILL.md`. Keeps the main file focused and the support files load only when Claude decides to read them.
-- **Iterate on the description first**, Most "my skill doesn't trigger" problems are description problems, not body problems.
+- **Directory layout**: `.claude/skills/<skill-name>/SKILL.md` for project skills (committed); `~/.claude/skills/<skill-name>/SKILL.md` for personal.
+- **Minimum viable `SKILL.md`**: Frontmatter with `name` + `description` + a short markdown body with numbered steps. That's it.
+- **Test auto-invocation**: Open a fresh session, phrase a user message that should match the description. If Claude loads the skill, you see it mention the skill by name. If not, sharpen the description's trigger phrase.
+- **Test direct invocation**: Type `/skill-name` to confirm the skill loads and the steps work end-to-end.
+- **Add a supporting file**: Move a long reference section (API snippets, long examples) into `SKILL.md`'s sibling file, link from `SKILL.md`. Keeps the main file focused and the support files load only when Claude decides to read them.
+- **Iterate on the description first**: Most "my skill doesn't trigger" problems are description problems, not body problems.
 
 ## References
 

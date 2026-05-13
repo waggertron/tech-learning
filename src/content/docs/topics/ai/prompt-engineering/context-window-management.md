@@ -14,11 +14,11 @@ A long context window is not a free resource. Attention follows a U-shaped curve
 
 ## Key ideas
 
-- **Lost in the middle**, Liu et al. (2023) showed retrieval accuracy drops sharply for items placed in the middle of a long context. Put the load-bearing content at the front or end of a long block.
-- **Context rot**, Chroma's research found degradation at every context-length increment, not just near the cap. Even well under the limit, more tokens = worse attention.
-- **Compression and summarization**, Instead of carrying every tool result verbatim, summarize older state and keep only decisions, open questions, and task markers.
-- **Retrieval over stuffing**, Past a corpus size, RAG beats long-context stuffing for accuracy *and* cost. See [RAG](../../rag/).
-- **Ordering matters**, System prompt first (cache-friendly), then high-signal reference, then the task, with examples closest to the task.
+- **Lost in the middle**: Liu et al. (2023) showed retrieval accuracy drops sharply for items placed in the middle of a long context. Put the load-bearing content at the front or end of a long block.
+- **Context rot**: Chroma's research found degradation at every context-length increment, not just near the cap. Even well under the limit, more tokens = worse attention.
+- **Compression and summarization**: Instead of carrying every tool result verbatim, summarize older state and keep only decisions, open questions, and task markers.
+- **Retrieval over stuffing**: Past a corpus size, RAG beats long-context stuffing for accuracy *and* cost. See [RAG](../../rag/).
+- **Ordering matters**: System prompt first (cache-friendly), then high-signal reference, then the task, with examples closest to the task.
 
 ## References
 

@@ -245,7 +245,7 @@ These are domain-specialized benchmarks. Useful for hiring decisions ("will this
 
 ## The benchmark-is-reward-hackable problem
 
-Berkeley's [RDI team analysis](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/) demonstrates how every major agent benchmark can be gamed:
+Berkeley's [RDI team analysis](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/) shows how every major agent benchmark can be gamed:
 
 - **SWE-bench.** Agent inspects the test file, hard-codes the expected output.
 - **WebArena.** Agent finds a shortcut through the test environment, bypasses the intended task path.

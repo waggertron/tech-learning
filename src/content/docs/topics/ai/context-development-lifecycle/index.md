@@ -10,7 +10,7 @@ updated: 2026-05-04
 
 ## What it is
 
-The Context Development Lifecycle (CDLC) is a framework for managing the knowledge AI coding agents need to work effectively in a specific codebase or organization. Patrick Debois (who coined "DevOps" in 2009, now at Tessl) proposed it as the organizational complement to technical context engineering: the harness decides what goes in the window at runtime; the CDLC decides what exists to put there in the first place.
+The Context Development Lifecycle (CDLC) is a framework for managing the knowledge AI coding agents need to work effectively in a specific codebase or organization. Patrick Debois (who coined "DevOps" in 2009, now at Tessl) proposed it as the organizational complement to technical context engineering: the harness decides what goes in the window at runtime. The CDLC decides what exists to put there in the first place.
 
 The core claim: as AI coding agents improve, the bottleneck in software development shifts from generating code to explaining what the code should do and why. Agents start each session with zero institutional knowledge. A developer's job increasingly involves encoding that knowledge into structured, tested, versioned context.
 
@@ -162,7 +162,7 @@ Publish an internal skill:
 tessl publish @your-org/internal-api-conventions
 ```
 
-The Tessl registry indexes over 3,000 evaluated skills covering 10,000+ open-source packages. Open-source maintainers can publish official guidance so agents use their APIs correctly; Tessl reports up to 3.3x improvement in correct API usage for packages with evaluated skills.
+The Tessl registry indexes over 3,000 evaluated skills covering 10,000+ open-source packages. Open-source maintainers can publish official guidance so agents use their APIs correctly. Tessl reports up to 3.3x improvement in correct API usage for packages with evaluated skills.
 
 Skills installed via Tessl work across Claude Code, Cursor, and Gemini without ecosystem lock-in.
 
@@ -221,7 +221,7 @@ Models and tools are commoditizing. Structured organizational context is not. Tw
 
 **Context rot**: stale guidance does not fail loudly. It silently degrades agent output. Unlike a broken test, outdated instructions produce plausible but wrong results with no alert. Version your context files and run scheduled evals, not only on-change evals.
 
-**The whack-a-mole problem**: adding one instruction changes broader agent behavior. LLMs are not rule engines; every new constraint shifts the full output distribution. No eval suite captures all interaction effects. Always rerun the full suite after any context modification, not just related scenarios.
+**The whack-a-mole problem**: adding one instruction changes broader agent behavior. LLMs are not rule engines. Every new constraint shifts the full output distribution. No eval suite captures all interaction effects. Always rerun the full suite after any context modification, not just related scenarios.
 
 **Scale paradox**: infinite context windows do not solve consistency and governance problems. They amplify them by increasing contradiction density. More context surface area means more places for conflicts to hide. Skill files with narrow triggers beat one giant `CLAUDE.md`.
 

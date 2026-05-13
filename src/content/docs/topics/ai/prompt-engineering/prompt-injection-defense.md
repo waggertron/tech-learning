@@ -14,11 +14,11 @@ Prompt injection is structurally unsolved: tool outputs are model inputs, and a 
 
 ## Key ideas
 
-- **The lethal trifecta**, Simon Willison's framing: access to private data + exposure to untrusted content + ability to communicate externally. Break any one edge and the worst-case exfiltration is blocked.
-- **Least privilege per tool**, A read-only web-fetch can't commit to git. A file editor can't hit the network. Partition the tool set so compromised reasoning can't reach dangerous actions.
-- **Human-in-the-loop for irreversible actions**, Approval gates on writes, sends, deploys, and destructive reads. Pair with clear UX so approvals aren't rubber-stamped.
-- **Content provenance labels**, Tag tool-returned content so the model can see "this came from an untrusted source." Helps but does not prevent injection.
-- **Deterministic output channels**, Structure the final response so any exfiltration attempt has no path to an external system (no auto-rendered URLs, no auto-executed shell, etc.).
+- **The lethal trifecta**: Simon Willison's framing: access to private data + exposure to untrusted content + ability to communicate externally. Break any one edge and the worst-case exfiltration is blocked.
+- **Least privilege per tool**: A read-only web-fetch can't commit to git. A file editor can't hit the network. Partition the tool set so compromised reasoning can't reach dangerous actions.
+- **Human-in-the-loop for irreversible actions**: Approval gates on writes, sends, deploys, and destructive reads. Pair with clear UX so approvals aren't rubber-stamped.
+- **Content provenance labels**: Tag tool-returned content so the model can see "this came from an untrusted source." Helps but does not prevent injection.
+- **Deterministic output channels**: Structure the final response so any exfiltration attempt has no path to an external system (no auto-rendered URLs, no auto-executed shell, etc.).
 
 ## References
 

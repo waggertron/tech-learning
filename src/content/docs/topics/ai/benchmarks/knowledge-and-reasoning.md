@@ -163,7 +163,7 @@ No lookup table can solve this. No training corpus contains the rule stated expl
 
 **The cost-vs-capability gap.** The human average of ~2.7 minutes per task translates to perhaps a few cents of human time. The leading AI system (Poetiq) charges $31 per task to reach 54% accuracy. Humans achieve full accuracy at 1/1000th the cost per task. This gap is the clearest current evidence that LLMs are not doing what humans do when solving novel visual reasoning problems.
 
-**Older ARC.** The original ARC-AGI has been solved; ARC-AGI-2 is the live challenge.
+**Older ARC.** The original ARC-AGI has been solved. ARC-AGI-2 is the live challenge.
 
 **Current state (April 2026).** With search and reasoning compute, frontier systems have reached 85% (GPT-5.5), 83.3% (GPT-5.4 Pro), 77.1% (Gemini 3.1 Pro). Pure language models score near 0% without heavy test-time compute.
 
