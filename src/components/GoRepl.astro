@@ -89,11 +89,14 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     }
 
     // Detect packages used in the approach function.
-    if (/\bfmt\./.test(approachCode))     pkgs.add('"fmt"');
-    if (/\bsort\./.test(approachCode))    pkgs.add('"sort"');
-    if (/\bstrings\./.test(approachCode)) pkgs.add('"strings"');
-    if (/\bstrconv\./.test(approachCode)) pkgs.add('"strconv"');
-    if (/\bmath\./.test(approachCode))    pkgs.add('"math"');
+    if (/\bfmt\./.test(approachCode))       pkgs.add('"fmt"');
+    if (/\bsort\./.test(approachCode))      pkgs.add('"sort"');
+    if (/\bstrings\./.test(approachCode))   pkgs.add('"strings"');
+    if (/\bstrconv\./.test(approachCode))   pkgs.add('"strconv"');
+    if (/\bmath\./.test(approachCode))      pkgs.add('"math"');
+    if (/\bheap\./.test(approachCode))      pkgs.add('"container/heap"');
+    if (/\blist\./.test(approachCode))      pkgs.add('"container/list"');
+    if (/\bunicode\./.test(approachCode))   pkgs.add('"unicode"');
 
     if (pkgs.size === 0) return '';
     if (pkgs.size === 1) return `import ${[...pkgs][0]}`;
