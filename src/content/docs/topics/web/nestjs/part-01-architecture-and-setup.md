@@ -228,11 +228,11 @@ One module per feature, one folder per module.
 
 ## Gotchas at this stage
 
-- **`@Module()` metadata is required**, even for a module with no controllers or providers. An empty `@Module({})` is valid and common for re-export-only modules.
-- **Circular imports are a smell**, if Module A imports Module B and Module B imports Module A, you likely need to extract the shared dependency into a third module. `forwardRef` is an escape hatch (Part 2 covers it).
-- **`providers` vs `exports`**, adding a service to `providers` makes it available inside that module. Adding it to `exports` makes it available to any module that imports this one. Forgetting `exports` is the most common beginner mistake.
-- **`start:dev` uses `ts-node`**, `start:prod` uses the compiled JavaScript in `dist/`. Always build before deploying: `npm run build`.
-- **Decorator order on class members matters**, TypeScript applies decorators bottom-up when multiple are stacked. This matters most for method decorators in Part 7.
+- **`@Module()` metadata is required**: even for a module with no controllers or providers. An empty `@Module({})` is valid and common for re-export-only modules.
+- **Circular imports are a smell**: if Module A imports Module B and Module B imports Module A, you likely need to extract the shared dependency into a third module. `forwardRef` is an escape hatch (Part 2 covers it).
+- **`providers` vs `exports`**: adding a service to `providers` makes it available inside that module. Adding it to `exports` makes it available to any module that imports this one. Forgetting `exports` is the most common beginner mistake.
+- **`start:dev` uses `ts-node`**: `start:prod` uses the compiled JavaScript in `dist/`. Always build before deploying: `npm run build`.
+- **Decorator order on class members matters**: TypeScript applies decorators bottom-up when multiple are stacked. This matters most for method decorators in Part 7.
 
 ## What's next
 

@@ -327,11 +327,11 @@ When "Nest can't resolve dependencies" errors appear at startup, the message tel
 
 ## Gotchas at this stage
 
-- **`exports` is not optional when other modules need your provider**, modules are isolated by default; nothing leaks out unless you explicitly export it.
-- **REQUEST scope propagates**, adding `Scope.REQUEST` to a low-level service silently makes every service above it in the injection chain REQUEST-scoped. Profile before using.
-- **`forwardRef` both ways**, a circular dep requires `forwardRef` on both sides or the container may still fail.
-- **`emitDecoratorMetadata` must be true**, if TypeScript metadata emission is off, the container can't read parameter types and everything fails with cryptic errors.
-- **Async factories can fail silently**, if a `useFactory` async function rejects, the app fails to start. Add error handling inside the factory or the rejection will be swallowed in some setups.
+- **`exports` is not optional when other modules need your provider**: modules are isolated by default; nothing leaks out unless you explicitly export it.
+- **REQUEST scope propagates**: adding `Scope.REQUEST` to a low-level service silently makes every service above it in the injection chain REQUEST-scoped. Profile before using.
+- **`forwardRef` both ways**: a circular dep requires `forwardRef` on both sides or the container may still fail.
+- **`emitDecoratorMetadata` must be true**: if TypeScript metadata emission is off, the container can't read parameter types and everything fails with cryptic errors.
+- **Async factories can fail silently**: if a `useFactory` async function rejects, the app fails to start. Add error handling inside the factory or the rejection will be swallowed in some setups.
 
 ## What's next
 

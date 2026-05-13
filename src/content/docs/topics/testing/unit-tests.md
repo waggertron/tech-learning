@@ -200,9 +200,9 @@ Line coverage tells you which lines ran. Not whether they were *tested*. You can
 
 Useful heuristics:
 
-- **< 60% coverage**, you're missing obvious tests.
-- **60–85% coverage**, normal. The uncovered parts are usually error paths and glue.
-- **> 95% coverage forced**, the last 5% is usually ceremony. Lowering the bar to pragmatic creates saner tests.
+- **< 60% coverage**: you're missing obvious tests.
+- **60–85% coverage**: normal. The uncovered parts are usually error paths and glue.
+- **> 95% coverage forced**: the last 5% is usually ceremony. Lowering the bar to pragmatic creates saner tests.
 
 Branch coverage is stricter than line coverage and catches more. Pair with mutation testing ([mutmut](https://github.com/boxed/mutmut), [PIT](https://pitest.org/)) to find tests that pass on broken code.
 
@@ -235,9 +235,9 @@ def test_a_visit_knows_its_skill():
 ## Where unit tests stop helping
 
 - **Whole-flow bugs.** "When a user clicks X, the system does Y", rarely a single unit.
-- **Integration issues.** Your code is correct; it talks to a wrong API. Unit tests won't see it.
+- **Integration issues.** Your code is correct. It talks to a wrong API and unit tests won't see it.
 - **Concurrency bugs.** Race conditions need [integration tests](../integration-tests/) or chaos-style tools.
-- **Visual regressions.** A button is misaligned; no unit test catches that.
+- **Visual regressions.** A button is misaligned. No unit test catches that.
 - **Performance.** A test that passes at n=10 may be O(n²). Load tests, not unit tests.
 
 ## Languages and frameworks

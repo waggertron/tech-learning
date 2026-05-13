@@ -10,9 +10,9 @@ updated: 2026-05-04
 
 ## Who this series is for
 
-- **Express users who want structure** - you've shipped REST APIs but find yourself re-inventing dependency injection, middleware ordering, and project layout on every project.
-- **Angular developers moving to the backend** - NestJS borrows Angular's decorator-based DI model deliberately; the mental model transfers well.
-- **Engineers preparing for Node.js backend interviews** - Parts 2 (DI), 5 (auth), and 9 (microservices) cover the topics that come up most.
+- **Express users who want structure**: you've shipped REST APIs but find yourself re-inventing dependency injection, middleware ordering, and project layout on every project.
+- **Angular developers moving to the backend**: NestJS borrows Angular's decorator-based DI model deliberately. The mental model transfers well.
+- **Engineers preparing for Node.js backend interviews**: Parts 2 (DI), 5 (auth), and 9 (microservices) cover the topics that come up most.
 
 Each part is self-contained enough to read on its own, but later parts assume the primitives introduced in earlier ones.
 

@@ -16,20 +16,20 @@ Smoke tests are **not** designed to find bugs. They're designed to answer one qu
 
 Three defining properties:
 
-- **Fast**, under 60 seconds total, ideally under 15.
-- **Narrow**, a handful of endpoints / flows, not dozens.
-- **Reliable**, if a smoke test fails, something is really wrong. Low false-positive rate is sacred.
+- **Fast**: under 60 seconds total, ideally under 15.
+- **Narrow**: a handful of endpoints / flows, not dozens.
+- **Reliable**: if a smoke test fails, something is really wrong. Low false-positive rate is sacred.
 
 ## What to smoke-test
 
 The basics every web service should have:
 
-- **Health endpoint returns 200.** `GET /healthz` or `GET /health` without authentication.
-- **Readiness endpoint returns 200.** If different from liveness, confirms dependencies are reachable.
-- **Login works.** One known test account, hit login, get a token.
-- **Core read path works.** One authenticated read of a well-known resource.
-- **Core write path works.** Ideally, creating a disposable test resource succeeds (and gets cleaned up).
-- **Version endpoint reflects what was deployed.** `GET /version` returns the expected git SHA or version tag.
+- **Health endpoint returns 200**: `GET /healthz` or `GET /health` without authentication.
+- **Readiness endpoint returns 200**: if different from liveness, confirms dependencies are reachable.
+- **Login works**: one known test account, hit login, get a token.
+- **Core read path works**: one authenticated read of a well-known resource.
+- **Core write path works**: ideally, creating a disposable test resource succeeds (and gets cleaned up).
+- **Version endpoint reflects what was deployed**: `GET /version` returns the expected git SHA or version tag.
 
 That's six tests. Under a minute. Good enough to catch ~90% of broken deploys.
 
@@ -84,7 +84,7 @@ curl -sf -X DELETE -H "Authorization: Bearer $token" "$API/api/v1/patients/$pid"
 echo "SMOKE OK"
 ```
 
-Six checks, done in 10 seconds against a local environment. Embed it in the repo; run after every `docker compose up`, after every deploy.
+Six checks, done in 10 seconds against a local environment. Embed it in the repo and run it after every `docker compose up`, after every deploy.
 
 ## When to run them
 
@@ -98,11 +98,11 @@ Six checks, done in 10 seconds against a local environment. Embed it in the repo
 
 Run smoke tests on a schedule against production:
 
-- **[Checkly](https://www.checklyhq.com/)**, Playwright-based synthetic monitoring.
-- **[Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/)**, same idea, Datadog-integrated.
+- **[Checkly](https://www.checklyhq.com/)**: Playwright-based synthetic monitoring.
+- **[Datadog Synthetic Monitoring](https://docs.datadoghq.com/synthetics/)**: same idea, Datadog-integrated.
 - **[New Relic Synthetics](https://docs.newrelic.com/docs/synthetics/)**
-- **[UptimeRobot / Statuscake](https://uptimerobot.com/)**, simpler HTTP-level uptime checks.
-- **Cron + curl + alerting**, roll-your-own via a tiny always-on container hitting your endpoints.
+- **[UptimeRobot / Statuscake](https://uptimerobot.com/)**: simpler HTTP-level uptime checks.
+- **Cron + curl + alerting**: roll-your-own via a tiny always-on container hitting your endpoints.
 
 The checks that matter:
 
@@ -152,7 +152,7 @@ Shared with the E2E suite but tagged `@smoke` and run earlier. Playwright's [tes
 - **No cleanup.** Leaving smoke-test data behind pollutes prod. Use a disposable tenant or delete what you create.
 - **Wrong granularity.** "GET /api/" that returns "Hello World" is too coarse. Hit something that actually requires the DB, cache, and auth.
 - **Same as integration tests.** If smoke is a subset of integration, duplicate the files. Run `pytest -m smoke` for the quick pass and `pytest -m integration` for the full one.
-- **Not run on deploy.** Every deploy needs a smoke test gate. Rolling back a bad deploy because customers complained is expensive; rolling back because smoke failed is cheap.
+- **Not run on deploy.** Every deploy needs a smoke test gate. Rolling back a bad deploy because customers complained is expensive. Rolling back because smoke failed is cheap.
 
 ## A smoke test "honest success" checklist
 

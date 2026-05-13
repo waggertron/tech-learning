@@ -363,11 +363,11 @@ The most common mistake is putting business logic in a guard (it should be in a 
 
 ## Gotchas at this stage
 
-- **Interceptors receive an Observable**, `next.handle()` returns an Observable, not a Promise. Use RxJS operators. If you need async logic in the pre-handler phase, return `from(asyncFn()).pipe(...)`.
-- **Global filters registered in `main.ts` can't inject providers**, because they're outside the module system. Use `APP_FILTER` in a module's `providers` array to get DI.
-- **`@Catch()` without arguments catches everything including non-HTTP errors**, TypeORM `QueryFailedError`, unhandled Promise rejections, etc. Log these carefully; they indicate bugs.
-- **Order of multiple interceptors**, `@UseInterceptors(A, B)` wraps as A(B(handler)). A's pre runs first; B's post runs first. The outermost interceptor sees the final output.
-- **Middleware can't return values**, it must call `next()` or end the response. Forgetting to call `next()` hangs the request.
+- **Interceptors receive an Observable**: `next.handle()` returns an Observable, not a Promise. Use RxJS operators. If you need async logic in the pre-handler phase, return `from(asyncFn()).pipe(...)`.
+- **Global filters registered in `main.ts` can't inject providers**: because they're outside the module system. Use `APP_FILTER` in a module's `providers` array to get DI.
+- **`@Catch()` without arguments catches everything including non-HTTP errors**: TypeORM `QueryFailedError`, unhandled Promise rejections, etc. Log these carefully; they indicate bugs.
+- **Order of multiple interceptors**: `@UseInterceptors(A, B)` wraps as A(B(handler)). A's pre runs first; B's post runs first. The outermost interceptor sees the final output.
+- **Middleware can't return values**: it must call `next()` or end the response. Forgetting to call `next()` hangs the request.
 
 ## What's next
 

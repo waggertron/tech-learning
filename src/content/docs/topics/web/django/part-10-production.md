@@ -87,9 +87,9 @@ In production, inject via your platform (AWS Secrets Manager, GCP Secret Manager
 
 ## WSGI vs ASGI
 
-- **WSGI** (`gunicorn`, `uWSGI`), the traditional choice. Sync only. Fast, battle-tested.
-- **ASGI** (`uvicorn`, `daphne`, `hypercorn`), required for async views, Channels, HTTP/2, WebSockets.
-- **Hybrid**, `gunicorn -k uvicorn.workers.UvicornWorker` runs uvicorn under gunicorn for supervision + async support.
+- **WSGI** (`gunicorn`, `uWSGI`): the traditional choice. Sync only. Fast, battle-tested.
+- **ASGI** (`uvicorn`, `daphne`, `hypercorn`): required for async views, Channels, HTTP/2, WebSockets.
+- **Hybrid**: `gunicorn -k uvicorn.workers.UvicornWorker` runs uvicorn under gunicorn for supervision + async support.
 
 Typical production command:
 
@@ -108,8 +108,8 @@ Workers rule of thumb: `(2 × CPU cores) + 1`. Long-lived connections (WebSocket
 
 Two different things:
 
-- **Static files**, your CSS, JS, images. Collected once during deploy.
-- **Media files**, user uploads. Stored somewhere writable that survives restarts.
+- **Static files**: your CSS, JS, images. Collected once during deploy.
+- **Media files**: user uploads. Stored somewhere writable that survives restarts.
 
 ### Static, WhiteNoise is the easy path
 
@@ -153,9 +153,9 @@ Django 5+ uses the `STORAGES` dict; older code used `DEFAULT_FILE_STORAGE` / `ST
 ## Database in production
 
 - **Postgres.** SQLite is fine for tiny projects but you'll outgrow it.
-- **Managed service**, RDS, Cloud SQL, Supabase. Taking backups, patching, and replication off your plate is worth the premium.
-- **Connection pooling**, `CONN_MAX_AGE=60` minimum; PgBouncer at scale (Part 8).
-- **Replicas**, Django supports database routers, but the simpler route is: all reads and writes to the primary, until you have a real reason.
+- **Managed service**: RDS, Cloud SQL, Supabase. Taking backups, patching, and replication off your plate is worth the premium.
+- **Connection pooling**: `CONN_MAX_AGE=60` minimum; PgBouncer at scale (Part 8).
+- **Replicas**: Django supports database routers, but the simpler route is: all reads and writes to the primary, until you have a real reason.
 
 ## Running migrations in production
 
@@ -223,9 +223,9 @@ Not optional at any real-world scale. The first time an exception silently 500s 
 
 ## Metrics and tracing
 
-- **[`django-prometheus`](https://github.com/korfuri/django-prometheus)**, request count, latency histogram, DB query count per view.
-- **OpenTelemetry**, distributed tracing; useful when a request touches multiple services.
-- **APM**, Datadog, New Relic, Sentry Performance, one of these usually covers metrics + traces + logs in a single product.
+- **[`django-prometheus`](https://github.com/korfuri/django-prometheus)**: request count, latency histogram, DB query count per view.
+- **OpenTelemetry**: distributed tracing; useful when a request touches multiple services.
+- **APM**: Datadog, New Relic, Sentry Performance, one of these usually covers metrics + traces + logs in a single product.
 
 ## Health checks
 
@@ -246,8 +246,8 @@ def liveness(request):
     return JsonResponse({"status": "alive"})
 ```
 
-- **Liveness**, am I running? If no, restart me.
-- **Readiness**, can I serve traffic? If no, take me out of the load balancer.
+- **Liveness**: am I running? If no, restart me.
+- **Readiness**: can I serve traffic? If no, take me out of the load balancer.
 
 Both endpoints should skip expensive work. A readiness probe that does heavy DB work becomes a DoS on your own infrastructure.
 
@@ -271,12 +271,12 @@ Before shipping a new version:
 
 ## Gotchas
 
-- **`SECRET_KEY` rotation**, rotating breaks every active session and every signed URL. Have a migration plan (store old keys under `SECRET_KEY_FALLBACKS` for a grace period).
-- **`ALLOWED_HOSTS` and load balancers**, if your LB sends `Host: internal-10.0.0.5`, that host must be allowed too, or liveness probes fail.
-- **Time zones**, `USE_TZ = True` (default). Store UTC, convert on render. Mixing tz-aware and tz-naive datetimes is the single most common production bug I've seen.
-- **Long-running workers after deploy**, Celery workers hold stale code until restarted. Your deploy script must restart them.
-- **Database migrations in parallel deploys**, two web instances both running `migrate` race. Run migrations in a single pre-deploy step.
-- **Manage commands on prod shells**, `python manage.py shell` on a production box is a loaded footgun. Use a read-only replica where possible.
+- **`SECRET_KEY` rotation**: rotating breaks every active session and every signed URL. Have a migration plan (store old keys under `SECRET_KEY_FALLBACKS` for a grace period).
+- **`ALLOWED_HOSTS` and load balancers**: if your LB sends `Host: internal-10.0.0.5`, that host must be allowed too, or liveness probes fail.
+- **Time zones**: `USE_TZ = True` (default). Store UTC, convert on render. Mixing tz-aware and tz-naive datetimes is the single most common production bug I've seen.
+- **Long-running workers after deploy**: Celery workers hold stale code until restarted. Your deploy script must restart them.
+- **Database migrations in parallel deploys**: two web instances both running `migrate` race. Run migrations in a single pre-deploy step.
+- **Manage commands on prod shells**: `python manage.py shell` on a production box is a loaded footgun. Use a read-only replica where possible.
 
 ## The end of the series
 

@@ -341,12 +341,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 ## Gotchas at this stage
 
-- **Same port, different protocols**, by default the WebSocket gateway shares port 3000 with HTTP. If you need a separate port: `@WebSocketGateway(3001)`.
-- **CORS must match your HTTP CORS config**, missing WebSocket CORS config is a common source of "connection refused" in the browser while curl works fine.
-- **`client.broadcast.emit` excludes the sender; `server.emit` includes everyone**, easy to swap and cause duplicate messages on the sender side.
-- **`WsException` vs `HttpException`**, HTTP exception filters don't apply in WS context. Throw `WsException` or the client receives a raw unformatted error.
-- **Memory leaks from rooms**, if you track room membership in a Map on the gateway, always clean up in `handleDisconnect`. Otherwise disconnected clients remain in room member lists forever.
-- **Scaling requires a Redis adapter**, the default in-memory pub/sub doesn't work across multiple Node processes. `@socket.io/redis-adapter` lets multiple instances share events.
+- **Same port, different protocols**: by default the WebSocket gateway shares port 3000 with HTTP. If you need a separate port: `@WebSocketGateway(3001)`.
+- **CORS must match your HTTP CORS config**: missing WebSocket CORS config is a common source of "connection refused" in the browser while curl works fine.
+- **`client.broadcast.emit` excludes the sender; `server.emit` includes everyone**: easy to swap and cause duplicate messages on the sender side.
+- **`WsException` vs `HttpException`**: HTTP exception filters don't apply in WS context. Throw `WsException` or the client receives a raw unformatted error.
+- **Memory leaks from rooms**: if you track room membership in a Map on the gateway, always clean up in `handleDisconnect`. Otherwise disconnected clients remain in room member lists forever.
+- **Scaling requires a Redis adapter**: the default in-memory pub/sub doesn't work across multiple Node processes. `@socket.io/redis-adapter` lets multiple instances share events.
 
 ## What's next
 

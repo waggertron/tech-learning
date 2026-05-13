@@ -40,7 +40,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export class AppModule {}
 ```
 
-**`synchronize: true` drops and recreates columns** to match your entities. Safe for prototyping locally; disastrous in production. Use migrations instead.
+**`synchronize: true` drops and recreates columns** to match your entities. Safe for prototyping locally. Disastrous in production. Use migrations instead.
 
 ## Entities
 
@@ -372,11 +372,11 @@ await this.postsRepo.findOne({         // withDeleted: true to include soft-dele
 
 ## Gotchas at this stage
 
-- **`save()` runs a SELECT before INSERT**, TypeORM checks if the entity exists by primary key before deciding INSERT vs UPDATE. On high-volume inserts, use `insert()` instead.
-- **Lazy relations break serialization**, TypeORM's "lazy" relations return a Promise. `JSON.stringify` on a Promise gives `{}`. Load relations explicitly.
-- **N+1 queries in loops**, calling `findOne` inside a loop is the classic N+1. Use `leftJoinAndSelect` or `findByIds` to batch the load.
-- **`synchronize` drops columns**, if you rename a column in an entity without a migration, `synchronize: true` drops the old column and creates a new one. Data gone.
-- **Transaction isolation**, `dataSource.transaction()` uses the database's default isolation level. For financial operations, set it explicitly: `dataSource.transaction('SERIALIZABLE', async (em) => ...)`.
+- **`save()` runs a SELECT before INSERT**: TypeORM checks if the entity exists by primary key before deciding INSERT vs UPDATE. On high-volume inserts, use `insert()` instead.
+- **Lazy relations break serialization**: TypeORM's "lazy" relations return a Promise. `JSON.stringify` on a Promise gives `{}`. Load relations explicitly.
+- **N+1 queries in loops**: calling `findOne` inside a loop is the classic N+1. Use `leftJoinAndSelect` or `findByIds` to batch the load.
+- **`synchronize` drops columns**: if you rename a column in an entity without a migration, `synchronize: true` drops the old column and creates a new one. Data gone.
+- **Transaction isolation**: `dataSource.transaction()` uses the database's default isolation level. For financial operations, set it explicitly: `dataSource.transaction('SERIALIZABLE', async (em) => ...)`.
 
 ## What's next
 

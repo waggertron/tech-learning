@@ -124,7 +124,7 @@ Most real-world practice is a blend, leaning Chicago for logic and London for wi
 
 Short-term, it does, 10–20% slower in the first week. After that, the regression rate drops, the refactor confidence rises, and the net effect is positive in almost every team study.
 
-The slowness people notice is real but misattributed. It's the cost of thinking about the problem before typing. TDD forces that thinking; skipping TDD defers it.
+The slowness people notice is real but misattributed. It's the cost of thinking about the problem before typing. TDD forces that thinking. Skipping TDD defers it.
 
 ### "TDD makes me 100% covered"
 
@@ -132,11 +132,11 @@ It makes you tightly covered on the paths you exercised. It doesn't guarantee br
 
 ### "TDD replaces other tests"
 
-TDD is mostly a unit-test discipline. You still need integration, E2E, and smoke tests, TDD just gives you strong unit coverage as a byproduct.
+TDD is mostly a unit-test discipline. You still need integration, E2E, and smoke tests. TDD just gives you strong unit coverage as a byproduct.
 
 ### "TDD means writing tests first, always"
 
-In practice, mature TDD practitioners sometimes write code first for a few minutes, see the shape, then rewrite starting with tests. The discipline isn't a legal requirement; it's a habit that pays off on net.
+In practice, mature TDD practitioners sometimes write code first for a few minutes, see the shape, then rewrite starting with tests. The discipline isn't a legal requirement. It's a habit that pays off on net.
 
 ## Common mistakes
 

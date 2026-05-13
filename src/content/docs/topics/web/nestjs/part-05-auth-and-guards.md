@@ -353,11 +353,11 @@ export class UsersService {
 
 ## Gotchas at this stage
 
-- **`JWT_SECRET` must be the same across services**, a token signed with one secret can't be verified with another. Use an environment variable and a config service, never hardcode it.
-- **Guards run before interceptors and pipes**, a request rejected by a guard never reaches validation or business logic. This is the correct order.
-- **`AuthGuard` vs custom guard**, extending `AuthGuard('jwt')` gives you Passport's 401 behavior automatically. A plain `CanActivate` implementation requires you to throw `UnauthorizedException` manually.
-- **`getAllAndOverride` vs `getAllAndMerge`**, `getAllAndOverride` returns the first defined value (handler beats class). `getAllAndMerge` merges arrays from both. Use `getAllAndMerge` for roles so a controller-level `@Roles(Role.Admin)` and a method-level `@Roles(Role.SuperAdmin)` combine properly.
-- **Token expiry and refresh**, this series covers access tokens only. For production, add a refresh token flow: longer-lived token stored in an httpOnly cookie, separate `/auth/refresh` endpoint.
+- **`JWT_SECRET` must be the same across services**: a token signed with one secret can't be verified with another. Use an environment variable and a config service, never hardcode it.
+- **Guards run before interceptors and pipes**: a request rejected by a guard never reaches validation or business logic. This is the correct order.
+- **`AuthGuard` vs custom guard**: extending `AuthGuard('jwt')` gives you Passport's 401 behavior automatically. A plain `CanActivate` implementation requires you to throw `UnauthorizedException` manually.
+- **`getAllAndOverride` vs `getAllAndMerge`**: `getAllAndOverride` returns the first defined value (handler beats class). `getAllAndMerge` merges arrays from both. Use `getAllAndMerge` for roles so a controller-level `@Roles(Role.Admin)` and a method-level `@Roles(Role.SuperAdmin)` combine properly.
+- **Token expiry and refresh**: this series covers access tokens only. For production, add a refresh token flow: longer-lived token stored in an httpOnly cookie, separate `/auth/refresh` endpoint.
 
 ## What's next
 

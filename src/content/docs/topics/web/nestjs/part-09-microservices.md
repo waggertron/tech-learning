@@ -25,10 +25,10 @@ npm install -D @types/amqplib
 
 `@nestjs/microservices` is a transport-agnostic messaging layer. Instead of HTTP, services communicate over:
 
-- **TCP** (built-in, good for internal networks)
-- **Redis** (pub/sub; good for event broadcasting)
-- **RabbitMQ** (durable queues; good for reliable job processing)
-- **Kafka, NATS, gRPC** (also supported, not covered here)
+- **TCP**: built-in, good for internal networks
+- **Redis**: pub/sub; good for event broadcasting
+- **RabbitMQ**: durable queues; good for reliable job processing
+- **Kafka, NATS, gRPC**: also supported, not covered here
 
 The same `@MessagePattern` and `@EventPattern` decorators work across transports. You swap the transport configuration without changing business logic.
 
@@ -348,11 +348,11 @@ The API Gateway handles public-facing HTTP and translates to internal message pa
 
 ## Gotchas at this stage
 
-- **`firstValueFrom` vs `lastValueFrom`**, `send()` emits exactly one value and completes. Both work, but `firstValueFrom` is semantically clearer.
-- **`ClientProxy` must be connected before use**, call `await client.connect()` if you're sending messages at startup (e.g., in a service's `onModuleInit`).
-- **TCP transport is not production-hardened**, TCP has no built-in retries, dead-letter queues, or persistence. Use RabbitMQ or Kafka for production workloads that can't lose messages.
-- **Pattern matching is by value equality**, `{ cmd: 'get_user' }` on the sender must exactly match `@MessagePattern({ cmd: 'get_user' })` on the receiver. A typo causes the message to silently go unhandled.
-- **Scaling with Redis**, multiple instances of a Redis-transport microservice each receive every message (pub/sub). For work queues where each message should be processed once, use RabbitMQ or Kafka instead.
+- **`firstValueFrom` vs `lastValueFrom`**: `send()` emits exactly one value and completes. Both work, but `firstValueFrom` is semantically clearer.
+- **`ClientProxy` must be connected before use**: call `await client.connect()` if you're sending messages at startup (e.g., in a service's `onModuleInit`).
+- **TCP transport is not production-hardened**: TCP has no built-in retries, dead-letter queues, or persistence. Use RabbitMQ or Kafka for production workloads that can't lose messages.
+- **Pattern matching is by value equality**: `{ cmd: 'get_user' }` on the sender must exactly match `@MessagePattern({ cmd: 'get_user' })` on the receiver. A typo causes the message to silently go unhandled.
+- **Scaling with Redis**: multiple instances of a Redis-transport microservice each receive every message (pub/sub). For work queues where each message should be processed once, use RabbitMQ or Kafka instead.
 
 ## What's next
 

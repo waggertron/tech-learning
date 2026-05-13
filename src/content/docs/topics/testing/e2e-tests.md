@@ -196,7 +196,7 @@ A 10-minute E2E suite blocks every PR. Ways to reduce:
 
 - **Parallelize.** Playwright runs tests in parallel workers. Default 50%; tune up with disposable per-test data.
 - **Shard.** Split the test suite across multiple CI machines.
-- **Tag subsets.** Only the `@smoke` tag runs on every PR; `@e2e` runs on main / nightly.
+- **Tag subsets.** Only the `@smoke` tag runs on every PR. `@e2e` runs on main / nightly.
 - **Cheat on setup.** Use the storage-state or backdoor patterns above.
 - **Skip what's already tested.** If a component test covers a bug, remove the E2E duplicate.
 - **Run against a warm environment.** Boot infrastructure once per suite, not per test.
@@ -210,9 +210,9 @@ E2E tests are flaky. Timing issues, animations, network blips, clock skew. Mitig
 - **Auto-waiting assertions** (Playwright's defaults).
 - **No manual `sleep`.** Always `expect(...).toBeVisible({ timeout: ... })`.
 - **Disable animations** in test environments (`prefers-reduced-motion`).
-- **Stable selectors**, accessible role/name, not `.btn-3.css-xyz-9`.
+- **Stable selectors**: accessible role/name, not `.btn-3.css-xyz-9`.
 - **Retry twice max.** More than that hides real bugs.
-- **Trace failed runs.** Playwright's trace viewer is gold; upload it as a CI artifact.
+- **Trace failed runs.** Playwright's trace viewer is gold. Upload it as a CI artifact.
 
 Accept that you'll never hit 0% flake rate. Target < 0.5%.
 
@@ -234,10 +234,10 @@ Four times the runtime; find the small number of browser-specific bugs. Usually 
 ## CI integration
 
 - **Record and upload traces** on failure, `trace: 'retain-on-failure'`.
-- **Upload screenshots**, `screenshot: 'only-on-failure'`.
-- **Video**, useful for hard-to-debug failures; heavy on storage.
+- **Upload screenshots**: `screenshot: 'only-on-failure'`.
+- **Video**: useful for hard-to-debug failures; heavy on storage.
 - **Block the merge** on smoke subset; let full E2E warn-only until stable.
-- **Report durations**, a test that gets 50% slower week over week is tomorrow's flake.
+- **Report durations**: a test that gets 50% slower week over week is tomorrow's flake.
 
 ## Staging vs ephemeral environments
 
@@ -262,7 +262,7 @@ Turn on only for stable UI, visual tests are more flake-prone than behavior test
 ## Common mistakes
 
 - **E2E as the primary test tier.** Slow, expensive, hard to debug. Push coverage down the pyramid.
-- **No test-data strategy.** Tests pollute each other; failures cascade.
+- **No test-data strategy.** Tests pollute each other. Failures cascade.
 - **Testing implementation details.** Asserting on CSS classes. When you refactor, tests break even though the UX didn't change.
 - **No trace upload on failure.** Flaky test that only repros in CI and you have no evidence. Always collect traces.
 - **Every test logs in via UI.** 90% of your test time is login. Use storage state.
@@ -273,10 +273,10 @@ Turn on only for stable UI, visual tests are more flake-prone than behavior test
 
 For a mid-sized product:
 
-- **Smoke (1–5 tests)**, login + one critical path. Run on every PR and every deploy.
-- **Critical path (10–30 tests)**, checkout, account creation, key workflows. Run on every PR.
-- **Full regression (50–200 tests)**, run nightly on main.
-- **Cross-browser**, smoke + critical path, run weekly or on release candidates.
+- **Smoke (1–5 tests)**: login + one critical path. Run on every PR and every deploy.
+- **Critical path (10–30 tests)**: checkout, account creation, key workflows. Run on every PR.
+- **Full regression (50–200 tests)**: run nightly on main.
+- **Cross-browser**: smoke + critical path, run weekly or on release candidates.
 
 Going above 200 E2E tests is usually a sign you should push coverage down to integration or component tests.
 

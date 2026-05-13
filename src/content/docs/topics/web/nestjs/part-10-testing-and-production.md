@@ -555,11 +555,11 @@ Kubernetes sends SIGTERM before killing the pod. A graceful shutdown lets in-fli
 
 ## Gotchas at this stage
 
-- **`overrideProvider` in e2e tests must come before `.compile()`**, calling it after has no effect.
-- **`app.close()` in `afterAll` is required**, otherwise Jest hangs waiting for open handles (the HTTP server, database pool, etc.).
-- **Swagger `@ApiProperty()` on class-transformer `@Exclude()` properties still shows them in docs**, explicitly use `@ApiHideProperty()` to remove them from the schema.
-- **TypeScript decorators and `emitDecoratorMetadata` are required at runtime**, the production Docker image must not strip them. Verify `tsconfig.build.json` has them enabled.
-- **`npm ci --only=production` skips devDependencies**, if you use `ts-node` or `ts-jest` at runtime (you shouldn't), they won't be present in the Docker image. Always compile to `dist/` before building the image.
+- **`overrideProvider` in e2e tests must come before `.compile()`**: calling it after has no effect.
+- **`app.close()` in `afterAll` is required**: otherwise Jest hangs waiting for open handles (the HTTP server, database pool, etc.).
+- **Swagger `@ApiProperty()` on class-transformer `@Exclude()` properties still shows them in docs**: explicitly use `@ApiHideProperty()` to remove them from the schema.
+- **TypeScript decorators and `emitDecoratorMetadata` are required at runtime**: the production Docker image must not strip them. Verify `tsconfig.build.json` has them enabled.
+- **`npm ci --only=production` skips devDependencies**: if you use `ts-node` or `ts-jest` at runtime (you shouldn't), they won't be present in the Docker image. Always compile to `dist/` before building the image.
 
 ## Related topics
 

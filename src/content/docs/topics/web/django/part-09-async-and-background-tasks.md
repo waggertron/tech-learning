@@ -12,9 +12,9 @@ updated: 2026-04-24
 
 A Django app hits three ceilings as it grows:
 
-1. **Slow external I/O in views**, a call to Stripe, OpenAI, Slack. Blocks the worker.
-2. **Real-time features**, WebSockets, server-sent events, live dashboards. HTTP isn't the right protocol.
-3. **Work that outlives the request**, sending email, running reports, processing uploads. Should happen *after* the user gets their response.
+1. **Slow external I/O in views**: a call to Stripe, OpenAI, Slack. Blocks the worker.
+2. **Real-time features**: WebSockets, server-sent events, live dashboards. HTTP isn't the right protocol.
+3. **Work that outlives the request**: sending email, running reports, processing uploads. Should happen *after* the user gets their response.
 
 Answers: **async views**, **Channels**, **Celery**. Sometimes more than one.
 
@@ -40,7 +40,7 @@ async def dashboard(request):
 
 Requirements:
 
-- **ASGI server**, `uvicorn`, `daphne`, or `hypercorn`. Gunicorn alone won't run async views (use `gunicorn -k uvicorn.workers.UvicornWorker`).
+- **ASGI server**: `uvicorn`, `daphne`, or `hypercorn`. Gunicorn alone won't run async views (use `gunicorn -k uvicorn.workers.UvicornWorker`).
 - **`ASGI_APPLICATION`** set in `settings.py`, not `WSGI_APPLICATION`.
 
 ### Async ORM
@@ -69,13 +69,13 @@ async def handler(request):
 
 ### When async actually helps
 
-- **External HTTP calls**, concurrent with `asyncio.gather`.
-- **WebSockets / SSE**, one worker, many long-lived connections.
+- **External HTTP calls**: concurrent with `asyncio.gather`.
+- **WebSockets / SSE**: one worker, many long-lived connections.
 
 ### When it doesn't
 
-- **CPU-bound work**, async doesn't parallelize Python code; you're still bound by the GIL.
-- **Pure DB-heavy endpoints**, Django's DB driver isn't truly async yet (uses a thread pool under the hood). Often no measurable win over sync.
+- **CPU-bound work**: async doesn't parallelize Python code; you're still bound by the GIL.
+- **Pure DB-heavy endpoints**: Django's DB driver isn't truly async yet (uses a thread pool under the hood). Often no measurable win over sync.
 
 ## Channels, WebSockets and beyond
 
@@ -266,20 +266,20 @@ celery -A mysite beat -l info
 
 Celery is the 800-pound gorilla, but it's complex. Simpler options:
 
-- **[`django-rq`](https://github.com/rq/django-rq)**, Redis Queue. Simpler, fewer moving parts.
-- **[`django-q2`](https://github.com/django-q2/django-q2)**, lightweight, scheduling included.
-- **[`huey`](https://huey.readthedocs.io/)**, small, no broker required (can use Redis or SQLite).
-- **Postgres-backed** ([`pgq`](https://github.com/graphile/worker), [procrastinate](https://github.com/procrastinate-org/procrastinate)), one fewer service to run; the DB becomes the queue.
+- **[`django-rq`](https://github.com/rq/django-rq)**: Redis Queue. Simpler, fewer moving parts.
+- **[`django-q2`](https://github.com/django-q2/django-q2)**: lightweight, scheduling included.
+- **[`huey`](https://huey.readthedocs.io/)**: small, no broker required (can use Redis or SQLite).
+- **Postgres-backed** ([`pgq`](https://github.com/graphile/worker), [procrastinate](https://github.com/procrastinate-org/procrastinate)): one fewer service to run; the DB becomes the queue.
 
 For a modest app, `huey` or a Postgres-backed queue is usually the better starting point.
 
 ## Gotchas summary
 
-- **Mixing sync and async under ASGI**, wrap sync code with `sync_to_async`; wrap async code called from sync with `async_to_sync`.
-- **Gunicorn + async**, `gunicorn -k uvicorn.workers.UvicornWorker` or switch to `uvicorn` directly.
-- **Channels without the channel layer**, works, but each worker is isolated. Production always needs Redis or a similar layer.
-- **Celery import order**, tasks must be importable at worker startup. `autodiscover_tasks()` needs tasks in `<app>/tasks.py`.
-- **`django_redis`** vs **Redis cache backend built into Django 4+**, the stdlib version is usually enough; `django-redis` only if you need its advanced features.
+- **Mixing sync and async under ASGI**: wrap sync code with `sync_to_async`; wrap async code called from sync with `async_to_sync`.
+- **Gunicorn + async**: `gunicorn -k uvicorn.workers.UvicornWorker` or switch to `uvicorn` directly.
+- **Channels without the channel layer**: works, but each worker is isolated. Production always needs Redis or a similar layer.
+- **Celery import order**: tasks must be importable at worker startup. `autodiscover_tasks()` needs tasks in `<app>/tasks.py`.
+- **`django_redis` vs Redis cache backend built into Django 4+**: the stdlib version is usually enough; `django-redis` only if you need its advanced features.
 
 ## What's next
 

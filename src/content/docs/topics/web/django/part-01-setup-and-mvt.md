@@ -55,12 +55,12 @@ You should now see the Django green rocket.
 
 Key knobs in `settings.py`:
 
-- `DEBUG = True`, local only; leaks stack traces otherwise.
-- `ALLOWED_HOSTS = []`, must include your domain in production.
-- `INSTALLED_APPS`, the apps Django knows about.
-- `MIDDLEWARE`, ordered list of request/response processors.
-- `DATABASES`, SQLite by default; swap to Postgres for anything real.
-- `SECRET_KEY`, signing key; never commit a production one.
+- `DEBUG = True`: local only. It leaks stack traces otherwise.
+- `ALLOWED_HOSTS = []`: must include your domain in production.
+- `INSTALLED_APPS`: the apps Django knows about.
+- `MIDDLEWARE`: ordered list of request/response processors.
+- `DATABASES`: SQLite by default; swap to Postgres for anything real.
+- `SECRET_KEY`: signing key; never commit a production one.
 
 ## Create your first app
 
@@ -163,11 +163,11 @@ Restart `runserver` (it usually auto-reloads) and hit `http://127.0.0.1:8000/`, 
 
 ## Gotchas at this stage
 
-- **`STATICFILES_DIRS` vs `STATIC_ROOT`**, `_DIRS` is where Django *looks* for static files in development; `_ROOT` is where `collectstatic` puts them in production. You'll want both eventually.
-- **Template namespace**, always nest templates under an app-named folder (`blog/templates/blog/home.html`). Without this, two apps with `home.html` collide silently.
-- **`app_name` in urls.py**, enables `{% url "blog:home" %}` in templates. Add it from day one; it's annoying to retrofit later.
-- **Migrations before server**, `python manage.py migrate` before `runserver` the first time, or you'll see "no such table" errors.
-- **Python 3.12+**, Django 5.2 supports Python 3.10–3.12; pick one and pin it in your project.
+- **`STATICFILES_DIRS` vs `STATIC_ROOT`**: `_DIRS` is where Django *looks* for static files in development; `_ROOT` is where `collectstatic` puts them in production. You'll want both eventually.
+- **Template namespace**: always nest templates under an app-named folder (`blog/templates/blog/home.html`). Without this, two apps with `home.html` collide silently.
+- **`app_name` in urls.py**: enables `{% url "blog:home" %}` in templates. Add it from day one; it's annoying to retrofit later.
+- **Migrations before server**: `python manage.py migrate` before `runserver` the first time, or you'll see "no such table" errors.
+- **Python 3.12+**: Django 5.2 supports Python 3.10–3.12; pick one and pin it in your project.
 
 ## What's next
 

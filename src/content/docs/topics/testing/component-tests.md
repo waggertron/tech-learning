@@ -20,7 +20,7 @@ The unifying idea: **test a meaningful chunk of behavior at the seam where it's 
 
 ## Why they deserve their own tier
 
-Unit tests were invented for languages that don't have GUIs. Once your codebase has a UI, the question "does this button correctly render the loading state?" isn't a unit test, it involves rendering, lifecycle, and state. You can do it in sub-50ms with a good test library; you don't need a real browser; but it's more than a single function.
+Unit tests were invented for languages that don't have GUIs. Once your codebase has a UI, the question "does this button correctly render the loading state?" isn't a unit test, it involves rendering, lifecycle, and state. You can do it in sub-50ms with a good test library. You don't need a real browser, but it's more than a single function.
 
 Component tests fill that gap. On the backend, the same role is played by mid-level integration tests that stay in-process.
 
@@ -28,10 +28,10 @@ Component tests fill that gap. On the backend, the same role is played by mid-le
 
 Tooling in 2026:
 
-- **[Vitest](https://vitest.dev/)**, fast Jest alternative, built on Vite. Default for new projects.
-- **[Jest](https://jestjs.io/)**, the legacy default; still widely used.
-- **[Testing Library](https://testing-library.com/)**, framework-agnostic helpers for querying the DOM the way a user would. `@testing-library/react`, `@testing-library/vue`, `@testing-library/svelte`, etc.
-- **[Playwright component testing](https://playwright.dev/docs/test-components)**, real-browser component tests. Slower but more accurate; use for components heavy on layout / canvas / interaction.
+- **[Vitest](https://vitest.dev/)**: fast Jest alternative, built on Vite. Default for new projects.
+- **[Jest](https://jestjs.io/)**: the legacy default; still widely used.
+- **[Testing Library](https://testing-library.com/)**: framework-agnostic helpers for querying the DOM the way a user would. `@testing-library/react`, `@testing-library/vue`, `@testing-library/svelte`, etc.
+- **[Playwright component testing](https://playwright.dev/docs/test-components)**: real-browser component tests. Slower but more accurate; use for components heavy on layout / canvas / interaction.
 
 ### Example, React + Vitest + Testing Library
 
@@ -122,7 +122,7 @@ Components that fetch have async state. Two approaches:
 1. **Inject the fetch function** so tests can pass a stub.
 2. **[Mock Service Worker (MSW)](https://mswjs.io/)**, intercepts real `fetch` / `XMLHttpRequest` calls at the network layer.
 
-MSW is the modern default. It lets the component make real network calls; MSW serves scripted responses:
+MSW is the modern default. It lets the component make real network calls. MSW serves scripted responses:
 
 ```ts
 import { setupServer } from 'msw/node';
@@ -193,10 +193,10 @@ Backend component tests shade into [integration tests](../integration-tests/). T
 
 ## Speed budget
 
-- **Unit test**, < 10ms.
-- **Component test**, < 50ms (frontend with JSDOM), < 200ms (backend with DB).
-- **Integration test**, < 2s.
-- **E2E test**, < 30s.
+- **Unit test**: < 10ms.
+- **Component test**: < 50ms (frontend with JSDOM), < 200ms (backend with DB).
+- **Integration test**: < 2s.
+- **E2E test**: < 30s.
 
 If component tests are hitting 1s, something's off, probably too much setup or rendering happening per test.
 
@@ -229,11 +229,11 @@ Catches contrast, missing labels, invalid ARIA roles, the common stuff.
 
 A component test catches "the button is labeled wrong." It doesn't catch "the button is now 2px off." For that:
 
-- **[Chromatic](https://www.chromatic.com/)**, Storybook-based visual snapshots in the cloud.
-- **[Percy](https://percy.io/)**, similar, BrowserStack-owned.
-- **[Playwright screenshot comparison](https://playwright.dev/docs/test-snapshots)**, built into Playwright test runner.
+- **[Chromatic](https://www.chromatic.com/)**: Storybook-based visual snapshots in the cloud.
+- **[Percy](https://percy.io/)**: similar, BrowserStack-owned.
+- **[Playwright screenshot comparison](https://playwright.dev/docs/test-snapshots)**: built into Playwright test runner.
 
-Visual regression tests are flaky by nature (fonts render differently, animations, timing). Budget for that; enable only on a subset of critical UI.
+Visual regression tests are flaky by nature (fonts render differently, animations, timing). Budget for that. Enable only on a subset of critical UI.
 
 ## References
 

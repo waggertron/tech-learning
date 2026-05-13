@@ -14,10 +14,10 @@ updated: 2026-04-24
 
 Two related flavors:
 
-- **Property-based testing** (PBT), Hypothesis, QuickCheck, fast-check. Inputs are generated from a typed spec; assertions are about invariants.
-- **Coverage-guided fuzzing** (CGF), AFL, libFuzzer, go-fuzz, Jazzer. Inputs are mutated bytes; the fuzzer learns which mutations reach new code paths and tries more like them.
+- **Property-based testing** (PBT): Hypothesis, QuickCheck, fast-check. Inputs are generated from a typed spec; assertions are about invariants.
+- **Coverage-guided fuzzing** (CGF): AFL, libFuzzer, go-fuzz, Jazzer. Inputs are mutated bytes; the fuzzer learns which mutations reach new code paths and tries more like them.
 
-PBT is the developer-facing tool; CGF is the security-facing tool. Both have earned their place in any serious suite.
+PBT is the developer-facing tool. CGF is the security-facing tool. Both have earned their place in any serious suite.
 
 ## Property-based testing
 
@@ -55,17 +55,17 @@ Hypothesis generates hundreds of lists, empty, single-element, negative numbers,
 
 ### Useful invariants to look for
 
-- **Round-trip**, `parse(serialize(x)) == x`, or `decrypt(encrypt(x)) == x`.
-- **Idempotence**, `f(f(x)) == f(x)`.
-- **Inverse**, `inverse(f(x)) == x`.
-- **Algebraic properties**, `add(a, b) == add(b, a)` (commutativity), `(a + b) + c == a + (b + c)` (associativity).
-- **Monotonicity**, adding an element never decreases the output.
-- **Invariance**, a property holds no matter the input.
-- **Metamorphic relations**, `f(scale(x, 2)) == scale(f(x), 2)`.
+- **Round-trip**: `parse(serialize(x)) == x`, or `decrypt(encrypt(x)) == x`.
+- **Idempotence**: `f(f(x)) == f(x)`.
+- **Inverse**: `inverse(f(x)) == x`.
+- **Algebraic properties**: `add(a, b) == add(b, a)` (commutativity), `(a + b) + c == a + (b + c)` (associativity).
+- **Monotonicity**: adding an element never decreases the output.
+- **Invariance**: a property holds no matter the input.
+- **Metamorphic relations**: `f(scale(x, 2)) == scale(f(x), 2)`.
 
 ### Shrinking, the killer feature
 
-When a property fails, PBT tools **shrink** the counterexample to a minimal failing case. You don't get "list of 94 floats of which five are subtly wrong"; you get "[-1.0, 0.0]" with a clear trace.
+When a property fails, PBT tools **shrink** the counterexample to a minimal failing case. You don't get "list of 94 floats of which five are subtly wrong." You get "[-1.0, 0.0]" with a clear trace.
 
 Hypothesis is exceptional at this. A rule that fails because of integer overflow on a single specific value will shrink to that value in seconds.
 
@@ -164,12 +164,12 @@ The fuzzer maintains a **corpus**, inputs that reached new code paths. Over time
 
 ### Tools
 
-- **[AFL++](https://github.com/AFLplusplus/AFLplusplus)**, the canonical CGF for C/C++.
-- **[libFuzzer](https://llvm.org/docs/LibFuzzer.html)**, built into LLVM, used heavily by Chrome.
-- **[Go's built-in fuzzer](https://go.dev/security/fuzz/)**, since Go 1.18; shown above.
-- **[Atheris](https://github.com/google/atheris)**, libFuzzer bindings for Python.
-- **[Jazzer](https://github.com/CodeIntelligenceTesting/jazzer)**, JVM fuzzer.
-- **[cargo-fuzz](https://rust-fuzz.github.io/book/cargo-fuzz.html)**, Rust via libFuzzer.
+- **[AFL++](https://github.com/AFLplusplus/AFLplusplus)**: the canonical CGF for C/C++.
+- **[libFuzzer](https://llvm.org/docs/LibFuzzer.html)**: built into LLVM, used heavily by Chrome.
+- **[Go's built-in fuzzer](https://go.dev/security/fuzz/)**: since Go 1.18; shown above.
+- **[Atheris](https://github.com/google/atheris)**: libFuzzer bindings for Python.
+- **[Jazzer](https://github.com/CodeIntelligenceTesting/jazzer)**: JVM fuzzer.
+- **[cargo-fuzz](https://rust-fuzz.github.io/book/cargo-fuzz.html)**: Rust via libFuzzer.
 
 ### What CGF finds
 
@@ -205,17 +205,17 @@ The LLM isn't the fuzzer. It's the creator of good seed inputs, the hardest huma
 - **Testing only happy paths.** The first PBT every project adds should test error handling: "every invalid input either throws a known exception or returns a specific error; nothing else."
 - **Examples disguised as properties.** `@given(st.integers(min_value=0, max_value=10))`, ten inputs isn't a fuzz test. Widen the strategy.
 - **Time-based properties without a fake clock.** A test that asserts "X happened within 100ms" fails under CI load. Inject the clock.
-- **Ignoring flaky PBT failures.** Hypothesis found a real bug; you retry and the test passes because the generator chose a different input. Save the seed (Hypothesis does this automatically) and reproduce.
+- **Ignoring flaky PBT failures.** Hypothesis found a real bug. You retry and the test passes because the generator chose a different input. Save the seed (Hypothesis does this automatically) and reproduce.
 - **Running CGF for 30 seconds.** CGF needs hours to days. Either run it continuously (OSS-Fuzz) or budget CI for serious time.
-- **Not versioning the corpus.** CGF corpora evolve; keeping them in a shared storage lets the team benefit from prior runs.
+- **Not versioning the corpus.** CGF corpora evolve. Keeping them in shared storage lets the team benefit from prior runs.
 - **Overly-constrained generators.** A strategy like `st.text(alphabet="abc")` finds fewer bugs than `st.text()`. Start wide; narrow only when the test logic genuinely requires it.
 
 ## Integrating into CI
 
-- **PBT**, run as part of the regular test suite. Fast; < 10 seconds for most properties.
-- **Short fuzz runs**, 60 seconds per target in CI, as a regression gate.
-- **Long fuzz runs**, on a nightly or weekly job, hours per target.
-- **Corpus**, check in seeds; keep the evolving corpus in cache or object storage.
+- **PBT**: run as part of the regular test suite. Fast; < 10 seconds for most properties.
+- **Short fuzz runs**: 60 seconds per target in CI, as a regression gate.
+- **Long fuzz runs**: on a nightly or weekly job, hours per target.
+- **Corpus**: check in seeds; keep the evolving corpus in cache or object storage.
 
 ## Complementary, not replacement
 

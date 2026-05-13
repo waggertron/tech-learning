@@ -115,8 +115,8 @@ class Post(models.Model):
 
 ### AbstractUser vs AbstractBaseUser
 
-- **`AbstractUser`**, all the default User fields; just add yours. 90% of projects want this.
-- **`AbstractBaseUser`**, a minimal skeleton (password + last_login). Use when you need a completely different identifier (e.g., email-only, no username).
+- **`AbstractUser`**: all the default User fields; just add yours. 90% of projects want this.
+- **`AbstractBaseUser`**: a minimal skeleton (password + last_login). Use when you need a completely different identifier (e.g., email-only, no username).
 
 ## Permissions
 
@@ -152,8 +152,8 @@ user.groups.add(editors)
 
 Model permissions are **per model**, not per row. "Alice can edit *her* posts" is not expressible in built-in auth. Options:
 
-- **Check in the view**, `if post.author != request.user: raise PermissionDenied`.
-- **[django-guardian](https://github.com/django-guardian/django-guardian)**, adds per-object permissions with `user.has_perm("blog.change_post", post_instance)`.
+- **Check in the view**: `if post.author != request.user: raise PermissionDenied`.
+- **[django-guardian](https://github.com/django-guardian/django-guardian)**: adds per-object permissions with `user.has_perm("blog.change_post", post_instance)`.
 
 ## The admin
 
@@ -203,11 +203,11 @@ PASSWORD_HASHERS = [
 
 ## Gotchas
 
-- **`is_authenticated` is a property**, `if request.user.is_authenticated:` not `.is_authenticated()`. It was a method in Django 1.x.
-- **Password change invalidates sessions**, users must re-login after a password change. Use `update_session_auth_hash(request, user)` to keep them logged in.
-- **Anonymous users still have `request.user`**, it's an `AnonymousUser` instance, not `None`. Always check `.is_authenticated`.
-- **`authenticate()` returns `None` on failure, not an exception**, easy to forget the `if user is not None:` guard.
-- **Email as username**, the built-in `User` uses `username` as the login field. Either write a custom auth backend or use a package like [django-allauth](https://github.com/pennersr/django-allauth), which also does social login.
+- **`is_authenticated` is a property**: `if request.user.is_authenticated:` not `.is_authenticated()`. It was a method in Django 1.x.
+- **Password change invalidates sessions**: users must re-login after a password change. Use `update_session_auth_hash(request, user)` to keep them logged in.
+- **Anonymous users still have `request.user`**: it's an `AnonymousUser` instance, not `None`. Always check `.is_authenticated`.
+- **`authenticate()` returns `None` on failure, not an exception**: easy to forget the `if user is not None:` guard.
+- **Email as username**: the built-in `User` uses `username` as the login field. Either write a custom auth backend or use a package like [django-allauth](https://github.com/pennersr/django-allauth), which also does social login.
 
 ## What's next
 

@@ -59,7 +59,7 @@ Without `F`, `post.view_count += 1; post.save()` is a classic race-condition bug
 
 Both prevent N+1 queries. They work differently.
 
-### `select_related`, for ForeignKey / OneToOne (forward)
+### `select_related`: for ForeignKey / OneToOne (forward)
 
 Does a SQL `JOIN` in one query.
 
@@ -75,7 +75,7 @@ for post in Post.objects.select_related("author"):
 
 Chain for deeper: `select_related("author__profile")`.
 
-### `prefetch_related`, for M2M and reverse FK
+### `prefetch_related`: for M2M and reverse FK
 
 Can't be done in a single JOIN cleanly; does a **second query** and stitches results in Python.
 
@@ -221,10 +221,10 @@ Computed on insert/update at the database level, queryable directly.
 
 - **`update()` bypasses signals and `save()` logic.** Any `post_save` handlers, `auto_now=True`, custom `save()`, all skipped. Use when you need performance and no side effects.
 - **`annotate` + `filter` join multiplication.** Annotating through a relation then filtering produces duplicate rows. Use subqueries or `Count(..., distinct=True)`.
-- **`.distinct()` vs `.distinct(*fields)`**, bare is SQL `DISTINCT *`; with field names is Postgres's `DISTINCT ON`. Different semantics.
-- **`order_by("?")`**, random ordering, performs terribly on large tables. Fetch a count first, pick random offsets.
-- **`iterator()`**, skips the QuerySet cache; essential for iterating millions of rows without OOM. Pair with `chunk_size`.
-- **Lazy QuerySets get re-evaluated**, if you iterate twice, SQL runs twice. Cache with `list(qs)` if you'll reuse.
+- **`.distinct()` vs `.distinct(*fields)`**: bare is SQL `DISTINCT *`; with field names is Postgres's `DISTINCT ON`. Different semantics.
+- **`order_by("?")`**: random ordering, performs terribly on large tables. Fetch a count first, pick random offsets.
+- **`iterator()`**: skips the QuerySet cache; essential for iterating millions of rows without OOM. Pair with `chunk_size`.
+- **Lazy QuerySets get re-evaluated**: if you iterate twice, SQL runs twice. Cache with `list(qs)` if you'll reuse.
 
 ## What's next
 

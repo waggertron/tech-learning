@@ -343,11 +343,11 @@ findOne() {}
 
 ## Gotchas at this stage
 
-- **`@Res()` disables automatic serialization**, if you inject the response object, you own the response. Returning a value from the method has no effect.
-- **Query params are always strings**, NestJS does not coerce `?page=2` to a number. Use `+page` or a ParseIntPipe (Part 6) to convert.
-- **Route param coercion**, `:id` is a string. `+id` converts it; `NaN` comes back if the segment isn't numeric. Validate inputs (Part 6).
-- **Prefix trailing slashes**, `@Controller('users/')` and `@Get('/')` produce double slashes in some edge cases. Keep prefixes without trailing slashes.
-- **No body on GET/DELETE by HTTP spec**, some clients ignore a body on GET. NestJS doesn't stop you from reading `@Body()` on a GET, but you'll run into client interop issues.
+- **`@Res()` disables automatic serialization**: if you inject the response object, you own the response. Returning a value from the method has no effect.
+- **Query params are always strings**: NestJS does not coerce `?page=2` to a number. Use `+page` or a ParseIntPipe (Part 6) to convert.
+- **Route param coercion**: `:id` is a string. `+id` converts it; `NaN` comes back if the segment isn't numeric. Validate inputs (Part 6).
+- **Prefix trailing slashes**: `@Controller('users/')` and `@Get('/')` produce double slashes in some edge cases. Keep prefixes without trailing slashes.
+- **No body on GET/DELETE by HTTP spec**: some clients ignore a body on GET. NestJS doesn't stop you from reading `@Body()` on a GET, but you'll run into client interop issues.
 
 ## What's next
 

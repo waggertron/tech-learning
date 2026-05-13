@@ -335,11 +335,11 @@ export class ForgotPasswordDto extends PickType(CreateUserDto, ['email'] as cons
 
 ## Gotchas at this stage
 
-- **`transform: true` is required for `@Type()` to work**, without it, class-transformer doesn't run and nested object validation silently fails.
-- **Query strings are always strings**, even with `enableImplicitConversion: true`, complex types need explicit `@Type()`. The implicit conversion only handles primitives (string to number, string to boolean).
-- **`whitelist` strips unknown properties before validation**, if you're debugging and your DTO properties are always empty, check that `whitelist` isn't stripping a misconfigured property name.
-- **`@IsOptional()` does not mean nullable**, it means the property can be absent (`undefined`). To also allow `null`, add `@IsNull()` or use `{ nullable: true }` in `@Column()`.
-- **Validation error messages are arrays**, the default 400 response has a `message` array where each element describes one constraint violation. Log the raw error during development; it's detailed.
+- **`transform: true` is required for `@Type()` to work**: without it, class-transformer doesn't run and nested object validation silently fails.
+- **Query strings are always strings**: even with `enableImplicitConversion: true`, complex types need explicit `@Type()`. The implicit conversion only handles primitives (string to number, string to boolean).
+- **`whitelist` strips unknown properties before validation**: if you're debugging and your DTO properties are always empty, check that `whitelist` isn't stripping a misconfigured property name.
+- **`@IsOptional()` does not mean nullable**: it means the property can be absent (`undefined`). To also allow `null`, add `@IsNull()` or use `{ nullable: true }` in `@Column()`.
+- **Validation error messages are arrays**: the default 400 response has a `message` array where each element describes one constraint violation. Log the raw error during development; it's detailed.
 
 ## What's next
 

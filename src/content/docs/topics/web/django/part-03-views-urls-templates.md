@@ -84,7 +84,7 @@ urlpatterns = [
 ]
 ```
 
-**Path converters**, built in: `str` (default), `int`, `slug`, `uuid`, `path`. You can write custom ones for business types like ISBN.
+**Path converters**: built in: `str` (default), `int`, `slug`, `uuid`, `path`. You can write custom ones for business types like ISBN.
 
 **Reversing URLs**
 
@@ -101,7 +101,7 @@ In templates:
 <a href="{% url 'blog:detail' slug=post.slug %}">{{ post.title }}</a>
 ```
 
-**Why namespaces (`app_name`) matter**, two apps can both name a URL `"detail"`. Without namespacing, `reverse("detail")` is ambiguous.
+**Why namespaces (`app_name`) matter**: two apps can both name a URL `"detail"`. Without namespacing, `reverse("detail")` is ambiguous.
 
 ## The template language
 
@@ -135,8 +135,8 @@ Django's template language is intentionally weak, no arbitrary Python, to keep l
 
 ### The two syntaxes
 
-- **`{{ variable }}`**, output an expression, with optional filters: `{{ value|default:"n/a"|upper }}`.
-- **`{% tag %}`**, control flow and logic: `{% if %}`, `{% for %}`, `{% url %}`, `{% block %}`, `{% extends %}`, `{% include %}`.
+- **`{{ variable }}`**: output an expression, with optional filters: `{{ value|default:"n/a"|upper }}`.
+- **`{% tag %}`**: control flow and logic: `{% if %}`, `{% for %}`, `{% url %}`, `{% block %}`, `{% extends %}`, `{% include %}`.
 
 ### Template inheritance
 
@@ -184,11 +184,11 @@ Register in `settings.TEMPLATES[0]["OPTIONS"]["context_processors"]`. Useful for
 
 ## Gotchas
 
-- **`render()` vs `HttpResponse`**, `render()` auto-wires the request context (needed for CSRF, auth). Using bare `HttpResponse` on HTML breaks forms.
-- **Empty templates**, `{% block content %}{% endblock %}` in base without default content is fine; `{% block content %}{% endblock content %}` (named) helps debugging.
-- **Template `DEBUG`**, set `"debug": True` in `TEMPLATES[0]["OPTIONS"]` to get usable error pages during development.
-- **Silent failures**, by default, if `{{ post.author.name }}` fails somewhere in the chain, Django returns empty string. Set `string_if_invalid` in `TEMPLATES` to a sentinel in dev to catch these.
-- **Class-based view learning curve**, the [CCBV (Classy Class-Based Views)](https://ccbv.co.uk/) site shows the full inheritance chain for every generic view; bookmark it before writing CBVs.
+- **`render()` vs `HttpResponse`**: `render()` auto-wires the request context (needed for CSRF, auth). Using bare `HttpResponse` on HTML breaks forms.
+- **Empty templates**: `{% block content %}{% endblock %}` in base without default content is fine; `{% block content %}{% endblock content %}` (named) helps debugging.
+- **Template `DEBUG`**: set `"debug": True` in `TEMPLATES[0]["OPTIONS"]` to get usable error pages during development.
+- **Silent failures**: by default, if `{{ post.author.name }}` fails somewhere in the chain, Django returns empty string. Set `string_if_invalid` in `TEMPLATES` to a sentinel in dev to catch these.
+- **Class-based view learning curve**: the [CCBV (Classy Class-Based Views)](https://ccbv.co.uk/) site shows the full inheritance chain for every generic view; bookmark it before writing CBVs.
 
 ## What's next
 

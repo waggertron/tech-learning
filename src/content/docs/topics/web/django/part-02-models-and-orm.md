@@ -172,12 +172,12 @@ print(connection.queries[-3:])     # last 3 SQL queries in this session
 
 ## Gotchas
 
-- **`get()` raises `DoesNotExist`**, always wrap in `try/except` or use `filter(...).first()`.
-- **`save()` triggers `pre_save`/`post_save` signals**, but `update()` does not, this is a common footgun when you expect side effects.
-- **`auto_now_add=True` only fires on `create()`**; `auto_now=True` fires on every `save()`.
-- **Integer vs BigInteger primary keys**, Django 3.2+ defaults to `BigAutoField`. Old projects may still be on `AutoField`; mixing `ForeignKey(on_delete=...)` across types breaks.
-- **Migrations with data migrations**, when you need to both change schema AND transform data, write a `RunPython` migration. Keep data migrations idempotent.
-- **Squashing migrations**, over time you'll accumulate hundreds of migrations per app. `python manage.py squashmigrations blog 0001 0150` consolidates them; squash once per release cycle, not continuously.
+- **`get()` raises `DoesNotExist`**: always wrap in `try/except` or use `filter(...).first()`.
+- **`save()` triggers `pre_save`/`post_save` signals**: but `update()` does not, this is a common footgun when you expect side effects.
+- **`auto_now_add=True` only fires on `create()`**: `auto_now=True` fires on every `save()`.
+- **Integer vs BigInteger primary keys**: Django 3.2+ defaults to `BigAutoField`. Old projects may still be on `AutoField`; mixing `ForeignKey(on_delete=...)` across types breaks.
+- **Migrations with data migrations**: when you need to both change schema AND transform data, write a `RunPython` migration. Keep data migrations idempotent.
+- **Squashing migrations**: over time you'll accumulate hundreds of migrations per app. `python manage.py squashmigrations blog 0001 0150` consolidates them; squash once per release cycle, not continuously.
 
 ## What's next
 
