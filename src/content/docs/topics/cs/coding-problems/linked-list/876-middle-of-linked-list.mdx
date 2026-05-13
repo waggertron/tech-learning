@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './876-middle-of-linked-list.py?raw';
+import practiceCodeTs from './876-middle-of-linked-list.ts?raw';
+import approach2TsCode from './876-middle-of-linked-list-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +27,21 @@ LeetCode 876 · [Link](https://leetcode.com/problems/middle-of-the-linked-list/)
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="middle-of-linked-list" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="middle-of-linked-list-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="middle-of-linked-list-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, two passes
 
 First pass: count nodes. Second pass: walk to the middle index.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def middle_node(head):
     n, cur = 0, head
@@ -40,6 +53,24 @@ def middle_node(head):
         cur = cur.next
     return cur
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function middleNode(head: ListNode | null): ListNode | null {
+    let n = 0, cur = head;
+    while (cur) { n++; cur = cur.next; }  // L1: O(n) count
+    cur = head;
+    for (let i = 0; i < Math.floor(n / 2); i++) cur = cur!.next;  // L2: O(n/2) walk
+    return cur;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -60,6 +91,8 @@ Correct but walks the list twice.
 
 `slow` advances one step per iteration; `fast` advances two. When `fast` reaches the end of the list, `slow` is at the middle. For even-length lists, `fast` runs off the end after the second-to-last node, leaving `slow` at the second middle (which is what the problem requires).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def middle_node(head):
     slow = fast = head
@@ -68,6 +101,20 @@ def middle_node(head):
         fast = fast.next.next         # L3: O(1) advance fast by 2
     return slow                        # L4: slow is at the middle
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function middleNode(head: ListNode | null): ListNode | null {
+    let slow = head, fast = head;
+    while (fast && fast.next) {        // L1: fast needs current and next node
+        slow = slow!.next;            // L2: O(1) advance slow by 1
+        fast = fast.next.next;        // L3: O(1) advance fast by 2
+    }
+    return slow;                       // L4: slow is at the middle
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -106,6 +153,14 @@ fast is None -> exit
 Return slow = node(4)  correct: second middle of 6
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="middle-of-linked-list-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Key takeaways
 
 - The 2:1 speed ratio means slow travels half the distance fast travels. When fast hits the end, slow is at the midpoint.
@@ -114,6 +169,8 @@ Return slow = node(4)  correct: second middle of 6
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -156,6 +213,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function middleNode(head: ListNode | null): ListNode | null {
+    let slow = head, fast = head;
+    while (fast && fast.next) { slow = slow!.next; fast = fast.next.next; }
+    return slow;
+}
+
+console.assert(middleNode(fromList([1, 2, 3, 4, 5]))!.val === 3);
+console.assert(middleNode(fromList([1, 2, 3, 4, 5, 6]))!.val === 4);
+console.assert(middleNode(fromList([1, 2]))!.val === 2);
+console.assert(middleNode(fromList([1]))!.val === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

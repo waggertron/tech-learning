@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './128-longest-consecutive-sequence.py?raw';
+import practiceCodeTs from './128-longest-consecutive-sequence.ts?raw';
+import approach2PyCode from './128-longest-consecutive-sequence-approach2.py?raw';
+import approach2TsCode from './128-longest-consecutive-sequence-approach2.ts?raw';
+import approach3PyCode from './128-longest-consecutive-sequence-approach3.py?raw';
+import approach3TsCode from './128-longest-consecutive-sequence-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 128 · [Link](https://leetcode.com/problems/longest-consecutive-sequenc
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="longest-consecutive-sequence" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="longest-consecutive-sequence-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="longest-consecutive-sequence-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, for each number, walk forward
 
 For each number `x`, linearly scan the array for `x+1`, `x+2`, until a miss.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_consecutive(nums: list[int]) -> int:
     best = 0                              # L1: O(1)
@@ -41,6 +57,25 @@ def longest_consecutive(nums: list[int]) -> int:
         best = max(best, length)          # L8: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestConsecutive(nums: number[]): number {
+    let best = 0;                                      // L1: O(1)
+    for (const x of nums) {                            // L2: outer loop, n iterations
+        let cur = x;                                   // L3: O(1)
+        let length = 1;                                // L4: O(1)
+        while (nums.includes(cur + 1)) {              // L5: O(n) membership per call
+            cur++;                                     // L6: O(1)
+            length++;                                  // L7: O(1)
+        }
+        best = Math.max(best, length);                 // L8: O(1)
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -64,6 +99,8 @@ Clearly doesn't meet the O(n) requirement, useful to see what the naive instinct
 
 After sorting, runs of consecutive integers are adjacent. Walk the sorted array.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_consecutive(nums: list[int]) -> int:
     if not nums:                                    # L1: O(1) guard
@@ -78,6 +115,26 @@ def longest_consecutive(nums: list[int]) -> int:
             cur = 1                                 # L8: O(1) reset
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestConsecutive(nums: number[]): number {
+    if (!nums.length) return 0;                     // L1: O(1) guard
+    const sorted = [...new Set(nums)].sort((a, b) => a - b); // L2: O(n log n)
+    let best = 1, cur = 1;                          // L3: O(1)
+    for (let i = 1; i < sorted.length; i++) {       // L4: loop, n iterations
+        if (sorted[i] === sorted[i - 1] + 1) {      // L5: O(1) comparison
+            cur++;                                   // L6: O(1)
+            best = Math.max(best, cur);             // L7: O(1)
+        } else {
+            cur = 1;                                 // L8: O(1) reset
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -96,12 +153,25 @@ The sort owns the cost; the rest is a single linear pass.
 
 Correct and simple, but violates the explicit O(n) constraint in the prompt.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="longest-consecutive-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="longest-consecutive-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Hash set + run-start detection (optimal)
 
 Put everything in a set. For each number, only start counting a run if `x - 1` is *not* in the set (so `x` is a run start). Then walk upward as long as the next integer is present.
 
 Each element is touched by a walking pointer at most once across the whole algorithm, giving total O(n).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_consecutive(nums: list[int]) -> int:
     num_set = set(nums)                    # L1: O(n) set construction
@@ -117,6 +187,27 @@ def longest_consecutive(nums: list[int]) -> int:
         best = max(best, length)           # L10: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestConsecutive(nums: number[]): number {
+    const numSet = new Set(nums);                   // L1: O(n) set construction
+    let best = 0;                                   // L2: O(1)
+    for (const x of numSet) {                       // L3: outer loop, n iterations
+        if (numSet.has(x - 1)) continue;            // L4: O(1) set lookup, skip non-starts
+        let cur = x;                                // L5: O(1)
+        let length = 1;                             // L6: O(1)
+        while (numSet.has(cur + 1)) {              // L7: O(1) set lookup per call
+            cur++;                                  // L8: O(1)
+            length++;                               // L9: O(1)
+        }
+        best = Math.max(best, length);              // L10: O(1)
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -136,6 +227,17 @@ L4's guard ensures each element is walked from its run-start exactly once. Even 
 - **Time:** O(n), driven by L1 (set build) plus the amortized-O(n) total inner-while work at L7.
 - **Space:** O(n) for the set.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="longest-consecutive-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="longest-consecutive-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ### Alternative: Union-Find
 
 A second O(n) approach unions every `x` with `x - 1` and `x + 1` in a disjoint-set structure and returns the largest component size. Same asymptotics, more code, worth knowing for the pattern.
@@ -152,6 +254,8 @@ The run-start trick is elegant and exact-fit to the problem's constraint. Recogn
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_longest_consecutive.py and run.
 # Uses the canonical implementation (Approach 3: hash set + run-start detection).
@@ -182,6 +286,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestConsecutive(nums: number[]): number {
+    const numSet = new Set(nums);
+    let best = 0;
+    for (const x of numSet) {
+        if (numSet.has(x - 1)) continue;
+        let cur = x;
+        let length = 1;
+        while (numSet.has(cur + 1)) { cur++; length++; }
+        best = Math.max(best, length);
+    }
+    return best;
+}
+
+console.assert(longestConsecutive([100, 4, 200, 1, 3, 2]) === 4);
+console.assert(longestConsecutive([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]) === 9);
+console.assert(longestConsecutive([]) === 0);
+console.assert(longestConsecutive([1]) === 1);
+console.assert(longestConsecutive([1, 2, 3, 4, 5]) === 5);
+console.assert(longestConsecutive([5, 4, 3, 2, 1]) === 5);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './271-encode-and-decode-strings.py?raw';
+import practiceCodeTs from './271-encode-and-decode-strings.ts?raw';
+import approach2PyCode from './271-encode-and-decode-strings-approach2.py?raw';
+import approach2TsCode from './271-encode-and-decode-strings-approach2.ts?raw';
+import approach3PyCode from './271-encode-and-decode-strings-approach3.py?raw';
+import approach3TsCode from './271-encode-and-decode-strings-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 271 (premium; free equivalent exists as **LC 659 / 1923**) · [Link](ht
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="encode-and-decode-strings" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="encode-and-decode-strings-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="encode-and-decode-strings-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, single-char delimiter + escape
 
 Pick a rare character as a delimiter, escape any occurrences in the source.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def encode(strs: list[str]) -> str:          # L1: join with escaped delimiter
     return "\x1f".join(s.replace("\\", "\\\\").replace("\x1f", "\\u") for s in strs)
@@ -38,6 +54,19 @@ def decode(s: str) -> list[str]:             # L2: split + unescape
     result, parts = [], s.split("\x1f")
     return [p.replace("\\u", "\x1f").replace("\\\\", "\\") for p in parts]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function encode(strs: string[]): string {
+    return strs.map(s => s.replace(/\\/g, '\\\\').replace(/\x1f/g, '\\u')).join('\x1f');
+}
+
+function decode(s: string): string[] {
+    return s.split('\x1f').map(p => p.replace(/\\u/g, '\x1f').replace(/\\\\/g, '\\'));
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -60,6 +89,8 @@ Fragile: if the input can contain ANY ASCII (or Unicode), picking a "rare" delim
 
 Offload escaping to a proven serializer.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import json
 
@@ -69,6 +100,19 @@ def encode(strs: list[str]) -> str:
 def decode(s: str) -> list[str]:
     return json.loads(s)           # L2: O(N) JSON decode
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function encode(strs: string[]): string {
+    return JSON.stringify(strs);   // L1: O(N) JSON encode
+}
+
+function decode(s: string): string[] {
+    return JSON.parse(s);          // L2: O(N) JSON decode
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -87,10 +131,23 @@ JSON serialization and deserialization are linear in the total character count.
 
 Correct and robust. Not typically accepted on LeetCode because the problem wants you to design the scheme, but worth knowing for real-world code, the right answer unless there's a reason to roll your own.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="encode-decode-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="encode-decode-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Length-prefix encoding (optimal, self-delimiting)
 
 Prefix each string with its length and a fixed delimiter (e.g., `#`). The length tells the decoder exactly how many characters to take next, no escaping needed.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def encode(strs: list[str]) -> str:
     return "".join(f"{len(s)}#{s}" for s in strs)  # L1: O(N) one pass
@@ -104,6 +161,27 @@ def decode(s: str) -> list[str]:
         i = j + 1 + length              # L7: O(1) advance
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function encode(strs: string[]): string {
+    return strs.map(s => `${s.length}#${s}`).join('');  // L1: O(N) one pass
+}
+
+function decode(s: string): string[] {
+    const result: string[] = [];
+    let i = 0;                                           // L2: O(1) init
+    while (i < s.length) {                               // L3: loop
+        const j = s.indexOf('#', i);                     // L4: O(len_digits) scan
+        const length = parseInt(s.slice(i, j));          // L5: O(len_digits) parse
+        result.push(s.slice(j + 1, j + 1 + length));    // L6: O(length) slice
+        i = j + 1 + length;                              // L7: O(1) advance
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -126,6 +204,17 @@ Each character in the original strings is visited exactly once during the decode
 
 This works for any character content, including the `#` delimiter, because the length prefix makes the scheme self-delimiting. The canonical interview answer.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="encode-decode-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="encode-decode-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -138,6 +227,8 @@ Length-prefix encoding is the pattern behind many real-world formats, Pascal str
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_encode_decode.py and run.
 # Uses the canonical implementation (Approach 3: length-prefix encoding).
@@ -170,6 +261,40 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function encode(strs: string[]): string {
+    return strs.map(s => `${s.length}#${s}`).join('');
+}
+
+function decode(s: string): string[] {
+    const result: string[] = [];
+    let i = 0;
+    while (i < s.length) {
+        const j = s.indexOf('#', i);
+        const length = parseInt(s.slice(i, j));
+        result.push(s.slice(j + 1, j + 1 + length));
+        i = j + 1 + length;
+    }
+    return result;
+}
+
+const cases: string[][] = [
+    ["hello", "world", "foo", "bar"],
+    [""],
+    ["a"],
+    [],
+    ["hello#world", "foo#bar"],
+    ["5#abc", "def"],
+];
+for (const strs of cases) {
+    console.assert(JSON.stringify(decode(encode(strs))) === JSON.stringify(strs));
+}
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

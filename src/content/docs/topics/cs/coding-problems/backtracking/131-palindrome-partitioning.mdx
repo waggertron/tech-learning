@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './131-palindrome-partitioning.py?raw';
+import practiceCodeTs from './131-palindrome-partitioning.ts?raw';
+import approach2PyCode from './131-palindrome-partitioning-approach2.py?raw';
+import approach2TsCode from './131-palindrome-partitioning-approach2.ts?raw';
+import approach3PyCode from './131-palindrome-partitioning-approach3.py?raw';
+import approach3TsCode from './131-palindrome-partitioning-approach3.ts?raw';
 
 ## Problem
 
@@ -23,7 +30,14 @@ LeetCode 131 · [Link](https://leetcode.com/problems/palindrome-partitioning/) �
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="palindrome-partitioning" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="palindrome-partitioning-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="palindrome-partitioning-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, backtracking with per-cut palindrome check
 
@@ -72,6 +86,8 @@ There are 2^(n-1) possible cut positions, so the search space is O(2^n). Each ca
 
 Avoid slicing by checking the palindrome inline.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def partition(s):
     result = []
@@ -99,6 +115,43 @@ def partition(s):
     backtrack(0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function partition(s: string): string[][] {
+    const result: string[][] = [];
+    const path: string[] = [];
+    const n = s.length;
+
+    function isPal(l: number, r: number): boolean {
+        while (l < r) {
+            if (s[l] !== s[r]) return false;
+            l++;
+            r--;                                   // L1: O(k) two-pointer check
+        }
+        return true;
+    }
+
+    function backtrack(start: number): void {
+        if (start === n) {
+            result.push([...path]);                // L2: O(n) copy
+            return;
+        }
+        for (let end = start; end < n; end++) {
+            if (isPal(start, end)) {
+                path.push(s.slice(start, end + 1)); // L3: O(k) slice for result
+                backtrack(end + 1);                 // L4: recurse
+                path.pop();
+            }
+        }
+    }
+
+    backtrack(0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -114,10 +167,23 @@ def partition(s):
 - **Time:** O(n · 2^n) worst case.
 - **Space:** O(n) recursion.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="palindrome-partitioning-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="palindrome-partitioning-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Precompute palindrome DP table (optimal constant factor)
 
 Precompute `is_pal[i][j]` for all substrings in O(n^2). Then the palindrome check during backtracking is O(1).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def partition(s):
     n = len(s)
@@ -147,6 +213,45 @@ def partition(s):
     backtrack(0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function partition(s: string): string[][] {
+    const n = s.length;
+    // isPal[i][j] = true iff s[i..j] is a palindrome
+    const isPal: boolean[][] = Array.from({ length: n }, () => new Array(n).fill(false));
+    for (let i = 0; i < n; i++) isPal[i][i] = true;         // L1: single chars
+    for (let len = 2; len <= n; len++) {
+        for (let i = 0; i <= n - len; i++) {
+            const j = i + len - 1;
+            if (s[i] === s[j] && (len === 2 || isPal[i + 1][j - 1]))
+                isPal[i][j] = true;                          // L2: O(1) DP recurrence
+        }
+    }
+
+    const result: string[][] = [];
+    const path: string[] = [];
+
+    function backtrack(start: number): void {
+        if (start === n) {
+            result.push([...path]);                          // L3: O(n) copy
+            return;
+        }
+        for (let end = start; end < n; end++) {
+            if (isPal[start][end]) {                         // L4: O(1) table lookup
+                path.push(s.slice(start, end + 1));          // L5: O(k) slice for result
+                backtrack(end + 1);                          // L6: recurse
+                path.pop();
+            }
+        }
+    }
+
+    backtrack(0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -164,6 +269,17 @@ The O(n^2) DP preprocessing pays off when there are many palindrome checks; each
 - **Time:** O(n · 2^n). The DP table is O(n^2) once; the backtracking work dominates asymptotically but is constant-factor faster.
 - **Space:** O(n^2) DP + O(n) recursion.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="palindrome-partitioning-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="palindrome-partitioning-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -176,6 +292,8 @@ All three have the same dominant term (exponential number of partitions). DP pre
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def partition(s):
     n = len(s)
@@ -211,6 +329,46 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function partition(s: string): string[][] {
+    const n = s.length;
+    const isPal: boolean[][] = Array.from({ length: n }, () => new Array(n).fill(false));
+    for (let i = 0; i < n; i++) isPal[i][i] = true;
+    for (let len = 2; len <= n; len++) {
+        for (let i = 0; i <= n - len; i++) {
+            const j = i + len - 1;
+            if (s[i] === s[j] && (len === 2 || isPal[i + 1][j - 1])) isPal[i][j] = true;
+        }
+    }
+    const result: string[][] = [];
+    const path: string[] = [];
+    function backtrack(start: number): void {
+        if (start === n) { result.push([...path]); return; }
+        for (let end = start; end < n; end++) {
+            if (isPal[start][end]) {
+                path.push(s.slice(start, end + 1));
+                backtrack(end + 1);
+                path.pop();
+            }
+        }
+    }
+    backtrack(0);
+    return result;
+}
+
+const norm = (arr: string[][]): string =>
+    JSON.stringify(arr.map(a => [...a]).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1));
+
+console.assert(norm(partition('aab')) === norm([['a','a','b'],['aa','b']]));
+console.assert(JSON.stringify(partition('a')) === JSON.stringify([['a']]));
+console.assert(norm(partition('aaa')) === norm([['a','a','a'],['a','aa'],['aa','a'],['aaa']]));
+console.assert(norm(partition('abc')) === norm([['a','b','c']]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

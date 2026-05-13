@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, graphs, bfs, matrix, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './542-01-matrix.py?raw';
+import practiceCodeTs from './542-01-matrix.ts?raw';
+import approach2PyCode from './542-01-matrix-approach2.py?raw';
+import approach2TsCode from './542-01-matrix-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 542 · [Link](https://leetcode.com/problems/01-matrix/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="01-matrix" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="01-matrix-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="01-matrix-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Multi-source BFS from all zeros simultaneously
 
 The key insight is to seed the BFS queue with every `0` cell at distance 0, then expand outward. Because BFS explores by distance levels, the first time a `1` cell is reached it has the shortest possible distance to any `0`. Running a separate BFS from each `0` would be O((m*n)^2) in the worst case; seeding all zeros at once keeps it O(m*n).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -53,6 +67,41 @@ def update_matrix(mat):
 
     return dist                                            # L10: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function updateMatrix(mat: number[][]): number[][] {
+    const rows = mat.length, cols = mat[0].length;                    // L1: grid dimensions
+    const dist: number[][] = Array.from({ length: rows },
+        () => new Array(cols).fill(Infinity));                        // L2: O(m*n) distance matrix
+    const q: [number, number][] = [];
+
+    for (let r = 0; r < rows; r++) {                                  // L3: seed queue with all 0-cells
+        for (let c = 0; c < cols; c++) {
+            if (mat[r][c] === 0) {
+                dist[r][c] = 0;                                       // L4: O(1) distance for 0-cells
+                q.push([r, c]);                                       // L5: O(1) enqueue
+            }
+        }
+    }
+
+    let head = 0;
+    while (head < q.length) {                                         // L6: BFS main loop
+        const [r, c] = q[head++];                                     // L7: O(1) dequeue
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && dist[nr][nc] === Infinity) {
+                dist[nr][nc] = dist[r][c] + 1;                        // L8: O(1) update distance
+                q.push([nr, nc]);                                     // L9: O(1) enqueue neighbor
+            }
+        }
+    }
+
+    return dist;                                                      // L10: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -77,6 +126,17 @@ Each cell enters the queue at most once (the `dist == inf` guard in the neighbor
 
 Treat all `0` cells as a single virtual source at distance 0. BFS explores in shells: all cells at distance 1 before distance 2, etc. The first time any `1` cell is dequeued, its recorded distance is the true shortest path to the nearest `0`. This is the same principle as Rotting Oranges (994) and Walls and Gates (286).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="01-matrix-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="01-matrix-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -86,6 +146,8 @@ Treat all `0` cells as a single virtual source at distance 0. BFS explores in sh
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -130,6 +192,38 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function updateMatrix(mat: number[][]): number[][] {
+    const rows = mat.length, cols = mat[0].length;
+    const dist: number[][] = Array.from({ length: rows }, () => new Array(cols).fill(Infinity));
+    const q: [number, number][] = [];
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            if (mat[r][c] === 0) { dist[r][c] = 0; q.push([r, c]); }
+    let head = 0;
+    while (head < q.length) {
+        const [r, c] = q[head++];
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && dist[nr][nc] === Infinity) {
+                dist[nr][nc] = dist[r][c] + 1;
+                q.push([nr, nc]);
+            }
+        }
+    }
+    return dist;
+}
+
+console.assert(JSON.stringify(updateMatrix([[0,0,0],[0,1,0],[0,0,0]])) === JSON.stringify([[0,0,0],[0,1,0],[0,0,0]]));
+console.assert(JSON.stringify(updateMatrix([[0,0,0],[0,1,0],[1,1,1]])) === JSON.stringify([[0,0,0],[0,1,0],[1,2,1]]));
+console.assert(JSON.stringify(updateMatrix([[0,0],[0,0]])) === JSON.stringify([[0,0],[0,0]]));
+console.assert(JSON.stringify(updateMatrix([[0]])) === JSON.stringify([[0]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

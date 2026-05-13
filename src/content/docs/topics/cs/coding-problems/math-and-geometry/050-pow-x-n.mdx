@@ -5,11 +5,18 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './050-pow-x-n.py?raw';
+import practiceCodeTs from './050-pow-x-n.ts?raw';
+import approach2PyCode from './050-pow-x-n-approach2.py?raw';
+import approach2TsCode from './050-pow-x-n-approach2.ts?raw';
+import approach3PyCode from './050-pow-x-n-approach3.py?raw';
+import approach3TsCode from './050-pow-x-n-approach3.ts?raw';
 
 ## Problem
 
@@ -23,10 +30,19 @@ LeetCode 50 · [Link](https://leetcode.com/problems/powx-n/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="pow-x-n" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="pow-x-n-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="pow-x-n-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, multiply n times
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def my_pow(x, n):
     if n < 0:               # L1: O(1)
@@ -37,6 +53,18 @@ def my_pow(x, n):
         result *= x         # L5: O(1)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function myPow(x: number, n: number): number {
+    if (n < 0) { x = 1 / x; n = -n; }   // L1-L3: O(1)
+    let result = 1.0;
+    for (let i = 0; i < n; i++) result *= x;  // L4, L5: loop |n| times
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,6 +87,8 @@ Times out for large `|n|`.
 
 `x^n = (x^(n/2))² · (x if n odd else 1)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def my_pow(x, n):
     if n < 0:                           # L1: O(1)
@@ -75,6 +105,27 @@ def my_pow(x, n):
 
     return helper(x, n)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function myPow(x: number, n: number): number {
+    if (n < 0) {                                    // L1: O(1)
+        x = 1 / x;                                 // L2: O(1)
+        n = -n;                                    // L3: O(1)
+    }
+
+    function helper(base: number, exp: number): number {
+        if (exp === 0) return 1;                    // L4: base case O(1)
+        const half = helper(base, Math.floor(exp / 2));  // L5: recurse on half exponent
+        if (exp % 2 === 0) return half * half;      // L6: O(1)
+        return half * half * base;                  // L7: O(1) for odd exp
+    }
+
+    return helper(x, n);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -92,8 +143,21 @@ Each recursive call halves the exponent; there are log n levels, each doing O(1)
 - **Time:** O(log |n|), driven by L5 (halving the exponent at each level).
 - **Space:** O(log |n|) recursion stack depth.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="pow-x-n-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="pow-x-n-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Iterative exponentiation by squaring (optimal)
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def my_pow(x, n):
     if n < 0:               # L1: O(1)
@@ -107,6 +171,25 @@ def my_pow(x, n):
         n >>= 1             # L8: O(1), shift to next bit
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function myPow(x: number, n: number): number {
+    if (n < 0) {            // L1: O(1)
+        x = 1 / x;         // L2: O(1)
+        n = -n;             // L3: O(1)
+    }
+    let result = 1.0;       // L4: O(1)
+    while (n) {             // L5: loop log n times
+        if (n & 1) result *= x;   // L6: O(1), multiply in if odd bit
+        x *= x;             // L7: O(1), square x each iteration
+        n >>= 1;            // L8: O(1), shift to next bit
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -128,6 +211,17 @@ The while loop iterates once per bit in `n`; there are log n bits.
 ### Why it works
 Every integer `n` has a binary expansion. `x^n = prod(x^(2^k))` over the bit positions `k` where `n` has a 1. Iterate the bits, squaring `x` each time; multiply into the result when the current bit is set.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="pow-x-n-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="pow-x-n-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -140,6 +234,8 @@ Fast exponentiation is the template for modular exponentiation (common in number
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_050.py and run.
 # Uses the canonical implementation (Approach 3: iterative squaring).
@@ -168,6 +264,30 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function myPow(x: number, n: number): number {
+    if (n < 0) { x = 1 / x; n = -n; }
+    let result = 1.0;
+    while (n) {
+        if (n & 1) result *= x;
+        x *= x;
+        n >>= 1;
+    }
+    return result;
+}
+
+console.assert(Math.abs(myPow(2.0, 10) - 1024.0) < 1e-9);
+console.assert(Math.abs(myPow(2.0, -2) - 0.25) < 1e-9);
+console.assert(Math.abs(myPow(2.0, 0) - 1.0) < 1e-9);
+console.assert(Math.abs(myPow(1.0, 1000000) - 1.0) < 1e-9);
+console.assert(Math.abs(myPow(0.0, 5) - 0.0) < 1e-9);
+console.assert(Math.abs(myPow(2.0, 1) - 2.0) < 1e-9);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

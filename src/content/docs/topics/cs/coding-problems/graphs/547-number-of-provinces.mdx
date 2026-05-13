@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, graphs, union-find, dfs, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './547-number-of-provinces.py?raw';
+import practiceCodeTs from './547-number-of-provinces.ts?raw';
+import approach2PyCode from './547-number-of-provinces-approach2.py?raw';
+import approach2TsCode from './547-number-of-provinces-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 547 · [Link](https://leetcode.com/problems/number-of-provinces/) · *M
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="number-of-provinces" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="number-of-provinces-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="number-of-provinces-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: DFS, count connected components
 
 Mark each city as visited when first reached. Each unvisited city that triggers a new DFS is a new province.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_circle_num_dfs(isConnected):
     n = len(isConnected)                                    # L1: number of cities
@@ -48,6 +62,34 @@ def find_circle_num_dfs(isConnected):
 
     return provinces
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCircleNum(isConnected: number[][]): number {
+    const n = isConnected.length;                           // L1: number of cities
+    const visited = new Array(n).fill(false);               // L2: O(n) visited array
+    let provinces = 0;                                      // L3: O(1)
+
+    function dfs(city: number): void {
+        visited[city] = true;                               // L4: O(1) mark visited
+        for (let neighbor = 0; neighbor < n; neighbor++) {  // L5: scan all potential neighbors
+            if (isConnected[city][neighbor] === 1 && !visited[neighbor]) {
+                dfs(neighbor);                              // L6: O(1) per call, recurse
+            }
+        }
+    }
+
+    for (let city = 0; city < n; city++) {                  // L7: outer scan
+        if (!visited[city]) {
+            provinces++;                                    // L8: O(1) new province
+            dfs(city);                                      // L9: DFS from unvisited city
+        }
+    }
+    return provinces;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -70,6 +112,8 @@ The DFS for each city scans its entire row in `isConnected` (L5). Every city is 
 
 Union the pairs of directly connected cities. Count distinct root nodes at the end.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_circle_num_uf(isConnected):
     n = len(isConnected)                                    # L1: number of cities
@@ -93,23 +137,52 @@ def find_circle_num_uf(isConnected):
 
     return sum(1 for i in range(n) if find(i) == i)        # L8: count distinct roots
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCircleNum(isConnected: number[][]): number {
+    const n = isConnected.length;                           // L1: number of cities
+    const parent = Array.from({ length: n }, (_, i) => i); // L2: O(n) init
 
-**Where the time goes, line by line**
+    function find(x: number): number {
+        while (parent[x] !== x) {
+            parent[x] = parent[parent[x]];                 // L3: path halving
+            x = parent[x];
+        }
+        return x;
+    }
 
-*Variables: n = number of cities.*
+    function union(a: number, b: number): void {
+        const ra = find(a), rb = find(b);                   // L4: O(alpha) each
+        if (ra !== rb) parent[ra] = rb;                     // L5: O(1) link roots
+    }
 
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L2 (init parent) | O(1) per city | n | O(n) |
-| L6 (scan upper triangle) | O(1) | n * (n-1) / 2 | O(n^2) |
-| **L7 (union calls)** | **O(alpha(n))** | **at most n^2 / 2** | **O(n^2 * alpha) ← dominates** |
-| L8 (count roots) | O(alpha(n)) per find | n | O(n * alpha) |
+    for (let i = 0; i < n; i++) {                           // L6: scan upper triangle
+        for (let j = i + 1; j < n; j++) {
+            if (isConnected[i][j] === 1) union(i, j);       // L7: O(alpha) union
+        }
+    }
 
-The outer loop scans the upper triangle of the matrix (L6), which is unavoidable. alpha(n) is inverse-Ackermann, effectively a constant for any real n.
+    return Array.from({ length: n }, (_, i) => i).filter(i => find(i) === i).length;  // L8
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(n^2 * alpha(n)), effectively O(n^2), driven by L6/L7.
 - **Space:** O(n) parent array.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="number-of-provinces-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="number-of-provinces-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -122,6 +195,8 @@ Both approaches are bounded by O(n^2) because you must read the adjacency matrix
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_circle_num(isConnected):
     n = len(isConnected)
@@ -163,6 +238,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCircleNum(isConnected: number[][]): number {
+    const n = isConnected.length;
+    const visited = new Array(n).fill(false);
+    let provinces = 0;
+
+    function dfs(city: number): void {
+        visited[city] = true;
+        for (let nb = 0; nb < n; nb++)
+            if (isConnected[city][nb] === 1 && !visited[nb]) dfs(nb);
+    }
+
+    for (let city = 0; city < n; city++) {
+        if (!visited[city]) { provinces++; dfs(city); }
+    }
+    return provinces;
+}
+
+console.assert(findCircleNum([[1,1,0],[1,1,0],[0,0,1]]) === 2);
+console.assert(findCircleNum([[1,0,0],[0,1,0],[0,0,1]]) === 3);
+console.assert(findCircleNum([[1,1,1],[1,1,1],[1,1,1]]) === 1);
+console.assert(findCircleNum([[1]]) === 1);
+console.assert(findCircleNum([[1,1,0],[1,1,1],[0,1,1]]) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

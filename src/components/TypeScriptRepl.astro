@@ -166,6 +166,17 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     const runtimes: number[] = [];
     const view = makeEditor(host, original);
 
+    // Re-trigger CodeMirror layout measurement when a Starlight tab panel
+    // becomes visible (panel is briefly hidden during web component setup).
+    const panel = host.closest('[role="tabpanel"]');
+    if (panel) {
+      new MutationObserver(() => {
+        if (!(panel as HTMLElement).hasAttribute('hidden')) {
+          view.requestMeasure();
+        }
+      }).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+    }
+
     resetBtn.addEventListener('click', () => {
       view.dispatch({
         changes: { from: 0, to: view.state.doc.length, insert: original },

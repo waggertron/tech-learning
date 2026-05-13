@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './355-design-twitter.py?raw';
+import practiceCodeTs from './355-design-twitter.ts?raw';
+import approach2TsCode from './355-design-twitter-approach2.ts?raw';
 
 ## Problem
 
@@ -26,12 +30,21 @@ LeetCode 355 · [Link](https://leetcode.com/problems/design-twitter/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="design-twitter" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="design-twitter-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="design-twitter-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, merge all tweets and sort
 
 Per-user tweet list; on `getNewsFeed`, concatenate relevant lists and sort by timestamp.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -59,6 +72,44 @@ class Twitter:
         feed.sort(reverse=True)                            # L5: O(T log T) sort
         return [t for _, t in feed[:10]]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Twitter {
+    private time = 0;
+    private tweets = new Map<number, Array<[number, number]>>();
+    private follows = new Map<number, Set<number>>();
+
+    private getTweets(u: number): Array<[number, number]> {
+        if (!this.tweets.has(u)) this.tweets.set(u, []);
+        return this.tweets.get(u)!;
+    }
+    private getFollows(u: number): Set<number> {
+        if (!this.follows.has(u)) this.follows.set(u, new Set());
+        return this.follows.get(u)!;
+    }
+
+    postTweet(userId: number, tweetId: number): void {
+        this.getTweets(userId).push([this.time++, tweetId]);  // L1: O(1) append
+    }
+    follow(followerId: number, followeeId: number): void {
+        this.getFollows(followerId).add(followeeId);           // L2: O(1) set add
+    }
+    unfollow(followerId: number, followeeId: number): void {
+        this.getFollows(followerId).delete(followeeId);        // L3: O(1) set delete
+    }
+    getNewsFeed(userId: number): number[] {
+        const users = new Set([userId, ...this.getFollows(userId)]);
+        const feed: Array<[number, number]> = [];
+        for (const u of users)
+            feed.push(...this.getTweets(u));                   // L4: O(T) collect all
+        feed.sort((a, b) => b[0] - a[0]);                     // L5: O(T log T) sort
+        return feed.slice(0, 10).map(([, tid]) => tid);
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -78,6 +129,8 @@ class Twitter:
 
 Store each user's tweets as a list (append-only, so it's naturally sorted by time). On `getNewsFeed`, k-way-merge the latest 10 from each followed user using a max-heap of size at most k + 1.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 import heapq
@@ -119,6 +172,96 @@ class Twitter:
                 heapq.heappush(heap, (-t2, u, i, tid2))   # L8: O(log k) push
         return feed
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Min-heap on negated timestamp acts as max-heap by time.
+// Each entry: [negTime, userId, tweetIndex, tweetId]
+type HeapEntry = [number, number, number, number];
+
+class MinHeap {
+    private data: HeapEntry[] = [];
+    get size(): number { return this.data.length; }
+    push(val: HeapEntry): void {
+        this.data.push(val);
+        this._siftUp(this.data.length - 1);
+    }
+    pop(): HeapEntry {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) { this.data[0] = last; this._siftDown(0); }
+        return top;
+    }
+    private _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p][0] <= this.data[i][0]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    private _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l][0] < this.data[smallest][0]) smallest = l;
+            if (r < n && this.data[r][0] < this.data[smallest][0]) smallest = r;
+            if (smallest === i) break;
+            [this.data[smallest], this.data[i]] = [this.data[i], this.data[smallest]]; i = smallest;
+        }
+    }
+}
+
+class Twitter {
+    private time = 0;
+    private tweets = new Map<number, Array<[number, number]>>();
+    private follows = new Map<number, Set<number>>();
+
+    private getTweets(u: number): Array<[number, number]> {
+        if (!this.tweets.has(u)) this.tweets.set(u, []);
+        return this.tweets.get(u)!;
+    }
+    private getFollows(u: number): Set<number> {
+        if (!this.follows.has(u)) this.follows.set(u, new Set());
+        return this.follows.get(u)!;
+    }
+
+    postTweet(userId: number, tweetId: number): void {
+        this.getTweets(userId).push([this.time++, tweetId]);  // L1: O(1)
+    }
+    follow(followerId: number, followeeId: number): void {
+        this.getFollows(followerId).add(followeeId);           // L2: O(1)
+    }
+    unfollow(followerId: number, followeeId: number): void {
+        this.getFollows(followerId).delete(followeeId);        // L3: O(1)
+    }
+
+    getNewsFeed(userId: number): number[] {
+        const users = new Set([userId, ...this.getFollows(userId)]);
+        const heap = new MinHeap();
+        // Seed: latest tweet from each user              L4: O(k) seed
+        for (const u of users) {
+            const tw = this.getTweets(u);
+            if (tw.length > 0) {
+                const i = tw.length - 1;
+                heap.push([-tw[i][0], u, i, tw[i][1]]);
+            }
+        }
+        const feed: number[] = [];
+        while (heap.size > 0 && feed.length < 10) {      // L6: at most 10 iters
+            const [, u, i, tid] = heap.pop();             // L7: O(log k) pop
+            feed.push(tid);
+            if (i > 0) {
+                const tw = this.getTweets(u);
+                heap.push([-tw[i - 1][0], u, i - 1, tw[i - 1][1]]); // L8: O(log k) push
+            }
+        }
+        return feed;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -138,13 +281,17 @@ The heap never exceeds k + 1 entries. Each of the 10 pops and up to 10 pushes co
 
 Same pattern as problem 23 (Merge k Sorted Lists).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="design-twitter-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Cap per-user feed; global merge
 
 If each user only ever needs the last 10 tweets, truncate the per-user list to length 10 (a rolling window). Then merge at most `10 · k` tweets on `getNewsFeed`.
-
-```python
-# Identical to Approach 2 but truncate self.tweets[userId] to length 10 on postTweet.
-```
 
 **Complexity**
 - `getNewsFeed`: O(10 · k).
@@ -154,6 +301,8 @@ Lower memory if you don't need long-term history.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_355.py and run.
 # Uses the heap k-way merge approach (Approach 2).
@@ -222,6 +371,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses the heap k-way merge approach (Approach 2).
+// See 355-design-twitter-approach2.ts for the full implementation.
+const t = new Twitter();
+t.postTweet(1, 5);
+console.assert(JSON.stringify(t.getNewsFeed(1)) === JSON.stringify([5]));
+
+t.follow(1, 2);
+t.postTweet(2, 6);
+console.assert(JSON.stringify(t.getNewsFeed(1)) === JSON.stringify([6, 5]));
+
+t.unfollow(1, 2);
+console.assert(JSON.stringify(t.getNewsFeed(1)) === JSON.stringify([5]));
+
+const t2 = new Twitter();
+for (let i = 0; i < 12; i++) t2.postTweet(1, i);
+const feed = t2.getNewsFeed(1);
+console.assert(feed.length === 10);
+console.assert(JSON.stringify(feed) === JSON.stringify([11, 10, 9, 8, 7, 6, 5, 4, 3, 2]));
+
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

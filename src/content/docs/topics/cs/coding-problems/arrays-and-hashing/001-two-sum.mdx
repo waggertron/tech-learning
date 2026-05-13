@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-05-01
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './001-two-sum.py?raw';
+import practiceCodeTs from './001-two-sum.ts?raw';
+import approach2PyCode from './001-two-sum-approach2.py?raw';
+import approach2TsCode from './001-two-sum-approach2.ts?raw';
+import approach3PyCode from './001-two-sum-approach3.py?raw';
+import approach3TsCode from './001-two-sum-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 1 · [Link](https://leetcode.com/problems/two-sum/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="two-sum" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="two-sum-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="two-sum-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every pair
 
 Iterate all `(i, j)` pairs with `i < j`; return when `nums[i] + nums[j] == target`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def two_sum(nums: list[int], target: int) -> list[int]:
     n = len(nums)                              # L1: O(1)
@@ -39,6 +55,22 @@ def two_sum(nums: list[int], target: int) -> list[int]:
                 return [i, j]                  # L5: O(1) return
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(nums: number[], target: number): number[] {
+    const n = nums.length;                          // L1: O(1)
+    for (let i = 0; i < n; i++) {                  // L2: outer loop, n iterations
+        for (let j = i + 1; j < n; j++) {          // L3: inner loop, up to n-i-1 iterations
+            if (nums[i] + nums[j] === target)       // L4: O(1) check
+                return [i, j];                      // L5: O(1) return
+        }
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -61,6 +93,8 @@ The nested loops make this quadratic. For `n = 10⁴`, that's ~50 million compar
 
 Sort by value (keeping original indices), then use two pointers from both ends.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def two_sum(nums: list[int], target: int) -> list[int]:
     indexed = sorted(enumerate(nums), key=lambda p: p[1])  # L1: O(n log n)
@@ -75,6 +109,25 @@ def two_sum(nums: list[int], target: int) -> list[int]:
             r -= 1                                          # L9: O(1)
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(nums: number[], target: number): number[] {
+    const indexed = nums.map((v, i) => [i, v] as [number, number])
+        .sort((a, b) => a[1] - b[1]);                      // L1: O(n log n)
+    let l = 0, r = indexed.length - 1;                     // L2: O(1)
+    while (l < r) {                                         // L3: at most n iterations
+        const s = indexed[l][1] + indexed[r][1];           // L4: O(1) sum
+        if (s === target)                                   // L5: O(1) check
+            return [indexed[l][0], indexed[r][0]].sort((a, b) => a - b); // L6: O(1)
+        if (s < target) l++;                               // L7-L8: O(1)
+        else r--;                                           // L9: O(1)
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -94,10 +147,23 @@ The sort owns the total cost; the two-pointer scan is linear.
 
 This is the right approach for LeetCode **167. Two Sum II** (input already sorted), where it drops to O(n) time and O(1) space.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="two-sum-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="two-sum-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Hash map in a single pass (optimal)
 
 For each element `x`, look up its complement `target - x` in a hash map of elements seen so far. If it's there, we've found the pair.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def two_sum(nums: list[int], target: int) -> list[int]:
     seen = {}                          # L1: O(1), empty dict
@@ -108,6 +174,22 @@ def two_sum(nums: list[int], target: int) -> list[int]:
         seen[x] = i                    # L6: O(1) average hash insert
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(nums: number[], target: number): number[] {
+    const seen = new Map<number, number>();  // L1: O(1), empty map
+    for (let i = 0; i < nums.length; i++) { // L2: loop, n iterations
+        const complement = target - nums[i]; // L3: O(1) arithmetic
+        if (seen.has(complement))            // L4: O(1) average hash lookup
+            return [seen.get(complement)!, i]; // L5: O(1) return
+        seen.set(nums[i], i);               // L6: O(1) average hash insert
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -128,6 +210,17 @@ Every operation is O(1) average per iteration. One pass over n elements gives O(
 - **Time:** O(n), driven by L4/L6 (hash operations per element).
 - **Space:** O(n). Hash map can hold up to `n` entries.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="two-sum-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="two-sum-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -140,6 +233,8 @@ The hash-map approach is the canonical answer. It's strictly better than sort on
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_two_sum.py and run.
 # Uses the canonical implementation (Approach 3: hash map).
@@ -165,6 +260,28 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(nums: number[], target: number): number[] {
+    const seen = new Map<number, number>();
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (seen.has(complement)) return [seen.get(complement)!, i];
+        seen.set(nums[i], i);
+    }
+    return [];
+}
+
+console.assert(JSON.stringify(twoSum([2, 7, 11, 15], 9)) === JSON.stringify([0, 1]));
+console.assert(JSON.stringify(twoSum([3, 2, 4], 6)) === JSON.stringify([1, 2]));
+console.assert(JSON.stringify(twoSum([3, 3], 6)) === JSON.stringify([0, 1]));
+console.assert(JSON.stringify(twoSum([1, 2, 3, 4, 5], 9)) === JSON.stringify([3, 4]));
+console.assert(JSON.stringify(twoSum([0, 4], 4)) === JSON.stringify([0, 1]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

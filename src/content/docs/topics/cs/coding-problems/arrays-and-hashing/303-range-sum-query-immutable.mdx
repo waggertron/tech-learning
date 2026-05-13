@@ -8,8 +8,13 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './303-range-sum-query-immutable.py?raw';
+import practiceCodeTs from './303-range-sum-query-immutable.ts?raw';
+import approach2PyCode from './303-range-sum-query-immutable-approach2.py?raw';
+import approach2TsCode from './303-range-sum-query-immutable-approach2.ts?raw';
 
 ## Problem
 
@@ -28,12 +33,21 @@ LeetCode 303 · [Link](https://leetcode.com/problems/range-sum-query-immutable/)
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="range-sum-query-immutable" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="range-sum-query-immutable-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="range-sum-query-immutable-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, sum on every query
 
 Sum `nums[left..right]` from scratch on each query call.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class NumArray:
     def __init__(self, nums: list[int]):
@@ -42,6 +56,23 @@ class NumArray:
     def sum_range(self, left: int, right: int) -> int:
         return sum(self.nums[left:right + 1])        # L2: O(n) per query
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class NumArray {
+    private nums: number[];
+    constructor(nums: number[]) {
+        this.nums = nums;                            // L1: O(n) store
+    }
+    sumRange(left: number, right: number): number {
+        let s = 0;
+        for (let i = left; i <= right; i++) s += this.nums[i]; // L2: O(n) per query
+        return s;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -69,6 +100,8 @@ sumRange(l, r) = prefix[r + 1] - prefix[l]
 
 This works because `prefix[r+1]` is the sum of the first `r+1` elements, and subtracting `prefix[l]` removes the first `l` elements, leaving exactly `nums[l..r]`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class NumArray:
     def __init__(self, nums: list[int]):
@@ -79,6 +112,23 @@ class NumArray:
     def sum_range(self, left: int, right: int) -> int:
         return self.prefix[right + 1] - self.prefix[left]  # L4: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class NumArray {
+    private prefix: number[];
+    constructor(nums: number[]) {
+        this.prefix = new Array(nums.length + 1).fill(0); // L1: O(n) allocate
+        for (let i = 0; i < nums.length; i++)             // L2: O(n) build prefix
+            this.prefix[i + 1] = this.prefix[i] + nums[i]; // L3: O(1) per step
+    }
+    sumRange(left: number, right: number): number {
+        return this.prefix[right + 1] - this.prefix[left]; // L4: O(1)
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -94,6 +144,17 @@ class NumArray:
 - **Build:** O(n), driven by L2/L3.
 - **Query:** O(1), driven by L4 (single subtraction).
 - **Space:** O(n) for the prefix array.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="range-sum-query-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="range-sum-query-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ### Prefix array walkthrough
 
@@ -123,6 +184,8 @@ sumRange(0, 5) = prefix[6] - prefix[0] = -3 - 0 = -3
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class NumArray:
     def __init__(self, nums: list[int]):
@@ -153,6 +216,41 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function assert(condition: boolean, msg: string = ''): void {
+    if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+class NumArray {
+    private prefix: number[];
+    constructor(nums: number[]) {
+        this.prefix = new Array(nums.length + 1).fill(0);
+        for (let i = 0; i < nums.length; i++)
+            this.prefix[i + 1] = this.prefix[i] + nums[i];
+    }
+    sumRange(left: number, right: number): number {
+        return this.prefix[right + 1] - this.prefix[left];
+    }
+}
+
+const na = new NumArray([-2, 0, 3, -5, 2, -1]);
+assert(na.sumRange(0, 2) === 1);
+assert(na.sumRange(2, 5) === -1);
+assert(na.sumRange(0, 5) === -3);
+
+const na2 = new NumArray([5]);
+assert(na2.sumRange(0, 0) === 5);
+
+const na3 = new NumArray([-1, -2, -3]);
+assert(na3.sumRange(0, 2) === -6);
+assert(na3.sumRange(1, 2) === -5);
+
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

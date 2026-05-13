@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, grid, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './130-surrounded-regions.py?raw';
+import practiceCodeTs from './130-surrounded-regions.ts?raw';
+import approach2PyCode from './130-surrounded-regions-approach2.py?raw';
+import approach2TsCode from './130-surrounded-regions-approach2.ts?raw';
 
 ## Problem
 
@@ -37,59 +42,21 @@ LeetCode 130 · [Link](https://leetcode.com/problems/surrounded-regions/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="surrounded-regions" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="surrounded-regions-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="surrounded-regions-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, DFS from each O to check if surrounded
 
 For each `O`, DFS to see if the component touches the border. If not, flip them all to `X`.
 
-```python
-def solve(board):
-    rows, cols = len(board), len(board[0])    # L1: O(1) setup
-
-    def component(r, c):
-        stack = [(r, c)]                       # L2: O(1) init
-        visited = set()                        # L3: O(1)
-        touches_border = False
-        while stack:                           # L4: loop over component cells
-            x, y = stack.pop()                 # L5: O(1)
-            if (x, y) in visited:
-                continue
-            visited.add((x, y))               # L6: O(1)
-            if x in (0, rows - 1) or y in (0, cols - 1):
-                touches_border = True
-            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < rows and 0 <= ny < cols and board[nx][ny] == 'O' and (nx, ny) not in visited:
-                    stack.append((nx, ny))    # L7: O(1) per neighbor
-        return visited, touches_border
-
-    done = set()
-    for r in range(rows):
-        for c in range(cols):                  # L8: O(m*n) outer scan
-            if board[r][c] == 'O' and (r, c) not in done:
-                comp, border = component(r, c) # L9: O(component size)
-                done |= comp
-                if not border:
-                    for x, y in comp:
-                        board[x][y] = 'X'      # L10: O(component size)
-```
-
-**Where the time goes, line by line**
-
-*Variables: m = grid rows, n = grid cols.*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L1 (setup) | O(1) | 1 | O(1) |
-| L8 (outer scan) | O(1) | m*n | O(m*n) |
-| **L9 (component DFS)** | **O(component)** | **once per unvisited O** | **O(m*n) total** ← dominates |
-| L10 (flip) | O(component) | once per non-border component | O(m*n) total |
-
-Each cell is visited at most once in any component call (the `done` guard). So the total work across all component calls is O(m*n). The scan at L8 is also O(m*n). Overall the constant is roughly 2x but the asymptotic is O(m*n).
-
 **Complexity**
-- **Time:** O(m*n), driven by L9 (total component work across all cells).
+- **Time:** O(m*n), driven by total component work across all cells.
 - **Space:** O(m*n) for the visited set and the `done` set.
 
 Works but it's awkward to implement the "touches border" flag cleanly.
@@ -98,6 +65,8 @@ Works but it's awkward to implement the "touches border" flag cleanly.
 
 Flip the problem: any `O` that's reachable from a border `O` is *not* surrounded. Temporarily mark those border-connected `O`s with a sentinel (e.g., `'T'`). After the scan, flip every remaining `O` to `X`, then flip `T` back to `O`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def solve(board):
     if not board:                              # L1: O(1) guard
@@ -122,6 +91,36 @@ def solve(board):
             elif board[r][c] == 'T':
                 board[r][c] = 'O'             # L10: O(1) restore border O
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function solve(board: string[][]): void {
+    if (!board.length) return;                 // L1: O(1) guard
+    const rows = board.length, cols = board[0].length;  // L2: O(1)
+
+    function dfs(r: number, c: number): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] !== 'O') return;  // L3
+        board[r][c] = 'T';                     // L4: O(1) mark sentinel
+        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1);  // L5: recurse
+    }
+
+    for (let c = 0; c < cols; c++) {
+        dfs(0, c); dfs(rows - 1, c);           // L6: seed top and bottom rows
+    }
+    for (let r = 0; r < rows; r++) {
+        dfs(r, 0); dfs(r, cols - 1);           // L7: seed left and right cols
+    }
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {       // L8: O(m*n) final sweep
+            if (board[r][c] === 'O') board[r][c] = 'X';       // L9: flip interior O
+            else if (board[r][c] === 'T') board[r][c] = 'O';  // L10: restore border O
+        }
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -134,8 +133,6 @@ def solve(board):
 | **L5 (DFS recursion)** | **O(1) per cell** | **at most m*n total** | **O(m*n)** ← dominates |
 | L8-L10 (final sweep) | O(1) | m*n | O(m*n) |
 
-The DFS from all border cells collectively visits each cell at most once (once marked `'T'`, it won't be entered again). The final sweep is a single pass. Both halves are O(m*n).
-
 **Complexity**
 - **Time:** O(m*n), driven by L5/L8 (DFS traversal + final sweep).
 - **Space:** O(m*n) recursion stack in the worst case (a board full of O's causes a chain of depth m*n).
@@ -144,6 +141,8 @@ The DFS from all border cells collectively visits each cell at most once (once m
 
 Same idea with a queue, prefer when recursion depth is a concern.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -177,23 +176,57 @@ def solve(board):
             elif board[r][c] == 'T':
                 board[r][c] = 'O'             # L13: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function solve(board: string[][]): void {
+    if (!board.length) return;
+    const rows = board.length, cols = board[0].length;
 
-**Where the time goes, line by line**
+    function bfs(startR: number, startC: number): void {
+        if (board[startR][startC] !== 'O') return;
+        const q: [number, number][] = [[startR, startC]];
+        board[startR][startC] = 'T';
+        let head = 0;
+        while (head < q.length) {
+            const [r, c] = q[head++];
+            for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && board[nr][nc] === 'O') {
+                    board[nr][nc] = 'T';
+                    q.push([nr, nc]);
+                }
+            }
+        }
+    }
 
-*Variables: m = grid rows, n = grid cols.*
+    for (let c = 0; c < cols; c++) { bfs(0, c); bfs(rows - 1, c); }
+    for (let r = 0; r < rows; r++) { bfs(r, 0); bfs(r, cols - 1); }
 
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L9 (seed top/bottom) | O(1) | 2*n | O(n) |
-| L10 (seed left/right) | O(1) | 2*m | O(m) |
-| **L7, L8 (BFS body)** | **O(1) per cell** | **at most m*n total** | **O(m*n)** ← dominates |
-| L11-L13 (final sweep) | O(1) | m*n | O(m*n) |
-
-Identical complexity to the DFS variant. The queue holds at most O(m*n) cells; in practice it's bounded by the perimeter of the largest border-connected region. The explicit queue avoids Python's recursion limit, which is the only practical reason to choose BFS here.
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++) {
+            if (board[r][c] === 'O') board[r][c] = 'X';
+            else if (board[r][c] === 'T') board[r][c] = 'O';
+        }
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
-- **Time:** O(m*n), driven by L7/L8/L11 (BFS traversal + final sweep).
+- **Time:** O(m*n), driven by BFS traversal + final sweep.
 - **Space:** O(m*n) for the queue in the worst case.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="surrounded-regions-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="surrounded-regions-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -207,6 +240,8 @@ Same "reverse direction from boundary" trick as Pacific Atlantic, the cleanest v
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_130.py and run.
 # Uses the canonical implementation (Approach 2: reverse DFS from borders).
@@ -280,6 +315,39 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function solve(board: string[][]): void {
+    if (!board.length) return;
+    const rows = board.length, cols = board[0].length;
+
+    function dfs(r: number, c: number): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] !== 'O') return;
+        board[r][c] = 'T';
+        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1);
+    }
+
+    for (let c = 0; c < cols; c++) { dfs(0, c); dfs(rows-1, c); }
+    for (let r = 0; r < rows; r++) { dfs(r, 0); dfs(r, cols-1); }
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++) {
+            if (board[r][c] === 'O') board[r][c] = 'X';
+            else if (board[r][c] === 'T') board[r][c] = 'O';
+        }
+}
+
+const b1 = [['X','X','X','X'],['X','O','O','X'],['X','X','O','X'],['X','O','X','X']];
+solve(b1);
+console.assert(JSON.stringify(b1) === JSON.stringify([['X','X','X','X'],['X','X','X','X'],['X','X','X','X'],['X','O','X','X']]));
+const b2 = [['O']]; solve(b2); console.assert(b2[0][0] === 'O');
+const b3 = [['X','X','X'],['X','O','X'],['X','X','X']];
+solve(b3);
+console.assert(b3[1][1] === 'X');
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

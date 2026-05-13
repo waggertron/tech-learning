@@ -1,6 +1,6 @@
 ---
 title: "312. Burst Balloons (Hard)"
-description: Maximize coins by choosing the order to burst balloons, where each burst earns a product of neighboring values.
+description: "Maximize coins by choosing the order to burst balloons, where each burst earns a product of neighboring values."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, interval-dp, hard]
 status: draft
@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './312-burst-balloons.py?raw';
+import practiceCodeTs from './312-burst-balloons.ts?raw';
+import approach3PyCode from './312-burst-balloons-approach3.py?raw';
+import approach3TsCode from './312-burst-balloons-approach3.ts?raw';
 
 ## Problem
 
@@ -23,7 +28,14 @@ LeetCode 312 · [Link](https://leetcode.com/problems/burst-balloons/) · *Hard*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="burst-balloons" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="burst-balloons-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="burst-balloons-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every order
 
@@ -83,6 +95,8 @@ This is why Approach 3 reverses the framing.
 
 Pad `nums` with 1's on both sides. Let `dp[i][j]` = max coins from bursting *all* balloons strictly between indices `i` and `j`. For each `k ∈ (i, j)`, assume balloon `k` is the **last** burst in this interval, at that moment its neighbors are `nums[i]` and `nums[j]`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_coins(nums):
     nums = [1] + nums + [1]                          # L1: O(n) pad with sentinel 1s
@@ -99,6 +113,27 @@ def max_coins(nums):
 
     return dp[0][n - 1]                              # L10: O(1) answer (full interval)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxCoins(nums: number[]): number {
+    const padded = [1, ...nums, 1];                                        // L1: O(n) pad sentinels
+    const n = padded.length;                                               // L2: O(1)
+    const dp: number[][] = Array.from({ length: n }, () => new Array(n).fill(0));  // L3: O(n^2) init
+    for (let length = 2; length <= n; length++) {                         // L4: O(n) length loop
+        for (let i = 0; i <= n - length; i++) {                           // L5: O(n) left endpoint
+            const j = i + length - 1;                                     // L6: O(1) right endpoint
+            for (let k = i + 1; k < j; k++) {                             // L7: O(n) last-burst k
+                const coins = padded[i] * padded[k] * padded[j] + dp[i][k] + dp[k][j];  // L8
+                if (coins > dp[i][j]) dp[i][j] = coins;                   // L9: O(1) update best
+            }
+        }
+    }
+    return dp[0][n - 1];                                                   // L10: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -121,6 +156,17 @@ The three nested loops at L4/L5/L7 iterate over all O(n^3) triples `(i, j, k)`. 
 ### Why "last to burst"
 When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and between `k` and `j`, has already been bursted. Those sub-intervals are independent subproblems, clean recurrence. Trying "first to burst" instead, the subproblems are not independent (their boundaries shift).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="burst-balloons-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="burst-balloons-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -133,6 +179,8 @@ Interval DP is a major pattern, same template solves Matrix Chain Multiplication
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_312.py and run.
 # Uses the canonical implementation (Approach 3: interval DP).
@@ -165,6 +213,33 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxCoins(nums: number[]): number {
+    const padded = [1, ...nums, 1];
+    const n = padded.length;
+    const dp: number[][] = Array.from({ length: n }, () => new Array(n).fill(0));
+    for (let length = 2; length <= n; length++)
+        for (let i = 0; i <= n - length; i++) {
+            const j = i + length - 1;
+            for (let k = i + 1; k < j; k++) {
+                const coins = padded[i] * padded[k] * padded[j] + dp[i][k] + dp[k][j];
+                if (coins > dp[i][j]) dp[i][j] = coins;
+            }
+        }
+    return dp[0][n - 1];
+}
+
+console.assert(maxCoins([3, 1, 5, 8]) === 167);
+console.assert(maxCoins([1, 5]) === 10);
+console.assert(maxCoins([5]) === 5);
+console.assert(maxCoins([3, 3]) === 12);
+console.assert(maxCoins([1, 1, 1]) === 3);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

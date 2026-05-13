@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './224-basic-calculator.py?raw';
+import practiceCodeTs from './224-basic-calculator.ts?raw';
+import approach2TsCode from './224-basic-calculator-approach2.ts?raw';
 
 ## Problem
 
@@ -27,7 +31,14 @@ LeetCode 224 · [Link](https://leetcode.com/problems/basic-calculator/) · *Hard
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="basic-calculator" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="basic-calculator-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="basic-calculator-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Stack to save and restore sign context
 
@@ -42,6 +53,8 @@ On `')'`: pop `(prev_result, prev_sign)` and compute `prev_result + prev_sign * 
 On a digit: accumulate the full multi-digit number.
 On `'+'` or `'-'`: apply `sign * num` to `result`, then update `sign` for the next number.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def calculate(s: str) -> int:
     stack = []           # L1: stores (result, sign) on open paren
@@ -69,6 +82,40 @@ def calculate(s: str) -> int:
 
     return result + sign * num               # L18: flush any trailing number
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function calculate(s: string): number {
+    const stack: [number, number][] = [];    // L1: stores [result, sign] on open paren
+    let result = 0;                          // L2: running total for this nesting level
+    let sign = 1;                            // L3: +1 or -1, applies to next number
+    let num = 0;                             // L4: accumulates multi-digit number
+
+    for (const ch of s) {                   // L5: iterate characters, O(n)
+        if (ch >= '0' && ch <= '9') {
+            num = num * 10 + Number(ch);     // L6: O(1) accumulate digit
+        } else if (ch === '+' || ch === '-') {
+            result += sign * num;            // L7: O(1) apply pending number
+            num = 0;                         // L8: reset accumulator
+            sign = ch === '+' ? 1 : -1;     // L9: update sign for next number
+        } else if (ch === '(') {
+            stack.push([result, sign]);      // L10: O(1) save context
+            result = 0;                      // L11: fresh sub-expression result
+            sign = 1;                        // L12: sub-expression starts positive
+            num = 0;                         // L13: clear accumulator
+        } else if (ch === ')') {
+            result += sign * num;            // L14: O(1) flush last number in parens
+            num = 0;                         // L15: clear accumulator
+            const [prevResult, prevSign] = stack.pop()!;  // L16: O(1) restore context
+            result = prevResult + prevSign * result;       // L17: combine levels
+        }
+    }
+
+    return result + sign * num;             // L18: flush any trailing number
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -85,6 +132,17 @@ Each character triggers exactly one branch, all O(1). Each `'('` causes one push
 **Complexity**
 - **Time:** O(n), one pass through the string.
 - **Space:** O(n) stack depth (at most n/2 open parens).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="basic-calculator-approach1-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="basic-calculator-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Sign context illustrated
 

@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, cycle-detection, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './207-course-schedule.py?raw';
+import practiceCodeTs from './207-course-schedule.ts?raw';
+import approach2PyCode from './207-course-schedule-approach2.py?raw';
+import approach2TsCode from './207-course-schedule-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 207 · [Link](https://leetcode.com/problems/course-schedule/) · *Mediu
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="course-schedule" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="course-schedule-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="course-schedule-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, DFS with path tracking
 
 For each course, DFS tracking the current recursion path; if we hit a course already on the path, it's a cycle.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -55,6 +69,37 @@ def can_finish(num_courses, prerequisites):
             return False
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canFinish(numCourses: number, prerequisites: number[][]): boolean {
+    const graph: number[][] = Array.from({ length: numCourses }, () => []);
+    for (const [a, b] of prerequisites) {        // L1: O(E) build adjacency list
+        graph[b].push(a);
+    }
+
+    function hasCycle(start: number): boolean {
+        const onPath = new Set<number>();        // L2: O(1) init per call
+        function dfs(n: number): boolean {
+            if (onPath.has(n)) return true;      // L3: O(1) membership check
+            onPath.add(n);                       // L4: O(1)
+            for (const nb of graph[n]) {         // L5: iterate neighbors
+                if (dfs(nb)) return true;        // L6: recurse
+            }
+            onPath.delete(n);                    // L7: O(1) backtrack
+            return false;
+        }
+        return dfs(start);
+    }
+
+    for (let c = 0; c < numCourses; c++) {       // L8: call hasCycle for every node
+        if (hasCycle(c)) return false;
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -80,6 +125,8 @@ Correct but wasteful.
 
 Each node is `white` (unvisited), `gray` (on the current DFS path), or `black` (finished). A gray-to-gray transition means a cycle.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -108,6 +155,37 @@ def can_finish(num_courses, prerequisites):
             return False
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canFinish(numCourses: number, prerequisites: number[][]): boolean {
+    const graph: number[][] = Array.from({ length: numCourses }, () => []);
+    for (const [a, b] of prerequisites) {        // L1: O(E) build graph
+        graph[b].push(a);
+    }
+
+    const WHITE = 0, GRAY = 1, BLACK = 2;
+    const color = new Array(numCourses).fill(WHITE);  // L2: O(V) init color array
+
+    function dfs(n: number): boolean {
+        if (color[n] === GRAY) return false;     // L3: O(1) back-edge check (cycle)
+        if (color[n] === BLACK) return true;     // L4: O(1) already done
+        color[n] = GRAY;                         // L5: O(1) mark in-progress
+        for (const nb of graph[n]) {             // L6: iterate neighbors
+            if (!dfs(nb)) return false;          // L7: recurse
+        }
+        color[n] = BLACK;                        // L8: O(1) mark complete
+        return true;
+    }
+
+    for (let c = 0; c < numCourses; c++) {       // L9: outer loop over all nodes
+        if (!dfs(c)) return false;
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -127,50 +205,16 @@ The BLACK check at L4 is the memoization that makes this O(V + E) instead of O(V
 - **Time:** O(V + E), driven by L6/L7 (each edge visited at most once across the whole run).
 - **Space:** O(V + E).
 
-## Approach 3: Kahn's algorithm (topological sort via BFS on in-degree)
+**Try this approach:**
 
-Build an in-degree array. Repeatedly remove nodes with in-degree 0; if we can process all of them, the graph is a DAG.
-
-```python
-from collections import defaultdict, deque
-
-def can_finish(num_courses, prerequisites):
-    graph = defaultdict(list)
-    in_deg = [0] * num_courses                   # L1: O(V) init in-degree
-    for a, b in prerequisites:                   # L2: O(E) build graph + in-degrees
-        graph[b].append(a)
-        in_deg[a] += 1
-
-    q = deque([i for i in range(num_courses) if in_deg[i] == 0])  # L3: O(V) seed queue
-    done = 0                                     # L4: O(1)
-    while q:                                     # L5: process until queue empty
-        n = q.popleft()                          # L6: O(1) dequeue
-        done += 1                                # L7: O(1) count processed
-        for nb in graph[n]:                      # L8: iterate neighbors
-            in_deg[nb] -= 1                      # L9: O(1) decrement in-degree
-            if in_deg[nb] == 0:
-                q.append(nb)                     # L10: O(1) enqueue newly free node
-    return done == num_courses                   # L11: O(1)
-```
-
-**Where the time goes, line by line**
-
-*Variables: V = numCourses, E = len(prerequisites).*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L1 (init in-degree) | O(V) | 1 | O(V) |
-| L2 (build graph) | O(1) per edge | E | O(E) |
-| L3 (seed queue) | O(V) | 1 | O(V) |
-| L6 (dequeue) | O(1) | at most V | O(V) |
-| **L8, L9, L10 (edge processing)** | **O(1) per edge** | **each edge visited at most once** | **O(E) ← dominates** |
-| L11 (comparison) | O(1) | 1 | O(1) |
-
-Each directed edge causes exactly one decrement at L9 and at most one enqueue at L10. No edge is processed twice. The total work is proportional to V + E, matching the DFS approach.
-
-**Complexity**
-- **Time:** O(V + E), driven by L8/L9/L10 (each edge processed once).
-- **Space:** O(V + E).
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="course-schedule-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="course-schedule-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -184,6 +228,8 @@ Both DFS+color and Kahn's are optimal. Kahn's generalizes directly to problem 21
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_207.py and run.
 # Uses the canonical implementation (Approach 2: DFS three-color).
@@ -241,6 +287,39 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canFinish(numCourses: number, prerequisites: number[][]): boolean {
+    const graph: number[][] = Array.from({ length: numCourses }, () => []);
+    for (const [a, b] of prerequisites) graph[b].push(a);
+
+    const WHITE = 0, GRAY = 1, BLACK = 2;
+    const color = new Array(numCourses).fill(WHITE);
+
+    function dfs(n: number): boolean {
+        if (color[n] === GRAY) return false;
+        if (color[n] === BLACK) return true;
+        color[n] = GRAY;
+        for (const nb of graph[n]) if (!dfs(nb)) return false;
+        color[n] = BLACK;
+        return true;
+    }
+
+    for (let c = 0; c < numCourses; c++) if (!dfs(c)) return false;
+    return true;
+}
+
+console.assert(canFinish(2, [[1, 0]]) === true);
+console.assert(canFinish(2, [[1, 0], [0, 1]]) === false);
+console.assert(canFinish(5, []) === true);
+console.assert(canFinish(1, []) === true);
+console.assert(canFinish(3, [[1, 0], [2, 1], [0, 2]]) === false);
+console.assert(canFinish(4, [[1, 0], [2, 0], [3, 1], [3, 2]]) === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

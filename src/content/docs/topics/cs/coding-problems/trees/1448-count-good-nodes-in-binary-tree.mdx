@@ -1,15 +1,20 @@
 ---
 title: "1448. Count Good Nodes in Binary Tree (Medium)"
-description: Count nodes on every root-to-node path that are >= every value above them.
+description: "Count nodes on every root-to-node path that are >= every value above them."
 parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1448-count-good-nodes-in-binary-tree.py?raw';
+import practiceCodeTs from './1448-count-good-nodes-in-binary-tree.ts?raw';
+import approach2PyCode from './1448-count-good-nodes-in-binary-tree-approach2.py?raw';
+import approach2TsCode from './1448-count-good-nodes-in-binary-tree-approach2.ts?raw';
 
 ## Problem
 
@@ -24,7 +29,14 @@ LeetCode 1448 · [Link](https://leetcode.com/problems/count-good-nodes-in-binary
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="count-good-nodes-in-binary-tree" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="count-good-nodes-in-binary-tree-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="count-good-nodes-in-binary-tree-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, for each node, walk up to the root
 
@@ -76,6 +88,8 @@ Wasteful, we're re-walking ancestor chains that largely overlap.
 
 Walk top-down with the running maximum seen so far on the root-to-current path. A node is good iff `node.val >= running_max`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def good_nodes(root):
     def dfs(node, max_so_far):
@@ -86,6 +100,28 @@ def good_nodes(root):
         return good + dfs(node.left, new_max) + dfs(node.right, new_max)  # L3: recurse
     return dfs(root, float('-inf'))
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function goodNodes(root: TreeNode | null): number {
+    function dfs(node: TreeNode | null, maxSoFar: number): number {
+        if (!node) return 0;
+        const good = node.val >= maxSoFar ? 1 : 0;        // L1: O(1) check
+        const newMax = Math.max(maxSoFar, node.val);        // L2: O(1) update
+        return good + dfs(node.left, newMax) + dfs(node.right, newMax);  // L3: recurse
+    }
+    return dfs(root, -Infinity);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -105,6 +141,17 @@ Each node is visited exactly once with O(1) work, carrying the running max as a 
 
 ### Pattern: "path-state DFS"
 Carry a running invariant (max, min, sum, seen-set) as a parameter. Works for every "a node is X iff the root-to-node path is Y" problem.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="count-good-nodes-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="count-good-nodes-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Iterative DFS with explicit path state
 
@@ -154,6 +201,8 @@ The recursive path-state DFS is the canonical answer and the template for many "
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -198,6 +247,49 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(vals: (number | null)[]): TreeNode | null {
+    if (!vals.length) return null;
+    const root = new TreeNode(vals[0] as number);
+    const q: TreeNode[] = [root];
+    let i = 1;
+    while (q.length && i < vals.length) {
+        const node = q.shift()!;
+        if (i < vals.length && vals[i] !== null) { node.left = new TreeNode(vals[i] as number); q.push(node.left); }
+        i++;
+        if (i < vals.length && vals[i] !== null) { node.right = new TreeNode(vals[i] as number); q.push(node.right); }
+        i++;
+    }
+    return root;
+}
+
+function goodNodes(root: TreeNode | null): number {
+    function dfs(node: TreeNode | null, maxSoFar: number): number {
+        if (!node) return 0;
+        const good = node.val >= maxSoFar ? 1 : 0;
+        const newMax = Math.max(maxSoFar, node.val);
+        return good + dfs(node.left, newMax) + dfs(node.right, newMax);
+    }
+    return dfs(root, -Infinity);
+}
+
+console.assert(goodNodes(buildTree([3, 1, 4, 3, null, 1, 5])) === 4);
+console.assert(goodNodes(buildTree([3, 3, null, 4, 2])) === 3);
+console.assert(goodNodes(buildTree([1])) === 1);
+console.assert(goodNodes(buildTree([5, 4, 6, 3, null, null, 7])) === 3);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

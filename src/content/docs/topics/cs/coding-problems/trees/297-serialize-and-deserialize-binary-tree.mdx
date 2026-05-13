@@ -1,15 +1,20 @@
 ---
 title: "297. Serialize and Deserialize Binary Tree (Hard)"
-description: Convert a binary tree to a string and back.
+description: "Convert a binary tree to a string and back."
 parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, dfs, design, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './297-serialize-and-deserialize-binary-tree.py?raw';
+import practiceCodeTs from './297-serialize-and-deserialize-binary-tree.ts?raw';
+import approach2PyCode from './297-serialize-and-deserialize-binary-tree-approach2.py?raw';
+import approach2TsCode from './297-serialize-and-deserialize-binary-tree-approach2.ts?raw';
 
 ## Problem
 
@@ -22,12 +27,21 @@ LeetCode 297 · [Link](https://leetcode.com/problems/serialize-and-deserialize-b
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="serialize-and-deserialize-binary-tree" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="serialize-and-deserialize-binary-tree-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="serialize-and-deserialize-binary-tree-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: BFS with null markers
 
 Serialize level-by-level, using a sentinel (`"#"`) for missing children. Deserialize by consuming the tokens in order and wiring up children with a queue.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -66,6 +80,59 @@ class Codec:
             i += 1
         return root
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+class Codec {
+    serialize(root: TreeNode | null): string {
+        if (!root) return "";
+        const parts: string[] = [];
+        const q: (TreeNode | null)[] = [root];        // L1: O(1) init
+        while (q.length) {
+            const node = q.shift()!;                   // L2: O(1) dequeue
+            if (node) {
+                parts.push(String(node.val));          // L3: O(1) append value
+                q.push(node.left);                     // L4: enqueue left (may be null)
+                q.push(node.right);                    // L5: enqueue right (may be null)
+            } else {
+                parts.push("#");                       // L6: O(1) append null marker
+            }
+        }
+        return parts.join(",");                        // L7: O(n) join
+    }
+
+    deserialize(data: string): TreeNode | null {
+        if (!data) return null;
+        const tokens = data.split(",");                // L8: O(n) split
+        const root = new TreeNode(Number(tokens[0]));
+        const q: TreeNode[] = [root];
+        let i = 1;
+        while (q.length && i < tokens.length) {
+            const node = q.shift()!;                   // L9: O(1) dequeue
+            if (tokens[i] !== "#") {
+                node.left = new TreeNode(Number(tokens[i]));
+                q.push(node.left);                     // L10: O(1) wire left
+            }
+            i++;
+            if (i < tokens.length && tokens[i] !== "#") {
+                node.right = new TreeNode(Number(tokens[i]));
+                q.push(node.right);                    // L11: O(1) wire right
+            }
+            i++;
+        }
+        return root;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -90,6 +157,8 @@ The LeetCode's own serialization format uses this approach; it's the easiest to 
 
 Recursive serialize in preorder, emitting `"#"` for missing children. Deserialize recursively consuming tokens from an iterator.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class Codec:
     def serialize(self, root):
@@ -116,6 +185,39 @@ class Codec:
             return node
         return rec()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Codec {
+    serialize(root: TreeNode | null): string {
+        const parts: string[] = [];
+        function rec(node: TreeNode | null): void {
+            if (!node) { parts.push("#"); return; }  // L1: O(1) emit null
+            parts.push(String(node.val));             // L2: O(1) emit value
+            rec(node.left);                           // L3: recurse left
+            rec(node.right);                          // L4: recurse right
+        }
+        rec(root);
+        return parts.join(",");                       // L5: O(n) join
+    }
+
+    deserialize(data: string): TreeNode | null {
+        const tokens = data.split(",");               // L6: O(n) split
+        let i = 0;
+        function rec(): TreeNode | null {
+            const val = tokens[i++];
+            if (val === "#") return null;             // L7: null marker
+            const node = new TreeNode(Number(val));
+            node.left = rec();                        // L8: recurse left
+            node.right = rec();                       // L9: recurse right
+            return node;
+        }
+        return rec();
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -134,6 +236,17 @@ class Codec:
 - **Space:** O(n) output + O(h) recursion.
 
 Shortest correct answer and arguably the cleanest.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="serialize-and-deserialize-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="serialize-and-deserialize-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Postorder DFS with null markers
 
@@ -198,6 +311,8 @@ With null markers, every internal node contributes 1 value token and every leaf 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -283,6 +398,83 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(vals: (number | null)[]): TreeNode | null {
+    if (!vals.length) return null;
+    const root = new TreeNode(vals[0] as number);
+    const q: TreeNode[] = [root];
+    let i = 1;
+    while (q.length && i < vals.length) {
+        const node = q.shift()!;
+        if (i < vals.length && vals[i] !== null) { node.left = new TreeNode(vals[i] as number); q.push(node.left); }
+        i++;
+        if (i < vals.length && vals[i] !== null) { node.right = new TreeNode(vals[i] as number); q.push(node.right); }
+        i++;
+    }
+    return root;
+}
+
+function treeToList(root: TreeNode | null): (number | null)[] {
+    if (!root) return [];
+    const result: (number | null)[] = [];
+    const q: (TreeNode | null)[] = [root];
+    while (q.length) {
+        const node = q.shift()!;
+        if (node) { result.push(node.val); q.push(node.left); q.push(node.right); }
+        else result.push(null);
+    }
+    while (result.length && result[result.length - 1] === null) result.pop();
+    return result;
+}
+
+class Codec {
+    serialize(root: TreeNode | null): string {
+        const parts: string[] = [];
+        function rec(node: TreeNode | null): void {
+            if (!node) { parts.push("#"); return; }
+            parts.push(String(node.val));
+            rec(node.left);
+            rec(node.right);
+        }
+        rec(root);
+        return parts.join(",");
+    }
+    deserialize(data: string): TreeNode | null {
+        const tokens = data.split(",");
+        let i = 0;
+        function rec(): TreeNode | null {
+            const val = tokens[i++];
+            if (val === "#") return null;
+            const node = new TreeNode(Number(val));
+            node.left = rec();
+            node.right = rec();
+            return node;
+        }
+        return rec();
+    }
+}
+
+const codec = new Codec();
+const t = buildTree([1, 2, 3, null, null, 4, 5]);
+console.assert(JSON.stringify(treeToList(codec.deserialize(codec.serialize(t)))) === JSON.stringify([1, 2, 3, null, null, 4, 5]));
+console.assert(codec.deserialize(codec.serialize(null)) === null);
+const t2 = buildTree([42]);
+console.assert(codec.deserialize(codec.serialize(t2))!.val === 42);
+const t3 = buildTree([1, 2, null, 3]);
+console.assert(JSON.stringify(treeToList(codec.deserialize(codec.serialize(t3)))) === JSON.stringify([1, 2, null, 3]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

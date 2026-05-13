@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './019-remove-nth-node-from-end-of-list.py?raw';
+import practiceCodeTs from './019-remove-nth-node-from-end-of-list.ts?raw';
+import approach3TsCode from './019-remove-nth-node-from-end-of-list-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 19 · [Link](https://leetcode.com/problems/remove-nth-node-from-end-of-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="remove-nth-node-from-end-of-list" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="remove-nth-node-from-end-of-list-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="remove-nth-node-from-end-of-list-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, two passes (count, then remove)
 
 First pass: count length `L`. Second pass: advance `L - n` steps, then splice.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -49,6 +62,29 @@ def remove_nth_from_end(head, n):
     cur.next = cur.next.next             # L5: O(1) splice
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let L = 0;
+    let cur: ListNode | null = head;
+    while (cur) { L++; cur = cur.next; }   // L1-L2: first pass, count length
+    let prev: ListNode = dummy;
+    for (let i = 0; i < L - n; i++) {      // L3-L4: second pass, advance L-n steps
+        prev = prev.next!;
+    }
+    prev.next = prev.next!.next;            // L5: O(1) splice
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -72,6 +108,8 @@ Works. Not one-pass.
 
 Recurse to the end, then decrement a counter on the way back up; at `n == 0`, splice the previous node.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def remove_nth_from_end(head, n):
     dummy = ListNode(0, head)
@@ -85,6 +123,25 @@ def remove_nth_from_end(head, n):
     rec(dummy)
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
+    const dummy = new ListNode(0, head);
+    function rec(node: ListNode | null): number {
+        if (!node) return 0;                 // L1: base case
+        const k = rec(node.next) + 1;       // L2: recurse deeper, O(1) on return
+        if (k === n + 1) {
+            node.next = node.next!.next;     // L3: O(1) splice at right depth
+        }
+        return k;
+    }
+    rec(dummy);
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -108,6 +165,8 @@ Elegant but uses stack proportional to list length.
 
 Advance `fast` by `n + 1` steps, then walk both pointers together. When `fast` falls off, `slow` sits one before the node to remove.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def remove_nth_from_end(head, n):
     dummy = ListNode(0, head)
@@ -120,6 +179,26 @@ def remove_nth_from_end(head, n):
     slow.next = slow.next.next         # L6: O(1) splice
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let slow: ListNode = dummy;
+    let fast: ListNode | null = dummy;
+    for (let i = 0; i <= n; i++) {      // L1-L2: advance fast n+1 steps
+        fast = fast!.next;
+    }
+    while (fast) {                       // L3: walk both until fast falls off
+        slow = slow.next!;              // L4: O(1) per step
+        fast = fast.next;              // L5: O(1) per step
+    }
+    slow.next = slow.next!.next;        // L6: O(1) splice
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -140,8 +219,18 @@ Total steps = (n + 1) + (L - n) = L + 1, so exactly one pass over the list. The 
 ### Why the dummy node matters
 When `n == L` (removing the head), the `slow` pointer needs to land "one before the head." A dummy sentinel makes "one before the head" a real node, so the splice logic is uniform regardless of whether we're removing the head.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="remove-nth-node-from-end-of-list-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_019.py and run.
 # Uses the two-pointer offset approach (Approach 3).
@@ -193,6 +282,45 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let slow: ListNode = dummy, fast: ListNode | null = dummy;
+    for (let i = 0; i <= n; i++) fast = fast!.next;
+    while (fast) { slow = slow.next!; fast = fast.next; }
+    slow.next = slow.next!.next;
+    return dummy.next;
+}
+
+console.assert(JSON.stringify(toList(removeNthFromEnd(fromList([1,2,3,4,5]), 2))) === JSON.stringify([1,2,3,5]));
+console.assert(JSON.stringify(toList(removeNthFromEnd(fromList([1]), 1))) === JSON.stringify([]));
+console.assert(JSON.stringify(toList(removeNthFromEnd(fromList([1,2]), 1))) === JSON.stringify([1]));
+console.assert(JSON.stringify(toList(removeNthFromEnd(fromList([1,2]), 2))) === JSON.stringify([2]));
+console.assert(JSON.stringify(toList(removeNthFromEnd(fromList([1,2,3,4,5]), 5))) === JSON.stringify([2,3,4,5]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

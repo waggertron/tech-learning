@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './217-contains-duplicate.py?raw';
+import practiceCodeTs from './217-contains-duplicate.ts?raw';
+import approach2PyCode from './217-contains-duplicate-approach2.py?raw';
+import approach2TsCode from './217-contains-duplicate-approach2.ts?raw';
+import approach3PyCode from './217-contains-duplicate-approach3.py?raw';
+import approach3TsCode from './217-contains-duplicate-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 217 · [Link](https://leetcode.com/problems/contains-duplicate/) · *Ea
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="contains-duplicate" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="contains-duplicate-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="contains-duplicate-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, check every pair
 
 Compare every element with every element after it. If any two match, return `true`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def contains_duplicate(nums: list[int]) -> bool:
     n = len(nums)                              # L1: O(1)
@@ -39,6 +55,21 @@ def contains_duplicate(nums: list[int]) -> bool:
                 return True                    # L5: O(1) early return
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function containsDuplicate(nums: number[]): boolean {
+    const n = nums.length;                          // L1: O(1)
+    for (let i = 0; i < n; i++) {                  // L2: outer loop, n iterations
+        for (let j = i + 1; j < n; j++) {          // L3: inner loop, up to n-i-1 iterations
+            if (nums[i] === nums[j]) return true;   // L4-L5: O(1) comparison + early return
+        }
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -63,6 +94,8 @@ This is the most direct approach but quadratic time makes it unusable for large 
 
 After sorting, any duplicates are adjacent. One linear scan is enough.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def contains_duplicate(nums: list[int]) -> bool:
     nums_sorted = sorted(nums)                    # L1: O(n log n), new list
@@ -71,6 +104,19 @@ def contains_duplicate(nums: list[int]) -> bool:
             return True                           # L4: O(1) early return
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function containsDuplicate(nums: number[]): boolean {
+    const sorted = [...nums].sort((a, b) => a - b); // L1: O(n log n)
+    for (let i = 1; i < sorted.length; i++) {        // L2: loop, n-1 iterations
+        if (sorted[i] === sorted[i - 1]) return true; // L3-L4: O(1) comparison + return
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -90,10 +136,23 @@ The sort is the only meaningful cost; the scan after it is linear.
 
 Improvement: we dropped one order of growth. Worth knowing as an alternative when memory is tight and in-place sort is available.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="contains-duplicate-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="contains-duplicate-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Hash set (optimal)
 
 Walk the array once, storing values in a set. The first repeat hit is a duplicate.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def contains_duplicate(nums: list[int]) -> bool:
     seen = set()                       # L1: O(1) empty set
@@ -103,6 +162,20 @@ def contains_duplicate(nums: list[int]) -> bool:
         seen.add(x)                    # L5: O(1) avg set insert
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function containsDuplicate(nums: number[]): boolean {
+    const seen = new Set<number>();    // L1: O(1) empty set
+    for (const x of nums) {            // L2: loop, n iterations
+        if (seen.has(x)) return true;  // L3-L4: O(1) avg set lookup + early return
+        seen.add(x);                   // L5: O(1) avg set insert
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -131,6 +204,17 @@ def contains_duplicate(nums: list[int]) -> bool:
     return len(set(nums)) < len(nums)
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="contains-duplicate-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="contains-duplicate-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -143,6 +227,8 @@ The hash-set approach is strictly best on time. Use the sort variant only when m
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_contains_duplicate.py and run.
 # Uses the canonical implementation (Approach 3: hash set).
@@ -167,6 +253,28 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function containsDuplicate(nums: number[]): boolean {
+    const seen = new Set<number>();
+    for (const x of nums) {
+        if (seen.has(x)) return true;
+        seen.add(x);
+    }
+    return false;
+}
+
+console.assert(containsDuplicate([1, 2, 3, 1]) === true);
+console.assert(containsDuplicate([1, 2, 3, 4]) === false);
+console.assert(containsDuplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2]) === true);
+console.assert(containsDuplicate([]) === false);
+console.assert(containsDuplicate([5]) === false);
+console.assert(containsDuplicate([5, 5]) === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

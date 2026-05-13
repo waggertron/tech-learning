@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './875-koko-eating-bananas.py?raw';
+import practiceCodeTs from './875-koko-eating-bananas.ts?raw';
+import approach3PyCode from './875-koko-eating-bananas-approach3.py?raw';
+import approach3TsCode from './875-koko-eating-bananas-approach3.ts?raw';
 
 ## Problem
 
@@ -26,12 +31,21 @@ LeetCode 875 · [Link](https://leetcode.com/problems/koko-eating-bananas/) · *M
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="koko-eating-bananas" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="koko-eating-bananas-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="koko-eating-bananas-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every speed from 1 upward
 
 Start at `k = 1` and increment until she finishes in time.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from math import ceil
 
@@ -43,6 +57,20 @@ def min_eating_speed(piles: list[int], h: int) -> int:
             return k
         k += 1                                      # L3: O(1) increment
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minEatingSpeed(piles: number[], h: number): number {
+    let k = 1;
+    while (true) {                                                // L1: loop up to max(piles) times
+        const hours = piles.reduce((s, p) => s + Math.ceil(p / k), 0);  // L2: O(n) feasibility
+        if (hours <= h) return k;
+        k++;                                                      // L3: O(1) increment
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -64,16 +92,31 @@ In the worst case k must reach max(piles) before succeeding. Each check scans al
 
 Starting from `k = max(piles)` and decrementing doesn't help, we'd still do O(max) iterations.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from math import ceil
 
 def min_eating_speed(piles, h):
     for k in range(max(piles), 0, -1):                  # L1: M iterations downward
         hours = sum(ceil(p / k) for p in piles)         # L2: O(n) feasibility check
-        if hours > h:                                   # first failure → previous k was the answer
+        if hours > h:                                   # first failure: previous k was the answer
             return k + 1
     return 1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minEatingSpeed(piles: number[], h: number): number {
+    for (let k = Math.max(...piles); k >= 1; k--) {          // L1: M iterations downward
+        const hours = piles.reduce((s, p) => s + Math.ceil(p / k), 0);  // L2: O(n) feasibility
+        if (hours > h) return k + 1;                         // first failure: previous k was answer
+    }
+    return 1;
+}
+```
+</TabItem>
+</Tabs>
 
 `max(piles)` always works (h ≥ n is guaranteed by the problem), so we walk down until the first speed that fails. Same O(n · M) profile as Approach 1; just goes the other direction.
 
@@ -85,8 +128,10 @@ A genuine middle tier is the **realization that feasibility is monotonic**: if s
 
 ## Approach 3: Binary search on the answer (optimal)
 
-The answer lives in `[1, max(piles)]`. Binary-search this range using a feasibility predicate `hours_needed(k) <= h`.
+The answer lives in `[1, max(piles)]`. Binary-search this range using a feasibility predicate `hours_needed(k) ≤ h`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from math import ceil
 
@@ -103,6 +148,25 @@ def min_eating_speed(piles: list[int], h: int) -> int:
             lo = mid + 1                           # L7: O(1) too slow, need larger k
     return lo
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minEatingSpeed(piles: number[], h: number): number {
+    function hours(k: number): number {
+        return piles.reduce((sum, p) => sum + Math.ceil(p / k), 0);  // L1: O(n) per call
+    }
+
+    let lo = 1, hi = Math.max(...piles);             // L2: O(n) to find max
+    while (lo < hi) {                                // L3: loop, O(log M) iterations
+        const mid = (lo + hi) >> 1;                  // L4: O(1) midpoint
+        if (hours(mid) <= h) hi = mid;               // L5/L6: mid works, try smaller
+        else lo = mid + 1;                           // L7: too slow, need larger k
+    }
+    return lo;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -129,6 +193,17 @@ def hours(k: int) -> int:
     return sum((p + k - 1) // k for p in piles)
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="koko-eating-bananas-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="koko-eating-bananas-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -142,6 +217,8 @@ Adjacent problems: 1011 Capacity To Ship Packages, 410 Split Array Largest Sum, 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_875.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -172,6 +249,29 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minEatingSpeed(piles: number[], h: number): number {
+    const hours = (k: number) => piles.reduce((s, p) => s + Math.ceil(p / k), 0);
+    let lo = 1, hi = Math.max(...piles);
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (hours(mid) <= h) hi = mid;
+        else lo = mid + 1;
+    }
+    return lo;
+}
+
+console.assert(minEatingSpeed([3, 6, 7, 11], 8) === 4);
+console.assert(minEatingSpeed([30, 11, 23, 4, 20], 5) === 30);
+console.assert(minEatingSpeed([30, 11, 23, 4, 20], 6) === 23);
+console.assert(minEatingSpeed([1], 1) === 1);                      // single pile, exact fit
+console.assert(minEatingSpeed([1000000000], 2) === 500000000);     // large pile, 2 hours
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

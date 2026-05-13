@@ -5,11 +5,18 @@ parent: intervals
 tags: [leetcode, neetcode-150, intervals, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './252-meeting-rooms.py?raw';
+import practiceCodeTs from './252-meeting-rooms.ts?raw';
+import approach2PyCode from './252-meeting-rooms-approach2.py?raw';
+import approach2TsCode from './252-meeting-rooms-approach2.ts?raw';
+import approach3PyCode from './252-meeting-rooms-approach3.py?raw';
+import approach3TsCode from './252-meeting-rooms-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 252 (premium) · [Link](https://leetcode.com/problems/meeting-rooms/) �
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="meeting-rooms" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="meeting-rooms-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="meeting-rooms-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, check every pair
 
 Compare every pair of intervals for overlap.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def can_attend_meetings(intervals):
     n = len(intervals)                              # L1: O(1)
@@ -39,6 +55,22 @@ def can_attend_meetings(intervals):
                 return False
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canAttendMeetings(intervals: number[][]): boolean {
+    const n = intervals.length;                                    // L1: O(1)
+    for (let i = 0; i < n; i++) {                                 // L2: outer loop, n iterations
+        for (let j = i + 1; j < n; j++) {                        // L3: inner loop, up to n-1 iterations
+            const a = intervals[i], b = intervals[j];             // L4: O(1) unpack
+            if (a[0] < b[1] && b[0] < a[1]) return false;        // L5: overlap check, O(1)
+        }
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -61,6 +93,8 @@ Every pair of intervals is inspected once. No sorting, no extra space. The quadr
 
 Sort. If any meeting's start is earlier than the previous meeting's end, there's a conflict.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def can_attend_meetings(intervals):
     intervals.sort(key=lambda x: x[0])             # L1: O(n log n)
@@ -69,6 +103,19 @@ def can_attend_meetings(intervals):
             return False
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canAttendMeetings(intervals: number[][]): boolean {
+    intervals.sort((a, b) => a[0] - b[0]);                       // L1: O(n log n)
+    for (let i = 1; i < intervals.length; i++) {                 // L2: linear scan, n-1 iterations
+        if (intervals[i][0] < intervals[i - 1][1]) return false; // L3: adjacent overlap check, O(1)
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -86,10 +133,23 @@ Once sorted by start time, only adjacent pairs can overlap: if interval i and in
 - **Time:** O(n log n), driven by L1 (the sort).
 - **Space:** O(1) extra (sort is in-place for Python lists; the input is mutated).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="meeting-rooms-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="meeting-rooms-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Sweep line on events
 
-Decompose into `+1` (start) and `-1` (end) events; sort by time with `-1` before `+1` on ties; running sum must stay \<= 1.
+Decompose into `+1` (start) and `-1` (end) events; sort by time with `-1` before `+1` on ties; running sum must stay ≤ 1.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def can_attend_meetings(intervals):
     events = []                                        # L1: O(1)
@@ -104,6 +164,26 @@ def can_attend_meetings(intervals):
             return False
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canAttendMeetings(intervals: number[][]): boolean {
+    const events: [number, number][] = [];             // L1: O(1)
+    for (const [s, e] of intervals) {                  // L2: build events, O(n)
+        events.push([s, 1]);                           // L3: start event
+        events.push([e, -1]);                          // L4: end event
+    }
+    events.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]);  // L5: sort 2n events, O(n log n)
+    let cur = 0;                                       // L6: O(1)
+    for (const [, delta] of events) {                 // L7: scan events, 2n iterations
+        cur += delta;                                  // L8: O(1) update
+        if (cur > 1) return false;                     // L9: overlap if 2 active at once
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -123,6 +203,17 @@ The events list has 2n entries (one start, one end per interval). Sorting 2n ite
 
 Useful when the next problem (Meeting Rooms II) extends the counting.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="meeting-rooms-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="meeting-rooms-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -135,6 +226,8 @@ Sort + adjacent check is the shortest. Sweep-line generalizes to "how many rooms
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_252.py and run.
 # Uses the canonical implementation (Approach 2: sort + adjacent check).
@@ -164,6 +257,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canAttendMeetings(intervals: number[][]): boolean {
+    intervals.sort((a, b) => a[0] - b[0]);
+    for (let i = 1; i < intervals.length; i++) {
+        if (intervals[i][0] < intervals[i - 1][1]) return false;
+    }
+    return true;
+}
+
+console.assert(canAttendMeetings([[0,30],[5,10],[15,20]]) === false);
+console.assert(canAttendMeetings([[7,10],[2,4]]) === true);
+console.assert(canAttendMeetings([]) === true);
+console.assert(canAttendMeetings([[1,5]]) === true);
+console.assert(canAttendMeetings([[1,5],[5,10]]) === true);
+console.assert(canAttendMeetings([[1,6],[5,10]]) === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

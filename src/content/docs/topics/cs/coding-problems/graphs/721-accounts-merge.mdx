@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, graphs, union-find, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './721-accounts-merge.py?raw';
+import practiceCodeTs from './721-accounts-merge.ts?raw';
+import approach2PyCode from './721-accounts-merge-approach2.py?raw';
+import approach2TsCode from './721-accounts-merge-approach2.ts?raw';
 
 ## Problem
 
@@ -40,12 +45,21 @@ LeetCode 721 · [Link](https://leetcode.com/problems/accounts-merge/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="accounts-merge" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="accounts-merge-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="accounts-merge-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Union-Find on emails
 
 The core observation: two accounts are the same person iff they share at least one email. Treat emails as graph nodes; union every email in an account under that account's first email. Then group all emails by their root, attach the name, and sort.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def accounts_merge(accounts):
     parent = {}                                             # L1: email -> parent email
@@ -79,6 +93,47 @@ def accounts_merge(accounts):
 
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function accountsMerge(accounts: string[][]): string[][] {
+    const parent = new Map<string, string>();               // L1: email -> parent email
+    const emailToName = new Map<string, string>();          // L5: email -> account owner name
+
+    function find(x: string): string {                     // L2: path-compressed find
+        if (parent.get(x) !== x) parent.set(x, find(parent.get(x)!));  // L3: compression
+        return parent.get(x)!;
+    }
+
+    function union(a: string, b: string): void {
+        parent.set(find(a), find(b));                      // L4: O(alpha) link roots
+    }
+
+    for (const account of accounts) {                      // L6: O(n) over all accounts
+        const name = account[0];
+        for (const email of account.slice(1)) {            // L7: O(k) per account
+            if (!parent.has(email)) parent.set(email, email);  // L8: O(1) init new email
+            emailToName.set(email, name);                  // L9: O(1) record owner
+            union(account[1], email);                      // L10: O(alpha) union under first email
+        }
+    }
+
+    const groups = new Map<string, string[]>();            // L11: root -> list of emails
+    for (const email of parent.keys()) {                   // L12: over all emails
+        const root = find(email);
+        if (!groups.has(root)) groups.set(root, []);
+        groups.get(root)!.push(email);                     // L13: O(alpha) find + append
+    }
+
+    const result: string[][] = [];
+    for (const [root, emails] of groups) {                 // L14: iterate groups
+        result.push([emailToName.get(root)!, ...emails.sort()]);  // L15: O(k log k) sort
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -93,8 +148,6 @@ def accounts_merge(accounts):
 | L12 (group pass) | O(alpha) per find | n * k | O(n * k * alpha) |
 | **L15 (sort)** | **O(k log k)** | **n groups** | **O(n * k * log k) ← dominates** |
 
-The sort in L15 dominates the Union-Find operations because alpha is effectively constant while log k grows. Total email count is n * k, and sorting all emails across all groups costs O(n * k * log k).
-
 **Complexity**
 - **Time:** O(n * k * log k), driven by L15 (sorting emails within each merged group).
 - **Space:** O(n * k) for the `parent` and `email_to_name` maps.
@@ -102,6 +155,17 @@ The sort in L15 dominates the Union-Find operations because alpha is effectively
 ### Why union under the first email?
 
 Every email in an account must be reachable from every other email in that account (they all belong to the same person). Unioning each email with `account[1]` (the first email) creates a star topology centered on the first email. Path compression flattens this during subsequent finds, so the root correctly represents the merged group.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="accounts-merge-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="accounts-merge-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -114,6 +178,8 @@ Every email in an account must be reachable from every other email in that accou
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -179,6 +245,61 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function accountsMerge(accounts: string[][]): string[][] {
+    const parent = new Map<string, string>();
+    const emailToName = new Map<string, string>();
+
+    function find(x: string): string {
+        if (parent.get(x) !== x) parent.set(x, find(parent.get(x)!));
+        return parent.get(x)!;
+    }
+
+    for (const account of accounts) {
+        const name = account[0];
+        for (const email of account.slice(1)) {
+            if (!parent.has(email)) parent.set(email, email);
+            emailToName.set(email, name);
+            parent.set(find(account[1]), find(email));
+        }
+    }
+
+    const groups = new Map<string, string[]>();
+    for (const email of parent.keys()) {
+        const root = find(email);
+        if (!groups.has(root)) groups.set(root, []);
+        groups.get(root)!.push(email);
+    }
+
+    const result: string[][] = [];
+    for (const [root, emails] of groups)
+        result.push([emailToName.get(root)!, ...emails.sort()]);
+    return result;
+}
+
+function normalize(result: string[][]): string {
+    return JSON.stringify(result.map(row => [row[0], ...row.slice(1).sort()]).sort());
+}
+
+const a1 = [
+    ["John","johnsmith@mail.com","john_newyork@mail.com"],
+    ["John","johnsmith@mail.com","john00@mail.com"],
+    ["Mary","mary@mail.com"],
+    ["John","johnnybravo@mail.com"],
+];
+const e1 = [
+    ["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],
+    ["Mary","mary@mail.com"],
+    ["John","johnnybravo@mail.com"],
+];
+console.assert(normalize(accountsMerge(a1)) === normalize(e1));
+console.assert(normalize(accountsMerge([["Alice","a@x.com"]])) === normalize([["Alice","a@x.com"]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

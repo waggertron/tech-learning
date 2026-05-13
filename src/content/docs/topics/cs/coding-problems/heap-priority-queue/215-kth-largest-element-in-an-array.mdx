@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './215-kth-larget-element-in-an-array.py?raw';
+import practiceCodeTs from './215-kth-larget-element-in-an-array.ts?raw';
+import approach2TsCode from './215-kth-largest-element-in-an-array-approach2.ts?raw';
+import approach3TsCode from './215-kth-largest-element-in-an-array-approach3.ts?raw';
 
 ## Problem
 
@@ -25,15 +30,34 @@ LeetCode 215 · [Link](https://leetcode.com/problems/kth-largest-element-in-an-a
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="kth-largest-element-in-an-array" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="kth-largest-element-in-an-array-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="kth-largest-element-in-an-array-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, sort, index
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_kth_largest(nums, k):
     nums.sort()       # L1: O(n log n)
     return nums[-k]   # L2: O(1) index
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findKthLargest(nums: number[], k: number): number {
+    const arr = [...nums].sort((a, b) => a - b);  // L1: O(n log n)
+    return arr[arr.length - k];                    // L2: O(1) index
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -54,6 +78,8 @@ Fastest to write; doesn't meet the "without sorting" challenge.
 
 Maintain a min-heap of size k; the top is the kth largest.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -68,6 +94,55 @@ def find_kth_largest(nums, k):
 # Equivalent one-liner:
 # return heapq.nlargest(k, nums)[-1]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MinHeap {
+    private data: number[] = [];
+    get size(): number { return this.data.length; }
+    get top(): number { return this.data[0]; }
+    push(val: number): void {
+        this.data.push(val);
+        this._siftUp(this.data.length - 1);
+    }
+    pop(): number {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) { this.data[0] = last; this._siftDown(0); }
+        return top;
+    }
+    private _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p] <= this.data[i]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    private _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l] < this.data[smallest]) smallest = l;
+            if (r < n && this.data[r] < this.data[smallest]) smallest = r;
+            if (smallest === i) break;
+            [this.data[smallest], this.data[i]] = [this.data[i], this.data[smallest]]; i = smallest;
+        }
+    }
+}
+
+function findKthLargest(nums: number[], k: number): number {
+    const heap = new MinHeap();
+    for (const x of nums) {       // L1: iterate n elements
+        heap.push(x);              // L2: O(log k) push
+        if (heap.size > k)
+            heap.pop();            // L3: O(log k) pop to keep size k
+    }
+    return heap.top;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -85,10 +160,20 @@ The heap never exceeds k entries. Every push and pop costs O(log k). Since we pr
 - **Time:** O(n log k), driven by L2/L3.
 - **Space:** O(k).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="kth-largest-element-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Quickselect (optimal average)
 
 Partition-based selection; average linear time.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import random
 
@@ -125,6 +210,43 @@ def find_kth_largest(nums, k):
 
     return quickselect(0, len(nums) - 1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findKthLargest(nums: number[], k: number): number {
+    const arr = nums.slice(); // avoid mutating input
+    const target = arr.length - k;
+
+    function partition(lo: number, hi: number): [number, number] {
+        const pivotIdx = lo + Math.floor(Math.random() * (hi - lo + 1));
+        const pivot = arr[pivotIdx];  // L1: random pivot
+        let left = lo, right = hi, i = lo;
+        while (i <= right) {          // L2: three-way partition
+            if (arr[i] < pivot) {
+                [arr[left], arr[i]] = [arr[i], arr[left]];
+                left++; i++;
+            } else if (arr[i] > pivot) {
+                [arr[right], arr[i]] = [arr[i], arr[right]];
+                right--;
+            } else {
+                i++;
+            }
+        }
+        return [left, right];
+    }
+
+    let lo = 0, hi = arr.length - 1;
+    while (true) {
+        if (lo === hi) return arr[lo];
+        const [l, r] = partition(lo, hi);   // L3: O(hi - lo) per call
+        if (l <= target && target <= r) return arr[target];
+        else if (target < l) hi = l - 1;
+        else lo = r + 1;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -144,8 +266,18 @@ On average, each round halves the search space: n + n/2 + n/4 + ... = 2n = O(n).
 
 The three-way partition handles duplicate values efficiently, important when the array contains many repeats.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="kth-largest-element-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_215.py and run.
 # Uses the size-K min-heap approach (Approach 2).
@@ -174,6 +306,20 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses the size-K min-heap approach (Approach 2).
+// See 215-kth-largest-element-in-an-array-approach2.ts for the full implementation.
+console.assert(findKthLargest([3,2,1,5,6,4], 2) === 5);
+console.assert(findKthLargest([3,2,3,1,2,4,5,5,6], 4) === 4);
+console.assert(findKthLargest([1], 1) === 1);
+console.assert(findKthLargest([2,2,2,2], 2) === 2);
+console.assert(findKthLargest([5,3,1,4,2], 5) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

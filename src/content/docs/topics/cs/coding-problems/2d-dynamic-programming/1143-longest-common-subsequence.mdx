@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1143-longest-common-subsequence.py?raw';
+import practiceCodeTs from './1143-longest-common-subsequence.ts?raw';
+import approach2PyCode from './1143-longest-common-subsequence-approach2.py?raw';
+import approach2TsCode from './1143-longest-common-subsequence-approach2.ts?raw';
+import approach3PyCode from './1143-longest-common-subsequence-approach3.py?raw';
+import approach3TsCode from './1143-longest-common-subsequence-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 1143 · [Link](https://leetcode.com/problems/longest-common-subsequence
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="longest-common-subsequence" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="longest-common-subsequence-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="longest-common-subsequence-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive
 
 `f(i, j)` = LCS of `text1[i:]` and `text2[j:]`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_common_subsequence(text1, text2):
     def f(i, j):
@@ -40,6 +56,21 @@ def longest_common_subsequence(text1, text2):
         return max(f(i + 1, j), f(i, j + 1))   # L4: two recursive calls
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestCommonSubsequence(text1: string, text2: string): number {
+    function f(i: number, j: number): number {
+        if (i === text1.length || j === text2.length) return 0;  // L1: O(1) base case
+        if (text1[i] === text2[j])                               // L2: O(1) char match
+            return 1 + f(i + 1, j + 1);                          // L3: one recursive call (diagonal)
+        return Math.max(f(i + 1, j), f(i, j + 1));              // L4: two recursive calls
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -61,6 +92,8 @@ Every mismatch doubles the call tree. Without memoization the same `(i, j)` is r
 
 `dp[i][j]` = LCS of `text1[:i]` and `text2[:j]`. `dp[i][j]` depends on `dp[i-1][j-1]`, `dp[i-1][j]`, `dp[i][j-1]`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_common_subsequence(text1, text2):
     m, n = len(text1), len(text2)                        # L1: O(1)
@@ -73,6 +106,26 @@ def longest_common_subsequence(text1, text2):
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])  # L7: O(1) max of up/left
     return dp[m][n]                                      # L8: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestCommonSubsequence(text1: string, text2: string): number {
+    const m = text1.length, n = text2.length;                          // L1: O(1)
+    const dp: number[][] = Array.from({ length: m + 1 }, () =>
+        new Array(n + 1).fill(0));                                     // L2: O(m*n) table init
+    for (let i = 1; i <= m; i++) {                                     // L3: outer loop O(m)
+        for (let j = 1; j <= n; j++) {                                 // L4: inner loop O(n)
+            if (text1[i - 1] === text2[j - 1])                        // L5: O(1) char match
+                dp[i][j] = 1 + dp[i - 1][j - 1];                     // L6: O(1) diagonal + 1
+            else
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);     // L7: O(1) max of up/left
+        }
+    }
+    return dp[m][n];                                                   // L8: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -90,10 +143,23 @@ Each cell fill is a single comparison plus one or two table lookups, all O(1). T
 - **Time:** O(m · n), driven by L3/L4 (the full double loop).
 - **Space:** O(m · n) for the DP table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="longest-common-subsequence-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="longest-common-subsequence-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: 1-D rolling array (optimal space)
 
 Keep two rows, current and previous. Or one row with a diagonal scratch scalar.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_common_subsequence(text1, text2):
     m, n = len(text1), len(text2)         # L1: O(1)
@@ -111,6 +177,29 @@ def longest_common_subsequence(text1, text2):
         prev = curr                       # L10: O(1) roll the row
     return prev[n]                        # L11: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestCommonSubsequence(text1: string, text2: string): number {
+    let s1 = text1, s2 = text2;
+    if (s1.length < s2.length) [s1, s2] = [s2, s1];                   // L2: minimize space
+    const m = s1.length, n = s2.length;
+    let prev: number[] = new Array(n + 1).fill(0);                    // L3: O(n) init previous row
+    for (let i = 1; i <= m; i++) {                                     // L4: outer loop O(m)
+        const curr: number[] = new Array(n + 1).fill(0);              // L5: O(n) current row
+        for (let j = 1; j <= n; j++) {                                 // L6: inner loop O(n)
+            if (s1[i - 1] === s2[j - 1])                              // L7: O(1) char match
+                curr[j] = 1 + prev[j - 1];                            // L8: O(1) diagonal + 1
+            else
+                curr[j] = Math.max(prev[j], curr[j - 1]);             // L9: O(1) max of up/left
+        }
+        prev = curr;                                                   // L10: O(1) roll
+    }
+    return prev[n];                                                    // L11: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -129,6 +218,17 @@ Same time as 2-D DP but space is O(n) (two rows of size n). The swap at L2 ensur
 - **Time:** O(m · n), driven by L4/L6 (the double loop).
 - **Space:** O(min(m, n)) for the two rolling rows.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="longest-common-subsequence-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="longest-common-subsequence-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -141,6 +241,8 @@ LCS is the prototype of the "compare two sequences" DP. Its recurrence pattern, 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_1143.py and run.
 # Uses the canonical implementation (Approach 2: 2-D bottom-up DP).
@@ -171,6 +273,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestCommonSubsequence(text1: string, text2: string): number {
+    const m = text1.length, n = text2.length;
+    const dp: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+    for (let i = 1; i <= m; i++)
+        for (let j = 1; j <= n; j++)
+            if (text1[i - 1] === text2[j - 1])
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            else
+                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+    return dp[m][n];
+}
+
+console.assert(longestCommonSubsequence("abcde", "ace") === 3);
+console.assert(longestCommonSubsequence("abc", "abc") === 3);
+console.assert(longestCommonSubsequence("abc", "def") === 0);
+console.assert(longestCommonSubsequence("", "abc") === 0);
+console.assert(longestCommonSubsequence("abc", "") === 0);
+console.assert(longestCommonSubsequence("a", "a") === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

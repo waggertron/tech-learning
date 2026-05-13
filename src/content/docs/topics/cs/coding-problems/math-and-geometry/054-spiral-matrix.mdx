@@ -5,11 +5,16 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './054-spiral-matrix.py?raw';
+import practiceCodeTs from './054-spiral-matrix.ts?raw';
+import approach2PyCode from './054-spiral-matrix-approach2.py?raw';
+import approach2TsCode from './054-spiral-matrix-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 54 · [Link](https://leetcode.com/problems/spiral-matrix/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="spiral-matrix" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="spiral-matrix-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="spiral-matrix-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Visited-set DFS / walking with direction
 
 Walk, turning when you hit a visited cell or the boundary.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def spiral_order(matrix):
     if not matrix:
@@ -50,6 +64,32 @@ def spiral_order(matrix):
         r, c = nr, nc
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function spiralOrder(matrix: number[][]): number[] {
+    if (!matrix.length) return [];
+    const rows = matrix.length, cols = matrix[0].length;    // L1: O(1)
+    const dirs = [[0,1],[1,0],[0,-1],[-1,0]];
+    const result: number[] = [];
+    const visited = Array.from({ length: rows }, () => new Array(cols).fill(false)); // L2: O(m·n)
+    let r = 0, c = 0, d = 0;
+    for (let i = 0; i < rows * cols; i++) {                 // L3: loop m·n times
+        result.push(matrix[r][c]);                           // L4: O(1) amortized
+        visited[r][c] = true;                               // L5: O(1)
+        const [dr, dc] = dirs[d];
+        const nr = r + dr, nc = c + dc;
+        if (nr < 0 || nr >= rows || nc < 0 || nc >= cols || visited[nr][nc]) {
+            d = (d + 1) % 4;                                // L6: O(1) turn
+        }
+        r += dirs[d][0];
+        c += dirs[d][1];
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -71,6 +111,8 @@ Every cell is visited exactly once.
 
 Maintain `top`, `bottom`, `left`, `right`. Walk each layer: right along `top`, down along `right`, left along `bottom`, up along `left`. After each side, shrink the boundary.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def spiral_order(matrix):
     if not matrix:
@@ -96,6 +138,38 @@ def spiral_order(matrix):
             left += 1
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function spiralOrder(matrix: number[][]): number[] {
+    if (!matrix.length) return [];
+    const result: number[] = [];
+    let top = 0, bottom = matrix.length - 1;    // L1: O(1)
+    let left = 0, right = matrix[0].length - 1; // L2: O(1)
+
+    while (top <= bottom && left <= right) {     // L3: outer loop, min(m,n)/2 rounds
+        for (let c = left; c <= right; c++)      // L4: walk top row
+            result.push(matrix[top][c]);         // L5: O(1) amortized
+        top++;                                   // L6: shrink
+        for (let r = top; r <= bottom; r++)      // L7: walk right col
+            result.push(matrix[r][right]);
+        right--;
+        if (top <= bottom) {
+            for (let c = right; c >= left; c--)  // L8: walk bottom row
+                result.push(matrix[bottom][c]);
+            bottom--;
+        }
+        if (left <= right) {
+            for (let r = bottom; r >= top; r--)  // L9: walk left col
+                result.push(matrix[r][left]);
+            left++;
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -113,6 +187,17 @@ All four side-walks together visit each cell exactly once across all rounds.
 - **Space:** O(1) extra.
 
 The `if top <= bottom` / `if left <= right` guards handle the last single row or column in non-square matrices.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="spiral-matrix-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="spiral-matrix-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Recursive peel + rotate
 
@@ -149,6 +234,8 @@ The boundary-shrink template works for Spiral Matrix II (fill), III (starting of
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_054.py and run.
 # Uses the canonical implementation (Approach 2: shrinking boundaries).
@@ -188,6 +275,41 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function spiralOrder(matrix: number[][]): number[] {
+    if (!matrix.length) return [];
+    const result: number[] = [];
+    let top = 0, bottom = matrix.length - 1;
+    let left = 0, right = matrix[0].length - 1;
+    while (top <= bottom && left <= right) {
+        for (let c = left; c <= right; c++) result.push(matrix[top][c]);
+        top++;
+        for (let r = top; r <= bottom; r++) result.push(matrix[r][right]);
+        right--;
+        if (top <= bottom) {
+            for (let c = right; c >= left; c--) result.push(matrix[bottom][c]);
+            bottom--;
+        }
+        if (left <= right) {
+            for (let r = bottom; r >= top; r--) result.push(matrix[r][left]);
+            left++;
+        }
+    }
+    return result;
+}
+
+console.assert(JSON.stringify(spiralOrder([[1,2,3],[4,5,6],[7,8,9]])) === JSON.stringify([1,2,3,6,9,8,7,4,5]));
+console.assert(JSON.stringify(spiralOrder([[1,2,3,4],[5,6,7,8],[9,10,11,12]])) === JSON.stringify([1,2,3,4,8,12,11,10,9,5,6,7]));
+console.assert(JSON.stringify(spiralOrder([[1]])) === JSON.stringify([1]));
+console.assert(JSON.stringify(spiralOrder([[1,2],[3,4]])) === JSON.stringify([1,2,4,3]));
+console.assert(JSON.stringify(spiralOrder([[1],[2],[3]])) === JSON.stringify([1,2,3]));
+console.assert(JSON.stringify(spiralOrder([[1,2,3]])) === JSON.stringify([1,2,3]));
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

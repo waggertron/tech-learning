@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './238-product-of-array-except-self.py?raw';
+import practiceCodeTs from './238-product-of-array-except-self.ts?raw';
+import approach2PyCode from './238-product-of-array-except-self-approach2.py?raw';
+import approach2TsCode from './238-product-of-array-except-self-approach2.ts?raw';
+import approach3PyCode from './238-product-of-array-except-self-approach3.py?raw';
+import approach3TsCode from './238-product-of-array-except-self-approach3.ts?raw';
 
 ## Problem
 
@@ -25,12 +32,21 @@ LeetCode 238 · [Link](https://leetcode.com/problems/product-of-array-except-sel
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="product-of-array-except-self" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="product-of-array-except-self-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="product-of-array-except-self-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, nested product
 
 For each `i`, multiply all other elements.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def product_except_self(nums: list[int]) -> list[int]:
     n = len(nums)                              # L1: O(1)
@@ -43,6 +59,24 @@ def product_except_self(nums: list[int]) -> list[int]:
         answer[i] = prod                       # L8: O(1) assign
     return answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function productExceptSelf(nums: number[]): number[] {
+    const n = nums.length;                         // L1: O(1)
+    const answer = new Array(n).fill(0);           // L2: O(n)
+    for (let i = 0; i < n; i++) {                 // L3: outer loop, n iterations
+        let prod = 1;                              // L4: O(1) reset
+        for (let j = 0; j < n; j++) {             // L5: inner loop, n iterations
+            if (j !== i) prod *= nums[j];          // L6-L7: O(1) guard + multiply
+        }
+        answer[i] = prod;                          // L8: O(1) assign
+    }
+    return answer;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -69,6 +103,8 @@ Too slow for the problem's stated constraint but useful as a sanity check.
 
 Compute both in O(n) and combine.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def product_except_self(nums: list[int]) -> list[int]:
     n = len(nums)                              # L1: O(1)
@@ -83,6 +119,25 @@ def product_except_self(nums: list[int]) -> list[int]:
 
     return [prefix[i] * suffix[i] for i in range(n)]  # L8: O(n)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function productExceptSelf(nums: number[]): number[] {
+    const n = nums.length;                                  // L1: O(1)
+    const prefix = new Array(n).fill(1);                    // L2: O(n)
+    const suffix = new Array(n).fill(1);                    // L3: O(n)
+
+    for (let i = 1; i < n; i++)                            // L4: forward pass, n-1 steps
+        prefix[i] = prefix[i - 1] * nums[i - 1];          // L5: O(1)
+
+    for (let i = n - 2; i >= 0; i--)                      // L6: backward pass, n-1 steps
+        suffix[i] = suffix[i + 1] * nums[i + 1];          // L7: O(1)
+
+    return prefix.map((p, i) => p * suffix[i]);            // L8: O(n)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -101,10 +156,23 @@ Three linear passes, each O(n). All three contribute equally; none dominates asy
 - **Time:** O(n), driven by the three linear passes (L4/L5, L6/L7, L8).
 - **Space:** O(n) for the two auxiliary arrays.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="product-except-self-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="product-except-self-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Space-optimized (O(1) extra space)
 
 Reuse the output array for the prefix pass; track the suffix product as a single running scalar on a second pass.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def product_except_self(nums: list[int]) -> list[int]:
     n = len(nums)                              # L1: O(1)
@@ -122,6 +190,29 @@ def product_except_self(nums: list[int]) -> list[int]:
 
     return answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function productExceptSelf(nums: number[]): number[] {
+    const n = nums.length;                              // L1: O(1)
+    const answer = new Array(n).fill(1);                // L2: O(n) output array
+
+    // First pass: answer[i] = product of all elements left of i
+    for (let i = 1; i < n; i++)                        // L3: n-1 steps
+        answer[i] = answer[i - 1] * nums[i - 1];      // L4: O(1)
+
+    // Second pass: multiply by product of all elements right of i
+    let suffix = 1;                                     // L5: O(1) running scalar
+    for (let i = n - 1; i >= 0; i--) {                // L6: n steps, right to left
+        answer[i] *= suffix;                            // L7: O(1) multiply-in-place
+        suffix *= nums[i];                              // L8: O(1) extend suffix product
+    }
+
+    return answer;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -140,6 +231,17 @@ Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the ne
 - **Time:** O(n), driven by L3/L4 and L6/L7/L8 (two linear passes).
 - **Space:** O(1) extra (the output array is not counted per the problem).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="product-except-self-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="product-except-self-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -152,6 +254,8 @@ Division would give an O(n) single-pass solution, forbidden here because of how 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_product_except_self.py and run.
 # Uses the canonical implementation (Approach 3: space-optimized).
@@ -178,6 +282,30 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function productExceptSelf(nums: number[]): number[] {
+    const n = nums.length;
+    const answer = new Array(n).fill(1);
+    for (let i = 1; i < n; i++) answer[i] = answer[i - 1] * nums[i - 1];
+    let suffix = 1;
+    for (let i = n - 1; i >= 0; i--) {
+        answer[i] *= suffix;
+        suffix *= nums[i];
+    }
+    return answer;
+}
+
+console.assert(JSON.stringify(productExceptSelf([1, 2, 3, 4])) === JSON.stringify([24, 12, 8, 6]));
+console.assert(JSON.stringify(productExceptSelf([-1, 1, 0, -3, 3])) === JSON.stringify([0, 0, 9, 0, 0]));
+console.assert(JSON.stringify(productExceptSelf([1, 1])) === JSON.stringify([1, 1]));
+console.assert(JSON.stringify(productExceptSelf([2, 3])) === JSON.stringify([3, 2]));
+console.assert(JSON.stringify(productExceptSelf([1, 0])) === JSON.stringify([0, 1]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

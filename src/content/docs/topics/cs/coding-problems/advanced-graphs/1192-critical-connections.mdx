@@ -5,11 +5,16 @@ parent: advanced-graphs
 tags: [leetcode, advanced-graphs, tarjans, hard]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1192-critical-connections.py?raw';
+import practiceCodeTs from './1192-critical-connections.ts?raw';
+import approach2PyCode from './1192-critical-connections-approach2.py?raw';
+import approach2TsCode from './1192-critical-connections-approach2.ts?raw';
 
 ## Problem
 
@@ -26,7 +31,14 @@ LeetCode 1192 · [Link](https://leetcode.com/problems/critical-connections-in-a-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="critical-connections" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="critical-connections-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="critical-connections-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Tarjan's bridge-finding algorithm
 
@@ -48,8 +60,10 @@ low[v] > disc[u]
 
 This means: no node reachable from `v`'s subtree can reach `u` or any ancestor of `u` via a back edge. Removing `(u, v)` therefore disconnects the graph.
 
-**Why `low[v] > disc[u]` (strict, not >=):** If `low[v] == disc[u]`, the subtree of `v` can reach `u` itself (via a back edge to `u`), so there is an alternate path. The edge is not a bridge.
+**Why `low[v] > disc[u]` (strict, not ≥):** If `low[v] == disc[u]`, the subtree of `v` can reach `u` itself (via a back edge to `u`), so there is an alternate path. The edge is not a bridge.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -85,6 +99,43 @@ def critical_connections(n, connections):
 
     return bridges
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function criticalConnections(n: number, connections: number[][]): number[][] {
+    const graph = new Map<number, number[]>();
+    for (let i = 0; i < n; i++) graph.set(i, []);
+    for (const [u, v] of connections) {          // L2: O(E) build adjacency
+        graph.get(u)!.push(v);
+        graph.get(v)!.push(u);
+    }
+
+    const disc = new Array(n).fill(-1);          // L3: O(V) discovery times
+    const low = new Array(n).fill(0);            // L4: O(V) low values
+    const bridges: number[][] = [];              // L5: O(1) result list
+    let timer = 0;                               // L6: mutable counter
+
+    function dfs(node: number, parent: number): void {
+        disc[node] = low[node] = timer++;        // L7/L8: O(1) assign + increment
+
+        for (const neighbor of graph.get(node)!) {  // L9: O(deg(node)) per call
+            if (neighbor === parent) continue;   // L10: O(1) skip parent edge
+            if (disc[neighbor] === -1) {         // L11: O(1) unvisited
+                dfs(neighbor, node);             // L12: O(1) recurse
+                low[node] = Math.min(low[node], low[neighbor]);  // L13: O(1) pull up
+                if (low[neighbor] > disc[node]) bridges.push([node, neighbor]);  // L14: bridge check
+            } else {                             // L15: back edge to visited node
+                low[node] = Math.min(low[node], disc[neighbor]);  // L16: O(1) update low
+            }
+        }
+    }
+
+    for (let i = 0; i < n; i++) if (disc[i] === -1) dfs(i, -1);  // L17: handle disconnected
+    return bridges;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -105,6 +156,17 @@ Each node is visited exactly once; each edge is examined twice (once from each e
 **Complexity**
 - **Time:** O(V + E). Each node and each edge processed once.
 - **Space:** O(V + E) for the adjacency list, disc/low arrays, and recursion stack.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="critical-connections-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="critical-connections-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ### Visualizing with the example
 
@@ -151,6 +213,8 @@ Tarjan's bridge algorithm is the standard O(V+E) solution for finding all bridge
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -192,6 +256,46 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function criticalConnections(n: number, connections: number[][]): number[][] {
+    const graph = new Map<number, number[]>();
+    for (let i = 0; i < n; i++) graph.set(i, []);
+    for (const [u, v] of connections) {
+        graph.get(u)!.push(v);
+        graph.get(v)!.push(u);
+    }
+    const disc = new Array(n).fill(-1);
+    const low = new Array(n).fill(0);
+    const bridges: number[][] = [];
+    let timer = 0;
+
+    function dfs(node: number, parent: number): void {
+        disc[node] = low[node] = timer++;
+        for (const neighbor of graph.get(node)!) {
+            if (neighbor === parent) continue;
+            if (disc[neighbor] === -1) {
+                dfs(neighbor, node);
+                low[node] = Math.min(low[node], low[neighbor]);
+                if (low[neighbor] > disc[node]) bridges.push([node, neighbor]);
+            } else {
+                low[node] = Math.min(low[node], disc[neighbor]);
+            }
+        }
+    }
+
+    for (let i = 0; i < n; i++) if (disc[i] === -1) dfs(i, -1);
+    return bridges;
+}
+
+console.assert(JSON.stringify(criticalConnections(4, [[0,1],[1,2],[2,0],[1,3]])) === JSON.stringify([[1,3]]));
+console.assert(JSON.stringify(criticalConnections(2, [[0,1]])) === JSON.stringify([[0,1]]));
+console.assert(JSON.stringify(criticalConnections(3, [[0,1],[1,2],[0,2]])) === JSON.stringify([]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

@@ -1,6 +1,6 @@
 ---
 title: "518. Coin Change II (Medium)"
-description: Count the number of ways to make an amount using unlimited coins of each denomination.
+description: "Count the number of ways to make an amount using unlimited coins of each denomination."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './518-coin-change-ii.py?raw';
+import practiceCodeTs from './518-coin-change-ii.ts?raw';
+import approach2PyCode from './518-coin-change-ii-approach2.py?raw';
+import approach2TsCode from './518-coin-change-ii-approach2.ts?raw';
+import approach3PyCode from './518-coin-change-ii-approach3.py?raw';
+import approach3TsCode from './518-coin-change-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 518 · [Link](https://leetcode.com/problems/coin-change-ii/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="coin-change-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="coin-change-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="coin-change-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive with coin index
 
 At each step, for coin `c`, choose "include another `c`" or "move to next coin."
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def change(amount, coins):
     def f(i, remaining):
@@ -39,6 +55,20 @@ def change(amount, coins):
         return f(i, remaining - coins[i]) + f(i + 1, remaining)  # L3: use coin or skip
     return f(0, amount)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function change(amount: number, coins: number[]): number {
+    function f(i: number, remaining: number): number {
+        if (remaining === 0) return 1;                              // L1: O(1) base: made amount
+        if (remaining < 0 || i === coins.length) return 0;        // L2: O(1) base: overshoot/done
+        return f(i, remaining - coins[i]) + f(i + 1, remaining);  // L3: use coin or skip
+    }
+    return f(0, amount);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,6 +89,8 @@ Without memoization, the same `(i, remaining)` is recomputed many times across b
 
 Cache by `(i, remaining)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -72,6 +104,25 @@ def change(amount, coins):
         return f(i, remaining - coins[i]) + f(i + 1, remaining)  # L4: O(1) with cache
     return f(0, amount)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function change(amount: number, coins: number[]): number {
+    const memo: Map<string, number> = new Map();
+    function f(i: number, remaining: number): number {
+        if (remaining === 0) return 1;                             // L2: O(1) base case
+        if (remaining < 0 || i === coins.length) return 0;       // L3: O(1) base case
+        const key = `${i},${remaining}`;
+        if (memo.has(key)) return memo.get(key)!;                 // L1: O(1) cache lookup
+        const result = f(i, remaining - coins[i]) + f(i + 1, remaining);  // L4: cached
+        memo.set(key, result);
+        return result;
+    }
+    return f(0, amount);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -89,10 +140,23 @@ Each unique `(i, remaining)` pair is computed once. There are `n * (A+1)` such p
 - **Time:** O(n · amount), driven by L4 across all unique (i, remaining) states.
 - **Space:** O(n · amount) for the memo table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="coin-change-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="coin-change-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up 1-D DP with outer loop over coins (canonical)
 
 Think of it as an unbounded knapsack *counting* problem. The loop order matters: **coins outside, amounts inside**. Swapping the loops would count permutations instead of combinations.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def change(amount, coins):
     dp = [0] * (amount + 1)    # L1: O(A) table init
@@ -102,6 +166,22 @@ def change(amount, coins):
             dp[s] += dp[s - c]           # L5: O(1) accumulate ways using coin c
     return dp[amount]          # L6: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function change(amount: number, coins: number[]): number {
+    const dp: number[] = new Array(amount + 1).fill(0);  // L1: O(A) table init
+    dp[0] = 1;                                            // L2: O(1) base: one way for amount 0
+    for (const c of coins) {                              // L3: O(n) outer loop over coins
+        for (let s = c; s <= amount; s++) {               // L4: O(A) inner loop, left-to-right
+            dp[s] += dp[s - c];                           // L5: O(1) accumulate ways
+        }
+    }
+    return dp[amount];                                    // L6: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -122,6 +202,17 @@ The left-to-right inner loop (L4) is what makes this unbounded knapsack (vs. 0/1
 ### Why coin-outside, amount-inside
 With coin-outside, each coin is "introduced" once; by the time the inner loop finishes, you've added every multiset that includes that coin an integer number of times. Amount-outside would multi-count, treating `[1, 2]` and `[2, 1]` as different compositions.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="coin-change-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="coin-change-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -134,6 +225,8 @@ Template for every "count combinations using unlimited items" problem (Number of
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_518.py and run.
 # Uses the canonical implementation (Approach 3: 1-D DP, coin-outside).
@@ -161,6 +254,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function change(amount: number, coins: number[]): number {
+    const dp: number[] = new Array(amount + 1).fill(0);
+    dp[0] = 1;
+    for (const c of coins)
+        for (let s = c; s <= amount; s++)
+            dp[s] += dp[s - c];
+    return dp[amount];
+}
+
+console.assert(change(5, [1, 2, 5]) === 4);
+console.assert(change(3, [2]) === 0);
+console.assert(change(0, [1, 2, 5]) === 1);
+console.assert(change(10, [5]) === 1);
+console.assert(change(10, [1, 5, 10]) === 4);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

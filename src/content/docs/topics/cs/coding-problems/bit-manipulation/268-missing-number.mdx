@@ -5,11 +5,18 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, math, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './268-missing-number.py?raw';
+import practiceCodeTs from './268-missing-number.ts?raw';
+import approach2PyCode from './268-missing-number-approach2.py?raw';
+import approach2TsCode from './268-missing-number-approach2.ts?raw';
+import approach3PyCode from './268-missing-number-approach3.py?raw';
+import approach3TsCode from './268-missing-number-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 268 · [Link](https://leetcode.com/problems/missing-number/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="missing-number" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="missing-number-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="missing-number-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Hash set
 
 Put everything into a set, then scan `[0, n]` for the missing value.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def missing_number(nums):
     s = set(nums)                           # L1: O(n)
@@ -38,6 +54,19 @@ def missing_number(nums):
             return i
     return -1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function missingNumber(nums: number[]): number {
+    const s = new Set(nums);                // L1: O(n)
+    for (let i = 0; i <= nums.length; i++) { // L2: scan 0..n
+        if (!s.has(i)) return i;            // L3: O(1) amortized
+    }
+    return -1;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -56,11 +85,23 @@ def missing_number(nums):
 
 Expected sum of `[0, n]` is `n(n + 1)/2`. Missing = expected - actual.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def missing_number(nums):
     n = len(nums)                           # L1: O(1)
     return n * (n + 1) // 2 - sum(nums)    # L2: O(n)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function missingNumber(nums: number[]): number {
+    const n = nums.length;                              // L1: O(1)
+    return n * (n + 1) / 2 - nums.reduce((a, b) => a + b, 0); // L2: O(n)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -75,12 +116,25 @@ def missing_number(nums):
 - **Time:** O(n), driven by L2 (summing all elements).
 - **Space:** O(1).
 
-Risk of overflow in fixed-width languages for large n (not an issue in Python).
+Risk of overflow in fixed-width languages for large n (not an issue in Python or JavaScript's 64-bit floats for this constraint).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="missing-number-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="missing-number-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: XOR of indices and values (optimal, overflow-safe)
 
-XOR all values 0…n with all array elements. Pairs cancel; missing remains.
+XOR all values 0...n with all array elements. Pairs cancel; missing remains.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def missing_number(nums):
     result = len(nums)                      # L1: O(1), start with n
@@ -88,6 +142,19 @@ def missing_number(nums):
         result ^= i ^ x                     # L3: O(1), cancel paired values
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function missingNumber(nums: number[]): number {
+    let result = nums.length;               // L1: O(1), start with n
+    for (let i = 0; i < nums.length; i++) { // L2: single pass, n iterations
+        result ^= i ^ nums[i];              // L3: O(1), cancel paired values
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -107,6 +174,17 @@ A single pass; each element and index are XORed in once.
 ### Why it works
 Result starts at `n`. We XOR in every index 0..n-1 and every value from `nums`. Every number from 0..n except the missing one appears exactly twice (once as an index, once as a value); each cancels to 0. The initial `n` and the missing value survive, but `n` is also present as an index of the initial XOR, so it cancels unless it's the missing one... Actually here's the clean reading: we start with `n`, then XOR in all i and all nums[i]; the set `{0..n} ∪ {all nums}` has every value except the missing appearing an even number of times. Net result = missing.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="missing-number-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="missing-number-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -117,6 +195,8 @@ Result starts at `n`. We XOR in every index 0..n-1 and every value from `nums`. 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_268.py and run.
 # Uses the canonical implementation (Approach 3: XOR).
@@ -139,6 +219,25 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function missingNumber(nums: number[]): number {
+    let result = nums.length;
+    for (let i = 0; i < nums.length; i++) result ^= i ^ nums[i];
+    return result;
+}
+
+console.assert(missingNumber([3, 0, 1]) === 2);
+console.assert(missingNumber([0, 1]) === 2);
+console.assert(missingNumber([9, 6, 4, 2, 3, 5, 7, 0, 1]) === 8);
+console.assert(missingNumber([0]) === 1);
+console.assert(missingNumber([1]) === 0);
+console.assert(missingNumber([0, 1, 2, 4, 5]) === 3);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

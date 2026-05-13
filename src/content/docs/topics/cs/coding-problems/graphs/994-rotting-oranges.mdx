@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, bfs, multi-source, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './994-rotting-oranges.py?raw';
+import practiceCodeTs from './994-rotting-oranges.ts?raw';
+import approach2PyCode from './994-rotting-oranges-approach2.py?raw';
+import approach2TsCode from './994-rotting-oranges-approach2.ts?raw';
 
 ## Problem
 
@@ -30,52 +35,22 @@ LeetCode 994 · [Link](https://leetcode.com/problems/rotting-oranges/) · *Mediu
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="rotting-oranges" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="rotting-oranges-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="rotting-oranges-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, simulate minute-by-minute
 
 On each tick, scan the grid and mark any fresh orange adjacent to a rotten one. Keep ticking until no more changes.
 
-```python
-def oranges_rotting(grid):
-    rows, cols = len(grid), len(grid[0])             # L1: grid dimensions
-    time = 0
-    while True:                                       # L2: outer loop, one tick per iteration
-        to_rot = []
-        for r in range(rows):                         # L3: scan rows
-            for c in range(cols):                     # L4: scan cols
-                if grid[r][c] == 1:
-                    for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                        nr, nc = r + dr, c + dc
-                        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 2:
-                            to_rot.append((r, c))     # L5: queue cell to rot
-                            break
-        if not to_rot:                                # L6: no change, done
-            break
-        for r, c in to_rot:
-            grid[r][c] = 2                            # L7: apply rot
-        time += 1                                     # L8: advance clock
-
-    return -1 if any(1 in row for row in grid) else time  # L9: check unreachable
-```
-
-**Where the time goes, line by line**
-
-*Variables: m = grid rows, n = grid cols.*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L3, L4 (full scan) | O(1) per cell | m * n per tick | O(m * n) per tick |
-| **L2 (outer loop)** | **O(m * n) per tick** | **up to m * n ticks** | **O((m * n)^2) ← dominates** |
-| L5 (append) | O(1) | up to m * n total | O(m * n) |
-| L7 (apply rot) | O(1) | up to m * n total | O(m * n) |
-| L9 (final scan) | O(m * n) | 1 | O(m * n) |
-
-The bottleneck is L2 combined with L3/L4: in the worst case (a long snake of oranges), exactly one orange rots per tick, giving m * n ticks each scanning m * n cells.
-
 **Complexity**
-- **Time:** O((m * n)^2), driven by L2 (up to m * n ticks, each doing an O(m * n) scan).
-- **Space:** O(m * n) for `to_rot` in the worst tick.
+- **Time:** O((m * n)²), driven by up to m * n ticks, each doing an O(m * n) scan.
+- **Space:** O(m * n) for the to_rot list.
 
 Correct but slow.
 
@@ -83,6 +58,8 @@ Correct but slow.
 
 Seed a BFS queue with every rotten orange at time 0; process levels. When the queue empties, time = last recorded minute. Return -1 if any fresh orange remains.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -110,6 +87,39 @@ def oranges_rotting(grid):
 
     return time if fresh == 0 else -1                # L11: check for unreachable
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function orangesRotting(grid: number[][]): number {
+    const rows = grid.length, cols = grid[0].length;  // L1: grid dimensions
+    const q: [number, number, number][] = [];
+    let fresh = 0;
+    for (let r = 0; r < rows; r++) {                  // L2: seed queue + count fresh
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === 2) q.push([r, c, 0]); // L3: enqueue rotten with t=0
+            else if (grid[r][c] === 1) fresh++;       // L4: count fresh
+        }
+    }
+
+    let time = 0, head = 0;
+    while (head < q.length) {                         // L5: BFS loop
+        const [r, c, t] = q[head++];                  // L6: O(1) dequeue
+        time = t;                                     // L7: track latest minute
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {
+                grid[nr][nc] = 2;                     // L8: rot neighbor
+                fresh--;                              // L9: decrement fresh count
+                q.push([nr, nc, t + 1]);              // L10: enqueue with incremented time
+            }
+        }
+    }
+
+    return fresh === 0 ? time : -1;                   // L11: check for unreachable
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -138,6 +148,8 @@ Think of all rotten oranges as simultaneous "starting points" of a BFS. The dept
 
 Same idea, drop per-entry time tag; use level-by-level batching.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -166,27 +178,57 @@ def oranges_rotting(grid):
 
     return -1 if fresh > 0 else time                 # L12: check for unreachable
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function orangesRotting(grid: number[][]): number {
+    const rows = grid.length, cols = grid[0].length;  // L1: grid dimensions
+    const q: [number, number][] = [];
+    let fresh = 0;
+    for (let r = 0; r < rows; r++) {                  // L2: seed queue + count fresh
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === 2) q.push([r, c]);     // L3: enqueue rotten, no time tag
+            else if (grid[r][c] === 1) fresh++;       // L4: count fresh
+        }
+    }
 
-**Where the time goes, line by line**
+    let time = 0, head = 0;
+    while (head < q.length && fresh > 0) {            // L5: BFS loop, stop early if no fresh
+        time++;                                       // L6: advance clock once per level
+        const levelEnd = q.length;
+        while (head < levelEnd) {                     // L7: process exactly one level
+            const [r, c] = q[head++];                 // L8: O(1) dequeue
+            for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {
+                    grid[nr][nc] = 2;                 // L9: rot neighbor
+                    fresh--;                          // L10: decrement fresh count
+                    q.push([nr, nc]);                 // L11: enqueue for next level
+                }
+            }
+        }
+    }
 
-*Variables: m = grid rows, n = grid cols.*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L2 (seed scan) | O(1) | m * n | O(m * n) |
-| L6 (time increment) | O(1) | once per BFS level | O(m * n) total |
-| L7 (level snapshot) | O(1) | once per level | O(m * n) total |
-| **L8 (dequeue)** | **O(1)** | **once per cell** | **O(m * n) ← dominates** |
-| L9, L10 (rot + decrement) | O(1) | once per fresh cell | O(m * n) |
-| L11 (enqueue) | O(1) | once per fresh cell | O(m * n) |
-
-The `for _ in range(len(q))` snapshot in L7 captures exactly the current level's size before any new cells are appended. This avoids the per-entry time tuple while keeping level boundaries clean.
+    return fresh > 0 ? -1 : time;                     // L12: check for unreachable
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(m * n), driven by L8/L11 (each cell processed once).
-- **Space:** O(m * n) queue; slightly less memory per entry than Approach 2 (no `t` field in each tuple).
+- **Space:** O(m * n) queue; slightly less memory per entry than Approach 2 (no `t` tuple element).
 
-Same asymptotic; slightly tighter memory (no `t` tuple element).
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="rotting-oranges-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="rotting-oranges-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -200,6 +242,8 @@ Multi-source BFS is the canonical template for "fire/water/infection spreads fro
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_994.py and run.
 # Uses the canonical implementation (Approach 2: multi-source BFS).
@@ -256,6 +300,43 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function orangesRotting(grid: number[][]): number {
+    const rows = grid.length, cols = grid[0].length;
+    const q: [number, number, number][] = [];
+    let fresh = 0;
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === 2) q.push([r, c, 0]);
+            else if (grid[r][c] === 1) fresh++;
+        }
+
+    let time = 0, head = 0;
+    while (head < q.length) {
+        const [r, c, t] = q[head++];
+        time = t;
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {
+                grid[nr][nc] = 2; fresh--; q.push([nr, nc, t + 1]);
+            }
+        }
+    }
+    return fresh === 0 ? time : -1;
+}
+
+console.assert(orangesRotting([[2,1,1],[1,1,0],[0,1,1]]) === 4);
+console.assert(orangesRotting([[2,1,1],[0,1,1],[1,0,1]]) === -1);
+console.assert(orangesRotting([[0,2]]) === 0);
+console.assert(orangesRotting([[1,1],[1,1]]) === -1);
+console.assert(orangesRotting([[0]]) === 0);
+console.assert(orangesRotting([[2,1]]) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

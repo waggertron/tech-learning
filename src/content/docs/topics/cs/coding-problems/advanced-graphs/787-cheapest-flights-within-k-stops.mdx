@@ -5,11 +5,18 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, bellman-ford, bfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './787-cheapest-flights-within-k-stops.py?raw';
+import practiceCodeTs from './787-cheapest-flights-within-k-stops.ts?raw';
+import approach2PyCode from './787-cheapest-flights-within-k-stops-approach2.py?raw';
+import approach2TsCode from './787-cheapest-flights-within-k-stops-approach2.ts?raw';
+import approach3PyCode from './787-cheapest-flights-within-k-stops-approach3.py?raw';
+import approach3TsCode from './787-cheapest-flights-within-k-stops-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 787 · [Link](https://leetcode.com/problems/cheapest-flights-within-k-s
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="cheapest-flights-within-k-stops" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="cheapest-flights-within-k-stops-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="cheapest-flights-within-k-stops-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, DFS with memo
 
 DFS all paths from src, prune with cost; memoize by `(city, remaining_stops)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 from functools import lru_cache
@@ -52,6 +68,38 @@ def find_cheapest_price(n, flights, src, dst, k):
     result = dfs(src, k + 1)                           # L6: O(V*K*avg_deg) total
     return -1 if result == float('inf') else result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCheapestPrice(n: number, flights: number[][], src: number, dst: number, k: number): number {
+    const graph = new Map<number, [number, number][]>();
+    for (const [u, v, w] of flights) {                // L1: build adjacency list, O(E)
+        if (!graph.has(u)) graph.set(u, []);
+        graph.get(u)!.push([v, w]);                   // L2: O(1) per edge
+    }
+
+    const memo = new Map<string, number>();
+
+    function dfs(city: number, stopsLeft: number): number {  // L3: memoized over V*K states
+        if (city === dst) return 0;
+        if (stopsLeft < 0) return Infinity;
+        const key = `${city},${stopsLeft}`;
+        if (memo.has(key)) return memo.get(key)!;
+        let best = Infinity;
+        for (const [nb, cost] of (graph.get(city) ?? [])) {  // L4: iterate neighbors, O(deg)
+            const sub = dfs(nb, stopsLeft - 1);
+            if (sub !== Infinity) best = Math.min(best, cost + sub);  // L5: recurse, O(1) if cached
+        }
+        memo.set(key, best);
+        return best;
+    }
+
+    const result = dfs(src, k + 1);                   // L6: O(V*K*avg_deg) total
+    return result === Infinity ? -1 : result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -75,6 +123,8 @@ Each `(city, stops_left)` pair is computed exactly once; its neighbors are itera
 
 Dijkstra-ish with a third dimension for hops left; prune entries that exhaust hops before reaching dst.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import defaultdict
@@ -94,6 +144,31 @@ def find_cheapest_price(n, flights, src, dst, k):
                 heapq.heappush(heap, (cost + w, nb, stops - 1))  # L7: O(log(heap_size))
     return -1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCheapestPrice(n: number, flights: number[][], src: number, dst: number, k: number): number {
+    const graph = new Map<number, [number, number][]>();
+    for (const [u, v, w] of flights) {                // L1: build adjacency list, O(E)
+        if (!graph.has(u)) graph.set(u, []);
+        graph.get(u)!.push([v, w]);                   // L2: O(1) per edge
+    }
+    const heap = new MinHeap();
+    heap.push([0, src, k + 1]);                       // L3: seed heap, O(1)
+    while (heap.size > 0) {                           // L4: outer loop, up to E*K pushes
+        const [cost, city, stops] = heap.pop();       // L5: O(log(heap_size))
+        if (city === dst) return cost;
+        if (stops > 0) {
+            for (const [nb, w] of (graph.get(city) ?? [])) {  // L6: iterate neighbors
+                heap.push([cost + w, nb, stops - 1]);  // L7: O(log(heap_size))
+            }
+        }
+    }
+    return -1;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -116,10 +191,23 @@ The heap can hold up to O(E*K) entries because each edge can be pushed once per 
 
 Works but may re-expand nodes with fewer stops and higher cost.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="cheapest-flights-within-k-stops-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="cheapest-flights-within-k-stops-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bellman-Ford with hop limit (canonical)
 
 Run Bellman-Ford exactly `k + 1` iterations (each iteration = one more hop allowed). Snapshot distances each round to avoid using this-round relaxations.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_cheapest_price(n, flights, src, dst, k):
     INF = float('inf')
@@ -133,6 +221,27 @@ def find_cheapest_price(n, flights, src, dst, k):
         dist = new_dist                                # L8: commit snapshot
     return -1 if dist[dst] == INF else dist[dst]       # L9: O(1) lookup
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCheapestPrice(n: number, flights: number[][], src: number, dst: number, k: number): number {
+    const INF = Infinity;
+    let dist = new Array(n).fill(INF);                 // L1: init distances, O(V)
+    dist[src] = 0;                                     // L2: source costs zero
+    for (let round = 0; round <= k; round++) {         // L3: outer loop, K+1 rounds
+        const newDist = [...dist];                     // L4: snapshot, O(V)
+        for (const [u, v, w] of flights) {             // L5: scan all edges, O(E)
+            if (dist[u] !== INF && dist[u] + w < newDist[v]) {  // L6: relax if better
+                newDist[v] = dist[u] + w;              // L7: O(1) update
+            }
+        }
+        dist = newDist;                                // L8: commit snapshot
+    }
+    return dist[dst] === INF ? -1 : dist[dst];        // L9: O(1) lookup
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -155,6 +264,17 @@ The double loop is exactly (K+1) rounds times E edges. The snapshot at L4 is the
 ### Why the snapshot matters
 Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately used by `v -> x` in the same iteration, that's two hops in one "hop budget" slot, corrupting the answer.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="cheapest-flights-within-k-stops-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="cheapest-flights-within-k-stops-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -167,6 +287,8 @@ Bellman-Ford with a hop cap is the cleanest solution for this shape of problem, 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_787.py and run.
 # Uses the canonical implementation (Approach 3: Bellman-Ford with hop limit).
@@ -202,6 +324,34 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCheapestPrice(n: number, flights: number[][], src: number, dst: number, k: number): number {
+    const INF = Infinity;
+    let dist = new Array(n).fill(INF);
+    dist[src] = 0;
+    for (let round = 0; round <= k; round++) {
+        const newDist = [...dist];
+        for (const [u, v, w] of flights) {
+            if (dist[u] !== INF && dist[u] + w < newDist[v]) newDist[v] = dist[u] + w;
+        }
+        dist = newDist;
+    }
+    return dist[dst] === INF ? -1 : dist[dst];
+}
+
+const flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]];
+console.assert(findCheapestPrice(4, flights, 0, 3, 1) === 700);
+console.assert(findCheapestPrice(4, flights, 0, 3, 0) === -1);
+console.assert(findCheapestPrice(4, flights, 0, 3, 2) === 400);
+console.assert(findCheapestPrice(2, [[0,1,500]], 0, 1, 0) === 500);
+console.assert(findCheapestPrice(3, [[0,1,100],[1,2,50]], 1, 1, 1) === 0);
+console.assert(findCheapestPrice(3, [[0,1,100]], 0, 2, 5) === -1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

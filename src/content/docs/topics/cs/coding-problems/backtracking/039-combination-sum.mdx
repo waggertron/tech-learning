@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './039-combination-sum.py?raw';
+import practiceCodeTs from './039-combination-sum.ts?raw';
+import approach2PyCode from './039-combination-sum-approach2.py?raw';
+import approach2TsCode from './039-combination-sum-approach2.ts?raw';
+import approach3PyCode from './039-combination-sum-approach3.py?raw';
+import approach3TsCode from './039-combination-sum-approach3.ts?raw';
 
 ## Problem
 
@@ -23,7 +30,14 @@ LeetCode 39 · [Link](https://leetcode.com/problems/combination-sum/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="combination-sum" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="combination-sum-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="combination-sum-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try all orderings, dedup
 
@@ -54,10 +68,12 @@ Wasteful; every combination is re-found under every permutation.
 
 ## Approach 2: Backtracking with `start` index (canonical)
 
-Enforce an ordering: once you "use" index `i`, later recursive calls can only consider indices >= `i`. This guarantees each combination is built in sorted candidate order exactly once.
+Enforce an ordering: once you "use" index `i`, later recursive calls can only consider indices ≥ `i`. This guarantees each combination is built in sorted candidate order exactly once.
 
 Because we can reuse the same candidate, we pass `i` (not `i + 1`) when recursing after including.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def combination_sum(candidates, target):
     result = []
@@ -77,6 +93,32 @@ def combination_sum(candidates, target):
     backtrack(0, target)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function combinationSum(candidates: number[], target: number): number[][] {
+    const result: number[][] = [];
+    const path: number[] = [];
+
+    function backtrack(start: number, remaining: number): void {
+        if (remaining === 0) {
+            result.push([...path]);     // L1: O(k) copy at leaf
+            return;
+        }
+        if (remaining < 0) return;
+        for (let i = start; i < candidates.length; i++) {
+            path.push(candidates[i]);                       // L2: O(1) push
+            backtrack(i, remaining - candidates[i]);        // L3: recurse (reuse allowed)
+            path.pop();                                     // L4: O(1) pop
+        }
+    }
+
+    backtrack(0, target);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -94,10 +136,23 @@ The recursion tree has branching factor n and maximum depth k = target / min(can
 - **Time:** Exponential in the depth of the search tree, bounded by O(n^(target / min(candidates))).
 - **Space:** O(k) recursion, where k = target / min(candidates).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="combination-sum-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="combination-sum-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Sort + early termination (optimization)
 
 Sort candidates ascending. When iterating, break the loop as soon as `candidates[i] > remaining`, every subsequent candidate is too large.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def combination_sum(candidates, target):
     candidates.sort()                  # L1: O(n log n) sort once
@@ -118,6 +173,33 @@ def combination_sum(candidates, target):
     backtrack(0, target)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function combinationSum(candidates: number[], target: number): number[][] {
+    candidates.sort((a, b) => a - b);   // L1: O(n log n) sort once
+    const result: number[][] = [];
+    const path: number[] = [];
+
+    function backtrack(start: number, remaining: number): void {
+        if (remaining === 0) {
+            result.push([...path]);     // L2: O(k) copy at leaf
+            return;
+        }
+        for (let i = start; i < candidates.length; i++) {
+            if (candidates[i] > remaining) break;    // L3: O(1) prune entire suffix
+            path.push(candidates[i]);                // L4: O(1) push
+            backtrack(i, remaining - candidates[i]); // L5: recurse
+            path.pop();                              // L6: O(1) pop
+        }
+    }
+
+    backtrack(0, target);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -135,6 +217,17 @@ Sorting enables L3 to cut entire subtrees. The asymptotic bound is the same, but
 - **Time:** Same worst-case Big-O as Approach 2; practical speedup from pruning is substantial on inputs with mixed sizes.
 - **Space:** O(k) recursion, where k = target / min(candidates).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="combination-sum-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="combination-sum-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -147,6 +240,8 @@ The `start` index is the critical idea, same template solves Combination Sum II 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def combination_sum(candidates, target):
     candidates.sort()
@@ -179,6 +274,37 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function combinationSum(candidates: number[], target: number): number[][] {
+    candidates.sort((a, b) => a - b);
+    const result: number[][] = [];
+    const path: number[] = [];
+    function backtrack(start: number, remaining: number): void {
+        if (remaining === 0) { result.push([...path]); return; }
+        for (let i = start; i < candidates.length; i++) {
+            if (candidates[i] > remaining) break;
+            path.push(candidates[i]);
+            backtrack(i, remaining - candidates[i]);
+            path.pop();
+        }
+    }
+    backtrack(0, target);
+    return result;
+}
+
+const norm = (arr: number[][]): string =>
+    JSON.stringify(arr.map(a => [...a].sort((x, y) => x - y)).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1));
+
+console.assert(norm(combinationSum([2, 3, 6, 7], 7)) === norm([[2,2,3],[7]]));
+console.assert(norm(combinationSum([2, 3, 5], 8)) === norm([[2,2,2,2],[2,3,3],[3,5]]));
+console.assert(norm(combinationSum([3], 9)) === norm([[3,3,3]]));
+console.assert(combinationSum([5], 3).length === 0);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

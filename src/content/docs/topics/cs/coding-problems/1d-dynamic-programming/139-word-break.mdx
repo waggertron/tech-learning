@@ -5,11 +5,18 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './139-word-break.py?raw';
+import practiceCodeTs from './139-word-break.ts?raw';
+import approach2PyCode from './139-word-break-approach2.py?raw';
+import approach2TsCode from './139-word-break-approach2.ts?raw';
+import approach3PyCode from './139-word-break-approach3.py?raw';
+import approach3TsCode from './139-word-break-approach3.ts?raw';
 
 ## Problem
 
@@ -24,7 +31,14 @@ LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="word-break" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="word-break-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="word-break-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive, try every prefix
 
@@ -40,6 +54,40 @@ def word_break(s, word_dict):
         return False
     return f(0)                                   # L5: initial call
 ```
+
+<Tabs>
+<TabItem label="Python">
+```python
+def word_break(s, word_dict):
+    words = set(word_dict)                        # L1: O(W) to build set
+    def f(start):
+        if start == len(s):                       # L2: base case, O(1)
+            return True
+        for end in range(start + 1, len(s) + 1): # L3: try every prefix from start
+            if s[start:end] in words and f(end):  # L4: O(L) slice + O(L) hash lookup
+                return True
+        return False
+    return f(0)                                   # L5: initial call
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function wordBreak(s: string, wordDict: string[]): boolean {
+    const words = new Set(wordDict);                       // L1: O(W) to build set
+    function f(start: number): boolean {
+        if (start === s.length) return true;               // L2: base case, O(1)
+        for (let end = start + 1; end <= s.length; end++) { // L3: try every prefix
+            if (words.has(s.slice(start, end)) && f(end)) { // L4: O(L) slice + lookup
+                return true;
+            }
+        }
+        return false;
+    }
+    return f(0);                                           // L5: initial call
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -63,6 +111,8 @@ Without memoization, the same suffix can be recomputed from scratch every time a
 
 Cache by start index.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -78,6 +128,29 @@ def word_break(s, word_dict):
         return False
     return f(0)                                   # L5: initial call
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function wordBreak(s: string, wordDict: string[]): boolean {
+    const words = new Set(wordDict);                       // L1: O(W · L) to build set
+    const memo = new Map<number, boolean>();
+    function f(start: number): boolean {
+        if (start === s.length) return true;               // L2: base case, O(1)
+        if (memo.has(start)) return memo.get(start)!;
+        for (let end = start + 1; end <= s.length; end++) { // L3: try every split point
+            if (words.has(s.slice(start, end)) && f(end)) { // L4: O(L) slice + lookup
+                memo.set(start, true);
+                return true;
+            }
+        }
+        memo.set(start, false);
+        return false;
+    }
+    return f(0);                                           // L5: initial call
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -97,10 +170,23 @@ Memoization limits `f` to at most `n + 1` unique `start` values. Each unique cal
 - **Time:** O(n² · L), driven by L4 across all memoized calls.
 - **Space:** O(n) for the cache and call stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="word-break-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="word-break-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up DP (canonical)
 
 `dp[i] = True` iff `s[:i]` can be segmented. `dp[0] = True`; `dp[i] = any(dp[j] and s[j:i] in words for j < i)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def word_break(s, word_dict):
     words = set(word_dict)              # L1: O(W · L) to build set
@@ -114,6 +200,27 @@ def word_break(s, word_dict):
                 break
     return dp[n]                        # L9: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function wordBreak(s: string, wordDict: string[]): boolean {
+    const words = new Set(wordDict);              // L1: O(W · L) to build set
+    const n = s.length;                           // L2: O(1)
+    const dp = new Array(n + 1).fill(false);      // L3: O(n) allocation
+    dp[0] = true;                                 // L4: base case, O(1)
+    for (let i = 1; i <= n; i++) {               // L5: outer loop, n iterations
+        for (let j = 0; j < i; j++) {            // L6: inner loop, i iterations
+            if (dp[j] && words.has(s.slice(j, i))) {  // L7: O(L) slice + lookup
+                dp[i] = true;                    // L8: O(1)
+                break;
+            }
+        }
+    }
+    return dp[n];                                 // L9: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -128,14 +235,25 @@ def word_break(s, word_dict):
 | **L7 (slice + lookup)** | **O(L)** | **O(n²) worst case** | **O(n² · L)** ← dominates |
 | L8, L9 (assignments) | O(1) | at most n | O(n) |
 
-The early `break` in L8 short-circuits once a valid `j` is found, but the worst case still touches all O(n²) pairs. Each pair costs O(L) for the string slice and hash lookup, giving O(n² · L) overall. When dictionary words are short relative to `n`, bounding the inner loop to `j >= i - max_word_length` reduces practical runtime significantly.
+The early `break` in L8 short-circuits once a valid `j` is found, but the worst case still touches all O(n²) pairs. Each pair costs O(L) for the string slice and hash lookup, giving O(n² · L) overall.
 
 **Complexity**
 - **Time:** O(n² · L), driven by L7 across all (i, j) pairs.
 - **Space:** O(n) for the dp array.
 
 ### Optimization
-Limit the inner loop to `j >= i - max_word_length`. Saves time when dictionary words are short relative to `s`.
+Limit the inner loop to `j ≥ i - max_word_length`. Saves time when dictionary words are short relative to `s`.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="word-break-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="word-break-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -149,6 +267,8 @@ The "partition a string into dictionary pieces" template applies to Word Break I
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_word_break.py and run.
 # Uses the canonical implementation (Approach 3: bottom-up DP).
@@ -180,6 +300,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function wordBreak(s: string, wordDict: string[]): boolean {
+    const words = new Set(wordDict);
+    const n = s.length;
+    const dp = new Array(n + 1).fill(false);
+    dp[0] = true;
+    for (let i = 1; i <= n; i++) {
+        for (let j = 0; j < i; j++) {
+            if (dp[j] && words.has(s.slice(j, i))) {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[n];
+}
+
+console.assert(wordBreak('leetcode', ['leet', 'code']) === true);
+console.assert(wordBreak('applepenapple', ['apple', 'pen']) === true);
+console.assert(wordBreak('catsandog', ['cats', 'dog', 'sand', 'and', 'cat']) === false);
+console.assert(wordBreak('a', ['a']) === true);
+console.assert(wordBreak('a', ['b']) === false);
+console.assert(wordBreak('aaaa', ['a', 'aa']) === true);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

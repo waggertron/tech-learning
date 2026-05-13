@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './021-merge-two-sorted-lists.py?raw';
+import practiceCodeTs from './021-merge-two-sorted-lists.ts?raw';
+import approach2TsCode from './021-merge-two-sorted-lists-approach2.ts?raw';
+import approach3TsCode from './021-merge-two-sorted-lists-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +29,21 @@ LeetCode 21 · [Link](https://leetcode.com/problems/merge-two-sorted-lists/) · 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="merge-two-sorted-lists" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="merge-two-sorted-lists-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="merge-two-sorted-lists-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, collect values, sort, rebuild
 
 Walk both lists into one array, sort it, rebuild a fresh list.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -50,6 +64,34 @@ def merge_two_lists(l1, l2):
         tail = tail.next
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    const values: number[] = [];
+    for (let head of [l1, l2]) {
+        while (head) {
+            values.push(head.val);    // L1: O(1) per node
+            head = head.next;
+        }
+    }
+    values.sort((a, b) => a - b);    // L2: O((n+m) log(n+m))
+    const dummy = new ListNode();
+    let tail = dummy;
+    for (const v of values) {
+        tail.next = new ListNode(v);  // L3: O(1) per value
+        tail = tail.next;
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -73,6 +115,8 @@ Wasteful, ignores the sorted structure.
 
 Two pointers walk down both lists; at each step, splice the smaller head onto the tail of the merged list. A dummy head simplifies the edge case where the merged list is empty.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge_two_lists(l1, l2):
     dummy = ListNode()
@@ -86,6 +130,28 @@ def merge_two_lists(l1, l2):
     tail.next = l1 or l2                   # L5: O(1) attach remainder
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    const dummy = new ListNode();
+    let tail = dummy;
+    while (l1 && l2) {                     // L1: loop while both non-empty
+        if (l1.val <= l2.val) {
+            tail.next = l1;                // L2: splice l1 node
+            l1 = l1.next;
+        } else {
+            tail.next = l2;                // L3: splice l2 node
+            l2 = l2.next;
+        }
+        tail = tail.next!;                 // L4: advance tail
+    }
+    tail.next = l1 ?? l2;                  // L5: O(1) attach remainder
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -104,10 +170,20 @@ The loop exits as soon as either list is exhausted (after min(n, m) steps), then
 - **Time:** O(n + m). One pass (L1-L4) plus O(1) tail attachment (L5).
 - **Space:** O(1). No new nodes allocated.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="merge-two-sorted-lists-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Recursive merge
 
 Pick the smaller head, recurse on the rest.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge_two_lists(l1, l2):
     if not l1:                                    # L1: base case
@@ -120,6 +196,22 @@ def merge_two_lists(l1, l2):
     l2.next = merge_two_lists(l1, l2.next)       # L4: recurse with l2 advanced
     return l2
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    if (!l1) return l2;                                      // L1: base case
+    if (!l2) return l1;                                      // L2: base case
+    if (l1.val <= l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2);               // L3: recurse with l1 advanced
+        return l1;
+    }
+    l2.next = mergeTwoLists(l1, l2.next);                   // L4: recurse with l2 advanced
+    return l2;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -138,8 +230,18 @@ Each call consumes exactly one node (either l1 or l2 advances), so the depth equ
 
 Elegant; stack-space trade-off.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="merge-two-sorted-lists-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_021.py and run.
 # Uses the iterative splice approach (Approach 2).
@@ -191,6 +293,48 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    const dummy = new ListNode();
+    let tail = dummy;
+    while (l1 && l2) {
+        if (l1.val <= l2.val) { tail.next = l1; l1 = l1.next; }
+        else { tail.next = l2; l2 = l2.next; }
+        tail = tail.next!;
+    }
+    tail.next = l1 ?? l2;
+    return dummy.next;
+}
+
+console.assert(JSON.stringify(toList(mergeTwoLists(fromList([1,2,4]), fromList([1,3,4])))) === JSON.stringify([1,1,2,3,4,4]));
+console.assert(JSON.stringify(toList(mergeTwoLists(null, null))) === JSON.stringify([]));
+console.assert(JSON.stringify(toList(mergeTwoLists(null, fromList([0])))) === JSON.stringify([0]));
+console.assert(JSON.stringify(toList(mergeTwoLists(fromList([1,3,5]), null))) === JSON.stringify([1,3,5]));
+console.assert(JSON.stringify(toList(mergeTwoLists(fromList([1,2,3]), fromList([4,5,6,7])))) === JSON.stringify([1,2,3,4,5,6,7]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

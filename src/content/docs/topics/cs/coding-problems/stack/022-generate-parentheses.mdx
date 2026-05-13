@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './022-generate-parentheses.py?raw';
+import practiceCodeTs from './022-generate-parentheses.ts?raw';
+import approach2TsCode from './022-generate-parentheses-approach2.ts?raw';
+import approach3TsCode from './022-generate-parentheses-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 22 · [Link](https://leetcode.com/problems/generate-parentheses/) · *M
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="generate-parentheses" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="generate-parentheses-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="generate-parentheses-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, generate every 2n-char string, filter valid
 
 Enumerate all 2^(2n) strings over `{(, )}`, keep the valid ones.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def generate_parenthesis(n: int) -> list[str]:
     def is_valid(s):                               # helper: O(n) per call
@@ -50,6 +64,33 @@ def generate_parenthesis(n: int) -> list[str]:
     rec("")
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function generateParenthesis(n: number): string[] {
+    function isValid(s: string): boolean {
+        let balance = 0;
+        for (const ch of s) {
+            balance += ch === '(' ? 1 : -1;
+            if (balance < 0) return false;
+        }
+        return balance === 0;
+    }
+    const result: string[] = [];
+    function rec(s: string): void {                // L1: recursive enumeration
+        if (s.length === 2 * n) {                  // L2: O(1) base-case check
+            if (isValid(s)) result.push(s);        // L3: O(n) validation
+            return;
+        }
+        rec(s + '(');                              // L4: recurse with open
+        rec(s + ')');                              // L5: recurse with close
+    }
+    rec('');
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -70,6 +111,8 @@ The recursion tree has 4^n leaves (all 2n-length strings of `(` and `)`); each i
 
 Track running balance during the recursion. Abort a branch as soon as `close > open` or `open > n`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def generate_parenthesis(n: int) -> list[str]:
     result = []
@@ -84,6 +127,23 @@ def generate_parenthesis(n: int) -> list[str]:
     rec("", 0, 0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function generateParenthesis(n: number): string[] {
+    const result: string[] = [];
+    function rec(s: string, opens: number, closes: number): void {  // L1: pruned recursion
+        if (opens > n || closes > opens) return;                     // L2: O(1) prune check
+        if (s.length === 2 * n) { result.push(s); return; }         // L3: O(1) base case
+        rec(s + '(', opens + 1, closes);                             // L4: try open
+        rec(s + ')', opens, closes + 1);                             // L5: try close
+    }
+    rec('', 0, 0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -100,10 +160,23 @@ Pruning reduces the explored space from 4^n to the Catalan number C(n) ≈ 4^n /
 - **Time:** O(4^n / sqrt(n)), the n-th Catalan number times a linear factor. Much smaller than the brute-force 4^n.
 - **Space:** O(n) recursion depth.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="generate-parentheses-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="generate-parentheses-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Backtracking with the exact open/close invariant (optimal)
 
 Same idea, phrased so the invariants are explicit: at each step you can add `(` if `opens < n`, and `)` if `closes < opens`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def generate_parenthesis(n: int) -> list[str]:
     result = []                                    # L1: O(1)
@@ -125,6 +198,36 @@ def generate_parenthesis(n: int) -> list[str]:
     backtrack(0, 0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function generateParenthesis(n: number): string[] {
+    const result: string[] = [];                   // L1: O(1)
+    const path: string[] = [];                     // L2: O(1) shared path buffer
+
+    function backtrack(opens: number, closes: number): void {
+        if (opens === n && closes === n) {         // L3: O(1) done check
+            result.push(path.join(''));            // L4: O(n) join at leaf
+            return;
+        }
+        if (opens < n) {                          // L5: O(1)
+            path.push('(');                       // L6: O(1) amortized
+            backtrack(opens + 1, closes);         // L7: recurse
+            path.pop();                           // L8: O(1) undo
+        }
+        if (closes < opens) {                     // L9: O(1)
+            path.push(')');                       // L10: O(1) amortized
+            backtrack(opens, closes + 1);         // L11: recurse
+            path.pop();                           // L12: O(1) undo
+        }
+    }
+
+    backtrack(0, 0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -144,6 +247,17 @@ Using a single `path` list with `append`/`pop` avoids O(n) string concatenation 
 
 Using a single `path` list with `append`/`pop` avoids string concatenation (O(n) per append); the final join happens only on full paths.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="generate-parentheses-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="generate-parentheses-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -156,6 +270,8 @@ Approach 3 is the canonical answer and the cleanest expression of the idea. The 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_generate_parentheses.py and run.
 # Uses the canonical implementation (Approach 3: backtracking with invariants).
@@ -190,6 +306,28 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function generateParenthesis(n: number): string[] {
+    const result: string[] = [];
+    const path: string[] = [];
+    function backtrack(opens: number, closes: number): void {
+        if (opens === n && closes === n) { result.push(path.join('')); return; }
+        if (opens < n) { path.push('('); backtrack(opens + 1, closes); path.pop(); }
+        if (closes < opens) { path.push(')'); backtrack(opens, closes + 1); path.pop(); }
+    }
+    backtrack(0, 0);
+    return result;
+}
+
+console.assert(JSON.stringify(generateParenthesis(1).sort()) === JSON.stringify(['()']));
+console.assert(JSON.stringify(generateParenthesis(2).sort()) === JSON.stringify(['(())', '()()'].sort()));
+console.assert(generateParenthesis(4).length === 14);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

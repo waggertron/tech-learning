@@ -5,11 +5,16 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './191-number-of-1-bits.py?raw';
+import practiceCodeTs from './191-number-of-1-bits.ts?raw';
+import approach2PyCode from './191-number-of-1-bits-approach2.py?raw';
+import approach2TsCode from './191-number-of-1-bits-approach2.ts?raw';
 
 ## Problem
 
@@ -23,10 +28,19 @@ LeetCode 191 · [Link](https://leetcode.com/problems/number-of-1-bits/) · *Easy
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="number-of-1-bits" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="number-of-1-bits-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="number-of-1-bits-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Shift and test each bit
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def hamming_weight(n):
     count = 0
@@ -35,6 +49,20 @@ def hamming_weight(n):
         n >>= 1                     # L3: O(1), shift right
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function hammingWeight(n: number): number {
+    let count = 0;
+    while (n) {                     // L1: loop up to B iterations (B = bit width)
+        count += n & 1;             // L2: O(1), test LSB
+        n >>>= 1;                   // L3: O(1), shift right (unsigned)
+    }
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -56,6 +84,8 @@ The loop runs at most B = 32 iterations regardless of input value.
 
 `n & (n - 1)` clears the lowest set bit. Loop until `n == 0`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def hamming_weight(n):
     count = 0
@@ -64,6 +94,20 @@ def hamming_weight(n):
         count += 1                  # L3: O(1)
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function hammingWeight(n: number): number {
+    let count = 0;
+    while (n) {                     // L1: loop popcount(n) times
+        n &= n - 1;                 // L2: O(1), clear lowest set bit
+        count++;                    // L3: O(1)
+    }
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -82,9 +126,20 @@ The loop runs exactly popcount(n) times, not B times. For sparse inputs this is 
 
 Faster than Approach 1 when the integer has few set bits.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="number-of-1-bits-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="number-of-1-bits-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Built-in / bit-parallel tricks
 
-Modern hardware has popcount instructions. Python's `bin(n).count('1')` or `n.bit_count()` (Python 3.10+) compiles to that on supporting platforms.
+Modern hardware has popcount instructions. Python's `bin(n).count('1')` or `n.bit_count()` (Python 3.10+) compiles to that on supporting platforms. In TypeScript, `Math.clz32` counts leading zeros but there is no direct popcount built-in; use Kernighan's trick instead.
 
 ```python
 def hamming_weight(n):
@@ -117,6 +172,8 @@ Kernighan's is the interview-canonical trick. Know it for problem 338 and any "c
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_191.py and run.
 # Uses the canonical implementation (Approach 2: Kernighan's trick).
@@ -140,6 +197,28 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function hammingWeight(n: number): number {
+    let count = 0;
+    while (n) {
+        n &= n - 1;
+        count++;
+    }
+    return count;
+}
+
+console.assert(hammingWeight(11) === 3);
+console.assert(hammingWeight(128) === 1);
+console.assert(hammingWeight(0) === 0);
+console.assert(hammingWeight(4294967295) === 32);
+console.assert(hammingWeight(1) === 1);
+console.assert(hammingWeight(183) === 6);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

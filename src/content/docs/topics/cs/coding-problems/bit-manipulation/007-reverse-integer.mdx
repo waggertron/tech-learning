@@ -5,11 +5,16 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, math, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './007-reverse-integer.py?raw';
+import practiceCodeTs from './007-reverse-integer.ts?raw';
+import approach2PyCode from './007-reverse-integer-approach2.py?raw';
+import approach2TsCode from './007-reverse-integer-approach2.ts?raw';
 
 ## Problem
 
@@ -26,18 +31,39 @@ LeetCode 7 · [Link](https://leetcode.com/problems/reverse-integer/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="reverse-integer" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="reverse-integer-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="reverse-integer-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: String manipulation
 
 Convert to string, reverse, handle sign; check range.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse(x):
     sign = -1 if x < 0 else 1              # L1: O(1)
     rev = int(str(abs(x))[::-1]) * sign    # L2: O(log|x|) string ops
     return 0 if rev < -2**31 or rev > 2**31 - 1 else rev  # L3: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverse(x: number): number {
+    const sign = x < 0 ? -1 : 1;                          // L1: O(1)
+    const rev = parseInt(String(Math.abs(x)).split('').reverse().join('')) * sign; // L2: O(log|x|)
+    const INT_MIN = -(2 ** 31), INT_MAX = 2 ** 31 - 1;
+    return rev < INT_MIN || rev > INT_MAX ? 0 : rev;       // L3: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,6 +85,8 @@ Easy, but uses language features that dodge the "no 64-bit int" constraint.
 
 Pop the last digit with `x % 10` and append to a reversed number, checking for overflow *before* the push.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 INT_MIN = -2**31
 INT_MAX = 2**31 - 1
@@ -78,6 +106,30 @@ def reverse(x):
         result = result * 10 + digit       # L8: O(1)
     return sign * result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+const INT_MIN = -(2 ** 31);
+const INT_MAX = 2 ** 31 - 1;
+
+function reverse(x: number): number {
+    const sign = x < 0 ? -1 : 1;           // L1: O(1)
+    x = Math.abs(x);                        // L2: O(1)
+    let result = 0;
+    while (x) {                             // L3: loop d times (d = digits)
+        const digit = x % 10;               // L4: O(1)
+        x = Math.floor(x / 10);            // L5: O(1)
+        if (sign === 1 && (result > Math.floor(INT_MAX / 10) || (result === Math.floor(INT_MAX / 10) && digit > 7)))
+            return 0;                       // L6: O(1) overflow guard
+        if (sign === -1 && (result > Math.floor(-INT_MIN / 10) || (result === Math.floor(-INT_MIN / 10) && digit > 8)))
+            return 0;                       // L7: O(1) overflow guard
+        result = result * 10 + digit;       // L8: O(1)
+    }
+    return sign * result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -99,6 +151,17 @@ One iteration per digit; each iteration does O(1) work.
 
 ### Why the overflow check is tricky
 `INT_MAX = 2147483647`. Before a push we need `result * 10 + digit ≤ INT_MAX`, i.e., `result < INT_MAX / 10` (then any digit is fine) or `result == INT_MAX / 10 = 214748364` and `digit ≤ 7`. Symmetric condition for negatives (where `-INT_MIN = 2147483648` has last digit 8).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="reverse-integer-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="reverse-integer-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Simpler check by computing and comparing
 
@@ -125,6 +188,8 @@ The digit-extraction version with pre-push overflow check is the canonical inter
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_007.py and run.
 # Uses the canonical implementation (Approach 2: digit extraction + pre-check).
@@ -158,6 +223,38 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+const INT_MIN = -(2 ** 31);
+const INT_MAX = 2 ** 31 - 1;
+
+function reverse(x: number): number {
+    const sign = x < 0 ? -1 : 1;
+    x = Math.abs(x);
+    let result = 0;
+    while (x) {
+        const digit = x % 10;
+        x = Math.floor(x / 10);
+        if (sign === 1 && (result > Math.floor(INT_MAX / 10) || (result === Math.floor(INT_MAX / 10) && digit > 7)))
+            return 0;
+        if (sign === -1 && (result > Math.floor(-INT_MIN / 10) || (result === Math.floor(-INT_MIN / 10) && digit > 8)))
+            return 0;
+        result = result * 10 + digit;
+    }
+    return sign * result;
+}
+
+console.assert(reverse(123) === 321);
+console.assert(reverse(-123) === -321);
+console.assert(reverse(120) === 21);
+console.assert(reverse(0) === 0);
+console.assert(reverse(2 ** 31 - 1) === 0);
+console.assert(reverse(1534236469) === 0);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './084-largest-rectangle-in-histogram.py?raw';
+import practiceCodeTs from './084-largest-rectangle-in-histogram.ts?raw';
+import approach2TsCode from './084-largest-rectangle-in-histogram-approach2.ts?raw';
+import approach3TsCode from './084-largest-rectangle-in-histogram-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 84 · [Link](https://leetcode.com/problems/largest-rectangle-in-histogr
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="largest-rectangle-in-histogram" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="largest-rectangle-in-histogram-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="largest-rectangle-in-histogram-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, expand around each bar
 
 For each bar `i`, find how far left and right you can extend while heights stay ≥ `heights[i]`. The rectangle with bar `i` as the shortest is `heights[i] * width`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def largest_rectangle_area(heights: list[int]) -> int:
     n = len(heights)                               # L1: O(1)
@@ -46,6 +60,25 @@ def largest_rectangle_area(heights: list[int]) -> int:
         best = max(best, h * (r - l + 1))          # L9: O(1) area
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function largestRectangleArea(heights: number[]): number {
+    const n = heights.length;                        // L1: O(1)
+    let best = 0;                                    // L2: O(1)
+    for (let i = 0; i < n; i++) {                   // L3: outer loop, n iterations
+        const h = heights[i];                        // L4: O(1)
+        let l = i;
+        while (l - 1 >= 0 && heights[l - 1] >= h) l--;  // L5-L6: expand left
+        let r = i;
+        while (r + 1 < n && heights[r + 1] >= h) r++;   // L7-L8: expand right
+        best = Math.max(best, h * (r - l + 1));      // L9: O(1) area
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -71,6 +104,8 @@ For each index, precompute:
 
 Then area with bar `i` as the minimum is `heights[i] * (right[i] - left[i] - 1)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def largest_rectangle_area(heights: list[int]) -> int:
     n = len(heights)                               # L1: O(1)
@@ -93,6 +128,38 @@ def largest_rectangle_area(heights: list[int]) -> int:
 
     return max((heights[i] * (right[i] - left[i] - 1) for i in range(n)), default=0)  # L14: O(n)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function largestRectangleArea(heights: number[]): number {
+    const n = heights.length;
+    const left = new Array(n).fill(-1);            // L2: O(n)
+    const right = new Array(n).fill(n);            // L3: O(n)
+
+    let stack: number[] = [];
+    for (let i = 0; i < n; i++) {                 // L4: forward pass for left[]
+        while (stack.length && heights[stack[stack.length - 1]] >= heights[i])
+            stack.pop();                           // L5-L6: O(1) amortized
+        left[i] = stack.length ? stack[stack.length - 1] : -1;  // L7: O(1)
+        stack.push(i);                             // L8: O(1)
+    }
+
+    stack = [];
+    for (let i = n - 1; i >= 0; i--) {            // L9: backward pass for right[]
+        while (stack.length && heights[stack[stack.length - 1]] >= heights[i])
+            stack.pop();                           // L10-L11: O(1) amortized
+        right[i] = stack.length ? stack[stack.length - 1] : n;  // L12: O(1)
+        stack.push(i);                             // L13: O(1)
+    }
+
+    let best = 0;
+    for (let i = 0; i < n; i++)
+        best = Math.max(best, heights[i] * (right[i] - left[i] - 1));  // L14: O(n)
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -111,10 +178,23 @@ Each index is pushed and popped at most once per pass; the stack operations are 
 - **Time:** O(n), driven by L4-L8 and L9-L13 (two linear monotonic-stack passes).
 - **Space:** O(n) for the left/right arrays and stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="largest-rectangle-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="largest-rectangle-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Single monotonic stack pass (optimal)
 
 Maintain a stack of indices whose heights are monotonically increasing. When a shorter bar comes in, pop the top and compute the rectangle where the popped bar is the shortest, bounded on the right by the current index and on the left by the new stack top. A sentinel (bar of height 0) at the end flushes the stack.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def largest_rectangle_area(heights: list[int]) -> int:
     stack = []                             # L1: O(1), indices with increasing heights
@@ -129,6 +209,27 @@ def largest_rectangle_area(heights: list[int]) -> int:
         stack.append(i)                    # L10: O(1) push
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function largestRectangleArea(heights: number[]): number {
+    const h = [...heights, 0];               // L3: sentinel appended
+    const stack: number[] = [];
+    let best = 0;
+    for (let i = 0; i < h.length; i++) {    // L4: n+1 iterations
+        while (stack.length && h[stack[stack.length - 1]] > h[i]) {  // L5: pop taller bars
+            const top = stack.pop()!;        // L6: O(1) amortized pop
+            const height = h[top];           // L7: O(1)
+            const width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;  // L8: O(1) width
+            best = Math.max(best, height * width);  // L9: O(1) update
+        }
+        stack.push(i);                       // L10: O(1) push
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -149,6 +250,17 @@ Each bar is pushed exactly once and popped at most once; the total push+pop coun
 ### Intuition
 The stack stores "bars that are still candidates for being the left boundary of some rectangle." When a new bar breaks the increasing property, the popped bar's maximal rectangle is determined, extend it leftward until the new top of the stack (the first bar shorter than the popped one on its left) and rightward to the current index.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="largest-rectangle-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="largest-rectangle-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -161,6 +273,8 @@ This problem is a rite of passage for monotonic stacks. It also unlocks **85. Ma
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_largest_rectangle.py and run.
 # Uses the canonical implementation (Approach 3: single monotonic stack).
@@ -190,6 +304,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function largestRectangleArea(heights: number[]): number {
+    const h = [...heights, 0];
+    const stack: number[] = [];
+    let best = 0;
+    for (let i = 0; i < h.length; i++) {
+        while (stack.length && h[stack[stack.length - 1]] > h[i]) {
+            const top = stack.pop()!;
+            const height = h[top];
+            const width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;
+            best = Math.max(best, height * width);
+        }
+        stack.push(i);
+    }
+    return best;
+}
+
+console.assert(largestRectangleArea([2, 1, 5, 6, 2, 3]) === 10);
+console.assert(largestRectangleArea([2, 4]) === 4);
+console.assert(largestRectangleArea([1]) === 1);
+console.assert(largestRectangleArea([6, 5, 4, 3, 2, 1]) === 12);
+console.assert(largestRectangleArea([1, 2, 3, 4, 5, 6]) === 12);
+console.assert(largestRectangleArea([2, 0, 2]) === 2);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

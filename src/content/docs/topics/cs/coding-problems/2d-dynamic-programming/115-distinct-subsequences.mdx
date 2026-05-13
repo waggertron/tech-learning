@@ -1,6 +1,6 @@
 ---
 title: "115. Distinct Subsequences (Hard)"
-description: Count the number of distinct subsequences of s that equal t.
+description: "Count the number of distinct subsequences of s that equal t."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hard]
 status: draft
@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './115-distinct-subsequences.py?raw';
+import practiceCodeTs from './115-distinct-subsequences.ts?raw';
+import approach2PyCode from './115-distinct-subsequences-approach2.py?raw';
+import approach2TsCode from './115-distinct-subsequences-approach2.ts?raw';
+import approach3PyCode from './115-distinct-subsequences-approach3.py?raw';
+import approach3TsCode from './115-distinct-subsequences-approach3.ts?raw';
 
 ## Problem
 
@@ -23,7 +30,14 @@ LeetCode 115 · [Link](https://leetcode.com/problems/distinct-subsequences/) · 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="distinct-subsequences" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="distinct-subsequences-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="distinct-subsequences-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive
 
@@ -34,6 +48,8 @@ LeetCode 115 · [Link](https://leetcode.com/problems/distinct-subsequences/) · 
 - If `s[i] == t[j]`: `f(i + 1, j + 1) + f(i + 1, j)` (use or skip).
 - Else: `f(i + 1, j)` (must skip).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def num_distinct(s, t):
     def f(i, j):
@@ -46,6 +62,22 @@ def num_distinct(s, t):
         return f(i + 1, j)                          # L5: one call (must skip)
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDistinct(s: string, t: string): number {
+    function f(i: number, j: number): number {
+        if (j === t.length) return 1;               // L1: O(1) base: t fully matched
+        if (i === s.length) return 0;               // L2: O(1) base: s exhausted
+        if (s[i] === t[j])                          // L3: O(1) char match check
+            return f(i + 1, j + 1) + f(i + 1, j); // L4: two calls (use or skip)
+        return f(i + 1, j);                         // L5: one call (must skip)
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -65,6 +97,8 @@ In the worst case (s and t all the same character), every position in `s` can ma
 
 ## Approach 2: Top-down memoized
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -80,6 +114,29 @@ def num_distinct(s, t):
         return f(i + 1, j)                          # L6: O(1) with cache
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDistinct(s: string, t: string): number {
+    const memo: Map<string, number> = new Map();
+    function f(i: number, j: number): number {
+        if (j === t.length) return 1;               // L2: O(1) base case
+        if (i === s.length) return 0;               // L3: O(1) base case
+        const key = `${i},${j}`;
+        if (memo.has(key)) return memo.get(key)!;   // L1: O(1) cache lookup
+        let result: number;
+        if (s[i] === t[j])                          // L4: O(1) char match
+            result = f(i + 1, j + 1) + f(i + 1, j); // L5: O(1) with cache
+        else
+            result = f(i + 1, j);                   // L6: O(1) with cache
+        memo.set(key, result);
+        return result;
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -97,10 +154,23 @@ Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pair
 - **Time:** O(m · n), driven by L5/L6 across all unique (i,j) states.
 - **Space:** O(m · n) for the memo table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="distinct-subsequences-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="distinct-subsequences-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up 2-D DP + rolling to 1-D (optimal space)
 
 `dp[j]` = number of ways `t[:j]` appears as a subsequence of the current prefix of `s`. Iterate j from high to low to avoid reusing updates within a single row.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def num_distinct(s, t):
     m, n = len(s), len(t)                  # L1: O(1)
@@ -112,6 +182,23 @@ def num_distinct(s, t):
                 dp[j] += dp[j - 1]        # L7: O(1) accumulate ways
     return dp[n]                           # L8: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDistinct(s: string, t: string): number {
+    const m = s.length, n = t.length;
+    const dp: number[] = new Array(n + 1).fill(0);  // L2: O(n) 1-D table init
+    dp[0] = 1;                                       // L3: O(1) base: empty t matched by any prefix
+    for (let i = 0; i < m; i++) {                    // L4: outer loop over s O(m)
+        for (let j = n; j >= 1; j--) {              // L5: inner loop over t, right-to-left O(n)
+            if (s[i] === t[j - 1]) dp[j] += dp[j - 1];  // L6+L7: O(1) match + accumulate
+        }
+    }
+    return dp[n];                                    // L8: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -129,6 +216,17 @@ The right-to-left inner loop is critical: it prevents an `s[i]` character from b
 - **Time:** O(m · n), driven by L4/L5 (the double loop).
 - **Space:** O(n) for the rolling 1-D array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="distinct-subsequences-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="distinct-subsequences-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -139,6 +237,8 @@ The right-to-left inner loop is critical: it prevents an `s[i]` character from b
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_115.py and run.
 # Uses the canonical implementation (Approach 3: 1-D bottom-up DP).
@@ -170,6 +270,29 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDistinct(s: string, t: string): number {
+    const m = s.length, n = t.length;
+    const dp: number[] = new Array(n + 1).fill(0);
+    dp[0] = 1;
+    for (let i = 0; i < m; i++)
+        for (let j = n; j >= 1; j--)
+            if (s[i] === t[j - 1]) dp[j] += dp[j - 1];
+    return dp[n];
+}
+
+console.assert(numDistinct("rabbbit", "rabbit") === 3);
+console.assert(numDistinct("babgbag", "bag") === 5);
+console.assert(numDistinct("abc", "") === 1);
+console.assert(numDistinct("", "a") === 0);
+console.assert(numDistinct("abc", "abc") === 1);
+console.assert(numDistinct("aaa", "b") === 0);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

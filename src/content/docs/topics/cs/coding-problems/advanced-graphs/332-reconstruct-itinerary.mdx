@@ -5,11 +5,18 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, eulerian-path, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './332-reconstruct-itinerary.py?raw';
+import practiceCodeTs from './332-reconstruct-itinerary.ts?raw';
+import approach2PyCode from './332-reconstruct-itinerary-approach2.py?raw';
+import approach2TsCode from './332-reconstruct-itinerary-approach2.ts?raw';
+import approach3PyCode from './332-reconstruct-itinerary-approach3.py?raw';
+import approach3TsCode from './332-reconstruct-itinerary-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 332 · [Link](https://leetcode.com/problems/reconstruct-itinerary/) · 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="reconstruct-itinerary" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="reconstruct-itinerary-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="reconstruct-itinerary-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, backtracking
 
 Try every permutation of tickets starting from JFK; pick the lexicographically smallest valid one.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -56,6 +72,42 @@ def find_itinerary(tickets):
 
     return dfs("JFK", ["JFK"])
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findItinerary(tickets: string[][]): string[] {
+    const graph = new Map<string, (string | null)[]>();
+    const sorted = [...tickets].sort((a, b) =>
+        a[0] !== b[0] ? a[0].localeCompare(b[0]) : a[1].localeCompare(b[1])
+    );
+    for (const [src, dst] of sorted) {               // L1: O(E log E) sort
+        if (!graph.has(src)) graph.set(src, []);
+        graph.get(src)!.push(dst);                   // L2: O(1) amortized per append
+    }
+
+    const targetLen = tickets.length + 1;            // L3: O(1)
+
+    function dfs(node: string, path: string[]): string[] | null {
+        if (path.length === targetLen) return [...path]; // L4: O(1) base case check
+        const neighbors = graph.get(node) ?? [];
+        for (let i = 0; i < neighbors.length; i++) { // L5: iterate over neighbors
+            const nb = neighbors[i];
+            if (nb === null) continue;
+            neighbors[i] = null;                     // L6: O(1) mark used
+            path.push(nb);                           // L7: O(1) amortized
+            const result = dfs(nb, path);            // L8: recurse
+            if (result) return result;
+            path.pop();                              // L9: O(1) backtrack
+            neighbors[i] = nb;                       // L10: O(1) restore
+        }
+        return null;
+    }
+
+    return dfs('JFK', ['JFK']) ?? [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -78,6 +130,8 @@ At each step, up to E tickets could be chosen; with E steps total, the search tr
 
 Hierholzer's builds an Eulerian path in O(E). The trick: always recurse into the **lexicographically smallest** outgoing edge, then prepend the current node to the result as the recursion unwinds.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 import heapq
@@ -97,6 +151,32 @@ def find_itinerary(tickets):
     dfs("JFK")
     return itinerary[::-1]                            # L6: O(E) reverse to get forward path
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findItinerary(tickets: string[][]): string[] {
+    const graph = new Map<string, MinHeap>();
+    for (const [src, dst] of tickets) {
+        if (!graph.has(src)) graph.set(src, new MinHeap());
+        graph.get(src)!.push(dst);                   // L1: O(log E) per push; total O(E log E)
+    }
+
+    const itinerary: string[] = [];
+    function dfs(node: string): void {
+        const heap = graph.get(node);
+        while (heap && heap.size > 0) {              // L2: loop until no more edges from this node
+            const nb = heap.pop();                   // L3: O(log E) pop smallest neighbor
+            dfs(nb);                                 // L4: recurse; each edge visited exactly once
+        }
+        itinerary.push(node);                        // L5: O(1), post-order append
+    }
+
+    dfs('JFK');
+    return itinerary.reverse();                      // L6: O(E) reverse to get forward path
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -120,10 +200,23 @@ Each ticket is a directed edge used exactly once, so the total number of heappop
 ### Why it works
 In an Eulerian path, you may hit dead ends along the way. Hierholzer's handles this by building the path in reverse: when you can't move forward, the current node is part of the *end* of the final path. Appending in post-order then reversing gives the full traversal.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="reconstruct-itinerary-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="reconstruct-itinerary-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Hierholzer's with sorted adjacency lists + pointer
 
 Same idea; sort adjacency lists once and iterate with a pointer instead of repeatedly popping from a heap.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -141,6 +234,37 @@ def find_itinerary(tickets):
     return itinerary[::-1]                            # L7: O(E) reverse
 
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findItinerary(tickets: string[][]): string[] {
+    const graph = new Map<string, string[]>();
+    // sort descending so pop() from end gives lexicographically smallest
+    const sorted = [...tickets].sort((a, b) => {
+        const cmpSrc = b[0].localeCompare(a[0]);
+        return cmpSrc !== 0 ? cmpSrc : b[1].localeCompare(a[1]);
+    });
+    for (const [src, dst] of sorted) {               // L1: O(E log E) for sort; O(1) per append
+        if (!graph.has(src)) graph.set(src, []);
+        graph.get(src)!.push(dst);
+    }
+
+    const itinerary: string[] = [];
+    const stack: string[] = ['JFK'];                  // L2: O(1), explicit stack replaces recursion
+    while (stack.length > 0) {                       // L3: outer loop, runs E+1 times total
+        const top = stack[stack.length - 1];
+        const neighbors = graph.get(top);
+        if (neighbors && neighbors.length > 0) {
+            stack.push(neighbors.pop()!);             // L5: O(1) list pop from end + stack push
+        } else {
+            itinerary.push(stack.pop()!);             // L6: O(1), node has no more outgoing edges
+        }
+    }
+    return itinerary.reverse();                       // L7: O(E) reverse
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -162,6 +286,17 @@ Sorting once at L1 is the only super-linear step. Everything after is amortized 
 
 Iterative form avoids recursion depth concerns.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="reconstruct-itinerary-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="reconstruct-itinerary-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -174,6 +309,8 @@ Hierholzer's is the canonical answer. The "build in reverse" trick is subtle; re
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_332.py and run.
 # Uses the canonical implementation (Hierholzer's iterative, Approach 3).
@@ -208,6 +345,42 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findItinerary(tickets: string[][]): string[] {
+    const graph = new Map<string, string[]>();
+    const sorted = [...tickets].sort((a, b) => {
+        const cmpSrc = b[0].localeCompare(a[0]);
+        return cmpSrc !== 0 ? cmpSrc : b[1].localeCompare(a[1]);
+    });
+    for (const [src, dst] of sorted) {
+        if (!graph.has(src)) graph.set(src, []);
+        graph.get(src)!.push(dst);
+    }
+    const itinerary: string[] = [];
+    const stack: string[] = ['JFK'];
+    while (stack.length > 0) {
+        const top = stack[stack.length - 1];
+        const neighbors = graph.get(top);
+        if (neighbors && neighbors.length > 0) {
+            stack.push(neighbors.pop()!);
+        } else {
+            itinerary.push(stack.pop()!);
+        }
+    }
+    return itinerary.reverse();
+}
+
+console.assert(JSON.stringify(findItinerary([['MUC','LHR'],['JFK','MUC'],['SFO','SJC'],['LHR','SFO']])) === JSON.stringify(['JFK','MUC','LHR','SFO','SJC']));
+console.assert(JSON.stringify(findItinerary([['JFK','SFO'],['JFK','ATL'],['SFO','ATL'],['ATL','JFK'],['ATL','SFO']])) === JSON.stringify(['JFK','ATL','JFK','SFO','ATL','SFO']));
+console.assert(JSON.stringify(findItinerary([['JFK','ATL']])) === JSON.stringify(['JFK','ATL']));
+console.assert(JSON.stringify(findItinerary([['JFK','A'],['A','B'],['B','C']])) === JSON.stringify(['JFK','A','B','C']));
+console.assert(JSON.stringify(findItinerary([['JFK','ATL'],['ATL','JFK']])) === JSON.stringify(['JFK','ATL','JFK']));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './024-swap-nodes-in-pairs.py?raw';
+import practiceCodeTs from './024-swap-nodes-in-pairs.ts?raw';
+import approach2TsCode from './024-swap-nodes-in-pairs-approach2.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 24 · [Link](https://leetcode.com/problems/swap-nodes-in-pairs/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="swap-nodes-in-pairs" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="swap-nodes-in-pairs-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="swap-nodes-in-pairs-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, collect values and rebuild
 
 Collect all node values into a list, swap adjacent pairs, rebuild.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -51,6 +64,32 @@ def swap_pairs(head):
         tail = tail.next
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function swapPairs(head: ListNode | null): ListNode | null {
+    const vals: number[] = [];
+    let cur: ListNode | null = head;
+    while (cur) { vals.push(cur.val); cur = cur.next; }  // L1: O(n) collect
+    for (let i = 0; i < vals.length - 1; i += 2) {       // L2: swap adjacent pairs
+        [vals[i], vals[i + 1]] = [vals[i + 1], vals[i]];
+    }
+    const dummy = new ListNode();
+    let tail = dummy;
+    for (const v of vals) {                               // L3: O(n) rebuild
+        tail.next = new ListNode(v);
+        tail = tail.next;
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -77,6 +116,8 @@ Before: prev -> cur -> cur.next -> next_pair -> ...
 After:  prev -> cur.next -> cur -> next_pair -> ...
 ```
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def swap_pairs(head):
     dummy = ListNode(0, head)               # L1: O(1) sentinel before head
@@ -90,6 +131,26 @@ def swap_pairs(head):
         cur = next_pair                    # L8: O(1) advance cur to start of next pair
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function swapPairs(head: ListNode | null): ListNode | null {
+    const dummy = new ListNode(0, head);    // L1: O(1) sentinel before head
+    let prev: ListNode = dummy;
+    let cur: ListNode | null = head;
+    while (cur && cur.next) {              // L2: at least two nodes remain
+        const nextPair = cur.next.next;    // L3: O(1) save remainder
+        prev.next = cur.next;             // L4: O(1) link prev to second node
+        cur.next.next = cur;              // L5: O(1) second node points back to first
+        cur.next = nextPair;             // L6: O(1) first node points to remainder
+        prev = cur;                        // L7: O(1) advance prev
+        cur = nextPair;                    // L8: O(1) advance cur
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -110,26 +171,36 @@ Four pointer assignments per pair, n/2 pairs total. No allocation beyond the dum
 ### Pointer diagram for `[1, 2, 3, 4]`
 
 ```
-Step 1 (cur=1, next_pair=3):
+Step 1 (cur=1, nextPair=3):
   dummy -> 1 -> 2 -> 3 -> 4
   After:  dummy -> 2 -> 1 -> 3 -> 4
   prev=1, cur=3
 
-Step 2 (cur=3, next_pair=None):
+Step 2 (cur=3, nextPair=None):
   dummy -> 2 -> 1 -> 3 -> 4
   After:  dummy -> 2 -> 1 -> 4 -> 3
   prev=3, cur=None  (loop exits)
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="swap-nodes-in-pairs-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Key takeaways
 
 - Always draw the before/after pointer diagram before coding; the four assignments (L4-L6) have one correct order.
 - The dummy head eliminates the "is this the first node?" special case.
-- `prev = cur` (not `prev = cur.next`) because after the swap, `cur` is the second of the two in the output order, and the next pair starts at `next_pair`.
+- `prev = cur` (not `prev = cur.next`) because after the swap, `cur` is the second of the two in the output order, and the next pair starts at `nextPair`.
 - This pattern generalizes directly to 25 (Reverse Nodes in k-Group), which does the same rewiring over a window of k nodes.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -173,6 +244,46 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function swapPairs(head: ListNode | null): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let prev: ListNode = dummy, cur: ListNode | null = head;
+    while (cur && cur.next) {
+        const nextPair = cur.next.next;
+        prev.next = cur.next; cur.next.next = cur; cur.next = nextPair;
+        prev = cur; cur = nextPair;
+    }
+    return dummy.next;
+}
+
+console.assert(JSON.stringify(toList(swapPairs(fromList([1, 2, 3, 4])))) === JSON.stringify([2, 1, 4, 3]));
+console.assert(JSON.stringify(toList(swapPairs(fromList([])))) === JSON.stringify([]));
+console.assert(JSON.stringify(toList(swapPairs(fromList([1])))) === JSON.stringify([1]));
+console.assert(JSON.stringify(toList(swapPairs(fromList([1, 2, 3])))) === JSON.stringify([2, 1, 3]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

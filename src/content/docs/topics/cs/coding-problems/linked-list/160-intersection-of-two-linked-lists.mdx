@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './160-intersection-of-two-linked-lists.py?raw';
+import practiceCodeTs from './160-intersection-of-two-linked-lists.ts?raw';
+import approach2TsCode from './160-intersection-of-two-linked-lists-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +27,21 @@ LeetCode 160 · [Link](https://leetcode.com/problems/intersection-of-two-linked-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="intersection-of-two-linked-lists" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="intersection-of-two-linked-lists-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="intersection-of-two-linked-lists-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, hash set of visited nodes
 
 Walk list A and store every node object in a set. Walk list B and return the first node found in the set.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def get_intersection_node(headA, headB):
     visited = set()
@@ -43,6 +56,28 @@ def get_intersection_node(headA, headB):
         cur = cur.next
     return None
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): ListNode | null {
+    const visited = new Set<ListNode>();
+    let cur = headA;
+    while (cur) { visited.add(cur); cur = cur.next; }  // L1-L2: O(m) walk list A
+    cur = headB;
+    while (cur) {                 // L3: O(n) walk list B
+        if (visited.has(cur)) return cur;  // L4: O(1) set lookup
+        cur = cur.next;
+    }
+    return null;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -67,6 +102,8 @@ Why it works: if the lists intersect, `pA` travels `a + c + b` total steps and `
 
 If there is no intersection, both pointers reach `None` at the same time (each having traveled `a + b` steps), ending the loop.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def get_intersection_node(headA, headB):
     pA, pB = headA, headB
@@ -75,6 +112,21 @@ def get_intersection_node(headA, headB):
         pB = pB.next if pB else headA  # L3: O(1) advance; redirect at end
     return pA                         # L4: intersection node, or None
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): ListNode | null {
+    let pA: ListNode | null = headA;
+    let pB: ListNode | null = headB;
+    while (pA !== pB) {              // L1: loop until equal (both null, or shared node)
+        pA = pA ? pA.next : headB;  // L2: O(1) advance; redirect at end
+        pB = pB ? pB.next : headA;  // L3: O(1) advance; redirect at end
+    }
+    return pA;                       // L4: intersection node, or null
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -102,6 +154,14 @@ pB path: b1, b2, b3, c1, c2, c3, a1, a2, [c1]  <- meet here
 
 Both pointers travel 8 steps (a=2, b=3, c=3: 2+3+3=8) before landing on c1 simultaneously.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="intersection-of-two-linked-lists-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Key takeaways
 
 - The trick is that both pointers travel the same total distance (m + n) regardless of where the intersection is.
@@ -110,6 +170,8 @@ Both pointers travel 8 steps (a=2, b=3, c=3: 2+3+3=8) before landing on c1 simul
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -146,6 +208,41 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): ListNode | null {
+    let pA: ListNode | null = headA, pB: ListNode | null = headB;
+    while (pA !== pB) { pA = pA ? pA.next : headB; pB = pB ? pB.next : headA; }
+    return pA;
+}
+
+// Shared tail: A=[4,1,8,4,5], B=[5,6,1,8,4,5], intersect at 8
+const shared = new ListNode(8, new ListNode(4, new ListNode(5)));
+const headA = new ListNode(4, new ListNode(1, shared));
+const headB = new ListNode(5, new ListNode(6, new ListNode(1, shared)));
+console.assert(getIntersectionNode(headA, headB) === shared);
+
+// No intersection
+const a = new ListNode(2, new ListNode(6, new ListNode(4)));
+const b = new ListNode(1, new ListNode(5));
+console.assert(getIntersectionNode(a, b) === null);
+
+// Both empty
+console.assert(getIntersectionNode(null, null) === null);
+
+// One empty
+console.assert(getIntersectionNode(new ListNode(1), null) === null);
+
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

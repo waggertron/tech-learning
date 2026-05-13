@@ -5,11 +5,16 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './371-sum-of-two-integers.py?raw';
+import practiceCodeTs from './371-sum-of-two-integers.ts?raw';
+import approach2PyCode from './371-sum-of-two-integers-approach2.py?raw';
+import approach2TsCode from './371-sum-of-two-integers-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 371 · [Link](https://leetcode.com/problems/sum-of-two-integers/) · *M
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="sum-of-two-integers" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="sum-of-two-integers-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="sum-of-two-integers-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Bit-by-bit with carry (language-agnostic)
 
 Simulate a full-adder one bit at a time over 32 bits.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def get_sum(a, b):
     MASK = 0xFFFFFFFF
@@ -42,6 +56,23 @@ def get_sum(a, b):
     # Two's complement fix for negatives
     return result if result < (1 << 31) else result - (1 << 32)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function getSum(a: number, b: number): number {
+    let result = 0;
+    let carry = 0;
+    for (let i = 0; i < 32; i++) {                  // L1: always 32 iterations
+        const bitA = (a >> i) & 1;                  // L2: O(1)
+        const bitB = (b >> i) & 1;                  // L3: O(1)
+        result |= ((bitA ^ bitB ^ carry) & 1) << i; // L4: O(1), sum bit
+        carry = (bitA & bitB) | (bitA & carry) | (bitB & carry); // L5: O(1)
+    }
+    return result | 0;  // sign-extend to 32-bit signed
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -63,8 +94,10 @@ All 32 iterations are O(1); the whole function is effectively O(1).
 
 `a ^ b` is "sum without carry." `(a & b) << 1` is "the carry." Iterate until carry is 0.
 
-In Python, integers are arbitrary-width, so we mask to 32 bits to simulate C-like overflow.
+In Python, integers are arbitrary-width, so we mask to 32 bits to simulate C-like overflow. TypeScript's bitwise operators already work on 32-bit signed integers.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def get_sum(a, b):
     MASK = 0xFFFFFFFF
@@ -73,6 +106,22 @@ def get_sum(a, b):
         a, b = (a ^ b) & MASK, ((a & b) << 1) & MASK  # L2: O(1) per iter
     return a if a <= MAX_INT else ~(a ^ MASK)   # L3: O(1) sign correction
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function getSum(a: number, b: number): number {
+    const MASK = 0xFFFFFFFF;
+    const MAX_INT = 0x7FFFFFFF;
+    while (b !== 0) {                                       // L1: loop at most 32 times
+        const carry = ((a & b) << 1) & MASK;               // L2a: O(1), compute carry
+        a = (a ^ b) & MASK;                                 // L2b: O(1), sum without carry
+        b = carry;
+    }
+    return a <= MAX_INT ? a : ~(a ^ MASK);                  // L3: O(1) sign correction
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -89,7 +138,18 @@ Each iteration shifts the carry left by one bit; after at most 32 iterations the
 - **Time:** O(32) = O(1), driven by L1/L2 (at most 32 carry-propagation iterations).
 - **Space:** O(1).
 
-The final `if a <= MAX_INT else ~(a ^ MASK)` converts back from unsigned 32-bit to Python's signed integer.
+The final sign correction converts back from unsigned 32-bit to a signed integer.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="sum-of-two-integers-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="sum-of-two-integers-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Python built-ins (cheating)
 
@@ -112,6 +172,8 @@ The XOR + carry loop is the classic bitwise-arithmetic pattern. Same core idea s
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_371.py and run.
 # Uses the canonical implementation (Approach 2: XOR + carry loop).
@@ -135,6 +197,30 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function getSum(a: number, b: number): number {
+    const MASK = 0xFFFFFFFF;
+    const MAX_INT = 0x7FFFFFFF;
+    while (b !== 0) {
+        const carry = ((a & b) << 1) & MASK;
+        a = (a ^ b) & MASK;
+        b = carry;
+    }
+    return a <= MAX_INT ? a : ~(a ^ MASK);
+}
+
+console.assert(getSum(1, 2) === 3);
+console.assert(getSum(2, 3) === 5);
+console.assert(getSum(0, 0) === 0);
+console.assert(getSum(-1, 1) === 0);
+console.assert(getSum(-5, 3) === -2);
+console.assert(getSum(2 ** 30, 2 ** 30) === 2 ** 31);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

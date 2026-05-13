@@ -5,11 +5,18 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './846-hand-of-straights.py?raw';
+import practiceCodeTs from './846-hand-of-straights.ts?raw';
+import approach2PyCode from './846-hand-of-straights-approach2.py?raw';
+import approach2TsCode from './846-hand-of-straights-approach2.ts?raw';
+import approach3PyCode from './846-hand-of-straights-approach3.py?raw';
+import approach3TsCode from './846-hand-of-straights-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 846 · [Link](https://leetcode.com/problems/hand-of-straights/) · *Med
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="hand-of-straights" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="hand-of-straights-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="hand-of-straights-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every partitioning
 
 Recursively pick `group_size` indices, check they form a consecutive run, then recurse on the rest.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from itertools import combinations
 
@@ -46,6 +62,36 @@ def is_n_straight_hand(hand, group_size):
                 return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isNStraightHand(hand: number[], groupSize: number): boolean {
+    if (hand.length % groupSize !== 0) return false;
+    if (hand.length === 0) return true;
+    const n = hand.length;
+    // Try every combination of groupSize indices
+    function* combinations(arr: number[], k: number): Generator<number[]> {
+        if (k === 0) { yield []; return; }
+        for (let i = 0; i <= arr.length - k; i++) {
+            for (const rest of combinations(arr.slice(i + 1), k - 1)) {
+                yield [arr[i], ...rest];
+            }
+        }
+    }
+    const indices = Array.from({ length: n }, (_, i) => i);
+    for (const chosen of combinations(indices, groupSize)) {        // L1: C(n, k) groups
+        const group = chosen.map(i => hand[i]).sort((a, b) => a - b);
+        if (group.every((v, i) => i === 0 || v - group[i - 1] === 1)) {
+            const chosen_set = new Set(chosen);
+            const remaining = hand.filter((_, i) => !chosen_set.has(i));
+            if (isNStraightHand(remaining, groupSize)) return true; // L2: recurse
+        }
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 Each level tries C(n, k) groups; the recursion has n/k levels. Total combinatorial blow-up. Skip.
 
@@ -57,6 +103,8 @@ Each level tries C(n, k) groups; the recursion has n/k levels. Total combinatori
 
 Count occurrences. Repeatedly take the smallest remaining value `x`; it must start a run of `x, x+1, ..., x + groupSize - 1`, remove one of each. If at any point you can't, return false.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -74,6 +122,28 @@ def is_n_straight_hand(hand, group_size):
             counts[x + k] -= c                 # L7: O(1)
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isNStraightHand(hand: number[], groupSize: number): boolean {
+    if (hand.length % groupSize !== 0) return false;                // L1: O(1) quick reject
+    const counts = new Map<number, number>();
+    for (const v of hand) counts.set(v, (counts.get(v) ?? 0) + 1); // L2: O(n)
+    const keys = Array.from(counts.keys()).sort((a, b) => a - b);   // L3: O(u log u)
+    for (const x of keys) {
+        const c = counts.get(x)!;                                   // L4: O(1)
+        if (c === 0) continue;
+        for (let k = 0; k < groupSize; k++) {                       // L5: O(group_size) per value
+            const cur = counts.get(x + k) ?? 0;
+            if (cur < c) return false;                              // L6: O(1)
+            counts.set(x + k, cur - c);                            // L7: O(1)
+        }
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -91,10 +161,23 @@ Sorting the distinct values is O(u log u) where u ≤ n, so O(n log n). The inne
 - **Time:** O(n log n + n · k), driven by L3 (sort) and L5/L6/L7 (group consumption).
 - **Space:** O(n) for the Counter.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="hand-of-straights-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="hand-of-straights-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Min-heap + lazy consumption
 
 Min-heap of remaining values; pop smallest; consume one of each of the next k values.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import Counter
@@ -118,6 +201,30 @@ def is_n_straight_hand_heap(hand, group_size):
             heapq.heappop(heap)                 # L10: O(log u) cleanup
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Min-heap using a sorted key list (straightforward for interview context)
+function isNStraightHandHeap(hand: number[], groupSize: number): boolean {
+    if (hand.length % groupSize !== 0) return false;                // L1: O(1)
+    const counts = new Map<number, number>();
+    for (const v of hand) counts.set(v, (counts.get(v) ?? 0) + 1); // L2: O(n)
+    const keys = Array.from(counts.keys()).sort((a, b) => a - b);   // L3: O(u)
+    let ki = 0;                                                     // L4: O(u) setup
+    while (ki < keys.length) {                                      // L5: outer loop
+        const x = keys[ki];
+        if ((counts.get(x) ?? 0) === 0) { ki++; continue; }        // L7: skip exhausted
+        for (let k = 0; k < groupSize; k++) {                       // L8: O(group_size) per start
+            const cur = counts.get(x + k) ?? 0;
+            if (cur === 0) return false;
+            counts.set(x + k, cur - 1);                            // L9: O(1)
+        }
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -136,6 +243,17 @@ Heap pops cost O(log u) and happen at most u times; consumption loops cost O(gro
 - **Time:** O(n log n + n · k), same as Approach 2.
 - **Space:** O(n) for Counter and heap.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="hand-of-straights-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="hand-of-straights-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -148,6 +266,8 @@ The greedy choice, always start the next group from the smallest remaining value
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_846.py and run.
 # Uses the canonical implementation (Approach 2: sort + per-smallest).
@@ -180,6 +300,36 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isNStraightHand(hand: number[], groupSize: number): boolean {
+    if (hand.length % groupSize !== 0) return false;
+    const counts = new Map<number, number>();
+    for (const v of hand) counts.set(v, (counts.get(v) ?? 0) + 1);
+    const keys = Array.from(counts.keys()).sort((a, b) => a - b);
+    for (const x of keys) {
+        const c = counts.get(x)!;
+        if (c === 0) continue;
+        for (let k = 0; k < groupSize; k++) {
+            const cur = counts.get(x + k) ?? 0;
+            if (cur < c) return false;
+            counts.set(x + k, cur - c);
+        }
+    }
+    return true;
+}
+
+console.assert(isNStraightHand([1,2,3,6,2,3,4,7,8], 3) === true);
+console.assert(isNStraightHand([1,2,3,4,5], 4) === false);
+console.assert(isNStraightHand([1], 1) === true);           // single card, group of 1
+console.assert(isNStraightHand([1,2,3], 3) === true);       // exact one group
+console.assert(isNStraightHand([1,2,4], 3) === false);      // gap, can't form run
+console.assert(isNStraightHand([1,1,2,2,3,3], 3) === true); // two complete groups
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

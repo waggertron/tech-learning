@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './347-top-k-frequent-elements.py?raw';
+import practiceCodeTs from './347-top-k-frequent-elements.ts?raw';
+import approach2PyCode from './347-top-k-frequent-elements-approach2.py?raw';
+import approach2TsCode from './347-top-k-frequent-elements-approach2.ts?raw';
+import approach3PyCode from './347-top-k-frequent-elements-approach3.py?raw';
+import approach3TsCode from './347-top-k-frequent-elements-approach3.ts?raw';
 
 ## Problem
 
@@ -25,12 +32,21 @@ LeetCode 347 · [Link](https://leetcode.com/problems/top-k-frequent-elements/) �
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="top-k-frequent-elements" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="top-k-frequent-elements-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="top-k-frequent-elements-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, count, then sort
 
 Count frequencies with a hash map, then sort by count descending, take the first `k`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -38,6 +54,20 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
     counts = Counter(nums)                          # L1: O(n) build counter
     return [num for num, _ in counts.most_common(k)]  # L2: O(n log k) heap internally
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function topKFrequent(nums: number[], k: number): number[] {
+    const counts = new Map<number, number>();        // L1: O(n) build counter
+    for (const x of nums) counts.set(x, (counts.get(x) ?? 0) + 1);
+    return [...counts.entries()]
+        .sort((a, b) => b[1] - a[1])               // L2: O(n log n) sort
+        .slice(0, k)
+        .map(([num]) => num);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -60,6 +90,8 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
 
 Maintain a heap of size `k` over `(count, value)` pairs. Evict the smallest whenever the heap grows past `k`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 import heapq
@@ -73,6 +105,19 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
             heapq.heappop(heap)            # L6: O(log k) pop
     return [num for _, num in heap]        # L7: O(k)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function topKFrequent(nums: number[], k: number): number[] {
+    const counts = new Map<number, number>();         // L1: O(n) build counter
+    for (const x of nums) counts.set(x, (counts.get(x) ?? 0) + 1);
+    // Sort entries by count ascending, keep last k
+    const entries = [...counts.entries()].sort((a, b) => a[1] - b[1]); // L3-L4: O(d log d)
+    return entries.slice(-k).map(([num]) => num);    // L7: O(k)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -94,10 +139,23 @@ Since d ≤ n, the total is O(n log k).
 
 When `k` is small relative to `n`, this is noticeably faster than the O(n log n) sort.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="top-k-frequent-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="top-k-frequent-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bucket sort by frequency (optimal)
 
 Frequencies are bounded by `n` (no value can appear more than `n` times). Bucket each distinct element into `buckets[freq]`, then scan from high to low.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -115,6 +173,27 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
                 return result                      # L9: O(1) early return
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function topKFrequent(nums: number[], k: number): number[] {
+    const counts = new Map<number, number>();         // L1: O(n) build counter
+    for (const x of nums) counts.set(x, (counts.get(x) ?? 0) + 1);
+    const buckets: number[][] = Array.from({length: nums.length + 1}, () => []); // L2: O(n)
+    for (const [num, cnt] of counts) buckets[cnt].push(num); // L3-L4: O(d)
+
+    const result: number[] = [];
+    for (let cnt = buckets.length - 1; cnt > 0; cnt--) { // L5: scan high-to-low
+        for (const num of buckets[cnt]) {               // L6: visit elements
+            result.push(num);                           // L7: O(1)
+            if (result.length === k) return result;     // L8-L9: early return
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -133,6 +212,17 @@ Every distinct element is bucketed once and visited at most once during the scan
 - **Time:** O(n), driven by L1/L2 (linear setup) plus the O(n) total scan in L5-L9. Counter is O(n); bucketing is O(n); the scan visits at most `n` elements.
 - **Space:** O(n) for counter and buckets.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="top-k-frequent-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="top-k-frequent-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -145,6 +235,8 @@ Bucket sort beats the heap when `k` is not trivially small; the heap wins on str
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_top_k_frequent.py and run.
 # Uses the canonical implementation (Approach 3: bucket sort).
@@ -172,10 +264,38 @@ def _run_tests():
     r = top_k_frequent([1,2,3], 1)
     assert len(r) == 1 and r[0] in [1, 2, 3]
     print("all tests pass")
-
-if __name__ == "__main__":
-    _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function assert(condition: boolean, msg: string = ''): void {
+    if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+function topKFrequent(nums: number[], k: number): number[] {
+    const counts = new Map<number, number>();
+    for (const x of nums) counts.set(x, (counts.get(x) ?? 0) + 1);
+    const buckets: number[][] = Array.from({length: nums.length + 1}, () => []);
+    for (const [num, cnt] of counts) buckets[cnt].push(num);
+    const result: number[] = [];
+    for (let cnt = buckets.length - 1; cnt > 0; cnt--) {
+        for (const num of buckets[cnt]) {
+            result.push(num);
+            if (result.length === k) return result;
+        }
+    }
+    return result;
+}
+
+assert(JSON.stringify([...topKFrequent([1,1,1,2,2,3], 2)].sort()) === JSON.stringify([1,2]));
+assert(JSON.stringify(topKFrequent([1], 1)) === JSON.stringify([1]));
+assert(JSON.stringify([...topKFrequent([1,2], 2)].sort()) === JSON.stringify([1,2]));
+const r = topKFrequent([1,2,3], 1);
+assert(r.length === 1 && [1,2,3].includes(r[0]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

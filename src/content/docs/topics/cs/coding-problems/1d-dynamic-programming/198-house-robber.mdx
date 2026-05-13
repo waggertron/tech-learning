@@ -5,11 +5,20 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './198-house-robber.py?raw';
+import practiceCodeTs from './198-house-robber.ts?raw';
+import approach2PyCode from './198-house-robber-approach2.py?raw';
+import approach2TsCode from './198-house-robber-approach2.ts?raw';
+import approach3PyCode from './198-house-robber-approach3.py?raw';
+import approach3TsCode from './198-house-robber-approach3.ts?raw';
+import approach4PyCode from './198-house-robber-approach4.py?raw';
+import approach4TsCode from './198-house-robber-approach4.ts?raw';
 
 ## Problem
 
@@ -23,12 +32,21 @@ LeetCode 198 · [Link](https://leetcode.com/problems/house-robber/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="house-robber" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="house-robber-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="house-robber-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive with take/skip
 
 `f(i) = max(nums[i] + f(i+2), f(i+1))`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(nums):
     def f(i):                              # L1: define recursive helper
@@ -37,6 +55,19 @@ def rob(nums):
         return max(nums[i] + f(i + 2), f(i + 1))  # L3: two recursive calls each time
     return f(0)                            # L4: O(1) entry call
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    function f(i: number): number {                                    // L1: define helper
+        if (i >= nums.length) return 0;                               // L2: O(1) base case
+        return Math.max(nums[i] + f(i + 2), f(i + 1));               // L3: two recursive calls
+    }
+    return f(0);                                                       // L4: O(1) entry call
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -56,6 +87,8 @@ Every call fans out into two subproblems with no memoization, so the call tree i
 
 ## Approach 2: Memoized
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -68,6 +101,24 @@ def rob(nums):
         return max(nums[i] + f(i + 2), f(i + 1))  # L3: O(1) per unique call (cache hits after)
     return f(0)                            # L4: O(1) entry call
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    const n = nums.length;
+    const memo = new Map<number, number>();
+    function f(i: number): number {
+        if (i >= n) return 0;                                         // L2: O(1) base case
+        if (memo.has(i)) return memo.get(i)!;
+        const result = Math.max(nums[i] + f(i + 2), f(i + 1));      // L3: O(1) per unique call
+        memo.set(i, result);
+        return result;
+    }
+    return f(0);                                                       // L4: O(1) entry call
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -86,10 +137,23 @@ Each index `i` is computed exactly once; subsequent calls return a cached result
 - **Time:** O(n), driven by L3 (n unique subproblems, each computed once).
 - **Space:** O(n) for the cache and recursion stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="house-robber-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="house-robber-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up DP array
 
 `dp[i]` = max money robbing houses `0..i`. `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(nums):
     n = len(nums)
@@ -102,6 +166,23 @@ def rob(nums):
         dp[i] = max(dp[i-1], dp[i-2] + nums[i])  # L5: O(1) recurrence
     return dp[n-1]                            # L6: O(1) return
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    const n = nums.length;
+    if (n === 1) return nums[0];
+    const dp = new Array(n).fill(0);              // L1: O(n) allocation
+    dp[0] = nums[0];                              // L2: base case
+    dp[1] = Math.max(nums[0], nums[1]);           // L3: base case
+    for (let i = 2; i < n; i++) {                // L4: loop n-2 times
+        dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);  // L5: O(1) recurrence
+    }
+    return dp[n - 1];                            // L6: O(1) return
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -118,10 +199,23 @@ def rob(nums):
 - **Time:** O(n), driven by L4/L5 (n - 2 iterations).
 - **Space:** O(n) for the dp array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="house-robber-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="house-robber-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 4: Bottom-up with two variables (optimal)
 
 `prev2 = dp[i-2]`, `prev1 = dp[i-1]`. `dp[i] = max(prev1, prev2 + nums[i])`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(nums):
     prev2, prev1 = 0, 0                    # L1: O(1) initialization
@@ -129,6 +223,19 @@ def rob(nums):
         prev2, prev1 = prev1, max(prev1, prev2 + x)  # L3: O(1) per iteration
     return prev1                           # L4: O(1) return
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    let prev2 = 0, prev1 = 0;             // L1: O(1) initialization
+    for (const x of nums) {               // L2: loop over n elements
+        [prev2, prev1] = [prev1, Math.max(prev1, prev2 + x)];  // L3: O(1) per iteration
+    }
+    return prev1;                         // L4: O(1) return
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -147,6 +254,17 @@ The entire DP table is collapsed to two scalars. Each step only needs the previo
 - **Time:** O(n), driven by L3 (single pass over nums).
 - **Space:** O(1), only two scalar variables regardless of input size.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach4PyCode} id="house-robber-approach4-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach4TsCode} id="house-robber-approach4-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -160,6 +278,8 @@ This is the canonical "take or skip" DP pattern. Reappears in Paint House, Delet
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_198_house_robber.py and run.
 # Uses the canonical implementation (Approach 4: bottom-up two variables).
@@ -182,6 +302,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    let prev2 = 0, prev1 = 0;
+    for (const x of nums) {
+        [prev2, prev1] = [prev1, Math.max(prev1, prev2 + x)];
+    }
+    return prev1;
+}
+
+console.assert(rob([1, 2, 3, 1]) === 4);
+console.assert(rob([2, 7, 9, 3, 1]) === 12);
+console.assert(rob([0]) === 0);
+console.assert(rob([5]) === 5);
+console.assert(rob([2, 1]) === 2);
+console.assert(rob([1, 3, 1, 3, 100]) === 103);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

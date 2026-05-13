@@ -5,11 +5,18 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './213-house-robber-ii.py?raw';
+import practiceCodeTs from './213-house-robber-ii.ts?raw';
+import approach2PyCode from './213-house-robber-ii-approach2.py?raw';
+import approach2TsCode from './213-house-robber-ii-approach2.ts?raw';
+import approach3PyCode from './213-house-robber-ii-approach3.py?raw';
+import approach3TsCode from './213-house-robber-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 213 · [Link](https://leetcode.com/problems/house-robber-ii/) · *Mediu
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="house-robber-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="house-robber-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="house-robber-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, enumerate all non-adjacent subsets
 
 Generate every subset with no two adjacent (including circular adjacency, where house 0 and house n-1 cannot both be picked). Impractical past n ≈ 25.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(nums):
     n = len(nums)
@@ -48,6 +64,28 @@ def rob(nums):
             best = max(best, sum(nums[i] for i in chosen))
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    const n = nums.length;
+    if (n === 1) return nums[0];
+    let best = 0;
+    for (let mask = 0; mask < (1 << n); mask++) {           // L1: 2^n subsets
+        const chosen: number[] = [];
+        for (let i = 0; i < n; i++) if (mask & (1 << i)) chosen.push(i);
+        let valid = true;
+        for (let i = 0; i < chosen.length - 1; i++) {
+            if (chosen[i + 1] - chosen[i] === 1) { valid = false; break; }
+        }
+        if (valid && chosen.includes(0) && chosen.includes(n - 1)) valid = false;
+        if (valid) best = Math.max(best, chosen.reduce((s, i) => s + nums[i], 0));
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 The bitmask enumeration touches 2^n subsets; for each, validating non-adjacency and summing is O(n). Total O(2^n · n).
 
@@ -61,6 +99,8 @@ Either you rob the first house (then you can't rob the last), or you don't (and 
 
 Special-case `n == 1`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(nums):
     def rob_linear(arr):                         # L1: define helper
@@ -73,6 +113,23 @@ def rob(nums):
         return nums[0]
     return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))  # L7: two O(n) calls
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    function robLinear(arr: number[]): number {              // L1: define helper
+        let prev2 = 0, prev1 = 0;                           // L2: O(1) init
+        for (const x of arr) {                              // L3: loop over slice length (n-1)
+            [prev2, prev1] = [prev1, Math.max(prev1, prev2 + x)];  // L4: O(1) per step
+        }
+        return prev1;                                       // L5: O(1) return
+    }
+    if (nums.length === 1) return nums[0];                  // L6: O(1) edge case
+    return Math.max(robLinear(nums.slice(0, -1)), robLinear(nums.slice(1)));  // L7: two O(n) calls
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -92,10 +149,23 @@ Two passes of length n-1 over the input, plus O(n) memory for the two slices. To
 - **Time:** O(n), driven by L4 across two calls (L7).
 - **Space:** O(n) for slicing (or O(1) if you pass indices).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="house-robber-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="house-robber-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Two-pointer range DP, avoid slicing (optimal space)
 
 Same idea, but iterate with explicit start/end indices instead of creating sliced copies. Drop first house by calling `rob_range(1, n)`, drop last by calling `rob_range(0, n-1)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(nums):
     def rob_range(lo, hi):                           # L1: define helper, args are indices
@@ -108,6 +178,23 @@ def rob(nums):
         return nums[0]
     return max(rob_range(0, len(nums) - 1), rob_range(1, len(nums)))  # L7: two O(n) calls
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    function robRange(lo: number, hi: number): number {      // L1: define helper
+        let prev2 = 0, prev1 = 0;                           // L2: O(1) init
+        for (let i = lo; i < hi; i++) {                     // L3: loop hi-lo iterations
+            [prev2, prev1] = [prev1, Math.max(prev1, prev2 + nums[i])];  // L4: O(1) per step
+        }
+        return prev1;                                       // L5: O(1) return
+    }
+    if (nums.length === 1) return nums[0];                  // L6: O(1) edge case
+    return Math.max(robRange(0, nums.length - 1), robRange(1, nums.length));  // L7: two O(n) calls
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -127,6 +214,17 @@ Identical time to Approach 2, but the two index arguments replace the two O(n) s
 - **Time:** O(n), driven by L4 across two calls (L7).
 - **Space:** O(1), no slice copies; only scalar vars.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="house-robber-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="house-robber-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -139,6 +237,8 @@ The "split the circle by fixing one house in/out" trick is common in circular-ar
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_213_house_robber_ii.py and run.
 # Uses the canonical implementation (Approach 3: range-based, O(1) space).
@@ -166,6 +266,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(nums: number[]): number {
+    function robRange(lo: number, hi: number): number {
+        let prev2 = 0, prev1 = 0;
+        for (let i = lo; i < hi; i++) {
+            [prev2, prev1] = [prev1, Math.max(prev1, prev2 + nums[i])];
+        }
+        return prev1;
+    }
+    if (nums.length === 1) return nums[0];
+    return Math.max(robRange(0, nums.length - 1), robRange(1, nums.length));
+}
+
+console.assert(rob([2, 3, 2]) === 3);
+console.assert(rob([1, 2, 3, 1]) === 4);
+console.assert(rob([1, 2, 3]) === 3);
+console.assert(rob([5]) === 5);
+console.assert(rob([1, 3]) === 3);
+console.assert(rob([2, 7, 9, 3, 1]) === 11);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

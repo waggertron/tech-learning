@@ -5,11 +5,18 @@ parent: intervals
 tags: [leetcode, neetcode-150, intervals, heap, sweep-line, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './253-meeting-rooms-ii.py?raw';
+import practiceCodeTs from './253-meeting-rooms-ii.ts?raw';
+import approach2PyCode from './253-meeting-rooms-ii-approach2.py?raw';
+import approach2TsCode from './253-meeting-rooms-ii-approach2.ts?raw';
+import approach3PyCode from './253-meeting-rooms-ii-approach3.py?raw';
+import approach3TsCode from './253-meeting-rooms-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 253 (premium) · [Link](https://leetcode.com/problems/meeting-rooms-ii/
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="meeting-rooms-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="meeting-rooms-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="meeting-rooms-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, simulate time ticks
 
 For every time t from 0 to max_end, count active meetings. Max over all t is the answer.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_meeting_rooms(intervals):
     if not intervals:
@@ -40,6 +56,22 @@ def min_meeting_rooms(intervals):
         best = max(best, active)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minMeetingRooms(intervals: number[][]): number {
+    if (intervals.length === 0) return 0;
+    const maxEnd = Math.max(...intervals.map(([, e]) => e));
+    let best = 0;
+    for (let t = 0; t <= maxEnd; t++) {                // L1: T iterations
+        const active = intervals.filter(([s, e]) => s <= t && t < e).length;  // L2: O(n) per tick
+        best = Math.max(best, active);
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 Direct but quadratic in (T · n). Useful as a sanity-check oracle, never as a real solution.
 
@@ -51,6 +83,8 @@ Direct but quadratic in (T · n). Useful as a sanity-check oracle, never as a re
 
 Sort intervals by start. Maintain a min-heap of end times for current rooms. For each new meeting: pop end times ≤ current start (those rooms freed up); push the new end time. Answer = max heap size.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -63,6 +97,26 @@ def min_meeting_rooms(intervals):
         heapq.heappush(heap, e)          # L6: O(log n) book a room
     return len(heap)                     # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Min-heap backed by a sorted array (small n). For large n use a proper heap library.
+function minMeetingRooms(intervals: number[][]): number {
+    intervals.sort((a, b) => a[0] - b[0]);   // L1: O(n log n)
+    const heap: number[] = [];               // L2: O(1)
+
+    const heapPush = (val: number) => { heap.push(val); heap.sort((a, b) => a - b); };
+    const heapPop = () => heap.shift()!;
+
+    for (const [s, e] of intervals) {        // L3: outer loop, n iterations
+        if (heap.length > 0 && heap[0] <= s) heapPop();  // L4/L5: O(log n) free a room
+        heapPush(e);                         // L6: O(log n) book a room
+    }
+    return heap.length;                      // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -84,10 +138,23 @@ L1 (sort) and L6 (n pushes) both contribute O(n log n); neither strictly dominat
 - **Time:** O(n log n), driven by L1 (sort) and L6 (heap pushes, n total).
 - **Space:** O(n) for the heap in the worst case (all meetings overlap).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="meeting-rooms-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="meeting-rooms-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Sweep line with separate start/end arrays (counters only)
 
 Sort starts and ends independently. Two pointers; increment count on a start, decrement on an end (before a new start). Track max count.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_meeting_rooms(intervals):
     starts = sorted(s for s, _ in intervals)   # L1: O(n log n)
@@ -104,6 +171,28 @@ def min_meeting_rooms(intervals):
             j += 1                             # L11: O(1)
     return best                                # L12: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minMeetingRooms(intervals: number[][]): number {
+    const starts = intervals.map(([s]) => s).sort((a, b) => a - b);  // L1: O(n log n)
+    const ends   = intervals.map(([, e]) => e).sort((a, b) => a - b); // L2: O(n log n)
+    let i = 0, j = 0, used = 0, best = 0;                            // L3, L4: O(1)
+    while (i < intervals.length) {                                    // L5: outer loop, n iterations
+        if (starts[i] < ends[j]) {                                    // L6: O(1) comparison
+            used++;                                                    // L7: O(1)
+            best = Math.max(best, used);                              // L8: O(1)
+            i++;                                                       // L9: O(1)
+        } else {
+            used--;                                                    // L10: O(1)
+            j++;                                                       // L11: O(1)
+        }
+    }
+    return best;                                                       // L12: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -127,6 +216,17 @@ After sorting, the while loop runs exactly n times (i advances once per iteratio
 ### Why it works
 Intuitively: whenever a meeting's start comes before the earliest current end, we need a new room. Whenever an end arrives first, a room frees up. The running count of active rooms is exactly what we want.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="meeting-rooms-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="meeting-rooms-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -139,6 +239,8 @@ Heap version is the canonical answer. Sweep-line is the shortest.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_253.py and run.
 # Uses the canonical implementation (Approach 2: min-heap of end times).
@@ -166,6 +268,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minMeetingRooms(intervals: number[][]): number {
+    intervals.sort((a, b) => a[0] - b[0]);
+    const heap: number[] = [];
+    const heapPush = (val: number) => { heap.push(val); heap.sort((a, b) => a - b); };
+    const heapPop = () => heap.shift()!;
+    for (const [s, e] of intervals) {
+        if (heap.length > 0 && heap[0] <= s) heapPop();
+        heapPush(e);
+    }
+    return heap.length;
+}
+
+console.assert(minMeetingRooms([[0,30],[5,10],[15,20]]) === 2);
+console.assert(minMeetingRooms([[7,10],[2,4]]) === 1);
+console.assert(minMeetingRooms([[1,5]]) === 1);
+console.assert(minMeetingRooms([]) === 0);
+console.assert(minMeetingRooms([[1,4],[2,5],[3,6]]) === 3);
+console.assert(minMeetingRooms([[0,5],[5,10],[10,15]]) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

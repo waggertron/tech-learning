@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './057-insert-interval.py?raw';
+import practiceCodeTs from './057-insert-interval.ts?raw';
+import approach2TsCode from './057-insert-interval-approach2.ts?raw';
+import approach3TsCode from './057-insert-interval-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 57 · [Link](https://leetcode.com/problems/insert-interval/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="insert-interval" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="insert-interval-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="insert-interval-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, append and merge
 
 Add to list, sort, run Merge Intervals.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def insert(intervals, new_interval):
     intervals = [list(iv) for iv in intervals] + [list(new_interval)]
@@ -41,6 +55,25 @@ def insert(intervals, new_interval):
             result.append(list(iv))
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function insert(intervals: number[][], newInterval: number[]): number[][] {
+    const all = [...intervals.map(iv => [...iv]), [...newInterval]];
+    all.sort((a, b) => a[0] - b[0]);                // L1: O(n log n)
+    const result: number[][] = [];
+    for (const iv of all) {                          // L2: O(n) sweep
+        if (result.length > 0 && iv[0] <= result[result.length - 1][1]) {
+            result[result.length - 1][1] = Math.max(result[result.length - 1][1], iv[1]);
+        } else {
+            result.push([...iv]);
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 The sort is the load-bearing step. After sort, the linear merge is the same template as LeetCode 56.
 
@@ -52,6 +85,8 @@ The sort is the load-bearing step. After sort, the linear merge is the same temp
 
 Find where `newInterval` goes; then walk left and right, merging overlaps.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import bisect
 
@@ -74,10 +109,50 @@ def insert(intervals, new_interval):
 
     return intervals
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function insert(intervals: number[][], newInterval: number[]): number[][] {
+    const ivs = intervals.map(iv => [...iv]);
+    // find insertion point by binary search
+    let lo = 0, hi = ivs.length;
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (ivs[mid][0] < newInterval[0]) lo = mid + 1; else hi = mid;
+    }
+    let idx = lo;
+    ivs.splice(idx, 0, [...newInterval]);               // L1/L2: O(n) shift
+
+    // Merge leftward
+    while (idx > 0 && ivs[idx - 1][1] >= ivs[idx][0]) {
+        ivs[idx - 1][1] = Math.max(ivs[idx - 1][1], ivs[idx][1]);
+        ivs.splice(idx, 1); idx--;
+    }
+    // Merge rightward
+    while (idx + 1 < ivs.length && ivs[idx][1] >= ivs[idx + 1][0]) {
+        ivs[idx][1] = Math.max(ivs[idx][1], ivs[idx + 1][1]);
+        ivs.splice(idx + 1, 1);
+    }
+    return ivs;
+}
+```
+</TabItem>
+</Tabs>
 
 The binary search saves work on the search, but the `insert` and `pop` calls are O(n) shifts, so the worst case is the same as a single linear pass.
 
 Same O(n) in the worst case.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="insert-interval-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="insert-interval-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Single linear pass (canonical, O(n))
 
@@ -87,6 +162,8 @@ Three phases over the sorted list:
 2. Merge any overlapping with `newInterval`.
 3. Copy the rest.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def insert(intervals, new_interval):
     result = []                   # L1: O(1) setup
@@ -112,6 +189,39 @@ def insert(intervals, new_interval):
 
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function insert(intervals: number[][], newInterval: number[]): number[][] {
+    const result: number[][] = [];                         // L1: O(1) setup
+    let i = 0;                                            // L2: O(1)
+    const n = intervals.length;                           // L3: O(1)
+
+    // 1. before
+    while (i < n && intervals[i][1] < newInterval[0]) {  // L4: O(1) per check
+        result.push([...intervals[i]]);                   // L5: O(1) per append
+        i++;
+    }
+
+    // 2. overlap
+    while (i < n && intervals[i][0] <= newInterval[1]) { // L6: O(1) per check
+        newInterval = [Math.min(newInterval[0], intervals[i][0]),
+                       Math.max(newInterval[1], intervals[i][1])]; // L7: O(1) per merge
+        i++;
+    }
+    result.push(newInterval);                             // L8: O(1)
+
+    // 3. after
+    while (i < n) {                                       // L9: O(1) per check
+        result.push([...intervals[i]]);                   // L10: O(1) per append
+        i++;
+    }
+
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -130,6 +240,17 @@ No phase dominates; every interval is visited exactly once across the three phas
 - **Time:** O(n), driven by the single pass across all three phases (L4-L10).
 - **Space:** O(n).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="insert-interval-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="insert-interval-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -142,6 +263,8 @@ The three-phase template is the cleanest answer.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_057_insert_interval.py and run.
 # Uses the canonical implementation (Approach 3).
@@ -185,6 +308,33 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function insert(intervals: number[][], newInterval: number[]): number[][] {
+    const result: number[][] = [];
+    let i = 0;
+    const n = intervals.length;
+    while (i < n && intervals[i][1] < newInterval[0]) { result.push([...intervals[i]]); i++; }
+    while (i < n && intervals[i][0] <= newInterval[1]) {
+        newInterval = [Math.min(newInterval[0], intervals[i][0]), Math.max(newInterval[1], intervals[i][1])];
+        i++;
+    }
+    result.push(newInterval);
+    while (i < n) { result.push([...intervals[i]]); i++; }
+    return result;
+}
+
+console.assert(JSON.stringify(insert([[1,3],[6,9]], [2,5])) === JSON.stringify([[1,5],[6,9]]));
+console.assert(JSON.stringify(insert([[1,2],[3,5],[6,7],[8,10],[12,16]], [4,8])) === JSON.stringify([[1,2],[3,10],[12,16]]));
+console.assert(JSON.stringify(insert([[3,5],[6,9]], [1,2])) === JSON.stringify([[1,2],[3,5],[6,9]]));
+console.assert(JSON.stringify(insert([[1,2],[3,5]], [7,9])) === JSON.stringify([[1,2],[3,5],[7,9]]));
+console.assert(JSON.stringify(insert([[1,2],[3,4],[5,6]], [0,10])) === JSON.stringify([[0,10]]));
+console.assert(JSON.stringify(insert([], [1,5])) === JSON.stringify([[1,5]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

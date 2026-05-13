@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, bfs, strings, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './127-word-ladder.py?raw';
+import practiceCodeTs from './127-word-ladder.ts?raw';
+import approach2PyCode from './127-word-ladder-approach2.py?raw';
+import approach2TsCode from './127-word-ladder-approach2.ts?raw';
 
 ## Problem
 
@@ -29,12 +34,21 @@ LeetCode 127 · [Link](https://leetcode.com/problems/word-ladder/) · *Hard*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="word-ladder" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="word-ladder-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="word-ladder-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, BFS comparing every pair
 
 BFS from `beginWord`. At each frontier word, scan the whole word list for "1 letter off" candidates.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -58,6 +72,39 @@ def ladder_length(beginWord, endWord, wordList):
                 q.append((cand, dist + 1))
     return 0
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
+    const words = new Set(wordList);
+    if (!words.has(endWord)) return 0;      // L1: O(N) set lookup
+
+    const L = beginWord.length;
+    const q: [string, number][] = [[beginWord, 1]];  // L3: init queue
+    const visited = new Set([beginWord]);   // L4: init visited
+
+    function oneAway(a: string, b: string): boolean {  // L5: O(L) per call
+        let diff = 0;
+        for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) diff++;
+        return diff === 1;
+    }
+
+    let head = 0;
+    while (head < q.length) {              // L6: outer BFS loop
+        const [word, dist] = q[head++];    // L7: O(1)
+        if (word === endWord) return dist;
+        for (const cand of words) {        // L8: O(N) scan per word
+            if (!visited.has(cand) && oneAway(word, cand)) {  // L9: O(L)
+                visited.add(cand);
+                q.push([cand, dist + 1]);
+            }
+        }
+    }
+    return 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -81,6 +128,8 @@ Each dequeued word scans the entire word list (L8, O(N)) and calls `one_away` fo
 
 Preprocess: for each word, generate patterns like `"h*t"`, `"*ot"`, `"ho*"` (one wildcard). Two words are one-away iff they share a pattern. A dict `pattern → [words]` gives O(L) neighbor lookup.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict, deque
 
@@ -109,6 +158,44 @@ def ladder_length(beginWord, endWord, wordList):
             patterns[key] = []                       # L14: prune bucket
     return 0
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
+    if (!wordList.includes(endWord)) return 0;       // L1: O(N)
+
+    const L = beginWord.length;                      // L2: O(1)
+    const patterns = new Map<string, string[]>();    // L3: O(1) init
+    for (const w of wordList) {                      // L4: O(N) outer
+        for (let i = 0; i < L; i++) {                // L5: O(L) inner
+            const key = w.slice(0, i) + '*' + w.slice(i + 1);  // L6: O(L) slice + store
+            if (!patterns.has(key)) patterns.set(key, []);
+            patterns.get(key)!.push(w);
+        }
+    }
+
+    const q: [string, number][] = [[beginWord, 1]]; // L7: O(1)
+    const visited = new Set([beginWord]);            // L8: O(1)
+    let head = 0;
+    while (head < q.length) {                        // L9: BFS loop
+        const [word, dist] = q[head++];              // L10: O(1)
+        if (word === endWord) return dist;
+        for (let i = 0; i < L; i++) {                // L11: O(L) per word
+            const key = word.slice(0, i) + '*' + word.slice(i + 1);  // L12: O(L) slice
+            for (const nb of patterns.get(key) ?? []) {  // L13: O(neighbors)
+                if (!visited.has(nb)) {
+                    visited.add(nb);
+                    q.push([nb, dist + 1]);
+                }
+            }
+            patterns.set(key, []);                   // L14: prune bucket
+        }
+    }
+    return 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -128,10 +215,23 @@ The bottleneck is the preprocessing (L4-L6) plus the BFS neighbor lookups (L13).
 - **Time:** O(N · L²), driven by L4-L6/L13 (pattern construction and BFS neighbor traversal, each O(N · L²) total).
 - **Space:** O(N · L²).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="word-ladder-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="word-ladder-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bidirectional BFS
 
 Start BFS simultaneously from both `beginWord` and `endWord`; alternately expand the smaller frontier. When they meet, sum the two depths. Much faster on deep graphs because the branching factor is squared without bidirectional search.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -163,6 +263,45 @@ def ladder_length(beginWord, endWord, wordList):
         dist += 1
     return 0
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
+    const words = new Set(wordList);            // L1: O(N) build set
+    if (!words.has(endWord)) return 0;          // L2: O(1)
+
+    const L = beginWord.length;                 // L3: O(1)
+    let front = new Set([beginWord]);           // L4: O(1) init frontiers
+    let back = new Set([endWord]);
+    const visited = new Set([beginWord, endWord]);  // L5: O(1)
+    let dist = 1;                               // L6: O(1)
+
+    while (front.size > 0 && back.size > 0) {  // L7: outer loop, O(diameter) levels
+        if (front.size > back.size) {           // L8: swap to keep front smaller
+            [front, back] = [back, front];
+        }
+
+        const nextFront = new Set<string>();
+        for (const w of front) {               // L9: iterate smaller frontier
+            for (let i = 0; i < L; i++) {      // L10: O(L) positions
+                for (let code = 97; code <= 122; code++) {  // L11: O(26) chars
+                    const cand = w.slice(0, i) + String.fromCharCode(code) + w.slice(i + 1);  // L12
+                    if (back.has(cand)) return dist + 1;     // L13: O(1) set lookup
+                    if (words.has(cand) && !visited.has(cand)) {  // L14: O(1)
+                        visited.add(cand);
+                        nextFront.add(cand);
+                    }
+                }
+            }
+        }
+        front = nextFront;
+        dist++;
+    }
+    return 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -193,6 +332,8 @@ Bidirectional BFS is a general technique for "minimum number of edits" problems 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_127.py and run.
 # Uses Approach 2 (pattern buckets + BFS) as the canonical implementation.
@@ -238,6 +379,46 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
+    if (!wordList.includes(endWord)) return 0;
+    const L = beginWord.length;
+    const patterns = new Map<string, string[]>();
+    for (const w of wordList) {
+        for (let i = 0; i < L; i++) {
+            const key = w.slice(0, i) + '*' + w.slice(i + 1);
+            if (!patterns.has(key)) patterns.set(key, []);
+            patterns.get(key)!.push(w);
+        }
+    }
+    const q: [string, number][] = [[beginWord, 1]];
+    const visited = new Set([beginWord]);
+    let head = 0;
+    while (head < q.length) {
+        const [word, dist] = q[head++];
+        if (word === endWord) return dist;
+        for (let i = 0; i < L; i++) {
+            const key = word.slice(0, i) + '*' + word.slice(i + 1);
+            for (const nb of patterns.get(key) ?? []) {
+                if (!visited.has(nb)) { visited.add(nb); q.push([nb, dist + 1]); }
+            }
+            patterns.set(key, []);
+        }
+    }
+    return 0;
+}
+
+console.assert(ladderLength("hit", "cog", ["hot","dot","dog","lot","log","cog"]) === 5);
+console.assert(ladderLength("hit", "cot", ["hot","dot","dog","lot","log","cog"]) === 0);
+console.assert(ladderLength("hot", "dot", ["dot","lot"]) === 2);
+console.assert(ladderLength("hit", "cog", ["hot","dot","dog","lot","log"]) === 0);
+console.assert(ladderLength("a", "c", ["a","b","c"]) === 2);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

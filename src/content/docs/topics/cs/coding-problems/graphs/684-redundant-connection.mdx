@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './684-redundant-connection.py?raw';
+import practiceCodeTs from './684-redundant-connection.ts?raw';
+import approach2PyCode from './684-redundant-connection-approach2.py?raw';
+import approach2TsCode from './684-redundant-connection-approach2.ts?raw';
 
 ## Problem
 
@@ -23,109 +28,26 @@ LeetCode 684 · [Link](https://leetcode.com/problems/redundant-connection/) · *
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="redundant-connection" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="redundant-connection-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="redundant-connection-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, for each edge, test if removing it makes the graph a tree
 
 Remove each edge in turn; run a DFS/BFS on the rest; test for connectivity and acyclicity.
 
-```python
-from collections import defaultdict
-
-def find_redundant_connection(edges):
-    n = len(edges)                                      # L1: n edges, nodes 1..n
-
-    def is_tree(skip_idx):                              # L2: O(n) per call
-        graph = defaultdict(list)                       # L3: build adjacency list
-        for i, (u, v) in enumerate(edges):             # L4: O(n)
-            if i == skip_idx:
-                continue
-            graph[u].append(v)
-            graph[v].append(u)
-        visited = set()
-        def dfs(node, parent):                          # L5: cycle-free DFS
-            if node in visited:
-                return False
-            visited.add(node)
-            for nb in graph[node]:
-                if nb == parent:
-                    continue
-                if nb in visited or not dfs(nb, node):
-                    return False
-            return True
-        if not dfs(1, -1):
-            return False
-        return len(visited) == n                        # L6: connected check
-
-    for i in range(n - 1, -1, -1):                     # L7: iterate last-to-first
-        if is_tree(i):
-            return edges[i]
-    return []
-```
-
-**Where the time goes, line by line**
-
-*Variables: V = number of vertices = len(edges), E = len(edges).*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L3-L4 (build graph) | O(V) | V (once per is_tree call) | O(V²) |
-| L5 (DFS) | O(V) | V | O(V²) |
-| L6 (connectivity check) | O(1) | V | O(V) |
-| **L7 + is_tree (outer loop)** | **O(V) per iteration** | **V** | **O(V²)** ← dominates |
-
-For each of the V edges we remove, we rebuild the graph and run a full DFS, both O(V). The total is O(V²).
-
 **Complexity**
-- **Time:** O(V²), driven by L7 (V iterations each triggering an O(V) is_tree call).
+- **Time:** O(V²), driven by V iterations each triggering an O(V) tree-check call.
 - **Space:** O(V) for the adjacency list and DFS stack.
 
 ## Approach 2: DFS to find the cycle, pick the last edge on it
 
 Build the full graph; run a DFS that finds a back edge, walk the parent chain to collect all edges on the cycle, then iterate the input edges in reverse and return the first one whose index is in the cycle.
-
-```python
-from collections import defaultdict
-
-def find_redundant_connection(edges):
-    graph = defaultdict(list)
-    for ei, (u, v) in enumerate(edges):
-        graph[u].append((v, ei))                          # edge-indexed neighbors
-        graph[v].append((u, ei))
-
-    cycle_edges = set()
-    visited = set()
-    parent_edge = {}                                       # node -> edge index used to reach it
-    parent_node = {}                                       # node -> parent node
-
-    def dfs(node, came_from):                              # `came_from` is an edge index, not a node
-        visited.add(node)
-        for nb, ei in graph[node]:
-            if ei == came_from:
-                continue                                   # don't revisit the same edge
-            if nb in visited:
-                cycle_edges.add(ei)
-                cur = node
-                while cur != nb:                           # walk parents back to nb
-                    cycle_edges.add(parent_edge[cur])
-                    cur = parent_node[cur]
-                return True
-            parent_edge[nb] = ei
-            parent_node[nb] = node
-            if dfs(nb, ei):
-                return True
-        return False
-
-    dfs(1, -1)
-    for i in range(len(edges) - 1, -1, -1):                # last edge on the cycle wins
-        if i in cycle_edges:
-            return edges[i]
-    return []
-```
-
-The "ignore parent" trick has to track the **edge index** rather than the parent node, otherwise multi-edges (e.g., `[[1,2],[1,2]]`) would falsely pass through.
-
-This is really just a special case of Approach 3, with more bookkeeping.
 
 **Complexity**
 - **Time:** O(V + E).
@@ -135,6 +57,8 @@ This is really just a special case of Approach 3, with more bookkeeping.
 
 Process edges in order. For each `(u, v)`: if `u` and `v` are already in the same component, this edge creates a cycle, return it. Otherwise, union them.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_redundant_connection(edges):
     n = len(edges)                              # L1: n edges
@@ -158,6 +82,36 @@ def find_redundant_connection(edges):
             return [u, v]
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findRedundantConnection(edges: number[][]): number[] {
+    const n = edges.length;                             // L1: n edges
+    const parent = Array.from({ length: n + 1 }, (_, i) => i);  // L2: O(n) init
+
+    function find(x: number): number {                  // L3: path-halving find
+        while (parent[x] !== x) {                       // L4: walk to root
+            parent[x] = parent[parent[x]];              // L5: path halving
+            x = parent[x];                             // L6: move up
+        }
+        return x;
+    }
+
+    function union(a: number, b: number): boolean {     // L7: union two components
+        const ra = find(a), rb = find(b);               // L8: find both roots
+        if (ra === rb) return false;                    // L9: same component = cycle
+        parent[ra] = rb;                                // L10: merge
+        return true;
+    }
+
+    for (const [u, v] of edges) {                       // L11: process each edge
+        if (!union(u, v)) return [u, v];               // L12: cycle detected
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -169,9 +123,7 @@ def find_redundant_connection(edges):
 | L4-L6 (find, path-halving) | O(α(V)) amortized | 2 per edge = 2V | O(V · α(V)) |
 | L9 (same-component test) | O(1) | V | O(V) |
 | L10 (merge) | O(1) | up to V - 1 | O(V) |
-| **L11-L12 (edge loop + union)** | **O(α(V)) per edge** | **V** | **O(V · α(V))** ← dominates |
-
-The α(V) factor is the inverse Ackermann function, which grows so slowly it is effectively constant for all practical V (α(V) ≤ 4 for V up to 10^80). Path halving at L5 keeps the tree nearly flat: each `find` traverses at most a logarithmic height that collapses on subsequent calls. The amortized cost per operation is O(α(V)), giving O(V · α(V)) total, essentially linear.
+| **L11-L12 (edge loop + union)** | **O(α(V)) per edge** | **V** | **O(V · α(V)) ← dominates** |
 
 **Complexity**
 - **Time:** O(V · α(V)) ≈ O(V), driven by L11-L12 (V union operations each costing O(α(V)) amortized).
@@ -180,6 +132,17 @@ The α(V) factor is the inverse Ackermann function, which grows so slowly it is 
 ### Why this works
 
 If the graph has exactly one cycle, then exactly one edge causes a "same-component" event when processed in order. All edges preceding it form a forest; this edge closes a cycle. Since input is a tree plus one edge, that closing edge is the answer.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="redundant-connection-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="redundant-connection-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -193,6 +156,8 @@ Union-Find is the canonical solution and the template for any incremental connec
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_684.py and run.
 # Uses the canonical implementation (Approach 3, Union-Find).
@@ -242,6 +207,38 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findRedundantConnection(edges: number[][]): number[] {
+    const n = edges.length;
+    const parent = Array.from({ length: n + 1 }, (_, i) => i);
+
+    function find(x: number): number {
+        while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }
+        return x;
+    }
+
+    function union(a: number, b: number): boolean {
+        const ra = find(a), rb = find(b);
+        if (ra === rb) return false;
+        parent[ra] = rb;
+        return true;
+    }
+
+    for (const [u, v] of edges) if (!union(u, v)) return [u, v];
+    return [];
+}
+
+console.assert(JSON.stringify(findRedundantConnection([[1,2],[1,3],[2,3]])) === JSON.stringify([2,3]));
+console.assert(JSON.stringify(findRedundantConnection([[1,2],[2,3],[3,4],[1,4],[1,5]])) === JSON.stringify([1,4]));
+console.assert(JSON.stringify(findRedundantConnection([[1,2],[1,2]])) === JSON.stringify([1,2]));
+console.assert(JSON.stringify(findRedundantConnection([[1,2],[2,3],[1,3]])) === JSON.stringify([1,3]));
+console.assert(JSON.stringify(findRedundantConnection([[1,2],[2,3],[3,4],[4,5],[3,5]])) === JSON.stringify([3,5]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

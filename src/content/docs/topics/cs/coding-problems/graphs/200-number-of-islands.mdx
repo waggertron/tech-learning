@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, union-find, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './200-number-of-islands.py?raw';
+import practiceCodeTs from './200-number-of-islands.ts?raw';
+import approach2PyCode from './200-number-of-islands-approach2.py?raw';
+import approach2TsCode from './200-number-of-islands-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 200 · [Link](https://leetcode.com/problems/number-of-islands/) · *Med
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="number-of-islands" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="number-of-islands-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="number-of-islands-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: DFS with in-place mutation
 
 Scan the grid; for each land cell, DFS to mark every connected land cell as water (visited). Each DFS trigger = one island.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def num_islands(grid):
     if not grid:                                                        # L1: guard empty input
@@ -49,6 +63,33 @@ def num_islands(grid):
                 dfs(r, c)                                              # L9: DFS from new island root
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numIslands(grid: string[][]): number {
+    if (grid.length === 0) return 0;                                   // L1: guard empty input
+    const rows = grid.length, cols = grid[0].length;                   // L2: O(1)
+    let count = 0;                                                     // L3: O(1)
+
+    function dfs(r: number, c: number): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] !== '1') return;  // L4: boundary
+        grid[r][c] = '0';                                              // L5: O(1) mark visited
+        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1); // L6: recurse 4 neighbors
+    }
+
+    for (let r = 0; r < rows; r++) {                                   // L7: outer scan loop
+        for (let c = 0; c < cols; c++) {                               // L8: inner scan loop
+            if (grid[r][c] === '1') {
+                count++;
+                dfs(r, c);                                             // L9: DFS from new island root
+            }
+        }
+    }
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -71,6 +112,8 @@ Every land cell is flipped from `"1"` to `"0"` exactly once, so L6 fires at most
 
 Same idea, BFS instead of DFS, avoids deep recursion on large grids.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -98,6 +141,43 @@ def num_islands(grid):
                 bfs(r, c)                                            # L12: BFS from new island root
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numIslands(grid: string[][]): number {
+    if (grid.length === 0) return 0;                                  // L1: guard empty input
+    const rows = grid.length, cols = grid[0].length;                  // L2: O(1)
+    let count = 0;                                                    // L3: O(1)
+
+    function bfs(r: number, c: number): void {
+        const q: [number, number][] = [[r, c]];                       // L4: O(1) seed queue
+        grid[r][c] = '0';                                             // L5: O(1) mark root visited
+        let head = 0;
+        while (head < q.length) {                                     // L6: process until queue empty
+            const [x, y] = q[head++];                                 // L7: O(1) dequeue
+            for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+                const nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && grid[nx][ny] === '1') {
+                    grid[nx][ny] = '0';                               // L8: O(1) mark visited
+                    q.push([nx, ny]);                                 // L9: O(1) enqueue neighbor
+                }
+            }
+        }
+    }
+
+    for (let r = 0; r < rows; r++) {                                  // L10: outer scan
+        for (let c = 0; c < cols; c++) {                              // L11: inner scan
+            if (grid[r][c] === '1') {
+                count++;
+                bfs(r, c);                                            // L12: BFS from new island root
+            }
+        }
+    }
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -116,57 +196,16 @@ The queue holds at most min(m, n) cells at any instant (the BFS frontier cannot 
 - **Time:** O(m · n), driven by L9/L12 (each cell enqueued at most once in total).
 - **Space:** O(min(m, n)) queue (max frontier width).
 
-## Approach 3: Union-Find
+**Try this approach:**
 
-Treat each land cell as a node; union neighboring land cells. Count unique components at the end.
-
-```python
-def num_islands(grid):
-    if not grid:                                                          # L1: guard
-        return 0
-    rows, cols = len(grid), len(grid[0])                                 # L2: O(1)
-    parent = list(range(rows * cols))                                    # L3: O(m · n) init
-    count = sum(grid[r][c] == "1" for r in range(rows) for c in range(cols))  # L4: O(m · n) count land
-
-    def find(x):                                                         # L5: path-compressed find
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]                               # L6: path halving
-            x = parent[x]
-        return x
-
-    def union(a, b):
-        nonlocal count
-        ra, rb = find(a), find(b)                                        # L7: O(α) each
-        if ra != rb:
-            parent[ra] = rb                                              # L8: O(1) link roots
-            count -= 1                                                   # L9: O(1) merge components
-
-    for r in range(rows):                                                # L10: outer scan
-        for c in range(cols):                                            # L11: inner scan
-            if grid[r][c] == "1":
-                if r + 1 < rows and grid[r + 1][c] == "1":
-                    union(r * cols + c, (r + 1) * cols + c)             # L12: union down-neighbor
-                if c + 1 < cols and grid[r][c + 1] == "1":
-                    union(r * cols + c, r * cols + c + 1)               # L13: union right-neighbor
-    return count
-```
-
-**Where the time goes, line by line**
-
-*Variables: m = grid rows, n = grid cols.*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L3, L4 (init) | O(m · n) | 1 each | O(m · n) |
-| L10, L11 (scan) | O(1) | m · n | O(m · n) |
-| L6 (path halving) | O(1) amortized | per find call | amortized O(1) |
-| **L12, L13 (union calls)** | **O(α(m · n))** | **at most 2 · m · n** | **O(m · n · α) ← dominates** |
-
-The `find` function uses path halving (not full path compression), which still achieves the same inverse-Ackermann amortized bound. α(m · n) is less than 5 for any realistic grid, so this is effectively O(m · n). The factor dominates over init and scan only in the constant, not asymptotically.
-
-**Complexity**
-- **Time:** O(m · n · α(m · n)), driven by L12/L13 (the union calls). Effectively O(m · n).
-- **Space:** O(m · n) parent array.
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="number-of-islands-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="number-of-islands-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -180,6 +219,8 @@ DFS/BFS are equivalent in Big-O. Choose Union-Find when the graph is growing ove
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_200.py and run.
 # Uses the canonical implementation (Approach 1: DFS).
@@ -238,6 +279,40 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numIslands(grid: string[][]): number {
+    if (grid.length === 0) return 0;
+    const rows = grid.length, cols = grid[0].length;
+    let count = 0;
+
+    function dfs(r: number, c: number): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] !== '1') return;
+        grid[r][c] = '0';
+        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1);
+    }
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === '1') { count++; dfs(r, c); }
+        }
+    }
+    return count;
+}
+
+const g1 = [['1','1','1','1','0'],['1','1','0','1','0'],['1','1','0','0','0'],['0','0','0','0','0']];
+console.assert(numIslands(g1) === 1);
+const g2 = [['1','1','0','0','0'],['1','1','0','0','0'],['0','0','1','0','0'],['0','0','0','1','1']];
+console.assert(numIslands(g2) === 3);
+console.assert(numIslands([]) === 0);
+console.assert(numIslands([['1']]) === 1);
+console.assert(numIslands([['0']]) === 0);
+console.assert(numIslands([['1','1'],['1','1']]) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

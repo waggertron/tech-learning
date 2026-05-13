@@ -8,8 +8,13 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './454-4sum-ii.py?raw';
+import practiceCodeTs from './454-4sum-ii.ts?raw';
+import approach2PyCode from './454-4sum-ii-approach2.py?raw';
+import approach2TsCode from './454-4sum-ii-approach2.ts?raw';
 
 ## Problem
 
@@ -28,12 +33,21 @@ LeetCode 454 · [Link](https://leetcode.com/problems/4sum-ii/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="4sum-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="4sum-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="4sum-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force (four nested loops)
 
 Try every combination of one element from each array.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def four_sum_count(nums1, nums2, nums3, nums4):
     count = 0
@@ -45,6 +59,22 @@ def four_sum_count(nums1, nums2, nums3, nums4):
                         count += 1
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function fourSumCount(nums1: number[], nums2: number[],
+                      nums3: number[], nums4: number[]): number {
+    let count = 0;
+    for (const a of nums1)
+        for (const b of nums2)
+            for (const c of nums3)
+                for (const d of nums4)
+                    if (a + b + c + d === 0) count++;
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity:** O(n^4) time, O(1) space. Completely impractical for n > 50.
 
@@ -52,6 +82,8 @@ def four_sum_count(nums1, nums2, nums3, nums4):
 
 Split the four arrays into two pairs. Enumerate all `a + b` sums from `nums1` and `nums2` and store them in a frequency map. Then for each `c + d` from `nums3` and `nums4`, check whether `-(c + d)` exists in the map. If so, add its count to the result.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -67,6 +99,24 @@ def four_sum_count(nums1: list[int], nums2: list[int],
             result += ab_counts[-(c + d)]    # L8: O(1) hash lookup
     return result                             # L9: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function fourSumCount(nums1: number[], nums2: number[],
+                      nums3: number[], nums4: number[]): number {
+    const abCounts = new Map<number, number>();  // L1: O(1)
+    for (const a of nums1)                       // L2: outer loop, n iterations
+        for (const b of nums2)                   // L3: inner loop, n iterations
+            abCounts.set(a + b, (abCounts.get(a + b) ?? 0) + 1); // L4: O(1)
+    let result = 0;                              // L5: O(1)
+    for (const c of nums3)                       // L6: outer loop, n iterations
+        for (const d of nums4)                   // L7: inner loop, n iterations
+            result += abCounts.get(-(c + d)) ?? 0; // L8: O(1) hash lookup
+    return result;                               // L9: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -88,12 +138,25 @@ Two separate O(n^2) passes rather than one O(n^4). The hash map bridges the two 
 - **Time:** O(n^2), driven by L3/L4 and L7/L8 (two double-loops over n * n pairs each).
 - **Space:** O(n^2). The map stores at most n^2 distinct `a + b` sums.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="4sum-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="4sum-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Why split 4 into 2+2?
 
 Brute force is O(n^4). Splitting into two pairs brings that to O(n^2) + O(n^2) = O(n^2). This is the same "meet in the middle" idea used in many combinatorial problems: hashing half the work lets you look it up instead of re-computing it.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_454.py and run.
 
@@ -119,6 +182,33 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function assert(condition: boolean, msg: string = ''): void {
+    if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+function fourSumCount(nums1: number[], nums2: number[],
+                      nums3: number[], nums4: number[]): number {
+    const abCounts = new Map<number, number>();
+    for (const a of nums1)
+        for (const b of nums2)
+            abCounts.set(a + b, (abCounts.get(a + b) ?? 0) + 1);
+    let result = 0;
+    for (const c of nums3)
+        for (const d of nums4)
+            result += abCounts.get(-(c + d)) ?? 0;
+    return result;
+}
+
+assert(fourSumCount([1,2], [-2,-1], [-1,2], [0,2]) === 2);
+assert(fourSumCount([0], [0], [0], [0]) === 1);
+assert(fourSumCount([-1,-1], [-1,1], [-1,1], [1,-1]) === 6);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

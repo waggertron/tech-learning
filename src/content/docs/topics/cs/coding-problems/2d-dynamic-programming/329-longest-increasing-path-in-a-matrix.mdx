@@ -1,6 +1,6 @@
 ---
 title: "329. Longest Increasing Path in a Matrix (Hard)"
-description: Find the length of the longest strictly increasing path in a 2D grid.
+description: "Find the length of the longest strictly increasing path in a 2D grid."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, dfs, memoization, grid, hard]
 status: draft
@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './329-longest-increasing-path-in-a-matrix.py?raw';
+import practiceCodeTs from './329-longest-increasing-path-in-a-matrix.ts?raw';
+import approach2PyCode from './329-longest-increasing-path-in-a-matrix-approach2.py?raw';
+import approach2TsCode from './329-longest-increasing-path-in-a-matrix-approach2.ts?raw';
+import approach3PyCode from './329-longest-increasing-path-in-a-matrix-approach3.py?raw';
+import approach3TsCode from './329-longest-increasing-path-in-a-matrix-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 329 · [Link](https://leetcode.com/problems/longest-increasing-path-in-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="longest-increasing-path-in-a-matrix" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="longest-increasing-path-in-a-matrix-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="longest-increasing-path-in-a-matrix-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: DFS from every cell
 
 For each cell, DFS to longer neighbors; track global max.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def longest_increasing_path(matrix):
     if not matrix:                                          # L1: O(1) guard
@@ -45,6 +61,31 @@ def longest_increasing_path(matrix):
 
     return max(dfs(r, c) for r in range(rows) for c in range(cols))  # L6: run from every cell
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestIncreasingPath(matrix: number[][]): number {
+    if (!matrix.length) return 0;                                      // L1: O(1) guard
+    const rows = matrix.length, cols = matrix[0].length;               // L2: O(1)
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    function dfs(r: number, c: number): number {
+        let best = 1;                                                   // L3: O(1) minimum path
+        for (const [dr, dc] of dirs) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && matrix[nr][nc] > matrix[r][c])
+                best = Math.max(best, 1 + dfs(nr, nc));                // L5: recursive call
+        }
+        return best;
+    }
+    let ans = 0;
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            ans = Math.max(ans, dfs(r, c));                            // L6: run from every cell
+    return ans;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -66,6 +107,8 @@ Without memoization, each DFS from a cell can revisit the same sub-paths that ot
 
 Each cell's "longest path starting here" is a property of the cell alone, no backtracking mutation needed because the strictly-increasing constraint prevents cycles. Cache it.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -85,6 +128,35 @@ def longest_increasing_path(matrix):
 
     return max(dfs(r, c) for r in range(rows) for c in range(cols))  # L7: O(m*n) launches
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestIncreasingPath(matrix: number[][]): number {
+    if (!matrix.length) return 0;                                      // L1: O(1) guard
+    const rows = matrix.length, cols = matrix[0].length;               // L2: O(1)
+    const memo: Map<number, number> = new Map();
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    function dfs(r: number, c: number): number {
+        const key = r * cols + c;
+        if (memo.has(key)) return memo.get(key)!;                      // L3: cache lookup
+        let best = 1;                                                   // L4: O(1) minimum path
+        for (const [dr, dc] of dirs) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && matrix[nr][nc] > matrix[r][c])
+                best = Math.max(best, 1 + dfs(nr, nc));                // L6: O(1) with cache
+        }
+        memo.set(key, best);
+        return best;
+    }
+    let ans = 0;
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            ans = Math.max(ans, dfs(r, c));                            // L7: O(m*n) launches
+    return ans;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -106,10 +178,23 @@ Each cell is computed exactly once (via `lru_cache`). Each computation checks at
 ### Why no "visited" set is needed
 Strict inequality implies no cycles, the sequence of values on any path is strictly increasing, so revisit is impossible. This is what allows the memoization to be sound.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="longest-increasing-path-in-a-matrix-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="longest-increasing-path-in-a-matrix-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Topological sort + BFS (iterative, avoids recursion)
 
 Treat cells as nodes; edges from lower to higher values. Compute in-degree and BFS from zero-in-degree cells (local minima). The number of BFS levels is the answer.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -145,6 +230,45 @@ def longest_increasing_path(matrix):
                         q.append((nr, nc))                # L11: O(1) enqueue
     return levels
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestIncreasingPath(matrix: number[][]): number {
+    if (!matrix.length) return 0;                                          // L1: O(1) guard
+    const rows = matrix.length, cols = matrix[0].length;                   // L2: O(1)
+    const inDeg: number[][] = Array.from({ length: rows }, () => new Array(cols).fill(0));  // L3
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    for (let r = 0; r < rows; r++) {                                       // L4: build in-degree
+        for (let c = 0; c < cols; c++) {
+            for (const [dr, dc] of dirs) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && matrix[nr][nc] < matrix[r][c])
+                    inDeg[r][c]++;
+            }
+        }
+    }
+    const queue: [number, number][] = [];
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            if (inDeg[r][c] === 0) queue.push([r, c]);                    // L6: seed minima
+    let levels = 0, qi = 0;
+    while (qi < queue.length) {                                            // L8: BFS levels
+        levels++;
+        const size = queue.length - qi;
+        for (let s = 0; s < size; s++) {
+            const [r, c] = queue[qi++];
+            for (const [dr, dc] of dirs) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && matrix[nr][nc] > matrix[r][c])
+                    if (--inDeg[nr][nc] === 0) queue.push([nr, nc]);      // L10+L11
+            }
+        }
+    }
+    return levels;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -164,6 +288,17 @@ Each cell is enqueued and dequeued at most once. Each dequeue checks 4 neighbors
 
 Useful when recursion depth is a concern (very tall/wide matrices).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="longest-increasing-path-in-a-matrix-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="longest-increasing-path-in-a-matrix-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -176,6 +311,8 @@ Memoized DFS is the canonical answer. Topological sort is the "avoid recursion" 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_329.py and run.
 # Uses the canonical implementation (Approach 2: memoized DFS).
@@ -213,6 +350,42 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function longestIncreasingPath(matrix: number[][]): number {
+    if (!matrix.length) return 0;
+    const rows = matrix.length, cols = matrix[0].length;
+    const memo: Map<number, number> = new Map();
+    const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    function dfs(r: number, c: number): number {
+        const key = r * cols + c;
+        if (memo.has(key)) return memo.get(key)!;
+        let best = 1;
+        for (const [dr, dc] of dirs) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && matrix[nr][nc] > matrix[r][c])
+                best = Math.max(best, 1 + dfs(nr, nc));
+        }
+        memo.set(key, best);
+        return best;
+    }
+    let ans = 0;
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            ans = Math.max(ans, dfs(r, c));
+    return ans;
+}
+
+console.assert(longestIncreasingPath([[9,9,4],[6,6,8],[2,1,1]]) === 4);
+console.assert(longestIncreasingPath([[3,4,5],[3,2,6],[2,2,1]]) === 4);
+console.assert(longestIncreasingPath([[1]]) === 1);
+console.assert(longestIncreasingPath([[1,1],[1,1]]) === 1);
+console.assert(longestIncreasingPath([[1,2,3,4]]) === 4);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

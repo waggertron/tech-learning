@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './153-find-minimum-in-rotated-sorted-array.py?raw';
+import practiceCodeTs from './153-find-minimum-in-rotated-sorted-array.ts?raw';
+import approach3PyCode from './153-find-minimum-in-rotated-sorted-array-approach3.py?raw';
+import approach3TsCode from './153-find-minimum-in-rotated-sorted-array-approach3.ts?raw';
 
 ## Problem
 
@@ -24,14 +29,32 @@ LeetCode 153 · [Link](https://leetcode.com/problems/find-minimum-in-rotated-sor
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="find-minimum-in-rotated-sorted-array" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="find-minimum-in-rotated-sorted-array-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="find-minimum-in-rotated-sorted-array-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, `min(nums)`
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_min(nums: list[int]) -> int:
     return min(nums)    # L1: O(n) linear scan to find minimum
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMin(nums: number[]): number {
+    return Math.min(...nums);    // L1: O(n) linear scan to find minimum
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -41,7 +64,7 @@ def find_min(nums: list[int]) -> int:
 | --- | --- | --- | --- |
 | **L1 (min scan)** | **O(n)** | **1** | **O(n)** ← dominates |
 
-Python's `min()` scans all n elements unconditionally.
+Python's `min()` / JS's `Math.min()` scans all n elements unconditionally.
 
 **Complexity**
 - **Time:** O(n), driven by L1 (linear scan ignoring the rotated-sorted structure).
@@ -53,6 +76,8 @@ Correct but violates the O(log n) constraint.
 
 If the array is rotated, the minimum is at the first drop. Scan linearly.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_min(nums: list[int]) -> int:
     for i in range(1, len(nums)):          # L1: scan, up to n-1 steps
@@ -60,6 +85,18 @@ def find_min(nums: list[int]) -> int:
             return nums[i]
     return nums[0]   # not rotated (or rotated by n), first element is minimum
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMin(nums: number[]): number {
+    for (let i = 1; i < nums.length; i++) {   // L1: scan, up to n-1 steps
+        if (nums[i] < nums[i - 1]) return nums[i];  // L2: O(1) drop check
+    }
+    return nums[0];   // not rotated (or rotated by n), first element is minimum
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -86,6 +123,8 @@ Compare `nums[mid]` to `nums[hi]`:
 
 When `lo == hi`, you're at the minimum.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_min(nums: list[int]) -> int:
     lo, hi = 0, len(nums) - 1      # L1: O(1)
@@ -97,6 +136,21 @@ def find_min(nums: list[int]) -> int:
             hi = mid               # L6: O(1) min is mid or left of mid
     return nums[lo]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMin(nums: number[]): number {
+    let lo = 0, hi = nums.length - 1;    // L1: O(1)
+    while (lo < hi) {                     // L2: loop, O(log n) iterations
+        const mid = (lo + hi) >> 1;      // L3: O(1) midpoint
+        if (nums[mid] > nums[hi]) lo = mid + 1;  // L4/L5: min is in right half
+        else hi = mid;                            // L6: min is mid or left of mid
+    }
+    return nums[lo];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -117,6 +171,17 @@ Each iteration eliminates half the range. Unlike standard binary search, the loo
 ### Why compare to `hi`, not `lo`?
 Comparing `nums[mid]` to `nums[lo]` is subtler because a not-rotated segment `[lo, mid]` can look identical to a rotated one starting past `mid`. Comparing to `nums[hi]` uniquely identifies which half contains the minimum.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="find-minimum-in-rotated-sorted-array-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="find-minimum-in-rotated-sorted-array-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -129,6 +194,8 @@ The "compare to `nums[hi]`" trick is the key insight; it transfers directly to p
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_153.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -155,6 +222,29 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMin(nums: number[]): number {
+    let lo = 0, hi = nums.length - 1;
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (nums[mid] > nums[hi]) lo = mid + 1;
+        else hi = mid;
+    }
+    return nums[lo];
+}
+
+console.assert(findMin([3, 4, 5, 1, 2]) === 1);
+console.assert(findMin([4, 5, 6, 7, 0, 1, 2]) === 0);
+console.assert(findMin([11, 13, 15, 17]) === 11);    // not rotated
+console.assert(findMin([1]) === 1);                   // single element
+console.assert(findMin([2, 1]) === 1);                // two elements, rotated
+console.assert(findMin([1, 2]) === 1);                // two elements, not rotated
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

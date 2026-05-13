@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './090-subsets-ii.py?raw';
+import practiceCodeTs from './090-subsets-ii.ts?raw';
+import approach2PyCode from './090-subsets-ii-approach2.py?raw';
+import approach2TsCode from './090-subsets-ii-approach2.ts?raw';
 
 ## Problem
 
@@ -23,7 +28,14 @@ LeetCode 90 · [Link](https://leetcode.com/problems/subsets-ii/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="subsets-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="subsets-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="subsets-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Subsets with set-dedup
 
@@ -61,6 +73,8 @@ Works but wastes effort generating then filtering duplicates.
 
 Sort the array so duplicates sit together. At each recursion level, after taking `nums[i]`, skip any subsequent indices with the same value, they would produce the same subset at this level.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def subsets_with_dup(nums):
     nums.sort()                               # L1: O(n log n) sort
@@ -79,6 +93,30 @@ def subsets_with_dup(nums):
     backtrack(0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function subsetsWithDup(nums: number[]): number[][] {
+    nums.sort((a, b) => a - b);               // L1: O(n log n) sort
+    const result: number[][] = [];
+    const path: number[] = [];
+
+    function backtrack(start: number): void {
+        result.push([...path]);               // L2: O(k) copy at every node
+        for (let i = start; i < nums.length; i++) {
+            if (i > start && nums[i] === nums[i - 1]) continue;  // L3: skip same-level dup
+            path.push(nums[i]);               // L4: O(1) push
+            backtrack(i + 1);                 // L5: recurse
+            path.pop();                       // L6: O(1) pop
+        }
+    }
+
+    backtrack(0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -99,6 +137,17 @@ Every node in the recursion tree emits a result (unlike Combination Sum where on
 
 ### Why "at the same level"?
 `i > start` means we've already considered one occurrence of this value at this recursion depth, taking a second one would produce a duplicate subset. But `i == start` is fine: that's a different level, where we *do* want to include the duplicate.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="subsets-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="subsets-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Counter / multiset iteration
 
@@ -155,6 +204,8 @@ The sort + skip template is the one to memorize, same pattern applies to Combina
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def subsets_with_dup(nums):
     nums.sort(); result = []; path = []
@@ -179,6 +230,36 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function subsetsWithDup(nums: number[]): number[][] {
+    nums.sort((a, b) => a - b);
+    const result: number[][] = [];
+    const path: number[] = [];
+    function backtrack(start: number): void {
+        result.push([...path]);
+        for (let i = start; i < nums.length; i++) {
+            if (i > start && nums[i] === nums[i - 1]) continue;
+            path.push(nums[i]);
+            backtrack(i + 1);
+            path.pop();
+        }
+    }
+    backtrack(0);
+    return result;
+}
+
+const norm = (arr: number[][]): string =>
+    JSON.stringify(arr.map(a => [...a].sort((x, y) => x - y)).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1));
+
+console.assert(norm(subsetsWithDup([1, 2, 2])) === norm([[], [1], [2], [1,2], [2,2], [1,2,2]]));
+console.assert(norm(subsetsWithDup([0])) === norm([[], [0]]));
+console.assert(norm(subsetsWithDup([2, 2, 2])) === norm([[], [2], [2,2], [2,2,2]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

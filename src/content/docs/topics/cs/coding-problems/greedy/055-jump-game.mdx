@@ -5,11 +5,18 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './055-jump-game.py?raw';
+import practiceCodeTs from './055-jump-game.ts?raw';
+import approach2PyCode from './055-jump-game-approach2.py?raw';
+import approach2TsCode from './055-jump-game-approach2.ts?raw';
+import approach3PyCode from './055-jump-game-approach3.py?raw';
+import approach3TsCode from './055-jump-game-approach3.ts?raw';
 
 ## Problem
 
@@ -23,10 +30,19 @@ LeetCode 55 · [Link](https://leetcode.com/problems/jump-game/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="jump-game" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="jump-game-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="jump-game-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive, try every jump
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def can_jump(nums):
     def f(i):                                   # L1: called exponential times naively
@@ -38,6 +54,22 @@ def can_jump(nums):
         return False
     return f(0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canJump(nums: number[]): boolean {
+    function f(i: number): boolean {                    // L1: called exponential times naively
+        if (i >= nums.length - 1) return true;         // L2: base case O(1)
+        for (let step = 1; step <= nums[i]; step++) {  // L3: try each step
+            if (f(i + step)) return true;              // L4: recursive call
+        }
+        return false;
+    }
+    return f(0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -58,6 +90,8 @@ Without memoization, the same subproblem `f(i)` is called many times; worst case
 
 `dp[i]` = reachable from `i`? `dp[n - 1] = True`; walk backward, `dp[i] = any(dp[i + k] for k in 1..nums[i])`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def can_jump(nums):
     n = len(nums)                               # L1: O(1)
@@ -71,6 +105,27 @@ def can_jump(nums):
                 break
     return dp[0]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canJump(nums: number[]): boolean {
+    const n = nums.length;                                 // L1: O(1)
+    const dp: boolean[] = new Array(n).fill(false);        // L2: O(n)
+    dp[n - 1] = true;                                     // L3: O(1)
+    for (let i = n - 2; i >= 0; i--) {                    // L4: outer loop, n-1 iterations
+        const furthest = Math.min(i + nums[i], n - 1);
+        for (let j = i + 1; j <= furthest; j++) {         // L5: inner loop, up to n per i
+            if (dp[j]) {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[0];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -88,10 +143,23 @@ The inner scan at each `i` can range over the entire remaining array in the wors
 - **Time:** O(n²), driven by L5 (inner scan for reachable positions).
 - **Space:** O(n) for the dp array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="jump-game-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="jump-game-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Greedy running max-reach (optimal)
 
 Walk left to right; track the furthest index reachable. If the current index exceeds it, we're stuck.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def can_jump(nums):
     max_reach = 0                               # L1: O(1)
@@ -103,6 +171,21 @@ def can_jump(nums):
             return True
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canJump(nums: number[]): boolean {
+    let maxReach = 0;                                      // L1: O(1)
+    for (let i = 0; i < nums.length; i++) {               // L2: single pass, n iterations
+        if (i > maxReach) return false;                    // L3: O(1)
+        maxReach = Math.max(maxReach, i + nums[i]);        // L4: O(1), update reach
+        if (maxReach >= nums.length - 1) return true;      // L5: O(1), early exit
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -124,6 +207,17 @@ A single linear scan; each element is visited once.
 ### Why greedy works
 If the furthest reachable index is `R`, every position `i ≤ R` is reachable. So we only need to update `R = max(R, i + nums[i])` as we walk. No DP table needed.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="jump-game-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="jump-game-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -136,6 +230,8 @@ Monotone-invariant greedy, `max_reach` is non-decreasing; the algorithm fails fa
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_055.py and run.
 # Uses the canonical implementation (Approach 3: greedy max-reach).
@@ -162,6 +258,29 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canJump(nums: number[]): boolean {
+    let maxReach = 0;
+    for (let i = 0; i < nums.length; i++) {
+        if (i > maxReach) return false;
+        maxReach = Math.max(maxReach, i + nums[i]);
+        if (maxReach >= nums.length - 1) return true;
+    }
+    return true;
+}
+
+console.assert(canJump([2, 3, 1, 1, 4]) === true);
+console.assert(canJump([3, 2, 1, 0, 4]) === false);
+console.assert(canJump([0]) === true);           // single element, already at end
+console.assert(canJump([1, 0]) === true);        // one jump gets to end
+console.assert(canJump([0, 1]) === false);       // stuck at index 0 immediately
+console.assert(canJump([2, 0, 0]) === true);     // jump over zeros
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

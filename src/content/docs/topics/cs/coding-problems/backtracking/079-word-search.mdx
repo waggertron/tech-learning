@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './079-word-search.py?raw';
+import practiceCodeTs from './079-word-search.ts?raw';
+import approach2PyCode from './079-word-search-approach2.py?raw';
+import approach2TsCode from './079-word-search-approach2.ts?raw';
 
 ## Problem
 
@@ -24,7 +29,14 @@ LeetCode 79 · [Link](https://leetcode.com/problems/word-search/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="word-search" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="word-search-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="word-search-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, DFS from every cell with a visited set
 
@@ -64,6 +76,8 @@ def exist(board, word):
 
 Instead of a visited set, temporarily mutate the cell to a sentinel (`'#'`) while it's on the path; restore on backtrack. Saves the hash-set allocation.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def exist(board, word):
     rows, cols = len(board), len(board[0])
@@ -88,6 +102,35 @@ def exist(board, word):
                 return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function exist(board: string[][], word: string): boolean {
+    const rows = board.length;
+    const cols = board[0].length;
+
+    function dfs(r: number, c: number, i: number): boolean {
+        if (i === word.length) return true;                               // L1: full match
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] !== word[i])
+            return false;                                                 // L2: boundary / mismatch
+        const saved = board[r][c];
+        board[r][c] = '#';                                               // L3: O(1) mark in-place
+        const found = dfs(r + 1, c, i + 1) || dfs(r - 1, c, i + 1) ||
+                      dfs(r, c + 1, i + 1) || dfs(r, c - 1, i + 1);    // L4: 4 recursive calls
+        board[r][c] = saved;                                             // L5: O(1) restore
+        return found;
+    }
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (dfs(r, c, 0)) return true;
+        }
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -106,6 +149,17 @@ Starting from each of n cells, the DFS explores at most 4^L paths of length L.
 - **Space:** O(L) recursion. No auxiliary set.
 
 Standard interview answer. The "restore on backtrack" is the essential pattern.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="word-search-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="word-search-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Start-cell pruning with character counts
 
@@ -168,6 +222,8 @@ Related problem: **Word Search II (212)** uses a trie over multiple target words
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def exist(board, word):
     rows, cols = len(board), len(board[0])
@@ -197,6 +253,37 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function exist(board: string[][], word: string): boolean {
+    const rows = board.length;
+    const cols = board[0].length;
+    function dfs(r: number, c: number, i: number): boolean {
+        if (i === word.length) return true;
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] !== word[i]) return false;
+        const saved = board[r][c];
+        board[r][c] = '#';
+        const found = dfs(r+1,c,i+1) || dfs(r-1,c,i+1) || dfs(r,c+1,i+1) || dfs(r,c-1,i+1);
+        board[r][c] = saved;
+        return found;
+    }
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            if (dfs(r, c, 0)) return true;
+    return false;
+}
+
+const b = (): string[][] => [['A','B','C','E'],['S','F','C','S'],['A','D','E','E']];
+console.assert(exist(b(), 'ABCCED') === true);
+console.assert(exist(b(), 'SEE') === true);
+console.assert(exist(b(), 'ABCB') === false);
+console.assert(exist([['A']], 'A') === true);
+console.assert(exist([['A']], 'B') === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

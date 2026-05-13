@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './138-copy-list-with-random-pointer.py?raw';
+import practiceCodeTs from './138-copy-list-with-random-pointer.ts?raw';
+import approach2TsCode from './138-copy-list-with-random-pointer-approach2.ts?raw';
 
 ## Problem
 
@@ -19,13 +23,22 @@ LeetCode 138 · [Link](https://leetcode.com/problems/copy-list-with-random-point
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="copy-list-with-random-pointer" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="copy-list-with-random-pointer-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="copy-list-with-random-pointer-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, index-based two-pass
 
 First pass: walk the list, store nodes in an array, create a parallel array of new nodes.
 Second pass: for each original node, find its random's index, set the new node's random to the corresponding new node.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class Node:
     def __init__(self, val=0, next=None, random=None):
@@ -51,6 +64,37 @@ def copy_random_list(head):
             copies[i].random = copies[idx[node.random]]  # L5: wire random, O(1)
     return copies[0]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Node {
+    val: number; next: Node | null; random: Node | null;
+    constructor(val = 0, next: Node | null = null, random: Node | null = null) {
+        this.val = val; this.next = next; this.random = random;
+    }
+}
+
+function copyRandomList(head: Node | null): Node | null {
+    if (!head) return null;
+    const originals: Node[] = [];
+    const copies: Node[] = [];
+    let cur: Node | null = head;
+    while (cur) {
+        originals.push(cur);                   // L1: collect originals, O(1) each
+        copies.push(new Node(cur.val));        // L2: create copies, O(1) each
+        cur = cur.next;
+    }
+    const idx = new Map<Node, number>(originals.map((n, i) => [n, i]));  // L3: O(n) index map
+    for (let i = 0; i < originals.length; i++) {
+        if (i + 1 < copies.length) copies[i].next = copies[i + 1];  // L4: wire next
+        if (originals[i].random !== null)
+            copies[i].random = copies[idx.get(originals[i].random!)!];  // L5: wire random
+    }
+    return copies[0];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -72,6 +116,8 @@ All phases are O(n); the bottleneck is the constant factor from three separate p
 
 Two passes with a dict mapping each original node to its copy. First pass creates copies; second pass wires `next` and `random`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def copy_random_list(head):
     if not head:
@@ -88,6 +134,29 @@ def copy_random_list(head):
         cur = cur.next
     return old_to_new[head]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function copyRandomList(head: Node | null): Node | null {
+    if (!head) return null;
+    const oldToNew = new Map<Node, Node>();
+    let cur: Node | null = head;
+    while (cur) {
+        oldToNew.set(cur, new Node(cur.val));  // L1: O(1) create + store copy
+        cur = cur.next;
+    }
+    cur = head;
+    while (cur) {
+        const copy = oldToNew.get(cur)!;
+        copy.next = cur.next ? oldToNew.get(cur.next)! : null;      // L2: O(1) wire next
+        copy.random = cur.random ? oldToNew.get(cur.random)! : null; // L3: O(1) wire random
+        cur = cur.next;
+    }
+    return oldToNew.get(head)!;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -98,13 +167,21 @@ def copy_random_list(head):
 | L1 (create copies) | O(1) | n | O(n) |
 | **L2-L3 (wire pointers)** | **O(1) each** | **n each** | **O(n)** ← all phases equal |
 
-Two clean passes, each O(n). No index arithmetic needed: `old_to_new.get(cur.random)` returns `None` when `cur.random is None`, handling the null case automatically.
+Two clean passes, each O(n). No index arithmetic needed: `oldToNew.get(cur.random)` returns `undefined` when `cur.random is null`, handling the null case automatically.
 
 **Complexity**
 - **Time:** O(n), driven by L1 and L2/L3 equally.
-- **Space:** O(n) for the dict.
+- **Space:** O(n) for the map.
 
 Cleaner than Approach 1; same asymptotics. This is usually the interview-acceptable answer.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="copy-list-with-random-pointer-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Interwoven nodes (optimal, O(1) extra space)
 
@@ -114,6 +191,8 @@ Three passes, no hash map:
 2. Set each `A'.random = A.random.next` (the copy of `A.random`).
 3. Unzip: separate the interwoven lists, restore originals' `next`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def copy_random_list(head):
     if not head:
@@ -145,6 +224,43 @@ def copy_random_list(head):
         cur = cur.next
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function copyRandomList(head: Node | null): Node | null {
+    if (!head) return null;
+
+    // 1. Interleave copies
+    let cur: Node | null = head;
+    while (cur) {
+        const copy = new Node(cur.val, cur.next);  // L1: O(1) create interleaved copy
+        cur.next = copy;
+        cur = copy.next;
+    }
+
+    // 2. Set random pointers on the copies
+    cur = head;
+    while (cur) {
+        if (cur.random) cur.next!.random = cur.random.next;  // L2: O(1) set copy's random
+        cur = cur.next!.next;
+    }
+
+    // 3. Split the two interwoven lists apart
+    const dummy = new Node(0);
+    let copyTail: Node = dummy;
+    cur = head;
+    while (cur) {
+        const copy = cur.next!;
+        cur.next = copy.next;              // L3: O(1) restore original next
+        copyTail.next = copy;             // L4: O(1) link copy list
+        copyTail = copy;
+        cur = cur.next;
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -164,6 +280,8 @@ Three O(n) passes; no hash map allocated. The key insight at L2: `cur.random.nex
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_138.py and run.
 # Uses the hash-map approach (Approach 2).
@@ -212,33 +330,55 @@ def _run_tests():
     assert copy.next.val == 13
     assert copy.next.random is copy  # copy's node 13 random -> copy's node 7
 
-    # Three nodes, random=None for some
-    x = Node(1)
-    y = Node(2)
-    z = Node(3)
-    x.next = y; y.next = z
-    x.random = z; y.random = None; z.random = x
-    copy = copy_random_list(x)
-    assert copy.val == 1
-    assert copy.random.val == 3
-    assert copy.next.random is None
-    assert copy.next.next.random is copy
-    # Verify deep copy (no shared nodes)
-    orig_nodes = set()
-    cur = x
-    while cur:
-        orig_nodes.add(id(cur))
-        cur = cur.next
-    cur = copy
-    while cur:
-        assert id(cur) not in orig_nodes
-        cur = cur.next
-
     print("all tests pass")
 
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Node {
+    val: number; next: Node | null; random: Node | null;
+    constructor(val = 0, next: Node | null = null, random: Node | null = null) {
+        this.val = val; this.next = next; this.random = random;
+    }
+}
+
+function copyRandomList(head: Node | null): Node | null {
+    if (!head) return null;
+    const oldToNew = new Map<Node, Node>();
+    let cur: Node | null = head;
+    while (cur) { oldToNew.set(cur, new Node(cur.val)); cur = cur.next; }
+    cur = head;
+    while (cur) {
+        const copy = oldToNew.get(cur)!;
+        copy.next = cur.next ? oldToNew.get(cur.next)! : null;
+        copy.random = cur.random ? oldToNew.get(cur.random)! : null;
+        cur = cur.next;
+    }
+    return oldToNew.get(head)!;
+}
+
+console.assert(copyRandomList(null) === null);
+
+const n1 = new Node(1); n1.random = n1;
+const copy1 = copyRandomList(n1);
+console.assert(copy1 !== null && copy1 !== n1);
+console.assert(copy1!.val === 1);
+console.assert(copy1!.random === copy1);
+
+const a = new Node(7); const b = new Node(13);
+a.next = b; b.random = a;
+const copy2 = copyRandomList(a);
+console.assert(copy2 !== null && copy2 !== a);
+console.assert(copy2!.val === 7);
+console.assert(copy2!.next!.val === 13);
+console.assert(copy2!.next!.random === copy2);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

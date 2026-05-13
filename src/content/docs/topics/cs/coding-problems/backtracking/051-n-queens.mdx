@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './051-n-queens.py?raw';
+import practiceCodeTs from './051-n-queens.ts?raw';
+import approach3PyCode from './051-n-queens-approach3.py?raw';
+import approach3TsCode from './051-n-queens-approach3.ts?raw';
 
 ## Problem
 
@@ -25,7 +30,14 @@ LeetCode 51 · [Link](https://leetcode.com/problems/n-queens/) · *Hard*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="n-queens" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="n-queens-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="n-queens-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try all n^n placements
 
@@ -92,6 +104,8 @@ def solve_n_queens(n):
 
 Maintain three sets: used columns, used `row + col` diagonals (anti-diagonals), used `row - col` diagonals. All checks are O(1).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def solve_n_queens(n):
     result = []
@@ -120,6 +134,44 @@ def solve_n_queens(n):
     backtrack(0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function solveNQueens(n: number): string[][] {
+    const result: string[][] = [];
+    const colsUsed = new Set<number>();
+    const diag1 = new Set<number>();  // row + col
+    const diag2 = new Set<number>();  // row - col
+    const placement: number[] = new Array(n).fill(-1);
+
+    function backtrack(r: number): void {
+        if (r === n) {
+            const board = Array.from({ length: n }, (_, i) =>
+                Array.from({ length: n }, (_, j) => placement[i] === j ? 'Q' : '.').join('')
+            );
+            result.push(board);                       // L1: O(n^2) build board
+            return;
+        }
+        for (let c = 0; c < n; c++) {
+            if (colsUsed.has(c) || diag1.has(r + c) || diag2.has(r - c))
+                continue;                             // L2: O(1) conflict check
+            colsUsed.add(c);                          // L3: O(1) mark column
+            diag1.add(r + c);                         // L4: O(1) mark anti-diag
+            diag2.add(r - c);                         // L5: O(1) mark main diag
+            placement[r] = c;
+            backtrack(r + 1);                         // L6: recurse to next row
+            colsUsed.delete(c);                       // L7: O(1) unmark
+            diag1.delete(r + c);
+            diag2.delete(r - c);
+        }
+    }
+
+    backtrack(0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -142,6 +194,17 @@ The recursion tree has at most n! leaves (after column pruning). Each level has 
 ### Why `row + col` and `row - col`?
 Cells on the same anti-diagonal share `row + col` (constant along the up-right direction). Cells on the same main diagonal share `row - col` (constant along the down-right direction). Two integers per conflict dimension suffice to make every check O(1).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="n-queens-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="n-queens-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -154,6 +217,8 @@ The conflict-set template is the classic N-Queens solution and the template for 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def solve_n_queens(n):
     result = []
@@ -193,6 +258,47 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function solveNQueens(n: number): string[][] {
+    const result: string[][] = [];
+    const colsUsed = new Set<number>();
+    const diag1 = new Set<number>();
+    const diag2 = new Set<number>();
+    const placement: number[] = new Array(n).fill(-1);
+    function backtrack(r: number): void {
+        if (r === n) {
+            const board = Array.from({ length: n }, (_, i) =>
+                Array.from({ length: n }, (_, j) => placement[i] === j ? 'Q' : '.').join('')
+            );
+            result.push(board);
+            return;
+        }
+        for (let c = 0; c < n; c++) {
+            if (colsUsed.has(c) || diag1.has(r + c) || diag2.has(r - c)) continue;
+            colsUsed.add(c); diag1.add(r + c); diag2.add(r - c);
+            placement[r] = c;
+            backtrack(r + 1);
+            colsUsed.delete(c); diag1.delete(r + c); diag2.delete(r - c);
+        }
+    }
+    backtrack(0);
+    return result;
+}
+
+console.assert(JSON.stringify(solveNQueens(1)) === JSON.stringify([['Q']]));
+const r4 = solveNQueens(4);
+console.assert(r4.length === 2);
+console.assert(JSON.stringify(r4.sort()) === JSON.stringify([['.Q..','...Q','Q...','..Q.'],['..Q.','Q...','...Q','.Q..']]
+    .sort()));
+console.assert(solveNQueens(5).length === 10);
+console.assert(solveNQueens(2).length === 0);
+console.assert(solveNQueens(3).length === 0);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

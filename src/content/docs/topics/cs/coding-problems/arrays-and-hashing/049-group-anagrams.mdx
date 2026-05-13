@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './049-group-anagrams.py?raw';
+import practiceCodeTs from './049-group-anagrams.ts?raw';
+import approach2PyCode from './049-group-anagrams-approach2.py?raw';
+import approach2TsCode from './049-group-anagrams-approach2.ts?raw';
+import approach3PyCode from './049-group-anagrams-approach3.py?raw';
+import approach3TsCode from './049-group-anagrams-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 49 · [Link](https://leetcode.com/problems/group-anagrams/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="group-anagrams" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="group-anagrams-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="group-anagrams-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, pairwise anagram check
 
 For each string, compare its character count against representatives of existing groups.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -47,6 +63,31 @@ def group_anagrams(strs: list[str]) -> list[list[str]]:
             groups.append([s])                 # L8: O(1) amortized
     return groups
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function groupAnagrams(strs: string[]): string[][] {
+    const groups: string[][] = [];                      // L1: O(1)
+    for (const s of strs) {                             // L2: outer loop, n iterations
+        const cs = new Array(26).fill(0);
+        for (const ch of s) cs[ch.charCodeAt(0) - 97]++; // L3: O(k) per string
+        let placed = false;                             // L4: O(1)
+        for (const g of groups) {                       // L5: inner loop, up to n groups
+            const cg = new Array(26).fill(0);
+            for (const ch of g[0]) cg[ch.charCodeAt(0) - 97]++; // L6: O(k) compare
+            if (cs.join(',') === cg.join(',')) {
+                g.push(s);                              // L7: O(1) amortized
+                placed = true;
+                break;
+            }
+        }
+        if (!placed) groups.push([s]);                  // L8: O(1) amortized
+    }
+    return groups;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -69,6 +110,8 @@ For each of `n` strings, the inner loop scans up to `n` existing groups and does
 
 Anagrams share the same multiset of characters; their sorted form is identical. Use the sorted string as a hash map key.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -79,6 +122,21 @@ def group_anagrams(strs: list[str]) -> list[list[str]]:
         groups[key].append(s)                  # L4: O(1) avg hash insert + append
     return list(groups.values())               # L5: O(n) to collect
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function groupAnagrams(strs: string[]): string[][] {
+    const groups = new Map<string, string[]>();  // L1: O(1)
+    for (const s of strs) {                      // L2: n iterations
+        const key = s.split('').sort().join(''); // L3: O(k log k) sort + O(k) join
+        if (!groups.has(key)) groups.set(key, []); // L4: O(1) avg
+        groups.get(key)!.push(s);
+    }
+    return [...groups.values()];                 // L5: O(n) to collect
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -97,10 +155,23 @@ The sort step on each string drives the total. Key hashing is O(k) but that's do
 - **Time:** O(n·k log k), driven by L3 (sorting each string).
 - **Space:** O(n·k) for keys + output.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="group-anagrams-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="group-anagrams-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Char-count tuple as key (optimal for bounded alphabet)
 
 Skip sorting entirely; a 26-slot frequency tuple is a cheaper, immutable key.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -113,6 +184,24 @@ def group_anagrams(strs: list[str]) -> list[list[str]]:
         groups[tuple(count)].append(s)         # L6: O(26)=O(1) tuple + hash + append
     return list(groups.values())               # L7: O(n) to collect
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function groupAnagrams(strs: string[]): string[][] {
+    const groups = new Map<string, string[]>();  // L1: O(1)
+    for (const s of strs) {                      // L2: n iterations
+        const count = new Array(26).fill(0);     // L3: O(1), fixed 26-slot array
+        for (const ch of s)                      // L4: k iterations per string
+            count[ch.charCodeAt(0) - 97]++;      // L5: O(1) array index
+        const key = count.join(',');             // L6: O(26)=O(1) key
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key)!.push(s);
+    }
+    return [...groups.values()];                 // L7: O(n) to collect
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -132,6 +221,17 @@ The inner loop counts each character in O(1); no sort is needed. The tuple key i
 - **Time:** O(n·k), driven by L4/L5 (character counting). Linear per string, strictly better than the sort-key approach.
 - **Space:** O(n·k) for the output; O(n) hash map slots of fixed-size (26) keys.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="group-anagrams-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="group-anagrams-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -144,6 +244,8 @@ For bounded alphabets, the count-tuple approach is the tightest. For huge or unb
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_group_anagrams.py and run.
 # Uses the canonical implementation (Approach 3: char-count tuple key).
@@ -186,6 +288,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function groupAnagrams(strs: string[]): string[][] {
+    const groups = new Map<string, string[]>();
+    for (const s of strs) {
+        const count = new Array(26).fill(0);
+        for (const ch of s) count[ch.charCodeAt(0) - 97]++;
+        const key = count.join(',');
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key)!.push(s);
+    }
+    return [...groups.values()];
+}
+
+function normalize(result: string[][]): string[][] {
+    return result.map(g => [...g].sort()).sort((a, b) => a[0].localeCompare(b[0]));
+}
+
+const r1 = groupAnagrams(["eat","tea","tan","ate","nat","bat"]);
+console.assert(JSON.stringify(normalize(r1)) === JSON.stringify([["ate","eat","tea"],["bat"],["nat","tan"]]));
+const r2 = groupAnagrams([""]);
+console.assert(JSON.stringify(normalize(r2)) === JSON.stringify([[""]]));
+const r3 = groupAnagrams(["a"]);
+console.assert(JSON.stringify(normalize(r3)) === JSON.stringify([["a"]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

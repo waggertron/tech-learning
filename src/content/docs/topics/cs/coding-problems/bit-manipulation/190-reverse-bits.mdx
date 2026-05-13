@@ -5,11 +5,18 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './190-reverse-bits.py?raw';
+import practiceCodeTs from './190-reverse-bits.ts?raw';
+import approach2PyCode from './190-reverse-bits-approach2.py?raw';
+import approach2TsCode from './190-reverse-bits-approach2.ts?raw';
+import approach3PyCode from './190-reverse-bits-approach3.py?raw';
+import approach3TsCode from './190-reverse-bits-approach3.ts?raw';
 
 ## Problem
 
@@ -23,10 +30,19 @@ LeetCode 190 · [Link](https://leetcode.com/problems/reverse-bits/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="reverse-bits" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="reverse-bits-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="reverse-bits-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Bit-by-bit shift
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_bits(n):
     result = 0
@@ -35,6 +51,20 @@ def reverse_bits(n):
         n >>= 1                             # L3: O(1), shift input right
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseBits(n: number): number {
+    let result = 0;
+    for (let i = 0; i < 32; i++) {          // L1: always 32 iterations
+        result = ((result << 1) | (n & 1)) >>> 0; // L2: O(1), shift result and OR in LSB
+        n >>>= 1;                            // L3: O(1), shift input right (unsigned)
+    }
+    return result >>> 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -54,10 +84,21 @@ All 32 iterations are constant-time; the whole function is O(1).
 
 ## Approach 2: String conversion (cheating)
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_bits(n):
     return int(f"{n:032b}"[::-1], 2)        # L1: O(32) format + reverse + parse
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseBits(n: number): number {
+    return parseInt(n.toString(2).padStart(32, '0').split('').reverse().join(''), 2); // L1: O(32)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -73,10 +114,23 @@ def reverse_bits(n):
 
 Clear and short, but doesn't demonstrate bit mechanics.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="reverse-bits-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="reverse-bits-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Byte-wise swap with masks (mask-and-swap)
 
 For a fixed-size reversal, use two-way swap on halves: swap 16-bit halves, then 8-bit, then 4-bit, then 2-bit, then 1-bit. Each step uses a constant mask.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_bits(n):
     n = ((n >> 16) | (n << 16)) & 0xFFFFFFFF           # L1: swap 16-bit halves
@@ -86,6 +140,20 @@ def reverse_bits(n):
     n = ((n & 0xAAAAAAAA) >> 1) | ((n & 0x55555555) << 1)   # L5: swap individual bits
     return n & 0xFFFFFFFF
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseBits(n: number): number {
+    n = (((n >>> 16) | (n << 16)) >>> 0);                           // L1: swap 16-bit halves
+    n = (((n & 0xFF00FF00) >>> 8) | ((n & 0x00FF00FF) << 8)) >>> 0; // L2: swap bytes
+    n = (((n & 0xF0F0F0F0) >>> 4) | ((n & 0x0F0F0F0F) << 4)) >>> 0; // L3: swap nibbles
+    n = (((n & 0xCCCCCCCC) >>> 2) | ((n & 0x33333333) << 2)) >>> 0; // L4: swap pairs
+    n = (((n & 0xAAAAAAAA) >>> 1) | ((n & 0x55555555) << 1)) >>> 0; // L5: swap individual bits
+    return n >>> 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -101,6 +169,17 @@ Five constant-time bitwise operations regardless of input value.
 - **Time:** O(1). Constant number of bitwise operations.
 - **Space:** O(1).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="reverse-bits-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="reverse-bits-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -113,6 +192,8 @@ Mask-and-swap is the classic "known-width bit reversal" trick, also used in FFT 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_190.py and run.
 # Uses the canonical implementation (Approach 1: bit-by-bit, clearest for verification).
@@ -135,6 +216,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseBits(n: number): number {
+    let result = 0;
+    for (let i = 0; i < 32; i++) {
+        result = ((result << 1) | (n & 1)) >>> 0;
+        n >>>= 1;
+    }
+    return result >>> 0;
+}
+
+console.assert(reverseBits(43261596) === 964176192);
+console.assert(reverseBits(4294967293) === 3221225471);
+console.assert(reverseBits(0) === 0);
+console.assert(reverseBits(4294967295) === 4294967295);
+console.assert(reverseBits(1) === 2147483648);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

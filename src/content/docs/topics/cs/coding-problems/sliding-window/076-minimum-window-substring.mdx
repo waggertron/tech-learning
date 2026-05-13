@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './076-minimum-window-substring.py?raw';
+import practiceCodeTs from './076-minimum-window-substring.ts?raw';
+import approach3TsCode from './076-minimum-window-substring-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 76 Â· [Link](https://leetcode.com/problems/minimum-window-substring/) Â
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="minimum-window-substring" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="minimum-window-substring-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="minimum-window-substring-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, every substring
 
 Check every substring of `s` and compare its character counts to those of `t`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -47,6 +60,32 @@ def min_window(s: str, t: str) -> str:
                     best = s[i:j]                             # L6: O(n) slice
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minWindow(s: string, t: string): string {
+    if (!s || !t) return '';
+    const need = new Map<string, number>();
+    for (const ch of t) need.set(ch, (need.get(ch) ?? 0) + 1);
+    const n = s.length;
+    let best = '';
+    for (let i = 0; i < n; i++) {                                    // L2: outer loop
+        for (let j = i + t.length; j <= n; j++) {                   // L3: inner loop
+            const window = new Map<string, number>();
+            for (const ch of s.slice(i, j))                         // L4: Counter, O(n) each
+                window.set(ch, (window.get(ch) ?? 0) + 1);
+            let valid = true;
+            for (const [ch, cnt] of need)                           // L5: O(k) check
+                if ((window.get(ch) ?? 0) < cnt) { valid = false; break; }
+            if (valid && (!best || j - i < best.length))
+                best = s.slice(i, j);                               // L6: O(n) slice
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -70,6 +109,8 @@ L4 is the killer: building a `Counter` from a slice requires scanning the slice,
 
 Expand `right`; when the window contains all of `t`, contract `left` to shrink.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -89,6 +130,36 @@ def min_window(s: str, t: str) -> str:
             left += 1                                         # L8: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minWindow(s: string, t: string): string {
+    if (!s || !t) return '';
+    const need = new Map<string, number>();
+    for (const ch of t) need.set(ch, (need.get(ch) ?? 0) + 1);
+    const window = new Map<string, number>();                          // L2: O(1)
+    let left = 0;
+    let best = '';
+    for (let right = 0; right < s.length; right++) {                 // L3: outer loop
+        const ch = s[right];
+        window.set(ch, (window.get(ch) ?? 0) + 1);                   // L4: O(1)
+        const valid = () => {                                         // L5: O(k) per check
+            for (const [c, cnt] of need)
+                if ((window.get(c) ?? 0) < cnt) return false;
+            return true;
+        };
+        while (valid()) {
+            if (!best || right - left + 1 < best.length)
+                best = s.slice(left, right + 1);                      // L6: O(n) slice
+            window.set(s[left], window.get(s[left])! - 1);           // L7: O(1)
+            left++;                                                   // L8: O(1)
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -113,6 +184,8 @@ The `all(...)` check iterates over all k distinct characters of t every time the
 
 Track how many *distinct* characters of `t` are fully matched in the current window (`have`). `have == len(need)` is a constant-time "valid window" check.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -140,6 +213,43 @@ def min_window(s: str, t: str) -> str:
 
     return "" if best[0] == float('inf') else s[best[1]:best[2] + 1]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minWindow(s: string, t: string): string {
+    if (!s || !t) return '';
+    const need = new Map<string, number>();                // L1: O(|t|)
+    for (const ch of t) need.set(ch, (need.get(ch) ?? 0) + 1);
+    const needed = need.size;                             // L2: O(1)
+    const window = new Map<string, number>();             // L3: O(1)
+    let have = 0;                                         // L4: O(1)
+    let left = 0;
+    let bestLen = Infinity, bestL = 0, bestR = 0;         // L5: O(1)
+
+    for (let right = 0; right < s.length; right++) {     // L6: outer loop, n iterations
+        const ch = s[right];
+        window.set(ch, (window.get(ch) ?? 0) + 1);       // L7: O(1)
+        if (need.has(ch) && window.get(ch) === need.get(ch)) {  // L8: O(1)
+            have++;                                       // L9: O(1)
+        }
+        while (have === needed) {                         // L10: O(1) guard; shrink loop
+            if (right - left + 1 < bestLen) {
+                bestLen = right - left + 1;               // L11: O(1)
+                bestL = left; bestR = right;
+            }
+            const lch = s[left];
+            window.set(lch, window.get(lch)! - 1);       // L12: O(1)
+            if (need.has(lch) && window.get(lch)! < need.get(lch)!) {
+                have--;                                   // L13: O(1)
+            }
+            left++;                                       // L14: O(1)
+        }
+    }
+    return bestLen === Infinity ? '' : s.slice(bestL, bestR + 1);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -158,6 +268,14 @@ The key upgrade over Approach 2: `have` is an integer that tracks how many disti
 - **Time:** O(n), driven by L6/L7/L8 (the single linear pass with O(1) window updates).
 - **Space:** O(k).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="minimum-window-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -170,6 +288,8 @@ The "have vs. need" pattern is the workhorse of hard sliding-window problems. Th
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_076.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -212,6 +332,44 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minWindow(s: string, t: string): string {
+    if (!s || !t) return '';
+    const need = new Map<string, number>();
+    for (const ch of t) need.set(ch, (need.get(ch) ?? 0) + 1);
+    const needed = need.size;
+    const window = new Map<string, number>();
+    let have = 0, left = 0;
+    let bestLen = Infinity, bestL = 0, bestR = 0;
+    for (let right = 0; right < s.length; right++) {
+        const ch = s[right];
+        window.set(ch, (window.get(ch) ?? 0) + 1);
+        if (need.has(ch) && window.get(ch) === need.get(ch)) have++;
+        while (have === needed) {
+            if (right - left + 1 < bestLen) {
+                bestLen = right - left + 1; bestL = left; bestR = right;
+            }
+            const lch = s[left];
+            window.set(lch, window.get(lch)! - 1);
+            if (need.has(lch) && window.get(lch)! < need.get(lch)!) have--;
+            left++;
+        }
+    }
+    return bestLen === Infinity ? '' : s.slice(bestL, bestR + 1);
+}
+
+console.assert(minWindow("ADOBECODEBANC", "ABC") === "BANC");
+console.assert(minWindow("a", "a") === "a");
+console.assert(minWindow("a", "aa") === "");
+console.assert(minWindow("", "a") === "");
+console.assert(minWindow("abc", "") === "");
+console.assert(minWindow("aa", "aa") === "aa");
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

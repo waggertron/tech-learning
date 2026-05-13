@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './981-time-based-key-value-store.py?raw';
+import practiceCodeTs from './981-time-based-key-value-store.ts?raw';
+import approach2PyCode from './981-time-based-key-value-store-approach2.py?raw';
+import approach2TsCode from './981-time-based-key-value-store-approach2.ts?raw';
+import approach3PyCode from './981-time-based-key-value-store-approach3.py?raw';
+import approach3TsCode from './981-time-based-key-value-store-approach3.ts?raw';
 
 ## Problem
 
@@ -34,12 +41,21 @@ LeetCode 981 · [Link](https://leetcode.com/problems/time-based-key-value-store/
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="time-based-key-value-store" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="time-based-key-value-store-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="time-based-key-value-store-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, linear scan per `get`
 
 Per key, keep a list of `(timestamp, value)` entries. On `get`, scan linearly to find the largest timestamp ≤ query.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -59,6 +75,30 @@ class TimeMap:
                 break                          # L5: early exit (timestamps sorted)
         return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TimeMap {
+    private data: Map<string, [number, string][]> = new Map();
+
+    set(key: string, value: string, timestamp: number): void {
+        if (!this.data.has(key)) this.data.set(key, []);
+        this.data.get(key)!.push([timestamp, value]);  // L2: O(1) amortized
+    }
+
+    get(key: string, timestamp: number): string {
+        const entries = this.data.get(key) ?? [];
+        let best = '';
+        for (const [ts, v] of entries) {    // L3: scan all entries, O(n)
+            if (ts <= timestamp) best = v;  // L4: O(1) compare
+            else break;                     // L5: early exit (sorted)
+        }
+        return best;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -80,6 +120,8 @@ class TimeMap:
 
 Since timestamps are strictly increasing per key, per-key lists are sorted. Binary-search them.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -103,6 +145,36 @@ class TimeMap:
                 hi = mid - 1                        # L8: O(1) too late, go earlier
         return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TimeMap {
+    private data: Map<string, [number, string][]> = new Map();
+
+    set(key: string, value: string, timestamp: number): void {
+        if (!this.data.has(key)) this.data.set(key, []);
+        this.data.get(key)!.push([timestamp, value]);    // L1: O(1) amortized
+    }
+
+    get(key: string, timestamp: number): string {
+        const entries = this.data.get(key) ?? [];
+        let lo = 0, hi = entries.length - 1;             // L2: O(1)
+        let result = '';
+        while (lo <= hi) {                               // L3: binary search, O(log n) steps
+            const mid = (lo + hi) >> 1;                  // L4: O(1) midpoint
+            if (entries[mid][0] <= timestamp) {          // L5: O(1) compare timestamp
+                result = entries[mid][1];                // L6: O(1) record candidate
+                lo = mid + 1;                            // L7: O(1) look for larger ts
+            } else {
+                hi = mid - 1;                            // L8: O(1) too late, go earlier
+            }
+        }
+        return result;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -121,10 +193,23 @@ Since timestamps for each key are strictly increasing (guaranteed by the problem
 - `get`: **O(log n)**, driven by L3 (binary search over n sorted entries).
 - Space: O(n).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="time-based-key-value-store-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="time-based-key-value-store-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: `bisect` for clean per-key binary search (optimal, idiomatic)
 
 Use Python's `bisect` with parallel `timestamps` and `values` arrays per key.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 from bisect import bisect_right
@@ -145,6 +230,39 @@ class TimeMap:
             return ""
         return self.values[key][i]               # L5: O(1) index lookup
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TimeMap {
+    private timestamps: Map<string, number[]> = new Map();
+    private values: Map<string, string[]> = new Map();
+
+    set(key: string, value: string, timestamp: number): void {
+        if (!this.timestamps.has(key)) {
+            this.timestamps.set(key, []);
+            this.values.set(key, []);
+        }
+        this.timestamps.get(key)!.push(timestamp);   // L1: O(1) amortized
+        this.values.get(key)!.push(value);           // L2: O(1) amortized
+    }
+
+    get(key: string, timestamp: number): string {
+        const ts = this.timestamps.get(key) ?? [];
+        // bisect_right equivalent: find insertion point for timestamp
+        let lo = 0, hi = ts.length;
+        while (lo < hi) {                            // L3: O(log n) binary search
+            const mid = (lo + hi) >> 1;
+            if (ts[mid] <= timestamp) lo = mid + 1;
+            else hi = mid;
+        }
+        const i = lo - 1;                            // L4: rightmost index ≤ timestamp
+        if (i < 0) return '';                        // L5: no entry before query
+        return this.values.get(key)![i];             // L6: O(1) index lookup
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -165,6 +283,17 @@ class TimeMap:
 
 `bisect_right(ts, timestamp) - 1` returns the largest index whose timestamp is ≤ `timestamp`.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="time-based-key-value-store-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="time-based-key-value-store-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | `set` | `get` | Space |
@@ -177,6 +306,8 @@ The `bisect` version is idiomatic Python; the manual binary search is what you'd
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_981.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -215,6 +346,49 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TimeMap {
+    private timestamps: Map<string, number[]> = new Map();
+    private values: Map<string, string[]> = new Map();
+
+    set(key: string, value: string, timestamp: number): void {
+        if (!this.timestamps.has(key)) {
+            this.timestamps.set(key, []);
+            this.values.set(key, []);
+        }
+        this.timestamps.get(key)!.push(timestamp);
+        this.values.get(key)!.push(value);
+    }
+
+    get(key: string, timestamp: number): string {
+        const ts = this.timestamps.get(key) ?? [];
+        let lo = 0, hi = ts.length;
+        while (lo < hi) {
+            const mid = (lo + hi) >> 1;
+            if (ts[mid] <= timestamp) lo = mid + 1;
+            else hi = mid;
+        }
+        const i = lo - 1;
+        if (i < 0) return '';
+        return this.values.get(key)![i];
+    }
+}
+
+const store = new TimeMap();
+store.set("foo", "bar", 1);
+console.assert(store.get("foo", 1) === "bar");
+console.assert(store.get("foo", 3) === "bar");     // no entry at 3, returns closest before
+store.set("foo", "bar2", 4);
+console.assert(store.get("foo", 4) === "bar2");
+console.assert(store.get("foo", 5) === "bar2");
+console.assert(store.get("foo", 0) === "");        // before any entry
+console.assert(store.get("missing", 1) === "");    // key never set
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

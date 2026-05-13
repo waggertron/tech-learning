@@ -5,11 +5,16 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './043-multiply-strings.py?raw';
+import practiceCodeTs from './043-multiply-strings.ts?raw';
+import approach2PyCode from './043-multiply-strings-approach2.py?raw';
+import approach2TsCode from './043-multiply-strings-approach2.ts?raw';
 
 ## Problem
 
@@ -23,16 +28,34 @@ LeetCode 43 · [Link](https://leetcode.com/problems/multiply-strings/) · *Mediu
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="multiply-strings" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="multiply-strings-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="multiply-strings-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Big-integer via int() (cheating)
 
 Not permitted by the problem, but shown for contrast.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def multiply(num1, num2):
     return str(int(num1) * int(num2))
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function multiply(num1: string, num2: string): string {
+    return String(BigInt(num1) * BigInt(num2));
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(n · m) ish.
@@ -42,6 +65,8 @@ def multiply(num1, num2):
 
 `result[i + j + 1]` accumulates `num1[i] * num2[j]` with carries propagated at the end.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def multiply(num1, num2):
     if num1 == "0" or num2 == "0":              # L1: O(1) early exit
@@ -62,6 +87,29 @@ def multiply(num1, num2):
         start += 1                              # L11: O(n + m)
     return "".join(map(str, result[start:]))    # L12: O(n + m)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function multiply(num1: string, num2: string): string {
+    if (num1 === '0' || num2 === '0') return '0';          // L1: O(1) early exit
+    const n = num1.length, m = num2.length;                // L2: O(1)
+    const result = new Array(n + m).fill(0);               // L3: O(n + m)
+    for (let i = n - 1; i >= 0; i--) {                    // L4: outer loop, n iterations
+        for (let j = m - 1; j >= 0; j--) {                // L5: inner loop, m iterations
+            const prod = +num1[i] * +num2[j];              // L6: O(1)
+            const p1 = i + j, p2 = i + j + 1;             // L7: O(1)
+            const total = prod + result[p2];               // L8: O(1)
+            result[p2] = total % 10;                       // L9: O(1)
+            result[p1] += Math.floor(total / 10);          // L10: O(1)
+        }
+    }
+    let start = 0;
+    while (start < result.length && result[start] === 0) start++;  // L11: O(n + m)
+    return result.slice(start).join('') || '0';            // L12: O(n + m)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -82,6 +130,17 @@ Every pair of digit positions (i, j) is visited exactly once; there are n * m su
 
 ### Why `p1, p2 = i + j, i + j + 1` works
 In schoolbook multiplication, the product of two digits at positions `i` (from num1) and `j` (from num2) contributes to positions `i + j` (carry) and `i + j + 1` (units) of the result. Carries propagate leftward during accumulation.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="multiply-strings-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="multiply-strings-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Karatsuba (divide and conquer)
 
@@ -164,6 +223,8 @@ Schoolbook is the canonical interview answer. Know the `i + j + 1` positional in
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_043.py and run.
 # Uses the canonical implementation (Approach 2: schoolbook multiplication).
@@ -197,6 +258,37 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function multiply(num1: string, num2: string): string {
+    if (num1 === '0' || num2 === '0') return '0';
+    const n = num1.length, m = num2.length;
+    const result = new Array(n + m).fill(0);
+    for (let i = n - 1; i >= 0; i--) {
+        for (let j = m - 1; j >= 0; j--) {
+            const prod = +num1[i] * +num2[j];
+            const p1 = i + j, p2 = i + j + 1;
+            const total = prod + result[p2];
+            result[p2] = total % 10;
+            result[p1] += Math.floor(total / 10);
+        }
+    }
+    let start = 0;
+    while (start < result.length && result[start] === 0) start++;
+    return result.slice(start).join('') || '0';
+}
+
+console.assert(multiply('2', '3') === '6');
+console.assert(multiply('123', '456') === '56088');
+console.assert(multiply('0', '12345') === '0');
+console.assert(multiply('99', '99') === '9801');
+console.assert(multiply('1', '1') === '1');
+console.assert(multiply('9999', '9999') === '99980001');
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './210-course-schedule-ii.py?raw';
+import practiceCodeTs from './210-course-schedule-ii.ts?raw';
+import approach2PyCode from './210-course-schedule-ii-approach2.py?raw';
+import approach2TsCode from './210-course-schedule-ii-approach2.ts?raw';
 
 ## Problem
 
@@ -24,16 +29,18 @@ LeetCode 210 · [Link](https://leetcode.com/problems/course-schedule-ii/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="course-schedule-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="course-schedule-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="course-schedule-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, check feasibility first, then try to order
 
 Use problem 207 to check for cycles. If none, use a second pass to build the order. Two passes, wasted work.
-
-```python
-# Essentially: two passes of the graph, once to detect cycles, once to order.
-# Skipping full implementation since it's strictly worse than the one-pass versions.
-```
 
 **Complexity**
 - **Time:** O(V + E) × 2 = O(V + E).
@@ -43,6 +50,8 @@ Use problem 207 to check for cycles. If none, use a second pass to build the ord
 
 Topological order = reversed post-order of a DFS traversal (on a DAG).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -78,6 +87,39 @@ def find_order(num_courses, prerequisites):
         return []
     return order[::-1]                         # L18: O(V) reverse
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findOrder(numCourses: number, prerequisites: number[][]): number[] {
+    const graph: number[][] = Array.from({ length: numCourses }, () => []);
+    for (const [a, b] of prerequisites) graph[b].push(a);  // L1-L3: build graph
+
+    const WHITE = 0, GRAY = 1, BLACK = 2;
+    const color = new Array(numCourses).fill(WHITE);        // L5: O(V) array
+    const order: number[] = [];                             // L6: result list
+    let hasCycle = false;                                   // L7: flag
+
+    function dfs(n: number): void {                         // L8: inner DFS
+        if (hasCycle) return;                               // L9: early exit
+        color[n] = GRAY;                                    // L10: mark in-progress
+        for (const nb of graph[n]) {                        // L11: visit neighbors
+            if (color[nb] === WHITE) dfs(nb);               // L12: recurse on unvisited
+            else if (color[nb] === GRAY) { hasCycle = true; return; }  // L13: cycle
+        }
+        color[n] = BLACK;                                   // L14: mark done
+        order.push(n);                                      // L15: O(1) amortized
+    }
+
+    for (let c = 0; c < numCourses; c++) {                  // L16: visit every node
+        if (color[c] === WHITE) dfs(c);                     // L17: O(V + E) total
+    }
+
+    if (hasCycle) return [];
+    return order.reverse();                                  // L18: O(V) reverse
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -101,6 +143,8 @@ Each node is colored WHITE → GRAY → BLACK exactly once, and each edge is exa
 
 Incrementally process zero-in-degree nodes; the output order is the topological sort.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict, deque
 
@@ -124,6 +168,37 @@ def find_order(num_courses, prerequisites):
 
     return order if len(order) == num_courses else []  # L14: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findOrder(numCourses: number, prerequisites: number[][]): number[] {
+    const graph: number[][] = Array.from({ length: numCourses }, () => []);
+    const inDeg = new Array(numCourses).fill(0);  // L2: O(V) in-degree array
+    for (const [a, b] of prerequisites) {          // L3: O(E) to populate
+        graph[b].push(a);                          // L4: O(1) per edge
+        inDeg[a]++;                                // L5: O(1) per edge
+    }
+
+    const q: number[] = [];
+    for (let i = 0; i < numCourses; i++) {         // L6: O(V) seed queue
+        if (inDeg[i] === 0) q.push(i);
+    }
+    const order: number[] = [];                    // L7: result
+    let head = 0;
+    while (head < q.length) {                      // L8: outer BFS loop
+        const n = q[head++];                       // L9: O(1)
+        order.push(n);                             // L10: O(1) amortized
+        for (const nb of graph[n]) {               // L11: visit neighbors
+            inDeg[nb]--;                           // L12: O(1)
+            if (inDeg[nb] === 0) q.push(nb);       // L13: O(1) amortized
+        }
+    }
+
+    return order.length === numCourses ? order : [];  // L14: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -143,6 +218,17 @@ Each node enters the queue at most once (when its in-degree hits zero), and each
 - **Time:** O(V + E), driven by L11-L13 (every edge decremented once).
 - **Space:** O(V + E) for the graph, in-degree array, and queue.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="course-schedule-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="course-schedule-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -155,6 +241,8 @@ Kahn's is usually the cleanest answer here, you get feasibility and ordering in 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_210.py and run.
 # Uses Kahn's algorithm (Approach 3) as the canonical implementation.
@@ -207,6 +295,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findOrder(numCourses: number, prerequisites: number[][]): number[] {
+    const graph: number[][] = Array.from({ length: numCourses }, () => []);
+    const inDeg = new Array(numCourses).fill(0);
+    for (const [a, b] of prerequisites) { graph[b].push(a); inDeg[a]++; }
+    const q: number[] = [];
+    for (let i = 0; i < numCourses; i++) if (inDeg[i] === 0) q.push(i);
+    const order: number[] = [];
+    let head = 0;
+    while (head < q.length) {
+        const n = q[head++];
+        order.push(n);
+        for (const nb of graph[n]) { inDeg[nb]--; if (inDeg[nb] === 0) q.push(nb); }
+    }
+    return order.length === numCourses ? order : [];
+}
+
+console.assert(JSON.stringify(findOrder(2, [[1, 0]])) === JSON.stringify([0, 1]));
+const r = findOrder(4, [[1,0],[2,0],[3,1],[3,2]]);
+console.assert(r.indexOf(0) < r.indexOf(1) && r.indexOf(0) < r.indexOf(2));
+console.assert(JSON.stringify(findOrder(2, [[1,0],[0,1]])) === JSON.stringify([]));
+console.assert(JSON.stringify(findOrder(1, [])) === JSON.stringify([0]));
+console.assert(JSON.stringify(findOrder(3, [[0,1],[1,2],[2,0]])) === JSON.stringify([]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

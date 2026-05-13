@@ -5,11 +5,20 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './746-min-cost-climbing-stairs.py?raw';
+import practiceCodeTs from './746-min-cost-climbing-stairs.ts?raw';
+import approach2PyCode from './746-min-cost-climbing-stairs-approach2.py?raw';
+import approach2TsCode from './746-min-cost-climbing-stairs-approach2.ts?raw';
+import approach3PyCode from './746-min-cost-climbing-stairs-approach3.py?raw';
+import approach3TsCode from './746-min-cost-climbing-stairs-approach3.ts?raw';
+import approach4PyCode from './746-min-cost-climbing-stairs-approach4.py?raw';
+import approach4TsCode from './746-min-cost-climbing-stairs-approach4.ts?raw';
 
 ## Problem
 
@@ -23,12 +32,21 @@ LeetCode 746 · [Link](https://leetcode.com/problems/min-cost-climbing-stairs/) 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="min-cost-climbing-stairs" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="min-cost-climbing-stairs-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="min-cost-climbing-stairs-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive, min cost from step i
 
 `min_from(i) = cost[i] + min(min_from(i+1), min_from(i+2))`. Return `min(min_from(0), min_from(1))`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_cost_climbing_stairs(cost):
     n = len(cost)
@@ -38,6 +56,20 @@ def min_cost_climbing_stairs(cost):
         return cost[i] + min(min_from(i + 1), min_from(i + 2))  # L2: two recursive branches
     return min(min_from(0), min_from(1))  # L3: best of starting at 0 or 1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minCostClimbingStairs(cost: number[]): number {
+    const n = cost.length;
+    function minFrom(i: number): number {
+        if (i >= n) return 0;                                              // L1: base case, past top
+        return cost[i] + Math.min(minFrom(i + 1), minFrom(i + 2));        // L2: two recursive branches
+    }
+    return Math.min(minFrom(0), minFrom(1));                               // L3: best of 0 or 1
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -57,6 +89,8 @@ Each call spawns two more; the tree doubles in width at every level, giving an e
 
 ## Approach 2: Memoized recursion
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -69,6 +103,24 @@ def min_cost_climbing_stairs(cost):
         return cost[i] + min(f(i + 1), f(i + 2))  # L2: two sub-calls, cached after first hit
     return min(f(0), f(1))    # L3: best start
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minCostClimbingStairs(cost: number[]): number {
+    const n = cost.length;
+    const memo = new Map<number, number>();
+    function f(i: number): number {
+        if (i >= n) return 0;                                          // L1: base case
+        if (memo.has(i)) return memo.get(i)!;
+        const result = cost[i] + Math.min(f(i + 1), f(i + 2));       // L2: two sub-calls, cached
+        memo.set(i, result);
+        return result;
+    }
+    return Math.min(f(0), f(1));                                       // L3: best start
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -86,10 +138,23 @@ Each of the n steps is computed exactly once; subsequent calls hit the cache in 
 - **Time:** O(n), driven by L2 (n unique states, each computed once).
 - **Space:** O(n) cache + stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="min-cost-climbing-stairs-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="min-cost-climbing-stairs-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up DP array
 
 `dp[i]` = min cost to step on stair `i`. Build iteratively from left to right.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_cost_climbing_stairs(cost):
     n = len(cost)
@@ -99,6 +164,22 @@ def min_cost_climbing_stairs(cost):
         dp[i] = cost[i] + min(dp[i-1], dp[i-2])  # L4: O(1) recurrence
     return min(dp[n-1], dp[n-2])               # L5: O(1) return
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minCostClimbingStairs(cost: number[]): number {
+    const n = cost.length;
+    const dp = new Array(n).fill(0);              // L1: O(n) allocation
+    dp[0] = cost[0];
+    dp[1] = cost[1];                              // L2: seed base cases
+    for (let i = 2; i < n; i++) {               // L3: loop n-2 times
+        dp[i] = cost[i] + Math.min(dp[i - 1], dp[i - 2]);  // L4: O(1) recurrence
+    }
+    return Math.min(dp[n - 1], dp[n - 2]);        // L5: O(1) return
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -115,10 +196,23 @@ def min_cost_climbing_stairs(cost):
 - **Time:** O(n), driven by L3/L4 (n - 2 iterations).
 - **Space:** O(n) for the dp array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="min-cost-climbing-stairs-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="min-cost-climbing-stairs-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 4: Bottom-up with two variables (optimal)
 
 `dp[i]` = min cost to stand on step `i`. Then `dp[i] = cost[i] + min(dp[i-1], dp[i-2])`. Answer = `min(dp[n-1], dp[n-2])`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_cost_climbing_stairs(cost):
     n = len(cost)                       # L1: get length
@@ -127,6 +221,20 @@ def min_cost_climbing_stairs(cost):
         a, b = b, cost[i] + min(a, b)  # L4: O(1) update per step
     return min(a, b)                    # L5: best of last two steps
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minCostClimbingStairs(cost: number[]): number {
+    const n = cost.length;                    // L1: get length
+    let a = cost[0], b = cost[1];            // L2: seed dp[0], dp[1]
+    for (let i = 2; i < n; i++) {           // L3: loop n-2 times
+        [a, b] = [b, cost[i] + Math.min(a, b)];  // L4: O(1) update per step
+    }
+    return Math.min(a, b);                   // L5: best of last two steps
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -146,6 +254,17 @@ The loop runs exactly n - 2 times, each iteration is a constant-cost update. No 
 - **Time:** O(n), driven by L3/L4.
 - **Space:** O(1), just two scalars.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach4PyCode} id="min-cost-climbing-stairs-approach4-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach4TsCode} id="min-cost-climbing-stairs-approach4-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -157,6 +276,8 @@ The loop runs exactly n - 2 times, each iteration is a constant-cost update. No 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_746.py and run.
 # Uses the canonical implementation (Approach 4: bottom-up two variables).
@@ -179,6 +300,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minCostClimbingStairs(cost: number[]): number {
+    const n = cost.length;
+    let a = cost[0], b = cost[1];
+    for (let i = 2; i < n; i++) {
+        [a, b] = [b, cost[i] + Math.min(a, b)];
+    }
+    return Math.min(a, b);
+}
+
+console.assert(minCostClimbingStairs([10, 15, 20]) === 15);
+console.assert(minCostClimbingStairs([1, 100, 1, 1, 1, 100, 1, 1, 100, 1]) === 6);
+console.assert(minCostClimbingStairs([0, 0]) === 0);
+console.assert(minCostClimbingStairs([1, 2]) === 1);
+console.assert(minCostClimbingStairs([5, 3, 1, 2]) === 4);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

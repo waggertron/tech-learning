@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1046-last-stone-weight.py?raw';
+import practiceCodeTs from './1046-last-stone-weight.ts?raw';
+import approach2TsCode from './1046-last-stone-weight-approach2.ts?raw';
 
 ## Problem
 
@@ -32,17 +36,6 @@ LeetCode 1046 · [Link](https://leetcode.com/problems/last-stone-weight/) · *Ea
 The algorithm only ever cares about the two largest weights at each step. Watching the heap shrink (or annihilate) round by round is the fastest way to see why a max-heap is the natural fit. Each row below shows the multiset of stones (sorted descending for readability) and the action taken.
 
 ### Trace 1: `[2,7,4,1,8,1]` → `1` (the canonical case)
-
-```
-heap (desc)        action                       result
-[8,7,4,2,1,1]      pop 8,7  →  push 8-7=1      [4,2,1,1,1]
-[4,2,1,1,1]        pop 4,2  →  push 4-2=2      [2,1,1,1,1]
-[2,1,1,1,1]        pop 2,1  →  push 2-1=1      [1,1,1,1]
-[1,1,1,1]          pop 1,1  →  equal, destroy  [1,1]
-[1,1]              pop 1,1  →  equal, destroy  []
-```
-
-Wait, that ends at `[]`, not `[1]`. Recount the input: `[2,7,4,1,8,1]` has six stones. After round 1 there are five, after round 2 four, after round 3 three. So:
 
 ```
 heap (desc)        action                       result        size
@@ -79,7 +72,7 @@ heap (desc)        action                       result
 [1,1]              pop 1,1   →  destroy        []
 ```
 
-Returns `0`. Notice how the two pushed `1`s collide in the next round, an emergent property the algorithm doesn't plan for, it just falls out of always taking the two largest.
+Returns `0`. Notice how the two pushed `1`s collide in the next round, an emergent property the algorithm doesn't plan for; it just falls out of always taking the two largest.
 
 ### What the traces reveal
 
@@ -89,12 +82,21 @@ Returns `0`. Notice how the two pushed `1`s collide in the next round, an emerge
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="last-stone-weight" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="last-stone-weight-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="last-stone-weight-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, sort each round
 
 Each round, re-sort the whole array, pop the two largest off the end, compute the remainder, append it back.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def last_stone_weight(stones):
     while len(stones) > 1:    # L1: outer loop, runs up to n-1 times
@@ -105,6 +107,23 @@ def last_stone_weight(stones):
             stones.append(y - x)  # L5: O(1) amortized
     return stones[0] if stones else 0
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lastStoneWeight(stones: number[]): number {
+    const arr = [...stones];
+    while (arr.length > 1) {         // L1: outer loop, runs up to n-1 times
+        arr.sort((a, b) => a - b);   // L2: O(n log n) per round
+        const y = arr.pop()!;        // L3: O(1) (pop from end)
+        const x = arr.pop()!;        // L4: O(1) (pop from end)
+        if (x !== y)
+            arr.push(y - x);         // L5: O(1) amortized
+    }
+    return arr.length > 0 ? arr[0] : 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -119,16 +138,16 @@ def last_stone_weight(stones):
 
 The whole story is L2. Sorting an array of size n costs O(n log n), and we do it once per round. Annihilation rounds shrink the array faster, but the worst case (no annihilations) still gives n-1 rounds, so the total is O(n × n log n) = **O(n² log n)**.
 
-A common optimization people propose is sorting once and using `bisect.insort` for the new stone, which would give O(n²) total (insertion is O(n) due to shifting). Still asymptotically worse than the heap.
-
 **Complexity**
 - **Time:** O(n² log n), driven entirely by L2.
 - **Space:** O(1) extra (sort is in-place; pops and appends don't grow the array beyond its starting capacity).
 
 ## Approach 2: Max-heap (optimal)
 
-Python's `heapq` is a min-heap. Negate every weight on the way in and out and you get a max-heap for free.
+Python's `heapq` is a min-heap. Negate every weight on the way in and out and you get a max-heap for free. TypeScript has no built-in heap, so the approach file includes a small `MaxHeap` class.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -142,6 +161,57 @@ def last_stone_weight(stones):
             heapq.heappush(heap, -(y - x)) # L6: O(log n) when taken
     return -heap[0] if heap else 0
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MaxHeap {
+    private data: number[] = [];
+    get size(): number { return this.data.length; }
+    push(val: number): void {
+        this.data.push(val);
+        this._siftUp(this.data.length - 1);
+    }
+    pop(): number {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) { this.data[0] = last; this._siftDown(0); }
+        return top;
+    }
+    peek(): number { return this.data[0]; }
+    private _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p] >= this.data[i]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    private _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let largest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l] > this.data[largest]) largest = l;
+            if (r < n && this.data[r] > this.data[largest]) largest = r;
+            if (largest === i) break;
+            [this.data[largest], this.data[i]] = [this.data[i], this.data[largest]]; i = largest;
+        }
+    }
+}
+
+function lastStoneWeight(stones: number[]): number {
+    const heap = new MaxHeap();
+    for (const s of stones) heap.push(s);  // L1+L2: build max-heap O(n)
+    while (heap.size > 1) {                // L3: outer loop, up to n-1 rounds
+        const y = heap.pop();              // L4: O(log n) per call
+        const x = heap.pop();              // L5: O(log n) per call
+        if (x !== y)
+            heap.push(y - x);             // L6: O(log n) when taken
+    }
+    return heap.size > 0 ? heap.peek() : 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -149,8 +219,8 @@ def last_stone_weight(stones):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (negate list) | O(1) | n | O(n) |
-| L2 (heapify) | O(n) | 1 | O(n) |
+| L1 (negate list / build heap) | O(1) per element | n | O(n) |
+| L2 (heapify / incremental) | O(n) | 1 | O(n) |
 | L3 (loop test) | O(1) | n-1 | O(n) |
 | **L4, L5 (pops)** | **O(log n)** | **n-1 each** | **O(n log n)** ← dominates |
 | L6 (push) | O(log n) | up to n-1 | O(n log n) |
@@ -164,56 +234,29 @@ Since we do n-1 rounds and each round is O(log n), the running total is **O(n lo
 
 **Complexity**
 - **Time:** O(n log n), driven by L4/L5/L6 (the three heap operations inside the loop).
-- **Space:** O(n) for the negated heap. The original `stones` is left untouched.
+- **Space:** O(n) for the heap.
 
-## Approach 3: SortedList (identical complexity, cleaner for two-ended access)
+**Try this approach:**
 
-`sortedcontainers.SortedList` is a B+ tree of small sorted buckets. Add and remove are O(log n) at either end, and indexed access is O(log n) anywhere.
-
-```python
-from sortedcontainers import SortedList
-
-def last_stone_weight(stones):
-    sl = SortedList(stones)   # L1: O(n log n) (sorts on construction)
-    while len(sl) > 1:        # L2: outer loop, up to n-1 rounds
-        y = sl.pop()          # L3: O(log n) per call (pop from end)
-        x = sl.pop()          # L4: O(log n) per call
-        if x != y:
-            sl.add(y - x)     # L5: O(log n) when taken
-    return sl[0] if sl else 0
-```
-
-**Where the time goes, line by line**
-
-*Variables: n = number of stones in the input array.*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L1 (construct SortedList) | O(n log n) | 1 | O(n log n) |
-| L2 (loop test) | O(1) | n-1 | O(n) |
-| **L3, L4 (pops)** | **O(log n)** | **n-1 each** | **O(n log n)** |
-| L5 (add) | O(log n) | up to n-1 | O(n log n) |
-
-Same total as the heap, but L1 alone already costs O(n log n), so construction is no cheaper than the work it saves. The win over the heap is purely ergonomic: no negation trick, and you keep O(log n) middle-index access in case the problem variant needs it.
-
-Not in the standard library, so depending on the LeetCode environment you may or may not have it available.
-
-**Complexity**
-- **Time:** O(n log n), with L1 and the inner loop both contributing O(n log n).
-- **Space:** O(n) for the sorted structure.
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="last-stone-weight-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
 | Approach | Time | Space | Bottleneck |
 | --- | --- | --- | --- |
 | Sort each round | O(n² log n) | O(1) | L2: re-sorting every round |
-| **Max-heap (via negation)** | **O(n log n)** | **O(n)** | **L4/L5/L6: per-round heap ops** |
-| SortedList | O(n log n) | O(n) | L1 + L3/L4/L5: construction and per-round ops |
+| **Max-heap** | **O(n log n)** | **O(n)** | **L4/L5/L6: per-round heap ops** |
 
 Simulation problems with dynamic priority almost always want a heap. The brute-force version is a good baseline because it makes the "what does each round actually cost?" question impossible to ignore: if your inner-loop step is O(n log n), you've already lost a factor of n that a heap would have saved.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -239,6 +282,24 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses the MaxHeap approach (Approach 2).
+// See 1046-last-stone-weight-approach2.ts for the full implementation.
+const heap = new MaxHeap();
+[2, 7, 4, 1, 8, 1].forEach(s => heap.push(s));
+// ... run lastStoneWeight on each case
+console.assert(lastStoneWeight([2, 7, 4, 1, 8, 1]) === 1);
+console.assert(lastStoneWeight([1]) === 1);
+console.assert(lastStoneWeight([31, 26, 33, 21, 40]) === 9);
+console.assert(lastStoneWeight([9, 3, 2, 10]) === 0);
+console.assert(lastStoneWeight([2, 2]) === 0);
+console.assert(lastStoneWeight([1, 3]) === 2);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

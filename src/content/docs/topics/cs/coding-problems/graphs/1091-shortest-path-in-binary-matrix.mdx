@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, graphs, bfs, matrix, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1091-shortest-path-in-binary-matrix.py?raw';
+import practiceCodeTs from './1091-shortest-path-in-binary-matrix.ts?raw';
+import approach2PyCode from './1091-shortest-path-in-binary-matrix-approach2.py?raw';
+import approach2TsCode from './1091-shortest-path-in-binary-matrix-approach2.ts?raw';
 
 ## Problem
 
@@ -17,19 +22,28 @@ Given an `n x n` binary grid, a clear path goes from the top-left cell `(0, 0)` 
 
 **Example**
 - `grid = [[0,1],[1,0]]` → `2` (path: (0,0) -> (1,1))
-- `grid = [[0,0,0],[1,1,0],[1,1,0]]` → `4` (path: (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2), length 4... wait, that's 5. Correct: (0,0)->(0,1)->(0,2)->(1,2) is 4 cells -- but (2,2) isn't reached. Path: (0,0)->(0,1)->(1,2)->(2,2) = 4 cells.)
+- `grid = [[0,0,0],[1,1,0],[1,1,0]]` → `4` (path: (0,0) -> (0,1) -> (1,2) -> (2,2), length 4)
 - `grid = [[1,0,0],[1,1,0],[1,1,0]]` → `-1` (start blocked)
 
 LeetCode 1091 · [Link](https://leetcode.com/problems/shortest-path-in-binary-matrix/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="shortest-path-in-binary-matrix" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="shortest-path-in-binary-matrix-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="shortest-path-in-binary-matrix-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: BFS from top-left, 8 directions
 
 BFS guarantees the first time we reach the destination, it is via the shortest path. Mark cells as visited by setting `grid[r][c] = 1` in place to avoid a separate visited set. Return -1 immediately if the start or end is blocked.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -58,29 +72,61 @@ def shortest_path_binary_matrix(grid):
 
     return -1                                                  # L13: O(1) destination unreachable
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function shortestPathBinaryMatrix(grid: number[][]): number {
+    const n = grid.length;                                     // L1: grid is n x n
+    if (grid[0][0] === 1 || grid[n-1][n-1] === 1) return -1;  // L2: start or end blocked
+
+    if (n === 1) return 1;                                     // L3: single cell
+
+    const q: [number, number, number][] = [[0, 0, 1]];        // L4: seed (row, col, dist)
+    grid[0][0] = 1;                                            // L5: mark start visited
+
+    const DIRS = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];  // L6: 8 directions
+
+    let head = 0;
+    while (head < q.length) {                                  // L7: BFS loop
+        const [r, c, dist] = q[head++];                        // L8: O(1) dequeue
+        for (const [dr, dc] of DIRS) {                         // L9: O(1) per direction
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < n && nc >= 0 && nc < n && grid[nr][nc] === 0) {
+                if (nr === n - 1 && nc === n - 1) return dist + 1;  // L10: reached destination
+                grid[nr][nc] = 1;                              // L11: mark visited
+                q.push([nr, nc, dist + 1]);                    // L12: enqueue
+            }
+        }
+    }
+
+    return -1;                                                 // L13: destination unreachable
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
-*Variables: n = grid side length, so n^2 = total cells.*
+*Variables: n = grid side length, so n² = total cells.*
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L2, L3 (guards) | O(1) | 1 | O(1) |
 | L4 (seed queue) | O(1) | 1 | O(1) |
-| **L8 (dequeue)** | **O(1)** | **at most n^2** | **O(n^2)** |
-| **L9 (direction loop)** | **O(1) * 8** | **once per dequeued cell** | **O(n^2) ← dominates** |
-| L11 (mark visited) | O(1) | at most n^2 | O(n^2) |
-| L12 (enqueue) | O(1) | at most n^2 | O(n^2) |
+| **L8 (dequeue)** | **O(1)** | **at most n²** | **O(n²)** |
+| **L9 (direction loop)** | **O(1) × 8** | **once per dequeued cell** | **O(n²) ← dominates** |
+| L11 (mark visited) | O(1) | at most n² | O(n²) |
+| L12 (enqueue) | O(1) | at most n² | O(n²) |
 
 Each cell enters the queue at most once (L11 marks it visited before L12 enqueues it). The direction constant 8 is absorbed into the O notation.
 
 **Complexity**
-- **Time:** O(n^2), driven by L8/L9 (each cell dequeued at most once, 8 directions checked).
-- **Space:** O(n^2) queue worst case (all cells 0 and BFS frontier fills the grid).
+- **Time:** O(n²), driven by L8/L9 (each cell dequeued at most once, 8 directions checked).
+- **Space:** O(n²) queue worst case (all cells 0 and BFS frontier fills the grid).
 
 ### Why in-place mutation for visited
 
-Setting `grid[nr][nc] = 1` at L11 serves as the visited marker. Without it, the same 0-cell could be enqueued multiple times from different neighbors, causing O(n^2 * 8) enqueue operations instead of O(n^2). Mark before enqueue, not after dequeue.
+Setting `grid[nr][nc] = 1` at L11 serves as the visited marker. Without it, the same 0-cell could be enqueued multiple times from different neighbors, causing O(n² × 8) enqueue operations instead of O(n²). Mark before enqueue, not after dequeue.
 
 ### 8-direction vs 4-direction
 
@@ -95,18 +141,34 @@ Setting `grid[nr][nc] = 1` at L11 serves as the visited marker. Without it, the 
 
 This problem uses 8-direction movement. The neighbor formula adds `(-1,-1)` through `(1,1)` excluding `(0,0)`.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="shortest-path-in-binary-matrix-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="shortest-path-in-binary-matrix-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| DFS | O(n^2) | O(n^2) | Does not guarantee shortest path |
-| **BFS** | **O(n^2)** | **O(n^2)** | **Canonical, guarantees shortest** |
+| DFS | O(n²) | O(n²) | Does not guarantee shortest path |
+| **BFS** | **O(n²)** | **O(n²)** | **Canonical, guarantees shortest** |
 
 Always use BFS (not DFS) for shortest path on unweighted graphs.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
+# Quick smoke tests, paste into a REPL or save as test_1091.py and run.
+# Uses the canonical BFS implementation.
+
 from collections import deque
 
 def shortest_path_binary_matrix(grid):
@@ -158,6 +220,42 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function shortestPathBinaryMatrix(grid: number[][]): number {
+    const n = grid.length;
+    if (grid[0][0] === 1 || grid[n-1][n-1] === 1) return -1;
+    if (n === 1) return 1;
+    const q: [number, number, number][] = [[0, 0, 1]];
+    grid[0][0] = 1;
+    const DIRS = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+    let head = 0;
+    while (head < q.length) {
+        const [r, c, dist] = q[head++];
+        for (const [dr, dc] of DIRS) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < n && nc >= 0 && nc < n && grid[nr][nc] === 0) {
+                if (nr === n - 1 && nc === n - 1) return dist + 1;
+                grid[nr][nc] = 1;
+                q.push([nr, nc, dist + 1]);
+            }
+        }
+    }
+    return -1;
+}
+
+console.assert(shortestPathBinaryMatrix([[0,1],[1,0]]) === 2);
+console.assert(shortestPathBinaryMatrix([[0,0,0],[1,1,0],[1,1,0]]) === 4);
+console.assert(shortestPathBinaryMatrix([[1,0,0],[1,1,0],[1,1,0]]) === -1);
+console.assert(shortestPathBinaryMatrix([[0,0,0],[0,0,0],[0,0,1]]) === -1);
+console.assert(shortestPathBinaryMatrix([[0]]) === 1);
+console.assert(shortestPathBinaryMatrix([[1]]) === -1);
+console.assert(shortestPathBinaryMatrix([[0,0],[0,0]]) === 2);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

@@ -5,11 +5,18 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './091-decode-ways.py?raw';
+import practiceCodeTs from './091-decode-ways.ts?raw';
+import approach2PyCode from './091-decode-ways-approach2.py?raw';
+import approach2TsCode from './091-decode-ways-approach2.ts?raw';
+import approach3PyCode from './091-decode-ways-approach3.py?raw';
+import approach3TsCode from './091-decode-ways-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 91 · [Link](https://leetcode.com/problems/decode-ways/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="decode-ways" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="decode-ways-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="decode-ways-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive, try single and double digit
 
 At position `i`, try decoding 1 digit (if != '0') and/or 2 digits (if in `[10, 26]`).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def num_decodings(s):
     def f(i):
@@ -43,6 +59,25 @@ def num_decodings(s):
         return ways
     return f(0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDecodings(s: string): number {
+    function f(i: number): number {
+        if (i === s.length) return 1;                         // L1: O(1) base case
+        if (s[i] === '0') return 0;                          // L2: O(1) invalid check
+        let ways = f(i + 1);                                 // L3: recurse on single digit
+        if (i + 1 < s.length) {
+            const two = parseInt(s.slice(i, i + 2));
+            if (two >= 10 && two <= 26) ways += f(i + 2);   // L4/L5: two-digit branch
+        }
+        return ways;
+    }
+    return f(0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -62,6 +97,8 @@ Each call spawns up to two recursive calls, and there is no memoization, so the 
 
 ## Approach 2: Top-down memoized
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -78,6 +115,28 @@ def num_decodings(s):
         return ways
     return f(0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDecodings(s: string): number {
+    const memo = new Map<number, number>();
+    function f(i: number): number {
+        if (i === s.length) return 1;                        // L1: O(1) base case
+        if (s[i] === '0') return 0;                         // L2: O(1) invalid check
+        if (memo.has(i)) return memo.get(i)!;
+        let ways = f(i + 1);                                // L3: O(1) cached lookup
+        if (i + 1 < s.length) {
+            const two = parseInt(s.slice(i, i + 2));
+            if (two >= 10 && two <= 26) ways += f(i + 2);  // L4/L5: O(1) cached lookup
+        }
+        memo.set(i, ways);
+        return ways;
+    }
+    return f(0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -89,16 +148,29 @@ def num_decodings(s):
 | **L3 (single-digit call)** | **O(1) with cache** | **n unique calls** | **O(n)** ← dominates |
 | L4, L5 (two-digit call) | O(1) with cache | up to n calls | O(n) |
 
-With memoization, each of the n+1 unique indices is computed exactly once. Both recursive calls at L3 and L5 hit the cache on every repeated access, reducing total work to O(n). The cache itself holds at most n+1 entries.
+With memoization, each of the n+1 unique indices is computed exactly once. Both recursive calls at L3 and L5 hit the cache on every repeated access, reducing total work to O(n).
 
 **Complexity**
 - **Time:** O(n), driven by L3/L5 (n unique subproblems, each solved once and cached).
 - **Space:** O(n) for the call stack and the cache.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="decode-ways-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="decode-ways-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up with two variables (optimal)
 
 `dp[i]` = ways to decode prefix of length `i`. `dp[0] = 1`, `dp[i] = (one-digit ok ? dp[i-1] : 0) + (two-digit ok ? dp[i-2] : 0)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def num_decodings(s):
     if not s or s[0] == '0':                   # L1: O(1) early exit
@@ -114,6 +186,24 @@ def num_decodings(s):
         prev2, prev1 = prev1, cur              # L10: O(1) slide window
     return prev1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDecodings(s: string): number {
+    if (!s || s[0] === '0') return 0;          // L1: O(1) early exit
+    let prev2 = 1, prev1 = 1;                 // L2: O(1) base cases dp[0]=1, dp[1]=1
+    for (let i = 1; i < s.length; i++) {      // L3: O(n) loop over positions
+        let cur = 0;                           // L4: O(1)
+        if (s[i] !== '0') cur += prev1;       // L5/L6: O(1) one-digit valid check
+        const two = parseInt(s.slice(i - 1, i + 1));
+        if (two >= 10 && two <= 26) cur += prev2;  // L7/L8/L9: O(1) two-digit check
+        [prev2, prev1] = [prev1, cur];         // L10: O(1) slide window
+    }
+    return prev1;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -133,6 +223,17 @@ Every position is visited exactly once. The two-variable rolling window replaces
 - **Time:** O(n), driven by L3 (single pass through the string).
 - **Space:** O(1), two scalar variables instead of an array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="decode-ways-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="decode-ways-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -145,6 +246,8 @@ Index-DP on strings with local transition rules, template for Unique BSTs, Parti
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_091.py and run.
 # Uses the canonical implementation (Approach 3: bottom-up two variables).
@@ -179,6 +282,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numDecodings(s: string): number {
+    if (!s || s[0] === '0') return 0;
+    let prev2 = 1, prev1 = 1;
+    for (let i = 1; i < s.length; i++) {
+        let cur = 0;
+        if (s[i] !== '0') cur += prev1;
+        const two = parseInt(s.slice(i - 1, i + 1));
+        if (two >= 10 && two <= 26) cur += prev2;
+        [prev2, prev1] = [prev1, cur];
+    }
+    return prev1;
+}
+
+console.assert(numDecodings('12') === 2);
+console.assert(numDecodings('226') === 3);
+console.assert(numDecodings('06') === 0);
+console.assert(numDecodings('0') === 0);
+console.assert(numDecodings('1') === 1);
+console.assert(numDecodings('11106') === 2);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

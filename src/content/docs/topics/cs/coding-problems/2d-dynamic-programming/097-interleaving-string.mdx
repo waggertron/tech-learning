@@ -1,6 +1,6 @@
 ---
 title: "97. Interleaving String (Medium)"
-description: Determine whether s3 can be formed by interleaving s1 and s2 while preserving relative order within each.
+description: "Determine whether s3 can be formed by interleaving s1 and s2 while preserving relative order within each."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]
 status: draft
@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './097-interleaving-string.py?raw';
+import practiceCodeTs from './097-interleaving-string.ts?raw';
+import approach2PyCode from './097-interleaving-string-approach2.py?raw';
+import approach2TsCode from './097-interleaving-string-approach2.ts?raw';
+import approach3PyCode from './097-interleaving-string-approach3.py?raw';
+import approach3TsCode from './097-interleaving-string-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 97 · [Link](https://leetcode.com/problems/interleaving-string/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="interleaving-string" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="interleaving-string-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="interleaving-string-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive
 
 `f(i, j)` = can `s3[:i + j]` be formed by `s1[:i]` and `s2[:j]`?
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_interleave(s1, s2, s3):
     if len(s1) + len(s2) != len(s3):   # L1: O(1) length guard
@@ -44,6 +60,23 @@ def is_interleave(s1, s2, s3):
         return False
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isInterleave(s1: string, s2: string, s3: string): boolean {
+    if (s1.length + s2.length !== s3.length) return false;     // L1: O(1) length guard
+    function f(i: number, j: number): boolean {
+        const k = i + j;                                        // L2: O(1) current s3 index
+        if (k === s3.length) return true;                       // L3: O(1) base case
+        if (i < s1.length && s1[i] === s3[k] && f(i + 1, j)) return true;  // L4: try s1
+        if (j < s2.length && s2[j] === s3[k] && f(i, j + 1)) return true;  // L5: try s2
+        return false;
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -63,6 +96,8 @@ At each step, both `s1[i]` and `s2[j]` might match `s3[k]`, spawning two branche
 
 ## Approach 2: Top-down memoized
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -81,6 +116,28 @@ def is_interleave(s1, s2, s3):
         return False
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isInterleave(s1: string, s2: string, s3: string): boolean {
+    if (s1.length + s2.length !== s3.length) return false;
+    const memo: Map<string, boolean> = new Map();
+    function f(i: number, j: number): boolean {
+        const key = `${i},${j}`;
+        if (memo.has(key)) return memo.get(key)!;
+        const k = i + j;
+        if (k === s3.length) { memo.set(key, true); return true; }
+        let result = false;
+        if (i < s1.length && s1[i] === s3[k] && f(i + 1, j)) result = true;
+        if (!result && j < s2.length && s2[j] === s3[k] && f(i, j + 1)) result = true;
+        memo.set(key, result);
+        return result;
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -98,10 +155,23 @@ With memoization each `(i, j)` is computed once. Short-circuit evaluation means 
 - **Time:** O(m · n), driven by L5/L6 across all unique (i,j) states.
 - **Space:** O(m · n) memo table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="interleaving-string-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="interleaving-string-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up 2-D DP
 
 `dp[i][j]` = can `s3[:i + j]` be formed from `s1[:i]` and `s2[:j]`?
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_interleave(s1, s2, s3):
     m, n = len(s1), len(s2)             # L1: O(1)
@@ -120,6 +190,30 @@ def is_interleave(s1, s2, s3):
                 dp[i][j] = True
     return dp[m][n]                    # L10: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isInterleave(s1: string, s2: string, s3: string): boolean {
+    const m = s1.length, n = s2.length;
+    if (m + n !== s3.length) return false;                         // L2: O(1) length guard
+    const dp: boolean[][] = Array.from({ length: m + 1 }, () =>
+        new Array(n + 1).fill(false));                             // L3: O(m*n) table init
+    dp[0][0] = true;                                               // L4: O(1) base case
+    for (let i = 0; i <= m; i++) {                                 // L5: outer loop O(m)
+        for (let j = 0; j <= n; j++) {                             // L6: inner loop O(n)
+            if (i === 0 && j === 0) continue;
+            const k = i + j - 1;                                   // L7: O(1) s3 index
+            if (i > 0 && s1[i - 1] === s3[k] && dp[i - 1][j])    // L8: O(1) from-s1
+                dp[i][j] = true;
+            if (!dp[i][j] && j > 0 && s2[j - 1] === s3[k] && dp[i][j - 1])  // L9: from-s2
+                dp[i][j] = true;
+        }
+    }
+    return dp[m][n];                                               // L10: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -137,6 +231,17 @@ Each cell requires at most two O(1) lookups. The double loop at L5/L6 drives the
 - **Time:** O(m · n), driven by L5/L6 (the full double loop).
 - **Space:** O(m · n). Can be reduced to O(min(m, n)) via rolling array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="interleaving-string-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="interleaving-string-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -147,6 +252,8 @@ Each cell requires at most two O(1) lookups. The double loop at L5/L6 drives the
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_097.py and run.
 # Uses the canonical implementation (Approach 3: bottom-up 2-D DP).
@@ -183,6 +290,34 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isInterleave(s1: string, s2: string, s3: string): boolean {
+    const m = s1.length, n = s2.length;
+    if (m + n !== s3.length) return false;
+    const dp: boolean[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(false));
+    dp[0][0] = true;
+    for (let i = 0; i <= m; i++)
+        for (let j = 0; j <= n; j++) {
+            if (i === 0 && j === 0) continue;
+            const k = i + j - 1;
+            if (i > 0 && s1[i - 1] === s3[k] && dp[i - 1][j]) dp[i][j] = true;
+            if (!dp[i][j] && j > 0 && s2[j - 1] === s3[k] && dp[i][j - 1]) dp[i][j] = true;
+        }
+    return dp[m][n];
+}
+
+console.assert(isInterleave("aabcc", "dbbca", "aadbbcbcac") === true);
+console.assert(isInterleave("aabcc", "dbbca", "aadbbbaccc") === false);
+console.assert(isInterleave("", "", "") === true);
+console.assert(isInterleave("a", "", "a") === true);
+console.assert(isInterleave("", "b", "b") === true);
+console.assert(isInterleave("a", "b", "abc") === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

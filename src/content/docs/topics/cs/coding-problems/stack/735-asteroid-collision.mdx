@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './735-asteroid-collision.py?raw';
+import practiceCodeTs from './735-asteroid-collision.ts?raw';
+import approach2TsCode from './735-asteroid-collision-approach2.ts?raw';
 
 ## Problem
 
@@ -27,7 +31,14 @@ LeetCode 735 · [Link](https://leetcode.com/problems/asteroid-collision/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="asteroid-collision" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="asteroid-collision-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="asteroid-collision-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Stack of survivors
 
@@ -35,6 +46,8 @@ A right-moving asteroid (positive) can only collide with asteroids to its right 
 
 The stack holds asteroids that are still alive and moving rightward (or left-movers that have already passed through without collision).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def asteroid_collision(asteroids: list[int]) -> list[int]:
     stack = []                                          # L1: survivors so far
@@ -56,6 +69,35 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 
     return stack                                        # L14: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function asteroidCollision(asteroids: number[]): number[] {
+    const stack: number[] = [];                         // L1: survivors so far
+
+    for (const asteroid of asteroids) {                 // L2: n iterations
+        let alive = true;                               // L3: assume current survives
+
+        while (alive && stack.length && asteroid < 0 && stack[stack.length - 1] > 0) {  // L4: collision
+            const top = stack[stack.length - 1];
+            if (top < -asteroid) {                      // L5: right one smaller
+                stack.pop();                            // L6: right one explodes, keep checking
+            } else if (top === -asteroid) {             // L7: equal size
+                stack.pop();                            // L8: right one explodes
+                alive = false;                          // L9: left one also explodes
+            } else {                                    // L10: left one smaller
+                alive = false;                          // L11: left one explodes
+            }
+        }
+
+        if (alive) stack.push(asteroid);                // L12-L13: survived, push
+    }
+
+    return stack;                                       // L14: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Collision condition (L4):** `asteroid < 0 < stack[-1]` means the current asteroid is left-moving AND the top of the stack is right-moving. These two are on a collision course. Any other combination never collides:
 - Both positive: moving same direction (right)
@@ -101,6 +143,17 @@ The while loop looks nested but each asteroid is pushed at most once and popped 
 **Complexity**
 - **Time:** O(n), amortized: each asteroid is pushed once and popped at most once.
 - **Space:** O(n) for the stack (all asteroids survive in the worst case).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="asteroid-collision-approach-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="asteroid-collision-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Common mistakes
 

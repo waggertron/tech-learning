@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './074-search-a-2d-matrix.py?raw';
+import practiceCodeTs from './074-search-a-2d-matrix.ts?raw';
+import approach2PyCode from './074-search-a-2d-matrix-approach2.py?raw';
+import approach2TsCode from './074-search-a-2d-matrix-approach2.ts?raw';
+import approach3PyCode from './074-search-a-2d-matrix-approach3.py?raw';
+import approach3TsCode from './074-search-a-2d-matrix-approach3.ts?raw';
 
 ## Problem
 
@@ -28,12 +35,21 @@ LeetCode 74 · [Link](https://leetcode.com/problems/search-a-2d-matrix/) · *Med
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="search-a-2d-matrix" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="search-a-2d-matrix-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="search-a-2d-matrix-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, linear scan
 
 Scan every cell.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def search_matrix(matrix: list[list[int]], target: int) -> bool:
     for row in matrix:          # L1: iterate over m rows
@@ -41,6 +57,18 @@ def search_matrix(matrix: list[list[int]], target: int) -> bool:
             return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function searchMatrix(matrix: number[][], target: number): boolean {
+    for (const row of matrix) {          // L1: iterate over m rows
+        if (row.includes(target)) return true;  // L2: O(n) linear scan per row
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,6 +87,8 @@ def search_matrix(matrix: list[list[int]], target: int) -> bool:
 
 Use row ordering: binary-search each row in turn. A small improvement: skip rows whose range can't contain the target.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from bisect import bisect_left
 
@@ -70,6 +100,26 @@ def search_matrix(matrix: list[list[int]], target: int) -> bool:
                 return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function searchMatrix(matrix: number[][], target: number): boolean {
+    for (const row of matrix) {                              // L1: iterate over m rows
+        if (row[0] <= target && target <= row[row.length - 1]) {  // L2: O(1) range check
+            let lo = 0, hi = row.length - 1;
+            while (lo <= hi) {                               // L3: O(log n) binary search
+                const mid = (lo + hi) >> 1;
+                if (row[mid] === target) return true;
+                if (row[mid] < target) lo = mid + 1;
+                else hi = mid - 1;
+            }
+        }
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -87,10 +137,23 @@ The range check at L2 prunes rows that can't contain the target, but in the wors
 - **Time:** O(m · log n), driven by L3 (binary search per row).
 - **Space:** O(1).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="search-a-2d-matrix-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="search-a-2d-matrix-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Flatten to a single sorted array (optimal)
 
 The two invariants imply the concatenation of rows is a single sorted sequence of length `m · n`. Binary-search it directly, treating the 1D index as `(row, col)` via divmod.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def search_matrix(matrix: list[list[int]], target: int) -> bool:
     m, n = len(matrix), len(matrix[0])
@@ -106,6 +169,24 @@ def search_matrix(matrix: list[list[int]], target: int) -> bool:
             hi = mid - 1                  # L7: O(1) narrow left
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function searchMatrix(matrix: number[][], target: number): boolean {
+    const m = matrix.length, n = matrix[0].length;
+    let lo = 0, hi = m * n - 1;                   // L1: treat matrix as 1D of size m*n
+    while (lo <= hi) {                              // L2: loop, O(log(m*n)) iterations
+        const mid = (lo + hi) >> 1;                // L3: O(1) midpoint
+        const r = Math.floor(mid / n), c = mid % n; // L4: decode 1D index to (row, col)
+        if (matrix[r][c] === target) return true;  // L5: O(1) compare
+        if (matrix[r][c] < target) lo = mid + 1;  // L6: O(1) narrow right
+        else hi = mid - 1;                         // L7: O(1) narrow left
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -126,6 +207,17 @@ The matrix's two structural properties (sorted rows, each row's first element ex
 ### Two-binary-search alternative
 Pick the row first with binary search on the first column (O(log m)), then binary-search that row (O(log n)). Same total complexity, one more index calculation to get wrong.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="search-a-2d-matrix-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="search-a-2d-matrix-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -138,6 +230,8 @@ If the problem becomes 240 (**Search a 2D Matrix II**), rows and columns sorted 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_074.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -169,6 +263,33 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function searchMatrix(matrix: number[][], target: number): boolean {
+    const m = matrix.length, n = matrix[0].length;
+    let lo = 0, hi = m * n - 1;
+    while (lo <= hi) {
+        const mid = (lo + hi) >> 1;
+        const r = Math.floor(mid / n), c = mid % n;
+        if (matrix[r][c] === target) return true;
+        if (matrix[r][c] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return false;
+}
+
+const mat = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]];
+console.assert(searchMatrix(mat, 3) === true);
+console.assert(searchMatrix(mat, 13) === false);
+console.assert(searchMatrix([[1]], 1) === true);              // 1x1 hit
+console.assert(searchMatrix([[1]], 2) === false);             // 1x1 miss
+console.assert(searchMatrix([[1, 3]], 3) === true);           // single row, last element
+console.assert(searchMatrix([[1], [3]], 1) === true);         // single col, first element
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

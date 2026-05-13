@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './155-min-stack.py?raw';
+import practiceCodeTs from './155-min-stack.ts?raw';
+import approach2TsCode from './155-min-stack-approach2.ts?raw';
+import approach3TsCode from './155-min-stack-approach3.ts?raw';
 
 ## Problem
 
@@ -29,12 +34,21 @@ LeetCode 155 · [Link](https://leetcode.com/problems/min-stack/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="min-stack" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="min-stack-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="min-stack-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, scan on getMin
 
 Use a plain stack; compute `min(stack)` on every `getMin` call.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class MinStack:
     def __init__(self):
@@ -48,6 +62,19 @@ class MinStack:
     def getMin(self) -> int:
         return min(self.stack)                     # L5: O(n) full scan
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MinStack {
+    private stack: number[] = [];                          // L1: O(1)
+    push(val: number): void { this.stack.push(val); }      // L2: O(1) amortized
+    pop(): void { this.stack.pop(); }                      // L3: O(1)
+    top(): number { return this.stack[this.stack.length - 1]; }  // L4: O(1)
+    getMin(): number { return Math.min(...this.stack); }   // L5: O(n) full scan
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -73,6 +100,8 @@ Fails the problem's O(1) requirement for `getMin`.
 
 Maintain a parallel stack of running minimums. On `push`, push `min(val, current_min)` onto the aux stack; on `pop`, pop both.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class MinStack:
     def __init__(self):
@@ -93,6 +122,30 @@ class MinStack:
     def getMin(self) -> int:
         return self.mins[-1]                       # L8: O(1) top of min-stack
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MinStack {
+    private stack: number[] = [];                  // L1: O(1)
+    private mins: number[] = [];                   // L2: O(1) parallel min-stack
+
+    push(val: number): void {
+        this.stack.push(val);                      // L3: O(1)
+        this.mins.push(this.mins.length === 0 ? val : Math.min(val, this.mins[this.mins.length - 1]));  // L4: O(1)
+    }
+
+    pop(): void {
+        this.stack.pop();                          // L5: O(1)
+        this.mins.pop();                           // L6: O(1)
+    }
+
+    top(): number { return this.stack[this.stack.length - 1]; }  // L7: O(1)
+
+    getMin(): number { return this.mins[this.mins.length - 1]; } // L8: O(1) top of min-stack
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -111,10 +164,23 @@ Every operation is O(1); the mins stack mirrors every push/pop.
 - All operations: **O(1)**.
 - Space: O(n) + O(n) = O(n).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="min-stack-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="min-stack-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Single stack of `(value, running_min)` tuples (optimal, one container)
 
 Same asymptotics as Approach 2 but with one container instead of two.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class MinStack:
     def __init__(self):
@@ -133,6 +199,26 @@ class MinStack:
     def getMin(self) -> int:
         return self.stack[-1][1]                   # L6: O(1) second element of top tuple
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MinStack {
+    private stack: [number, number][] = [];        // L1: O(1) [value, running_min]
+
+    push(val: number): void {
+        const curMin = this.stack.length === 0 ? val : Math.min(val, this.stack[this.stack.length - 1][1]);  // L2: O(1)
+        this.stack.push([val, curMin]);             // L3: O(1) amortized
+    }
+
+    pop(): void { this.stack.pop(); }              // L4: O(1)
+
+    top(): number { return this.stack[this.stack.length - 1][0]; }   // L5: O(1)
+
+    getMin(): number { return this.stack[this.stack.length - 1][1]; } // L6: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -154,6 +240,17 @@ All operations remain O(1) by keeping the running minimum embedded in each stack
 ### Optional refinement: store only min-changes on a second stack
 A third variant pushes to the aux min-stack **only** when a new minimum is established (and pops when popping a value equal to the current min). Saves memory on heavily-duplicated stacks. Same asymptotics.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="min-stack-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="min-stack-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | push/pop/top | getMin | Space |
@@ -166,6 +263,8 @@ The tuple-stack and auxiliary-stack approaches are equivalent in Big-O. Pick by 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_min_stack.py and run.
 # Uses the canonical implementation (Approach 3: tuple stack).
@@ -217,6 +316,41 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MinStack {
+    private stack: [number, number][] = [];
+    push(val: number): void {
+        const curMin = this.stack.length === 0 ? val : Math.min(val, this.stack[this.stack.length - 1][1]);
+        this.stack.push([val, curMin]);
+    }
+    pop(): void { this.stack.pop(); }
+    top(): number { return this.stack[this.stack.length - 1][0]; }
+    getMin(): number { return this.stack[this.stack.length - 1][1]; }
+}
+
+const ms = new MinStack();
+ms.push(-2); ms.push(0); ms.push(-3);
+console.assert(ms.getMin() === -3);
+ms.pop();
+console.assert(ms.top() === 0);
+console.assert(ms.getMin() === -2);
+
+const ms2 = new MinStack();
+ms2.push(1); ms2.push(2); ms2.push(3);
+console.assert(ms2.getMin() === 1);
+ms2.pop();
+console.assert(ms2.getMin() === 1);
+
+const ms3 = new MinStack();
+ms3.push(5);
+console.assert(ms3.top() === 5);
+console.assert(ms3.getMin() === 5);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

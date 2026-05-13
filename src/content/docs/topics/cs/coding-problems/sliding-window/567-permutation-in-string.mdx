@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './567-permutation-in-string.py?raw';
+import practiceCodeTs from './567-permutation-in-string.ts?raw';
+import approach3TsCode from './567-permutation-in-string-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +27,21 @@ LeetCode 567 · [Link](https://leetcode.com/problems/permutation-in-string/) · 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="permutation-in-string" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="permutation-in-string-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="permutation-in-string-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, generate all permutations of s1
 
 Generate every permutation of `s1` and check whether any is a substring of `s2`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from itertools import permutations
 
@@ -38,6 +51,25 @@ def check_inclusion(s1: str, s2: str) -> bool:
             return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function checkInclusion(s1: string, s2: string): boolean {
+    function* perms(arr: string[]): Generator<string[]> {   // L1: n! permutations
+        if (arr.length <= 1) { yield arr; return; }
+        for (let i = 0; i < arr.length; i++) {
+            const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
+            for (const p of perms(rest)) yield [arr[i], ...p];
+        }
+    }
+    for (const p of perms([...s1])) {
+        if (s2.includes(p.join(''))) return true;           // L2: O(n) join + O(m) search
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -60,6 +92,8 @@ Included to emphasize "permutation substring = anagram substring", don't actuall
 
 Slide a window of size `len(s1)` across `s2`; for each position, check whether the window is an anagram of `s1` using a `Counter` comparison.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -73,6 +107,30 @@ def check_inclusion(s1: str, s2: str) -> bool:
             return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function checkInclusion(s1: string, s2: string): boolean {
+    const n = s1.length, m = s2.length;
+    if (n > m) return false;
+    const target = new Map<string, number>();
+    for (const ch of s1) target.set(ch, (target.get(ch) ?? 0) + 1);  // L1: O(n)
+    const mapsEqual = (a: Map<string, number>, b: Map<string, number>) => {
+        if (a.size !== b.size) return false;
+        for (const [k, v] of a) if (b.get(k) !== v) return false;
+        return true;
+    };
+    for (let i = n; i <= m; i++) {                                     // L2: m-n+1 windows
+        const window = new Map<string, number>();
+        for (const ch of s2.slice(i - n, i))                          // L3: O(n) Counter
+            window.set(ch, (window.get(ch) ?? 0) + 1);
+        if (mapsEqual(window, target)) return true;
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -94,6 +152,8 @@ For every window position we build a brand-new Counter from a slice, which scans
 
 Maintain a single running `Counter` over the current window. On each slide, increment the new character and decrement the old one. Compare counters in O(26) each step.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -114,6 +174,37 @@ def check_inclusion(s1: str, s2: str) -> bool:
             return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function checkInclusion(s1: string, s2: string): boolean {
+    const n = s1.length, m = s2.length;
+    if (n > m) return false;
+    const target = new Map<string, number>();           // L1: O(n)
+    for (const ch of s1) target.set(ch, (target.get(ch) ?? 0) + 1);
+    const window = new Map<string, number>();           // L2: O(n) initial window
+    for (let i = 0; i < n; i++) {
+        const ch = s2[i];
+        window.set(ch, (window.get(ch) ?? 0) + 1);
+    }
+    const mapsEqual = (a: Map<string, number>, b: Map<string, number>) => {
+        if (a.size !== b.size) return false;
+        for (const [k, v] of a) if (b.get(k) !== v) return false;
+        return true;
+    };
+    if (mapsEqual(window, target)) return true;        // L3: O(k) compare
+    for (let i = n; i < m; i++) {                      // L4: slide m - n steps
+        window.set(s2[i], (window.get(s2[i]) ?? 0) + 1);       // L5: O(1) add new char
+        const outCh = s2[i - n];
+        window.set(outCh, window.get(outCh)! - 1);              // L6: O(1) remove old char
+        if (window.get(outCh) === 0) window.delete(outCh);      // L7: O(1) cleanup
+        if (mapsEqual(window, target)) return true;             // L8: O(k) compare
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -136,6 +227,14 @@ Instead of rebuilding the Counter each step, we do two O(1) updates (L5/L6) and 
 ### Even tighter: matching counter with "matches" counter
 Instead of comparing full counters every step, maintain a `matches` integer that counts how many characters in the alphabet have the correct count. Increment/decrement `matches` when a character's running count crosses its target. Check `matches == 26` each step. Same O(m), smaller constant factor.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="permutation-in-string-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -144,10 +243,12 @@ Instead of comparing full counters every step, maintain a `matches` integer that
 | Per-window Counter | O(m · n) | O(n) |
 | **Running counter window** | **O(m)** | **O(k)** |
 
-The key realization is "permutation substring ⇔ anagram substring", once you see it, the fixed-size sliding window falls out.
+The key realization is "permutation substring = anagram substring"; once you see it, the fixed-size sliding window falls out.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_567.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -183,6 +284,45 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function checkInclusion(s1: string, s2: string): boolean {
+    const n = s1.length, m = s2.length;
+    if (n > m) return false;
+    const target = new Map<string, number>();
+    for (const ch of s1) target.set(ch, (target.get(ch) ?? 0) + 1);
+    const window = new Map<string, number>();
+    for (let i = 0; i < n; i++) {
+        const ch = s2[i];
+        window.set(ch, (window.get(ch) ?? 0) + 1);
+    }
+    const mapsEqual = (a: Map<string, number>, b: Map<string, number>) => {
+        if (a.size !== b.size) return false;
+        for (const [k, v] of a) if (b.get(k) !== v) return false;
+        return true;
+    };
+    if (mapsEqual(window, target)) return true;
+    for (let i = n; i < m; i++) {
+        window.set(s2[i], (window.get(s2[i]) ?? 0) + 1);
+        const outCh = s2[i - n];
+        window.set(outCh, window.get(outCh)! - 1);
+        if (window.get(outCh) === 0) window.delete(outCh);
+        if (mapsEqual(window, target)) return true;
+    }
+    return false;
+}
+
+console.assert(checkInclusion("ab", "eidbaooo") === true);
+console.assert(checkInclusion("ab", "eidboaoo") === false);
+console.assert(checkInclusion("a", "a") === true);
+console.assert(checkInclusion("a", "b") === false);
+console.assert(checkInclusion("abc", "ab") === false);
+console.assert(checkInclusion("aab", "aabc") === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

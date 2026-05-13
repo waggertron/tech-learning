@@ -1,15 +1,20 @@
 ---
 title: "572. Subtree of Another Tree (Easy)"
-description: Given the roots of two trees, determine whether one is a subtree of the other.
+description: "Given the roots of two trees, determine whether one is a subtree of the other."
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './572-subtree-of-another-tree.py?raw';
+import practiceCodeTs from './572-subtree-of-another-tree.ts?raw';
+import approach2PyCode from './572-subtree-of-another-tree-approach2.py?raw';
+import approach2TsCode from './572-subtree-of-another-tree-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 572 · [Link](https://leetcode.com/problems/subtree-of-another-tree/) �
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="subtree-of-another-tree" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="subtree-of-another-tree-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="subtree-of-another-tree-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, at every node of `root`, check Same Tree
 
 DFS `root`; at each node, run `isSameTree` against `subRoot`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_same_tree(p, q):
     if not p and not q:
@@ -44,6 +58,30 @@ def is_subtree(root, subRoot):
         return True
     return is_subtree(root.left, subRoot) or is_subtree(root.right, subRoot)  # L2: recurse
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) return true;
+    if (!p || !q || p.val !== q.val) return false;
+    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+}
+
+function isSubtree(root: TreeNode | null, subRoot: TreeNode | null): boolean {
+    if (!root) return false;
+    if (isSameTree(root, subRoot)) return true;          // L1: O(m) check at each node
+    return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);  // L2: recurse
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -57,7 +95,7 @@ def is_subtree(root, subRoot):
 At each of the n nodes in `root`, we do a full O(m) equality check of `subRoot`.
 
 **Complexity**
-- **Time:** O(m · n). For each of m nodes in `root`, do an O(n) check.
+- **Time:** O(m · n). For each of n nodes in `root`, do an O(m) check.
 - **Space:** O(h_root + h_sub) recursion.
 
 The most common interview answer and usually acceptable.
@@ -66,6 +104,8 @@ The most common interview answer and usually acceptable.
 
 Serialize each tree with delimiters so concatenated children can't accidentally match across boundaries. Then check whether `serialize(subRoot)` is a substring of `serialize(root)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_subtree(root, subRoot):
     def serialize(node):
@@ -74,6 +114,19 @@ def is_subtree(root, subRoot):
         return f",{node.val},({serialize(node.left)})({serialize(node.right)})"  # L1: O(n) build
     return serialize(subRoot) in serialize(root)  # L2: O((m+n)²) or O(m+n) with KMP
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isSubtree(root: TreeNode | null, subRoot: TreeNode | null): boolean {
+    function serialize(node: TreeNode | null): string {
+        if (!node) return "#";
+        return `,${node.val},(${serialize(node.left)})(${serialize(node.right)})`;  // L1: O(n) build
+    }
+    return serialize(root).includes(serialize(subRoot!));  // L2: O((m+n)²) or O(m+n) with KMP
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -87,11 +140,22 @@ def is_subtree(root, subRoot):
 Python's `in` for strings is naive O(n · m) in the worst case. With KMP or Z-function, L2 drops to O(n + m).
 
 **Complexity**
-- **Time:** O((m + n)²) worst case using Python's `in` (substring search is typically O(m · n) in the interpreter). With **KMP** or **Z-function**, drops to O(m + n).
+- **Time:** O((m + n)²) worst case using Python's `in`. With **KMP** or **Z-function**, drops to O(m + n).
 - **Space:** O(m + n) for the strings.
 
 ### Why the delimiters matter
-Without unique delimiters, `serialize(subRoot)` could match a substring of `serialize(root)` that doesn't correspond to an actual subtree, for example, matching a prefix of one node's serialization plus a suffix of another. The delimiter pattern I used (`,val,(L)(R)`) ensures a node's serialization has unambiguous start and end.
+Without unique delimiters, `serialize(subRoot)` could match a substring of `serialize(root)` that doesn't correspond to an actual subtree. The delimiter pattern `,val,(L)(R)` ensures a node's serialization has unambiguous start and end.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="subtree-of-another-tree-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="subtree-of-another-tree-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Hash each subtree (Merkle-style)
 
@@ -159,6 +223,8 @@ Approach 1 is what most interviewers expect; Approach 2 with KMP is the asymptot
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -207,6 +273,53 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(vals: (number | null)[]): TreeNode | null {
+    if (!vals.length) return null;
+    const root = new TreeNode(vals[0] as number);
+    const q: TreeNode[] = [root];
+    let i = 1;
+    while (q.length && i < vals.length) {
+        const node = q.shift()!;
+        if (i < vals.length && vals[i] !== null) { node.left = new TreeNode(vals[i] as number); q.push(node.left); }
+        i++;
+        if (i < vals.length && vals[i] !== null) { node.right = new TreeNode(vals[i] as number); q.push(node.right); }
+        i++;
+    }
+    return root;
+}
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) return true;
+    if (!p || !q || p.val !== q.val) return false;
+    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+}
+
+function isSubtree(root: TreeNode | null, subRoot: TreeNode | null): boolean {
+    if (!root) return false;
+    if (isSameTree(root, subRoot)) return true;
+    return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+}
+
+console.assert(isSubtree(buildTree([3, 4, 5, 1, 2]), buildTree([4, 1, 2])) === true);
+console.assert(isSubtree(buildTree([3, 4, 5, 1, 2, null, null, null, null, 0]), buildTree([4, 1, 2])) === false);
+const t = buildTree([1, 2, 3]);
+console.assert(isSubtree(t, t) === true);
+console.assert(isSubtree(buildTree([1, 2, 3]), buildTree([2])) === true);
+console.assert(isSubtree(buildTree([1, 2, 3]), buildTree([4])) === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './071-simplify-path.py?raw';
+import practiceCodeTs from './071-simplify-path.ts?raw';
+import approach2TsCode from './071-simplify-path-approach2.ts?raw';
 
 ## Problem
 
@@ -34,7 +38,14 @@ LeetCode 71 · [Link](https://leetcode.com/problems/simplify-path/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="simplify-path" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="simplify-path-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="simplify-path-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Split on slash, stack for components
 
@@ -46,6 +57,8 @@ Split the path on `'/'` to get individual components. For each component:
 
 Join the stack with `'/'` and prepend `'/'` for the result.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def simplify_path(path: str) -> str:
     parts = path.split("/")          # L1: O(n) split into components
@@ -60,6 +73,25 @@ def simplify_path(path: str) -> str:
             stack.append(part)       # L8: O(1) push directory name
     return "/" + "/".join(stack)     # L9: O(n) join result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function simplifyPath(path: string): string {
+    const parts = path.split('/');           // L1: O(n) split into components
+    const stack: string[] = [];              // L2: O(1) init
+    for (const part of parts) {             // L3: iterate each component
+        if (!part || part === '.') continue; // L4: skip empty and current-dir dot
+        if (part === '..') {                 // L5: go up one level
+            if (stack.length) stack.pop();   // L6-L7: O(1) pop if non-empty
+        } else {
+            stack.push(part);                // L8: O(1) push directory name
+        }
+    }
+    return '/' + stack.join('/');            // L9: O(n) join result
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -77,6 +109,17 @@ k is at most n (each char could be its own component), so both O(k) terms collap
 **Complexity**
 - **Time:** O(n), driven by the split and join (L1, L9).
 - **Space:** O(n) for the stack and parts list.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="simplify-path-approach1-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="simplify-path-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Key takeaways
 

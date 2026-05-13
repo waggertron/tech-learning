@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1249-minimum-remove-valid-parens.py?raw';
+import practiceCodeTs from './1249-minimum-remove-valid-parens.ts?raw';
+import approach2TsCode from './1249-minimum-remove-valid-parens-approach2.ts?raw';
 
 ## Problem
 
@@ -27,7 +31,14 @@ LeetCode 1249 · [Link](https://leetcode.com/problems/minimum-remove-to-make-val
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="minimum-remove-valid-parens" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="minimum-remove-valid-parens-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="minimum-remove-valid-parens-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Two-pass stack of indices
 
@@ -39,6 +50,8 @@ After pass 1, all indices remaining in the stack are unmatched `'('` that also n
 
 **Pass 2:** Build the result, skipping any index that was marked.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_remove_to_make_valid(s: str) -> str:
     stack = []          # L1: indices of unmatched '('
@@ -61,6 +74,36 @@ def min_remove_to_make_valid(s: str) -> str:
             result.append(ch)              # L10: O(1) keep character
     return "".join(result)                 # L11: O(n) join
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function minRemoveToMakeValid(s: string): string {
+    const stack: number[] = [];             // L1: indices of unmatched '('
+    const remove = new Set<number>();       // L2: indices to remove
+
+    for (let i = 0; i < s.length; i++) {   // L3: n iterations (pass 1)
+        if (s[i] === '(') {
+            stack.push(i);                  // L4: O(1) push index of '('
+        } else if (s[i] === ')') {
+            if (stack.length) {
+                stack.pop();                // L5: O(1) matched pair
+            } else {
+                remove.add(i);              // L6: O(1) unmatched ')'
+            }
+        }
+    }
+
+    for (const i of stack) remove.add(i);  // L7: remaining '(' are unmatched
+
+    const result: string[] = [];
+    for (let i = 0; i < s.length; i++) {   // L8: n iterations (pass 2)
+        if (!remove.has(i)) result.push(s[i]);  // L9-L10: O(1) set lookup + keep
+    }
+    return result.join('');                 // L11: O(n) join
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -76,6 +119,17 @@ def min_remove_to_make_valid(s: str) -> str:
 **Complexity**
 - **Time:** O(n), two linear passes.
 - **Space:** O(n) for the stack, remove set, and result buffer.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="minimum-remove-valid-parens-approach1-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="minimum-remove-valid-parens-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Pass 1 illustrated
 

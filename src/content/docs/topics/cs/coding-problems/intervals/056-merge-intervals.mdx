@@ -5,11 +5,18 @@ parent: intervals
 tags: [leetcode, neetcode-150, intervals, sorting, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './056-merge-intervals.py?raw';
+import practiceCodeTs from './056-merge-intervals.ts?raw';
+import approach2PyCode from './056-merge-intervals-approach2.py?raw';
+import approach2TsCode from './056-merge-intervals-approach2.ts?raw';
+import approach3PyCode from './056-merge-intervals-approach3.py?raw';
+import approach3TsCode from './056-merge-intervals-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 56 · [Link](https://leetcode.com/problems/merge-intervals/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="merge-intervals" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="merge-intervals-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="merge-intervals-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, quadratic merge
 
 Repeatedly find any pair of overlapping intervals and merge them until none remain.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge(intervals):
     intervals = [list(iv) for iv in intervals]
@@ -48,6 +64,35 @@ def merge(intervals):
         intervals = result
     return intervals
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function merge(intervals: number[][]): number[][] {
+    let ivs = intervals.map(iv => [...iv]);
+    let changed = true;
+    while (changed) {                              // L1: outer fixed-point loop
+        changed = false;
+        const result: number[][] = [];
+        for (const iv of ivs) {                   // L2: scan every interval
+            let merged = false;
+            for (const existing of result) {       // L3: against every kept one
+                if (iv[0] <= existing[1] && existing[0] <= iv[1]) {
+                    existing[0] = Math.min(existing[0], iv[0]);
+                    existing[1] = Math.max(existing[1], iv[1]);
+                    changed = true;
+                    merged = true;
+                    break;
+                }
+            }
+            if (!merged) result.push([...iv]);
+        }
+        ivs = result;
+    }
+    return ivs;
+}
+```
+</TabItem>
+</Tabs>
 
 Each outer pass touches every pair (L2 × L3 = O(n²)). The outer loop runs until a pass produces no merges; in the worst case (a chain like `[[1,2],[2,3],[3,4],...]`) that's another O(n) factor → O(n³) overall.
 
@@ -59,6 +104,8 @@ Each outer pass touches every pair (L2 × L3 = O(n²)). The outer loop runs unti
 
 Sort; then walk, merging each new interval into the last of the result if they overlap, else appending.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge(intervals):
     intervals.sort(key=lambda x: x[0])   # L1: O(n log n)
@@ -70,6 +117,24 @@ def merge(intervals):
             result.append(list(interval))  # L6: O(1) amortized
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function merge(intervals: number[][]): number[][] {
+    intervals.sort((a, b) => a[0] - b[0]);           // L1: O(n log n)
+    const result: number[][] = [];                    // L2: O(1) setup
+    for (const interval of intervals) {               // L3: O(n) iterations
+        if (result.length > 0 && interval[0] <= result[result.length - 1][1]) {  // L4: O(1) check
+            result[result.length - 1][1] = Math.max(result[result.length - 1][1], interval[1]);  // L5: O(1) extend
+        } else {
+            result.push([...interval]);               // L6: O(1) amortized
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -90,10 +155,23 @@ L1 dominates: sorting requires O(n log n) comparisons, and the linear sweep that
 - **Time:** O(n log n), driven by L1 (the sort).
 - **Space:** O(n) output.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="merge-intervals-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="merge-intervals-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bucket sort (when values are bounded)
 
 If interval endpoints are bounded (e.g., within [0, 10⁴]), tally start and end events into counter arrays, then sweep tracking open intervals. Each closed run produces one merged interval.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge(intervals):
     if not intervals:
@@ -118,12 +196,52 @@ def merge(intervals):
                 result.append([cur_start, i])
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function merge(intervals: number[][]): number[][] {
+    if (intervals.length === 0) return [];
+    const maxV = Math.max(...intervals.map(([, e]) => e));
+    const starts = new Array(maxV + 2).fill(0);
+    const ends = new Array(maxV + 2).fill(0);
+    for (const [s, e] of intervals) {
+        starts[s]++;
+        ends[e]++;
+    }
+
+    const result: number[][] = [];
+    let openCount = 0;
+    let curStart = 0;
+    for (let i = 0; i <= maxV + 1; i++) {
+        if (starts[i] > 0 && openCount === 0) curStart = i;
+        openCount += starts[i];               // process starts before ends so touching merges
+        if (ends[i] > 0) {
+            openCount -= ends[i];
+            if (openCount === 0) result.push([curStart, i]);
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 Rarely worth it in practice; the constant factors and the array allocation only pay off for tiny bounded ranges.
 
 **Complexity**
 - **Time:** O(max_value).
 - **Space:** O(max_value).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="merge-intervals-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="merge-intervals-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -137,6 +255,8 @@ Standard answer is sort + sweep. The same template feeds Insert Interval, Meetin
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_056_merge_intervals.py and run.
 # Uses the canonical implementation (Approach 2).
@@ -169,6 +289,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function merge(intervals: number[][]): number[][] {
+    intervals.sort((a, b) => a[0] - b[0]);
+    const result: number[][] = [];
+    for (const interval of intervals) {
+        if (result.length > 0 && interval[0] <= result[result.length - 1][1]) {
+            result[result.length - 1][1] = Math.max(result[result.length - 1][1], interval[1]);
+        } else {
+            result.push([...interval]);
+        }
+    }
+    return result;
+}
+
+console.assert(JSON.stringify(merge([[1,3],[2,6],[8,10],[15,18]])) === JSON.stringify([[1,6],[8,10],[15,18]]));
+console.assert(JSON.stringify(merge([[1,4],[4,5]])) === JSON.stringify([[1,5]]));
+console.assert(JSON.stringify(merge([[1,2]])) === JSON.stringify([[1,2]]));
+console.assert(JSON.stringify(merge([[1,10],[2,5],[3,8]])) === JSON.stringify([[1,10]]));
+console.assert(JSON.stringify(merge([[1,2],[3,4],[5,6]])) === JSON.stringify([[1,2],[3,4],[5,6]]));
+console.assert(JSON.stringify(merge([[15,18],[1,3],[2,6],[8,10]])) === JSON.stringify([[1,6],[8,10],[15,18]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './496-next-greater-element-i.py?raw';
+import practiceCodeTs from './496-next-greater-element-i.ts?raw';
+import approach2TsCode from './496-next-greater-element-i-approach2.ts?raw';
 
 ## Problem
 
@@ -26,12 +30,21 @@ LeetCode 496 · [Link](https://leetcode.com/problems/next-greater-element-i/) ·
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="next-greater-element-i" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="next-greater-element-i-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="next-greater-element-i-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, nested scan
 
 For each element in `nums1`, find its position in `nums2`, then scan right for the first greater element.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def next_greater_element(nums1: list[int], nums2: list[int]) -> list[int]:
     result = []
@@ -45,6 +58,24 @@ def next_greater_element(nums1: list[int], nums2: list[int]) -> list[int]:
         result.append(found)                 # L5: O(1)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function nextGreaterElement(nums1: number[], nums2: number[]): number[] {
+    const result: number[] = [];
+    for (const x of nums1) {                               // L1: m iterations
+        const idx = nums2.indexOf(x);                      // L2: O(n) linear search
+        let found = -1;
+        for (let j = idx + 1; j < nums2.length; j++) {    // L3: up to n steps
+            if (nums2[j] > x) { found = nums2[j]; break; } // L4: O(1) compare
+        }
+        result.push(found);                                // L5: O(1)
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(m * n), m queries each requiring O(n) to scan nums2.
@@ -56,6 +87,8 @@ The trick: answer *all* next-greater queries for nums2 in a single O(n) pass, st
 
 Use a **monotonic decreasing stack** (values decrease from bottom to top). When a new element is larger than the stack top, the stack top has found its next-greater answer.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def next_greater_element(nums1: list[int], nums2: list[int]) -> list[int]:
     nge = {}                                       # L1: O(1) hash map
@@ -71,6 +104,26 @@ def next_greater_element(nums1: list[int], nums2: list[int]) -> list[int]:
 
     return [nge[x] for x in nums1]                # L9: O(m) lookup
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function nextGreaterElement(nums1: number[], nums2: number[]): number[] {
+    const nge = new Map<number, number>();          // L1: O(1) hash map
+    const stack: number[] = [];                     // L2: O(1) monotonic stack (values)
+
+    for (const num of nums2) {                      // L3: n iterations
+        while (stack.length && stack[stack.length - 1] < num)
+            nge.set(stack.pop()!, num);             // L4-L5: O(1) amortized: record answer
+        stack.push(num);                            // L6: O(1) push current
+    }
+
+    for (const num of stack) nge.set(num, -1);     // L7-L8: remaining have no answer
+
+    return nums1.map(x => nge.get(x)!);            // L9: O(m) lookup
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -88,6 +141,17 @@ Each element of nums2 is pushed once and popped at most once. Total stack work i
 **Complexity**
 - **Time:** O(m + n): O(n) to build the map, O(m) to answer queries.
 - **Space:** O(n) for the hash map and stack.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="next-greater-element-i-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="next-greater-element-i-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## How the monotonic stack resolves answers
 

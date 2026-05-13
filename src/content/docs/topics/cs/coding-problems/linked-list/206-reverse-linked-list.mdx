@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './206-reverse-linked-list.py?raw';
+import practiceCodeTs from './206-reverse-linked-list.ts?raw';
+import approach2TsCode from './206-reverse-linked-list-approach2.ts?raw';
+import approach3TsCode from './206-reverse-linked-list-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +29,21 @@ LeetCode 206 · [Link](https://leetcode.com/problems/reverse-linked-list/) · *E
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="reverse-linked-list" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="reverse-linked-list-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="reverse-linked-list-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, collect values, rebuild
 
 Walk the list and store values in an array; build a fresh list in reverse.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -49,6 +63,32 @@ def reverse_list(head):
         tail = tail.next
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function reverseList(head: ListNode | null): ListNode | null {
+    const values: number[] = [];
+    let cur = head;
+    while (cur) {
+        values.push(cur.val);    // L1: O(1) per node
+        cur = cur.next;
+    }
+    const dummy = new ListNode();
+    let tail = dummy;
+    for (let i = values.length - 1; i >= 0; i--) {
+        tail.next = new ListNode(values[i]);  // L2: O(1) per node, new allocation
+        tail = tail.next;
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -71,6 +111,8 @@ Correct but wasteful.
 
 Walk the list once, re-pointing each `next` backward. Needs three pointers: `prev`, `curr`, and a scratch `next` saved before overwriting `curr.next`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_list(head):
     prev, curr = None, head
@@ -81,6 +123,23 @@ def reverse_list(head):
         curr = nxt                 # L5: O(1) advance curr
     return prev
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseList(head: ListNode | null): ListNode | null {
+    let prev: ListNode | null = null;
+    let curr = head;
+    while (curr) {                 // L1: one pass over n nodes
+        const nxt = curr.next;     // L2: O(1) save next
+        curr.next = prev;          // L3: O(1) reverse pointer
+        prev = curr;               // L4: O(1) advance prev
+        curr = nxt;                // L5: O(1) advance curr
+    }
+    return prev;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -97,10 +156,20 @@ Four O(1) operations per iteration for exactly n iterations. The canonical inter
 - **Time:** O(n), driven by L2-L5.
 - **Space:** O(1).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="reverse-linked-list-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Recursive reversal
 
 Recursively reverse the tail, then flip the current node's link.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_list(head):
     if not head or not head.next:          # L1: base case
@@ -110,6 +179,19 @@ def reverse_list(head):
     head.next = None                       # L4: O(1) cut old link
     return new_head
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseList(head: ListNode | null): ListNode | null {
+    if (!head || !head.next) return head;           // L1: base case
+    const newHead = reverseList(head.next);         // L2: recurse on tail
+    head.next.next = head;                          // L3: O(1) flip link
+    head.next = null;                               // L4: O(1) cut old link
+    return newHead;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -129,8 +211,18 @@ Each call processes one node and recurses on the rest. Stack depth = n. Python's
 
 Elegant but uses stack frames proportional to n, can stack-overflow for very long lists (Python's default recursion limit is 1000).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="reverse-linked-list-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_206.py and run.
 # Uses the iterative three-pointer approach (Approach 2).
@@ -178,6 +270,47 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function reverseList(head: ListNode | null): ListNode | null {
+    let prev: ListNode | null = null;
+    let curr = head;
+    while (curr) {
+        const nxt = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    return prev;
+}
+
+console.assert(JSON.stringify(toList(reverseList(fromList([1,2,3,4,5])))) === JSON.stringify([5,4,3,2,1]));
+console.assert(JSON.stringify(toList(reverseList(fromList([1,2])))) === JSON.stringify([2,1]));
+console.assert(JSON.stringify(toList(reverseList(fromList([1])))) === JSON.stringify([1]));
+console.assert(reverseList(null) === null);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

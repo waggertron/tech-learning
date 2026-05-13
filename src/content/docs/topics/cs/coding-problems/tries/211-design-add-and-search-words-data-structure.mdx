@@ -5,11 +5,17 @@ parent: tries
 tags: [leetcode, neetcode-150, tries, backtracking, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-13
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './211-design-add-and-search-words-data-structure.py?raw';
+import approach2PyCode from './211-design-add-and-search-words-data-structure-approach2.py?raw';
+import approach2TsCode from './211-design-add-and-search-words-data-structure-approach2.ts?raw';
+import approach3PyCode from './211-design-add-and-search-words-data-structure-approach3.py?raw';
+import approach3TsCode from './211-design-add-and-search-words-data-structure-approach3.ts?raw';
 
 ## Problem
 
@@ -32,12 +38,18 @@ LeetCode 211 · [Link](https://leetcode.com/problems/design-add-and-search-words
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="design-add-and-search-words-data-structure" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="design-add-and-search-words-data-structure-py" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, list of words, regex match
 
-Store words in a list; on search, compile `.` as regex.
+Store words in a list; on search, compile `.` as a regex pattern and scan every word.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import re
 
@@ -52,6 +64,24 @@ class WordDictionary:
         pattern = re.compile("^" + word + "$")   # L2: O(L) compile regex
         return any(pattern.match(w) for w in self.words)  # L3: O(W · L) scan
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class WordDictionary {
+    private words: string[] = [];
+
+    addWord(word: string): void {
+        this.words.push(word);                      // L1: O(1) push
+    }
+
+    search(word: string): boolean {
+        const pattern = new RegExp("^" + word.replace(/\./g, ".") + "$");  // L2: O(L) compile
+        return this.words.some(w => pattern.test(w));  // L3: O(W · L) scan
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -72,6 +102,8 @@ class WordDictionary:
 
 Group words by length; on search, compare character-by-character only against same-length words. Faster pruning but still linear in group size.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -88,6 +120,32 @@ class WordDictionary:
                 return True
         return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class WordDictionary {
+    private byLen: Map<number, string[]> = new Map();
+
+    addWord(word: string): void {
+        if (!this.byLen.has(word.length)) this.byLen.set(word.length, []);
+        this.byLen.get(word.length)!.push(word);  // L1: O(1) amortized push
+    }
+
+    search(word: string): boolean {
+        const candidates = this.byLen.get(word.length) ?? [];
+        for (const w of candidates) {             // L2: scan same-length words, O(W_L)
+            let match = true;
+            for (let i = 0; i < word.length; i++) {
+                if (word[i] !== '.' && word[i] !== w[i]) { match = false; break; }  // L3: O(L) char compare
+            }
+            if (match) return true;
+        }
+        return false;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -105,12 +163,25 @@ Bucketing by length prunes same-length candidates immediately, but within the bu
 - `addWord`: O(L), driven by hashing the length key.
 - `search`: O(W_L · L), driven by L3 (per-word character comparison within the same-length bucket).
 
-Reasonable for small L, small W_L.
+Reasonable for small L and small W_L.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="design-add-and-search-words-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="design-add-and-search-words-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Trie with DFS wildcard (canonical)
 
-Store words in a trie. On search, follow the trie; for `.`, try every child.
+Store words in a trie. On search, follow the trie character by character; for `.`, branch to every child via DFS.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TrieNode:
     def __init__(self):
@@ -141,6 +212,46 @@ class WordDictionary:
             return False
         return dfs(0, self.root)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    isEnd: boolean = false;
+}
+
+class WordDictionary {
+    private root = new TrieNode();
+
+    addWord(word: string): void {
+        let node = this.root;
+        for (const ch of word) {                          // L1: iterate L characters
+            if (!node.children.has(ch)) node.children.set(ch, new TrieNode());  // L2: O(1) create node
+            node = node.children.get(ch)!;                // L3: O(1) descend
+        }
+        node.isEnd = true;                                // L4: O(1) mark end
+    }
+
+    search(word: string): boolean {
+        return this.dfs(0, this.root, word);
+    }
+
+    private dfs(i: number, node: TrieNode, word: string): boolean {
+        if (i === word.length) return node.isEnd;         // L5: base case
+        const ch = word[i];
+        if (ch === '.') {                                 // L6: wildcard: try all children
+            for (const child of node.children.values()) {
+                if (this.dfs(i + 1, child, word)) return true;  // L7: up to 26 branches
+            }
+            return false;
+        }
+        if (!node.children.has(ch)) return false;         // L8: O(1) exact match check
+        return this.dfs(i + 1, node.children.get(ch)!, word);  // L9: recurse one path
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -159,7 +270,18 @@ For exact character matches, each DFS call moves one level deeper and is O(1). F
 - `search`: O(L) average (no wildcards), O(26^L) worst (all wildcards in a dense trie).
 - Space: O(total chars).
 
-The wildcard branches are where performance can degrade, a prompt like `"......"` against a dense dictionary is the pathological case.
+The wildcard branches are where performance can degrade: a query like `"......"` against a dense dictionary is the pathological case.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="design-add-and-search-words-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="design-add-and-search-words-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -173,6 +295,8 @@ The trie approach generalizes to **212 Word Search II** (the next problem) where
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_211.py and run.
 # Uses the canonical Approach 3 implementation (trie + DFS wildcard).
@@ -222,6 +346,53 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    isEnd: boolean = false;
+}
+
+class WordDictionary {
+    private root = new TrieNode();
+    addWord(word: string): void {
+        let node = this.root;
+        for (const ch of word) {
+            if (!node.children.has(ch)) node.children.set(ch, new TrieNode());
+            node = node.children.get(ch)!;
+        }
+        node.isEnd = true;
+    }
+    search(word: string): boolean {
+        return this.dfs(0, this.root, word);
+    }
+    private dfs(i: number, node: TrieNode, word: string): boolean {
+        if (i === word.length) return node.isEnd;
+        const ch = word[i];
+        if (ch === '.') {
+            for (const child of node.children.values()) {
+                if (this.dfs(i + 1, child, word)) return true;
+            }
+            return false;
+        }
+        if (!node.children.has(ch)) return false;
+        return this.dfs(i + 1, node.children.get(ch)!, word);
+    }
+}
+
+const wd = new WordDictionary();
+wd.addWord("bad"); wd.addWord("dad"); wd.addWord("mad");
+console.assert(wd.search("pad") === false);
+console.assert(wd.search("bad") === true);
+console.assert(wd.search(".ad") === true);
+console.assert(wd.search("b..") === true);
+console.assert(wd.search("...") === true);
+console.assert(wd.search("....") === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

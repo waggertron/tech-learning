@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './003-longest-substring-without-repeating-characters.py?raw';
+import practiceCodeTs from './003-longest-substring-without-repeating-characters.ts?raw';
+import approach3TsCode from './003-longest-substring-without-repeating-characters-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 3 · [Link](https://leetcode.com/problems/longest-substring-without-rep
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="longest-substring-without-repeating-characters" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="longest-substring-without-repeating-characters-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="longest-substring-without-repeating-characters-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, check every substring
 
 Enumerate every substring and check uniqueness.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def length_of_longest_substring(s: str) -> int:
     best = 0
@@ -40,6 +53,25 @@ def length_of_longest_substring(s: str) -> int:
                 best = max(best, j - i + 1)          # L4: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLongestSubstring(s: string): number {
+    let best = 0;
+    const n = s.length;
+    for (let i = 0; i < n; i++) {                           // L1: outer loop, n iterations
+        for (let j = i; j < n; j++) {                       // L2: inner loop, up to n-i iterations
+            const sub = s.slice(i, j + 1);
+            if (new Set(sub).size === j - i + 1) {          // L3: slice + Set, O(n) each
+                best = Math.max(best, j - i + 1);           // L4: O(1)
+            }
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -62,6 +94,8 @@ L3 is the culprit: `s[i:j+1]` allocates a new string of length up to n, then `se
 
 For each starting index, expand rightward while the next character isn't already in the set.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def length_of_longest_substring(s: str) -> int:
     n = len(s)
@@ -75,6 +109,25 @@ def length_of_longest_substring(s: str) -> int:
         best = max(best, len(seen))   # L6: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLongestSubstring(s: string): number {
+    const n = s.length;
+    let best = 0;
+    for (let i = 0; i < n; i++) {              // L1: outer loop, n iterations
+        const seen = new Set<string>();         // L2: new Set each start, O(1)
+        for (let j = i; j < n; j++) {          // L3: inner loop, up to n-i iterations
+            if (seen.has(s[j])) break;         // L4: O(1) Set membership
+            seen.add(s[j]);                    // L5: O(1) amortized
+        }
+        best = Math.max(best, seen.size);      // L6: O(1)
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -99,6 +152,8 @@ Better than brute force, still not optimal.
 
 Maintain `left` (start of the current valid window) and a hash map `last_seen[ch] = index`. When the current character was last seen *inside* the current window, jump `left` to just past that last-seen index.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def length_of_longest_substring(s: str) -> int:
     last_seen = {}                                        # L1: O(1)
@@ -111,6 +166,26 @@ def length_of_longest_substring(s: str) -> int:
         best = max(best, right - left + 1)               # L8: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLongestSubstring(s: string): number {
+    const lastSeen = new Map<string, number>();           // L1: O(1)
+    let left = 0;                                        // L2: O(1)
+    let best = 0;                                        // L3: O(1)
+    for (let right = 0; right < s.length; right++) {    // L4: outer loop, n iterations
+        const ch = s[right];
+        if (lastSeen.has(ch) && lastSeen.get(ch)! >= left) {  // L5: O(1) map lookup
+            left = lastSeen.get(ch)! + 1;               // L6: O(1) jump left
+        }
+        lastSeen.set(ch, right);                        // L7: O(1) update map
+        best = Math.max(best, right - left + 1);        // L8: O(1)
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -131,6 +206,14 @@ The critical insight: `left` only ever moves forward. Across the entire run, `le
 - **Time:** O(n), driven by L4/L5/L7 (the single linear pass).
 - **Space:** O(k). Hash map bounded by alphabet size.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="longest-substring-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -143,6 +226,8 @@ The optimal approach is a variable-size sliding window whose invariant (no repea
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_003.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -170,6 +255,34 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLongestSubstring(s: string): number {
+    const lastSeen = new Map<string, number>();
+    let left = 0;
+    let best = 0;
+    for (let right = 0; right < s.length; right++) {
+        const ch = s[right];
+        if (lastSeen.has(ch) && lastSeen.get(ch)! >= left) {
+            left = lastSeen.get(ch)! + 1;
+        }
+        lastSeen.set(ch, right);
+        best = Math.max(best, right - left + 1);
+    }
+    return best;
+}
+
+console.assert(lengthOfLongestSubstring("abcabcbb") === 3);
+console.assert(lengthOfLongestSubstring("bbbbb") === 1);
+console.assert(lengthOfLongestSubstring("pwwkew") === 3);
+console.assert(lengthOfLongestSubstring("") === 0);
+console.assert(lengthOfLongestSubstring("a") === 1);
+console.assert(lengthOfLongestSubstring("abcdef") === 6);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

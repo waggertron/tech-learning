@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './143-reorder-list.py?raw';
+import practiceCodeTs from './143-reorder-list.ts?raw';
+import approach3TsCode from './143-reorder-list-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +27,21 @@ LeetCode 143 · [Link](https://leetcode.com/problems/reorder-list/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="reorder-list" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="reorder-list-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="reorder-list-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, copy to array, re-link by index
 
 Walk the list into an array; use two pointers from both ends to reassemble.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reorder_list(head) -> None:
     if not head:
@@ -48,6 +61,35 @@ def reorder_list(head) -> None:
         j -= 1
     nodes[i].next = None
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function reorderList(head: ListNode | null): void {
+    if (!head) return;
+    const nodes: ListNode[] = [];
+    let cur: ListNode | null = head;
+    while (cur) {
+        nodes.push(cur);           // L1: O(1) per node, n total
+        cur = cur.next;
+    }
+    let i = 0, j = nodes.length - 1;
+    while (i < j) {               // L2: n/2 iterations
+        nodes[i].next = nodes[j]; // L3: O(1) splice
+        i++;
+        if (i === j) break;
+        nodes[j].next = nodes[i]; // L4: O(1) splice
+        j--;
+    }
+    nodes[i].next = null;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -68,6 +110,8 @@ Both phases are O(n). The array costs O(n) extra space but simplifies the two-en
 
 Push nodes into a deque; pop alternately from the left and right.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -89,6 +133,28 @@ def reorder_list(head) -> None:
         take_left = not take_left
     tail.next = None
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reorderList(head: ListNode | null): void {
+    if (!head) return;
+    const nodes: ListNode[] = [];
+    let cur: ListNode | null = head;
+    while (cur) { nodes.push(cur); cur = cur.next; }  // L1: O(1) per node
+    let left = 0, right = nodes.length - 1;
+    let takeLeft = true;
+    let tail: ListNode | null = null;
+    while (left <= right) {        // L2: n iterations
+        const node = takeLeft ? nodes[left++] : nodes[right--];  // L3: O(1) pick
+        if (tail) tail.next = node;  // L4: O(1) link
+        tail = node;
+        takeLeft = !takeLeft;
+    }
+    tail!.next = null;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -113,6 +179,8 @@ Three sub-routines, each O(n) and O(1) space:
 2. Reverse the second half in place.
 3. Weave the two halves.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reorder_list(head) -> None:
     if not head or not head.next:
@@ -144,6 +212,45 @@ def reorder_list(head) -> None:
         first = t1
         second = t2
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reorderList(head: ListNode | null): void {
+    if (!head || !head.next) return;
+
+    // 1. Find middle
+    let slow: ListNode = head, fast: ListNode | null = head;
+    while (fast.next && fast.next.next) {
+        slow = slow.next!;                 // L2: O(1) advance slow
+        fast = fast.next.next;            // L3: O(1) advance fast
+    }
+
+    // 2. Reverse second half
+    let prev: ListNode | null = null;
+    let curr: ListNode | null = slow.next;
+    slow.next = null;
+    while (curr) {
+        const nxt = curr.next;
+        curr.next = prev;                  // L4: O(1) pointer reversal
+        prev = curr;
+        curr = nxt;
+    }
+    let second = prev;
+
+    // 3. Weave
+    let first: ListNode | null = head;
+    while (second) {                       // L5: n/2 iterations
+        const t1 = first!.next;
+        const t2 = second.next;
+        first!.next = second;             // L6: O(1) splice
+        second.next = t1;                 // L7: O(1) splice
+        first = t1;
+        second = t2;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -161,8 +268,18 @@ Three independent O(n) passes, each touching n/2 nodes. No extra allocation. The
 - **Time:** O(n). Three linear passes (L1-L3, L4, L5-L7).
 - **Space:** O(1).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="reorder-list-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_143.py and run.
 # Uses the find-middle + reverse + weave approach (Approach 3).
@@ -237,6 +354,54 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function reorderList(head: ListNode | null): void {
+    if (!head || !head.next) return;
+    let slow: ListNode = head, fast: ListNode | null = head;
+    while (fast.next && fast.next.next) { slow = slow.next!; fast = fast.next.next; }
+    let prev: ListNode | null = null, curr: ListNode | null = slow.next;
+    slow.next = null;
+    while (curr) { const nxt = curr.next; curr.next = prev; prev = curr; curr = nxt; }
+    let second = prev, first: ListNode | null = head;
+    while (second) {
+        const t1 = first!.next, t2 = second.next;
+        first!.next = second; second.next = t1;
+        first = t1; second = t2;
+    }
+}
+
+const h1 = fromList([1,2,3,4]); reorderList(h1);
+console.assert(JSON.stringify(toList(h1)) === JSON.stringify([1,4,2,3]));
+const h2 = fromList([1,2,3,4,5]); reorderList(h2);
+console.assert(JSON.stringify(toList(h2)) === JSON.stringify([1,5,2,4,3]));
+const h3 = fromList([1]); reorderList(h3);
+console.assert(JSON.stringify(toList(h3)) === JSON.stringify([1]));
+const h4 = fromList([1,2]); reorderList(h4);
+console.assert(JSON.stringify(toList(h4)) === JSON.stringify([1,2]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

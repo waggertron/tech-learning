@@ -5,11 +5,16 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, arrays, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './066-plus-one.py?raw';
+import practiceCodeTs from './066-plus-one.ts?raw';
+import approach2PyCode from './066-plus-one-approach2.py?raw';
+import approach2TsCode from './066-plus-one-approach2.ts?raw';
 
 ## Problem
 
@@ -23,17 +28,36 @@ LeetCode 66 · [Link](https://leetcode.com/problems/plus-one/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="plus-one" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="plus-one-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="plus-one-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Convert to int, add, reconvert
 
 Works in Python because `int` is arbitrary-precision.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def plus_one(digits):
     n = int("".join(map(str, digits))) + 1  # L1: O(n) join + convert
     return [int(d) for d in str(n)]         # L2: O(n) convert back
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function plusOne(digits: number[]): number[] {
+    const n = BigInt(digits.join('')) + 1n;   // L1: O(n) join + convert
+    return String(n).split('').map(Number);   // L2: O(n) convert back
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -54,6 +78,8 @@ Fails in languages with fixed integer widths past ~10 digits.
 
 Standard grade-school addition, handling the all-nines case.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def plus_one(digits):
     for i in range(len(digits) - 1, -1, -1):    # L1: walk right to left
@@ -63,6 +89,22 @@ def plus_one(digits):
         digits[i] = 0                            # L4: O(1), carry continues
     return [1] + digits                          # L5: O(n), all nines case
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function plusOne(digits: number[]): number[] {
+    for (let i = digits.length - 1; i >= 0; i--) {  // L1: walk right to left
+        if (digits[i] < 9) {                          // L2: O(1)
+            digits[i]++;                              // L3: O(1), no carry needed
+            return digits;
+        }
+        digits[i] = 0;                               // L4: O(1), carry continues
+    }
+    return [1, ...digits];                           // L5: O(n), all nines case
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -74,11 +116,22 @@ def plus_one(digits):
 | L2-L4 (carry logic) | O(1) | up to n | O(n) |
 | L5 (prepend 1, all-nines) | O(n) | at most 1 | O(n) |
 
-Best case: one step (last digit \< 9). Worst case: all nines, walk all n digits then prepend.
+Best case: one step (last digit &lt; 9). Worst case: all nines, walk all n digits then prepend.
 
 **Complexity**
 - **Time:** O(n), driven by L1/L2/L3/L4 (right-to-left carry walk).
 - **Space:** O(1) extra (worst case one extra digit).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="plus-one-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="plus-one-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -91,6 +144,8 @@ The digit-carry approach is language-agnostic and generalizes to problems like A
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_066.py and run.
 # Uses the canonical implementation (Approach 2: right-to-left carry).
@@ -115,6 +170,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function plusOne(digits: number[]): number[] {
+    for (let i = digits.length - 1; i >= 0; i--) {
+        if (digits[i] < 9) { digits[i]++; return digits; }
+        digits[i] = 0;
+    }
+    return [1, ...digits];
+}
+
+console.assert(JSON.stringify(plusOne([1, 2, 3])) === JSON.stringify([1, 2, 4]));
+console.assert(JSON.stringify(plusOne([9, 9, 9])) === JSON.stringify([1, 0, 0, 0]));
+console.assert(JSON.stringify(plusOne([0])) === JSON.stringify([1]));
+console.assert(JSON.stringify(plusOne([9])) === JSON.stringify([1, 0]));
+console.assert(JSON.stringify(plusOne([1, 0, 9])) === JSON.stringify([1, 1, 0]));
+console.assert(JSON.stringify(plusOne([4, 3, 2, 1])) === JSON.stringify([4, 3, 2, 2]));
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

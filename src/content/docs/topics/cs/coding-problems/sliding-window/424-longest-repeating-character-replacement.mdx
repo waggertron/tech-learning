@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './424-longest-repeating-character-replacement.py?raw';
+import practiceCodeTs from './424-longest-repeating-character-replacement.ts?raw';
+import approach3TsCode from './424-longest-repeating-character-replacement-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +27,21 @@ LeetCode 424 · [Link](https://leetcode.com/problems/longest-repeating-character
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="longest-repeating-character-replacement" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="longest-repeating-character-replacement-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="longest-repeating-character-replacement-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every substring
 
-For each substring, count characters and check that `(length, max_count) ≤ k`.
+For each substring, count characters and check that `(length - max_count) ≤ k`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def character_replacement(s: str, k: int) -> int:
     from collections import Counter
@@ -42,6 +55,27 @@ def character_replacement(s: str, k: int) -> int:
                 best = max(best, length)         # L5: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function characterReplacement(s: string, k: number): number {
+    const n = s.length;
+    let best = 0;
+    for (let i = 0; i < n; i++) {                            // L1: outer loop, n iterations
+        const counts = new Map<string, number>();
+        for (let j = i; j < n; j++) {                        // L2: inner loop, O(n) per outer
+            counts.set(s[j], (counts.get(s[j]) ?? 0) + 1);  // L3: O(1) incremental update
+            const length = j - i + 1;
+            const maxCount = Math.max(...counts.values());    // L4: O(k) max over counts
+            if (length - maxCount <= k)
+                best = Math.max(best, length);                // L5: O(1)
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -62,8 +96,10 @@ L3 allocates a new slice and builds a Counter for every (i, j) pair, which is O(
 
 ## Approach 2: Per-target-letter sliding window
 
-For each possible target letter (A–Z, so at most 26), slide a window that keeps the count of non-target characters ≤ k.
+For each possible target letter (A-Z, so at most 26), slide a window that keeps the count of non-target characters ≤ k.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def character_replacement(s: str, k: int) -> int:
     best = 0
@@ -80,6 +116,28 @@ def character_replacement(s: str, k: int) -> int:
             best = max(best, right - left + 1)  # L8: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function characterReplacement(s: string, k: number): number {
+    let best = 0;
+    const chars = new Set(s);
+    for (const target of chars) {                   // L1: at most 26 targets
+        let left = 0, nonTarget = 0;
+        for (let right = 0; right < s.length; right++) {  // L2: n iterations per target
+            if (s[right] !== target) nonTarget++;   // L3/L4: O(1)
+            while (nonTarget > k) {                 // L5: shrink window
+                if (s[left] !== target) nonTarget--;// L6: O(1)
+                left++;                             // L7: O(1)
+            }
+            best = Math.max(best, right - left + 1);// L8: O(1)
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -102,10 +160,12 @@ Already optimal in Big-O; the third approach drops the constant factor of 26.
 
 ## Approach 3: Single sliding window with running max-frequency (optimal)
 
-Maintain one window and a count of each character in it. Track `max_freq`, the most frequent character in the window. Shrinking is needed when `(window_length, max_freq) > k`.
+Maintain one window and a count of each character in it. Track `max_freq`, the most frequent character in the window. Shrinking is needed when `(window_length - max_freq) > k`.
 
 Key insight: we never need to *decrease* `max_freq` as `left` advances. A smaller max-freq would only matter if it produced a *larger* window, which the current `best` already captured.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def character_replacement(s: str, k: int) -> int:
     from collections import Counter
@@ -122,6 +182,29 @@ def character_replacement(s: str, k: int) -> int:
         best = max(best, right - left + 1)              # L7: O(1)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function characterReplacement(s: string, k: number): number {
+    const counts = new Map<string, number>();
+    let left = 0;
+    let maxFreq = 0;
+    let best = 0;
+    for (let right = 0; right < s.length; right++) {    // L1: outer loop, n iterations
+        const ch = s[right];
+        counts.set(ch, (counts.get(ch) ?? 0) + 1);      // L2: O(1)
+        maxFreq = Math.max(maxFreq, counts.get(ch)!);   // L3: O(1) running max
+        while ((right - left + 1) - maxFreq > k) {     // L4: shrink if too many replacements
+            counts.set(s[left], counts.get(s[left])! - 1);  // L5: O(1)
+            left++;                                     // L6: O(1)
+        }
+        best = Math.max(best, right - left + 1);        // L7: O(1)
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -140,6 +223,14 @@ The key insight for L3: we never decrease `max_freq` even when shrinking. This i
 - **Time:** O(n), driven by L1 (single pass; `left` and `right` each advance at most n times total).
 - **Space:** O(k) for the counter (at most alphabet size).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="longest-repeating-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -148,10 +239,12 @@ The key insight for L3: we never decrease `max_freq` even when shrinking. This i
 | Per-letter sliding window | O(26 · n) = O(n) | O(1) |
 | **Single sliding window** | **O(n)** | O(k) |
 
-The max-freq trick is the hallmark of this problem, it lets us skip the "decrement max_freq when shrinking" step entirely, because it only affects candidate windows that are shorter than what we've already seen.
+The max-freq trick is the hallmark of this problem: it lets us skip the "decrement max_freq when shrinking" step entirely, because it only affects candidate windows that are shorter than what we've already seen.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_424.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -184,6 +277,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function characterReplacement(s: string, k: number): number {
+    const counts = new Map<string, number>();
+    let left = 0, maxFreq = 0, best = 0;
+    for (let right = 0; right < s.length; right++) {
+        const ch = s[right];
+        counts.set(ch, (counts.get(ch) ?? 0) + 1);
+        maxFreq = Math.max(maxFreq, counts.get(ch)!);
+        while ((right - left + 1) - maxFreq > k) {
+            counts.set(s[left], counts.get(s[left])! - 1);
+            left++;
+        }
+        best = Math.max(best, right - left + 1);
+    }
+    return best;
+}
+
+console.assert(characterReplacement("ABAB", 2) === 4);
+console.assert(characterReplacement("AABABBA", 1) === 4);
+console.assert(characterReplacement("A", 0) === 1);
+console.assert(characterReplacement("AAAA", 2) === 4);
+console.assert(characterReplacement("ABCDE", 1) === 2);
+console.assert(characterReplacement("AABBA", 2) === 5);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

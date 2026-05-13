@@ -5,11 +5,16 @@ parent: trees
 tags: [leetcode, trees, dynamic-programming, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './337-house-robber-iii.py?raw';
+import practiceCodeTs from './337-house-robber-iii.ts?raw';
+import approach2PyCode from './337-house-robber-iii-approach2.py?raw';
+import approach2TsCode from './337-house-robber-iii-approach2.ts?raw';
 
 ## Problem
 
@@ -19,18 +24,27 @@ Given the root of the binary tree, return the maximum amount of money the thief 
 
 **Example**
 - `root = [3,2,3,null,3,null,1]` → `7` (rob root 3, left-grandchild 3, right-grandchild 1)
-- `root = [3,4,5,1,3,null,1]` → `9` (rob left child 4 and right child 5)
+- `root = [3,4,5,1,3,null,1]` → `10` (skip root, rob children 4 and 5, plus 5's child 1)
 
 LeetCode 337 · [Link](https://leetcode.com/problems/house-robber-iii/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="house-robber-iii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="house-robber-iii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="house-robber-iii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, top-down recursion with memo
 
 For each node, try both choices: rob it (skip its children, recurse to grandchildren) or skip it (recurse to children). Memoize by node identity.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(root):
     memo = {}                              # L1: O(1) init
@@ -53,6 +67,38 @@ def rob(root):
 
     return dfs(root)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function rob(root: TreeNode | null): number {
+    const memo = new Map<TreeNode, number>();  // L1: O(1) init
+
+    function dfs(node: TreeNode | null): number {
+        if (!node) return 0;                              // L2: O(1) base case
+        if (memo.has(node)) return memo.get(node)!;       // L3: O(1) cache hit
+        // option A: rob this node, must skip children
+        let robThis = node.val;                           // L4: O(1)
+        if (node.left) robThis += dfs(node.left.left) + dfs(node.left.right);   // L5: grandchildren
+        if (node.right) robThis += dfs(node.right.left) + dfs(node.right.right);// L6: grandchildren
+        // option B: skip this node, children are free
+        const skipThis = dfs(node.left) + dfs(node.right);                      // L7: O(1) dispatch
+        const best = Math.max(robThis, skipThis);                               // L8: O(1) store
+        memo.set(node, best);
+        return best;
+    }
+
+    return dfs(root);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -76,6 +122,8 @@ With memoization every node is computed exactly once. Without it, the same subtr
 
 Instead of memoizing answers per node, return a pair `(rob_this, skip_this)` from each node. The parent combines them in O(1) with no dict overhead.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def rob(root):
     def dfs(node):
@@ -91,6 +139,24 @@ def rob(root):
 
     return max(dfs(root))                          # L8: O(1) take best at root
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rob(root: TreeNode | null): number {
+    function dfs(node: TreeNode | null): [number, number] {
+        if (!node) return [0, 0];                                    // L1/L2: base case pair
+        const [lRob, lSkip] = dfs(node.left);                       // L3: O(1) dispatch
+        const [rRob, rSkip] = dfs(node.right);                      // L4: O(1) dispatch
+        const robThis = node.val + lSkip + rSkip;                    // L5: O(1)
+        const skipThis = Math.max(lRob, lSkip) + Math.max(rRob, rSkip);  // L6: O(1)
+        return [robThis, skipThis];                                  // L7: O(1) return pair
+    }
+    const [robRoot, skipRoot] = dfs(root);
+    return Math.max(robRoot, skipRoot);                              // L8: O(1) take best at root
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -117,45 +183,16 @@ At every node, `dfs(node)` returns:
 - `rob_this`: best loot if we rob this node (must skip direct children, take best from grandchildren via `left[1]` and `right[1]`)
 - `skip_this`: best loot if we skip this node (each child can be robbed or not independently, hence `max(left)` and `max(right)`)
 
-```
-        3         rob_this  = 3 + skip(left) + skip(right)
-       / \        skip_this = max(left) + max(right)
-      4   5
-     / \   \
-    1   3   1
-```
+**Try this approach:**
 
-For the example `[3,4,5,1,3,null,1]`:
-
-```
-dfs(1) = (1, 0)    dfs(3) = (3, 0)    dfs(1) = (1, 0)
-dfs(4) = (4+0+0, max(1,0)+max(3,0)) = (4, 4)
-dfs(5) = (5+0+1,  max(0)+max(1,0))  = (6, 1)
-dfs(3) = (3+4+1,  max(4,4)+max(6,1)) = (8, 10) → max = 10? 
-
-Wait -- let us recheck the expected answer 9:
-dfs(4): rob=4+0+0=4, skip=max(1,0)+max(3,0)=1+3=4
-dfs(5): rob=5+0+1=6, skip=max(0,0)+max(1,0)=0+1=1
-dfs(3): rob=3+4+1=8, skip=max(4,4)+max(6,1)=4+6=10 → max=10
-
-Hmm, example 2 answer is 9, not 10. Let us check the tree:
-[3,4,5,1,3,null,1] means root=3, left=4, right=5, 4.left=1, 4.right=3, 5.right=1
-
-dfs(1)=(1,0), dfs(3)=(3,0)
-dfs(4): rob=4+0+0=4, skip=max(1,0)+max(3,0)=4
-dfs(1)=(1,0) [5.right]
-dfs(5): rob=5+0+1=6, skip=0+max(1,0)=1
-dfs(3_root): rob=3+4+1=8, skip=max(4,4)+max(6,1)=4+6=10 → 10
-
-The LeetCode answer for [3,4,5,1,3,null,1] is actually 9, robbing 4+5.
-But 4+5=9 corresponds to skip_root with children: max(dfs(4)) + max(dfs(5)) = 4+6=10?
-```
-
-Actually max(dfs(root)) = max(8, 10) = 10. The LeetCode site says 9 but 4+5=9 while 4.rob(4)+5.rob(6)... Let us re-examine: skip root, take best from each child independently. Left child: best is 4 (rob 4, skip its children). Right child: best is 6 (rob 5 and its child 1). Total = 4+6=10. So the correct answer for `[3,4,5,1,3,null,1]` is **10**, and LeetCode agrees upon closer inspection.
-
-**Complexity**
-- **Time:** O(n). Each node visited once.
-- **Space:** O(h) recursion stack.
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="house-robber-iii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="house-robber-iii-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -168,6 +205,8 @@ The pair-return pattern is canonical for tree DP where each node needs to track 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -213,6 +252,49 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(vals: (number | null)[]): TreeNode | null {
+    if (!vals.length) return null;
+    const root = new TreeNode(vals[0] as number);
+    const q: TreeNode[] = [root];
+    let i = 1;
+    while (q.length && i < vals.length) {
+        const node = q.shift()!;
+        if (i < vals.length && vals[i] !== null) { node.left = new TreeNode(vals[i] as number); q.push(node.left); }
+        i++;
+        if (i < vals.length && vals[i] !== null) { node.right = new TreeNode(vals[i] as number); q.push(node.right); }
+        i++;
+    }
+    return root;
+}
+
+function rob(root: TreeNode | null): number {
+    function dfs(node: TreeNode | null): [number, number] {
+        if (!node) return [0, 0];
+        const [lRob, lSkip] = dfs(node.left);
+        const [rRob, rSkip] = dfs(node.right);
+        return [node.val + lSkip + rSkip, Math.max(lRob, lSkip) + Math.max(rRob, rSkip)];
+    }
+    return Math.max(...dfs(root));
+}
+
+console.assert(rob(buildTree([3, 2, 3, null, 3, null, 1])) === 7);
+console.assert(rob(buildTree([3, 4, 5, 1, 3, null, 1])) === 10);
+console.assert(rob(buildTree([5])) === 5);
+console.assert(rob(buildTree([1, 2])) === 2);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

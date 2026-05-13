@@ -5,11 +5,16 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './152-maximum-product-subarray.py?raw';
+import practiceCodeTs from './152-maximum-product-subarray.ts?raw';
+import approach3PyCode from './152-maximum-product-subarray-approach3.py?raw';
+import approach3TsCode from './152-maximum-product-subarray-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +29,21 @@ LeetCode 152 · [Link](https://leetcode.com/problems/maximum-product-subarray/) 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="maximum-product-subarray" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="maximum-product-subarray-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="maximum-product-subarray-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, every subarray
 
 For each `(i, j)`, compute the product.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_product(nums):
     best = nums[0]                          # L1: O(1) init
@@ -40,6 +54,23 @@ def max_product(nums):
             best = max(best, prod)         # L6: O(1) update
     return best                            # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProduct(nums: number[]): number {
+    let best = nums[0];                         // L1: O(1) init
+    for (let i = 0; i < nums.length; i++) {    // L2: outer loop, n iterations
+        let prod = 1;                           // L3: O(1) reset
+        for (let j = i; j < nums.length; j++) { // L4: inner loop, n-i iterations
+            prod *= nums[j];                    // L5: O(1) multiply
+            best = Math.max(best, prod);        // L6: O(1) update
+        }
+    }
+    return best;                                // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -62,6 +93,8 @@ Every pair `(i, j)` is visited exactly once. No early exit is possible because t
 
 First instinct: `dp[i] = max(nums[i], dp[i - 1] * nums[i])`. This fails when a large negative product meets a negative number, the product becomes large positive.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_product(nums):
     dp_prev = nums[0]
@@ -71,6 +104,21 @@ def max_product(nums):
         best = max(best, dp_prev)
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProduct(nums: number[]): number {
+    let dpPrev = nums[0];
+    let best = dpPrev;
+    for (let k = 1; k < nums.length; k++) {
+        dpPrev = Math.max(nums[k], dpPrev * nums[k]);  // WRONG: throws away the running min
+        best = Math.max(best, dpPrev);
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Counter-example:** `[-2, 3, -4]`. The correct answer is `24` (multiply all three). This wrong DP gives `3`:
 
@@ -88,6 +136,8 @@ Not a valid approach. Included to motivate Approach 3.
 
 Because multiplying a negative makes a big-negative-min into a big-positive-max, we must track both `max_here` and `min_here`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_product(nums):
     max_here = min_here = best = nums[0]   # L1: O(1) init from first element
@@ -99,6 +149,23 @@ def max_product(nums):
         best = max(best, max_here)         # L6: O(1) track global best
     return best                            # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProduct(nums: number[]): number {
+    let maxHere = nums[0], minHere = nums[0], best = nums[0];  // L1: O(1) init
+    for (let k = 1; k < nums.length; k++) {                    // L2: single pass, n-1 iters
+        const x = nums[k];
+        if (x < 0) [maxHere, minHere] = [minHere, maxHere];   // L3: O(1) swap on sign flip
+        maxHere = Math.max(x, maxHere * x);                    // L4: O(1) extend or restart max
+        minHere = Math.min(x, minHere * x);                    // L5: O(1) extend or restart min
+        best = Math.max(best, maxHere);                        // L6: O(1) track global best
+    }
+    return best;                                               // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -121,6 +188,17 @@ Every line is O(1) per iteration and there is only one loop of length n - 1, so 
 ### Why swap on negative
 When `x < 0`, multiplying by `x` flips order: the previous max becomes the smallest candidate, and the previous min becomes the largest. Swapping max/min before the update captures this cleanly.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="maximum-product-subarray-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="maximum-product-subarray-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -133,6 +211,8 @@ The "track both extremes" pattern also solves problem 978 (Longest Turbulent Sub
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_max_product.py and run.
 # Uses the canonical implementation (Approach 3: track max and min).
@@ -162,6 +242,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProduct(nums: number[]): number {
+    let maxHere = nums[0], minHere = nums[0], best = nums[0];
+    for (let k = 1; k < nums.length; k++) {
+        const x = nums[k];
+        if (x < 0) [maxHere, minHere] = [minHere, maxHere];
+        maxHere = Math.max(x, maxHere * x);
+        minHere = Math.min(x, minHere * x);
+        best = Math.max(best, maxHere);
+    }
+    return best;
+}
+
+console.assert(maxProduct([2, 3, -2, 4]) === 6);
+console.assert(maxProduct([-2, 0, -1]) === 0);
+console.assert(maxProduct([-2, 3, -4]) === 24);
+console.assert(maxProduct([0]) === 0);
+console.assert(maxProduct([-3]) === -3);
+console.assert(maxProduct([-2, -3]) === 6);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './295-find-median-from-datastream.py?raw';
+import practiceCodeTs from './295-find-median-from-datastream.ts?raw';
+import approach3TsCode from './295-find-median-from-datastream-approach3.ts?raw';
 
 ## Problem
 
@@ -28,12 +32,21 @@ LeetCode 295 · [Link](https://leetcode.com/problems/find-median-from-data-strea
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="find-median-from-data-stream" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="find-median-from-data-stream-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="find-median-from-data-stream-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, store and sort on each findMedian
 
 Keep all values; sort on query.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class MedianFinder:
     def __init__(self):
@@ -47,6 +60,24 @@ class MedianFinder:
             return s[n // 2]
         return (s[n // 2 - 1] + s[n // 2]) / 2
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MedianFinder {
+    private nums: number[] = [];
+    addNum(num: number): void {
+        this.nums.push(num);           // L1: O(1) append
+    }
+    findMedian(): number {
+        const s = [...this.nums].sort((a, b) => a - b);  // L2: O(n log n) sort on every query
+        const n = s.length;
+        if (n % 2 === 1) return s[Math.floor(n / 2)];
+        return (s[n / 2 - 1] + s[n / 2]) / 2;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -66,6 +97,8 @@ class MedianFinder:
 
 Keep the array sorted on insertion.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import bisect
 
@@ -80,6 +113,30 @@ class MedianFinder:
             return self.nums[n // 2]    # L2: O(1) index
         return (self.nums[n // 2 - 1] + self.nums[n // 2]) / 2
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MedianFinder {
+    private nums: number[] = [];
+    addNum(num: number): void {
+        // Binary search for insertion point, then splice
+        let lo = 0, hi = this.nums.length;
+        while (lo < hi) {
+            const mid = (lo + hi) >> 1;
+            if (this.nums[mid] < num) lo = mid + 1;
+            else hi = mid;
+        }
+        this.nums.splice(lo, 0, num);   // L1: O(log n) search + O(n) shift
+    }
+    findMedian(): number {
+        const n = this.nums.length;
+        if (n % 2 === 1) return this.nums[Math.floor(n / 2)];  // L2: O(1) index
+        return (this.nums[n / 2 - 1] + this.nums[n / 2]) / 2;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -87,10 +144,10 @@ class MedianFinder:
 
 | Line | Per-call cost | Times executed | Contribution per call |
 | --- | --- | --- | --- |
-| **L1 (insort)** | **O(n)** | **1 per addNum** | **O(n)** ← dominates addNum |
+| **L1 (insort / splice)** | **O(n)** | **1 per addNum** | **O(n)** ← dominates addNum |
 | L2 (findMedian index) | O(1) | 1 per findMedian | O(1) |
 
-`bisect.insort` uses binary search (O(log n)) to find the insertion point but then shifts all elements after it (O(n)).
+`bisect.insort` / `splice` uses binary search (O(log n)) to find the insertion point but then shifts all elements after it (O(n)).
 
 **Complexity**
 - `addNum`: O(n) (L1 shift dominates).
@@ -101,6 +158,8 @@ class MedianFinder:
 
 Maintain a **max-heap** `lo` for the smaller half and a **min-heap** `hi` for the larger half. Balance them so `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. The median is at the top(s).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -122,6 +181,84 @@ class MedianFinder:
             return -self.lo[0]           # L4: O(1) read lo top
         return (-self.lo[0] + self.hi[0]) / 2  # L5: O(1) average both tops
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MinHeap {
+    protected data: number[] = [];
+    get size(): number { return this.data.length; }
+    get top(): number { return this.data[0]; }
+    push(val: number): void {
+        this.data.push(val);
+        this._siftUp(this.data.length - 1);
+    }
+    pop(): number {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) { this.data[0] = last; this._siftDown(0); }
+        return top;
+    }
+    protected _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p] <= this.data[i]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    protected _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let smallest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l] < this.data[smallest]) smallest = l;
+            if (r < n && this.data[r] < this.data[smallest]) smallest = r;
+            if (smallest === i) break;
+            [this.data[smallest], this.data[i]] = [this.data[i], this.data[smallest]]; i = smallest;
+        }
+    }
+}
+
+class MaxHeap extends MinHeap {
+    protected override _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p] >= this.data[i]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    protected override _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let largest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l] > this.data[largest]) largest = l;
+            if (r < n && this.data[r] > this.data[largest]) largest = r;
+            if (largest === i) break;
+            [this.data[largest], this.data[i]] = [this.data[i], this.data[largest]]; i = largest;
+        }
+    }
+}
+
+class MedianFinder {
+    private lo = new MaxHeap(); // smaller half
+    private hi = new MinHeap(); // larger half
+
+    addNum(num: number): void {
+        this.lo.push(num);                          // L1: O(log n) push to lo
+        this.hi.push(this.lo.pop());               // L2: O(log n) pop lo top + push hi
+        if (this.hi.size > this.lo.size)
+            this.lo.push(this.hi.pop());           // L3: O(log n) rebalance
+    }
+
+    findMedian(): number {
+        if (this.lo.size > this.hi.size)
+            return this.lo.top;                    // L4: O(1) read lo top
+        return (this.lo.top + this.hi.top) / 2;   // L5: O(1) average both tops
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -148,8 +285,18 @@ After each `addNum`:
 
 If the total count is odd, the median is `lo`'s top; if even, it's the average of both tops.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="find-median-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_295.py and run.
 # Uses the two-heaps approach (Approach 3).
@@ -203,6 +350,33 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses the two-heaps approach (Approach 3).
+// See 295-find-median-from-datastream-approach3.ts for the full implementation.
+const mf = new MedianFinder();
+mf.addNum(1); mf.addNum(2);
+console.assert(mf.findMedian() === 1.5);
+mf.addNum(3);
+console.assert(mf.findMedian() === 2.0);
+
+const mf2 = new MedianFinder();
+mf2.addNum(42);
+console.assert(mf2.findMedian() === 42.0);
+
+const mf3 = new MedianFinder();
+for (const v of [5, 3, 8, 1, 9]) mf3.addNum(v);
+console.assert(mf3.findMedian() === 5.0);  // sorted: [1,3,5,8,9]
+
+const mf4 = new MedianFinder();
+for (const v of [2, 4, 6, 8]) mf4.addNum(v);
+console.assert(mf4.findMedian() === 5.0);  // (4+6)/2
+
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

@@ -5,11 +5,20 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, fibonacci, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './070-climbing-stairs.py?raw';
+import practiceCodeTs from './070-climbing-stairs.ts?raw';
+import approach2PyCode from './070-climbing-stairs-approach2.py?raw';
+import approach2TsCode from './070-climbing-stairs-approach2.ts?raw';
+import approach3PyCode from './070-climbing-stairs-approach3.py?raw';
+import approach3TsCode from './070-climbing-stairs-approach3.ts?raw';
+import approach4PyCode from './070-climbing-stairs-approach4.py?raw';
+import approach4TsCode from './070-climbing-stairs-approach4.ts?raw';
 
 ## Problem
 
@@ -23,18 +32,37 @@ LeetCode 70 · [Link](https://leetcode.com/problems/climbing-stairs/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="climbing-stairs" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="climbing-stairs-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="climbing-stairs-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, naive recursion
 
 `f(n) = f(n-1) + f(n-2)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def climb_stairs(n):
     if n <= 2:              # L1: base case
         return n
     return climb_stairs(n - 1) + climb_stairs(n - 2)  # L2: two recursive calls per step
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function climbStairs(n: number): number {
+    if (n <= 2) return n;                              // L1: base case
+    return climbStairs(n - 1) + climbStairs(n - 2);  // L2: two recursive calls per step
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -55,6 +83,8 @@ Each call at depth d spawns two more calls, doubling the tree width. The total n
 
 Cache results by `n`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -64,6 +94,21 @@ def climb_stairs(n):
         return n
     return climb_stairs(n - 1) + climb_stairs(n - 2)  # L2: two sub-calls, result cached
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+const memo = new Map<number, number>();
+
+function climbStairs(n: number): number {
+    if (n <= 2) return n;                              // L1: base case
+    if (memo.has(n)) return memo.get(n)!;
+    const result = climbStairs(n - 1) + climbStairs(n - 2);  // L2: two sub-calls, cached
+    memo.set(n, result);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -80,10 +125,23 @@ Each unique `n` is computed once and cached. After that, every subsequent call h
 - **Time:** O(n), driven by L2 (n unique states, each computed once).
 - **Space:** O(n) cache + recursion stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="climbing-stairs-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="climbing-stairs-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up DP array
 
 Build the full Fibonacci sequence in a dp array, one cell per step.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def climb_stairs(n):
     if n <= 2:                          # L1: base case
@@ -94,6 +152,22 @@ def climb_stairs(n):
         dp[i] = dp[i - 1] + dp[i - 2] # L5: O(1) recurrence
     return dp[n]                        # L6: O(1) return
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function climbStairs(n: number): number {
+    if (n <= 2) return n;                          // L1: base case
+    const dp = new Array(n + 1).fill(0);           // L2: O(n) allocation
+    dp[1] = 1;
+    dp[2] = 2;                                     // L3: seed base cases
+    for (let i = 3; i <= n; i++) {                 // L4: loop n-2 times
+        dp[i] = dp[i - 1] + dp[i - 2];            // L5: O(1) recurrence
+    }
+    return dp[n];                                  // L6: O(1) return
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -110,10 +184,23 @@ def climb_stairs(n):
 - **Time:** O(n), driven by L4/L5 (n - 2 iterations).
 - **Space:** O(n) for the dp array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="climbing-stairs-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="climbing-stairs-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 4: Bottom-up with two variables (optimal)
 
 Only the last two values are needed.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def climb_stairs(n):
     if n <= 2:                    # L1: base case O(1)
@@ -123,6 +210,20 @@ def climb_stairs(n):
         a, b = b, a + b           # L4: O(1) update per iteration
     return b
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function climbStairs(n: number): number {
+    if (n <= 2) return n;         // L1: base case O(1)
+    let a = 1, b = 2;             // L2: init f(1), f(2)
+    for (let i = 3; i <= n; i++) { // L3: loop runs n-2 times
+        [a, b] = [b, a + b];      // L4: O(1) update per iteration
+    }
+    return b;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -141,6 +242,17 @@ The loop runs exactly n - 2 times; each iteration is a fixed-cost swap-and-add. 
 - **Time:** O(n), driven by L3/L4 (n - 2 iterations).
 - **Space:** O(1), just two scalars.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach4PyCode} id="climbing-stairs-approach4-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach4TsCode} id="climbing-stairs-approach4-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -154,6 +266,8 @@ Template for every Fibonacci-shape DP (House Robber, Min Cost Climbing Stairs, T
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_climbing_stairs.py and run.
 # Uses the canonical implementation (Approach 4: bottom-up two variables).
@@ -178,6 +292,28 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function climbStairs(n: number): number {
+    if (n <= 2) return n;
+    let a = 1, b = 2;
+    for (let i = 3; i <= n; i++) {
+        [a, b] = [b, a + b];
+    }
+    return b;
+}
+
+console.assert(climbStairs(1) === 1);
+console.assert(climbStairs(2) === 2);
+console.assert(climbStairs(3) === 3);
+console.assert(climbStairs(4) === 5);
+console.assert(climbStairs(5) === 8);
+console.assert(climbStairs(10) === 89);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

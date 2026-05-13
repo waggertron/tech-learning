@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './739-daily-temperatures.py?raw';
+import practiceCodeTs from './739-daily-temperatures.ts?raw';
+import approach2TsCode from './739-daily-temperatures-approach2.ts?raw';
+import approach3TsCode from './739-daily-temperatures-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +29,21 @@ LeetCode 739 · [Link](https://leetcode.com/problems/daily-temperatures/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="daily-temperatures" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="daily-temperatures-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="daily-temperatures-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, for each day, scan forward
 
 For each day, linearly search for the first warmer day.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def daily_temperatures(temperatures: list[int]) -> list[int]:
     n = len(temperatures)                          # L1: O(1)
@@ -41,6 +55,25 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
                 break
     return answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function dailyTemperatures(temperatures: number[]): number[] {
+    const n = temperatures.length;                          // L1: O(1)
+    const answer = new Array(n).fill(0);                    // L2: O(n)
+    for (let i = 0; i < n; i++) {                          // L3: outer loop, n iterations
+        for (let j = i + 1; j < n; j++) {                 // L4: inner scan, up to n-i steps
+            if (temperatures[j] > temperatures[i]) {       // L5: O(1) compare
+                answer[i] = j - i;                         // L6: O(1) distance
+                break;
+            }
+        }
+    }
+    return answer;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -62,6 +95,8 @@ Each inner scan can run n-i steps, giving O(n²) in the worst case (monotonicall
 
 Walk the array backwards, maintaining a stack of "candidate future warmer days." For each index, pop stack entries whose temperatures aren't strictly greater, then the top (if any) is the next warmer day.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def daily_temperatures(temperatures: list[int]) -> list[int]:
     n = len(temperatures)                          # L1: O(1)
@@ -75,6 +110,24 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
         stack.append(i)                            # L7: O(1) push
     return answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function dailyTemperatures(temperatures: number[]): number[] {
+    const n = temperatures.length;
+    const answer = new Array(n).fill(0);           // L2: O(n)
+    const stack: number[] = [];
+    for (let i = n - 1; i >= 0; i--) {            // L3: backward loop, n iterations
+        while (stack.length && temperatures[stack[stack.length - 1]] <= temperatures[i])
+            stack.pop();                           // L4-L5: O(1) amortized
+        if (stack.length) answer[i] = stack[stack.length - 1] - i;  // L6: O(1) distance
+        stack.push(i);                             // L7: O(1) push
+    }
+    return answer;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -92,10 +145,23 @@ Each index is pushed once and popped at most once; total stack work across all i
 - **Time:** O(n), driven by L4-L7 (each index pushed and popped at most once).
 - **Space:** O(n) stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="daily-temperatures-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="daily-temperatures-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Forward pass with a monotonic decreasing stack (canonical)
 
 Maintain a stack of indices with strictly decreasing temperatures. For each new day, pop all days on the stack whose temperature is less than today's, those are answered; today is their warmer day.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def daily_temperatures(temperatures: list[int]) -> list[int]:
     n = len(temperatures)                          # L1: O(1)
@@ -108,6 +174,25 @@ def daily_temperatures(temperatures: list[int]) -> list[int]:
         stack.append(i)                            # L8: O(1) push today
     return answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function dailyTemperatures(temperatures: number[]): number[] {
+    const n = temperatures.length;
+    const answer = new Array(n).fill(0);           // L2: O(n) output initialized to 0
+    const stack: number[] = [];                    // L3: O(1)
+    for (let i = 0; i < n; i++) {                 // L4: forward loop, n iterations
+        while (stack.length && temperatures[stack[stack.length - 1]] < temperatures[i]) {  // L5
+            const j = stack.pop()!;               // L6: O(1) amortized pop
+            answer[j] = i - j;                    // L7: O(1) store distance
+        }
+        stack.push(i);                             // L8: O(1) push today
+    }
+    return answer;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -125,6 +210,17 @@ Each index is pushed once and popped at most once. The inner while loop is amort
 - **Time:** O(n), driven by L5-L8 (amortized O(n) total stack work).
 - **Space:** O(n) for the stack and output.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="daily-temperatures-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="daily-temperatures-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -137,6 +233,8 @@ The forward monotonic-stack form is the canonical template for "next greater ele
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_daily_temperatures.py and run.
 # Uses the canonical implementation (Approach 3: forward monotonic stack).
@@ -163,6 +261,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function dailyTemperatures(temperatures: number[]): number[] {
+    const n = temperatures.length;
+    const answer = new Array(n).fill(0);
+    const stack: number[] = [];
+    for (let i = 0; i < n; i++) {
+        while (stack.length && temperatures[stack[stack.length - 1]] < temperatures[i]) {
+            const j = stack.pop()!;
+            answer[j] = i - j;
+        }
+        stack.push(i);
+    }
+    return answer;
+}
+
+console.assert(JSON.stringify(dailyTemperatures([73,74,75,71,69,72,76,73])) === JSON.stringify([1,1,4,2,1,1,0,0]));
+console.assert(JSON.stringify(dailyTemperatures([30,40,50,60])) === JSON.stringify([1,1,1,0]));
+console.assert(JSON.stringify(dailyTemperatures([30,60,90])) === JSON.stringify([1,1,0]));
+console.assert(JSON.stringify(dailyTemperatures([90,60,30])) === JSON.stringify([0,0,0]));
+console.assert(JSON.stringify(dailyTemperatures([70])) === JSON.stringify([0]));
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

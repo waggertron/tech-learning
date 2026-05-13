@@ -8,16 +8,23 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './036-valid-sudoku.py?raw';
+import practiceCodeTs from './036-valid-sudoku.ts?raw';
+import approach2PyCode from './036-valid-sudoku-approach2.py?raw';
+import approach2TsCode from './036-valid-sudoku-approach2.ts?raw';
+import approach3PyCode from './036-valid-sudoku-approach3.py?raw';
+import approach3TsCode from './036-valid-sudoku-approach3.ts?raw';
 
 ## Problem
 
 Determine whether a 9×9 Sudoku board is **valid** (note: not necessarily solvable; just that the current filled cells don't violate any rules):
 
-1. Each row contains the digits 1–9 without repetition.
-2. Each column contains the digits 1–9 without repetition.
-3. Each of the nine 3×3 sub-boxes contains the digits 1–9 without repetition.
+1. Each row contains the digits 1-9 without repetition.
+2. Each column contains the digits 1-9 without repetition.
+3. Each of the nine 3×3 sub-boxes contains the digits 1-9 without repetition.
 
 Empty cells are `'.'`.
 
@@ -25,12 +32,21 @@ LeetCode 36 · [Link](https://leetcode.com/problems/valid-sudoku/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="valid-sudoku" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="valid-sudoku-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="valid-sudoku-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, three separate passes
 
 Check rows, then columns, then boxes, each with a fresh set.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_valid_sudoku(board: list[list[str]]) -> bool:
     # Rows
@@ -68,6 +84,48 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
                     seen.add(ch)
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValidSudoku(board: string[][]): boolean {
+    // Rows
+    for (const row of board) {                         // L1: 9 rows
+        const seen = new Set<string>();                // L2: fresh set
+        for (const ch of row) {                        // L3: 9 chars per row
+            if (ch === '.') continue;                  // L4: skip
+            if (seen.has(ch)) return false;            // L5: set lookup
+            seen.add(ch);                              // L6: set insert
+        }
+    }
+    // Columns
+    for (let c = 0; c < 9; c++) {                      // L7: 9 columns
+        const seen = new Set<string>();
+        for (let r = 0; r < 9; r++) {                  // L8: 9 rows per column
+            const ch = board[r][c];
+            if (ch === '.') continue;
+            if (seen.has(ch)) return false;
+            seen.add(ch);
+        }
+    }
+    // 3x3 boxes
+    for (let br = 0; br < 9; br += 3) {                // L9: 3 box-row offsets
+        for (let bc = 0; bc < 9; bc += 3) {            // L10: 3 box-col offsets
+            const seen = new Set<string>();
+            for (let r = br; r < br + 3; r++) {        // L11: 3 rows per box
+                for (let c = bc; c < bc + 3; c++) {    // L12: 3 cols per box
+                    const ch = board[r][c];
+                    if (ch === '.') continue;
+                    if (seen.has(ch)) return false;
+                    seen.add(ch);
+                }
+            }
+        }
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -91,6 +149,8 @@ Works, but reads the board three times. The larger Big-O lesson: a "constant-siz
 
 Maintain 9 row-sets, 9 column-sets, and 9 box-sets; one pass over the board.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_valid_sudoku(board: list[list[str]]) -> bool:
     rows = [set() for _ in range(9)]           # L1: O(1), 9 empty sets
@@ -110,6 +170,31 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
             boxes[b].add(ch)                   # L12: O(1)
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValidSudoku(board: string[][]): boolean {
+    const rows = Array.from({length: 9}, () => new Set<string>());   // L1
+    const cols = Array.from({length: 9}, () => new Set<string>());   // L2
+    const boxes = Array.from({length: 9}, () => new Set<string>());  // L3
+
+    for (let r = 0; r < 9; r++) {                                     // L4: 9 rows
+        for (let c = 0; c < 9; c++) {                                 // L5: 9 cols each
+            const ch = board[r][c];                                   // L6: O(1)
+            if (ch === '.') continue;                                  // L7: skip
+            const b = Math.floor(r / 3) * 3 + Math.floor(c / 3);    // L8: O(1) box index
+            if (rows[r].has(ch) || cols[c].has(ch) || boxes[b].has(ch)) // L9: O(1)
+                return false;
+            rows[r].add(ch);                                          // L10
+            cols[c].add(ch);                                          // L11
+            boxes[b].add(ch);                                         // L12
+        }
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -127,12 +212,23 @@ One pass, constant work per cell, short-circuits on the first conflict.
 - **Time:** O(81) = O(1), driven by the single 81-cell pass (L4/L5 with L6-L12).
 - **Space:** O(81) = O(1).
 
-One pass, short-circuits on the first conflict.
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="valid-sudoku-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="valid-sudoku-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Bitmask-based single pass (optimal constant factors)
 
 Replace each set with a 9-bit integer. Bit `i` is set if digit `i+1` is already present.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_valid_sudoku(board: list[list[str]]) -> bool:
     rows = [0] * 9                             # L1: O(1), 9 integers
@@ -153,6 +249,32 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
             boxes[b] |= bit                    # L13: O(1)
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValidSudoku(board: string[][]): boolean {
+    const rows = new Array(9).fill(0);                              // L1
+    const cols = new Array(9).fill(0);                              // L2
+    const boxes = new Array(9).fill(0);                             // L3
+
+    for (let r = 0; r < 9; r++) {                                   // L4: 9 rows
+        for (let c = 0; c < 9; c++) {                               // L5: 9 cols each
+            const ch = board[r][c];                                 // L6
+            if (ch === '.') continue;                                // L7: skip
+            const bit = 1 << (parseInt(ch) - 1);                   // L8: O(1) bitmask
+            const b = Math.floor(r / 3) * 3 + Math.floor(c / 3);  // L9: O(1) box index
+            if (rows[r] & bit || cols[c] & bit || boxes[b] & bit)  // L10: O(1) AND
+                return false;
+            rows[r] |= bit;                                         // L11
+            cols[c] |= bit;                                         // L12
+            boxes[b] |= bit;                                        // L13
+        }
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -170,6 +292,17 @@ Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at t
 - **Time:** O(1). Same as the hash-set version but with constant-factor gains from integer bit ops vs. set ops.
 - **Space:** O(1). 27 integers vs. 27 sets of up to 9 strings.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="valid-sudoku-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="valid-sudoku-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -182,6 +315,8 @@ All approaches are formally O(1) because the board is fixed-size; the difference
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_valid_sudoku.py and run.
 # Uses the canonical implementation (Approach 3: bitmask single pass).
@@ -241,6 +376,58 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValidSudoku(board: string[][]): boolean {
+    const rows = new Array(9).fill(0);
+    const cols = new Array(9).fill(0);
+    const boxes = new Array(9).fill(0);
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            const ch = board[r][c];
+            if (ch === '.') continue;
+            const bit = 1 << (parseInt(ch) - 1);
+            const b = Math.floor(r / 3) * 3 + Math.floor(c / 3);
+            if (rows[r] & bit || cols[c] & bit || boxes[b] & bit) return false;
+            rows[r] |= bit;
+            cols[c] |= bit;
+            boxes[b] |= bit;
+        }
+    }
+    return true;
+}
+
+const validBoard = [
+    ["5","3",".",".","7",".",".",".","."],
+    ["6",".",".","1","9","5",".",".","."],
+    [".","9","8",".",".",".",".","6","."],
+    ["8",".",".",".","6",".",".",".","3"],
+    ["4",".",".","8",".","3",".",".","1"],
+    ["7",".",".",".","2",".",".",".","6"],
+    [".","6",".",".",".",".","2","8","."],
+    [".",".",".","4","1","9",".",".","5"],
+    [".",".",".",".","8",".",".","7","9"]
+];
+console.assert(isValidSudoku(validBoard) === true);
+const dupRow = [
+    ["8","3",".",".","7",".",".",".","."],
+    ["6",".",".","1","9","5",".",".","."],
+    [".","9","8",".",".",".",".","6","."],
+    ["8",".",".",".","6",".",".",".","3"],
+    ["4",".",".","8",".","3",".",".","1"],
+    ["7",".",".",".","2",".",".",".","6"],
+    [".","6",".",".",".",".","2","8","."],
+    [".",".",".","4","1","9",".",".","5"],
+    [".",".",".",".","8",".",".","7","9"]
+];
+console.assert(isValidSudoku(dupRow) === false);
+const empty: string[][] = Array.from({length: 9}, () => Array(9).fill('.'));
+console.assert(isValidSudoku(empty) === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

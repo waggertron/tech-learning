@@ -5,11 +5,16 @@ parent: advanced-graphs
 tags: [leetcode, advanced-graphs, dijkstra, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1514-path-with-maximum-probability.py?raw';
+import practiceCodeTs from './1514-path-with-maximum-probability.ts?raw';
+import approach2PyCode from './1514-path-with-maximum-probability-approach2.py?raw';
+import approach2TsCode from './1514-path-with-maximum-probability-approach2.ts?raw';
 
 ## Problem
 
@@ -25,12 +30,21 @@ LeetCode 1514 · [Link](https://leetcode.com/problems/path-with-maximum-probabil
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="path-with-maximum-probability" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="path-with-maximum-probability-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="path-with-maximum-probability-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, Bellman-Ford style relaxation
 
 Repeat relaxation until no updates occur. Works because probabilities are always in (0, 1], so multiplying never increases the value -- no negative-cycle analog.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_probability(n, edges, succ_prob, start, end):
     prob = [0.0] * n                          # L1: O(V) init
@@ -49,6 +63,33 @@ def max_probability(n, edges, succ_prob, start, end):
             break
     return prob[end]                          # L8: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProbability(n: number, edges: number[][], succProb: number[], start: number, end: number): number {
+    const prob = new Array(n).fill(0.0);      // L1: O(V) init
+    prob[start] = 1.0;                        // L2: O(1) seed
+    for (let round = 0; round < n - 1; round++) {  // L3: at most V-1 rounds
+        let updated = false;
+        for (let i = 0; i < edges.length; i++) {   // L4: O(E) per round
+            const [u, v] = edges[i];
+            const p = succProb[i];
+            if (prob[u] * p > prob[v]) {      // L5: O(1) relax u->v
+                prob[v] = prob[u] * p;
+                updated = true;
+            }
+            if (prob[v] * p > prob[u]) {      // L6: O(1) relax v->u (undirected)
+                prob[u] = prob[v] * p;
+                updated = true;
+            }
+        }
+        if (!updated) break;                  // L7: O(1) early exit
+    }
+    return prob[end];                         // L8: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -74,6 +115,8 @@ Standard Dijkstra minimizes cost; here we maximize probability. Swap the min-hea
 
 **Key insight:** probabilities are multiplied along a path, so the "best" path uses the product of edge probabilities. This is still monotone: adding more edges can only decrease or maintain probability, just as adding more edges (with positive weight) increases distance in standard Dijkstra.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import defaultdict
@@ -104,6 +147,42 @@ def max_probability(n, edges, succ_prob, start, end):
 
     return prob[end]                               # L15: O(1) result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProbability(n: number, edges: number[][], succProb: number[], start: number, end: number): number {
+    const graph = new Map<number, [number, number][]>();
+    for (let i = 0; i < n; i++) graph.set(i, []);
+    for (let i = 0; i < edges.length; i++) {       // L2: O(E) build adjacency
+        const [u, v] = edges[i];
+        graph.get(u)!.push([v, succProb[i]]);
+        graph.get(v)!.push([u, succProb[i]]);
+    }
+
+    const prob = new Array(n).fill(0.0);            // L3: O(V) init probabilities
+    prob[start] = 1.0;                              // L4: O(1) seed
+    // max-heap via negation: store [-prob, node]
+    const heap = new MaxProbHeap();
+    heap.push([-1.0, start]);                       // L5: O(1) seed heap
+
+    while (heap.size > 0) {                         // L6: main loop
+        const [negP, u] = heap.pop();               // L7: O(log V) pop best prob
+        const p = -negP;
+        if (p < prob[u]) continue;                  // L8: O(1) stale check
+        if (u === end) return p;                    // L9: O(1) early exit
+        for (const [v, edgeP] of graph.get(u)!) {  // L10: O(deg(u)) neighbors
+            const newP = p * edgeP;                 // L11: O(1) path prob
+            if (newP > prob[v]) {                   // L12: O(1) improvement check
+                prob[v] = newP;                     // L13: O(1) update
+                heap.push([-newP, v]);              // L14: O(log V) push
+            }
+        }
+    }
+    return prob[end];                               // L15: O(1) result
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -154,6 +233,17 @@ Pop (-0.5, 1), p=0.5:
 Pop (-0.25, 2), p=0.25: u==end -> return 0.25
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="path-with-maximum-probability-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="path-with-maximum-probability-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -165,6 +255,8 @@ The mapping from standard Dijkstra: `min distance` becomes `max probability`, `s
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import defaultdict
@@ -201,6 +293,76 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses modified Dijkstra (Approach 2) with inline MaxProbHeap (min-heap on negated prob).
+class MaxProbHeap {
+    private data: [number, number][] = [];
+    push(item: [number, number]): void {
+        this.data.push(item);
+        let i = this.data.length - 1;
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p][0] <= this.data[i][0]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]];
+            i = p;
+        }
+    }
+    pop(): [number, number] {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) {
+            this.data[0] = last;
+            let i = 0;
+            while (true) {
+                let s = i;
+                const l = 2 * i + 1, r = 2 * i + 2;
+                if (l < this.data.length && this.data[l][0] < this.data[s][0]) s = l;
+                if (r < this.data.length && this.data[r][0] < this.data[s][0]) s = r;
+                if (s === i) break;
+                [this.data[s], this.data[i]] = [this.data[i], this.data[s]];
+                i = s;
+            }
+        }
+        return top;
+    }
+    get size(): number { return this.data.length; }
+}
+
+function maxProbability(n: number, edges: number[][], succProb: number[], start: number, end: number): number {
+    const graph = new Map<number, [number, number][]>();
+    for (let i = 0; i < n; i++) graph.set(i, []);
+    for (let i = 0; i < edges.length; i++) {
+        const [u, v] = edges[i];
+        graph.get(u)!.push([v, succProb[i]]);
+        graph.get(v)!.push([u, succProb[i]]);
+    }
+    const prob = new Array(n).fill(0.0);
+    prob[start] = 1.0;
+    const heap = new MaxProbHeap();
+    heap.push([-1.0, start]);
+    while (heap.size > 0) {
+        const [negP, u] = heap.pop();
+        const p = -negP;
+        if (p < prob[u]) continue;
+        if (u === end) return p;
+        for (const [v, edgeP] of graph.get(u)!) {
+            const newP = p * edgeP;
+            if (newP > prob[v]) { prob[v] = newP; heap.push([-newP, v]); }
+        }
+    }
+    return prob[end];
+}
+
+console.assert(Math.abs(maxProbability(3, [[0,1],[1,2],[0,2]], [0.5,0.5,0.2], 0, 2) - 0.25) < 1e-5);
+console.assert(Math.abs(maxProbability(3, [[0,1],[1,2],[0,2]], [0.5,0.5,0.3], 0, 2) - 0.3) < 1e-5);
+console.assert(maxProbability(3, [[0,1]], [0.5], 0, 2) === 0.0);
+console.assert(Math.abs(maxProbability(2, [[0,1]], [0.9], 0, 1) - 0.9) < 1e-5);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

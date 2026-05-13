@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, graphs, bfs, bipartite, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './886-possible-bipartition.py?raw';
+import practiceCodeTs from './886-possible-bipartition.ts?raw';
+import approach2PyCode from './886-possible-bipartition-approach2.py?raw';
+import approach2TsCode from './886-possible-bipartition-approach2.ts?raw';
 
 ## Problem
 
@@ -24,12 +29,21 @@ LeetCode 886 · [Link](https://leetcode.com/problems/possible-bipartition/) · *
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="possible-bipartition" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="possible-bipartition-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="possible-bipartition-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Build dislikes graph, then check bipartiteness
 
 This is exactly the bipartite check from problem 785, applied to the dislikes relationship. Two people who dislike each other must be in different groups, which is the same constraint as "adjacent nodes must have different colors." So: build an undirected graph from `dislikes`, then run BFS 2-coloring.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict, deque
 
@@ -58,6 +72,41 @@ def possible_bipartition(n, dislikes):
 
     return True                                            # L16: O(1) no conflict found
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function possibleBipartition(n: number, dislikes: number[][]): boolean {
+    const graph: number[][] = Array.from({ length: n + 1 }, () => []);
+    for (const [a, b] of dislikes) {                       // L2: O(e) build undirected graph
+        graph[a].push(b);                                  // L3: O(1) edge a->b
+        graph[b].push(a);                                  // L4: O(1) edge b->a
+    }
+
+    const color = new Array(n + 1).fill(-1);               // L5: person -> color, -1 = unvisited
+
+    for (let start = 1; start <= n; start++) {             // L6: handle disconnected components
+        if (color[start] !== -1) continue;                 // L7: skip already-colored nodes
+        color[start] = 0;                                  // L8: O(1) seed color
+        const q: number[] = [start];                       // L9: O(1) seed queue
+        let head = 0;
+
+        while (head < q.length) {                          // L10: BFS loop
+            const person = q[head++];                      // L11: O(1) dequeue
+            for (const neighbor of graph[person]) {        // L12: O(deg) check neighbors
+                if (color[neighbor] === -1) {
+                    color[neighbor] = 1 - color[person];   // L13: O(1) assign opposite color
+                    q.push(neighbor);                      // L14: O(1) enqueue
+                } else if (color[neighbor] === color[person]) {
+                    return false;                          // L15: O(1) conflict, odd cycle
+                }
+            }
+        }
+    }
+    return true;                                           // L16: O(1) no conflict found
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -70,8 +119,6 @@ def possible_bipartition(n, dislikes):
 | **L11 (dequeue)** | **O(1)** | **once per person** | **O(n)** |
 | **L12 (neighbor scan)** | **O(deg)** | **once per person** | **O(n + e) ← dominates** |
 | L13, L14 (color + enqueue) | O(1) | once per unvisited neighbor | O(n) |
-
-Each person is dequeued at most once (L13 only fires when `neighbor not in color`). Each dislike edge is examined twice (once from each endpoint), so L12 totals O(e) across the full BFS.
 
 **Complexity**
 - **Time:** O(n + e), driven by L12 (each edge examined twice, each node dequeued once).
@@ -95,6 +142,17 @@ BFS from 1: color[1]=0, color[2]=1, color[3]=1
   Groups: {1,4} vs {2,3}
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="possible-bipartition-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="possible-bipartition-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Step | Cost |
@@ -105,6 +163,8 @@ BFS from 1: color[1]=0, color[2]=1, color[3]=1
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict, deque
 
@@ -158,6 +218,40 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function possibleBipartition(n: number, dislikes: number[][]): boolean {
+    const graph: number[][] = Array.from({ length: n + 1 }, () => []);
+    for (const [a, b] of dislikes) { graph[a].push(b); graph[b].push(a); }
+
+    const color = new Array(n + 1).fill(-1);
+    for (let start = 1; start <= n; start++) {
+        if (color[start] !== -1) continue;
+        color[start] = 0;
+        const q: number[] = [start];
+        let head = 0;
+        while (head < q.length) {
+            const person = q[head++];
+            for (const neighbor of graph[person]) {
+                if (color[neighbor] === -1) { color[neighbor] = 1 - color[person]; q.push(neighbor); }
+                else if (color[neighbor] === color[person]) return false;
+            }
+        }
+    }
+    return true;
+}
+
+console.assert(possibleBipartition(4, [[1,2],[1,3],[2,4]]) === true);
+console.assert(possibleBipartition(3, [[1,2],[1,3],[2,3]]) === false);
+console.assert(possibleBipartition(5, [[1,2],[2,3],[3,4],[4,5],[1,5]]) === false);
+console.assert(possibleBipartition(4, []) === true);
+console.assert(possibleBipartition(4, [[1,2],[3,4]]) === true);
+console.assert(possibleBipartition(1, []) === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

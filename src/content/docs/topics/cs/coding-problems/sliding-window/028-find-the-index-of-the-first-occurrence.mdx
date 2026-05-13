@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './028-find-the-index-of-the-first-occurrence.py?raw';
+import practiceCodeTs from './028-find-the-index-of-the-first-occurrence.ts?raw';
+import approach2TsCode from './028-find-the-index-of-the-first-occurrence-approach2.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 28 · [Link](https://leetcode.com/problems/find-the-index-of-the-first-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="find-the-index-of-the-first-occurrence" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="find-the-index-of-the-first-occurrence-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="find-the-index-of-the-first-occurrence-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force sliding window
 
 Slide a window of length `len(needle)` one character at a time over `haystack`. At each position, compare the window against `needle`. Return the first position where they match.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def str_str(haystack: str, needle: str) -> int:
     n, m = len(haystack), len(needle)    # L1: O(1)
@@ -38,6 +51,21 @@ def str_str(haystack: str, needle: str) -> int:
             return i                     # L4: O(1) return
     return -1                            # L5: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function strStr(haystack: string, needle: string): number {
+    const n = haystack.length, m = needle.length;   // L1: O(1)
+    for (let i = 0; i <= n - m; i++) {              // L2: loop, n-m+1 iterations
+        if (haystack.slice(i, i + m) === needle) {  // L3: slice + compare, O(m) each
+            return i;                               // L4: O(1) return
+        }
+    }
+    return -1;                                      // L5: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -57,16 +85,35 @@ The slice `haystack[i:i+m]` allocates a new string of length `m` and the `==` co
 - **Time:** O(n * m), driven by L3 (window comparison at every position).
 - **Space:** O(m) for the slice allocated at each step.
 
-## Approach 2: Python built-in (interview-acceptable)
+## Approach 2: Built-in (interview-acceptable)
 
-Python's `str.find()` uses an optimized algorithm under the hood (similar to Boyer-Moore-Horspool). In an interview, returning `haystack.find(needle)` is explicitly acceptable for this problem.
+Python's `str.find()` and JavaScript's `String.prototype.indexOf()` use optimized algorithms under the hood. In an interview, returning the built-in result is explicitly acceptable for this problem.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def str_str(haystack: str, needle: str) -> int:
     return haystack.find(needle)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function strStr(haystack: string, needle: string): number {
+    return haystack.indexOf(needle);
+}
+```
+</TabItem>
+</Tabs>
 
-This is O(n) in the average case and O(n * m) in the worst case, but the constant factor is far lower than a hand-rolled Python loop because the inner comparison runs in C.
+This is O(n) in the average case and O(n * m) in the worst case, but the constant factor is far lower than a hand-rolled loop because the inner comparison runs in native code.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="find-first-occurrence-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Note on KMP
 
@@ -77,13 +124,15 @@ The Knuth-Morris-Pratt algorithm solves this in O(n + m) time and O(m) space by 
 | Approach | Time | Space |
 | --- | --- | --- |
 | Brute sliding window | O(n * m) | O(m) |
-| Python built-in | O(n) avg | O(1) |
+| Built-in | O(n) avg | O(1) |
 | KMP | O(n + m) | O(m) |
 
-The brute approach is the clearest to reason about and fine for small inputs. Use the built-in in Python interviews unless the interviewer specifically asks for the algorithm. KMP is the canonical O(n) solution.
+The brute approach is the clearest to reason about and fine for small inputs. Use the built-in in interviews unless the interviewer specifically asks for the algorithm. KMP is the canonical O(n) solution.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_028.py and run.
 # Uses the brute sliding window implementation.
@@ -108,6 +157,28 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function strStr(haystack: string, needle: string): number {
+    const n = haystack.length, m = needle.length;
+    for (let i = 0; i <= n - m; i++) {
+        if (haystack.slice(i, i + m) === needle) return i;
+    }
+    return -1;
+}
+
+console.assert(strStr("sadbutsad", "sad") === 0);
+console.assert(strStr("leetcode", "leeto") === -1);
+console.assert(strStr("hello", "ll") === 2);
+console.assert(strStr("a", "a") === 0);
+console.assert(strStr("mississippi", "issip") === 4);
+console.assert(strStr("abc", "") === 0);
+console.assert(strStr("", "a") === -1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

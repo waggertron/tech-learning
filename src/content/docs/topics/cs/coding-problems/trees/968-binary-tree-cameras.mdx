@@ -5,11 +5,16 @@ parent: trees
 tags: [leetcode, trees, greedy, hard]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './968-binary-tree-cameras.py?raw';
+import practiceCodeTs from './968-binary-tree-cameras.ts?raw';
+import approach2PyCode from './968-binary-tree-cameras-approach2.py?raw';
+import approach2TsCode from './968-binary-tree-cameras-approach2.ts?raw';
 
 ## Problem
 
@@ -23,7 +28,14 @@ LeetCode 968 · [Link](https://leetcode.com/problems/binary-tree-cameras/) · *H
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="binary-tree-cameras" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="binary-tree-cameras-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="binary-tree-cameras-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Greedy post-order DFS
 
@@ -41,7 +53,7 @@ Process nodes bottom-up (post-order). Each node returns one of three states:
 
 ```
 if any child is 0 (not covered):
-    place camera here -> return 1
+    place camera here → return 1
 
 elif any child is 1 (has camera, so this node is covered):
     return 2
@@ -52,6 +64,8 @@ else (all children are 2, covered but no camera):
 
 After the DFS, if the root returns 0, add one more camera at the root.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_camera_cover(root):
     cameras = 0                                # L1: O(1) counter
@@ -73,6 +87,37 @@ def min_camera_cover(root):
         cameras += 1
     return cameras
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function minCameraCover(root: TreeNode | null): number {
+    let cameras = 0;                                   // L1: O(1) counter
+
+    function dfs(node: TreeNode | null): number {
+        if (!node) return 2;                           // L2: null nodes are trivially covered
+        const left = dfs(node.left);                   // L3: O(1) dispatch
+        const right = dfs(node.right);                 // L4: O(1) dispatch
+        if (left === 0 || right === 0) {               // L5: a child needs coverage
+            cameras++;                                  // L6: O(1) place camera here
+            return 1;
+        }
+        if (left === 1 || right === 1) return 2;       // L7: a child has camera
+        return 0;                                      // L8: children covered, not this node
+    }
+
+    if (dfs(root) === 0) cameras++;                    // L9: root uncovered
+    return cameras;
+}
+```
+</TabItem>
+</Tabs>
 
 **Why null nodes return 2 (covered):** Null is not a real node and does not need coverage. If we returned 0, every leaf would place a camera -- that is too eager. Returning 2 lets leaves return 0 (not covered), which pushes camera placement up to the leaf's parent where it covers more nodes.
 
@@ -95,6 +140,17 @@ Each node is visited exactly once. Every decision is O(1) based on two child sta
 - **Time:** O(n). Each node visited once in post-order, driven by L3/L4.
 - **Space:** O(h) for the recursion stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="binary-tree-cameras-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="binary-tree-cameras-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ### Trace on `[0,0,null,0,0]`
 
 ```
@@ -106,11 +162,11 @@ Each node is visited exactly once. Every decision is O(1) based on two child sta
 ```
 
 ```
-dfs(C) -> no children -> left=2, right=2 -> return 0  (not covered)
-dfs(D) -> no children -> left=2, right=2 -> return 0  (not covered)
-dfs(B) -> left=0 (C not covered) -> place camera! cameras=1, return 1
-dfs(A) -> left=1 (B has camera) -> return 2  (A is covered by B)
-root returns 2 -> no extra camera
+dfs(C) → no children → left=2, right=2 → return 0  (not covered)
+dfs(D) → no children → left=2, right=2 → return 0  (not covered)
+dfs(B) → left=0 (C not covered) → place camera! cameras=1, return 1
+dfs(A) → left=1 (B has camera) → return 2  (A is covered by B)
+root returns 2 → no extra camera
 Answer: 1
 ```
 
@@ -129,12 +185,12 @@ Answer: 1
 ```
 
 ```
-dfs(E) -> return 0
-dfs(D) -> left=2, right=0 -> place camera! cameras=1, return 1
-dfs(C) -> left=1 -> return 2
-dfs(B) -> left=2, right=2 -> return 0  (not covered!)
-dfs(A) -> left=0 -> place camera! cameras=2, return 1
-root returns 1 -> no extra camera
+dfs(E) → return 0
+dfs(D) → left=2, right=0 → place camera! cameras=1, return 1
+dfs(C) → left=1 → return 2
+dfs(B) → left=2, right=2 → return 0  (not covered!)
+dfs(A) → left=0 → place camera! cameras=2, return 1
+root returns 1 → no extra camera
 Answer: 2
 ```
 
@@ -150,6 +206,8 @@ The greedy works because tree structure is acyclic: once we commit to a post-ord
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -202,6 +260,53 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(vals: (number | null)[]): TreeNode | null {
+    if (!vals.length) return null;
+    const root = new TreeNode(vals[0] as number);
+    const q: TreeNode[] = [root];
+    let i = 1;
+    while (q.length && i < vals.length) {
+        const node = q.shift()!;
+        if (i < vals.length && vals[i] !== null) { node.left = new TreeNode(vals[i] as number); q.push(node.left); }
+        i++;
+        if (i < vals.length && vals[i] !== null) { node.right = new TreeNode(vals[i] as number); q.push(node.right); }
+        i++;
+    }
+    return root;
+}
+
+function minCameraCover(root: TreeNode | null): number {
+    let cameras = 0;
+    function dfs(node: TreeNode | null): number {
+        if (!node) return 2;
+        const left = dfs(node.left);
+        const right = dfs(node.right);
+        if (left === 0 || right === 0) { cameras++; return 1; }
+        if (left === 1 || right === 1) return 2;
+        return 0;
+    }
+    if (dfs(root) === 0) cameras++;
+    return cameras;
+}
+
+console.assert(minCameraCover(buildTree([0, 0, null, 0, 0])) === 1);
+console.assert(minCameraCover(buildTree([0, 0, null, 0, null, 0, null, null, 0])) === 2);
+console.assert(minCameraCover(buildTree([0])) === 1);
+console.assert(minCameraCover(buildTree([0, 0])) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

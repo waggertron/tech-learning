@@ -5,11 +5,18 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, bfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './045-jump-game-ii.py?raw';
+import practiceCodeTs from './045-jump-game-ii.ts?raw';
+import approach2PyCode from './045-jump-game-ii-approach2.py?raw';
+import approach2TsCode from './045-jump-game-ii-approach2.ts?raw';
+import approach3PyCode from './045-jump-game-ii-approach3.py?raw';
+import approach3TsCode from './045-jump-game-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 45 · [Link](https://leetcode.com/problems/jump-game-ii/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="jump-game-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="jump-game-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="jump-game-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: DP, min jumps to reach each index
 
 `dp[i]` = min jumps to reach `i`. `dp[i] = min(dp[j] + 1)` over `j` from which `i` is reachable.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def jump(nums):
     n = len(nums)                           # L1: O(1)
@@ -43,6 +59,25 @@ def jump(nums):
             dp[j] = min(dp[j], dp[i] + 1)  # L7: O(1)
     return dp[n - 1]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function jump(nums: number[]): number {
+    const n = nums.length;                                  // L1: O(1)
+    const dp: number[] = new Array(n).fill(Infinity);      // L2: O(n)
+    dp[0] = 0;                                             // L3: O(1)
+    for (let i = 0; i < n; i++) {                          // L4: outer loop, n iterations
+        if (dp[i] === Infinity) continue;
+        const furthest = Math.min(i + nums[i], n - 1);     // L5: O(1)
+        for (let j = i + 1; j <= furthest; j++) {          // L6: inner loop, up to n per i
+            dp[j] = Math.min(dp[j], dp[i] + 1);           // L7: O(1)
+        }
+    }
+    return dp[n - 1];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -64,6 +99,8 @@ L6 is the bottleneck: for each index `i` we may scan up to `nums[i]` forward pos
 
 Treat each jump as a BFS level. All positions reachable in `k` jumps form level `k`. Return the level that contains the last index.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def jump(nums):
     n = len(nums)                                   # L1: O(1)
@@ -87,6 +124,36 @@ def jump(nums):
         frontier = next_frontier
     return -1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function jump(nums: number[]): number {
+    const n = nums.length;                                  // L1: O(1)
+    if (n <= 1) return 0;
+    const visited: boolean[] = new Array(n).fill(false);   // L2: O(n)
+    visited[0] = true;
+    let level = 0;                                         // L3: O(1)
+    let frontier: number[] = [0];                          // L4: O(1)
+    while (frontier.length > 0) {                          // L5: outer loop, one per jump level
+        level++;
+        const nextFrontier: number[] = [];
+        for (const i of frontier) {                        // L6: iterate current frontier
+            for (let k = 1; k <= nums[i]; k++) {           // L7: try each reachable step
+                const j = i + k;
+                if (j >= n - 1) return level;
+                if (!visited[j]) {
+                    visited[j] = true;
+                    nextFrontier.push(j);                  // L8: O(1) amortized
+                }
+            }
+        }
+        frontier = nextFrontier;
+    }
+    return -1;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -105,10 +172,23 @@ Each node is visited at most once (the `visited` guard), so total work across al
 - **Time:** O(n²) worst case, driven by L6/L7.
 - **Space:** O(n) for visited and frontier arrays.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="jump-game-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="jump-game-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Greedy with current-end + farthest (optimal)
 
 Track the rightmost index reachable within the current jump (`current_end`) and the global farthest reachable (`farthest`). When you cross `current_end`, you must have jumped once more, so set `current_end = farthest`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def jump(nums):
     jumps = 0                                   # L1: O(1)
@@ -121,6 +201,25 @@ def jump(nums):
             current_end = farthest
     return jumps
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function jump(nums: number[]): number {
+    let jumps = 0;                                          // L1: O(1)
+    let currentEnd = 0;                                    // L2: O(1)
+    let farthest = 0;                                      // L3: O(1)
+    for (let i = 1; i < nums.length; i++) {                // L4: single pass, n-1 iterations
+        farthest = Math.max(farthest, i + nums[i]);        // L5: O(1) per step
+        if (i === currentEnd) {                            // L6: O(1) per step
+            jumps++;
+            currentEnd = farthest;
+        }
+    }
+    return jumps;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -142,6 +241,17 @@ Every line executes exactly once per index. The whole algorithm is a single line
 ### Intuition
 This is BFS collapsed into a linear scan: the "frontier" of a BFS level is implicit in the window `[prev_end, current_end]`. Each time the walking index reaches `current_end`, we "commit" to another jump and extend to `farthest`.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="jump-game-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="jump-game-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -154,6 +264,8 @@ One of the cleanest greedy collapses of a BFS structure.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_045.py and run.
 # Uses the canonical implementation (Approach 3: greedy).
@@ -180,6 +292,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function jump(nums: number[]): number {
+    let jumps = 0;
+    let currentEnd = 0;
+    let farthest = 0;
+    for (let i = 1; i < nums.length; i++) {
+        farthest = Math.max(farthest, i + nums[i]);
+        if (i === currentEnd) {
+            jumps++;
+            currentEnd = farthest;
+        }
+    }
+    return jumps;
+}
+
+console.assert(jump([2, 3, 1, 1, 4]) === 2);
+console.assert(jump([2, 3, 0, 1, 4]) === 2);
+console.assert(jump([1]) === 0);          // single element, already at end
+console.assert(jump([1, 1, 1, 1]) === 3);
+console.assert(jump([5, 4, 3, 2, 1, 0]) === 1);  // jump over everything in one step
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './704-binary-search.py?raw';
+import practiceCodeTs from './704-binary-search.ts?raw';
+import approach2PyCode from './704-binary-search-approach2.py?raw';
+import approach2TsCode from './704-binary-search-approach2.ts?raw';
+import approach3PyCode from './704-binary-search-approach3.py?raw';
+import approach3TsCode from './704-binary-search-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 704 · [Link](https://leetcode.com/problems/binary-search/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="binary-search" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="binary-search-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="binary-search-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, linear scan
 
 Ignore sortedness and scan linearly.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def search(nums: list[int], target: int) -> int:
     for i, x in enumerate(nums):    # L1: scan every element, up to n iterations
@@ -36,6 +52,18 @@ def search(nums: list[int], target: int) -> int:
             return i
     return -1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function search(nums: number[], target: number): number {
+    for (let i = 0; i < nums.length; i++) {  // L1: scan every element, up to n
+        if (nums[i] === target) return i;     // L2: O(1) compare
+    }
+    return -1;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -57,6 +85,8 @@ Fails the problem's O(log n) requirement.
 
 Divide the range and recurse.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def search(nums: list[int], target: int) -> int:
     def helper(lo: int, hi: int) -> int:
@@ -70,6 +100,22 @@ def search(nums: list[int], target: int) -> int:
         return helper(lo, mid - 1)          # L6: recurse on left half
     return helper(0, len(nums) - 1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function search(nums: number[], target: number): number {
+    function helper(lo: number, hi: number): number {
+        if (lo > hi) return -1;                    // L1: base case, O(1)
+        const mid = (lo + hi) >> 1;               // L2: O(1)
+        if (nums[mid] === target) return mid;      // L3: O(1) compare
+        if (nums[mid] < target) return helper(mid + 1, hi);  // L5: recurse right
+        return helper(lo, mid - 1);               // L6: recurse left
+    }
+    return helper(0, nums.length - 1);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -86,10 +132,23 @@ Each recursive call handles a half-size subproblem, so there are at most log n s
 - **Time:** O(log n), driven by L1-L4 (log n recursive levels, O(1) work each).
 - **Space:** O(log n) recursion depth.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="binary-search-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="binary-search-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Iterative binary search (optimal)
 
 Same halving, no recursion.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def search(nums: list[int], target: int) -> int:
     lo, hi = 0, len(nums) - 1            # L1: O(1)
@@ -103,6 +162,22 @@ def search(nums: list[int], target: int) -> int:
             hi = mid - 1                  # L7: O(1) narrow left
     return -1
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function search(nums: number[], target: number): number {
+    let lo = 0, hi = nums.length - 1;    // L1: O(1)
+    while (lo <= hi) {                    // L2: loop, at most log n iterations
+        const mid = (lo + hi) >> 1;      // L3: O(1) midpoint
+        if (nums[mid] === target) return mid;  // L4: O(1) compare
+        if (nums[mid] < target) lo = mid + 1; // L6: O(1) narrow right
+        else hi = mid - 1;                     // L7: O(1) narrow left
+    }
+    return -1;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -114,7 +189,7 @@ def search(nums: list[int], target: int) -> int:
 | **L2/L3/L4/L5 (loop body)** | **O(1)** | **log n** | **O(log n)** ← dominates |
 | L6 or L7 (narrow) | O(1) | log n | O(log n) |
 
-Each iteration halves the search space from [lo, hi] to either [lo, mid-1] or [mid+1, hi]. Starting with n elements, after k steps we have n / 2^k elements remaining. The loop terminates when n / 2^k \< 1, i.e., k > log2(n).
+Each iteration halves the search space from [lo, hi] to either [lo, mid-1] or [mid+1, hi]. Starting with n elements, after k steps we have n / 2^k elements remaining. The loop terminates when n / 2^k is less than 1, i.e., k exceeds log2(n).
 
 **Complexity**
 - **Time:** O(log n), driven by L2 (loop halves the search space each iteration).
@@ -122,6 +197,17 @@ Each iteration halves the search space from [lo, hi] to either [lo, mid-1] or [m
 
 ### Note on `mid = (lo + hi) // 2`
 In languages where integer overflow is a concern (C, C++, Java `int`), prefer `mid = lo + (hi - lo) // 2` to avoid `lo + hi` overflowing. In Python, integers are arbitrary-precision, so `(lo + hi) // 2` is safe.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="binary-search-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="binary-search-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -135,6 +221,8 @@ Memorize the iterative form, it's the template for every other binary-search pro
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_704.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -163,6 +251,30 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function search(nums: number[], target: number): number {
+    let lo = 0, hi = nums.length - 1;
+    while (lo <= hi) {
+        const mid = (lo + hi) >> 1;
+        if (nums[mid] === target) return mid;
+        if (nums[mid] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+
+console.assert(search([-1, 0, 3, 5, 9, 12], 9) === 4);
+console.assert(search([-1, 0, 3, 5, 9, 12], 2) === -1);    // not present
+console.assert(search([5], 5) === 0);                        // single element found
+console.assert(search([5], 3) === -1);                       // single element not found
+console.assert(search([-1, 0, 3, 5, 9, 12], -1) === 0);    // first element
+console.assert(search([-1, 0, 3, 5, 9, 12], 12) === 5);    // last element
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

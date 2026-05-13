@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './133-clone-graph.py?raw';
+import practiceCodeTs from './133-clone-graph.ts?raw';
+import approach2PyCode from './133-clone-graph-approach2.py?raw';
+import approach2TsCode from './133-clone-graph-approach2.ts?raw';
 
 ## Problem
 
@@ -19,12 +24,21 @@ LeetCode 133 · [Link](https://leetcode.com/problems/clone-graph/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="clone-graph" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="clone-graph-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="clone-graph-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: DFS + hash map old -> new
 
 Walk the graph recursively; keep a dict mapping each original node to its clone. On each node, create the clone, then recursively clone neighbors.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class Node:
     def __init__(self, val=0, neighbors=None):
@@ -47,6 +61,37 @@ def clone_graph(node):
 
     return dfs(node)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Node {
+    val: number;
+    neighbors: Node[];
+    constructor(val: number = 0, neighbors: Node[] = []) {
+        this.val = val;
+        this.neighbors = neighbors;
+    }
+}
+
+function cloneGraph(node: Node | null): Node | null {
+    if (!node) return null;                    // L1: O(1) null guard
+    const oldToNew = new Map<Node, Node>();    // L2: O(1) init map
+
+    function dfs(n: Node): Node {
+        if (oldToNew.has(n)) return oldToNew.get(n)!;  // L3: O(1) already cloned
+        const copy = new Node(n.val);          // L4: O(1) create clone
+        oldToNew.set(n, copy);                 // L5: O(1) register before recursing (cycle safety)
+        for (const nb of n.neighbors) {
+            copy.neighbors.push(dfs(nb));      // L6: O(1) per edge, recurse each neighbor
+        }
+        return copy;
+    }
+
+    return dfs(node);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -71,6 +116,8 @@ Canonical, cleanest.
 
 Same idea, queue-driven; useful when recursion depth is a concern.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -88,6 +135,30 @@ def clone_graph(node):
             old_to_new[cur].neighbors.append(old_to_new[nb])  # L9: O(1) wire edge
     return old_to_new[node]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function cloneGraph(node: Node | null): Node | null {
+    if (!node) return null;                              // L1: O(1) null guard
+    const oldToNew = new Map<Node, Node>();
+    oldToNew.set(node, new Node(node.val));             // L2: O(1) seed map with root
+    const q: Node[] = [node];                           // L3: O(1) init queue
+    let head = 0;
+    while (head < q.length) {                           // L4: loop until queue empty
+        const cur = q[head++];                          // L5: O(1) dequeue
+        for (const nb of cur.neighbors) {               // L6: O(degree) per node
+            if (!oldToNew.has(nb)) {
+                oldToNew.set(nb, new Node(nb.val));     // L7: O(1) create clone once
+                q.push(nb);                             // L8: O(1) enqueue for later
+            }
+            oldToNew.get(cur)!.neighbors.push(oldToNew.get(nb)!);  // L9: O(1) wire edge
+        }
+    }
+    return oldToNew.get(node)!;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -107,45 +178,16 @@ Each node is enqueued and dequeued exactly once. Each edge is wired at L9 exactl
 - **Time:** O(V + E), driven by L6/L9 (iterating every edge).
 - **Space:** O(V) for the map and queue.
 
-## Approach 3: Two-pass DFS (nodes first, edges second)
+**Try this approach:**
 
-Pass 1: create every clone (no neighbor pointers). Pass 2: iterate original nodes and set each clone's neighbors from the map.
-
-```python
-def clone_graph(node):
-    if not node:                               # L1: O(1) null guard
-        return None
-    old_to_new = {}                            # L2: O(1) init map
-    def build_nodes(n):
-        if n in old_to_new:                    # L3: O(1) skip if seen
-            return
-        old_to_new[n] = Node(n.val)            # L4: O(1) create clone (no neighbors yet)
-        for nb in n.neighbors:
-            build_nodes(nb)                    # L5: O(1) recurse, V calls total
-    build_nodes(node)
-    for orig, clone in old_to_new.items():
-        clone.neighbors = [old_to_new[nb] for nb in orig.neighbors]  # L6: O(degree) per node
-    return old_to_new[node]
-```
-
-**Where the time goes, line by line**
-
-*Variables: V = number of nodes in the graph, E = number of edges.*
-
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L3 (cache check) | O(1) | V | O(V) |
-| L4 (create clone) | O(1) | V | O(V) |
-| **L5 (pass 1 recursion)** | **O(1) per node** | **V** | **O(V)** |
-| **L6 (pass 2 edge wiring)** | **O(degree)** | **V nodes, E edges total** | **O(E)** ← dominates for dense graphs |
-
-Pass 1 visits every node once: O(V). Pass 2 rebuilds every neighbor list from the map: total neighbor list lengths sum to 2E (undirected), so this is O(E). The two-pass structure makes the separation of concerns explicit, at the cost of two DFS traversals instead of one.
-
-**Complexity**
-- **Time:** O(V + E) across the two passes, driven by L6 (edge wiring in pass 2).
-- **Space:** O(V) for the map, plus O(V) recursion stack.
-
-Useful when neighbor lists are built from complex state you'd rather compute once.
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="clone-graph-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="clone-graph-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -153,12 +195,13 @@ Useful when neighbor lists are built from complex state you'd rather compute onc
 | --- | --- | --- | --- |
 | **DFS + old->new map** | **O(V + E)** | **O(V)** | Canonical |
 | BFS + old->new map | O(V + E) | O(V) | Avoids deep recursion |
-| Two-pass node-then-edges | O(V + E) | O(V) | Clear separation |
 
 All three are optimal in Big-O. DFS is the shortest to write.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_133.py and run.
 # Uses the canonical implementation (Approach 1: DFS + hash map).
@@ -239,6 +282,53 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class Node {
+    val: number;
+    neighbors: Node[];
+    constructor(val: number = 0, neighbors: Node[] = []) {
+        this.val = val;
+        this.neighbors = neighbors;
+    }
+}
+
+function cloneGraph(node: Node | null): Node | null {
+    if (!node) return null;
+    const oldToNew = new Map<Node, Node>();
+
+    function dfs(n: Node): Node {
+        if (oldToNew.has(n)) return oldToNew.get(n)!;
+        const copy = new Node(n.val);
+        oldToNew.set(n, copy);
+        for (const nb of n.neighbors) copy.neighbors.push(dfs(nb));
+        return copy;
+    }
+
+    return dfs(node);
+}
+
+const n1 = new Node(1);
+const c1 = cloneGraph(n1)!;
+console.assert(c1 !== n1);
+console.assert(c1.val === 1);
+console.assert(c1.neighbors.length === 0);
+
+const a = new Node(1);
+const b = new Node(2);
+a.neighbors = [b];
+b.neighbors = [a];
+const ca = cloneGraph(a)!;
+console.assert(ca !== a && ca.val === 1);
+const cb = ca.neighbors[0];
+console.assert(cb !== b && cb.val === 2 && cb.neighbors[0] === ca);
+
+console.assert(cloneGraph(null) === null);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

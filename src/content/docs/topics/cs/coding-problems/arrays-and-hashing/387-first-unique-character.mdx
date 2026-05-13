@@ -8,8 +8,13 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './387-first-unique-character.py?raw';
+import practiceCodeTs from './387-first-unique-character.ts?raw';
+import approach2PyCode from './387-first-unique-character-approach2.py?raw';
+import approach2TsCode from './387-first-unique-character-approach2.ts?raw';
 
 ## Problem
 
@@ -24,13 +29,22 @@ LeetCode 387 · [Link](https://leetcode.com/problems/first-unique-character-in-a
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="first-unique-character" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="first-unique-character-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="first-unique-character-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Two-pass frequency count
 
 **Pass 1:** build a frequency map (count of each character).
 **Pass 2:** scan left to right and return the first index whose count is exactly 1.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -41,6 +55,20 @@ def first_uniq_char(s: str) -> int:
             return i                 # L4: O(1) return
     return -1                        # L5: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function firstUniqChar(s: string): number {
+    const counts = new Map<string, number>();
+    for (const ch of s) counts.set(ch, (counts.get(ch) ?? 0) + 1); // L1: O(n) build
+    for (let i = 0; i < s.length; i++) {                            // L2: O(n) second scan
+        if (counts.get(s[i]) === 1) return i;                       // L3-L4: O(1) lookup
+    }
+    return -1;                                                       // L5: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -62,6 +90,17 @@ Both passes are O(n). The total is O(n) even though we traverse the string twice
 
 The space bound is O(1) because the problem constrains `s` to lowercase English letters: the alphabet is fixed at 26 characters. No matter how long the string is, the frequency map never exceeds 26 entries.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="first-unique-character-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="first-unique-character-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Step | Cost |
@@ -72,6 +111,8 @@ The space bound is O(1) because the problem constrains `s` to lowercase English 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_387.py and run.
 
@@ -96,6 +137,32 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function assert(condition: boolean, msg: string = ''): void {
+    if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+function firstUniqChar(s: string): number {
+    const counts = new Map<string, number>();
+    for (const ch of s) counts.set(ch, (counts.get(ch) ?? 0) + 1);
+    for (let i = 0; i < s.length; i++) {
+        if (counts.get(s[i]) === 1) return i;
+    }
+    return -1;
+}
+
+assert(firstUniqChar("leetcode") === 0);
+assert(firstUniqChar("loveleetcode") === 2);
+assert(firstUniqChar("aabb") === -1);
+assert(firstUniqChar("z") === 0);
+assert(firstUniqChar("aab") === 2);
+assert(firstUniqChar("cc") === -1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

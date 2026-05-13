@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './503-next-greater-element-ii.py?raw';
+import practiceCodeTs from './503-next-greater-element-ii.ts?raw';
+import approach2TsCode from './503-next-greater-element-ii-approach2.ts?raw';
 
 ## Problem
 
@@ -29,12 +33,21 @@ LeetCode 503 · [Link](https://leetcode.com/problems/next-greater-element-ii/) �
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="next-greater-element-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="next-greater-element-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="next-greater-element-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force with circular wraparound
 
 For each index, scan up to n steps forward (with wrap) looking for a strictly greater element.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def next_greater_elements(nums: list[int]) -> list[int]:
     n = len(nums)
@@ -47,6 +60,23 @@ def next_greater_elements(nums: list[int]) -> list[int]:
                 break
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function nextGreaterElements(nums: number[]): number[] {
+    const n = nums.length;
+    const result = new Array(n).fill(-1);      // L1: O(n)
+    for (let i = 0; i < n; i++) {             // L2: n iterations
+        for (let j = 1; j < n; j++) {         // L3: up to n-1 steps per i
+            const k = (i + j) % n;            // L4: O(1) circular index
+            if (nums[k] > nums[i]) { result[i] = nums[k]; break; }  // L5: O(1) compare
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(n²), each of n elements scans up to n positions.
@@ -58,6 +88,8 @@ Simulate circularity by iterating indices `0` to `2n-1` and using `i % n` to wra
 
 Use a **monotonic decreasing stack** that stores **indices** (not values). When the current value exceeds the value at the stack top, the stack top has found its next-greater answer.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def next_greater_elements(nums: list[int]) -> list[int]:
     n = len(nums)                                      # L1: O(1)
@@ -72,6 +104,25 @@ def next_greater_elements(nums: list[int]) -> list[int]:
 
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function nextGreaterElements(nums: number[]): number[] {
+    const n = nums.length;                                      // L1: O(1)
+    const result = new Array(n).fill(-1);                       // L2: O(n) default -1
+    const stack: number[] = [];                                 // L3: O(1) stores indices
+
+    for (let i = 0; i < 2 * n; i++) {                          // L4: 2n iterations
+        while (stack.length && nums[stack[stack.length - 1]] < nums[i % n])
+            result[stack.pop()!] = nums[i % n];                 // L5-L6: O(1) amortized
+        if (i < n) stack.push(i);                               // L7-L8: only push during first pass
+    }
+
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -88,6 +139,17 @@ Each index is pushed once (guard `i < n`) and popped at most once. Total stack w
 **Complexity**
 - **Time:** O(n), the 2n loop with amortized O(1) stack work per step.
 - **Space:** O(n) for the result array and stack.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="next-greater-element-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="next-greater-element-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Circular traversal illustrated
 

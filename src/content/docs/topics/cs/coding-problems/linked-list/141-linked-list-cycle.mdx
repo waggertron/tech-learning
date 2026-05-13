@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './141-linked-list-cycle.py?raw';
+import practiceCodeTs from './141-linked-list-cycle.ts?raw';
+import approach3TsCode from './141-linked-list-cycle-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 141 · [Link](https://leetcode.com/problems/linked-list-cycle/) · *Eas
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="linked-list-cycle" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="linked-list-cycle-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="linked-list-cycle-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, hash set of visited nodes
 
 Walk the list, storing each node in a hash set. If you encounter a node you've seen, there's a cycle.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def has_cycle(head) -> bool:
     seen = set()
@@ -41,6 +54,27 @@ def has_cycle(head) -> bool:
         cur = cur.next
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function hasCycle(head: ListNode | null): boolean {
+    const seen = new Set<ListNode>();
+    let cur = head;
+    while (cur) {                // L1: walk until end or revisit
+        if (seen.has(cur)) return true;  // L2: O(1) set lookup
+        seen.add(cur);           // L3: O(1) set insert
+        cur = cur.next;
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -64,6 +98,8 @@ Simple and correct but uses linear extra memory.
 
 Mutate each visited node to a sentinel value, detect on revisit. Trashes the list, not acceptable if the caller still needs it. Included only to contrast with the optimal.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def has_cycle(head) -> bool:
     SENTINEL = object()              # unique marker; can't collide with real values
@@ -75,6 +111,23 @@ def has_cycle(head) -> bool:
         cur = cur.next
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+const SENTINEL = Symbol('sentinel');
+
+function hasCycle(head: ListNode | null): boolean {
+    let cur: any = head;
+    while (cur) {
+        if (cur.val === SENTINEL) return true;  // revisit detected
+        cur.val = SENTINEL;
+        cur = cur.next;
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 O(n) time, O(1) extra space, but the list is now wrecked: every visited node's value is overwritten with the sentinel.
 
@@ -84,6 +137,8 @@ A non-mutating O(1)-space alternative is Approach 3 below.
 
 Two pointers: `slow` moves one step, `fast` moves two. If there's a cycle, they'll meet inside it; if there's no cycle, `fast` reaches the end.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def has_cycle(head) -> bool:
     slow = fast = head
@@ -94,6 +149,22 @@ def has_cycle(head) -> bool:
             return True
     return False
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function hasCycle(head: ListNode | null): boolean {
+    let slow = head;
+    let fast = head;
+    while (fast && fast.next) {    // L1: guard against end of list
+        slow = slow!.next;         // L2: O(1) advance slow by 1
+        fast = fast.next.next;     // L3: O(1) advance fast by 2
+        if (slow === fast) return true;  // L4: O(1) meeting check
+    }
+    return false;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -117,8 +188,18 @@ Once both pointers are inside the cycle, the gap between them decreases by 1 eac
 ### Follow-up (problem 142)
 If you need the cycle *start*, not just existence, reset `slow` to head after the meet, then advance both by one step until they meet again. They meet at the cycle start. (Proof is a bit of modular arithmetic; trust the procedure.)
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="linked-list-cycle-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_141.py and run.
 # Uses Floyd's tortoise and hare (Approach 3).
@@ -169,6 +250,45 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function hasCycle(head: ListNode | null): boolean {
+    let slow = head;
+    let fast = head;
+    while (fast && fast.next) {
+        slow = slow!.next;
+        fast = fast.next.next;
+        if (slow === fast) return true;
+    }
+    return false;
+}
+
+// No cycle, empty
+console.assert(hasCycle(null) === false);
+// No cycle, single node
+console.assert(hasCycle(new ListNode(1)) === false);
+// No cycle, multiple nodes
+const n1 = new ListNode(1); const n2 = new ListNode(2); const n3 = new ListNode(3);
+n1.next = n2; n2.next = n3;
+console.assert(hasCycle(n1) === false);
+// Cycle: tail connects to index 1
+const a = new ListNode(3); const b = new ListNode(2);
+const c = new ListNode(0); const d = new ListNode(-4);
+a.next = b; b.next = c; c.next = d; d.next = b;
+console.assert(hasCycle(a) === true);
+// Single node cycle
+const x = new ListNode(1); x.next = x;
+console.assert(hasCycle(x) === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

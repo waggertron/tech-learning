@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './973-k-closest-points-to-origin.py?raw';
+import practiceCodeTs from './973-k-closest-points-to-origin.ts?raw';
+import approach2TsCode from './973-k-closest-points-to-origin-approach2.ts?raw';
+import approach3TsCode from './973-k-closest-points-to-origin-approach3.ts?raw';
 
 ## Problem
 
@@ -23,16 +28,36 @@ LeetCode 973 · [Link](https://leetcode.com/problems/k-closest-points-to-origin/
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="k-closest-points-to-origin" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="k-closest-points-to-origin-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="k-closest-points-to-origin-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, sort by squared distance
 
 Sort all points; take the first k.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def k_closest(points, k):
     return sorted(points, key=lambda p: p[0] ** 2 + p[1] ** 2)[:k]  # L1: O(n log n)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function kClosest(points: number[][], k: number): number[][] {
+    return [...points]
+        .sort((a, b) => (a[0]*a[0] + a[1]*a[1]) - (b[0]*b[0] + b[1]*b[1]))  // L1: O(n log n)
+        .slice(0, k);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -52,6 +77,8 @@ Simple and often accepted.
 
 Keep a max-heap of size K. Each new point is pushed; if the heap exceeds K, pop the farthest.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -66,6 +93,61 @@ def k_closest(points, k):
             heapq.heapreplace(heap, (d, x, y)) # L3: O(log k) replace farthest
     return [[x, y] for _, x, y in heap]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Max-heap on (negated distance, x, y)
+type Entry = [number, number, number];
+
+class MaxHeap {
+    private data: Entry[] = [];
+    get size(): number { return this.data.length; }
+    get top(): Entry { return this.data[0]; }
+    push(val: Entry): void {
+        this.data.push(val);
+        this._siftUp(this.data.length - 1);
+    }
+    // Replace top with val (like heapreplace)
+    replace(val: Entry): void {
+        this.data[0] = val;
+        this._siftDown(0);
+    }
+    private _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p][0] >= this.data[i][0]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    private _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let largest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l][0] > this.data[largest][0]) largest = l;
+            if (r < n && this.data[r][0] > this.data[largest][0]) largest = r;
+            if (largest === i) break;
+            [this.data[largest], this.data[i]] = [this.data[i], this.data[largest]]; i = largest;
+        }
+    }
+    entries(): Entry[] { return (this as any).data; }
+}
+
+function kClosest(points: number[][], k: number): number[][] {
+    const heap = new MaxHeap();
+    for (const [x, y] of points) {             // L1: iterate n points
+        const d = -(x * x + y * y);
+        if (heap.size < k) {
+            heap.push([d, x, y]);              // L2: O(log k) push
+        } else if (d > heap.top[0]) {
+            heap.replace([d, x, y]);           // L3: O(log k) replace farthest
+        }
+    }
+    return heap.entries().map(([, x, y]) => [x, y]);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -85,10 +167,20 @@ For the first k points, each push costs O(log k). For the remaining n - k points
 
 Strictly better than Approach 1 when k ≪ n.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="k-closest-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Quickselect (optimal average)
 
 Partition the array in place so the first k elements are the k closest (unordered). Average O(n).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def k_closest(points, k):
     def dist(p):
@@ -118,6 +210,41 @@ def k_closest(points, k):
     quickselect(0, len(points) - 1, k)
     return points[:k]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function kClosest(points: number[][], k: number): number[][] {
+    const arr = points.map(p => [...p]); // avoid mutating input
+
+    const dist = (p: number[]) => p[0] * p[0] + p[1] * p[1];
+
+    function partition(lo: number, hi: number): number {  // L1: O(hi - lo) per call
+        const pivot = dist(arr[hi]);
+        let store = lo;
+        for (let i = lo; i < hi; i++) {
+            if (dist(arr[i]) <= pivot) {
+                [arr[store], arr[i]] = [arr[i], arr[store]];
+                store++;
+            }
+        }
+        [arr[store], arr[hi]] = [arr[hi], arr[store]];
+        return store;
+    }
+
+    function quickselect(lo: number, hi: number, k: number): void {
+        if (lo >= hi) return;                       // L2: base case
+        const p = partition(lo, hi);               // L3: O(subarray size)
+        if (p === k) return;
+        if (p < k) quickselect(p + 1, hi, k);     // L4: recurse right
+        else quickselect(lo, p - 1, k);            // L5: recurse left
+    }
+
+    quickselect(0, arr.length - 1, k);
+    return arr.slice(0, k);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -136,8 +263,18 @@ On average each partition halves the search space: n + n/2 + n/4 + ... = 2n = O(
 
 Pick quickselect when you're allowed to mutate the input and want the tightest average complexity.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="k-closest-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_973.py and run.
 # Uses the size-K max-heap approach (Approach 2).
@@ -179,6 +316,34 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses the size-K max-heap approach (Approach 2).
+// See 973-k-closest-points-to-origin-approach2.ts for the full implementation.
+const sortFn = (a: number[], b: number[]) => a[0] - b[0] || a[1] - b[1];
+
+let result = kClosest([[1,3],[-2,2]], 1);
+console.assert(JSON.stringify(result) === JSON.stringify([[-2,2]]), `got ${JSON.stringify(result)}`);
+
+result = kClosest([[3,3],[5,-1],[-2,4]], 2);
+console.assert(
+    JSON.stringify(result.slice().sort(sortFn)) === JSON.stringify([[3,3],[-2,4]].sort(sortFn)),
+    `got ${JSON.stringify(result)}`
+);
+
+console.assert(JSON.stringify(kClosest([[0,0]], 1)) === JSON.stringify([[0,0]]));
+
+result = kClosest([[1,0],[-1,0],[0,1],[0,-1]], 2);
+console.assert(result.length === 2);
+
+result = kClosest([[1,2],[3,4],[0,0]], 3);
+console.assert(result.length === 3);
+
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 
@@ -188,7 +353,7 @@ if __name__ == "__main__":
 | **Size-K max-heap** | **O(n log k)** | **O(k)** |
 | Quickselect | O(n) avg / O(n²) worst | O(log n) |
 
-The heap version is the canonical interview answer. Quickselect is the "optimal-average" answer, know it for when the interviewer pushes on tighter bounds.
+The heap version is the canonical interview answer. Quickselect is the "optimal-average" answer; know it for when the interviewer pushes on tighter bounds.
 
 ## Related data structures
 

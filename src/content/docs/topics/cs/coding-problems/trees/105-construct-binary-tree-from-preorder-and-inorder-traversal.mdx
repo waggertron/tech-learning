@@ -1,15 +1,20 @@
 ---
 title: "105. Construct Binary Tree from Preorder and Inorder Traversal (Medium)"
-description: Reconstruct a binary tree from its preorder and inorder traversal lists.
+description: "Reconstruct a binary tree from its preorder and inorder traversal lists."
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal.py?raw';
+import practiceCodeTs from './105-construct-binary-tree-from-preorder-and-inorder-traversal.ts?raw';
+import approach2PyCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.py?raw';
+import approach2TsCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 105 · [Link](https://leetcode.com/problems/construct-binary-tree-from-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="construct-binary-tree-from-preorder-and-inorder-traversal" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="construct-binary-tree-from-preorder-and-inorder-traversal-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="construct-binary-tree-from-preorder-and-inorder-traversal-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive with `list.index` per call
 
 First element of `preorder` is the root. Find it in `inorder` to split left/right subtrees. Recurse.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def build_tree(preorder, inorder):
     if not preorder:
@@ -40,6 +54,28 @@ def build_tree(preorder, inorder):
     root.right = build_tree(preorder[mid + 1:], inorder[mid + 1:])   # L4: O(n) slice
     return root
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
+    if (!preorder.length) return null;
+    const rootVal = preorder[0];                           // L1: O(1)
+    const root = new TreeNode(rootVal);
+    const mid = inorder.indexOf(rootVal);                  // L2: O(n) linear scan
+    root.left = buildTree(preorder.slice(1, mid + 1), inorder.slice(0, mid));      // L3: O(n) slice
+    root.right = buildTree(preorder.slice(mid + 1), inorder.slice(mid + 1));       // L4: O(n) slice
+    return root;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,8 +95,10 @@ Both L2 and L3/L4 are O(n) per call, and both are called O(n) times total. The n
 
 ## Approach 2: Hash map inorder index + pointer recursion (optimal)
 
-Precompute `val -> index` in `inorder` once (O(n)). Pass index ranges into the recursion instead of slicing.
+Precompute `val → index` in `inorder` once (O(n)). Pass index ranges into the recursion instead of slicing.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def build_tree(preorder, inorder):
     inorder_idx = {v: i for i, v in enumerate(inorder)}  # L1: O(n) build map
@@ -79,6 +117,29 @@ def build_tree(preorder, inorder):
 
     return rec(0, len(inorder) - 1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
+    const inorderIdx = new Map<number, number>();
+    inorder.forEach((v, i) => inorderIdx.set(v, i));  // L1: O(n) build map
+    let preI = 0;
+
+    function rec(inL: number, inR: number): TreeNode | null {
+        if (inL > inR) return null;
+        const rootVal = preorder[preI++];              // L2/L3: O(1) read + advance
+        const root = new TreeNode(rootVal);
+        const mid = inorderIdx.get(rootVal)!;          // L4: O(1) hash lookup
+        root.left = rec(inL, mid - 1);                 // L5: recurse left subtree
+        root.right = rec(mid + 1, inR);                // L6: recurse right subtree
+        return root;
+    }
+
+    return rec(0, inorder.length - 1);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -100,6 +161,17 @@ Every node is constructed in O(1) given the precomputed map. No slicing, no scan
 
 ### Why the preorder index is shared state
 We consume the preorder from left to right, but we must process the left subtree completely *before* starting the right subtree. By sharing a single counter (`pre_i`) across recursive calls, the left subtree's exhaustion naturally positions us at the right subtree's root.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="construct-binary-tree-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="construct-binary-tree-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Iterative with a stack
 
@@ -147,6 +219,8 @@ The hash-map + recursion pattern generalizes to problem 106 (Build from Inorder 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -209,6 +283,57 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
+    const inorderIdx = new Map<number, number>();
+    inorder.forEach((v, i) => inorderIdx.set(v, i));
+    let preI = 0;
+    function rec(inL: number, inR: number): TreeNode | null {
+        if (inL > inR) return null;
+        const rootVal = preorder[preI++];
+        const root = new TreeNode(rootVal);
+        const mid = inorderIdx.get(rootVal)!;
+        root.left = rec(inL, mid - 1);
+        root.right = rec(mid + 1, inR);
+        return root;
+    }
+    return rec(0, inorder.length - 1);
+}
+
+function treeToList(root: TreeNode | null): (number | null)[] {
+    if (!root) return [];
+    const result: (number | null)[] = [];
+    const q: (TreeNode | null)[] = [root];
+    while (q.length) {
+        const node = q.shift()!;
+        if (node) { result.push(node.val); q.push(node.left); q.push(node.right); }
+        else result.push(null);
+    }
+    while (result.length && result[result.length - 1] === null) result.pop();
+    return result;
+}
+
+const t = buildTree([3, 9, 20, 15, 7], [9, 3, 15, 20, 7]);
+console.assert(JSON.stringify(treeToList(t)) === JSON.stringify([3, 9, 20, null, null, 15, 7]));
+const t2 = buildTree([-1], [-1]);
+console.assert(t2!.val === -1 && t2!.left === null && t2!.right === null);
+const t3 = buildTree([1, 2, 3], [3, 2, 1]);
+console.assert(JSON.stringify(treeToList(t3)) === JSON.stringify([1, 2, null, 3]));
+const t4 = buildTree([1, 2, 3], [1, 2, 3]);
+console.assert(JSON.stringify(treeToList(t4)) === JSON.stringify([1, null, 2, null, 3]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './062-unique-paths.py?raw';
+import practiceCodeTs from './062-unique-paths.ts?raw';
+import approach2PyCode from './062-unique-paths-approach2.py?raw';
+import approach2TsCode from './062-unique-paths-approach2.ts?raw';
+import approach3PyCode from './062-unique-paths-approach3.py?raw';
+import approach3TsCode from './062-unique-paths-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 62 · [Link](https://leetcode.com/problems/unique-paths/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="unique-paths" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="unique-paths-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="unique-paths-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive
 
 `f(r, c) = f(r, 1, c) + f(r, c, 1)` with `f(0, c) = f(r, 0) = 1`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def unique_paths(m, n):
     def f(r, c):                          # L1: define recursive helper
@@ -37,6 +53,19 @@ def unique_paths(m, n):
         return f(r - 1, c) + f(r, c - 1) # L3: two recursive calls
     return f(m - 1, n - 1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function uniquePaths(m: number, n: number): number {
+    function f(r: number, c: number): number {   // L1: define recursive helper
+        if (r === 0 || c === 0) return 1;        // L2: O(1) base case (edge row/col)
+        return f(r - 1, c) + f(r, c - 1);       // L3: two recursive calls
+    }
+    return f(m - 1, n - 1);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -57,6 +86,8 @@ Without caching, the same `(r, c)` is recomputed at every node of a binary tree 
 
 `dp[r][c]` = paths to `(r, c)`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def unique_paths(m, n):
     dp = [[1] * n for _ in range(m)]   # L1: O(m*n) init, all 1s (edges are base cases)
@@ -65,6 +96,21 @@ def unique_paths(m, n):
             dp[r][c] = dp[r - 1][c] + dp[r][c - 1]  # L4: O(1) recurrence
     return dp[m - 1][n - 1]            # L5: O(1) read answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function uniquePaths(m: number, n: number): number {
+    const dp: number[][] = Array.from({ length: m }, () => new Array(n).fill(1));  // L1: O(m*n) init
+    for (let r = 1; r < m; r++) {                     // L2: outer loop O(m)
+        for (let c = 1; c < n; c++) {                 // L3: inner loop O(n)
+            dp[r][c] = dp[r - 1][c] + dp[r][c - 1];  // L4: O(1) recurrence
+        }
+    }
+    return dp[m - 1][n - 1];                          // L5: O(1) read answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -83,10 +129,23 @@ Every cell is visited once; each fill is a single addition. The double loop is t
 - **Time:** O(m · n), driven by L2+L3+L4 (the full grid traversal).
 - **Space:** O(m · n) for the DP table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="unique-paths-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="unique-paths-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: 1-D rolling array (optimal space)
 
 `dp[c]` holds the current row; update in place.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def unique_paths(m, n):
     dp = [1] * n          # L1: O(n) init (first row, all paths = 1)
@@ -95,6 +154,21 @@ def unique_paths(m, n):
             dp[c] += dp[c - 1]         # L4: O(1) in-place update
     return dp[n - 1]      # L5: O(1) read answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function uniquePaths(m: number, n: number): number {
+    const dp: number[] = new Array(n).fill(1);  // L1: O(n) init (first row, all paths = 1)
+    for (let r = 1; r < m; r++) {               // L2: outer loop O(m)
+        for (let c = 1; c < n; c++) {           // L3: inner loop O(n)
+            dp[c] += dp[c - 1];                 // L4: O(1) in-place update
+        }
+    }
+    return dp[n - 1];                           // L5: O(1) read answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -115,6 +189,17 @@ Same time complexity as 2-D DP but the space drops from O(m · n) to O(n) by reu
 ### Closed-form (math variant)
 The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` total moves are "down." O(min(m, n)) using iterative factorial.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="unique-paths-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="unique-paths-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -128,6 +213,8 @@ The 1-D rolling array is the standard interview answer. The closed-form is a nea
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_062.py and run.
 # Uses the canonical implementation (Approach 3: 1-D rolling DP).
@@ -156,6 +243,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function uniquePaths(m: number, n: number): number {
+    const dp: number[] = new Array(n).fill(1);
+    for (let r = 1; r < m; r++)
+        for (let c = 1; c < n; c++)
+            dp[c] += dp[c - 1];
+    return dp[n - 1];
+}
+
+console.assert(uniquePaths(3, 7) === 28);
+console.assert(uniquePaths(3, 2) === 3);
+console.assert(uniquePaths(1, 1) === 1);
+console.assert(uniquePaths(1, 5) === 1);
+console.assert(uniquePaths(5, 1) === 1);
+console.assert(uniquePaths(3, 3) === 6);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

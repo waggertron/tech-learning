@@ -5,11 +5,16 @@ parent: advanced-graphs
 tags: [leetcode, advanced-graphs, minimum-spanning-tree, hard]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1489-critical-and-pseudo-critical-edges.py?raw';
+import practiceCodeTs from './1489-critical-and-pseudo-critical-edges.ts?raw';
+import approach2PyCode from './1489-critical-and-pseudo-critical-edges-approach2.py?raw';
+import approach2TsCode from './1489-critical-and-pseudo-critical-edges-approach2.ts?raw';
 
 ## Problem
 
@@ -29,12 +34,21 @@ LeetCode 1489 · [Link](https://leetcode.com/problems/find-critical-and-pseudo-c
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="critical-and-pseudo-critical-edges" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="critical-and-pseudo-critical-edges-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="critical-and-pseudo-critical-edges-ts" />
+  </TabItem>
+</Tabs>
 
 ## Background: Kruskal's algorithm and Union-Find
 
 Kruskal builds an MST by sorting edges by weight and greedily adding each edge if it doesn't form a cycle. Cycle detection uses Union-Find with path compression.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class UnionFind:
     def __init__(self, n):
@@ -57,6 +71,32 @@ class UnionFind:
             self.rank[rx] += 1
         return True                       # merged successfully
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class UnionFind {
+    parent: number[];
+    rank: number[];
+    constructor(n: number) {
+        this.parent = Array.from({ length: n }, (_, i) => i);
+        this.rank = new Array(n).fill(0);
+    }
+    find(x: number): number {
+        if (this.parent[x] !== x) this.parent[x] = this.find(this.parent[x]);
+        return this.parent[x];
+    }
+    union(x: number, y: number): boolean {
+        let rx = this.find(x), ry = this.find(y);
+        if (rx === ry) return false;      // already same component, cycle!
+        if (this.rank[rx] < this.rank[ry]) [rx, ry] = [ry, rx];
+        this.parent[ry] = rx;
+        if (this.rank[rx] === this.rank[ry]) this.rank[rx]++;
+        return true;                      // merged successfully
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 ## Approach: Brute force per-edge classification
 
@@ -65,6 +105,8 @@ For each edge `e` (indexed in sorted order), run two modified Kruskal passes:
 1. **Critical test:** build MST excluding `e`. If MST weight increases or graph disconnects, `e` is critical.
 2. **Pseudo-critical test:** build MST forcing `e` in first. If the resulting MST weight equals the base MST weight, `e` is pseudo-critical.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_critical_and_pseudo_critical_edges(n, edges):
     # attach original indices before sorting
@@ -106,6 +148,45 @@ def find_critical_and_pseudo_critical_edges(n, edges):
     pseudo.sort()
     return [critical, pseudo]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findCriticalAndPseudoCriticalEdges(n: number, edges: number[][]): number[][] {
+    // attach original indices before sorting
+    const indexed: [number, number, number, number][] = edges.map(([u, v, w], i) => [w, u, v, i]);
+    indexed.sort((a, b) => a[0] - b[0]);                            // L2: O(E log E)
+
+    function kruskal(skip = -1, force = -1): number {               // L3: helper
+        const uf = new UnionFind(n);
+        let weight = 0, count = 0;
+        if (force !== -1) {                                         // L4: force edge in first
+            const [w, u, v] = indexed[force];
+            uf.union(u, v);
+            weight += w;
+            count++;
+        }
+        for (let idx = 0; idx < indexed.length; idx++) {           // L5: O(E) Kruskal
+            if (idx === skip) continue;                             // L6: skip this edge
+            const [w, u, v] = indexed[idx];
+            if (uf.union(u, v)) { weight += w; count++; }          // L7: no cycle
+        }
+        return count < n - 1 ? Infinity : weight;                  // L8: disconnected check
+    }
+
+    const base = kruskal();                                         // L9: O(E alpha(V))
+    const critical: number[] = [], pseudo: number[] = [];
+
+    for (let i = 0; i < indexed.length; i++) {                     // L10: O(E) outer loop
+        if (kruskal(i) > base) critical.push(indexed[i][3]);       // L11: critical test
+        else if (kruskal(-1, i) === base) pseudo.push(indexed[i][3]);  // L12: pseudo-critical test
+    }
+    critical.sort((a, b) => a - b);                                // L13: O(E log E)
+    pseudo.sort((a, b) => a - b);
+    return [critical, pseudo];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -124,6 +205,17 @@ For each of E edges, we run two O(E alpha(V)) Kruskal passes, giving O(E^2 alpha
 **Complexity**
 - **Time:** O(E^2 alpha(V)), driven by L11/L12 (two Kruskal passes per edge).
 - **Space:** O(V + E) for the Union-Find and edge list.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="critical-and-pseudo-critical-edges-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="critical-and-pseudo-critical-edges-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ### Why not O(E log E) for the whole problem?
 
@@ -155,6 +247,8 @@ The pattern: establish a baseline, then test each candidate by modifying the bas
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class UnionFind:
     def __init__(self, n):
@@ -211,6 +305,66 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class UnionFind {
+    parent: number[];
+    rank: number[];
+    constructor(n: number) {
+        this.parent = Array.from({ length: n }, (_, i) => i);
+        this.rank = new Array(n).fill(0);
+    }
+    find(x: number): number {
+        if (this.parent[x] !== x) this.parent[x] = this.find(this.parent[x]);
+        return this.parent[x];
+    }
+    union(x: number, y: number): boolean {
+        let rx = this.find(x), ry = this.find(y);
+        if (rx === ry) return false;
+        if (this.rank[rx] < this.rank[ry]) [rx, ry] = [ry, rx];
+        this.parent[ry] = rx;
+        if (this.rank[rx] === this.rank[ry]) this.rank[rx]++;
+        return true;
+    }
+}
+
+function findCriticalAndPseudoCriticalEdges(n: number, edges: number[][]): number[][] {
+    const indexed: [number, number, number, number][] = edges.map(([u, v, w], i) => [w, u, v, i]);
+    indexed.sort((a, b) => a[0] - b[0]);
+
+    function kruskal(skip = -1, force = -1): number {
+        const uf = new UnionFind(n);
+        let weight = 0, count = 0;
+        if (force !== -1) {
+            const [w, u, v] = indexed[force];
+            uf.union(u, v); weight += w; count++;
+        }
+        for (let idx = 0; idx < indexed.length; idx++) {
+            if (idx === skip) continue;
+            const [w, u, v] = indexed[idx];
+            if (uf.union(u, v)) { weight += w; count++; }
+        }
+        return count < n - 1 ? Infinity : weight;
+    }
+
+    const base = kruskal();
+    const critical: number[] = [], pseudo: number[] = [];
+    for (let i = 0; i < indexed.length; i++) {
+        if (kruskal(i) > base) critical.push(indexed[i][3]);
+        else if (kruskal(-1, i) === base) pseudo.push(indexed[i][3]);
+    }
+    critical.sort((a, b) => a - b);
+    pseudo.sort((a, b) => a - b);
+    return [critical, pseudo];
+}
+
+console.assert(JSON.stringify(findCriticalAndPseudoCriticalEdges(5, [[0,1,1],[1,2,1],[2,3,2],[0,3,2],[0,4,3],[3,4,3],[1,4,6]])) === JSON.stringify([[0,1],[2,3,4,5]]));
+console.assert(JSON.stringify(findCriticalAndPseudoCriticalEdges(4, [[0,1,1],[1,2,1],[2,3,1],[0,3,1]])) === JSON.stringify([[],[0,1,2,3]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

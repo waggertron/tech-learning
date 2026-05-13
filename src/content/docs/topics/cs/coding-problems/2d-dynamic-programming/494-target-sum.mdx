@@ -1,6 +1,6 @@
 ---
 title: "494. Target Sum (Medium)"
-description: Count the number of ways to assign + and − signs to an integer array so the signed sum equals a target.
+description: "Count the number of ways to assign + and - signs to an integer array so the signed sum equals a target."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
@@ -8,12 +8,19 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './494-target-sum.py?raw';
+import practiceCodeTs from './494-target-sum.ts?raw';
+import approach2PyCode from './494-target-sum-approach2.py?raw';
+import approach2TsCode from './494-target-sum-approach2.ts?raw';
+import approach3PyCode from './494-target-sum-approach3.py?raw';
+import approach3TsCode from './494-target-sum-approach3.ts?raw';
 
 ## Problem
 
-Given an integer array `nums` and an integer `target`, assign `+` or `−` to each number and return the number of sign assignments whose signed sum equals `target`.
+Given an integer array `nums` and an integer `target`, assign `+` or `-` to each number and return the number of sign assignments whose signed sum equals `target`.
 
 **Example**
 - `nums = [1, 1, 1, 1, 1]`, `target = 3` → `5`
@@ -23,10 +30,19 @@ LeetCode 494 · [Link](https://leetcode.com/problems/target-sum/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="target-sum" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="target-sum-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="target-sum-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive, try both signs per element
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_target_sum_ways(nums, target):
     def f(i, cur):
@@ -35,6 +51,19 @@ def find_target_sum_ways(nums, target):
         return f(i + 1, cur + nums[i]) + f(i + 1, cur - nums[i])  # L2: two recursive calls
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findTargetSumWays(nums: number[], target: number): number {
+    function f(i: number, cur: number): number {
+        if (i === nums.length) return cur === target ? 1 : 0;          // L1: O(1) base case
+        return f(i + 1, cur + nums[i]) + f(i + 1, cur - nums[i]);     // L2: two recursive calls
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -53,6 +82,8 @@ Every element branches into two sign choices. The call tree is a complete binary
 
 ## Approach 2: Top-down memoized by (i, cur)
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -64,6 +95,24 @@ def find_target_sum_ways(nums, target):
         return f(i + 1, cur + nums[i]) + f(i + 1, cur - nums[i])  # L3: O(1) with cache
     return f(0, 0)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findTargetSumWays(nums: number[], target: number): number {
+    const memo: Map<string, number> = new Map();
+    function f(i: number, cur: number): number {
+        if (i === nums.length) return cur === target ? 1 : 0;          // L2: O(1) base case
+        const key = `${i},${cur}`;
+        if (memo.has(key)) return memo.get(key)!;                      // L1: O(1) cache lookup
+        const result = f(i + 1, cur + nums[i]) + f(i + 1, cur - nums[i]);  // L3: cached
+        memo.set(key, result);
+        return result;
+    }
+    return f(0, 0);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -81,12 +130,25 @@ The unique states are `(i, cur)` where `i` ranges over `n+1` values and `cur` ra
 - **Time:** O(n · total_sum), driven by L3 across all unique (i, cur) states.
 - **Space:** O(n · total_sum) for the memo table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="target-sum-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="target-sum-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Subset-sum transformation + 1-D DP (canonical)
 
 Let `P` = positive-signed subset, `N` = negative-signed. Then `P + N = total` and `P - N = target` → `P = (total + target) / 2`. So: count subsets that sum to `P`. That's classic 0/1 subset-sum.
 
 Edge cases: `total + target` must be even and non-negative.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_target_sum_ways(nums, target):
     total = sum(nums)                                   # L1: O(n)
@@ -101,6 +163,25 @@ def find_target_sum_ways(nums, target):
             dp[s] += dp[s - x]                         # L8: O(1) accumulate ways
     return dp[P]                                       # L9: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findTargetSumWays(nums: number[], target: number): number {
+    const total = nums.reduce((a, b) => a + b, 0);                    // L1: O(n)
+    if ((total + target) % 2 !== 0 || total < Math.abs(target)) return 0;  // L2: feasibility
+    const P = (total + target) / 2;                                    // L3: O(1) target sum
+    const dp: number[] = new Array(P + 1).fill(0);                    // L4: O(P) table init
+    dp[0] = 1;                                                         // L5: O(1) base case
+    for (const x of nums) {                                            // L6: O(n) outer loop
+        for (let s = P; s >= x; s--) {                                 // L7: O(P) right-to-left
+            dp[s] += dp[s - x];                                        // L8: O(1) accumulate
+        }
+    }
+    return dp[P];                                                      // L9: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -118,6 +199,17 @@ The right-to-left inner loop (L7) is critical for 0/1 knapsack correctness: it e
 - **Time:** O(n · P), driven by L6/L7 (the double loop).
 - **Space:** O(P) for the 1-D DP array.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="target-sum-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="target-sum-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -130,6 +222,8 @@ The "convert to subset sum" transformation is a classic move, same technique sol
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_494.py and run.
 # Uses the canonical implementation (Approach 3: subset-sum + 1-D DP).
@@ -163,6 +257,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findTargetSumWays(nums: number[], target: number): number {
+    const total = nums.reduce((a, b) => a + b, 0);
+    if ((total + target) % 2 !== 0 || total < Math.abs(target)) return 0;
+    const P = (total + target) / 2;
+    const dp: number[] = new Array(P + 1).fill(0);
+    dp[0] = 1;
+    for (const x of nums)
+        for (let s = P; s >= x; s--)
+            dp[s] += dp[s - x];
+    return dp[P];
+}
+
+console.assert(findTargetSumWays([1, 1, 1, 1, 1], 3) === 5);
+console.assert(findTargetSumWays([1], 1) === 1);
+console.assert(findTargetSumWays([1, 1], 0) === 2);
+console.assert(findTargetSumWays([1, 2], 4) === 0);
+console.assert(findTargetSumWays([1], -1) === 1);
+console.assert(findTargetSumWays([0, 0, 0], 0) === 8);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

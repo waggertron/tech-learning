@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './242-valid-anagram.py?raw';
+import practiceCodeTs from './242-valid-anagram.ts?raw';
+import approach2PyCode from './242-valid-anagram-approach2.py?raw';
+import approach2TsCode from './242-valid-anagram-approach2.ts?raw';
+import approach3PyCode from './242-valid-anagram-approach3.py?raw';
+import approach3TsCode from './242-valid-anagram-approach3.ts?raw';
 
 ## Problem
 
@@ -25,18 +32,38 @@ LeetCode 242 · [Link](https://leetcode.com/problems/valid-anagram/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="valid-anagram" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="valid-anagram-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="valid-anagram-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, sort both strings
 
 If two strings are anagrams, their sorted character sequences are identical.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_anagram(s: str, t: str) -> bool:
     if len(s) != len(t):       # L1: O(1) length guard
         return False
     return sorted(s) == sorted(t)  # L2: O(n log n) sort each, O(n) compare
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isAnagram(s: string, t: string): boolean {
+    if (s.length !== t.length) return false;            // L1: O(1) length guard
+    return s.split('').sort().join('') ===
+           t.split('').sort().join('');                 // L2: O(n log n) sort each
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,12 +86,30 @@ Sorting each string costs O(n log n); the final equality check scans both sorted
 
 Build frequency maps of each string; compare.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
 def is_anagram(s: str, t: str) -> bool:
     return Counter(s) == Counter(t)   # L1: O(n) build each + O(k) compare
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isAnagram(s: string, t: string): boolean {
+    if (s.length !== t.length) return false;
+    const cs = new Map<string, number>();
+    const ct = new Map<string, number>();
+    for (const ch of s) cs.set(ch, (cs.get(ch) ?? 0) + 1); // L1: O(n) build
+    for (const ch of t) ct.set(ch, (ct.get(ch) ?? 0) + 1); // L1: O(n) build
+    for (const [ch, cnt] of cs)                              // O(k) compare
+        if (ct.get(ch) !== cnt) return false;
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -82,10 +127,23 @@ Building each Counter is O(n); comparing two Counters is O(k) over distinct char
 
 Clean, correct, Unicode-safe. This is usually the right production answer.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="valid-anagram-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="valid-anagram-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Single count array (optimal for bounded alphabet)
 
 For lowercase-English-only input, we can use a fixed 26-element integer array. Increment on `s`, decrement on `t`, check that nothing goes negative (we can short-circuit).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_anagram(s: str, t: str) -> bool:
     if len(s) != len(t):                    # L1: O(1) guard
@@ -100,6 +158,24 @@ def is_anagram(s: str, t: str) -> bool:
             return False
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isAnagram(s: string, t: string): boolean {
+    if (s.length !== t.length) return false;            // L1: O(1) guard
+    const counts = new Array(26).fill(0);               // L2: O(1), fixed 26-slot array
+    for (const ch of s)                                 // L3: loop n iterations
+        counts[ch.charCodeAt(0) - 97]++;               // L4: O(1) array index + increment
+    for (const ch of t) {                               // L5: loop n iterations
+        const idx = ch.charCodeAt(0) - 97;             // L6: O(1)
+        counts[idx]--;                                  // L7: O(1)
+        if (counts[idx] < 0) return false;              // L8: O(1) early exit
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -120,6 +196,17 @@ Two linear passes of O(1) work each. The 26-slot array makes both passes O(n) to
 
 For Unicode input, substitute a `dict` (which is equivalent to the Counter approach).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="valid-anagram-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="valid-anagram-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | Notes |
@@ -132,6 +219,8 @@ The Counter approach is usually what you want unless the problem strictly limits
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_valid_anagram.py and run.
 # Uses the canonical implementation (Approach 3: fixed count array).
@@ -161,6 +250,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isAnagram(s: string, t: string): boolean {
+    if (s.length !== t.length) return false;
+    const counts = new Array(26).fill(0);
+    for (const ch of s) counts[ch.charCodeAt(0) - 97]++;
+    for (const ch of t) {
+        const idx = ch.charCodeAt(0) - 97;
+        counts[idx]--;
+        if (counts[idx] < 0) return false;
+    }
+    return true;
+}
+
+console.assert(isAnagram("anagram", "nagaram") === true);
+console.assert(isAnagram("rat", "car") === false);
+console.assert(isAnagram("a", "a") === true);
+console.assert(isAnagram("ab", "ba") === true);
+console.assert(isAnagram("ab", "a") === false);
+console.assert(isAnagram("", "") === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

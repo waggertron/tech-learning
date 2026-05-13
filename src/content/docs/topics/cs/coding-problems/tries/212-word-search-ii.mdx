@@ -5,11 +5,17 @@ parent: tries
 tags: [leetcode, neetcode-150, tries, backtracking, dfs, grid, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-13
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './212-word-search-ii.py?raw';
+import approach2PyCode from './212-word-search-ii-approach2.py?raw';
+import approach2TsCode from './212-word-search-ii-approach2.ts?raw';
+import approach3PyCode from './212-word-search-ii-approach3.py?raw';
+import approach3TsCode from './212-word-search-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +30,18 @@ LeetCode 212 · [Link](https://leetcode.com/problems/word-search-ii/) · *Hard*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="word-search-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="word-search-ii-py" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, solve Word Search for each word
 
-Run problem 79's algorithm once per word.
+Run problem 79's single-word DFS once per word. No prefix sharing between words.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_words(board, words):
     rows, cols = len(board), len(board[0])
@@ -47,7 +59,7 @@ def find_words(board, words):
             board[r][c] = saved             # L5: unmark, O(1)
             return found
 
-        for r in range(rows):               # L6: iterate over m*n cells
+        for r in range(rows):               # L6: iterate over m · n cells
             for c in range(cols):
                 if dfs(r, c, 0):
                     return True
@@ -55,6 +67,35 @@ def find_words(board, words):
 
     return [w for w in words if exist(w)]  # L7: run exist() W times
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findWords(board: string[][], words: string[]): string[] {
+    const rows = board.length, cols = board[0].length;
+
+    function exist(word: string): boolean {
+        function dfs(r: number, c: number, i: number): boolean {
+            if (i === word.length) return true;                    // L1: base case
+            if (r < 0 || r >= rows || c < 0 || c >= cols
+                || board[r][c] !== word[i]) return false;          // L2: bounds + match
+            const saved = board[r][c];
+            board[r][c] = '#';                                     // L3: mark visited
+            const found = dfs(r + 1, c, i + 1) || dfs(r - 1, c, i + 1)
+                       || dfs(r, c + 1, i + 1) || dfs(r, c - 1, i + 1);  // L4: 4 directions
+            board[r][c] = saved;                                   // L5: unmark
+            return found;
+        }
+        for (let r = 0; r < rows; r++)                            // L6: iterate over m · n cells
+            for (let c = 0; c < cols; c++)
+                if (dfs(r, c, 0)) return true;
+        return false;
+    }
+
+    return words.filter(w => exist(w));                            // L7: run exist() W times
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -78,6 +119,8 @@ Typically times out: overlapping prefixes across words cause massive duplicate w
 
 Walk the board with DFS; at each step, move down the trie along the current letter. If the letter isn't a child of the current trie node, prune immediately. When you reach an end-of-word node, record the word.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TrieNode:
     def __init__(self):
@@ -119,6 +162,48 @@ def find_words(board, words):
             dfs(r, c, root)
     return found
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    word: string | null = null;
+}
+
+function findWords(board: string[][], words: string[]): string[] {
+    const root = new TrieNode();
+    for (const w of words) {                      // L1: build trie
+        let node = root;
+        for (const ch of w) {
+            if (!node.children.has(ch)) node.children.set(ch, new TrieNode());
+            node = node.children.get(ch)!;
+        }
+        node.word = w;
+    }
+
+    const rows = board.length, cols = board[0].length;
+    const found: string[] = [];
+
+    function dfs(r: number, c: number, node: TrieNode): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols) return;
+        const ch = board[r][c];
+        if (ch === '#' || !node.children.has(ch)) return;  // L2: O(1) trie lookup prune
+        const nextNode = node.children.get(ch)!;
+        if (nextNode.word !== null) { found.push(nextNode.word); nextNode.word = null; }  // L3: dedup
+        board[r][c] = '#';                                  // L4: mark visited
+        dfs(r + 1, c, nextNode); dfs(r - 1, c, nextNode);  // L5: 4-way DFS
+        dfs(r, c + 1, nextNode); dfs(r, c - 1, nextNode);
+        board[r][c] = ch;                                   // L6: unmark
+    }
+
+    for (let r = 0; r < rows; r++)                          // L7: launch from every cell
+        for (let c = 0; c < cols; c++)
+            dfs(r, c, root);
+    return found;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -137,18 +222,134 @@ The key improvement over Approach 1: all W words are searched simultaneously. Wh
 - **Time:** O(m · n · 4^L), driven by L5/L7 (single DFS over all cells, guided by the trie).
 - **Space:** O(total characters in words).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="word-search-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="word-search-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Approach 2 + dead-branch pruning
 
-After finding a word, prune the leaf from the trie. Over time the trie shrinks, cutting the DFS search space. Combined with the `word = None` dedup above, this gives noticeable speedups on large word lists.
+After collecting a word at a terminal node, that leaf has no remaining useful children. Delete it from its parent on the way back up the recursion. Over time the trie shrinks, cutting the DFS search space progressively.
 
+<Tabs>
+<TabItem label="Python">
 ```python
-# Add to the DFS in Approach 2: prune empty subtrees on the way back up.
-# After the recursive calls:
-#     if not next_node.children:
-#         node.children.pop(ch)
-```
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.word = None
 
-Complexity is unchanged asymptotically but wall-clock is often 2–10× faster.
+def find_words(board, words):
+    root = TrieNode()
+    for w in words:
+        node = root
+        for ch in w:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.word = w
+
+    rows, cols = len(board), len(board[0])
+    found = []
+
+    def dfs(r, c, node):
+        if not (0 <= r < rows and 0 <= c < cols):
+            return
+        ch = board[r][c]
+        if ch == "#" or ch not in node.children:
+            return
+        next_node = node.children[ch]
+        if next_node.word:
+            found.append(next_node.word)
+            next_node.word = None
+        board[r][c] = "#"
+        dfs(r + 1, c, next_node); dfs(r - 1, c, next_node)
+        dfs(r, c + 1, next_node); dfs(r, c - 1, next_node)
+        board[r][c] = ch
+        if not next_node.children:          # L8: prune empty subtree on unwind
+            del node.children[ch]           # L9: O(1) dict delete
+
+    for r in range(rows):
+        for c in range(cols):
+            dfs(r, c, root)
+    return found
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    word: string | null = null;
+}
+
+function findWords(board: string[][], words: string[]): string[] {
+    const root = new TrieNode();
+    for (const w of words) {
+        let node = root;
+        for (const ch of w) {
+            if (!node.children.has(ch)) node.children.set(ch, new TrieNode());
+            node = node.children.get(ch)!;
+        }
+        node.word = w;
+    }
+
+    const rows = board.length, cols = board[0].length;
+    const found: string[] = [];
+
+    function dfs(r: number, c: number, node: TrieNode): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols) return;
+        const ch = board[r][c];
+        if (ch === '#' || !node.children.has(ch)) return;
+        const nextNode = node.children.get(ch)!;
+        if (nextNode.word !== null) { found.push(nextNode.word); nextNode.word = null; }
+        board[r][c] = '#';
+        dfs(r + 1, c, nextNode); dfs(r - 1, c, nextNode);
+        dfs(r, c + 1, nextNode); dfs(r, c - 1, nextNode);
+        board[r][c] = ch;
+        if (nextNode.children.size === 0 && nextNode.word === null)  // L8: prune empty subtree
+            node.children.delete(ch);                                 // L9: O(1) map delete
+    }
+
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            dfs(r, c, root);
+    return found;
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: W = len(words), L = max word length, m = board rows, n = board columns.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L8 (empty check) | O(1) | each DFS unwind | negligible |
+| **L9 (prune leaf)** | **O(1)** | **≤ total trie nodes** | **shrinks trie over time** ← key benefit |
+
+Big-O is unchanged: O(m · n · 4^L) in the absolute worst case. In practice, once a word is found the trie branch leading to it is removed, so subsequent DFS calls skip that path entirely. On large word lists with many shared prefixes this gives 2-10x wall-clock speedup.
+
+**Complexity**
+- Same O(m · n · 4^L) asymptotically.
+- Space: O(total chars), shrinks as words are found.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="word-search-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="word-search-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -162,6 +363,8 @@ This problem is the canonical "why tries matter" interview question. The trie tu
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_212.py and run.
 # Uses the canonical Approach 2 implementation (trie + board DFS).
@@ -224,6 +427,55 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TrieNode {
+    children: Map<string, TrieNode> = new Map();
+    word: string | null = null;
+}
+
+function findWords(board: string[][], words: string[]): string[] {
+    const root = new TrieNode();
+    for (const w of words) {
+        let node = root;
+        for (const ch of w) {
+            if (!node.children.has(ch)) node.children.set(ch, new TrieNode());
+            node = node.children.get(ch)!;
+        }
+        node.word = w;
+    }
+    const rows = board.length, cols = board[0].length;
+    const found: string[] = [];
+    function dfs(r: number, c: number, node: TrieNode): void {
+        if (r < 0 || r >= rows || c < 0 || c >= cols) return;
+        const ch = board[r][c];
+        if (ch === '#' || !node.children.has(ch)) return;
+        const nextNode = node.children.get(ch)!;
+        if (nextNode.word !== null) { found.push(nextNode.word); nextNode.word = null; }
+        board[r][c] = '#';
+        dfs(r + 1, c, nextNode); dfs(r - 1, c, nextNode);
+        dfs(r, c + 1, nextNode); dfs(r, c - 1, nextNode);
+        board[r][c] = ch;
+    }
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            dfs(r, c, root);
+    return found;
+}
+
+const board1 = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]];
+const r1 = new Set(findWords(board1, ["oath","pea","eat","rain"]));
+console.assert(r1.has("oath") && r1.has("eat") && r1.size === 2);
+console.assert(JSON.stringify(findWords([["a"]], ["a"])) === JSON.stringify(["a"]));
+console.assert(JSON.stringify(findWords([["a"]], ["b"])) === JSON.stringify([]));
+const board2 = [["a","b"],["c","d"]];
+const r2 = new Set(findWords(board2, ["ab","cd","abdc"]));
+console.assert(r2.has("ab") && r2.has("cd") && r2.has("abdc") && r2.size === 3);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

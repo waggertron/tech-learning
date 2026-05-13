@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './004-median-of-two-sorted-arrays.py?raw';
+import practiceCodeTs from './004-median-of-two-sorted-arrays.ts?raw';
+import approach2PyCode from './004-median-of-two-sorted-arrays-approach2.py?raw';
+import approach2TsCode from './004-median-of-two-sorted-arrays-approach2.ts?raw';
+import approach3PyCode from './004-median-of-two-sorted-arrays-approach3.py?raw';
+import approach3TsCode from './004-median-of-two-sorted-arrays-approach3.ts?raw';
 
 ## Problem
 
@@ -23,12 +30,21 @@ LeetCode 4 · [Link](https://leetcode.com/problems/median-of-two-sorted-arrays/)
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="median-of-two-sorted-arrays" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="median-of-two-sorted-arrays-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="median-of-two-sorted-arrays-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, merge, then index
 
 Merge the two sorted arrays into one, then return the middle element(s).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     merged = sorted(nums1 + nums2)    # L1: O((m+n) log(m+n)) sort
@@ -38,6 +54,19 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
         return (merged[mid - 1] + merged[mid]) / 2   # L2: O(1) index
     return merged[mid]                                # L3: O(1) index
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+    const merged = [...nums1, ...nums2].sort((a, b) => a - b);  // L1: O((m+n) log(m+n))
+    const total = merged.length;
+    const mid = total >> 1;
+    if (total % 2 === 0) return (merged[mid - 1] + merged[mid]) / 2;  // L2: O(1)
+    return merged[mid];                                                 // L3: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -60,6 +89,8 @@ Fails the required O(log(min(m, n))) time.
 
 Instead of merging completely, walk both arrays with two pointers and stop at the median index.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     m, n = len(nums1), len(nums2)
@@ -79,6 +110,29 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 
     return cur if total % 2 == 1 else (prev + cur) / 2   # L5: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+    const m = nums1.length, n = nums2.length;
+    const total = m + n;
+    const need = Math.floor(total / 2) + 1;   // L1: O(1)
+
+    let i = 0, j = 0;
+    let prev = 0, cur = 0;
+    for (let step = 0; step < need; step++) {  // L2: advance need steps
+        prev = cur;
+        if (i < m && (j >= n || nums1[i] <= nums2[j])) {
+            cur = nums1[i++];                  // L3: O(1) take from nums1
+        } else {
+            cur = nums2[j++];                  // L4: O(1) take from nums2
+        }
+    }
+    return total % 2 === 1 ? cur : (prev + cur) / 2;  // L5: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -98,6 +152,17 @@ We only walk to the median position; no need to finish the merge. But the median
 
 Still doesn't meet the target complexity.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="median-of-two-sorted-arrays-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="median-of-two-sorted-arrays-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Binary search partition (optimal)
 
 The trick: find a partition index `i` in `nums1` and corresponding `j = (m + n + 1) // 2 - i` in `nums2` such that:
@@ -107,6 +172,8 @@ The trick: find a partition index `i` in `nums1` and corresponding `j = (m + n +
 
 Binary-search `i` on the shorter array.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     if len(nums1) > len(nums2):            # L1: ensure nums1 is shorter, O(1)
@@ -134,6 +201,38 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
             lo = i + 1                    # L13: O(1) cut too far left
     return 0.0   # unreachable for valid input
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+    if (nums1.length > nums2.length) [nums1, nums2] = [nums2, nums1];  // L1: shorter first
+    const m = nums1.length, n = nums2.length;
+    const half = Math.floor((m + n + 1) / 2);   // L2: O(1)
+
+    let lo = 0, hi = m;                          // L3: binary search over [0, m]
+    while (lo <= hi) {                           // L4: loop, O(log m) iterations
+        const i = (lo + hi) >> 1;               // L5: partition index for nums1
+        const j = half - i;                     // L6: partition index for nums2
+
+        const aLeft  = i > 0 ? nums1[i - 1] : -Infinity;   // L7: O(1)
+        const aRight = i < m ? nums1[i]     :  Infinity;    // L8: O(1)
+        const bLeft  = j > 0 ? nums2[j - 1] : -Infinity;   // L9: O(1)
+        const bRight = j < n ? nums2[j]     :  Infinity;    // L10: O(1)
+
+        if (aLeft <= bRight && bLeft <= aRight) {            // L11: partition valid
+            if ((m + n) % 2 === 1) return Math.max(aLeft, bLeft);
+            return (Math.max(aLeft, bLeft) + Math.min(aRight, bRight)) / 2;
+        } else if (aLeft > bRight) {
+            hi = i - 1;                          // L12: cut too far right
+        } else {
+            lo = i + 1;                          // L13: cut too far left
+        }
+    }
+    return 0;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -151,7 +250,18 @@ We binary-search only over `i` in `[0, m]`, the shorter array's partition. For e
 - **Space:** O(1).
 
 ### Why it works
-We're searching for the correct horizontal "cut" that divides the conceptual merged array in half. The invariants `a_left <= b_right` and `b_left <= a_right` together guarantee the left side has all the smaller elements. Because the two arrays are sorted, overshoot/undershoot each have a clean correction.
+We're searching for the correct horizontal "cut" that divides the conceptual merged array in half. The invariants `a_left ≤ b_right` and `b_left ≤ a_right` together guarantee the left side has all the smaller elements. Because the two arrays are sorted, overshoot/undershoot each have a clean correction.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="median-of-two-sorted-arrays-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="median-of-two-sorted-arrays-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -165,6 +275,8 @@ This is the canonical "hard" binary-search problem. Once you see the partition i
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests - paste into a REPL or save as test_004.py and run.
 # Uses the optimal Approach 3 implementation.
@@ -204,6 +316,43 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
+    if (nums1.length > nums2.length) [nums1, nums2] = [nums2, nums1];
+    const m = nums1.length, n = nums2.length;
+    const half = Math.floor((m + n + 1) / 2);
+    let lo = 0, hi = m;
+    while (lo <= hi) {
+        const i = (lo + hi) >> 1;
+        const j = half - i;
+        const aLeft  = i > 0 ? nums1[i - 1] : -Infinity;
+        const aRight = i < m ? nums1[i]     :  Infinity;
+        const bLeft  = j > 0 ? nums2[j - 1] : -Infinity;
+        const bRight = j < n ? nums2[j]     :  Infinity;
+        if (aLeft <= bRight && bLeft <= aRight) {
+            if ((m + n) % 2 === 1) return Math.max(aLeft, bLeft);
+            return (Math.max(aLeft, bLeft) + Math.min(aRight, bRight)) / 2;
+        } else if (aLeft > bRight) {
+            hi = i - 1;
+        } else {
+            lo = i + 1;
+        }
+    }
+    return 0;
+}
+
+console.assert(findMedianSortedArrays([1, 3], [2]) === 2.0);
+console.assert(findMedianSortedArrays([1, 2], [3, 4]) === 2.5);
+console.assert(findMedianSortedArrays([0, 0], [0, 0]) === 0.0);
+console.assert(findMedianSortedArrays([], [1]) === 1.0);       // one array empty
+console.assert(findMedianSortedArrays([2], []) === 2.0);       // other array empty
+console.assert(findMedianSortedArrays([1, 3], [2, 4]) === 2.5);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

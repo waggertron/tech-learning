@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './078-subsets.py?raw';
+import practiceCodeTs from './078-subsets.ts?raw';
+import approach3PyCode from './078-subsets-approach3.py?raw';
+import approach3TsCode from './078-subsets-approach3.ts?raw';
 
 ## Problem
 
@@ -23,7 +28,14 @@ LeetCode 78 · [Link](https://leetcode.com/problems/subsets/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="subsets" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="subsets-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="subsets-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Bitmask enumeration
 
@@ -87,6 +99,8 @@ Elegant, especially in Python. Slightly more allocation than the backtracking ve
 
 At each index, choose to include or exclude the current element. Record the path at every recursive call (it's already a valid subset).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def subsets(nums):
     result = []
@@ -106,6 +120,32 @@ def subsets(nums):
     backtrack(0)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function subsets(nums: number[]): number[][] {
+    const result: number[][] = [];
+    const path: number[] = [];
+
+    function backtrack(i: number): void {
+        if (i === nums.length) {
+            result.push([...path]);    // L1: O(n) copy at leaf
+            return;
+        }
+        // exclude
+        backtrack(i + 1);             // L2: recurse without nums[i]
+        // include
+        path.push(nums[i]);           // L3: O(1) push
+        backtrack(i + 1);             // L4: recurse with nums[i]
+        path.pop();                   // L5: O(1) pop
+    }
+
+    backtrack(0);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -126,6 +166,17 @@ The binary choice (include/exclude) at each of n levels gives exactly 2^n leaves
 ### Why `path[:]`?
 We mutate `path` in place across recursive calls. When we record a subset, we need a snapshot, hence the copy.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="subsets-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="subsets-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -138,6 +189,8 @@ All three have the same asymptotic complexity (the output itself is O(n · 2^n))
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def subsets(nums):
     result = []; path = []
@@ -166,6 +219,35 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function subsets(nums: number[]): number[][] {
+    const result: number[][] = [];
+    const path: number[] = [];
+    function backtrack(i: number): void {
+        if (i === nums.length) { result.push([...path]); return; }
+        backtrack(i + 1);
+        path.push(nums[i]);
+        backtrack(i + 1);
+        path.pop();
+    }
+    backtrack(0);
+    return result;
+}
+
+const norm = (arr: number[][]): string =>
+    JSON.stringify(arr.map(a => [...a].sort((x, y) => x - y)).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1));
+
+const r = subsets([1, 2, 3]);
+console.assert(r.length === 8);
+console.assert(norm(r) === norm([[], [1], [2], [3], [1,2], [1,3], [2,3], [1,2,3]]));
+console.assert(norm(subsets([0])) === norm([[], [0]]));
+console.assert(JSON.stringify(subsets([])) === JSON.stringify([[]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

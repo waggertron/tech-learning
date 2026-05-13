@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1047-remove-all-adjacent-duplicates.py?raw';
+import practiceCodeTs from './1047-remove-all-adjacent-duplicates.ts?raw';
+import approach2TsCode from './1047-remove-all-adjacent-duplicates-approach2.ts?raw';
 
 ## Problem
 
@@ -29,12 +33,21 @@ LeetCode 1047 · [Link](https://leetcode.com/problems/remove-all-adjacent-duplic
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="remove-all-adjacent-duplicates" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="remove-all-adjacent-duplicates-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="remove-all-adjacent-duplicates-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Repeated scanning
 
 Scan the string repeatedly, removing any adjacent duplicate pair on each pass. Stop when no pair is found.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def remove_duplicates(s: str) -> str:
     changed = True
@@ -52,6 +65,30 @@ def remove_duplicates(s: str) -> str:
         s = "".join(result)                 # L5: O(n) join
     return s
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function removeDuplicates(s: string): string {
+    let changed = true;
+    while (changed) {                                   // L1: up to n/2 passes
+        changed = false;
+        const result: string[] = [];
+        let i = 0;
+        while (i < s.length) {                         // L2: O(n) per pass
+            if (i + 1 < s.length && s[i] === s[i + 1]) {  // L3: O(1) compare
+                i += 2;                                // L4: skip the pair
+                changed = true;
+            } else {
+                result.push(s[i++]);
+            }
+        }
+        s = result.join('');                           // L5: O(n) join
+    }
+    return s;
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(n²), up to n/2 passes each taking O(n).
@@ -61,6 +98,8 @@ def remove_duplicates(s: str) -> str:
 
 Process each character once. If the stack is non-empty and the top equals the current character, they cancel (pop). Otherwise push. The stack accumulates the surviving characters in order.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def remove_duplicates(s: str) -> str:
     stack = []                               # L1: O(1) init
@@ -71,6 +110,23 @@ def remove_duplicates(s: str) -> str:
             stack.append(ch)                 # L5: O(1) no match, push
     return "".join(stack)                    # L6: O(n) join survivors
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function removeDuplicates(s: string): string {
+    const stack: string[] = [];                                     // L1: O(1) init
+    for (const ch of s) {                                           // L2: n iterations
+        if (stack.length && stack[stack.length - 1] === ch) {       // L3: O(1) compare top
+            stack.pop();                                            // L4: O(1) cancel pair
+        } else {
+            stack.push(ch);                                         // L5: O(1) no match, push
+        }
+    }
+    return stack.join('');                                          // L6: O(n) join survivors
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -87,6 +143,17 @@ Each character is pushed once and popped at most once. Total: O(n).
 **Complexity**
 - **Time:** O(n), one pass with O(1) per character.
 - **Space:** O(n) for the stack (at most n characters survive).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="remove-all-adjacent-duplicates-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="remove-all-adjacent-duplicates-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Why one pass is enough
 

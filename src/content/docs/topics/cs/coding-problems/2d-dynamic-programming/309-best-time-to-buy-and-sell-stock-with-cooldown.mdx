@@ -1,6 +1,6 @@
 ---
 title: "309. Best Time to Buy and Sell Stock with Cooldown (Medium)"
-description: Maximize profit from buying/selling a stock with unlimited transactions and a one-day cooldown after each sell.
+description: "Maximize profit from buying/selling a stock with unlimited transactions and a one-day cooldown after each sell."
 parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, state-machine, medium]
 status: draft
@@ -8,8 +8,15 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './309-best-time-to-buy-and-sell-stock-with-cooldown.py?raw';
+import practiceCodeTs from './309-best-time-to-buy-and-sell-stock-with-cooldown.ts?raw';
+import approach2PyCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.py?raw';
+import approach2TsCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.ts?raw';
+import approach3PyCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.py?raw';
+import approach3TsCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.ts?raw';
 
 ## Problem
 
@@ -26,12 +33,21 @@ LeetCode 309 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-s
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="best-time-to-buy-and-sell-stock-with-cooldown" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="best-time-to-buy-and-sell-stock-with-cooldown-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="best-time-to-buy-and-sell-stock-with-cooldown-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive with state
 
 At each day, you're in one of three states: **holding** a stock, **free** (can buy), **cooldown** (can't buy this day).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_profit(prices):
     n = len(prices)
@@ -46,6 +62,25 @@ def max_profit(prices):
         return best
     return f(0, False, False)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    const n = prices.length;
+    function f(i: number, holding: boolean, cooldown: boolean): number {
+        if (i === n) return 0;                                           // L1: O(1) base case
+        let best = f(i + 1, holding, false);                            // L2: skip today
+        if (holding)
+            best = Math.max(best, prices[i] + f(i + 1, false, true));  // L3: sell
+        else if (!cooldown)
+            best = Math.max(best, -prices[i] + f(i + 1, true, false)); // L4: buy
+        return best;
+    }
+    return f(0, false, false);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -64,6 +99,8 @@ Each state `(i, holding, cooldown)` can fan out into two calls. Without caching,
 
 ## Approach 2: Top-down memoized
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from functools import lru_cache
 
@@ -81,6 +118,29 @@ def max_profit(prices):
         return best
     return f(0, False, False)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    const n = prices.length;
+    const memo: Map<string, number> = new Map();
+    function f(i: number, holding: boolean, cooldown: boolean): number {
+        if (i === n) return 0;                                           // L2: O(1) base case
+        const key = `${i},${holding},${cooldown}`;
+        if (memo.has(key)) return memo.get(key)!;                       // L1: O(1) cache lookup
+        let best = f(i + 1, holding, false);                            // L3: skip
+        if (holding)
+            best = Math.max(best, prices[i] + f(i + 1, false, true));  // L4: sell
+        else if (!cooldown)
+            best = Math.max(best, -prices[i] + f(i + 1, true, false)); // L5: buy
+        memo.set(key, best);
+        return best;
+    }
+    return f(0, false, false);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -98,10 +158,23 @@ The state space is `n * 2 * 2 = 4n` (day, holding bool, cooldown bool). Each sta
 - **Time:** O(n), driven by L3-L5 across at most 4n unique states.
 - **Space:** O(n) for the memo table and recursion stack.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="best-time-to-buy-and-sell-stock-with-cooldown-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="best-time-to-buy-and-sell-stock-with-cooldown-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Bottom-up three-state DP (optimal)
 
 Track three scalar states: `hold` (holding a stock), `sold` (just sold, must cooldown next day), `rest` (free to buy).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_profit(prices):
     if not prices:                                           # L1: O(1) guard
@@ -118,6 +191,25 @@ def max_profit(prices):
 
     return max(sold, rest)                                  # L10: O(1) answer
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    if (prices.length === 0) return 0;                              // L1: O(1) guard
+    let hold = -prices[0];                                          // L2: O(1) init: buy on day 0
+    let sold = 0;                                                   // L3: O(1) init
+    let rest = 0;                                                   // L4: O(1) init
+    for (let i = 1; i < prices.length; i++) {                      // L5: O(n) loop
+        const prevHold = hold, prevSold = sold, prevRest = rest;   // L6: O(1) snapshot
+        hold = Math.max(prevHold, prevRest - prices[i]);            // L7: O(1) keep or buy
+        sold = prevHold + prices[i];                                // L8: O(1) sell from hold
+        rest = Math.max(prevRest, prevSold);                        // L9: O(1) stay or from cooldown
+    }
+    return Math.max(sold, rest);                                    // L10: O(1) answer
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -145,6 +237,17 @@ The three states are nodes in a DAG:
 - `hold → sold` (sell)
 - `sold → rest` (cooldown expires)
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="best-time-to-buy-and-sell-stock-with-cooldown-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="best-time-to-buy-and-sell-stock-with-cooldown-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -157,6 +260,8 @@ State-machine DP is the right abstraction whenever you have "at each position, t
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_309.py and run.
 # Uses the canonical implementation (Approach 3: three-state scalar DP).
@@ -191,6 +296,31 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    if (prices.length === 0) return 0;
+    let hold = -prices[0], sold = 0, rest = 0;
+    for (let i = 1; i < prices.length; i++) {
+        const ph = hold, ps = sold, pr = rest;
+        hold = Math.max(ph, pr - prices[i]);
+        sold = ph + prices[i];
+        rest = Math.max(pr, ps);
+    }
+    return Math.max(sold, rest);
+}
+
+console.assert(maxProfit([1, 2, 3, 0, 2]) === 3);
+console.assert(maxProfit([1]) === 0);
+console.assert(maxProfit([]) === 0);
+console.assert(maxProfit([5, 4, 3, 2, 1]) === 0);
+console.assert(maxProfit([1, 2, 3, 4, 5]) === 4);
+console.assert(maxProfit([1, 2]) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

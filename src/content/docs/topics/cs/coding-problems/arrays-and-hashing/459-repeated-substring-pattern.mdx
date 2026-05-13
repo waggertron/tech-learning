@@ -8,8 +8,13 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './459-repeated-substring-pattern.py?raw';
+import practiceCodeTs from './459-repeated-substring-pattern.ts?raw';
+import approach2PyCode from './459-repeated-substring-pattern-approach2.py?raw';
+import approach2TsCode from './459-repeated-substring-pattern-approach2.ts?raw';
 
 ## Problem
 
@@ -24,12 +29,21 @@ LeetCode 459 · [Link](https://leetcode.com/problems/repeated-substring-pattern/
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="repeated-substring-pattern" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="repeated-substring-pattern-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="repeated-substring-pattern-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Try all divisor lengths
 
 A repeated pattern of length `p` can only work if `p` divides `n = len(s)`. Try every valid period length and check.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def repeated_substring_pattern(s: str) -> bool:
     n = len(s)                                   # L1: O(1)
@@ -40,6 +54,20 @@ def repeated_substring_pattern(s: str) -> bool:
             return True                          # L5: O(1)
     return False                                 # L6: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function repeatedSubstringPattern(s: string): boolean {
+    const n = s.length;                                   // L1: O(1)
+    for (let p = 1; p <= Math.floor(n / 2); p++) {       // L2: loop, n/2 iterations
+        if (n % p !== 0) continue;                        // L3: O(1) divisibility check
+        if (s.slice(0, p).repeat(n / p) === s) return true; // L4: O(n) build + compare
+    }
+    return false;                                         // L6: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -63,11 +91,23 @@ The string construction `s[:p] * (n // p)` allocates and fills a string of lengt
 
 If `s` is built from a repeating pattern, then doubling it (`s + s`) and removing the first and last characters still contains `s` somewhere in the middle. If `s` is *not* a repeated pattern, removing those boundary characters breaks any interior copy.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def repeated_substring_pattern(s: str) -> bool:
     doubled = (s + s)[1:-1]    # L1: O(n) concatenate and slice
     return s in doubled         # L2: O(n) substring search
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function repeatedSubstringPattern(s: string): boolean {
+    const doubled = (s + s).slice(1, -1);  // L1: O(n) concatenate and slice
+    return doubled.includes(s);            // L2: O(n) substring search
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -83,6 +123,17 @@ Python's `in` operator for strings uses an optimized search (similar to Boyer-Mo
 **Complexity**
 - **Time:** O(n), driven by L1/L2 (linear string operations).
 - **Space:** O(n) for `doubled`.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="repeated-substring-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="repeated-substring-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ### Why this works
 
@@ -117,6 +168,8 @@ Note: with KMP for the substring search inside L2, the full algorithm is O(n) wi
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_459.py and run.
 # Uses Approach 2.
@@ -136,6 +189,27 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function assert(condition: boolean, msg: string = ''): void {
+    if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+function repeatedSubstringPattern(s: string): boolean {
+    return (s + s).slice(1, -1).includes(s);
+}
+
+assert(repeatedSubstringPattern("abab") === true);
+assert(repeatedSubstringPattern("aba") === false);
+assert(repeatedSubstringPattern("abcabcabcabc") === true);
+assert(repeatedSubstringPattern("a") === false);
+assert(repeatedSubstringPattern("aa") === true);
+assert(repeatedSubstringPattern("abaaba") === true);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

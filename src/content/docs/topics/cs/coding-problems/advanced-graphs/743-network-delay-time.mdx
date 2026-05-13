@@ -5,11 +5,18 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, dijkstra, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './743-network-delay-time.py?raw';
+import practiceCodeTs from './743-network-delay-time.ts?raw';
+import approach2PyCode from './743-network-delay-time-approach2.py?raw';
+import approach2TsCode from './743-network-delay-time-approach2.ts?raw';
+import approach3PyCode from './743-network-delay-time-approach3.py?raw';
+import approach3TsCode from './743-network-delay-time-approach3.ts?raw';
 
 ## Problem
 
@@ -24,12 +31,21 @@ LeetCode 743 · [Link](https://leetcode.com/problems/network-delay-time/) · *Me
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="network-delay-time" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="network-delay-time-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="network-delay-time-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, Bellman-Ford
 
 Relax every edge `n - 1` times.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def network_delay_time(times, n, k):
     INF = float('inf')
@@ -42,6 +58,25 @@ def network_delay_time(times, n, k):
     m = max(dist[1:])               # L6: O(V)
     return -1 if m == INF else m    # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function networkDelayTime(times: number[][], n: number, k: number): number {
+    const INF = Infinity;
+    const dist = new Array(n + 1).fill(INF);  // L1: O(V) init
+    dist[k] = 0;                               // L2: O(1)
+    for (let round = 0; round < n - 1; round++) {  // L3: outer loop, V-1 rounds
+        for (const [u, v, w] of times) {       // L4: iterate all edges, O(E) per round
+            if (dist[u] + w < dist[v])
+                dist[v] = dist[u] + w;         // L5: O(1) relaxation
+        }
+    }
+    const m = Math.max(...dist.slice(1));      // L6: O(V)
+    return m === INF ? -1 : m;                 // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -68,6 +103,8 @@ Works; overkill for non-negative weights.
 
 Compute all-pairs shortest paths, then take `max(dist[k][v])`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def network_delay_time(times, n, k):
     INF = float('inf')
@@ -84,6 +121,26 @@ def network_delay_time(times, n, k):
     m = max(dist[k][1:])                                # L8: O(V)
     return -1 if m == INF else m                        # L9: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function networkDelayTime(times: number[][], n: number, k: number): number {
+    const INF = Infinity;
+    const dist: number[][] = Array.from({ length: n + 1 }, (_, i) =>
+        Array.from({ length: n + 1 }, (_, j) => (i === j ? 0 : INF))
+    );                                                  // L1: O(V²) init
+    for (const [u, v, w] of times) dist[u][v] = w;    // L3: O(E) seed edges
+    for (let mid = 1; mid <= n; mid++)                 // L4: outer pivot loop, V iters
+        for (let i = 1; i <= n; i++)                   // L5: row loop, V iters
+            for (let j = 1; j <= n; j++)               // L6: col loop, V iters
+                if (dist[i][mid] + dist[mid][j] < dist[i][j])
+                    dist[i][j] = dist[i][mid] + dist[mid][j];  // L7: O(1) relax
+    const m = Math.max(...dist[k].slice(1));           // L8: O(V)
+    return m === INF ? -1 : m;                         // L9: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -107,10 +164,23 @@ The triple nested loop (L4/L5/L6) is the signature of Floyd-Warshall. Every (i, 
 
 Single-source only needs `V²`; Floyd-Warshall is wasteful here.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="network-delay-time-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="network-delay-time-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Dijkstra with a binary heap (optimal)
 
 Min-heap of `(dist, node)`. Always expand the closest unvisited node.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import defaultdict
@@ -136,6 +206,39 @@ def network_delay_time(times, n, k):
         return -1
     return max(dist.values())                      # L12: O(V)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function networkDelayTime(times: number[][], n: number, k: number): number {
+    const graph = new Map<number, [number, number][]>();
+    for (const [u, v, w] of times) {              // L2: O(E) build adjacency
+        if (!graph.has(u)) graph.set(u, []);
+        graph.get(u)!.push([v, w]);
+    }
+
+    const dist = new Map<number, number>();
+    dist.set(k, 0);                                // L3: O(1) seed source
+    const heap = new MinHeap();
+    heap.push([0, k]);                             // L4: O(1) seed heap
+
+    while (heap.size > 0) {                       // L5: loop until heap empty
+        const [d, u] = heap.pop();                // L6: O(log V) pop min
+        if (d > (dist.get(u) ?? Infinity)) continue;  // L7: O(1) stale check
+        for (const [v, w] of (graph.get(u) ?? [])) {  // L8: O(deg(u)) neighbor scan
+            const nd = d + w;
+            if (nd < (dist.get(v) ?? Infinity)) {
+                dist.set(v, nd);                  // L9: O(1) update dist
+                heap.push([nd, v]);               // L10: O(log V) push
+            }
+        }
+    }
+
+    if (dist.size !== n) return -1;              // L11: O(1) reachability check
+    return Math.max(...dist.values());            // L12: O(V)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -158,6 +261,17 @@ Each edge can produce at most one push (L10), so the heap holds at most E entrie
 - **Time:** O((V + E) log V), driven by L6/L10 (heap pop/push inside the main loop).
 - **Space:** O(V + E).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="network-delay-time-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="network-delay-time-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space | When to use |
@@ -170,6 +284,8 @@ Dijkstra is the canonical SSSP for non-negative weights. Memorize the heap-based
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import defaultdict
@@ -209,6 +325,77 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses Dijkstra (Approach 3) with inline MinHeap.
+class MinHeap {
+    private data: [number, number][] = [];
+    push(item: [number, number]): void {
+        this.data.push(item);
+        let i = this.data.length - 1;
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p][0] <= this.data[i][0]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]];
+            i = p;
+        }
+    }
+    pop(): [number, number] {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) {
+            this.data[0] = last;
+            let i = 0;
+            while (true) {
+                let s = i;
+                const l = 2 * i + 1, r = 2 * i + 2;
+                if (l < this.data.length && this.data[l][0] < this.data[s][0]) s = l;
+                if (r < this.data.length && this.data[r][0] < this.data[s][0]) s = r;
+                if (s === i) break;
+                [this.data[s], this.data[i]] = [this.data[i], this.data[s]];
+                i = s;
+            }
+        }
+        return top;
+    }
+    get size(): number { return this.data.length; }
+}
+
+function networkDelayTime(times: number[][], n: number, k: number): number {
+    const graph = new Map<number, [number, number][]>();
+    for (const [u, v, w] of times) {
+        if (!graph.has(u)) graph.set(u, []);
+        graph.get(u)!.push([v, w]);
+    }
+    const dist = new Map<number, number>();
+    dist.set(k, 0);
+    const heap = new MinHeap();
+    heap.push([0, k]);
+    while (heap.size > 0) {
+        const [d, u] = heap.pop();
+        if (d > (dist.get(u) ?? Infinity)) continue;
+        for (const [v, w] of (graph.get(u) ?? [])) {
+            const nd = d + w;
+            if (nd < (dist.get(v) ?? Infinity)) {
+                dist.set(v, nd);
+                heap.push([nd, v]);
+            }
+        }
+    }
+    if (dist.size !== n) return -1;
+    return Math.max(...dist.values());
+}
+
+console.assert(networkDelayTime([[2,1,1],[2,3,1],[3,4,1]], 4, 2) === 2);
+console.assert(networkDelayTime([[1,2,1]], 2, 1) === 1);
+console.assert(networkDelayTime([[1,2,1]], 2, 2) === -1);
+console.assert(networkDelayTime([], 1, 1) === 0);
+console.assert(networkDelayTime([[1,2,1],[1,2,5]], 2, 1) === 1);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

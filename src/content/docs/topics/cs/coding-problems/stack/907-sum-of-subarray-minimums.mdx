@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './907-sum-of-subarray-minimums.py?raw';
+import practiceCodeTs from './907-sum-of-subarray-minimums.ts?raw';
+import approach2TsCode from './907-sum-of-subarray-minimums-approach2.ts?raw';
 
 ## Problem
 
@@ -29,12 +33,21 @@ LeetCode 907 · [Link](https://leetcode.com/problems/sum-of-subarray-minimums/) 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="sum-of-subarray-minimums" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="sum-of-subarray-minimums-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="sum-of-subarray-minimums-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, enumerate all subarrays
 
 Try every starting index, extend to the right tracking the running minimum.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def sum_subarray_mins(arr: list[int]) -> int:
     MOD = 10 ** 9 + 7
@@ -47,6 +60,25 @@ def sum_subarray_mins(arr: list[int]) -> int:
             total = (total + cur_min) % MOD # L4: O(1) accumulate
     return total
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function sumSubarrayMins(arr: number[]): number {
+    const MOD = 1_000_000_007;
+    const n = arr.length;
+    let total = 0;
+    for (let i = 0; i < n; i++) {               // L1: n iterations
+        let curMin = arr[i];
+        for (let j = i; j < n; j++) {           // L2: up to n-i iterations
+            curMin = Math.min(curMin, arr[j]);   // L3: O(1) track running min
+            total = (total + curMin) % MOD;      // L4: O(1) accumulate
+        }
+    }
+    return total;
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
 - **Time:** O(n²), nested loops each running up to n.
@@ -60,6 +92,8 @@ Instead of iterating subarrays, ask: **how many subarrays have `arr[i]` as their
 
 The asymmetry (strict left, non-strict right) prevents double-counting when equal elements are adjacent.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def sum_subarray_mins(arr: list[int]) -> int:
     MOD = 10 ** 9 + 7
@@ -86,6 +120,39 @@ def sum_subarray_mins(arr: list[int]) -> int:
         total = (total + arr[i] * left[i] * right[i]) % MOD  # L12: O(1)
     return total
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function sumSubarrayMins(arr: number[]): number {
+    const MOD = 1_000_000_007n;
+    const n = arr.length;
+    const left = new Array(n).fill(0);    // left[i]: distance to previous strictly smaller
+    const right = new Array(n).fill(0);   // right[i]: distance to next smaller-or-equal
+    let stack: number[] = [];
+
+    for (let i = 0; i < n; i++) {                        // L1: compute left spans
+        while (stack.length && arr[stack[stack.length - 1]] >= arr[i])
+            stack.pop();                                  // L2-L3: O(1) amortized
+        left[i] = stack.length ? i - stack[stack.length - 1] : i + 1;  // L4: O(1)
+        stack.push(i);                                    // L5: O(1) push
+    }
+
+    stack = [];
+    for (let i = n - 1; i >= 0; i--) {                   // L6: compute right spans
+        while (stack.length && arr[stack[stack.length - 1]] > arr[i])
+            stack.pop();                                  // L7-L8: O(1) amortized
+        right[i] = stack.length ? stack[stack.length - 1] - i : n - i;  // L9: O(1)
+        stack.push(i);                                    // L10: O(1) push
+    }
+
+    let total = 0n;
+    for (let i = 0; i < n; i++)
+        total = (total + BigInt(arr[i]) * BigInt(left[i]) * BigInt(right[i])) % MOD;  // L11-L12
+    return Number(total);
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -102,6 +169,17 @@ Each index is pushed once and popped at most once in each pass. Both passes are 
 **Complexity**
 - **Time:** O(n), two monotonic stack passes plus one summation pass.
 - **Space:** O(n) for left, right, and stack arrays.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="sum-of-subarray-minimums-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="sum-of-subarray-minimums-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Why asymmetric boundaries prevent double counting
 

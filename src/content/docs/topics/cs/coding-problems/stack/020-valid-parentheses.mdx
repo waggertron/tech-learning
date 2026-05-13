@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './020-valid-parentheses.py?raw';
+import practiceCodeTs from './020-valid-parentheses.ts?raw';
+import approach2TsCode from './020-valid-parentheses-approach2.ts?raw';
+import approach3TsCode from './020-valid-parentheses-approach3.ts?raw';
 
 ## Problem
 
@@ -25,18 +30,39 @@ LeetCode 20 · [Link](https://leetcode.com/problems/valid-parentheses/) · *Easy
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="valid-parentheses" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="valid-parentheses-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="valid-parentheses-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, repeated replacement
 
 Repeatedly remove innermost pairs (`"()"`, `"[]"`, `"{}"`) until the string stops changing. Valid iff the final string is empty.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_valid(s: str) -> bool:
     while "()" in s or "[]" in s or "{}" in s:           # L1: O(n) scan per iteration
         s = s.replace("()", "").replace("[]", "").replace("{}", "")  # L2: O(n) per replace
     return s == ""                                        # L3: O(n) comparison
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValid(s: string): boolean {
+    while (s.includes('()') || s.includes('[]') || s.includes('{}')) {  // L1: O(n) scan
+        s = s.replace('()', '').replace('[]', '').replace('{}', '');     // L2: O(n) per replace
+    }
+    return s === '';                                                      // L3: O(n) comparison
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -60,6 +86,8 @@ Cute but genuinely quadratic. Shows the intuition (innermost pairs cancel) witho
 
 Push opens; on a close, pop and verify the types match.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_valid(s: str) -> bool:
     stack = []                                 # L1: O(1) empty stack
@@ -76,6 +104,27 @@ def is_valid(s: str) -> bool:
                 return False
     return not stack                           # L8: O(1) all opens matched
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValid(s: string): boolean {
+    const stack: string[] = [];                        // L1: O(1) empty stack
+    for (const ch of s) {                             // L2: n iterations
+        if ('([{'.includes(ch)) {                     // L3: O(1) check
+            stack.push(ch);                           // L4: O(1) push
+        } else {
+            if (!stack.length) return false;          // L5: O(1) empty check
+            const top = stack.pop()!;                 // L6: O(1) pop
+            if ((ch === ')' && top !== '(') ||
+                (ch === ']' && top !== '[') ||
+                (ch === '}' && top !== '{')) return false; // L7: O(1) type check
+        }
+    }
+    return stack.length === 0;                        // L8: O(1) all opens matched
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -94,10 +143,23 @@ Each character is pushed or popped exactly once.
 - **Time:** O(n), driven by L3-L7 (one push or pop per character).
 - **Space:** O(n) for the stack (at most n/2 open brackets).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="valid-parentheses-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="valid-parentheses-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Stack with a pair-map (cleanest)
 
 Replace the `if/elif` chain with a dictionary mapping closers to their matching openers.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_valid(s: str) -> bool:
     pairs = {")": "(", "]": "[", "}": "{"}     # L1: O(1) constant dict
@@ -110,6 +172,24 @@ def is_valid(s: str) -> bool:
                 return False
     return not stack                            # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValid(s: string): boolean {
+    const pairs: Record<string, string> = { ')': '(', ']': '[', '}': '{' }; // L1: O(1) dict
+    const stack: string[] = [];                                              // L2: O(1)
+    for (const ch of s) {                                                    // L3: n iterations
+        if (Object.values(pairs).includes(ch)) {                             // L4: O(1) check
+            stack.push(ch);                                                  // L5: O(1) push
+        } else {
+            if (!stack.length || stack.pop() !== pairs[ch]) return false;    // L6: O(1) pop+lookup
+        }
+    }
+    return stack.length === 0;                                               // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -127,6 +207,17 @@ Same O(n) work, but the pair-map removes all branching.
 **Complexity**
 - **Time:** O(n), driven by L4-L6 (one push or pop+check per character).
 - **Space:** O(n) for the stack.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="valid-parentheses-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="valid-parentheses-approach3-ts" />
+  </TabItem>
+</Tabs>
 
 ## How to recognize this pattern
 
@@ -178,6 +269,8 @@ All stack approaches have the same asymptotic complexity; the pair-map version i
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_valid_parentheses.py and run.
 # Uses the canonical implementation (Approach 3: stack + pair-map).
@@ -207,6 +300,34 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isValid(s: string): boolean {
+    const pairs: Record<string, string> = { ')': '(', ']': '[', '}': '{' };
+    const stack: string[] = [];
+    for (const ch of s) {
+        if (Object.values(pairs).includes(ch)) {
+            stack.push(ch);
+        } else {
+            if (!stack.length || stack.pop() !== pairs[ch]) return false;
+        }
+    }
+    return stack.length === 0;
+}
+
+console.assert(isValid('()') === true);
+console.assert(isValid('()[]{}') === true);
+console.assert(isValid('(]') === false);
+console.assert(isValid('([)]') === false);
+console.assert(isValid('{[]}') === true);
+console.assert(isValid('') === true);
+console.assert(isValid('(') === false);
+console.assert(isValid(')') === false);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

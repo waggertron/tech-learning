@@ -8,12 +8,17 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './621-task-scheduler.py?raw';
+import practiceCodeTs from './621-task-scheduler.ts?raw';
+import approach2TsCode from './621-task-scheduler-approach2.ts?raw';
+import approach3TsCode from './621-task-scheduler-approach3.ts?raw';
 
 ## Problem
 
-Given a list `tasks` (characters A–Z representing task types) and an integer `n` (the cooldown), return the least number of time units the CPU takes to finish. Between any two identical tasks, there must be at least `n` idle cycles.
+Given a list `tasks` (characters A-Z representing task types) and an integer `n` (the cooldown), return the least number of time units the CPU takes to finish. Between any two identical tasks, there must be at least `n` idle cycles.
 
 **Example**
 - `tasks = ["A","A","A","B","B","B"]`, `n = 2` → `8` (e.g., `A B idle A B idle A B`)
@@ -24,12 +29,21 @@ LeetCode 621 · [Link](https://leetcode.com/problems/task-scheduler/) · *Medium
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="task-scheduler" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="task-scheduler-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="task-scheduler-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, simulate cycle-by-cycle
 
 Track remaining counts per task and the cooldown expiration for each. At each time step, pick any runnable task.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -50,6 +64,35 @@ def least_interval(tasks, n):
         time += 1
     return time
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function leastInterval(tasks: string[], n: number): number {
+    const counts = new Map<string, number>();
+    for (const t of tasks) counts.set(t, (counts.get(t) ?? 0) + 1);
+    const cooldown = new Map<string, number>();
+    for (const t of counts.keys()) cooldown.set(t, 0);
+
+    let time = 0;
+    while ([...counts.values()].some(c => c > 0)) {  // L1: T outer iterations
+        let picked: string | null = null;
+        let bestCount = 0;
+        for (const [t, c] of counts) {               // L2: scan up to 26 tasks
+            if (c > 0 && (cooldown.get(t) ?? 0) <= time && c > bestCount) {
+                picked = t; bestCount = c;
+            }
+        }
+        if (picked) {
+            counts.set(picked, counts.get(picked)! - 1);  // L3: O(1) decrement
+            cooldown.set(picked, time + n + 1);            // L4: O(1) set cooldown
+        }
+        time++;
+    }
+    return time;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -73,6 +116,8 @@ Choosing highest-remaining-count is key, otherwise you strand long runs.
 
 Max-heap of remaining counts; after running a task, enqueue it with its ready-time into a FIFO. Each cycle: move expired tasks from the queue back into the heap, then run the heap's top.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 from collections import Counter, deque
@@ -93,6 +138,70 @@ def least_interval(tasks, n):
             heapq.heappush(heap, c)              # L5: O(log t) push
     return time
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class MaxHeap {
+    private data: number[] = [];
+    get size(): number { return this.data.length; }
+    push(val: number): void {
+        this.data.push(val);
+        this._siftUp(this.data.length - 1);
+    }
+    pop(): number {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) { this.data[0] = last; this._siftDown(0); }
+        return top;
+    }
+    private _siftUp(i: number): void {
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p] >= this.data[i]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]]; i = p;
+        }
+    }
+    private _siftDown(i: number): void {
+        const n = this.data.length;
+        while (true) {
+            let largest = i;
+            const l = 2 * i + 1, r = 2 * i + 2;
+            if (l < n && this.data[l] > this.data[largest]) largest = l;
+            if (r < n && this.data[r] > this.data[largest]) largest = r;
+            if (largest === i) break;
+            [this.data[largest], this.data[i]] = [this.data[i], this.data[largest]]; i = largest;
+        }
+    }
+}
+
+function leastInterval(tasks: string[], n: number): number {
+    const freq = new Map<string, number>();
+    for (const t of tasks) freq.set(t, (freq.get(t) ?? 0) + 1);
+
+    const heap = new MaxHeap();
+    for (const c of freq.values()) heap.push(c);  // L1: O(t) build heap
+
+    // cooldown queue: [readyTime, remainingCount]
+    const cooldown: Array<[number, number]> = [];
+    let time = 0;
+
+    while (heap.size > 0 || cooldown.length > 0) {  // L2: T iterations
+        time++;
+        if (heap.size > 0) {
+            const c = heap.pop() - 1;               // L3: O(log t) pop
+            if (c > 0)
+                cooldown.push([time + n, c]);        // L4: O(1) enqueue
+        }
+        if (cooldown.length > 0 && cooldown[0][0] === time) {
+            const [, c] = cooldown.shift()!;
+            heap.push(c);                            // L5: O(log t) push
+        }
+    }
+    return time;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -114,6 +223,14 @@ Since t ≤ 26, O(T log t) = O(T log 26) = O(T).
 
 Cleaner than the brute force; a natural fit for "greedy scheduling with recurring cooldowns."
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="task-scheduler-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Closed-form math (optimal)
 
 Let `max_count` be the count of the most-frequent task and `ties` be the number of tasks that hit `max_count`. The answer is:
@@ -124,6 +241,8 @@ max(len(tasks), (max_count - 1) * (n + 1) + ties)
 
 Intuition: build a skeleton of `max_count - 1` "rows" of width `n + 1`, plus a tail row with `ties` slots. Other tasks slot into the idle spaces. If there are more tasks than that schedule provides for, the total time is just `len(tasks)` (no idle needed).
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import Counter
 
@@ -133,6 +252,24 @@ def least_interval(tasks, n):
     ties = sum(1 for c in counts.values() if c == max_count)  # L3: O(t) count ties
     return max(len(tasks), (max_count - 1) * (n + 1) + ties)  # L4: O(1) formula
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function leastInterval(tasks: string[], n: number): number {
+    const freq = new Map<string, number>();
+    for (const t of tasks) freq.set(t, (freq.get(t) ?? 0) + 1);  // L1: O(T) build counter
+
+    let maxCount = 0;
+    for (const c of freq.values()) if (c > maxCount) maxCount = c;  // L2: O(t) find max
+
+    let ties = 0;
+    for (const c of freq.values()) if (c === maxCount) ties++;       // L3: O(t) count ties
+
+    return Math.max(tasks.length, (maxCount - 1) * (n + 1) + ties); // L4: O(1) formula
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -140,7 +277,7 @@ def least_interval(tasks, n):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (Counter)** | **O(T)** | **1** | **O(T)** ← dominates |
+| **L1 (Counter / freq build)** | **O(T)** | **1** | **O(T)** ← dominates |
 | L2 (max) | O(t) | 1 | O(t) |
 | L3 (count ties) | O(t) | 1 | O(t) |
 | L4 (formula) | O(1) | 1 | O(1) |
@@ -151,8 +288,18 @@ Building the Counter at L1 touches every task once. The remaining steps scan at 
 - **Time:** O(T) where T = len(tasks), driven by L1 (Counter construction).
 - **Space:** O(t) = O(26).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="task-scheduler-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_621.py and run.
 # Uses the closed-form math approach (Approach 3).
@@ -180,6 +327,21 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// Uses the closed-form math approach (Approach 3).
+// See 621-task-scheduler-approach3.ts for the full implementation.
+console.assert(leastInterval(['A','A','A','B','B','B'], 2) === 8);
+console.assert(leastInterval(['A','A','A','B','B','B'], 0) === 6);
+console.assert(leastInterval(['A','A','A','A','A','A','B','C','D','E','F','G'], 2) === 16);
+console.assert(leastInterval(['A','B','C','D','A','B','C','D'], 2) === 8);
+console.assert(leastInterval(['A','A','A'], 3) === 9);
+console.assert(leastInterval(['A','A','A'], 0) === 3);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

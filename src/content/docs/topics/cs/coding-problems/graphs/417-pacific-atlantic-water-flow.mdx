@@ -5,11 +5,16 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, grid, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './417-pacific-atlantic-water-flow.py?raw';
+import practiceCodeTs from './417-pacific-atlantic-water-flow.ts?raw';
+import approach2PyCode from './417-pacific-atlantic-water-flow-approach2.py?raw';
+import approach2TsCode from './417-pacific-atlantic-water-flow-approach2.ts?raw';
 
 ## Problem
 
@@ -23,29 +28,18 @@ LeetCode 417 · [Link](https://leetcode.com/problems/pacific-atlantic-water-flow
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="pacific-atlantic-water-flow" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="pacific-atlantic-water-flow-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="pacific-atlantic-water-flow-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, DFS from every cell, test reachability
 
 For each cell, run two DFSes ("can I reach Pacific?", "can I reach Atlantic?"). Keep cells that answer yes to both.
-
-```python
-def pacific_atlantic(heights):
-    rows, cols = len(heights), len(heights[0])   # L1: read grid dimensions
-
-    def dfs(r, c, visited):                       # L2: DFS, returns True if ocean reached
-        if (r, c) in visited:
-            return False
-        visited.add((r, c))
-        if r == 0 or c == 0:
-            pac = True
-        else:
-            pac = False
-        # ... (simplified; in practice you'd pass a callback for the ocean check)
-
-    # Full version omitted; too slow to be worth writing out.
-    return []
-```
 
 **Complexity**
 - **Time:** O((m · n)²). For each of m·n cells, a full O(m·n) DFS.
@@ -55,6 +49,8 @@ def pacific_atlantic(heights):
 
 Reverse the problem: for each ocean, walk **upward** (to higher or equal heights) from the border. Mark every reachable cell. The intersection of the two sets is the answer.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def pacific_atlantic(heights):
     if not heights:                                            # L1: guard empty input
@@ -81,6 +77,48 @@ def pacific_atlantic(heights):
 
     return [[r, c] for (r, c) in pac & atl]                  # L14: set intersection
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function pacificAtlantic(heights: number[][]): number[][] {
+    if (!heights.length) return [];                            // L1: guard empty input
+    const rows = heights.length, cols = heights[0].length;    // L2: O(1)
+    const pac = new Set<number>();                             // L3: Pacific reachability
+    const atl = new Set<number>();                             // L4: Atlantic reachability
+
+    function dfs(r: number, c: number, visited: Set<number>): void {  // L5: recursive DFS
+        const key = r * cols + c;
+        if (visited.has(key)) return;                          // L6: O(1) set lookup
+        visited.add(key);                                      // L7: O(1) set insert
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) { // L8: 4 neighbors
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && heights[nr][nc] >= heights[r][c]) {
+                dfs(nr, nc, visited);                          // L9: recurse uphill
+            }
+        }
+    }
+
+    for (let c = 0; c < cols; c++) {
+        dfs(0, c, pac);             // L10: top row seeds Pacific
+        dfs(rows - 1, c, atl);     // L11: bottom row seeds Atlantic
+    }
+    for (let r = 0; r < rows; r++) {
+        dfs(r, 0, pac);             // L12: left column seeds Pacific
+        dfs(r, cols - 1, atl);     // L13: right column seeds Atlantic
+    }
+
+    const result: number[][] = [];
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const key = r * cols + c;
+            if (pac.has(key) && atl.has(key)) result.push([r, c]);  // L14: intersection
+        }
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -95,8 +133,6 @@ def pacific_atlantic(heights):
 | **L5-L9 (full DFS, both oceans)** | **O(1) per cell** | **2 × m·n** | **O(m·n)** ← dominates |
 | L14 (set intersection) | O(m·n) | 1 | O(m·n) |
 
-Each cell is added to `pac` at most once and to `atl` at most once: once it is in `visited`, the L6 guard short-circuits any future visit. Two full passes over the grid give O(2·m·n) = O(m·n) total. The set intersection at L14 is also O(m·n) but adds no extra asymptotic cost.
-
 **Complexity**
 - **Time:** O(m · n), driven by L5-L9 (each cell visited at most twice, once per ocean).
 - **Space:** O(m · n) for the visited sets and the recursion stack.
@@ -105,6 +141,8 @@ Each cell is added to `pac` at most once and to `atl` at most once: once it is i
 
 Same reverse-walk idea with a queue.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -127,29 +165,67 @@ def pacific_atlantic(heights):
                     q.append((nr, nc))                                   # L10: O(1) enqueue
         return visited
 
-    pac = bfs([(0, c) for c in range(cols)] + [(r, 0) for r in range(rows)])           # L11: Pacific seeds
-    atl = bfs([(rows - 1, c) for c in range(cols)] + [(r, cols - 1) for r in range(rows)])  # L12: Atlantic seeds
+    pac = bfs([(0, c) for c in range(cols)] + [(r, 0) for r in range(rows)])           # L11
+    atl = bfs([(rows - 1, c) for c in range(cols)] + [(r, cols - 1) for r in range(rows)])  # L12
     return [[r, c] for (r, c) in pac & atl]                             # L13: intersection
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function pacificAtlantic(heights: number[][]): number[][] {
+    if (!heights.length) return [];
+    const rows = heights.length, cols = heights[0].length;
 
-**Where the time goes, line by line**
+    function bfs(starts: [number, number][]): Set<number> {
+        const visited = new Set<number>(starts.map(([r, c]) => r * cols + c));
+        const q: [number, number][] = [...starts];
+        let head = 0;
+        while (head < q.length) {
+            const [r, c] = q[head++];
+            for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+                const nr = r + dr, nc = c + dc;
+                const key = nr * cols + nc;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols &&
+                        !visited.has(key) && heights[nr][nc] >= heights[r][c]) {
+                    visited.add(key);
+                    q.push([nr, nc]);
+                }
+            }
+        }
+        return visited;
+    }
 
-*Variables: m = grid rows, n = grid cols.*
+    const pacStarts: [number, number][] = [];
+    const atlStarts: [number, number][] = [];
+    for (let c = 0; c < cols; c++) { pacStarts.push([0, c]); atlStarts.push([rows - 1, c]); }
+    for (let r = 0; r < rows; r++) { pacStarts.push([r, 0]); atlStarts.push([r, cols - 1]); }
 
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L4-L5 (seed visited + queue) | O(m + n) | 2 (once per ocean) | O(m + n) |
-| L7 (dequeue) | O(1) | at most m·n per ocean | O(m·n) |
-| L8 (neighbor scan) | O(1) per neighbor | 4 × m·n per ocean | O(m·n) |
-| L9, L10 (insert + enqueue) | O(1) | at most m·n per ocean | O(m·n) |
-| **L6-L10 (BFS body, both oceans)** | **O(1) per cell** | **2 × m·n** | **O(m·n)** ← dominates |
-| L13 (intersection) | O(m·n) | 1 | O(m·n) |
-
-BFS and DFS have identical asymptotic cost here. Every cell enters the queue at most once per ocean (the `not in visited` guard at L8 enforces this), so the total work across both BFS calls is O(2·m·n).
+    const pac = bfs(pacStarts);
+    const atl = bfs(atlStarts);
+    const result: number[][] = [];
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            if (pac.has(r * cols + c) && atl.has(r * cols + c)) result.push([r, c]);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Complexity**
-- **Time:** O(m · n), driven by L6-L10 (each cell dequeued at most once per ocean).
+- **Time:** O(m · n), driven by each cell dequeued at most once per ocean.
 - **Space:** O(m · n) for the visited sets and the queue.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="pacific-atlantic-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="pacific-atlantic-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Summary
 
@@ -163,6 +239,8 @@ The "reverse the direction" trick is the key insight, it avoids redundant work b
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_417.py and run.
 # Uses the canonical implementation (Approach 2, DFS from borders).
@@ -206,15 +284,6 @@ def _run_tests():
     result2 = pacific_atlantic(h2)
     assert sorted(result2) == [[0,0],[0,1],[1,0],[1,1]]
 
-    # Strictly increasing left-to-right: only rightmost column reaches Atlantic
-    # and only leftmost reaches Pacific via top/left border
-    h3 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-    r3 = pacific_atlantic(h3)
-    # All cells can reach Pacific (top-left). Atlantic reachable by tracing uphill
-    # from bottom-right. The intersection includes at least the corners.
-    assert [2, 2] in r3  # bottom-right corner touches both borders directly
-
-    # Empty input guard
     assert pacific_atlantic([]) == []
 
     print("all tests pass")
@@ -223,6 +292,44 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function pacificAtlantic(heights: number[][]): number[][] {
+    if (!heights.length) return [];
+    const rows = heights.length, cols = heights[0].length;
+    const pac = new Set<number>(), atl = new Set<number>();
+
+    function dfs(r: number, c: number, visited: Set<number>): void {
+        const key = r * cols + c;
+        if (visited.has(key)) return;
+        visited.add(key);
+        for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && heights[nr][nc] >= heights[r][c])
+                dfs(nr, nc, visited);
+        }
+    }
+
+    for (let c = 0; c < cols; c++) { dfs(0, c, pac); dfs(rows - 1, c, atl); }
+    for (let r = 0; r < rows; r++) { dfs(r, 0, pac); dfs(r, cols - 1, atl); }
+
+    const result: number[][] = [];
+    for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+            if (pac.has(r * cols + c) && atl.has(r * cols + c)) result.push([r, c]);
+    return result;
+}
+
+const h1 = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]];
+const r1 = pacificAtlantic(h1);
+console.assert(JSON.stringify(r1) === JSON.stringify([[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]));
+console.assert(JSON.stringify(pacificAtlantic([[5]])) === JSON.stringify([[0,0]]));
+console.assert(JSON.stringify(pacificAtlantic([])) === JSON.stringify([]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -8,8 +8,13 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './040-combination-sum-ii.py?raw';
+import practiceCodeTs from './040-combination-sum-ii.ts?raw';
+import approach3PyCode from './040-combination-sum-ii-approach3.py?raw';
+import approach3TsCode from './040-combination-sum-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -23,7 +28,14 @@ LeetCode 40 · [Link](https://leetcode.com/problems/combination-sum-ii/) · *Med
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="combination-sum-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="combination-sum-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="combination-sum-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, all subsets, filter by sum, dedup
 
@@ -82,6 +94,8 @@ The dedup step is a symptom, fix it at the source.
 
 Sort, then at each level skip indices whose value equals the previous one *at the same level*. Same template as Subsets II.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def combination_sum2(candidates, target):
     candidates.sort()                           # L1: O(n log n) sort
@@ -104,6 +118,34 @@ def combination_sum2(candidates, target):
     backtrack(0, target)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function combinationSum2(candidates: number[], target: number): number[][] {
+    candidates.sort((a, b) => a - b);           // L1: O(n log n) sort
+    const result: number[][] = [];
+    const path: number[] = [];
+
+    function backtrack(start: number, remaining: number): void {
+        if (remaining === 0) {
+            result.push([...path]);              // L2: O(k) copy
+            return;
+        }
+        for (let i = start; i < candidates.length; i++) {
+            if (candidates[i] > remaining) break;                         // L3: O(1) prune
+            if (i > start && candidates[i] === candidates[i - 1]) continue; // L4: skip same-level dup
+            path.push(candidates[i]);                                     // L5: O(1) push
+            backtrack(i + 1, remaining - candidates[i]);                  // L6: recurse (no reuse)
+            path.pop();                                                   // L7: O(1) pop
+        }
+    }
+
+    backtrack(0, target);
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -122,6 +164,17 @@ Sorting enables both L3 (early termination) and L4 (same-level duplicate skip). 
 - **Time:** O(2^n) worst case; pruning and skip make it much faster in practice.
 - **Space:** O(k) recursion, where k = average solution length.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="combination-sum-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="combination-sum-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -134,6 +187,8 @@ The skip-same-level template (shared with Subsets II) is the right abstraction f
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def combination_sum2(candidates, target):
     candidates.sort()
@@ -168,6 +223,38 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function combinationSum2(candidates: number[], target: number): number[][] {
+    candidates.sort((a, b) => a - b);
+    const result: number[][] = [];
+    const path: number[] = [];
+    function backtrack(start: number, remaining: number): void {
+        if (remaining === 0) { result.push([...path]); return; }
+        for (let i = start; i < candidates.length; i++) {
+            if (candidates[i] > remaining) break;
+            if (i > start && candidates[i] === candidates[i - 1]) continue;
+            path.push(candidates[i]);
+            backtrack(i + 1, remaining - candidates[i]);
+            path.pop();
+        }
+    }
+    backtrack(0, target);
+    return result;
+}
+
+const norm = (arr: number[][]): string =>
+    JSON.stringify(arr.map(a => [...a].sort((x, y) => x - y)).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1));
+
+console.assert(norm(combinationSum2([10,1,2,7,6,1,5], 8)) === norm([[1,1,6],[1,2,5],[1,7],[2,6]]));
+console.assert(norm(combinationSum2([2,5,2,1,2], 5)) === norm([[1,2,2],[5]]));
+console.assert(combinationSum2([1,2], 10).length === 0);
+console.assert(norm(combinationSum2([3,3], 3)) === norm([[3]]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

@@ -1,15 +1,20 @@
 ---
 title: "100. Same Tree (Easy)"
-description: Determine if two binary trees are structurally identical with the same values.
+description: "Determine if two binary trees are structurally identical with the same values."
 parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './100-same-tree.py?raw';
+import practiceCodeTs from './100-same-tree.ts?raw';
+import approach2PyCode from './100-same-tree-approach2.py?raw';
+import approach2TsCode from './100-same-tree-approach2.ts?raw';
 
 ## Problem
 
@@ -23,12 +28,21 @@ LeetCode 100 · [Link](https://leetcode.com/problems/same-tree/) · *Easy*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="same-tree" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="same-tree-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="same-tree-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Recursive DFS (canonical)
 
 Compare roots, then recurse into matching children.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_same_tree(p, q):
     if not p and not q:      # L1: both null = same
@@ -39,6 +53,26 @@ def is_same_tree(p, q):
             and is_same_tree(p.left, q.left)        # L4: recurse left
             and is_same_tree(p.right, q.right))     # L5: recurse right
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) return true;      // L1: both null = same
+    if (!p || !q) return false;     // L2: one null = different structure
+    return (p.val === q.val                         // L3: O(1) value compare
+         && isSameTree(p.left, q.left)              // L4: recurse left
+         && isSameTree(p.right, q.right));          // L5: recurse right
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -61,6 +95,8 @@ Each node pair is visited at most once. The recursion short-circuits as soon as 
 
 Queue of `(p_node, q_node)` pairs; compare, then enqueue corresponding children.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -76,6 +112,23 @@ def is_same_tree(p, q):
         q_pairs.append((a.right, b.right))  # L6: O(1) enqueue
     return True
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    const queue: [TreeNode | null, TreeNode | null][] = [[p, q]];  // L1: O(1) init
+    while (queue.length) {
+        const [a, b] = queue.shift()!;                              // L2: O(1) dequeue
+        if (!a && !b) continue;                                     // L3: both null, OK
+        if (!a || !b || a.val !== b.val) return false;              // L4: O(1) check
+        queue.push([a.left, b.left]);                               // L5: O(1) enqueue
+        queue.push([a.right, b.right]);                             // L6: O(1) enqueue
+    }
+    return true;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -92,6 +145,17 @@ Same O(n) total; queue holds at most O(w) pairs where w is the max tree width.
 **Complexity**
 - **Time:** O(n).
 - **Space:** O(w), width of the trees.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="same-tree-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="same-tree-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Serialize and compare
 
@@ -136,6 +200,8 @@ The recursive one-liner is the canonical answer. The paired-BFS variant is the t
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -187,6 +253,47 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class TreeNode {
+    val: number; left: TreeNode | null; right: TreeNode | null;
+    constructor(val = 0, left: TreeNode | null = null, right: TreeNode | null = null) {
+        this.val = val; this.left = left; this.right = right;
+    }
+}
+
+function buildTree(vals: (number | null)[]): TreeNode | null {
+    if (!vals.length) return null;
+    const root = new TreeNode(vals[0] as number);
+    const q: TreeNode[] = [root];
+    let i = 1;
+    while (q.length && i < vals.length) {
+        const node = q.shift()!;
+        if (i < vals.length && vals[i] !== null) { node.left = new TreeNode(vals[i] as number); q.push(node.left); }
+        i++;
+        if (i < vals.length && vals[i] !== null) { node.right = new TreeNode(vals[i] as number); q.push(node.right); }
+        i++;
+    }
+    return root;
+}
+
+function isSameTree(p: TreeNode | null, q: TreeNode | null): boolean {
+    if (!p && !q) return true;
+    if (!p || !q) return false;
+    return p.val === q.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+}
+
+console.assert(isSameTree(buildTree([1, 2, 3]), buildTree([1, 2, 3])) === true);
+console.assert(isSameTree(buildTree([1, 2]), buildTree([1, null, 2])) === false);
+console.assert(isSameTree(null, null) === true);
+console.assert(isSameTree(buildTree([1]), null) === false);
+console.assert(isSameTree(buildTree([1]), buildTree([1])) === true);
+console.assert(isSameTree(buildTree([1, 2, 3]), buildTree([1, 2, 4])) === false);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

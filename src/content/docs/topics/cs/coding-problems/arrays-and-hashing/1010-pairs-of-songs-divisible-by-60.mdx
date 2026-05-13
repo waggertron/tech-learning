@@ -8,8 +8,13 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './1010-pairs-of-songs-divisible-by-60.py?raw';
+import practiceCodeTs from './1010-pairs-of-songs-divisible-by-60.ts?raw';
+import approach2PyCode from './1010-pairs-of-songs-divisible-by-60-approach2.py?raw';
+import approach2TsCode from './1010-pairs-of-songs-divisible-by-60-approach2.ts?raw';
 
 ## Problem
 
@@ -26,7 +31,14 @@ LeetCode 1010 · [Link](https://leetcode.com/problems/pairs-of-songs-with-total-
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="pairs-of-songs-divisible-by-60" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="pairs-of-songs-divisible-by-60-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="pairs-of-songs-divisible-by-60-ts" />
+  </TabItem>
+</Tabs>
 
 ## The key insight: Two Sum mod 60
 
@@ -38,6 +50,8 @@ The `% 60` wrapper around `(60 - a % 60)` handles the edge case where `a % 60 ==
 
 For each song, compute its remainder mod 60. Look up how many previously seen songs have the complementary remainder. Then record this song's remainder.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def num_pairs_divisible_by60(time: list[int]) -> int:
     remainders = [0] * 60          # L1: O(1), at most 60 distinct remainders
@@ -48,6 +62,22 @@ def num_pairs_divisible_by60(time: list[int]) -> int:
         remainders[t % 60] += 1          # L6: O(1) record this song's remainder
     return result                  # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numPairsDivisibleBy60(time: number[]): number {
+    const remainders = new Array(60).fill(0);         // L1: O(1), at most 60 distinct remainders
+    let result = 0;                                   // L2: O(1)
+    for (const t of time) {                          // L3: loop, n iterations
+        const complement = (60 - t % 60) % 60;      // L4: O(1) compute complement remainder
+        result += remainders[complement];             // L5: O(1) lookup
+        remainders[t % 60]++;                        // L6: O(1) record this song's remainder
+    }
+    return result;                                    // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -103,8 +133,21 @@ t=40:  complement = (60-40)%60 = 20
 return 3
 ```
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="pairs-of-songs-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="pairs-of-songs-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_1010.py and run.
 
@@ -128,6 +171,29 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function numPairsDivisibleBy60(time: number[]): number {
+    const remainders = new Array(60).fill(0);
+    let result = 0;
+    for (const t of time) {
+        const complement = (60 - t % 60) % 60;
+        result += remainders[complement];
+        remainders[t % 60]++;
+    }
+    return result;
+}
+
+console.assert(numPairsDivisibleBy60([30,20,150,100,40]) === 3);
+console.assert(numPairsDivisibleBy60([60,60,60]) === 3);
+console.assert(numPairsDivisibleBy60([10,50,90,30]) === 2);
+console.assert(numPairsDivisibleBy60([1]) === 0);
+console.assert(numPairsDivisibleBy60([60]) === 0);
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Related topics
 

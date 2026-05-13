@@ -5,11 +5,18 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, binary-search, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './300-longest-increasing-subsequence.py?raw';
+import practiceCodeTs from './300-longest-increasing-subsequence.ts?raw';
+import approach2PyCode from './300-longest-increasing-subsequence-approach2.py?raw';
+import approach2TsCode from './300-longest-increasing-subsequence-approach2.ts?raw';
+import approach3PyCode from './300-longest-increasing-subsequence-approach3.py?raw';
+import approach3TsCode from './300-longest-increasing-subsequence-approach3.ts?raw';
 
 ## Problem
 
@@ -26,7 +33,14 @@ LeetCode 300 · [Link](https://leetcode.com/problems/longest-increasing-subseque
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="longest-increasing-subsequence" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="longest-increasing-subsequence-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="longest-increasing-subsequence-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every subsequence
 
@@ -55,6 +69,8 @@ Skip.
 
 `dp[i]` = length of LIS ending at `i`. `dp[i] = 1 + max(dp[j] for j < i if nums[j] < nums[i])`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def length_of_lis(nums):
     n = len(nums)                          # L1: O(1)
@@ -65,6 +81,24 @@ def length_of_lis(nums):
                 dp[i] = max(dp[i], dp[j] + 1)  # L6: O(1) update
     return max(dp)                         # L7: O(n) scan
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLIS(nums: number[]): number {
+    const n = nums.length;                          // L1: O(1)
+    const dp = new Array(n).fill(1);               // L2: O(n) init, every element is LIS of 1
+    for (let i = 1; i < n; i++) {                 // L3: outer loop, n-1 iterations
+        for (let j = 0; j < i; j++) {             // L4: inner loop, up to i iterations
+            if (nums[j] < nums[i]) {              // L5: O(1) comparison
+                dp[i] = Math.max(dp[i], dp[j] + 1);  // L6: O(1) update
+            }
+        }
+    }
+    return Math.max(...dp);                        // L7: O(n) scan
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -85,10 +119,23 @@ The triangular sum at L4 is the bottleneck. For each index `i`, we scan all `j <
 
 Canonical "beginner" DP.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="longest-increasing-subsequence-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="longest-increasing-subsequence-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Patience sort / binary search (optimal)
 
-Maintain `tails[k]` = the smallest tail of any increasing subsequence of length `k + 1`. For each new number, replace the first `tails[k] >= num` (or append). `len(tails)` is the LIS length.
+Maintain `tails[k]` = the smallest tail of any increasing subsequence of length `k + 1`. For each new number, replace the first `tails[k] ≥ num` (or append). `len(tails)` is the LIS length.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from bisect import bisect_left
 
@@ -102,6 +149,31 @@ def length_of_lis(nums):
             tails[i] = x                  # L6: O(1), update smallest tail
     return len(tails)                      # L7: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLIS(nums: number[]): number {
+    function bisectLeft(arr: number[], x: number): number {
+        let lo = 0, hi = arr.length;
+        while (lo < hi) {
+            const mid = (lo + hi) >> 1;
+            if (arr[mid] < x) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
+    }
+
+    const tails: number[] = [];                    // L1: O(1), empty tails array
+    for (const x of nums) {                        // L2: outer loop, n iterations
+        const i = bisectLeft(tails, x);            // L3: O(log k) binary search
+        if (i === tails.length) tails.push(x);    // L4/L5: O(1) extend LIS
+        else tails[i] = x;                        // L6: O(1) update smallest tail
+    }
+    return tails.length;                           // L7: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -126,6 +198,17 @@ L3 does a binary search over `tails`, which grows to at most n elements. Each of
 
 For the actual sequence, track predecessor indices alongside (more bookkeeping).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="longest-increasing-subsequence-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="longest-increasing-subsequence-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -138,6 +221,8 @@ Patience sort is the canonical O(n log n) answer. Same template: Longest Bitonic
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_300.py and run.
 # Uses the canonical implementation (Approach 3: patience sort + binary search).
@@ -166,6 +251,38 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function lengthOfLIS(nums: number[]): number {
+    function bisectLeft(arr: number[], x: number): number {
+        let lo = 0, hi = arr.length;
+        while (lo < hi) {
+            const mid = (lo + hi) >> 1;
+            if (arr[mid] < x) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
+    }
+    const tails: number[] = [];
+    for (const x of nums) {
+        const i = bisectLeft(tails, x);
+        if (i === tails.length) tails.push(x);
+        else tails[i] = x;
+    }
+    return tails.length;
+}
+
+console.assert(lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]) === 4);
+console.assert(lengthOfLIS([0, 1, 0, 3, 2, 3]) === 4);
+console.assert(lengthOfLIS([7, 7, 7, 7]) === 1);
+console.assert(lengthOfLIS([1]) === 1);
+console.assert(lengthOfLIS([1, 2, 3, 4, 5]) === 5);
+console.assert(lengthOfLIS([5, 4, 3, 2, 1]) === 1);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

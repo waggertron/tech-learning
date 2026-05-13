@@ -5,11 +5,16 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, hash-tables, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './2013-detect-squares.py?raw';
+import practiceCodeTs from './2013-detect-squares.ts?raw';
+import approach2PyCode from './2013-detect-squares-approach2.py?raw';
+import approach2TsCode from './2013-detect-squares-approach2.ts?raw';
 
 ## Problem
 
@@ -32,7 +37,14 @@ LeetCode 2013 · [Link](https://leetcode.com/problems/detect-squares/) · *Mediu
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="detect-squares" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="detect-squares-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="detect-squares-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, pairwise check
 
@@ -82,6 +94,8 @@ Fix the query point `(qx, qy)`. For each stored point `(x, y)`:
 
 Use a `Counter` of points.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -105,6 +119,40 @@ class DetectSquares:
                           * self.counts[(qx, y)])  # L7: O(1)
         return total
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class DetectSquares {
+    private counts: Map<string, number> = new Map();   // L1: O(1)
+    private points: Set<string> = new Set();            // L2: O(1), distinct points for iteration
+
+    private key(x: number, y: number): string {
+        return `${x},${y}`;
+    }
+
+    add(point: number[]): void {
+        const k = this.key(point[0], point[1]);
+        this.counts.set(k, (this.counts.get(k) ?? 0) + 1);  // L3: O(1) amortized
+        this.points.add(k);                                   // L4: O(1) amortized
+    }
+
+    count(point: number[]): number {
+        const [qx, qy] = point;
+        let total = 0;
+        for (const pk of this.points) {                       // L5: iterate all distinct points, O(n)
+            const [x, y] = pk.split(',').map(Number);
+            if (Math.abs(x - qx) === Math.abs(y - qy) && x !== qx && y !== qy) {  // L6: O(1)
+                total += (this.counts.get(pk) ?? 0)
+                       * (this.counts.get(this.key(x, qy)) ?? 0)
+                       * (this.counts.get(this.key(qx, y)) ?? 0);  // L7: O(1)
+            }
+        }
+        return total;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -121,6 +169,17 @@ class DetectSquares:
 - `add`: O(1) amortized.
 - `count`: O(n).
 - Space: O(n).
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="detect-squares-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="detect-squares-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Hash-map keyed by x-coordinate
 
@@ -183,6 +242,8 @@ The "fix a diagonal corner, multiply counts of the other three" pattern applies 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_2013.py and run.
 # Uses the canonical implementation (Approach 2: count map + diagonal fix).
@@ -229,6 +290,50 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class DetectSquares {
+    private counts: Map<string, number> = new Map();
+    private points: Set<string> = new Set();
+    private key(x: number, y: number): string { return `${x},${y}`; }
+
+    add(point: number[]): void {
+        const k = this.key(point[0], point[1]);
+        this.counts.set(k, (this.counts.get(k) ?? 0) + 1);
+        this.points.add(k);
+    }
+
+    count(point: number[]): number {
+        const [qx, qy] = point;
+        let total = 0;
+        for (const pk of this.points) {
+            const [x, y] = pk.split(',').map(Number);
+            if (Math.abs(x - qx) === Math.abs(y - qy) && x !== qx && y !== qy) {
+                total += (this.counts.get(pk) ?? 0)
+                       * (this.counts.get(this.key(x, qy)) ?? 0)
+                       * (this.counts.get(this.key(qx, y)) ?? 0);
+            }
+        }
+        return total;
+    }
+}
+
+const d = new DetectSquares();
+d.add([3, 10]); d.add([11, 2]); d.add([3, 2]);
+console.assert(d.count([11, 10]) === 1);
+console.assert(d.count([14, 8]) === 0);
+d.add([11, 2]);
+console.assert(d.count([11, 10]) === 2);
+const d2 = new DetectSquares();
+console.assert(d2.count([0, 0]) === 0);
+const d3 = new DetectSquares();
+d3.add([0, 0]); d3.add([2, 0]); d3.add([0, 2]); d3.add([2, 2]);
+console.assert(d3.count([0, 0]) === 1);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

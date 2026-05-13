@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './025-reverse-nodes-in-k-group.py?raw';
+import practiceCodeTs from './025-reverse-nodes-in-k-group.ts?raw';
+import approach2TsCode from './025-reverse-nodes-in-k-group-approach2.ts?raw';
 
 ## Problem
 
@@ -24,12 +28,21 @@ LeetCode 25 Â· [Link](https://leetcode.com/problems/reverse-nodes-in-k-group/) Â
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="reverse-nodes-in-k-group" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="reverse-nodes-in-k-group-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="reverse-nodes-in-k-group-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, collect values, reverse in groups, rebuild
 
 Decode the list to a value array, reverse groups of `k`, rebuild.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -54,6 +67,33 @@ def reverse_k_group(head, k):
         tail = tail.next
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
+    const values: number[] = [];
+    let cur: ListNode | null = head;
+    while (cur) { values.push(cur.val); cur = cur.next; }  // L1: O(1) per node
+    for (let i = 0; i + k <= values.length; i += k) {
+        let lo = i, hi = i + k - 1;
+        while (lo < hi) {
+            [values[lo], values[hi]] = [values[hi], values[lo]];  // L2: O(k) per group
+            lo++; hi--;
+        }
+    }
+    const dummy = new ListNode();
+    let tail = dummy;
+    for (const v of values) { tail.next = new ListNode(v); tail = tail.next; }  // L3
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -77,6 +117,8 @@ Violates the "modify pointers in place" requirement but clarifies the semantics.
 
 Walk the list; for each k-group, verify there are k nodes ahead, then reverse exactly k links and stitch to the prior chunk.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_k_group(head, k):
     dummy = ListNode(0, head)
@@ -104,6 +146,41 @@ def reverse_k_group(head, k):
         group_prev.next = kth               # L4: O(1) stitch to prior chunk
         group_prev = tmp
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let groupPrev: ListNode = dummy;
+
+    while (true) {
+        // 1. Find the k-th node from groupPrev
+        let kth: ListNode | null = groupPrev;
+        for (let i = 0; i < k; i++) {       // L1: advance k steps to find group end
+            kth = kth!.next;
+            if (!kth) return dummy.next;
+        }
+        const groupNext = kth!.next;
+
+        // 2. Reverse this group of k nodes
+        let prev: ListNode | null = groupNext;
+        let curr: ListNode | null = groupPrev.next;
+        while (curr !== groupNext) {         // L2: reverse k links
+            const nxt = curr!.next;
+            curr!.next = prev;              // L3: O(1) pointer reversal
+            prev = curr;
+            curr = nxt;
+        }
+
+        // 3. Reattach
+        const tmp = groupPrev.next!;
+        groupPrev.next = kth;               // L4: O(1) stitch to prior chunk
+        groupPrev = tmp;
+    }
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -122,15 +199,25 @@ Each node is touched twice: once during the "find k-th" scan (L1) and once durin
 - **Space:** O(1).
 
 ### Walkthrough
-- `group_prev` anchors the node just before the current k-group.
+- `groupPrev` anchors the node just before the current k-group.
 - `kth` advances k steps; if it falls off the end, we're done (leave remainder as-is).
-- Reverse the group in place using the three-pointer reversal from problem 206, stopping when we hit `group_next`.
-- `tmp = group_prev.next` was the old first node, now the tail, becomes the next iteration's `group_prev`.
+- Reverse the group in place using the three-pointer reversal from problem 206, stopping when we hit `groupNext`.
+- `tmp = groupPrev.next` was the old first node, now the tail, becomes the next iteration's `groupPrev`.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="reverse-nodes-in-k-group-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 3: Recursive reversal per group
 
 Reverse the first k nodes if possible, then recurse on the remainder.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def reverse_k_group(head, k):
     # Check there are at least k nodes
@@ -153,6 +240,31 @@ def reverse_k_group(head, k):
     head.next = reverse_k_group(curr, k) # L4: recurse on remainder
     return prev
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
+    // Check there are at least k nodes
+    let count = 0;
+    let cur: ListNode | null = head;
+    while (cur && count < k) { cur = cur.next; count++; }  // L1: count up to k nodes
+    if (count < k) return head;
+
+    // Reverse k nodes starting from head
+    let prev: ListNode | null = null, curr: ListNode | null = head;
+    for (let i = 0; i < k; i++) {         // L2: reverse k pointers
+        const nxt = curr!.next;
+        curr!.next = prev;                // L3: O(1) reversal
+        prev = curr;
+        curr = nxt;
+    }
+    // head is now the tail; curr is the (k+1)-th node
+    head!.next = reverseKGroup(curr, k); // L4: recurse on remainder
+    return prev;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -172,6 +284,8 @@ The recursion depth is n/k (one frame per group), not n. If k = 1 (no reversal n
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_025.py and run.
 # Uses the iterative in-place approach (Approach 2).
@@ -232,6 +346,49 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
+    const dummy = new ListNode(0, head);
+    let groupPrev: ListNode = dummy;
+    while (true) {
+        let kth: ListNode | null = groupPrev;
+        for (let i = 0; i < k; i++) { kth = kth!.next; if (!kth) return dummy.next; }
+        const groupNext = kth!.next;
+        let prev: ListNode | null = groupNext, curr: ListNode | null = groupPrev.next;
+        while (curr !== groupNext) { const nxt = curr!.next; curr!.next = prev; prev = curr; curr = nxt; }
+        const tmp = groupPrev.next!; groupPrev.next = kth; groupPrev = tmp;
+    }
+}
+
+console.assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3,4,5]), 2))) === JSON.stringify([2,1,4,3,5]));
+console.assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3,4,5]), 3))) === JSON.stringify([3,2,1,4,5]));
+console.assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3,4,5,6]), 3))) === JSON.stringify([3,2,1,6,5,4]));
+console.assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3]), 1))) === JSON.stringify([1,2,3]));
+console.assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3]), 3))) === JSON.stringify([3,2,1]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

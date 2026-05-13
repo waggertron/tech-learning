@@ -8,8 +8,12 @@ created: 2026-04-23
 updated: 2026-04-23
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './023-merge-k-sorted-lists.py?raw';
+import practiceCodeTs from './023-merge-k-sorted-lists.ts?raw';
+import approach3aTsCode from './023-merge-k-sorted-lists-approach3a.ts?raw';
 
 ## Problem
 
@@ -26,12 +30,21 @@ LeetCode 23 · [Link](https://leetcode.com/problems/merge-k-sorted-lists/) · *H
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="merge-k-sorted-lists" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="merge-k-sorted-lists-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="merge-k-sorted-lists-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, dump values, sort, rebuild
 
 Walk every list, collect values, sort, rebuild.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -52,6 +65,34 @@ def merge_k_lists(lists):
         tail = tail.next
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
+    const values: number[] = [];
+    for (let head of lists) {
+        while (head) {
+            values.push(head.val);     // L1: O(1) per node, N total
+            head = head.next;
+        }
+    }
+    values.sort((a, b) => a - b);     // L2: O(N log N)
+    const dummy = new ListNode();
+    let tail = dummy;
+    for (const v of values) {
+        tail.next = new ListNode(v);   // L3: O(1) per node
+        tail = tail.next;
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -75,6 +116,8 @@ Ignores sortedness.
 
 Merge list 0 with list 1, then the result with list 2, etc.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge_two(l1, l2):
     dummy = ListNode()
@@ -94,6 +137,31 @@ def merge_k_lists(lists):
         result = merge_two(result, head)   # L2: each merge is O(current size)
     return result
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    const dummy = new ListNode();
+    let tail = dummy;
+    while (l1 && l2) {
+        if (l1.val <= l2.val) { tail.next = l1; l1 = l1.next; }
+        else { tail.next = l2; l2 = l2.next; }
+        tail = tail.next!;
+    }
+    tail.next = l1 ?? l2;
+    return dummy.next;
+}
+
+function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
+    let result: ListNode | null = null;
+    for (const head of lists) {            // L1: k iterations
+        result = mergeTwoLists(result, head);  // L2: each merge is O(current size)
+    }
+    return result;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -116,6 +184,8 @@ Simple but slow for large k.
 
 Merge lists in pairs like merge sort, O(log k) levels, O(N) work each.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def merge_k_lists(lists):
     if not lists:
@@ -129,6 +199,25 @@ def merge_k_lists(lists):
         lists = merged
     return lists[0]
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
+    if (!lists.length) return null;
+    while (lists.length > 1) {      // L1: log k rounds
+        const merged: (ListNode | null)[] = [];
+        for (let i = 0; i < lists.length; i += 2) {  // L2: pair up adjacent lists
+            const a = lists[i];
+            const b = i + 1 < lists.length ? lists[i + 1] : null;
+            merged.push(mergeTwoLists(a, b));          // L3: merge each pair
+        }
+        lists = merged;
+    }
+    return lists[0];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -146,10 +235,20 @@ At each round, the total work across all pairwise merges is O(N) (every node is 
 - **Time:** O(N log k), driven by L3 across log k rounds.
 - **Space:** O(log k) if implemented recursively; O(k) for the merged array in this iterative form.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3aTsCode} id="merge-k-sorted-lists-approach3a-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3b: Min-heap of heads (optimal)
 
 Put the head of each list in a min-heap keyed by value. Repeatedly pop the smallest and push its `next`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 import heapq
 
@@ -169,6 +268,33 @@ def merge_k_lists(lists):
             heapq.heappush(heap, (node.next.val, i, node.next))  # L4: O(log k)
     return dummy.next
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+// TypeScript doesn't have a built-in heap; use the divide-and-conquer (Approach 3a)
+// in interviews. Shown here as a min-heap simulation for illustration.
+function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
+    // Seed a sorted array of [val, listIndex, node] tuples as a naive heap simulation
+    const heap: [number, number, ListNode][] = [];
+    for (let i = 0; i < lists.length; i++) {
+        if (lists[i]) heap.push([lists[i]!.val, i, lists[i]!]);  // L1: seed
+    }
+    heap.sort((a, b) => a[0] - b[0]);  // initial sort
+    const dummy = new ListNode();
+    let tail = dummy;
+    while (heap.length) {
+        const [, i, node] = heap.shift()!;  // L3: O(k) shift (naive; real heap = O(log k))
+        tail.next = node; tail = node;
+        if (node.next) {
+            heap.push([node.next.val, i, node.next]);  // L4: re-insert
+            heap.sort((a, b) => a[0] - b[0]);
+        }
+    }
+    return dummy.next;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -189,6 +315,8 @@ The heap never exceeds k entries (one per list). Each of the N nodes triggers on
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_023.py and run.
 # Uses the min-heap approach (Approach 3b).
@@ -246,6 +374,57 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+class ListNode {
+    val: number; next: ListNode | null;
+    constructor(val = 0, next: ListNode | null = null) { this.val = val; this.next = next; }
+}
+
+function toList(head: ListNode | null): number[] {
+    const out: number[] = [];
+    while (head) { out.push(head.val); head = head.next; }
+    return out;
+}
+
+function fromList(vals: number[]): ListNode | null {
+    const dummy = new ListNode();
+    let cur = dummy;
+    for (const v of vals) { cur.next = new ListNode(v); cur = cur.next; }
+    return dummy.next;
+}
+
+function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    const dummy = new ListNode(); let tail = dummy;
+    while (l1 && l2) {
+        if (l1.val <= l2.val) { tail.next = l1; l1 = l1.next; }
+        else { tail.next = l2; l2 = l2.next; }
+        tail = tail.next!;
+    }
+    tail.next = l1 ?? l2; return dummy.next;
+}
+
+function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
+    if (!lists.length) return null;
+    while (lists.length > 1) {
+        const merged: (ListNode | null)[] = [];
+        for (let i = 0; i < lists.length; i += 2)
+            merged.push(mergeTwoLists(lists[i], i + 1 < lists.length ? lists[i + 1] : null));
+        lists = merged;
+    }
+    return lists[0];
+}
+
+console.assert(JSON.stringify(toList(mergeKLists([fromList([1,4,5]), fromList([1,3,4]), fromList([2,6])]))) === JSON.stringify([1,1,2,3,4,4,5,6]));
+console.assert(mergeKLists([]) === null);
+console.assert(JSON.stringify(toList(mergeKLists([null]))) === JSON.stringify([]));
+console.assert(JSON.stringify(toList(mergeKLists([fromList([1,2,3])]))) === JSON.stringify([1,2,3]));
+console.assert(JSON.stringify(toList(mergeKLists([fromList([1,2]), null]))) === JSON.stringify([1,2]));
+console.log("all tests pass");
+```
+</TabItem>
+</Tabs>
 
 ## Summary
 

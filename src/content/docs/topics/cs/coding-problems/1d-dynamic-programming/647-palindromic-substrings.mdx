@@ -5,11 +5,18 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './647-palindromic-substrings.py?raw';
+import practiceCodeTs from './647-palindromic-substrings.ts?raw';
+import approach2PyCode from './647-palindromic-substrings-approach2.py?raw';
+import approach2TsCode from './647-palindromic-substrings-approach2.ts?raw';
+import approach3PyCode from './647-palindromic-substrings-approach3.py?raw';
+import approach3TsCode from './647-palindromic-substrings-approach3.ts?raw';
 
 ## Problem
 
@@ -23,10 +30,19 @@ LeetCode 647 · [Link](https://leetcode.com/problems/palindromic-substrings/) ·
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="palindromic-substrings" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="palindromic-substrings-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="palindromic-substrings-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, check every substring
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def count_substrings(s):
     def is_pal(t):
@@ -38,6 +54,24 @@ def count_substrings(s):
                 count += 1           # L5: O(1)
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function countSubstrings(s: string): number {
+    function isPal(t: string): boolean {
+        return t === t.split('').reverse().join('');  // L1: O(k) reversal + compare
+    }
+    let count = 0;
+    for (let i = 0; i < s.length; i++) {             // L2: outer loop, n iterations
+        for (let j = i; j < s.length; j++) {         // L3: inner loop, up to n iterations
+            if (isPal(s.slice(i, j + 1))) count++;   // L4/L5: slice + palindrome check
+        }
+    }
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,6 +93,8 @@ The slice `s[i:j+1]` allocates a new string of length k, and the reverse compari
 
 For each of `2n - 1` centers, expand outward and count every step that forms a palindrome.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def count_substrings(s):
     def expand(l, r):
@@ -71,6 +107,28 @@ def count_substrings(s):
 
     return sum(expand(i, i) + expand(i, i + 1) for i in range(len(s)))  # L5: 2n calls
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function countSubstrings(s: string): number {
+    function expand(l: number, r: number): number {
+        let count = 0;
+        while (l >= 0 && r < s.length && s[l] === s[r]) {  // L1: O(1) per iteration
+            count++;                                          // L2: O(1)
+            l--;                                             // L3: O(1)
+            r++;                                             // L4: O(1)
+        }
+        return count;
+    }
+    let total = 0;
+    for (let i = 0; i < s.length; i++) {
+        total += expand(i, i) + expand(i, i + 1);           // L5: 2n calls
+    }
+    return total;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -89,10 +147,23 @@ Each character can be the turning point of at most O(n) expansion steps, but sum
 - **Time:** O(n²), driven by L1-L4 (expansion work summed across all centers).
 - **Space:** O(1) (no auxiliary structure; just two integer pointers).
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="palindromic-substrings-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="palindromic-substrings-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: DP table
 
 `dp[i][j] = True` iff `s[i:j+1]` is a palindrome. Fill by length; count the `True` entries.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def count_substrings(s):
     n = len(s)                                           # L1: O(1)
@@ -109,6 +180,31 @@ def count_substrings(s):
                 count += 1                               # L11: O(1)
     return count
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function countSubstrings(s: string): number {
+    const n = s.length;                                          // L1: O(1)
+    const dp: boolean[][] = Array.from({ length: n }, () => new Array(n).fill(false));  // L2: O(n²)
+    let count = 0;
+    for (let i = 0; i < n; i++) {                               // L3: base case, length-1
+        dp[i][i] = true;                                        // L4: O(1)
+        count++;                                                 // L5: O(1)
+    }
+    for (let length = 2; length <= n; length++) {               // L6: outer loop over lengths
+        for (let i = 0; i <= n - length; i++) {                 // L7: valid start positions
+            const j = i + length - 1;                           // L8: O(1)
+            if (s[i] === s[j] && (length === 2 || dp[i + 1][j - 1])) {  // L9: O(1) lookup
+                dp[i][j] = true;                                // L10: O(1)
+                count++;                                         // L11: O(1)
+            }
+        }
+    }
+    return count;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -127,6 +223,17 @@ Each cell is filled in O(1) using a previously-computed shorter-length result. T
 - **Time:** O(n²), driven by L6/L7/L8-L11 (the nested length-and-index loops).
 - **Space:** O(n²) for the dp table.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="palindromic-substrings-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="palindromic-substrings-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -139,6 +246,8 @@ Same pattern as problem 5. Manacher's gives O(n) if you need it.
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_647.py and run.
 # Uses the canonical implementation (Approach 2: expand around center).
@@ -166,6 +275,36 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function countSubstrings(s: string): number {
+    function expand(l: number, r: number): number {
+        let count = 0;
+        while (l >= 0 && r < s.length && s[l] === s[r]) {
+            count++;
+            l--;
+            r++;
+        }
+        return count;
+    }
+    let total = 0;
+    for (let i = 0; i < s.length; i++) {
+        total += expand(i, i) + expand(i, i + 1);
+    }
+    return total;
+}
+
+console.assert(countSubstrings('abc') === 3);
+console.assert(countSubstrings('aaa') === 6);
+console.assert(countSubstrings('a') === 1);
+console.assert(countSubstrings('aa') === 3);
+console.assert(countSubstrings('abba') === 6);
+console.assert(countSubstrings('racecar') === 10);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

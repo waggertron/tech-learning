@@ -8,8 +8,12 @@ created: 2026-05-07
 updated: 2026-05-07
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './394-decode-string.py?raw';
+import practiceCodeTs from './394-decode-string.ts?raw';
+import approach2TsCode from './394-decode-string-approach2.ts?raw';
 
 ## Problem
 
@@ -24,7 +28,14 @@ LeetCode 394 · [Link](https://leetcode.com/problems/decode-string/) · *Medium*
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="decode-string" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="decode-string-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="decode-string-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach: Stack of (count, prefix) pairs
 
@@ -32,6 +43,8 @@ The core challenge is nesting: `"3[a2[c]]"` means you must finish decoding `2[c]
 
 Track two running values: `current_count` (digits accumulated so far) and `current_string` (letters accumulated so far). When you see `[`, freeze both onto the stack and reset. When you see `]`, pop and reassemble.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def decode_string(s: str) -> str:
     stack = []          # L1: each entry is (count, prefix_string)
@@ -53,6 +66,34 @@ def decode_string(s: str) -> str:
 
     return current_string                              # L16: O(1)
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function decodeString(s: string): string {
+    const stack: [number, string][] = [];   // L1: each entry is [count, prefix_string]
+    let currentString = '';                 // L2: characters accumulated at current level
+    let currentCount = 0;                   // L3: number being parsed digit by digit
+
+    for (const ch of s) {                  // L4: n iterations
+        if (ch >= '0' && ch <= '9') {      // L5: O(1)
+            currentCount = currentCount * 10 + Number(ch);  // L6: handles multi-digit
+        } else if (ch === '[') {           // L7: O(1)
+            stack.push([currentCount, currentString]);       // L8: freeze state
+            currentCount = 0;              // L9: reset for inner level
+            currentString = '';            // L10: reset for inner level
+        } else if (ch === ']') {           // L11: O(1)
+            const [count, prefix] = stack.pop()!;            // L12: restore outer state
+            currentString = prefix + currentString.repeat(count);  // L13: expand and attach
+        } else {                           // L14: regular letter
+            currentString += ch;           // L15: O(1) amortized
+        }
+    }
+
+    return currentString;                  // L16: O(1)
+}
+```
+</TabItem>
+</Tabs>
 
 **Tracing `"3[a2[c]]"`**
 
@@ -89,6 +130,17 @@ String concatenation at L13 dominates: each character of the final output is wri
 **Complexity**
 - **Time:** O(D), where D is the length of the decoded string. In the worst case (`"10000[a]"`) this is much larger than n.
 - **Space:** O(n + D) for the stack entries and current_string at each nesting level.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="decode-string-approach-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="decode-string-approach2-ts" />
+  </TabItem>
+</Tabs>
 
 ## Key insight: "pending business" model
 
