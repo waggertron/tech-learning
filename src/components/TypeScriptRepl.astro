@@ -259,7 +259,10 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
       const tsScaffold = document.querySelector<HTMLElement>('.tsrepl[data-original]')?.dataset.original ?? '';
       const testMatch = tsScaffold.match(/function _runTests[\s\S]*/);
       const testSnippet = testMatch?.[0]?.trim() ?? '';
-      const code = pre.innerText + (testSnippet ? '\n\n' + testSnippet : '');
+      // assert is defined in the scaffold's .ts file but only _runTests is
+      // extracted above, so inject it here so approach blocks can use it.
+      const assertPolyfill = `function assert(condition: boolean, msg: string = ''): void { if (!condition) throw new Error(msg || 'Assertion failed'); }`;
+      const code = assertPolyfill + '\n\n' + pre.innerText + (testSnippet ? '\n\n' + testSnippet : '');
 
       runBtn.disabled = true;
       statusEl.textContent = babelPromise ? 'running…' : 'loading Babel…';
