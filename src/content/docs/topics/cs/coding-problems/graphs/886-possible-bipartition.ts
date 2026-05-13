@@ -15,7 +15,7 @@ function _runTests(): void {
     assert(possibleBipartition(4, [[1,2],[3,4]]) === true);
     assert(possibleBipartition(1, []) === true);
     // perf
-    const nPeople = 200;
+    const nPeople = 10_000;
     const bigDislikes = Array.from({ length: nPeople }, (_, i) => [i + 1, (i % nPeople) + 1 === nPeople ? 1 : (i % nPeople) + 2]);
     const t0 = performance.now();
     possibleBipartition(nPeople, bigDislikes);

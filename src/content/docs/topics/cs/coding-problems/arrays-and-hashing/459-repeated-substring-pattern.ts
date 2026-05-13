@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(repeatedSubstringPattern('abaaba') === true);
     // perf
     const t0 = performance.now();
-    repeatedSubstringPattern('ab'.repeat(5000));
-    console.log(`perf repeatedSubstringPattern n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    repeatedSubstringPattern('ab'.repeat(500_000));
+    console.log(`perf repeatedSubstringPattern n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

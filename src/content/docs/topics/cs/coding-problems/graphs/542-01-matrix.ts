@@ -14,7 +14,7 @@ function _runTests(): void {
     assert(JSON.stringify(updateMatrix([[0]])) === JSON.stringify([[0]]));
     assert(JSON.stringify(updateMatrix([[0,0,0],[0,0,0],[0,0,1]])) === JSON.stringify([[0,0,0],[0,0,0],[0,0,1]]));
     // perf
-    const n = 50;
+    const n = 300;
     const big = Array.from({ length: n }, (_, r) => Array.from({ length: n }, (__, c) => (r === 0 || c === 0) ? 0 : 1));
     const t0 = performance.now();
     updateMatrix(big);

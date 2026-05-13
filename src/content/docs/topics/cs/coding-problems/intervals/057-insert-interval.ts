@@ -17,8 +17,8 @@ function _runTests(): void {
 
     // perf
     const t0 = performance.now();
-    insert(Array.from({ length: 1000 }, (_, i) => [2 * i, 2 * i + 1]), [999, 1000]);
-    console.log(`perf insert 1000 intervals: ${(performance.now() - t0).toFixed(1)}ms`);
+    insert(Array.from({ length: 500_000 }, (_, i) => [2 * i, 2 * i + 1]), [999999, 1000000]);
+    console.log(`perf insert 500000 intervals: ${(performance.now() - t0).toFixed(1)}ms`);
 
     console.log('all tests pass');
 }

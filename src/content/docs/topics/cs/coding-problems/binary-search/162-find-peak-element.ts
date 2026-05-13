@@ -17,8 +17,8 @@ function _runTests(): void {
     // perf
     const nums = Array.from({ length: 100000 }, () => Math.floor(Math.random() * 1000000));
     const t0 = performance.now();
-    findPeakElement(nums);
-    console.log(`perf findPeakElement(100000 elements): ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) findPeakElement(nums);
+    console.log(`perf findPeakElement(100000 elements) x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

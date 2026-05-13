@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(jump([5, 4, 3, 2, 1, 0]) === 1);
     // perf
     const t0 = performance.now();
-    jump(Array(10000).fill(2));
-    console.log(`perf jump(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    jump(Array(1_000_000).fill(2));
+    console.log(`perf jump(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

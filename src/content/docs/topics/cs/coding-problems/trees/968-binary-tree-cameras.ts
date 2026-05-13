@@ -52,10 +52,10 @@ function _runTests(): void {
         }
         return nodes[0];
     }
-    const root = makeTree(1000);
+    const root = makeTree(131_071);
     const t0 = performance.now();
     minCameraCover(root);
-    console.log(`perf min_camera_cover on 1000-node complete tree: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf min_camera_cover on 131071-node complete tree: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

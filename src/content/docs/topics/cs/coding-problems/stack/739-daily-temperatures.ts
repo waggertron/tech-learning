@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(JSON.stringify(dailyTemperatures([70])) === JSON.stringify([0]));
     // perf
     const t0 = performance.now();
-    dailyTemperatures(Array.from({ length: 5000 }, (_, i) => i % 100));
-    console.log(`perf 5000-element temperatures: ${(performance.now() - t0).toFixed(1)}ms`);
+    dailyTemperatures(Array.from({ length: 1_000_000 }, (_, i) => i % 100));
+    console.log(`perf 1000000-element temperatures: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

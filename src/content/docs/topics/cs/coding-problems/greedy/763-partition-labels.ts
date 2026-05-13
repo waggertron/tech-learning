@@ -16,10 +16,10 @@ function _runTests(): void {
     assert(eq(partitionLabels('aabb'), [2, 2]));
     // perf
     const alpha = 'abcdefghijklmnopqrstuvwxyz';
-    const big = (alpha.repeat(385)).slice(0, 10000);
+    const big = (alpha.repeat(38462)).slice(0, 1_000_000);
     const t0 = performance.now();
     partitionLabels(big);
-    console.log(`perf partitionLabels(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf partitionLabels(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -32,9 +32,9 @@ function _runTests(): void {
     // perf
     const mfPerf = new MedianFinder();
     const t0 = performance.now();
-    for (let i = 0; i < 2000; i++) mfPerf.addNum(i);
+    for (let i = 0; i < 100_000; i++) mfPerf.addNum(i);
     mfPerf.findMedian();
-    console.log(`perf MedianFinder 2000 inserts: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf MedianFinder 100000 inserts: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

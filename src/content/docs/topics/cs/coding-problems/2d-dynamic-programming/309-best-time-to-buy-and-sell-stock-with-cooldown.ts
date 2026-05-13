@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(maxProfit([1, 2, 3, 4, 5]) === 4);
     assert(maxProfit([1, 2]) === 1);
     const t0 = performance.now();
-    maxProfit(Array.from({ length: 500 }, (_, i) => 500 - i));
-    console.log(`perf maxProfit(range 500 desc): ${(performance.now() - t0).toFixed(1)}ms`);
+    maxProfit(Array.from({ length: 1_000_000 }, (_, i) => 1_000_000 - i));
+    console.log(`perf maxProfit(range 1000000 desc): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

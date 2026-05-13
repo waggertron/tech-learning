@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(numDistinct('abc', 'abc') === 1);
     assert(numDistinct('aaa', 'b') === 0);
     const t0 = performance.now();
-    numDistinct('a'.repeat(200), 'a'.repeat(100));
-    console.log(`perf numDistinct("a"*200, "a"*100): ${(performance.now() - t0).toFixed(1)}ms`);
+    numDistinct('a'.repeat(1000), 'a'.repeat(500));
+    console.log(`perf numDistinct("a"*1000, "a"*500): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

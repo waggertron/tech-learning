@@ -33,8 +33,8 @@ function _runTests(): void {
     // perf
     const klPerf = new KthLargest(500, Array.from({ length: 1000 }, (_, i) => i));
     const t0 = performance.now();
-    for (let i = 1000; i < 2000; i++) klPerf.add(i);
-    console.log(`perf KthLargest 1000 adds: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 1000; i < 101_000; i++) klPerf.add(i);
+    console.log(`perf KthLargest 100000 adds: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

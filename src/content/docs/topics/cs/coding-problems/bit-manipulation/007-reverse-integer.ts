@@ -19,8 +19,8 @@ function _runTests(): void {
     assert(reverse(1534236469) === 0);
     // perf
     const t0 = performance.now();
-    for (let i = 0; i < 1000; i++) reverse(1534236469 - i);
-    console.log(`perf reverse integer x1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) reverse(1534236469 - i % 1000);
+    console.log(`perf reverse integer x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -16,7 +16,7 @@ function _runTests(): void {
     assert(shortestPathBinaryMatrix([[1]]) === -1);
     assert(shortestPathBinaryMatrix([[0,0],[0,0]]) === 2);
     // perf
-    const n = 50;
+    const n = 300;
     const big = Array.from({ length: n }, () => new Array(n).fill(0));
     const t0 = performance.now();
     shortestPathBinaryMatrix(big);

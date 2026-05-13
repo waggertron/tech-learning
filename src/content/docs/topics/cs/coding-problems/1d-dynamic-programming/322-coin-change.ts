@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(coinChange([186, 419, 83, 408], 6249) === 20);
     // perf
     const t0 = performance.now();
-    coinChange([1, 2, 5], 500);
-    console.log(`perf coinChange([1,2,5], 500): ${(performance.now() - t0).toFixed(1)}ms`);
+    coinChange([1, 2, 5], 1_000_000);
+    console.log(`perf coinChange([1,2,5], 1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -84,10 +84,10 @@ function _runTests(): void {
         }
         return nodes[0];
     }
-    const root = makeTree(1000);
+    const root = makeTree(131_071);
     const t0 = performance.now();
     codec.deserialize(codec.serialize(root));
-    console.log(`perf serialize+deserialize round-trip on 1000-node tree: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf serialize+deserialize round-trip on 131071-node tree: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

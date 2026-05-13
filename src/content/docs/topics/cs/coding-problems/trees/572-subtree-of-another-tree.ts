@@ -59,11 +59,11 @@ function _runTests(): void {
         }
         return nodes[0];
     }
-    const root = makeTree(1000);
-    const sub = makeTree(50);
+    const root = makeTree(131_071);
+    const sub = makeTree(127);
     const t0 = performance.now();
     isSubtree(root, sub);
-    console.log(`perf is_subtree (1000-node root, 50-node subtree): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf is_subtree (131071-node root, 127-node subtree): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

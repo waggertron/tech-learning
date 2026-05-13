@@ -14,10 +14,10 @@ function _runTests(): void {
     const r = topKFrequent([1, 2, 3], 1);
     assert(r.length === 1 && [1, 2, 3].includes(r[0]));
     // perf
-    const nums = Array.from({ length: 10000 }, (_, i) => i % 100);
+    const nums = Array.from({ length: 1_000_000 }, (_, i) => i % 100);
     const t0 = performance.now();
     topKFrequent(nums, 10);
-    console.log(`perf topKFrequent n=10000 k=10: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf topKFrequent n=1000000 k=10: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

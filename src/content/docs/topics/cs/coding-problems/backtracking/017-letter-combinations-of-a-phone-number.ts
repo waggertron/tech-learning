@@ -18,8 +18,8 @@ function _runTests(): void {
     assert(letterCombinations('22').length === 9);
     // perf
     const t0 = performance.now();
-    letterCombinations('2345');
-    console.log(`perf letterCombinations("2345") n=4 digits: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 10_000; i++) letterCombinations('23456789');
+    console.log(`perf letterCombinations("23456789") x10000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

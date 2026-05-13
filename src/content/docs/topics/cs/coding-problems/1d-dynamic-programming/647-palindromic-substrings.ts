@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(countSubstrings('racecar') === 10);
     // perf
     const t0 = performance.now();
-    countSubstrings('a'.repeat(500));
-    console.log(`perf countSubstrings("a"*500): ${(performance.now() - t0).toFixed(1)}ms`);
+    countSubstrings('a'.repeat(1000));
+    console.log(`perf countSubstrings("a"*1000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

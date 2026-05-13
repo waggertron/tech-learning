@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(JSON.stringify(maxSlidingWindow([1, 2, 3, 4, 5], 3)) === JSON.stringify([3, 4, 5]));
     // perf
     const t0 = performance.now();
-    maxSlidingWindow(Array.from({ length: 10000 }, (_, i) => i), 100);
-    console.log(`perf 10000-element array k=100: ${(performance.now() - t0).toFixed(1)}ms`);
+    maxSlidingWindow(Array.from({ length: 1_000_000 }, (_, i) => i), 100);
+    console.log(`perf 1000000-element array k=100: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

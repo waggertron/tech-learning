@@ -47,7 +47,7 @@ function _runTests(): void {
     const t4 = buildTree([1, 2, 3], [1, 2, 3]);
     assert(eq(treeToList(t4), [1, null, 2, null, 3]));
     // perf
-    const n = 1000;
+    const n = 100_000;
     const inorder: number[] = Array.from({ length: n }, (_, i) => i);
     const preorder: number[] = [];
     function genPre(lo: number, hi: number): void {

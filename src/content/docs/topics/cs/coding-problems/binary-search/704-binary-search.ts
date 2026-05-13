@@ -17,8 +17,8 @@ function _runTests(): void {
     // perf
     const arr = Array.from({ length: 100000 }, (_, i) => i);
     const t0 = performance.now();
-    search(arr, 99999);
-    console.log(`perf binary search n=100000: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) search(arr, 99999);
+    console.log(`perf binary search n=100000 x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

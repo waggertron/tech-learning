@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(canJump([2, 0, 0]) === true);
     // perf
     const t0 = performance.now();
-    canJump(Array(10000).fill(1));
-    console.log(`perf canJump(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    canJump(Array(1_000_000).fill(1));
+    console.log(`perf canJump(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

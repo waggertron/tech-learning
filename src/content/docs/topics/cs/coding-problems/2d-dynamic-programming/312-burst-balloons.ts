@@ -14,8 +14,8 @@ function _runTests(): void {
     assert(maxCoins([3, 3]) === 12);
     assert(maxCoins([1, 1, 1]) === 3);
     const t0 = performance.now();
-    maxCoins(Array.from({ length: 30 }, (_, i) => i + 1));
-    console.log(`perf maxCoins(range 1..30): ${(performance.now() - t0).toFixed(1)}ms`);
+    maxCoins(Array.from({ length: 100 }, (_, i) => i + 1));
+    console.log(`perf maxCoins(range 1..100): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

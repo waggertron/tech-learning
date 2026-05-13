@@ -54,11 +54,11 @@ function _runTests(): void {
         }
         return nodes[0];
     }
-    const rootA = makeTree(1000);
-    const rootB = makeTree(1000);
+    const rootA = makeTree(131_071);
+    const rootB = makeTree(131_071);
     const t0 = performance.now();
     isSameTree(rootA, rootB);
-    console.log(`perf is_same_tree on two 1000-node trees: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf is_same_tree on two 131071-node trees: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(JSON.stringify(productExceptSelf([1, 0])) === JSON.stringify([0, 1]));
     // perf
     const t0 = performance.now();
-    productExceptSelf(Array.from({ length: 10000 }, (_, i) => i + 1));
-    console.log(`perf productExceptSelf n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    productExceptSelf(Array.from({ length: 1_000_000 }, (_, i) => i + 1));
+    console.log(`perf productExceptSelf n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

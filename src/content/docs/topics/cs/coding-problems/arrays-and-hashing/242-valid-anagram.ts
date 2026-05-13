@@ -15,11 +15,11 @@ function _runTests(): void {
     assert(isAnagram('ab', 'a') === false);
     assert(isAnagram('', '') === true);
     // perf
-    const _s = 'abcdefghij'.repeat(100);
+    const _s = 'abcdefghij'.repeat(100_000);
     const _u = _s.split('').reverse().join('');
     const t0 = performance.now();
     isAnagram(_s, _u);
-    console.log(`perf isAnagram len=1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf isAnagram len=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

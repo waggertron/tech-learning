@@ -14,7 +14,7 @@ function _runTests(): void {
     assert(findDuplicate([1,1]) === 1);
     assert(findDuplicate([2,2,2,1]) === 2);
     // perf
-    const n = 1000;
+    const n = 100_000;
     const nums = Array.from({ length: n + 1 }, (_, i) => (i === n ? n - 1 : i + 1));
     nums[n] = nums[n - 2]; // introduce duplicate
     const t0 = performance.now();

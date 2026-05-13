@@ -27,8 +27,8 @@ function _runTests(): void {
 
     // perf
     const t0 = performance.now();
-    findOrder(200, Array.from({ length: 199 }, (_, i) => [i + 1, i]));
-    console.log(`perf find-order 200 courses DAG chain: ${(performance.now() - t0).toFixed(1)}ms`);
+    findOrder(10_000, Array.from({ length: 9_999 }, (_, i) => [i + 1, i]));
+    console.log(`perf find-order 10000 courses DAG chain: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

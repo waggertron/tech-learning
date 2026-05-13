@@ -18,10 +18,10 @@ function _runTests(): void {
     const g3 = [['1','1'],['1','1']];
     assert(numIslands(g3) === 1);
     // perf
-    const big: string[][] = Array.from({ length: 50 }, () => Array(50).fill('1'));
+    const big: string[][] = Array.from({ length: 300 }, () => Array(300).fill('1'));
     const t0 = performance.now();
     numIslands(big);
-    console.log(`perf num-islands 50x50 all-land grid: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf num-islands 300x300 all-land grid: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

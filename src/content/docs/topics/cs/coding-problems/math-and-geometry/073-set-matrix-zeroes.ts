@@ -24,12 +24,12 @@ function _runTests(): void {
     assert(JSON.stringify(m4) === JSON.stringify([[0]]));
 
     const t0 = performance.now();
-    const bigM: number[][] = Array.from({ length: 100 }, (_, i) =>
-        Array.from({ length: 100 }, (_, j) => i * 100 + j)
+    const bigM: number[][] = Array.from({ length: 1000 }, (_, i) =>
+        Array.from({ length: 1000 }, (_, j) => i * 1000 + j)
     );
-    bigM[50][50] = 0;
+    bigM[500][500] = 0;
     setZeroes(bigM);
-    console.log(`perf setZeroes 100x100 matrix: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf setZeroes 1000x1000 matrix: ${(performance.now() - t0).toFixed(1)}ms`);
 
     console.log('all tests pass');
 }

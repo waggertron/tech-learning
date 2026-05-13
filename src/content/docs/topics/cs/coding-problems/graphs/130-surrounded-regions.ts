@@ -28,12 +28,12 @@ function _runTests(): void {
     assert(JSON.stringify(b5) === JSON.stringify([['X','X','X'],['X','X','X'],['X','X','X']]));
 
     // perf
-    const big = Array.from({ length: 50 }, (_, i) =>
-        Array.from({ length: 50 }, (__, j) =>
-            (i === 0 || i === 49 || j === 0 || j === 49) ? 'O' : 'X'));
+    const big = Array.from({ length: 300 }, (_, i) =>
+        Array.from({ length: 300 }, (__, j) =>
+            (i === 0 || i === 299 || j === 0 || j === 299) ? 'O' : 'X'));
     const t0 = performance.now();
     solve(big);
-    console.log(`perf surrounded-regions 50x50 board: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf surrounded-regions 300x300 board: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

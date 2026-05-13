@@ -39,12 +39,12 @@ function _runTests(): void {
     assert(copy2!.next!.random === copy2);
 
     // perf
-    const nodes = Array.from({ length: 100 }, (_, i) => new Node(i));
+    const nodes = Array.from({ length: 100_000 }, (_, i) => new Node(i));
     for (let i = 0; i < nodes.length - 1; i++) nodes[i].next = nodes[i + 1];
     for (let i = 0; i < nodes.length; i++) nodes[i].random = nodes[Math.floor(Math.random() * nodes.length)];
     const t0 = performance.now();
     copyRandomList(nodes[0]);
-    console.log(`perf copyRandomList(100 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf copyRandomList(100000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -15,10 +15,10 @@ function _runTests(): void {
     assert(missingNumber([1]) === 0);
     assert(missingNumber([0, 1, 2, 4, 5]) === 3);
     // perf
-    const nums = Array.from({ length: 1000 }, (_, i) => i);
+    const nums = Array.from({ length: 1_000_000 }, (_, i) => i);
     const t0 = performance.now();
-    for (let i = 0; i < 1000; i++) missingNumber(nums);
-    console.log(`perf missingNumber n=1000 x1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    missingNumber(nums);
+    console.log(`perf missingNumber n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

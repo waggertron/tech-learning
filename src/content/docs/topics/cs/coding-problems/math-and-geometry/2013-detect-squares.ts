@@ -37,11 +37,11 @@ function _runTests(): void {
 
     const t0 = performance.now();
     const dBig = new DetectSquares();
-    for (let i = 0; i < 1000; i++) {
-        dBig.add([i % 32, i % 32]);
-        dBig.count([i % 32, (i + 1) % 32]);
+    for (let i = 0; i < 100_000; i++) {
+        dBig.add([i % 100, i % 100]);
+        dBig.count([i % 100, (i + 1) % 100]);
     }
-    console.log(`perf DetectSquares 1000 add+count ops: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf DetectSquares 100000 add+count ops: ${(performance.now() - t0).toFixed(1)}ms`);
 
     console.log('all tests pass');
 }

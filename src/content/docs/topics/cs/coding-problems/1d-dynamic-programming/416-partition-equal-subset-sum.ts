@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(canPartition([3, 3, 3, 4, 5]) === true);
     // perf
     const t0 = performance.now();
-    canPartition(Array.from({ length: 50 }, (_, i) => i + 1));
-    console.log(`perf canPartition(1..50): ${(performance.now() - t0).toFixed(1)}ms`);
+    canPartition(Array.from({ length: 200 }, (_, i) => i + 1));
+    console.log(`perf canPartition(1..200): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

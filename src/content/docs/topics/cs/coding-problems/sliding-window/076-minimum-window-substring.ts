@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(minWindow('aa', 'aa') === 'aa');
     // perf
     const t0 = performance.now();
-    minWindow('a'.repeat(5000) + 'b'.repeat(5000), 'ab');
-    console.log(`perf 10000-char string: ${(performance.now() - t0).toFixed(1)}ms`);
+    minWindow('a'.repeat(500_000) + 'b'.repeat(500_000), 'ab');
+    console.log(`perf 1000000-char string: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(JSON.stringify(countBits(8)) === JSON.stringify([0, 1, 1, 2, 1, 2, 2, 3, 1]));
     // perf
     const t0 = performance.now();
-    for (let i = 0; i < 1000; i++) countBits(1000);
-    console.log(`perf countBits n=1000 x1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    countBits(1_000_000);
+    console.log(`perf countBits n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

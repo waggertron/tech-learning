@@ -32,10 +32,10 @@ function _runTests(): void {
     assert(normalize(accountsMerge(a3)) === normalize([['A', 'a@b.com', 'c@d.com', 'x@y.com']]));
 
     // perf
-    const big = Array.from({ length: 200 }, (_, i) => [`User${i}`, `email${i}@x.com`, 'shared@x.com']);
+    const big = Array.from({ length: 10_000 }, (_, i) => [`User${i}`, `email${i}@x.com`, 'shared@x.com']);
     const t0 = performance.now();
     accountsMerge(big);
-    console.log(`perf accounts-merge 200 accounts sharing one email: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf accounts-merge 10000 accounts sharing one email: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -35,11 +35,11 @@ function _runTests(): void {
     assert(JSON.stringify(toList(addTwoNumbers(fromList([1]), fromList([2])))) === JSON.stringify([3]));
     assert(JSON.stringify(toList(addTwoNumbers(fromList([5]), fromList([5])))) === JSON.stringify([0,1]));
     // perf
-    const head1 = fromList(Array.from({ length: 1000 }, () => 9));
-    const head2 = fromList(Array.from({ length: 1000 }, () => 9));
+    const head1 = fromList(Array.from({ length: 100_000 }, () => 9));
+    const head2 = fromList(Array.from({ length: 100_000 }, () => 9));
     const t0 = performance.now();
     addTwoNumbers(head1, head2);
-    console.log(`perf addTwoNumbers(1000-digit numbers): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf addTwoNumbers(100000-digit numbers): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

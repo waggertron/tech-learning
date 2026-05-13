@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(uniquePaths(5, 1) === 1);
     assert(uniquePaths(3, 3) === 6);
     const t0 = performance.now();
-    uniquePaths(100, 100);
-    console.log(`perf uniquePaths(100, 100): ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) uniquePaths(100, 100);
+    console.log(`perf uniquePaths(100, 100) x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

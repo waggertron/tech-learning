@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(maxProduct([-2, -3]) === 6);
     // perf
     const t0 = performance.now();
-    maxProduct(Array.from({ length: 500 }, (_, i) => (i % 3 === 0 ? -1 : i + 1)));
-    console.log(`perf maxProduct(500 mixed): ${(performance.now() - t0).toFixed(1)}ms`);
+    maxProduct(Array.from({ length: 1_000_000 }, (_, i) => (i % 3 === 0 ? -1 : i + 1)));
+    console.log(`perf maxProduct(1000000 mixed): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -14,8 +14,8 @@ function _runTests(): void {
     assert(numPairsDivisibleBy60([1]) === 0);
     // perf
     const t0 = performance.now();
-    numPairsDivisibleBy60(Array(10000).fill(30));
-    console.log(`perf numPairsDivisibleBy60 n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    numPairsDivisibleBy60(Array(1_000_000).fill(30));
+    console.log(`perf numPairsDivisibleBy60 n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

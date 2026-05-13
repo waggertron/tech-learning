@@ -17,8 +17,8 @@ function _runTests(): void {
     assert(isPalindrome('ab') === false);
     // perf
     const t0 = performance.now();
-    isPalindrome('a'.repeat(5000));
-    console.log(`perf 5000-char palindrome string: ${(performance.now() - t0).toFixed(1)}ms`);
+    isPalindrome('a'.repeat(1_000_000));
+    console.log(`perf 1000000-char palindrome string: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

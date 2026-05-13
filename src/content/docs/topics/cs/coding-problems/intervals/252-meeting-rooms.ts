@@ -17,8 +17,8 @@ function _runTests(): void {
 
     // perf
     const t0 = performance.now();
-    canAttendMeetings(Array.from({ length: 1000 }, (_, i) => [2 * i, 2 * i + 1]));
-    console.log(`perf canAttendMeetings 1000 non-overlapping intervals: ${(performance.now() - t0).toFixed(1)}ms`);
+    canAttendMeetings(Array.from({ length: 500_000 }, (_, i) => [2 * i, 2 * i + 1]));
+    console.log(`perf canAttendMeetings 500000 non-overlapping intervals: ${(performance.now() - t0).toFixed(1)}ms`);
 
     console.log('all tests pass');
 }

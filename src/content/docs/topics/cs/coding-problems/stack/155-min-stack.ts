@@ -36,9 +36,9 @@ function _runTests(): void {
     // perf
     const msPerf = new MinStack();
     const t0 = performance.now();
-    for (let i = 0; i < 5000; i++) msPerf.push(i);
+    for (let i = 0; i < 500_000; i++) msPerf.push(i);
     msPerf.getMin();
-    console.log(`perf 5000-element push + getMin: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf 500000-element push + getMin: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

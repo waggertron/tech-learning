@@ -35,10 +35,10 @@ function _runTests(): void {
     assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3]), 1))) === JSON.stringify([1,2,3]));
     assert(JSON.stringify(toList(reverseKGroup(fromList([1,2,3]), 3))) === JSON.stringify([3,2,1]));
     // perf
-    const head = fromList(Array.from({ length: 1000 }, (_, i) => i));
+    const head = fromList(Array.from({ length: 100_000 }, (_, i) => i));
     const t0 = performance.now();
     reverseKGroup(head, 5);
-    console.log(`perf reverseKGroup(1000 nodes, k=5): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf reverseKGroup(100000 nodes, k=5): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

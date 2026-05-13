@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(isNStraightHand([1,1,2,2,3,3], 3) === true);
     // perf
     const t0 = performance.now();
-    isNStraightHand(Array.from({ length: 10000 }, (_, i) => i), 10);
-    console.log(`perf isNStraightHand(n=10000, groupSize=10): ${(performance.now() - t0).toFixed(1)}ms`);
+    isNStraightHand(Array.from({ length: 500_000 }, (_, i) => i), 10);
+    console.log(`perf isNStraightHand(n=500000, groupSize=10): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

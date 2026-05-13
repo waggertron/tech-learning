@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(hammingWeight(183) === 6);
     // perf
     const t0 = performance.now();
-    for (let i = 0; i < 1000; i++) hammingWeight((i * 1000003) & 0xFFFFFFFF);
-    console.log(`perf hammingWeight x1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) hammingWeight((i * 1000003) & 0xFFFFFFFF);
+    console.log(`perf hammingWeight x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

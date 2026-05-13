@@ -24,10 +24,10 @@ function _runTests(): void {
     assert(maxAreaOfIsland([[1,0,0,1,1],[1,0,0,0,1]]) === 3);
     assert(maxAreaOfIsland([[1,1],[1,1]]) === 4);
     // perf
-    const big = Array.from({ length: 50 }, () => Array(50).fill(1));
+    const big = Array.from({ length: 300 }, () => Array(300).fill(1));
     const t0 = performance.now();
     maxAreaOfIsland(big);
-    console.log(`perf max-area-of-island 50x50 all-land grid: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf max-area-of-island 300x300 all-land grid: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

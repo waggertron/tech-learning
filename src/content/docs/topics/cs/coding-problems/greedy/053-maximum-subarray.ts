@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(maxSubarray([1, 2, 3, 4, 5]) === 15);
     // perf
     const t0 = performance.now();
-    maxSubarray(Array.from({ length: 10000 }, (_, i) => i - 5000));
-    console.log(`perf maxSubarray(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    maxSubarray(Array.from({ length: 1_000_000 }, (_, i) => i - 500000));
+    console.log(`perf maxSubarray(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

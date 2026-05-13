@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(characterReplacement('AABBA', 2) === 5);
     // perf
     const t0 = performance.now();
-    characterReplacement('abcd'.repeat(2500), 1000);
-    console.log(`perf 10000-char string k=1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    characterReplacement('abcd'.repeat(250_000), 100_000);
+    console.log(`perf 1000000-char string k=100000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

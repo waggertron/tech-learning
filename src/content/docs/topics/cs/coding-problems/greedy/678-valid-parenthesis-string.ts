@@ -17,8 +17,8 @@ function _runTests(): void {
     assert(checkValidString(')') === false);
     // perf
     const t0 = performance.now();
-    checkValidString('(*'.repeat(5000));
-    console.log(`perf checkValidString(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    checkValidString('(*'.repeat(500_000));
+    console.log(`perf checkValidString(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

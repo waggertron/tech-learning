@@ -16,10 +16,10 @@ function _runTests(): void {
     assert(evalRpn(['7', '2', '/']) === 3);
     assert(evalRpn(['-7', '2', '/']) === -3);
     // perf
-    const tokens = [...Array(2500).fill('1'), ...Array(2499).fill('+')];
+    const tokens = [...Array(500_000).fill('1'), ...Array(499_999).fill('+')];
     const t0 = performance.now();
     evalRpn(tokens);
-    console.log(`perf 4999-token RPN expression: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf 999999-token RPN expression: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

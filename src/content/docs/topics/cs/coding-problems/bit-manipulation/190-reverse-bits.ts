@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(reverseBits(1) === 2147483648);
     // perf
     const t0 = performance.now();
-    for (let i = 0; i < 1000; i++) reverseBits((i * 1000003) >>> 0);
-    console.log(`perf reverseBits x1000: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) reverseBits((i * 1000003) >>> 0);
+    console.log(`perf reverseBits x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

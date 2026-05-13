@@ -34,11 +34,11 @@ function _runTests(): void {
     assert(JSON.stringify(toList(reverseList(fromList([1])))) === JSON.stringify([1]));
     assert(reverseList(null) === null);
     // perf
-    const vals = Array.from({ length: 1000 }, (_, i) => i);
+    const vals = Array.from({ length: 100_000 }, (_, i) => i);
     const head = fromList(vals);
     const t0 = performance.now();
     reverseList(head);
-    console.log(`perf reverseList(1000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf reverseList(100000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

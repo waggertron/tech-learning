@@ -15,9 +15,9 @@ function _runTests(): void {
     assert(mergeTriplets([[1,0,0],[0,1,0],[0,0,1]], [1,1,1]) === true);
     // perf
     const t0 = performance.now();
-    const big = Array.from({ length: 10000 }, (_, i) => [(i % 5) + 1, (i % 7) + 1, (i % 3) + 1]);
+    const big = Array.from({ length: 1_000_000 }, (_, i) => [(i % 5) + 1, (i % 7) + 1, (i % 3) + 1]);
     mergeTriplets(big, [5, 7, 3]);
-    console.log(`perf mergeTriplets(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf mergeTriplets(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -19,10 +19,10 @@ function _runTests(): void {
     assert(r3.some(p => p[0] === 2 && p[1] === 2));
     assert(JSON.stringify(pacificAtlantic([])) === JSON.stringify([]));
     // perf
-    const big = Array.from({ length: 30 }, (_, i) => Array.from({ length: 30 }, (__, j) => i + j));
+    const big = Array.from({ length: 300 }, (_, i) => Array.from({ length: 300 }, (__, j) => i + j));
     const t0 = performance.now();
     pacificAtlantic(big);
-    console.log(`perf pacific-atlantic 30x30 grid: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf pacific-atlantic 300x300 grid: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(subarraySum([-1, -1, 1], 0) === 1);
     // perf
     const t0 = performance.now();
-    subarraySum(Array.from({ length: 10000 }, (_, i) => i), 100);
-    console.log(`perf subarray_sum n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    subarraySum(Array.from({ length: 1_000_000 }, (_, i) => i), 100);
+    console.log(`perf subarray_sum n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

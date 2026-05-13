@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(checkInclusion('aab', 'aabc') === true);
     // perf
     const t0 = performance.now();
-    checkInclusion('ab', 'abcd'.repeat(2500));
-    console.log(`perf 10000-char s2: ${(performance.now() - t0).toFixed(1)}ms`);
+    checkInclusion('ab', 'abcd'.repeat(250_000));
+    console.log(`perf 1000000-char s2: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

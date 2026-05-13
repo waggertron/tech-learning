@@ -25,10 +25,10 @@ function _runTests(): void {
         assert(JSON.stringify(decode(encode(strs))) === JSON.stringify(strs), `Failed on: ${JSON.stringify(strs)}`);
     }
     // perf
-    const big = Array(10000).fill('word'.repeat(10));
+    const big = Array(500_000).fill('word'.repeat(10));
     const t0 = performance.now();
     decode(encode(big));
-    console.log(`perf encode+decode n=10000 strings: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf encode+decode n=500000 strings: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

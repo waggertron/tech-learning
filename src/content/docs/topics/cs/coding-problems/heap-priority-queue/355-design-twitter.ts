@@ -44,12 +44,12 @@ function _runTests(): void {
     // perf
     const t0 = performance.now();
     const tp = new Twitter();
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 100_000; i++) {
         tp.postTweet(i % 10, i);
         tp.follow(0, i % 10);
         tp.getNewsFeed(0);
     }
-    console.log(`perf Twitter 1000 mixed ops: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf Twitter 100000 mixed ops: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

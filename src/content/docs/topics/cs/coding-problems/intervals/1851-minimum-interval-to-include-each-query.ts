@@ -16,10 +16,10 @@ function _runTests(): void {
 
     // perf
     const t0 = performance.now();
-    const bigIntervals = Array.from({ length: 1000 }, (_, i) => [2 * i, 2 * i + 1]);
-    const bigQueries = Array.from({ length: 1000 }, (_, i) => 2 * i);
+    const bigIntervals = Array.from({ length: 500_000 }, (_, i) => [2 * i, 2 * i + 1]);
+    const bigQueries = Array.from({ length: 500_000 }, (_, i) => 2 * i);
     minInterval(bigIntervals, bigQueries);
-    console.log(`perf minInterval 1000 intervals 1000 queries: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf minInterval 500000 intervals 500000 queries: ${(performance.now() - t0).toFixed(1)}ms`);
 
     console.log('all tests pass');
 }

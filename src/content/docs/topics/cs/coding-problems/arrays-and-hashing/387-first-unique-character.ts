@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(firstUniqChar('aab') === 2);
     // perf
     const t0 = performance.now();
-    firstUniqChar('a'.repeat(10000) + 'b');
-    console.log(`perf firstUniqChar n=10001: ${(performance.now() - t0).toFixed(1)}ms`);
+    firstUniqChar('a'.repeat(1_000_000) + 'b');
+    console.log(`perf firstUniqChar n=1000001: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

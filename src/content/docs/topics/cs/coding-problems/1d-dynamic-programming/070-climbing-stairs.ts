@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(climbStairs(10) === 89);
     // perf
     const t0 = performance.now();
-    climbStairs(500);
-    console.log(`perf climbStairs(500): ${(performance.now() - t0).toFixed(1)}ms`);
+    climbStairs(1_000_000);
+    console.log(`perf climbStairs(1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

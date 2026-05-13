@@ -34,12 +34,15 @@ function _runTests(): void {
     assert(getIntersectionNode(new ListNode(1), null) === null);
 
     // perf
-    const shared2 = new ListNode(99);
-    const longA = new ListNode(0, new ListNode(1, shared2));
-    const longB = new ListNode(2, new ListNode(3, new ListNode(4, shared2)));
+    let sharedTail: ListNode | null = new ListNode(99);
+    for (let i = 0; i < 50_000; i++) sharedTail = new ListNode(i, sharedTail);
+    let longA: ListNode | null = sharedTail;
+    for (let i = 0; i < 50_000; i++) longA = new ListNode(i, longA);
+    let longB: ListNode | null = sharedTail;
+    for (let i = 0; i < 50_000; i++) longB = new ListNode(i, longB);
     const t0 = performance.now();
     getIntersectionNode(longA, longB);
-    console.log(`perf getIntersectionNode: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf getIntersectionNode(100000+ nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(multiply('9999', '9999') === '99980001');
 
     const t0 = performance.now();
-    multiply('9'.repeat(100), '9'.repeat(100));
-    console.log(`perf multiply 100-digit strings: ${(performance.now() - t0).toFixed(1)}ms`);
+    multiply('9'.repeat(1000), '9'.repeat(1000));
+    console.log(`perf multiply 1000-digit strings: ${(performance.now() - t0).toFixed(1)}ms`);
 
     console.log('all tests pass');
 }

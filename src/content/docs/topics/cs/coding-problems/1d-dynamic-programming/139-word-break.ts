@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(wordBreak('aaaa', ['a', 'aa']) === true);
     // perf
     const t0 = performance.now();
-    wordBreak('a'.repeat(50), ['a', 'aa', 'aaa', 'aaaa']);
-    console.log(`perf wordBreak("a"*50): ${(performance.now() - t0).toFixed(1)}ms`);
+    wordBreak('a'.repeat(1000), ['a', 'aa', 'aaa', 'aaaa']);
+    console.log(`perf wordBreak("a"*1000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

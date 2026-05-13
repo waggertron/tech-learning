@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(maxArea([1, 2, 4, 3]) === 4);
     // perf
     const t0 = performance.now();
-    maxArea(Array.from({ length: 10000 }, (_, i) => i));
-    console.log(`perf 10000-element array: ${(performance.now() - t0).toFixed(1)}ms`);
+    maxArea(Array.from({ length: 1_000_000 }, (_, i) => i));
+    console.log(`perf 1000000-element array: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

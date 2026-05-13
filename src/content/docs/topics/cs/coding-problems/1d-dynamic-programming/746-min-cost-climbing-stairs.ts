@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(minCostClimbingStairs([5, 3, 1, 2]) === 4);
     // perf
     const t0 = performance.now();
-    minCostClimbingStairs(new Array(500).fill(1));
-    console.log(`perf minCostClimbingStairs(500): ${(performance.now() - t0).toFixed(1)}ms`);
+    minCostClimbingStairs(new Array(1_000_000).fill(1));
+    console.log(`perf minCostClimbingStairs(1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

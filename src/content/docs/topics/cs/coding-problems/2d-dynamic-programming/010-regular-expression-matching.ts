@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(isMatch('', '') === true);
     assert(isMatch('', 'a*') === true);
     const t0 = performance.now();
-    isMatch('a'.repeat(200), 'a'.repeat(100) + '.*');
-    console.log(`perf isMatch("a"*200, pattern): ${(performance.now() - t0).toFixed(1)}ms`);
+    isMatch('a'.repeat(1000), 'a'.repeat(500) + '.*');
+    console.log(`perf isMatch("a"*1000, pattern): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

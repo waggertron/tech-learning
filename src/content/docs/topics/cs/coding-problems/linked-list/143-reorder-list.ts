@@ -41,10 +41,10 @@ function _runTests(): void {
     reorderList(h);
     assert(JSON.stringify(toList(h)) === JSON.stringify([1,2]));
     // perf
-    const head = fromList(Array.from({ length: 1000 }, (_, i) => i));
+    const head = fromList(Array.from({ length: 100_000 }, (_, i) => i));
     const t0 = performance.now();
     reorderList(head);
-    console.log(`perf reorderList(1000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf reorderList(100000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

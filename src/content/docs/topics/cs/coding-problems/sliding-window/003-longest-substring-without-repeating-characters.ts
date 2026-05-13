@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(lengthOfLongestSubstring('abcdef') === 6);
     // perf
     const t0 = performance.now();
-    lengthOfLongestSubstring('abcd'.repeat(2500));
-    console.log(`perf 10000-char string: ${(performance.now() - t0).toFixed(1)}ms`);
+    lengthOfLongestSubstring('abcd'.repeat(250_000));
+    console.log(`perf 1000000-char string: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -15,10 +15,10 @@ function _runTests(): void {
     assert(trap([3, 0, 3]) === 3);
     assert(trap([1, 0, 1]) === 1);
     // perf
-    const big = [...Array.from({ length: 5000 }, (_, i) => i), ...Array.from({ length: 5000 }, (_, i) => 5000 - i)];
+    const big = [...Array.from({ length: 500_000 }, (_, i) => i), ...Array.from({ length: 500_000 }, (_, i) => 500_000 - i)];
     const t0 = performance.now();
     trap(big);
-    console.log(`perf 10000-element array: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf 1000000-element array: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -72,10 +72,10 @@ function _runTests(): void {
         }
         return nodes[0];
     }
-    const root = makeTree(1000);
+    const root = makeTree(131_071);
     const t0 = performance.now();
     invertTree(root);
-    console.log(`perf invert_tree on 1000-node complete tree: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf invert_tree on 131071-node complete tree: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

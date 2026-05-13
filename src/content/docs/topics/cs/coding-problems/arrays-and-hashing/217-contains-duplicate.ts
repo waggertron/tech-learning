@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(containsDuplicate([5, 5]) === true);
     // perf
     const t0 = performance.now();
-    containsDuplicate(Array.from({ length: 10000 }, (_, i) => i));
-    console.log(`perf containsDuplicate n=10000 unique: ${(performance.now() - t0).toFixed(1)}ms`);
+    containsDuplicate(Array.from({ length: 1_000_000 }, (_, i) => i));
+    console.log(`perf containsDuplicate n=1000000 unique: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

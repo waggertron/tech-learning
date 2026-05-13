@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(JSON.stringify(twoSum([0, 4], 4)) === JSON.stringify([0, 1]));
     // perf
     const t0 = performance.now();
-    twoSum(Array.from({ length: 10000 }, (_, i) => i), 19997);
-    console.log(`perf twoSum n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    twoSum(Array.from({ length: 1_000_000 }, (_, i) => i), 1_999_997);
+    console.log(`perf twoSum n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

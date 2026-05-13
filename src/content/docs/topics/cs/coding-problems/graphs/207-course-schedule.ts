@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(canFinish(4, [[1, 0], [2, 0], [3, 1], [3, 2]]) === true);
     // perf
     const t0 = performance.now();
-    canFinish(200, Array.from({ length: 199 }, (_, i) => [i + 1, i]));
-    console.log(`perf can-finish 200 courses DAG chain: ${(performance.now() - t0).toFixed(1)}ms`);
+    canFinish(10_000, Array.from({ length: 9_999 }, (_, i) => [i + 1, i]));
+    console.log(`perf can-finish 10000 courses DAG chain: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

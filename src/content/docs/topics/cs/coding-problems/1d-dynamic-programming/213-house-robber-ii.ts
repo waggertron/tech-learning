@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(rob([2, 7, 9, 3, 1]) === 11);
     // perf
     const t0 = performance.now();
-    rob(Array.from({ length: 500 }, (_, i) => 500 - i));
-    console.log(`perf rob(range 500 desc circular): ${(performance.now() - t0).toFixed(1)}ms`);
+    rob(Array.from({ length: 1_000_000 }, (_, i) => 1_000_000 - i));
+    console.log(`perf rob(range 1000000 desc circular): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

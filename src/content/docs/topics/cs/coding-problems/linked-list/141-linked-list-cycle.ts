@@ -33,11 +33,11 @@ function _runTests(): void {
     x.next = x;
     assert(hasCycle(x) === true);
     // perf
-    const nodes = Array.from({ length: 1000 }, (_, i) => new ListNode(i));
+    const nodes = Array.from({ length: 100_000 }, (_, i) => new ListNode(i));
     for (let i = 0; i < nodes.length - 1; i++) nodes[i].next = nodes[i + 1];
     const t0 = performance.now();
     hasCycle(nodes[0]);
-    console.log(`perf hasCycle(1000-node acyclic list): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf hasCycle(100000-node acyclic list): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

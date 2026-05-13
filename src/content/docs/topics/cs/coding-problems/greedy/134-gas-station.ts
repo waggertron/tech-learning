@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(canCompleteCircuit([2, 0, 1], [0, 1, 2]) === 0);
     // perf
     const t0 = performance.now();
-    canCompleteCircuit(Array(10000).fill(2), Array(10000).fill(1));
-    console.log(`perf canCompleteCircuit(n=10000): ${(performance.now() - t0).toFixed(1)}ms`);
+    canCompleteCircuit(Array(1_000_000).fill(2), Array(1_000_000).fill(1));
+    console.log(`perf canCompleteCircuit(n=1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

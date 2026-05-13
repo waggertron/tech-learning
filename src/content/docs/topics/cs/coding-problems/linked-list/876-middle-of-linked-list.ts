@@ -28,10 +28,10 @@ function _runTests(): void {
     assert(middleNode(fromList([1,2]))!.val === 2);
     assert(middleNode(fromList([1]))!.val === 1);
     // perf
-    const head = fromList(Array.from({ length: 1000 }, (_, i) => i));
+    const head = fromList(Array.from({ length: 100_000 }, (_, i) => i));
     const t0 = performance.now();
     middleNode(head);
-    console.log(`perf middleNode(1000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf middleNode(100000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

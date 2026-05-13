@@ -21,8 +21,8 @@ function _runTests(): void {
         Array.from({ length: cols }, (_, c) => r * cols + c)
     );
     const t0 = performance.now();
-    searchMatrix(mat, rows * cols - 1);
-    console.log(`perf searchMatrix 1000x100: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) searchMatrix(mat, rows * cols - 1);
+    console.log(`perf searchMatrix 1000x100 x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(lengthOfLIS([5, 4, 3, 2, 1]) === 1);
     // perf
     const t0 = performance.now();
-    lengthOfLIS(Array.from({ length: 500 }, (_, i) => i));
-    console.log(`perf lengthOfLIS(sorted 500): ${(performance.now() - t0).toFixed(1)}ms`);
+    lengthOfLIS(Array.from({ length: 500_000 }, (_, i) => i));
+    console.log(`perf lengthOfLIS(sorted 500000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

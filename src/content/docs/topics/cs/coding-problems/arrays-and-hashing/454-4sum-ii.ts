@@ -12,7 +12,7 @@ function _runTests(): void {
     assert(fourSumCount([0], [0], [0], [0]) === 1);
     assert(fourSumCount([-1,-1], [-1,1], [-1,1], [1,-1]) === 6);
     // perf
-    const n = 100;
+    const n = 500;
     const arr = Array.from({length: n}, (_, i) => i);
     const t0 = performance.now();
     fourSumCount(arr, arr, arr, arr);

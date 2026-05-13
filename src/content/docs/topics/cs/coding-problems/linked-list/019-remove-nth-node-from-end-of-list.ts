@@ -35,10 +35,10 @@ function _runTests(): void {
     assert(JSON.stringify(toList(removeNthFromEnd(fromList([1,2]), 2))) === JSON.stringify([2]));
     assert(JSON.stringify(toList(removeNthFromEnd(fromList([1,2,3,4,5]), 5))) === JSON.stringify([2,3,4,5]));
     // perf
-    const head = fromList(Array.from({ length: 1000 }, (_, i) => i));
+    const head = fromList(Array.from({ length: 100_000 }, (_, i) => i));
     const t0 = performance.now();
-    removeNthFromEnd(head, 500);
-    console.log(`perf removeNthFromEnd(1000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    removeNthFromEnd(head, 50_000);
+    console.log(`perf removeNthFromEnd(100000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

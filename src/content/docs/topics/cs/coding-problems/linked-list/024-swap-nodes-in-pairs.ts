@@ -34,10 +34,10 @@ function _runTests(): void {
     assert(JSON.stringify(toList(swapPairs(fromList([1])))) === JSON.stringify([1]));
     assert(JSON.stringify(toList(swapPairs(fromList([1,2,3])))) === JSON.stringify([2,1,3]));
     // perf
-    const head = fromList(Array.from({ length: 1000 }, (_, i) => i));
+    const head = fromList(Array.from({ length: 100_000 }, (_, i) => i));
     const t0 = performance.now();
     swapPairs(head);
-    console.log(`perf swapPairs(1000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf swapPairs(100000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

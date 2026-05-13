@@ -15,8 +15,8 @@ function _runTests(): void {
     assert(minDistance('', 'abc') === 3);
     assert(minDistance('abc', 'abc') === 0);
     const t0 = performance.now();
-    minDistance('a'.repeat(200), 'b'.repeat(200));
-    console.log(`perf minDistance("a"*200, "b"*200): ${(performance.now() - t0).toFixed(1)}ms`);
+    minDistance('a'.repeat(1000), 'b'.repeat(1000));
+    console.log(`perf minDistance("a"*1000, "b"*1000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

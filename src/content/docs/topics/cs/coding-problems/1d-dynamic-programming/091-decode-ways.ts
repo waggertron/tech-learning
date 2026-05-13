@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(numDecodings('11106') === 2);
     // perf
     const t0 = performance.now();
-    numDecodings('1'.repeat(500));
-    console.log(`perf numDecodings("1"*500): ${(performance.now() - t0).toFixed(1)}ms`);
+    numDecodings('1'.repeat(1_000_000));
+    console.log(`perf numDecodings("1"*1000000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

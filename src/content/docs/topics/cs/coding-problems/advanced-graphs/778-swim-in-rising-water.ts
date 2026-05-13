@@ -14,7 +14,7 @@ function _runTests(): void {
     assert(swimInWater([[7]]) === 7);
     assert(swimInWater([[0,1],[3,2]]) === 2);
     // perf: 30x30 grid with shuffled values
-    const n = 30;
+    const n = 300;
     const vals = Array.from({ length: n * n }, (_, i) => i);
     // simple deterministic shuffle (seeded-like)
     for (let i = vals.length - 1; i > 0; i--) {
@@ -24,7 +24,7 @@ function _runTests(): void {
     const big: number[][] = Array.from({ length: n }, (_, r) => vals.slice(r * n, (r + 1) * n));
     const t0 = performance.now();
     swimInWater(big);
-    console.log(`perf swim-in-rising-water 30x30 grid: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf swim-in-rising-water 300x300 grid: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

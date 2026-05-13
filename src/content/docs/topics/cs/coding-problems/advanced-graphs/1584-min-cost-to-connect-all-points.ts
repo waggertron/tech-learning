@@ -14,10 +14,10 @@ function _runTests(): void {
     assert(minCostConnectPoints([[0,0],[1,1]]) === 2);
     assert(minCostConnectPoints([[0,0],[1,0],[2,0],[3,0]]) === 3);
     // perf
-    const bigPoints = Array.from({ length: 200 }, (_, i) => [i, i * 2]);
+    const bigPoints = Array.from({ length: 1000 }, (_, i) => [i, i * 2]);
     const t0 = performance.now();
     minCostConnectPoints(bigPoints);
-    console.log(`perf min-cost-connect 200 points: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf min-cost-connect 1000 points: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

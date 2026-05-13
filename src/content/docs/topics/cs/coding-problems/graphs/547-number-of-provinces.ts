@@ -14,7 +14,7 @@ function _runTests(): void {
     assert(findCircleNum([[1]]) === 1);
     assert(findCircleNum([[1,1,0],[1,1,1],[0,1,1]]) === 1);
     // perf
-    const n = 100;
+    const n = 1000;
     const big = Array.from({ length: n }, (_, i) => Array.from({ length: n }, (__, j) => i === j ? 1 : 0));
     const t0 = performance.now();
     findCircleNum(big);

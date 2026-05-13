@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(longestPalindrome('abacaba') === 'abacaba');
     // perf
     const t0 = performance.now();
-    longestPalindrome('a'.repeat(500));
-    console.log(`perf longestPalindrome("a"*500): ${(performance.now() - t0).toFixed(1)}ms`);
+    longestPalindrome('a'.repeat(1000));
+    console.log(`perf longestPalindrome("a"*1000): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

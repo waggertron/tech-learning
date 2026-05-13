@@ -14,8 +14,8 @@ function _runTests(): void {
     assert(JSON.stringify([...intersection([1,1,1], [1,1,1])].sort((a,b)=>a-b)) === JSON.stringify([1]));
     // perf
     const t0 = performance.now();
-    intersection(Array.from({length:10000},(_,i)=>i), Array.from({length:10000},(_,i)=>i+5000));
-    console.log(`perf intersection n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    intersection(Array.from({length:1_000_000},(_,i)=>i), Array.from({length:1_000_000},(_,i)=>i+500_000));
+    console.log(`perf intersection n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

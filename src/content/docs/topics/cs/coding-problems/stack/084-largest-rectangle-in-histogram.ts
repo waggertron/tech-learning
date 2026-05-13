@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(largestRectangleArea([2, 0, 2]) === 2);
     // perf
     const t0 = performance.now();
-    largestRectangleArea(Array.from({ length: 5000 }, (_, i) => i % 100));
-    console.log(`perf 5000-bar histogram: ${(performance.now() - t0).toFixed(1)}ms`);
+    largestRectangleArea(Array.from({ length: 1_000_000 }, (_, i) => i % 100));
+    console.log(`perf 1000000-bar histogram: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

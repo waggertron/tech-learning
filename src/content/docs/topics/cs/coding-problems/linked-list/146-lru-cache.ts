@@ -58,10 +58,10 @@ function _runTests(): void {
     assert(c1.get(2) === 20);
 
     // perf
-    const big = new LRUCache(100);
+    const big = new LRUCache(1000);
     const t0 = performance.now();
-    for (let i = 0; i < 1000; i++) { big.put(i % 150, i); big.get(i % 100); }
-    console.log(`perf LRUCache 1000 ops: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 100_000; i++) { big.put(i % 1500, i); big.get(i % 1000); }
+    console.log(`perf LRUCache 100000 ops: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

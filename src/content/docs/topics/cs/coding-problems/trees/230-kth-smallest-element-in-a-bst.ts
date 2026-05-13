@@ -43,11 +43,11 @@ function _runTests(): void {
     assert(kthSmallest(buildTree([1]), 1) === 1);
     assert(kthSmallest(buildTree([3, 1, 4, null, 2]), 4) === 4);
     // perf
-    const bstNodes: TreeNode[] = Array.from({ length: 1000 }, (_, i) => new TreeNode(i));
-    for (let i = 0; i < 999; i++) bstNodes[i].right = bstNodes[i + 1];
+    const bstNodes: TreeNode[] = Array.from({ length: 100_000 }, (_, i) => new TreeNode(i));
+    for (let i = 0; i < 99_999; i++) bstNodes[i].right = bstNodes[i + 1];
     const t0 = performance.now();
-    kthSmallest(bstNodes[0], 500);
-    console.log(`perf kth_smallest (k=500) on 1000-node BST chain: ${(performance.now() - t0).toFixed(1)}ms`);
+    kthSmallest(bstNodes[0], 50_000);
+    console.log(`perf kth_smallest (k=50000) on 100000-node BST chain: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

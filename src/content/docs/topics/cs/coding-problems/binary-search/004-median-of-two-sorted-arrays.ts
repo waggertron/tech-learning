@@ -18,8 +18,8 @@ function _runTests(): void {
     const a = Array.from({ length: 100000 }, (_, i) => i * 2);
     const b = Array.from({ length: 100000 }, (_, i) => i * 2 + 1);
     const t0 = performance.now();
-    findMedianSortedArrays(a, b);
-    console.log(`perf findMedianSortedArrays n=100000 each: ${(performance.now() - t0).toFixed(1)}ms`);
+    for (let i = 0; i < 1_000_000; i++) findMedianSortedArrays(a, b);
+    console.log(`perf findMedianSortedArrays n=100000 each x1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

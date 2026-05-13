@@ -17,11 +17,11 @@ function _runTests(): void {
     const r3 = alienOrder(['abc']);
     assert(new Set(r3).size === 3 && r3.includes('a') && r3.includes('b') && r3.includes('c'), `got ${JSON.stringify(r3)}`);
     // perf
-    const bigWords = Array.from({ length: 200 }, (_, i) =>
+    const bigWords = Array.from({ length: 10_000 }, (_, i) =>
         String.fromCharCode(97 + (i % 26)).repeat(3) + String.fromCharCode(97 + ((i + 1) % 26)));
     const t0 = performance.now();
     alienOrder(bigWords);
-    console.log(`perf alien-dictionary 200 words: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf alien-dictionary 10000 words: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

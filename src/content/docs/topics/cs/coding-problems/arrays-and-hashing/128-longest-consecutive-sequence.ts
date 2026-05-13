@@ -16,8 +16,8 @@ function _runTests(): void {
     assert(longestConsecutive([5, 4, 3, 2, 1]) === 5);
     // perf
     const t0 = performance.now();
-    longestConsecutive(Array.from({ length: 10000 }, (_, i) => i));
-    console.log(`perf longestConsecutive n=10000: ${(performance.now() - t0).toFixed(1)}ms`);
+    longestConsecutive(Array.from({ length: 1_000_000 }, (_, i) => i));
+    console.log(`perf longestConsecutive n=1000000: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

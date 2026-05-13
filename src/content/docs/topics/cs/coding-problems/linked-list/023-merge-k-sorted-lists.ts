@@ -35,12 +35,12 @@ function _runTests(): void {
     assert(JSON.stringify(toList(mergeKLists([fromList([1,2,3])]))) === JSON.stringify([1,2,3]));
     assert(JSON.stringify(toList(mergeKLists([fromList([1,2]), null]))) === JSON.stringify([1,2]));
     // perf
-    const lists = Array.from({ length: 10 }, (_, i) =>
-        fromList(Array.from({ length: 100 }, (_, j) => i + j * 10))
+    const lists = Array.from({ length: 100 }, (_, i) =>
+        fromList(Array.from({ length: 1000 }, (_, j) => i + j * 100))
     );
     const t0 = performance.now();
     mergeKLists(lists);
-    console.log(`perf mergeKLists(10 lists x 100 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf mergeKLists(100 lists x 1000 nodes): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

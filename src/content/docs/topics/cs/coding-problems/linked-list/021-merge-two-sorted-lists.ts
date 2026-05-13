@@ -35,11 +35,11 @@ function _runTests(): void {
     assert(JSON.stringify(toList(mergeTwoLists(fromList([1,3,5]), null))) === JSON.stringify([1,3,5]));
     assert(JSON.stringify(toList(mergeTwoLists(fromList([1,2,3]), fromList([4,5,6,7])))) === JSON.stringify([1,2,3,4,5,6,7]));
     // perf
-    const head1 = fromList(Array.from({ length: 1000 }, (_, i) => i * 2));
-    const head2 = fromList(Array.from({ length: 1000 }, (_, i) => i * 2 + 1));
+    const head1 = fromList(Array.from({ length: 100_000 }, (_, i) => i * 2));
+    const head2 = fromList(Array.from({ length: 100_000 }, (_, i) => i * 2 + 1));
     const t0 = performance.now();
     mergeTwoLists(head1, head2);
-    console.log(`perf mergeTwoLists(1000 nodes each): ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf mergeTwoLists(100000 nodes each): ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

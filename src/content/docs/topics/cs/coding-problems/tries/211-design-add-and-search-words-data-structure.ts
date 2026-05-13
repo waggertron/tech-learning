@@ -31,14 +31,14 @@ function _runTests(): void {
     assert(wd.search('....') === false);
     // perf
     const chars = 'abcdefghijklmnopqrstuvwxyz';
-    const words = Array.from({ length: 1000 }, (_, i) =>
+    const words = Array.from({ length: 100_000 }, (_, i) =>
         Array.from({ length: 5 + (i % 6) }, (_, j) => chars[(i * 7 + j) % 26]).join('')
     );
     const bigWd = new WordDictionary();
     const t0 = performance.now();
     words.forEach(w => bigWd.addWord(w));
     words.forEach(w => bigWd.search(w));
-    console.log(`perf WordDictionary 1000 words: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf WordDictionary 100000 words: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

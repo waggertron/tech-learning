@@ -23,10 +23,10 @@ function _runTests(): void {
     const r5 = groupAnagrams(['a', 'b', 'c']);
     assert(JSON.stringify(normalize(r5)) === JSON.stringify([['a'], ['b'], ['c']]));
     // perf
-    const big = Array.from({ length: 10000 }, (_, i) => 'a'.repeat((i % 5) + 1));
+    const big = Array.from({ length: 500_000 }, (_, i) => 'a'.repeat((i % 5) + 1));
     const t0 = performance.now();
     groupAnagrams(big);
-    console.log(`perf groupAnagrams n=10000 strings: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf groupAnagrams n=500000 strings: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

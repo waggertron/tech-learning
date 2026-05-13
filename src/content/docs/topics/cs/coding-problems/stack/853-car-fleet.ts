@@ -14,8 +14,8 @@ function _runTests(): void {
     assert(carFleet(10, [6, 8], [3, 2]) === 2);
     // perf
     const t0 = performance.now();
-    carFleet(5001, Array.from({ length: 5000 }, (_, i) => i), new Array(5000).fill(1));
-    console.log(`perf 5000-car fleet: ${(performance.now() - t0).toFixed(1)}ms`);
+    carFleet(500_001, Array.from({ length: 500_000 }, (_, i) => i), new Array(500_000).fill(1));
+    console.log(`perf 500000-car fleet: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 
