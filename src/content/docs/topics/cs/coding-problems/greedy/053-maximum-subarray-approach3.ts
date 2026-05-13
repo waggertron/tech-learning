@@ -1,0 +1,22 @@
+function assert(condition: boolean, msg: string = ''): void {
+    if (!condition) throw new Error(msg || 'Assertion failed');
+}
+
+function maxSubarray(nums: number[]): number {
+    let best = nums[0];
+    let cur = nums[0];
+    for (let i = 1; i < nums.length; i++) {
+        const x = nums[i];
+        cur = Math.max(x, cur + x);
+        best = Math.max(best, cur);
+    }
+    return best;
+}
+
+assert(maxSubarray([-2, 1, -3, 4, -1, 2, 1, -5, 4]) === 6);
+assert(maxSubarray([1]) === 1);
+assert(maxSubarray([5, 4, -1, 7, 8]) === 23);
+assert(maxSubarray([-1]) === -1);
+assert(maxSubarray([-2, -3, -1, -5]) === -1);
+assert(maxSubarray([1, 2, 3, 4, 5]) === 15);
+console.log("all tests pass");

@@ -5,11 +5,16 @@ parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, greedy, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './011-container-with-most-water.py?raw';
+import practiceCodeTs from './011-container-with-most-water.ts?raw';
+import approach2PyCode from './011-container-with-most-water-approach2.py?raw';
+import approach2TsCode from './011-container-with-most-water-approach2.ts?raw';
 
 ## Problem
 
@@ -25,12 +30,21 @@ LeetCode 11 · [Link](https://leetcode.com/problems/container-with-most-water/) 
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="container-with-most-water" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="container-with-most-water-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="container-with-most-water-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, every pair
 
 Check every `(l, r)` pair and track the max area.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_area(height: list[int]) -> int:
     n = len(height)                                    # L1: O(1)
@@ -41,6 +55,23 @@ def max_area(height: list[int]) -> int:
             best = max(best, area)                     # L6: O(1) update
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxArea(height: number[]): number {
+    const n = height.length;                           // L1: O(1)
+    let best = 0;                                      // L2: O(1)
+    for (let l = 0; l < n; l++) {                     // L3: outer loop, n iterations
+        for (let r = l + 1; r < n; r++) {             // L4: inner loop, n-l-1 iterations
+            const area = Math.min(height[l], height[r]) * (r - l); // L5: O(1) area
+            best = Math.max(best, area);               // L6: O(1) update
+        }
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -64,6 +95,8 @@ Too slow for `n ≤ 10⁵`.
 
 Start with pointers at both ends. Compute the area; then move the pointer with the **shorter** height inward. Continue until the pointers meet.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_area(height: list[int]) -> int:
     l, r = 0, len(height) - 1           # L1: O(1) init pointers
@@ -77,6 +110,23 @@ def max_area(height: list[int]) -> int:
             r -= 1                       # L8: O(1) advance right
     return best
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxArea(height: number[]): number {
+    let l = 0, r = height.length - 1;   // L1: O(1) init pointers
+    let best = 0;                        // L2: O(1)
+    while (l < r) {                      // L3: loop, at most n iterations total
+        const area = Math.min(height[l], height[r]) * (r - l); // L4: O(1) area
+        best = Math.max(best, area);     // L5: O(1) update
+        if (height[l] < height[r]) l++; // L6/L7: O(1) advance left
+        else r--;                        // L8: O(1) advance right
+    }
+    return best;
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -98,6 +148,17 @@ Each iteration advances either `l` or `r` by one; together they start n-1 apart 
 ### Why it's correct (proof sketch)
 At each step the container has width `r - l` and height `min(height[l], height[r])`. Moving the **taller** side inward can never produce a larger area with the current shorter side, the width shrinks while the height can't exceed the current shorter side. Therefore the shorter side can only limit future answers in combination with itself, and we can safely discard it by moving its pointer. This preserves the optimum in the remaining search space.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="container-with-most-water-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="container-with-most-water-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -109,6 +170,8 @@ This is a case where the problem jumps from O(n²) brute force straight to O(n) 
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_container_with_most_water.py and run.
 # Uses the canonical implementation (Approach 2: two pointers).
@@ -136,6 +199,30 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxArea(height: number[]): number {
+    let l = 0, r = height.length - 1;
+    let best = 0;
+    while (l < r) {
+        const area = Math.min(height[l], height[r]) * (r - l);
+        best = Math.max(best, area);
+        if (height[l] < height[r]) l++;
+        else r--;
+    }
+    return best;
+}
+
+console.assert(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]) === 49);
+console.assert(maxArea([1, 1]) === 1);
+console.assert(maxArea([1, 2, 1]) === 2);
+console.assert(maxArea([4, 3, 2, 1, 4]) === 16);
+console.assert(maxArea([1, 2, 4, 3]) === 4);
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 

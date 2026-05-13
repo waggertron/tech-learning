@@ -5,11 +5,18 @@ parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-05-12
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import practiceCode from './167-two-sum-ii.py?raw';
+import practiceCodeTs from './167-two-sum-ii.ts?raw';
+import approach2PyCode from './167-two-sum-ii-approach2.py?raw';
+import approach2TsCode from './167-two-sum-ii-approach2.ts?raw';
+import approach3PyCode from './167-two-sum-ii-approach3.py?raw';
+import approach3TsCode from './167-two-sum-ii-approach3.ts?raw';
 
 ## Problem
 
@@ -25,10 +32,19 @@ LeetCode 167 · [Link](https://leetcode.com/problems/two-sum-ii-input-array-is-s
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="two-sum-ii" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="two-sum-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="two-sum-ii-ts" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, try every pair
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def two_sum(numbers: list[int], target: int) -> list[int]:
     n = len(numbers)                                    # L1: O(1)
@@ -38,6 +54,22 @@ def two_sum(numbers: list[int], target: int) -> list[int]:
                 return [i + 1, j + 1]                   # L5: O(1) return (1-indexed)
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(numbers: number[], target: number): number[] {
+    const n = numbers.length;                           // L1: O(1)
+    for (let i = 0; i < n; i++) {                      // L2: outer loop, n iterations
+        for (let j = i + 1; j < n; j++) {              // L3: inner loop
+            if (numbers[i] + numbers[j] === target)    // L4: O(1) check
+                return [i + 1, j + 1];                 // L5: O(1) return (1-indexed)
+        }
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -59,6 +91,8 @@ Ignores that the array is sorted, so this is strictly worse than it needs to be.
 
 Since the array is sorted, you can binary-search for `target - numbers[i]` in the suffix.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from bisect import bisect_left
 
@@ -71,6 +105,31 @@ def two_sum(numbers: list[int], target: int) -> list[int]:
             return [i + 1, j + 1]                       # L6: O(1) return
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function bisectLeft(nums: number[], target: number, lo: number, hi: number): number {
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (nums[mid] < target) lo = mid + 1;
+        else hi = mid;
+    }
+    return lo;
+}
+
+function twoSum(numbers: number[], target: number): number[] {
+    const n = numbers.length;                           // L1: O(1)
+    for (let i = 0; i < n; i++) {                      // L2: outer loop, n iterations
+        const need = target - numbers[i];              // L3: O(1) complement
+        const j = bisectLeft(numbers, need, i + 1, n); // L4: O(log n) binary search
+        if (j < n && numbers[j] === need)              // L5: O(1) verify
+            return [i + 1, j + 1];                     // L6: O(1) return
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -88,10 +147,23 @@ def two_sum(numbers: list[int], target: int) -> list[int]:
 
 Uses the sort structure, but not optimally.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="two-sum-ii-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="two-sum-ii-approach2-ts" />
+  </TabItem>
+</Tabs>
+
 ## Approach 3: Two pointers from both ends (optimal)
 
 Start with pointers at both ends. If the sum is too small, move the left pointer right (increase sum). If too large, move the right pointer left (decrease sum). This works exactly because the array is sorted.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def two_sum(numbers: list[int], target: int) -> list[int]:
     l, r = 0, len(numbers) - 1           # L1: O(1) init pointers
@@ -105,6 +177,23 @@ def two_sum(numbers: list[int], target: int) -> list[int]:
             r -= 1                        # L8: O(1) advance right
     return []
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(numbers: number[], target: number): number[] {
+    let l = 0, r = numbers.length - 1;   // L1: O(1) init pointers
+    while (l < r) {                       // L2: at most n iterations
+        const s = numbers[l] + numbers[r]; // L3: O(1) sum
+        if (s === target)                 // L4: O(1) check
+            return [l + 1, r + 1];        // L5: O(1) return (1-indexed)
+        if (s < target) l++;             // L6/L7: O(1) advance left
+        else r--;                        // L8: O(1) advance right
+    }
+    return [];
+}
+```
+</TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -126,6 +215,17 @@ Each iteration advances either `l` or `r` by one; they start n-1 apart and meet,
 
 At any point, `numbers[l] + numbers[r]` is the sum under consideration. If it's too small, `numbers[l]` can't be part of any valid pair with *any* remaining right value, moving `l` right is safe. Symmetric argument for moving `r` left. So the pair, if it exists, must be found during the walk.
 
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="two-sum-ii-approach3-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach3TsCode} id="two-sum-ii-approach3-ts" />
+  </TabItem>
+</Tabs>
+
 ## Summary
 
 | Approach | Time | Space |
@@ -138,6 +238,8 @@ The two-pointer approach is the standard answer. Generalizes directly to 3Sum an
 
 ## Test cases
 
+<Tabs>
+<TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_two_sum_ii.py and run.
 # Uses the canonical implementation (Approach 3: two pointers).
@@ -165,6 +267,29 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
 ```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function twoSum(numbers: number[], target: number): number[] {
+    let l = 0, r = numbers.length - 1;
+    while (l < r) {
+        const s = numbers[l] + numbers[r];
+        if (s === target) return [l + 1, r + 1];
+        if (s < target) l++;
+        else r--;
+    }
+    return [];
+}
+
+console.assert(JSON.stringify(twoSum([2, 7, 11, 15], 9)) === JSON.stringify([1, 2]));
+console.assert(JSON.stringify(twoSum([2, 3, 4], 6)) === JSON.stringify([1, 3]));
+console.assert(JSON.stringify(twoSum([3, 3], 6)) === JSON.stringify([1, 2]));
+console.assert(JSON.stringify(twoSum([1, 2, 3, 4, 5], 9)) === JSON.stringify([4, 5]));
+console.assert(JSON.stringify(twoSum([-3, -1, 0, 2, 4], 1)) === JSON.stringify([1, 5]));
+console.log('all tests pass');
+```
+</TabItem>
+</Tabs>
 
 ## Related data structures
 
