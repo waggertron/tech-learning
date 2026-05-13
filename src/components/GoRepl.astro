@@ -1,0 +1,368 @@
+---
+interface Props {
+  code: string;
+  id?: string;
+}
+const { code, id = 'gorepl' } = Astro.props;
+const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="gorepl not-content" data-repl-id={replId} data-original={code}>
+  <div class="gorepl__header">
+    <div class="gorepl__btn-group">
+      <button class="gorepl__run" type="button">▶ Run Go</button>
+      <button class="gorepl__reset" type="button" title="Reset to original">↻ Reset</button>
+    </div>
+    <span class="gorepl__status" data-status>idle</span>
+  </div>
+  <div class="gorepl__editor-host" data-editor></div>
+  <pre class="gorepl__output" data-output>Click <strong>Run Go</strong> to execute. Runs via the Go Playground API.</pre>
+  <div class="gorepl__timing" data-timing></div>
+</div>
+
+<script>
+  import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
+  import { EditorState } from '@codemirror/state';
+  import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands';
+  import { go } from '@codemirror/lang-go';
+  import { oneDark } from '@codemirror/theme-one-dark';
+  import {
+    syntaxHighlighting,
+    defaultHighlightStyle,
+    indentOnInput,
+    bracketMatching,
+    indentUnit,
+  } from '@codemirror/language';
+  import {
+    autocompletion,
+    completionKeymap,
+    closeBrackets,
+    closeBracketsKeymap,
+  } from '@codemirror/autocomplete';
+
+  const GO_PLAYGROUND_URL = 'https://go.dev/play/compile?version=2';
+
+  interface RunResult {
+    lines: string[];
+    ms: number;
+    error: boolean;
+  }
+
+  async function runGo(code: string): Promise<RunResult> {
+    const t0 = performance.now();
+    let resp: Response;
+    try {
+      resp = await fetch(GO_PLAYGROUND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ body: code, version: 2 }),
+      });
+    } catch (e: any) {
+      return { lines: [`Network error: ${e?.message ?? e}`], ms: 0, error: true };
+    }
+
+    const ms = performance.now() - t0;
+    if (!resp.ok) {
+      return { lines: [`HTTP ${resp.status}: ${resp.statusText}`], ms, error: true };
+    }
+
+    const data = await resp.json();
+    if (data.Errors) {
+      return { lines: [data.Errors], ms, error: true };
+    }
+    const lines: string[] = (data.Events ?? []).map((e: any) => e.Message as string);
+    return { lines, ms, error: false };
+  }
+
+  // Build an import block by merging packages from the scaffold with
+  // packages detected in the approach function code.
+  function buildGoImports(scaffold: string, approachCode: string): string {
+    const pkgs = new Set<string>();
+
+    const multi = scaffold.match(/^import\s*\(([\s\S]*?)\)/m);
+    if (multi) {
+      for (const m of multi[1].matchAll(/"([^"]+)"/g)) pkgs.add(`"${m[1]}"`);
+    } else {
+      const single = scaffold.match(/^import\s+"([^"]+)"/m);
+      if (single) pkgs.add(`"${single[1]}"`);
+    }
+
+    // Detect packages used in the approach function.
+    if (/\bfmt\./.test(approachCode))     pkgs.add('"fmt"');
+    if (/\bsort\./.test(approachCode))    pkgs.add('"sort"');
+    if (/\bstrings\./.test(approachCode)) pkgs.add('"strings"');
+    if (/\bstrconv\./.test(approachCode)) pkgs.add('"strconv"');
+    if (/\bmath\./.test(approachCode))    pkgs.add('"math"');
+
+    if (pkgs.size === 0) return '';
+    if (pkgs.size === 1) return `import ${[...pkgs][0]}`;
+    return `import (\n\t${[...pkgs].join('\n\t')}\n)`;
+  }
+
+  const tightLines = EditorView.theme({
+    '&': { fontSize: '0.85rem' },
+    '.cm-content': {
+      lineHeight: '1.4',
+      padding: '4px 0',
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    },
+    '.cm-line': { lineHeight: '1.4', padding: '0 4px', margin: '0' },
+    '.cm-gutters': { borderRight: 'none' },
+    '.cm-gutterElement': { lineHeight: '1.4', padding: '0 8px 0 4px', margin: '0' },
+    '.cm-scroller': { lineHeight: '1.4' },
+  });
+
+  function makeEditor(host: HTMLElement, initialCode: string): EditorView {
+    return new EditorView({
+      doc: initialCode,
+      extensions: [
+        lineNumbers(),
+        highlightActiveLine(),
+        history(),
+        indentOnInput(),
+        bracketMatching(),
+        closeBrackets(),
+        indentUnit.of('\t'),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        go(),
+        autocompletion({ activateOnTyping: true }),
+        oneDark,
+        tightLines,
+        keymap.of([
+          indentWithTab,
+          ...closeBracketsKeymap,
+          ...completionKeymap,
+          ...defaultKeymap,
+          ...historyKeymap,
+        ]),
+        EditorState.tabSize.of(4),
+      ],
+      parent: host,
+    });
+  }
+
+  function attachRepl(root: HTMLElement) {
+    const runBtn    = root.querySelector<HTMLButtonElement>('.gorepl__run')!;
+    const resetBtn  = root.querySelector<HTMLButtonElement>('.gorepl__reset')!;
+    const host      = root.querySelector<HTMLElement>('[data-editor]')!;
+    const output    = root.querySelector<HTMLElement>('[data-output]')!;
+    const timing    = root.querySelector<HTMLElement>('[data-timing]')!;
+    const status    = root.querySelector<HTMLElement>('[data-status]')!;
+    const original  = root.dataset.original ?? '';
+
+    const runtimes: number[] = [];
+    const view = makeEditor(host, original);
+
+    const panel = host.closest('[role="tabpanel"]');
+    if (panel) {
+      new MutationObserver(() => {
+        if (!(panel as HTMLElement).hasAttribute('hidden')) view.requestMeasure();
+      }).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+    }
+
+    resetBtn.addEventListener('click', () => {
+      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: original } });
+      output.textContent = '(reset)';
+      status.textContent = 'idle';
+      timing.textContent = '';
+    });
+
+    runBtn.addEventListener('click', async () => {
+      runBtn.disabled = true;
+      output.textContent = '';
+      timing.textContent = '';
+      status.textContent = 'running…';
+
+      const code = view.state.doc.toString();
+      const result = await runGo(code);
+
+      output.textContent = result.lines.length > 0 ? result.lines.join('') : '(no output)';
+      status.textContent = result.error ? 'error' : 'done';
+
+      if (!result.error) {
+        runtimes.push(result.ms);
+        const avg = runtimes.reduce((a, b) => a + b, 0) / runtimes.length;
+        timing.textContent = runtimes.length === 1
+          ? `Round-trip: ${result.ms.toFixed(0)}ms`
+          : `Round-trip: ${result.ms.toFixed(0)}ms  |  avg ${avg.toFixed(0)}ms over ${runtimes.length} runs`;
+      }
+      runBtn.disabled = false;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('.gorepl').forEach(attachRepl);
+
+  // Attach "▶ Run Go" buttons to Go code blocks.
+  function attachGoCodeBlockRunner(figure: HTMLElement) {
+    const pre = figure.querySelector<HTMLElement>('pre[data-language="go"]');
+    if (!pre) return;
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-run-toolbar';
+
+    const runBtn = document.createElement('button');
+    runBtn.className = 'code-run-btn go-run-btn';
+    runBtn.textContent = '▶ Run Go';
+    toolbar.append(runBtn);
+
+    const statusEl = document.createElement('span');
+    statusEl.className = 'code-run-status';
+    toolbar.append(statusEl);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-run-output';
+    wrapper.hidden = true;
+    const outputEl = document.createElement('pre');
+    outputEl.className = 'code-run-output__text';
+    const timingEl = document.createElement('div');
+    timingEl.className = 'code-run-output__timing';
+    wrapper.append(outputEl, timingEl);
+
+    const ec = figure.closest('.expressive-code') ?? figure;
+    ec.before(toolbar);
+    ec.after(wrapper);
+
+    const runtimes: number[] = [];
+
+    runBtn.addEventListener('click', async () => {
+      const codeText = pre.innerText.trim();
+
+      // If the block is already a complete Go program, send as-is.
+      // Otherwise wrap it with the scaffold's helpers and test runner.
+      let code: string;
+      if (codeText.startsWith('package ')) {
+        code = codeText;
+      } else {
+        const scaffold = document.querySelector<HTMLElement>('.gorepl[data-original]')?.dataset.original ?? '';
+        const assertFn = scaffold.match(/func assert\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
+        const testsFn  = scaffold.match(/func runTests\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
+        const imports  = buildGoImports(scaffold, codeText);
+
+        code = [
+          'package main',
+          imports,
+          assertFn,
+          codeText,
+          testsFn,
+          'func main() { runTests() }',
+        ].filter(Boolean).join('\n\n');
+      }
+
+      runBtn.disabled = true;
+      statusEl.textContent = 'running…';
+      outputEl.textContent = '';
+      timingEl.textContent = '';
+      wrapper.hidden = false;
+
+      const result = await runGo(code);
+      outputEl.textContent = result.lines.length > 0 ? result.lines.join('') : '(no output)';
+      statusEl.textContent = result.error ? 'error' : 'done';
+
+      if (!result.error) {
+        runtimes.push(result.ms);
+        const avg = runtimes.reduce((a, b) => a + b, 0) / runtimes.length;
+        timingEl.textContent = runtimes.length === 1
+          ? `Round-trip: ${result.ms.toFixed(0)}ms`
+          : `Round-trip: ${result.ms.toFixed(0)}ms  |  avg ${avg.toFixed(0)}ms over ${runtimes.length} runs`;
+      }
+      runBtn.disabled = false;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('figure.frame').forEach(attachGoCodeBlockRunner);
+</script>
+
+<style>
+  .gorepl {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    margin: 1.25rem 0;
+    overflow: hidden;
+    background: var(--sl-color-bg);
+  }
+  .gorepl__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--sl-color-gray-6);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+  .gorepl__btn-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .gorepl__run, .gorepl__reset {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--sl-color-gray-4);
+    background: var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+    padding: 0.35rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .gorepl__run {
+    background: #00ADD8;
+    color: white;
+    border-color: transparent;
+  }
+  .gorepl__run:disabled { opacity: 0.6; cursor: wait; }
+  .gorepl__status {
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .gorepl__editor-host {
+    min-height: 280px;
+    max-height: 560px;
+    overflow: auto;
+  }
+  .gorepl__editor-host :global(.cm-editor) {
+    height: 100%;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .gorepl__editor-host :global(.cm-editor.cm-focused) { outline: none; }
+  .gorepl__editor-host :global(.cm-scroller) { line-height: 1.4; }
+  .gorepl__editor-host :global(.cm-content),
+  .gorepl__editor-host :global(.cm-content > *),
+  .gorepl__editor-host :global(.cm-line),
+  .gorepl__editor-host :global(.cm-gutter),
+  .gorepl__editor-host :global(.cm-gutterElement) {
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .gorepl__editor-host :global(.cm-line) { padding: 0 4px; }
+  .gorepl__editor-host :global(.cm-gutterElement) { line-height: 1.4; }
+  .gorepl__output {
+    margin: 0;
+    padding: 0.75rem;
+    background: var(--sl-color-black, #0d0d0d);
+    color: var(--sl-color-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    border-top: 1px solid var(--sl-color-gray-5);
+    max-height: 280px;
+    overflow: auto;
+    white-space: pre-wrap;
+  }
+  .gorepl__timing {
+    padding: 0.35rem 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    background: var(--sl-color-black, #0d0d0d);
+    border-top: 1px solid var(--sl-color-gray-6);
+    min-height: 0;
+  }
+  .gorepl__timing:empty { display: none; }
+</style>

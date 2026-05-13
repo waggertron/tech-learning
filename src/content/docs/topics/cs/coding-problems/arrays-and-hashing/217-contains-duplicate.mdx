@@ -11,12 +11,16 @@ updated: 2026-04-23
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './217-contains-duplicate.py?raw';
 import practiceCodeTs from './217-contains-duplicate.ts?raw';
+import practiceCodeGo from './217-contains-duplicate.go?raw';
 import approach2PyCode from './217-contains-duplicate-approach2.py?raw';
 import approach2TsCode from './217-contains-duplicate-approach2.ts?raw';
+import approach2GoCode from './217-contains-duplicate-approach2.go?raw';
 import approach3PyCode from './217-contains-duplicate-approach3.py?raw';
 import approach3TsCode from './217-contains-duplicate-approach3.ts?raw';
+import approach3GoCode from './217-contains-duplicate-approach3.go?raw';
 
 ## Problem
 
@@ -37,6 +41,9 @@ LeetCode 217 · [Link](https://leetcode.com/problems/contains-duplicate/) · *Ea
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="contains-duplicate-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="contains-duplicate-go" />
   </TabItem>
 </Tabs>
 
@@ -66,6 +73,21 @@ function containsDuplicate(nums: number[]): boolean {
         }
     }
     return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func containsDuplicate(nums []int) bool {
+	n := len(nums)                             // L1: O(1)
+	for i := 0; i < n; i++ {                  // L2: outer loop, n iterations
+		for j := i + 1; j < n; j++ {          // L3: inner loop, up to n-i-1 iterations
+			if nums[i] == nums[j] {            // L4: O(1) comparison
+				return true                    // L5: O(1) early return
+			}
+		}
+	}
+	return false
 }
 ```
 </TabItem>
@@ -116,6 +138,19 @@ function containsDuplicate(nums: number[]): boolean {
 }
 ```
 </TabItem>
+<TabItem label="Go">
+```go
+func containsDuplicate(nums []int) bool {
+	sorted := make([]int, len(nums))
+	copy(sorted, nums)
+	sort.Ints(sorted)                                  // L1: O(n log n)
+	for i := 1; i < len(sorted); i++ {                // L2: loop, n-1 iterations
+		if sorted[i] == sorted[i-1] { return true }   // L3-L4: O(1) comparison + return
+	}
+	return false
+}
+```
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -145,6 +180,9 @@ Improvement: we dropped one order of growth. Worth knowing as an alternative whe
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="contains-duplicate-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="contains-duplicate-approach2-go" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Hash set (optimal)
@@ -172,6 +210,20 @@ function containsDuplicate(nums: number[]): boolean {
         seen.add(x);                   // L5: O(1) avg set insert
     }
     return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func containsDuplicate(nums []int) bool {
+	seen := make(map[int]struct{})     // L1: O(1) empty map
+	for _, x := range nums {           // L2: loop, n iterations
+		if _, ok := seen[x]; ok {      // L3: O(1) avg map lookup
+			return true                // L4: O(1) early return
+		}
+		seen[x] = struct{}{}           // L5: O(1) avg map insert
+	}
+	return false
 }
 ```
 </TabItem>
@@ -212,6 +264,9 @@ def contains_duplicate(nums: list[int]) -> bool:
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="contains-duplicate-approach3-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="contains-duplicate-approach3-go" />
   </TabItem>
 </Tabs>
 
@@ -272,6 +327,32 @@ console.assert(containsDuplicate([]) === false);
 console.assert(containsDuplicate([5]) === false);
 console.assert(containsDuplicate([5, 5]) === true);
 console.log("all tests pass");
+```
+</TabItem>
+<TabItem label="Go">
+```go
+package main
+
+import "fmt"
+
+func containsDuplicate(nums []int) bool {
+	seen := make(map[int]struct{})
+	for _, x := range nums {
+		if _, ok := seen[x]; ok { return true }
+		seen[x] = struct{}{}
+	}
+	return false
+}
+
+func main() {
+	if !containsDuplicate([]int{1, 2, 3, 1})           { panic("test 1") }
+	if containsDuplicate([]int{1, 2, 3, 4})             { panic("test 2") }
+	if !containsDuplicate([]int{1, 1, 1, 3, 3, 4, 3, 2, 4, 2}) { panic("test 3") }
+	if containsDuplicate([]int{})                       { panic("test 4") }
+	if containsDuplicate([]int{5})                      { panic("test 5") }
+	if !containsDuplicate([]int{5, 5})                  { panic("test 6") }
+	fmt.Println("all tests pass")
+}
 ```
 </TabItem>
 </Tabs>
