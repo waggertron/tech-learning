@@ -16,5 +16,6 @@ description: Topics in artificial intelligence, prompt engineering, harness deve
 - [LLM reasoning benchmarks and metrics](./benchmarks/): 8-part series on what the leaderboard numbers actually mean
 - [AI text tells](./ai-text-markers/): the patterns that reveal LLM-generated text and the training dynamics that produce each one
 - [LLMs vs. agentic AI vs. AI agents](./llm-vs-agentic-ai/): three distinct concepts: the base model, the loop-plus-tools architectural pattern, and specific implementations
+- [Deep Learn skill](./deep-learn-skill/): a Claude Code skill implementing 15 learning science patterns for durable retention of any knowledge base
 
 Each topic has a hub overview, subtopics for deeper dives, and references to authoritative external resources.
