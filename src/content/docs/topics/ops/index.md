@@ -7,7 +7,12 @@ description: The disciplines that turn working code into running systems, Kubern
 
 ### Platform
 
+- [Docker](./docker/), the container runtime: images, containers, volumes, Compose, Dockerfile best practices, and the relationship to Kubernetes
 - [Kubernetes](./kubernetes/), the container orchestrator: architecture, workloads, networking, storage, RBAC, autoscaling, footguns
+  - [Networking](./kubernetes/networking/), pod network model, CNI, kube-proxy, CoreDNS, NetworkPolicy
+  - [Security Hardening](./kubernetes/security/), Pod Security Standards, admission controllers, RBAC lockdown, secrets
+  - [Troubleshooting](./kubernetes/troubleshooting/), systematic debugging for every common failure mode
+  - [Workloads Reference](./kubernetes/workloads/), Deployment, StatefulSet, DaemonSet, Job, CronJob, probes, resource management
 - [Helm](./helm/), the package manager for Kubernetes: charts, values, templates, releases, OCI distribution
 - [Terraform](./terraform/), infrastructure as code: providers, resources, state, modules, multi-environment patterns
 

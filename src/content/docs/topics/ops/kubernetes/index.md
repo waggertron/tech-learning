@@ -456,8 +456,16 @@ That's the baseline. Everything beyond (service mesh, multi-cluster federation, 
 - [Gateway API spec](https://gateway-api.sigs.k8s.io/)
 - [Karpenter](https://karpenter.sh/), node autoscaling on AWS
 
+## Subtopics
+
+- [Networking](./networking/), the pod network model, CNI plugins, kube-proxy, CoreDNS, and NetworkPolicy
+- [Security Hardening](./security/), Pod Security Standards, admission controllers, RBAC, secrets, and image supply chain
+- [Troubleshooting](./troubleshooting/), systematic kubectl-based debugging for every common failure mode
+- [Workloads Reference](./workloads/), deep coverage of Deployment, StatefulSet, DaemonSet, Job, CronJob, probes, and resource management
+
 ## Related topics
 
+- [Docker](../docker/), building and running containers that Kubernetes orchestrates
 - [Helm](../helm/), the package manager for Kubernetes
 - [Terraform](../terraform/), provisioning the cluster itself
 - [GitOps](../gitops/), deploying into the cluster declaratively

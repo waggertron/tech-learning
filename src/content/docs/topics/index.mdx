@@ -215,7 +215,12 @@ Topics are the durable knowledge base. Each topic lives at `topics/<category>/<s
 ## Operations
 
 - [Ops, category overview](./ops/)
+- [Docker](./ops/docker/), the container runtime: images, containers, volumes, Compose, Dockerfile best practices
 - [Kubernetes](./ops/kubernetes/), the container orchestrator: architecture, workloads, networking, storage, RBAC, autoscaling, footguns
+  - [Networking](./ops/kubernetes/networking/), pod network model, CNI, kube-proxy, CoreDNS, NetworkPolicy
+  - [Security Hardening](./ops/kubernetes/security/), Pod Security Standards, admission controllers, RBAC lockdown, secrets
+  - [Troubleshooting](./ops/kubernetes/troubleshooting/), systematic debugging for every common failure mode
+  - [Workloads Reference](./ops/kubernetes/workloads/), Deployment, StatefulSet, DaemonSet, Job, CronJob, probes, resource management
 - [Helm](./ops/helm/), the package manager for Kubernetes: charts, values, templates, releases
 - [Terraform](./ops/terraform/), infrastructure as code: providers, resources, state, modules, multi-environment patterns
 - [GitOps](./ops/gitops/), Git as the source of truth for infrastructure, with a reconciliation agent doing the work
