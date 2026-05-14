@@ -28,15 +28,27 @@ pnpm-debug.log*
 # local AI workspace (not versioned, not published)
 CLAUDE.md
 .claude/*
-# exceptions: publish the quiz and learning skills (reusable; not personal data)
+# exceptions: publish reusable skills (not personal data)
 !.claude/skills/
 .claude/skills/*
 !.claude/skills/quiz/
 !.claude/skills/learning/
+!.claude/skills/authoring/
+!.claude/skills/writing-style/
+!.claude/skills/prose-cleanup/
+!.claude/skills/deep-learn/
 .claude/skills/quiz/*
 !.claude/skills/quiz/SKILL.md
 .claude/skills/learning/*
 !.claude/skills/learning/SKILL.md
+.claude/skills/authoring/*
+!.claude/skills/authoring/SKILL.md
+.claude/skills/writing-style/*
+!.claude/skills/writing-style/SKILL.md
+.claude/skills/prose-cleanup/*
+!.claude/skills/prose-cleanup/SKILL.md
+.claude/skills/deep-learn/*
+!.claude/skills/deep-learn/SKILL.md
 __pycache__/
 
 # local research notes (not published)
