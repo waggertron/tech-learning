@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 You have an object whose state matters to other parts of the system, but you do not want it to know anything specific about those dependents. The naive approach is to call each dependent directly, which creates tight coupling: the subject needs to import and call every listener, adding a new subscriber requires changing the subject, and removing one requires hunting down the call site.
@@ -47,7 +49,10 @@ classDiagram
 - You are building an event bus, a reactive UI layer, or any publish/subscribe system.
 - You need to decouple a domain object from logging, metrics, or notification side effects.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 TypeScript's type system makes it straightforward to build a generic `EventEmitter` that carries typed payloads per event name. The `Events` type parameter is a record mapping event names to their payload types, so misspelled event names or wrong payload shapes are caught at compile time.
 
@@ -102,7 +107,8 @@ market.emit('priceChange', { symbol: 'AAPL', price: 186.0 });
 // (only alert observer fires now)
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Python's `defaultdict` removes the boilerplate of checking whether a key exists before appending. The `off` method uses identity comparison (`is not`) rather than equality, so two listeners that happen to do the same thing are not confused with each other.
 
@@ -153,7 +159,8 @@ market.emit('price_change', symbol='AAPL', price=186.0)
 # (only alert fires)
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go's interface-based approach keeps the observer contract explicit without inheritance. The `sync.RWMutex` lets multiple goroutines read the observer list concurrently while `Subscribe` and `Unsubscribe` take an exclusive write lock. `SetPrice` copies the observer slice under a read lock before iterating, so a `Subscribe` call during notification does not corrupt the loop.
 
@@ -240,6 +247,9 @@ func main() {
 	// (only alert fires)
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

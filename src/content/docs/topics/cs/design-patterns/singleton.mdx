@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 Some resources should exist exactly once in a process: the application config, a database connection pool, a shared logger. Creating a second instance of any of these is either wasteful (two pools doing the same work) or incorrect (two configs diverging silently). You need a way to guarantee that no matter how many times a caller asks for the object, they always get the same one.
@@ -38,7 +40,10 @@ classDiagram
 - You need lazy initialization: the instance should not exist until something first requests it.
 - The alternative is passing the same object through many layers of function calls, and that threading cost is higher than the coupling cost of a global.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 Two approaches are shown below. The first is the classic GoF form with a private constructor and a static `getInstance()` method. The second is a module-level instance, which is more idiomatic in TypeScript and Node.js.
 
@@ -100,7 +105,8 @@ export const config = new Config();
 
 The module-level approach is simpler and requires no ceremony. Prefer it unless you need lazy initialization or want to prevent callers from constructing their own instances.
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Three approaches are shown below, from most boilerplate to least.
 
@@ -154,7 +160,8 @@ config = _Config()
 
 The `__new__` override works but is unusual Python. Use it only when you need lazy initialization or subclassing. For everything else, a module-level instance is clearer and avoids the magic.
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 `sync.Once` is the idiomatic Go singleton. It guarantees the initializer runs exactly once even under concurrent access, without locks you have to manage yourself.
 
@@ -213,6 +220,9 @@ func main() {
 ```
 
 Note that `sync.Once` handles the "create once" guarantee, but individual `Get` and `Set` calls still need their own lock (`sync.RWMutex`) to be safe under concurrent reads and writes.
+
+</TabItem>
+</Tabs>
 
 ## When the pattern fits and when it does not
 

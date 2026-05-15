@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 A class needs to perform some operation, but the exact algorithm depends on context: a payment system needs to support credit cards, PayPal, and crypto; a sorter might need to switch between merge sort and radix sort based on input size; a compressor might switch between gzip and brotli based on content type. The straightforward solution is a long `if/else` or `switch` inside the class. That conditional grows with every new algorithm, every branch gets harder to test in isolation, and the class violates the open/closed principle every time you add a variant.
@@ -52,7 +54,10 @@ classDiagram
 - A family of similar classes differs only in behavior. Strategy replaces subclassing with composition.
 - You are accumulating `if/else` branches that select different behaviors based on type or configuration.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 The `Checkout` context takes a `PaymentStrategy` in its constructor and exposes `setStrategy` for runtime swaps. None of the concrete strategy classes know about each other or about `Checkout`.
 
@@ -109,7 +114,8 @@ checkout.processPayment(19.99);
 // Transferred $19.99 worth of BTC to 1A2B3C4D...
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Python duck typing means the abstract base class is optional. The `Protocol` approach used here gives type checkers and IDEs the information they need to catch mismatches without requiring `CreditCard` or `PayPal` to inherit from anything.
 
@@ -166,7 +172,8 @@ checkout.process_payment(49.99)
 # Sent $49.99 via PayPal to user@example.com
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go interfaces are satisfied implicitly, so `CreditCard`, `PayPal`, and `Crypto` implement `PaymentStrategy` without any declaration. A nil strategy panics at call time: initialize `Checkout` with a concrete strategy or add a nil guard in `ProcessPayment`.
 
@@ -217,6 +224,9 @@ func main() {
 	// Transferred $19.99 worth of BTC to 1A2B3C4D...
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

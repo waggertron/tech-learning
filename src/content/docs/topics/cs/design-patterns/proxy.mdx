@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 Sometimes you can't or shouldn't hand a caller a direct reference to a real object. The object might be expensive to create and shouldn't be instantiated until someone actually needs it. It might live in another process or on a remote server. It might require permission checks before any method can run. Or it might benefit from caching so that repeated calls don't repeat expensive work.
@@ -45,7 +47,10 @@ classDiagram
 - Results from the real object can be cached to avoid repeated expensive calls (caching proxy).
 - The real object lives in another process, machine, or service and the caller needs a local stand-in (remote proxy).
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 A virtual proxy defers loading an image from disk until `display()` is first called. Subsequent calls reuse the already-loaded instance.
 
@@ -139,7 +144,8 @@ try {
 }
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Virtual proxy using an abstract base class. The protection proxy follows the same pattern: check a condition before calling `self._real_image`.
 
@@ -188,7 +194,8 @@ image.display()  # uses cached instance
 # Displaying photo.jpg: <image data for photo.jpg>
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 `Image` interface, `RealImage`, and `ImageProxy`. The proxy is assigned to an `Image` variable so the compiler verifies interface satisfaction at the call site.
 
@@ -248,6 +255,9 @@ func main() {
 	image.Display() // uses cached
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## The four proxy types
 

@@ -8,20 +8,23 @@ import Default from '@astrojs/starlight/components/Head.astro';
   import mermaid from 'mermaid';
 
   function renderMermaid() {
-    const blocks = document.querySelectorAll('code.language-mermaid');
-    if (blocks.length === 0) return;
+    const pres = document.querySelectorAll('pre[data-language="mermaid"]');
+    if (pres.length === 0) return;
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     mermaid.initialize({ startOnLoad: false, theme: isDark ? 'dark' : 'default' });
 
-    for (const block of blocks) {
-      const pre = block.parentElement;
-      if (!pre) continue;
-      const code = block.textContent ?? '';
+    for (const pre of pres) {
+      const wrapper = pre.closest('.expressive-code');
+      if (!wrapper) continue;
+
+      const lines = pre.querySelectorAll('.ec-line');
+      const code = Array.from(lines).map(l => l.textContent ?? '').join('\n');
+
       const div = document.createElement('div');
       div.className = 'mermaid-diagram';
       div.textContent = code;
-      pre.replaceWith(div);
+      wrapper.replaceWith(div);
     }
 
     mermaid.run({ nodes: document.querySelectorAll('.mermaid-diagram') });

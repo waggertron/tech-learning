@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 Some applications create enormous numbers of nearly identical objects. A game rendering a forest of 100,000 trees can't afford 100,000 independent objects each carrying the full tree species name, color, and texture data. A text editor displaying a million characters can't store the full font descriptor on every glyph. The memory cost of repeated identical state adds up to something the application can't sustain.
@@ -53,7 +55,10 @@ classDiagram
 - The application does not require each object to have its own unique identity for the shared portion of its state.
 - The extrinsic state can be computed or passed in at call time without burdening callers significantly.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 A `Forest` plants trees using a shared `TreeType` for species data (intrinsic) and per-tree coordinates (extrinsic). Four trees share only two `TreeType` instances.
 
@@ -117,7 +122,8 @@ forest.draw();
 console.log(`TreeType instances: ${TreeTypeFactory.count()}`); // 2, not 4
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Same structure with a module-level `_tree_types` dict acting as the factory cache. The dict key is a tuple of the intrinsic fields, which is hashable and unambiguous.
 
@@ -177,7 +183,8 @@ forest.draw()
 print(f'TreeType instances: {len(_tree_types)}')  # 2, not 4
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 `TreeType` holds the intrinsic state. A `treeTypeFactory` with a mutex-guarded map caches instances. `Tree` and `Forest` hold only extrinsic state.
 
@@ -260,6 +267,9 @@ func main() {
 	fmt.Printf("TreeType instances: %d\n", factory.Count()) // 2, not 4
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

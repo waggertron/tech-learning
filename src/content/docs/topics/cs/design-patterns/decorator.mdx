@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 You have an object that does its job well, and you want to add behavior to it: logging, caching, retries, authentication checks. The obvious route is subclassing, but that leads to a class for every combination. Logging + caching? One subclass. Logging + caching + retries? Another. With four behaviors you're looking at sixteen subclasses before you've written any business logic.
@@ -48,7 +50,10 @@ classDiagram
 - The additional behaviors are optional or composable at runtime rather than fixed at compile time.
 - You want to follow the open/closed principle: extend behavior without modifying existing code.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 `DataService` is the shared interface. `RealDataService` does the actual work. `LoggerDecorator` and `CacheDecorator` each hold a reference to any `DataService` and call through to it. Stack them in any order.
 
@@ -111,7 +116,8 @@ service.fetchData('user:42');
 // [CACHE] hit for "user:42"
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 The class-based decorator below matches the GoF pattern exactly: `DataService` is an abstract base class, and each decorator holds a `_wrapped` reference and delegates to it.
 
@@ -194,7 +200,8 @@ get_user(42)
 
 The `@` syntax wraps a function once at import time. The GoF class decorator wraps an object instance at runtime and can be stacked or removed dynamically. Both are called "decorators" in Python, but they serve different purposes.
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go has no abstract classes. The idiomatic approach is to define an interface, then have each decorator hold a reference to another value of that interface. The compiler verifies that both `LoggerDecorator` and `CacheDecorator` satisfy `DataService`.
 
@@ -261,6 +268,9 @@ func main() {
 	service.FetchData("user:42")
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

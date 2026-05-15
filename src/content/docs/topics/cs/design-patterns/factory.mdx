@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 When call sites instantiate concrete classes directly, they accumulate knowledge they should not have. A module that calls `new EmailNotification(address)` now knows that email notifications exist, how to construct one, and that the constructor takes an address. If you add SMS support, every call site changes. If you want to test with a fake notification, you have to modify the code under test or reach for a mocking library.
@@ -56,7 +58,10 @@ classDiagram
 - A family of related classes shares a creation pattern and you want one authoritative place for that logic.
 - You need extensibility: new types should be addable without touching existing call sites.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 The example first shows a simple factory function, which covers most real-world cases. Then it shows the GoF Factory Method pattern, where `NotificationService` is an abstract class with a protected `createNotification` method that subclasses override. Abstract Factory (a factory of factories) is not shown in full because it compounds the complexity without adding new concepts; use it when you need to produce *families* of related objects consistently.
 
@@ -130,7 +135,8 @@ service.notify('admin@example.com', 'Server alert');
 // Email to admin@example.com: Server alert
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Python uses `abc.ABC` for the `Notification` interface and the abstract `NotificationService`. The simple factory function uses `match` (Python 3.10+) for the dispatch. For older Python, a `dict` mapping type strings to classes is cleaner than an `if/elif` chain.
 
@@ -199,7 +205,8 @@ service.notify('admin@example.com', 'Server alert')
 # Email to admin@example.com: Server alert
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go has no abstract classes. The Factory Method pattern maps to an interface with a `Create` method. The `NotificationService` struct holds a factory and calls it in `Notify`, which is the same structure as the abstract creator in other languages. The simple factory function handles the common case where you just need a concrete object by name.
 
@@ -262,6 +269,9 @@ func main() {
 	// Email to admin@example.com: Server alert
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

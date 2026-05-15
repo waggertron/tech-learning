@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 You have a class that does something useful, but its interface does not match what your application expects. Maybe it is a legacy payment gateway that takes cents as integers and returns error codes, while your new checkout code expects decimal amounts and boolean results. Maybe it is a third-party SDK you cannot modify. Changing the caller is invasive; changing the library is impossible.
@@ -43,7 +45,10 @@ classDiagram
 - You are standardizing multiple external services behind a single interface (for example, adapting three different SMS providers to one `SmsSender` interface).
 - You want to test code that depends on an external system by substituting a stub adapter.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 The `LegacyPaymentGateway` takes cents as an integer and returns a numeric result code. The new `PaymentProcessor` interface takes decimal amounts and returns booleans. The adapter converts between them so client code never sees the legacy details.
 
@@ -94,7 +99,8 @@ processOrder(adapter, 29.99);
 // Payment accepted
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Python's abstract base class makes the target interface explicit. The adapter inherits from `PaymentProcessor` and holds a `LegacyPaymentGateway` as an instance variable. Without the ABC, duck typing would still work, but the ABC gives `isinstance` checks and IDE completions.
 
@@ -145,7 +151,8 @@ process_order(adapter, 29.99)
 # Payment accepted
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go satisfies interfaces implicitly. `LegacyPaymentAdapter` implements `PaymentProcessor` because it has matching `Charge` and `Refund` methods. The compile-time check `var _ PaymentProcessor = (*LegacyPaymentAdapter)(nil)` catches mismatches without running any code.
 
@@ -210,6 +217,9 @@ func main() {
 	// Payment accepted
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

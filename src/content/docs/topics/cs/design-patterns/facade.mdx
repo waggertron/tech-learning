@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 A subsystem often grows into a tangle of interdependent classes, each responsible for one narrow slice of behavior. To accomplish anything useful, a caller has to know the order in which to call them, which state to set on each one, and what to do if any step fails. The caller ends up duplicating that coordination logic everywhere it needs the same workflow.
@@ -55,7 +57,10 @@ classDiagram
 - You are wrapping a legacy system and want to expose a clean surface to new code.
 - You are integrating a third-party library and want to isolate your code from its API changes.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 Four subsystem classes plus a `HomeTheaterFacade` that sequences them into two high-level operations.
 
@@ -135,7 +140,8 @@ theater.endMovie();
 // Lights on
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Same structure using plain classes. The facade takes subsystem instances through its constructor so they can be replaced in tests.
 
@@ -196,7 +202,8 @@ theater.watch_movie('The Matrix')
 theater.end_movie()
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Same structure using structs and methods. The facade holds concrete pointers; swap them for interfaces if you need testability.
 
@@ -261,6 +268,9 @@ func main() {
 	theater.EndMovie()
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

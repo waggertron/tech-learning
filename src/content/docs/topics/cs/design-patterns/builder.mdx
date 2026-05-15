@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 When an object has many optional fields, constructor calls become unreadable. A function with eight parameters forces callers to remember argument order, and most parameters are left as `null` or a default sentinel. The telescoping constructor antipattern is the common symptom: one constructor for every combination of optional fields, each delegating to a longer one. Adding a ninth parameter breaks every call site.
@@ -40,7 +42,10 @@ classDiagram
 - Construction involves validation that only makes sense after all inputs are known (cross-field invariants).
 - You want to prevent callers from holding a partially constructed object and accidentally using it.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 The SQL `QueryBuilder` below accumulates clauses through method chaining. Each setter returns `this`, which lets calls chain. `build()` validates and assembles the final string.
 
@@ -84,7 +89,8 @@ console.log(query);
 // SELECT id, name, email FROM users WHERE active = true AND age > 18 ORDER BY name ASC LIMIT 10
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 Python's `from` is a reserved keyword, so the `from_` method handles that clause. The `__future__` import lets the return type annotation refer to `QueryBuilder` before the class is fully defined.
 
@@ -149,7 +155,8 @@ print(query)
 # SELECT id, name, email FROM users WHERE active = true AND age > 18 ORDER BY name ASC LIMIT 10
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go has no default parameter values, so optional clauses are tracked with explicit fields. The `hasLimit` boolean distinguishes "not set" from `LIMIT 0`. All validation lives in `Build()`, which returns an error rather than panicking.
 
@@ -236,6 +243,9 @@ func main() {
 	// SELECT id, name, email FROM users WHERE active = true AND age > 18 ORDER BY name ASC LIMIT 10
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 

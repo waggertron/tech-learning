@@ -8,6 +8,8 @@ created: 2026-05-15
 updated: 2026-05-15
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 ## The problem
 
 In most applications, user actions and the code that handles them are directly coupled. A button click calls a method. A menu item calls a different method. When you need undo, you realize every action needs a reverse operation, but those reverse operations are scattered across unrelated objects with no shared structure. Logging, queueing, and replaying operations have the same problem: there is no object to log, queue, or replay.
@@ -65,7 +67,10 @@ classDiagram
 - You need an audit log of every action a user or system took, in order and reversible.
 - You want to compose simple commands into macro commands without changing the calling code.
 
-## TypeScript
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
 
 `TextEditor` is the receiver: it owns the content and exposes `insert` and `delete`. Commands wrap operations on the editor and capture enough state to reverse them. `CommandHistory` manages the stack and handles redo by truncating forward history when a new command arrives.
 
@@ -159,7 +164,8 @@ history.execute(new DeleteCommand(editor, 7, 5));
 console.log(editor.getContent()); // Hello, 
 ```
 
-## Python
+</TabItem>
+<TabItem label="Python">
 
 `abc.ABC` with `@abstractmethod` is the idiomatic way to define the `Command` interface in Python. The `DeleteCommand` captures deleted text inside `execute()`, not in `__init__`, because the content to be deleted does not exist yet at construction time.
 
@@ -257,7 +263,8 @@ history.redo()
 print(editor.get_content())  # Hello, world
 ```
 
-## Go
+</TabItem>
+<TabItem label="Go">
 
 Go uses an interface for `Command`. There are no abstract classes, so the interface is the natural fit. String slicing on a raw `string` type works the same way as in TypeScript and Python for this ASCII example. In production code handling Unicode, you would convert to `[]rune` first.
 
@@ -354,6 +361,9 @@ func main() {
 	fmt.Println(editor.GetContent()) // Hello, world
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ## Tradeoffs
 
