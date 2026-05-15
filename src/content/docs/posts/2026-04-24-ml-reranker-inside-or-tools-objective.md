@@ -62,7 +62,7 @@ def train(df, out_path="ranker.pkl"):
     joblib.dump(model, out_path)
 ```
 
-Training data is synthetic for a portfolio project, a seed script simulates 90 days with realistic noise. The model's job isn't to make a revolutionary prediction; it's to make the solver pick "Sarah for Mrs. Chen" over "Jordan for Mrs. Chen" when both are feasible.
+Training data is synthetic for a portfolio project, a seed script simulates 90 days with realistic noise. The model's job isn't to make a revolutionary prediction. It's to make the solver pick "Sarah for Mrs. Chen" over "Jordan for Mrs. Chen" when both are feasible.
 
 ## Loading the model once, scoring in the hot loop
 

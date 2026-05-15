@@ -15,7 +15,7 @@ That's it. The rest is elaboration.
 
 ## Where the advice came from
 
-The Gang of Four's 1994 *[Design Patterns](../topics/cs/design-patterns/)* had it as an explicit principle: *"Favor object composition over class inheritance."* Every pattern in the book uses composition; the ones that use inheritance do so narrowly. Thirty years later the advice has only gotten stronger because frameworks learned the same lesson independently, React, Rust's trait system, Go's struct embedding, all treat inheritance as either absent or heavily constrained.
+The Gang of Four's 1994 *[Design Patterns](../topics/cs/design-patterns/)* had it as an explicit principle: *"Favor object composition over class inheritance."* Every pattern in the book uses composition. The ones that use inheritance do so narrowly. Thirty years later the advice has only gotten stronger because frameworks learned the same lesson independently, React, Rust's trait system, Go's struct embedding, all treat inheritance as either absent or heavily constrained.
 
 ## Why inheritance goes wrong
 
@@ -87,7 +87,7 @@ dog = Animal("Rex", BarkVoice())
 cat = Animal("Mittens", MeowVoice())
 ```
 
-Before: `Dog` and `Cat` are types. After: `Animal` is a type; voice is a field. You can:
+Before: `Dog` and `Cat` are types. After: `Animal` is a type. Voice is a field. You can:
 
 - Add a new voice without touching `Animal`.
 - Swap a voice at runtime (`dog.voice = MeowVoice()`, weird but possible).
@@ -118,7 +118,7 @@ Subclass-proliferation disease cured. Adding a new sort is adding a class, not c
 
 Some language communities embrace composition via traits (Rust), mixins (Ruby), or interfaces with default methods (Java, Kotlin, Python). Each is "compose a set of behaviors into a type" without an is-a relationship.
 
-Rust's `impl Iterator for MyType { ... }` is pure composition, `MyType` doesn't "inherit" anything; it implements a trait.
+Rust's `impl Iterator for MyType { ... }` is pure composition, `MyType` doesn't "inherit" anything. It implements a trait.
 
 ### The [Decorator pattern](../topics/cs/design-patterns/decorator/)
 
@@ -155,11 +155,11 @@ An `AbstractTenantScopedModel` with common audit fields (`created_at`, `updated_
 
 ### 3. When language features are only available via inheritance
 
-In some languages (Java before default methods; older Python), there's no other way to share implementation.
+In some languages (Java before default methods, older Python), there's no other way to share implementation.
 
 ### 4. Performance, zero-overhead abstraction
 
-Virtual dispatch via inheritance is sometimes cheaper than composition's indirection. Rare; don't optimize prematurely.
+Virtual dispatch via inheritance is sometimes cheaper than composition's indirection. Rare. Don't optimize prematurely.
 
 ## The "rule" most teams need
 
@@ -177,7 +177,7 @@ React moved from mixins (early) to class inheritance (`React.Component`) to hook
 
 ### Django models
 
-Django models inherit from `models.Model`, but the community has consistently favored **composition over inheritance within your own domain**. Django's abstract base classes are widely used; deep custom hierarchies aren't.
+Django models inherit from `models.Model`, but the community has consistently favored **composition over inheritance within your own domain**. Django's abstract base classes are widely used. Deep custom hierarchies aren't.
 
 ### Go
 
@@ -190,9 +190,9 @@ Rust explicitly rejects inheritance. Traits + generics + composition + impl bloc
 ## Common mistakes
 
 - **"I need three specific subclasses; I'll inherit."** Three strategies in a field works better, with room for a fourth.
-- **Reaching for template method.** Template method (abstract hook in a parent, override in children) is a classic inheritance use; a callback or strategy often replaces it more cleanly.
+- **Reaching for template method.** Template method (abstract hook in a parent, override in children) is a classic inheritance use. A callback or strategy often replaces it more cleanly.
 - **Chasing DRY by extracting base classes.** Extract shared functions or shared fields; avoid extracting a base class just to dedupe four lines.
-- **Making every collaborator inject-able.** Every field as a constructor parameter is over-engineering for simple code. Compose the pieces that vary; concrete-instantiate the ones that don't.
+- **Making every collaborator inject-able.** Every field as a constructor parameter is over-engineering for simple code. Compose the pieces that vary. Concrete-instantiate the ones that don't.
 - **Prefer composition dogmatically in frameworks that expect inheritance.** Fighting React (pre-hooks), Rails, or Django by refusing to inherit the framework's base classes leads to worse code. Use the framework's idiom.
 
 ## A shorthand for code review

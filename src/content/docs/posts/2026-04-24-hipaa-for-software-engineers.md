@@ -27,7 +27,7 @@ Consumer fitness apps, direct-to-consumer mental-wellness apps, nutrition tracke
 
 ## What counts as PHI
 
-PHI = individually identifiable health information. HIPAA names **18 identifiers**; if any of them appears alongside health/treatment/payment data, it's PHI:
+PHI = individually identifiable health information. HIPAA names **18 identifiers**. If any of them appears alongside health/treatment/payment data, it's PHI:
 
 1. Names
 2. Geographic data smaller than a state (ZIP codes down to 3 digits can sometimes be okay)
@@ -58,7 +58,7 @@ Every vendor between a CE and the data must sign a BAA. The BAA is a contract bi
 
 - Use PHI only as permitted.
 - Implement HIPAA Security Rule safeguards.
-- Report breaches to the CE within a specified window (usually 60 days; contracts often shorten this to 10).
+- Report breaches to the CE within a specified window (usually 60 days, though contracts often shorten this to 10).
 - Terminate the relationship or destroy PHI at contract end.
 - Pass down the same obligations to any subcontractors (e.g. their cloud provider).
 
@@ -76,7 +76,7 @@ Five required standards:
 
 - **Unique User Identification**: every person has their own account. No shared logins. Ever.
 - **Emergency Access**: a break-glass procedure to get into PHI during an incident.
-- **Automatic Logoff** (addressable): idle sessions time out. Typical: 15 minutes for admin consoles; 30 minutes or less for clinical interfaces.
+- **Automatic Logoff** (addressable): idle sessions time out. Typical: 15 minutes for admin consoles, 30 minutes or less for clinical interfaces.
 - **Encryption and Decryption** (addressable): if you implement encryption, it must be proper encryption. (See more below.)
 
 Implementation in a typical SaaS:
@@ -151,7 +151,7 @@ Verify anyone accessing ePHI is who they claim. In 2026 this translates to:
 
 #### 5. Transmission Security (§164.312(e))
 
-Encrypt PHI in transit. TLS 1.2 minimum; 1.3 preferred. No plain HTTP, no unencrypted SMTP for PHI, no SFTP without strong ciphers.
+Encrypt PHI in transit. TLS 1.2 minimum. 1.3 preferred. No plain HTTP, no unencrypted SMTP for PHI, no SFTP without strong ciphers.
 
 **Internal service-to-service traffic** counts. A VPC isn't enough, encrypt inside the VPC too, via mTLS or service-mesh policy.
 
@@ -189,19 +189,19 @@ Major cloud providers publish lists of **HIPAA-eligible services**, the services
 
 ### Azure
 
-- Broadest coverage among the three; see [Azure HIPAA / HITECH offering](https://learn.microsoft.com/en-us/azure/compliance/offerings/offering-hipaa-us).
+- Broadest coverage among the three. See [Azure HIPAA / HITECH offering](https://learn.microsoft.com/en-us/azure/compliance/offerings/offering-hipaa-us).
 
 ### Beyond the big three
 
 - **Snowflake, Databricks, MongoDB Atlas**: BAA-available for enterprise plans.
 - **Twilio**: BAA-available for specific products (SMS, Voice, Email). **Free-tier Twilio is not BAA-eligible.**
 - **SendGrid**: BAA via a specific compliance offering.
-- **OpenAI, Anthropic**: BAAs available on enterprise plans; check current terms before sending PHI to an LLM.
+- **OpenAI, Anthropic**: BAAs available on enterprise plans. Check current terms before sending PHI to an LLM.
 - **Slack, Zoom, Google Workspace**: Enterprise plans with BAA only. The free and mid-tier versions are **not** BAA-covered.
 
 ### The practical implication
 
-Every new tool added to the stack needs a BAA check. Your legal team maintains the list; your engineers should habitually ask "is this BAA'd?" before integrating.
+Every new tool added to the stack needs a BAA check. Your legal team maintains the list. Your engineers should habitually ask "is this BAA'd?" before integrating.
 
 ## The Breach Notification Rule
 
@@ -210,7 +210,7 @@ A breach = unauthorized acquisition, access, use, or disclosure of unsecured PHI
 Required notifications:
 
 - **Affected individuals**: within 60 days of discovery.
-- **HHS**: within 60 days; immediately if 500+ individuals are affected.
+- **HHS**: within 60 days. Immediately if 500+ individuals are affected.
 - **Media**: if 500+ individuals in a single state or jurisdiction.
 - **Business Associate to Covered Entity**: usually contractually 10 days, sometimes less.
 
@@ -233,7 +233,7 @@ Stripped to essentials:
 
 - SSO (SAML / OIDC) as the only path in for real users.
 - MFA required.
-- RBAC at the data layer; minimum-necessary access principle.
+- RBAC at the data layer. Minimum-necessary access principle.
 - Break-glass procedure with enhanced logging.
 
 ### Encryption
@@ -267,19 +267,19 @@ Stripped to essentials:
 - Vulnerability management with defined SLAs.
 - Annual penetration test by a qualified third party.
 - Annual tabletop incident-response exercise.
-- Dedicated HIPAA Security Officer and Privacy Officer (the law requires both; can be the same human).
+- Dedicated HIPAA Security Officer and Privacy Officer (the law requires both, though they can be the same person).
 
 ## Things that trip up software teams
 
 - **Email.** Plain email is rarely HIPAA-safe. Use BAA'd email (secure-email gateway, or patient portals with in-app messaging).
-- **SMS.** Carrier SMS is not HIPAA-compliant; patient identifiers + health info over SMS is a risk. Use secure-messaging platforms, or scrub content to appointment-only info.
+- **SMS.** Carrier SMS is not HIPAA-compliant. Patient identifiers and health info over SMS is a risk. Use secure-messaging platforms, or scrub content to appointment-only info.
 - **Analytics scripts on PHI pages.** Google Analytics, Meta Pixel, Hotjar, these have caused multiple HIPAA breach settlements. Don't put them on pages that display PHI unless you've scrubbed it or have a BAA with the vendor.
 - **Local development.** Engineers pulling prod data to laptops. Never. Synthetic data or a de-identified copy only.
 - **Screenshots.** Someone posts a screenshot of a bug into Slack, PHI. Train people.
 - **Support tools.** Intercom, Zendesk, Help Scout, need BAAs. Most offer HIPAA-enterprise tiers.
 - **LLM prompts.** Pasting patient notes into a non-BAA'd LLM is a breach. Even if you have a BAA, understand the data-retention terms.
 - **Third-party auth libraries.** If an SSO library's logs capture PHI (e.g. full URLs with patient IDs), those logs are now PHI.
-- **Staging environments with prod data.** Staging often has laxer controls; copying prod PHI in is an incident.
+- **Staging environments with prod data.** Staging often has laxer controls. Copying prod PHI in is an incident.
 
 ## A pragmatic starter checklist
 
@@ -300,10 +300,10 @@ That's the shape. Execution takes 6–12 months for a real compliance posture.
 
 ## When HIPAA doesn't apply but adjacent rules do
 
-- **GDPR / UK GDPR**: if EU patients are involved. Stricter in many dimensions; breach notifications are 72 hours.
-- **State laws**: California's CMIA, Texas HB 300, New York's SHIELD Act. Often stricter than HIPAA; the state-law delta is a separate analysis.
+- **GDPR / UK GDPR**: if EU patients are involved. Stricter in many dimensions. Breach notifications are 72 hours.
+- **State laws**: California's CMIA, Texas HB 300, New York's SHIELD Act. Often stricter than HIPAA. The state-law delta is a separate analysis.
 - **FTC Health Breach Notification Rule**: for non-HIPAA health apps. Expanded scope in 2024.
-- **21st Century Cures Act**: specifically addresses information blocking; a different compliance concern for certain EHR-adjacent products.
+- **21st Century Cures Act**: specifically addresses information blocking. It's a different compliance concern for certain EHR-adjacent products.
 
 ## References
 

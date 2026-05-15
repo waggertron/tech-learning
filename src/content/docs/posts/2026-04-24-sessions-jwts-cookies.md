@@ -50,7 +50,7 @@ Cookie holds an opaque random token. Server looks up session state in Redis / DB
 | Scale | Requires session store |
 | Good for | First-party web apps, admin consoles |
 
-**Why it's still the default for web apps:** `HttpOnly` cookies are not readable from JavaScript. Even a successful XSS can't exfiltrate the token. SameSite=Lax blocks most cross-site request forgery automatically; a CSRF token defeats the rest.
+**Why it's still the default for web apps:** `HttpOnly` cookies are not readable from JavaScript. Even a successful XSS can't exfiltrate the token. SameSite=Lax blocks most cross-site request forgery automatically. A CSRF token defeats the rest.
 
 ### 2. JWT in Authorization: Bearer header
 
@@ -114,7 +114,7 @@ Token-based CSRF protection:
 
 1. Server sets a `csrftoken` cookie (JS-readable, *not* HttpOnly).
 2. Client reads the cookie, includes its value in `X-CSRFToken` header for every non-idempotent request.
-3. Server compares cookie and header; rejects if mismatched.
+3. Server compares cookie and header. Rejects if mismatched.
 
 An attacker on `evil.com` can cause the browser to send the cookie, but can't read it (same-origin policy), so can't put it in a header. Defeats CSRF.
 
@@ -186,7 +186,7 @@ This three-lane setup covers most security and operational needs without being e
 - **Putting JWTs in `localStorage` with no CSP.** The first XSS empties every user.
 - **Using `SameSite=None` without a reason.** Turns on cross-site cookie attaching, widens the CSRF surface.
 - **Missing `Secure` in production.** Cookie sniffed over plain HTTP.
-- **Cookie scope too wide.** `Domain=.acme.com` sent to every subdomain; a subdomain compromise leaks the cookie.
+- **Cookie scope too wide.** `Domain=.acme.com` sent to every subdomain. A subdomain compromise leaks the cookie.
 - **Forgetting to set CSRF tokens on new endpoints.** Every non-idempotent endpoint needs it.
 - **Refreshing tokens indefinitely.** Without a max-session length, a stolen refresh token lives forever.
 - **Not rotating refresh tokens.** A leaked refresh token generates access tokens until it's discovered, which is usually after damage.

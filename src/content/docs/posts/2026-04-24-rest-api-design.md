@@ -28,7 +28,7 @@ PUT    /visits/42        replace visit 42 entirely
 DELETE /visits/42        delete visit 42
 ```
 
-Each row has a predictable effect. Clients can read URLs and guess what happens; engineers can read the route table and understand the system.
+Each row has a predictable effect. Clients can read URLs and guess what happens. Engineers can read the route table and understand the system.
 
 ## Resource modeling
 
@@ -40,7 +40,7 @@ Three tests for a good resource:
 2. **It has a clear lifecycle.** Creation, updates, deletion.
 3. **Its verbs (CRUD) map reasonably to user operations.**
 
-A `User` is a resource. A `SearchResult` usually isn't. An `Order` is; `SubmitOrder` isn't, it's an action on an `Order`.
+A `User` is a resource. A `SearchResult` usually isn't. An `Order` is. `SubmitOrder` isn't, it's an action on an `Order`.
 
 ### Nested resources
 
@@ -62,7 +62,7 @@ POST /orders/42/approve        ← action as a sub-resource
 POST /orders/42 { op: approve } ← action in the body
 ```
 
-The first is cleaner for REST tooling (OpenAPI understands it; middleware and caches can reason about it). The second is closer to JSON-RPC. Pick one and apply it consistently.
+The first is cleaner for REST tooling (OpenAPI understands it, and middleware and caches can reason about it). The second is closer to JSON-RPC. Pick one and apply it consistently.
 
 Avoid mixing: having some actions as verbs (`/cancel`) and some as body fields makes the API surface feel arbitrary.
 
@@ -79,7 +79,7 @@ Avoid mixing: having some actions as verbs (`/cancel`) and some as body fields m
 | DELETE | Remove | Yes | No | Usually no |
 
 - **Safe**: no observable state change. GET and HEAD.
-- **Idempotent**: repeating the request yields the same result as one request. GET, PUT, DELETE. POST is not idempotent; PATCH is sometimes idempotent, sometimes not.
+- **Idempotent**: repeating the request yields the same result as one request. GET, PUT, DELETE. POST is not idempotent. PATCH is sometimes idempotent, sometimes not.
 
 Two practical consequences:
 
@@ -91,9 +91,9 @@ Two practical consequences:
 The minimum set you must know:
 
 - **200 OK**: success with a body.
-- **201 Created**: POST success with a new resource; include `Location` header.
+- **201 Created**: POST success with a new resource. Include `Location` header.
 - **204 No Content**: success with no body (DELETE, sometimes PATCH).
-- **301 / 302 / 307 / 308**: redirects (308 permanent, 307 temporary, strict method preservation; 301/302 have legacy method-change behavior).
+- **301 / 302 / 307 / 308**: redirects (308 permanent, 307 temporary, strict method preservation, 301/302 have legacy method-change behavior).
 - **400 Bad Request**: malformed request (bad JSON, missing required field).
 - **401 Unauthorized**: no or bad credentials. (Really means "unauthenticated.")
 - **403 Forbidden**: authenticated but not allowed.
@@ -105,7 +105,7 @@ The minimum set you must know:
 - **422 Unprocessable Entity**: syntactically valid but semantically wrong (DRF's default for validation errors).
 - **429 Too Many Requests**: rate limit. Include `Retry-After`.
 - **500 Internal Server Error**: generic blow-up. You should rarely see this in logs without a corresponding alert.
-- **503 Service Unavailable**: temporary outage; include `Retry-After` if you can predict it.
+- **503 Service Unavailable**: temporary outage. Include `Retry-After` if you can predict it.
 
 Pick codes deliberately. Returning 200 with `{"error": "..."}` breaks every HTTP tool (caching, monitoring, tracing, retries).
 
@@ -149,7 +149,7 @@ GET /visits?status=assigned&clinician_id=17&sort=-window_start&fields=id,status,
 Keep the query string conventional:
 
 - Filter by exact match with the field name.
-- Sort with a `sort=` param; prefix with `-` for descending.
+- Sort with a `sort=` param. Prefix with `-` for descending.
 - Field selection with `fields=` (list of fields to include). Useful for bandwidth-sensitive clients.
 
 Avoid inventing DSLs in query strings (`?q=status:assigned AND clinician_id:17`). They're fun to design, painful to use.
@@ -164,7 +164,7 @@ Simplest, most visible, easiest to route. Every major public API does this.
 
 ### 2. Accept header, `Accept: application/vnd.acme.v1+json`
 
-Keeps URLs clean; harder to debug with curl. Purist-favored.
+Keeps URLs clean. Harder to debug with curl. Purist-favored.
 
 ### 3. Custom header, `X-API-Version: 2026-01-01`
 
@@ -178,7 +178,7 @@ Pick option 1 for most B2B/internal APIs. Pick option 4 if your API evolves fast
 
 ## Error shapes
 
-Pick one; apply everywhere:
+Pick one. Apply everywhere:
 
 ```json
 {
@@ -248,7 +248,7 @@ Idempotency-Key: f47ac10b-58cc-4372-a567-0e02b2c3d479
 
 Server stores a hash of the key + request body. Re-sends with the same key return the original response, not a duplicate.
 
-Stripe popularized this; most new APIs with "actions that must not be duplicated" (payments, bookings, bulk imports) include it.
+Stripe popularized this. Most new APIs with "actions that must not be duplicated" (payments, bookings, bulk imports) include it.
 
 ## HATEOAS, the part no one uses
 
@@ -266,7 +266,7 @@ Fielding's purist REST requires hypermedia controls, responses contain links to 
 }
 ```
 
-In principle, the client could walk only links from a single entry URL, never hard-coding paths. In practice, ~no client does this. HATEOAS comes and goes in fashion; most 2026 APIs ignore it, and their clients work fine.
+In principle, the client could walk only links from a single entry URL, never hard-coding paths. In practice, ~no client does this. HATEOAS comes and goes in fashion. Most 2026 APIs ignore it and their clients work fine.
 
 ## OpenAPI, the spec that won
 
@@ -312,7 +312,7 @@ Spec-first is the modern default: write the OpenAPI doc, generate types on both 
 
 - **GET that mutates.** Crawlers will hit it. Always.
 - **201 without `Location` header.** Clients have to guess the URL of the new resource.
-- **Inconsistent error shapes.** Two endpoints return errors differently; clients need two parsers.
+- **Inconsistent error shapes.** Two endpoints return errors differently. Clients need two parsers.
 - **Mixing verbs and nouns.** `/getUsers` is not REST. `/users` with `GET` is.
 - **Overloading 500.** Validation failure returns 500 with a leaked stack trace. Use 4xx for client errors, 5xx only for your server's problems.
 - **Nested resources 4 levels deep.** Flatten.
@@ -327,11 +327,11 @@ Spec-first is the modern default: write the OpenAPI doc, generate types on both 
 If you spend thought on these four, the rest of the [API design](../topics/system-design/api-design/) falls into place:
 
 1. **Error shape.** Pick one, apply everywhere. Machine-readable code + human message + field.
-2. **Pagination.** Default to cursor-based; document the cursor opacity; include a sane max limit.
-3. **Versioning.** Decide before the first public call. Migration is painful; greenfield is free.
+2. **Pagination.** Default to cursor-based. Document the cursor opacity. Include a sane max limit.
+3. **Versioning.** Decide before the first public call. Migration is painful. Greenfield is free.
 4. **Auth model.** Bearer token, API key, session cookie? Mix of these for which user types?
 
-Four decisions. Every other design question (casing, verbs, status codes) has a conventional answer that works; these four don't.
+Four decisions. Every other design question (casing, verbs, status codes) has a conventional answer that works. These four don't.
 
 ## References
 

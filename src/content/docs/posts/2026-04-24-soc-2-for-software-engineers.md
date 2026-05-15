@@ -23,7 +23,7 @@ It **is** the price of admission for selling software to mid-market and enterpri
 
 ## The five Trust Service Criteria (TSC)
 
-SOC 2 is organized around five categories. You pick which ones apply; every audit covers **Security** (the "Common Criteria"); the other four are optional.
+SOC 2 is organized around five categories. You pick which ones apply. Every audit covers **Security** (the "Common Criteria"). The other four are optional.
 
 | Criterion | What it covers | When you scope it in |
 | --- | --- | --- |
@@ -65,8 +65,8 @@ This is where engineering actually shows up. For a typical B2B SaaS company:
 ### Access management
 
 - **SSO everywhere.** Engineering laptops, cloud consoles, GitHub, Slack, Jira. Auditor will ask for the list of critical systems and verify SSO.
-- **MFA on SSO and privileged accounts.** TOTP or WebAuthn; SMS doesn't count for anything sensitive.
-- **Quarterly access reviews.** Someone reviews "who has access to what" and signs off. Must be logged; auditor will ask for a sample.
+- **MFA on SSO and privileged accounts.** TOTP or WebAuthn. SMS doesn't count for anything sensitive.
+- **Quarterly access reviews.** Someone reviews "who has access to what" and signs off. Must be logged. The auditor will ask for a sample.
 - **Onboarding / offboarding checklists.** Termination especially, within 24 hours, ideally automated.
 - **Least privilege in cloud.** IAM roles, no account-wide `*:*` for humans.
 
@@ -74,7 +74,7 @@ This is where engineering actually shows up. For a typical B2B SaaS company:
 
 - **All code changes via pull request.** No direct pushes to `main`.
 - **Required reviewers.** Branch protection rule enforced, not just documented.
-- **CI runs tests.** Auditor doesn't care what tests; they care that builds block on failure.
+- **CI runs tests.** The auditor doesn't care what tests. They care that builds block on failure.
 - **Production deploys from CI, not laptops.** Paper trail from PR → merge → deploy.
 - **Emergency change policy.** Written procedure for production hotfixes when full review isn't possible. Auditors love this one because it acknowledges reality.
 
@@ -82,7 +82,7 @@ This is where engineering actually shows up. For a typical B2B SaaS company:
 
 - **Centralized logs.** CloudWatch, Datadog, Splunk, one of these. With retention (usually 12 months minimum).
 - **Alerts on security events.** Failed logins, IAM policy changes, public S3 bucket creation.
-- **Log integrity.** Logs are write-only from the source; engineers can't delete them.
+- **Log integrity.** Logs are write-only from the source. Engineers can't delete them.
 - **Runbook for each alert.** "When X fires, do Y." Auditors verify the runbook is followed in a sample incident.
 
 ### Incident response
@@ -101,7 +101,7 @@ This is where engineering actually shows up. For a typical B2B SaaS company:
 
 - **In transit.** TLS everywhere, including internal service-to-service. mTLS in some audits.
 - **At rest.** EBS / RDS / S3 encryption on. KMS or equivalent.
-- **Key management.** Keys rotated; access to keys limited.
+- **Key management.** Keys rotated. Access to keys limited.
 - **Secrets.** Not in source. Secrets manager + rotation for long-lived credentials.
 
 ### Vulnerability management
@@ -114,7 +114,7 @@ This is where engineering actually shows up. For a typical B2B SaaS company:
 
 - **Backup policy.** RDS automated backups, S3 versioning, PVC snapshots.
 - **Restore drill.** Actually restore from backup annually. Document the result.
-- **DR plan.** Multi-AZ minimum; multi-region if the availability criterion is in scope.
+- **DR plan.** Multi-AZ minimum. Multi-region if the availability criterion is in scope.
 
 ## The unglamorous 80%, documentation
 
@@ -202,16 +202,16 @@ The most common SOC 2 exceptions:
 4. **Critical CVE not patched within SLA.** Snyk shows a `critical` CVE older than your own policy allows.
 5. **Production change without a ticket.** `main` has a commit that doesn't tie to a ticket or PR.
 6. **Missing approvals.** PR merged by the author without review, or merged with a stale review.
-7. **Backup not tested.** Backups run; restore hasn't been attempted.
-8. **Tabletop exercise not documented.** You talked through it; no meeting notes exist.
+7. **Backup not tested.** Backups run. Restore hasn't been attempted.
+8. **Tabletop exercise not documented.** You talked through it. No meeting notes exist.
 
 Every one of these is a process discipline issue, not a tech issue. The technical gap is usually the easier fix.
 
 ## What SOC 2 doesn't prove
 
 - It doesn't prove the code is secure. No one reviews your code during an audit.
-- It doesn't prove your product works. Controls exist around engineering; product quality isn't in scope.
-- It doesn't prove customer data is isolated. Multi-tenant isolation is a control *you* design; the auditor checks that you follow it, not that it's bulletproof.
+- It doesn't prove your product works. Controls exist around engineering. Product quality isn't in scope.
+- It doesn't prove customer data is isolated. Multi-tenant isolation is a control *you* design. The auditor checks that you follow it, not that it's bulletproof.
 - It doesn't prove you'd survive a breach. It proves you have a plan.
 
 Treat SOC 2 as the floor, not the ceiling. A team serious about security does more than SOC 2 requires.
@@ -219,7 +219,7 @@ Treat SOC 2 as the floor, not the ceiling. A team serious about security does mo
 ## When to start
 
 - **Have 3+ customers asking for it:** start now.
-- **One whale asking for it:** start now; the deal value justifies the ~$30–70k all-in cost.
+- **One whale asking for it:** start now. The deal value justifies the ~$30–70k all-in cost.
 - **No enterprise pipeline yet:** defer. SOC 2 has real ongoing costs (audit fees, compliance platform, policy maintenance). Don't pay for the badge you don't need.
 
 ## References

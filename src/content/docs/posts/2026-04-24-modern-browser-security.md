@@ -202,7 +202,7 @@ Enable via CSP:
 Content-Security-Policy: require-trusted-types-for 'script';
 ```
 
-Effectively eliminates DOM-based XSS. Adoption is still early but growing; worth enabling in new apps.
+Effectively eliminates DOM-based XSS. Adoption is still early but growing. Worth enabling in new apps.
 
 ## CORS, widely misunderstood
 
@@ -211,14 +211,14 @@ CORS relaxes the Same-Origin Policy for specific cases. Critical correctness poi
 - **CORS is not access control.** It protects *the user's browser* from reading a response. It doesn't protect your API. Always enforce auth on the server.
 - **`Access-Control-Allow-Origin: *` disallows credentials.** If you need cookies / auth, echo the specific origin and set `Access-Control-Allow-Credentials: true`.
 - **Never reflect arbitrary origins.** `Access-Control-Allow-Origin: <request.Origin>` without validation makes your API accessible to *every* website with user credentials. Validate against a whitelist.
-- **Preflight requests**: browsers issue an OPTIONS request before non-simple requests. Handle it server-side; return the right `Access-Control-Allow-*` headers.
+- **Preflight requests**: browsers issue an OPTIONS request before non-simple requests. Handle it server-side. Return the right `Access-Control-Allow-*` headers.
 
 ## Dependency supply chain
 
 npm, PyPI, and similar ecosystems have all seen malicious package takeovers, typosquatting, and dependency-confusion attacks. Defenses:
 
 - **Lockfiles.** `package-lock.json`, `uv.lock`, `Cargo.lock`. Pin exact versions.
-- **Automated scanning.** Dependabot / Renovate for updates; Snyk / Socket / Semgrep for CVE and malicious-package detection.
+- **Automated scanning.** Dependabot / Renovate for updates. Snyk / Socket / Semgrep for CVE and malicious-package detection.
 - **Minimum permissions in CI.** Don't give `npm install` access to secrets.
 - **Lower the dependency count.** Every transitive dep is a risk. Tree-shake. Audit once a quarter.
 - **Subresource integrity** for anything loaded at runtime.
@@ -246,7 +246,7 @@ Spikes in CSP violations often reveal active attacks or a new vendor trying to l
 
 The browser platform has been getting safer without much fanfare:
 
-- **Third-party cookies ending.** Chrome's transition complete in 2024; Firefox and Safari already ahead. Cross-site tracking via cookies is over.
+- **Third-party cookies ending.** Chrome's transition complete in 2024. Firefox and Safari already ahead. Cross-site tracking via cookies is over.
 - **Privacy Sandbox.** Chrome-led replacement for third-party cookies, Topics API, FLEDGE / Protected Audience, Attribution Reporting. Controversial, but reshapes ads without direct tracking.
 - **Post-quantum TLS.** Chrome and Firefox ship Kyber / ML-KEM hybrid key exchanges. Long-term plan for the cryptography transition.
 - **Storage Partitioning.** Cross-site iframes now get their own storage keyed to the top-level site, not the iframe's origin. Breaks some legacy trackers.
@@ -254,7 +254,7 @@ The browser platform has been getting safer without much fanfare:
 - **Credential management and passkeys.** WebAuthn / passkey UX now feasible as the primary auth method on many properties.
 - **Fenced Frames.** A stronger iframe with additional isolation, one of the Privacy Sandbox primitives.
 
-Keep reading Chrome Platform Status and Mozilla's Firefox release notes; the pace is fast.
+Keep reading Chrome Platform Status and Mozilla's Firefox release notes. The pace is fast.
 
 ## A minimum-viable browser-security checklist
 
@@ -266,7 +266,7 @@ Before shipping a public site:
 - [ ] `X-Content-Type-Options: nosniff`.
 - [ ] `Referrer-Policy: strict-origin-when-cross-origin`.
 - [ ] Cookies: `HttpOnly; Secure; SameSite=Lax`, preferably `__Host-` prefixed.
-- [ ] CORS origin-whitelist; no wildcards with credentials.
+- [ ] CORS origin-whitelist. No wildcards with credentials.
 - [ ] SRI on every third-party script.
 - [ ] No `localStorage` for auth tokens.
 - [ ] Automated dependency scanning in CI.
@@ -282,7 +282,7 @@ Before shipping a public site:
 - **Disabling SOP with `crossorigin` attributes you don't understand.** Read the docs before setting them.
 - **Assuming CSP stops supply-chain attacks on your own code.** If your own script is compromised (`script-src 'self'` allows it), CSP won't save you.
 - **Forgetting about fonts and images.** CSP `font-src` / `img-src` default to `default-src`. Missing either can make legitimate assets fail.
-- **Not testing the headers in all environments.** Staging is sometimes more relaxed; the prod deploy finds what staging never caught.
+- **Not testing the headers in all environments.** Staging is sometimes more relaxed. The prod deploy finds what staging never caught.
 
 ## References
 

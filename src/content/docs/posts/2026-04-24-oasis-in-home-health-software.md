@@ -93,7 +93,7 @@ Build a schema-driven UI, not a hand-coded form. Otherwise every OASIS update me
 
 ### 3. Effective dates and retroactive rules
 
-CMS publishes changes to items, response options, and skip logic at version boundaries. An assessment dated `2024-12-31` must use OASIS-E rules; an assessment dated `2025-01-01` must use OASIS-E1 rules. Your submission code needs to pick the correct schema by assessment date, not by today's date.
+CMS publishes changes to items, response options, and skip logic at version boundaries. An assessment dated `2024-12-31` must use OASIS-E rules. An assessment dated `2025-01-01` must use OASIS-E1 rules. Your submission code needs to pick the correct schema by assessment date, not by today's date.
 
 ### 4. ICD-10 codes as OASIS items
 
@@ -103,7 +103,7 @@ CMS publishes changes to items, response options, and skip logic at version boun
 - Manifestation/etiology rules (some codes can't stand alone, others can't be paired).
 - Annual ICD-10 updates (October 1 every year).
 
-This is sometimes outsourced to a clinical coding service; sometimes embedded via a medical-terminology vendor (IMO Health, Intelligent Medical Objects).
+This is sometimes outsourced to a clinical coding service, sometimes embedded via a medical-terminology vendor (IMO Health, Intelligent Medical Objects).
 
 ## Submission, iQIES and the XML schema
 
@@ -181,7 +181,7 @@ Quality measures computed from OASIS feed:
 - **Home Health Value-Based Purchasing (HHVBP)**: payment adjustments based on quality scores
 - **Home Health Quality Reporting Program (HHQRP)**: publishing requirement with a 2% Medicare pay cut for non-reporters
 
-Measures are computed by CMS from submitted OASIS; your software doesn't compute them directly. But your software's accuracy directly determines the agency's stars.
+Measures are computed by CMS from submitted OASIS. Your software doesn't compute them directly. But your software's accuracy directly determines the agency's stars.
 
 ## Engineering challenges specific to OASIS software
 
@@ -255,10 +255,10 @@ If you're actually building OASIS capture:
 2. **Model the items as data**, not code. JSON / YAML schema that can be regenerated year over year.
 3. **Pick a forms engine** that supports skip logic natively, or build one.
 4. **Implement XML submission to the iQIES spec.** Test with the CMS-provided test environments.
-5. **Pick an ICD-10 source.** The CMS free download is fine for a portfolio project; production systems use IMO Health or similar for clinical concept mapping.
-6. **Write a PDGM calculator.** The logic is public; the tricky part is keeping it current with annual updates.
+5. **Pick an ICD-10 source.** The CMS free download is fine for a portfolio project. Production systems use IMO Health or similar for clinical concept mapping.
+6. **Write a PDGM calculator.** The logic is public. The tricky part is keeping it current with annual updates.
 7. **Build the audit trail first.** Don't retrofit it, every mutation writes an audit entry from day one.
-8. **Get a real clinician to test the UX.** OASIS is tolerable for clinicians who know what they're doing; for everyone else it's a slog. UX matters.
+8. **Get a real clinician to test the UX.** OASIS is tolerable for clinicians who know what they're doing. For everyone else it's a slog. UX matters.
 
 ## Non-goals for most teams
 

@@ -39,7 +39,7 @@ def optimize_day(request):
     )
 ```
 
-The status code is deliberate. **202 Accepted** means "I got your request; it'll happen later." It sets client expectations correctly: don't block on this response, watch for the event.
+The status code is deliberate. **202 Accepted** means "I got your request. It'll happen later." It sets client expectations correctly: don't block on this response, watch for the event.
 
 ### 2. Celery's broker picks up the task
 
@@ -61,7 +61,7 @@ def optimize_day(self, tenant_id: int, date: str):
 Three observations worth calling out:
 
 - **`@shared_task(bind=True)`**: `bind=True` gives the task access to `self`, which you need for retries and logging.
-- **`max_retries=2`**: the VRP solver is deterministic; a failure is almost always a code bug or a missing row, not a transient issue. Two retries is a safety net, not a recovery strategy.
+- **`max_retries=2`**: the VRP solver is deterministic. A failure is almost always a code bug or a missing row, not a transient issue. Two retries is a safety net, not a recovery strategy.
 - **`with tenant_context(...)`**: Celery tasks don't run through the HTTP middleware, so the tenant context has to be set explicitly. This is the #1 bug source in multi-tenant Celery code.
 
 ### 3. The pub/sub side-effect
@@ -102,7 +102,7 @@ wss.on("connection", async (ws, req) => {
 });
 ```
 
-Deliberately dumb. No business logic. No DB access. No authentication logic of its own, it asks Django whether a token is valid. The whole point of having a separate service here is to **keep long-lived WebSocket connections off the Django process**. Django under Gunicorn/Uvicorn holds a worker per connection; Node with `ws` happily holds ten thousand.
+Deliberately dumb. No business logic. No DB access. No authentication logic of its own, it asks Django whether a token is valid. The whole point of having a separate service here is to **keep long-lived WebSocket connections off the Django process**. Django under Gunicorn/Uvicorn holds a worker per connection. Node with `ws` happily holds ten thousand.
 
 ### 5. The browser updates
 
@@ -133,7 +133,7 @@ Async views are fine for a dashboard endpoint fanning out to Stripe + an analyti
 ## Pitfalls worth knowing
 
 - **`.delay()` inside a transaction.** The task may dequeue and run *before* the transaction commits, reading stale state. Fix: `transaction.on_commit(lambda: task.delay(id))`.
-- **Model instances as arguments.** Celery serializes args as JSON. A `Visit` instance becomes nonsense on the other side. Pass primary keys; re-fetch in the task.
+- **Model instances as arguments.** Celery serializes args as JSON. A `Visit` instance becomes nonsense on the other side. Pass primary keys. Re-fetch in the task.
 - **Silent backlog.** A queue that's full but not erroring is the worst outcome, users see delays without alerts. Monitor queue depth (Flower, or a `LLEN celery` Prometheus exporter).
 - **`PUBLISH` isn't durable.** If the subscriber disconnects, messages are lost. For truly critical events, use Redis Streams (`XADD`/`XREAD`) or a proper broker like RabbitMQ. For UI fan-out where the client re-syncs on reconnect anyway, fire-and-forget is fine.
 - **Context leakage between tasks.** `_tenant_context` is a `ContextVar`. Clean it up at the end of every task, or use a decorator. Leaks are invisible until they cause a cross-tenant read.

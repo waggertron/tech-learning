@@ -156,7 +156,7 @@ console.log(engine.getBidHistory('a1'))   // [ { u1, 100 }, { u4, 101 } ]
 
 **Multiple processes.** The mutex lives in memory. Two Node.js processes running the same engine can still race. For that, you need a distributed lock: Redis `SET NX PX`, a database advisory lock, or a queue.
 
-**Fairness.** The chain guarantees sequential execution but not fairness across auctions. Bids on `a1` and `b1` run independently in parallel, which is correct; they do not block each other.
+**Fairness.** The chain guarantees sequential execution but not fairness across auctions. Bids on `a1` and `b1` run independently in parallel, which is correct. They do not block each other.
 
 ## When to reach for this pattern
 

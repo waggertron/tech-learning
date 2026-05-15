@@ -17,7 +17,7 @@ Every public endpoint faces three different threats at the same time:
 
 [Rate limiting](../topics/system-design/rate-limiting/) addresses all three but with different parameters. A login endpoint wants a strict per-IP burst limit (abuse). A long-running read endpoint wants a fair-share queue (overload + neighbors). A write endpoint usually wants a per-account quota (neighbors).
 
-**Throttling** and **rate limiting** get used interchangeably. The distinction sometimes drawn: rate limiting *rejects* over-limit requests (HTTP 429); throttling *delays* them. In practice both are the same feature family.
+**Throttling** and **rate limiting** get used interchangeably. The distinction sometimes drawn: rate limiting *rejects* over-limit requests (HTTP 429). Throttling *delays* them. In practice both are the same feature family.
 
 ## The four algorithms
 
@@ -69,7 +69,7 @@ Good for: public API quotas with millions of users. Cloudflare and others ship t
 
 ### 4. Token bucket
 
-A bucket of N tokens refills at rate R tokens/sec, capped at N. Each request consumes 1 token; if empty, reject or wait.
+A bucket of N tokens refills at rate R tokens/sec, capped at N. Each request consumes 1 token. If empty, reject or wait.
 
 ```
 tokens = min(N, tokens + (now, last_refill) * R)
@@ -90,7 +90,7 @@ Good for: nearly every case where you want "burst-tolerant but long-run-limited.
 
 A sibling of token bucket. Requests enter a queue that drains at rate R. If the queue is full, new requests are rejected.
 
-In practice, leaky bucket ≈ token bucket from the limiter's outside. The internal mechanism differs; the behavior seen by clients is nearly identical.
+In practice, leaky bucket ≈ token bucket from the limiter's outside. The internal mechanism differs. The behavior seen by clients is nearly identical.
 
 ## Which to pick
 
@@ -129,7 +129,7 @@ Connection pools + query budgets. Not quite rate limiting, but the same instinct
 
 **Use for:** protecting shared-resource pressure.
 
-Most production systems do 2–3 of these layered. Edge handles the dumb abuse; gateway handles plan quotas; application handles business-logic rules.
+Most production systems do 2–3 of these layered. Edge handles the dumb abuse. Gateway handles plan quotas. Application handles business-logic rules.
 
 ## Example, Django middleware with a Redis token bucket
 
@@ -211,7 +211,7 @@ Content-Type: application/json
 {"error": {"type": "rate_limited", "message": "Too many requests. Retry in 30s."}}
 ```
 
-Clients can back off intelligently; support can debug.
+Clients can back off intelligently. Support can debug.
 
 ## Identifying the client
 
@@ -233,21 +233,21 @@ Options:
 
 1. **Centralize state in Redis** (as above). Cheap and correct.
 2. **Sticky routing by key**: route all requests from a user to one pod. Works but loses the redundancy benefits of multiple pods.
-3. **Probabilistic approaches**: each pod approximates the limit locally; sample-broadcast to sync. Used at hyperscale.
+3. **Probabilistic approaches**: each pod approximates the limit locally. Sample-broadcast to sync. Used at hyperscale.
 
 Centralized Redis handles most teams' needs up to six-figure RPS. Beyond that, consider specialized services like [Envoy's global rate limit service](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/ratelimit) or [Stripe's custom approach](https://stripe.com/blog/rate-limiters).
 
 ## Common mistakes
 
 - **Rate limiting by `X-Forwarded-For` without validating it.** Attackers spoof it trivially. Either trust only the first hop from a known proxy or use the actual peer address.
-- **Rate limiting reads and writes with the same bucket.** Reads are cheap; writes are expensive. Size them separately.
+- **Rate limiting reads and writes with the same bucket.** Reads are cheap. Writes are expensive. Size them separately.
 - **Whitelisting without expiration.** A "never rate-limit this partner" entry from 2022 is a ticking bomb.
 - **No limit on the rate-limit storage.** Redis can fill up with abandoned token-bucket state. Always set TTLs.
 - **Applying the limit at the application middleware only.** Malicious traffic still reaches your app servers, costing CPU. Push abuse detection to the edge.
 - **Silent failures in the limiter.** If Redis is down, what happens? Usually: allow requests through (fail-open). Make that choice explicit and alert on the fallback.
 - **Forgetting internal/admin traffic.** Your own background jobs get rate-limited by your own middleware. Use separate credentials with explicit higher limits.
-- **Returning 503 instead of 429.** 503 means "server problem"; 429 means "you, client, are hitting us too hard." Clients treat them differently.
-- **Locking a key forever.** A short hard lockout is fine; a "your API is disabled, contact support" on a single rate-limit spike is customer-hostile.
+- **Returning 503 instead of 429.** 503 means "server problem". 429 means "you, client, are hitting us too hard." Clients treat them differently.
+- **Locking a key forever.** A short hard lockout is fine. A "your API is disabled, contact support" on a single rate-limit spike is customer-hostile.
 
 ## Specialized cases
 
@@ -257,11 +257,11 @@ Abuse surface. Suggested defaults:
 
 - **5 attempts per 10 minutes per (username, IP) pair.** After that, require CAPTCHA.
 - **20 attempts per 10 minutes per IP.** Catches credential stuffing across usernames.
-- Lock accounts only after a careful threshold; attackers will lock users on purpose.
+- Lock accounts only after a careful threshold. Attackers will lock users on purpose.
 
 ### Password reset
 
-Even stricter. 3 per hour per email; include rate-limit headers in the response.
+Even stricter. 3 per hour per email. Include rate-limit headers in the response.
 
 ### Expensive endpoints (search, exports)
 
@@ -269,7 +269,7 @@ Separate bucket with lower limits. "Cost" per request can scale with result size
 
 ### Free vs paid tiers
 
-Separate buckets per tier. Free tier is where abuse happens; pay attention to its limits.
+Separate buckets per tier. Free tier is where abuse happens. Pay attention to its limits.
 
 ### Webhooks you send
 
@@ -288,16 +288,16 @@ Every client library should:
 
 Minimum viable rate limiter:
 
-- [ ] Identifies clients correctly (user > IP for authenticated; IP for anon).
+- [ ] Identifies clients correctly (user > IP for authenticated, IP for anon).
 - [ ] Uses token bucket or sliding window counter (not fixed window).
 - [ ] Stores state centrally (Redis or equivalent).
 - [ ] Returns 429 + `Retry-After` + rate-limit headers.
 - [ ] Different limits for reads vs writes vs auth.
-- [ ] Logs when limits trigger; alerts on sustained bursts.
+- [ ] Logs when limits trigger. Alerts on sustained bursts.
 - [ ] Tested under multi-pod deployment.
 - [ ] Has a kill switch (disable rate limiting in an emergency).
 
-Ship that on day one; tune on day N.
+Ship that on day one. Tune on day N.
 
 ## References
 

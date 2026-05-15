@@ -64,7 +64,7 @@ POST /visits/42/check-out   {notes}
 POST /visits/42/cancel      {reason}
 ```
 
-Each endpoint represents one edge in the state machine. Clients call the verb that describes what they want to happen; the server owns the rule for whether it's legal.
+Each endpoint represents one edge in the state machine. Clients call the verb that describes what they want to happen. The server owns the rule for whether it's legal.
 
 ## The guard: `IllegalStateTransition` → HTTP 409
 
@@ -106,7 +106,7 @@ Clients need to distinguish "your request was malformed" from "your request was 
 - **422**, DRF's default validation error on a serializer. Same spirit as 400.
 - **409 Conflict**, the canonical "your request was well-formed but the server state says no." Perfect for illegal transitions, version mismatches, and duplicate-resource errors.
 
-A client seeing 409 knows to *refresh its view of the resource* and try a different action. A client seeing 400 knows to fix its form. These are different bugs; they deserve different codes.
+A client seeing 409 knows to *refresh its view of the resource* and try a different action. A client seeing 400 knows to fix its form. These are different bugs. They deserve different codes.
 
 ## Tests become boring (in a good way)
 

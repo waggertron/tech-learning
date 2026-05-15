@@ -9,7 +9,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-vehicle-r
 
 ## Context
 
-Spent an afternoon reading through [Google OR-Tools' routing docs](https://developers.google.com/optimization/routing/vrp) and some surrounding papers. Writing up the shape of the problem and a few things that surprised me. Full structured notes are in my [Vehicle Routing topic](../../topics/cs/vehicle-routing/); this post is the narrative version.
+Spent an afternoon reading through [Google OR-Tools' routing docs](https://developers.google.com/optimization/routing/vrp) and some surrounding papers. Writing up the shape of the problem and a few things that surprised me. Full structured notes are in my [Vehicle Routing topic](../../topics/cs/vehicle-routing/). This post is the narrative version.
 
 ## The one-line summary
 
@@ -39,16 +39,16 @@ One of the first things I noticed: OR-Tools' `SAVINGS` first-solution strategy i
 3. Sort pairs by savings descending.
 4. Merge greedily, respecting capacity.
 
-It doesn't give the best answer; it gives a good starting point that the local-search phase then improves. But 60 years later, it's still the default initial solution for a huge swath of problems. This is a pattern, some heuristics are **shaped like the problem** and don't go obsolete.
+It doesn't give the best answer. It gives a good starting point that the local-search phase then improves. But 60 years later, it's still the default initial solution for a huge swath of problems. This is a pattern, some heuristics are **shaped like the problem** and don't go obsolete.
 
 ### 3. The phase-1 / phase-2 split is worth understanding before touching the API
 
 Every metaheuristic VRP solver does the same two phases:
 
 - **Phase 1, build a feasible solution** (`PATH_CHEAPEST_ARC`, `SAVINGS`, `PARALLEL_CHEAPEST_INSERTION`, …).
-- **Phase 2, improve via local search + metaheuristic** (2-opt, Or-opt, Lin-Kernighan; Guided Local Search, Tabu, Simulated Annealing).
+- **Phase 2, improve via local search + metaheuristic** (2-opt, Or-opt, Lin-Kernighan, Guided Local Search, Tabu, Simulated Annealing).
 
-When solutions fail, the failure usually traces to one of these. "No feasible solution found" on a tight VRPTW = phase 1 couldn't even get started; try `PARALLEL_CHEAPEST_INSERTION`. "Solutions are correct but bad" = phase 2 needs more time budget.
+When solutions fail, the failure usually traces to one of these. "No feasible solution found" on a tight VRPTW = phase 1 couldn't even get started. Try `PARALLEL_CHEAPEST_INSERTION`. "Solutions are correct but bad" = phase 2 needs more time budget.
 
 ### 4. Time windows are qualitatively harder than capacity
 

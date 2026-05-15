@@ -89,7 +89,7 @@ def bellman_ford(edges, V, source):
 
 **What**: shortest path between **every pair** of nodes.
 
-**When**: small dense graphs (V ≤ ~500); transitive closure problems; graph diameter.
+**When**: small dense graphs (V ≤ ~500), transitive closure problems, graph diameter.
 
 **How**: triple loop, considering each node as a possible intermediate.
 
@@ -282,11 +282,11 @@ def prim(graph, V):
 
 ## Union-Find (Disjoint Set Union)
 
-**What**: maintain a partition of n elements into disjoint sets. Two operations: `union(a, b)` merges two sets; `find(a)` returns the set's representative.
+**What**: maintain a partition of n elements into disjoint sets. Two operations: `union(a, b)` merges two sets. `find(a)` returns the set's representative.
 
 **When**: Kruskal's MST, connected components, dynamic connectivity, "are these two things in the same group?"
 
-**How**: each set is a tree. `find` walks to the root; `union` links one root under another.
+**How**: each set is a tree. `find` walks to the root. `union` links one root under another.
 
 ```python
 class UnionFind:
@@ -373,7 +373,7 @@ def tarjan_scc(graph, V):
 **Gotchas**:
 
 - The `lowlink == index` check is what defines an SCC root. When DFS returns to a node whose lowlink equals its discovery index, everything still on the stack from that point down is one SCC.
-- Kosaraju's algorithm gets the same result with two DFS passes; pick whichever you find easier to recall.
+- Kosaraju's algorithm gets the same result with two DFS passes. Pick whichever you find easier to recall.
 
 ---
 
@@ -381,7 +381,7 @@ def tarjan_scc(graph, V):
 
 **What**: Dijkstra's, but guided by a heuristic. Finds shortest path faster on average when you have a good estimate of remaining distance.
 
-**When**: pathfinding in games, robotics; whenever you can cheaply estimate distance to the goal.
+**When**: pathfinding in games and robotics, whenever you can cheaply estimate distance to the goal.
 
 **How**: Dijkstra-like, but the priority queue is keyed on `g(n) + h(n)`, where `g` is cost so far and `h` is the heuristic estimate of remaining cost.
 
@@ -409,7 +409,7 @@ def a_star(graph, start, goal, h):
 **Gotchas**:
 
 - The heuristic must be **admissible**: it must never overestimate the true remaining cost. Otherwise A* loses optimality.
-- For a stronger guarantee (no node revisits), the heuristic should be **consistent**: `h(u) <= cost(u, v) + h(v)`. Manhattan distance on a grid is consistent; straight-line distance in a road network is consistent if you can travel in straight lines.
+- For a stronger guarantee (no node revisits), the heuristic should be **consistent**: `h(u) <= cost(u, v) + h(v)`. Manhattan distance on a grid is consistent. Straight-line distance in a road network is consistent if you can travel in straight lines.
 - A* with `h ≡ 0` is just Dijkstra. A* with a perfect `h` walks straight to the goal.
 
 ---
@@ -630,7 +630,7 @@ If you can name the shape, you can quote the bound. Half the interview battle is
 ## References
 
 - Cormen, Leiserson, Rivest, Stein. *Introduction to Algorithms* (CLRS), 4th ed. The reference for every algorithm here.
-- [Competitive Programmer's Handbook (PDF)](https://cses.fi/book/book.pdf), Antti Laaksonen, free; concise treatments of all the graph algorithms.
+- [Competitive Programmer's Handbook (PDF)](https://cses.fi/book/book.pdf), Antti Laaksonen, free. Concise treatments of all the graph algorithms.
 - [USACO Guide](https://usaco.guide/), categorized by topic with code examples.
 - [Tushar Roy's algorithms playlist](https://www.youtube.com/c/tusharroy2525), good visual walkthroughs of Tarjan, KMP, and others.
 

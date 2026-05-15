@@ -25,7 +25,7 @@ They're OO principles, designed to fight specific 1990s-era pains: giant classes
 
 The usual bad paraphrase: "a class should do one thing." That's not quite it. A `UserService` that validates emails, hashes passwords, and saves users to a database *does* one thing, it manages users, but it has three reasons to change (email rules, crypto library, database schema).
 
-The real unit is *axis of change*. Code that changes together belongs together; code that changes for different reasons belongs apart.
+The real unit is *axis of change*. Code that changes together belongs together. Code that changes for different reasons belongs apart.
 
 **What it prevents**: A change to the email validation rule forcing a re-test of the password hashing code. Two stakeholders modifying the same class for unrelated reasons, producing merge conflicts.
 
@@ -41,7 +41,7 @@ Classic OCP violation: a `shape.area()` function with an `if shape.type == 'circ
 
 **What it prevents**: Changes that ripple through the codebase. Fear of adding features because the blast radius is unknown.
 
-**Misreading**: "Every class needs an interface and a factory so it can be replaced." Most code will never be replaced; premature extensibility is a tax on reading.
+**Misreading**: "Every class needs an interface and a factory so it can be replaced." Most code will never be replaced. Premature extensibility is a tax on reading.
 
 ## L, Liskov Substitution Principle
 
@@ -76,7 +76,7 @@ Instead of `OrderService` directly using `MySQLOrderRepo`, both depend on an `Or
 
 **What it prevents**: Business logic that can't be tested without a real database. Upgrade paths that require rewriting the domain code.
 
-**Misreading**: "DI framework everywhere." DIP is about direction of dependency, not about a specific injection mechanism. Constructor injection works; a DI container is overkill for most things.
+**Misreading**: "DI framework everywhere." DIP is about direction of dependency, not about a specific injection mechanism. Constructor injection works. A DI container is overkill for most things.
 
 ## The tensions SOLID balances
 
@@ -84,9 +84,9 @@ SOLID principles pull against each other:
 
 - **SRP + OCP**, splitting classes can make extension harder because there's more code to navigate.
 - **ISP + SRP**, narrow interfaces can imply narrow classes, sometimes *too* narrow.
-- **DIP + YAGNI**, every abstraction has a cost; reach for it when you need substitutability, not on principle.
+- **DIP + YAGNI**, every abstraction has a cost. Reach for it when you need substitutability, not on principle.
 
-Applying SOLID means picking which force to lean on for this code. A 200-line data transformation utility doesn't need all five; a 20,000-line domain model probably does.
+Applying SOLID means picking which force to lean on for this code. A 200-line data transformation utility doesn't need all five. A 20,000-line domain model probably does.
 
 ## What SOLID doesn't cover
 

@@ -15,7 +15,7 @@ The appeal:
 
 - **Horizontal scale without a session store.** Any worker can serve any request.
 - **No round-trip to Redis or a DB** to authenticate each call.
-- **Cross-service propagation.** Service A signs a token; service B can verify it with the same public key, no shared infrastructure.
+- **Cross-service propagation.** Service A signs a token. Service B can verify it with the same public key, no shared infrastructure.
 
 This is the central sales pitch of JWTs. It's real, and it's also narrower than the industry sometimes pretends.
 
@@ -75,7 +75,7 @@ If a key is compromised, rotate. Old tokens become invalid. Blunt but effective,
 
 ### The practical reality
 
-Every serious JWT system hits revocation. The pure-stateless dream is aspirational; hybrid is the norm.
+Every serious JWT system hits revocation. The pure-stateless dream is aspirational. Hybrid is the norm.
 
 ## Size and payload bloat
 
@@ -94,7 +94,7 @@ JWTs ride in the `Authorization` header on every request. A claim-heavy JWT can 
 }
 ```
 
-On a high-RPS API, an extra 1 KB per request adds up. Keep JWTs lean: put stable, small claims in; put large or mutable state elsewhere.
+On a high-RPS API, an extra 1 KB per request adds up. Keep JWTs lean: put stable, small claims in. Leave large or mutable state elsewhere.
 
 ## What you should actually put in a JWT
 
@@ -115,7 +115,7 @@ Two main families:
 
 ### Symmetric (HS256, HS384, HS512)
 
-Issuer and verifier share a secret. Simpler but requires trusting every verifier not to impersonate the issuer. Fine for a single service; don't use across organizational boundaries.
+Issuer and verifier share a secret. Simpler but requires trusting every verifier not to impersonate the issuer. Fine for a single service. Don't use across organizational boundaries.
 
 ### Asymmetric (RS256, ES256, PS256)
 
@@ -123,7 +123,7 @@ Issuer holds a private key, signs. Anyone holds the public key, verifies. The st
 
 ### `alg: none`
 
-A legacy option that disables signature verification. If your library accepts this by default, **you have a vulnerability**. Every mature library now rejects it; verify yours does.
+A legacy option that disables signature verification. If your library accepts this by default, **you have a vulnerability**. Every mature library now rejects it. Verify yours does.
 
 ## When to prefer sessions
 
@@ -177,7 +177,7 @@ The industry converged on this because it balances the stateless win (fast verif
 
 ## Service-to-service auth
 
-Inter-service calls use the same JWT mechanism, with either user-propagated tokens (the client's JWT is re-used; often not what you want) or service JWTs (issued to each service, with its own identity).
+Inter-service calls use the same JWT mechanism, with either user-propagated tokens (the client's JWT is re-used, often not what you want) or service JWTs (issued to each service, with its own identity).
 
 **mTLS + JWT** is the modern service-to-service standard: mTLS authenticates the sender (who are you?), JWT carries the claim (what are you allowed to do?).
 
@@ -225,14 +225,14 @@ Three rules worth internalizing:
 
 ## Common mistakes
 
-- **Put large mutable state in the JWT.** Tokens bloat; stale data serves for the life of the token.
+- **Put large mutable state in the JWT.** Tokens bloat. Stale data serves for the life of the token.
 - **Not verifying `aud`/`iss`.** Tokens intended for service A accepted by service B is a privilege-escalation vulnerability.
 - **Using HS256 when RS256/ES256 is available.** Symmetric keys don't scale across service boundaries.
 - **Storing JWTs in `localStorage`.** XSS-readable. See the [sessions/JWTs/cookies post](../2026-04-24-sessions-jwts-cookies/).
 - **Never rotating signing keys.** A leaked key is valid forever.
 - **Missing `exp`.** Rare in practice, catastrophic when it happens.
 - **Trusting claims without verification.** Base64-decoding a JWT without verifying the signature reads whatever the attacker wants it to read.
-- **Ignoring clock skew.** `exp` enforcement without leeway rejects valid tokens across servers with mildly-different clocks. PyJWT defaults to 0; set `leeway=30` seconds.
+- **Ignoring clock skew.** `exp` enforcement without leeway rejects valid tokens across servers with mildly-different clocks. PyJWT defaults to 0. Set `leeway=30` seconds.
 - **Expecting stateless to mean "no session store."** You still need one for refresh. Plan for it.
 
 ## When to not use JWTs at all

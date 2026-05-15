@@ -138,7 +138,7 @@ solution = routing.SolveWithParameters(search)
 
 ## How it fits
 
-This VRP runs inside a Celery task (`vrp.optimize_day`) triggered by a button in the ops console. The task fetches visits and clinicians, builds the matrices, solves, and writes `RoutePlan` rows back. The HTTP response is 202 Accepted; the result arrives over a WebSocket.
+This VRP runs inside a Celery task (`vrp.optimize_day`) triggered by a button in the ops console. The task fetches visits and clinicians, builds the matrices, solves, and writes `RoutePlan` rows back. The HTTP response is 202 Accepted. The result arrives over a WebSocket.
 
 Full code in [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton) under `apps/api/scheduling/vrp.py`.
 

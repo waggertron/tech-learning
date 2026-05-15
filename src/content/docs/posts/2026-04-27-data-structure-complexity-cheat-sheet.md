@@ -19,7 +19,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 
 - **Time** is the operation cost in terms of `n`, the size of the structure, unless noted otherwise.
 - **Space** is the structure's storage cost (or auxiliary cost for an algorithm).
-- **Worst case** is the column that matters in interviews. "Average" is what you'd quote for hash structures with a decent hash function; mention the worst case if asked.
+- **Worst case** is the column that matters in interviews. "Average" is what you'd quote for hash structures with a decent hash function. Mention the worst case if asked.
 - "Amortized O(1)" means the operation is occasionally expensive (e.g., a doubling realloc), but spread over many operations it's constant on average. Treat it as O(1) unless you're doing something like real-time scheduling.
 
 ---
@@ -38,7 +38,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 
 **Gotchas**:
 
-- Dynamic arrays are O(1) **at the end** and O(n) **in the middle**. `list.pop()` is fast; `list.pop(0)` shifts every other element. Use `collections.deque` if you need O(1) at both ends.
+- Dynamic arrays are O(1) **at the end** and O(n) **in the middle**. `list.pop()` is fast. `list.pop(0)` shifts every other element. Use `collections.deque` if you need O(1) at both ends.
 - [Linked lists](../topics/cs/data-structures/linked-lists/) are O(1) to insert *given a node reference*. Finding that node is O(n). LeetCode problems usually hand you the node, hiding the search cost.
 - Stack and queue costs assume an underlying structure that supports O(1) at the relevant end. A queue built on `list.pop(0)` is secretly O(n) per dequeue.
 
@@ -55,7 +55,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 **Gotchas**:
 
 - The O(1) amortized claim depends on a good hash function. With adversarial keys (or `__hash__` you wrote yourself badly), every key collides and everything degrades to O(n).
-- Resizing the table is O(n) and happens when load factor crosses a threshold. Most of the time it's invisible; occasionally an insert is unexpectedly slow.
+- Resizing the table is O(n) and happens when load factor crosses a threshold. Most of the time it's invisible. Occasionally an insert is unexpectedly slow.
 - `dict` ordering in Python 3.7+ is insertion order. Don't rely on this for hash semantics, but it's reliable for iteration.
 - Two hash maps used together can blow space without you noticing. A `set` of `(a, b)` tuples for n × m pairs is O(n · m) space.
 
@@ -76,7 +76,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 **Gotchas**:
 
 - "Binary search tree" by itself usually means *unbalanced*. The O(log n) bound only applies to **balanced** BSTs (AVL, red-black, treap, ...). On adversarial sorted input, an unbalanced BST is O(n).
-- [Tries](../topics/cs/data-structures/tries/) trade space for time. A trie of all English words wastes a lot of nodes; a compressed trie ([radix tree](../topics/cs/data-structures/radix-tree/)) saves space.
+- [Tries](../topics/cs/data-structures/tries/) trade space for time. A trie of all English words wastes a lot of nodes. A compressed trie ([radix tree](../topics/cs/data-structures/radix-tree/)) saves space.
 - Heaps are O(1) to peek but O(n) to **search by value**. They're fast at the extremes (top), slow in the middle. Don't reach for a heap to find an arbitrary element.
 - Building a heap from a list is O(n) using `heapify`, not O(n log n). The reverse-level-order sift-down does the trick. Push-by-push is O(n log n).
 
