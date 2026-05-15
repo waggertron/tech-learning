@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './builder.ts?raw';
+import pyCode from './builder.py?raw';
+import goCode from './builder.go?raw';
 
 ## The problem
 
@@ -44,206 +50,17 @@ classDiagram
 
 ## Implementation
 
+The SQL `QueryBuilder` accumulates clauses through method chaining: each setter returns `this` (or `self`), and `build()` validates then assembles the final string. Python's `from` is a reserved keyword, so the method is named `from_`. Go has no default parameter values, so optional clauses use explicit fields; the `hasLimit` boolean distinguishes "not set" from `LIMIT 0`, and `Build()` returns an error rather than panicking.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-The SQL `QueryBuilder` below accumulates clauses through method chaining. Each setter returns `this`, which lets calls chain. `build()` validates and assembles the final string.
-
-```typescript
-class QueryBuilder {
-  private table = '';
-  private columns = '*';
-  private conditions: string[] = [];
-  private limitValue: number | null = null;
-  private orderByColumn = '';
-  private orderDir: 'ASC' | 'DESC' = 'ASC';
-
-  select(columns: string): this { this.columns = columns; return this; }
-  from(table: string): this { this.table = table; return this; }
-  where(condition: string): this { this.conditions.push(condition); return this; }
-  orderBy(column: string, dir: 'ASC' | 'DESC' = 'ASC'): this {
-    this.orderByColumn = column; this.orderDir = dir; return this;
-  }
-  limit(n: number): this { this.limitValue = n; return this; }
-
-  build(): string {
-    if (!this.table) throw new Error('FROM clause is required');
-    let q = `SELECT ${this.columns} FROM ${this.table}`;
-    if (this.conditions.length > 0) q += ` WHERE ${this.conditions.join(' AND ')}`;
-    if (this.orderByColumn) q += ` ORDER BY ${this.orderByColumn} ${this.orderDir}`;
-    if (this.limitValue !== null) q += ` LIMIT ${this.limitValue}`;
-    return q;
-  }
-}
-
-const query = new QueryBuilder()
-  .select('id, name, email')
-  .from('users')
-  .where('active = true')
-  .where('age > 18')
-  .orderBy('name')
-  .limit(10)
-  .build();
-
-console.log(query);
-// SELECT id, name, email FROM users WHERE active = true AND age > 18 ORDER BY name ASC LIMIT 10
-```
-
+<TypeScriptRepl code={tsCode} id="builder-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python's `from` is a reserved keyword, so the `from_` method handles that clause. The `__future__` import lets the return type annotation refer to `QueryBuilder` before the class is fully defined.
-
-```python
-from __future__ import annotations
-
-
-class QueryBuilder:
-    def __init__(self) -> None:
-        self._table = ''
-        self._columns = '*'
-        self._conditions: list[str] = []
-        self._limit: int | None = None
-        self._order_by = ''
-        self._order_dir = 'ASC'
-
-    def select(self, columns: str) -> QueryBuilder:
-        self._columns = columns
-        return self
-
-    def from_(self, table: str) -> QueryBuilder:
-        self._table = table
-        return self
-
-    def where(self, condition: str) -> QueryBuilder:
-        self._conditions.append(condition)
-        return self
-
-    def order_by(self, column: str, direction: str = 'ASC') -> QueryBuilder:
-        self._order_by = column
-        self._order_dir = direction
-        return self
-
-    def limit(self, n: int) -> QueryBuilder:
-        self._limit = n
-        return self
-
-    def build(self) -> str:
-        if not self._table:
-            raise ValueError('FROM clause is required')
-        q = f'SELECT {self._columns} FROM {self._table}'
-        if self._conditions:
-            q += ' WHERE ' + ' AND '.join(self._conditions)
-        if self._order_by:
-            q += f' ORDER BY {self._order_by} {self._order_dir}'
-        if self._limit is not None:
-            q += f' LIMIT {self._limit}'
-        return q
-
-
-query = (
-    QueryBuilder()
-    .select('id, name, email')
-    .from_('users')
-    .where('active = true')
-    .where('age > 18')
-    .order_by('name')
-    .limit(10)
-    .build()
-)
-print(query)
-# SELECT id, name, email FROM users WHERE active = true AND age > 18 ORDER BY name ASC LIMIT 10
-```
-
+<PythonRepl code={pyCode} id="builder-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go has no default parameter values, so optional clauses are tracked with explicit fields. The `hasLimit` boolean distinguishes "not set" from `LIMIT 0`. All validation lives in `Build()`, which returns an error rather than panicking.
-
-```go
-package main
-
-import (
-	"errors"
-	"fmt"
-	"strings"
-)
-
-type QueryBuilder struct {
-	table      string
-	columns    string
-	conditions []string
-	orderCol   string
-	orderDir   string
-	limitVal   int
-	hasLimit   bool
-}
-
-func NewQuery() *QueryBuilder {
-	return &QueryBuilder{columns: "*", orderDir: "ASC"}
-}
-
-func (q *QueryBuilder) Select(columns string) *QueryBuilder {
-	q.columns = columns
-	return q
-}
-
-func (q *QueryBuilder) From(table string) *QueryBuilder {
-	q.table = table
-	return q
-}
-
-func (q *QueryBuilder) Where(condition string) *QueryBuilder {
-	q.conditions = append(q.conditions, condition)
-	return q
-}
-
-func (q *QueryBuilder) OrderBy(column, dir string) *QueryBuilder {
-	q.orderCol = column
-	q.orderDir = dir
-	return q
-}
-
-func (q *QueryBuilder) Limit(n int) *QueryBuilder {
-	q.limitVal = n
-	q.hasLimit = true
-	return q
-}
-
-func (q *QueryBuilder) Build() (string, error) {
-	if q.table == "" {
-		return "", errors.New("FROM clause is required")
-	}
-	query := fmt.Sprintf("SELECT %s FROM %s", q.columns, q.table)
-	if len(q.conditions) > 0 {
-		query += " WHERE " + strings.Join(q.conditions, " AND ")
-	}
-	if q.orderCol != "" {
-		query += fmt.Sprintf(" ORDER BY %s %s", q.orderCol, q.orderDir)
-	}
-	if q.hasLimit {
-		query += fmt.Sprintf(" LIMIT %d", q.limitVal)
-	}
-	return query, nil
-}
-
-func main() {
-	query, err := NewQuery().
-		Select("id, name, email").
-		From("users").
-		Where("active = true").
-		Where("age > 18").
-		OrderBy("name", "ASC").
-		Limit(10).
-		Build()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(query)
-	// SELECT id, name, email FROM users WHERE active = true AND age > 18 ORDER BY name ASC LIMIT 10
-}
-```
-
+<GoRepl code={goCode} id="builder-go" />
 </TabItem>
 </Tabs>
 

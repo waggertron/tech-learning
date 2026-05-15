@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './flyweight.ts?raw';
+import pyCode from './flyweight.py?raw';
+import goCode from './flyweight.go?raw';
 
 ## The problem
 
@@ -57,217 +63,17 @@ classDiagram
 
 ## Implementation
 
+A `Forest` plants trees using a shared `TreeType` for species data (intrinsic state: name, color, texture) and per-tree coordinates (extrinsic state). Four trees share only two `TreeType` instances, demonstrating the memory savings. Python uses a module-level `_tree_types` dict as the factory cache, with a tuple key that is hashable and unambiguous. Go uses a `treeTypeFactory` with a `sync.Mutex`-guarded map to keep the cache safe under concurrent access.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-A `Forest` plants trees using a shared `TreeType` for species data (intrinsic) and per-tree coordinates (extrinsic). Four trees share only two `TreeType` instances.
-
-```typescript
-class TreeType {
-  constructor(
-    readonly name: string,
-    readonly color: string,
-    readonly texture: string,
-  ) {}
-
-  draw(x: number, y: number): void {
-    console.log(
-      `Drawing ${this.name} (${this.color}) at (${x}, ${y}) [texture: ${this.texture}]`
-    );
-  }
-}
-
-class TreeTypeFactory {
-  private static types = new Map<string, TreeType>();
-
-  static getTreeType(name: string, color: string, texture: string): TreeType {
-    const key = `${name}|${color}|${texture}`;
-    if (!this.types.has(key)) {
-      this.types.set(key, new TreeType(name, color, texture));
-    }
-    return this.types.get(key)!;
-  }
-
-  static count(): number { return this.types.size; }
-}
-
-class Tree {
-  constructor(
-    private x: number,
-    private y: number,
-    private type: TreeType,
-  ) {}
-
-  draw(): void { this.type.draw(this.x, this.y); }
-}
-
-class Forest {
-  private trees: Tree[] = [];
-
-  plantTree(x: number, y: number, name: string, color: string, texture: string): void {
-    const type = TreeTypeFactory.getTreeType(name, color, texture);
-    this.trees.push(new Tree(x, y, type));
-  }
-
-  draw(): void { this.trees.forEach(t => t.draw()); }
-}
-
-const forest = new Forest();
-forest.plantTree(10, 20, 'Oak', 'dark green', 'rough');
-forest.plantTree(30, 40, 'Oak', 'dark green', 'rough');   // reuses existing TreeType
-forest.plantTree(50, 60, 'Pine', 'light green', 'smooth');
-forest.plantTree(70, 80, 'Oak', 'dark green', 'rough');   // reuses existing TreeType
-
-forest.draw();
-console.log(`TreeType instances: ${TreeTypeFactory.count()}`); // 2, not 4
-```
-
+<TypeScriptRepl code={tsCode} id="flyweight-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Same structure with a module-level `_tree_types` dict acting as the factory cache. The dict key is a tuple of the intrinsic fields, which is hashable and unambiguous.
-
-```python
-from __future__ import annotations
-
-_tree_types: dict[tuple[str, str, str], TreeType] = {}
-
-
-class TreeType:
-    def __init__(self, name: str, color: str, texture: str) -> None:
-        self.name = name
-        self.color = color
-        self.texture = texture
-
-    def draw(self, x: int, y: int) -> None:
-        print(f'Drawing {self.name} ({self.color}) at ({x}, {y}) [texture: {self.texture}]')
-
-
-def get_tree_type(name: str, color: str, texture: str) -> TreeType:
-    key = (name, color, texture)
-    if key not in _tree_types:
-        _tree_types[key] = TreeType(name, color, texture)
-    return _tree_types[key]
-
-
-class Tree:
-    def __init__(self, x: int, y: int, tree_type: TreeType) -> None:
-        self._x = x
-        self._y = y
-        self._type = tree_type
-
-    def draw(self) -> None:
-        self._type.draw(self._x, self._y)
-
-
-class Forest:
-    def __init__(self) -> None:
-        self._trees: list[Tree] = []
-
-    def plant_tree(self, x: int, y: int, name: str, color: str, texture: str) -> None:
-        tree_type = get_tree_type(name, color, texture)
-        self._trees.append(Tree(x, y, tree_type))
-
-    def draw(self) -> None:
-        for tree in self._trees:
-            tree.draw()
-
-
-forest = Forest()
-forest.plant_tree(10, 20, 'Oak', 'dark green', 'rough')
-forest.plant_tree(30, 40, 'Oak', 'dark green', 'rough')   # reuses
-forest.plant_tree(50, 60, 'Pine', 'light green', 'smooth')
-forest.plant_tree(70, 80, 'Oak', 'dark green', 'rough')   # reuses
-
-forest.draw()
-print(f'TreeType instances: {len(_tree_types)}')  # 2, not 4
-```
-
+<PythonRepl code={pyCode} id="flyweight-py" />
 </TabItem>
 <TabItem label="Go">
-
-`TreeType` holds the intrinsic state. A `treeTypeFactory` with a mutex-guarded map caches instances. `Tree` and `Forest` hold only extrinsic state.
-
-```go
-package main
-
-import (
-	"fmt"
-	"sync"
-)
-
-type TreeType struct {
-	Name    string
-	Color   string
-	Texture string
-}
-
-func (t *TreeType) Draw(x, y int) {
-	fmt.Printf(
-		"Drawing %s (%s) at (%d, %d) [texture: %s]\n",
-		t.Name, t.Color, x, y, t.Texture,
-	)
-}
-
-type treeTypeFactory struct {
-	mu    sync.Mutex
-	types map[string]*TreeType
-}
-
-var factory = &treeTypeFactory{types: make(map[string]*TreeType)}
-
-func (f *treeTypeFactory) Get(name, color, texture string) *TreeType {
-	key := name + "|" + color + "|" + texture
-	f.mu.Lock()
-	defer f.mu.Unlock()
-	if t, ok := f.types[key]; ok {
-		return t
-	}
-	t := &TreeType{Name: name, Color: color, Texture: texture}
-	f.types[key] = t
-	return t
-}
-
-func (f *treeTypeFactory) Count() int {
-	f.mu.Lock()
-	defer f.mu.Unlock()
-	return len(f.types)
-}
-
-type Tree struct {
-	x, y     int
-	treeType *TreeType
-}
-
-func (t *Tree) Draw() { t.treeType.Draw(t.x, t.y) }
-
-type Forest struct {
-	trees []*Tree
-}
-
-func (f *Forest) PlantTree(x, y int, name, color, texture string) {
-	t := factory.Get(name, color, texture)
-	f.trees = append(f.trees, &Tree{x: x, y: y, treeType: t})
-}
-
-func (f *Forest) Draw() {
-	for _, t := range f.trees {
-		t.Draw()
-	}
-}
-
-func main() {
-	forest := &Forest{}
-	forest.PlantTree(10, 20, "Oak", "dark green", "rough")
-	forest.PlantTree(30, 40, "Oak", "dark green", "rough")   // reuses
-	forest.PlantTree(50, 60, "Pine", "light green", "smooth")
-	forest.PlantTree(70, 80, "Oak", "dark green", "rough")   // reuses
-
-	forest.Draw()
-	fmt.Printf("TreeType instances: %d\n", factory.Count()) // 2, not 4
-}
-```
-
+<GoRepl code={goCode} id="flyweight-go" />
 </TabItem>
 </Tabs>
 

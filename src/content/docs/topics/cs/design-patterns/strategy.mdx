@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './strategy.ts?raw';
+import pyCode from './strategy.py?raw';
+import goCode from './strategy.go?raw';
 
 ## The problem
 
@@ -56,175 +62,17 @@ classDiagram
 
 ## Implementation
 
+All three show the same payment example: a `Checkout` context that holds a `PaymentStrategy` reference and delegates to whichever concrete strategy is active. The `Checkout` class takes a strategy in its constructor and exposes `setStrategy` for runtime swaps; none of the concrete strategy classes know about each other or about `Checkout`. Python uses `typing.Protocol` rather than an abstract base class, so `CreditCard` and `PayPal` satisfy the interface without inheriting from anything. Go interfaces are satisfied implicitly, which means `CreditCard`, `PayPal`, and `Crypto` implement `PaymentStrategy` without any explicit declaration. Note that a zero-value `Checkout` with a nil `strategy` field will panic on the first call in Go: always initialize with a concrete strategy.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-The `Checkout` context takes a `PaymentStrategy` in its constructor and exposes `setStrategy` for runtime swaps. None of the concrete strategy classes know about each other or about `Checkout`.
-
-```typescript
-interface PaymentStrategy {
-  pay(amount: number): void;
-}
-
-class CreditCard implements PaymentStrategy {
-  constructor(private cardNumber: string) {}
-  pay(amount: number): void {
-    console.log(
-      `Charged $${amount} to card ending ${this.cardNumber.slice(-4)}`
-    );
-  }
-}
-
-class PayPal implements PaymentStrategy {
-  constructor(private email: string) {}
-  pay(amount: number): void {
-    console.log(`Sent $${amount} via PayPal to ${this.email}`);
-  }
-}
-
-class Crypto implements PaymentStrategy {
-  constructor(private address: string) {}
-  pay(amount: number): void {
-    console.log(`Transferred $${amount} worth of BTC to ${this.address}`);
-  }
-}
-
-class Checkout {
-  constructor(private strategy: PaymentStrategy) {}
-
-  setStrategy(strategy: PaymentStrategy): void {
-    this.strategy = strategy;
-  }
-
-  processPayment(amount: number): void {
-    this.strategy.pay(amount);
-  }
-}
-
-const checkout = new Checkout(new CreditCard('4111111111111111'));
-checkout.processPayment(99.99);
-// Charged $99.99 to card ending 1111
-
-checkout.setStrategy(new PayPal('user@example.com'));
-checkout.processPayment(49.99);
-// Sent $49.99 via PayPal to user@example.com
-
-checkout.setStrategy(new Crypto('1A2B3C4D...'));
-checkout.processPayment(19.99);
-// Transferred $19.99 worth of BTC to 1A2B3C4D...
-```
-
+<TypeScriptRepl code={tsCode} id="strategy-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python duck typing means the abstract base class is optional. The `Protocol` approach used here gives type checkers and IDEs the information they need to catch mismatches without requiring `CreditCard` or `PayPal` to inherit from anything.
-
-```python
-from __future__ import annotations
-from typing import Protocol
-
-
-class PaymentStrategy(Protocol):
-    def pay(self, amount: float) -> None: ...
-
-
-class CreditCard:
-    def __init__(self, card_number: str) -> None:
-        self._card = card_number
-
-    def pay(self, amount: float) -> None:
-        print(f'Charged ${amount} to card ending {self._card[-4:]}')
-
-
-class PayPal:
-    def __init__(self, email: str) -> None:
-        self._email = email
-
-    def pay(self, amount: float) -> None:
-        print(f'Sent ${amount} via PayPal to {self._email}')
-
-
-class Crypto:
-    def __init__(self, address: str) -> None:
-        self._address = address
-
-    def pay(self, amount: float) -> None:
-        print(f'Transferred ${amount} worth of BTC to {self._address}')
-
-
-class Checkout:
-    def __init__(self, strategy: PaymentStrategy) -> None:
-        self._strategy = strategy
-
-    def set_strategy(self, strategy: PaymentStrategy) -> None:
-        self._strategy = strategy
-
-    def process_payment(self, amount: float) -> None:
-        self._strategy.pay(amount)
-
-
-checkout = Checkout(CreditCard('4111111111111111'))
-checkout.process_payment(99.99)
-# Charged $99.99 to card ending 1111
-
-checkout.set_strategy(PayPal('user@example.com'))
-checkout.process_payment(49.99)
-# Sent $49.99 via PayPal to user@example.com
-```
-
+<PythonRepl code={pyCode} id="strategy-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go interfaces are satisfied implicitly, so `CreditCard`, `PayPal`, and `Crypto` implement `PaymentStrategy` without any declaration. A nil strategy panics at call time: initialize `Checkout` with a concrete strategy or add a nil guard in `ProcessPayment`.
-
-```go
-package main
-
-import "fmt"
-
-type PaymentStrategy interface {
-	Pay(amount float64)
-}
-
-type CreditCard struct{ CardNumber string }
-
-func (c *CreditCard) Pay(amount float64) {
-	last4 := c.CardNumber[len(c.CardNumber)-4:]
-	fmt.Printf("Charged $%.2f to card ending %s\n", amount, last4)
-}
-
-type PayPal struct{ Email string }
-
-func (p *PayPal) Pay(amount float64) {
-	fmt.Printf("Sent $%.2f via PayPal to %s\n", amount, p.Email)
-}
-
-type Crypto struct{ Address string }
-
-func (c *Crypto) Pay(amount float64) {
-	fmt.Printf("Transferred $%.2f worth of BTC to %s\n", amount, c.Address)
-}
-
-type Checkout struct{ strategy PaymentStrategy }
-
-func (c *Checkout) SetStrategy(s PaymentStrategy) { c.strategy = s }
-func (c *Checkout) ProcessPayment(amount float64)  { c.strategy.Pay(amount) }
-
-func main() {
-	checkout := &Checkout{strategy: &CreditCard{CardNumber: "4111111111111111"}}
-	checkout.ProcessPayment(99.99)
-	// Charged $99.99 to card ending 1111
-
-	checkout.SetStrategy(&PayPal{Email: "user@example.com"})
-	checkout.ProcessPayment(49.99)
-	// Sent $49.99 via PayPal to user@example.com
-
-	checkout.SetStrategy(&Crypto{Address: "1A2B3C4D..."})
-	checkout.ProcessPayment(19.99)
-	// Transferred $19.99 worth of BTC to 1A2B3C4D...
-}
-```
-
+<GoRepl code={goCode} id="strategy-go" />
 </TabItem>
 </Tabs>
 

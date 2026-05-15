@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './proxy.ts?raw';
+import pyCode from './proxy.py?raw';
+import goCode from './proxy.go?raw';
 
 ## The problem
 
@@ -49,213 +55,17 @@ classDiagram
 
 ## Implementation
 
+The examples demonstrate a virtual proxy that defers loading an image from disk until `display()` is first called, caching the result for subsequent calls. The TypeScript tab also includes a protection proxy that gates `deleteUser` behind a role check, showing the same interface from two proxy variants. Python uses `abc.ABC` with `@abstractmethod` for the `Image` interface. Go uses an interface type and a blank compile-time assignment (`var _ Image = (*ImageProxy)(nil)`) to confirm satisfaction without any runtime cost.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-A virtual proxy defers loading an image from disk until `display()` is first called. Subsequent calls reuse the already-loaded instance.
-
-```typescript
-interface Image {
-  display(): void;
-}
-
-class RealImage implements Image {
-  private data: string;
-
-  constructor(private filename: string) {
-    this.data = this.loadFromDisk();
-  }
-
-  private loadFromDisk(): string {
-    console.log(`Loading ${this.filename} from disk...`);
-    return `<image data for ${this.filename}>`;
-  }
-
-  display(): void {
-    console.log(`Displaying ${this.filename}: ${this.data}`);
-  }
-}
-
-class ImageProxy implements Image {
-  private realImage: RealImage | null = null;
-
-  constructor(private filename: string) {}
-
-  display(): void {
-    if (!this.realImage) {
-      this.realImage = new RealImage(this.filename);
-    }
-    this.realImage.display();
-  }
-}
-
-// With RealImage, disk load happens at construction time.
-// With ImageProxy, disk load is deferred until display() is called.
-const image = new ImageProxy('photo.jpg');
-console.log('Proxy created, no disk access yet');
-
-image.display(); // loads now
-// Loading photo.jpg from disk...
-// Displaying photo.jpg: <image data for photo.jpg>
-
-image.display(); // uses cached RealImage
-// Displaying photo.jpg: <image data for photo.jpg>
-```
-
-A protection proxy adds a permission check before delegating. The caller gets the same `UserService` interface either way.
-
-```typescript
-interface UserService {
-  getUser(id: string): string;
-  deleteUser(id: string): void;
-}
-
-class RealUserService implements UserService {
-  getUser(id: string): string { return `User ${id}`; }
-  deleteUser(id: string): void { console.log(`Deleted user ${id}`); }
-}
-
-class AuthUserServiceProxy implements UserService {
-  constructor(
-    private service: RealUserService,
-    private role: string,
-  ) {}
-
-  getUser(id: string): string {
-    return this.service.getUser(id);
-  }
-
-  deleteUser(id: string): void {
-    if (this.role !== 'admin') {
-      throw new Error('Permission denied: admin role required');
-    }
-    this.service.deleteUser(id);
-  }
-}
-
-const adminProxy = new AuthUserServiceProxy(new RealUserService(), 'admin');
-adminProxy.deleteUser('42'); // Deleted user 42
-
-const userProxy = new AuthUserServiceProxy(new RealUserService(), 'user');
-try {
-  userProxy.deleteUser('42');
-} catch (e) {
-  console.log((e as Error).message); // Permission denied: admin role required
-}
-```
-
+<TypeScriptRepl code={tsCode} id="proxy-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Virtual proxy using an abstract base class. The protection proxy follows the same pattern: check a condition before calling `self._real_image`.
-
-```python
-from __future__ import annotations
-from abc import ABC, abstractmethod
-
-
-class Image(ABC):
-    @abstractmethod
-    def display(self) -> None: ...
-
-
-class RealImage(Image):
-    def __init__(self, filename: str) -> None:
-        self._filename = filename
-        self._data = self._load_from_disk()
-
-    def _load_from_disk(self) -> str:
-        print(f'Loading {self._filename} from disk...')
-        return f'<image data for {self._filename}>'
-
-    def display(self) -> None:
-        print(f'Displaying {self._filename}: {self._data}')
-
-
-class ImageProxy(Image):
-    def __init__(self, filename: str) -> None:
-        self._filename = filename
-        self._real_image: RealImage | None = None
-
-    def display(self) -> None:
-        if self._real_image is None:
-            self._real_image = RealImage(self._filename)
-        self._real_image.display()
-
-
-image = ImageProxy('photo.jpg')
-print('Proxy created, no disk access yet')
-
-image.display()  # loads now
-# Loading photo.jpg from disk...
-# Displaying photo.jpg: <image data for photo.jpg>
-
-image.display()  # uses cached instance
-# Displaying photo.jpg: <image data for photo.jpg>
-```
-
+<PythonRepl code={pyCode} id="proxy-py" />
 </TabItem>
 <TabItem label="Go">
-
-`Image` interface, `RealImage`, and `ImageProxy`. The proxy is assigned to an `Image` variable so the compiler verifies interface satisfaction at the call site.
-
-```go
-package main
-
-import "fmt"
-
-type Image interface {
-	Display()
-}
-
-// Compile-time interface check.
-var _ Image = (*ImageProxy)(nil)
-
-type RealImage struct {
-	filename string
-	data     string
-}
-
-func NewRealImage(filename string) *RealImage {
-	img := &RealImage{filename: filename}
-	img.data = img.loadFromDisk()
-	return img
-}
-
-func (r *RealImage) loadFromDisk() string {
-	fmt.Printf("Loading %s from disk...\n", r.filename)
-	return fmt.Sprintf("<image data for %s>", r.filename)
-}
-
-func (r *RealImage) Display() {
-	fmt.Printf("Displaying %s: %s\n", r.filename, r.data)
-}
-
-type ImageProxy struct {
-	filename  string
-	realImage *RealImage
-}
-
-func NewImageProxy(filename string) *ImageProxy {
-	return &ImageProxy{filename: filename}
-}
-
-func (p *ImageProxy) Display() {
-	if p.realImage == nil {
-		p.realImage = NewRealImage(p.filename)
-	}
-	p.realImage.Display()
-}
-
-func main() {
-	var image Image = NewImageProxy("photo.jpg")
-	fmt.Println("Proxy created, no disk access yet")
-
-	image.Display() // loads now
-	image.Display() // uses cached
-}
-```
-
+<GoRepl code={goCode} id="proxy-go" />
 </TabItem>
 </Tabs>
 

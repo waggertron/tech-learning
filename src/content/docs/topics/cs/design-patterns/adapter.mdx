@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './adapter.ts?raw';
+import pyCode from './adapter.py?raw';
+import goCode from './adapter.go?raw';
 
 ## The problem
 
@@ -47,177 +53,17 @@ classDiagram
 
 ## Implementation
 
+Each example wraps a `LegacyPaymentGateway` (takes cents as an integer, returns a numeric result code) behind a `PaymentProcessor` interface (takes decimal amounts, returns booleans). The adapter converts between the two representations so client code never sees the legacy details. Python uses `abc.ABC` with `@abstractmethod` to make the target interface explicit and enable `isinstance` checks. Go satisfies interfaces implicitly: `LegacyPaymentAdapter` implements `PaymentProcessor` because its method signatures match, and a compile-time blank assignment catches any drift.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-The `LegacyPaymentGateway` takes cents as an integer and returns a numeric result code. The new `PaymentProcessor` interface takes decimal amounts and returns booleans. The adapter converts between them so client code never sees the legacy details.
-
-```typescript
-// New interface the rest of the application expects
-interface PaymentProcessor {
-  charge(amount: number, currency: string): boolean;
-  refund(transactionId: string): boolean;
-}
-
-// Legacy system we cannot modify
-class LegacyPaymentGateway {
-  makePayment(cents: number, currencyCode: string): number {
-    console.log(`Legacy: charging ${cents} cents in ${currencyCode}`);
-    return 0; // 0 = success
-  }
-
-  reverseTransaction(transactionId: string): boolean {
-    console.log(`Legacy: reversing ${transactionId}`);
-    return true;
-  }
-}
-
-// Adapter: implements the new interface, delegates to the old one
-class LegacyPaymentAdapter implements PaymentProcessor {
-  constructor(private gateway: LegacyPaymentGateway) {}
-
-  charge(amount: number, currency: string): boolean {
-    const cents = Math.round(amount * 100);
-    const result = this.gateway.makePayment(cents, currency.toUpperCase());
-    return result === 0;
-  }
-
-  refund(transactionId: string): boolean {
-    return this.gateway.reverseTransaction(transactionId);
-  }
-}
-
-// Client code uses only PaymentProcessor; legacy details are hidden
-function processOrder(processor: PaymentProcessor, total: number): void {
-  const ok = processor.charge(total, 'usd');
-  console.log(ok ? 'Payment accepted' : 'Payment failed');
-}
-
-const adapter = new LegacyPaymentAdapter(new LegacyPaymentGateway());
-processOrder(adapter, 29.99);
-// Legacy: charging 2999 cents in USD
-// Payment accepted
-```
-
+<TypeScriptRepl code={tsCode} id="adapter-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python's abstract base class makes the target interface explicit. The adapter inherits from `PaymentProcessor` and holds a `LegacyPaymentGateway` as an instance variable. Without the ABC, duck typing would still work, but the ABC gives `isinstance` checks and IDE completions.
-
-```python
-from __future__ import annotations
-from abc import ABC, abstractmethod
-
-
-class PaymentProcessor(ABC):
-    @abstractmethod
-    def charge(self, amount: float, currency: str) -> bool: ...
-
-    @abstractmethod
-    def refund(self, transaction_id: str) -> bool: ...
-
-
-class LegacyPaymentGateway:
-    def make_payment(self, cents: int, currency_code: str) -> int:
-        print(f'Legacy: charging {cents} cents in {currency_code}')
-        return 0  # 0 = success
-
-    def reverse_transaction(self, transaction_id: str) -> bool:
-        print(f'Legacy: reversing {transaction_id}')
-        return True
-
-
-class LegacyPaymentAdapter(PaymentProcessor):
-    def __init__(self, gateway: LegacyPaymentGateway) -> None:
-        self._gateway = gateway
-
-    def charge(self, amount: float, currency: str) -> bool:
-        cents = round(amount * 100)
-        result = self._gateway.make_payment(cents, currency.upper())
-        return result == 0
-
-    def refund(self, transaction_id: str) -> bool:
-        return self._gateway.reverse_transaction(transaction_id)
-
-
-def process_order(processor: PaymentProcessor, total: float) -> None:
-    ok = processor.charge(total, 'usd')
-    print('Payment accepted' if ok else 'Payment failed')
-
-
-adapter = LegacyPaymentAdapter(LegacyPaymentGateway())
-process_order(adapter, 29.99)
-# Legacy: charging 2999 cents in USD
-# Payment accepted
-```
-
+<PythonRepl code={pyCode} id="adapter-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go satisfies interfaces implicitly. `LegacyPaymentAdapter` implements `PaymentProcessor` because it has matching `Charge` and `Refund` methods. The compile-time check `var _ PaymentProcessor = (*LegacyPaymentAdapter)(nil)` catches mismatches without running any code.
-
-```go
-package main
-
-import (
-	"fmt"
-	"math"
-)
-
-// Target interface
-type PaymentProcessor interface {
-	Charge(amount float64, currency string) bool
-	Refund(transactionID string) bool
-}
-
-// Adaptee (legacy, cannot be changed)
-type LegacyPaymentGateway struct{}
-
-func (g *LegacyPaymentGateway) MakePayment(cents int, currencyCode string) int {
-	fmt.Printf("Legacy: charging %d cents in %s\n", cents, currencyCode)
-	return 0 // 0 = success
-}
-
-func (g *LegacyPaymentGateway) ReverseTransaction(id string) bool {
-	fmt.Printf("Legacy: reversing %s\n", id)
-	return true
-}
-
-// Adapter
-type LegacyPaymentAdapter struct {
-	gateway *LegacyPaymentGateway
-}
-
-// Compile-time interface check
-var _ PaymentProcessor = (*LegacyPaymentAdapter)(nil)
-
-func (a *LegacyPaymentAdapter) Charge(amount float64, currency string) bool {
-	cents := int(math.Round(amount * 100))
-	result := a.gateway.MakePayment(cents, currency)
-	return result == 0
-}
-
-func (a *LegacyPaymentAdapter) Refund(transactionID string) bool {
-	return a.gateway.ReverseTransaction(transactionID)
-}
-
-func processOrder(p PaymentProcessor, total float64) {
-	ok := p.Charge(total, "USD")
-	if ok {
-		fmt.Println("Payment accepted")
-	} else {
-		fmt.Println("Payment failed")
-	}
-}
-
-func main() {
-	adapter := &LegacyPaymentAdapter{gateway: &LegacyPaymentGateway{}}
-	processOrder(adapter, 29.99)
-	// Legacy: charging 2999 cents in USD
-	// Payment accepted
-}
-```
-
+<GoRepl code={goCode} id="adapter-go" />
 </TabItem>
 </Tabs>
 

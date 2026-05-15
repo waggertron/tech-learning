@@ -42,10 +42,10 @@ Creational patterns separate object construction from use, hiding the concrete c
 
 | Pattern | Intent |
 | --- | --- |
-| Abstract Factory | Produce families of related objects without specifying concrete classes |
+| [Abstract Factory](./abstract-factory/) | Produce families of related objects without specifying concrete classes |
 | [Builder](./builder/) | Build complex objects step by step, separating construction from representation |
 | [Factory Method](./factory/) | Delegate instantiation to subclasses |
-| Prototype | Clone an existing object rather than constructing a new one |
+| [Prototype](./prototype/) | Clone an existing object rather than constructing a new one |
 | [Singleton](./singleton/) | Ensure one instance and provide a global access point |
 
 ## Structural patterns
@@ -55,8 +55,8 @@ Structural patterns deal with how classes and objects are composed to form large
 | Pattern | Intent |
 | --- | --- |
 | [Adapter](./adapter/) | Make incompatible interfaces work together |
-| Bridge | Decouple an abstraction from its implementation |
-| Composite | Compose objects into trees for uniform treatment |
+| [Bridge](./bridge/) | Decouple an abstraction from its implementation |
+| [Composite](./composite/) | Compose objects into trees for uniform treatment |
 | [Decorator](./decorator/) | Add behavior by wrapping, not subclassing |
 | [Facade](./facade/) | Provide a simplified interface to a complex subsystem |
 | [Flyweight](./flyweight/) | Share fine-grained objects to reduce memory |
@@ -70,15 +70,15 @@ Behavioral patterns focus on communication and responsibility between objects.
 | --- | --- |
 | Chain of Responsibility | Pass a request along a chain of handlers |
 | [Command](./command/) | Encapsulate a request as an object |
-| Interpreter | Define a grammar and an interpreter for a language |
-| Iterator | Sequential element access without exposing internals |
-| Mediator | Centralize communication between objects |
-| Memento | Capture and restore an object's state |
+| [Interpreter](./interpreter/) | Define a grammar and an interpreter for a language |
+| [Iterator](./iterator/) | Sequential element access without exposing internals |
+| [Mediator](./mediator/) | Centralize communication between objects |
+| [Memento](./memento/) | Capture and restore an object's state |
 | [Observer](./observer/) | Notify dependents automatically when state changes |
-| State | Alter behavior when internal state changes |
+| [State](./state/) | Alter behavior when internal state changes |
 | [Strategy](./strategy/) | Define a family of algorithms, encapsulate each, make them interchangeable |
-| Template Method | Define the skeleton of an algorithm, leave steps to subclasses |
-| Visitor | Add new operations to a class hierarchy without modifying it |
+| [Template Method](./template-method/) | Define the skeleton of an algorithm, leave steps to subclasses |
+| [Visitor](./visitor/) | Add new operations to a class hierarchy without modifying it |
 
 ## Patterns you will encounter most
 
@@ -100,17 +100,36 @@ Read each pattern for the problem it solves.
 
 ## Subtopics
 
+**Creational**
+
+- [Abstract Factory](./abstract-factory/), families of related objects without specifying concrete classes
 - [Builder](./builder/), step-by-step object construction with a fluent interface
+- [Factory](./factory/), centralized object creation with Factory Method and Abstract Factory
+- [Prototype](./prototype/), clone existing objects rather than constructing new ones
+- [Singleton](./singleton/), one instance, global access
+
+**Structural**
+
+- [Adapter](./adapter/), incompatible interfaces made compatible
+- [Bridge](./bridge/), abstraction decoupled from implementation so both can vary
+- [Composite](./composite/), part-whole trees where leaves and branches are treated uniformly
+- [Decorator](./decorator/), behavior added by wrapping without subclassing
 - [Facade](./facade/), a simplified surface over a complex subsystem
 - [Flyweight](./flyweight/), shared intrinsic state to reduce memory use
-- [Command](./command/), requests as first-class objects with undo and queuing
-- [Observer](./observer/), automatic notification of dependents on state change
-- [Strategy](./strategy/), swappable algorithm families
-- [Factory](./factory/), centralized object creation with Factory Method and Abstract Factory
-- [Decorator](./decorator/), behavior added by wrapping without subclassing
-- [Singleton](./singleton/), one instance, global access
-- [Adapter](./adapter/), incompatible interfaces made compatible
 - [Proxy](./proxy/), controlled access through a surrogate
+
+**Behavioral**
+
+- [Command](./command/), requests as first-class objects with undo and queuing
+- [Interpreter](./interpreter/), a grammar and evaluator for a small language
+- [Iterator](./iterator/), sequential element access without exposing internals
+- [Mediator](./mediator/), centralized communication between peer objects
+- [Memento](./memento/), snapshot and restore an object's internal state
+- [Observer](./observer/), automatic notification of dependents on state change
+- [State](./state/), behavior that changes as internal state changes
+- [Strategy](./strategy/), swappable algorithm families
+- [Template Method](./template-method/), algorithm skeleton in a base class with steps deferred to subclasses
+- [Visitor](./visitor/), new operations on a class hierarchy without modifying it
 
 ## References
 

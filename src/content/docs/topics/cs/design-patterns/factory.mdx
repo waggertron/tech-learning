@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './factory.ts?raw';
+import pyCode from './factory.py?raw';
+import goCode from './factory.go?raw';
 
 ## The problem
 
@@ -60,216 +66,17 @@ classDiagram
 
 ## Implementation
 
+Each example shows a simple factory function first (the common case), then the GoF Factory Method pattern where an abstract creator delegates construction to subclasses. Abstract Factory is not shown in full because it adds complexity without new concepts; use it when you need to produce families of related objects together. Python uses `abc.ABC` for both the `Notification` interface and the abstract service, and the simple factory uses `match` (Python 3.10+; use a `dict` mapping for older versions). Go has no abstract classes, so Factory Method maps to an interface with a `Create` method injected as a struct field.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-The example first shows a simple factory function, which covers most real-world cases. Then it shows the GoF Factory Method pattern, where `NotificationService` is an abstract class with a protected `createNotification` method that subclasses override. Abstract Factory (a factory of factories) is not shown in full because it compounds the complexity without adding new concepts; use it when you need to produce *families* of related objects consistently.
-
-```typescript
-interface Notification {
-  send(message: string): void;
-}
-
-class EmailNotification implements Notification {
-  constructor(private address: string) {}
-  send(message: string): void {
-    console.log(`Email to ${this.address}: ${message}`);
-  }
-}
-
-class SMSNotification implements Notification {
-  constructor(private phone: string) {}
-  send(message: string): void {
-    console.log(`SMS to ${this.phone}: ${message}`);
-  }
-}
-
-class PushNotification implements Notification {
-  constructor(private deviceId: string) {}
-  send(message: string): void {
-    console.log(`Push to device ${this.deviceId}: ${message}`);
-  }
-}
-
-// Simple factory function (not GoF, but common)
-function createNotification(
-  type: 'email' | 'sms' | 'push',
-  destination: string
-): Notification {
-  switch (type) {
-    case 'email': return new EmailNotification(destination);
-    case 'sms':   return new SMSNotification(destination);
-    case 'push':  return new PushNotification(destination);
-  }
-}
-
-// GoF Factory Method: abstract creator with a factory method
-abstract class NotificationService {
-  protected abstract createNotification(destination: string): Notification;
-
-  notify(destination: string, message: string): void {
-    const notification = this.createNotification(destination);
-    notification.send(message);
-  }
-}
-
-class EmailService extends NotificationService {
-  protected createNotification(email: string): Notification {
-    return new EmailNotification(email);
-  }
-}
-
-class SMSService extends NotificationService {
-  protected createNotification(phone: string): Notification {
-    return new SMSNotification(phone);
-  }
-}
-
-// Usage
-const n = createNotification('email', 'user@example.com');
-n.send('Your order shipped');
-// Email to user@example.com: Your order shipped
-
-const service = new EmailService();
-service.notify('admin@example.com', 'Server alert');
-// Email to admin@example.com: Server alert
-```
-
+<TypeScriptRepl code={tsCode} id="factory-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python uses `abc.ABC` for the `Notification` interface and the abstract `NotificationService`. The simple factory function uses `match` (Python 3.10+) for the dispatch. For older Python, a `dict` mapping type strings to classes is cleaner than an `if/elif` chain.
-
-```python
-from __future__ import annotations
-from abc import ABC, abstractmethod
-
-
-class Notification(ABC):
-    @abstractmethod
-    def send(self, message: str) -> None: ...
-
-
-class EmailNotification(Notification):
-    def __init__(self, address: str) -> None:
-        self._address = address
-
-    def send(self, message: str) -> None:
-        print(f'Email to {self._address}: {message}')
-
-
-class SMSNotification(Notification):
-    def __init__(self, phone: str) -> None:
-        self._phone = phone
-
-    def send(self, message: str) -> None:
-        print(f'SMS to {self._phone}: {message}')
-
-
-class PushNotification(Notification):
-    def __init__(self, device_id: str) -> None:
-        self._device_id = device_id
-
-    def send(self, message: str) -> None:
-        print(f'Push to {self._device_id}: {message}')
-
-
-def create_notification(type_: str, destination: str) -> Notification:
-    match type_:
-        case 'email': return EmailNotification(destination)
-        case 'sms':   return SMSNotification(destination)
-        case 'push':  return PushNotification(destination)
-        case _: raise ValueError(f'Unknown type: {type_}')
-
-
-class NotificationService(ABC):
-    @abstractmethod
-    def create_notification(self, destination: str) -> Notification: ...
-
-    def notify(self, destination: str, message: str) -> None:
-        notification = self.create_notification(destination)
-        notification.send(message)
-
-
-class EmailService(NotificationService):
-    def create_notification(self, destination: str) -> Notification:
-        return EmailNotification(destination)
-
-
-n = create_notification('email', 'user@example.com')
-n.send('Your order shipped')
-# Email to user@example.com: Your order shipped
-
-service = EmailService()
-service.notify('admin@example.com', 'Server alert')
-# Email to admin@example.com: Server alert
-```
-
+<PythonRepl code={pyCode} id="factory-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go has no abstract classes. The Factory Method pattern maps to an interface with a `Create` method. The `NotificationService` struct holds a factory and calls it in `Notify`, which is the same structure as the abstract creator in other languages. The simple factory function handles the common case where you just need a concrete object by name.
-
-```go
-package main
-
-import "fmt"
-
-type Notification interface {
-	Send(message string)
-}
-
-type EmailNotification struct{ Address string }
-func (n *EmailNotification) Send(msg string) { fmt.Printf("Email to %s: %s\n", n.Address, msg) }
-
-type SMSNotification struct{ Phone string }
-func (n *SMSNotification) Send(msg string) { fmt.Printf("SMS to %s: %s\n", n.Phone, msg) }
-
-type PushNotification struct{ DeviceID string }
-func (n *PushNotification) Send(msg string) { fmt.Printf("Push to %s: %s\n", n.DeviceID, msg) }
-
-// Simple factory function
-func CreateNotification(notifType, destination string) Notification {
-	switch notifType {
-	case "email":
-		return &EmailNotification{Address: destination}
-	case "sms":
-		return &SMSNotification{Phone: destination}
-	case "push":
-		return &PushNotification{DeviceID: destination}
-	default:
-		panic("unknown notification type: " + notifType)
-	}
-}
-
-// Factory Method: interface with a factory method
-type NotificationFactory interface {
-	Create(destination string) Notification
-}
-
-type NotificationService struct {
-	factory NotificationFactory
-}
-
-func (s *NotificationService) Notify(destination, message string) {
-	n := s.factory.Create(destination)
-	n.Send(message)
-}
-
-type EmailFactory struct{}
-func (f *EmailFactory) Create(dest string) Notification { return &EmailNotification{Address: dest} }
-
-func main() {
-	n := CreateNotification("email", "user@example.com")
-	n.Send("Your order shipped")
-	// Email to user@example.com: Your order shipped
-
-	svc := &NotificationService{factory: &EmailFactory{}}
-	svc.Notify("admin@example.com", "Server alert")
-	// Email to admin@example.com: Server alert
-}
-```
-
+<GoRepl code={goCode} id="factory-go" />
 </TabItem>
 </Tabs>
 

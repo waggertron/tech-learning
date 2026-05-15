@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './singleton.ts?raw';
+import pyCode from './singleton.py?raw';
+import goCode from './singleton.go?raw';
 
 ## The problem
 
@@ -42,185 +48,17 @@ classDiagram
 
 ## Implementation
 
+Each language offers two approaches. TypeScript shows the classic GoF form (private constructor plus `static getInstance()`) and then the idiomatic module-level instance that Node.js module caching makes equivalent. Python shows a `__new__` override and the simpler module-level instance (the `__new__` approach works but is unusual; prefer the module-level form unless you need lazy initialization or subclassing). Go uses `sync.Once`, which guarantees the initializer runs exactly once under concurrent access without any locks you have to manage manually. Note that `sync.Once` covers creation only; individual `Get` and `Set` calls still need their own `sync.RWMutex` to be safe under concurrent reads and writes.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-Two approaches are shown below. The first is the classic GoF form with a private constructor and a static `getInstance()` method. The second is a module-level instance, which is more idiomatic in TypeScript and Node.js.
-
-```typescript
-// Approach 1: classic GoF Singleton
-class AppConfig {
-  private static instance: AppConfig | null = null;
-  private settings = new Map<string, string>();
-
-  private constructor() {
-    // Load from environment at construction time.
-    this.settings.set('env', process.env.NODE_ENV ?? 'development');
-    this.settings.set('port', process.env.PORT ?? '3000');
-  }
-
-  static getInstance(): AppConfig {
-    if (!AppConfig.instance) {
-      AppConfig.instance = new AppConfig();
-    }
-    return AppConfig.instance;
-  }
-
-  get(key: string): string | undefined {
-    return this.settings.get(key);
-  }
-
-  set(key: string, value: string): void {
-    this.settings.set(key, value);
-  }
-}
-
-const config1 = AppConfig.getInstance();
-const config2 = AppConfig.getInstance();
-console.log(config1 === config2); // true
-
-config1.set('feature_x', 'enabled');
-console.log(config2.get('feature_x')); // enabled
-```
-
-```typescript
-// Approach 2: module-level instance (idiomatic TypeScript/Node.js)
-// config.ts
-class Config {
-  private settings = new Map<string, string>();
-
-  get(key: string): string | undefined {
-    return this.settings.get(key);
-  }
-
-  set(key: string, value: string): void {
-    this.settings.set(key, value);
-  }
-}
-
-export const config = new Config();
-// Node.js loads each module once and caches it.
-// Every import of this module receives the same `config` object.
-```
-
-The module-level approach is simpler and requires no ceremony. Prefer it unless you need lazy initialization or want to prevent callers from constructing their own instances.
-
+<TypeScriptRepl code={tsCode} id="singleton-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Three approaches are shown below, from most boilerplate to least.
-
-```python
-from __future__ import annotations
-
-
-# Approach 1: __new__ override
-class AppConfig:
-    _instance: AppConfig | None = None
-
-    def __new__(cls) -> AppConfig:
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._settings: dict[str, str] = {}
-        return cls._instance
-
-    def get(self, key: str) -> str | None:
-        return self._settings.get(key)
-
-    def set(self, key: str, value: str) -> None:
-        self._settings[key] = value
-
-
-config1 = AppConfig()
-config2 = AppConfig()
-print(config1 is config2)  # True
-
-config1.set('env', 'production')
-print(config2.get('env'))  # production
-```
-
-```python
-# Approach 2: module-level instance (most Pythonic)
-# In config.py:
-class _Config:
-    def __init__(self) -> None:
-        self._settings: dict[str, str] = {}
-
-    def get(self, key: str) -> str | None:
-        return self._settings.get(key)
-
-    def set(self, key: str, value: str) -> None:
-        self._settings[key] = value
-
-
-config = _Config()
-# Other modules do: from config import config
-# The underscore on _Config signals that only the instance is public.
-```
-
-The `__new__` override works but is unusual Python. Use it only when you need lazy initialization or subclassing. For everything else, a module-level instance is clearer and avoids the magic.
-
+<PythonRepl code={pyCode} id="singleton-py" />
 </TabItem>
 <TabItem label="Go">
-
-`sync.Once` is the idiomatic Go singleton. It guarantees the initializer runs exactly once even under concurrent access, without locks you have to manage yourself.
-
-```go
-package main
-
-import (
-	"fmt"
-	"sync"
-)
-
-type AppConfig struct {
-	settings map[string]string
-	mu       sync.RWMutex
-}
-
-var (
-	configInstance *AppConfig
-	configOnce     sync.Once
-)
-
-func GetConfig() *AppConfig {
-	configOnce.Do(func() {
-		configInstance = &AppConfig{
-			settings: map[string]string{
-				"env":  "development",
-				"port": "3000",
-			},
-		}
-	})
-	return configInstance
-}
-
-func (c *AppConfig) Get(key string) (string, bool) {
-	c.mu.RLock()
-	defer c.mu.RUnlock()
-	val, ok := c.settings[key]
-	return val, ok
-}
-
-func (c *AppConfig) Set(key, value string) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	c.settings[key] = value
-}
-
-func main() {
-	cfg1 := GetConfig()
-	cfg2 := GetConfig()
-	fmt.Println(cfg1 == cfg2) // true
-
-	cfg1.Set("feature_x", "enabled")
-	val, _ := cfg2.Get("feature_x")
-	fmt.Println(val) // enabled
-}
-```
-
-Note that `sync.Once` handles the "create once" guarantee, but individual `Get` and `Set` calls still need their own lock (`sync.RWMutex`) to be safe under concurrent reads and writes.
-
+<GoRepl code={goCode} id="singleton-go" />
 </TabItem>
 </Tabs>
 
