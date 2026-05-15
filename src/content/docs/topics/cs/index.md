@@ -15,6 +15,7 @@ description: Computer science fundamentals, data structures, NeetCode 150 walkth
 - [Technology Laws](./technology-laws/), named laws and principles every software engineer will encounter: Conway, Brooks, Amdahl, Little, Goodhart, Hyrum, Gall, Schneier, and more
 - [Graph Theory](./graph-theory/), deep dive into terminology, graph types, components, SCCs, DAGs, bipartite graphs, weighted-graph problem modeling
 - [Sentinel Values](./sentinel-values/), the "impossible" placeholder pattern across DP, shortest-path, search, and linked-list problems
+- [Design Patterns](./design-patterns/), the 23 Gang of Four patterns grouped by intent: creational, structural, and behavioral, with TypeScript, Python, and Go implementations
 
 ## How the topics connect
 

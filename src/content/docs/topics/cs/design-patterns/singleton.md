@@ -1,0 +1,260 @@
+---
+title: Singleton Pattern
+description: "Ensure a class has exactly one instance and provide a global access point to it."
+parent: design-patterns
+tags: [design-patterns, creational, oop]
+status: draft
+created: 2026-05-15
+updated: 2026-05-15
+---
+
+## The problem
+
+Some resources should exist exactly once in a process: the application config, a database connection pool, a shared logger. Creating a second instance of any of these is either wasteful (two pools doing the same work) or incorrect (two configs diverging silently). You need a way to guarantee that no matter how many times a caller asks for the object, they always get the same one.
+
+The Singleton pattern solves this by making the class itself responsible for managing its own instance. Construction is hidden behind a static access point. The first call creates the instance and stores it. Every subsequent call returns the stored instance. The class controls its own lifecycle, and the caller never has to think about it.
+
+One honest caveat before you reach for this pattern: Singleton is in the original GoF catalog, and it is genuinely useful for config stores, connection pools, and loggers. It is also one of the most frequently overused patterns. When you find yourself thinking "this should be global," consider whether dependency injection would serve you better. The sections below cover both when the pattern fits and when it does not.
+
+## Structure
+
+```mermaid
+classDiagram
+    class AppConfig {
+        -_instance: AppConfig$
+        -settings: Map
+        -constructor()
+        +getInstance()$ AppConfig
+        +get(key) string|undefined
+        +set(key, value)
+    }
+    AppConfig --> AppConfig : returns single instance
+```
+
+## When to use
+
+- Exactly one instance must coordinate across the whole program: a shared logger, a connection pool, a config store.
+- Construction is expensive and the result is safe to share across callers.
+- You need lazy initialization: the instance should not exist until something first requests it.
+- The alternative is passing the same object through many layers of function calls, and that threading cost is higher than the coupling cost of a global.
+
+## TypeScript
+
+Two approaches are shown below. The first is the classic GoF form with a private constructor and a static `getInstance()` method. The second is a module-level instance, which is more idiomatic in TypeScript and Node.js.
+
+```typescript
+// Approach 1: classic GoF Singleton
+class AppConfig {
+  private static instance: AppConfig | null = null;
+  private settings = new Map<string, string>();
+
+  private constructor() {
+    // Load from environment at construction time.
+    this.settings.set('env', process.env.NODE_ENV ?? 'development');
+    this.settings.set('port', process.env.PORT ?? '3000');
+  }
+
+  static getInstance(): AppConfig {
+    if (!AppConfig.instance) {
+      AppConfig.instance = new AppConfig();
+    }
+    return AppConfig.instance;
+  }
+
+  get(key: string): string | undefined {
+    return this.settings.get(key);
+  }
+
+  set(key: string, value: string): void {
+    this.settings.set(key, value);
+  }
+}
+
+const config1 = AppConfig.getInstance();
+const config2 = AppConfig.getInstance();
+console.log(config1 === config2); // true
+
+config1.set('feature_x', 'enabled');
+console.log(config2.get('feature_x')); // enabled
+```
+
+```typescript
+// Approach 2: module-level instance (idiomatic TypeScript/Node.js)
+// config.ts
+class Config {
+  private settings = new Map<string, string>();
+
+  get(key: string): string | undefined {
+    return this.settings.get(key);
+  }
+
+  set(key: string, value: string): void {
+    this.settings.set(key, value);
+  }
+}
+
+export const config = new Config();
+// Node.js loads each module once and caches it.
+// Every import of this module receives the same `config` object.
+```
+
+The module-level approach is simpler and requires no ceremony. Prefer it unless you need lazy initialization or want to prevent callers from constructing their own instances.
+
+## Python
+
+Three approaches are shown below, from most boilerplate to least.
+
+```python
+from __future__ import annotations
+
+
+# Approach 1: __new__ override
+class AppConfig:
+    _instance: AppConfig | None = None
+
+    def __new__(cls) -> AppConfig:
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._settings: dict[str, str] = {}
+        return cls._instance
+
+    def get(self, key: str) -> str | None:
+        return self._settings.get(key)
+
+    def set(self, key: str, value: str) -> None:
+        self._settings[key] = value
+
+
+config1 = AppConfig()
+config2 = AppConfig()
+print(config1 is config2)  # True
+
+config1.set('env', 'production')
+print(config2.get('env'))  # production
+```
+
+```python
+# Approach 2: module-level instance (most Pythonic)
+# In config.py:
+class _Config:
+    def __init__(self) -> None:
+        self._settings: dict[str, str] = {}
+
+    def get(self, key: str) -> str | None:
+        return self._settings.get(key)
+
+    def set(self, key: str, value: str) -> None:
+        self._settings[key] = value
+
+
+config = _Config()
+# Other modules do: from config import config
+# The underscore on _Config signals that only the instance is public.
+```
+
+The `__new__` override works but is unusual Python. Use it only when you need lazy initialization or subclassing. For everything else, a module-level instance is clearer and avoids the magic.
+
+## Go
+
+`sync.Once` is the idiomatic Go singleton. It guarantees the initializer runs exactly once even under concurrent access, without locks you have to manage yourself.
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type AppConfig struct {
+	settings map[string]string
+	mu       sync.RWMutex
+}
+
+var (
+	configInstance *AppConfig
+	configOnce     sync.Once
+)
+
+func GetConfig() *AppConfig {
+	configOnce.Do(func() {
+		configInstance = &AppConfig{
+			settings: map[string]string{
+				"env":  "development",
+				"port": "3000",
+			},
+		}
+	})
+	return configInstance
+}
+
+func (c *AppConfig) Get(key string) (string, bool) {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	val, ok := c.settings[key]
+	return val, ok
+}
+
+func (c *AppConfig) Set(key, value string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.settings[key] = value
+}
+
+func main() {
+	cfg1 := GetConfig()
+	cfg2 := GetConfig()
+	fmt.Println(cfg1 == cfg2) // true
+
+	cfg1.Set("feature_x", "enabled")
+	val, _ := cfg2.Get("feature_x")
+	fmt.Println(val) // enabled
+}
+```
+
+Note that `sync.Once` handles the "create once" guarantee, but individual `Get` and `Set` calls still need their own lock (`sync.RWMutex`) to be safe under concurrent reads and writes.
+
+## When the pattern fits and when it does not
+
+The Singleton is appropriate when:
+
+- One instance must coordinate across the whole process: a shared logger, a connection pool, a config store.
+- Construction is expensive and the result is safe to share.
+- The instance is stateless or its state is intentionally global (e.g., feature flags loaded once at startup).
+
+It is less appropriate when:
+
+- Tests need to reset global state between runs. A singleton shared across tests produces flaky, order-dependent results. Prefer dependency injection so tests can supply their own instance.
+- The "global" use case is really just avoiding parameter threading. Module-level variables in Python and Go cover most needs without any class ceremony.
+- The object holds mutable state that different callers need independently. That is not a singleton: it is a registry or a service locator, and those deserve different patterns.
+
+## Tradeoffs
+
+| Pro | Con |
+| --- | --- |
+| Guarantees one instance across the process | Global state is hard to test in isolation |
+| Controls access to a shared resource | Introduces hidden coupling between callers |
+| Lazy initialization possible: create on first use | Thread safety requires explicit synchronization |
+| Familiar and well understood | Often a code smell for a design that needs dependency injection |
+
+## Gotchas
+
+- In Python, the `__new__` approach works but is unusual. Module-level instances are idiomatic and avoid the boilerplate. Use the class approach only when you need lazy initialization or subclassing.
+- In Go, always use `sync.Once`. A naive `if instance == nil` check is a data race on any path where two goroutines reach it simultaneously. The race detector will catch it.
+- In TypeScript and Node.js, the module system provides singleton behavior for free. A module is loaded once and cached by the runtime. A module-level `export const config = new Config()` is a singleton without the pattern's ceremony.
+- Tests that need a clean config should accept an injected config rather than calling `getInstance()`. If you find yourself resetting `AppConfig.instance = null` in test setup, that is a sign the code needs dependency injection instead.
+- The private constructor trick in TypeScript prevents direct instantiation, but it does not prevent someone from bypassing it via `Object.create(AppConfig.prototype)`. This is rarely a real concern, but it is not a security boundary.
+
+## References
+
+- [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.oreilly.com/library/view/design-patterns-elements/0201633612/), the original GoF entry for Singleton (p. 127)
+- [Singleton pattern, Refactoring.Guru](https://refactoring.guru/design-patterns/singleton), illustrated walkthrough covering lazy init, thread safety, and common pitfalls
+- [SourceMaking: Singleton](https://sourcemaking.com/design_patterns/singleton), discussion of the pattern and when to avoid it
+- [sync.Once, Go standard library](https://pkg.go.dev/sync#Once), the idiomatic Go mechanism for one-time initialization
+
+## Related topics
+
+- [Design Patterns](../), the full GoF catalog
+- [Factory](../factory/), often used alongside Singleton to control instance creation
+- [Decorator](../decorator/), can wrap a singleton to add logging or caching without modifying it
+- [Proxy](../proxy/), another wrapping pattern useful for adding access control around a shared instance

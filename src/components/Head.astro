@@ -1,0 +1,32 @@
+---
+import Default from '@astrojs/starlight/components/Head.astro';
+import type { Props } from '@astrojs/starlight/props';
+---
+
+<Default {...Astro.props}><slot /></Default>
+
+<script>
+  import mermaid from 'mermaid';
+
+  function renderMermaid() {
+    const blocks = document.querySelectorAll('code.language-mermaid');
+    if (blocks.length === 0) return;
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    mermaid.initialize({ startOnLoad: false, theme: isDark ? 'dark' : 'default' });
+
+    for (const block of blocks) {
+      const pre = block.parentElement;
+      if (!pre) continue;
+      const code = block.textContent ?? '';
+      const div = document.createElement('div');
+      div.className = 'mermaid-diagram';
+      div.textContent = code;
+      pre.replaceWith(div);
+    }
+
+    mermaid.run({ nodes: document.querySelectorAll('.mermaid-diagram') });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderMermaid);
+</script>
