@@ -11,13 +11,13 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
 <div class="pyrepl not-content" data-repl-id={replId} data-original={code}>
   <div class="pyrepl__header">
     <div class="pyrepl__btn-group">
-      <button class="pyrepl__run" type="button">▶ Run tests</button>
+      <button class="pyrepl__run" type="button">▶ Run Python</button>
       <button class="pyrepl__reset" type="button" title="Reset to original">↻ Reset</button>
     </div>
     <span class="pyrepl__status" data-status>idle</span>
   </div>
   <div class="pyrepl__editor-host" data-editor></div>
-  <pre class="pyrepl__output" data-output>Click <strong>Run tests</strong> to execute. First run downloads Python (~10 MB, cached after that).</pre>
+  <pre class="pyrepl__output" data-output>Click <strong>Run Python</strong> to execute. First run downloads Python (~10 MB, cached after that).</pre>
   <div class="pyrepl__timing" data-timing></div>
 </div>
 
