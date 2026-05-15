@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './visitor.ts?raw';
+import pyCode from './visitor.py?raw';
+import goCode from './visitor.go?raw';
 
 ## The problem
 
@@ -75,277 +81,17 @@ classDiagram
 
 ## Implementation
 
+Each node calls the appropriate visitor method inside `accept`, passing itself as the argument so the visitor receives the concrete type with no casting needed. Both visitors traverse the same tree without touching the node classes. Python does not enforce double dispatch the way statically typed languages do; `functools.singledispatch` is a compelling alternative that skips `accept` entirely and dispatches by type. In Go, interfaces are satisfied implicitly, and adding a new visitor requires no changes to the node structs.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-Each node calls `visitor.visitHeading(this)` (or the appropriate method) inside `accept`. The visitor receives the concrete type, so no casting is needed. Both visitors traverse the same tree without touching the node classes.
-
-```typescript
-interface Visitor {
-  visitHeading(node: Heading): void;
-  visitParagraph(node: Paragraph): void;
-  visitImage(node: Image): void;
-}
-
-interface Node {
-  accept(visitor: Visitor): void;
-}
-
-class Heading implements Node {
-  constructor(public level: number, public text: string) {}
-  accept(visitor: Visitor): void {
-    visitor.visitHeading(this);
-  }
-}
-
-class Paragraph implements Node {
-  constructor(public text: string) {}
-  accept(visitor: Visitor): void {
-    visitor.visitParagraph(this);
-  }
-}
-
-class Image implements Node {
-  constructor(public src: string, public alt: string) {}
-  accept(visitor: Visitor): void {
-    visitor.visitImage(this);
-  }
-}
-
-class WordCountVisitor implements Visitor {
-  count = 0;
-
-  visitHeading(node: Heading): void {
-    this.count += node.text.split(/\s+/).filter(Boolean).length;
-  }
-  visitParagraph(node: Paragraph): void {
-    this.count += node.text.split(/\s+/).filter(Boolean).length;
-  }
-  visitImage(_node: Image): void {
-    // images contribute no words
-  }
-}
-
-class HTMLExportVisitor implements Visitor {
-  output = '';
-
-  visitHeading(node: Heading): void {
-    this.output += `<h${node.level}>${node.text}</h${node.level}>\n`;
-  }
-  visitParagraph(node: Paragraph): void {
-    this.output += `<p>${node.text}</p>\n`;
-  }
-  visitImage(node: Image): void {
-    this.output += `<img src="${node.src}" alt="${node.alt}">\n`;
-  }
-}
-
-const tree: Node[] = [
-  new Heading(1, 'Hello World'),
-  new Paragraph('The quick brown fox'),
-  new Image('fox.png', 'A fox'),
-  new Paragraph('jumps over the lazy dog'),
-];
-
-const counter = new WordCountVisitor();
-tree.forEach(node => node.accept(counter));
-console.log(counter.count); // 9
-
-const exporter = new HTMLExportVisitor();
-tree.forEach(node => node.accept(exporter));
-console.log(exporter.output);
-// <h1>Hello World</h1>
-// <p>The quick brown fox</p>
-// <img src="fox.png" alt="A fox">
-// <p>jumps over the lazy dog</p>
-```
-
+<TypeScriptRepl code={tsCode} id="visitor-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python does not enforce the double-dispatch ceremony the way statically typed languages do. The `accept` method works as shown, but `functools.singledispatch` is a compelling alternative: register a handler per type and call `visit(node)` directly, skipping `accept` entirely and making the visitor look more like a plain function dispatch table.
-
-```python
-from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Protocol
-
-
-class Visitor(Protocol):
-    def visit_heading(self, node: Heading) -> None: ...
-    def visit_paragraph(self, node: Paragraph) -> None: ...
-    def visit_image(self, node: Image) -> None: ...
-
-
-@dataclass
-class Heading:
-    level: int
-    text: str
-
-    def accept(self, visitor: Visitor) -> None:
-        visitor.visit_heading(self)
-
-
-@dataclass
-class Paragraph:
-    text: str
-
-    def accept(self, visitor: Visitor) -> None:
-        visitor.visit_paragraph(self)
-
-
-@dataclass
-class Image:
-    src: str
-    alt: str
-
-    def accept(self, visitor: Visitor) -> None:
-        visitor.visit_image(self)
-
-
-class WordCountVisitor:
-    def __init__(self) -> None:
-        self.count = 0
-
-    def visit_heading(self, node: Heading) -> None:
-        self.count += len(node.text.split())
-
-    def visit_paragraph(self, node: Paragraph) -> None:
-        self.count += len(node.text.split())
-
-    def visit_image(self, node: Image) -> None:
-        pass  # images contribute no words
-
-
-class HTMLExportVisitor:
-    def __init__(self) -> None:
-        self.output = ''
-
-    def visit_heading(self, node: Heading) -> None:
-        self.output += f'<h{node.level}>{node.text}</h{node.level}>\n'
-
-    def visit_paragraph(self, node: Paragraph) -> None:
-        self.output += f'<p>{node.text}</p>\n'
-
-    def visit_image(self, node: Image) -> None:
-        self.output += f'<img src="{node.src}" alt="{node.alt}">\n'
-
-
-tree = [
-    Heading(1, 'Hello World'),
-    Paragraph('The quick brown fox'),
-    Image('fox.png', 'A fox'),
-    Paragraph('jumps over the lazy dog'),
-]
-
-counter = WordCountVisitor()
-for node in tree:
-    node.accept(counter)
-print(counter.count)  # 9
-
-exporter = HTMLExportVisitor()
-for node in tree:
-    node.accept(exporter)
-print(exporter.output)
-# <h1>Hello World</h1>
-# <p>The quick brown fox</p>
-# <img src="fox.png" alt="A fox">
-# <p>jumps over the lazy dog</p>
-```
-
+<PythonRepl code={pyCode} id="visitor-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go interfaces are satisfied implicitly. Each node's `Accept` method calls back to the visitor with the concrete receiver, giving the visitor full type information without a type switch. Adding a new visitor requires no changes to the node structs.
-
-```go
-package main
-
-import (
-	"fmt"
-	"strings"
-)
-
-type Visitor interface {
-	VisitHeading(n *Heading)
-	VisitParagraph(n *Paragraph)
-	VisitImage(n *Image)
-}
-
-type Node interface {
-	Accept(v Visitor)
-}
-
-type Heading struct {
-	Level int
-	Text  string
-}
-
-func (h *Heading) Accept(v Visitor) { v.VisitHeading(h) }
-
-type Paragraph struct{ Text string }
-
-func (p *Paragraph) Accept(v Visitor) { v.VisitParagraph(p) }
-
-type Image struct {
-	Src string
-	Alt string
-}
-
-func (i *Image) Accept(v Visitor) { v.VisitImage(i) }
-
-// WordCountVisitor -----------------------------------------------------------
-
-type WordCountVisitor struct{ Count int }
-
-func (w *WordCountVisitor) VisitHeading(n *Heading) {
-	w.Count += len(strings.Fields(n.Text))
-}
-func (w *WordCountVisitor) VisitParagraph(n *Paragraph) {
-	w.Count += len(strings.Fields(n.Text))
-}
-func (w *WordCountVisitor) VisitImage(_ *Image) {}
-
-// HTMLExportVisitor ----------------------------------------------------------
-
-type HTMLExportVisitor struct{ Output strings.Builder }
-
-func (h *HTMLExportVisitor) VisitHeading(n *Heading) {
-	fmt.Fprintf(&h.Output, "<h%d>%s</h%d>\n", n.Level, n.Text, n.Level)
-}
-func (h *HTMLExportVisitor) VisitParagraph(n *Paragraph) {
-	fmt.Fprintf(&h.Output, "<p>%s</p>\n", n.Text)
-}
-func (h *HTMLExportVisitor) VisitImage(n *Image) {
-	fmt.Fprintf(&h.Output, `<img src="%s" alt="%s">`+"\n", n.Src, n.Alt)
-}
-
-func main() {
-	tree := []Node{
-		&Heading{Level: 1, Text: "Hello World"},
-		&Paragraph{Text: "The quick brown fox"},
-		&Image{Src: "fox.png", Alt: "A fox"},
-		&Paragraph{Text: "jumps over the lazy dog"},
-	}
-
-	counter := &WordCountVisitor{}
-	for _, node := range tree {
-		node.Accept(counter)
-	}
-	fmt.Println(counter.Count) // 9
-
-	exporter := &HTMLExportVisitor{}
-	for _, node := range tree {
-		node.Accept(exporter)
-	}
-	fmt.Print(exporter.Output.String())
-	// <h1>Hello World</h1>
-	// <p>The quick brown fox</p>
-	// <img src="fox.png" alt="A fox">
-	// <p>jumps over the lazy dog</p>
-}
-```
-
+<GoRepl code={goCode} id="visitor-go" />
 </TabItem>
 </Tabs>
 

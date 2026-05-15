@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './state.ts?raw';
+import pyCode from './state.py?raw';
+import goCode from './state.go?raw';
 
 ## The problem
 
@@ -58,181 +64,17 @@ classDiagram
 
 ## Implementation
 
+Each concrete state class handles transitions by calling `setState` (or `set_state`) on the context with the next state object. In TypeScript and Python, the context never needs to know the transition rules. Python uses `Protocol` for the state interface, avoiding mandatory inheritance. In Go, interfaces are satisfied implicitly; each state struct receives a pointer to the context to call `SetState`. A zero-value `TrafficLight` with a nil state field will panic, so always initialize with a concrete state.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-Each concrete state class handles `next()` by calling `context.setState()` with the following state. The `TrafficLight` context never needs to know the transition rules.
-
-```typescript
-interface TrafficLightState {
-  next(context: TrafficLight): void;
-  getColor(): string;
-}
-
-class RedState implements TrafficLightState {
-  next(context: TrafficLight): void {
-    context.setState(new GreenState());
-  }
-  getColor(): string {
-    return 'Red';
-  }
-}
-
-class GreenState implements TrafficLightState {
-  next(context: TrafficLight): void {
-    context.setState(new YellowState());
-  }
-  getColor(): string {
-    return 'Green';
-  }
-}
-
-class YellowState implements TrafficLightState {
-  next(context: TrafficLight): void {
-    context.setState(new RedState());
-  }
-  getColor(): string {
-    return 'Yellow';
-  }
-}
-
-class TrafficLight {
-  constructor(private state: TrafficLightState = new RedState()) {}
-
-  setState(state: TrafficLightState): void {
-    this.state = state;
-  }
-
-  next(): void {
-    this.state.next(this);
-  }
-
-  getColor(): string {
-    return this.state.getColor();
-  }
-}
-
-const light = new TrafficLight();
-console.log(light.getColor()); // Red
-light.next();
-console.log(light.getColor()); // Green
-light.next();
-console.log(light.getColor()); // Yellow
-light.next();
-console.log(light.getColor()); // Red
-```
-
+<TypeScriptRepl code={tsCode} id="state-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python's `Protocol` defines the state interface without requiring inheritance. Each concrete state receives the context as an argument so it can trigger the transition itself.
-
-```python
-from __future__ import annotations
-from typing import Protocol
-
-
-class TrafficLightState(Protocol):
-    def next(self, context: TrafficLight) -> None: ...
-    def get_color(self) -> str: ...
-
-
-class RedState:
-    def next(self, context: TrafficLight) -> None:
-        context.set_state(GreenState())
-
-    def get_color(self) -> str:
-        return 'Red'
-
-
-class GreenState:
-    def next(self, context: TrafficLight) -> None:
-        context.set_state(YellowState())
-
-    def get_color(self) -> str:
-        return 'Green'
-
-
-class YellowState:
-    def next(self, context: TrafficLight) -> None:
-        context.set_state(RedState())
-
-    def get_color(self) -> str:
-        return 'Yellow'
-
-
-class TrafficLight:
-    def __init__(self) -> None:
-        self._state: TrafficLightState = RedState()
-
-    def set_state(self, state: TrafficLightState) -> None:
-        self._state = state
-
-    def next(self) -> None:
-        self._state.next(self)
-
-    def get_color(self) -> str:
-        return self._state.get_color()
-
-
-light = TrafficLight()
-print(light.get_color())  # Red
-light.next()
-print(light.get_color())  # Green
-light.next()
-print(light.get_color())  # Yellow
-light.next()
-print(light.get_color())  # Red
-```
-
+<PythonRepl code={pyCode} id="state-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go interfaces are satisfied implicitly. Each state struct receives a pointer to the context and calls `SetState` to hand off control. A zero-value `TrafficLight` with a nil state field panics: always initialize with a concrete state.
-
-```go
-package main
-
-import "fmt"
-
-type TrafficLightState interface {
-	Next(ctx *TrafficLight)
-	GetColor() string
-}
-
-type RedState struct{}
-
-func (r *RedState) Next(ctx *TrafficLight) { ctx.SetState(&GreenState{}) }
-func (r *RedState) GetColor() string       { return "Red" }
-
-type GreenState struct{}
-
-func (g *GreenState) Next(ctx *TrafficLight) { ctx.SetState(&YellowState{}) }
-func (g *GreenState) GetColor() string       { return "Green" }
-
-type YellowState struct{}
-
-func (y *YellowState) Next(ctx *TrafficLight) { ctx.SetState(&RedState{}) }
-func (y *YellowState) GetColor() string       { return "Yellow" }
-
-type TrafficLight struct{ state TrafficLightState }
-
-func (t *TrafficLight) SetState(s TrafficLightState) { t.state = s }
-func (t *TrafficLight) Next()                        { t.state.Next(t) }
-func (t *TrafficLight) GetColor() string             { return t.state.GetColor() }
-
-func main() {
-	light := &TrafficLight{state: &RedState{}}
-	fmt.Println(light.GetColor()) // Red
-	light.Next()
-	fmt.Println(light.GetColor()) // Green
-	light.Next()
-	fmt.Println(light.GetColor()) // Yellow
-	light.Next()
-	fmt.Println(light.GetColor()) // Red
-}
-```
-
+<GoRepl code={goCode} id="state-go" />
 </TabItem>
 </Tabs>
 

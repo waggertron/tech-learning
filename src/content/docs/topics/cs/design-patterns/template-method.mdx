@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './template-method.ts?raw';
+import pyCode from './template-method.py?raw';
+import goCode from './template-method.go?raw';
 
 ## The problem
 
@@ -51,234 +57,17 @@ classDiagram
 
 ## Implementation
 
+In TypeScript, `ReportGenerator` declares `generateReport` as the template method and marks `parseData` and `formatReport` abstract; subclasses inherit the orchestration and supply only their specific steps. Python's `abc` module enforces the abstract contract at instantiation time: a subclass with missing overrides raises `TypeError` before any code runs. Go has no inheritance, so the pattern uses a `ReportSteps` interface passed into a top-level `GenerateReport` function that owns the sequence; embedding does not provide method overriding in Go.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-`ReportGenerator` declares `generateReport` as the template method and marks `parseData` and `formatReport` as abstract. `CSVReport` and `JSONReport` inherit the orchestration and supply only their specific implementations.
-
-```typescript
-abstract class ReportGenerator {
-  // Template method: defines the invariant sequence.
-  generateReport(): void {
-    const raw = this.fetchData();
-    const parsed = this.parseData(raw);
-    const formatted = this.formatReport(parsed);
-    this.sendReport(formatted);
-  }
-
-  protected fetchData(): string {
-    return 'id,name,score\n1,Alice,95\n2,Bob,87';
-  }
-
-  protected abstract parseData(raw: string): Record<string, string>[];
-
-  protected abstract formatReport(data: Record<string, string>[]): string;
-
-  protected sendReport(output: string): void {
-    console.log('Sending report:\n' + output);
-  }
-}
-
-class CSVReport extends ReportGenerator {
-  protected parseData(raw: string): Record<string, string>[] {
-    const [header, ...rows] = raw.trim().split('\n');
-    const keys = header.split(',');
-    return rows.map(row => {
-      const values = row.split(',');
-      return Object.fromEntries(keys.map((k, i) => [k, values[i]]));
-    });
-  }
-
-  protected formatReport(data: Record<string, string>[]): string {
-    const header = Object.keys(data[0]).join(',');
-    const rows = data.map(r => Object.values(r).join(','));
-    return [header, ...rows].join('\n');
-  }
-}
-
-class JSONReport extends ReportGenerator {
-  protected parseData(raw: string): Record<string, string>[] {
-    const [header, ...rows] = raw.trim().split('\n');
-    const keys = header.split(',');
-    return rows.map(row => {
-      const values = row.split(',');
-      return Object.fromEntries(keys.map((k, i) => [k, values[i]]));
-    });
-  }
-
-  protected formatReport(data: Record<string, string>[]): string {
-    return JSON.stringify(data, null, 2);
-  }
-}
-
-new CSVReport().generateReport();
-// Sending report:
-// id,name,score
-// 1,Alice,95
-// 2,Bob,87
-
-new JSONReport().generateReport();
-// Sending report:
-// [{ "id": "1", "name": "Alice", "score": "95" }, ...]
-```
-
+<TypeScriptRepl code={tsCode} id="template-method-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python's `abc` module enforces the abstract contract at instantiation time, so attempting to create a `ReportGenerator` directly or a subclass with missing overrides raises a `TypeError` before any code runs.
-
-```python
-from __future__ import annotations
-from abc import ABC, abstractmethod
-
-
-class ReportGenerator(ABC):
-    # Template method: defines the invariant sequence.
-    def generate_report(self) -> None:
-        raw = self.fetch_data()
-        parsed = self.parse_data(raw)
-        formatted = self.format_report(parsed)
-        self.send_report(formatted)
-
-    def fetch_data(self) -> str:
-        return 'id,name,score\n1,Alice,95\n2,Bob,87'
-
-    @abstractmethod
-    def parse_data(self, raw: str) -> list[dict[str, str]]: ...
-
-    @abstractmethod
-    def format_report(self, data: list[dict[str, str]]) -> str: ...
-
-    def send_report(self, output: str) -> None:
-        print(f'Sending report:\n{output}')
-
-
-class CSVReport(ReportGenerator):
-    def parse_data(self, raw: str) -> list[dict[str, str]]:
-        lines = raw.strip().split('\n')
-        keys = lines[0].split(',')
-        return [dict(zip(keys, row.split(','))) for row in lines[1:]]
-
-    def format_report(self, data: list[dict[str, str]]) -> str:
-        header = ','.join(data[0].keys())
-        rows = [','.join(r.values()) for r in data]
-        return '\n'.join([header, *rows])
-
-
-class JSONReport(ReportGenerator):
-    def parse_data(self, raw: str) -> list[dict[str, str]]:
-        lines = raw.strip().split('\n')
-        keys = lines[0].split(',')
-        return [dict(zip(keys, row.split(','))) for row in lines[1:]]
-
-    def format_report(self, data: list[dict[str, str]]) -> str:
-        import json
-        return json.dumps(data, indent=2)
-
-
-CSVReport().generate_report()
-# Sending report:
-# id,name,score
-# 1,Alice,95
-
-JSONReport().generate_report()
-# Sending report:
-# [{"id": "1", "name": "Alice", "score": "95"}, ...]
-```
-
+<PythonRepl code={pyCode} id="template-method-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go has no inheritance, so the template method pattern uses a `ReportSteps` interface passed into a shared `GenerateReport` function. The function owns the sequence; the struct that satisfies the interface supplies only the variable steps.
-
-```go
-package main
-
-import (
-	"encoding/json"
-	"fmt"
-	"strings"
-)
-
-type ReportSteps interface {
-	ParseData(raw string) []map[string]string
-	FormatReport(data []map[string]string) string
-}
-
-// GenerateReport is the template method: it owns the sequence.
-func GenerateReport(steps ReportSteps) {
-	raw := fetchData()
-	parsed := steps.ParseData(raw)
-	formatted := steps.FormatReport(parsed)
-	sendReport(formatted)
-}
-
-func fetchData() string {
-	return "id,name,score\n1,Alice,95\n2,Bob,87"
-}
-
-func sendReport(output string) {
-	fmt.Println("Sending report:\n" + output)
-}
-
-// CSVReport implements ReportSteps.
-type CSVReport struct{}
-
-func (c CSVReport) ParseData(raw string) []map[string]string {
-	lines := strings.Split(strings.TrimSpace(raw), "\n")
-	keys := strings.Split(lines[0], ",")
-	var result []map[string]string
-	for _, row := range lines[1:] {
-		values := strings.Split(row, ",")
-		m := make(map[string]string)
-		for i, k := range keys {
-			m[k] = values[i]
-		}
-		result = append(result, m)
-	}
-	return result
-}
-
-func (c CSVReport) FormatReport(data []map[string]string) string {
-	if len(data) == 0 {
-		return ""
-	}
-	keys := []string{"id", "name", "score"}
-	rows := []string{strings.Join(keys, ",")}
-	for _, r := range data {
-		vals := make([]string, len(keys))
-		for i, k := range keys {
-			vals[i] = r[k]
-		}
-		rows = append(rows, strings.Join(vals, ","))
-	}
-	return strings.Join(rows, "\n")
-}
-
-// JSONReport implements ReportSteps.
-type JSONReport struct{}
-
-func (j JSONReport) ParseData(raw string) []map[string]string {
-	return CSVReport{}.ParseData(raw)
-}
-
-func (j JSONReport) FormatReport(data []map[string]string) string {
-	b, _ := json.MarshalIndent(data, "", "  ")
-	return string(b)
-}
-
-func main() {
-	GenerateReport(CSVReport{})
-	// Sending report:
-	// id,name,score
-	// 1,Alice,95
-
-	GenerateReport(JSONReport{})
-	// Sending report:
-	// [{"id":"1","name":"Alice","score":"95"}, ...]
-}
-```
-
+<GoRepl code={goCode} id="template-method-go" />
 </TabItem>
 </Tabs>
 

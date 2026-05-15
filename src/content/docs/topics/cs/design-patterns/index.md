@@ -68,7 +68,7 @@ Behavioral patterns focus on communication and responsibility between objects.
 
 | Pattern | Intent |
 | --- | --- |
-| Chain of Responsibility | Pass a request along a chain of handlers |
+| [Chain of Responsibility](./chain-of-responsibility/) | Pass a request along a chain of handlers |
 | [Command](./command/) | Encapsulate a request as an object |
 | [Interpreter](./interpreter/) | Define a grammar and an interpreter for a language |
 | [Iterator](./iterator/) | Sequential element access without exposing internals |
@@ -120,6 +120,7 @@ Read each pattern for the problem it solves.
 
 **Behavioral**
 
+- [Chain of Responsibility](./chain-of-responsibility/), requests passed along a handler chain until one resolves them
 - [Command](./command/), requests as first-class objects with undo and queuing
 - [Interpreter](./interpreter/), a grammar and evaluator for a small language
 - [Iterator](./iterator/), sequential element access without exposing internals

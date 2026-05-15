@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './interpreter.ts?raw';
+import pyCode from './interpreter.py?raw';
+import goCode from './interpreter.go?raw';
 
 ## The problem
 
@@ -60,186 +66,17 @@ classDiagram
 
 ## Implementation
 
+Each expression class implements a single `interpret(context)` method against a plain context map, with the tree built manually to keep the focus on the pattern rather than parsing. Python uses a `Protocol` for type-checker coverage without requiring inheritance, keeping each class a small pure function over its children. In Go, interfaces are satisfied implicitly, so short-circuit evaluation in `AndExpression` and `OrExpression` follows naturally from `&&` and `||`. A nil `Expression` field in Go causes a nil-pointer panic at `Interpret` time, so guard non-terminal constructors or document that nil is not a valid operand.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-Each expression class implements a single `interpret(context)` method. The context is a plain `Map<string, boolean>`. Building the tree is manual here to keep the focus on the pattern itself; a real system would generate the tree from a parser.
-
-```typescript
-type Context = Map<string, boolean>;
-
-interface AbstractExpression {
-  interpret(context: Context): boolean;
-}
-
-class Variable implements AbstractExpression {
-  constructor(private name: string) {}
-  interpret(context: Context): boolean {
-    return context.get(this.name) ?? false;
-  }
-}
-
-class AndExpression implements AbstractExpression {
-  constructor(
-    private left: AbstractExpression,
-    private right: AbstractExpression
-  ) {}
-  interpret(context: Context): boolean {
-    return this.left.interpret(context) && this.right.interpret(context);
-  }
-}
-
-class OrExpression implements AbstractExpression {
-  constructor(
-    private left: AbstractExpression,
-    private right: AbstractExpression
-  ) {}
-  interpret(context: Context): boolean {
-    return this.left.interpret(context) || this.right.interpret(context);
-  }
-}
-
-class NotExpression implements AbstractExpression {
-  constructor(private operand: AbstractExpression) {}
-  interpret(context: Context): boolean {
-    return !this.operand.interpret(context);
-  }
-}
-
-// (x AND y) OR (NOT z)
-const x = new Variable('x');
-const y = new Variable('y');
-const z = new Variable('z');
-const expr = new OrExpression(
-  new AndExpression(x, y),
-  new NotExpression(z)
-);
-
-const ctx: Context = new Map([['x', true], ['y', false], ['z', false]]);
-console.log(expr.interpret(ctx)); // true  (NOT z is true)
-
-const ctx2: Context = new Map([['x', true], ['y', true], ['z', true]]);
-console.log(expr.interpret(ctx2)); // true  (x AND y is true)
-```
-
+<TypeScriptRepl code={tsCode} id="interpreter-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python's duck typing makes the abstract base optional. The `Protocol` below provides type-checker coverage without requiring inheritance. Each class is a small, pure function over its children.
-
-```python
-from __future__ import annotations
-from typing import Protocol
-
-
-Context = dict[str, bool]
-
-
-class AbstractExpression(Protocol):
-    def interpret(self, context: Context) -> bool: ...
-
-
-class Variable:
-    def __init__(self, name: str) -> None:
-        self._name = name
-
-    def interpret(self, context: Context) -> bool:
-        return context.get(self._name, False)
-
-
-class AndExpression:
-    def __init__(self, left: AbstractExpression, right: AbstractExpression) -> None:
-        self._left = left
-        self._right = right
-
-    def interpret(self, context: Context) -> bool:
-        return self._left.interpret(context) and self._right.interpret(context)
-
-
-class OrExpression:
-    def __init__(self, left: AbstractExpression, right: AbstractExpression) -> None:
-        self._left = left
-        self._right = right
-
-    def interpret(self, context: Context) -> bool:
-        return self._left.interpret(context) or self._right.interpret(context)
-
-
-class NotExpression:
-    def __init__(self, operand: AbstractExpression) -> None:
-        self._operand = operand
-
-    def interpret(self, context: Context) -> bool:
-        return not self._operand.interpret(context)
-
-
-# (x AND y) OR (NOT z)
-x, y, z = Variable('x'), Variable('y'), Variable('z')
-expr = OrExpression(AndExpression(x, y), NotExpression(z))
-
-ctx = {'x': True, 'y': False, 'z': False}
-print(expr.interpret(ctx))  # True  (NOT z is true)
-
-ctx2 = {'x': True, 'y': True, 'z': True}
-print(expr.interpret(ctx2))  # True  (x AND y is true)
-```
-
+<PythonRepl code={pyCode} id="interpreter-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go interfaces are satisfied implicitly. Every concrete type with an `Interpret(ctx)` method satisfies `Expression` without declaring it. Short-circuit evaluation in `AndExpression` and `OrExpression` follows naturally from `&&` and `||`.
-
-```go
-package main
-
-import "fmt"
-
-type Context map[string]bool
-
-type Expression interface {
-	Interpret(ctx Context) bool
-}
-
-type Variable struct{ Name string }
-
-func (v *Variable) Interpret(ctx Context) bool {
-	return ctx[v.Name]
-}
-
-type AndExpression struct{ Left, Right Expression }
-
-func (a *AndExpression) Interpret(ctx Context) bool {
-	return a.Left.Interpret(ctx) && a.Right.Interpret(ctx)
-}
-
-type OrExpression struct{ Left, Right Expression }
-
-func (o *OrExpression) Interpret(ctx Context) bool {
-	return o.Left.Interpret(ctx) || o.Right.Interpret(ctx)
-}
-
-type NotExpression struct{ Operand Expression }
-
-func (n *NotExpression) Interpret(ctx Context) bool {
-	return !n.Operand.Interpret(ctx)
-}
-
-func main() {
-	// (x AND y) OR (NOT z)
-	x, y, z := &Variable{"x"}, &Variable{"y"}, &Variable{"z"}
-	expr := &OrExpression{
-		Left:  &AndExpression{Left: x, Right: y},
-		Right: &NotExpression{Operand: z},
-	}
-
-	ctx := Context{"x": true, "y": false, "z": false}
-	fmt.Println(expr.Interpret(ctx)) // true  (NOT z is true)
-
-	ctx2 := Context{"x": true, "y": true, "z": true}
-	fmt.Println(expr.Interpret(ctx2)) // true  (x AND y is true)
-}
-```
-
+<GoRepl code={goCode} id="interpreter-go" />
 </TabItem>
 </Tabs>
 

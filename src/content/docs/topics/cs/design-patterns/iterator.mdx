@@ -9,6 +9,12 @@ updated: 2026-05-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import TypeScriptRepl from '../../../../../components/TypeScriptRepl.astro';
+import PythonRepl from '../../../../../components/PythonRepl.astro';
+import GoRepl from '../../../../../components/GoRepl.astro';
+import tsCode from './iterator.ts?raw';
+import pyCode from './iterator.py?raw';
+import goCode from './iterator.go?raw';
 
 ## The problem
 
@@ -63,240 +69,17 @@ classDiagram
 
 ## Implementation
 
+TypeScript's built-in `Iterator<T>` protocol uses `next()` returning `{ value, done }`, so implementing `[Symbol.iterator]` lets the collection work with `for...of` loops and spread syntax without any adapter code. Python's iterator protocol requires `__iter__` (returns `self`) and `__next__` (returns the next value or raises `StopIteration`), making any class that implements both compatible with `for` loops and `list()`. Go has no built-in iterator protocol before 1.23, so the conventional approach uses a struct with `HasNext() bool` and `Next() Book` methods, with each traversal strategy as a separate struct constructed by the collection.
+
 <Tabs>
 <TabItem label="TypeScript">
-
-TypeScript's built-in `Iterator<T>` protocol uses `next()` returning `{ value, done }`. Implementing it lets the collection work with `for...of` loops and spread syntax without any extra adapter code.
-
-```typescript
-interface Book {
-  title: string;
-  genre: string;
-}
-
-class BookCollection implements Iterable<Book> {
-  private books: Book[] = [];
-
-  add(book: Book): void {
-    this.books.push(book);
-  }
-
-  [Symbol.iterator](): Iterator<Book> {
-    let index = 0;
-    const books = this.books;
-    return {
-      next(): IteratorResult<Book> {
-        if (index < books.length) {
-          return { value: books[index++], done: false };
-        }
-        return { value: undefined as unknown as Book, done: true };
-      },
-    };
-  }
-
-  byGenre(genre: string): Iterable<Book> {
-    const filtered = this.books.filter((b) => b.genre === genre);
-    return {
-      [Symbol.iterator](): Iterator<Book> {
-        let index = 0;
-        return {
-          next(): IteratorResult<Book> {
-            if (index < filtered.length) {
-              return { value: filtered[index++], done: false };
-            }
-            return { value: undefined as unknown as Book, done: true };
-          },
-        };
-      },
-    };
-  }
-}
-
-const collection = new BookCollection();
-collection.add({ title: 'Dune', genre: 'sci-fi' });
-collection.add({ title: 'Foundation', genre: 'sci-fi' });
-collection.add({ title: 'Shogun', genre: 'historical' });
-
-for (const book of collection) {
-  console.log(book.title);
-}
-// Dune
-// Foundation
-// Shogun
-
-for (const book of collection.byGenre('sci-fi')) {
-  console.log(book.title);
-}
-// Dune
-// Foundation
-```
-
+<TypeScriptRepl code={tsCode} id="iterator-ts" />
 </TabItem>
 <TabItem label="Python">
-
-Python's iterator protocol requires `__iter__` (returns `self`) and `__next__` (returns the next value or raises `StopIteration`). A class that implements both is a proper Python iterator and works with `for` loops, `list()`, and any function that accepts an iterable.
-
-```python
-from __future__ import annotations
-from typing import Iterator
-
-
-class Book:
-    def __init__(self, title: str, genre: str) -> None:
-        self.title = title
-        self.genre = genre
-
-
-class ForwardIterator(Iterator[Book]):
-    def __init__(self, books: list[Book]) -> None:
-        self._books = books
-        self._index = 0
-
-    def __iter__(self) -> ForwardIterator:
-        return self
-
-    def __next__(self) -> Book:
-        if self._index >= len(self._books):
-            raise StopIteration
-        book = self._books[self._index]
-        self._index += 1
-        return book
-
-
-class GenreIterator(Iterator[Book]):
-    def __init__(self, books: list[Book], genre: str) -> None:
-        self._books = [b for b in books if b.genre == genre]
-        self._index = 0
-
-    def __iter__(self) -> GenreIterator:
-        return self
-
-    def __next__(self) -> Book:
-        if self._index >= len(self._books):
-            raise StopIteration
-        book = self._books[self._index]
-        self._index += 1
-        return book
-
-
-class BookCollection:
-    def __init__(self) -> None:
-        self._books: list[Book] = []
-
-    def add(self, book: Book) -> None:
-        self._books.append(book)
-
-    def __iter__(self) -> ForwardIterator:
-        return ForwardIterator(self._books)
-
-    def by_genre(self, genre: str) -> GenreIterator:
-        return GenreIterator(self._books, genre)
-
-
-collection = BookCollection()
-collection.add(Book('Dune', 'sci-fi'))
-collection.add(Book('Foundation', 'sci-fi'))
-collection.add(Book('Shogun', 'historical'))
-
-for book in collection:
-    print(book.title)
-# Dune
-# Foundation
-# Shogun
-
-for book in collection.by_genre('sci-fi'):
-    print(book.title)
-# Dune
-# Foundation
-```
-
+<PythonRepl code={pyCode} id="iterator-py" />
 </TabItem>
 <TabItem label="Go">
-
-Go has no built-in iterator protocol before 1.23. The conventional pre-1.23 approach is a struct with `HasNext() bool` and `Next() Book` methods. Each traversal strategy is a separate struct; the collection constructs and returns the appropriate one.
-
-```go
-package main
-
-import "fmt"
-
-type Book struct {
-	Title string
-	Genre string
-}
-
-type Iterator interface {
-	HasNext() bool
-	Next() Book
-}
-
-type ForwardIterator struct {
-	books []Book
-	index int
-}
-
-func (it *ForwardIterator) HasNext() bool { return it.index < len(it.books) }
-func (it *ForwardIterator) Next() Book {
-	b := it.books[it.index]
-	it.index++
-	return b
-}
-
-type GenreIterator struct {
-	books []Book
-	index int
-}
-
-func (it *GenreIterator) HasNext() bool { return it.index < len(it.books) }
-func (it *GenreIterator) Next() Book {
-	b := it.books[it.index]
-	it.index++
-	return b
-}
-
-type BookCollection struct {
-	books []Book
-}
-
-func (c *BookCollection) Add(b Book) { c.books = append(c.books, b) }
-
-func (c *BookCollection) CreateIterator() Iterator {
-	return &ForwardIterator{books: c.books}
-}
-
-func (c *BookCollection) CreateGenreIterator(genre string) Iterator {
-	var filtered []Book
-	for _, b := range c.books {
-		if b.Genre == genre {
-			filtered = append(filtered, b)
-		}
-	}
-	return &GenreIterator{books: filtered}
-}
-
-func main() {
-	collection := &BookCollection{}
-	collection.Add(Book{Title: "Dune", Genre: "sci-fi"})
-	collection.Add(Book{Title: "Foundation", Genre: "sci-fi"})
-	collection.Add(Book{Title: "Shogun", Genre: "historical"})
-
-	it := collection.CreateIterator()
-	for it.HasNext() {
-		fmt.Println(it.Next().Title)
-	}
-	// Dune
-	// Foundation
-	// Shogun
-
-	genre := collection.CreateGenreIterator("sci-fi")
-	for genre.HasNext() {
-		fmt.Println(genre.Next().Title)
-	}
-	// Dune
-	// Foundation
-}
-```
-
+<GoRepl code={goCode} id="iterator-go" />
 </TabItem>
 </Tabs>
 
