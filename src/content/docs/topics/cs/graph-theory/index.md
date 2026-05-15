@@ -8,7 +8,7 @@ created: 2026-05-04
 updated: 2026-05-04
 ---
 
-## Why graphs
+## Why [graphs](../data-structures/graphs/)
 
 Every data structure you know is a special case of a graph. A linked list is a path graph. A tree is a connected acyclic graph. A grid is an implicit graph where cells are vertices and adjacency is directional. A state machine is a directed graph where nodes are states and edges are transitions. The moment a problem involves pairwise relationships between entities, you are in graph territory. Graphs are the most general modeling tool in computer science because "pairwise relationship" is almost the broadest constraint you can impose on a problem while still having something useful to say.
 

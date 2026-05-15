@@ -148,7 +148,7 @@ Hash tables appear in 34 NeetCode 150 problems across 14 categories.
 - [79. Word Search](../../coding-problems/backtracking/079-word-search/), Counter pruning
 - [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
 
-**Graphs:**
+**[Graphs](graphs/):**
 - [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/), pattern-bucket adjacency
 - [133. Clone Graph](../../coding-problems/graphs/133-clone-graph/)
 - [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/), adjacency list

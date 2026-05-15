@@ -135,7 +135,7 @@ Heaps / priority queues appear in 17 NeetCode 150 problems across 7 categories.
 - [973. K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
 - [1046. Last Stone Weight](../../coding-problems/heap-priority-queue/1046-last-stone-weight/), max-heap via negation
 
-**Advanced Graphs:**
+**Advanced [Graphs](graphs/):**
 - [332. Reconstruct Itinerary](../../coding-problems/advanced-graphs/332-reconstruct-itinerary/), lexicographic neighbor heap
 - [743. Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/), Dijkstra
 - [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/), modified Dijkstra

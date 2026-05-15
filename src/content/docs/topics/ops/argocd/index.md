@@ -46,7 +46,7 @@ One `Application` = one deployable unit. ArgoCD reads the manifests at `path` in
 
 Key fields:
 
-- **`source`**: where the manifests live. Can be plain YAML, Kustomize, Helm, or Jsonnet.
+- **`source`**: where the manifests live. Can be plain YAML, Kustomize, [Helm](../helm/), or Jsonnet.
 - **`destination`**: where to apply them. Same cluster as ArgoCD (`kubernetes.default.svc`) or a registered remote cluster.
 - **`syncPolicy.automated.prune`**: delete resources that are no longer in Git.
 - **`syncPolicy.automated.selfHeal`**: revert live changes that drift from Git.

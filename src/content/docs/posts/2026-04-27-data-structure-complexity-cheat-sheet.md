@@ -76,7 +76,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 **Gotchas**:
 
 - "Binary search tree" by itself usually means *unbalanced*. The O(log n) bound only applies to **balanced** BSTs (AVL, red-black, treap, ...). On adversarial sorted input, an unbalanced BST is O(n).
-- Tries trade space for time. A trie of all English words wastes a lot of nodes; a compressed trie ([radix tree](../topics/cs/data-structures/radix-tree/)) saves space.
+- [Tries](../topics/cs/data-structures/tries/) trade space for time. A trie of all English words wastes a lot of nodes; a compressed trie ([radix tree](../topics/cs/data-structures/radix-tree/)) saves space.
 - Heaps are O(1) to peek but O(n) to **search by value**. They're fast at the extremes (top), slow in the middle. Don't reach for a heap to find an arbitrary element.
 - Building a heap from a list is O(n) using `heapify`, not O(n log n). The reverse-level-order sift-down does the trick. Push-by-push is O(n log n).
 
@@ -86,7 +86,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 
 | Representation | Space | Edge lookup `(u, v)` | Iterate neighbors of `u` | Notes |
 |---|---|---|---|---|
-| Adjacency list | O(V + E) | O(degree(u)) | O(degree(u)) | Best for sparse graphs |
+| Adjacency list | O(V + E) | O(degree(u)) | O(degree(u)) | Best for sparse [graphs](../topics/cs/data-structures/graphs/) |
 | Adjacency matrix | O(V²) | O(1) | O(V) | Best for dense graphs or frequent edge queries |
 | Edge list | O(E) | O(E) | O(E) | Used by Kruskal's MST (sorts edges) |
 

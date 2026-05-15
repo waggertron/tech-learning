@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A queue is a **FIFO** (first-in, first-out) collection. You enqueue at one end and dequeue from the other. The standard queue API is `enqueue`, `dequeue`, `peek`, all O(1). Queues power BFS (and therefore shortest-path-on-unweighted-graphs), level-order traversals, task scheduling, and many streaming-window problems.
+A queue is a **FIFO** (first-in, first-out) collection. You enqueue at one end and dequeue from the other. The standard queue API is `enqueue`, `dequeue`, `peek`, all O(1). Queues power BFS (and therefore shortest-path-on-unweighted-[graphs](graphs/)), level-order traversals, task scheduling, and many streaming-window problems.
 
 ## In-depth description
 

@@ -365,11 +365,9 @@ finally:
   .pyrepl__editor-host {
     /* CodeMirror styles itself; this just sizes the host. */
     min-height: 280px;
-    max-height: 560px;
-    overflow: auto;
   }
   .pyrepl__editor-host :global(.cm-editor) {
-    height: 100%;
+    height: auto;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.85rem;
     line-height: 1.4;
@@ -378,6 +376,7 @@ finally:
     outline: none;
   }
   .pyrepl__editor-host :global(.cm-scroller) {
+    overflow: visible !important;
     line-height: 1.4;
   }
   /* Starlight's content CSS adds vertical margin to direct child elements;

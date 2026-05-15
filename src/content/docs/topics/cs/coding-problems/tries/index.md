@@ -1,5 +1,5 @@
 ---
-title: Tries
+title: Trie problems
 description: 3 problems on prefix trees, basic implementation, wildcard search, and combined trie + grid DFS for multi-word search.
 parent: coding-problems
 tags: [leetcode, neetcode-150, tries]

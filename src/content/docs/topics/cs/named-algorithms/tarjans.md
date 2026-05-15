@@ -192,7 +192,7 @@ The single DFS pass is what makes O(V + E) achievable. No graph is traversed twi
 
 ## Application: bridges and articulation points
 
-Tarjan also published a related algorithm (sometimes called Tarjan's bridge-finding algorithm) for **undirected** graphs. It uses the same `disc`/`low` machinery but asks a different question: which edges (bridges) or vertices (articulation points) would disconnect the graph if removed?
+Tarjan also published a related algorithm (sometimes called Tarjan's bridge-finding algorithm) for **undirected** [graphs](../data-structures/graphs/). It uses the same `disc`/`low` machinery but asks a different question: which edges (bridges) or vertices (articulation points) would disconnect the graph if removed?
 
 For undirected graphs, the low-link check becomes:
 

@@ -324,17 +324,15 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
   }
   .gorepl__editor-host {
     min-height: 280px;
-    max-height: 560px;
-    overflow: auto;
   }
   .gorepl__editor-host :global(.cm-editor) {
-    height: 100%;
+    height: auto;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.85rem;
     line-height: 1.4;
   }
   .gorepl__editor-host :global(.cm-editor.cm-focused) { outline: none; }
-  .gorepl__editor-host :global(.cm-scroller) { line-height: 1.4; }
+  .gorepl__editor-host :global(.cm-scroller) { overflow: visible !important; line-height: 1.4; }
   .gorepl__editor-host :global(.cm-content),
   .gorepl__editor-host :global(.cm-content > *),
   .gorepl__editor-host :global(.cm-line),

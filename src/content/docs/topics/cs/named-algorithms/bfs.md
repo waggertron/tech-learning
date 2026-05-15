@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Breadth-First Search explores a graph or grid by visiting every node at distance 1 before any node at distance 2, every node at distance 2 before any node at distance 3, and so on. It radiates outward from the starting node in concentric shells, like ripples on water.
 
-Because of this layer-by-layer property, BFS is the canonical algorithm for shortest paths in unweighted graphs. When you first reach a node, you have taken the shortest possible route to it. There is no need for a priority queue, no relaxation step, no Dijkstra machinery. The FIFO queue does all the work.
+Because of this layer-by-layer property, BFS is the canonical algorithm for shortest paths in unweighted [graphs](../data-structures/graphs/). When you first reach a node, you have taken the shortest possible route to it. There is no need for a priority queue, no relaxation step, no Dijkstra machinery. The FIFO queue does all the work.
 
 BFS shows up everywhere: finding the nearest exit in a maze, determining if two nodes are connected, computing the minimum number of word-transformation steps, detecting whether a graph is bipartite, and the "rotting oranges" multi-source spread problems on LeetCode.
 

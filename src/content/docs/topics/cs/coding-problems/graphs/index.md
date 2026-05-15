@@ -1,5 +1,5 @@
 ---
-title: Graphs
+title: Graph problems
 description: "19 problems covering BFS, DFS, multi-source BFS, topological sort, union-find, and the most common modeling tricks (grids as graphs, words as graphs)."
 parent: coding-problems
 tags: [leetcode, neetcode-150, graphs]

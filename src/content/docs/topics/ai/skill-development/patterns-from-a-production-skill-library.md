@@ -33,7 +33,7 @@ Five categories cover almost every skill in the library:
 
 1. **Workflow**, the choreography of getting work done (branching, PRs, plans, insights).
 2. **Quality gate**, what to run before committing, merging, or shipping.
-3. **Infra-awareness**, rules for a specific piece of infrastructure (Helm, [Terraform](../../ops/terraform/), Argo, Redis…).
+3. **Infra-awareness**, rules for a specific piece of infrastructure ([Helm](../../ops/helm/), [Terraform](../../ops/terraform/), Argo, Redis…).
 4. **Language-awareness**, project-specific conventions for Python, TypeScript, and framework usage.
 5. **Utility**, single-purpose tools (convert, diagram, format).
 

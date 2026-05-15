@@ -91,7 +91,7 @@ Push works fine for simple setups. Most production systems graduate to pull with
 Not just YAML. The whole **desired state** of the system:
 
 - [Kubernetes](../kubernetes/) manifests (Deployments, Services, ConfigMaps).
-- Helm charts or Kustomize overlays.
+- [Helm](../helm/) charts or Kustomize overlays.
 - CRDs and their instances (ArgoCD Applications, ExternalSecrets, KEDA ScaledObjects, cert-manager Certificates).
 - RBAC (Roles, RoleBindings, ServiceAccounts).
 - Infrastructure-as-code for the things that *host* the cluster ([Terraform](../terraform/)), though this often lives in a separate repo with its own apply loop.

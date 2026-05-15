@@ -10,9 +10,9 @@ updated: 2026-05-04
 
 ## What it does
 
-Depth-First Search explores a graph by plunging as deep as possible down one branch before backing up and trying the next. It commits to a neighbor, then commits to *that* node's neighbors, recursing until it hits a dead end, then unwinds and tries alternatives. The result is that DFS visits every node reachable from a given start, but it explores the shape of the graph in depth order rather than distance order.
+Depth-First Search explores a graph by plunging as deep as possible down one branch before backing up and trying the next. It commits to a neighbor, then commits to *that* node's neighbors, recursing until it hits a dead end, then unwinds and [tries](../data-structures/tries/) alternatives. The result is that DFS visits every node reachable from a given start, but it explores the shape of the graph in depth order rather than distance order.
 
-That commitment-first behavior makes DFS the natural fit for problems that require exhaustive exploration of one path at a time: cycle detection, topological ordering, connected components, and backtracking search. It is also the intuitive shape of recursive tree traversal, which most programmers encounter before they encounter graphs.
+That commitment-first behavior makes DFS the natural fit for problems that require exhaustive exploration of one path at a time: cycle detection, topological ordering, connected components, and backtracking search. It is also the intuitive shape of recursive tree traversal, which most programmers encounter before they encounter [graphs](../data-structures/graphs/).
 
 ## The core idea, in one sentence
 

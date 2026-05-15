@@ -160,10 +160,10 @@ Arrays are the most referenced data structure in the NeetCode 150, 74 problems a
 - [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
 - [131. Palindrome Partitioning](../../coding-problems/backtracking/131-palindrome-partitioning/), 2-D palindrome DP table
 
-**Tries:**
+**[Tries](tries/):**
 - [212. Word Search II](../../coding-problems/tries/212-word-search-ii/), grid with in-place visited marker
 
-**Graphs:**
+**[Graphs](graphs/):**
 - [130. Surrounded Regions](../../coding-problems/graphs/130-surrounded-regions/)
 - [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/)
 - [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/)

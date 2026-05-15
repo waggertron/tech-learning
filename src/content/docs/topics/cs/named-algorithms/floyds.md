@@ -454,6 +454,6 @@ if __name__ == "__main__":
 ## Related topics
 
 - [BFS](./bfs/), graph traversal that also detects structure reachable from a start node
-- [DFS](./dfs/), finds back edges (and thus cycles) in arbitrary directed graphs with color marking
+- [DFS](./dfs/), finds back edges (and thus cycles) in arbitrary directed [graphs](../data-structures/graphs/) with color marking
 - [LeetCode 150, linked-list problems](../coding-problems/linked-list/), the exercise set that uses Floyd's most often
 - [Data structures](../data-structures/), for the linked-list mechanics Floyd's operates on

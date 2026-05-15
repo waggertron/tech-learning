@@ -62,7 +62,7 @@ Four moving parts:
 
 - `dist[v]` = best distance to `v` found so far. Starts at infinity, `0` at source.
 - The outer loop runs at most `n-1` times (one pass = one "hop" propagated from source).
-- The early exit (`if not updated: break`) is optional but important in practice: many real graphs converge in far fewer than V-1 passes.
+- The early exit (`if not updated: break`) is optional but important in practice: many real [graphs](../data-structures/graphs/) converge in far fewer than V-1 passes.
 - The V-th pass runs over all edges one more time. If anything still relaxes, a negative cycle must exist.
 
 ## Why V-1 passes is enough

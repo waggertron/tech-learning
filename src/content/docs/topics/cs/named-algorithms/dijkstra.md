@@ -151,7 +151,7 @@ Key moment: step 2 improved the distance to vertex 1 from 4 (via direct edge 0->
 
 The Fibonacci heap is theoretically optimal but never used in practice due to high constant factors and implementation complexity. The binary heap version is the standard.
 
-For **dense graphs** (E close to V²), a simple array-based priority queue runs in O(V²), which is better than O(E log V) = O(V² log V). When V <= 1000 and the graph is dense, the O(V²) version can outperform the heap version.
+For **dense [graphs](../data-structures/graphs/)** (E close to V²), a simple array-based priority queue runs in O(V²), which is better than O(E log V) = O(V² log V). When V <= 1000 and the graph is dense, the O(V²) version can outperform the heap version.
 
 ## Reconstructing the actual path
 

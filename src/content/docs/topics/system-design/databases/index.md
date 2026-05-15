@@ -32,7 +32,7 @@ NoSQL is not one thing. There are five distinct models:
 | Document | MongoDB, Firestore | JSON-like objects with varying shapes; user profiles, product catalogs |
 | Key-value | Redis, DynamoDB | Fast single-key lookups; sessions, caches, feature flags |
 | Wide-column | Cassandra, HBase | Time-series, write-heavy, append-mostly; IoT, logs, metrics |
-| Graph | Neo4j, Amazon Neptune | Relationships as first-class data; social graphs, recommendation engines |
+| Graph | Neo4j, Amazon Neptune | Relationships as first-class data; social [graphs](../../cs/data-structures/graphs/), recommendation engines |
 | Time-series | InfluxDB, TimescaleDB | Ordered numeric measurements; monitoring, telemetry |
 
 NoSQL databases often sacrifice:

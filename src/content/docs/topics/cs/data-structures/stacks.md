@@ -21,7 +21,7 @@ The most powerful and interview-relevant pattern is the **monotonic stack**, a s
 Other frequent stack patterns:
 
 - **Parentheses / delimiter matching**: push on open, pop and compare on close.
-- **Iterative DFS**: replace the system recursion stack with an explicit stack to avoid stack-overflow on deep trees/graphs.
+- **Iterative DFS**: replace the system recursion stack with an explicit stack to avoid stack-overflow on deep trees/[graphs](graphs/).
 - **Expression evaluation**: Reverse Polish Notation, Shunting-yard, Basic Calculator, stacks handle the operand/operator precedence.
 - **Undo history and backtracking**: push decisions, pop to revert.
 
