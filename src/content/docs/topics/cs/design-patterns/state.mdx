@@ -1,0 +1,266 @@
+---
+title: State Pattern
+description: "Alter an object's behavior when its internal state changes so the object appears to change its class."
+parent: design-patterns
+tags: [design-patterns, behavioral, oop]
+status: draft
+created: 2026-05-15
+updated: 2026-05-15
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## The problem
+
+An object's behavior depends on its current state, and that state changes at runtime. The naive solution is a sprawling `switch` or `if/else` inside every method that checks `this.state` and branches accordingly. A traffic light has a `next()` method that must behave differently for `Red`, `Yellow`, and `Green`. With inline conditionals, every new state means editing every method. Every method must know every state. The logic scatters, and adding a fourth state (say, a flashing `Yellow`) requires hunting down every branch in every method.
+
+State moves each state's behavior into its own class. The context holds a reference to the current state object and delegates calls to it. Transitioning to a new state is a single assignment on the context. Each state class knows only its own logic and which state follows it. Adding a new state requires a new class, not edits to existing ones.
+
+## Structure
+
+```mermaid
+classDiagram
+    class TrafficLight {
+        -state: TrafficLightState
+        +setState(state)
+        +next()
+        +getColor() string
+    }
+    class TrafficLightState {
+        <<interface>>
+        +next(context: TrafficLight)
+        +getColor() string
+    }
+    class RedState {
+        +next(context: TrafficLight)
+        +getColor() string
+    }
+    class YellowState {
+        +next(context: TrafficLight)
+        +getColor() string
+    }
+    class GreenState {
+        +next(context: TrafficLight)
+        +getColor() string
+    }
+    TrafficLightState <|-- RedState
+    TrafficLightState <|-- YellowState
+    TrafficLightState <|-- GreenState
+    TrafficLight --> TrafficLightState
+```
+
+## When to use
+
+- An object's behavior changes dramatically based on internal state and the number of states is large or growing.
+- You have methods with parallel `switch` statements that all switch on the same state variable.
+- State transitions have explicit rules that belong with the state, not scattered across the context.
+- You want to add new states without modifying existing state classes or the context.
+
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
+
+Each concrete state class handles `next()` by calling `context.setState()` with the following state. The `TrafficLight` context never needs to know the transition rules.
+
+```typescript
+interface TrafficLightState {
+  next(context: TrafficLight): void;
+  getColor(): string;
+}
+
+class RedState implements TrafficLightState {
+  next(context: TrafficLight): void {
+    context.setState(new GreenState());
+  }
+  getColor(): string {
+    return 'Red';
+  }
+}
+
+class GreenState implements TrafficLightState {
+  next(context: TrafficLight): void {
+    context.setState(new YellowState());
+  }
+  getColor(): string {
+    return 'Green';
+  }
+}
+
+class YellowState implements TrafficLightState {
+  next(context: TrafficLight): void {
+    context.setState(new RedState());
+  }
+  getColor(): string {
+    return 'Yellow';
+  }
+}
+
+class TrafficLight {
+  constructor(private state: TrafficLightState = new RedState()) {}
+
+  setState(state: TrafficLightState): void {
+    this.state = state;
+  }
+
+  next(): void {
+    this.state.next(this);
+  }
+
+  getColor(): string {
+    return this.state.getColor();
+  }
+}
+
+const light = new TrafficLight();
+console.log(light.getColor()); // Red
+light.next();
+console.log(light.getColor()); // Green
+light.next();
+console.log(light.getColor()); // Yellow
+light.next();
+console.log(light.getColor()); // Red
+```
+
+</TabItem>
+<TabItem label="Python">
+
+Python's `Protocol` defines the state interface without requiring inheritance. Each concrete state receives the context as an argument so it can trigger the transition itself.
+
+```python
+from __future__ import annotations
+from typing import Protocol
+
+
+class TrafficLightState(Protocol):
+    def next(self, context: TrafficLight) -> None: ...
+    def get_color(self) -> str: ...
+
+
+class RedState:
+    def next(self, context: TrafficLight) -> None:
+        context.set_state(GreenState())
+
+    def get_color(self) -> str:
+        return 'Red'
+
+
+class GreenState:
+    def next(self, context: TrafficLight) -> None:
+        context.set_state(YellowState())
+
+    def get_color(self) -> str:
+        return 'Green'
+
+
+class YellowState:
+    def next(self, context: TrafficLight) -> None:
+        context.set_state(RedState())
+
+    def get_color(self) -> str:
+        return 'Yellow'
+
+
+class TrafficLight:
+    def __init__(self) -> None:
+        self._state: TrafficLightState = RedState()
+
+    def set_state(self, state: TrafficLightState) -> None:
+        self._state = state
+
+    def next(self) -> None:
+        self._state.next(self)
+
+    def get_color(self) -> str:
+        return self._state.get_color()
+
+
+light = TrafficLight()
+print(light.get_color())  # Red
+light.next()
+print(light.get_color())  # Green
+light.next()
+print(light.get_color())  # Yellow
+light.next()
+print(light.get_color())  # Red
+```
+
+</TabItem>
+<TabItem label="Go">
+
+Go interfaces are satisfied implicitly. Each state struct receives a pointer to the context and calls `SetState` to hand off control. A zero-value `TrafficLight` with a nil state field panics: always initialize with a concrete state.
+
+```go
+package main
+
+import "fmt"
+
+type TrafficLightState interface {
+	Next(ctx *TrafficLight)
+	GetColor() string
+}
+
+type RedState struct{}
+
+func (r *RedState) Next(ctx *TrafficLight) { ctx.SetState(&GreenState{}) }
+func (r *RedState) GetColor() string       { return "Red" }
+
+type GreenState struct{}
+
+func (g *GreenState) Next(ctx *TrafficLight) { ctx.SetState(&YellowState{}) }
+func (g *GreenState) GetColor() string       { return "Green" }
+
+type YellowState struct{}
+
+func (y *YellowState) Next(ctx *TrafficLight) { ctx.SetState(&RedState{}) }
+func (y *YellowState) GetColor() string       { return "Yellow" }
+
+type TrafficLight struct{ state TrafficLightState }
+
+func (t *TrafficLight) SetState(s TrafficLightState) { t.state = s }
+func (t *TrafficLight) Next()                        { t.state.Next(t) }
+func (t *TrafficLight) GetColor() string             { return t.state.GetColor() }
+
+func main() {
+	light := &TrafficLight{state: &RedState{}}
+	fmt.Println(light.GetColor()) // Red
+	light.Next()
+	fmt.Println(light.GetColor()) // Green
+	light.Next()
+	fmt.Println(light.GetColor()) // Yellow
+	light.Next()
+	fmt.Println(light.GetColor()) // Red
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Tradeoffs
+
+| Pro | Con |
+| --- | --- |
+| Eliminates parallel `switch` blocks scattered across methods | One class per state; a machine with many states means many files |
+| Open/closed: new states require no changes to existing state classes | State classes are tightly coupled to the context type they accept |
+| Transition logic lives with the state that owns it | Shared state between state objects requires careful coordination |
+| Each state class is independently testable in isolation | Can be overkill when an object has only two states that rarely change |
+
+## Gotchas
+
+- State and Strategy look almost identical in structure. The difference is intent: Strategy swaps algorithms the client chooses; State manages transitions the object controls internally.
+- Circular references are normal here. `RedState` knows about `GreenState`, which knows about `YellowState`, which knows about `RedState`. Use forward declarations or lazy instantiation in languages that require it.
+- If state objects are stateless (no instance data), they can be singletons. Creating a new instance on every transition is wasteful when the state carries no data.
+- Transition logic can live in the context or in the state classes. Putting it in the states keeps transitions close to the behavior they govern. Putting it in the context gives a single place to read the full machine. Pick one and stay consistent.
+- In Go, passing a pointer to the context through every state method ties the interface to one concrete context type. If you need the same states reused across multiple context types, introduce a narrower interface for the context argument.
+
+## References
+
+- [Design Patterns: State, GoF](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610), the canonical definition
+- [Refactoring Guru: State](https://refactoring.guru/design-patterns/state), diagrams and multiple-language examples
+- [SourceMaking: State](https://sourcemaking.com/design_patterns/state), additional context and known uses
+
+## Related topics
+
+- [Design Patterns](../), the full GoF catalog
+- [Strategy](../strategy/), also externalizes behavior but does not manage transitions
+- [Observer](../observer/), often used alongside State to broadcast state changes

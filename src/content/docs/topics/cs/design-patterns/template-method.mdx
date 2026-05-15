@@ -1,0 +1,312 @@
+---
+title: Template Method Pattern
+description: "Define the skeleton of an algorithm in a base class, deferring some steps to subclasses so subclasses can redefine certain steps without changing the algorithm's structure."
+parent: design-patterns
+tags: [design-patterns, behavioral, oop]
+status: draft
+created: 2026-05-15
+updated: 2026-05-15
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## The problem
+
+A family of related processes shares the same high-level sequence of steps, but individual steps differ by type. A report generator always fetches data, parses it, formats the output, and sends the result. A CSV report and a JSON report follow that exact sequence: only the parse and format steps are different. The naive solution duplicates the shared scaffolding in every variant, spreads the sequence logic across multiple classes, and makes it easy for one variant to accidentally skip a step or execute steps out of order.
+
+Template Method captures the invariant sequence in a single base class method (the template method) and declares the variable steps as abstract methods. Each subclass fills in only the steps that differ. The sequence is defined once, in one place, and subclasses cannot change it.
+
+## Structure
+
+```mermaid
+classDiagram
+    class ReportGenerator {
+        <<abstract>>
+        +generateReport()
+        +fetchData()*
+        +parseData()*
+        +formatReport()*
+        +sendReport()
+    }
+    class CSVReport {
+        +fetchData()
+        +parseData()
+        +formatReport()
+    }
+    class JSONReport {
+        +fetchData()
+        +parseData()
+        +formatReport()
+    }
+    ReportGenerator <|-- CSVReport
+    ReportGenerator <|-- JSONReport
+```
+
+## When to use
+
+- Multiple classes share the same algorithm structure but differ in one or more steps.
+- You want to enforce a fixed sequence of operations and prevent subclasses from reordering steps.
+- Common behavior should live in one place to avoid duplication across related classes.
+- You are writing a framework and want to give callers extension points without exposing the full algorithm.
+
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
+
+`ReportGenerator` declares `generateReport` as the template method and marks `parseData` and `formatReport` as abstract. `CSVReport` and `JSONReport` inherit the orchestration and supply only their specific implementations.
+
+```typescript
+abstract class ReportGenerator {
+  // Template method: defines the invariant sequence.
+  generateReport(): void {
+    const raw = this.fetchData();
+    const parsed = this.parseData(raw);
+    const formatted = this.formatReport(parsed);
+    this.sendReport(formatted);
+  }
+
+  protected fetchData(): string {
+    return 'id,name,score\n1,Alice,95\n2,Bob,87';
+  }
+
+  protected abstract parseData(raw: string): Record<string, string>[];
+
+  protected abstract formatReport(data: Record<string, string>[]): string;
+
+  protected sendReport(output: string): void {
+    console.log('Sending report:\n' + output);
+  }
+}
+
+class CSVReport extends ReportGenerator {
+  protected parseData(raw: string): Record<string, string>[] {
+    const [header, ...rows] = raw.trim().split('\n');
+    const keys = header.split(',');
+    return rows.map(row => {
+      const values = row.split(',');
+      return Object.fromEntries(keys.map((k, i) => [k, values[i]]));
+    });
+  }
+
+  protected formatReport(data: Record<string, string>[]): string {
+    const header = Object.keys(data[0]).join(',');
+    const rows = data.map(r => Object.values(r).join(','));
+    return [header, ...rows].join('\n');
+  }
+}
+
+class JSONReport extends ReportGenerator {
+  protected parseData(raw: string): Record<string, string>[] {
+    const [header, ...rows] = raw.trim().split('\n');
+    const keys = header.split(',');
+    return rows.map(row => {
+      const values = row.split(',');
+      return Object.fromEntries(keys.map((k, i) => [k, values[i]]));
+    });
+  }
+
+  protected formatReport(data: Record<string, string>[]): string {
+    return JSON.stringify(data, null, 2);
+  }
+}
+
+new CSVReport().generateReport();
+// Sending report:
+// id,name,score
+// 1,Alice,95
+// 2,Bob,87
+
+new JSONReport().generateReport();
+// Sending report:
+// [{ "id": "1", "name": "Alice", "score": "95" }, ...]
+```
+
+</TabItem>
+<TabItem label="Python">
+
+Python's `abc` module enforces the abstract contract at instantiation time, so attempting to create a `ReportGenerator` directly or a subclass with missing overrides raises a `TypeError` before any code runs.
+
+```python
+from __future__ import annotations
+from abc import ABC, abstractmethod
+
+
+class ReportGenerator(ABC):
+    # Template method: defines the invariant sequence.
+    def generate_report(self) -> None:
+        raw = self.fetch_data()
+        parsed = self.parse_data(raw)
+        formatted = self.format_report(parsed)
+        self.send_report(formatted)
+
+    def fetch_data(self) -> str:
+        return 'id,name,score\n1,Alice,95\n2,Bob,87'
+
+    @abstractmethod
+    def parse_data(self, raw: str) -> list[dict[str, str]]: ...
+
+    @abstractmethod
+    def format_report(self, data: list[dict[str, str]]) -> str: ...
+
+    def send_report(self, output: str) -> None:
+        print(f'Sending report:\n{output}')
+
+
+class CSVReport(ReportGenerator):
+    def parse_data(self, raw: str) -> list[dict[str, str]]:
+        lines = raw.strip().split('\n')
+        keys = lines[0].split(',')
+        return [dict(zip(keys, row.split(','))) for row in lines[1:]]
+
+    def format_report(self, data: list[dict[str, str]]) -> str:
+        header = ','.join(data[0].keys())
+        rows = [','.join(r.values()) for r in data]
+        return '\n'.join([header, *rows])
+
+
+class JSONReport(ReportGenerator):
+    def parse_data(self, raw: str) -> list[dict[str, str]]:
+        lines = raw.strip().split('\n')
+        keys = lines[0].split(',')
+        return [dict(zip(keys, row.split(','))) for row in lines[1:]]
+
+    def format_report(self, data: list[dict[str, str]]) -> str:
+        import json
+        return json.dumps(data, indent=2)
+
+
+CSVReport().generate_report()
+# Sending report:
+# id,name,score
+# 1,Alice,95
+
+JSONReport().generate_report()
+# Sending report:
+# [{"id": "1", "name": "Alice", "score": "95"}, ...]
+```
+
+</TabItem>
+<TabItem label="Go">
+
+Go has no inheritance, so the template method pattern uses a `ReportSteps` interface passed into a shared `GenerateReport` function. The function owns the sequence; the struct that satisfies the interface supplies only the variable steps.
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
+type ReportSteps interface {
+	ParseData(raw string) []map[string]string
+	FormatReport(data []map[string]string) string
+}
+
+// GenerateReport is the template method: it owns the sequence.
+func GenerateReport(steps ReportSteps) {
+	raw := fetchData()
+	parsed := steps.ParseData(raw)
+	formatted := steps.FormatReport(parsed)
+	sendReport(formatted)
+}
+
+func fetchData() string {
+	return "id,name,score\n1,Alice,95\n2,Bob,87"
+}
+
+func sendReport(output string) {
+	fmt.Println("Sending report:\n" + output)
+}
+
+// CSVReport implements ReportSteps.
+type CSVReport struct{}
+
+func (c CSVReport) ParseData(raw string) []map[string]string {
+	lines := strings.Split(strings.TrimSpace(raw), "\n")
+	keys := strings.Split(lines[0], ",")
+	var result []map[string]string
+	for _, row := range lines[1:] {
+		values := strings.Split(row, ",")
+		m := make(map[string]string)
+		for i, k := range keys {
+			m[k] = values[i]
+		}
+		result = append(result, m)
+	}
+	return result
+}
+
+func (c CSVReport) FormatReport(data []map[string]string) string {
+	if len(data) == 0 {
+		return ""
+	}
+	keys := []string{"id", "name", "score"}
+	rows := []string{strings.Join(keys, ",")}
+	for _, r := range data {
+		vals := make([]string, len(keys))
+		for i, k := range keys {
+			vals[i] = r[k]
+		}
+		rows = append(rows, strings.Join(vals, ","))
+	}
+	return strings.Join(rows, "\n")
+}
+
+// JSONReport implements ReportSteps.
+type JSONReport struct{}
+
+func (j JSONReport) ParseData(raw string) []map[string]string {
+	return CSVReport{}.ParseData(raw)
+}
+
+func (j JSONReport) FormatReport(data []map[string]string) string {
+	b, _ := json.MarshalIndent(data, "", "  ")
+	return string(b)
+}
+
+func main() {
+	GenerateReport(CSVReport{})
+	// Sending report:
+	// id,name,score
+	// 1,Alice,95
+
+	GenerateReport(JSONReport{})
+	// Sending report:
+	// [{"id":"1","name":"Alice","score":"95"}, ...]
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Tradeoffs
+
+| Pro | Con |
+| --- | --- |
+| The sequence lives in one place; subclasses cannot reorder steps | Inheritance couples subclasses to the base class; changes ripple downward |
+| New variants add a class, not a conditional | Deep hierarchies become hard to follow when hooks and overrides stack up |
+| Base class can provide sensible defaults for optional steps (hooks) | Subclasses can accidentally override the template method itself if it is not marked `final` |
+| Framework authors can expose extension points without exposing internal logic | The Liskov substitution principle is easy to violate if a subclass dramatically changes a step's contract |
+
+## Gotchas
+
+- Mark the template method `final` (Java) or leave it non-overridable by convention in Python. A subclass that overrides `generateReport` itself defeats the whole pattern.
+- "Hooks" are optional steps with a no-op default in the base class. Use them for before/after callbacks that only some subclasses need. Document which methods are abstract (required) and which are hooks (optional).
+- Template Method and Strategy solve similar problems with opposite tools: Template Method uses inheritance, Strategy uses composition. Prefer Strategy when the variant behavior needs to be swapped at runtime or when you want to avoid an inheritance hierarchy.
+- In Go, the natural expression is a `steps` interface plus a top-level function (shown above), not embedded structs trying to simulate inheritance. Embedding does not give method overriding.
+- Avoid putting too many abstract steps in one template method. If callers override six of eight steps, the base class is providing almost no value. Split the algorithm or consider a different pattern.
+
+## References
+
+- [Design Patterns: Template Method, GoF](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610), the canonical definition
+- [Refactoring Guru: Template Method](https://refactoring.guru/design-patterns/template-method), diagrams and multiple-language examples
+- [SourceMaking: Template Method](https://sourcemaking.com/design_patterns/template_method), additional context and known uses
+
+## Related topics
+
+- [Design Patterns](../), the full GoF catalog
+- [Strategy](../strategy/), achieves similar variation through composition rather than inheritance
+- [Factory](../factory/), Factory Method is a specialization of Template Method
