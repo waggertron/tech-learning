@@ -5,7 +5,7 @@ parent: benchmarks
 tags: [multimodal, mmmu, mathvista, chartqa, docvqa, benchmarks]
 status: draft
 created: 2026-04-24
-updated: 2026-05-13
+updated: 2026-05-15
 ---
 
 ## The multimodal benchmark family
@@ -43,32 +43,44 @@ Vision-language models have their own benchmark ecosystem. The major ones in 202
 
 **What it measures.** Image + text reasoning at college level.
 
-**Saturation.** Top models in the 70–80% range (April 2026). MMMU itself is largely saturated for leading models.
+**Saturation.** Top models in the 70-80% range (April 2026). MMMU itself is largely saturated for leading models.
 
-**MMMU-Pro.** 2024 successor. More robust filtering, vision-only variants (no text cues), harder overall. Frontier models in the 60–70% range. Still differentiates.
+**MMMU-Pro.** 2024 successor. More robust filtering, vision-only variants (no text cues), harder overall. Frontier models in the 60-70% range. Still differentiates.
 
 ### MMMU example questions
 
 **Example 1 (Art History):**
 
-> The image shows a painting with a distinct style characterized by broken brushstrokes, visible paint texture, and emphasis on light effects over precise line drawing. Based on the visual evidence in the image, this work is most consistent with which art movement?
+![Monet, Impression soleil levant (1872). Broken brushstrokes, visible texture, and light over form — the defining visual markers of Impressionism. Public domain.](/tech-learning/img/benchmarks/monet-impression-sunrise.jpg)
+
+> Based on the visual evidence in the image, this work is most consistent with which art movement?
 > (A) Neoclassicism &nbsp; (B) Impressionism &nbsp; (C) Abstract Expressionism &nbsp; (D) Photorealism
 
-For a human with art education: immediately recognizable as Impressionism from the described visual properties. For a model: requires both reading the description AND connecting the visual properties to the correct movement, not just recognizing the word "Impressionism" in the text.
+For a human with art education: immediately recognizable as Impressionism from the broken brushwork, visible texture, and light-over-form emphasis. For a model: requires reading the visual properties and connecting them to the correct movement, not just recognizing the word "Impressionism" anywhere in the text.
 
 **Example 2 (Medicine/Radiology):**
 
-> The image shows an X-ray of a patient's chest. There is increased opacity in the right lower lobe with blurring of the right hemidiaphragm border. The trachea appears midline. Based on these findings, what is the most likely diagnosis?
+![Chest X-ray showing right-sided lobar pneumonia with consolidation and blurring of the hemidiaphragm border. Dr. Mikael Häggström, CC0.](/tech-learning/img/benchmarks/chest-xray-pneumonia.jpg)
+
+> There is increased opacity in the right lower lobe with blurring of the right hemidiaphragm border. The trachea appears midline. Based on these findings, what is the most likely diagnosis?
 > (A) Pneumothorax &nbsp; (B) Right lower lobe pneumonia &nbsp; (C) Pleural effusion &nbsp; (D) Right-sided atelectasis
 
-The key visual finding (blurring of the hemidiaphragm, indicating consolidation but preserved trachea position) points to right lower lobe pneumonia rather than pleural effusion (which would shift the trachea) or pneumothorax (which shows hyperlucency). This requires integrating visual findings with clinical radiology knowledge.
+The key visual finding is blurring of the hemidiaphragm with preserved trachea position. Pleural effusion would shift the trachea; pneumothorax shows hyperlucency rather than opacity. The model must integrate what it sees with clinical radiology knowledge to pick (B).
 
 **Example 3 (Engineering/Circuits):**
 
-> The image shows a circuit diagram with a 12V source, a 4-ohm resistor R1, and a 2-ohm resistor R2 connected in parallel. What is the total current drawn from the source?
+```
+         +--------[ R1 = 4Ω ]--------+
+         |                            |
+(+) ─────+                            +───── (-)
+   12V   |                            |
+         +--------[ R2 = 2Ω ]--------+
+```
+
+> What is the total current drawn from the source?
 > (A) 1.5A &nbsp; (B) 3A &nbsp; (C) 4.5A &nbsp; (D) 6A
 
-Working from the diagram: parallel resistance = (4x2)/(4+2) = 8/6 = 4/3 ohms. Total current = 12V / (4/3) = 9A. That is not one of the options. This is exactly where models fail on MMMU: reading the circuit diagram correctly (are R1 and R2 in parallel or series? is the source 12V or is that a label for something else?) is the prerequisite. Models that misread the diagram get a wrong starting value and pick a plausible-looking wrong answer.
+Working from the diagram: parallel resistance = (4 × 2) / (4 + 2) = 4/3 Ω. Total current = 12V / (4/3) = 9A. That is not one of the options. This is exactly where models fail on MMMU: misreading the circuit (are R1 and R2 in parallel or series? is 12V the source or a label for something else?) produces a wrong starting value, and the model picks a plausible-looking wrong answer.
 
 ## MathVista
 
@@ -76,27 +88,52 @@ Working from the diagram: parallel resistance = (4x2)/(4+2) = 8/6 = 4/3 ohms. To
 
 **What it measures.** The intersection of visual-spatial reasoning and arithmetic. Exposes a common blind spot: models can solve an algebra problem, but struggle when the same problem is presented as a geometry diagram.
 
-**Current state.** Top reasoning models 65–80% range. Older non-reasoning models significantly lower.
+**Current state.** Top reasoning models 65-80% range. Older non-reasoning models significantly lower.
 
 ### MathVista example questions
 
 **Example 1 (Geometry from diagram):**
 
-> [Image: a right triangle with legs labeled 6 and 8, and a circle inscribed within it touching all three sides.]
+```
+*
+|\
+|  \
+|    \        legs:  6 (vertical), 8 (horizontal)
+6  (r)  \     hypotenuse: 10
+|        \    inscribed circle: touches all three sides
+|          \
+*────8──────*
+```
+
 > What is the radius of the inscribed circle?
 
-Working: for a right triangle with legs a, b and hypotenuse c, the inradius r = (a + b - c)/2. Here a=6, b=8, c=10 (Pythagorean triple). r = (6+8-10)/2 = **2**.
+Working: for a right triangle with legs a, b and hypotenuse c, the inradius r = (a + b - c) / 2. Here a = 6, b = 8, c = 10 (Pythagorean triple). r = (6 + 8 - 10) / 2 = **2**.
 
-The model must (1) identify the right triangle from the image, (2) read the labels correctly, (3) recognize the inscribed circle formula or derive it from area/perimeter: area = 24, perimeter = 24, r = 2 x area / perimeter = 48/24 = 2. Models that can do this algebra but misread the leg labels from the diagram fail.
+The model must (1) identify the right triangle from the image, (2) read the labels correctly, (3) recognize the inscribed circle formula or derive it from area / perimeter: area = 24, perimeter = 24, r = 2 × area / perimeter = 48 / 24 = 2. Models that can do this algebra but misread the leg labels from the diagram fail.
 
 **Example 2 (Chart-based math):**
 
-> [Image: a bar chart showing annual revenue for years 2019-2023. The bars reach approximately $12M, $15M, $11M, $18M, and $22M respectively.]
+```
+Annual Revenue ($M)
+─────────────────────────────────────────────────
+$22 ┤                                         ██
+$20 ┤                                         ██
+$18 ┤                        ██               ██
+$16 ┤                        ██               ██
+$15 ┤          ██            ██               ██
+$14 ┤          ██            ██               ██
+$12 ┤ ██       ██            ██               ██
+$11 ┤ ██       ██     ██     ██               ██
+$10 ┤ ██       ██     ██     ██               ██
+    └──────────────────────────────────────────
+     2019     2020   2021   2022             2023
+```
+
 > What was the average annual growth rate from 2019 to 2023?
 
 Working: from $12M to $22M over 4 years. CAGR = (22/12)^(1/4) - 1 = (1.833)^0.25 - 1 = approximately 16.4%.
 
-The failure mode: models often compute simple average growth ((22-12)/12 / 4 = 20.8%) instead of compound annual growth rate. Or they misread the bars (is the 2023 bar exactly $22M, or $21.5M?). The visual ambiguity in reading bar heights is a systematic MathVista weakness.
+The failure mode: models often compute simple average growth ((22 - 12) / 12 / 4 = 20.8%) instead of compound annual growth rate. Or they misread the bars (is the 2023 bar exactly $22M, or $21.5M?). The visual ambiguity in reading bar heights is a systematic MathVista weakness.
 
 ## ChartQA
 
@@ -104,27 +141,62 @@ Chart-and-graph question answering. Bar charts, line charts, pie charts, "what w
 
 **Why it matters.** Charts are ubiquitous in business and science, and they're a known failure mode. A model may read a table of numbers fine but fail to extract numbers from a chart of the same data.
 
-**Saturation.** Approaching but not fully saturated. Top models 85–90%.
+**Saturation.** Approaching but not fully saturated. Top models 85-90%.
 
 ### ChartQA example questions
 
 **Example 1 (direct retrieval):**
 
-> [Image: pie chart showing market share. Slices are labeled: Company A 35%, Company B 28%, Company C 22%, Company D 15%.]
+```
+Market Share by Company
+──────────────────────────────────────────────────
+Company A  ████████████████████████████████████   35%
+Company B  ████████████████████████████           28%
+Company C  ██████████████████████                 22%
+Company D  ███████████████                        15%
+```
+
 > What percentage of market share does Company B hold?
 
-Answer: 28%. This is the easy end of ChartQA, direct label reading. Frontier models score ~99% on this type. ChartQA's difficulty comes from the harder variants.
+Answer: 28%. This is the easy end of ChartQA, direct label reading. Frontier models score ~99% on this type. ChartQA's difficulty comes from the harder variants below.
 
 **Example 2 (comparison requiring visual estimation):**
 
-> [Image: line chart showing two companies' quarterly revenue from Q1 2020 to Q4 2022. Lines cross twice.]
+```
+Quarterly Revenue ($M)  — Company A vs Company B
+──────────────────────────────────────────────────────────────────
+$22 ┤                              A
+$20 ┤                          A       A
+$18 ┤  A                   A               A
+$16 ┤     A   ╳               B       B       B
+$15 ┤         B           ╳
+$14 ┤             B   B
+$12 ┤  B
+    └───────────────────────────────────────────────────────────
+     Q1  Q2  Q3  Q4  Q1  Q2  Q3  Q4  Q1  Q2  Q3  Q4
+     ────── 2020 ──────  ────── 2021 ──────  ────── 2022 ──────
+                  ↑cross 1             ↑cross 2
+```
+
 > During how many quarters did Company A exceed Company B?
 
-The model must count quarters, track which line is which across the crossings, and handle the crossings correctly. If the chart has 12 data points and the lines cross twice, the answer requires determining which company is higher in each of the 12 segments, which in turn requires reading whether each crossing is going up or down. Error rate increases with number of crossings.
+The model must count quarters, track which line is which across both crossings, and handle each crossing correctly. Across 12 data points with 2 crossings, each crossing segment requires determining which company is higher. Error rate increases with number of crossings and chart density.
 
-**Example 3 (calculation):**
+**Example 3 (calculation from stacked bar):**
 
-> [Image: stacked bar chart showing annual energy consumption by source: coal, oil, natural gas, renewables. Total bar heights are readable; individual stack heights require estimation.]
+```
+Annual Energy Consumption by Source (Exajoules)
+────────────────────────────────────────────────────────────────
+      Coal         Oil        Nat. Gas     Renewables
+2022 ├────────────┤────────────┤────────────────┤████████████┤
+2021 ├────────────┤────────────┤────────────────┤████████┤
+2020 ├────────────┤────────────┤────────────────┤██████┤
+2019 ├────────────┤────────────┤────────────────┤█████┤
+2018 ├────────────┤────────────┤────────────────┤████┤
+2015 ├────────────┤────────────┤────────────────┤███┤
+     ↑ total bars same height; renewable slice requires estimation
+```
+
 > By what percentage did renewable energy's share of total energy increase from 2015 to 2022?
 
 This requires reading two stacked bar heights (renewable slice in 2015, renewable slice in 2022), dividing each by the total bar height to get share percentages, then computing the percentage-point change. Each step introduces visual estimation error. This is where even frontier models average 75-80% accuracy rather than ~100%.
@@ -141,21 +213,57 @@ These exercise OCR + layout + reasoning together. Models good at pure OCR (good 
 
 **Example 1 (scanned form):**
 
-> [Image: a scanned insurance form with handwritten and printed fields.]
+```
+HOMEOWNERS INSURANCE POLICY
+────────────────────────────────────────────────────
+Policyholder:    Jane M. Doe
+Policy No.:      HO-2024-88347
+
+Issue Date:      03/01/2023
+Effective Date:  03/15/2023
+Start Date:      03/15/2023
+Expiration:      03/15/2024
+
+Property:        1424 Elm Street, Springfield, IL 62704
+Coverage:        [x] Dwelling  [x] Personal Property  [ ] Liability
+
+Annual Premium:  $1,248.00
+────────────────────────────────────────────────────
+```
+
 > What is the policy effective date listed on this form?
 
-The model must OCR the date field, which may be handwritten, partially obscured, or in an unusual format. DocVQA's OCR component is mostly solved by frontier models (90%+ accuracy). The harder cases are when the field label is ambiguous ("Effective Date" vs "Issue Date" vs "Start Date" appearing on the same form).
+The model must locate and read the correct date field. The difficulty here is that "Issue Date," "Effective Date," and "Start Date" all appear on the same form with the same value format. DocVQA's OCR component is mostly solved by frontier models (90%+ accuracy). The harder cases are when the right field label is ambiguous.
 
 **Example 2 (layout + reasoning):**
 
-> [Image: a multi-column financial statement PDF with tables and footnotes.]
+```
+NOTES TO CONSOLIDATED FINANCIAL STATEMENTS
+
+Note 1 — Basis of Presentation ........ 14
+Note 2 — Summary of Significant
+          Accounting Policies ......... 15
+Note 3 — Revenue Recognition .......... 17    <-- locate this
+Note 4 — Leases ........................ 19
+...
+
+NOTE 3 — REVENUE RECOGNITION
+
+The Company recognizes revenue in accordance with
+Accounting Standards Codification Topic 606,
+"Revenue from Contracts with Customers" (ASC 606),
+as issued by the Financial Accounting Standards
+Board (FASB). Revenue is recognized when, or as,
+performance obligations are satisfied.
+```
+
 > According to footnote 3, what accounting standard was used for the revenue recognition policy?
 
-The model must: (1) locate footnote 3 visually (it may be at the bottom of the page in small font), (2) read the text correctly, (3) identify the specific accounting standard mentioned. This combines OCR, layout understanding, and semantic understanding of accounting terminology.
+The model must: (1) locate Note 3 visually in a multi-column document with small footnote text, (2) OCR it correctly, (3) identify the specific accounting standard. The answer is ASC 606. This combines OCR, layout understanding, and semantic understanding of accounting terminology.
 
 ## OCRBench
 
-Specifically tests OCR capability in isolation, transcription of text from images, including weird fonts, rotated text, mathematical notation, multi-language.
+Specifically tests OCR capability in isolation: transcription of text from images, including weird fonts, rotated text, mathematical notation, multi-language.
 
 **Why it matters.** A prerequisite for DocVQA. Weak OCR guarantees weak DocVQA.
 
@@ -236,7 +344,7 @@ Some multimodal benchmarks now include long-form documents with many pages. Scor
 
 ### Reasoning-mode multiplier
 
-Same as every other benchmark: reasoning-mode variants score ~15–25 points higher on hard multimodal reasoning.
+Same as every other benchmark: reasoning-mode variants score ~15-25 points higher on hard multimodal reasoning.
 
 ## The current state of the art (April 2026)
 
