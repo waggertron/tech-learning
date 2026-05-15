@@ -17,7 +17,7 @@ The Claude Agent SDK frames it crisply: "the model reasons about what to do; the
 ## Key ideas
 
 - **The tool-use loop**: Every agent reduces to: send prompt + tool defs → model returns a tool-call request → harness executes → result appended → repeat until no tool call or a stop condition fires. Simon Willison's minimal definition: "an agent is a model using tools in a loop to achieve a goal."
-- **Context window management**: The harness decides what enters the window each turn: prior messages, tool results, file contents, memory summaries. Naive append-everything causes bloat and degraded attention on early instructions.
+- **[Context window management](../prompt-engineering/context-window-management/)**: The harness decides what enters the window each turn: prior messages, tool results, file contents, memory summaries. Naive append-everything causes bloat and degraded attention on early instructions.
 - **Compaction / summarization**: When the window approaches saturation (Claude Code triggers at ~92–95% capacity), the harness summarizes, preserving decisions, open bugs, task state, discarding verbose intermediate output. Typical compression: 60–80%.
 - **System prompts and skills**: The system prompt is the harness's primary policy surface. It's also the most cache-friendly prefix, stable content maximizes prompt cache hit rate.
 - **Prompt caching**: The harness pins stable prefixes (system prompt, tool definitions) as cache breakpoints so the model doesn't recompute them every turn. Cuts latency and cost significantly on long sessions.

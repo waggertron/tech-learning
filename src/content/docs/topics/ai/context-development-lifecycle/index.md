@@ -10,7 +10,7 @@ updated: 2026-05-04
 
 ## What it is
 
-The Context Development Lifecycle (CDLC) is a framework for managing the knowledge AI coding agents need to work effectively in a specific codebase or organization. Patrick Debois (who coined "DevOps" in 2009, now at Tessl) proposed it as the organizational complement to technical context engineering: the harness decides what goes in the window at runtime. The CDLC decides what exists to put there in the first place.
+The Context Development Lifecycle (CDLC) is a framework for managing the knowledge AI coding agents need to work effectively in a specific codebase or organization. Patrick Debois (who coined "DevOps" in 2009, now at Tessl) proposed it as the organizational complement to technical [context engineering](../harness-development/context-engineering/): the harness decides what goes in the window at runtime. The CDLC decides what exists to put there in the first place.
 
 The core claim: as AI coding agents improve, the bottleneck in software development shifts from generating code to explaining what the code should do and why. Agents start each session with zero institutional knowledge. A developer's job increasingly involves encoding that knowledge into structured, tested, versioned context.
 

@@ -227,7 +227,7 @@ func main() {
 | --- | --- |
 | Integrate legacy or third-party code without touching it | Adds a translation layer with its own maintenance burden |
 | Client code stays clean, depends only on the target interface | Data conversion (cents/dollars, codes/enums) can introduce bugs |
-| Easy to test: stub the adaptee in unit tests | Class adapter (multiple inheritance) is messy in most languages |
+| Easy to test: stub the adaptee in [unit tests](../../testing/unit-tests/) | Class adapter (multiple inheritance) is messy in most languages |
 | Standard way to wrap an SDK you do not own | If the adaptee API changes, the adapter must change too |
 
 ## Gotchas

@@ -33,7 +33,7 @@ Five categories cover almost every skill in the library:
 
 1. **Workflow**, the choreography of getting work done (branching, PRs, plans, insights).
 2. **Quality gate**, what to run before committing, merging, or shipping.
-3. **Infra-awareness**, rules for a specific piece of infrastructure (Helm, Terraform, Argo, Redis…).
+3. **Infra-awareness**, rules for a specific piece of infrastructure (Helm, [Terraform](../../ops/terraform/), Argo, Redis…).
 4. **Language-awareness**, project-specific conventions for Python, TypeScript, and framework usage.
 5. **Utility**, single-purpose tools (convert, diagram, format).
 
@@ -67,7 +67,7 @@ Workflow skills work best as **imperative checklists**. The model is good at fol
 
 | Skill | Purpose |
 | --- | --- |
-| `fast-checks` | Run all fast checks (lint, typecheck, unit, component) across the repo. No Docker. Pre-commit confidence. |
+| `fast-checks` | Run all fast checks (lint, typecheck, unit, component) across the repo. No [Docker](../../ops/docker/). Pre-commit confidence. |
 | `pre-commit-quality-gates` | Verify lint, format, and tests pass before committing |
 | `explicit-version-upgrades` | When bumping any dependency version, exact pins, PR justification, verification after |
 | `dependency-management` | Install / update / remove deps consistently in a polyglot monorepo |
@@ -109,7 +109,7 @@ Descriptions follow a template:
 
 > *Use when modifying [artifact type], enforces [specific rules] and prevents [specific failure mode].*
 
-The "prevents" clause is load-bearing. It's what keeps the description from being vague. "Enforces best practices" triggers nothing; "prevents cascading sync failures by enforcing dependency ordering, FQDN addressing, and pre-merge validation" triggers when you edit an ArgoCD Application.
+The "prevents" clause is load-bearing. It's what keeps the description from being vague. "Enforces best practices" triggers nothing; "prevents cascading sync failures by enforcing dependency ordering, FQDN addressing, and pre-merge validation" triggers when you edit an [ArgoCD](../../ops/argocd/) Application.
 
 ### Pattern: *awareness over prescription*
 
@@ -212,7 +212,7 @@ If you're building a repo's first skill library, start with these five archetype
 2. **`pre-commit-quality-gates`**, the "are we ready to commit?" checklist. Different from `fast-checks`, this one is the narrative flow, not the commands.
 3. **`feature-branch-workflow`**, how to start a task and prep a PR. Low controversy, high leverage.
 4. **`adversarial-pr-review`**, attack your own PR before anyone else does. Cheaper to find problems here than in review.
-5. **One infra-awareness skill** for the single piece of infra in your stack with the most footguns (Helm, Argo, Terraform, Kubernetes, whatever). Start with one; add more as the pain teaches you which.
+5. **One infra-awareness skill** for the single piece of infra in your stack with the most footguns (Helm, Argo, Terraform, [Kubernetes](../../ops/kubernetes/), whatever). Start with one; add more as the pain teaches you which.
 
 That's five skills. They fit in a single session's context, they cover 80% of where an AI coding agent's defaults go wrong, and they leave plenty of room to grow a library that looks like the one above.
 

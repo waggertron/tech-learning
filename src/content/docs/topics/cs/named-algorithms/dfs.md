@@ -243,7 +243,7 @@ reversed:            [0, 2, 1, 3]  <- topological order
 
 Check: 0 before 1 (edge 0->1), 0 before 2 (edge 0->2), 1 before 3 (edge 1->3), 2 before 3 (edge 2->3). All edges respected.
 
-Note: Kahn's algorithm (BFS-based, using in-degree counts) produces the same result via a different mechanism. The DFS post-order approach and Kahn's are equally valid; DFS post-order tends to show up more naturally when you are already doing cycle detection.
+Note: [Kahn's algorithm](kahns/) (BFS-based, using in-degree counts) produces the same result via a different mechanism. The DFS post-order approach and Kahn's are equally valid; DFS post-order tends to show up more naturally when you are already doing cycle detection.
 
 ## Application 3: Connected components
 

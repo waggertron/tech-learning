@@ -55,7 +55,7 @@ Three properties make this problem distinct from the textbook "find a path" prob
 
 The right way to think about it: the problem lives on a **time-expanded graph** (sometimes called a "temporal graph" or "time-respecting reachability graph"), not a normal directed graph. We will build up to that view; first, the direct algorithms.
 
-## Setup: the data structures
+## Setup: the [data structures](../data-structures/)
 
 Throughout, `flights` is an indexable list of `Flight` records. We pre-index them by source airport so we can quickly enumerate "all flights leaving airport X":
 

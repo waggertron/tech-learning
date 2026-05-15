@@ -83,4 +83,4 @@ For interview prep, read in order. For production reference, jump to the relevan
 
 - [Named Algorithms](../cs/named-algorithms/), algorithms that appear inside system components: Dijkstra in routing, BFS in crawlers, consistent hashing in storage
 - [Graph Theory](../cs/graph-theory/), the mathematical foundation for distributed system topology
-- [Operations](../ops/), the deployment layer above system design: Kubernetes, Terraform, GitOps
+- [Operations](../ops/), the deployment layer above system design: [Kubernetes](../ops/kubernetes/), Terraform, GitOps

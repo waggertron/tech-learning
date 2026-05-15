@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Overview
 
-Context engineering is distinct from prompt engineering: prompt engineering is static text you author; context engineering is what the harness assembles at each turn from running state, tool results, files, memory, and summaries. In a long-running agent, the harness's context strategy matters more than any single prompt.
+Context engineering is distinct from [prompt engineering](../prompt-engineering/): prompt engineering is static text you author; context engineering is what the harness assembles at each turn from running state, tool results, files, memory, and summaries. In a long-running agent, the harness's context strategy matters more than any single prompt.
 
 ## Key ideas
 

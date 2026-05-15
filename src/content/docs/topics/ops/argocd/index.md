@@ -10,7 +10,7 @@ updated: 2026-04-24
 
 ## What it is
 
-[ArgoCD](https://argo-cd.readthedocs.io/) is a GitOps controller that runs inside your Kubernetes cluster and continuously reconciles the cluster against manifests in a Git repository. CNCF graduated project. Web UI, CLI, and a rich CRD API. If you're doing GitOps on Kubernetes and you're not on Flux, you're on ArgoCD.
+[ArgoCD](https://argo-cd.readthedocs.io/) is a GitOps controller that runs inside your [Kubernetes](../kubernetes/) cluster and continuously reconciles the cluster against manifests in a Git repository. CNCF graduated project. Web UI, CLI, and a rich CRD API. If you're doing GitOps on Kubernetes and you're not on Flux, you're on ArgoCD.
 
 Pair it with the [GitOps topic](../gitops/) for the philosophy; this page is about the tool.
 
@@ -120,7 +120,7 @@ Hook types:
 
 - **`PreSync`**: runs before the main sync. DB migrations, schema changes.
 - **`Sync`**: runs as part of the sync. Rarely useful.
-- **`PostSync`**: runs after sync completes. Smoke tests, cache warmup.
+- **`PostSync`**: runs after sync completes. [Smoke tests](../../testing/smoke-tests/), cache warmup.
 - **`SyncFail`**: runs if sync fails. Rollback hooks, paging.
 
 `hook-delete-policy` controls when the Job is cleaned up. `HookSucceeded` is almost always what you want.

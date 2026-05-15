@@ -63,4 +63,4 @@ What works well for most engineers ramping up:
 ## Related topics
 
 - [Django, a 10-part series](../django/), if you need a backend API to pair with this frontend
-- [Testing](../../testing/tdd/), the TDD mindset applies to React component tests just as well
+- [Testing](../../testing/tdd/), the TDD mindset applies to React [component tests](../../testing/component-tests/) just as well

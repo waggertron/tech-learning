@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-Video streaming is one of the most technically rich system design problems. It splits cleanly into two independent pipelines: the upload and processing pipeline (write path) and the playback pipeline (read path). Great answers treat these as completely separate systems that share only the storage layer. The most common mistake is conflating them and designing a single system that tries to do both.
+Video streaming is one of the most technically rich [system design](../) problems. It splits cleanly into two independent pipelines: the upload and processing pipeline (write path) and the playback pipeline (read path). Great answers treat these as completely separate systems that share only the storage layer. The most common mistake is conflating them and designing a single system that tries to do both.
 
 ## Clarifying questions
 

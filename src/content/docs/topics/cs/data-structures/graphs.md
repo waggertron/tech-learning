@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A **graph** is a set of nodes (vertices) connected by edges. Edges can be directed or undirected, weighted or unweighted. Graphs generalize trees (a tree is a connected acyclic graph) and linked lists (a linear graph). Many real-world modeling problems, social networks, dependency resolution, routing, pipelines, reduce to graph problems. Graphs are the most general and the hardest data structure category in interviews. The effort pays off.
+A **graph** is a set of nodes (vertices) connected by edges. Edges can be directed or undirected, weighted or unweighted. Graphs generalize trees (a tree is a connected acyclic graph) and [linked lists](linked-lists/) (a linear graph). Many real-world modeling problems, social networks, dependency resolution, routing, pipelines, reduce to graph problems. Graphs are the most general and the hardest data structure category in interviews. The effort pays off.
 
 ## In-depth description
 
@@ -24,11 +24,11 @@ A **graph** is a set of nodes (vertices) connected by edges. Edges can be direct
 
 - **BFS**: O(V + E). Shortest path in an unweighted graph, level-based exploration. Uses a queue.
 - **DFS**: O(V + E). Cycle detection, topological sort, connected components, path existence. Uses recursion or an explicit stack.
-- **Dijkstra's algorithm**: O((V + E) log V) with a binary heap. Single-source shortest path with non-negative weights.
+- **[Dijkstra's algorithm](../named-algorithms/dijkstra/)**: O((V + E) log V) with a binary heap. Single-source shortest path with non-negative weights.
 - **Bellman-Ford**: O(V · E). Single-source shortest path allowing negative weights; detects negative cycles.
 - **Floyd-Warshall**: O(V³). All-pairs shortest paths via DP over intermediate nodes.
 - **Union-Find (Disjoint Set Union)**: nearly O(1) per op with path compression and union by rank. Connectivity, cycle detection in undirected graphs, Kruskal's MST.
-- **Topological sort**: O(V + E). Kahn's algorithm (BFS on zero-in-degree nodes) or DFS post-order reversed. Only defined on DAGs.
+- **Topological sort**: O(V + E). [Kahn's algorithm](../named-algorithms/kahns/) (BFS on zero-in-degree nodes) or DFS post-order reversed. Only defined on DAGs.
 - **Kruskal's / Prim's MST**: minimum spanning tree. Kruskal's uses edge list + union-find; Prim's uses a priority queue.
 
 ### Directed vs. undirected, a trap

@@ -49,7 +49,7 @@ def binary_search(nums, target):
 
 ### `None`: no node
 
-Linked lists and binary trees terminate with `None`. It is the oldest sentinel in common use. A valid node is always an object, never `None`, so `None` is unambiguously "end of structure."
+[Linked lists](../data-structures/linked-lists/) and binary trees terminate with `None`. It is the oldest sentinel in common use. A valid node is always an object, never `None`, so `None` is unambiguously "end of structure."
 
 ```python
 class ListNode:

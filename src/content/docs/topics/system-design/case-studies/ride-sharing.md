@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-Ride sharing is one of the richest system design problems. It combines geospatial indexing, real-time location at massive scale, matching under latency constraints, stream-based pricing, and a stateful trip lifecycle. The key insight that most candidates miss: the driver location update problem (750K writes/sec from 3M active drivers sending GPS every 4 seconds) is the dominant technical challenge -- not the booking flow, which is comparatively straightforward.
+Ride sharing is one of the richest [system design](../) problems. It combines geospatial indexing, real-time location at massive scale, matching under latency constraints, stream-based pricing, and a stateful trip lifecycle. The key insight that most candidates miss: the driver location update problem (750K writes/sec from 3M active drivers sending GPS every 4 seconds) is the dominant technical challenge -- not the booking flow, which is comparatively straightforward.
 
 ## Clarifying questions
 

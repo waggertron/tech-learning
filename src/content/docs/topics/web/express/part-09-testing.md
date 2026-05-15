@@ -8,7 +8,7 @@ created: 2026-05-04
 updated: 2026-05-04
 ---
 
-## Why integration tests over unit tests for Express
+## Why [integration tests](../../testing/integration-tests/) over unit tests for Express
 
 Unit tests verify individual functions. Integration tests verify that your routes, middleware, validation, and database calls cooperate correctly. For an HTTP API, integration tests catch the most real-world bugs because they exercise the full request/response cycle.
 
@@ -385,7 +385,7 @@ Put small test fixtures in `src/__tests__/fixtures/`.
 
 ## What's next
 
-Part 10 covers production: clustering, PM2, rate limiting, compression, health checks, Docker, and graceful shutdown.
+Part 10 covers production: clustering, PM2, [rate limiting](../../system-design/rate-limiting/), compression, health checks, Docker, and graceful shutdown.
 
 ## References
 

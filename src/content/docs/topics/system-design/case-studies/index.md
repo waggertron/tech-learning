@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-Each case study applies the [interview framework](../interview-framework/) to a canonical system design problem. The format is consistent: clarifying questions, estimation, high-level design, deep dives on the most interesting components, failure modes, and key takeaways.
+Each case study applies the [interview framework](../interview-framework/) to a canonical [system design](../) problem. The format is consistent: clarifying questions, estimation, high-level design, deep dives on the most interesting components, failure modes, and key takeaways.
 
 These six problems cover the most commonly asked designs across Google, Meta, Amazon, Uber, Stripe, and other top companies. Master these and you will recognize the underlying patterns in any new problem you face.
 
@@ -18,7 +18,7 @@ These six problems cover the most commonly asked designs across Google, Meta, Am
 - [Social Feed](./social-feed/), fanout strategies, hybrid push/pull, ML ranking, and the celebrity problem
 - [Video Streaming](./video-streaming/), chunked upload, transcoding pipelines, adaptive bitrate, and CDN strategy
 - [Chat System](./chat-system/), message ordering, WebSocket connection management, exactly-once delivery, and group chat scaling
-- [Notification System](./notification-system/), multi-channel delivery, priority queues, deduplication, and rate limiting per user
+- [Notification System](./notification-system/), multi-channel delivery, priority queues, deduplication, and [rate limiting](../rate-limiting/) per user
 - [Ride Sharing](./ride-sharing/), geospatial indexing, real-time location at scale, matching, and surge pricing
 
 ## The underlying patterns

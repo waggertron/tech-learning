@@ -12,7 +12,7 @@ OSPF gives every router in an area an identical map of the network. Each router 
 
 ## Why it matters
 
-Distance-vector protocols like RIP send routing tables to neighbors and trust them blindly. A router using RIP knows the destination is reachable via a neighbor but has no idea what the actual path looks like. Link-state protocols like OSPF share raw topology information instead. Each router builds its own link-state database (LSDB), containing the state of every link in the area, and computes its own shortest-path tree. The result is faster convergence, better scalability, and loop-free routing by design.
+Distance-vector protocols like RIP send routing tables to neighbors and trust them blindly. A router using RIP knows the destination is reachable via a neighbor but has no idea what the actual path looks like. Link-state protocols like OSPF share raw topology information instead. Each router builds its own link-state database (LSDB), containing the state of every link in the area, and computes its own shortest-path tree. The result is faster convergence, better [scalability](../system-design/scalability/), and loop-free routing by design.
 
 OSPF is defined in RFC 2328 (OSPFv2, for IPv4) and RFC 5340 (OSPFv3, which supports both IPv6 and IPv4). CCNA focuses on OSPFv2.
 

@@ -309,7 +309,7 @@ app.use(requestLogger);
 
 ## What's next
 
-Part 4 covers REST API design: splitting routes into Router files, versioning, CORS, and basic security headers.
+Part 4 covers REST [API design](../../system-design/api-design/): splitting routes into Router files, versioning, CORS, and basic security headers.
 
 ## References
 

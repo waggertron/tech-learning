@@ -164,7 +164,7 @@ Dashboards alone aren't enough. Wire drift into **alerts** that page when the PS
 
 Applied to ML, CI/CD fragments into three pipelines:
 
-- **CI**: code changes. Unit tests, lint, type checks. Same as any service.
+- **CI**: code changes. [Unit tests](../../testing/unit-tests/), lint, type checks. Same as any service.
 - **CT (continuous training)**: data or schedule changes. Re-run the training pipeline when fresh data arrives or on a cron. Produce a new model version. Don't auto-promote.
 - **CD**: deploy a *specific* model version to production. Usually a manual promotion after evaluation against a holdout set.
 - **CM (continuous monitoring)**: drift and performance monitoring triggering retraining or rollbacks.
@@ -189,7 +189,7 @@ A trained model is a pickled or ONNX blob + the feature schema + the training co
 
 ### GitOps for ML
 
-ML deployments are GitOps too: a repo holds manifests that reference model versions. Promoting a model means bumping a tag in a Kustomize overlay, which ArgoCD picks up. Same principles as [GitOps](../gitops/). The payload is a pickle instead of a Docker image.
+ML deployments are GitOps too: a repo holds manifests that reference model versions. Promoting a model means bumping a tag in a Kustomize overlay, which ArgoCD picks up. Same principles as [GitOps](../gitops/). The payload is a pickle instead of a [Docker](../docker/) image.
 
 ### Batch vs online
 

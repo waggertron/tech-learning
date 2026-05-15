@@ -461,7 +461,7 @@ The hybrid: server components for data, client components for interactivity. Imp
 
 ## Related topics
 
-- [Testing](../../testing/tdd/), TDD principles applied to React component tests
+- [Testing](../../testing/tdd/), TDD principles applied to React [component tests](../../testing/component-tests/)
 - [Django, a 10-part series](../django/), the backend that the frontend talks to
 
 ## References

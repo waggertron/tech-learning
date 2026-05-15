@@ -15,7 +15,7 @@ That's it. The rest is elaboration.
 
 ## Where the advice came from
 
-The Gang of Four's 1994 *Design Patterns* had it as an explicit principle: *"Favor object composition over class inheritance."* Every pattern in the book uses composition; the ones that use inheritance do so narrowly. Thirty years later the advice has only gotten stronger because frameworks learned the same lesson independently, React, Rust's trait system, Go's struct embedding, all treat inheritance as either absent or heavily constrained.
+The Gang of Four's 1994 *[Design Patterns](../topics/cs/design-patterns/)* had it as an explicit principle: *"Favor object composition over class inheritance."* Every pattern in the book uses composition; the ones that use inheritance do so narrowly. Thirty years later the advice has only gotten stronger because frameworks learned the same lesson independently, React, Rust's trait system, Go's struct embedding, all treat inheritance as either absent or heavily constrained.
 
 ## Why inheritance goes wrong
 
@@ -94,7 +94,7 @@ Before: `Dog` and `Cat` are types. After: `Animal` is a type; voice is a field. 
 - Test `Animal` with a fake voice.
 - Compose voices (`OverlaidVoice(BarkVoice(), MeowVoice())`).
 
-### The Strategy pattern as a motif
+### The [Strategy pattern](../topics/cs/design-patterns/strategy/) as a motif
 
 Anywhere you'd use `if` or a subclass, consider a strategy object:
 
@@ -120,7 +120,7 @@ Some language communities embrace composition via traits (Rust), mixins (Ruby), 
 
 Rust's `impl Iterator for MyType { ... }` is pure composition, `MyType` doesn't "inherit" anything; it implements a trait.
 
-### The Decorator pattern
+### The [Decorator pattern](../topics/cs/design-patterns/decorator/)
 
 When you'd override a method to extend it, wrap instead:
 

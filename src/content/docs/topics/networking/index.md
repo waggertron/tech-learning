@@ -45,7 +45,7 @@ Cisco organizes the CCNA (200-301) into six exam topics:
 - [Part 18: Access Control Lists](./part-18-access-control-lists), standard vs extended ACLs, wildcard masks, and placement rules
 - [Part 19: Network Security Fundamentals](./part-19-network-security-fundamentals), port security, DHCP snooping, 802.1X, and VPNs
 - [Part 20: WAN Technologies and Network Automation](./part-20-wan-technologies-and-network-automation), MPLS, SD-WAN, NETCONF, Python, and Ansible
-- [Part 21: EtherChannel](./part-21-etherchannel), link aggregation with LACP, PAgP, and load balancing across bundled physical links
+- [Part 21: EtherChannel](./part-21-etherchannel), link aggregation with LACP, PAgP, and [load balancing](../system-design/load-balancing/) across bundled physical links
 - [Part 22: Wireless LAN](./part-22-wireless-lan), 802.11 standards, WLC architecture, CAPWAP, SSIDs, and WPA2/WPA3 security
 - [Part 23: First Hop Redundancy](./part-23-first-hop-redundancy), HSRP, VRRP, and GLBP for default gateway resilience
 - [Part 24: QoS](./part-24-qos), classification, DSCP marking, LLQ, policing, and shaping for voice and video traffic

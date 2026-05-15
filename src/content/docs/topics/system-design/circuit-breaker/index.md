@@ -204,7 +204,7 @@ def checkout(order):
 
 **Semaphore bulkhead**: instead of separate thread pools, use semaphores to limit concurrent calls to each service. Simpler to implement and does not require managing threads.
 
-**Kubernetes resource limits**: at the container level, CPU and memory limits per service are a bulkhead -- one service cannot consume all node resources.
+**[Kubernetes](../../ops/kubernetes/) resource limits**: at the container level, CPU and memory limits per service are a bulkhead -- one service cannot consume all node resources.
 
 ## How these patterns compose
 
@@ -242,7 +242,7 @@ Resilience4j (Java) and pybreaker (Python) implement this composition.
 
 **Bulkheads convert total failure into partial degradation.** With bulkheads, a dead payment service degrades checkout -- but does not take down order history, product search, or user profiles. This is the difference between "payment is down" and "everything is down."
 
-**Fallbacks are a product decision.** When a circuit is open, what should the user see? A cached price? An error message? The answer comes from product requirements, not engineering. Clarify this in a real system design conversation.
+**Fallbacks are a product decision.** When a circuit is open, what should the user see? A cached price? An error message? The answer comes from product requirements, not engineering. Clarify this in a real [system design](../) conversation.
 
 **Exponential backoff with jitter is not optional at scale.** Without jitter, all clients retry at the same time after the same backoff interval, creating synchronized retry spikes (thundering herd). Jitter spreads them out.
 

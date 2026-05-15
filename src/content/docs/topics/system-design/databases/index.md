@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-Databases are almost always the bottleneck in a growing system. Understanding how they scale, and when they stop scaling, is the foundation of system design.
+Databases are almost always the bottleneck in a growing system. Understanding how they scale, and when they stop scaling, is the foundation of [system design](../).
 
 ## SQL vs NoSQL
 

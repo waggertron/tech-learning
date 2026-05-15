@@ -272,7 +272,7 @@ For Tailwind-first projects, `export --format tailwind` maps directly into `tail
 
 - A one-off internal tool where visual consistency doesn't matter. Let the agent pick defaults.
 - Projects that already use a rich design-token pipeline (Style Dictionary, Figma Tokens Studio). If your source of truth is elsewhere, consider generating `DESIGN.md` from it rather than authoring in both places.
-- Non-UI work. The file is specifically about visual identity; it doesn't model API design, data models, or business logic.
+- Non-UI work. The file is specifically about visual identity; it doesn't model [API design](../../system-design/api-design/), data models, or business logic.
 
 ## Status and outlook
 

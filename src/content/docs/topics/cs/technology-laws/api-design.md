@@ -31,7 +31,7 @@ Origin: Hyrum Wright, Google, formalized around 2012, widely cited from hyrumsla
 - Every behavior your API exhibits, even accidental ones, is eventually a contract.
 - The only way to change observable behavior without breaking callers is to version the API.
 - Design APIs to expose as little surface area as possible. Fewer observable behaviors means fewer accidental contracts.
-- Running integration tests against your consumers is the only reliable way to know what behaviors they actually depend on.
+- Running [integration tests](../../testing/integration-tests/) against your consumers is the only reliable way to know what behaviors they actually depend on.
 
 **What Hyrum's Law implies for API consumers**:
 
@@ -78,7 +78,7 @@ Or in its negative form: don't surprise people.
 
 **API pagination with shifting total counts**: A REST API returns paginated results. Page 1 returns `{"total": 100, "results": [...]}`. A record is deleted between page 1 and page 2. Page 2 returns `{"total": 99, "results": [...]}`. The total changed mid-pagination. Callers who built a progress bar using the initial total will show incorrect progress. The least astonishing behavior is a stable cursor that reflects the state at query time, not live counts.
 
-**POLA in API design**:
+**POLA in [API design](../../system-design/api-design/)**:
 
 - **Consistent naming**: if one endpoint is `/users/{id}`, don't make the next one `/widget-list`.
 - **Consistent behavior**: if GET is idempotent on all other resources, it should be idempotent on this one too.

@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-A notification system is a classic fan-out problem: one event triggers one or many notifications to one or many users across one or many channels. It appears as a standalone interview question and as a component in nearly every other system design (social feed, ride sharing, e-commerce). The interesting design decisions are around priority (OTPs must arrive in seconds, marketing emails can wait hours), channel selection (which channel to use for which user under which circumstances), and correctness (a duplicated OTP is a security problem, while a duplicated marketing email is just annoying).
+A notification system is a classic fan-out problem: one event triggers one or many notifications to one or many users across one or many channels. It appears as a standalone interview question and as a component in nearly every other [system design](../) (social feed, ride sharing, e-commerce). The interesting design decisions are around priority (OTPs must arrive in seconds, marketing emails can wait hours), channel selection (which channel to use for which user under which circumstances), and correctness (a duplicated OTP is a security problem, while a duplicated marketing email is just annoying).
 
 ## Clarifying questions
 

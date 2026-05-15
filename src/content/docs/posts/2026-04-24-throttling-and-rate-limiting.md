@@ -15,7 +15,7 @@ Every public endpoint faces three different threats at the same time:
 - **Overload**: legitimate traffic briefly spiking past capacity.
 - **Noisy neighbors**: one customer's runaway integration eating everyone else's quota.
 
-Rate limiting addresses all three but with different parameters. A login endpoint wants a strict per-IP burst limit (abuse). A long-running read endpoint wants a fair-share queue (overload + neighbors). A write endpoint usually wants a per-account quota (neighbors).
+[Rate limiting](../topics/system-design/rate-limiting/) addresses all three but with different parameters. A login endpoint wants a strict per-IP burst limit (abuse). A long-running read endpoint wants a fair-share queue (overload + neighbors). A write endpoint usually wants a per-account quota (neighbors).
 
 **Throttling** and **rate limiting** get used interchangeably. The distinction sometimes drawn: rate limiting *rejects* over-limit requests (HTTP 429); throttling *delays* them. In practice both are the same feature family.
 

@@ -64,7 +64,7 @@ A rough decision flow:
 ## Related posts
 
 - [Data structure complexity cheat sheet](../../../posts/2026-04-27-data-structure-complexity-cheat-sheet/), the operations and big-O for every structure on this page, with Python-specific gotchas (`list.pop(0)` is O(n), etc.).
-- [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), Dijkstra, Kahn, Kruskal, Tarjan, Floyd, KMP, quickselect, Union-Find, with canonical implementations and decision matrix.
+- [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), Dijkstra, Kahn, Kruskal, Tarjan, Floyd, KMP, [quickselect](../named-algorithms/quickselect/), Union-Find, with canonical implementations and decision matrix.
 
 ## Related topics
 

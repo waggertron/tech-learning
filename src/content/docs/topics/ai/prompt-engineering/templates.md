@@ -10,7 +10,7 @@ updated: 2026-04-24
 
 ## Overview
 
-Prompt engineering isn't a fresh invention per task, practitioners re-use a small catalog of named patterns. This page is a reference for those patterns with a runnable example under each. Pick the one that matches your problem shape rather than inventing from scratch.
+[Prompt engineering](./) isn't a fresh invention per task, practitioners re-use a small catalog of named patterns. This page is a reference for those patterns with a runnable example under each. Pick the one that matches your problem shape rather than inventing from scratch.
 
 Rough decision flow:
 

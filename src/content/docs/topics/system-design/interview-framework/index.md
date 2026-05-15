@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-System design interviews are open-ended by design. There is no single correct answer. What interviewers score is the quality of your reasoning process: how you structure ambiguity, what questions you ask, how you justify trade-offs, and how deep you can go when pushed.
+[System design](../) interviews are open-ended by design. There is no single correct answer. What interviewers score is the quality of your reasoning process: how you structure ambiguity, what questions you ask, how you justify trade-offs, and how deep you can go when pushed.
 
 This framework gives you a repeatable structure so you spend your mental energy on the actual design instead of figuring out what to do next.
 

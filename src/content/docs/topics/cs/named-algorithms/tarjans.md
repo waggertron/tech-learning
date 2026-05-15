@@ -25,7 +25,7 @@ In this graph, `{A, B, C, D}` form one SCC: you can get from any of them to any 
 
 SCCs matter because they reveal the cyclic structure of a directed graph. Compressing each SCC to a single node produces a DAG (directed acyclic graph), which is a much simpler object. From there you can topologically sort, run shortest paths, or answer reachability questions efficiently.
 
-Named after Robert Tarjan, who published the algorithm in 1972. It's one of the more elegant results in graph theory: a single DFS, one stack, and two arrays of integers are all you need.
+Named after Robert Tarjan, who published the algorithm in 1972. It's one of the more elegant results in [graph theory](../graph-theory/): a single DFS, one stack, and two arrays of integers are all you need.
 
 ## Core idea, in one sentence
 

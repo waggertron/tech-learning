@@ -200,7 +200,7 @@ L3 switch topology:
 
 | Criterion | Legacy (per-interface) | Router-on-a-stick | Layer 3 switch (SVIs) |
 |---|---|---|---|
-| Scalability | Poor (1 interface per VLAN) | Moderate (1 link, many sub-ifs) | Excellent (hundreds of VLANs) |
+| [Scalability](../system-design/scalability/) | Poor (1 interface per VLAN) | Moderate (1 link, many sub-ifs) | Excellent (hundreds of VLANs) |
 | Cost | High (router ports are expensive) | Low (one router port) | Moderate (L3 switch costs more than L2) |
 | Performance | Good (dedicated links) | Poor at scale (trunk bottleneck) | Excellent (hardware ASIC routing) |
 | Complexity | Low | Low | Moderate (ip routing, SVI up conditions) |

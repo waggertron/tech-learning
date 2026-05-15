@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Overview
 
-Dense retrieval (cosine over embeddings) is great at semantic match but weak on exact tokens, product codes, error messages, entity names. Sparse retrieval (BM25) is the opposite. Hybrid search runs both, fuses the rankings, and gets the strengths of each. It's the practical default for most production RAG systems.
+Dense retrieval (cosine over [embeddings](embeddings/)) is great at semantic match but weak on exact tokens, product codes, error messages, entity names. Sparse retrieval (BM25) is the opposite. Hybrid search runs both, fuses the rankings, and gets the strengths of each. It's the practical default for most production RAG systems.
 
 ## Key ideas
 

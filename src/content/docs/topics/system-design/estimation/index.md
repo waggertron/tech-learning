@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-Back-of-envelope estimation is the skill of producing useful approximations quickly with minimal information. In a system design interview, it tells you whether you need 1 database or 10, whether bandwidth is your bottleneck or storage, and whether a naive design will fall over at the stated scale.
+Back-of-envelope estimation is the skill of producing useful approximations quickly with minimal information. In a [system design](../) interview, it tells you whether you need 1 database or 10, whether bandwidth is your bottleneck or storage, and whether a naive design will fall over at the stated scale.
 
 You do not need exact numbers. You need to be within an order of magnitude and to draw the right architectural conclusions from the result.
 

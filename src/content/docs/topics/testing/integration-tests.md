@@ -16,7 +16,7 @@ Distinguishing from nearby tiers:
 
 - **Unit test**: no I/O. Pure logic.
 - **Component test**: one slice with real immediate collaborators, I/O stubbed.
-- **Integration test**: real I/O, real dependencies, usually spun up in Docker or test containers.
+- **Integration test**: real I/O, real dependencies, usually spun up in [Docker](../ops/docker/) or test containers.
 - **E2E test**: full system, real browser, real user flow.
 
 ## What you need integration tests for

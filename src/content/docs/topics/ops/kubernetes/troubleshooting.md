@@ -106,7 +106,7 @@ Common causes:
 - Typo in the image name or a tag that doesn't exist.
 - Private registry without credentials: create a `docker-registry` Secret and add `imagePullSecrets`.
 - Network issue: can the node reach the registry? Check node-level DNS and firewall rules.
-- Rate limiting: Docker Hub rate-limits unauthenticated pulls. Use an authenticated pull Secret.
+- [Rate limiting](../../system-design/rate-limiting/): Docker Hub rate-limits unauthenticated pulls. Use an authenticated pull Secret.
 
 ```bash
 kubectl create secret docker-registry regcred \

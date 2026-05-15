@@ -299,7 +299,7 @@ spec:
   restartPolicy: Never
 ```
 
-Run after install: `helm test home-health`. Good for smoke tests. Won't catch much beyond that.
+Run after install: `helm test home-health`. Good for [smoke tests](../../testing/smoke-tests/). Won't catch much beyond that.
 
 ## Repositories
 

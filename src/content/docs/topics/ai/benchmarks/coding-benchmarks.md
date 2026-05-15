@@ -12,7 +12,7 @@ updated: 2026-05-13
 
 Coding benchmarks went through three generations:
 
-1. **2018-2022, "Write this function."** HumanEval, MBPP. Short docstring to function body. Unit tests verify.
+1. **2018-2022, "Write this function."** HumanEval, MBPP. Short docstring to function body. [Unit tests](../../testing/unit-tests/) verify.
 2. **2022-2024, "Solve this competitive-programming problem."** APPS, CodeContests, LiveCodeBench. Competition tier.
 3. **2024+, "Fix this real issue in this real repo."** SWE-bench, SWE-bench Verified, SWE-bench Pro, Terminal-Bench. Multi-file, tool-using, long-horizon.
 
@@ -72,7 +72,7 @@ def longest_common_prefix(strs: List[str]) -> str:
 
 This is harder than `has_close_elements` because the optimal solution (vertical scanning or divide-and-conquer) isn't the first approach most developers reach for. A common wrong approach: zip the strings and check character-by-character, forgetting to handle an empty list or a single string.
 
-**Example 3 (harder -- recursive data structures):**
+**Example 3 (harder -- recursive [data structures](../../cs/data-structures/)):**
 
 ```python
 def flatten(lst: List) -> List:

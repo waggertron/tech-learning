@@ -456,4 +456,4 @@ Before 1.29, sidecars were regular containers with no guaranteed startup order r
 - [Kubernetes](./), the parent topic
 - [Kubernetes Troubleshooting](./troubleshooting/), diagnosing workload failures
 - [Helm](../helm/), packaging workload configurations into charts
-- [ArgoCD](../argocd/), deploying and managing workloads via GitOps
+- [ArgoCD](../argocd/), deploying and managing workloads via [GitOps](../gitops/)

@@ -15,7 +15,7 @@ Split your program into two layers:
 - A **functional core**, pure functions over plain values. No I/O, no clocks, no network, no mutable singletons. Given the same inputs, always returns the same output. Encapsulates all the decisions the program makes.
 - An **imperative shell**, the thin outer layer that talks to the world. Reads stdin, writes stdout, queries the database, fetches the network, gets the current time. Calls into the core with those values, receives new values back, and writes them to the world.
 
-The core has no dependencies and all the logic. The shell has all the dependencies and almost no logic, mostly straight-line calls with very few conditionals. You end up with *many fast unit tests* on the core and *few integration tests* on the shell, and the two sets barely overlap.
+The core has no dependencies and all the logic. The shell has all the dependencies and almost no logic, mostly straight-line calls with very few conditionals. You end up with *many fast [unit tests](../../testing/unit-tests/)* on the core and *few [integration tests](../../testing/integration-tests/)* on the shell, and the two sets barely overlap.
 
 The pattern comes from Gary Bernhardt's [Destroy All Software](https://www.destroyallsoftware.com/), specifically the [Boundaries](https://www.destroyallsoftware.com/talks/boundaries) talk from SCNA 2012 and the [Functional Core, Imperative Shell screencast](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell). It doesn't require a functional language; it works in Python, TypeScript, Ruby, and Go as well as Haskell.
 

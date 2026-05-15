@@ -9,7 +9,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/2026-04-27-common-al
 
 ## What's in here
 
-Most interviews and most real systems pull from a small set of named algorithms. This is the reference for that set: what each one does, when to pick it, the canonical implementation, and the failure modes. Sister post: [Data structure complexity cheat sheet](../2026-04-27-data-structure-complexity-cheat-sheet/).
+Most interviews and most real systems pull from a small set of [named algorithms](../topics/cs/named-algorithms/). This is the reference for that set: what each one does, when to pick it, the canonical implementation, and the failure modes. Sister post: [Data structure complexity cheat sheet](../2026-04-27-data-structure-complexity-cheat-sheet/).
 
 Each algorithm has the same shape: **what, when, how, complexity, gotchas.**
 
@@ -114,7 +114,7 @@ def floyd_warshall(W, V):
 
 ---
 
-## Topological sort (Kahn's algorithm)
+## Topological sort ([Kahn's algorithm](../topics/cs/named-algorithms/kahns/))
 
 **What**: linear ordering of nodes in a DAG such that for every edge `u → v`, `u` comes before `v`.
 
@@ -458,7 +458,7 @@ def find_cycle_start(head):
 
 ---
 
-## Quickselect (kth smallest)
+## [Quickselect](../topics/cs/named-algorithms/quickselect/) (kth smallest)
 
 **What**: find the kth smallest element in O(n) average time **without sorting**.
 

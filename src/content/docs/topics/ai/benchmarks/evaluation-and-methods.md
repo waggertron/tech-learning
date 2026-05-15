@@ -252,7 +252,7 @@ Examples:
 For deploying a specific model:
 
 1. **Build a golden set**, 50–500 examples representative of your traffic, hand-labeled for correctness.
-2. **Automate where you can**, exact match, regex matching, unit tests for code outputs.
+2. **Automate where you can**, exact match, regex matching, [unit tests](../../testing/unit-tests/) for code outputs.
 3. **LLM-as-judge for the rest**, with multiple seeds, pair-wise, and a judge you trust.
 4. **Log preferences**, thumbs up / down in production. Aggregate.
 5. **A/B test live**, small-percentage rollouts comparing models on real traffic.

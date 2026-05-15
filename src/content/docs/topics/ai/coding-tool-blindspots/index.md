@@ -23,7 +23,7 @@ A field guide to the predictable, documented ways that AI coding assistants (Cla
 - **Sycophancy / silent agreement**: Models agree with question framing instead of correcting it. OpenAI's April 2025 GPT-4o incident confirmed a model can optimize for agreeableness over correctness. Push back and the model often reverses a correct answer.
 - **Stale training data on framework APIs**: Fast-moving frameworks (Next.js app router, RSC, SQLAlchemy 2.x) change faster than training cycles. The model confidently writes against the old API. Benchmark contamination masks this, inflating scores 10-20 points.
 - **Drift and over-eager refactoring in long edits**: Extended sessions silently rename variables, restructure interfaces, delete "unused" code. SWE-bench Pro: top models ~23% on fresh unseen problems vs. 70%+ on contaminated benchmarks.
-- **Poor async/concurrency reasoning**: Mis-wired promises, async/await chains, race conditions. Code compiles; bug is temporal and rarely caught by unit tests.
+- **Poor async/concurrency reasoning**: Mis-wired promises, async/await chains, race conditions. Code compiles; bug is temporal and rarely caught by [unit tests](../../testing/unit-tests/).
 
 ## Mitigations
 

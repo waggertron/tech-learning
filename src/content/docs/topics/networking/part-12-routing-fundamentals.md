@@ -293,7 +293,7 @@ Part 13 covers static routing in detail. Dynamic routing protocols (OSPF, EIGRP)
   % Network not in table    <-- recursive lookup fails, route is unusable
   ```
 
-- **ECMP (Equal-Cost Multi-Path)**: when multiple routes for the same prefix have the same AD and metric, IOS installs all of them and load-balances. By default, IOS uses per-destination (CEF) load balancing, not per-packet.
+- **ECMP (Equal-Cost Multi-Path)**: when multiple routes for the same prefix have the same AD and metric, IOS installs all of them and load-balances. By default, IOS uses per-destination (CEF) [load balancing](../system-design/load-balancing/), not per-packet.
 
 - **CEF (Cisco Express Forwarding)**: modern IOS uses CEF for hardware-accelerated forwarding. CEF pre-computes the adjacency table (next-hop MAC address + outgoing interface) so each packet does not trigger a separate ARP lookup. `show ip cef` and `show adjacency` are useful for troubleshooting.
 

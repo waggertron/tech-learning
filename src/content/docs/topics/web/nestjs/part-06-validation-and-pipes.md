@@ -280,7 +280,7 @@ export class TrimPipe implements PipeTransform {
 }
 ```
 
-## DTO design patterns
+## DTO [design patterns](../../cs/design-patterns/)
 
 ### Command pattern (separate create and update)
 

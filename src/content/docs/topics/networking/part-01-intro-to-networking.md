@@ -12,7 +12,7 @@ Networks exist because isolated devices are useless at scale. The moment two dev
 
 ## Why it matters
 
-Every organization runs on data. Email, video calls, cloud storage, point-of-sale systems, industrial sensors: all of it depends on a network that someone designed and someone maintains. Understanding the vocabulary, the component types, and the design patterns is the foundation for every configuration, troubleshooting step, and design decision that follows in this series.
+Every organization runs on data. Email, video calls, cloud storage, point-of-sale systems, industrial sensors: all of it depends on a network that someone designed and someone maintains. Understanding the vocabulary, the component types, and the [design patterns](../cs/design-patterns/) is the foundation for every configuration, troubleshooting step, and design decision that follows in this series.
 
 ## What a network is
 

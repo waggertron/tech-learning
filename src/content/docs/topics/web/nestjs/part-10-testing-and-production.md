@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 NestJS ships with Jest configured out of the box. The project scaffold includes:
 
-- `jest` config in `package.json` for unit tests
+- `jest` config in `package.json` for [unit tests](../../testing/unit-tests/)
 - `jest-e2e.json` for end-to-end tests
 - `*.spec.ts` files alongside source (unit tests)
 - `test/*.e2e-spec.ts` files (e2e tests)
@@ -340,7 +340,7 @@ docker build -t my-api .
 docker run -p 3000:3000 --env-file .env my-api
 ```
 
-## Docker Compose for local development
+## [Docker](../../ops/docker/) Compose for local development
 
 ```yaml
 # docker-compose.yml
@@ -536,7 +536,7 @@ export class QueueService implements OnApplicationShutdown {
 }
 ```
 
-Kubernetes sends SIGTERM before killing the pod. A graceful shutdown lets in-flight requests complete before the process exits.
+[Kubernetes](../../ops/kubernetes/) sends SIGTERM before killing the pod. A graceful shutdown lets in-flight requests complete before the process exits.
 
 ## Production checklist
 
@@ -548,7 +548,7 @@ Kubernetes sends SIGTERM before killing the pod. A graceful shutdown lets in-fli
 - Global exception filter for consistent error shape
 - Logging interceptor for request tracing
 - `JWT_SECRET` at least 32 random characters, from a secret manager not `.env` in production
-- Rate limiting: `npm install @nestjs/throttler`
+- [Rate limiting](../../system-design/rate-limiting/): `npm install @nestjs/throttler`
 - CORS configured explicitly: `app.enableCors({ origin: ['https://app.example.com'] })`
 - Helmet for HTTP security headers: `npm install helmet`, then `app.use(helmet())`
 - Build with `npm run build`, run with `node dist/main` (not `ts-node`)

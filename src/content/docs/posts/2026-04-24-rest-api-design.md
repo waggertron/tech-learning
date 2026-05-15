@@ -223,7 +223,7 @@ Avoid auth via query parameters. Query strings end up in access logs and browser
 
 See the companion [sessions, JWTs, and cookies post](../2026-04-24-sessions-jwts-cookies/) for the security tradeoffs.
 
-## Rate limiting
+## [Rate limiting](../topics/system-design/rate-limiting/)
 
 API responses should include rate-limit headers so clients can self-throttle:
 
@@ -324,7 +324,7 @@ Spec-first is the modern default: write the OpenAPI doc, generate types on both 
 
 ## The small set of decisions that matter
 
-If you spend thought on these four, the rest of the API design falls into place:
+If you spend thought on these four, the rest of the [API design](../topics/system-design/api-design/) falls into place:
 
 1. **Error shape.** Pick one, apply everywhere. Machine-readable code + human message + field.
 2. **Pagination.** Default to cursor-based; document the cursor opacity; include a sane max limit.

@@ -1,0 +1,409 @@
+---
+title: Prototype Pattern
+description: "Clone an existing object rather than constructing a new one, avoiding the cost of re-running initialization and decoupling client code from concrete classes."
+parent: design-patterns
+tags: [design-patterns, creational, oop]
+status: draft
+created: 2026-05-15
+updated: 2026-05-15
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## The problem
+
+Some objects are expensive to create. Building a fresh database connection, parsing a configuration file, or assembling a complex document from scratch on every request wastes time and resources. You may also want a working copy you can modify safely without touching the original.
+
+The Prototype pattern solves both problems. Instead of constructing a new object from scratch, you ask an existing object to copy itself. The copy is independent: you can mutate it freely. The original stays intact.
+
+This also decouples client code from concrete classes. A factory or registry hands back a clone, and the caller never needs to know the concrete type.
+
+## Structure
+
+```mermaid
+classDiagram
+    class Prototype {
+        <<interface>>
+        +clone() Prototype
+    }
+
+    class ConcretePrototypeA {
+        -field: string
+        +clone() ConcretePrototypeA
+    }
+
+    class ConcretePrototypeB {
+        -value: number
+        +clone() ConcretePrototypeB
+    }
+
+    class PrototypeRegistry {
+        -items: Map
+        +register(key, prototype) void
+        +get(key) Prototype
+    }
+
+    Prototype <|.. ConcretePrototypeA
+    Prototype <|.. ConcretePrototypeB
+    PrototypeRegistry --> Prototype
+```
+
+**Participants:**
+
+- **Prototype**: the interface declaring `clone()`.
+- **ConcretePrototype**: implements `clone()` by copying itself.
+- **PrototypeRegistry**: stores named prototypes and returns fresh clones on demand.
+- **Client**: asks the registry for a clone without knowing the concrete type.
+
+## When to use
+
+- Object construction is expensive (network calls, file I/O, heavy computation) and a working copy is a cheap alternative.
+- You need many similar objects that differ only in a few fields.
+- You want to avoid a parallel class hierarchy of factories.
+- The concrete types are not known until runtime (e.g., loaded from config or a plugin system).
+- You need an undo/history mechanism where each state is a snapshot.
+
+## Implementation
+
+<Tabs>
+<TabItem label="TypeScript">
+
+```typescript
+// Prototype interface with a covariant return type
+interface Cloneable {
+  clone(): this;
+}
+
+// --- Concrete types ---
+
+class TextDocument implements Cloneable {
+  constructor(
+    public title: string,
+    public body: string,
+    public tags: string[],
+  ) {}
+
+  clone(): this {
+    // Shallow-copy the object, then deep-copy mutable fields
+    const copy = Object.create(Object.getPrototypeOf(this)) as this;
+    Object.assign(copy, this);
+    copy.tags = [...this.tags]; // tags array is mutable, copy it
+    return copy;
+  }
+
+  toString(): string {
+    return `TextDocument("${this.title}", tags=[${this.tags.join(", ")}])`;
+  }
+}
+
+class SpreadsheetDocument implements Cloneable {
+  constructor(
+    public title: string,
+    public rows: number[][],
+  ) {}
+
+  clone(): this {
+    const copy = Object.create(Object.getPrototypeOf(this)) as this;
+    Object.assign(copy, this);
+    copy.rows = this.rows.map((row) => [...row]); // deep-copy 2D array
+    return copy;
+  }
+
+  toString(): string {
+    return `SpreadsheetDocument("${this.title}", ${this.rows.length} rows)`;
+  }
+}
+
+// --- Registry ---
+
+class DocumentRegistry {
+  private items = new Map<string, Cloneable>();
+
+  register(key: string, prototype: Cloneable): void {
+    this.items.set(key, prototype);
+  }
+
+  get<T extends Cloneable>(key: string): T {
+    const proto = this.items.get(key);
+    if (!proto) throw new Error(`No prototype registered for key "${key}"`);
+    return proto.clone() as T;
+  }
+}
+
+// --- Usage ---
+
+const registry = new DocumentRegistry();
+
+registry.register(
+  "report",
+  new TextDocument("Quarterly Report", "Summary goes here.", ["finance", "q1"]),
+);
+
+registry.register(
+  "budget",
+  new SpreadsheetDocument("Budget Template", [[0, 0, 0]]),
+);
+
+const doc1 = registry.get<TextDocument>("report");
+doc1.title = "Q2 Report";
+doc1.tags.push("q2");
+
+const doc2 = registry.get<TextDocument>("report");
+// doc2 still has the original title and tags -- the registry prototype is untouched
+
+console.log(doc1.toString()); // TextDocument("Q2 Report", tags=[finance, q1, q2])
+console.log(doc2.toString()); // TextDocument("Quarterly Report", tags=[finance, q1])
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+from __future__ import annotations
+import copy
+from typing import Protocol, runtime_checkable
+
+
+@runtime_checkable
+class Cloneable(Protocol):
+    def clone(self) -> Cloneable:
+        ...
+
+
+class TextDocument:
+    def __init__(self, title: str, body: str, tags: list[str]) -> None:
+        self.title = title
+        self.body = body
+        self.tags = tags
+
+    def clone(self) -> TextDocument:
+        # copy.deepcopy handles nested mutable state automatically
+        return copy.deepcopy(self)
+
+    # Optional: support copy.copy() / copy.deepcopy() protocol directly
+    def __copy__(self) -> TextDocument:
+        return TextDocument(self.title, self.body, list(self.tags))
+
+    def __deepcopy__(self, memo: dict) -> TextDocument:
+        return TextDocument(
+            copy.deepcopy(self.title, memo),
+            copy.deepcopy(self.body, memo),
+            copy.deepcopy(self.tags, memo),
+        )
+
+    def __repr__(self) -> str:
+        return f'TextDocument("{self.title}", tags={self.tags})'
+
+
+class SpreadsheetDocument:
+    def __init__(self, title: str, rows: list[list[int]]) -> None:
+        self.title = title
+        self.rows = rows
+
+    def clone(self) -> SpreadsheetDocument:
+        return copy.deepcopy(self)
+
+    def __repr__(self) -> str:
+        return f'SpreadsheetDocument("{self.title}", {len(self.rows)} rows)'
+
+
+# --- Registry ---
+
+class DocumentRegistry:
+    def __init__(self) -> None:
+        self._items: dict[str, Cloneable] = {}
+
+    def register(self, key: str, prototype: Cloneable) -> None:
+        self._items[key] = prototype
+
+    def get(self, key: str) -> Cloneable:
+        try:
+            return self._items[key].clone()
+        except KeyError:
+            raise KeyError(f"No prototype registered for key '{key}'")
+
+
+# --- Usage ---
+
+registry = DocumentRegistry()
+
+registry.register(
+    "report",
+    TextDocument("Quarterly Report", "Summary goes here.", ["finance", "q1"]),
+)
+
+doc1 = registry.get("report")
+assert isinstance(doc1, TextDocument)
+doc1.title = "Q2 Report"
+doc1.tags.append("q2")
+
+doc2 = registry.get("report")
+assert isinstance(doc2, TextDocument)
+
+print(doc1)  # TextDocument("Q2 Report", tags=['finance', 'q1', 'q2'])
+print(doc2)  # TextDocument("Quarterly Report", tags=['finance', 'q1'])
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+package prototype
+
+import "fmt"
+
+// Go has no built-in clone mechanism.
+// The convention is a Clone() method on each concrete type.
+// Watch for shallow vs. deep copy: pointer fields and slices share backing
+// memory unless you explicitly copy them.
+
+// --- Prototype interface ---
+
+type Document interface {
+    Clone() Document
+    Title() string
+}
+
+// --- TextDocument ---
+
+type TextDocument struct {
+    title string
+    body  string
+    tags  []string // slice header is copied by value, but backing array is shared
+}
+
+func NewTextDocument(title, body string, tags []string) *TextDocument {
+    return &TextDocument{title: title, body: body, tags: tags}
+}
+
+// Clone performs a deep copy of the mutable slice field.
+func (d *TextDocument) Clone() Document {
+    tagsCopy := make([]string, len(d.tags))
+    copy(tagsCopy, d.tags)
+    return &TextDocument{
+        title: d.title,
+        body:  d.body,
+        tags:  tagsCopy,
+    }
+}
+
+func (d *TextDocument) Title() string { return d.title }
+
+func (d *TextDocument) AddTag(tag string) { d.tags = append(d.tags, tag) }
+
+func (d *TextDocument) String() string {
+    return fmt.Sprintf("TextDocument(%q, tags=%v)", d.title, d.tags)
+}
+
+// --- SpreadsheetDocument ---
+
+type SpreadsheetDocument struct {
+    title string
+    rows  [][]int // 2D slice: outer slice AND inner slices must be copied
+}
+
+func NewSpreadsheetDocument(title string, rows [][]int) *SpreadsheetDocument {
+    return &SpreadsheetDocument{title: title, rows: rows}
+}
+
+// Clone deep-copies the 2D slice.
+func (s *SpreadsheetDocument) Clone() Document {
+    rowsCopy := make([][]int, len(s.rows))
+    for i, row := range s.rows {
+        rowCopy := make([]int, len(row))
+        copy(rowCopy, row)
+        rowsCopy[i] = rowCopy
+    }
+    return &SpreadsheetDocument{title: s.title, rows: rowsCopy}
+}
+
+func (s *SpreadsheetDocument) Title() string { return s.title }
+
+func (s *SpreadsheetDocument) String() string {
+    return fmt.Sprintf("SpreadsheetDocument(%q, %d rows)", s.title, len(s.rows))
+}
+
+// --- Registry ---
+
+type DocumentRegistry struct {
+    items map[string]Document
+}
+
+func NewDocumentRegistry() *DocumentRegistry {
+    return &DocumentRegistry{items: make(map[string]Document)}
+}
+
+func (r *DocumentRegistry) Register(key string, proto Document) {
+    r.items[key] = proto
+}
+
+func (r *DocumentRegistry) Get(key string) (Document, error) {
+    proto, ok := r.items[key]
+    if !ok {
+        return nil, fmt.Errorf("no prototype registered for key %q", key)
+    }
+    return proto.Clone(), nil
+}
+
+// --- Usage (in main or a test) ---
+
+func Example() {
+    registry := NewDocumentRegistry()
+
+    registry.Register("report", NewTextDocument(
+        "Quarterly Report", "Summary goes here.", []string{"finance", "q1"},
+    ))
+
+    doc1, _ := registry.Get("report")
+    td1 := doc1.(*TextDocument)
+    td1.title = "Q2 Report"
+    td1.AddTag("q2")
+
+    doc2, _ := registry.Get("report")
+    td2 := doc2.(*TextDocument)
+
+    fmt.Println(td1) // TextDocument("Q2 Report", tags=[finance q1 q2])
+    fmt.Println(td2) // TextDocument("Quarterly Report", tags=[finance q1])
+
+    // Shallow copy pitfall (do NOT do this):
+    // bad := *td1   // copies slice header, not backing array
+    // bad.tags[0] = "OOPS"  // would mutate td1.tags too
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Tradeoffs
+
+| Pro | Con |
+|-----|-----|
+| Avoids repeated expensive initialization; clone cost is proportional to object size, not construction complexity. | Deep copying complex object graphs is error-prone; missing a pointer or nested slice silently shares state. |
+| Decouples client code from concrete classes; the registry API never changes even when new document types are added. | No language-level enforcement: Go and older Java require hand-written Clone methods that fall out of sync with new fields. |
+| Simplifies creating objects that differ by a small variation; clone then mutate is far less code than a full constructor call. | Circular references break naive deep-copy implementations and require memo-table tracking (Python's `deepcopy` handles this; others do not). |
+| Enables snapshot-based undo/history without extra infrastructure; each clone is a self-contained state. | Registry adds indirection: debugging requires tracing which prototype was used and what mutations happened after cloning. |
+| Works well with dependency injection; the registry can swap prototypes without changing callers. | Cloning bypasses constructors, so invariant-checking logic in `__init__` or constructors is silently skipped on the copy. |
+
+## Gotchas
+
+**Shallow vs. deep copy:** Copying an object's value fields is easy. Pointer fields, slices, and maps share backing memory between original and clone unless you explicitly copy them. The TypeScript and Go examples show the manual approach; Python's `copy.deepcopy` handles it automatically but can be slow on large graphs.
+
+**Constructors are skipped:** A clone is not constructed: it is copied. Any validation or side-effect logic in a constructor runs only for the prototype, not the clone. If a clone can end up in an invalid state, add a `validate()` step after cloning.
+
+**Circular references:** If an object graph contains a cycle (`A` references `B`, `B` references `A`), a naive recursive deep-copy loops forever. Python's `deepcopy` tracks visited objects with a memo dict. In Go and TypeScript, you must implement the same bookkeeping yourself or break the cycle by storing IDs instead of pointers.
+
+**Registry key collisions:** Using plain strings as registry keys is fragile. Two modules registering `"default"` silently overwrite each other. Prefer namespaced keys (`"documents/report/v2"`) or typed constants.
+
+**Thread safety:** A shared registry read by multiple goroutines (Go) or threads (Python) must be protected. In Go, use `sync.RWMutex`. In Python, use `threading.Lock`. The registry in the examples above is single-threaded only.
+
+## References
+
+- [Design Patterns: Elements of Reusable Object-Oriented Software](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610) (GoF book, the original source)
+- [Refactoring Guru: Prototype](https://refactoring.guru/design-patterns/prototype) (illustrations, code examples in many languages)
+- [SourceMaking: Prototype](https://sourcemaking.com/design_patterns/prototype) (concise summary with intent and applicability)
+
+## Related topics
+
+- [Design Patterns](../) -- the full GoF catalog, all 23 patterns grouped by category
+- [Builder](../builder/) -- another creational pattern; use Builder when the construction process has many steps, Prototype when you want a copy of a finished object
+- [Abstract Factory](../abstract-factory/) -- creates families of related objects; combine with Prototype when the factory itself stores prototypes to clone

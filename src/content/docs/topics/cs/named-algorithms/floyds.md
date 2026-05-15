@@ -293,7 +293,7 @@ def find_duplicate(nums):
 # Example: [1, 3, 4, 2, 2] -> 2
 ```
 
-**Find middle of linked list** - Fast pointer moves 2x, slow moves 1x. When fast reaches the end, slow is at the middle. Used as a subroutine in merge sort on linked lists.
+**Find middle of linked list** - Fast pointer moves 2x, slow moves 1x. When fast reaches the end, slow is at the middle. Used as a subroutine in [merge sort](merge-sort/) on [linked lists](../data-structures/linked-lists/).
 
 ```python
 def middle_node(head):

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-An array is a contiguous block of memory storing elements of the same type, indexed from 0. Because elements are contiguous and fixed-size, the offset of any index can be computed in constant time, which makes random access O(1). Arrays are the substrate beneath many higher-level data structures (strings, stacks, queues, heaps, hash-table buckets), so time spent mastering array manipulation pays off everywhere.
+An array is a contiguous block of memory storing elements of the same type, indexed from 0. Because elements are contiguous and fixed-size, the offset of any index can be computed in constant time, which makes random access O(1). Arrays are the substrate beneath many higher-level [data structures](./) (strings, stacks, queues, heaps, hash-table buckets), so time spent mastering array manipulation pays off everywhere.
 
 ## In-depth description
 

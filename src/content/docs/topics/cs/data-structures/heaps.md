@@ -127,7 +127,7 @@ Heaps / priority queues appear in 17 NeetCode 150 problems across 7 categories.
 - [23. Merge k Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/), min-heap of k heads
 
 **Heap / Priority Queue:**
-- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/), heap vs. quickselect
+- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/), heap vs. [quickselect](../named-algorithms/quickselect/)
 - [295. Find Median from Data Stream](../../coding-problems/heap-priority-queue/295-find-median-from-data-stream/), two-heap balancing
 - [355. Design Twitter](../../coding-problems/heap-priority-queue/355-design-twitter/), k-way merge across feeds
 - [621. Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/), max-heap + cooldown queue

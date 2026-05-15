@@ -41,7 +41,7 @@ With an FHRP, `192.168.1.1` is a virtual IP owned by neither router alone. R1 is
 |---------------------|----------------------------|-----------------------------|-------------------------------|
 | Standard            | Cisco proprietary          | IEEE 802.112 (open)         | Cisco proprietary             |
 | Active routers      | 1 active, 1 standby        | 1 master, 1+ backup         | 1 AVG + multiple AVFs         |
-| Load balancing      | No                         | No                          | Yes                           |
+| [Load balancing](../system-design/load-balancing/)      | No                         | No                          | Yes                           |
 | Virtual MAC (v2)    | 0000.0C9F.Fxxx             | 0000.5E00.01xx              | 0007.B400.xxyy (per AVF)      |
 | Virtual MAC (v1)    | 0000.0C07.ACxx             | N/A                         | N/A                           |
 | Max groups          | 4096 (v2)                  | 255                         | 1024                          |

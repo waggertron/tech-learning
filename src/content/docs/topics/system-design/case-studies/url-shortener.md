@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-The URL shortener is the "hello world" of system design interviews. It appears in virtually every company's interview loop as a warm-up or a standalone problem. Its simplicity is deceptive: the interesting parts are ID generation (how to produce 7 characters that are globally unique at high QPS without a bottleneck), redirect semantics (301 vs 302 and the analytics implications), and the analytics pipeline. Candidates who nail all three stand out significantly.
+The URL shortener is the "hello world" of [system design](../) interviews. It appears in virtually every company's interview loop as a warm-up or a standalone problem. Its simplicity is deceptive: the interesting parts are ID generation (how to produce 7 characters that are globally unique at high QPS without a bottleneck), redirect semantics (301 vs 302 and the analytics implications), and the analytics pipeline. Candidates who nail all three stand out significantly.
 
 ## Clarifying questions
 

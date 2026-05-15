@@ -291,7 +291,7 @@ BFS is not always the right call. Know when to reach for DFS instead:
 
 **Cycle detection.** DFS with a recursion stack (or an explicit "in-progress" set) detects back edges naturally. BFS can detect cycles too, but the DFS approach maps more cleanly to the standard interview implementations (coloring: white / gray / black).
 
-**Topological sort.** Kahn's algorithm uses BFS (process nodes with in-degree 0), but the classic recursive DFS post-order approach is the more common interview answer and integrates naturally with cycle detection.
+**Topological sort.** [Kahn's algorithm](kahns/) uses BFS (process nodes with in-degree 0), but the classic recursive DFS post-order approach is the more common interview answer and integrates naturally with cycle detection.
 
 **Finding any path (not shortest).** If you just need to know whether a path exists and don't care about length, DFS uses less memory and often exits sooner via backtracking.
 

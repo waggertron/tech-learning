@@ -12,11 +12,11 @@ updated: 2026-05-04
 
 Merge sort sorts an array in O(n log n) time, guaranteed. Not average-case. Not amortized. Every input, every time.
 
-That guarantee is one reason merge sort shows up whenever you cannot afford a worst-case blowup: external sorting on disk, sorting linked lists, and any multi-key sort that needs to preserve the relative order of equal elements (stability).
+That guarantee is one reason merge sort shows up whenever you cannot afford a worst-case blowup: external sorting on disk, sorting [linked lists](../data-structures/linked-lists/), and any multi-key sort that needs to preserve the relative order of equal elements (stability).
 
 It also sits at the theoretical floor for comparison-based sorting. Any algorithm that sorts by comparing elements must make at least O(n log n) comparisons in the worst case. Merge sort hits that bound exactly, which makes it the baseline every other comparison sort is measured against.
 
-The algorithm was first described by John von Neumann in 1945 in notes on the EDVAC, one of the earliest stored-program computers. It is one of the oldest named algorithms still in everyday use.
+The algorithm was first described by John von Neumann in 1945 in notes on the EDVAC, one of the earliest stored-program computers. It is one of the oldest [named algorithms](./) still in everyday use.
 
 ## The core idea, in one sentence
 

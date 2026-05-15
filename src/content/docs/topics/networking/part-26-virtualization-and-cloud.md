@@ -106,7 +106,7 @@ Container model:
 
 The shared kernel is the critical tradeoff. A kernel vulnerability affects every container on the host. VMs are isolated by the hypervisor. A guest OS compromise does not reach other VMs in the same way.
 
-### Docker and Kubernetes
+### [Docker](../ops/docker/) and [Kubernetes](../ops/kubernetes/)
 
 **Docker** builds and runs containers. A Docker image is a layered filesystem containing the application and its dependencies. Running an image creates a container instance.
 
