@@ -25,6 +25,10 @@ A data structure is a way of organizing data so the operations you need on it ar
 9. [Graphs](./graphs/)
 10. [Tries](./tries/)
 
+## Going deeper
+
+- [Radix Tree](./radix-tree/), the compressed trie that powers IP routing tables, URL routers, and autocomplete indexes
+
 ## How each subtopic is organized
 
 Every subtopic follows a consistent structure so they're easy to scan:

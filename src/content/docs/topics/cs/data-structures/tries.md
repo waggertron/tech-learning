@@ -139,6 +139,7 @@ Tries drive all 3 NeetCode 150 problems in the Tries category.
 
 - [Trie, Wikipedia](https://en.wikipedia.org/wiki/Trie)
 - [Radix tree / Patricia trie, Wikipedia](https://en.wikipedia.org/wiki/Radix_tree)
+- [Radix Tree](./radix-tree/), the compressed trie variant with a full Python implementation
 - [Tries for string processing, cp-algorithms](https://cp-algorithms.com/string/aho_corasick.html)
 - [Implement Trie, LeetCode 208](../../coding-problems/tries/208-implement-trie/)
 - [Word Search II, LeetCode 212 (trie + DFS)](../../coding-problems/tries/212-word-search-ii/)
