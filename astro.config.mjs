@@ -1,11 +1,17 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://waggertron.github.io',
   base: '/tech-learning',
+  markdown: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [[rehypeKatex, { throwOnError: false, output: 'htmlAndMathml' }]],
+  },
   vite: {
     server: {
       headers: {
@@ -21,7 +27,7 @@ export default defineConfig({
       social: {
         github: 'https://github.com/waggertron/tech-learning',
       },
-      customCss: ['./src/styles/custom.css'],
+      customCss: ['./src/styles/custom.css', 'katex/dist/katex.min.css'],
       components: {
         Footer: './src/components/Footer.astro',
         Head: './src/components/Head.astro',

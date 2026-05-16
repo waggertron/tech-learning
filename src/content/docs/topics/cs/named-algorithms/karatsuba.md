@@ -10,7 +10,7 @@ updated: 2026-05-06
 
 ## What it does
 
-Given two large integers each with `n` digits, compute their product faster than the O(n^2) schoolbook algorithm that every student learns.
+Given two large integers each with `n` digits, compute their product faster than the $O(n^2)$ schoolbook algorithm that every student learns.
 
 Named after Anatoly Karatsuba, who discovered it in 1960 and published with Yuri Ofman in 1962. Before this result, it was widely believed that O(n^2) was the theoretical lower bound for integer multiplication. Karatsuba showed that belief was wrong, and opened the door to a whole hierarchy of faster algorithms that culminates in near-linear FFT-based methods used in production today.
 
@@ -176,11 +176,9 @@ With schoolbook, each level-1 sub-problem would recurse into four calls, giving 
 
 The recurrence for Karatsuba is:
 
-```
-T(n) = 3 · T(n/2) + O(n)
-```
+$$T(n) = 3 \cdot T(n/2) + O(n)$$
 
-The O(n) term covers the additions, subtractions, and digit-shift operations at each level.
+The $O(n)$ term covers the additions, subtractions, and digit-shift operations at each level.
 
 Apply the **Master Theorem**: `T(n) = a·T(n/b) + f(n)` with `a = 3`, `b = 2`, `f(n) = O(n)`.
 
@@ -200,8 +198,8 @@ For `n = 1000` digits (typical for RSA-2048, which uses ~300-digit primes):
 
 | Algorithm | Approximate operations |
 | --- | --- |
-| Schoolbook O(n^2) | 1,000,000 |
-| Karatsuba O(n^1.585) | ~50,000 |
+| Schoolbook $O(n^2)$ | 1,000,000 |
+| Karatsuba $O(n^{1.585})$ | ~50,000 |
 | Ratio | ~20x fewer |
 
 For `n = 10,000` digits (common in high-precision libraries):
