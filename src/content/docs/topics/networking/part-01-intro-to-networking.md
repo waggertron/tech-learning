@@ -41,34 +41,33 @@ Topology describes the physical or logical arrangement of devices and the paths 
 
 All devices share a single cable segment. A signal travels the length of the bus. Every device sees every frame. Collisions are common. Largely obsolete.
 
-```
- [A]---[B]---[C]---[D]
- |________________________|
-           bus
+```mermaid
+flowchart LR
+    A[A] --- B[B] --- C[C] --- D[D]
 ```
 
 ### Ring
 
 Each device connects to exactly two neighbors, forming a loop. Token Ring (IEEE 802.5) used this layout. A break in the ring can take down the whole segment without redundancy.
 
-```
-    [A]
-   /   \
- [D]   [B]
-   \   /
-    [C]
+```mermaid
+flowchart TD
+    A[A] --> B[B]
+    B --> C[C]
+    C --> D[D]
+    D --> A
 ```
 
 ### Star
 
 All devices connect to a central device (switch or hub). This is the dominant topology in modern LANs. A cable failure only affects the one device on that link.
 
-```
-       [A]
-        |
-[D]---[SW]---[B]
-        |
-       [C]
+```mermaid
+flowchart TD
+    SW[Switch] --- A[A]
+    SW --- B[B]
+    SW --- C[C]
+    SW --- D[D]
 ```
 
 ### Mesh
@@ -77,23 +76,28 @@ Every device connects to every other device (full mesh) or to multiple (but not 
 
 Full mesh with 4 nodes:
 
-```
-[A]---[B]
- | \ / |
- | / \ |
-[D]---[C]
+```mermaid
+flowchart TD
+    A[A] --- B[B]
+    B --- C[C]
+    C --- D[D]
+    D --- A
+    A --- C
+    B --- D
 ```
 
 ### Hybrid
 
 Real networks mix topologies. A star-of-stars is the most common: access switches form stars, uplink to distribution switches, which uplink to core switches. Hybrid topologies trade simplicity for the specific redundancy or scale properties you need.
 
-```
-         [Core]
-        /      \
-  [Dist-1]  [Dist-2]
-   /    \    /    \
-[A-1] [A-2][A-3] [A-4]
+```mermaid
+flowchart TD
+    Core[Core] --- Dist1[Dist-1]
+    Core --- Dist2[Dist-2]
+    Dist1 --- A1[A-1]
+    Dist1 --- A2[A-2]
+    Dist2 --- A3[A-3]
+    Dist2 --- A4[A-4]
 ```
 
 ## Key network components

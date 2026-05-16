@@ -330,18 +330,17 @@ async processJob(
 
 ## Service-to-service communication patterns
 
-```
-REST client
-    |  HTTP
-    v
-API Gateway (NestJS HTTP app)
-    |  TCP/Redis/RabbitMQ
-    +---------> Users Service (microservice)
-    |
-    +---------> Orders Service (microservice)
-    |              |  RabbitMQ event
-    |              v
-    +---------> Inventory Service (microservice)
+```mermaid
+flowchart TD
+    Client[REST Client]
+    GW["API Gateway\n(NestJS HTTP app)"]
+    US["Users Service\n(microservice)"]
+    OS["Orders Service\n(microservice)"]
+    IS["Inventory Service\n(microservice)"]
+    Client -->|HTTP| GW
+    GW -->|"TCP/Redis/RabbitMQ"| US
+    GW -->|"TCP/Redis/RabbitMQ"| OS
+    OS -->|RabbitMQ event| IS
 ```
 
 The API Gateway handles public-facing HTTP and translates to internal message patterns. Internal services communicate via events for loose coupling.

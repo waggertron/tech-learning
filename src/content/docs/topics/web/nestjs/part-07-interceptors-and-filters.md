@@ -12,32 +12,18 @@ updated: 2026-05-04
 
 Before diving into individual pieces, here is the exact order NestJS processes a request:
 
-```
-Incoming request
-      |
-      v
-1. Middleware          (express-style, before routing; no access to Nest context)
-      |
-      v
-2. Guards             (canActivate; authentication and authorization)
-      |
-      v
-3. Interceptors (pre) (before the handler; logging start, transform input)
-      |
-      v
-4. Pipes              (validate and transform route params, query, body)
-      |
-      v
-5. Controller handler (your business logic)
-      |
-      v
-6. Interceptors (post)(after the handler returns; transform output)
-      |
-      v
-7. Exception filters  (catch anything that throws)
-      |
-      v
-Outgoing response
+```mermaid
+flowchart TD
+    A[Incoming request]
+    B[1. Middleware]
+    C[2. Guards]
+    D["3. Interceptors (pre)"]
+    E[4. Pipes]
+    F[5. Controller handler]
+    G["6. Interceptors (post)"]
+    H[7. Exception filters]
+    I[Outgoing response]
+    A --> B --> C --> D --> E --> F --> G --> H --> I
 ```
 
 Exceptions thrown in steps 1-5 propagate to exception filters. Interceptors wrap steps 3-6 so they can catch exceptions too, before filters handle them.

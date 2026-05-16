@@ -109,24 +109,21 @@ A compromise. The switch reads the first 64 bytes of the frame before forwarding
 
 This distinction is heavily tested on CCNA:
 
-```
-Hub (legacy):
-+------+------+------+
-| PC1  | PC2  | PC3  |
-+------+------+------+
-     One collision domain
-     One broadcast domain
+```mermaid
+flowchart TD
+    subgraph hub ["Hub — 1 collision domain, 1 broadcast domain"]
+        H[Hub]
+        PC1[PC1] --- H
+        PC2[PC2] --- H
+        PC3[PC3] --- H
+    end
 
-Switch:
-+------+   +------+   +------+
-| PC1  |   | PC2  |   | PC3  |
-+--+---+   +--+---+   +--+---+
-   |           |           |
-+--+-----------+-----------+--+
-|         SW1                  |
-+------------------------------+
-Three collision domains (one per port)
-One broadcast domain (all ports, same VLAN)
+    subgraph sw ["Switch — 3 collision domains, 1 broadcast domain"]
+        SW1[SW1]
+        SPC1[PC1] --- SW1
+        SPC2[PC2] --- SW1
+        SPC3[PC3] --- SW1
+    end
 ```
 
 Each switch port is an independent collision domain because the link between the port and the end device is a dedicated point-to-point full-duplex connection. Collisions cannot propagate between ports.

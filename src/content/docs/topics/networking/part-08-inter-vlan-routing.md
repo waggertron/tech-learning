@@ -30,20 +30,13 @@ The question is: how does the router (or Layer 3 switch) connect to multiple VLA
 
 One physical router interface per VLAN. The router has a dedicated port patched to a dedicated switch port for each VLAN.
 
-```
-        Router
-    +-----+-----+
-    | Gi0/0| Gi0/1|
-    +--+---+--+--+
-       |       |
-  192.168.10.1  192.168.20.1
-       |       |
-  +----+--+----+----+
-  |  SW1  (Layer 2) |
-  |  Access ports   |
-  +----+-------+----+
-  VLAN 10    VLAN 20
-  Gi0/1      Gi0/4
+```mermaid
+flowchart TD
+    Router["Router\nGi0/0: 192.168.10.1\nGi0/1: 192.168.20.1"]
+    Router -->|Gi0/0| SW1[SW1 Layer 2]
+    Router -->|Gi0/1| SW1
+    SW1 -->|Access Gi0/1| V10[VLAN 10]
+    SW1 -->|Access Gi0/4| V20[VLAN 20]
 ```
 
 Configuration on the router:
@@ -64,15 +57,12 @@ This works but does not scale. A router with 4 VLANs needs 4 physical interfaces
 
 One physical link carries all VLANs as a trunk between the router and switch. The router uses logical sub-interfaces, one per VLAN. Each sub-interface has its own IP address and processes frames tagged with a specific VLAN ID.
 
-```
-        Router
-    +----+----+
-    |  Gi0/0  |   <-- one physical interface
-    +----+----+
-         |  (802.1Q trunk)
-    +----+----+
-    |  SW1    |   Gi0/24 trunk port
-    +---------+
+```mermaid
+flowchart TD
+    Router["Router\nGi0/0 (one physical interface)"]
+    Router <-->|802.1Q trunk| SW1["SW1\nGi0/24 trunk port"]
+    SW1 --- V10[VLAN 10 hosts]
+    SW1 --- V20[VLAN 20 hosts]
 ```
 
 The physical interface has no IP address. Sub-interfaces do:
@@ -122,17 +112,13 @@ ROAS scales better than the legacy approach. You can support dozens of VLANs on 
 
 A Layer 3 switch runs routing in hardware using dedicated ASICs. SVIs (Switched Virtual Interfaces) are virtual Layer 3 interfaces, one per VLAN, that live entirely inside the switch. Traffic between VLANs never leaves the switch chassis.
 
-```
-        Layer 3 Switch
-  +--------------------------+
-  |  SVI VLAN 10: 192.168.10.1  |
-  |  SVI VLAN 20: 192.168.20.1  |
-  |  SVI VLAN 30: 192.168.30.1  |
-  |                          |
-  |  Gi0/1  Gi0/2  Gi0/3  Gi0/24 (uplink to WAN router) |
-  +-+------+------+------+---+
-    |      |      |
-  VLAN 10 VLAN 20 VLAN 30
+```mermaid
+flowchart TD
+    SW["Layer 3 Switch\nSVI VLAN 10: 192.168.10.1\nSVI VLAN 20: 192.168.20.1\nSVI VLAN 30: 192.168.30.1"]
+    SW -->|Gi0/1| V10[VLAN 10]
+    SW -->|Gi0/2| V20[VLAN 20]
+    SW -->|Gi0/3| V30[VLAN 30]
+    SW -->|Gi0/24 uplink| WAN[WAN Router]
 ```
 
 Configuration:
@@ -175,25 +161,25 @@ A routed port behaves like a router interface: it has an IP address, participate
 
 ## ROAS vs L3 switch topology diagrams
 
-```
-ROAS topology:
+```mermaid
+flowchart TD
+    subgraph roas ["ROAS — traffic hairpins through trunk"]
+        R1[Router\nsub-interfaces]
+        RSW[Layer 2 Switch]
+        RV10[VLAN 10 PCs] --> RSW
+        RV20[VLAN 20 PCs] --> RSW
+        RV30[VLAN 30 PCs] --> RSW
+        RSW <-->|trunk| R1
+    end
 
-[PC - VLAN 10] ---+
-[PC - VLAN 20] ---+--- SW1 (Layer 2) ---[trunk]--> R1
-[PC - VLAN 30] ---+                                 |
-                                                (sub-interfaces)
-                                           All traffic comes back
-                                           through the trunk link
-
-L3 switch topology:
-
-[PC - VLAN 10] ---+
-[PC - VLAN 20] ---+--- SW1 (Layer 3) --[routed port]--> WAN router
-[PC - VLAN 30] ---+         |
-                       (SVIs route
-                        internally,
-                        no external
-                        link needed)
+    subgraph l3 ["L3 Switch — routes internally"]
+        L3SW[Layer 3 Switch\nSVIs]
+        WAN[WAN Router]
+        LV10[VLAN 10 PCs] --> L3SW
+        LV20[VLAN 20 PCs] --> L3SW
+        LV30[VLAN 30 PCs] --> L3SW
+        L3SW -->|routed port| WAN
+    end
 ```
 
 ## Comparison table

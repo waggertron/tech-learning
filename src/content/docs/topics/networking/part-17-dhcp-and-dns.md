@@ -22,17 +22,14 @@ DHCP automates the assignment of IP addresses and network parameters (subnet mas
 
 Client and server exchange four messages to complete address assignment:
 
-```text
-Client                          Server
-  |                               |
-  |--- Discover (broadcast) ----->|   "Anyone have an address for me?"
-  |                               |
-  |<-- Offer (broadcast) ---------|   "I can give you 192.168.1.50"
-  |                               |
-  |--- Request (broadcast) ------>|   "I'd like 192.168.1.50 from you"
-  |                               |
-  |<-- Acknowledge (unicast) -----|   "It's yours, lease = 7 days"
-  |                               |
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as DHCP Server
+    C->>S: Discover (broadcast) — "Anyone have an address for me?"
+    S->>C: Offer (broadcast) — "I can give you 192.168.1.50"
+    C->>S: Request (broadcast) — "I'd like 192.168.1.50 from you"
+    S->>C: Acknowledge (unicast) — "It's yours, lease = 7 days"
 ```
 
 Key details:
@@ -117,16 +114,17 @@ DNS translates hostnames (like `google.com`) into IP addresses. It is a globally
 
 ### DNS hierarchy
 
-```text
-                    . (root)
-                    |
-       .----.-------+-------.----.
-       |                         |
-      .com                      .org
-       |
-   google.com (authoritative nameserver)
-       |
-  www.google.com  (A record: 142.250.x.x)
+```mermaid
+flowchart TD
+    root[". (root)"]
+    com[".com TLD"]
+    org[".org TLD"]
+    google["google.com\n(authoritative NS)"]
+    www["www.google.com\nA: 142.250.x.x"]
+    root --> com
+    root --> org
+    com --> google
+    google --> www
 ```
 
 The hierarchy from top to bottom:
@@ -150,20 +148,21 @@ The hierarchy from top to bottom:
 
 ### DNS resolution process
 
-```text
-User types "www.example.com" in browser
-
-Browser → Recursive resolver (ISP or 8.8.8.8)
-  Resolver → Root server:         "Where is .com?"
-  Root server → Resolver:         "Ask 192.5.6.30 (Verisign TLD)"
-
-  Resolver → .com TLD server:     "Where is example.com?"
-  TLD server → Resolver:          "Ask 205.251.196.1 (Route 53, authoritative)"
-
-  Resolver → Authoritative NS:    "What is www.example.com?"
-  Auth NS → Resolver:             "93.184.216.34, TTL 3600"
-
-Resolver → Browser:               "93.184.216.34"
+```mermaid
+sequenceDiagram
+    participant B as Browser
+    participant R as Recursive Resolver
+    participant Root as Root Server
+    participant TLD as .com TLD Server
+    participant Auth as Authoritative NS
+    B->>R: www.example.com?
+    R->>Root: Where is .com?
+    Root->>R: Ask 192.5.6.30 (Verisign)
+    R->>TLD: Where is example.com?
+    TLD->>R: Ask 205.251.196.1 (Route 53)
+    R->>Auth: What is www.example.com?
+    Auth->>R: 93.184.216.34, TTL 3600
+    R->>B: 93.184.216.34
 ```
 
 The recursive resolver does the heavy lifting. End clients only talk to their configured resolver.
