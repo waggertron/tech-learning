@@ -102,9 +102,9 @@ DRF turns the `APIException` subclass into a clean `HTTP 409 Conflict` with the 
 
 Clients need to distinguish "your request was malformed" from "your request was fine but the state of the resource doesn't allow this":
 
-- **400**, bad JSON, missing required field, wrong data type. Fix the request shape and retry.
-- **422**, DRF's default validation error on a serializer. Same spirit as 400.
-- **409 Conflict**, the canonical "your request was well-formed but the server state says no." Perfect for illegal transitions, version mismatches, and duplicate-resource errors.
+- **400**: bad JSON, missing required field, wrong data type. Fix the request shape and retry.
+- **422**: DRF's default validation error on a serializer. Same spirit as 400.
+- **409 Conflict**: the canonical "your request was well-formed but the server state says no." Perfect for illegal transitions, version mismatches, and duplicate-resource errors.
 
 A client seeing 409 knows to *refresh its view of the resource* and try a different action. A client seeing 400 knows to fix its form. These are different bugs. They deserve different codes.
 

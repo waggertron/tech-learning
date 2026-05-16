@@ -238,9 +238,9 @@ Chinese Academy of Sciences benchmark, 2024. Olympiad-level problems in math and
 
 Top reasoning results get reported against specific, hard problem sets:
 
-- **Putnam**, undergraduate math competition.
-- **IMO (International Math Olympiad)**, the gold standard high-school competition.
-- **USAMO**, USA Mathematical Olympiad.
+- **Putnam**: undergraduate math competition.
+- **IMO (International Math Olympiad)**: the gold standard high-school competition.
+- **USAMO**: USA Mathematical Olympiad.
 
 These show up in model release announcements as headline results ("model solved 5/6 IMO problems"). Treat as evidence, not as benchmark scores: the problem count is small and the selection is often cherry-picked.
 

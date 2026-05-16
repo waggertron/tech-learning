@@ -12,8 +12,8 @@ updated: 2026-05-13
 
 Every LLM evaluation sits somewhere on a spectrum:
 
-- **Objective**, the answer is "42" or the code compiles or the test passes. Easy to score, hard to bias.
-- **Subjective**, "is this response helpful?" "Is this summary accurate?" Fuzzy, valuable, hard to scale.
+- **Objective**: the answer is "42" or the code compiles or the test passes. Easy to score, hard to bias.
+- **Subjective**: "is this response helpful?" "Is this summary accurate?" Fuzzy, valuable, hard to scale.
 
 Math and code benchmarks live on the objective end. Instruction-following, creative writing, and conversational helpfulness live on the subjective end. Different metrics, different pitfalls.
 
@@ -47,7 +47,7 @@ Pitfalls:
 
 For code generation: generate `k` candidate solutions, count the problem as passed if any candidate passes the tests.
 
-- **pass@1**, generate once, does it pass? The standard for production-relevant scoring.
+- **pass@1**: generate once, does it pass? The standard for production-relevant scoring.
 - **pass@k** (k > 1), generate `k` times, any pass counts. Favors models with high diversity / randomness.
 
 Some papers report `pass@k` computed from unbiased samples (Codex paper's formulation). Others just generate `k` and report any-match. Both are called "pass@k"; they're different numbers.
@@ -85,9 +85,9 @@ A lab that reports "solved AIME 2024" using majority vote over 10 samples is rep
 
 For classification / extraction tasks (NER, QA with multiple valid answers):
 
-- **Precision**, of what the model produced, how much was right?
-- **Recall**, of what was supposed to be produced, how much did the model find?
-- **F1**, harmonic mean.
+- **Precision**: of what the model produced, how much was right?
+- **Recall**: of what was supposed to be produced, how much did the model find?
+- **F1**: harmonic mean.
 
 Heavy in IR and information-extraction benchmarks; rare in headline LLM evaluation.
 
@@ -95,8 +95,8 @@ Heavy in IR and information-extraction benchmarks; rare in headline LLM evaluati
 
 Translation and summarization metrics based on n-gram overlap:
 
-- **BLEU**, weighted precision of 1–4-grams of the candidate against reference translations.
-- **ROUGE**, recall-oriented variant (ROUGE-1, ROUGE-2, ROUGE-L).
+- **BLEU**: weighted precision of 1–4-grams of the candidate against reference translations.
+- **ROUGE**: recall-oriented variant (ROUGE-1, ROUGE-2, ROUGE-L).
 
 Well-understood in MT / summarization. **Largely obsolete for evaluating LLMs.** Modern paraphrasing models get low BLEU even when the output is better than the reference. Still used for historical comparison.
 
@@ -112,9 +112,9 @@ Useful for training dynamics; not for comparing deployed LLMs. A model tuned for
 
 Show human raters two outputs from two models. They pick the better one. Aggregate into win rates or Elo ratings.
 
-- **LMArena (formerly Chatbot Arena)**, the most-watched human-preference leaderboard. Real users submit prompts, rate pairwise responses anonymously.
-- **Arena-Hard**, harder prompts curated from LMArena, evaluated by LLM-as-judge instead of humans.
-- **MT-Bench**, 80 multi-turn questions, scored by GPT-4-as-judge.
+- **LMArena (formerly Chatbot Arena)**: the most-watched human-preference leaderboard. Real users submit prompts, rate pairwise responses anonymously.
+- **Arena-Hard**: harder prompts curated from LMArena, evaluated by LLM-as-judge instead of humans.
+- **MT-Bench**: 80 multi-turn questions, scored by GPT-4-as-judge.
 
 Pairwise comparisons are robust to scale differences ("is this a 7 or an 8?"). They're noisier per sample but aggregate well.
 
@@ -124,9 +124,9 @@ Use a strong model (GPT-4-class) to grade outputs. The [Zheng et al. 2023 paper]
 
 Three patterns:
 
-- **Single-output scoring, no reference**, "rate this on 1–10." Noisy.
-- **Single-output scoring, with reference**, "compare to this reference, score 1–10." Less noisy.
-- **Pairwise comparison**, "which is better, A or B?" Most robust.
+- **Single-output scoring, no reference**: "rate this on 1–10." Noisy.
+- **Single-output scoring, with reference**: "compare to this reference, score 1–10." Less noisy.
+- **Pairwise comparison**: "which is better, A or B?" Most robust.
 
 Well-known biases of LLM judges:
 
@@ -187,10 +187,10 @@ Deliberate unique strings inserted into benchmark questions. If a model regurgit
 
 The April 2026 landscape:
 
-- **HumanEval, MBPP, GSM8K, MATH, ARC, MMLU**, heavily contaminated. Scores reflect memorization as much as capability.
-- **MMLU-Pro, SWE-bench Verified**, partially contaminated. OpenAI confirmed every frontier model leaks on SWE-bench Verified.
-- **LiveCodeBench, HLE, FrontierMath, Scale SEAL, SWE-bench Pro**, designed to resist contamination. The most trustworthy scores.
-- **Private enterprise eval suites**, trustworthy by construction; not reproducible.
+- **HumanEval, MBPP, GSM8K, MATH, ARC, MMLU**: heavily contaminated. Scores reflect memorization as much as capability.
+- **MMLU-Pro, SWE-bench Verified**: partially contaminated. OpenAI confirmed every frontier model leaks on SWE-bench Verified.
+- **LiveCodeBench, HLE, FrontierMath, Scale SEAL, SWE-bench Pro**: designed to resist contamination. The most trustworthy scores.
+- **Private enterprise eval suites**: trustworthy by construction; not reproducible.
 
 Rule of thumb: the newer the benchmark, the more trustworthy the score.
 

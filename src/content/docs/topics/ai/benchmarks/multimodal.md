@@ -208,9 +208,9 @@ This requires reading two stacked bar heights (renewable slice in 2015, renewabl
 
 ## DocVQA and related document-understanding benchmarks
 
-- **DocVQA**, question answering over scanned documents.
-- **InfographicVQA**, harder; complex designed infographics with text + images + icons.
-- **TextVQA**, short text within natural images.
+- **DocVQA**: question answering over scanned documents.
+- **InfographicVQA**: harder; complex designed infographics with text + images + icons.
+- **TextVQA**: short text within natural images.
 
 These exercise OCR + layout + reasoning together. Models good at pure OCR (good text extraction) but bad at layout reasoning fail; so do the reverse.
 
@@ -278,23 +278,23 @@ Broader vision-language evaluation frameworks aggregating multiple capabilities 
 
 ## Video benchmarks
 
-- **Video-MME**, comprehensive video understanding (short to long clips).
-- **MVBench**, 20 video tasks spanning action, scene, object, and attribute understanding.
-- **LongVideoBench**, long-form video question answering (hour-plus videos).
+- **Video-MME**: comprehensive video understanding (short to long clips).
+- **MVBench**: 20 video tasks spanning action, scene, object, and attribute understanding.
+- **LongVideoBench**: long-form video question answering (hour-plus videos).
 
 Video benchmarks lag image benchmarks, the models are weaker, the benchmarks are less mature, and compute costs are prohibitive.
 
 ## Audio benchmarks
 
-- **AudioBench**, audio question answering.
-- **MMAU**, multimodal audio understanding.
+- **AudioBench**: audio question answering.
+- **MMAU**: multimodal audio understanding.
 
 Still early in development. Most "multimodal" claims in 2026 are primarily vision-language; audio is catch-up.
 
 ## Embodied / spatial benchmarks
 
-- **SpatialBench, MindCube**, 3D and embodied spatial reasoning.
-- **RoboBench**, robot-task completion from visual input.
+- **SpatialBench, MindCube**: 3D and embodied spatial reasoning.
+- **RoboBench**: robot-task completion from visual input.
 
 Emerging category. Frontier models struggle; benchmark-gaming is less of a concern because they're hard to saturate.
 
@@ -355,16 +355,16 @@ Same as every other benchmark: reasoning-mode variants score ~15-25 points highe
 
 Frontier multimodal models (GPT-5.x vision, Gemini 3.x, Claude 4.x vision):
 
-- **MMMU ~80%**, closing on saturation.
-- **MMMU-Pro ~65%**, still differentiates.
+- **MMMU ~80%**: closing on saturation.
+- **MMMU-Pro ~65%**: still differentiates.
 - **MathVista ~75%** with reasoning.
-- **ChartQA ~90%**, nearly saturated.
-- **DocVQA ~93%**, nearly saturated.
+- **ChartQA ~90%**: nearly saturated.
+- **DocVQA ~93%**: nearly saturated.
 
 The frontier is shifting toward:
 
 - **Longer videos** (an hour+ of footage).
-- **Agentic multimodal**, a model using a browser with screenshots in the loop.
+- **Agentic multimodal**: a model using a browser with screenshots in the loop.
 - **High-resolution technical diagrams** (engineering drawings, scientific figures).
 - **3D / spatial.**
 

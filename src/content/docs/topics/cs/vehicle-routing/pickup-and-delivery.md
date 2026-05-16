@@ -95,10 +95,10 @@ OR-Tools automatically enforces the capacity constraint at **every node** along 
 
 ## Applications
 
-- **Ride-sharing**, passenger pickups and dropoffs, same vehicle constraint is physically enforced.
-- **Same-day delivery / parcel relay**, where items can't transfer between couriers.
-- **Freight forwarding**, load cross-dock, but the intra-route leg must be one truck.
-- **Home care scheduling**, patient pickup from home, drop at clinic, then back home.
+- **Ride-sharing**: passenger pickups and dropoffs, same vehicle constraint is physically enforced.
+- **Same-day delivery / parcel relay**: where items can't transfer between couriers.
+- **Freight forwarding**: load cross-dock, but the intra-route leg must be one truck.
+- **Home care scheduling**: patient pickup from home, drop at clinic, then back home.
 
 ## References
 

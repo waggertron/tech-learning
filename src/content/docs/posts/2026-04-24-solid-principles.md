@@ -82,9 +82,9 @@ Instead of `OrderService` directly using `MySQLOrderRepo`, both depend on an `Or
 
 SOLID principles pull against each other:
 
-- **SRP + OCP**, splitting classes can make extension harder because there's more code to navigate.
-- **ISP + SRP**, narrow interfaces can imply narrow classes, sometimes *too* narrow.
-- **DIP + YAGNI**, every abstraction has a cost. Reach for it when you need substitutability, not on principle.
+- **SRP + OCP**: splitting classes can make extension harder because there's more code to navigate.
+- **ISP + SRP**: narrow interfaces can imply narrow classes, sometimes *too* narrow.
+- **DIP + YAGNI**: every abstraction has a cost. Reach for it when you need substitutability, not on principle.
 
 Applying SOLID means picking which force to lean on for this code. A 200-line data transformation utility doesn't need all five. A 20,000-line domain model probably does.
 

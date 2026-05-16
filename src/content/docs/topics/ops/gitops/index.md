@@ -44,9 +44,9 @@ developer → git push → repo state changes → controller notices
 
 The difference looks cosmetic. It isn't. Three things change:
 
-- **The cluster credentials live inside the cluster**, not in CI. CI never needs cluster admin.
-- **Reality drift is an automatic error**, not a silent "someone did something weird at 2am." The controller logs it, fixes it (or alerts), and the git log still tells you what was *intended*.
-- **Rollback is a revert commit**, not a job you have to re-run in a specific way.
+- **The cluster credentials live inside the cluster**: not in CI. CI never needs cluster admin.
+- **Reality drift is an automatic error**: not a silent "someone did something weird at 2am." The controller logs it, fixes it (or alerts), and the git log still tells you what was *intended*.
+- **Rollback is a revert commit**: not a job you have to re-run in a specific way.
 
 ## Push vs pull
 

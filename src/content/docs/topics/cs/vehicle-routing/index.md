@@ -60,8 +60,8 @@ In OR-Tools, the key abstraction on top of these is a **dimension**, a quantity 
 
 Less common variants covered briefly in the solution-approaches page:
 
-- **VRP with resource constraints**, limited loading docks at the depot, or mandatory driver breaks on long-haul routes
-- **VRP with dropped visits / penalties**, each node carries a penalty for being skipped; solver chooses which to serve
+- **VRP with resource constraints**: limited loading docks at the depot, or mandatory driver breaks on long-haul routes
+- **VRP with dropped visits / penalties**: each node carries a penalty for being skipped; solver chooses which to serve
 
 ## When is VRP the right frame?
 
@@ -73,9 +73,9 @@ Signals that you're in VRP territory:
 
 Non-VRP problems that look VRP-shaped:
 
-- **Single vehicle**, that's TSP; use a TSP solver (or VRP with one vehicle).
-- **Schedules without geography**, that's usually job-shop scheduling.
-- **Continuous placement**, facility location, not routing.
+- **Single vehicle**: that's TSP; use a TSP solver (or VRP with one vehicle).
+- **Schedules without geography**: that's usually job-shop scheduling.
+- **Continuous placement**: facility location, not routing.
 
 ## References
 

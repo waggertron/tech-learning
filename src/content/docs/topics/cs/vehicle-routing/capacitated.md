@@ -50,7 +50,7 @@ Subject to:
 
 - Every customer visited once, inflow and outflow each equal 1 per customer across all vehicles
 - Flow conservation at every node, inflow equals outflow per vehicle
-- **Capacity**, `Σ_i (Σ_j x_{ij}^k) · q_i ≤ Q` for every vehicle `k`
+- **Capacity**: `Σ_i (Σ_j x_{ij}^k) · q_i ≤ Q` for every vehicle `k`
 - Subtour elimination (polynomially many constraints via MTZ or flow formulation)
 
 ## OR-Tools sketch

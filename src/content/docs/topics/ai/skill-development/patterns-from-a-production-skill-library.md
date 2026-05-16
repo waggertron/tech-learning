@@ -189,10 +189,10 @@ Skills that can't answer all three get deleted. This is a maintenance discipline
 
 ## The skill-file lifecycle
 
-- **Day 0**, a recurring failure or workflow friction gets called out.
-- **Day 1**, a skill is drafted from the last PR where the problem happened. Description cites the failure mode.
-- **Week 2**, the skill fires in anger. You see whether it actually changes model behavior. About a third of skills don't, and get reworked.
-- **Month 3**, the underlying rule changes (new framework version, new convention). The skill either gets updated or starts to drift. Skills that drift more than two updates behind get deleted.
+- **Day 0**: a recurring failure or workflow friction gets called out.
+- **Day 1**: a skill is drafted from the last PR where the problem happened. Description cites the failure mode.
+- **Week 2**: the skill fires in anger. You see whether it actually changes model behavior. About a third of skills don't, and get reworked.
+- **Month 3**: the underlying rule changes (new framework version, new convention). The skill either gets updated or starts to drift. Skills that drift more than two updates behind get deleted.
 
 Treat skills as code. Review them in PRs. Grep for stale references. Delete the ones that stop firing.
 

@@ -217,7 +217,7 @@ The practical effect: the core can be tested without test doubles, and the shell
 - **[Hexagonal Architecture / Ports and Adapters](https://alistair.cockburn.us/hexagonal-architecture/)** (Alistair Cockburn), same instinct: isolate the domain from I/O. Hexagonal puts the emphasis on pluggable *adapters* for each external system; FC/IS puts the emphasis on *values at the boundary*. Compatible, often combined.
 - **[Onion Architecture](https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/)** (Jeffrey Palermo), concentric layers, domain at the center, I/O at the edge. Same shape.
 - **[Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)** (Robert Martin), the most opinionated and OO-heavy of the three; has a similar spine.
-- **Elm Architecture / Redux**, functional core as `(state, msg) -> state`, imperative shell as the runtime loop.
+- **Elm Architecture / Redux**: functional core as `(state, msg) -> state`, imperative shell as the runtime loop.
 
 All point the same direction. FC/IS is the version that best survives in a language without algebraic effects or enforced purity, its rules are conventions, not compiler-enforced, but they're specific enough to follow.
 

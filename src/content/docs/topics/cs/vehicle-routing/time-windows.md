@@ -45,9 +45,9 @@ Time windows dramatically tighten feasibility: the same set of customers and dis
 
 Solomon (1987) defined 56 benchmark instances, 100 customers each, still the canonical VRPTW test suite:
 
-- **R**, customers placed randomly
-- **C**, customers placed in clusters
-- **RC**, mix of random and clustered
+- **R**: customers placed randomly
+- **C**: customers placed in clusters
+- **RC**: mix of random and clustered
 
 Each family has tight-window (1) and wide-window (2) subvariants. An algorithm's score on Solomon is commonly reported as `(number of vehicles, total distance)` lexicographically.
 
