@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1249-minimum-remove-valid-parens.py?raw';
 import practiceCodeTs from './1249-minimum-remove-valid-parens.ts?raw';
 import practiceCodeGo from './1249-minimum-remove-valid-parens.go?raw';
+import approach2PyCode from './1249-minimum-remove-valid-parens-approach2.py?raw';
 import approach2TsCode from './1249-minimum-remove-valid-parens-approach2.ts?raw';
 import approach2GoCode from './1249-minimum-remove-valid-parens-approach2.go?raw';
 
@@ -158,6 +159,9 @@ func minRemoveToMakeValid(s string) string {
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="minimum-remove-valid-parens-approach1-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="minimum-remove-valid-parens-approach2-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="minimum-remove-valid-parens-approach2-ts" />

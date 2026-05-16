@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './206-reverse-linked-list.py?raw';
 import practiceCodeTs from './206-reverse-linked-list.ts?raw';
 import practiceCodeGo from './206-reverse-linked-list.go?raw';
+import approach2PyCode from './206-reverse-linked-list-approach2.py?raw';
 import approach2TsCode from './206-reverse-linked-list-approach2.ts?raw';
 import approach2GoCode from './206-reverse-linked-list-approach2.go?raw';
+import approach3PyCode from './206-reverse-linked-list-approach3.py?raw';
 import approach3TsCode from './206-reverse-linked-list-approach3.ts?raw';
 import approach3GoCode from './206-reverse-linked-list-approach3.go?raw';
 
@@ -210,6 +212,9 @@ Four $O(1)$ operations per iteration for exactly n iterations. The canonical int
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="reverse-linked-list-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="reverse-linked-list-approach2-ts" />
   </TabItem>
@@ -286,6 +291,9 @@ Elegant but uses stack frames proportional to n, can stack-overflow for very lon
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="reverse-linked-list-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="reverse-linked-list-approach3-ts" />
   </TabItem>

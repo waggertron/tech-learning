@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './025-reverse-nodes-in-k-group.py?raw';
 import practiceCodeTs from './025-reverse-nodes-in-k-group.ts?raw';
 import practiceCodeGo from './025-reverse-nodes-in-k-group.go?raw';
+import approach2PyCode from './025-reverse-nodes-in-k-group-approach2.py?raw';
 import approach2TsCode from './025-reverse-nodes-in-k-group-approach2.ts?raw';
 import approach2GoCode from './025-reverse-nodes-in-k-group-approach2.go?raw';
 
@@ -273,6 +274,9 @@ Each node is touched twice: once during the "find k-th" scan (L1) and once durin
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="reverse-nodes-in-k-group-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="reverse-nodes-in-k-group-approach2-ts" />
   </TabItem>

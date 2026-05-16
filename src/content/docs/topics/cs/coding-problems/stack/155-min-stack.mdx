@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './155-min-stack.py?raw';
 import practiceCodeTs from './155-min-stack.ts?raw';
 import practiceCodeGo from './155-min-stack.go?raw';
+import approach2PyCode from './155-min-stack-approach2.py?raw';
 import approach2TsCode from './155-min-stack-approach2.ts?raw';
 import approach2GoCode from './155-min-stack-approach2.go?raw';
+import approach3PyCode from './155-min-stack-approach3.py?raw';
 import approach3TsCode from './155-min-stack-approach3.ts?raw';
 import approach3GoCode from './155-min-stack-approach3.go?raw';
 
@@ -232,6 +234,9 @@ Every operation is $O(1)$; the mins stack mirrors every push/pop.
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="min-stack-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="min-stack-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="min-stack-approach2-ts" />
   </TabItem>
@@ -341,6 +346,9 @@ A third variant pushes to the aux min-stack **only** when a new minimum is estab
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="min-stack-approach3-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="min-stack-approach3-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="min-stack-approach3-ts" />

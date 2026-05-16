@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './138-copy-list-with-random-pointer.py?raw';
 import practiceCodeTs from './138-copy-list-with-random-pointer.ts?raw';
 import practiceCodeGo from './138-copy-list-with-random-pointer.go?raw';
+import approach2PyCode from './138-copy-list-with-random-pointer-approach2.py?raw';
 import approach2TsCode from './138-copy-list-with-random-pointer-approach2.ts?raw';
 import approach2GoCode from './138-copy-list-with-random-pointer-approach2.go?raw';
 
@@ -184,9 +185,16 @@ Cleaner than Approach 1; same asymptotics. This is usually the interview-accepta
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="copy-list-with-random-pointer-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="copy-list-with-random-pointer-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="copy-list-with-random-pointer-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Approach 3: Interwoven nodes (optimal, $O(1)$ extra space)

@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './143-reorder-list.py?raw';
 import practiceCodeTs from './143-reorder-list.ts?raw';
 import practiceCodeGo from './143-reorder-list.go?raw';
+import approach3PyCode from './143-reorder-list-approach3.py?raw';
 import approach3TsCode from './143-reorder-list-approach3.ts?raw';
 import approach3GoCode from './143-reorder-list-approach3.go?raw';
 
@@ -277,9 +278,16 @@ Three independent $O(n)$ passes, each touching n/2 nodes. No extra allocation. T
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="reorder-list-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="reorder-list-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="reorder-list-approach3-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Test cases

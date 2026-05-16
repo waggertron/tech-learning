@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './021-merge-two-sorted-lists.py?raw';
 import practiceCodeTs from './021-merge-two-sorted-lists.ts?raw';
 import practiceCodeGo from './021-merge-two-sorted-lists.go?raw';
+import approach2PyCode from './021-merge-two-sorted-lists-approach2.py?raw';
 import approach2TsCode from './021-merge-two-sorted-lists-approach2.ts?raw';
 import approach2GoCode from './021-merge-two-sorted-lists-approach2.go?raw';
+import approach3PyCode from './021-merge-two-sorted-lists-approach3.py?raw';
 import approach3TsCode from './021-merge-two-sorted-lists-approach3.ts?raw';
 import approach3GoCode from './021-merge-two-sorted-lists-approach3.go?raw';
 
@@ -237,6 +239,9 @@ The loop exits as soon as either list is exhausted (after min(n, m) steps), then
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="merge-two-sorted-lists-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="merge-two-sorted-lists-approach2-ts" />
   </TabItem>
@@ -319,6 +324,9 @@ Elegant; stack-space trade-off.
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="merge-two-sorted-lists-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="merge-two-sorted-lists-approach3-ts" />
   </TabItem>

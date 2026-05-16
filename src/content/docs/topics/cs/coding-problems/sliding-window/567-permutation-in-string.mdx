@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './567-permutation-in-string.py?raw';
 import practiceCodeTs from './567-permutation-in-string.ts?raw';
 import practiceCodeGo from './567-permutation-in-string.go?raw';
+import approach3PyCode from './567-permutation-in-string-approach3.py?raw';
 import approach3TsCode from './567-permutation-in-string-approach3.ts?raw';
 import approach3GoCode from './567-permutation-in-string-approach3.go?raw';
 
@@ -341,6 +342,9 @@ Instead of comparing full counters every step, maintain a `matches` integer that
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="permutation-in-string-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="permutation-in-string-approach3-ts" />
   </TabItem>

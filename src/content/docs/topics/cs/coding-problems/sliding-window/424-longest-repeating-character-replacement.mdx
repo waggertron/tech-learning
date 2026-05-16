@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './424-longest-repeating-character-replacement.py?raw';
 import practiceCodeTs from './424-longest-repeating-character-replacement.ts?raw';
 import practiceCodeGo from './424-longest-repeating-character-replacement.go?raw';
+import approach3PyCode from './424-longest-repeating-character-replacement-approach3.py?raw';
 import approach3TsCode from './424-longest-repeating-character-replacement-approach3.ts?raw';
 import approach3GoCode from './424-longest-repeating-character-replacement-approach3.go?raw';
 
@@ -311,6 +312,9 @@ The key insight for L3: we never decrease `max_freq` even when shrinking. This i
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="longest-repeating-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="longest-repeating-approach3-ts" />
   </TabItem>

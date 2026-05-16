@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './1046-last-stone-weight.py?raw';
 import practiceCodeTs from './1046-last-stone-weight.ts?raw';
 import practiceCodeGo from './1046-last-stone-weight.go?raw';
+import approach2PyCode from './1046-last-stone-weight-approach2.py?raw';
 import approach2TsCode from './1046-last-stone-weight-approach2.ts?raw';
 import approach2GoCode from './1046-last-stone-weight-approach2.go?raw';
 
@@ -314,6 +315,9 @@ Since we do n-1 rounds and each round is $O(log n)$, the running total is **$O(n
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="last-stone-weight-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="last-stone-weight-approach2-ts" />
   </TabItem>

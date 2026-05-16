@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './019-remove-nth-node-from-end-of-list.py?raw';
 import practiceCodeTs from './019-remove-nth-node-from-end-of-list.ts?raw';
 import practiceCodeGo from './019-remove-nth-node-from-end-of-list.go?raw';
+import approach3PyCode from './019-remove-nth-node-from-end-of-list-approach3.py?raw';
 import approach3TsCode from './019-remove-nth-node-from-end-of-list-approach3.ts?raw';
 import approach3GoCode from './019-remove-nth-node-from-end-of-list-approach3.go?raw';
 
@@ -294,6 +295,9 @@ When `n == L` (removing the head), the `slow` pointer needs to land "one before 
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="remove-nth-node-from-end-of-list-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="remove-nth-node-from-end-of-list-approach3-ts" />
   </TabItem>

@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './023-merge-k-sorted-lists.py?raw';
 import practiceCodeTs from './023-merge-k-sorted-lists.ts?raw';
 import practiceCodeGo from './023-merge-k-sorted-lists.go?raw';
+import approach3aPyCode from './023-merge-k-sorted-lists-approach3a.py?raw';
 import approach3aTsCode from './023-merge-k-sorted-lists-approach3a.ts?raw';
 import approach3aGoCode from './023-merge-k-sorted-lists-approach3a.go?raw';
 
@@ -322,6 +323,9 @@ At each round, the total work across all pairwise merges is $O(N)$ (every node i
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3aPyCode} id="merge-k-sorted-lists-approach3a-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3aTsCode} id="merge-k-sorted-lists-approach3a-ts" />
   </TabItem>

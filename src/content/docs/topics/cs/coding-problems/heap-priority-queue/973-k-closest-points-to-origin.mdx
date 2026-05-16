@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './973-k-closest-points-to-origin.py?raw';
 import practiceCodeTs from './973-k-closest-points-to-origin.ts?raw';
 import practiceCodeGo from './973-k-closest-points-to-origin.go?raw';
+import approach2PyCode from './973-k-closest-points-to-origin-approach2.py?raw';
 import approach2TsCode from './973-k-closest-points-to-origin-approach2.ts?raw';
 import approach2GoCode from './973-k-closest-points-to-origin-approach2.go?raw';
+import approach3PyCode from './973-k-closest-points-to-origin-approach3.py?raw';
 import approach3TsCode from './973-k-closest-points-to-origin-approach3.ts?raw';
 import approach3GoCode from './973-k-closest-points-to-origin-approach3.go?raw';
 
@@ -245,6 +247,9 @@ Strictly better than Approach 1 when k ≪ n.
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="k-closest-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="k-closest-approach2-ts" />
   </TabItem>
@@ -393,6 +398,9 @@ Pick quickselect when you're allowed to mutate the input and want the tightest a
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="k-closest-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="k-closest-approach3-ts" />
   </TabItem>

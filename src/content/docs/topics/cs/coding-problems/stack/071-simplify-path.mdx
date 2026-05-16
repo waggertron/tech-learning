@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './071-simplify-path.py?raw';
 import practiceCodeTs from './071-simplify-path.ts?raw';
 import practiceCodeGo from './071-simplify-path.go?raw';
+import approach2PyCode from './071-simplify-path-approach2.py?raw';
 import approach2TsCode from './071-simplify-path-approach2.ts?raw';
 import approach2GoCode from './071-simplify-path-approach2.go?raw';
 
@@ -141,6 +142,9 @@ k is at most n (each char could be its own component), so both $O(k)$ terms coll
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="simplify-path-approach1-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="simplify-path-approach2-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="simplify-path-approach2-ts" />

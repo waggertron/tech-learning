@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './853-car-fleet.py?raw';
 import practiceCodeTs from './853-car-fleet.ts?raw';
 import practiceCodeGo from './853-car-fleet.go?raw';
+import approach2PyCode from './853-car-fleet-approach2.py?raw';
 import approach2TsCode from './853-car-fleet-approach2.ts?raw';
 import approach2GoCode from './853-car-fleet-approach2.go?raw';
+import approach3PyCode from './853-car-fleet-approach3.py?raw';
 import approach3TsCode from './853-car-fleet-approach3.ts?raw';
 import approach3GoCode from './853-car-fleet-approach3.go?raw';
 
@@ -148,9 +150,16 @@ The sort dominates; the scan is linear.
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="car-fleet-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="car-fleet-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="car-fleet-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="car-fleet-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Approach 3: Sort + monotonic stack of arrival times (equivalent, stack-explicit)
@@ -211,9 +220,16 @@ Same cost structure as Approach 2; the stack just makes the fleet grouping expli
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="car-fleet-approach3-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="car-fleet-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="car-fleet-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="car-fleet-approach3-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Summary

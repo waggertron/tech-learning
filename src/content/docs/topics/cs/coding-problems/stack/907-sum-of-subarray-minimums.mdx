@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './907-sum-of-subarray-minimums.py?raw';
 import practiceCodeTs from './907-sum-of-subarray-minimums.ts?raw';
 import practiceCodeGo from './907-sum-of-subarray-minimums.go?raw';
+import approach2PyCode from './907-sum-of-subarray-minimums-approach2.py?raw';
 import approach2TsCode from './907-sum-of-subarray-minimums-approach2.ts?raw';
 import approach2GoCode from './907-sum-of-subarray-minimums-approach2.go?raw';
 
@@ -182,9 +183,16 @@ Each index is pushed once and popped at most once in each pass. Both passes are 
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="sum-of-subarray-minimums-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="sum-of-subarray-minimums-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="sum-of-subarray-minimums-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="sum-of-subarray-minimums-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Why asymmetric boundaries prevent double counting

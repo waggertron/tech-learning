@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './141-linked-list-cycle.py?raw';
 import practiceCodeTs from './141-linked-list-cycle.ts?raw';
 import practiceCodeGo from './141-linked-list-cycle.go?raw';
+import approach3PyCode from './141-linked-list-cycle-approach3.py?raw';
 import approach3TsCode from './141-linked-list-cycle-approach3.ts?raw';
 import approach3GoCode from './141-linked-list-cycle-approach3.go?raw';
 
@@ -197,9 +198,16 @@ If you need the cycle *start*, not just existence, reset `slow` to head after th
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="linked-list-cycle-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="linked-list-cycle-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="linked-list-cycle-approach3-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Test cases

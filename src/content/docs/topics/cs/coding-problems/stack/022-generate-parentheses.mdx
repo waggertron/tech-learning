@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './022-generate-parentheses.py?raw';
 import practiceCodeTs from './022-generate-parentheses.ts?raw';
 import practiceCodeGo from './022-generate-parentheses.go?raw';
+import approach2PyCode from './022-generate-parentheses-approach2.py?raw';
 import approach2TsCode from './022-generate-parentheses-approach2.ts?raw';
 import approach2GoCode from './022-generate-parentheses-approach2.go?raw';
+import approach3PyCode from './022-generate-parentheses-approach3.py?raw';
 import approach3TsCode from './022-generate-parentheses-approach3.ts?raw';
 import approach3GoCode from './022-generate-parentheses-approach3.go?raw';
 
@@ -215,6 +217,9 @@ Pruning reduces the explored space from 4^n to the Catalan number C(n) ≈ 4^n /
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="generate-parentheses-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="generate-parentheses-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="generate-parentheses-approach2-ts" />
   </TabItem>
@@ -331,6 +336,9 @@ Using a single `path` list with `append`/`pop` avoids string concatenation ($O(n
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="generate-parentheses-approach3-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="generate-parentheses-approach3-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="generate-parentheses-approach3-ts" />

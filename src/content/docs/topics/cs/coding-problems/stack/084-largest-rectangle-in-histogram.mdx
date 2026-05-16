@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './084-largest-rectangle-in-histogram.py?raw';
 import practiceCodeTs from './084-largest-rectangle-in-histogram.ts?raw';
 import practiceCodeGo from './084-largest-rectangle-in-histogram.go?raw';
+import approach2PyCode from './084-largest-rectangle-in-histogram-approach2.py?raw';
 import approach2TsCode from './084-largest-rectangle-in-histogram-approach2.ts?raw';
 import approach2GoCode from './084-largest-rectangle-in-histogram-approach2.go?raw';
+import approach3PyCode from './084-largest-rectangle-in-histogram-approach3.py?raw';
 import approach3TsCode from './084-largest-rectangle-in-histogram-approach3.ts?raw';
 import approach3GoCode from './084-largest-rectangle-in-histogram-approach3.go?raw';
 
@@ -259,6 +261,9 @@ Each index is pushed and popped at most once per pass; the stack operations are 
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="largest-rectangle-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="largest-rectangle-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="largest-rectangle-approach2-ts" />
   </TabItem>
@@ -359,6 +364,9 @@ The stack stores "bars that are still candidates for being the left boundary of 
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="largest-rectangle-approach3-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="largest-rectangle-approach3-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="largest-rectangle-approach3-ts" />

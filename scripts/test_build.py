@@ -443,6 +443,36 @@ def test_spot_checks() -> None:
 
 
 # ════════════════════════════════════════════════════════════════════════════
+# 9. Source: all approach stub files imported in their MDX
+# ════════════════════════════════════════════════════════════════════════════
+
+SRC_PROBLEMS = Path("src/content/docs/topics/cs/coding-problems")
+
+
+def test_approach_stubs_wired() -> None:
+    print(f"\n{BOLD}[9] Source: all approach stubs wired into MDX{RESET}")
+
+    if not SRC_PROBLEMS.exists():
+        check("coding-problems source directory exists", False)
+        return
+
+    missing: list[str] = []
+    for mdx in sorted(SRC_PROBLEMS.rglob("*.mdx")):
+        mdx_text = mdx.read_text(encoding="utf-8", errors="replace")
+        for stub in sorted(mdx.parent.glob(f"{mdx.stem}-approach*")):
+            if stub.suffix not in (".py", ".ts", ".go"):
+                continue
+            if stub.name not in mdx_text:
+                missing.append(f"{mdx.relative_to(SRC_PROBLEMS)}: {stub.name}")
+
+    check(
+        f"all approach stubs imported in MDX (found {len(missing)} missing)",
+        len(missing) == 0,
+        "\n         ".join(["missing:"] + missing[:8]),
+    )
+
+
+# ════════════════════════════════════════════════════════════════════════════
 # Runner
 # ════════════════════════════════════════════════════════════════════════════
 
@@ -460,6 +490,7 @@ def main() -> None:
     test_no_malformed_math()
     test_no_math_in_code_blocks()
     test_spot_checks()
+    test_approach_stubs_wired()
 
     total = passes + len(failures)
     print("\n" + "=" * 62)

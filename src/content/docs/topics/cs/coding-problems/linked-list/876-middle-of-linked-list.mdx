@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './876-middle-of-linked-list.py?raw';
 import practiceCodeTs from './876-middle-of-linked-list.ts?raw';
 import practiceCodeGo from './876-middle-of-linked-list.go?raw';
+import approach2PyCode from './876-middle-of-linked-list-approach2.py?raw';
 import approach2TsCode from './876-middle-of-linked-list-approach2.ts?raw';
 import approach2GoCode from './876-middle-of-linked-list-approach2.go?raw';
 
@@ -162,9 +163,16 @@ Return slow = node(4)  correct: second middle of 6
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="middle-of-linked-list-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="middle-of-linked-list-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="middle-of-linked-list-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Key takeaways

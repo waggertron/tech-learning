@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './239-sliding-window-maximum.py?raw';
 import practiceCodeTs from './239-sliding-window-maximum.ts?raw';
 import practiceCodeGo from './239-sliding-window-maximum.go?raw';
+import approach2PyCode from './239-sliding-window-maximum-approach2.py?raw';
 import approach2TsCode from './239-sliding-window-maximum-approach2.ts?raw';
 import approach2GoCode from './239-sliding-window-maximum-approach2.go?raw';
+import approach3PyCode from './239-sliding-window-maximum-approach3.py?raw';
 import approach3TsCode from './239-sliding-window-maximum-approach3.ts?raw';
 import approach3GoCode from './239-sliding-window-maximum-approach3.go?raw';
 
@@ -125,8 +127,41 @@ def max_sliding_window(nums: list[int], k: int) -> list[int]:
 </TabItem>
 <TabItem label="TypeScript">
 ```typescript
-// Uses a min-heap storing [-value, index] for max-heap semantics.
-// Full MinHeap implementation is in the approach file.
+// TypeScript has no built-in heap, so we implement a min-heap.
+// Storing [-value, index] gives us max-heap semantics on value.
+class MinHeap {
+    private data: [number, number][] = [];
+    push(val: [number, number]): void {
+        this.data.push(val);
+        let i = this.data.length - 1;
+        while (i > 0) {
+            const p = (i - 1) >> 1;
+            if (this.data[p][0] <= this.data[i][0]) break;
+            [this.data[p], this.data[i]] = [this.data[i], this.data[p]];
+            i = p;
+        }
+    }
+    pop(): [number, number] {
+        const top = this.data[0];
+        const last = this.data.pop()!;
+        if (this.data.length > 0) {
+            this.data[0] = last;
+            let i = 0;
+            while (true) {
+                let s = i;
+                const l = 2 * i + 1, r = 2 * i + 2;
+                if (l < this.data.length && this.data[l][0] < this.data[s][0]) s = l;
+                if (r < this.data.length && this.data[r][0] < this.data[s][0]) s = r;
+                if (s === i) break;
+                [this.data[s], this.data[i]] = [this.data[i], this.data[s]];
+                i = s;
+            }
+        }
+        return top;
+    }
+    peek(): [number, number] { return this.data[0]; }
+}
+
 function maxSlidingWindow(nums: number[], k: number): number[] {
     const heap = new MinHeap();
     const result: number[] = [];
@@ -186,6 +221,9 @@ Good enough to pass but noticeably slower than the optimal.
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="sliding-window-max-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="sliding-window-max-approach2-ts" />
   </TabItem>
@@ -291,6 +329,9 @@ If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max on
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="sliding-window-max-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="sliding-window-max-approach3-ts" />
   </TabItem>

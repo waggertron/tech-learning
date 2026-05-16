@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './735-asteroid-collision.py?raw';
 import practiceCodeTs from './735-asteroid-collision.ts?raw';
 import practiceCodeGo from './735-asteroid-collision.go?raw';
+import approach2PyCode from './735-asteroid-collision-approach2.py?raw';
 import approach2TsCode from './735-asteroid-collision-approach2.ts?raw';
 import approach2GoCode from './735-asteroid-collision-approach2.go?raw';
 
@@ -156,9 +157,16 @@ The while loop looks nested but each asteroid is pushed at most once and popped 
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="asteroid-collision-approach-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="asteroid-collision-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="asteroid-collision-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="asteroid-collision-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Common mistakes

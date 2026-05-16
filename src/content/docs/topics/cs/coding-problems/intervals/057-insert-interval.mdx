@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './057-insert-interval.py?raw';
 import practiceCodeTs from './057-insert-interval.ts?raw';
 import practiceCodeGo from './057-insert-interval.go?raw';
+import approach2PyCode from './057-insert-interval-approach2.py?raw';
 import approach2TsCode from './057-insert-interval-approach2.ts?raw';
 import approach2GoCode from './057-insert-interval-approach2.go?raw';
+import approach3PyCode from './057-insert-interval-approach3.py?raw';
 import approach3TsCode from './057-insert-interval-approach3.ts?raw';
 import approach3GoCode from './057-insert-interval-approach3.go?raw';
 
@@ -204,6 +206,9 @@ Same $O(n)$ in the worst case.
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="insert-interval-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="insert-interval-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="insert-interval-approach2-ts" />
   </TabItem>
@@ -334,6 +339,9 @@ No phase dominates; every interval is visited exactly once across the three phas
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="insert-interval-approach3-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="insert-interval-approach3-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="insert-interval-approach3-ts" />

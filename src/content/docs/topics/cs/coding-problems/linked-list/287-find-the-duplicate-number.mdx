@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './287-find-the-duplicate-number.py?raw';
 import practiceCodeTs from './287-find-the-duplicate-number.ts?raw';
 import practiceCodeGo from './287-find-the-duplicate-number.go?raw';
+import approach3PyCode from './287-find-the-duplicate-number-approach3.py?raw';
 import approach3TsCode from './287-find-the-duplicate-number-approach3.ts?raw';
 import approach3GoCode from './287-find-the-duplicate-number-approach3.go?raw';
 
@@ -209,9 +210,16 @@ Phase 1 detects the cycle in $O(n + c)$ steps where c is the cycle length. Phase
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="find-the-duplicate-number-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="find-the-duplicate-number-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="find-the-duplicate-number-approach3-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Test cases

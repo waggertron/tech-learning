@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './394-decode-string.py?raw';
 import practiceCodeTs from './394-decode-string.ts?raw';
 import practiceCodeGo from './394-decode-string.go?raw';
+import approach2PyCode from './394-decode-string-approach2.py?raw';
 import approach2TsCode from './394-decode-string-approach2.ts?raw';
 import approach2GoCode from './394-decode-string-approach2.go?raw';
 
@@ -143,9 +144,16 @@ String concatenation at L13 dominates: each character of the final output is wri
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="decode-string-approach-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="decode-string-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="decode-string-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="decode-string-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Key insight: "pending business" model

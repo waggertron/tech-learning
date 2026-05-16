@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './002-add-two-numbers.py?raw';
 import practiceCodeTs from './002-add-two-numbers.ts?raw';
 import practiceCodeGo from './002-add-two-numbers.go?raw';
+import approach2PyCode from './002-add-two-numbers-approach2.py?raw';
 import approach2TsCode from './002-add-two-numbers-approach2.ts?raw';
 import approach2GoCode from './002-add-two-numbers-approach2.go?raw';
 
@@ -250,6 +251,9 @@ Every line is $O(1)$ per iteration; the loop runs at most max(n, m) + 1 times (t
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="add-two-numbers-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="add-two-numbers-approach2-ts" />
   </TabItem>

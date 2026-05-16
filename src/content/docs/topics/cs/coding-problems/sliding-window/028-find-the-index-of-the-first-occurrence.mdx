@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './028-find-the-index-of-the-first-occurrence.py?raw';
 import practiceCodeTs from './028-find-the-index-of-the-first-occurrence.ts?raw';
 import practiceCodeGo from './028-find-the-index-of-the-first-occurrence.go?raw';
+import approach2PyCode from './028-find-the-index-of-the-first-occurrence-approach2.py?raw';
 import approach2TsCode from './028-find-the-index-of-the-first-occurrence-approach2.ts?raw';
 import approach2GoCode from './028-find-the-index-of-the-first-occurrence-approach2.go?raw';
 
@@ -136,6 +137,9 @@ This is $O(n)$ in the average case and $O(n * m)$ in the worst case, but the con
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="find-first-occurrence-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="find-first-occurrence-approach2-ts" />
   </TabItem>

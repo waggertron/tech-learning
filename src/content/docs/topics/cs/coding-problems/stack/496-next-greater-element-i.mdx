@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './496-next-greater-element-i.py?raw';
 import practiceCodeTs from './496-next-greater-element-i.ts?raw';
 import practiceCodeGo from './496-next-greater-element-i.go?raw';
+import approach2PyCode from './496-next-greater-element-i-approach2.py?raw';
 import approach2TsCode from './496-next-greater-element-i-approach2.ts?raw';
 import approach2GoCode from './496-next-greater-element-i-approach2.go?raw';
 
@@ -154,9 +155,16 @@ Each element of nums2 is pushed once and popped at most once. Total stack work i
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="next-greater-element-i-approach2-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="next-greater-element-i-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="next-greater-element-i-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="next-greater-element-i-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## How the monotonic stack resolves answers

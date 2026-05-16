@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './215-kth-larget-element-in-an-array.py?raw';
 import practiceCodeTs from './215-kth-larget-element-in-an-array.ts?raw';
 import practiceCodeGo from './215-kth-larget-element-in-an-array.go?raw';
+import approach2PyCode from './215-kth-largest-element-in-an-array-approach2.py?raw';
 import approach2TsCode from './215-kth-largest-element-in-an-array-approach2.ts?raw';
 import approach2GoCode from './215-kth-largest-element-in-an-array-approach2.go?raw';
+import approach3PyCode from './215-kth-largest-element-in-an-array-approach3.py?raw';
 import approach3TsCode from './215-kth-largest-element-in-an-array-approach3.ts?raw';
 import approach3GoCode from './215-kth-largest-element-in-an-array-approach3.go?raw';
 
@@ -228,6 +230,9 @@ The heap never exceeds k entries. Every push and pop costs $O(log k)$. Since we 
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="kth-largest-element-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="kth-largest-element-approach2-ts" />
   </TabItem>
@@ -384,6 +389,9 @@ The three-way partition handles duplicate values efficiently, important when the
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="kth-largest-element-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="kth-largest-element-approach3-ts" />
   </TabItem>

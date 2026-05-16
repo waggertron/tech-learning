@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './224-basic-calculator.py?raw';
 import practiceCodeTs from './224-basic-calculator.ts?raw';
 import practiceCodeGo from './224-basic-calculator.go?raw';
+import approach2PyCode from './224-basic-calculator-approach2.py?raw';
 import approach2TsCode from './224-basic-calculator-approach2.ts?raw';
 import approach2GoCode from './224-basic-calculator-approach2.go?raw';
 
@@ -145,9 +146,16 @@ Each character triggers exactly one branch, all $O(1)$. Each `'('` causes one pu
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="basic-calculator-approach1-py" />
   </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="basic-calculator-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="basic-calculator-approach2-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="basic-calculator-approach2-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Sign context illustrated

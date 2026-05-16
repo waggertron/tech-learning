@@ -15,8 +15,10 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './621-task-scheduler.py?raw';
 import practiceCodeTs from './621-task-scheduler.ts?raw';
 import practiceCodeGo from './621-task-scheduler.go?raw';
+import approach2PyCode from './621-task-scheduler-approach2.py?raw';
 import approach2TsCode from './621-task-scheduler-approach2.ts?raw';
 import approach2GoCode from './621-task-scheduler-approach2.go?raw';
+import approach3PyCode from './621-task-scheduler-approach3.py?raw';
 import approach3TsCode from './621-task-scheduler-approach3.ts?raw';
 import approach3GoCode from './621-task-scheduler-approach3.go?raw';
 
@@ -318,6 +320,9 @@ Cleaner than the brute force; a natural fit for "greedy scheduling with recurrin
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="task-scheduler-approach2-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="task-scheduler-approach2-ts" />
   </TabItem>
@@ -421,6 +426,9 @@ Building the Counter at L1 touches every task once. The remaining steps scan at 
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="task-scheduler-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="task-scheduler-approach3-ts" />
   </TabItem>

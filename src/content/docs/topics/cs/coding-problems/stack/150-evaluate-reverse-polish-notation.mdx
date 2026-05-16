@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './150-evaluate-reverse-polish-notation.py?raw';
 import practiceCodeTs from './150-evaluate-reverse-polish-notation.ts?raw';
 import practiceCodeGo from './150-evaluate-reverse-polish-notation.go?raw';
+import approach2PyCode from './150-evaluate-reverse-polish-notation-approach2.py?raw';
 import approach2TsCode from './150-evaluate-reverse-polish-notation-approach2.ts?raw';
 import approach2GoCode from './150-evaluate-reverse-polish-notation-approach2.go?raw';
 
@@ -228,6 +229,9 @@ Functionally identical to Approach 1; easier to extend (new operators) and easie
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="evaluate-rpn-approach2-py" />
+  </TabItem>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="evaluate-rpn-approach2-py" />
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach2TsCode} id="evaluate-rpn-approach2-ts" />

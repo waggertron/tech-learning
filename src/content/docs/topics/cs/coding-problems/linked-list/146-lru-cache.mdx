@@ -15,6 +15,7 @@ import GoRepl from '../../../../../../components/GoRepl.astro';
 import practiceCode from './146-lru-cache.py?raw';
 import practiceCodeTs from './146-lru-cache.ts?raw';
 import practiceCodeGo from './146-lru-cache.go?raw';
+import approach3PyCode from './146-lru-cache-approach3.py?raw';
 import approach3TsCode from './146-lru-cache-approach3.ts?raw';
 import approach3GoCode from './146-lru-cache-approach3.go?raw';
 
@@ -347,9 +348,16 @@ The hash map gives $O(1)$ lookup *by key*; the doubly linked list gives $O(1)$ r
 **Try this approach:**
 
 <Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach3PyCode} id="lru-cache-approach3-py" />
+  </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={approach3TsCode} id="lru-cache-approach3-ts" />
   </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach3GoCode} id="lru-cache-approach3-go" />
+  </TabItem>
+
 </Tabs>
 
 ## Test cases
