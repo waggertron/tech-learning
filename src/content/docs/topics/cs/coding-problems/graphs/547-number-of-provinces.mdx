@@ -103,16 +103,16 @@ function findCircleNum(isConnected: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init visited) | O(1) per city | n | O(n) |
-| L7 (outer scan) | O(1) | n | O(n) |
-| **L5 (neighbor scan inside DFS)** | **O(n)** | **once per city visited** | **O(n^2) ← dominates** |
-| L6 (recurse) | O(1) | at most n total | O(n) |
+| L2 (init visited) | $O(1)$ per city | n | $O(n)$ |
+| L7 (outer scan) | $O(1)$ | n | $O(n)$ |
+| **L5 (neighbor scan inside DFS)** | **$O(n)$** | **once per city visited** | **$O(n^2)$ ← dominates** |
+| L6 (recurse) | $O(1)$ | at most n total | $O(n)$ |
 
 The DFS for each city scans its entire row in `isConnected` (L5). Every city is visited at most once (L4 prevents re-entry), so L5 executes at most n times for a total of n * n = n^2 operations. This is unavoidable: we must read every entry in the n * n matrix.
 
 **Complexity**
-- **Time:** O(n^2), driven by L5 (reading the full adjacency matrix).
-- **Space:** O(n) visited array plus O(n) recursion stack.
+- **Time:** $O(n^2)$, driven by L5 (reading the full adjacency matrix).
+- **Space:** $O(n)$ visited array plus $O(n)$ recursion stack.
 
 ## Approach 2: Union-Find
 
@@ -176,8 +176,8 @@ function findCircleNum(isConnected: number[][]): number {
 </Tabs>
 
 **Complexity**
-- **Time:** O(n^2 * alpha(n)), effectively O(n^2), driven by L6/L7.
-- **Space:** O(n) parent array.
+- **Time:** $O(n^2 * alpha(n)$), effectively $O(n^2)$, driven by L6/L7.
+- **Space:** $O(n)$ parent array.
 
 **Try this approach:**
 
@@ -197,10 +197,10 @@ function findCircleNum(isConnected: number[][]): number {
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| **DFS** | O(n^2) | O(n) | Simple, canonical |
-| **Union-Find** | O(n^2 * alpha) | O(n) | Useful when adding connections online |
+| **DFS** | $O(n^2)$ | $O(n)$ | Simple, canonical |
+| **Union-Find** | $O(n^2 * alpha)$ | $O(n)$ | Useful when adding connections online |
 
-Both approaches are bounded by O(n^2) because you must read the adjacency matrix. Use DFS/BFS for a one-shot query; use Union-Find when connections are added incrementally.
+Both approaches are bounded by $O(n^2)$ because you must read the adjacency matrix. Use DFS/BFS for a one-shot query; use Union-Find when connections are added incrementally.
 
 ## Test cases
 

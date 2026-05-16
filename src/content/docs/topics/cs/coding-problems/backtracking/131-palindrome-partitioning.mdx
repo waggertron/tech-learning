@@ -79,15 +79,15 @@ def partition(s):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L3 (palindrome check + slice) | O(k) per cut | O(n · 2^n) total cuts | O(n · 2^n) |
-| **L5 (recurse)** | **O(1) dispatch** | **O(2^n) nodes** | **O(2^n)** ← dominates |
-| L2 (copy) | O(n) | partitions | O(n · partitions) |
+| L1/L3 (palindrome check + slice) | $O(k)$ per cut | $O(n · 2^n)$ total cuts | $O(n · 2^n)$ |
+| **L5 (recurse)** | **$O(1)$ dispatch** | **$O(2^n)$ nodes** | **$O(2^n)$** ← dominates |
+| L2 (copy) | $O(n)$ | partitions | $O(n · partitions)$ |
 
-There are 2^(n-1) possible cut positions, so the search space is O(2^n). Each call to `is_pal` for a substring of length k costs O(k).
+There are 2^(n-1) possible cut positions, so the search space is $O(2^n)$. Each call to `is_pal` for a substring of length k costs $O(k)$.
 
 **Complexity**
-- **Time:** O(n · 2^n). For each of 2^(n-1) possible partitions, O(n) palindrome checks.
-- **Space:** O(n) recursion.
+- **Time:** $O(n · 2^n)$. For each of 2^(n-1) possible partitions, $O(n)$ palindrome checks.
+- **Space:** $O(n)$ recursion.
 
 ## Approach 2: Two-pointer palindrome check (same Big-O, no string slicing)
 
@@ -204,13 +204,13 @@ func partition(s string) [][]string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (two-pointer check) | O(k) | O(n^2) pairs | O(n^2) setup |
-| **L4 (recurse)** | **O(1) dispatch** | **O(2^n) nodes** | **O(n · 2^n)** ← dominates |
-| L2 (copy) | O(n) | partitions | O(n · partitions) |
+| L1 (two-pointer check) | $O(k)$ | $O(n^2)$ pairs | $O(n^2)$ setup |
+| **L4 (recurse)** | **$O(1)$ dispatch** | **$O(2^n)$ nodes** | **$O(n · 2^n)$** ← dominates |
+| L2 (copy) | $O(n)$ | partitions | $O(n · partitions)$ |
 
 **Complexity**
-- **Time:** O(n · 2^n) worst case.
-- **Space:** O(n) recursion.
+- **Time:** $O(n · 2^n)$ worst case.
+- **Space:** $O(n)$ recursion.
 
 **Try this approach:**
 
@@ -228,7 +228,7 @@ func partition(s string) [][]string {
 
 ## Approach 3: Precompute palindrome DP table (optimal constant factor)
 
-Precompute `is_pal[i][j]` for all substrings in O(n^2). Then the palindrome check during backtracking is O(1).
+Precompute `is_pal[i][j]` for all substrings in $O(n^2)$. Then the palindrome check during backtracking is $O(1)$.
 
 <Tabs>
 <TabItem label="Python">
@@ -351,15 +351,15 @@ func partition(s string) [][]string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (DP table build) | O(1) | n^2 cells | O(n^2) |
-| L4 (O(1) lookup) | O(1) | O(n · 2^n) | O(n · 2^n) |
-| **L6 (recurse)** | **O(1) dispatch** | **O(2^n) nodes** | **O(n · 2^n)** ← dominates |
+| L1/L2 (DP table build) | $O(1)$ | n^2 cells | $O(n^2)$ |
+| L4 ($O(1)$ lookup) | $O(1)$ | $O(n · 2^n)$ | $O(n · 2^n)$ |
+| **L6 (recurse)** | **$O(1)$ dispatch** | **$O(2^n)$ nodes** | **$O(n · 2^n)$** ← dominates |
 
-The O(n^2) DP preprocessing pays off when there are many palindrome checks; each one drops from O(k) to O(1).
+The $O(n^2)$ DP preprocessing pays off when there are many palindrome checks; each one drops from $O(k)$ to $O(1)$.
 
 **Complexity**
-- **Time:** O(n · 2^n). The DP table is O(n^2) once; the backtracking work dominates asymptotically but is constant-factor faster.
-- **Space:** O(n^2) DP + O(n) recursion.
+- **Time:** $O(n · 2^n)$. The DP table is $O(n^2)$ once; the backtracking work dominates asymptotically but is constant-factor faster.
+- **Space:** $O(n^2)$ DP + $O(n)$ recursion.
 
 **Try this approach:**
 
@@ -379,9 +379,9 @@ The O(n^2) DP preprocessing pays off when there are many palindrome checks; each
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Backtrack + slice palindrome check | O(n · 2^n) | O(n) |
-| Backtrack + two-pointer check | O(n · 2^n) | O(n) |
-| **Backtrack + precomputed DP** | **O(n · 2^n)** | **O(n^2)** |
+| Backtrack + slice palindrome check | $O(n · 2^n)$ | $O(n)$ |
+| Backtrack + two-pointer check | $O(n · 2^n)$ | $O(n)$ |
+| **Backtrack + precomputed DP** | **$O(n · 2^n)$** | **$O(n^2)$** |
 
 All three have the same dominant term (exponential number of partitions). DP precomputation is the constant-factor win; it's also how problem **132. Palindrome Partitioning II** (min cuts) becomes tractable.
 

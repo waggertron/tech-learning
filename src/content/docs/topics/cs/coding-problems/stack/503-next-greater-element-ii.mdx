@@ -85,8 +85,8 @@ function nextGreaterElements(nums: number[]): number[] {
 </Tabs>
 
 **Complexity**
-- **Time:** O(n²), each of n elements scans up to n positions.
-- **Space:** O(1) extra.
+- **Time:** $O(n²)$, each of n elements scans up to n positions.
+- **Space:** $O(1)$ extra.
 
 ## Approach 2: Double traversal with monotonic index stack (optimal)
 
@@ -136,15 +136,15 @@ function nextGreaterElements(nums: number[]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init result) | O(n) | 1 | O(n) |
-| L4 (outer loop) | O(1) | 2n | O(n) |
-| **L5-L8 (stack ops)** | **O(1) amortized** | **n total pushes/pops** | **O(n)** ← dominates |
+| L2 (init result) | $O(n)$ | 1 | $O(n)$ |
+| L4 (outer loop) | $O(1)$ | 2n | $O(n)$ |
+| **L5-L8 (stack ops)** | **$O(1)$ amortized** | **n total pushes/pops** | **$O(n)$** ← dominates |
 
-Each index is pushed once (guard `i < n`) and popped at most once. Total stack work across both passes is O(n).
+Each index is pushed once (guard `i < n`) and popped at most once. Total stack work across both passes is $O(n)$.
 
 **Complexity**
-- **Time:** O(n), the 2n loop with amortized O(1) stack work per step.
-- **Space:** O(n) for the result array and stack.
+- **Time:** $O(n)$, the 2n loop with amortized $O(1)$ stack work per step.
+- **Space:** $O(n)$ for the result array and stack.
 
 **Try this approach:**
 

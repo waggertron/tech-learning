@@ -144,14 +144,14 @@ func minRemoveToMakeValid(s string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3-L6 (pass 1, stack ops) | O(1) amortized | n | O(n) |
-| L7 (update remove set) | O(k) where k = remaining stack | 1 | O(n) worst |
-| **L8-L10 (pass 2, rebuild)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L11 (join) | O(n) | 1 | O(n) |
+| L3-L6 (pass 1, stack ops) | $O(1)$ amortized | n | $O(n)$ |
+| L7 (update remove set) | $O(k)$ where k = remaining stack | 1 | $O(n)$ worst |
+| **L8-L10 (pass 2, rebuild)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L11 (join) | $O(n)$ | 1 | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n), two linear passes.
-- **Space:** O(n) for the stack, remove set, and result buffer.
+- **Time:** $O(n)$, two linear passes.
+- **Space:** $O(n)$ for the stack, remove set, and result buffer.
 
 **Try this approach:**
 
@@ -205,7 +205,7 @@ The unmatched `')'` are identified immediately (no stack to pop). But unmatched 
 
 - Stack of indices (not characters) is the right representation whenever you need to mark positions for removal after a full scan.
 - Unmatched `')'` (no opener on the stack) are caught in pass 1 immediately. Unmatched `'('` (stack still non-empty after pass 1) are caught by draining the stack into the remove set.
-- Using a set for `remove` gives O(1) lookup in pass 2.
+- Using a set for `remove` gives $O(1)$ lookup in pass 2.
 - Any valid answer is accepted, so the two-pass approach (remove minimum, keep order) always produces one correct answer.
 
 ## Related topics

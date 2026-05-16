@@ -59,7 +59,7 @@ def combination_sum2(candidates, target):
 ```
 
 **Complexity**
-- **Time:** O(2^n · n log n).
+- **Time:** $O(2^n · n log n)$.
 - **Space:** same.
 
 Exponential and wasteful.
@@ -91,7 +91,7 @@ def combination_sum2(candidates, target):
 ```
 
 **Complexity**
-- **Time:** exponential + O(m log m) for dedup.
+- **Time:** exponential + $O(m log m)$ for dedup.
 - **Space:** exponential storage.
 
 The dedup step is a symptom, fix it at the source.
@@ -192,16 +192,16 @@ func combinationSum2(candidates []int, target int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sort) | O(n log n) | 1 | O(n log n) |
-| L3 (prune) | O(1) | pruned nodes | O(pruned) |
-| L4 (skip dup) | O(1) | dup nodes | O(dup) |
-| **L6 (recurse)** | **O(1) dispatch** | **surviving nodes** | **O(2^n)** ← dominates |
+| L1 (sort) | $O(n log n)$ | 1 | $O(n log n)$ |
+| L3 (prune) | $O(1)$ | pruned nodes | $O(pruned)$ |
+| L4 (skip dup) | $O(1)$ | dup nodes | $O(dup)$ |
+| **L6 (recurse)** | **$O(1)$ dispatch** | **surviving nodes** | **$O(2^n)$** ← dominates |
 
 Sorting enables both L3 (early termination) and L4 (same-level duplicate skip). The `i > start` guard is critical: it allows the same value to be chosen at *different* recursion levels while forbidding it at the *same* level.
 
 **Complexity**
-- **Time:** O(2^n) worst case; pruning and skip make it much faster in practice.
-- **Space:** O(k) recursion, where k = average solution length.
+- **Time:** $O(2^n)$ worst case; pruning and skip make it much faster in practice.
+- **Space:** $O(k)$ recursion, where k = average solution length.
 
 **Try this approach:**
 
@@ -221,9 +221,9 @@ Sorting enables both L3 (early termination) and L4 (same-level duplicate skip). 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Powerset + filter + dedup | O(2^n · n log n) | O(2^n) |
+| Powerset + filter + dedup | $O(2^n · n log n)$ | $O(2^n)$ |
 | Backtracking + post-dedup | exponential | exponential |
-| **Sort + skip same-level** | O(2^n) with pruning | O(k) |
+| **Sort + skip same-level** | $O(2^n)$ with pruning | $O(k)$ |
 
 The skip-same-level template (shared with Subsets II) is the right abstraction for "no duplicates allowed when input has duplicates."
 

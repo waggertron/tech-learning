@@ -124,15 +124,15 @@ func swapPairs(head *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (collect)** | **O(1)** | **n** | **O(n)** |
-| L2 (swap values) | O(1) | n/2 | O(n) |
-| L3 (rebuild) | O(1) | n | O(n) |
+| **L1 (collect)** | **$O(1)$** | **n** | **$O(n)$** |
+| L2 (swap values) | $O(1)$ | n/2 | $O(n)$ |
+| L3 (rebuild) | $O(1)$ | n | $O(n)$ |
 
-Correct but allocates O(n) extra space and new nodes. Violates the "swap nodes not values" spirit of the problem.
+Correct but allocates $O(n)$ extra space and new nodes. Violates the "swap nodes not values" spirit of the problem.
 
 **Complexity**
-- **Time:** O(n)
-- **Space:** O(n)
+- **Time:** $O(n)$
+- **Space:** $O(n)$
 
 ## Approach 2: Iterative dummy-head pointer rewiring (optimal)
 
@@ -207,15 +207,15 @@ func swapPairs(head *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (dummy) | O(1) | 1 | O(1) |
-| L2 (loop guard) | O(1) | n/2 | O(n) |
-| **L3-L8 (rewire + advance)** | **O(1) each** | **n/2** | **O(n)** ← dominates |
+| L1 (dummy) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop guard) | $O(1)$ | n/2 | $O(n)$ |
+| **L3-L8 (rewire + advance)** | **$O(1)$ each** | **n/2** | **$O(n)$** ← dominates |
 
 Four pointer assignments per pair, n/2 pairs total. No allocation beyond the dummy head.
 
 **Complexity**
-- **Time:** O(n), driven by L3-L8 (one pass, constant work per pair).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L3-L8 (one pass, constant work per pair).
+- **Space:** $O(1)$.
 
 ### Pointer diagram for `[1, 2, 3, 4]`
 

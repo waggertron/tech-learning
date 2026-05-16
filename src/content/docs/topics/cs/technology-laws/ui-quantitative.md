@@ -74,7 +74,7 @@ The +1 accounts for the "no-action" option. You always have the choice of doing 
 **What Hick's Law does not cover**:
 
 - The time to physically acquire a target after deciding (that's Fitts's Law)
-- Choices where options are not equally probable (the log formula assumes uniform probability; skilled users with habitual choices can approach O(1) response time through pattern matching)
+- Choices where options are not equally probable (the log formula assumes uniform probability; skilled users with habitual choices can approach $O(1)$ response time through pattern matching)
 - Choices with search aids (search boxes override Hick's Law)
 
 ---

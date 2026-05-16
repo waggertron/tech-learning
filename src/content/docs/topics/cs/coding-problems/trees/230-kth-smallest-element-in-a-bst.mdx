@@ -62,14 +62,14 @@ def kth_smallest(root, k):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (inorder + concat)** | **O(n) per call due to list concat** | **n** | **O(n²)** ← dominates |
-| L2 (index) | O(1) | 1 | O(1) |
+| **L1 (inorder + concat)** | **$O(n)$ per call due to list concat** | **n** | **$O(n²)$** ← dominates |
+| L2 (index) | $O(1)$ | 1 | $O(1)$ |
 
-The `+` operator on lists creates a new list each time, making this O(n²) as written. Using `append` + generator would make it O(n).
+The `+` operator on lists creates a new list each time, making this $O(n²)$ as written. Using `append` + generator would make it $O(n)$.
 
 **Complexity**
-- **Time:** O(n) with a proper append-based inorder; O(n²) with list concatenation as written.
-- **Space:** O(n) for the list.
+- **Time:** $O(n)$ with a proper append-based inorder; $O(n²)$ with list concatenation as written.
+- **Space:** $O(n)$ for the list.
 
 Works but doesn't exploit "early termination" once we've hit k.
 
@@ -128,15 +128,15 @@ function kthSmallest(root: TreeNode | null, k: number): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (recurse left) | O(1) dispatch | h + k visits | O(h + k) |
-| L3 (increment) | O(1) | k | O(k) |
-| **L4/L5 (record + recurse right)** | **O(1)** | **h + k** | **O(h + k)** ← dominates |
+| L2 (recurse left) | $O(1)$ dispatch | h + k visits | $O(h + k)$ |
+| L3 (increment) | $O(1)$ | k | $O(k)$ |
+| **L4/L5 (record + recurse right)** | **$O(1)$** | **h + k** | **$O(h + k)$** ← dominates |
 
 Once `count == k`, all subsequent calls return immediately via L1's guard.
 
 **Complexity**
-- **Time:** O(h + k). Early exit after k visits.
-- **Space:** O(h) recursion.
+- **Time:** $O(h + k)$. Early exit after k visits.
+- **Space:** $O(h)$ recursion.
 
 **Try this approach:**
 
@@ -198,26 +198,26 @@ function kthSmallest(root: TreeNode | null, k: number): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (push spine) | O(1) per push | h + k total | O(h + k) |
-| L2/L3 (pop + decrement) | O(1) | k | O(k) |
-| **L4/L5 (return or advance)** | **O(1)** | **h + k** | **O(h + k)** ← dominates (all lines tie) |
+| L1 (push spine) | $O(1)$ per push | h + k total | $O(h + k)$ |
+| L2/L3 (pop + decrement) | $O(1)$ | k | $O(k)$ |
+| **L4/L5 (return or advance)** | **$O(1)$** | **h + k** | **$O(h + k)$** ← dominates (all lines tie) |
 
 We push nodes lazily (only down the left spine), so we never visit more than h + k nodes.
 
 **Complexity**
-- **Time:** O(h + k), driven by L1/L2 processing h + k nodes.
-- **Space:** O(h).
+- **Time:** $O(h + k)$, driven by L1/L2 processing h + k nodes.
+- **Space:** $O(h)$.
 
 ### Follow-up (mutable tree)
-If the tree changes frequently, augment each node with `left_subtree_count`. Then kth-smallest becomes O(h) without traversal, compare `k` against `left.count + 1` at each node to decide which direction to go. That's how many interview databases and self-balancing BST libraries implement O(log n) order statistics.
+If the tree changes frequently, augment each node with `left_subtree_count`. Then kth-smallest becomes $O(h)$ without traversal, compare `k` against `left.count + 1` at each node to decide which direction to go. That's how many interview databases and self-balancing BST libraries implement $O(log n)$ order statistics.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Full inorder list | O(n) | O(n) |
-| Recursive inorder + counter | O(h + k) | O(h) |
-| **Iterative inorder + stack** | **O(h + k)** | **O(h)** |
+| Full inorder list | $O(n)$ | $O(n)$ |
+| Recursive inorder + counter | $O(h + k)$ | $O(h)$ |
+| **Iterative inorder + stack** | **$O(h + k)$** | **$O(h)$** |
 
 The iterative inorder is the canonical answer. It's also the natural structure for related problems (next-in-inorder, inorder successor).
 

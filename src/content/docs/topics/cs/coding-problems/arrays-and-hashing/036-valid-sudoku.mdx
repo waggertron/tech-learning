@@ -181,17 +181,17 @@ func isValidSudoku(board [][]byte) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L6 (row pass) | O(1) per cell | 81 cells | O(81) = O(1) |
-| L7-L8 (column pass) | O(1) per cell | 81 cells | O(81) = O(1) |
-| **L9-L12 (box pass)** | **O(1) per cell** | **81 cells** | **O(81) = O(1)** ← same |
+| L1-L6 (row pass) | $O(1)$ per cell | 81 cells | $O(81)$ = $O(1)$ |
+| L7-L8 (column pass) | $O(1)$ per cell | 81 cells | $O(81)$ = $O(1)$ |
+| **L9-L12 (box pass)** | **$O(1)$ per cell** | **81 cells** | **$O(81)$ = $O(1)$** ← same |
 
 All three passes together visit 81 cells three times each. The board is fixed-size, so every loop is bounded by a constant.
 
 **Complexity**
-- **Time:** O(81) = O(1), driven by three constant-bounded passes over the 81-cell board.
-- **Space:** O(9) = O(1) for each set.
+- **Time:** $O(81)$ = $O(1)$, driven by three constant-bounded passes over the 81-cell board.
+- **Space:** $O(9)$ = $O(1)$ for each set.
 
-Works, but reads the board three times. The larger Big-O lesson: a "constant-sized" input has O(1) time regardless of method; the engineering question is clarity.
+Works, but reads the board three times. The larger Big-O lesson: a "constant-sized" input has $O(1)$ time regardless of method; the engineering question is clarity.
 
 ## Approach 2: Single pass with nine sets per dimension
 
@@ -279,15 +279,15 @@ func isValidSudoku(board [][]byte) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init sets) | O(1) | 1 | O(1) |
-| L4-L5 (double loop) | O(1) | 81 | O(1) |
-| **L6-L12 (per-cell work)** | **O(1)** | **81** | **O(1)** ← dominates |
+| L1-L3 (init sets) | $O(1)$ | 1 | $O(1)$ |
+| L4-L5 (double loop) | $O(1)$ | 81 | $O(1)$ |
+| **L6-L12 (per-cell work)** | **$O(1)$** | **81** | **$O(1)$** ← dominates |
 
 One pass, constant work per cell, short-circuits on the first conflict.
 
 **Complexity**
-- **Time:** O(81) = O(1), driven by the single 81-cell pass (L4/L5 with L6-L12).
-- **Space:** O(81) = O(1).
+- **Time:** $O(81)$ = $O(1)$, driven by the single 81-cell pass (L4/L5 with L6-L12).
+- **Space:** $O(81)$ = $O(1)$.
 
 **Try this approach:**
 
@@ -384,15 +384,15 @@ func isValidSudoku(board [][]byte) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init arrays) | O(1) | 1 | O(1) |
-| L4-L5 (double loop) | O(1) | 81 | O(1) |
-| **L6-L13 (per-cell bitmask ops)** | **O(1)** | **81** | **O(1)** ← dominates |
+| L1-L3 (init arrays) | $O(1)$ | 1 | $O(1)$ |
+| L4-L5 (double loop) | $O(1)$ | 81 | $O(1)$ |
+| **L6-L13 (per-cell bitmask ops)** | **$O(1)$** | **81** | **$O(1)$** ← dominates |
 
-Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at the hardware level, but both are O(1) per cell in Big-O terms.
+Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at the hardware level, but both are $O(1)$ per cell in Big-O terms.
 
 **Complexity**
-- **Time:** O(1). Same as the hash-set version but with constant-factor gains from integer bit ops vs. set ops.
-- **Space:** O(1). 27 integers vs. 27 sets of up to 9 strings.
+- **Time:** $O(1)$. Same as the hash-set version but with constant-factor gains from integer bit ops vs. set ops.
+- **Space:** $O(1)$. 27 integers vs. 27 sets of up to 9 strings.
 
 **Try this approach:**
 
@@ -412,11 +412,11 @@ Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at t
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| 3 separate passes | O(1) | O(1) | Easiest to read |
-| Single pass, 27 sets | O(1) | O(1) | Short-circuit on first conflict |
-| **Single pass, bitmasks** | **O(1)** | **O(1)** | Fastest constant factor |
+| 3 separate passes | $O(1)$ | $O(1)$ | Easiest to read |
+| Single pass, 27 sets | $O(1)$ | $O(1)$ | Short-circuit on first conflict |
+| **Single pass, bitmasks** | **$O(1)$** | **$O(1)$** | Fastest constant factor |
 
-All approaches are formally O(1) because the board is fixed-size; the differences are clarity and constant-factor speed. The bitmask version is the classic "good-enough-for-interview" flex.
+All approaches are formally $O(1)$ because the board is fixed-size; the differences are clarity and constant-factor speed. The bitmask version is the classic "good-enough-for-interview" flex.
 
 ## Test cases
 

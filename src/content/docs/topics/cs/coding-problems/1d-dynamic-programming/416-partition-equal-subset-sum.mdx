@@ -87,16 +87,16 @@ function canPartition(nums: number[]): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sum) | O(n) | 1 | O(n) |
-| L2, L3 (parity check) | O(1) | 1 | O(1) |
-| L4, L5 (base cases) | O(1) | per call | O(2ⁿ) |
-| **L6 (two recursive calls)** | **O(1)** | **up to 2ⁿ** | **O(2ⁿ)** ← dominates |
+| L1 (sum) | $O(n)$ | 1 | $O(n)$ |
+| L2, L3 (parity check) | $O(1)$ | 1 | $O(1)$ |
+| L4, L5 (base cases) | $O(1)$ | per call | $O(2ⁿ)$ |
+| **L6 (two recursive calls)** | **$O(1)$** | **up to 2ⁿ** | **$O(2ⁿ)$** ← dominates |
 
 Each item is either included or not, producing a full binary recursion tree of depth n. No memoization means identical subproblems are recomputed.
 
 **Complexity**
-- **Time:** O(2ⁿ), driven by L6 (the binary branching at every element).
-- **Space:** O(n) for the recursion stack.
+- **Time:** $O(2ⁿ)$, driven by L6 (the binary branching at every element).
+- **Space:** $O(n)$ for the recursion stack.
 
 ## Approach 2: Top-down memoized
 
@@ -152,16 +152,16 @@ function canPartition(nums: number[]): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sum) | O(n) | 1 | O(n) |
-| L2, L3 (parity check) | O(1) | 1 | O(1) |
-| L4, L5 (base cases) | O(1) | per unique (i, cur) | O(n · target) |
-| **L6 (recursive calls)** | **O(1) amortized** | **n · target unique states** | **O(n · target)** ← dominates |
+| L1 (sum) | $O(n)$ | 1 | $O(n)$ |
+| L2, L3 (parity check) | $O(1)$ | 1 | $O(1)$ |
+| L4, L5 (base cases) | $O(1)$ | per unique (i, cur) | $O(n · target)$ |
+| **L6 (recursive calls)** | **$O(1)$ amortized** | **n · target unique states** | **$O(n · target)$** ← dominates |
 
 With memoization, each `(i, cur)` pair is computed at most once. There are n indices and at most target+1 possible `cur` values, giving n · (target+1) unique states.
 
 **Complexity**
-- **Time:** O(n · target), driven by L6 (unique state count bounds total work).
-- **Space:** O(n · target) for the memo table plus O(n) for the call stack.
+- **Time:** $O(n · target)$, driven by L6 (unique state count bounds total work).
+- **Space:** $O(n · target)$ for the memo table plus $O(n)$ for the call stack.
 
 **Try this approach:**
 
@@ -219,17 +219,17 @@ function canPartition(nums: number[]): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sum) | O(n) | 1 | O(n) |
-| L4 (allocate dp) | O(target) | 1 | O(target) |
-| L6 (outer loop) | O(1) | n | O(n) |
-| **L7, L8 (inner loop + update)** | **O(1)** | **n × target** | **O(n · target)** ← dominates |
-| L9 (return) | O(1) | 1 | O(1) |
+| L1 (sum) | $O(n)$ | 1 | $O(n)$ |
+| L4 (allocate dp) | $O(target)$ | 1 | $O(target)$ |
+| L6 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L7, L8 (inner loop + update)** | **$O(1)$** | **n × target** | **$O(n · target)$** ← dominates |
+| L9 (return) | $O(1)$ | 1 | $O(1)$ |
 
-The double loop visits each of the n items against each of the target possible sums. The high-to-low sweep on L7 is not extra work; it is the same O(target) range traversed in reverse.
+The double loop visits each of the n items against each of the target possible sums. The high-to-low sweep on L7 is not extra work; it is the same $O(target)$ range traversed in reverse.
 
 **Complexity**
-- **Time:** O(n · target), driven by L7/L8 (the double loop).
-- **Space:** O(target) for the dp array.
+- **Time:** $O(n · target)$, driven by L7/L8 (the double loop).
+- **Space:** $O(target)$ for the dp array.
 
 ### Why iterate from high to low
 In 0/1 knapsack, iterating `s` low-to-high would let an item be included more than once in the same outer iteration. Going high-to-low uses only values that haven't yet been updated this round, preserving the 0/1 semantics.
@@ -249,9 +249,9 @@ In 0/1 knapsack, iterating `s` low-to-high would let an item be included more th
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(2ⁿ) | O(n) |
-| Top-down memo | O(n · target) | O(n · target) |
-| **Bottom-up 1-D DP** | **O(n · target)** | **O(target)** |
+| Naive recursion | $O(2ⁿ)$ | $O(n)$ |
+| Top-down memo | $O(n · target)$ | $O(n · target)$ |
+| **Bottom-up 1-D DP** | **$O(n · target)$** | **$O(target)$** |
 
 Template for every 0/1 knapsack problem, Target Sum (494), Last Stone Weight II (1049), etc.
 

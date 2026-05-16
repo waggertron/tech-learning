@@ -102,15 +102,15 @@ func maxArea(height []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L2 (init) | O(1) | 1 | O(1) |
-| L3 (outer loop) | O(1) | n | O(n) |
-| **L4, L5, L6 (inner loop + area)** | **O(1)** | **~n²/2** | **O(n²)** ← dominates |
+| L1, L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L4, L5, L6 (inner loop + area)** | **$O(1)$** | **~n²/2** | **$O(n²)$** ← dominates |
 
 Every pair (l, r) with l \< r is evaluated; there are n*(n-1)/2 such pairs.
 
 **Complexity**
-- **Time:** O(n²), driven by L4/L5 (nested loop area computations).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L4/L5 (nested loop area computations).
+- **Space:** $O(1)$.
 
 Too slow for `n ≤ 10⁵`.
 
@@ -177,16 +177,16 @@ func maxArea(height []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L2 (init) | O(1) | 1 | O(1) |
-| L3 (loop condition) | O(1) | n | O(n) |
-| **L4, L5 (area + update)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L6-L8 (move pointer) | O(1) | n | O(n) |
+| L1, L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| L3 (loop condition) | $O(1)$ | n | $O(n)$ |
+| **L4, L5 (area + update)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L6-L8 (move pointer) | $O(1)$ | n | $O(n)$ |
 
 Each iteration advances either `l` or `r` by one; together they start n-1 apart and meet, so exactly n-1 iterations occur.
 
 **Complexity**
-- **Time:** O(n), driven by L4/L5 (one area computation per pointer step). Each pointer moves inward monotonically; total work is linear.
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L4/L5 (one area computation per pointer step). Each pointer moves inward monotonically; total work is linear.
+- **Space:** $O(1)$.
 
 ### Why it's correct (proof sketch)
 At each step the container has width `r - l` and height `min(height[l], height[r])`. Moving the **taller** side inward can never produce a larger area with the current shorter side, the width shrinks while the height can't exceed the current shorter side. Therefore the shorter side can only limit future answers in combination with itself, and we can safely discard it by moving its pointer. This preserves the optimum in the remaining search space.
@@ -209,10 +209,10 @@ At each step the container has width `r - l` and height `min(height[l], height[r
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force | O(n²) | O(1) |
-| **Two pointers** | **O(n)** | **O(1)** |
+| Brute force | $O(n²)$ | $O(1)$ |
+| **Two pointers** | **$O(n)$** | **$O(1)$** |
 
-This is a case where the problem jumps from O(n²) brute force straight to O(n) optimal, there's no meaningful middle tier. The insight is the convergence proof above; once you see it, the solution falls out.
+This is a case where the problem jumps from $O(n²)$ brute force straight to $O(n)$ optimal, there's no meaningful middle tier. The insight is the convergence proof above; once you see it, the solution falls out.
 
 ## Test cases
 

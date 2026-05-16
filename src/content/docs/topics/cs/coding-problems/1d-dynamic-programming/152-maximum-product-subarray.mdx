@@ -101,16 +101,16 @@ func maxProduct(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L3, L7 (inits) | O(1) | O(n) total | O(n) |
-| L2 (outer loop) | O(1) | n | O(n) |
-| L4 (inner loop) | O(1) | n + (n-1) + ... + 1 | O(n²) iters total |
-| **L5, L6 (multiply + max)** | **O(1)** | **O(n²)** | **O(n²)** ← dominates |
+| L1, L3, L7 (inits) | $O(1)$ | $O(n)$ total | $O(n)$ |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L4 (inner loop) | $O(1)$ | n + (n-1) + ... + 1 | $O(n²)$ iters total |
+| **L5, L6 (multiply + max)** | **$O(1)$** | **$O(n²)$** | **$O(n²)$** ← dominates |
 
 Every pair `(i, j)` is visited exactly once. No early exit is possible because the product can always recover later (a zero resets it, a pair of negatives flips it positive), so the brute force must evaluate every subarray.
 
 **Complexity**
-- **Time:** O(n²), driven by L5/L6 across all O(n²) subarray pairs.
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L5/L6 across all $O(n²)$ subarray pairs.
+- **Space:** $O(1)$.
 
 ## Approach 2: Kadane-like DP tracking max only (WRONG)
 
@@ -243,17 +243,17 @@ func maxProduct(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| L2 (loop) | O(1) | n - 1 | O(n) |
-| L3 (swap) | O(1) | at most n - 1 | O(n) |
-| **L4, L5 (max/min update)** | **O(1)** | **n - 1 each** | **O(n)** ← dominates |
-| L6, L7 (best + return) | O(1) | n - 1 and 1 | O(n) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop) | $O(1)$ | n - 1 | $O(n)$ |
+| L3 (swap) | $O(1)$ | at most n - 1 | $O(n)$ |
+| **L4, L5 (max/min update)** | **$O(1)$** | **n - 1 each** | **$O(n)$** ← dominates |
+| L6, L7 (best + return) | $O(1)$ | n - 1 and 1 | $O(n)$ |
 
-Every line is O(1) per iteration and there is only one loop of length n - 1, so the entire algorithm is O(n). The L3 swap is the key insight: when `x < 0`, the roles of max and min flip before the multiplication, so L4 and L5 always see the right candidates without any branching on the product.
+Every line is $O(1)$ per iteration and there is only one loop of length n - 1, so the entire algorithm is $O(n)$. The L3 swap is the key insight: when `x < 0`, the roles of max and min flip before the multiplication, so L4 and L5 always see the right candidates without any branching on the product.
 
 **Complexity**
-- **Time:** O(n), driven by L4/L5 across the single pass.
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L4/L5 across the single pass.
+- **Space:** $O(1)$.
 
 ### Why swap on negative
 When `x < 0`, multiplying by `x` flips order: the previous max becomes the smallest candidate, and the previous min becomes the largest. Swapping max/min before the update captures this cleanly.
@@ -276,9 +276,9 @@ When `x < 0`, multiplying by `x` flips order: the previous max becomes the small
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Every subarray | O(n²) | O(1) |
-| Track max only | O(n) | **wrong** |
-| **Track max AND min** | **O(n)** | **O(1)** |
+| Every subarray | $O(n²)$ | $O(1)$ |
+| Track max only | $O(n)$ | **wrong** |
+| **Track max AND min** | **$O(n)$** | **$O(1)$** |
 
 The "track both extremes" pattern also solves problem 978 (Longest Turbulent Subarray) and is a cornerstone of monotonic-signal DP.
 

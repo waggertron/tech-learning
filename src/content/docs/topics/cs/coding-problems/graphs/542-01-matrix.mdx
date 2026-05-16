@@ -45,7 +45,7 @@ LeetCode 542 · [Link](https://leetcode.com/problems/01-matrix/) · *Medium*
 
 ## Approach: Multi-source BFS from all zeros simultaneously
 
-The key insight is to seed the BFS queue with every `0` cell at distance 0, then expand outward. Because BFS explores by distance levels, the first time a `1` cell is reached it has the shortest possible distance to any `0`. Running a separate BFS from each `0` would be O((m*n)^2) in the worst case; seeding all zeros at once keeps it O(m*n).
+The key insight is to seed the BFS queue with every `0` cell at distance 0, then expand outward. Because BFS explores by distance levels, the first time a `1` cell is reached it has the shortest possible distance to any `0`. Running a separate BFS from each `0` would be $O((m*n)$^2) in the worst case; seeding all zeros at once keeps it $O(m*n)$.
 
 <Tabs>
 <TabItem label="Python">
@@ -115,18 +115,18 @@ function updateMatrix(mat: number[][]): number[][] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init dist) | O(1) per cell | m * n | O(m * n) |
-| L3 (seed scan) | O(1) per cell | m * n | O(m * n) |
-| L5 (enqueue 0-cells) | O(1) | up to m * n | O(m * n) |
-| **L7 (dequeue)** | **O(1)** | **once per cell** | **O(m * n) ← dominates** |
-| L8 (update dist) | O(1) | once per 1-cell | O(m * n) |
-| **L9 (enqueue)** | **O(1)** | **once per 1-cell** | **O(m * n) ← dominates** |
+| L2 (init dist) | $O(1)$ per cell | m * n | $O(m * n)$ |
+| L3 (seed scan) | $O(1)$ per cell | m * n | $O(m * n)$ |
+| L5 (enqueue 0-cells) | $O(1)$ | up to m * n | $O(m * n)$ |
+| **L7 (dequeue)** | **$O(1)$** | **once per cell** | **$O(m * n)$ ← dominates** |
+| L8 (update dist) | $O(1)$ | once per 1-cell | $O(m * n)$ |
+| **L9 (enqueue)** | **$O(1)$** | **once per 1-cell** | **$O(m * n)$ ← dominates** |
 
 Each cell enters the queue at most once (the `dist == inf` guard in the neighbor check prevents re-enqueueing). The seed scan in L3 and the BFS body in L6 together visit every cell a constant number of times.
 
 **Complexity**
-- **Time:** O(m * n), driven by L7/L9 (each cell enqueued and dequeued at most once).
-- **Space:** O(m * n) for the distance matrix (L2) and worst-case queue size.
+- **Time:** $O(m * n)$, driven by L7/L9 (each cell enqueued and dequeued at most once).
+- **Space:** $O(m * n)$ for the distance matrix (L2) and worst-case queue size.
 
 ### Why multi-source BFS works
 
@@ -150,8 +150,8 @@ Treat all `0` cells as a single virtual source at distance 0. BFS explores in sh
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| BFS from each 0 separately | O((m * n)^2) | O(m * n) | Too slow |
-| **Multi-source BFS** | **O(m * n)** | **O(m * n)** | **Canonical** |
+| BFS from each 0 separately | $O((m * n)$^2) | $O(m * n)$ | Too slow |
+| **Multi-source BFS** | **$O(m * n)$** | **$O(m * n)$** | **Canonical** |
 
 ## Test cases
 

@@ -25,7 +25,7 @@ A sentinel must be:
 
 1. **Outside the valid answer range.** If real answers are always non-negative, `-1` works. If real answers are always at most `n`, then `n + 1` works.
 2. **Propagation-safe.** When the sentinel flows through your recurrence, it should stay "impossible." If you are taking `min()`, the sentinel must be large enough that any real answer beats it.
-3. **Cheap to check.** You need to test for it at the end. `!= INF`, `== -1`, `is None` are all O(1).
+3. **Cheap to check.** You need to test for it at the end. `!= INF`, `== -1`, `is None` are all $O(1)$.
 
 ## Common sentinels and where they appear
 

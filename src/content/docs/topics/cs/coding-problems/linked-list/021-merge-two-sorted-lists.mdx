@@ -134,15 +134,15 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (collect) | O(1) | n + m | O(n + m) |
-| **L2 (sort)** | **O((n+m) log(n+m))** | **1** | **O((n+m) log(n+m))** ← dominates |
-| L3 (rebuild) | O(1) | n + m | O(n + m) |
+| L1 (collect) | $O(1)$ | n + m | $O(n + m)$ |
+| **L2 (sort)** | **$O((n+m)$ log(n+m))** | **1** | **$O((n+m)$ log(n+m))** ← dominates |
+| L3 (rebuild) | $O(1)$ | n + m | $O(n + m)$ |
 
 Sorting throws away the fact that both lists are already sorted. The next two approaches exploit that structure.
 
 **Complexity**
-- **Time:** O((n + m) log(n + m)). Sort dominates (L2).
-- **Space:** O(n + m).
+- **Time:** $O((n + m)$ log(n + m)). Sort dominates (L2).
+- **Space:** $O(n + m)$.
 
 Wasteful, ignores the sorted structure.
 
@@ -223,16 +223,16 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop test) | O(1) | min(n, m) + 1 | O(min(n, m)) |
-| **L2 or L3 (splice)** | **O(1)** | **min(n, m)** | **O(min(n, m))** |
-| L4 (advance tail) | O(1) | min(n, m) | O(min(n, m)) |
-| L5 (attach remainder) | O(1) | 1 | O(1) |
+| L1 (loop test) | $O(1)$ | min(n, m) + 1 | $O(min(n, m)$) |
+| **L2 or L3 (splice)** | **$O(1)$** | **min(n, m)** | **$O(min(n, m)$)** |
+| L4 (advance tail) | $O(1)$ | min(n, m) | $O(min(n, m)$) |
+| L5 (attach remainder) | $O(1)$ | 1 | $O(1)$ |
 
-The loop exits as soon as either list is exhausted (after min(n, m) steps), then L5 attaches the remainder in one pointer assignment. Total: O(n + m) because L5 conceptually covers the remaining max(n, m) - min(n, m) nodes without iterating over them.
+The loop exits as soon as either list is exhausted (after min(n, m) steps), then L5 attaches the remainder in one pointer assignment. Total: $O(n + m)$ because L5 conceptually covers the remaining max(n, m) - min(n, m) nodes without iterating over them.
 
 **Complexity**
-- **Time:** O(n + m). One pass (L1-L4) plus O(1) tail attachment (L5).
-- **Space:** O(1). No new nodes allocated.
+- **Time:** $O(n + m)$. One pass (L1-L4) plus $O(1)$ tail attachment (L5).
+- **Space:** $O(1)$. No new nodes allocated.
 
 **Try this approach:**
 
@@ -305,14 +305,14 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L2 (base cases) | O(1) | up to 2 | O(1) |
-| **L3 or L4 (recurse)** | **O(1) per frame** | **n + m** | **O(n + m)** ← dominates (stack depth) |
+| L1, L2 (base cases) | $O(1)$ | up to 2 | $O(1)$ |
+| **L3 or L4 (recurse)** | **$O(1)$ per frame** | **n + m** | **$O(n + m)$** ← dominates (stack depth) |
 
 Each call consumes exactly one node (either l1 or l2 advances), so the depth equals n + m. Python's default stack limit (1000) can trigger on long lists.
 
 **Complexity**
-- **Time:** O(n + m).
-- **Space:** O(n + m) recursion depth.
+- **Time:** $O(n + m)$.
+- **Space:** $O(n + m)$ recursion depth.
 
 Elegant; stack-space trade-off.
 
@@ -429,9 +429,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Collect + sort + rebuild | O((n+m) log(n+m)) | O(n+m) |
-| **Iterative splice** | **O(n+m)** | **O(1)** |
-| Recursive | O(n+m) | O(n+m) stack |
+| Collect + sort + rebuild | $O((n+m)$ log(n+m)) | $O(n+m)$ |
+| **Iterative splice** | **$O(n+m)$** | **$O(1)$** |
+| Recursive | $O(n+m)$ | $O(n+m)$ stack |
 
 The iterative splice is the canonical answer and a prerequisite for problem 23 (Merge k Sorted Lists).
 

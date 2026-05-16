@@ -112,15 +112,15 @@ func jump(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init dp) | O(1) | n | O(n) |
-| L4 (outer loop) | O(1) | n | O(n) |
-| **L6, L7 (inner loop)** | **O(1)** | **up to n per i** | **O(n²)** ← dominates |
+| L2 (init dp) | $O(1)$ | n | $O(n)$ |
+| L4 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L6, L7 (inner loop)** | **$O(1)$** | **up to n per i** | **$O(n²)$** ← dominates |
 
-L6 is the bottleneck: for each index `i` we may scan up to `nums[i]` forward positions. In the worst case (e.g., `nums = [n, n, n, ...]`) each outer iteration scans nearly the entire remaining array, giving O(n²) total.
+L6 is the bottleneck: for each index `i` we may scan up to `nums[i]` forward positions. In the worst case (e.g., `nums = [n, n, n, ...]`) each outer iteration scans nearly the entire remaining array, giving $O(n²)$ total.
 
 **Complexity**
-- **Time:** O(n²), driven by L6/L7 (the inner scan for reachable positions).
-- **Space:** O(n) for the dp array.
+- **Time:** $O(n²)$, driven by L6/L7 (the inner scan for reachable positions).
+- **Space:** $O(n)$ for the dp array.
 
 ## Approach 2: BFS on jump levels
 
@@ -216,16 +216,16 @@ func jump(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init visited) | O(1) | n | O(n) |
-| L5 (BFS level loop) | O(1) | up to n levels | O(n) |
-| **L6, L7 (frontier scan)** | **O(1)** | **up to n² total** | **O(n²)** ← dominates |
-| L8 (append) | O(1) amortized | up to n | O(n) |
+| L2 (init visited) | $O(1)$ | n | $O(n)$ |
+| L5 (BFS level loop) | $O(1)$ | up to n levels | $O(n)$ |
+| **L6, L7 (frontier scan)** | **$O(1)$** | **up to n² total** | **$O(n²)$** ← dominates |
+| L8 (append) | $O(1)$ amortized | up to n | $O(n)$ |
 
-Each node is visited at most once (the `visited` guard), so total work across all levels is bounded by total edges, which is O(n²) worst case (when each node points to all following nodes).
+Each node is visited at most once (the `visited` guard), so total work across all levels is bounded by total edges, which is $O(n²)$ worst case (when each node points to all following nodes).
 
 **Complexity**
-- **Time:** O(n²) worst case, driven by L6/L7.
-- **Space:** O(n) for visited and frontier arrays.
+- **Time:** $O(n²)$ worst case, driven by L6/L7.
+- **Space:** $O(n)$ for visited and frontier arrays.
 
 **Try this approach:**
 
@@ -302,16 +302,16 @@ func jump(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(1) | 1 | O(1) |
-| **L4 (loop)** | **O(1)** | **n-1** | **O(n)** ← dominates |
-| L5 (update farthest) | O(1) | n-1 | O(n) |
-| L6 (commit jump) | O(1) | at most n-1 | O(n) |
+| L1-L3 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L4 (loop)** | **$O(1)$** | **n-1** | **$O(n)$** ← dominates |
+| L5 (update farthest) | $O(1)$ | n-1 | $O(n)$ |
+| L6 (commit jump) | $O(1)$ | at most n-1 | $O(n)$ |
 
-Every line executes exactly once per index. The whole algorithm is a single linear scan with O(1) work per step.
+Every line executes exactly once per index. The whole algorithm is a single linear scan with $O(1)$ work per step.
 
 **Complexity**
-- **Time:** O(n), driven by L4 (single linear scan).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L4 (single linear scan).
+- **Space:** $O(1)$.
 
 ### Intuition
 This is BFS collapsed into a linear scan: the "frontier" of a BFS level is implicit in the window `[prev_end, current_end]`. Each time the walking index reaches `current_end`, we "commit" to another jump and extend to `farthest`.
@@ -334,9 +334,9 @@ This is BFS collapsed into a linear scan: the "frontier" of a BFS level is impli
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DP | O(n²) | O(n) |
-| BFS levels | O(n²) worst | O(n) |
-| **Greedy with farthest** | **O(n)** | **O(1)** |
+| DP | $O(n²)$ | $O(n)$ |
+| BFS levels | $O(n²)$ worst | $O(n)$ |
+| **Greedy with farthest** | **$O(n)$** | **$O(1)$** |
 
 One of the cleanest greedy collapses of a BFS structure.
 

@@ -117,15 +117,15 @@ func largestRectangleArea(heights []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (outer loop) | O(1) | n | O(n) |
-| **L5-L8 (expand left + right)** | **O(1) per step** | **up to n per outer** | **O(n²)** ← dominates |
-| L9 (area) | O(1) | n | O(n) |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L5-L8 (expand left + right)** | **$O(1)$ per step** | **up to n per outer** | **$O(n²)$** ← dominates |
+| L9 (area) | $O(1)$ | n | $O(n)$ |
 
 In the worst case (a monotonic histogram), each bar expands across the entire remaining array.
 
 **Complexity**
-- **Time:** O(n²), driven by L5-L8 (worst-case full expansion per bar).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L5-L8 (worst-case full expansion per bar).
+- **Space:** $O(1)$.
 
 ## Approach 2: Precompute nearest-smaller arrays
 
@@ -242,16 +242,16 @@ func largestRectangleArea(heights []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (init arrays) | O(n) | 1 each | O(n) |
-| **L4-L8 (left pass, stack)** | **O(1) amortized** | **n** | **O(n)** |
-| **L9-L13 (right pass, stack)** | **O(1) amortized** | **n** | **O(n)** |
-| L14 (compute max) | O(1) per element | n | O(n) |
+| L2, L3 (init arrays) | $O(n)$ | 1 each | $O(n)$ |
+| **L4-L8 (left pass, stack)** | **$O(1)$ amortized** | **n** | **$O(n)$** |
+| **L9-L13 (right pass, stack)** | **$O(1)$ amortized** | **n** | **$O(n)$** |
+| L14 (compute max) | $O(1)$ per element | n | $O(n)$ |
 
-Each index is pushed and popped at most once per pass; the stack operations are O(n) total per pass.
+Each index is pushed and popped at most once per pass; the stack operations are $O(n)$ total per pass.
 
 **Complexity**
-- **Time:** O(n), driven by L4-L8 and L9-L13 (two linear monotonic-stack passes).
-- **Space:** O(n) for the left/right arrays and stack.
+- **Time:** $O(n)$, driven by L4-L8 and L9-L13 (two linear monotonic-stack passes).
+- **Space:** $O(n)$ for the left/right arrays and stack.
 
 **Try this approach:**
 
@@ -341,15 +341,15 @@ func largestRectangleArea(heights []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (sentinel) | O(n) | 1 | O(n) |
-| L4 (outer loop) | O(1) | n+1 | O(n) |
-| **L5-L10 (stack ops + area)** | **O(1) amortized** | **n total pushes/pops** | **O(n)** ← dominates |
+| L3 (sentinel) | $O(n)$ | 1 | $O(n)$ |
+| L4 (outer loop) | $O(1)$ | n+1 | $O(n)$ |
+| **L5-L10 (stack ops + area)** | **$O(1)$ amortized** | **n total pushes/pops** | **$O(n)$** ← dominates |
 
-Each bar is pushed exactly once and popped at most once; the total push+pop count is 2n, giving O(n) amortized.
+Each bar is pushed exactly once and popped at most once; the total push+pop count is 2n, giving $O(n)$ amortized.
 
 **Complexity**
-- **Time:** O(n), driven by L5-L10 (each bar pushed and popped at most once).
-- **Space:** O(n) stack.
+- **Time:** $O(n)$, driven by L5-L10 (each bar pushed and popped at most once).
+- **Space:** $O(n)$ stack.
 
 ### Intuition
 The stack stores "bars that are still candidates for being the left boundary of some rectangle." When a new bar breaks the increasing property, the popped bar's maximal rectangle is determined, extend it leftward until the new top of the stack (the first bar shorter than the popped one on its left) and rightward to the current index.
@@ -372,9 +372,9 @@ The stack stores "bars that are still candidates for being the left boundary of 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Expand-around | O(n²) | O(1) |
-| Nearest-smaller arrays | O(n) | O(n) |
-| **Single monotonic stack** | **O(n)** | **O(n)** |
+| Expand-around | $O(n²)$ | $O(1)$ |
+| Nearest-smaller arrays | $O(n)$ | $O(n)$ |
+| **Single monotonic stack** | **$O(n)$** | **$O(n)$** |
 
 This problem is a rite of passage for monotonic stacks. It also unlocks **85. Maximal Rectangle** (apply this per row of a binary matrix).
 

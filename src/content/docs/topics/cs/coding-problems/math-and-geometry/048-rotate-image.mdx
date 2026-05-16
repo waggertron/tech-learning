@@ -99,15 +99,15 @@ func rotate(matrix [][]int) {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (alloc new matrix) | O(1) | n² | O(n²) |
-| **L3, L4, L5 (remap loop)** | **O(1)** | **n²** | **O(n²)** ← dominates |
-| L6 (copy rows back) | O(n) | n | O(n²) |
+| L2 (alloc new matrix) | $O(1)$ | n² | $O(n²)$ |
+| **L3, L4, L5 (remap loop)** | **$O(1)$** | **n²** | **$O(n²)$** ← dominates |
+| L6 (copy rows back) | $O(n)$ | n | $O(n²)$ |
 
 Every cell is visited once for the remap and once for the copy-back.
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4/L5 (the cell-by-cell remap).
-- **Space:** O(n²) for the auxiliary matrix.
+- **Time:** $O(n²)$, driven by L3/L4/L5 (the cell-by-cell remap).
+- **Space:** $O(n²)$ for the auxiliary matrix.
 
 Violates the in-place constraint.
 
@@ -169,14 +169,14 @@ func rotate(matrix [][]int) {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (ring loop) | O(1) | n/2 | O(n) |
-| **L3-L8 (four-cell swap)** | **O(1)** | **n²/4 total cells** | **O(n²)** ← dominates |
+| L2 (ring loop) | $O(1)$ | n/2 | $O(n)$ |
+| **L3-L8 (four-cell swap)** | **$O(1)$** | **n²/4 total cells** | **$O(n²)$** ← dominates |
 
-Each of the n²/4 non-center cells is visited once in the four-cell swap; the four assignments per cell are all O(1).
+Each of the n²/4 non-center cells is visited once in the four-cell swap; the four assignments per cell are all $O(1)$.
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4-L8 (visiting every cell in every ring).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L3/L4-L8 (visiting every cell in every ring).
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -254,14 +254,14 @@ func rotate(matrix [][]int) {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1, L2, L3 (transpose)** | **O(1)** | **n(n-1)/2** | **O(n²)** ← dominates |
-| L4, L5 (row reversal) | O(n) | n | O(n²) |
+| **L1, L2, L3 (transpose)** | **$O(1)$** | **n(n-1)/2** | **$O(n²)$** ← dominates |
+| L4, L5 (row reversal) | $O(n)$ | n | $O(n²)$ |
 
 Both the transpose and the row-reversal pass touch every cell once.
 
 **Complexity**
-- **Time:** O(n²), driven by L1/L2/L3 (transpose) and L4/L5 (row reversal), both O(n²).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L1/L2/L3 (transpose) and L4/L5 (row reversal), both $O(n²)$.
+- **Space:** $O(1)$.
 
 Shortest and easiest to remember. Counter-clockwise = transpose + reverse each column (or reverse rows first, then transpose).
 
@@ -283,9 +283,9 @@ Shortest and easiest to remember. Counter-clockwise = transpose + reverse each c
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| New matrix | O(n²) | O(n²) |
-| Four-cell in-place rotation | O(n²) | O(1) |
-| **Transpose + row reverse** | **O(n²)** | **O(1)** |
+| New matrix | $O(n²)$ | $O(n²)$ |
+| Four-cell in-place rotation | $O(n²)$ | $O(1)$ |
+| **Transpose + row reverse** | **$O(n²)$** | **$O(1)$** |
 
 ## Test cases
 

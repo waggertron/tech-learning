@@ -10,15 +10,15 @@ updated: 2026-04-23
 
 ## Intro
 
-A queue is a **FIFO** (first-in, first-out) collection. You enqueue at one end and dequeue from the other. The standard queue API is `enqueue`, `dequeue`, `peek`, all O(1). Queues power BFS (and therefore shortest-path-on-unweighted-[graphs](graphs/)), level-order traversals, task scheduling, and many streaming-window problems.
+A queue is a **FIFO** (first-in, first-out) collection. You enqueue at one end and dequeue from the other. The standard queue API is `enqueue`, `dequeue`, `peek`, all $O(1)$. Queues power BFS (and therefore shortest-path-on-unweighted-[graphs](graphs/)), level-order traversals, task scheduling, and many streaming-window problems.
 
 ## In-depth description
 
-A queue can be implemented with a **linked list** (head and tail pointers) or a **circular buffer** backed by a dynamic array (wrap-around head/tail indices). The naive array-based queue, pop from index 0, is O(n) per dequeue, which is why Python `list` is not a queue. Use `collections.deque`, which is O(1) on both ends via a doubly-linked list of array blocks.
+A queue can be implemented with a **linked list** (head and tail pointers) or a **circular buffer** backed by a dynamic array (wrap-around head/tail indices). The naive array-based queue, pop from index 0, is $O(n)$ per dequeue, which is why Python `list` is not a queue. Use `collections.deque`, which is $O(1)$ on both ends via a doubly-linked list of array blocks.
 
 Key variants:
 
-- **Deque** (double-ended queue): O(1) push/pop at both ends. The substrate for the **monotonic deque** pattern, which solves sliding-window maximum / minimum in O(n) instead of the naive O(n·k).
+- **Deque** (double-ended queue): $O(1)$ push/pop at both ends. The substrate for the **monotonic deque** pattern, which solves sliding-window maximum / minimum in $O(n)$ instead of the naive $O(n·k)$.
 - **Priority queue**: dequeues elements by priority, not arrival order. Usually implemented with a heap (see [Heaps](../heaps/)).
 - **Circular buffer**: fixed-size array with wrap-around head and tail indices; used for ring buffers, rate limiters, and streaming windows.
 
@@ -32,16 +32,16 @@ Queues are the engine of **BFS**, which in turn solves:
 
 | Operation | Average | Worst |
 | --- | --- | --- |
-| Enqueue | O(1) | O(1) |
-| Dequeue | O(1) | O(1) |
-| Peek (front) | O(1) | O(1) |
-| Search by value | O(n) | O(n) |
-| Space | O(n) | O(n) |
+| Enqueue | $O(1)$ | $O(1)$ |
+| Dequeue | $O(1)$ | $O(1)$ |
+| Peek (front) | $O(1)$ | $O(1)$ |
+| Search by value | $O(n)$ | $O(n)$ |
+| Space | $O(n)$ | $O(n)$ |
 
 ## Common uses in DSA
 
 1. **BFS / level-order traversal**: Binary Tree Level Order Traversal, Number of Islands, Shortest Path in Binary Matrix, Word Ladder.
-2. **Sliding window maximum / minimum**: via a monotonic deque, O(n).
+2. **Sliding window maximum / minimum**: via a monotonic deque, $O(n)$.
 3. **Multi-source BFS**: Rotten Oranges, Walls and Gates, 01 Matrix (seed queue with all sources at distance 0).
 4. **Task scheduling and interval problems**: Task Scheduler, Design Hit Counter, Moving Average from Data Stream.
 5. **Producer-consumer / streaming buffers**: circular buffers for rate limiters, ring buffers in systems code, bounded channels.

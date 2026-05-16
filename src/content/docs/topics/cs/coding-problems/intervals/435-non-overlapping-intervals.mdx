@@ -112,18 +112,18 @@ func eraseOverlapIntervals(intervals [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sort) | O(n log n) | 1 | O(n log n) |
-| L2, L3 (init) | O(n) | 1 | O(n) |
-| L4 (outer loop) | O(1) | n-1 | O(n) |
-| **L5 (inner loop)** | **O(1)** | **O(n) per outer iter** | **O(n²)** ← dominates |
-| L6, L7 (body) | O(1) | O(n²) total | O(n²) |
-| L8 (max scan) | O(n) | 1 | O(n) |
+| L1 (sort) | $O(n log n)$ | 1 | $O(n log n)$ |
+| L2, L3 (init) | $O(n)$ | 1 | $O(n)$ |
+| L4 (outer loop) | $O(1)$ | n-1 | $O(n)$ |
+| **L5 (inner loop)** | **$O(1)$** | **$O(n)$ per outer iter** | **$O(n²)$** ← dominates |
+| L6, L7 (body) | $O(1)$ | $O(n²)$ total | $O(n²)$ |
+| L8 (max scan) | $O(n)$ | 1 | $O(n)$ |
 
-The nested loops are the classic O(n²) LIS pattern. L5 runs 0+1+2+...+(n-1) = n(n-1)/2 times total.
+The nested loops are the classic $O(n²)$ LIS pattern. L5 runs 0+1+2+...+(n-1) = n(n-1)/2 times total.
 
 **Complexity**
-- **Time:** O(n²), driven by L5 (the nested inner loop).
-- **Space:** O(n) for the dp array.
+- **Time:** $O(n²)$, driven by L5 (the nested inner loop).
+- **Space:** $O(n)$ for the dp array.
 
 ## Approach 2: Greedy, sort by end, keep earliest ends
 
@@ -188,17 +188,17 @@ func eraseOverlapIntervals(intervals [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2, L3 (init) | O(1) | 1 | O(1) |
-| L4 (loop) | O(1) | n | O(n) |
-| L5-L7 (body) | O(1) | n | O(n) |
-| L8 (return) | O(1) | 1 | O(1) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2, L3 (init) | $O(1)$ | 1 | $O(1)$ |
+| L4 (loop) | $O(1)$ | n | $O(n)$ |
+| L5-L7 (body) | $O(1)$ | n | $O(n)$ |
+| L8 (return) | $O(1)$ | 1 | $O(1)$ |
 
-After the sort, a single linear pass does all the work. Each interval is examined once, and the decision (keep or remove) is made in O(1) by comparing its start to the running `end` variable.
+After the sort, a single linear pass does all the work. Each interval is examined once, and the decision (keep or remove) is made in $O(1)$ by comparing its start to the running `end` variable.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (sort).
-- **Space:** O(1) extra; only two scalar variables beyond the (sorted) input.
+- **Time:** $O(n log n)$, driven by L1 (sort).
+- **Space:** $O(1)$ extra; only two scalar variables beyond the (sorted) input.
 
 ### Why "sort by end" is the right greedy
 Keeping the interval with the smallest end frees the most room for subsequent intervals, any optimal solution can be rewritten to include it (exchange argument). This is the **interval scheduling maximization** template.
@@ -283,17 +283,17 @@ func eraseOverlapIntervals(intervals [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2, L3 (init) | O(1) | 1 | O(1) |
-| L4 (loop) | O(1) | n | O(n) |
-| L5-L8 (body) | O(1) | n | O(n) |
-| L9 (return) | O(1) | 1 | O(1) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2, L3 (init) | $O(1)$ | 1 | $O(1)$ |
+| L4 (loop) | $O(1)$ | n | $O(n)$ |
+| L5-L8 (body) | $O(1)$ | n | $O(n)$ |
+| L9 (return) | $O(1)$ | 1 | $O(1)$ |
 
-Identical cost structure to Approach 2. The difference is the sort key (start vs. end) and the tie-breaking rule on conflict (keep the smaller end explicitly via `min`). Both approaches are O(n log n) dominated by the sort.
+Identical cost structure to Approach 2. The difference is the sort key (start vs. end) and the tie-breaking rule on conflict (keep the smaller end explicitly via `min`). Both approaches are $O(n log n)$ dominated by the sort.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (sort).
-- **Space:** O(1) extra.
+- **Time:** $O(n log n)$, driven by L1 (sort).
+- **Space:** $O(1)$ extra.
 
 **Try this approach:**
 
@@ -313,9 +313,9 @@ Identical cost structure to Approach 2. The difference is the sort key (start vs
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| LIS DP | O(n²) | O(n) |
-| **Sort by end, greedy** | **O(n log n)** | **O(1)** |
-| Sort by start, remove on conflict | O(n log n) | O(1) |
+| LIS DP | $O(n²)$ | $O(n)$ |
+| **Sort by end, greedy** | **$O(n log n)$** | **$O(1)$** |
+| Sort by start, remove on conflict | $O(n log n)$ | $O(1)$ |
 
 Interval scheduling is a canonical greedy. The proof-by-exchange argument is worth knowing.
 

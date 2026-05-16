@@ -238,7 +238,7 @@ def test_a_visit_knows_its_skill():
 - **Integration issues.** Your code is correct. It talks to a wrong API and unit tests won't see it.
 - **Concurrency bugs.** Race conditions need [integration tests](../integration-tests/) or chaos-style tools.
 - **Visual regressions.** A button is misaligned. No unit test catches that.
-- **Performance.** A test that passes at n=10 may be O(n²). Load tests, not unit tests.
+- **Performance.** A test that passes at n=10 may be $O(n²)$. Load tests, not unit tests.
 
 ## Languages and frameworks
 

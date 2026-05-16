@@ -80,15 +80,15 @@ function lowestCommonAncestor(root: TreeNode | null, p: TreeNode, q: TreeNode): 
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (base check) | O(1) | n | O(n) |
-| **L2/L3 (recurse both)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
-| L4/L5 (return) | O(1) | n | O(n) |
+| L1 (base check) | $O(1)$ | n | $O(n)$ |
+| **L2/L3 (recurse both)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates (all lines tie) |
+| L4/L5 (return) | $O(1)$ | n | $O(n)$ |
 
 Both subtrees are fully explored because this approach doesn't use the BST ordering invariant to prune.
 
 **Complexity**
-- **Time:** O(n). Whole tree visited worst case.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$. Whole tree visited worst case.
+- **Space:** $O(h)$ recursion.
 
 Correct but throws away the BST invariant.
 
@@ -126,16 +126,16 @@ function lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNod
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (comparison + recurse) | O(1) | one per level | O(h) |
-| **L3 (return split)** | **O(1)** | **1** | **O(h)** ← bottleneck is path length |
+| L1/L2 (comparison + recurse) | $O(1)$ | one per level | $O(h)$ |
+| **L3 (return split)** | **$O(1)$** | **1** | **$O(h)$** ← bottleneck is path length |
 
 We follow exactly one root-to-split path, never branching into both children.
 
 **Complexity**
-- **Time:** O(h). Follow a single root-to-split path.
-- **Space:** O(h) recursion.
+- **Time:** $O(h)$. Follow a single root-to-split path.
+- **Space:** $O(h)$ recursion.
 
-For balanced BSTs, O(log n); for skewed, O(n).
+For balanced BSTs, $O(log n)$; for skewed, $O(n)$.
 
 **Try this approach:**
 
@@ -189,20 +189,20 @@ function lowestCommonAncestor(root: TreeNode | null, p: TreeNode, q: TreeNode): 
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (compare + step) | O(1) | one per level | O(h) |
-| **L3 (return)** | **O(1)** | **1** | **O(h)** ← bottleneck is path length |
+| L1/L2 (compare + step) | $O(1)$ | one per level | $O(h)$ |
+| **L3 (return)** | **$O(1)$** | **1** | **$O(h)$** ← bottleneck is path length |
 
 **Complexity**
-- **Time:** O(h).
-- **Space:** **O(1)**.
+- **Time:** $O(h)$.
+- **Space:** **$O(1)$**.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Generic LCA | O(n) | O(h) |
-| Recursive BST walk | O(h) | O(h) |
-| **Iterative BST walk** | **O(h)** | **O(1)** |
+| Generic LCA | $O(n)$ | $O(h)$ |
+| Recursive BST walk | $O(h)$ | $O(h)$ |
+| **Iterative BST walk** | **$O(h)$** | **$O(1)$** |
 
 The iterative BST walk is optimal. For generic binary trees (not BSTs), see problem 236, which needs Approach 1.
 

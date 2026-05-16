@@ -10,13 +10,13 @@ updated: 2026-04-23
 
 ## Intro
 
-A stack is a **LIFO** (last-in, first-out) collection. You push elements onto the top and pop them off the top. Both operations are O(1). Stacks are the natural fit for any problem involving **nesting**, **backtracking**, or needing to process elements in **reverse order** relative to insertion. They also underlie recursion itself, the call stack is a stack.
+A stack is a **LIFO** (last-in, first-out) collection. You push elements onto the top and pop them off the top. Both operations are $O(1)$. Stacks are the natural fit for any problem involving **nesting**, **backtracking**, or needing to process elements in **reverse order** relative to insertion. They also underlie recursion itself, the call stack is a stack.
 
 ## In-depth description
 
-Implementation is straightforward: a dynamic array (Python `list`, Java `ArrayDeque`, C++ `std::stack` over `std::deque`) or a linked list with a head pointer. Both give O(1) push/pop/peek with different memory tradeoffs.
+Implementation is straightforward: a dynamic array (Python `list`, Java `ArrayDeque`, C++ `std::stack` over `std::deque`) or a linked list with a head pointer. Both give $O(1)$ push/pop/peek with different memory tradeoffs.
 
-The most powerful and interview-relevant pattern is the **monotonic stack**, a stack that maintains its elements in sorted (monotonic) order by popping elements that violate the order on each push. This turns many "find the next greater/smaller element" problems from O(n²) into O(n), because each element is pushed and popped at most once. Classic applications: Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water (one of several approaches).
+The most powerful and interview-relevant pattern is the **monotonic stack**, a stack that maintains its elements in sorted (monotonic) order by popping elements that violate the order on each push. This turns many "find the next greater/smaller element" problems from $O(n²)$ into $O(n)$, because each element is pushed and popped at most once. Classic applications: Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water (one of several approaches).
 
 Other frequent stack patterns:
 
@@ -31,11 +31,11 @@ A stack is also the memory model for function calls (the call stack): every recu
 
 | Operation | Average | Worst |
 | --- | --- | --- |
-| Push | O(1) amortized | O(n) (resize) |
-| Pop | O(1) | O(1) |
-| Peek / top | O(1) | O(1) |
-| Search by value | O(n) | O(n) |
-| Space | O(n) | O(n) |
+| Push | $O(1)$ amortized | $O(n)$ (resize) |
+| Pop | $O(1)$ | $O(1)$ |
+| Peek / top | $O(1)$ | $O(1)$ |
+| Search by value | $O(n)$ | $O(n)$ |
+| Space | $O(n)$ | $O(n)$ |
 
 ## Common uses in DSA
 
@@ -96,7 +96,7 @@ Curated kin where the recognition skill above is exercised. Each adds one twist 
 
 - **[20. Valid Parentheses](../coding-problems/stack/020-valid-parentheses/)** — the canonical LIFO match. Push openers, pop on closers.
 - **[150. Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/)** — push numbers, on operator pop two and combine.
-- **155. Min Stack** — stack of `(value, running_min)` to keep `min()` at O(1).
+- **155. Min Stack** — stack of `(value, running_min)` to keep `min()` at $O(1)$.
 - **[739. Daily Temperatures](../coding-problems/stack/739-daily-temperatures/)** — monotonic decreasing stack of indices; pop while top is colder than current.
 - **[84. Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/)** — monotonic increasing stack; on each pop, current bar is the right boundary, the new top is the left boundary.
 - **22. Generate Parentheses** — recursion = implicit stack of partial strings; the call-stack *is* the data structure.

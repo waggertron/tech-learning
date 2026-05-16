@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Given a text string `T` of length `n` and a pattern string `P` of length `m`, find every position in `T` where `P` occurs as a substring.
 
-KMP solves this in **O(n + m)** time: O(m) to preprocess the pattern, O(n) to scan the text. It never inspects the same character of the text more than once. Contrast with the naive approach, which is O(nm) in the worst case.
+KMP solves this in **$O(n + m)$** time: $O(m)$ to preprocess the pattern, $O(n)$ to scan the text. It never inspects the same character of the text more than once. Contrast with the naive approach, which is $O(nm)$ in the worst case.
 
 Named after Donald Knuth, Vaughan Pratt, and James Morris, who independently discovered the same algorithm and published it jointly in 1977. It remains the canonical interview answer for "implement substring search without using built-ins."
 
@@ -22,7 +22,7 @@ Named after Donald Knuth, Vaughan Pratt, and James Morris, who independently dis
 
 That one insight is the whole algorithm. Everything else is bookkeeping.
 
-## Why naive search is O(nm)
+## Why naive search is $O(nm)$
 
 The naive algorithm slides the pattern one position at a time and restarts from the beginning of the pattern on every mismatch:
 
@@ -36,9 +36,9 @@ def naive_search(text, pattern):
     return results
 ```
 
-Each outer iteration can do up to `m` comparisons. With `n - m + 1` starting positions, the worst case is O(nm).
+Each outer iteration can do up to `m` comparisons. With `n - m + 1` starting positions, the worst case is $O(nm)$.
 
-The adversarial input that actually triggers O(nm): search for pattern `"aaab"` inside text `"aaa...aaa"` (all `a`s, no `b`). Every starting position matches the first `m-1` characters and fails only on the last one. With n = 10,000 and m = 100, that's nearly a million character comparisons for a search that returns no matches.
+The adversarial input that actually triggers $O(nm)$: search for pattern `"aaab"` inside text `"aaa...aaa"` (all `a`s, no `b`). Every starting position matches the first `m-1` characters and fails only on the last one. With n = 10,000 and m = 100, that's nearly a million character comparisons for a search that returns no matches.
 
 ```
 text:    a a a a a a a a a ...
@@ -48,7 +48,7 @@ pattern: a a a b
              ^ ^ ^ X  (fail again)
 ```
 
-KMP would handle this in O(n + m) by recognizing that after the failure at `b`, the prefix `"aaa"` is also a suffix of what was matched, so the pattern pointer jumps back only as far as necessary, not all the way to zero.
+KMP would handle this in $O(n + m)$ by recognizing that after the failure at `b`, the prefix `"aaa"` is also a suffix of what was matched, so the pattern pointer jumps back only as far as necessary, not all the way to zero.
 
 ## The failure function (LPS array)
 
@@ -73,7 +73,7 @@ What `lps[7] = 3` means: the substring `"ABABCABA"` (indices 0-7) has a longest 
 
 What `lps[i]` tells the search algorithm: if you are at pattern position `i+1` and hit a mismatch, you already know that the last `lps[i]` characters of the text match the first `lps[i]` characters of the pattern. So instead of restarting from pattern position 0, restart from pattern position `lps[i]`. No text characters are wasted.
 
-### Building the LPS array in O(m)
+### Building the LPS array in $O(m)$
 
 ```python
 def build_lps(pattern):
@@ -99,7 +99,7 @@ def build_lps(pattern):
     return lps
 ```
 
-Two pointers: `i` scans the pattern left to right and never moves backward. `length` tracks the current candidate prefix-suffix length and can decrease, but the total number of decreases across the whole loop is bounded by the total number of increases, which is at most `m`. So the loop is O(m) overall.
+Two pointers: `i` scans the pattern left to right and never moves backward. `length` tracks the current candidate prefix-suffix length and can decrease, but the total number of decreases across the whole loop is bounded by the total number of increases, which is at most `m`. So the loop is $O(m)$ overall.
 
 ## The search algorithm
 
@@ -140,7 +140,7 @@ def kmp_search(text, pattern):
     return results
 ```
 
-The critical property: `i` only ever increases. `j` can decrease (on a mismatch via `lps`), but each decrease is paid for by a prior increase of `j`. The total number of changes to `j` across the whole search is O(n). Combined with the O(n) increases of `i`, the search is O(n).
+The critical property: `i` only ever increases. `j` can decrease (on a mismatch via `lps`), but each decrease is paid for by a prior increase of `j`. The total number of changes to `j` across the whole search is $O(n)$. Combined with the $O(n)$ increases of `i`, the search is $O(n)$.
 
 ## Step-by-step: building LPS for "ABABCABAB"
 
@@ -226,22 +226,22 @@ Result: match at index 0. Text pointer `i` moved from 0 to 10, always forward. P
 
 | Phase | Time | Space |
 | --- | --- | --- |
-| Preprocessing (build LPS) | O(m) | O(m) for LPS array |
-| Search | O(n) | O(1) extra (just two pointers) |
-| Total | O(n + m) | O(m) |
+| Preprocessing (build LPS) | $O(m)$ | $O(m)$ for LPS array |
+| Search | $O(n)$ | $O(1)$ extra (just two pointers) |
+| Total | $O(n + m)$ | $O(m)$ |
 
-Compare to naive: O(nm) time, O(1) space. KMP trades O(m) space for a factor-of-m speedup in the worst case.
+Compare to naive: $O(nm)$ time, $O(1)$ space. KMP trades $O(m)$ space for a factor-of-m speedup in the worst case.
 
-## Why the search is truly O(n): the key invariant
+## Why the search is truly $O(n)$: the key invariant
 
 The argument rests on a potential function: let `phi = i + j`. At the start, `phi = 0`. At the end of the search, `phi <= 2n`.
 
 - Each time `i` increases (a character match or a j=0 mismatch), `phi` increases by at most 2 (i by 1, j by at most 1).
 - Each time `j` decreases via `lps` (a mismatch with j > 0), `phi` decreases because `j` strictly decreases (since `lps[j-1] < j` always) and `i` stays fixed.
 
-Since `phi` can only decrease by something that was previously added through an increase, the total number of decreases of `j` across the entire search is bounded by the total number of increases of `i`, which is at most `n`. The outer while loop executes at most `2n` times total. That is O(n).
+Since `phi` can only decrease by something that was previously added through an increase, the total number of decreases of `j` across the entire search is bounded by the total number of increases of `i`, which is at most `n`. The outer while loop executes at most `2n` times total. That is $O(n)$.
 
-The same argument applies to `build_lps` with the analogous potential `i + length`, giving O(m).
+The same argument applies to `build_lps` with the analogous potential `i + length`, giving $O(m)$.
 
 ## Applications beyond substring search
 
@@ -288,16 +288,16 @@ This works because every rotation of `S1` is a contiguous substring of `S1 + S1`
 
 | Algorithm | Preprocessing | Search | Notes |
 | --- | --- | --- | --- |
-| Naive | None | O(nm) worst case | Fine for small m or random text |
-| KMP | O(m) | O(n) | Guaranteed linear; interview standard |
-| Rabin-Karp | O(m) | O(n) average | Uses rolling hash; simpler code but hash collisions require fallback |
-| Boyer-Moore | O(m + alphabet) | O(n/m) best case | Fastest in practice for large alphabets; harder to implement correctly |
-| Z-algorithm | O(n + m) | (combined) | Similar guarantees to KMP, arguably simpler to derive |
+| Naive | None | $O(nm)$ worst case | Fine for small m or random text |
+| KMP | $O(m)$ | $O(n)$ | Guaranteed linear; interview standard |
+| Rabin-Karp | $O(m)$ | $O(n)$ average | Uses rolling hash; simpler code but hash collisions require fallback |
+| Boyer-Moore | $O(m + alphabet)$ | $O(n/m)$ best case | Fastest in practice for large alphabets; harder to implement correctly |
+| Z-algorithm | $O(n + m)$ | (combined) | Similar guarantees to KMP, arguably simpler to derive |
 
 **When to use KMP:**
 
 - Interview problems asking you to implement substring search ([LeetCode 28](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/)).
-- When you need guaranteed worst-case O(n) and don't want to reason about hash collisions (Rabin-Karp) or Boyer-Moore's complex bad-character and good-suffix tables.
+- When you need guaranteed worst-case $O(n)$ and don't want to reason about hash collisions (Rabin-Karp) or Boyer-Moore's complex bad-character and good-suffix tables.
 - When the pattern contains many repeated characters (the adversarial case for naive; KMP handles it cleanly).
 
 **When Rabin-Karp wins:**
@@ -318,15 +318,15 @@ The Z-algorithm builds a Z-array where `Z[i]` is the length of the longest subst
 
 Most string matching problems on LeetCode accept built-in `str.find()` or `in` operator in Python solutions, which call the underlying C implementation of a search algorithm. KMP shows up explicitly in:
 
-- **[LeetCode 28 (Find the Index of the First Occurrence in a String)](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/)**: the canonical "implement strstr" problem. KMP is the expected O(n + m) solution when the interviewer bans built-ins.
-- **[LeetCode 459 (Repeated Substring Pattern)](https://leetcode.com/problems/repeated-substring-pattern/)**: determine if a string can be made by repeating a substring. Solvable directly from the LPS array (see the repeating unit section above) in O(n) with no search step needed.
+- **[LeetCode 28 (Find the Index of the First Occurrence in a String)](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/)**: the canonical "implement strstr" problem. KMP is the expected $O(n + m)$ solution when the interviewer bans built-ins.
+- **[LeetCode 459 (Repeated Substring Pattern)](https://leetcode.com/problems/repeated-substring-pattern/)**: determine if a string can be made by repeating a substring. Solvable directly from the LPS array (see the repeating unit section above) in $O(n)$ with no search step needed.
 - **[LeetCode 686 (Repeated String Match)](https://leetcode.com/problems/repeated-string-match/)**: find how many times you must repeat `A` so that `B` is a substring. Build `A` repeated enough times and run KMP search. The LPS preprocessing saves time when `B` is much longer than `A`.
 
 None of these pages may exist yet in this site's catalog; they live in the coding-problems subtopic tree.
 
 ## Multiple uses
 
-**Find all occurrences (not just first).** Standard KMP search but don't stop at the first match: when the pattern matches at position `i - m`, record the position and reset `j` using `lps[m-1]` to keep searching for overlapping hits. Total cost stays O(n + m) for all occurrences.
+**Find all occurrences (not just first).** Standard KMP search but don't stop at the first match: when the pattern matches at position `i - m`, record the position and reset `j` using `lps[m-1]` to keep searching for overlapping hits. Total cost stays $O(n + m)$ for all occurrences.
 
 ```python
 def kmp_find_all(text, pattern):
@@ -353,7 +353,7 @@ def kmp_find_all(text, pattern):
 # kmp_find_all("AAAA", "AA") -> [0, 1, 2]  (overlapping matches)
 ```
 
-**Circular string rotation check.** Is string B a rotation of string A? This is equivalent to asking whether B is a substring of A + A. KMP search on the doubled string answers this in O(n), no extra case analysis needed.
+**Circular string rotation check.** Is string B a rotation of string A? This is equivalent to asking whether B is a substring of A + A. KMP search on the doubled string answers this in $O(n)$, no extra case analysis needed.
 
 ```python
 def is_rotation(a, b):
@@ -366,7 +366,7 @@ def is_rotation(a, b):
 # is_rotation("abcde", "abced") -> False
 ```
 
-**Shortest period of a string.** The shortest repeating unit of string s has length `n - lps[n-1]` if that divides n evenly, otherwise the period is n itself. Read directly from the LPS array with no search step. O(n) to build the array, then O(1) to read the answer.
+**Shortest period of a string.** The shortest repeating unit of string s has length `n - lps[n-1]` if that divides n evenly, otherwise the period is n itself. Read directly from the LPS array with no search step. $O(n)$ to build the array, then $O(1)$ to read the answer.
 
 ```python
 def shortest_period(s):
@@ -382,7 +382,7 @@ def shortest_period(s):
 # shortest_period("ABCD")    -> "ABCD"  (lps[-1]=0, unit_len=4, 4%4==0 so whole string)
 ```
 
-**Find all anagram positions (sliding window + KMP hybrid note).** For a fixed-length pattern, maintain a character frequency window over the text and slide it one position at a time. This is O(n) like KMP but uses the sliding window approach rather than the LPS table. KMP proper is the better fit when the pattern length varies or when the alphabet is large and frequency maps are expensive.
+**Find all anagram positions (sliding window + KMP hybrid note).** For a fixed-length pattern, maintain a character frequency window over the text and slide it one position at a time. This is $O(n)$ like KMP but uses the sliding window approach rather than the LPS table. KMP proper is the better fit when the pattern length varies or when the alphabet is large and frequency maps are expensive.
 
 ```python
 from collections import Counter
@@ -532,4 +532,4 @@ if __name__ == "__main__":
 
 - [Data Structures](../data-structures/), for the string and array primitives KMP operates on
 - [BFS](./bfs/), another graph/tree algorithm where understanding the pointer invariant is the key insight
-- Z-algorithm: a close sibling to KMP with arguably simpler derivation. It builds a Z-array (longest match with the prefix starting at each position) rather than an LPS array. Both solve substring search in O(n + m); KMP is more common in interviews, Z-algorithm is worth knowing as a mental cross-check.
+- Z-algorithm: a close sibling to KMP with arguably simpler derivation. It builds a Z-array (longest match with the prefix starting at each position) rather than an LPS array. Both solve substring search in $O(n + m)$; KMP is more common in interviews, Z-algorithm is worth knowing as a mental cross-check.

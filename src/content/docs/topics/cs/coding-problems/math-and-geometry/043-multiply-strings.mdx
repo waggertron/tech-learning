@@ -75,8 +75,8 @@ func multiply(num1 string, num2 string) string {
 </Tabs>
 
 **Complexity**
-- **Time:** O(n · m) ish.
-- **Space:** O(n + m).
+- **Time:** $O(n · m)$ ish.
+- **Space:** $O(n + m)$.
 
 ## Approach 2: Schoolbook multiplication on digit arrays (canonical)
 
@@ -165,16 +165,16 @@ func multiply(num1 string, num2 string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (init result) | O(1) | n + m | O(n + m) |
-| **L4, L5 (nested loops)** | **O(1)** | **n * m** | **O(n · m)** ← dominates |
-| L6-L10 (digit multiply + carry) | O(1) | n * m | O(n · m) |
-| L11-L12 (strip + join) | O(1) | n + m | O(n + m) |
+| L3 (init result) | $O(1)$ | n + m | $O(n + m)$ |
+| **L4, L5 (nested loops)** | **$O(1)$** | **n * m** | **$O(n · m)$** ← dominates |
+| L6-L10 (digit multiply + carry) | $O(1)$ | n * m | $O(n · m)$ |
+| L11-L12 (strip + join) | $O(1)$ | n + m | $O(n + m)$ |
 
 Every pair of digit positions (i, j) is visited exactly once; there are n * m such pairs.
 
 **Complexity**
-- **Time:** O(n · m), driven by L4/L5/L6-L10 (the nested digit-multiply loop).
-- **Space:** O(n + m) for the result array.
+- **Time:** $O(n · m)$, driven by L4/L5/L6-L10 (the nested digit-multiply loop).
+- **Space:** $O(n + m)$ for the result array.
 
 ### Why `p1, p2 = i + j, i + j + 1` works
 In schoolbook multiplication, the product of two digits at positions `i` (from num1) and `j` (from num2) contributes to positions `i + j` (carry) and `i + j + 1` (units) of the result. Carries propagate leftward during accumulation.
@@ -195,7 +195,7 @@ In schoolbook multiplication, the product of two digits at positions `i` (from n
 
 ## Approach 3: Karatsuba (divide and conquer)
 
-O(n^log₂3) ≈ O(n^1.585). Rarely worth the code in an interview but known as "the first better-than-quadratic integer multiplication."
+$O(n^{log₂3})$ ≈ $O(n^{1.585})$. Rarely worth the code in an interview but known as "the first better-than-quadratic integer multiplication."
 
 The trick: split each number in half (`x = x_hi · 10^m + x_lo`, similarly for `y`). Schoolbook would do four multiplications:
 
@@ -256,19 +256,19 @@ def multiply(num1, num2):
     return kar(num1, num2)
 ```
 
-The recursion does T(n) = 3T(n/2) + O(n), which solves to O(n^log₂3). Helpers do string-level addition and subtraction so we never cast the full input to int.
+The recursion does T(n) = 3T(n/2) + $O(n)$, which solves to $O(n^{log₂3})$. Helpers do string-level addition and subtraction so we never cast the full input to int.
 
 **Complexity**
-- **Time:** O(n^1.585).
-- **Space:** O(n) for the recursion stack and intermediate string results.
+- **Time:** $O(n^{1.585})$.
+- **Space:** $O(n)$ for the recursion stack and intermediate string results.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Cast to int | O(n + m) | O(n + m) |
-| **Schoolbook** | **O(n · m)** | **O(n + m)** |
-| Karatsuba | O(n^1.585) | O(n) |
+| Cast to int | $O(n + m)$ | $O(n + m)$ |
+| **Schoolbook** | **$O(n · m)$** | **$O(n + m)$** |
+| Karatsuba | $O(n^{1.585})$ | $O(n)$ |
 
 Schoolbook is the canonical interview answer. Know the `i + j + 1` positional index.
 

@@ -147,16 +147,16 @@ function accountsMerge(accounts: string[][]): string[][] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L6 (account loop) | O(1) | n | O(n) |
-| L7 (email loop) | O(1) | n * k total | O(n * k) |
-| L8 (init parent) | O(1) | n * k | O(n * k) |
-| **L10 (union)** | **O(alpha)** | **n * k** | **O(n * k * alpha) ← dominates** |
-| L12 (group pass) | O(alpha) per find | n * k | O(n * k * alpha) |
-| **L15 (sort)** | **O(k log k)** | **n groups** | **O(n * k * log k) ← dominates** |
+| L6 (account loop) | $O(1)$ | n | $O(n)$ |
+| L7 (email loop) | $O(1)$ | n * k total | $O(n * k)$ |
+| L8 (init parent) | $O(1)$ | n * k | $O(n * k)$ |
+| **L10 (union)** | **$O(alpha)$** | **n * k** | **$O(n * k * alpha)$ ← dominates** |
+| L12 (group pass) | $O(alpha)$ per find | n * k | $O(n * k * alpha)$ |
+| **L15 (sort)** | **$O(k log k)$** | **n groups** | **$O(n * k * log k)$ ← dominates** |
 
 **Complexity**
-- **Time:** O(n * k * log k), driven by L15 (sorting emails within each merged group).
-- **Space:** O(n * k) for the `parent` and `email_to_name` maps.
+- **Time:** $O(n * k * log k)$, driven by L15 (sorting emails within each merged group).
+- **Space:** $O(n * k)$ for the `parent` and `email_to_name` maps.
 
 ### Why union under the first email?
 
@@ -180,10 +180,10 @@ Every email in an account must be reachable from every other email in that accou
 
 | Step | Cost |
 | --- | --- |
-| Build Union-Find (all union calls) | O(n * k * alpha) |
-| Group emails by root | O(n * k * alpha) |
-| Sort each group | O(n * k * log k) |
-| **Total** | **O(n * k * log k)** |
+| Build Union-Find (all union calls) | $O(n * k * alpha)$ |
+| Group emails by root | $O(n * k * alpha)$ |
+| Sort each group | $O(n * k * log k)$ |
+| **Total** | **$O(n * k * log k)$** |
 
 ## Test cases
 

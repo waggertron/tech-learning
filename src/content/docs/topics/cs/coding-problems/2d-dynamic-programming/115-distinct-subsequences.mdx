@@ -108,15 +108,15 @@ func numDistinct(s string, t string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (base + match check) | O(1) | per call | O(1) each |
-| **L4 (two recursive calls on match)** | **O(1) work + 2 calls** | **worst case every call** | **O(2^m)** ← dominates |
-| L5 (one recursive call on mismatch) | O(1) work + 1 call | per mismatch | O(2^m) same tree |
+| L1-L3 (base + match check) | $O(1)$ | per call | $O(1)$ each |
+| **L4 (two recursive calls on match)** | **$O(1)$ work + 2 calls** | **worst case every call** | **$O(2^m)$** ← dominates |
+| L5 (one recursive call on mismatch) | $O(1)$ work + 1 call | per mismatch | $O(2^m)$ same tree |
 
 In the worst case (s and t all the same character), every position in `s` can match `t[j]`, spawning two branches each time. The call tree is exponential in `m`.
 
 **Complexity**
-- **Time:** O(2^n) in the worst case (here n = len(s)), driven by L4 double-branching.
-- **Space:** O(n) recursion depth.
+- **Time:** $O(2^n)$ in the worst case (here n = len(s)), driven by L4 double-branching.
+- **Space:** $O(n)$ recursion depth.
 
 ## Approach 2: Top-down memoized
 
@@ -167,15 +167,15 @@ function numDistinct(s: string, t: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (lru_cache) | O(1) | 1 | O(1) |
-| L2-L4 (checks) | O(1) | once per unique (i,j) | O(m · n) total |
-| **L5, L6 (cached calls)** | **O(1) per call** | **at most (m+1)(n+1) states** | **O(m · n)** ← dominates |
+| L1 (lru_cache) | $O(1)$ | 1 | $O(1)$ |
+| L2-L4 (checks) | $O(1)$ | once per unique (i,j) | $O(m · n)$ total |
+| **L5, L6 (cached calls)** | **$O(1)$ per call** | **at most (m+1)(n+1) states** | **$O(m · n)$** ← dominates |
 
-Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pairs, each doing O(1) work.
+Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pairs, each doing $O(1)$ work.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 across all unique (i,j) states.
-- **Space:** O(m · n) for the memo table.
+- **Time:** $O(m · n)$, driven by L5/L6 across all unique (i,j) states.
+- **Space:** $O(m · n)$ for the memo table.
 
 **Try this approach:**
 
@@ -249,15 +249,15 @@ func numDistinct(s string, t string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(n) | 1 | O(n) |
-| **L4+L5 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
-| L6-L7 (update) | O(1) | at most m · n | included above |
+| L1-L3 (init) | $O(n)$ | 1 | $O(n)$ |
+| **L4+L5 (double loop)** | **$O(1)$ body** | **m · n** | **$O(m · n)$** ← dominates |
+| L6-L7 (update) | $O(1)$ | at most m · n | included above |
 
 The right-to-left inner loop is critical: it prevents an `s[i]` character from being used to extend two different `t` prefixes in the same outer iteration (same reason 0/1 knapsack iterates right-to-left).
 
 **Complexity**
-- **Time:** O(m · n), driven by L4/L5 (the double loop).
-- **Space:** O(n) for the rolling 1-D array.
+- **Time:** $O(m · n)$, driven by L4/L5 (the double loop).
+- **Space:** $O(n)$ for the rolling 1-D array.
 
 **Try this approach:**
 
@@ -277,9 +277,9 @@ The right-to-left inner loop is critical: it prevents an `s[i]` character from b
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(2^n) | O(n) |
-| Top-down memo | O(m · n) | O(m · n) |
-| **1-D bottom-up DP** | **O(m · n)** | **O(n)** |
+| Naive recursion | $O(2^n)$ | $O(n)$ |
+| Top-down memo | $O(m · n)$ | $O(m · n)$ |
+| **1-D bottom-up DP** | **$O(m · n)$** | **$O(n)$** |
 
 ## Test cases
 

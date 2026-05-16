@@ -211,8 +211,8 @@ You can verify: every edge `u -> v` has `u` appearing before `v` in the output.
 
 | Metric | Cost | Why |
 | --- | --- | --- |
-| Time | O(V + E) | Each node enters the queue once (O(V)), each edge is examined once during the decrement step (O(E)) |
-| Space | O(V + E) | Adjacency list stores all edges (O(E)), in-degree array and queue are O(V) |
+| Time | $O(V + E)$ | Each node enters the queue once ($O(V)$), each edge is examined once during the decrement step ($O(E)$) |
+| Space | $O(V + E)$ | Adjacency list stores all edges ($O(E)$), in-degree array and queue are $O(V)$ |
 
 V = number of vertices, E = number of edges. This is optimal: you must look at every node and every edge at least once to produce a correct ordering.
 
@@ -264,7 +264,7 @@ The DFS approach appends each node only after it has finished processing all its
 | Iterative? | Yes, trivially | Requires explicit stack to avoid recursion limit |
 | Mental model | "Peel off roots repeatedly" | "Finish all descendants before committing" |
 | Output order | Breadth-first layers | Reverse post-order |
-| Same complexity | O(V + E) | O(V + E) |
+| Same complexity | $O(V + E)$ | $O(V + E)$ |
 
 Both are correct and efficient. Kahn's is generally preferred in interviews because:
 - Cycle detection requires no extra state beyond `len(order) < V`.
@@ -348,7 +348,7 @@ def topological_sort_lex(num_nodes, edges):
     return order if len(order) == num_nodes else []
 ```
 
-The only change: `deque.popleft()` becomes `heapq.heappop()`, and `queue.append()` becomes `heapq.heappush()`. Complexity changes from O(V + E) to O((V + E) log V) because each heap operation costs O(log V).
+The only change: `deque.popleft()` becomes `heapq.heappop()`, and `queue.append()` becomes `heapq.heappush()`. Complexity changes from $O(V + E)$ to $O((V + E)$ log V) because each heap operation costs $O(log V)$.
 
 This variant appears in [LeetCode 269 (Alien Dictionary)](../coding-problems/graphs/269-alien-dictionary/), where you reconstruct a lexicographic character ordering from sorted word pairs.
 

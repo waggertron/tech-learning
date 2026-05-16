@@ -101,17 +101,17 @@ func isHappy(n int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (digit sum) | O(log x) | k | O(k · log n) |
-| L2 (loop guard) | O(1) | k | O(k) |
-| **L3, L4 (add + next)** | **O(log n)** | **k** | **O(k · log n)** ← dominates |
+| L1 (digit sum) | $O(log x)$ | k | $O(k · log n)$ |
+| L2 (loop guard) | $O(1)$ | k | $O(k)$ |
+| **L3, L4 (add + next)** | **$O(log n)$** | **k** | **$O(k · log n)$** ← dominates |
 
-For 32-bit integers, after one step the value drops below 9999 (at most 4 digits each squared = max 324), so k is effectively bounded by a small constant. In practice this is O(log n) total.
+For 32-bit integers, after one step the value drops below 9999 (at most 4 digits each squared = max 324), so k is effectively bounded by a small constant. In practice this is $O(log n)$ total.
 
 **Complexity**
-- **Time:** O(log n · k) where k is the number of iterations.
-- **Space:** O(k) for the seen set.
+- **Time:** $O(log n · k)$ where k is the number of iterations.
+- **Space:** $O(k)$ for the seen set.
 
-## Approach 2: Floyd's tortoise and hare (canonical, O(1) space)
+## Approach 2: Floyd's tortoise and hare (canonical, $O(1)$ space)
 
 Treat the sequence as a linked list. If it cycles (not happy), the two pointers meet.
 
@@ -184,15 +184,15 @@ func isHappy(n int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (digit extraction) | O(log x) | k | O(k · log n) |
-| **L2, L3 (slow/fast advance)** | **O(log n)** | **k** | **O(k · log n)** ← dominates |
-| L4, L5 (termination checks) | O(1) | k | O(k) |
+| L1 (digit extraction) | $O(log x)$ | k | $O(k · log n)$ |
+| **L2, L3 (slow/fast advance)** | **$O(log n)$** | **k** | **$O(k · log n)$** ← dominates |
+| L4, L5 (termination checks) | $O(1)$ | k | $O(k)$ |
 
 Same asymptotic cost as Approach 1; the win is space, not time.
 
 **Complexity**
 - **Time:** Same as Approach 1.
-- **Space:** O(1).
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -232,13 +232,13 @@ def is_happy(n):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1, L2 (loop)** | **O(log n)** | **k** | **O(k · log n)** ← dominates |
+| **L1, L2 (loop)** | **$O(log n)$** | **k** | **$O(k · log n)$** ← dominates |
 
 Same cost as Approaches 1 and 2; the "check for 4" is just a constant-factor improvement on the exit condition.
 
 **Complexity**
-- **Time:** O(log n · k).
-- **Space:** O(1).
+- **Time:** $O(log n · k)$.
+- **Space:** $O(1)$.
 
 ### Why `4` works
 For any number ≤ 9999, the happy iteration either reaches 1 or enters the cycle `4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4 → ...`. For larger numbers, one iteration brings them under 9999. Any unhappy number eventually hits 4; happy numbers don't.
@@ -247,9 +247,9 @@ For any number ≤ 9999, the happy iteration either reaches 1 or enters the cycl
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Hash set | O(log n · k) | O(k) |
-| **Floyd's cycle detection** | **O(log n · k)** | **O(1)** |
-| "Check for 4" shortcut | O(log n · k) | O(1) |
+| Hash set | $O(log n · k)$ | $O(k)$ |
+| **Floyd's cycle detection** | **$O(log n · k)$** | **$O(1)$** |
+| "Check for 4" shortcut | $O(log n · k)$ | $O(1)$ |
 
 Floyd's is the generalizable answer (applies to any deterministic next-state sequence); the "4 trick" is the cutest.
 

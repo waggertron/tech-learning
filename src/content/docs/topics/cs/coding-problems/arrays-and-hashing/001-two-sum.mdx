@@ -100,16 +100,16 @@ func twoSum(nums []int, target int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (len) | O(1) | 1 | O(1) |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L3, L4 (inner loop + check)** | **O(1)** | **up to n²/2** | **O(n²)** ← dominates |
-| L5 (return) | O(1) | 1 | O(1) |
+| L1 (len) | $O(1)$ | 1 | $O(1)$ |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L3, L4 (inner loop + check)** | **$O(1)$** | **up to n²/2** | **$O(n²)$** ← dominates |
+| L5 (return) | $O(1)$ | 1 | $O(1)$ |
 
 The nested loops make this quadratic. For `n = 10⁴`, that's ~50 million comparisons.
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4 (nested loops).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L3/L4 (nested loops).
+- **Space:** $O(1)$.
 
 ## Approach 2: Sort with remembered indices + two pointers
 
@@ -184,17 +184,17 @@ func twoSum(nums []int, target int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2 (init pointers) | O(1) | 1 | O(1) |
-| L3-L9 (two-pointer scan) | O(1) | at most n | O(n) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2 (init pointers) | $O(1)$ | 1 | $O(1)$ |
+| L3-L9 (two-pointer scan) | $O(1)$ | at most n | $O(n)$ |
 
 The sort owns the total cost; the two-pointer scan is linear.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (the sort).
-- **Space:** O(n), the indexed copy.
+- **Time:** $O(n log n)$, driven by L1 (the sort).
+- **Space:** $O(n)$, the indexed copy.
 
-This is the right approach for LeetCode **167. Two Sum II** (input already sorted), where it drops to O(n) time and O(1) space.
+This is the right approach for LeetCode **167. Two Sum II** (input already sorted), where it drops to $O(n)$ time and $O(1)$ space.
 
 **Try this approach:**
 
@@ -264,18 +264,18 @@ func twoSum(nums []int, target int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init dict) | O(1) | 1 | O(1) |
-| L2 (loop) | O(1) | n | O(n) |
-| L3 (arithmetic) | O(1) | n | O(n) |
-| **L4 (hash lookup)** | **O(1) avg** | **n** | **O(n)** ← dominates |
-| L5 (return) | O(1) | 1 | O(1) |
-| L6 (hash insert) | O(1) avg | up to n | O(n) |
+| L1 (init dict) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop) | $O(1)$ | n | $O(n)$ |
+| L3 (arithmetic) | $O(1)$ | n | $O(n)$ |
+| **L4 (hash lookup)** | **$O(1)$ avg** | **n** | **$O(n)$** ← dominates |
+| L5 (return) | $O(1)$ | 1 | $O(1)$ |
+| L6 (hash insert) | $O(1)$ avg | up to n | $O(n)$ |
 
-Every operation is O(1) average per iteration. One pass over n elements gives O(n) total.
+Every operation is $O(1)$ average per iteration. One pass over n elements gives $O(n)$ total.
 
 **Complexity**
-- **Time:** O(n), driven by L4/L6 (hash operations per element).
-- **Space:** O(n). Hash map can hold up to `n` entries.
+- **Time:** $O(n)$, driven by L4/L6 (hash operations per element).
+- **Space:** $O(n)$. Hash map can hold up to `n` entries.
 
 **Try this approach:**
 
@@ -295,9 +295,9 @@ Every operation is O(1) average per iteration. One pass over n elements gives O(
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force | O(n²) | O(1) |
-| Sort + two pointers | O(n log n) | O(n) |
-| **Hash map** | **O(n)** | O(n) |
+| Brute force | $O(n²)$ | $O(1)$ |
+| Sort + two pointers | $O(n log n)$ | $O(n)$ |
+| **Hash map** | **$O(n)$** | $O(n)$ |
 
 The hash-map approach is the canonical answer. It's strictly better than sort on time and same on space. The sort variant is worth knowing because it generalizes to Two Sum II (sorted) and 3Sum.
 

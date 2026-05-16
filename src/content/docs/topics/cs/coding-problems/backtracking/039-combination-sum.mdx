@@ -162,15 +162,15 @@ func combinationSum(candidates []int, target int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (copy path) | O(k) | one per solution | O(solutions · k) |
-| L2/L4 (push/pop) | O(1) | one per node | O(tree nodes) |
-| **L3 (recurse)** | **O(1) dispatch** | **tree nodes** | **O(n^k)** ← dominates |
+| L1 (copy path) | $O(k)$ | one per solution | $O(solutions · k)$ |
+| L2/L4 (push/pop) | $O(1)$ | one per node | $O(tree nodes)$ |
+| **L3 (recurse)** | **$O(1)$ dispatch** | **tree nodes** | **$O(n^k)$** ← dominates |
 
-The recursion tree has branching factor n and maximum depth k = target / min(candidates). The number of nodes is bounded by O(n^k).
+The recursion tree has branching factor n and maximum depth k = target / min(candidates). The number of nodes is bounded by $O(n^k)$.
 
 **Complexity**
-- **Time:** Exponential in the depth of the search tree, bounded by O(n^(target / min(candidates))).
-- **Space:** O(k) recursion, where k = target / min(candidates).
+- **Time:** Exponential in the depth of the search tree, bounded by $O(n^{target/min(candidates})$).
+- **Space:** $O(k)$ recursion, where k = target / min(candidates).
 
 **Try this approach:**
 
@@ -276,15 +276,15 @@ func combinationSum(candidates []int, target int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sort) | O(n log n) | 1 | O(n log n) |
-| L3 (prune) | O(1) | pruned nodes | O(pruned) |
-| **L5 (recurse)** | **O(1) dispatch** | **surviving nodes** | **O(n^k) worst** ← dominates |
+| L1 (sort) | $O(n log n)$ | 1 | $O(n log n)$ |
+| L3 (prune) | $O(1)$ | pruned nodes | $O(pruned)$ |
+| **L5 (recurse)** | **$O(1)$ dispatch** | **surviving nodes** | **$O(n^k)$ worst** ← dominates |
 
 Sorting enables L3 to cut entire subtrees. The asymptotic bound is the same, but the practical speedup on mixed-size inputs is substantial.
 
 **Complexity**
 - **Time:** Same worst-case Big-O as Approach 2; practical speedup from pruning is substantial on inputs with mixed sizes.
-- **Space:** O(k) recursion, where k = target / min(candidates).
+- **Space:** $O(k)$ recursion, where k = target / min(candidates).
 
 **Try this approach:**
 
@@ -305,7 +305,7 @@ Sorting enables L3 to cut entire subtrees. The asymptotic bound is the same, but
 | Approach | Time | Space |
 | --- | --- | --- |
 | All orderings + dedup | huge | huge |
-| **Backtracking with `start`** | O(n^(target/min)) | O(target/min) |
+| **Backtracking with `start`** | $O(n^{target/min})$ | $O(target/min)$ |
 | **Sort + prune** | same Big-O, faster in practice | same |
 
 The `start` index is the critical idea, same template solves Combination Sum II (40) and Subsets II (90) with a small tweak for duplicates.

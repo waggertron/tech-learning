@@ -103,14 +103,14 @@ function reorderList(head: ListNode | null): void {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (collect) | O(1) | n | O(n) |
-| **L2-L4 (re-link)** | **O(1)** | **n/2** | **O(n)** ← dominates |
+| L1 (collect) | $O(1)$ | n | $O(n)$ |
+| **L2-L4 (re-link)** | **$O(1)$** | **n/2** | **$O(n)$** ← dominates |
 
-Both phases are O(n). The array costs O(n) extra space but simplifies the two-ended access to O(1) per step.
+Both phases are $O(n)$. The array costs $O(n)$ extra space but simplifies the two-ended access to $O(1)$ per step.
 
 **Complexity**
-- **Time:** O(n), driven by L1 and L2-L4 equally.
-- **Space:** O(n) for the array.
+- **Time:** $O(n)$, driven by L1 and L2-L4 equally.
+- **Space:** $O(n)$ for the array.
 
 ## Approach 2: Use a deque (slightly cleaner)
 
@@ -168,18 +168,18 @@ function reorderList(head: ListNode | null): void {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build deque) | O(1) | n | O(n) |
-| **L2-L4 (drain + link)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (build deque) | $O(1)$ | n | $O(n)$ |
+| **L2-L4 (drain + link)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
-Same asymptotics as Approach 1 but deque's O(1) popleft avoids the index bookkeeping.
+Same asymptotics as Approach 1 but deque's $O(1)$ popleft avoids the index bookkeeping.
 
 **Complexity**
-- **Time:** O(n), driven by L1 and L2-L4 equally.
-- **Space:** O(n) for the deque.
+- **Time:** $O(n)$, driven by L1 and L2-L4 equally.
+- **Space:** $O(n)$ for the deque.
 
 ## Approach 3: Find middle + reverse second half + merge (optimal)
 
-Three sub-routines, each O(n) and O(1) space:
+Three sub-routines, each $O(n)$ and $O(1)$ space:
 
 1. Find middle with slow/fast pointers.
 2. Reverse the second half in place.
@@ -264,15 +264,15 @@ function reorderList(head: ListNode | null): void {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (find middle) | O(1) | n/2 | O(n) |
-| L4 (reverse) | O(1) | n/2 | O(n) |
-| **L5-L7 (weave)** | **O(1)** | **n/2** | **O(n)** ← all three phases equal |
+| L1-L3 (find middle) | $O(1)$ | n/2 | $O(n)$ |
+| L4 (reverse) | $O(1)$ | n/2 | $O(n)$ |
+| **L5-L7 (weave)** | **$O(1)$** | **n/2** | **$O(n)$** ← all three phases equal |
 
-Three independent O(n) passes, each touching n/2 nodes. No extra allocation. The cut at `slow.next = None` is essential: it prevents the weave loop from running into the reversed half before it's consumed.
+Three independent $O(n)$ passes, each touching n/2 nodes. No extra allocation. The cut at `slow.next = None` is essential: it prevents the weave loop from running into the reversed half before it's consumed.
 
 **Complexity**
-- **Time:** O(n). Three linear passes (L1-L3, L4, L5-L7).
-- **Space:** O(1).
+- **Time:** $O(n)$. Three linear passes (L1-L3, L4, L5-L7).
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -413,9 +413,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Array of nodes | O(n) | O(n) |
-| Deque | O(n) | O(n) |
-| **Find middle + reverse + weave** | **O(n)** | **O(1)** |
+| Array of nodes | $O(n)$ | $O(n)$ |
+| Deque | $O(n)$ | $O(n)$ |
+| **Find middle + reverse + weave** | **$O(n)$** | **$O(1)$** |
 
 The optimal approach composes three fundamental linked-list moves, it's the canonical test that you know the primitives.
 

@@ -24,7 +24,7 @@ import approach3GoCode from './073-set-matrix-zeroes-approach3.go?raw';
 
 ## Problem
 
-Given an `m × n` integer matrix, if a cell is `0`, set its entire row and column to `0`. Do it **in place**; try for O(1) extra space as a follow-up.
+Given an `m × n` integer matrix, if a cell is `0`, set its entire row and column to `0`. Do it **in place**; try for $O(1)$ extra space as a follow-up.
 
 **Example**
 - `matrix = [[1,1,1],[1,0,1],[1,1,1]]` → `[[1,0,1],[0,0,0],[1,0,1]]`
@@ -67,12 +67,12 @@ def set_zeroes(matrix):
 The snapshot is what makes it correct: without it, the in-place writes would propagate ("a zero I just wrote would trigger more zero-outs"). With a snapshot, the writes only depend on the original state.
 
 **Complexity**
-- **Time:** O(m · n).
-- **Space:** O(m · n).
+- **Time:** $O(m · n)$.
+- **Space:** $O(m · n)$.
 
 Doesn't meet the in-place requirement.
 
-## Approach 2: Two boolean arrays (O(m + n) space)
+## Approach 2: Two boolean arrays ($O(m + n)$ space)
 
 Collect which rows and columns contain a 0; then zero them.
 
@@ -156,15 +156,15 @@ func setZeroes(matrix [][]int) {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2-L3 (init flag arrays) | O(1) | m + n | O(m + n) |
-| **L4-L6 (first scan)** | **O(1)** | **m·n** | **O(m·n)** ← dominates |
-| L7-L8 (second scan) | O(1) | m·n | O(m·n) |
+| L2-L3 (init flag arrays) | $O(1)$ | m + n | $O(m + n)$ |
+| **L4-L6 (first scan)** | **$O(1)$** | **m·n** | **$O(m·n)$** ← dominates |
+| L7-L8 (second scan) | $O(1)$ | m·n | $O(m·n)$ |
 
-Two full passes over the matrix, each O(m·n).
+Two full passes over the matrix, each $O(m·n)$.
 
 **Complexity**
-- **Time:** O(m · n), driven by L4/L5/L6 and L7/L8 (two full matrix scans).
-- **Space:** O(m + n) for the flag arrays.
+- **Time:** $O(m · n)$, driven by L4/L5/L6 and L7/L8 (two full matrix scans).
+- **Space:** $O(m + n)$ for the flag arrays.
 
 **Try this approach:**
 
@@ -180,7 +180,7 @@ Two full passes over the matrix, each O(m·n).
   </TabItem>
 </Tabs>
 
-## Approach 3: First row and column as markers (O(1) space, canonical)
+## Approach 3: First row and column as markers ($O(1)$ space, canonical)
 
 Use the first row and column themselves as flag arrays. Track separately whether the first row / first column themselves need zeroing.
 
@@ -285,16 +285,16 @@ func setZeroes(matrix [][]int) {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (first row/col check) | O(1) | m + n | O(m + n) |
-| **L3-L5 (mark pass)** | **O(1)** | **(m-1)·(n-1)** | **O(m·n)** ← dominates |
-| L6-L7 (apply pass) | O(1) | (m-1)·(n-1) | O(m·n) |
-| L8-L9 (fix first row/col) | O(1) | m + n | O(m + n) |
+| L1-L2 (first row/col check) | $O(1)$ | m + n | $O(m + n)$ |
+| **L3-L5 (mark pass)** | **$O(1)$** | **(m-1)·(n-1)** | **$O(m·n)$** ← dominates |
+| L6-L7 (apply pass) | $O(1)$ | (m-1)·(n-1) | $O(m·n)$ |
+| L8-L9 (fix first row/col) | $O(1)$ | m + n | $O(m + n)$ |
 
-Three linear passes total; two of them are O(m·n), two are O(m + n).
+Three linear passes total; two of them are $O(m·n)$, two are $O(m + n)$.
 
 **Complexity**
-- **Time:** O(m · n), driven by L3/L4/L5 and L6/L7 (two full inner-matrix scans).
-- **Space:** O(1) extra.
+- **Time:** $O(m · n)$, driven by L3/L4/L5 and L6/L7 (two full inner-matrix scans).
+- **Space:** $O(1)$ extra.
 
 **Try this approach:**
 
@@ -314,9 +314,9 @@ Three linear passes total; two of them are O(m·n), two are O(m + n).
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Copy + overwrite | O(m · n) | O(m · n) |
-| Boolean flag arrays | O(m · n) | O(m + n) |
-| **First row/col as markers** | **O(m · n)** | **O(1)** |
+| Copy + overwrite | $O(m · n)$ | $O(m · n)$ |
+| Boolean flag arrays | $O(m · n)$ | $O(m + n)$ |
+| **First row/col as markers** | **$O(m · n)$** | **$O(1)$** |
 
 "Reuse the input as auxiliary storage" is a recurring in-place trick.
 

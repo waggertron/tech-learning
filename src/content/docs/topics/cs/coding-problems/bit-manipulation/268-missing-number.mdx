@@ -97,12 +97,12 @@ func missingNumber(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (build set)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L2-L3 (scan) | O(1) | n+1 | O(n) |
+| **L1 (build set)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L2-L3 (scan) | $O(1)$ | n+1 | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n), driven by L1/L2/L3 (one pass to build set, one to scan).
-- **Space:** O(n) for the set.
+- **Time:** $O(n)$, driven by L1/L2/L3 (one pass to build set, one to scan).
+- **Space:** $O(n)$ for the set.
 
 ## Approach 2: Sum formula
 
@@ -145,12 +145,12 @@ func missingNumber(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (get length) | O(1) | 1 | O(1) |
-| **L2 (sum)** | **O(n)** | **1** | **O(n)** ← dominates |
+| L1 (get length) | $O(1)$ | 1 | $O(1)$ |
+| **L2 (sum)** | **$O(n)$** | **1** | **$O(n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n), driven by L2 (summing all elements).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2 (summing all elements).
+- **Space:** $O(1)$.
 
 Risk of overflow in fixed-width languages for large n (not an issue in Python or JavaScript's 64-bit floats for this constraint).
 
@@ -212,14 +212,14 @@ func missingNumber(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init with n) | O(1) | 1 | O(1) |
-| **L2, L3 (XOR loop)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (init with n) | $O(1)$ | 1 | $O(1)$ |
+| **L2, L3 (XOR loop)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
 A single pass; each element and index are XORed in once.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3 (single XOR pass).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3 (single XOR pass).
+- **Space:** $O(1)$.
 
 ### Why it works
 Result starts at `n`. We XOR in every index 0..n-1 and every value from `nums`. Every number from 0..n except the missing one appears exactly twice (once as an index, once as a value); each cancels to 0. The initial `n` and the missing value survive, but `n` is also present as an index of the initial XOR, so it cancels unless it's the missing one... Actually here's the clean reading: we start with `n`, then XOR in all i and all nums[i]; the set `{0..n} ∪ {all nums}` has every value except the missing appearing an even number of times. Net result = missing.
@@ -242,9 +242,9 @@ Result starts at `n`. We XOR in every index 0..n-1 and every value from `nums`. 
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Hash set | O(n) | O(n) | Straightforward |
-| Sum formula | O(n) | O(1) | Overflow-sensitive |
-| **XOR** | **O(n)** | **O(1)** | Overflow-safe |
+| Hash set | $O(n)$ | $O(n)$ | Straightforward |
+| Sum formula | $O(n)$ | $O(1)$ | Overflow-sensitive |
+| **XOR** | **$O(n)$** | **$O(1)$** | Overflow-safe |
 
 ## Test cases
 

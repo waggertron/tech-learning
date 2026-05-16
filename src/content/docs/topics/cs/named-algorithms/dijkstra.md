@@ -10,7 +10,7 @@ updated: 2026-05-04
 
 ## What it does
 
-Given a weighted graph with non-negative edge weights and a source vertex, find the **shortest distance from the source to every reachable vertex**, in O((V + E) log V) time.
+Given a weighted graph with non-negative edge weights and a source vertex, find the **shortest distance from the source to every reachable vertex**, in $O((V + E)$ log V) time.
 
 Named after Edsger W. Dijkstra, who described it in a three-page paper published in *Numerische Mathematik* in 1959. He reportedly designed it in twenty minutes without pencil or paper while sitting with his fiancée in a cafe in Amsterdam.
 
@@ -85,7 +85,7 @@ The check `if d > dist[u]: continue` handles this. When the stale entry is event
 The alternative is an **indexed priority queue** or a Fibonacci heap, which can decrease-key in-place. In practice, lazy deletion is always used in interview code and competitive programming because:
 
 1. Python's `heapq` has no decrease-key operation.
-2. The overhead of stale entries is at most O(E log V) extra work, which doesn't change the asymptotic bound.
+2. The overhead of stale entries is at most $O(E log V)$ extra work, which doesn't change the asymptotic bound.
 
 ## Walking through an example
 
@@ -145,13 +145,13 @@ Key moment: step 2 improved the distance to vertex 1 from 4 (via direct edge 0->
 
 | Metric       | Cost with binary heap (`heapq`) | Cost with Fibonacci heap |
 | ------------ | -------------------------------- | ------------------------ |
-| Time         | O((V + E) log V)                 | O(E + V log V)           |
-| Space        | O(V + E)                         | O(V + E)                 |
-| Decrease-key | O(log V) via lazy push           | O(1) amortized           |
+| Time         | $O((V + E)$ log V)                 | $O(E + V log V)$           |
+| Space        | $O(V + E)$                         | $O(V + E)$                 |
+| Decrease-key | $O(log V)$ via lazy push           | $O(1)$ amortized           |
 
 The Fibonacci heap is theoretically optimal but never used in practice due to high constant factors and implementation complexity. The binary heap version is the standard.
 
-For **dense [graphs](../data-structures/graphs/)** (E close to V²), a simple array-based priority queue runs in O(V²), which is better than O(E log V) = O(V² log V). When V <= 1000 and the graph is dense, the O(V²) version can outperform the heap version.
+For **dense [graphs](../data-structures/graphs/)** (E close to V²), a simple array-based priority queue runs in $O(V²)$, which is better than $O(E log V)$ = $O(V² log V)$. When V <= 1000 and the graph is dense, the $O(V²)$ version can outperform the heap version.
 
 ## Reconstructing the actual path
 
@@ -214,7 +214,7 @@ def dijkstra_multi_source(n, adj, sources):
     return dist
 ```
 
-This runs in the same O((V + E) log V) as single-source. [LeetCode 994 (Rotting Oranges)](../coding-problems/graphs/994-rotting-oranges/) is essentially a multi-source BFS, which is the unweighted version of this.
+This runs in the same $O((V + E)$ log V) as single-source. [LeetCode 994 (Rotting Oranges)](../coding-problems/graphs/994-rotting-oranges/) is essentially a multi-source BFS, which is the unweighted version of this.
 
 ## Variant: maximum probability / minimum bottleneck path
 
@@ -257,7 +257,7 @@ Counter-example: vertices 0, 1, 2. Edges: 0->1 (5), 0->2 (3), 2->1 (-10).
 
 Dijkstra pops 0 first, pushes dist[2]=3 and dist[1]=5. Then pops vertex 2 (dist 3), updates dist[1] to 3 + (-10) = -7. That's correct, but only by luck. In a larger graph, Dijkstra might have already finalized vertex 1 at distance 5 before processing vertex 2. Once finalized, the algorithm doesn't revisit it.
 
-For graphs with negative edges but no negative cycles, use **Bellman-Ford** (O(VE)). For negative cycles (undefined shortest path), Bellman-Ford detects them.
+For graphs with negative edges but no negative cycles, use **Bellman-Ford** ($O(VE)$). For negative cycles (undefined shortest path), Bellman-Ford detects them.
 
 ## The relationship to A\*
 
@@ -279,12 +279,12 @@ On grids specifically, edges are implicit (four or eight neighbors), edge weight
 
 ## Things that aren't Dijkstra (counter-clues)
 
-- **All weights equal to 1** -> use BFS (O(V + E), no heap needed).
+- **All weights equal to 1** -> use BFS ($O(V + E)$, no heap needed).
 - **Negative edge weights** -> Bellman-Ford or SPFA.
-- **Shortest path between all pairs** -> Floyd-Warshall (O(V³)).
+- **Shortest path between all pairs** -> Floyd-Warshall ($O(V³)$).
 - **Maximum flow** -> different problem entirely; Ford-Fulkerson or Dinic's.
 - **Minimum spanning tree** -> Prim's (same greedy structure, but picks minimum edge to the tree, not shortest path from source).
-- **The graph has a DAG structure** -> relax edges in topological order, O(V + E), no heap.
+- **The graph has a DAG structure** -> relax edges in topological order, $O(V + E)$, no heap.
 
 ## LeetCode exercises
 

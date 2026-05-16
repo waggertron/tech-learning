@@ -141,11 +141,11 @@ func checkValidString(s string) bool {
 </TabItem>
 </Tabs>
 
-For each of the 3^k assignments to k stars, run a linear validation. Total O(3^k · n). The DP and two-pointer approaches below are dramatically better.
+For each of the 3^k assignments to k stars, run a linear validation. Total $O(3^k · n)$. The DP and two-pointer approaches below are dramatically better.
 
 **Complexity**
-- **Time:** O(3^k · n), where k = number of `*`.
-- **Space:** O(n).
+- **Time:** $O(3^k · n)$, where k = number of `*`.
+- **Space:** $O(n)$.
 
 ## Approach 2: Top-down DP on (index, open_count)
 
@@ -235,14 +235,14 @@ func checkValidString(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (unique states) | O(1) | n * n | O(n²) |
-| **L6-L8 (star branches)** | **O(1) memoized** | **up to n²** | **O(n²)** ← dominates |
+| L1 (unique states) | $O(1)$ | n * n | $O(n²)$ |
+| **L6-L8 (star branches)** | **$O(1)$ memoized** | **up to n²** | **$O(n²)$** ← dominates |
 
-There are O(n²) distinct (i, opens) states; each is computed once due to memoization.
+There are $O(n²)$ distinct (i, opens) states; each is computed once due to memoization.
 
 **Complexity**
-- **Time:** O(n²). States = `n × n`, each O(1).
-- **Space:** O(n²) for the memo table.
+- **Time:** $O(n²)$. States = `n × n`, each $O(1)$.
+- **Space:** $O(n²)$ for the memo table.
 
 **Try this approach:**
 
@@ -340,18 +340,18 @@ func checkValidString(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| **L2-L10 (scan)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L11 (final check) | O(1) | 1 | O(1) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L2-L10 (scan)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L11 (final check) | $O(1)$ | 1 | $O(1)$ |
 
-A single pass over the string; all operations per character are O(1).
+A single pass over the string; all operations per character are $O(1)$.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3-L10 (single linear scan).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3-L10 (single linear scan).
+- **Space:** $O(1)$.
 
 ### Two-stack alternative
-Push positions of `(` onto one stack and positions of `*` onto another; when you see `)`, pop from `(` first, else from `*`. At the end, ensure remaining `(` positions each have a later `*`. Same O(n), more bookkeeping.
+Push positions of `(` onto one stack and positions of `*` onto another; when you see `)`, pop from `(` first, else from `*`. At the end, ensure remaining `(` positions each have a later `*`. Same $O(n)$, more bookkeeping.
 
 **Try this approach:**
 
@@ -371,9 +371,9 @@ Push positions of `(` onto one stack and positions of `*` onto another; when you
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Enumerate interpretations | 3^k | O(k) |
-| DP on (i, opens) | O(n²) | O(n²) |
-| **Range of possible opens** | **O(n)** | **O(1)** |
+| Enumerate interpretations | 3^k | $O(k)$ |
+| DP on (i, opens) | $O(n²)$ | $O(n²)$ |
+| **Range of possible opens** | **$O(n)$** | **$O(1)$** |
 
 The `[lo, hi]` range trick is the right answer; `*` expands the range, `(` and `)` shift it.
 

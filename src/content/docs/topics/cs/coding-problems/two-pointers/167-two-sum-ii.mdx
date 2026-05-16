@@ -99,13 +99,13 @@ func twoSum(numbers []int, target int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L3, L4 (inner loop + check)** | **O(1)** | **~n²/2** | **O(n²)** ← dominates |
-| L5 (return) | O(1) | 1 | O(1) |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L3, L4 (inner loop + check)** | **$O(1)$** | **~n²/2** | **$O(n²)$** ← dominates |
+| L5 (return) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4 (nested loops).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L3/L4 (nested loops).
+- **Space:** $O(1)$.
 
 Ignores that the array is sorted, so this is strictly worse than it needs to be.
 
@@ -174,13 +174,13 @@ func twoSum(numbers []int, target int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L4 (binary search)** | **O(log n)** | **n** | **O(n log n)** ← dominates |
-| L3, L5, L6 | O(1) | n | O(n) |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L4 (binary search)** | **$O(log n)$** | **n** | **$O(n log n)$** ← dominates |
+| L3, L5, L6 | $O(1)$ | n | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n log n), driven by L4 (n iterations × O(log n) binary search).
-- **Space:** O(1).
+- **Time:** $O(n log n)$, driven by L4 (n iterations × $O(log n)$ binary search).
+- **Space:** $O(1)$.
 
 Uses the sort structure, but not optimally.
 
@@ -260,15 +260,15 @@ func twoSum(numbers []int, target int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| L2 (loop condition) | O(1) | n | O(n) |
-| **L3-L8 (sum + advance)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop condition) | $O(1)$ | n | $O(n)$ |
+| **L3-L8 (sum + advance)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
 Each iteration advances either `l` or `r` by one; they start n-1 apart and meet, so at most n-1 iterations.
 
 **Complexity**
-- **Time:** O(n), driven by L3-L8 (one sum and pointer step per iteration). Each pointer moves in one direction only, so total work is linear.
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L3-L8 (one sum and pointer step per iteration). Each pointer moves in one direction only, so total work is linear.
+- **Space:** $O(1)$.
 
 ### Why it's correct
 
@@ -292,9 +292,9 @@ At any point, `numbers[l] + numbers[r]` is the sum under consideration. If it's 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force | O(n²) | O(1) |
-| Per-element binary search | O(n log n) | O(1) |
-| **Two pointers** | **O(n)** | **O(1)** |
+| Brute force | $O(n²)$ | $O(1)$ |
+| Per-element binary search | $O(n log n)$ | $O(1)$ |
+| **Two pointers** | **$O(n)$** | **$O(1)$** |
 
 The two-pointer approach is the standard answer. Generalizes directly to 3Sum and 4Sum.
 

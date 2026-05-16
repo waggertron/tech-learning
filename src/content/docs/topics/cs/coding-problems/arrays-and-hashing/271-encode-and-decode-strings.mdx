@@ -106,14 +106,14 @@ func decode(s string) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (encode: escape + join)** | **O(N)** | **1** | **O(N)** ← dominates |
-| **L2 (decode: split + unescape)** | **O(N)** | **1** | **O(N)** ← dominates |
+| **L1 (encode: escape + join)** | **$O(N)$** | **1** | **$O(N)$** ← dominates |
+| **L2 (decode: split + unescape)** | **$O(N)$** | **1** | **$O(N)$** ← dominates |
 
 Both encode and decode scan every character a constant number of times.
 
 **Complexity**
-- **Time:** O(N) where N is the total number of characters (both encode and decode are linear in output size).
-- **Space:** O(N).
+- **Time:** $O(N)$ where N is the total number of characters (both encode and decode are linear in output size).
+- **Space:** $O(N)$.
 
 Fragile: if the input can contain ANY ASCII (or Unicode), picking a "rare" delimiter is a footgun. This is how you get a "works in tests, breaks in prod" bug.
 
@@ -168,14 +168,14 @@ func decode(s string) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (json.dumps)** | **O(N)** | **1** | **O(N)** ← dominates |
-| **L2 (json.loads)** | **O(N)** | **1** | **O(N)** ← dominates |
+| **L1 (json.dumps)** | **$O(N)$** | **1** | **$O(N)$** ← dominates |
+| **L2 (json.loads)** | **$O(N)$** | **1** | **$O(N)$** ← dominates |
 
 JSON serialization and deserialization are linear in the total character count.
 
 **Complexity**
-- **Time:** O(N).
-- **Space:** O(N).
+- **Time:** $O(N)$.
+- **Space:** $O(N)$.
 
 Correct and robust. Not typically accepted on LeetCode because the problem wants you to design the scheme, but worth knowing for real-world code, the right answer unless there's a reason to roll your own.
 
@@ -270,18 +270,18 @@ func decode(s string) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (encode: format + join)** | **O(N)** | **1** | **O(N)** ← dominates |
-| L2 (init) | O(1) | 1 | O(1) |
-| L3 (loop) | O(1) | m iterations | O(m) |
-| L4 (index '#') | O(digits) | m | O(m·d) |
-| **L6 (slice)** | **O(length)** | **m** | **O(N) total** ← dominates decode |
-| L7 (advance) | O(1) | m | O(m) |
+| **L1 (encode: format + join)** | **$O(N)$** | **1** | **$O(N)$** ← dominates |
+| L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| L3 (loop) | $O(1)$ | m iterations | $O(m)$ |
+| L4 (index '#') | $O(digits)$ | m | $O(m·d)$ |
+| **L6 (slice)** | **$O(length)$** | **m** | **$O(N)$ total** ← dominates decode |
+| L7 (advance) | $O(1)$ | m | $O(m)$ |
 
-Each character in the original strings is visited exactly once during the decode slice (L6). The loop overhead is O(m) for headers.
+Each character in the original strings is visited exactly once during the decode slice (L6). The loop overhead is $O(m)$ for headers.
 
 **Complexity**
-- **Time:** O(N). Each character is visited a constant number of times.
-- **Space:** O(N).
+- **Time:** $O(N)$. Each character is visited a constant number of times.
+- **Space:** $O(N)$.
 
 This works for any character content, including the `#` delimiter, because the length prefix makes the scheme self-delimiting. The canonical interview answer.
 
@@ -303,9 +303,9 @@ This works for any character content, including the `#` delimiter, because the l
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Delimiter + escape | O(N) | O(N) | Fragile; easy to corrupt |
-| JSON | O(N) | O(N) | Production-correct; not always accepted |
-| **Length prefix** | **O(N)** | **O(N)** | Robust and self-delimiting |
+| Delimiter + escape | $O(N)$ | $O(N)$ | Fragile; easy to corrupt |
+| JSON | $O(N)$ | $O(N)$ | Production-correct; not always accepted |
+| **Length prefix** | **$O(N)$** | **$O(N)$** | Robust and self-delimiting |
 
 Length-prefix encoding is the pattern behind many real-world formats, Pascal strings, netstrings, Protocol Buffers' length-delimited format, HTTP chunked encoding.
 

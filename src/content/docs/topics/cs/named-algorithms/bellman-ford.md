@@ -156,14 +156,14 @@ Key moment: vertex 3 reaches distance -2, via the negative edge 1->3. Dijkstra w
 
 | Metric | Bellman-Ford | Dijkstra (binary heap) |
 | ------ | ------------ | ---------------------- |
-| Time   | O(V \* E)    | O((V + E) log V)       |
-| Space  | O(V)         | O(V + E)               |
+| Time   | $O(V \* E)$    | $O((V + E)$ log V)       |
+| Space  | $O(V)$         | $O(V + E)$               |
 | Handles negative weights | Yes | No |
 | Detects negative cycles  | Yes | No |
 
-For a sparse graph (E close to V): Dijkstra is O(V log V), Bellman-Ford is O(V^2). Dijkstra wins badly.
+For a sparse graph (E close to V): Dijkstra is $O(V log V)$, Bellman-Ford is $O(V^2)$. Dijkstra wins badly.
 
-For a dense graph (E close to V^2): Dijkstra is O(V^2 log V), Bellman-Ford is O(V^3). Dijkstra still wins on dense graphs with no negative weights.
+For a dense graph (E close to V^2): Dijkstra is $O(V^2 log V)$, Bellman-Ford is $O(V^3)$. Dijkstra still wins on dense graphs with no negative weights.
 
 Bellman-Ford's only advantages are correctness on negative-weight graphs and cycle detection. When neither applies, use Dijkstra.
 
@@ -214,14 +214,14 @@ Key differences from standard Bellman-Ford:
 
 - Only processes a vertex when its distance improved (via the queue).
 - `count[v]` tracks how many times vertex `v` has been enqueued. If it exceeds `n`, vertex `v` has been relaxed more than `V` times, which is only possible with a negative cycle.
-- Average-case performance on real-world graphs is close to O(E), making it competitive with Dijkstra in practice. But the worst case (a carefully constructed adversarial graph) is still O(V \* E), same as standard Bellman-Ford.
+- Average-case performance on real-world graphs is close to $O(E)$, making it competitive with Dijkstra in practice. But the worst case (a carefully constructed adversarial graph) is still $O(V \* E)$, same as standard Bellman-Ford.
 
 SPFA is the algorithm to reach for when:
 - You expect negative weights but not negative cycles.
 - The graph is sparse and average-case performance matters.
 - You want to combine the generality of Bellman-Ford with speed closer to Dijkstra.
 
-Use standard Bellman-Ford when you need simple, predictable O(V \* E) behavior or when you're implementing the K-stops variant (see below).
+Use standard Bellman-Ford when you need simple, predictable $O(V \* E)$ behavior or when you're implementing the K-stops variant (see below).
 
 ## Application: [LeetCode 787](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/), [[Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
 
@@ -264,13 +264,13 @@ This is the standard Bellman-Ford pattern for "shortest path with at most K edge
 
 | Condition | Use |
 | --------- | --- |
-| No negative edge weights | Dijkstra (faster by O(log V) per vertex) |
+| No negative edge weights | Dijkstra (faster by $O(log V)$ per vertex) |
 | Negative edges, no negative cycles | Bellman-Ford or SPFA |
 | Need to detect negative cycles | Bellman-Ford |
 | Stop count constraint (at most K edges) | Bellman-Ford (K passes with snapshot) |
 | Sparse graph, no negatives | Dijkstra strongly preferred |
 | Dense graph, no negatives | Either (Dijkstra still usually wins) |
-| Dense graph with negatives | Bellman-Ford (O(V^3) vs nothing correct) |
+| Dense graph with negatives | Bellman-Ford ($O(V^3)$ vs nothing correct) |
 
 The presence of negative weights is the deciding factor. When they're absent, Dijkstra is always preferable. When they're present, Bellman-Ford is usually the only correct option.
 
@@ -280,24 +280,24 @@ Both handle negative weights. The distinction is scope:
 
 | Question | Algorithm |
 | -------- | --------- |
-| Shortest paths from one source to all vertices | Bellman-Ford: O(V \* E) |
-| Shortest paths between all pairs of vertices | Floyd-Warshall: O(V^3) |
+| Shortest paths from one source to all vertices | Bellman-Ford: $O(V \* E)$ |
+| Shortest paths between all pairs of vertices | Floyd-Warshall: $O(V^3)$ |
 | Negative cycle detection (from one source) | Bellman-Ford V-th pass |
 | Negative cycle detection (anywhere in graph) | Floyd-Warshall diagonal check |
 
-If the problem fixes a source and asks "distance to all vertices" or "can I reach X from Y," Bellman-Ford is the right level of scope. Floyd-Warshall's O(V^3) is unnecessary overhead when you only need single-source distances.
+If the problem fixes a source and asks "distance to all vertices" or "can I reach X from Y," Bellman-Ford is the right level of scope. Floyd-Warshall's $O(V^3)$ is unnecessary overhead when you only need single-source distances.
 
-Floyd-Warshall becomes the right tool when the problem asks about all pairs simultaneously, or when the graph is small enough that O(V^3) is acceptable and the simplicity of three nested loops is worth it.
+Floyd-Warshall becomes the right tool when the problem asks about all pairs simultaneously, or when the graph is small enough that $O(V^3)$ is acceptable and the simplicity of three nested loops is worth it.
 
 ## Counter-clues: when Bellman-Ford is overkill
 
 - **No negative edges in the problem.** If the problem guarantees non-negative weights (distances, costs, probabilities), Dijkstra is strictly better. Never reach for Bellman-Ford just because you know it works: it works on all cases Dijkstra handles, but at higher cost.
-- **All weights equal to 1.** Use BFS. O(V + E), no edge list iteration needed.
-- **Unweighted graph.** BFS gives shortest hop count in O(V + E).
+- **All weights equal to 1.** Use BFS. $O(V + E)$, no edge list iteration needed.
+- **Unweighted graph.** BFS gives shortest hop count in $O(V + E)$.
 - **All-pairs shortest path on a small graph.** Floyd-Warshall in three lines of nested loops is simpler.
-- **DAG (directed acyclic graph) with mixed weights.** Topological sort + single-pass relaxation is O(V + E) and handles negative edges correctly because there are no cycles to worry about.
+- **DAG (directed acyclic graph) with mixed weights.** Topological sort + single-pass relaxation is $O(V + E)$ and handles negative edges correctly because there are no cycles to worry about.
 
-The pattern: Bellman-Ford's O(V \* E) is only worth paying when (a) negative weights are present and (b) you need single-source distances. In every other case, a cheaper algorithm applies.
+The pattern: Bellman-Ford's $O(V \* E)$ is only worth paying when (a) negative weights are present and (b) you need single-source distances. In every other case, a cheaper algorithm applies.
 
 ## LeetCode exercises
 
@@ -306,7 +306,7 @@ The pattern: Bellman-Ford's O(V \* E) is only worth paying when (a) negative wei
 | [787 Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) | The canonical Bellman-Ford exercise: K+1 passes with snapshot copy |
 | [743 Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/) | Easier with Dijkstra (no negative weights), but solvable with Bellman-Ford as practice |
 
-Note on 743: all edge weights are positive. Dijkstra runs in O((V + E) log V) and is the intended solution. Bellman-Ford gives the correct answer at O(V \* E) cost. Use 743 for Dijkstra practice; use 787 for Bellman-Ford practice.
+Note on 743: all edge weights are positive. Dijkstra runs in $O((V + E)$ log V) and is the intended solution. Bellman-Ford gives the correct answer at $O(V \* E)$ cost. Use 743 for Dijkstra practice; use 787 for Bellman-Ford practice.
 
 ## Multiple uses
 
@@ -493,5 +493,5 @@ if __name__ == "__main__":
 ## Related topics
 
 - [Dijkstra's algorithm](./dijkstra/), the faster single-source algorithm for non-negative weights
-- [BFS](./bfs/), the O(V + E) shortest-path algorithm for unweighted graphs
+- [BFS](./bfs/), the $O(V + E)$ shortest-path algorithm for unweighted graphs
 - [Advanced Graphs](../coding-problems/advanced-graphs/), the problem category where both Dijkstra and Bellman-Ford appear

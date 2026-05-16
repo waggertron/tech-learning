@@ -25,7 +25,7 @@ A peak element is an element that is strictly greater than its neighbors. Given 
 
 You may assume `nums[-1] = nums[n] = -infinity`, meaning the first and last elements only need to beat one neighbor.
 
-The algorithm must run in O(log n) time.
+The algorithm must run in $O(log n)$ time.
 
 **Example**
 - `nums = [1,2,3,1]` → `2` (element 3 is greater than both neighbors)
@@ -91,18 +91,18 @@ func findPeakElement(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1/L2 (linear scan)** | **O(1)** | **up to n-1** | **O(n)** ← dominates |
-| L3 (fallback) | O(1) | at most 1 | O(1) |
+| **L1/L2 (linear scan)** | **$O(1)$** | **up to n-1** | **$O(n)$** ← dominates |
+| L3 (fallback) | $O(1)$ | at most 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n)
-- **Space:** O(1)
+- **Time:** $O(n)$
+- **Space:** $O(1)$
 
-Correct but fails the O(log n) requirement.
+Correct but fails the $O(log n)$ requirement.
 
 ## Approach 2: Binary search on slope direction (optimal)
 
-Key insight: if `nums[mid] < nums[mid + 1]`, the slope is rising to the right, so a peak must exist in `[mid+1, hi]`. If `nums[mid] > nums[mid + 1]`, the slope is falling to the right (or `mid` itself is a peak), so a peak exists in `[lo, mid]`. Binary search on this condition converges to a peak in O(log n) steps.
+Key insight: if `nums[mid] < nums[mid + 1]`, the slope is rising to the right, so a peak must exist in `[mid+1, hi]`. If `nums[mid] > nums[mid + 1]`, the slope is falling to the right (or `mid` itself is a peak), so a peak exists in `[lo, mid]`. Binary search on this condition converges to a peak in $O(log n)$ steps.
 
 <Tabs>
 <TabItem label="Python">
@@ -155,16 +155,16 @@ func findPeakElement(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop guard) | O(1) | log n | O(log n) |
-| **L2/L3 (midpoint + compare)** | **O(1)** | **log n** | **O(log n)** ← dominates |
-| L4 or L5 (narrow) | O(1) | log n | O(log n) |
-| L6 (return) | O(1) | 1 | O(1) |
+| L1 (loop guard) | $O(1)$ | log n | $O(log n)$ |
+| **L2/L3 (midpoint + compare)** | **$O(1)$** | **log n** | **$O(log n)$** ← dominates |
+| L4 or L5 (narrow) | $O(1)$ | log n | $O(log n)$ |
+| L6 (return) | $O(1)$ | 1 | $O(1)$ |
 
 Each iteration halves the search space. After log2(n) iterations, lo == hi and we have found a peak.
 
 **Complexity**
-- **Time:** O(log n), driven by L1 (log n loop iterations, O(1) work each).
-- **Space:** O(1).
+- **Time:** $O(log n)$, driven by L1 (log n loop iterations, $O(1)$ work each).
+- **Space:** $O(1)$.
 
 ### Why `hi = mid` not `hi = mid - 1`
 

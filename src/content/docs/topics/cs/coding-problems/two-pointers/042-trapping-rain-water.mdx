@@ -111,16 +111,16 @@ func trap(height []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (outer loop) | O(1) | n | O(n) |
-| **L4 (left max scan)** | **O(i)** | **n** | **O(n²) total** ← dominates |
-| **L5 (right max scan)** | **O(n-i)** | **n** | **O(n²) total** ← dominates |
-| L6 (contribution) | O(1) | n | O(n) |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L4 (left max scan)** | **$O(i)$** | **n** | **$O(n²)$ total** ← dominates |
+| **L5 (right max scan)** | **$O(n-i)$** | **n** | **$O(n²)$ total** ← dominates |
+| L6 (contribution) | $O(1)$ | n | $O(n)$ |
 
-Each max call scans a prefix/suffix of the array: O(i) and O(n-i) per iteration.
+Each max call scans a prefix/suffix of the array: $O(i)$ and $O(n-i)$ per iteration.
 
 **Complexity**
-- **Time:** O(n²), driven by L4/L5 (two max scans per index).
-- **Space:** O(1) extra.
+- **Time:** $O(n²)$, driven by L4/L5 (two max scans per index).
+- **Space:** $O(1)$ extra.
 
 ## Approach 2: Precomputed left/right max arrays
 
@@ -208,16 +208,16 @@ func trap(height []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3, L4 (init arrays) | O(n) | 1 each | O(n) |
-| **L6, L7 (left-max pass)** | **O(1)** | **n-1** | **O(n)** |
-| **L9, L10 (right-max pass)** | **O(1)** | **n-1** | **O(n)** |
-| **L11 (sum pass)** | **O(1) per element** | **n** | **O(n)** |
+| L3, L4 (init arrays) | $O(n)$ | 1 each | $O(n)$ |
+| **L6, L7 (left-max pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
+| **L9, L10 (right-max pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
+| **L11 (sum pass)** | **$O(1)$ per element** | **n** | **$O(n)$** |
 
-Three linear passes, each O(n). No pass dominates; all contribute equally.
+Three linear passes, each $O(n)$. No pass dominates; all contribute equally.
 
 **Complexity**
-- **Time:** O(n), driven by L6/L7, L9/L10, and L11 (three linear passes).
-- **Space:** O(n). Two auxiliary arrays.
+- **Time:** $O(n)$, driven by L6/L7, L9/L10, and L11 (three linear passes).
+- **Space:** $O(n)$. Two auxiliary arrays.
 
 Clean, easy to reason about, the right answer when memory isn't constrained.
 
@@ -322,17 +322,17 @@ func trap(height []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(1) | 1 | O(1) |
-| L4 (loop condition) | O(1) | n | O(n) |
-| **L5-L13 (per-step work)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1-L3 (init) | $O(1)$ | 1 | $O(1)$ |
+| L4 (loop condition) | $O(1)$ | n | $O(n)$ |
+| **L5-L13 (per-step work)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
 Each iteration advances either `l` or `r`; the two pointers start n-1 apart and converge, so exactly n-1 iterations.
 
 **Complexity**
-- **Time:** O(n), driven by L5-L13 (one O(1) step per pointer advance). Each index visited once.
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L5-L13 (one $O(1)$ step per pointer advance). Each index visited once.
+- **Space:** $O(1)$.
 
-### Monotonic-stack alternative (also O(n), O(n) space)
+### Monotonic-stack alternative (also $O(n)$, $O(n)$ space)
 
 A monotonic decreasing stack of indices computes the trapped water by popping whenever a larger bar is encountered, the popped bar forms the bottom of a basin bounded by the new bar and the next bar on the stack. Same Big-O as the two-pointer version; different pattern.
 
@@ -371,10 +371,10 @@ def trap_stack(height: list[int]) -> int:
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Nested max scans | O(n²) | O(1) |
-| Precomputed max arrays | O(n) | O(n) |
-| **Two pointers** | **O(n)** | **O(1)** |
-| Monotonic stack | O(n) | O(n) |
+| Nested max scans | $O(n²)$ | $O(1)$ |
+| Precomputed max arrays | $O(n)$ | $O(n)$ |
+| **Two pointers** | **$O(n)$** | **$O(1)$** |
+| Monotonic stack | $O(n)$ | $O(n)$ |
 
 Two pointers is the optimal standard answer. The monotonic-stack variant is worth knowing because the technique solves adjacent problems (Largest Rectangle in Histogram, Sum of Subarray Minimums).
 
@@ -452,4 +452,4 @@ console.log('all tests pass');
 ## Related data structures
 
 - [Arrays](../../../data-structures/arrays/), input and two-pointer sweep
-- [Stacks](../../../data-structures/stacks/), monotonic-stack alternative; same O(n) with different mechanics
+- [Stacks](../../../data-structures/stacks/), monotonic-stack alternative; same $O(n)$ with different mechanics

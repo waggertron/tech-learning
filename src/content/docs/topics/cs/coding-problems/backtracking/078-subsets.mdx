@@ -63,12 +63,12 @@ def subsets(nums):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (outer loop) | O(1) overhead | 2^n | O(2^n) |
-| **L2 (build subset)** | **O(n)** | **2^n** | **O(n · 2^n)** ← dominates |
+| L1 (outer loop) | $O(1)$ overhead | 2^n | $O(2^n)$ |
+| **L2 (build subset)** | **$O(n)$** | **2^n** | **$O(n · 2^n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n · 2^n), driven by L2 scanning bits for each mask.
-- **Space:** O(n · 2^n) output.
+- **Time:** $O(n · 2^n)$, driven by L2 scanning bits for each mask.
+- **Space:** $O(n · 2^n)$ output.
 
 Simple and fast for small n. Struggles past n ≈ 20.
 
@@ -90,14 +90,14 @@ def subsets(nums):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (outer loop) | O(1) overhead | n | O(n) |
-| **L2 (extend result)** | **O(2^i · i) at step i** | **n steps** | **O(n · 2^n)** ← dominates |
+| L1 (outer loop) | $O(1)$ overhead | n | $O(n)$ |
+| **L2 (extend result)** | **$O(2^i · i)$ at step i** | **n steps** | **$O(n · 2^n)$** ← dominates |
 
-At step i, `result` has 2^i entries and we copy each to produce 2^i new ones. Total work is the sum over i from 0 to n-1 of 2^i · i = O(n · 2^n).
+At step i, `result` has 2^i entries and we copy each to produce 2^i new ones. Total work is the sum over i from 0 to n-1 of 2^i · i = $O(n · 2^n)$.
 
 **Complexity**
-- **Time:** O(n · 2^n).
-- **Space:** O(n · 2^n).
+- **Time:** $O(n · 2^n)$.
+- **Space:** $O(n · 2^n)$.
 
 Elegant, especially in Python. Slightly more allocation than the backtracking version.
 
@@ -186,15 +186,15 @@ func subsets(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (copy) | O(n) | 2^n leaves | O(n · 2^n) |
-| L2/L4 (recurse) | O(1) dispatch | 2^n nodes | O(2^n) |
-| **L3/L5 (push/pop)** | **O(1)** | **2^n** | **O(2^n)** ← dominates (L1 ties) |
+| L1 (copy) | $O(n)$ | 2^n leaves | $O(n · 2^n)$ |
+| L2/L4 (recurse) | $O(1)$ dispatch | 2^n nodes | $O(2^n)$ |
+| **L3/L5 (push/pop)** | **$O(1)$** | **2^n** | **$O(2^n)$** ← dominates (L1 ties) |
 
 The binary choice (include/exclude) at each of n levels gives exactly 2^n leaves.
 
 **Complexity**
-- **Time:** O(n · 2^n).
-- **Space:** O(n) recursion + output.
+- **Time:** $O(n · 2^n)$.
+- **Space:** $O(n)$ recursion + output.
 
 ### Why `path[:]`?
 We mutate `path` in place across recursive calls. When we record a subset, we need a snapshot, hence the copy.
@@ -217,11 +217,11 @@ We mutate `path` in place across recursive calls. When we record a subset, we ne
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Bitmask | O(n · 2^n) | O(n · 2^n) |
-| Iterative build | O(n · 2^n) | O(n · 2^n) |
-| **Backtracking** | **O(n · 2^n)** | **O(n · 2^n)** |
+| Bitmask | $O(n · 2^n)$ | $O(n · 2^n)$ |
+| Iterative build | $O(n · 2^n)$ | $O(n · 2^n)$ |
+| **Backtracking** | **$O(n · 2^n)$** | **$O(n · 2^n)$** |
 
-All three have the same asymptotic complexity (the output itself is O(n · 2^n)). The backtracking template is the one that generalizes to Subsets II (with duplicates) and other tree-of-choices problems.
+All three have the same asymptotic complexity (the output itself is $O(n · 2^n)$). The backtracking template is the one that generalizes to Subsets II (with duplicates) and other tree-of-choices problems.
 
 ## Test cases
 

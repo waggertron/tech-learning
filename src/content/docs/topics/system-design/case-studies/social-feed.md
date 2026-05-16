@@ -105,7 +105,7 @@ def on_post_created(post_id, author_id):
         r.zremrangebyrank(f"feed:{follower_id}", 0, -1001)  # keep top 1000
 ```
 
-**Pros**: feed reads are O(1) from Redis. Any user's feed load is instant.
+**Pros**: feed reads are $O(1)$ from Redis. Any user's feed load is instant.
 
 **Cons**: if a user has 10M followers, one post triggers 10M Redis writes. This is a write amplification bomb. Lady Gaga posting takes minutes to propagate, not milliseconds.
 

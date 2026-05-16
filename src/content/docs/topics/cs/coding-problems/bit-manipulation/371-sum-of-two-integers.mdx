@@ -101,15 +101,15 @@ func getSum(a int, b int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L5 (bit loop)** | **O(1)** | **32** | **O(1)** ← dominates (constant) |
-| L2-L3 (extract bits) | O(1) | 32 | O(1) |
-| L4-L5 (sum + carry) | O(1) | 32 | O(1) |
+| **L1-L5 (bit loop)** | **$O(1)$** | **32** | **$O(1)$** ← dominates (constant) |
+| L2-L3 (extract bits) | $O(1)$ | 32 | $O(1)$ |
+| L4-L5 (sum + carry) | $O(1)$ | 32 | $O(1)$ |
 
-All 32 iterations are O(1); the whole function is effectively O(1).
+All 32 iterations are $O(1)$; the whole function is effectively $O(1)$.
 
 **Complexity**
-- **Time:** O(32) = O(1), driven by L1/L2-L5 (32 fixed iterations of full-adder logic).
-- **Space:** O(1).
+- **Time:** $O(32)$ = $O(1)$, driven by L1/L2-L5 (32 fixed iterations of full-adder logic).
+- **Space:** $O(1)$.
 
 ## Approach 2: XOR + carry loop (canonical)
 
@@ -168,14 +168,14 @@ func getSum(a int, b int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1, L2 (carry loop)** | **O(1)** | **at most 32** | **O(1)** ← dominates (constant) |
-| L3 (sign correction) | O(1) | 1 | O(1) |
+| **L1, L2 (carry loop)** | **$O(1)$** | **at most 32** | **$O(1)$** ← dominates (constant) |
+| L3 (sign correction) | $O(1)$ | 1 | $O(1)$ |
 
 Each iteration shifts the carry left by one bit; after at most 32 iterations the carry falls off the 32-bit window.
 
 **Complexity**
-- **Time:** O(32) = O(1), driven by L1/L2 (at most 32 carry-propagation iterations).
-- **Space:** O(1).
+- **Time:** $O(32)$ = $O(1)$, driven by L1/L2 (at most 32 carry-propagation iterations).
+- **Space:** $O(1)$.
 
 The final sign correction converts back from unsigned 32-bit to a signed integer.
 
@@ -206,9 +206,9 @@ Doesn't satisfy the problem, but shown for completeness.
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Bit-by-bit full adder | O(32) | O(1) | Explicit and clear |
-| **XOR + carry loop** | **O(32)** | **O(1)** | Canonical |
-| `sum(...)` | O(1) | O(1) | Not allowed by the problem |
+| Bit-by-bit full adder | $O(32)$ | $O(1)$ | Explicit and clear |
+| **XOR + carry loop** | **$O(32)$** | **$O(1)$** | Canonical |
+| `sum(...)` | $O(1)$ | $O(1)$ | Not allowed by the problem |
 
 The XOR + carry loop is the classic bitwise-arithmetic pattern. Same core idea simulates subtraction, multiplication, and division with only `&`, `|`, `^`, and shifts.
 

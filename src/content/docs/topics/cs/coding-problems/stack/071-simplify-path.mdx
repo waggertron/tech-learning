@@ -125,16 +125,16 @@ func simplifyPath(path string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (split) | O(n) | 1 | O(n) |
-| L3 (loop) | O(1) | k | O(k) |
-| **L4-L8 (per-component stack ops)** | **O(1)** | **k** | **O(k)** |
-| L9 (join) | O(n) | 1 | O(n) |
+| L1 (split) | $O(n)$ | 1 | $O(n)$ |
+| L3 (loop) | $O(1)$ | k | $O(k)$ |
+| **L4-L8 (per-component stack ops)** | **$O(1)$** | **k** | **$O(k)$** |
+| L9 (join) | $O(n)$ | 1 | $O(n)$ |
 
-k is at most n (each char could be its own component), so both O(k) terms collapse into O(n).
+k is at most n (each char could be its own component), so both $O(k)$ terms collapse into $O(n)$.
 
 **Complexity**
-- **Time:** O(n), driven by the split and join (L1, L9).
-- **Space:** O(n) for the stack and parts list.
+- **Time:** $O(n)$, driven by the split and join (L1, L9).
+- **Space:** $O(n)$ for the stack and parts list.
 
 **Try this approach:**
 

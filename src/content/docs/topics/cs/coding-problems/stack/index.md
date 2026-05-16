@@ -15,7 +15,7 @@ A stack is LIFO, you push and pop from the same end. In interviews it shows up i
 - **Matched delimiters**: push opens, pop and compare on closes.
 - **Expression evaluation**: operands on the stack, apply operator when you see one (RPN) or use the shunting-yard idea (infix).
 - **Backtracking / combinatorial generation**: the call stack plus local state acts as the stack; recursion is the natural expression.
-- **Monotonic stack**: maintain a stack whose values are monotonically increasing or decreasing. Each element is pushed and popped once, so problems like "next greater element" become O(n).
+- **Monotonic stack**: maintain a stack whose values are monotonically increasing or decreasing. Each element is pushed and popped once, so problems like "next greater element" become $O(n)$.
 
 ## Problems
 

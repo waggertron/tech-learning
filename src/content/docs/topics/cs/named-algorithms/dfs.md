@@ -140,12 +140,12 @@ The iterative version explored C before B because C was pushed after B and sits 
 
 | Metric | Cost | Why |
 | --- | --- | --- |
-| Time | O(V + E) | Each vertex visited once; each edge examined once (or twice in undirected graphs) |
-| Space (recursive) | O(V) worst case | Call stack depth equals longest DFS path, up to V on a chain graph |
-| Space (iterative) | O(V) worst case | Explicit stack holds at most V nodes |
-| Space (visited set) | O(V) | One entry per vertex |
+| Time | $O(V + E)$ | Each vertex visited once; each edge examined once (or twice in undirected graphs) |
+| Space (recursive) | $O(V)$ worst case | Call stack depth equals longest DFS path, up to V on a chain graph |
+| Space (iterative) | $O(V)$ worst case | Explicit stack holds at most V nodes |
+| Space (visited set) | $O(V)$ | One entry per vertex |
 
-The O(V + E) time bound holds for both directed and undirected graphs, and for both adjacency list and adjacency matrix representations (though adjacency matrix costs O(V^2) to scan all neighbors).
+The $O(V + E)$ time bound holds for both directed and undirected graphs, and for both adjacency list and adjacency matrix representations (though adjacency matrix costs $O(V^2)$ to scan all neighbors).
 
 ## Application 1: Cycle detection
 
@@ -273,7 +273,7 @@ def count_components(n, edges):
     return count
 ```
 
-Each top-level call to `dfs(u)` fully explores one connected component before the outer loop moves to the next unvisited node. Time is still O(V + E) total because each node and edge is touched once across all DFS calls.
+Each top-level call to `dfs(u)` fully explores one connected component before the outer loop moves to the next unvisited node. Time is still $O(V + E)$ total because each node and edge is touched once across all DFS calls.
 
 ## DFS on grids (flood fill)
 
@@ -314,7 +314,7 @@ Grid DFS is also the core of "surrounded regions" problems: flood-fill from the 
 
 ## When DFS beats BFS
 
-- **Memory on deep or wide graphs:** BFS holds the entire frontier in a queue, which can be O(V) in the worst case at every level. DFS holds only the current path, so for very deep graphs with narrow branching, DFS uses far less memory.
+- **Memory on deep or wide graphs:** BFS holds the entire frontier in a queue, which can be $O(V)$ in the worst case at every level. DFS holds only the current path, so for very deep graphs with narrow branching, DFS uses far less memory.
 - **Backtracking problems:** when you need to explore all solutions (word search, N-queens, permutations), DFS with backtracking is the natural fit. BFS cannot backtrack because it processes nodes level by level without maintaining path state.
 - **Cycle detection:** the "in-progress" gray-node trick requires the call stack to reflect the active path. DFS provides this naturally; BFS does not.
 - **Topological sort:** DFS post-order directly produces a topological ordering. BFS (Kahn's) requires computing and maintaining in-degrees separately.
@@ -415,7 +415,7 @@ def has_cycle_directed(graph):
     return any(dfs(u) for u in graph if color[u] == WHITE)
 ```
 
-**All paths from source to target.** DFS with backtracking: push the current node to path, recurse to neighbors, pop when done. Collect all paths that reach the target. O(2^V x V) in worst case (all subsets of nodes are valid paths in a complete graph).
+**All paths from source to target.** DFS with backtracking: push the current node to path, recurse to neighbors, pop when done. Collect all paths that reach the target. $O(2^V x V)$ in worst case (all subsets of nodes are valid paths in a complete graph).
 
 ```python
 def all_paths(graph, source, target):

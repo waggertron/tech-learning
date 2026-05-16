@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A **trie** (pronounced "try," from *retrieval*) is a rooted tree where each edge is labeled with a character and a path from the root to a marked node spells a word. It's optimized for prefix queries: "does any stored word start with `foo`?" in O(L) where L is the prefix length, independent of the dictionary's total size. Classic applications: autocomplete, spell check, IP routing, and word games on a grid.
+A **trie** (pronounced "try," from *retrieval*) is a rooted tree where each edge is labeled with a character and a path from the root to a marked node spells a word. It's optimized for prefix queries: "does any stored word start with `foo`?" in $O(L)$ where L is the prefix length, independent of the dictionary's total size. Classic applications: autocomplete, spell check, IP routing, and word games on a grid.
 
 ## In-depth description
 
@@ -21,7 +21,7 @@ Each **trie node** typically stores:
 
 **Insertion** walks down the tree from the root, creating new nodes as needed, and marks the final node as end-of-word. **Search** follows children. If any character isn't a child, the word isn't present. **Prefix search** is the same walk without the end-of-word check.
 
-The crucial property: every operation on a string of length L is **O(L)**. It does *not* depend on the number of words stored. This makes tries competitive even against hash sets when you need prefix queries, hash sets give you O(L) membership but can't answer "starts-with" without scanning every key.
+The crucial property: every operation on a string of length L is **$O(L)$**. It does *not* depend on the number of words stored. This makes tries competitive even against hash sets when you need prefix queries, hash sets give you $O(L)$ membership but can't answer "starts-with" without scanning every key.
 
 **Space is the tradeoff.** A naive trie uses `26 × |nodes|` pointers in the worst case. Mitigations:
 
@@ -35,11 +35,11 @@ The crucial property: every operation on a string of length L is **O(L)**. It do
 
 | Operation | Time | Space |
 | --- | --- | --- |
-| Insert word of length L | O(L) | O(L) (worst case, new path) |
-| Search word of length L | O(L) | O(1) |
-| Prefix search (length L, k matches) | O(L + output) | O(1) + output |
-| Delete | O(L) | - |
-| Build from n words, total length T | O(T) | O(T) (naive), less with compression |
+| Insert word of length L | $O(L)$ | $O(L)$ (worst case, new path) |
+| Search word of length L | $O(L)$ | $O(1)$ |
+| Prefix search (length L, k matches) | $O(L + output)$ | $O(1)$ + output |
+| Delete | $O(L)$ | - |
+| Build from n words, total length T | $O(T)$ | $O(T)$ (naive), less with compression |
 
 ## Common uses in DSA
 

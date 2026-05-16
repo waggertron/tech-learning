@@ -75,8 +75,8 @@ def exist(board, word):
 ```
 
 **Complexity**
-- **Time:** O(m · n · 4^L) where L = word length.
-- **Space:** O(L) visited + recursion.
+- **Time:** $O(m · n · 4^L)$ where L = word length.
+- **Space:** $O(L)$ visited + recursion.
 
 ## Approach 2: DFS with in-place mutation (canonical)
 
@@ -175,15 +175,15 @@ func exist(board [][]byte, word string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (boundary/mismatch) | O(1) | one per DFS call | O(n · 4^L) |
-| L3/L5 (mark/restore) | O(1) | one per DFS call | O(n · 4^L) |
-| **L4 (four recursive calls)** | **O(1) dispatch** | **n · 4^L** | **O(n · 4^L)** ← dominates |
+| L2 (boundary/mismatch) | $O(1)$ | one per DFS call | $O(n · 4^L)$ |
+| L3/L5 (mark/restore) | $O(1)$ | one per DFS call | $O(n · 4^L)$ |
+| **L4 (four recursive calls)** | **$O(1)$ dispatch** | **n · 4^L** | **$O(n · 4^L)$** ← dominates |
 
 Starting from each of n cells, the DFS explores at most 4^L paths of length L.
 
 **Complexity**
-- **Time:** O(m · n · 4^L), driven by L4 branching four ways per step.
-- **Space:** O(L) recursion. No auxiliary set.
+- **Time:** $O(m · n · 4^L)$, driven by L4 branching four ways per step.
+- **Space:** $O(L)$ recursion. No auxiliary set.
 
 Standard interview answer. The "restore on backtrack" is the essential pattern.
 
@@ -240,21 +240,21 @@ def exist(board, word):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (count + reject) | O(n + L) | 1 | O(n + L) |
-| L3 (reverse) | O(L) | at most 1 | O(L) |
-| **L4 (DFS)** | **O(n · 4^L)** | **1** | **O(n · 4^L)** ← dominates |
+| L1/L2 (count + reject) | $O(n + L)$ | 1 | $O(n + L)$ |
+| L3 (reverse) | $O(L)$ | at most 1 | $O(L)$ |
+| **L4 (DFS)** | **$O(n · 4^L)$** | **1** | **$O(n · 4^L)$** ← dominates |
 
 **Complexity**
 - **Time:** Same worst case; much faster in practice on edge-case inputs.
-- **Space:** O(L) recursion.
+- **Space:** $O(L)$ recursion.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS + visited set | O(m · n · 4^L) | O(L) |
-| **DFS + in-place mutation** | O(m · n · 4^L) | O(L) |
-| + Counter pruning / reverse | same Big-O | O(L) |
+| DFS + visited set | $O(m · n · 4^L)$ | $O(L)$ |
+| **DFS + in-place mutation** | $O(m · n · 4^L)$ | $O(L)$ |
+| + Counter pruning / reverse | same Big-O | $O(L)$ |
 
 The in-place mutation approach is the canonical interview answer. Counter-based pruning is a common "how would you optimize?" follow-up.
 

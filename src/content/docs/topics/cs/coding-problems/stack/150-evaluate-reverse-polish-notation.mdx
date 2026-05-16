@@ -121,15 +121,15 @@ func evalRPN(tokens []string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (loop) | O(1) | n | O(n) |
-| **L3-L11 (per-token: push or pop+apply)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L12 (return) | O(1) | 1 | O(1) |
+| L2 (loop) | $O(1)$ | n | $O(n)$ |
+| **L3-L11 (per-token: push or pop+apply)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L12 (return) | $O(1)$ | 1 | $O(1)$ |
 
-Each token is processed in O(1); one pass over all n tokens.
+Each token is processed in $O(1)$; one pass over all n tokens.
 
 **Complexity**
-- **Time:** O(n), driven by L3-L11 (one push or pop+apply per token).
-- **Space:** O(n). Stack depth at most O(n).
+- **Time:** $O(n)$, driven by L3-L11 (one push or pop+apply per token).
+- **Space:** $O(n)$. Stack depth at most $O(n)$.
 
 ## Approach 2: Stack with operator dictionary (cleaner)
 
@@ -212,16 +212,16 @@ func evalRPN(tokens []string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init ops dict) | O(1) | 1 | O(1) |
-| L3 (loop) | O(1) | n | O(n) |
-| **L4-L8 (per-token: push or apply)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L9 (return) | O(1) | 1 | O(1) |
+| L1 (init ops dict) | $O(1)$ | 1 | $O(1)$ |
+| L3 (loop) | $O(1)$ | n | $O(n)$ |
+| **L4-L8 (per-token: push or apply)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L9 (return) | $O(1)$ | 1 | $O(1)$ |
 
 Functionally identical to Approach 1; easier to extend (new operators) and easier to read.
 
 **Complexity**
-- **Time:** O(n), driven by L4-L8 (one push or pop+apply per token).
-- **Space:** O(n).
+- **Time:** $O(n)$, driven by L4-L8 (one push or pop+apply per token).
+- **Space:** $O(n)$.
 
 **Try this approach:**
 
@@ -241,8 +241,8 @@ Functionally identical to Approach 1; easier to extend (new operators) and easie
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Stack + if/elif | O(n) | O(n) | Verbose |
-| **Stack + operator dict** | **O(n)** | **O(n)** | Cleanest |
+| Stack + if/elif | $O(n)$ | $O(n)$ | Verbose |
+| **Stack + operator dict** | **$O(n)$** | **$O(n)$** | Cleanest |
 
 ## Test cases
 

@@ -143,15 +143,15 @@ func isValidBST(root *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (subtree walks) | O(n) | O(n) calls | O(n²) |
-| **L3/L4 (all_less/all_greater)** | **O(n)** | **n nodes** | **O(n²)** ← dominates |
-| L5/L6 (recurse children) | O(1) dispatch | n | O(n) |
+| L1/L2 (subtree walks) | $O(n)$ | $O(n)$ calls | $O(n²)$ |
+| **L3/L4 (all_less/all_greater)** | **$O(n)$** | **n nodes** | **$O(n²)$** ← dominates |
+| L5/L6 (recurse children) | $O(1)$ dispatch | n | $O(n)$ |
 
-For each node, the subtree walks re-examine every descendant. In a skewed tree of depth n, the same nodes are re-visited O(n) times each, giving O(n²) total.
+For each node, the subtree walks re-examine every descendant. In a skewed tree of depth n, the same nodes are re-visited $O(n)$ times each, giving $O(n²)$ total.
 
 **Complexity**
-- **Time:** O(n²) worst case, driven by L3/L4 re-walking subtrees at every node.
-- **Space:** O(h).
+- **Time:** $O(n²)$ worst case, driven by L3/L4 re-walking subtrees at every node.
+- **Space:** $O(h)$.
 
 Correct but re-walks subtrees many times.
 
@@ -233,16 +233,16 @@ func isValidBST(root *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (recurse left) | O(1) dispatch | n | O(n) |
-| L3 (compare prev) | O(1) | n | O(n) |
-| L4 (update prev) | O(1) | n | O(n) |
-| **L5 (recurse right)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+| L2 (recurse left) | $O(1)$ dispatch | n | $O(n)$ |
+| L3 (compare prev) | $O(1)$ | n | $O(n)$ |
+| L4 (update prev) | $O(1)$ | n | $O(n)$ |
+| **L5 (recurse right)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
-Every node is visited exactly once. All lines contribute O(n) total; the whole traversal is O(n).
+Every node is visited exactly once. All lines contribute $O(n)$ total; the whole traversal is $O(n)$.
 
 **Complexity**
-- **Time:** O(n), each node visited once via L2/L5.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$, each node visited once via L2/L5.
+- **Space:** $O(h)$ recursion.
 
 Elegant; the BST's defining property makes this a one-liner-ish implementation.
 
@@ -323,14 +323,14 @@ func isValidBST(root *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (bounds check) | O(1) | n | O(n) |
-| **L2/L3 (recurse children)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+| L1 (bounds check) | $O(1)$ | n | $O(n)$ |
+| **L2/L3 (recurse children)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
-Each node is visited exactly once, with O(1) work per node. The bounds are passed as scalars so there is no copying cost.
+Each node is visited exactly once, with $O(1)$ work per node. The bounds are passed as scalars so there is no copying cost.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3 visiting every node once.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$, driven by L2/L3 visiting every node once.
+- **Space:** $O(h)$ recursion.
 
 **Try this approach:**
 
@@ -350,11 +350,11 @@ Each node is visited exactly once, with O(1) work per node. The bounds are passe
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Nested all-less / all-greater | O(n²) | O(h) |
-| Inorder monotonic check | O(n) | O(h) |
-| **Recursive bounds** | **O(n)** | **O(h)** |
+| Nested all-less / all-greater | $O(n²)$ | $O(h)$ |
+| Inorder monotonic check | $O(n)$ | $O(h)$ |
+| **Recursive bounds** | **$O(n)$** | **$O(h)$** |
 
-Both Approach 2 and Approach 3 are O(n); the bounds version scales more naturally to variants that need upper/lower constraints (insertion, range counting).
+Both Approach 2 and Approach 3 are $O(n)$; the bounds version scales more naturally to variants that need upper/lower constraints (insertion, range counting).
 
 ## Test cases
 

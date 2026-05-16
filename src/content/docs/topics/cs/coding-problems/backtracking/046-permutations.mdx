@@ -63,11 +63,11 @@ def permute(nums):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (generate + convert)** | **O(n) per permutation** | **n!** | **O(n · n!)** ← dominates |
+| **L1 (generate + convert)** | **$O(n)$ per permutation** | **n!** | **$O(n · n!)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n · n!), driven by L1 generating and copying n! permutations each of length n.
-- **Space:** O(n · n!) output.
+- **Time:** $O(n · n!)$, driven by L1 generating and copying n! permutations each of length n.
+- **Space:** $O(n · n!)$ output.
 
 Production-correct; usually rejected in interviews that want the algorithm.
 
@@ -170,15 +170,15 @@ func permute(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (copy) | O(n) | n! | O(n · n!) |
-| L2 (skip) | O(1) | n per level | O(n · n!) |
-| **L5 (recurse)** | **O(1) dispatch** | **n · n! nodes** | **O(n · n!)** ← dominates (all lines tie) |
+| L1 (copy) | $O(n)$ | n! | $O(n · n!)$ |
+| L2 (skip) | $O(1)$ | n per level | $O(n · n!)$ |
+| **L5 (recurse)** | **$O(1)$ dispatch** | **n · n! nodes** | **$O(n · n!)$** ← dominates (all lines tie) |
 
-The recursion tree has n! leaves, each at depth n, giving O(n · n!) total node visits.
+The recursion tree has n! leaves, each at depth n, giving $O(n · n!)$ total node visits.
 
 **Complexity**
-- **Time:** O(n · n!), driven by L5 traversing the full permutation tree.
-- **Space:** O(n) recursion + output.
+- **Time:** $O(n · n!)$, driven by L5 traversing the full permutation tree.
+- **Space:** $O(n)$ recursion + output.
 
 The clearest expression of the backtracking template for permutations.
 
@@ -277,13 +277,13 @@ func permute(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (copy) | O(n) | n! | O(n · n!) |
-| L2/L4 (swap + undo) | O(1) | n · n! | O(n · n!) |
-| **L3 (recurse)** | **O(1) dispatch** | **n · n! nodes** | **O(n · n!)** ← dominates (all lines tie) |
+| L1 (copy) | $O(n)$ | n! | $O(n · n!)$ |
+| L2/L4 (swap + undo) | $O(1)$ | n · n! | $O(n · n!)$ |
+| **L3 (recurse)** | **$O(1)$ dispatch** | **n · n! nodes** | **$O(n · n!)$** ← dominates (all lines tie) |
 
 **Complexity**
-- **Time:** O(n · n!).
-- **Space:** O(n) recursion.
+- **Time:** $O(n · n!)$.
+- **Space:** $O(n)$ recursion.
 
 Saves the `used` array. Slightly less readable; mutates input.
 
@@ -305,11 +305,11 @@ Saves the `used` array. Slightly less readable; mutates input.
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| `itertools.permutations` | O(n · n!) | O(n · n!) |
-| **Backtracking + `used`** | **O(n · n!)** | **O(n)** recursion |
-| In-place swap | O(n · n!) | O(n) recursion |
+| `itertools.permutations` | $O(n · n!)$ | $O(n · n!)$ |
+| **Backtracking + `used`** | **$O(n · n!)$** | **$O(n)$** recursion |
+| In-place swap | $O(n · n!)$ | $O(n)$ recursion |
 
-All three are optimal in Big-O (output is itself O(n · n!)). Backtracking with `used` is the cleanest template; extends directly to Permutations II (duplicates allowed).
+All three are optimal in Big-O (output is itself $O(n · n!)$). Backtracking with `used` is the cleanest template; extends directly to Permutations II (duplicates allowed).
 
 ## Test cases
 

@@ -56,7 +56,7 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 
 ## BFS level-separation techniques
 
-Level-order BFS puts nodes into a queue. The queue gives you nodes in the right order, but it doesn't tell you where one level ends and the next begins. Three tricks solve this. All are O(n) time and O(n) space; the differences are code clarity and constant-factor overhead.
+Level-order BFS puts nodes into a queue. The queue gives you nodes in the right order, but it doesn't tell you where one level ends and the next begins. Three tricks solve this. All are $O(n)$ time and $O(n)$ space; the differences are code clarity and constant-factor overhead.
 
 ### Technique 1: level_size snapshot (preferred)
 

@@ -80,7 +80,7 @@ Returns `0`. Notice how the two pushed `1`s collide in the next round, an emerge
 ### What the traces reveal
 
 - **The only state that matters is the multiset of weights.** Order, history, and identity are irrelevant. That's the signature of a problem that wants a heap.
-- **Each round is O(log n) reads + O(log n) writes.** Three operations on a heap (two pops, optional push), no scanning, no indexing.
+- **Each round is $O(log n)$ reads + $O(log n)$ writes.** Three operations on a heap (two pops, optional push), no scanning, no indexing.
 - **The algorithm never looks ahead.** It can't tell whether a push will produce an annihilation later. Greedy on the two largest is enough.
 
 ## Try it yourself
@@ -158,16 +158,16 @@ func lastStoneWeight(stones []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop test) | O(1) | n-1 | O(n) |
-| **L2 (sort)** | **O(n log n)** | **up to n-1** | **O(n² log n)** ← dominates |
-| L3, L4 (pops) | O(1) each | n-1 each | O(n) |
-| L5 (append) | O(1) amortized | up to n-1 | O(n) |
+| L1 (loop test) | $O(1)$ | n-1 | $O(n)$ |
+| **L2 (sort)** | **$O(n log n)$** | **up to n-1** | **$O(n² log n)$** ← dominates |
+| L3, L4 (pops) | $O(1)$ each | n-1 each | $O(n)$ |
+| L5 (append) | $O(1)$ amortized | up to n-1 | $O(n)$ |
 
-The whole story is L2. Sorting an array of size n costs O(n log n), and we do it once per round. Annihilation rounds shrink the array faster, but the worst case (no annihilations) still gives n-1 rounds, so the total is O(n × n log n) = **O(n² log n)**.
+The whole story is L2. Sorting an array of size n costs $O(n log n)$, and we do it once per round. Annihilation rounds shrink the array faster, but the worst case (no annihilations) still gives n-1 rounds, so the total is $O(n × n log n)$ = **$O(n² log n)$**.
 
 **Complexity**
-- **Time:** O(n² log n), driven entirely by L2.
-- **Space:** O(1) extra (sort is in-place; pops and appends don't grow the array beyond its starting capacity).
+- **Time:** $O(n² log n)$, driven entirely by L2.
+- **Space:** $O(1)$ extra (sort is in-place; pops and appends don't grow the array beyond its starting capacity).
 
 ## Approach 2: Max-heap (optimal)
 
@@ -294,22 +294,22 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (negate list / build heap) | O(1) per element | n | O(n) |
-| L2 (heapify / incremental) | O(n) | 1 | O(n) |
-| L3 (loop test) | O(1) | n-1 | O(n) |
-| **L4, L5 (pops)** | **O(log n)** | **n-1 each** | **O(n log n)** ← dominates |
-| L6 (push) | O(log n) | up to n-1 | O(n log n) |
+| L1 (negate list / build heap) | $O(1)$ per element | n | $O(n)$ |
+| L2 (heapify / incremental) | $O(n)$ | 1 | $O(n)$ |
+| L3 (loop test) | $O(1)$ | n-1 | $O(n)$ |
+| **L4, L5 (pops)** | **$O(log n)$** | **n-1 each** | **$O(n log n)$** ← dominates |
+| L6 (push) | $O(log n)$ | up to n-1 | $O(n log n)$ |
 
 Two important details that often trip people up:
 
-- **`heapify` is O(n), not O(n log n).** Floyd's bottom-up construction sifts each node down toward the leaves, and the total work across the whole tree is bounded by a geometric series that sums to O(n). Building the heap is cheaper than maintaining it.
-- **Each round does at most three O(log n) operations.** Two pops, one optional push. We never scan, never re-sort, never index into the middle.
+- **`heapify` is $O(n)$, not $O(n log n)$.** Floyd's bottom-up construction sifts each node down toward the leaves, and the total work across the whole tree is bounded by a geometric series that sums to $O(n)$. Building the heap is cheaper than maintaining it.
+- **Each round does at most three $O(log n)$ operations.** Two pops, one optional push. We never scan, never re-sort, never index into the middle.
 
-Since we do n-1 rounds and each round is O(log n), the running total is **O(n log n)**, dominated by L4/L5/L6.
+Since we do n-1 rounds and each round is $O(log n)$, the running total is **$O(n log n)$**, dominated by L4/L5/L6.
 
 **Complexity**
-- **Time:** O(n log n), driven by L4/L5/L6 (the three heap operations inside the loop).
-- **Space:** O(n) for the heap.
+- **Time:** $O(n log n)$, driven by L4/L5/L6 (the three heap operations inside the loop).
+- **Space:** $O(n)$ for the heap.
 
 **Try this approach:**
 
@@ -326,10 +326,10 @@ Since we do n-1 rounds and each round is O(log n), the running total is **O(n lo
 
 | Approach | Time | Space | Bottleneck |
 | --- | --- | --- | --- |
-| Sort each round | O(n² log n) | O(1) | L2: re-sorting every round |
-| **Max-heap** | **O(n log n)** | **O(n)** | **L4/L5/L6: per-round heap ops** |
+| Sort each round | $O(n² log n)$ | $O(1)$ | L2: re-sorting every round |
+| **Max-heap** | **$O(n log n)$** | **$O(n)$** | **L4/L5/L6: per-round heap ops** |
 
-Simulation problems with dynamic priority almost always want a heap. The brute-force version is a good baseline because it makes the "what does each round actually cost?" question impossible to ignore: if your inner-loop step is O(n log n), you've already lost a factor of n that a heap would have saved.
+Simulation problems with dynamic priority almost always want a heap. The brute-force version is a good baseline because it makes the "what does each round actually cost?" question impossible to ignore: if your inner-loop step is $O(n log n)$, you've already lost a factor of n that a heap would have saved.
 
 ## Test cases
 

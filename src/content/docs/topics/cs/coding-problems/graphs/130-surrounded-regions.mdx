@@ -62,8 +62,8 @@ LeetCode 130 · [Link](https://leetcode.com/problems/surrounded-regions/) · *Me
 For each `O`, DFS to see if the component touches the border. If not, flip them all to `X`.
 
 **Complexity**
-- **Time:** O(m*n), driven by total component work across all cells.
-- **Space:** O(m*n) for the visited set and the `done` set.
+- **Time:** $O(m*n)$, driven by total component work across all cells.
+- **Space:** $O(m*n)$ for the visited set and the `done` set.
 
 Works but it's awkward to implement the "touches border" flag cleanly.
 
@@ -134,14 +134,14 @@ function solve(board: string[][]): void {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L6 (seed top/bottom) | O(1) | 2*n | O(n) |
-| L7 (seed left/right) | O(1) | 2*m | O(m) |
-| **L5 (DFS recursion)** | **O(1) per cell** | **at most m*n total** | **O(m*n)** ← dominates |
-| L8-L10 (final sweep) | O(1) | m*n | O(m*n) |
+| L6 (seed top/bottom) | $O(1)$ | 2*n | $O(n)$ |
+| L7 (seed left/right) | $O(1)$ | 2*m | $O(m)$ |
+| **L5 (DFS recursion)** | **$O(1)$ per cell** | **at most m*n total** | **$O(m*n)$** ← dominates |
+| L8-L10 (final sweep) | $O(1)$ | m*n | $O(m*n)$ |
 
 **Complexity**
-- **Time:** O(m*n), driven by L5/L8 (DFS traversal + final sweep).
-- **Space:** O(m*n) recursion stack in the worst case (a board full of O's causes a chain of depth m*n).
+- **Time:** $O(m*n)$, driven by L5/L8 (DFS traversal + final sweep).
+- **Space:** $O(m*n)$ recursion stack in the worst case (a board full of O's causes a chain of depth m*n).
 
 ## Approach 3: BFS variant of Approach 2
 
@@ -220,8 +220,8 @@ function solve(board: string[][]): void {
 </Tabs>
 
 **Complexity**
-- **Time:** O(m*n), driven by BFS traversal + final sweep.
-- **Space:** O(m*n) for the queue in the worst case.
+- **Time:** $O(m*n)$, driven by BFS traversal + final sweep.
+- **Space:** $O(m*n)$ for the queue in the worst case.
 
 **Try this approach:**
 
@@ -241,9 +241,9 @@ function solve(board: string[][]): void {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS + border-touch flag | O(m*n) | O(m*n) |
-| **Reverse DFS from borders** | **O(m*n)** | **O(m*n)** |
-| Reverse BFS from borders | O(m*n) | O(m*n) |
+| DFS + border-touch flag | $O(m*n)$ | $O(m*n)$ |
+| **Reverse DFS from borders** | **$O(m*n)$** | **$O(m*n)$** |
+| Reverse BFS from borders | $O(m*n)$ | $O(m*n)$ |
 
 Same "reverse direction from boundary" trick as Pacific Atlantic, the cleanest version of the problem.
 

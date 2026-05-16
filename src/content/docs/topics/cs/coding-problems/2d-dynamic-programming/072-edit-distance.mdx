@@ -109,15 +109,15 @@ func minDistance(word1 string, word2 string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2-L4 (base + match checks) | O(1) | per call | O(1) each |
-| L5 (one recursive call on match) | O(1) work + 1 call | per match | included below |
-| **L6 (three recursive branches on mismatch)** | **O(1) work + 3 calls** | **worst case every call** | **O(3^(m+n))** ← dominates |
+| L2-L4 (base + match checks) | $O(1)$ | per call | $O(1)$ each |
+| L5 (one recursive call on match) | $O(1)$ work + 1 call | per match | included below |
+| **L6 (three recursive branches on mismatch)** | **$O(1)$ work + 3 calls** | **worst case every call** | **$O(3^{m+n})$** ← dominates |
 
 Every mismatch spawns three sub-calls. Without memoization the same `(i, j)` sub-problem is recomputed exponentially many times.
 
 **Complexity**
-- **Time:** O(3^(m + n)), driven by L6 triple-branching on mismatches.
-- **Space:** O(m + n) recursion depth.
+- **Time:** $O(3^{m+n})$, driven by L6 triple-branching on mismatches.
+- **Space:** $O(m + n)$ recursion depth.
 
 ## Approach 2: Top-down memoized
 
@@ -171,15 +171,15 @@ function minDistance(word1: string, word2: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (lru_cache) | O(1) | 1 | O(1) |
-| L2-L4 (checks) | O(1) | once per unique (i,j) | O(m · n) total |
-| **L5, L6 (recursive calls, cache hits after first)** | **O(1) per call** | **at most (m+1)(n+1) unique states** | **O(m · n)** ← dominates |
+| L1 (lru_cache) | $O(1)$ | 1 | $O(1)$ |
+| L2-L4 (checks) | $O(1)$ | once per unique (i,j) | $O(m · n)$ total |
+| **L5, L6 (recursive calls, cache hits after first)** | **$O(1)$ per call** | **at most (m+1)(n+1) unique states** | **$O(m · n)$** ← dominates |
 
-Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pairs, each taking O(1).
+Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pairs, each taking $O(1)$.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 across all unique (i,j) states.
-- **Space:** O(m · n) for the memo table.
+- **Time:** $O(m · n)$, driven by L5/L6 across all unique (i,j) states.
+- **Space:** $O(m · n)$ for the memo table.
 
 **Try this approach:**
 
@@ -275,17 +275,17 @@ func minDistance(word1 string, word2 string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (table init) | O(1) per cell | (m+1)(n+1) | O(m · n) |
-| L3 (base init col 0) | O(1) | m+1 | O(m) |
-| L4 (base init row 0) | O(1) | n+1 | O(n) |
-| **L5+L6 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
-| L7-L9 (table fill) | O(1) | once per cell | included above |
+| L2 (table init) | $O(1)$ per cell | (m+1)(n+1) | $O(m · n)$ |
+| L3 (base init col 0) | $O(1)$ | m+1 | $O(m)$ |
+| L4 (base init row 0) | $O(1)$ | n+1 | $O(n)$ |
+| **L5+L6 (double loop)** | **$O(1)$ body** | **m · n** | **$O(m · n)$** ← dominates |
+| L7-L9 (table fill) | $O(1)$ | once per cell | included above |
 
-Every cell of the DP table is filled in O(1) via three table lookups. The double loop at L5/L6 drives the total.
+Every cell of the DP table is filled in $O(1)$ via three table lookups. The double loop at L5/L6 drives the total.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 (the double loop over all DP cells).
-- **Space:** O(m · n). Reducible to O(min(m, n)) with rolling rows.
+- **Time:** $O(m · n)$, driven by L5/L6 (the double loop over all DP cells).
+- **Space:** $O(m · n)$. Reducible to $O(min(m, n)$) with rolling rows.
 
 **Try this approach:**
 
@@ -305,9 +305,9 @@ Every cell of the DP table is filled in O(1) via three table lookups. The double
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(3^(m + n)) | O(m + n) |
-| Top-down memo | O(m · n) | O(m · n) |
-| **Bottom-up 2-D DP** | **O(m · n)** | **O(m · n)** |
+| Naive recursion | $O(3^{m+n})$ | $O(m + n)$ |
+| Top-down memo | $O(m · n)$ | $O(m · n)$ |
+| **Bottom-up 2-D DP** | **$O(m · n)$** | **$O(m · n)$** |
 
 Edit Distance (Levenshtein) is one of the most-cited DP problems, it underlies spell-check, DNA alignment, and diff algorithms.
 

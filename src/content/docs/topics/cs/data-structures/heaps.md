@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A **heap** is a tree-based structure satisfying the heap property: in a min-heap, every parent ≤ its children; in a max-heap, every parent ≥ its children. **Priority queue** is the abstract type; a binary heap is the standard implementation. Heaps give O(1) find-min/max and O(log n) push/pop, the optimal tradeoff for problems that need "quickly give me the smallest/largest element, then update."
+A **heap** is a tree-based structure satisfying the heap property: in a min-heap, every parent ≤ its children; in a max-heap, every parent ≥ its children. **Priority queue** is the abstract type; a binary heap is the standard implementation. Heaps give $O(1)$ find-min/max and $O(log n)$ push/pop, the optimal tradeoff for problems that need "quickly give me the smallest/largest element, then update."
 
 ## In-depth description
 
@@ -27,7 +27,7 @@ Two fundamental operations maintain the invariant:
 - **Heapify-up (sift-up)**: after push, bubble the new element up until the heap property holds.
 - **Heapify-down (sift-down)**: after pop of the root, move the last element to the root and sink it down.
 
-**Building a heap from an unsorted array is O(n)**, not O(n log n), via bottom-up heapify. This is a common interview gotcha.
+**Building a heap from an unsorted array is $O(n)$**, not $O(n log n)$, via bottom-up heapify. This is a common interview gotcha.
 
 Standard library specifics:
 
@@ -35,18 +35,18 @@ Standard library specifics:
 - **Java** `PriorityQueue`, min-heap by default; pass a comparator for max-heap.
 - **C++** `std::priority_queue`, *max*-heap by default.
 
-**Top-K pattern**, to find the K largest elements in a stream, maintain a min-heap of size K. Each new element costs O(log K); total O(n log K) for n elements. Dramatically better than sorting (O(n log n)) when K is small.
+**Top-K pattern**, to find the K largest elements in a stream, maintain a min-heap of size K. Each new element costs $O(log K)$; total $O(n log K)$ for n elements. Dramatically better than sorting ($O(n log n)$) when K is small.
 
 ## Time complexity
 
 | Operation | Time |
 | --- | --- |
-| Find min / max | O(1) |
-| Insert (push) | O(log n) |
-| Extract min / max | O(log n) |
-| Heapify an existing array | O(n) |
-| Delete arbitrary element | O(log n) (if index known) |
-| Space | O(n) |
+| Find min / max | $O(1)$ |
+| Insert (push) | $O(log n)$ |
+| Extract min / max | $O(log n)$ |
+| Heapify an existing array | $O(n)$ |
+| Delete arbitrary element | $O(log n)$ (if index known) |
+| Space | $O(n)$ |
 
 ## Common uses in DSA
 

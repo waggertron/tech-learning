@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Overview
 
-A trie stores a set of strings as a tree, where each edge is a character and a path from the root marks the characters of a stored word. Insertion and lookup are O(L) where L is the word length, independent of how many words are stored. Tries are the right structure whenever you need to answer **prefix** questions cheaply.
+A trie stores a set of strings as a tree, where each edge is a character and a path from the root marks the characters of a stored word. Insertion and lookup are $O(L)$ where L is the word length, independent of how many words are stored. Tries are the right structure whenever you need to answer **prefix** questions cheaply.
 
 ## Problems
 

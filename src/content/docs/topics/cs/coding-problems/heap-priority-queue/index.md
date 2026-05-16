@@ -12,7 +12,7 @@ updated: 2026-04-23
 
 A heap is the right data structure whenever you need:
 
-- **Top-K anything**: maintain a size-K heap. The heap gives O(n log K) instead of O(n log n) sorting.
+- **Top-K anything**: maintain a size-K heap. The heap gives $O(n log K)$ instead of $O(n log n)$ sorting.
 - **Streaming order statistics**: kth smallest/largest, running median, sliding-window extremes.
 - **Scheduling with dynamic priorities**: reorganize, task scheduling, meeting rooms.
 - **Greedy selection**: always take the best (cheapest, earliest, largest) element, then update.

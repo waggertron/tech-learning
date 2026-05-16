@@ -165,16 +165,16 @@ func swimInWater(grid [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| L13 (binary search) | O(1) | 2 log n iters | O(log n) |
-| **L15 (BFS call)** | **O(n²)** | **2 log n** | **O(n² log n)** ← dominates |
-| L6-L11 (BFS body) | O(1) per cell | n² per BFS | O(n²) per call |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| L13 (binary search) | $O(1)$ | 2 log n iters | $O(log n)$ |
+| **L15 (BFS call)** | **$O(n²)$** | **2 log n** | **$O(n² log n)$** ← dominates |
+| L6-L11 (BFS body) | $O(1)$ per cell | n² per BFS | $O(n²)$ per call |
 
-Each BFS traverses at most n² cells. The binary search calls BFS O(log(n²)) = O(log n) times. The product gives O(n² log n). The set membership check inside L9 is O(1) amortized for a hash set.
+Each BFS traverses at most n² cells. The binary search calls BFS $O(log(n²)$) = $O(log n)$ times. The product gives $O(n² log n)$. The set membership check inside L9 is $O(1)$ amortized for a hash set.
 
 **Complexity**
-- **Time:** O(n² log n), driven by L15 (BFS inside binary search).
-- **Space:** O(n²).
+- **Time:** $O(n² log n)$, driven by L15 (BFS inside binary search).
+- **Space:** $O(n²)$.
 
 ## Approach 2: Modified Dijkstra, min-max path (optimal)
 
@@ -266,18 +266,18 @@ func swimInWater(grid [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(1) | 1 | O(1) |
-| L4 (loop test) | O(1) | up to n² | O(n²) |
-| **L5 (heappop)** | **O(log n)** | **n²** | **O(n² log n)** ← dominates |
-| L6-L8 (checks) | O(1) | n² | O(n²) |
-| L9 (neighbors) | O(1) | 4n² total | O(n²) |
-| **L10 (heappush)** | **O(log n)** | **up to 4n²** | **O(n² log n)** ← dominates |
+| L1-L3 (init) | $O(1)$ | 1 | $O(1)$ |
+| L4 (loop test) | $O(1)$ | up to n² | $O(n²)$ |
+| **L5 (heappop)** | **$O(log n)$** | **n²** | **$O(n² log n)$** ← dominates |
+| L6-L8 (checks) | $O(1)$ | n² | $O(n²)$ |
+| L9 (neighbors) | $O(1)$ | 4n² total | $O(n²)$ |
+| **L10 (heappush)** | **$O(log n)$** | **up to 4n²** | **$O(n² log n)$** ← dominates |
 
-The heap holds at most n² entries (one per cell). Each cell is popped exactly once after being visited. Each pop and push costs O(log(n²)) = O(log n). With n² cells and 4 neighbors each: O(n² log n) total. The `max(t, grid[nr][nc])` at L10 is the key insight: path cost becomes the bottleneck elevation, not the sum.
+The heap holds at most n² entries (one per cell). Each cell is popped exactly once after being visited. Each pop and push costs $O(log(n²)$) = $O(log n)$. With n² cells and 4 neighbors each: $O(n² log n)$ total. The `max(t, grid[nr][nc])` at L10 is the key insight: path cost becomes the bottleneck elevation, not the sum.
 
 **Complexity**
-- **Time:** O(n² log n), driven by L5/L10 (heap pop/push, n² cells, each O(log n)).
-- **Space:** O(n²).
+- **Time:** $O(n² log n)$, driven by L5/L10 (heap pop/push, n² cells, each $O(log n)$).
+- **Space:** $O(n²)$.
 
 **Try this approach:**
 
@@ -421,18 +421,18 @@ func swimInWater(grid [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort cells)** | **O(n² log n)** | **1** | **O(n² log n)** ← dominates |
-| L2-L3 (init arrays) | O(1) | n² each | O(n²) |
-| L6 (cell loop) | O(1) | n² | O(n²) |
-| L7 (activate) | O(1) | n² | O(n²) |
-| L8 (union) | near O(1) amortized | up to 4n² | O(n²) |
-| L9 (connectivity check) | near O(1) amortized | n² | O(n²) |
+| **L1 (sort cells)** | **$O(n² log n)$** | **1** | **$O(n² log n)$** ← dominates |
+| L2-L3 (init arrays) | $O(1)$ | n² each | $O(n²)$ |
+| L6 (cell loop) | $O(1)$ | n² | $O(n²)$ |
+| L7 (activate) | $O(1)$ | n² | $O(n²)$ |
+| L8 (union) | near $O(1)$ amortized | up to 4n² | $O(n²)$ |
+| L9 (connectivity check) | near $O(1)$ amortized | n² | $O(n²)$ |
 
-L1 dominates: sorting n² cells costs O(n² log n). The union-find operations (L8/L9) use path compression with halving, giving amortized near-O(1) per operation (technically O(α(n²)) where α is the inverse Ackermann function, effectively constant for all practical n).
+L1 dominates: sorting n² cells costs $O(n² log n)$. The union-find operations (L8/L9) use path compression with halving, giving amortized near-$O(1)$ per operation (technically $O(α(n²)$) where α is the inverse Ackermann function, effectively constant for all practical n).
 
 **Complexity**
-- **Time:** O(n² log n), dominated by L1 (sorting), with near-O(n²) for the union-find passes.
-- **Space:** O(n²).
+- **Time:** $O(n² log n)$, dominated by L1 (sorting), with near-$O(n²)$ for the union-find passes.
+- **Space:** $O(n²)$.
 
 **Try this approach:**
 
@@ -452,11 +452,11 @@ L1 dominates: sorting n² cells costs O(n² log n). The union-find operations (L
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Binary search + BFS | O(n² log n) | O(n²) | Clean, generalizes |
-| **Modified Dijkstra (min-max)** | **O(n² log n)** | **O(n²)** | Canonical |
-| Union-Find with sorted cells | O(n² log n) | O(n²) | Neat alternative |
+| Binary search + BFS | $O(n² log n)$ | $O(n²)$ | Clean, generalizes |
+| **Modified Dijkstra (min-max)** | **$O(n² log n)$** | **$O(n²)$** | Canonical |
+| Union-Find with sorted cells | $O(n² log n)$ | $O(n²)$ | Neat alternative |
 
-All three are O(n² log n). Dijkstra with min-max edge weights is the most reusable, same template solves problems like "min maximum capacity path."
+All three are $O(n² log n)$. Dijkstra with min-max edge weights is the most reusable, same template solves problems like "min maximum capacity path."
 
 ## Test cases
 

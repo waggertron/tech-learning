@@ -139,15 +139,15 @@ func rightSideView(root *TreeNode) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (dequeue) | O(1) | n | O(n) |
-| L4 (append last) | O(1) | h | O(h) |
-| **L5/L6 (enqueue children)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L3 (dequeue) | $O(1)$ | n | $O(n)$ |
+| L4 (append last) | $O(1)$ | h | $O(h)$ |
+| **L5/L6 (enqueue children)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 Every node is enqueued and dequeued exactly once. Only h nodes (one per level) actually contribute to the result.
 
 **Complexity**
-- **Time:** O(n), driven by L3/L5/L6 processing each node once.
-- **Space:** O(w).
+- **Time:** $O(n)$, driven by L3/L5/L6 processing each node once.
+- **Space:** $O(w)$.
 
 ## Approach 2: BFS, always take the first right-first
 
@@ -178,13 +178,13 @@ def right_side_view(root):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (peek) | O(1) | h | O(h) |
-| L2 (dequeue) | O(1) | n | O(n) |
-| **L3/L4 (enqueue)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (peek) | $O(1)$ | h | $O(h)$ |
+| L2 (dequeue) | $O(1)$ | n | $O(n)$ |
+| **L3/L4 (enqueue)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(w).
+- **Time:** $O(n)$.
+- **Space:** $O(w)$.
 
 ## Approach 3: DFS right-first with depth tracking (optimal space)
 
@@ -255,12 +255,12 @@ func rightSideView(root *TreeNode) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (append) | O(1) | h | O(h) |
-| **L2/L3 (recurse)** | **O(1) dispatch** | **n** | **O(n)** ← dominates |
+| L1 (append) | $O(1)$ | h | $O(h)$ |
+| **L2/L3 (recurse)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(h) recursion (less than or equal to O(n), often O(log n)).
+- **Time:** $O(n)$.
+- **Space:** $O(h)$ recursion (less than or equal to $O(n)$, often $O(log n)$).
 
 For balanced trees, `h = log n`, which is smaller than the BFS `w = n/2` at the last level.
 
@@ -282,9 +282,9 @@ For balanced trees, `h = log n`, which is smaller than the BFS `w = n/2` at the 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| BFS + last per level | O(n) | O(w) |
-| BFS right-first | O(n) | O(w) |
-| **DFS right-first** | **O(n)** | **O(h)** |
+| BFS + last per level | $O(n)$ | $O(w)$ |
+| BFS right-first | $O(n)$ | $O(w)$ |
+| **DFS right-first** | **$O(n)$** | **$O(h)$** |
 
 All three are linear time. The DFS variant has smaller space for balanced trees; the BFS variant is arguably cleaner.
 

@@ -49,8 +49,8 @@ LeetCode 210 · [Link](https://leetcode.com/problems/course-schedule-ii/) · *Me
 Use problem 207 to check for cycles. If none, use a second pass to build the order. Two passes, wasted work.
 
 **Complexity**
-- **Time:** O(V + E) × 2 = O(V + E).
-- **Space:** O(V + E).
+- **Time:** $O(V + E)$ × 2 = $O(V + E)$.
+- **Space:** $O(V + E)$.
 
 ## Approach 2: DFS post-order (reversed)
 
@@ -165,17 +165,17 @@ func findOrder(numCourses int, prerequisites [][]int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (build graph) | O(1) per edge | E | O(E) |
-| L5 (color array) | O(V) | 1 | O(V) |
-| L16-L17 (outer loop + DFS) | O(1) per node/edge | V + E total | O(V + E) |
-| **L11-L12 (neighbor traversal inside DFS)** | **O(1) per edge** | **E total** | **O(V + E)** ← dominates |
-| L18 (reverse) | O(V) | 1 | O(V) |
+| L1-L3 (build graph) | $O(1)$ per edge | E | $O(E)$ |
+| L5 (color array) | $O(V)$ | 1 | $O(V)$ |
+| L16-L17 (outer loop + DFS) | $O(1)$ per node/edge | V + E total | $O(V + E)$ |
+| **L11-L12 (neighbor traversal inside DFS)** | **$O(1)$ per edge** | **E total** | **$O(V + E)$** ← dominates |
+| L18 (reverse) | $O(V)$ | 1 | $O(V)$ |
 
-Each node is colored WHITE → GRAY → BLACK exactly once, and each edge is examined exactly once during the neighbor loops. The total DFS cost across all calls in L16-L17 is O(V + E), not O(V × E).
+Each node is colored WHITE → GRAY → BLACK exactly once, and each edge is examined exactly once during the neighbor loops. The total DFS cost across all calls in L16-L17 is $O(V + E)$, not $O(V × E)$.
 
 **Complexity**
-- **Time:** O(V + E), driven by L11-L12 (each node and edge visited once).
-- **Space:** O(V + E) for the graph and recursion stack.
+- **Time:** $O(V + E)$, driven by L11-L12 (each node and edge visited once).
+- **Space:** $O(V + E)$ for the graph and recursion stack.
 
 ## Approach 3: Kahn's algorithm (BFS on in-degree), optimal and natural
 
@@ -271,17 +271,17 @@ func findOrder(numCourses int, prerequisites [][]int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L5 (build graph + in-degree) | O(1) per edge | E | O(E) |
-| L6 (seed queue) | O(V) | 1 | O(V) |
-| L8-L10 (dequeue each node) | O(1) | V | O(V) |
-| **L11-L13 (neighbor loop)** | **O(1) per edge** | **E total** | **O(V + E)** ← dominates |
-| L14 (length check) | O(1) | 1 | O(1) |
+| L1-L5 (build graph + in-degree) | $O(1)$ per edge | E | $O(E)$ |
+| L6 (seed queue) | $O(V)$ | 1 | $O(V)$ |
+| L8-L10 (dequeue each node) | $O(1)$ | V | $O(V)$ |
+| **L11-L13 (neighbor loop)** | **$O(1)$ per edge** | **E total** | **$O(V + E)$** ← dominates |
+| L14 (length check) | $O(1)$ | 1 | $O(1)$ |
 
-Each node enters the queue at most once (when its in-degree hits zero), and each edge is decremented exactly once in L12. The BFS processes the entire graph in a single O(V + E) pass, with no recursion overhead.
+Each node enters the queue at most once (when its in-degree hits zero), and each edge is decremented exactly once in L12. The BFS processes the entire graph in a single $O(V + E)$ pass, with no recursion overhead.
 
 **Complexity**
-- **Time:** O(V + E), driven by L11-L13 (every edge decremented once).
-- **Space:** O(V + E) for the graph, in-degree array, and queue.
+- **Time:** $O(V + E)$, driven by L11-L13 (every edge decremented once).
+- **Space:** $O(V + E)$ for the graph, in-degree array, and queue.
 
 **Try this approach:**
 
@@ -301,9 +301,9 @@ Each node enters the queue at most once (when its in-degree hits zero), and each
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Two-pass (cycle + order) | O(V + E) | O(V + E) | Redundant |
-| **DFS post-order reversed** | **O(V + E)** | **O(V + E)** | Elegant |
-| **Kahn's (BFS in-degree)** | **O(V + E)** | **O(V + E)** | Most natural for this problem |
+| Two-pass (cycle + order) | $O(V + E)$ | $O(V + E)$ | Redundant |
+| **DFS post-order reversed** | **$O(V + E)$** | **$O(V + E)$** | Elegant |
+| **Kahn's (BFS in-degree)** | **$O(V + E)$** | **$O(V + E)$** | Most natural for this problem |
 
 Kahn's is usually the cleanest answer here, you get feasibility and ordering in one pass. DFS post-order is worth knowing because it generalizes to problems where you need a specific topological ordering (e.g., tie-breaking alphabetically).
 

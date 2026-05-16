@@ -119,15 +119,15 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (count pass) | O(1) | L | O(L) |
-| **L3-L4 (advance pass)** | **O(1)** | **L - n** | **O(L)** ← dominates |
-| L5 (splice) | O(1) | 1 | O(1) |
+| L1-L2 (count pass) | $O(1)$ | L | $O(L)$ |
+| **L3-L4 (advance pass)** | **$O(1)$** | **L - n** | **$O(L)$** ← dominates |
+| L5 (splice) | $O(1)$ | 1 | $O(1)$ |
 
-Both passes are O(L); together they give O(2L) = O(L). The second pass only goes L - n steps, but in the worst case (n = 1) that's still L - 1 steps.
+Both passes are $O(L)$; together they give $O(2L)$ = $O(L)$. The second pass only goes L - n steps, but in the worst case (n = 1) that's still L - 1 steps.
 
 **Complexity**
-- **Time:** O(L). Two passes, each O(L).
-- **Space:** O(1).
+- **Time:** $O(L)$. Two passes, each $O(L)$.
+- **Space:** $O(1)$.
 
 Works. Not one-pass.
 
@@ -199,15 +199,15 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (base case) | O(1) | 1 | O(1) |
-| **L2 (recurse)** | **O(1) per frame** | **L + 1** | **O(L)** ← dominates (stack depth) |
-| L3 (splice) | O(1) | 1 | O(1) |
+| L1 (base case) | $O(1)$ | 1 | $O(1)$ |
+| **L2 (recurse)** | **$O(1)$ per frame** | **L + 1** | **$O(L)$** ← dominates (stack depth) |
+| L3 (splice) | $O(1)$ | 1 | $O(1)$ |
 
-The recursion unwinds L + 1 frames (including the dummy). Each frame does O(1) work; all cost is in the stack depth.
+The recursion unwinds L + 1 frames (including the dummy). Each frame does $O(1)$ work; all cost is in the stack depth.
 
 **Complexity**
-- **Time:** O(L).
-- **Space:** O(L) recursion depth.
+- **Time:** $O(L)$.
+- **Space:** $O(L)$ recursion depth.
 
 Elegant but uses stack proportional to list length.
 
@@ -278,15 +278,15 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (offset phase) | O(1) | n + 1 | O(n) |
-| **L3-L5 (walk phase)** | **O(1)** | **L - n** | **O(L)** ← dominates |
-| L6 (splice) | O(1) | 1 | O(1) |
+| L1-L2 (offset phase) | $O(1)$ | n + 1 | $O(n)$ |
+| **L3-L5 (walk phase)** | **$O(1)$** | **L - n** | **$O(L)$** ← dominates |
+| L6 (splice) | $O(1)$ | 1 | $O(1)$ |
 
 Total steps = (n + 1) + (L - n) = L + 1, so exactly one pass over the list. The dummy node ensures `slow` has a valid `.next` even when removing the head (n == L).
 
 **Complexity**
-- **Time:** O(L). One pass.
-- **Space:** O(1).
+- **Time:** $O(L)$. One pass.
+- **Space:** $O(1)$.
 
 ### Why the dummy node matters
 When `n == L` (removing the head), the `slow` pointer needs to land "one before the head." A dummy sentinel makes "one before the head" a real node, so the splice logic is uniform regardless of whether we're removing the head.
@@ -401,9 +401,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space | Passes |
 | --- | --- | --- | --- |
-| Two-pass count + remove | O(L) | O(1) | 2 |
-| Recursive | O(L) | O(L) stack | 1 |
-| **Two-pointer offset** | **O(L)** | **O(1)** | **1** |
+| Two-pass count + remove | $O(L)$ | $O(1)$ | 2 |
+| Recursive | $O(L)$ | $O(L)$ stack | 1 |
+| **Two-pointer offset** | **$O(L)$** | **$O(1)$** | **1** |
 
 The offset-n two-pointer trick generalizes to "find the k-th from end" and variants.
 

@@ -88,17 +88,17 @@ function numPairsDivisibleBy60(time: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init array) | O(1) | 1 | O(1) |
-| L2 (init result) | O(1) | 1 | O(1) |
-| **L3 (loop)** | **O(1) body** | **n** | **O(n)** ← dominates |
-| L4 (mod + complement) | O(1) | n | O(n) |
-| L5 (array lookup) | O(1) | n | O(n) |
-| L6 (array update) | O(1) | n | O(n) |
-| L7 (return) | O(1) | 1 | O(1) |
+| L1 (init array) | $O(1)$ | 1 | $O(1)$ |
+| L2 (init result) | $O(1)$ | 1 | $O(1)$ |
+| **L3 (loop)** | **$O(1)$ body** | **n** | **$O(n)$** ← dominates |
+| L4 (mod + complement) | $O(1)$ | n | $O(n)$ |
+| L5 (array lookup) | $O(1)$ | n | $O(n)$ |
+| L6 (array update) | $O(1)$ | n | $O(n)$ |
+| L7 (return) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n), driven by L3-L6 (single pass, all operations O(1)).
-- **Space:** O(1). The `remainders` array is always exactly 60 entries regardless of `n`.
+- **Time:** $O(n)$, driven by L3-L6 (single pass, all operations $O(1)$).
+- **Space:** $O(1)$. The `remainders` array is always exactly 60 entries regardless of `n`.
 
 ## Why record after looking up?
 

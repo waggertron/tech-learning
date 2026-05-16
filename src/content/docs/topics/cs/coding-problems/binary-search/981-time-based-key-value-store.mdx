@@ -140,15 +140,15 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (set append) | O(1) amortized | 1 per set call | O(1) per set |
-| **L3/L4 (get scan)** | **O(1)** | **up to n** | **O(n) per get** ← dominates |
+| L2 (set append) | $O(1)$ amortized | 1 per set call | $O(1)$ per set |
+| **L3/L4 (get scan)** | **$O(1)$** | **up to n** | **$O(n)$ per get** ← dominates |
 
-`set` is O(1); `get` scans entries until it finds a timestamp exceeding the query. With strictly increasing timestamps, the early break at L5 helps in the average case but not the worst case.
+`set` is $O(1)$; `get` scans entries until it finds a timestamp exceeding the query. With strictly increasing timestamps, the early break at L5 helps in the average case but not the worst case.
 
 **Complexity**
-- `set`: O(1).
-- `get`: O(n) where n is entries for that key.
-- Space: O(n).
+- `set`: $O(1)$.
+- `get`: $O(n)$ where n is entries for that key.
+- Space: $O(n)$.
 
 ## Approach 2: Binary search per `get` (manual implementation)
 
@@ -252,16 +252,16 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (set append) | O(1) amortized | 1 per set | O(1) per set |
-| L2 (init bounds) | O(1) | 1 per get | O(1) |
-| **L3-L8 (binary search loop)** | **O(1)** | **log n** | **O(log n) per get** ← dominates |
+| L1 (set append) | $O(1)$ amortized | 1 per set | $O(1)$ per set |
+| L2 (init bounds) | $O(1)$ | 1 per get | $O(1)$ |
+| **L3-L8 (binary search loop)** | **$O(1)$** | **log n** | **$O(log n)$ per get** ← dominates |
 
 Since timestamps for each key are strictly increasing (guaranteed by the problem), the per-key list is sorted, enabling binary search. We track `result` as we go right, keeping the last valid timestamp found.
 
 **Complexity**
-- `set`: O(1).
-- `get`: **O(log n)**, driven by L3 (binary search over n sorted entries).
-- Space: O(n).
+- `set`: $O(1)$.
+- `get`: **$O(log n)$**, driven by L3 (binary search over n sorted entries).
+- Space: $O(n)$.
 
 **Try this approach:**
 
@@ -380,16 +380,16 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (set appends) | O(1) amortized | 1 per set | O(1) per set |
-| **L3 (bisect_right)** | **O(log n)** | **1 per get** | **O(log n) per get** ← dominates |
-| L4/L5 (bounds check + index) | O(1) | 1 per get | O(1) |
+| L1/L2 (set appends) | $O(1)$ amortized | 1 per set | $O(1)$ per set |
+| **L3 (bisect_right)** | **$O(log n)$** | **1 per get** | **$O(log n)$ per get** ← dominates |
+| L4/L5 (bounds check + index) | $O(1)$ | 1 per get | $O(1)$ |
 
 `bisect_right(ts, timestamp)` returns the insertion point for `timestamp` in the sorted `ts` list. Subtracting 1 gives the rightmost entry with timestamp ≤ the query. If `i < 0`, no entry exists for that key at or before the query.
 
 **Complexity**
-- `set`: O(1) amortized, driven by L1/L2 (list appends).
-- `get`: **O(log n)**, driven by L3 (bisect_right over n sorted timestamps).
-- Space: O(n).
+- `set`: $O(1)$ amortized, driven by L1/L2 (list appends).
+- `get`: **$O(log n)$**, driven by L3 (bisect_right over n sorted timestamps).
+- Space: $O(n)$.
 
 `bisect_right(ts, timestamp) - 1` returns the largest index whose timestamp is ≤ `timestamp`.
 
@@ -411,9 +411,9 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 
 | Approach | `set` | `get` | Space |
 | --- | --- | --- | --- |
-| Linear scan | O(1) | O(n) | O(n) |
-| Manual binary search | O(1) | O(log n) | O(n) |
-| **`bisect_right`** | **O(1)** | **O(log n)** | O(n) |
+| Linear scan | $O(1)$ | $O(n)$ | $O(n)$ |
+| Manual binary search | $O(1)$ | $O(log n)$ | $O(n)$ |
+| **`bisect_right`** | **$O(1)$** | **$O(log n)$** | $O(n)$ |
 
 The `bisect` version is idiomatic Python; the manual binary search is what you'd write in languages without a `bisect`-equivalent (Java: `Collections.binarySearch`; C++: `upper_bound`).
 

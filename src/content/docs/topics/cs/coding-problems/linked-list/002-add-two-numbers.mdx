@@ -146,15 +146,15 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (decode digit) | O(1) | n + m | O(n + m) |
-| L3 (sum two ints) | O(d) where d = digits | 1 | O(max(n, m)) |
-| **L4 (build output)** | **O(1)** | **max(n, m) + 1** | **O(max(n, m))** ← dominates |
+| L2 (decode digit) | $O(1)$ | n + m | $O(n + m)$ |
+| L3 (sum two ints) | $O(d)$ where d = digits | 1 | $O(max(n, m)$) |
+| **L4 (build output)** | **$O(1)$** | **max(n, m) + 1** | **$O(max(n, m)$)** ← dominates |
 
-All three phases are O(max(n, m)); the output list length is the bottleneck in practice. In Python, big-int addition on step L3 is O(d) for d-digit numbers, but d = max(n, m), so the overall complexity doesn't change.
+All three phases are $O(max(n, m)$); the output list length is the bottleneck in practice. In Python, big-int addition on step L3 is $O(d)$ for d-digit numbers, but d = max(n, m), so the overall complexity doesn't change.
 
 **Complexity**
-- **Time:** O(max(n, m)), driven by all phases equally (L2/L3/L4).
-- **Space:** O(max(n, m)).
+- **Time:** $O(max(n, m)$), driven by all phases equally (L2/L3/L4).
+- **Space:** $O(max(n, m)$).
 
 Works in Python because ints are arbitrary-precision. In Java/C++/JS, breaks once the number exceeds 64-bit (common in test cases with ~100-digit inputs).
 
@@ -236,16 +236,16 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop test) | O(1) | max(n, m) + 1 | O(max(n, m)) |
-| L2-L4 (read digits) | O(1) | max(n, m) | O(max(n, m)) |
-| L5 (divmod) | O(1) | max(n, m) | O(max(n, m)) |
-| **L6 (build output node)** | **O(1)** | **max(n, m) + 1** | **O(max(n, m))** ← dominates |
+| L1 (loop test) | $O(1)$ | max(n, m) + 1 | $O(max(n, m)$) |
+| L2-L4 (read digits) | $O(1)$ | max(n, m) | $O(max(n, m)$) |
+| L5 (divmod) | $O(1)$ | max(n, m) | $O(max(n, m)$) |
+| **L6 (build output node)** | **$O(1)$** | **max(n, m) + 1** | **$O(max(n, m)$)** ← dominates |
 
-Every line is O(1) per iteration; the loop runs at most max(n, m) + 1 times (the +1 is for a possible final carry propagation). No hidden quadratic: each digit is consumed exactly once and each output node is allocated exactly once.
+Every line is $O(1)$ per iteration; the loop runs at most max(n, m) + 1 times (the +1 is for a possible final carry propagation). No hidden quadratic: each digit is consumed exactly once and each output node is allocated exactly once.
 
 **Complexity**
-- **Time:** O(max(n, m)), driven by L1/L6 (loop iterations and output construction).
-- **Space:** O(max(n, m)) for the output.
+- **Time:** $O(max(n, m)$), driven by L1/L6 (loop iterations and output construction).
+- **Space:** $O(max(n, m)$) for the output.
 
 **Try this approach:**
 
@@ -333,15 +333,15 @@ func addHelper(l1, l2 *ListNode, carry int) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L4 (base + read) | O(1) | max(n, m) + 1 | O(max(n, m)) |
-| L5 (allocate node) | O(1) | max(n, m) + 1 | O(max(n, m)) |
-| **L6 (recursive call)** | **O(1) per frame** | **max(n, m) + 1** | **O(max(n, m))** ← dominates (stack depth) |
+| L1-L4 (base + read) | $O(1)$ | max(n, m) + 1 | $O(max(n, m)$) |
+| L5 (allocate node) | $O(1)$ | max(n, m) + 1 | $O(max(n, m)$) |
+| **L6 (recursive call)** | **$O(1)$ per frame** | **max(n, m) + 1** | **$O(max(n, m)$)** ← dominates (stack depth) |
 
-The recursion depth equals the output length, so both time and stack space are O(max(n, m)). Python's default recursion limit of 1000 can be a real constraint for long inputs.
+The recursion depth equals the output length, so both time and stack space are $O(max(n, m)$). Python's default recursion limit of 1000 can be a real constraint for long inputs.
 
 **Complexity**
-- **Time:** O(max(n, m)), driven by L6 recursion depth.
-- **Space:** O(max(n, m)) recursion + output.
+- **Time:** $O(max(n, m)$), driven by L6 recursion depth.
+- **Space:** $O(max(n, m)$) recursion + output.
 
 ## Test cases
 
@@ -454,9 +454,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Decode → add → encode | O(max(n, m)) | O(max(n, m)) | Breaks on big ints in most languages |
-| **Iterative + carry** | **O(max(n, m))** | **O(max(n, m))** | Canonical, language-agnostic |
-| Recursive + carry | O(max(n, m)) | O(max(n, m)) stack | Elegant; stack cost |
+| Decode → add → encode | $O(max(n, m)$) | $O(max(n, m)$) | Breaks on big ints in most languages |
+| **Iterative + carry** | **$O(max(n, m)$)** | **$O(max(n, m)$)** | Canonical, language-agnostic |
+| Recursive + carry | $O(max(n, m)$) | $O(max(n, m)$) stack | Elegant; stack cost |
 
 The iterative carry loop is the workhorse for digit arithmetic on linked lists, it also solves 445 (Add Two Numbers II, big-endian variant with stacks or reversal).
 

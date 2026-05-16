@@ -48,8 +48,8 @@ LeetCode 417 · [Link](https://leetcode.com/problems/pacific-atlantic-water-flow
 For each cell, run two DFSes ("can I reach Pacific?", "can I reach Atlantic?"). Keep cells that answer yes to both.
 
 **Complexity**
-- **Time:** O((m · n)²). For each of m·n cells, a full O(m·n) DFS.
-- **Space:** O(m · n).
+- **Time:** $O((m · n)$²). For each of m·n cells, a full $O(m·n)$ DFS.
+- **Space:** $O(m · n)$.
 
 ## Approach 2: DFS from the oceans inward (optimal)
 
@@ -132,16 +132,16 @@ function pacificAtlantic(heights: number[][]): number[][] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L10-L13 (border seeds) | O(1) | 2(m + n) | O(m + n) |
-| L6 (visited lookup) | O(1) | at most m·n per ocean | O(m·n) |
-| L7 (visited insert) | O(1) | at most m·n per ocean | O(m·n) |
-| L8-L9 (neighbor recurse) | O(1) per neighbor | 4 × m·n total | O(m·n) |
-| **L5-L9 (full DFS, both oceans)** | **O(1) per cell** | **2 × m·n** | **O(m·n)** ← dominates |
-| L14 (set intersection) | O(m·n) | 1 | O(m·n) |
+| L10-L13 (border seeds) | $O(1)$ | 2(m + n) | $O(m + n)$ |
+| L6 (visited lookup) | $O(1)$ | at most m·n per ocean | $O(m·n)$ |
+| L7 (visited insert) | $O(1)$ | at most m·n per ocean | $O(m·n)$ |
+| L8-L9 (neighbor recurse) | $O(1)$ per neighbor | 4 × m·n total | $O(m·n)$ |
+| **L5-L9 (full DFS, both oceans)** | **$O(1)$ per cell** | **2 × m·n** | **$O(m·n)$** ← dominates |
+| L14 (set intersection) | $O(m·n)$ | 1 | $O(m·n)$ |
 
 **Complexity**
-- **Time:** O(m · n), driven by L5-L9 (each cell visited at most twice, once per ocean).
-- **Space:** O(m · n) for the visited sets and the recursion stack.
+- **Time:** $O(m · n)$, driven by L5-L9 (each cell visited at most twice, once per ocean).
+- **Space:** $O(m · n)$ for the visited sets and the recursion stack.
 
 ## Approach 3: BFS from the oceans inward
 
@@ -219,8 +219,8 @@ function pacificAtlantic(heights: number[][]): number[][] {
 </Tabs>
 
 **Complexity**
-- **Time:** O(m · n), driven by each cell dequeued at most once per ocean.
-- **Space:** O(m · n) for the visited sets and the queue.
+- **Time:** $O(m · n)$, driven by each cell dequeued at most once per ocean.
+- **Space:** $O(m · n)$ for the visited sets and the queue.
 
 **Try this approach:**
 
@@ -240,9 +240,9 @@ function pacificAtlantic(heights: number[][]): number[][] {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS from every cell to each ocean | O((m · n)²) | O(m · n) |
-| **DFS from ocean borders inward** | **O(m · n)** | **O(m · n)** |
-| BFS from ocean borders | O(m · n) | O(m · n) |
+| DFS from every cell to each ocean | $O((m · n)$²) | $O(m · n)$ |
+| **DFS from ocean borders inward** | **$O(m · n)$** | **$O(m · n)$** |
+| BFS from ocean borders | $O(m · n)$ | $O(m · n)$ |
 
 The "reverse the direction" trick is the key insight, it avoids redundant work by computing both reachability sets once. Same pattern solves problem 130 (Surrounded Regions).
 

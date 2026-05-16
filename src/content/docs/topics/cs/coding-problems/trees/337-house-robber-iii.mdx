@@ -106,21 +106,21 @@ function rob(root: TreeNode | null): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2-L3 (base/cache) | O(1) | n | O(n) |
-| L4 (rob_this init) | O(1) | n | O(n) |
-| **L5/L6 (grandchildren calls)** | **O(1) dispatch (memoized)** | **n** | **O(n)** |
-| L7 (skip_this calls) | O(1) dispatch | n | O(n) |
-| L8 (store memo) | O(1) | n | O(n) |
+| L2-L3 (base/cache) | $O(1)$ | n | $O(n)$ |
+| L4 (rob_this init) | $O(1)$ | n | $O(n)$ |
+| **L5/L6 (grandchildren calls)** | **$O(1)$ dispatch (memoized)** | **n** | **$O(n)$** |
+| L7 (skip_this calls) | $O(1)$ dispatch | n | $O(n)$ |
+| L8 (store memo) | $O(1)$ | n | $O(n)$ |
 
 With memoization every node is computed exactly once. Without it, the same subtrees are recomputed exponentially -- grandchildren are reached via two routes (rob parent, or skip parent then rob child).
 
 **Complexity**
-- **Time:** O(n). Each node computed once via memo.
-- **Space:** O(n) for the memo dict, O(h) for the recursion stack.
+- **Time:** $O(n)$. Each node computed once via memo.
+- **Space:** $O(n)$ for the memo dict, $O(h)$ for the recursion stack.
 
 ## Approach 2: Post-order DFS returning a pair (optimal)
 
-Instead of memoizing answers per node, return a pair `(rob_this, skip_this)` from each node. The parent combines them in O(1) with no dict overhead.
+Instead of memoizing answers per node, return a pair `(rob_this, skip_this)` from each node. The parent combines them in $O(1)$ with no dict overhead.
 
 <Tabs>
 <TabItem label="Python">
@@ -164,18 +164,18 @@ function rob(root: TreeNode | null): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (base case) | O(1) | h (leaf depth) | O(h) |
-| **L3/L4 (recurse children)** | **O(1) dispatch** | **n** | **O(n)** ← dominates |
-| L5 (rob_this) | O(1) | n | O(n) |
-| L6 (skip_this) | O(1) | n | O(n) |
-| L7 (return) | O(1) | n | O(n) |
-| L8 (final max) | O(1) | 1 | O(1) |
+| L1-L2 (base case) | $O(1)$ | h (leaf depth) | $O(h)$ |
+| **L3/L4 (recurse children)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates |
+| L5 (rob_this) | $O(1)$ | n | $O(n)$ |
+| L6 (skip_this) | $O(1)$ | n | $O(n)$ |
+| L7 (return) | $O(1)$ | n | $O(n)$ |
+| L8 (final max) | $O(1)$ | 1 | $O(1)$ |
 
 Each node is visited exactly once in post-order (leaves first, root last). The returned pair encodes both choices so no parent ever needs to revisit a subtree. Eliminates the hash dict entirely.
 
 **Complexity**
-- **Time:** O(n). Each node visited once, driven by L3/L4.
-- **Space:** O(h) for the recursion stack only.
+- **Time:** $O(n)$. Each node visited once, driven by L3/L4.
+- **Space:** $O(h)$ for the recursion stack only.
 
 ### The pair invariant
 
@@ -198,8 +198,8 @@ At every node, `dfs(node)` returns:
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Top-down with memo | O(n) | O(n) |
-| **Post-order pair return** | **O(n)** | **O(h)** |
+| Top-down with memo | $O(n)$ | $O(n)$ |
+| **Post-order pair return** | **$O(n)$** | **$O(h)$** |
 
 The pair-return pattern is canonical for tree DP where each node needs to track multiple states. The same shape solves Binary Tree Cameras (968) and Diameter of Binary Tree (543).
 

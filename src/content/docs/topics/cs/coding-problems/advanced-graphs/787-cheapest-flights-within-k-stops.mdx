@@ -144,17 +144,17 @@ func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (build graph) | O(1) per edge | E | O(E) |
+| L1-L2 (build graph) | $O(1)$ per edge | E | $O(E)$ |
 | L3 (unique memoized states) | - | V * (K+1) distinct | - |
-| L4 (neighbor iteration) | O(deg(city)) | once per state | O(E * K) total |
-| **L5 (recurse/lookup)** | **O(1) amortized (cache hit)** | **V * K * avg_deg** | **O(E * K)** ← dominates |
-| L6 (initial call) | O(V * K * avg_deg) | 1 | O(E * K) |
+| L4 (neighbor iteration) | $O(deg(city)$) | once per state | $O(E * K)$ total |
+| **L5 (recurse/lookup)** | **$O(1)$ amortized (cache hit)** | **V * K * avg_deg** | **$O(E * K)$** ← dominates |
+| L6 (initial call) | $O(V * K * avg_deg)$ | 1 | $O(E * K)$ |
 
-Each `(city, stops_left)` pair is computed exactly once; its neighbors are iterated once. Total states: V * (K+1). Each state visits avg_deg neighbors, and sum of degrees = E, so total work is O(E * K).
+Each `(city, stops_left)` pair is computed exactly once; its neighbors are iterated once. Total states: V * (K+1). Each state visits avg_deg neighbors, and sum of degrees = E, so total work is $O(E * K)$.
 
 **Complexity**
-- **Time:** O(E * K), driven by L4/L5 (each memoized state visits its neighbors once).
-- **Space:** O(E + V * K) for the graph and memo cache.
+- **Time:** $O(E * K)$, driven by L4/L5 (each memoized state visits its neighbors once).
+- **Space:** $O(E + V * K)$ for the graph and memo cache.
 
 ## Approach 2: Modified Dijkstra with (cost, node, stops_remaining)
 
@@ -240,18 +240,18 @@ func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (build graph) | O(1) per edge | E | O(E) |
-| L3 (init heap) | O(1) | 1 | O(1) |
-| L4 (loop) | O(1) | up to E*K | O(E*K) |
-| **L5 (pop)** | **O(log(E*K))** | **up to E*K** | **O(E*K*log(E*K))** ← dominates |
-| L6 (neighbors) | O(deg) | once per pop | O(E*K) total |
-| L7 (push) | O(log(E*K)) | up to E*K | O(E*K*log(E*K)) |
+| L1-L2 (build graph) | $O(1)$ per edge | E | $O(E)$ |
+| L3 (init heap) | $O(1)$ | 1 | $O(1)$ |
+| L4 (loop) | $O(1)$ | up to E*K | $O(E*K)$ |
+| **L5 (pop)** | **$O(log(E*K)$)** | **up to E*K** | **$O(E*K*log(E*K)$)** ← dominates |
+| L6 (neighbors) | $O(deg)$ | once per pop | $O(E*K)$ total |
+| L7 (push) | $O(log(E*K)$) | up to E*K | $O(E*K*log(E*K)$) |
 
-The heap can hold up to O(E*K) entries because each edge can be pushed once per remaining-stop level. Each push/pop is O(log(E*K)). Unlike classic Dijkstra, this does not deduplicate by (node, stops) so the same city may be popped multiple times.
+The heap can hold up to $O(E*K)$ entries because each edge can be pushed once per remaining-stop level. Each push/pop is $O(log(E*K)$). Unlike classic Dijkstra, this does not deduplicate by (node, stops) so the same city may be popped multiple times.
 
 **Complexity**
-- **Time:** O(E * K * log(E * K)), driven by L5/L7 (heap operations on a queue that can grow to E*K entries).
-- **Space:** O(E + V * K) for the graph and heap.
+- **Time:** $O(E * K * log(E * K)$), driven by L5/L7 (heap operations on a queue that can grow to E*K entries).
+- **Space:** $O(E + V * K)$ for the graph and heap.
 
 Works but may re-expand nodes with fewer stops and higher cost.
 
@@ -339,17 +339,17 @@ func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (init) | O(V) | 1 | O(V) |
-| L3 (outer loop) | O(1) | K+1 | O(K) |
-| L4 (snapshot) | O(V) | K+1 | O(V*K) |
-| **L5-L7 (edge scan + relax)** | **O(1) per edge** | **E per round, K+1 rounds** | **O(E*K)** ← dominates |
-| L8-L9 (commit + lookup) | O(1) | K+1 | O(K) |
+| L1-L2 (init) | $O(V)$ | 1 | $O(V)$ |
+| L3 (outer loop) | $O(1)$ | K+1 | $O(K)$ |
+| L4 (snapshot) | $O(V)$ | K+1 | $O(V*K)$ |
+| **L5-L7 (edge scan + relax)** | **$O(1)$ per edge** | **E per round, K+1 rounds** | **$O(E*K)$** ← dominates |
+| L8-L9 (commit + lookup) | $O(1)$ | K+1 | $O(K)$ |
 
 The double loop is exactly (K+1) rounds times E edges. The snapshot at L4 is the critical correctness detail: it prevents a chain `u -> v -> x` from consuming two hops in a single round.
 
 **Complexity**
-- **Time:** O(K * E), driven by L5-L7 (the inner edge scan across all K+1 rounds).
-- **Space:** O(V) for two distance arrays (dist and new_dist).
+- **Time:** $O(K * E)$, driven by L5-L7 (the inner edge scan across all K+1 rounds).
+- **Space:** $O(V)$ for two distance arrays (dist and new_dist).
 
 ### Why the snapshot matters
 Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately used by `v -> x` in the same iteration, that's two hops in one "hop budget" slot, corrupting the answer.
@@ -372,9 +372,9 @@ Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS + memo | O(E * K) | O(E + V * K) |
-| Modified Dijkstra | O(E * K * log(E * K)) | O(E + V * K) |
-| **Bellman-Ford + hop cap** | **O(K * E)** | **O(V)** |
+| DFS + memo | $O(E * K)$ | $O(E + V * K)$ |
+| Modified Dijkstra | $O(E * K * log(E * K)$) | $O(E + V * K)$ |
+| **Bellman-Ford + hop cap** | **$O(K * E)$** | **$O(V)$** |
 
 Bellman-Ford with a hop cap is the cleanest solution for this shape of problem, the hop count is exactly `k + 1` iterations. Same pattern applies to any "at-most-k-edges" shortest-path variant.
 

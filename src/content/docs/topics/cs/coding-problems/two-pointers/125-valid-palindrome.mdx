@@ -96,16 +96,16 @@ func isPalindrome(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (filter + join)** | **O(n)** | **1** | **O(n)** ← dominates |
-| L2 (reverse + compare) | O(n) | 1 | O(n) |
+| **L1 (filter + join)** | **$O(n)$** | **1** | **$O(n)$** ← dominates |
+| L2 (reverse + compare) | $O(n)$ | 1 | $O(n)$ |
 
 Both steps are linear; neither dominates asymptotically.
 
 **Complexity**
-- **Time:** O(n), driven by L1/L2 (two linear passes).
-- **Space:** O(n). The cleaned string and its reverse.
+- **Time:** $O(n)$, driven by L1/L2 (two linear passes).
+- **Space:** $O(n)$. The cleaned string and its reverse.
 
-Direct and clear, but uses an extra O(n) allocation where O(1) is achievable.
+Direct and clear, but uses an extra $O(n)$ allocation where $O(1)$ is achievable.
 
 ## Approach 2: Clean, then two pointers
 
@@ -167,15 +167,15 @@ func isPalindrome(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (filter)** | **O(n)** | **1** | **O(n)** ← dominates |
-| L2 (init pointers) | O(1) | 1 | O(1) |
-| L3-L6 (two-pointer scan) | O(1) | at most n/2 | O(n) |
+| **L1 (filter)** | **$O(n)$** | **1** | **$O(n)$** ← dominates |
+| L2 (init pointers) | $O(1)$ | 1 | $O(1)$ |
+| L3-L6 (two-pointer scan) | $O(1)$ | at most n/2 | $O(n)$ |
 
 The filter pass dominates; the pointer scan is at most half the cleaned length.
 
 **Complexity**
-- **Time:** O(n), driven by L1 (filter) and L3/L4 (scan). Best case O(1) (first mismatch).
-- **Space:** O(n). The cleaned list.
+- **Time:** $O(n)$, driven by L1 (filter) and L3/L4 (scan). Best case $O(1)$ (first mismatch).
+- **Space:** $O(n)$. The cleaned list.
 
 **Try this approach:**
 
@@ -257,16 +257,16 @@ func isPalindrome(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| L2 (outer loop) | O(1) | at most n | O(n) |
-| **L3-L6 (skip non-alnum)** | **O(1) per step** | **n total** | **O(n)** ← dominates |
-| L7-L9 (compare + advance) | O(1) | at most n/2 | O(n) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| L2 (outer loop) | $O(1)$ | at most n | $O(n)$ |
+| **L3-L6 (skip non-alnum)** | **$O(1)$ per step** | **n total** | **$O(n)$** ← dominates |
+| L7-L9 (compare + advance) | $O(1)$ | at most n/2 | $O(n)$ |
 
-Each character in `s` is touched at most once (either skipped in L3/L5 or compared in L7). Total work is O(n).
+Each character in `s` is touched at most once (either skipped in L3/L5 or compared in L7). Total work is $O(n)$.
 
 **Complexity**
-- **Time:** O(n), driven by L3-L6 (each character visited once). Each index is visited at most once.
-- **Space:** O(1). No auxiliary structures.
+- **Time:** $O(n)$, driven by L3-L6 (each character visited once). Each index is visited at most once.
+- **Space:** $O(1)$. No auxiliary structures.
 
 **Try this approach:**
 
@@ -286,9 +286,9 @@ Each character in `s` is touched at most once (either skipped in L3/L5 or compar
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Clean + reverse compare | O(n) | O(n) |
-| Clean + two pointers | O(n) | O(n) |
-| **Two pointers in place** | **O(n)** | **O(1)** |
+| Clean + reverse compare | $O(n)$ | $O(n)$ |
+| Clean + two pointers | $O(n)$ | $O(n)$ |
+| **Two pointers in place** | **$O(n)$** | **$O(1)$** |
 
 Same Big-O on time, but the in-place two-pointer version is the canonical "optimal-space" answer.
 

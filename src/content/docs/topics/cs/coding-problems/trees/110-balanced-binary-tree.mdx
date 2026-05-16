@@ -125,15 +125,15 @@ func isBalanced(root *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (height walk)** | **O(n)** | **n nodes** | **O(n²)** ← dominates |
-| L2 (abs check) | O(1) | n | O(n) |
-| L3 (recurse children) | O(1) dispatch | n | O(n) |
+| **L1 (height walk)** | **$O(n)$** | **n nodes** | **$O(n²)$** ← dominates |
+| L2 (abs check) | $O(1)$ | n | $O(n)$ |
+| L3 (recurse children) | $O(1)$ dispatch | n | $O(n)$ |
 
-For each of the n nodes, `height` walks the entire subtree beneath it. In a balanced tree of depth log n, the total work is O(n log n); in a skewed tree, it's O(n²).
+For each of the n nodes, `height` walks the entire subtree beneath it. In a balanced tree of depth log n, the total work is $O(n log n)$; in a skewed tree, it's $O(n²)$.
 
 **Complexity**
-- **Time:** O(n²) worst case (skewed tree), driven by L1 re-walking subtrees.
-- **Space:** O(h) recursion.
+- **Time:** $O(n²)$ worst case (skewed tree), driven by L1 re-walking subtrees.
+- **Space:** $O(h)$ recursion.
 
 Redundant work: we re-walk every subtree many times.
 
@@ -220,16 +220,16 @@ func isBalanced(root *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L3 (recurse) | O(1) dispatch | n | O(n) |
-| L2/L4 (sentinel check) | O(1) | n | O(n) |
-| L5 (balance check) | O(1) | n | O(n) |
-| **L6 (return height)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L1/L3 (recurse) | $O(1)$ dispatch | n | $O(n)$ |
+| L2/L4 (sentinel check) | $O(1)$ | n | $O(n)$ |
+| L5 (balance check) | $O(1)$ | n | $O(n)$ |
+| **L6 (return height)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 Each node is visited exactly once. The `-1` sentinel short-circuits traversal of subtrees that are already known to be unbalanced.
 
 **Complexity**
-- **Time:** O(n). Each node visited once, driven by L1/L3.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$. Each node visited once, driven by L1/L3.
+- **Space:** $O(h)$ recursion.
 
 ### Pattern
 This is the "sentinel value" version of the diameter pattern: we want a single value back from the DFS, but we also need to propagate a failure condition. `-1` is a legal "never going to match" sentinel because valid heights are ≥ 0.
@@ -254,8 +254,8 @@ An alternative is to return a tuple `(balanced: bool, height: int)`, same comple
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Top-down height per node | O(n²) | O(h) |
-| **Bottom-up with sentinel** | **O(n)** | **O(h)** |
+| Top-down height per node | $O(n²)$ | $O(h)$ |
+| **Bottom-up with sentinel** | **$O(n)$** | **$O(h)$** |
 
 The bottom-up form is the canonical fix for any "top-down recomputation" tree antipattern.
 

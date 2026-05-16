@@ -48,7 +48,7 @@ def bfs(graph, start):
     return dist
 ```
 
-Key invariant: every node enters the queue at most once (the `if neighbor not in dist` guard), so the algorithm terminates in O(V + E).
+Key invariant: every node enters the queue at most once (the `if neighbor not in dist` guard), so the algorithm terminates in $O(V + E)$.
 
 ### Grid BFS (implicit neighbors)
 
@@ -146,16 +146,16 @@ Notice that B and C (level 1) were both fully processed before D, E, F (level 2)
 
 | Metric | Cost     | Reason                                                  |
 | ------ | -------- | ------------------------------------------------------- |
-| Time   | O(V + E) | Each vertex enqueued once; each edge examined at most twice (undirected) |
-| Space  | O(V)     | The queue and dist map each hold at most V entries      |
+| Time   | $O(V + E)$ | Each vertex enqueued once; each edge examined at most twice (undirected) |
+| Space  | $O(V)$     | The queue and dist map each hold at most V entries      |
 
-For grids, V = rows * cols and E = 4 * V (four neighbors per cell), so both reduce to O(rows * cols).
+For grids, V = rows * cols and E = 4 * V (four neighbors per cell), so both reduce to $O(rows * cols)$.
 
 ## Variant: Multi-source BFS
 
-Sometimes the problem has multiple starting points and you want the shortest distance from any source to every other node. The naive approach runs BFS from each source separately, costing O(S * (V + E)).
+Sometimes the problem has multiple starting points and you want the shortest distance from any source to every other node. The naive approach runs BFS from each source separately, costing $O(S * (V + E)$).
 
-The insight: push all sources into the queue at distance 0 simultaneously. The single BFS pass then computes shortest distance from the nearest source to every node in one O(V + E) sweep.
+The insight: push all sources into the queue at distance 0 simultaneously. The single BFS pass then computes shortest distance from the nearest source to every node in one $O(V + E)$ sweep.
 
 ```python
 from collections import deque
@@ -287,7 +287,7 @@ Use BFS when the problem structure rewards level-by-level processing:
 
 BFS is not always the right call. Know when to reach for DFS instead:
 
-**Memory: sparse or deep graphs.** BFS must hold an entire frontier in the queue at once. In a wide graph (high branching factor), the queue can grow to O(V) nodes. DFS only holds the current path from root to the active node: O(depth). On a graph of depth 10 and branching factor 1000, BFS queues up to 10^10 nodes; DFS uses at most 10 stack frames.
+**Memory: sparse or deep graphs.** BFS must hold an entire frontier in the queue at once. In a wide graph (high branching factor), the queue can grow to $O(V)$ nodes. DFS only holds the current path from root to the active node: $O(depth)$. On a graph of depth 10 and branching factor 1000, BFS queues up to 10^10 nodes; DFS uses at most 10 stack frames.
 
 **Cycle detection.** DFS with a recursion stack (or an explicit "in-progress" set) detects back edges naturally. BFS can detect cycles too, but the DFS approach maps more cleanly to the standard interview implementations (coloring: white / gray / black).
 
@@ -312,7 +312,7 @@ Quick decision rule: if the problem says "shortest," reach for BFS. If it says "
 
 ## Multiple uses
 
-**Bipartite graph check (BFS 2-coloring).** Assign alternating colors as you traverse. If you ever need to assign both colors to a node, the graph is not bipartite. O(V+E).
+**Bipartite graph check (BFS 2-coloring).** Assign alternating colors as you traverse. If you ever need to assign both colors to a node, the graph is not bipartite. $O(V+E)$.
 
 ```python
 from collections import deque
@@ -335,7 +335,7 @@ def is_bipartite(graph):
     return True
 ```
 
-**Shortest path with obstacles on a grid (0/1 BFS).** When edge weights are only 0 or 1, use a deque instead of a heap. Weight-0 edges go to the front (`deque.appendleft`), weight-1 edges go to the back. O(V+E) instead of O((V+E) log V).
+**Shortest path with obstacles on a grid (0/1 BFS).** When edge weights are only 0 or 1, use a deque instead of a heap. Weight-0 edges go to the front (`deque.appendleft`), weight-1 edges go to the back. $O(V+E)$ instead of $O((V+E)$ log V).
 
 ```python
 from collections import deque

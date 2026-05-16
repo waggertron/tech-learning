@@ -24,7 +24,7 @@ import approach3GoCode from './136-single-number-approach3.go?raw';
 
 ## Problem
 
-Given a non-empty array of integers `nums` where every element appears twice except for one, find that single one. Solve in O(n) time and **O(1) extra space**.
+Given a non-empty array of integers `nums` where every element appears twice except for one, find that single one. Solve in $O(n)$ time and **$O(1)$ extra space**.
 
 **Example**
 - `nums = [2, 2, 1]` → `1`
@@ -102,14 +102,14 @@ func singleNumber(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L2-L4 (scan)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L5 (pop) | O(1) | 1 | O(1) |
+| **L2-L4 (scan)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L5 (pop) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3/L4 (single pass over all elements).
-- **Space:** O(n) for the set.
+- **Time:** $O(n)$, driven by L2/L3/L4 (single pass over all elements).
+- **Space:** $O(n)$ for the set.
 
-Violates the O(1) space constraint.
+Violates the $O(1)$ space constraint.
 
 ## Approach 2: Sort + scan pairs
 
@@ -160,12 +160,12 @@ func singleNumber(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2-L3 (pair scan) | O(1) | n/2 | O(n) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2-L3 (pair scan) | $O(1)$ | n/2 | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (sorting).
-- **Space:** O(1) with in-place sort.
+- **Time:** $O(n log n)$, driven by L1 (sorting).
+- **Space:** $O(1)$ with in-place sort.
 
 **Try this approach:**
 
@@ -230,14 +230,14 @@ func singleNumber(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| **L2, L3 (XOR loop)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L2, L3 (XOR loop)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
 A single pass; each element is XORed in once.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3 (single XOR pass).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3 (single XOR pass).
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -257,9 +257,9 @@ A single pass; each element is XORed in once.
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Hash set | O(n) | O(n) |
-| Sort + scan | O(n log n) | O(1) |
-| **XOR** | **O(n)** | **O(1)** |
+| Hash set | $O(n)$ | $O(n)$ |
+| Sort + scan | $O(n log n)$ | $O(1)$ |
+| **XOR** | **$O(n)$** | **$O(1)$** |
 
 XOR is the canonical bit-manipulation move, memorize it. Variants (Single Number II with triples, III with two singletons) build on this.
 

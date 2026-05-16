@@ -131,17 +131,17 @@ func minWindow(s string, t string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (Counter(t)) | O(\|t\|) | 1 | O(\|t\|) |
-| L2 (outer loop) | O(1) | n | O(n) |
-| L3 (inner loop) | O(1) | O(n²) total | O(n²) |
-| **L4 (Counter build)** | **O(n)** | **O(n²)** | **O(n³)** ← dominates |
-| L5 (all check) | O(k) | O(n²) | O(n² · k) |
+| L1 (Counter(t)) | $O(\|t\|)$ | 1 | $O(\|t\|)$ |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L3 (inner loop) | $O(1)$ | $O(n²)$ total | $O(n²)$ |
+| **L4 (Counter build)** | **$O(n)$** | **$O(n²)$** | **$O(n³)$** ← dominates |
+| L5 (all check) | $O(k)$ | $O(n²)$ | $O(n² · k)$ |
 
-L4 is the killer: building a `Counter` from a slice requires scanning the slice, which is O(n) per call, and we call it O(n²) times.
+L4 is the killer: building a `Counter` from a slice requires scanning the slice, which is $O(n)$ per call, and we call it $O(n²)$ times.
 
 **Complexity**
-- **Time:** O(n³) or worse, driven by L4 (Counter on every substring pair).
-- **Space:** O(k).
+- **Time:** $O(n³)$ or worse, driven by L4 (Counter on every substring pair).
+- **Space:** $O(k)$.
 
 ## Approach 2: Expand-then-contract sliding window, full counter compare each step
 
@@ -240,18 +240,18 @@ func minWindow(s string, t string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (init) | O(\|t\|) | 1 | O(\|t\|) |
-| L3 (expand right) | O(1) | n | O(n) |
-| L4 (increment) | O(1) | n | O(n) |
-| **L5 (all-check)** | **O(k)** | **O(n) times** | **O(n · k)** ← dominates |
-| L6 (best slice) | O(n) | at most n | O(n²) in theory but rarely |
-| L7/L8 (shrink left) | O(1) | at most n total | O(n) |
+| L1-L2 (init) | $O(\|t\|)$ | 1 | $O(\|t\|)$ |
+| L3 (expand right) | $O(1)$ | n | $O(n)$ |
+| L4 (increment) | $O(1)$ | n | $O(n)$ |
+| **L5 (all-check)** | **$O(k)$** | **$O(n)$ times** | **$O(n · k)$** ← dominates |
+| L6 (best slice) | $O(n)$ | at most n | $O(n²)$ in theory but rarely |
+| L7/L8 (shrink left) | $O(1)$ | at most n total | $O(n)$ |
 
-The `all(...)` check iterates over all k distinct characters of t every time the window is valid. Since `left` moves at most n times and `right` moves n times, L5 fires O(n) times total, giving O(n · k).
+The `all(...)` check iterates over all k distinct characters of t every time the window is valid. Since `left` moves at most n times and `right` moves n times, L5 fires $O(n)$ times total, giving $O(n · k)$.
 
 **Complexity**
-- **Time:** O(n · k), driven by L5 (the O(k) all-check inside the while loop).
-- **Space:** O(k).
+- **Time:** $O(n · k)$, driven by L5 (the $O(k)$ all-check inside the while loop).
+- **Space:** $O(k)$.
 
 ## Approach 3: Sliding window with "have vs. need" counter (optimal)
 
@@ -374,16 +374,16 @@ func minWindow(s string, t string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L5 (init) | O(\|t\|) | 1 | O(\|t\|) |
-| **L6 (expand right)** | **O(1) body** | **n** | **O(n)** ← dominates |
-| L7/L8/L9 (window update) | O(1) | n | O(n) |
-| L10-L14 (shrink left) | O(1) per step | at most n total | O(n) |
+| L1-L5 (init) | $O(\|t\|)$ | 1 | $O(\|t\|)$ |
+| **L6 (expand right)** | **$O(1)$ body** | **n** | **$O(n)$** ← dominates |
+| L7/L8/L9 (window update) | $O(1)$ | n | $O(n)$ |
+| L10-L14 (shrink left) | $O(1)$ per step | at most n total | $O(n)$ |
 
-The key upgrade over Approach 2: `have` is an integer that tracks how many distinct characters of `t` are fully satisfied. Checking `have == needed` is O(1) rather than O(k). Each character crosses the window boundary at most twice (once entering, once leaving), so the total work is O(n).
+The key upgrade over Approach 2: `have` is an integer that tracks how many distinct characters of `t` are fully satisfied. Checking `have == needed` is $O(1)$ rather than $O(k)$. Each character crosses the window boundary at most twice (once entering, once leaving), so the total work is $O(n)$.
 
 **Complexity**
-- **Time:** O(n), driven by L6/L7/L8 (the single linear pass with O(1) window updates).
-- **Space:** O(k).
+- **Time:** $O(n)$, driven by L6/L7/L8 (the single linear pass with $O(1)$ window updates).
+- **Space:** $O(k)$.
 
 **Try this approach:**
 
@@ -400,9 +400,9 @@ The key upgrade over Approach 2: `have` is an integer that tracks how many disti
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force | O(n³) | O(k) |
-| Window + O(k) check | O(n · k) | O(k) |
-| **Window + have/need counter** | **O(n)** | **O(k)** |
+| Brute force | $O(n³)$ | $O(k)$ |
+| Window + $O(k)$ check | $O(n · k)$ | $O(k)$ |
+| **Window + have/need counter** | **$O(n)$** | **$O(k)$** |
 
 The "have vs. need" pattern is the workhorse of hard sliding-window problems. The same template solves "substring with at most k distinct," "smallest subarray containing X", etc.
 

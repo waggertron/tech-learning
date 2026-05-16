@@ -72,8 +72,8 @@ def max_coins(nums):
 For each permutation, scan inward to find the active left and right neighbors at burst time.
 
 **Complexity**
-- **Time:** O(n! · n²).
-- **Space:** O(n).
+- **Time:** $O(n! · n²)$.
+- **Space:** $O(n)$.
 
 ## Approach 2: Recursive, pick the "first to burst" in each subproblem (wrong framing)
 
@@ -169,17 +169,17 @@ func maxCoins(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(n) or O(n^2) | 1 | O(n^2) |
-| L4 (length loop) | O(1) | n | O(n) outer |
-| L5 (left endpoint loop) | O(1) | O(n) per length | O(n^2) combined |
-| **L7 (last-burst k loop)** | **O(1) body** | **O(n) per (i,j) pair** | **O(n^3)** ← dominates |
-| L8-L9 (coin calc + update) | O(1) | once per (i,j,k) triple | included above |
+| L1-L3 (init) | $O(n)$ or $O(n^2)$ | 1 | $O(n^2)$ |
+| L4 (length loop) | $O(1)$ | n | $O(n)$ outer |
+| L5 (left endpoint loop) | $O(1)$ | $O(n)$ per length | $O(n^2)$ combined |
+| **L7 (last-burst k loop)** | **$O(1)$ body** | **$O(n)$ per (i,j) pair** | **$O(n^3)$** ← dominates |
+| L8-L9 (coin calc + update) | $O(1)$ | once per (i,j,k) triple | included above |
 
-The three nested loops at L4/L5/L7 iterate over all O(n^3) triples `(i, j, k)`. Each triple does O(1) work, so the total is O(n^3).
+The three nested loops at L4/L5/L7 iterate over all $O(n^3)$ triples `(i, j, k)`. Each triple does $O(1)$ work, so the total is $O(n^3)$.
 
 **Complexity**
-- **Time:** O(n^3), driven by L4/L5/L7 (the three nested loops over all interval triples).
-- **Space:** O(n^2) for the DP table.
+- **Time:** $O(n^3)$, driven by L4/L5/L7 (the three nested loops over all interval triples).
+- **Space:** $O(n^2)$ for the DP table.
 
 ### Why "last to burst"
 When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and between `k` and `j`, has already been bursted. Those sub-intervals are independent subproblems, clean recurrence. Trying "first to burst" instead, the subproblems are not independent (their boundaries shift).
@@ -202,9 +202,9 @@ When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and be
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Enumerate orderings | O(n!) | O(n) | Infeasible |
+| Enumerate orderings | $O(n!)$ | $O(n)$ | Infeasible |
 | Naive recursion ("first to burst") | - | - | Wrong framing |
-| **Interval DP ("last to burst")** | **O(n^3)** | **O(n^2)** | Canonical |
+| **Interval DP ("last to burst")** | **$O(n^3)$** | **$O(n^2)$** | Canonical |
 
 Interval DP is a major pattern, same template solves Matrix Chain Multiplication and Minimum Cost Tree From Leaf Values (1130).
 

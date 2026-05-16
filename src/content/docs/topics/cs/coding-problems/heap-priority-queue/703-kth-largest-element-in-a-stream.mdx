@@ -103,15 +103,15 @@ class KthLargest {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (initial sort) | O(n log n) | 1 (init) | O(n log n) |
-| **L2 (insort / splice)** | **O(n)** | **1 per add** | **O(n)** ← dominates each add |
-| L3 (index) | O(1) | 1 per add | O(1) |
+| L1 (initial sort) | $O(n log n)$ | 1 (init) | $O(n log n)$ |
+| **L2 (insort / splice)** | **$O(n)$** | **1 per add** | **$O(n)$** ← dominates each add |
+| L3 (index) | $O(1)$ | 1 per add | $O(1)$ |
 
-`bisect.insort` / `splice` finds the insertion point in O(log n) but must shift all subsequent elements in O(n).
+`bisect.insort` / `splice` finds the insertion point in $O(log n)$ but must shift all subsequent elements in $O(n)$.
 
 **Complexity**
-- `add`: O(n) per call (L2 shift dominates).
-- Space: O(n).
+- `add`: $O(n)$ per call (L2 shift dominates).
+- Space: $O(n)$.
 
 ## Approach 2: Keep a full heap
 
@@ -148,7 +148,7 @@ class KthLargest:
 </TabItem>
 </Tabs>
 
-This works but each `add` is O(k log n), worse than the size-K heap (Approach 3) which is O(log k). The "full heap" stores everything you've ever seen (O(n) space) instead of just the K candidates.
+This works but each `add` is $O(k log n)$, worse than the size-K heap (Approach 3) which is $O(log k)$. The "full heap" stores everything you've ever seen ($O(n)$ space) instead of just the K candidates.
 
 The meaningful optimization is Approach 3.
 
@@ -304,15 +304,15 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init loop) | O(log k) | n | O(n log k) |
-| **L2 or L3 (push/replace)** | **O(log k)** | **1 per add** | **O(log k)** ← dominates each add |
-| L4 (peek) | O(1) | 1 per add | O(1) |
+| L1 (init loop) | $O(log k)$ | n | $O(n log k)$ |
+| **L2 or L3 (push/replace)** | **$O(log k)$** | **1 per add** | **$O(log k)$** ← dominates each add |
+| L4 (peek) | $O(1)$ | 1 per add | $O(1)$ |
 
 The heap never grows beyond k entries. `heapreplace` / `replace` is one sift-down operation, cheaper than a separate `heappop` + `heappush` because it avoids an extra sift-up.
 
 **Complexity**
-- `add`: O(log k) per call (L2 or L3).
-- Space: O(k).
+- `add`: $O(log k)$ per call (L2 or L3).
+- Space: $O(k)$.
 
 ### Why min-heap?
 
@@ -409,8 +409,8 @@ console.log("all tests pass");
 
 | Approach | `add` | Space |
 | --- | --- | --- |
-| Sorted list (insort) | O(n) | O(n) |
-| **Size-K min-heap** | **O(log k)** | **O(k)** |
+| Sorted list (insort) | $O(n)$ | $O(n)$ |
+| **Size-K min-heap** | **$O(log k)$** | **$O(k)$** |
 
 This is the canonical "top-K streaming" pattern; the same template solves Top K Frequent (347) online and streaming percentile problems.
 

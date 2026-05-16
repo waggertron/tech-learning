@@ -78,13 +78,13 @@ function carFleet(target: number, position: number[], speed: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **sort + simulate** | **O(n) per step** | **T steps** | **O(n · T)** ← dominates |
+| **sort + simulate** | **$O(n)$ per step** | **T steps** | **$O(n · T)$** ← dominates |
 
 T is unbounded in general and may involve floating-point precision issues.
 
 **Complexity**
-- **Time:** Hard to bound cleanly; effectively O(n · T) where T is the simulation horizon.
-- **Space:** O(n).
+- **Time:** Hard to bound cleanly; effectively $O(n · T)$ where T is the simulation horizon.
+- **Space:** $O(n)$.
 
 Don't actually simulate, it's imprecise and slow.
 
@@ -133,14 +133,14 @@ function carFleet(target: number, position: number[], speed: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L4-L8 (linear scan) | O(1) | n | O(n) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L4-L8 (linear scan) | $O(1)$ | n | $O(n)$ |
 
 The sort dominates; the scan is linear.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (sorting by position). Sorting dominates.
-- **Space:** O(n) for the sort.
+- **Time:** $O(n log n)$, driven by L1 (sorting by position). Sorting dominates.
+- **Space:** $O(n)$ for the sort.
 
 **Try this approach:**
 
@@ -195,15 +195,15 @@ function carFleet(target: number, position: number[], speed: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L3-L6 (scan + stack ops) | O(1) | n | O(n) |
-| L7 (len) | O(1) | 1 | O(1) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L3-L6 (scan + stack ops) | $O(1)$ | n | $O(n)$ |
+| L7 (len) | $O(1)$ | 1 | $O(1)$ |
 
 Same cost structure as Approach 2; the stack just makes the fleet grouping explicit.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (sorting by position).
-- **Space:** O(n) for the stack.
+- **Time:** $O(n log n)$, driven by L1 (sorting by position).
+- **Space:** $O(n)$ for the stack.
 
 **Try this approach:**
 
@@ -220,9 +220,9 @@ Same cost structure as Approach 2; the stack just makes the fleet grouping expli
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Time-step simulation | O(n · T) | O(n) |
-| **Sort + arrival times** | **O(n log n)** | O(n) |
-| **Sort + monotonic stack** | **O(n log n)** | O(n) |
+| Time-step simulation | $O(n · T)$ | $O(n)$ |
+| **Sort + arrival times** | **$O(n log n)$** | $O(n)$ |
+| **Sort + monotonic stack** | **$O(n log n)$** | $O(n)$ |
 
 The insight: fleets are determined by **arrival times in order of starting position**, no need to simulate. A slower car ahead caps everyone behind it.
 

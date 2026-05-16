@@ -144,17 +144,17 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build graph) | O(1) per edge | E | O(E) |
+| L1 (build graph) | $O(1)$ per edge | E | $O(E)$ |
 | L8 (outer loop) | varies | V | V invocations of has_cycle |
-| L3, L4, L7 (path ops) | O(1) | per node visited | - |
-| L5, L6 (DFS traversal) | O(V + E) per start | V | O(V) calls × O(V + E) each |
-| **L8 total** | **O(V + E)** | **V** | **O(V² + VE) ← dominates** |
+| L3, L4, L7 (path ops) | $O(1)$ | per node visited | - |
+| L5, L6 (DFS traversal) | $O(V + E)$ per start | V | $O(V)$ calls × $O(V + E)$ each |
+| **L8 total** | **$O(V + E)$** | **V** | **$O(V² + VE)$ ← dominates** |
 
-Because `on_path` is reset on every call to `has_cycle`, there is no memoization. A node reachable from k different starting points is fully re-explored k times. In a dense graph (E near V²), this blows up to O(V³).
+Because `on_path` is reset on every call to `has_cycle`, there is no memoization. A node reachable from k different starting points is fully re-explored k times. In a dense graph (E near V²), this blows up to $O(V³)$.
 
 **Complexity**
-- **Time:** O(V² + VE), driven by L8 (re-walking the graph from every node).
-- **Space:** O(V + E).
+- **Time:** $O(V² + VE)$, driven by L8 (re-walking the graph from every node).
+- **Space:** $O(V + E)$.
 
 Correct but wasteful.
 
@@ -259,17 +259,17 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build graph) | O(1) per edge | E | O(E) |
-| L2 (init colors) | O(V) | 1 | O(V) |
-| L3, L4 (color checks) | O(1) | once per node entry | O(V) total |
-| **L5, L8 (color transitions)** | **O(1)** | **each node goes WHITE→GRAY→BLACK once** | **O(V) total** |
-| **L6, L7 (edge traversal)** | **O(1) per edge** | **each edge visited at most once** | **O(E) ← dominates** |
+| L1 (build graph) | $O(1)$ per edge | E | $O(E)$ |
+| L2 (init colors) | $O(V)$ | 1 | $O(V)$ |
+| L3, L4 (color checks) | $O(1)$ | once per node entry | $O(V)$ total |
+| **L5, L8 (color transitions)** | **$O(1)$** | **each node goes WHITE→GRAY→BLACK once** | **$O(V)$ total** |
+| **L6, L7 (edge traversal)** | **$O(1)$ per edge** | **each edge visited at most once** | **$O(E)$ ← dominates** |
 
-The BLACK check at L4 is the memoization that makes this O(V + E) instead of O(V² + VE). Once a node is colored BLACK, any future DFS that reaches it returns immediately without re-exploring its subtree.
+The BLACK check at L4 is the memoization that makes this $O(V + E)$ instead of $O(V² + VE)$. Once a node is colored BLACK, any future DFS that reaches it returns immediately without re-exploring its subtree.
 
 **Complexity**
-- **Time:** O(V + E), driven by L6/L7 (each edge visited at most once across the whole run).
-- **Space:** O(V + E).
+- **Time:** $O(V + E)$, driven by L6/L7 (each edge visited at most once across the whole run).
+- **Space:** $O(V + E)$.
 
 **Try this approach:**
 
@@ -289,9 +289,9 @@ The BLACK check at L4 is the memoization that makes this O(V + E) instead of O(V
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS from every node | O(V² + VE) | O(V + E) |
-| **DFS + three-color** | **O(V + E)** | **O(V + E)** |
-| **Kahn's algorithm (BFS)** | **O(V + E)** | **O(V + E)** |
+| DFS from every node | $O(V² + VE)$ | $O(V + E)$ |
+| **DFS + three-color** | **$O(V + E)$** | **$O(V + E)$** |
+| **Kahn's algorithm (BFS)** | **$O(V + E)$** | **$O(V + E)$** |
 
 Both DFS+color and Kahn's are optimal. Kahn's generalizes directly to problem 210 where we need the actual ordering, not just feasibility.
 

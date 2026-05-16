@@ -16,7 +16,7 @@ Origin: Robert Metcalfe, co-inventor of Ethernet, articulated this principle in 
 
 > The value of a network is proportional to the square of the number of connected users.
 
-**The math**: In a network of n users, each user can connect with n-1 others. The number of potential connections is n*(n-1)/2, which grows as O(n²). Double the users, roughly quadruple the connections. That quadrupling of potential connections is what Metcalfe captured: value grows with connections, and connections grow quadratically.
+**The math**: In a network of n users, each user can connect with n-1 others. The number of potential connections is n*(n-1)/2, which grows as $O(n²)$. Double the users, roughly quadruple the connections. That quadrupling of potential connections is what Metcalfe captured: value grows with connections, and connections grow quadratically.
 
 **Example 1: Fax machines**
 

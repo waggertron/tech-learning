@@ -83,19 +83,19 @@ function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (read first) | O(1) | n | O(n) |
-| **L2 (`list.index`)** | **O(n)** | **n** | **O(n²)** ← dominates |
-| L3/L4 (slicing) | O(n) | n | O(n²) |
+| L1 (read first) | $O(1)$ | n | $O(n)$ |
+| **L2 (`list.index`)** | **$O(n)$** | **n** | **$O(n²)$** ← dominates |
+| L3/L4 (slicing) | $O(n)$ | n | $O(n²)$ |
 
-Both L2 and L3/L4 are O(n) per call, and both are called O(n) times total. The n² comes from re-scanning the inorder array at every level of recursion.
+Both L2 and L3/L4 are $O(n)$ per call, and both are called $O(n)$ times total. The n² comes from re-scanning the inorder array at every level of recursion.
 
 **Complexity**
-- **Time:** O(n²). `list.index` is O(n); called O(n) times.
-- **Space:** O(n²) across slices; O(n) for the tree.
+- **Time:** $O(n²)$. `list.index` is $O(n)$; called $O(n)$ times.
+- **Space:** $O(n²)$ across slices; $O(n)$ for the tree.
 
 ## Approach 2: Hash map inorder index + pointer recursion (optimal)
 
-Precompute `val → index` in `inorder` once (O(n)). Pass index ranges into the recursion instead of slicing.
+Precompute `val → index` in `inorder` once ($O(n)$). Pass index ranges into the recursion instead of slicing.
 
 <Tabs>
 <TabItem label="Python">
@@ -147,17 +147,17 @@ function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build map) | O(n) | 1 | O(n) |
-| L2 (read preorder) | O(1) | n | O(n) |
-| L3 (advance pointer) | O(1) | n | O(n) |
-| **L4 (hash lookup)** | **O(1)** | **n** | **O(n)** ← dominates (all per-node lines tie) |
-| L5/L6 (recurse) | O(1) dispatch | n | O(n) |
+| L1 (build map) | $O(n)$ | 1 | $O(n)$ |
+| L2 (read preorder) | $O(1)$ | n | $O(n)$ |
+| L3 (advance pointer) | $O(1)$ | n | $O(n)$ |
+| **L4 (hash lookup)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all per-node lines tie) |
+| L5/L6 (recurse) | $O(1)$ dispatch | n | $O(n)$ |
 
-Every node is constructed in O(1) given the precomputed map. No slicing, no scanning.
+Every node is constructed in $O(1)$ given the precomputed map. No slicing, no scanning.
 
 **Complexity**
-- **Time:** O(n). Each node constructed in O(1) given the index.
-- **Space:** O(n) for the map + O(h) recursion.
+- **Time:** $O(n)$. Each node constructed in $O(1)$ given the index.
+- **Space:** $O(n)$ for the map + $O(h)$ recursion.
 
 ### Why the preorder index is shared state
 We consume the preorder from left to right, but we must process the left subtree completely *before* starting the right subtree. By sharing a single counter (`pre_i`) across recursive calls, the left subtree's exhaustion naturally positions us at the right subtree's root.
@@ -204,16 +204,16 @@ def build_tree(preorder, inorder):
 The invariant: the stack holds the current path of "left-child ancestors." When the top matches the inorder cursor, we've finished a left subtree, and the next preorder value belongs to a **right** child further up the path. The pop-while loop walks up to find which one.
 
 **Complexity**
-- **Time:** O(n). Each node is pushed and popped once.
-- **Space:** O(n) for the stack.
+- **Time:** $O(n)$. Each node is pushed and popped once.
+- **Space:** $O(n)$ for the stack.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Recursive with `list.index` | O(n²) | O(n²) slices |
-| **Hash map + recursion** | **O(n)** | **O(n)** |
-| Iterative stack | O(n) | O(n) |
+| Recursive with `list.index` | $O(n²)$ | $O(n²)$ slices |
+| **Hash map + recursion** | **$O(n)$** | **$O(n)$** |
+| Iterative stack | $O(n)$ | $O(n)$ |
 
 The hash-map + recursion pattern generalizes to problem 106 (Build from Inorder + Postorder), same code with the preorder cursor replaced by a right-to-left postorder cursor.
 
@@ -338,4 +338,4 @@ console.log("all tests pass");
 ## Related data structures
 
 - [Binary Trees & BSTs](../../../data-structures/binary-trees/), reconstruction from traversals
-- [Hash Tables](../../../data-structures/hash-tables/), O(1) index lookup in inorder
+- [Hash Tables](../../../data-structures/hash-tables/), $O(1)$ index lookup in inorder

@@ -10,17 +10,17 @@ updated: 2026-05-04
 
 ## What it does
 
-Merge sort sorts an array in O(n log n) time, guaranteed. Not average-case. Not amortized. Every input, every time.
+Merge sort sorts an array in $O(n log n)$ time, guaranteed. Not average-case. Not amortized. Every input, every time.
 
 That guarantee is one reason merge sort shows up whenever you cannot afford a worst-case blowup: external sorting on disk, sorting [linked lists](../data-structures/linked-lists/), and any multi-key sort that needs to preserve the relative order of equal elements (stability).
 
-It also sits at the theoretical floor for comparison-based sorting. Any algorithm that sorts by comparing elements must make at least O(n log n) comparisons in the worst case. Merge sort hits that bound exactly, which makes it the baseline every other comparison sort is measured against.
+It also sits at the theoretical floor for comparison-based sorting. Any algorithm that sorts by comparing elements must make at least $O(n log n)$ comparisons in the worst case. Merge sort hits that bound exactly, which makes it the baseline every other comparison sort is measured against.
 
 The algorithm was first described by John von Neumann in 1945 in notes on the EDVAC, one of the earliest stored-program computers. It is one of the oldest [named algorithms](./) still in everyday use.
 
 ## The core idea, in one sentence
 
-> Merging two already-sorted arrays into one takes O(n) time; applying that operation recursively via divide-and-conquer produces a full sort in O(n log n) total work.
+> Merging two already-sorted arrays into one takes $O(n)$ time; applying that operation recursively via divide-and-conquer produces a full sort in $O(n log n)$ total work.
 
 That is the whole algorithm. Split until trivial (a single element is already sorted). Merge on the way back up.
 
@@ -73,7 +73,7 @@ The `<=` in the comparison (not `<`) is what makes merge sort stable. When `left
 
 ## The bottom-up iterative version
 
-The recursive version allocates O(log n) stack frames. For very large inputs (tens of millions of elements) that can overflow the default recursion limit. The bottom-up version eliminates the call stack entirely by iterating over merge widths.
+The recursive version allocates $O(log n)$ stack frames. For very large inputs (tens of millions of elements) that can overflow the default recursion limit. The bottom-up version eliminates the call stack entirely by iterating over merge widths.
 
 ```python
 def merge_sort_iterative(arr):
@@ -149,17 +149,17 @@ Level 1 (merge the two halves):
 
 Output: `[1, 2, 3, 4, 5, 7, 8, 9]`
 
-## Why it's O(n log n)
+## Why it's $O(n log n)$
 
 Two facts combine:
 
 **Fact 1: there are log n levels of recursion.**
 Each split cuts the array in half. You can halve n at most log2(n) times before reaching size 1. So the tree has height log n.
 
-**Fact 2: each level does O(n) total merge work.**
-At every level of the tree, the sub-arrays at that level partition the original array without overlap. Every element appears in exactly one sub-array per level. The merge at each node takes time proportional to the size of its output. Summing across all nodes at one level gives O(n) total comparisons.
+**Fact 2: each level does $O(n)$ total merge work.**
+At every level of the tree, the sub-arrays at that level partition the original array without overlap. Every element appears in exactly one sub-array per level. The merge at each node takes time proportional to the size of its output. Summing across all nodes at one level gives $O(n)$ total comparisons.
 
-Multiplying: log n levels x O(n) work per level = **O(n log n)** total.
+Multiplying: log n levels x $O(n)$ work per level = **$O(n log n)$** total.
 
 ```
 Level 0:  1 merge of n       = n  comparisons
@@ -177,13 +177,13 @@ Unlike quicksort, there is no unlucky pivot that collapses this. The split is al
 
 | Metric           | Cost                                                       |
 | ---------------- | ---------------------------------------------------------- |
-| Time (best)      | O(n log n)                                                 |
-| Time (average)   | O(n log n)                                                 |
-| Time (worst)     | O(n log n)                                                 |
-| Space (aux array)| O(n) for the temporary arrays during merge                 |
-| Space (call stack)| O(log n) stack frames for the recursive version           |
+| Time (best)      | $O(n log n)$                                                 |
+| Time (average)   | $O(n log n)$                                                 |
+| Time (worst)     | $O(n log n)$                                                 |
+| Space (aux array)| $O(n)$ for the temporary arrays during merge                 |
+| Space (call stack)| $O(log n)$ stack frames for the recursive version           |
 
-The O(n) auxiliary space is the main cost relative to in-place sorts. You cannot merge two halves of an array in place without either O(n) extra space or O(n log n) extra comparisons. Standard merge sort pays the O(n) space and keeps the algorithm simple.
+The $O(n)$ auxiliary space is the main cost relative to in-place sorts. You cannot merge two halves of an array in place without either $O(n)$ extra space or $O(n log n)$ extra comparisons. Standard merge sort pays the $O(n)$ space and keeps the algorithm simple.
 
 ## Stability
 
@@ -201,30 +201,30 @@ Both are divide-and-conquer. Their performance profiles are different in ways th
 
 | Property          | Merge sort                   | Quicksort                          |
 | ----------------- | ---------------------------- | ---------------------------------- |
-| Time (worst case) | O(n log n), always           | O(n^2) on bad pivot choices        |
-| Time (average)    | O(n log n)                   | O(n log n)                         |
-| Space             | O(n) auxiliary array         | O(log n) stack, in-place partition |
+| Time (worst case) | $O(n log n)$, always           | $O(n^2)$ on bad pivot choices        |
+| Time (average)    | $O(n log n)$                   | $O(n log n)$                         |
+| Space             | $O(n)$ auxiliary array         | $O(log n)$ stack, in-place partition |
 | Stable            | Yes                          | No (standard partition)            |
 | Cache behavior    | Sequential access, decent    | Better cache locality in practice  |
 | Preferred for     | Linked lists, external sort  | In-memory arrays (typical case)    |
 
 In practice, well-implemented quicksort (with randomized pivots or median-of-three) is often faster than merge sort on random data because its in-place partition has better cache locality: it touches fewer distinct memory locations per comparison. Python's built-in `sorted()` and Java's `Arrays.sort()` for objects both use Timsort, a merge-sort variant that detects natural runs in the data and avoids splitting already-sorted subsequences.
 
-If you need guaranteed O(n log n) with no worst-case risk (e.g., sorting user-supplied data where an adversary might send pathological inputs), merge sort is the safer bet. If you are sorting on disk (external sort) where reading two sequential halves is cheap and random access is expensive, merge sort's sequential access pattern is the right choice. If you are sorting a linked list, merge sort wins outright (see below).
+If you need guaranteed $O(n log n)$ with no worst-case risk (e.g., sorting user-supplied data where an adversary might send pathological inputs), merge sort is the safer bet. If you are sorting on disk (external sort) where reading two sequential halves is cheap and random access is expensive, merge sort's sequential access pattern is the right choice. If you are sorting a linked list, merge sort wins outright (see below).
 
 ## Where merge sort appears in real systems
 
-**Timsort (Python, Java, Android, Swift).** Python's `sorted()` and Java's `Collections.sort()` both use Timsort, designed by Tim Peters in 2002. Timsort scans the input for natural runs (already-ascending or descending sequences) and uses insertion sort to build minimum-length runs, then merges them with a merge sort strategy. On nearly-sorted data it degrades to nearly O(n). On random data it matches merge sort's O(n log n). The stability guarantee is preserved throughout.
+**Timsort (Python, Java, Android, Swift).** Python's `sorted()` and Java's `Collections.sort()` both use Timsort, designed by Tim Peters in 2002. Timsort scans the input for natural runs (already-ascending or descending sequences) and uses insertion sort to build minimum-length runs, then merges them with a merge sort strategy. On nearly-sorted data it degrades to nearly $O(n)$. On random data it matches merge sort's $O(n log n)$. The stability guarantee is preserved throughout.
 
 **External sort (databases, MapReduce).** When data does not fit in memory, you split it into chunks that do fit, sort each chunk (any in-memory algorithm), write the sorted chunks to disk, then k-way merge the chunks. The merge phase is merge sort operating on disk files instead of arrays. The merge step's sequential read pattern is critical: spinning disks and SSDs both deliver their highest throughput on sequential I/O. Random access (as in quicksort's partition) would cost an order of magnitude more per operation. Every major database (PostgreSQL, MySQL, SQLite) uses an external merge sort for ORDER BY on large result sets.
 
-**Inversion distance in bioinformatics.** Counting inversions (covered below) measures edit distance between gene sequences. The O(n log n) merge-sort approach is standard in computational genomics tools.
+**Inversion distance in bioinformatics.** Counting inversions (covered below) measures edit distance between gene sequences. The $O(n log n)$ merge-sort approach is standard in computational genomics tools.
 
 ## Merge sort on linked lists
 
-For arrays, merge sort needs O(n) auxiliary space because you cannot efficiently access the midpoint of a half without copying it somewhere. For linked lists, the situation is different.
+For arrays, merge sort needs $O(n)$ auxiliary space because you cannot efficiently access the midpoint of a half without copying it somewhere. For linked lists, the situation is different.
 
-Finding the midpoint of a linked list takes O(n) time (fast/slow pointer), which does not change the asymptotic cost. More importantly, the merge step for linked lists requires zero auxiliary space: instead of copying elements into a result array, you re-link the `next` pointers of the existing nodes. No allocation.
+Finding the midpoint of a linked list takes $O(n)$ time (fast/slow pointer), which does not change the asymptotic cost. More importantly, the merge step for linked lists requires zero auxiliary space: instead of copying elements into a result array, you re-link the `next` pointers of the existing nodes. No allocation.
 
 ```python
 class ListNode:
@@ -270,7 +270,7 @@ The merge re-links existing nodes: no `append`, no auxiliary list. This is why m
 
 An inversion in an array is a pair of indices `(i, j)` with `i < j` but `arr[i] > arr[j]`. The inversion count measures how "unsorted" an array is: a sorted array has 0 inversions, a reverse-sorted array has n*(n-1)/2.
 
-Counting inversions in O(n^2) is straightforward (check every pair). Doing it in O(n log n) is a merge sort application.
+Counting inversions in $O(n^2)$ is straightforward (check every pair). Doing it in $O(n log n)$ is a merge sort application.
 
 The key insight: during the merge step, when you take an element from the `right` half before exhausting the `left` half, every remaining element in `left` forms an inversion with that `right` element. Those are called cross-inversions because they cross the split boundary.
 
@@ -319,20 +319,20 @@ merge([3], [1, 2]):
 Total: 0 + 0 + 2 = 2 inversions: (3,1) and (3,2). Correct.
 ```
 
-The sorted output is a free byproduct. You pay the same O(n log n) cost as merge sort and get the inversion count along the way.
+The sorted output is a free byproduct. You pay the same $O(n log n)$ cost as merge sort and get the inversion count along the way.
 
 ## LeetCode exercises
 
 The merge step appears directly or in generalized form across several problems:
 
 - [Merge Two Sorted Lists (021)](../coding-problems/linked-list/021-merge-two-sorted-lists/) is the `merge_lists` function in isolation. If you can write that function from memory, the linked-list sort above follows immediately.
-- [Merge k Sorted Lists (023)](../coding-problems/linked-list/023-merge-k-sorted-lists/) generalizes the two-way merge to k inputs. The standard approach uses a min-heap to pick the smallest front element across all k lists in O(log k) per step, giving O(n log k) total. Alternatively, you can apply the two-way merge pairwise in log k rounds, which also gives O(n log k).
+- [Merge k Sorted Lists (023)](../coding-problems/linked-list/023-merge-k-sorted-lists/) generalizes the two-way merge to k inputs. The standard approach uses a min-heap to pick the smallest front element across all k lists in $O(log k)$ per step, giving $O(n log k)$ total. Alternatively, you can apply the two-way merge pairwise in log k rounds, which also gives $O(n log k)$.
 - [LeetCode 148 (Sort List)](https://leetcode.com/problems/sort-list/) is the full linked-list merge sort above.
 - [LeetCode 315 (Count of Smaller Numbers After Self)](https://leetcode.com/problems/count-of-smaller-numbers-after-self/) is a per-element inversion count, solved with the counting-inversions technique.
 
 ## Multiple uses
 
-**Count inversions.** An inversion is a pair (i, j) where i < j but arr[i] > arr[j]. During the merge step, when you take an element from the right half while the left half still has elements remaining, every remaining left element forms an inversion with that right element. Add `len(left) - i` to the count at that moment. O(n log n), same cost as the sort itself.
+**Count inversions.** An inversion is a pair (i, j) where i < j but arr[i] > arr[j]. During the merge step, when you take an element from the right half while the left half still has elements remaining, every remaining left element forms an inversion with that right element. Add `len(left) - i` to the count at that moment. $O(n log n)$, same cost as the sort itself.
 
 ```python
 def count_inversions(arr):
@@ -360,7 +360,7 @@ def count_inversions(arr):
 # count_inversions([1, 2, 3]) -> ([1, 2, 3], 0)
 ```
 
-**Sort a linked list.** Find the midpoint with slow/fast pointers, sort both halves recursively, then merge by re-linking `next` pointers instead of copying into an auxiliary array. No auxiliary array needed. O(n log n) time, O(log n) stack space. Merge sort is the only major comparison sort that works efficiently on linked lists without random access.
+**Sort a linked list.** Find the midpoint with slow/fast pointers, sort both halves recursively, then merge by re-linking `next` pointers instead of copying into an auxiliary array. No auxiliary array needed. $O(n log n)$ time, $O(log n)$ stack space. Merge sort is the only major comparison sort that works efficiently on linked lists without random access.
 
 ```python
 class ListNode:
@@ -529,10 +529,10 @@ if __name__ == "__main__":
 
 - von Neumann, J. (1945). First description of merge sort in notes on the EDVAC, credited as the origin of the algorithm.
 - Knuth, D. E. (1998). *The Art of Computer Programming, Volume 3: Sorting and Searching* (2nd ed.). Addison-Wesley. Section 5.2.4 covers merge sorting in exhaustive detail.
-- Cormen, T. H., Leiserson, C. E., Rivest, R. L., and Stein, C. (2022). *Introduction to Algorithms* (4th ed.). MIT Press. Chapter 2.3 introduces merge sort; Chapter 8 proves the O(n log n) comparison-sort lower bound.
+- Cormen, T. H., Leiserson, C. E., Rivest, R. L., and Stein, C. (2022). *Introduction to Algorithms* (4th ed.). MIT Press. Chapter 2.3 introduces merge sort; Chapter 8 proves the $O(n log n)$ comparison-sort lower bound.
 
 ## Related topics
 
-- [Quickselect](./quickselect/), a partition-based algorithm from the same divide-and-conquer family, with O(n) average time for order statistics
+- [Quickselect](./quickselect/), a partition-based algorithm from the same divide-and-conquer family, with $O(n)$ average time for order statistics
 - [Linked list problems (LeetCode 150)](../coding-problems/linked-list/), where merge sort's pointer-relinking advantage is most visible
 - [Data structures](../data-structures/), for the array and linked list structures merge sort operates on

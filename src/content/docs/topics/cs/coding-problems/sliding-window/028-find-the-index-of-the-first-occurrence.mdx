@@ -92,17 +92,17 @@ func strStr(haystack string, needle string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (lengths) | O(1) | 1 | O(1) |
-| L2 (loop) | O(1) | n - m + 1 | O(n) |
-| **L3 (slice + compare)** | **O(m)** | **up to n - m + 1** | **O(n * m)** |
-| L4 (return) | O(1) | 1 | O(1) |
-| L5 (return -1) | O(1) | 1 | O(1) |
+| L1 (lengths) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop) | $O(1)$ | n - m + 1 | $O(n)$ |
+| **L3 (slice + compare)** | **$O(m)$** | **up to n - m + 1** | **$O(n * m)$** |
+| L4 (return) | $O(1)$ | 1 | $O(1)$ |
+| L5 (return -1) | $O(1)$ | 1 | $O(1)$ |
 
-The slice `haystack[i:i+m]` allocates a new string of length `m` and the `==` comparison scans up to `m` characters. Done at each of the ~n positions, that is O(n * m) total.
+The slice `haystack[i:i+m]` allocates a new string of length `m` and the `==` comparison scans up to `m` characters. Done at each of the ~n positions, that is $O(n * m)$ total.
 
 **Complexity**
-- **Time:** O(n * m), driven by L3 (window comparison at every position).
-- **Space:** O(m) for the slice allocated at each step.
+- **Time:** $O(n * m)$, driven by L3 (window comparison at every position).
+- **Space:** $O(m)$ for the slice allocated at each step.
 
 ## Approach 2: Built-in (interview-acceptable)
 
@@ -131,7 +131,7 @@ func strStr(haystack string, needle string) int {
 </TabItem>
 </Tabs>
 
-This is O(n) in the average case and O(n * m) in the worst case, but the constant factor is far lower than a hand-rolled loop because the inner comparison runs in native code.
+This is $O(n)$ in the average case and $O(n * m)$ in the worst case, but the constant factor is far lower than a hand-rolled loop because the inner comparison runs in native code.
 
 **Try this approach:**
 
@@ -146,17 +146,17 @@ This is O(n) in the average case and O(n * m) in the worst case, but the constan
 
 ## Note on KMP
 
-The Knuth-Morris-Pratt algorithm solves this in O(n + m) time and O(m) space by precomputing a failure function over `needle` that allows the search to skip redundant comparisons. See [KMP](../../../named-algorithms/kmp/) for the full walkthrough.
+The Knuth-Morris-Pratt algorithm solves this in $O(n + m)$ time and $O(m)$ space by precomputing a failure function over `needle` that allows the search to skip redundant comparisons. See [KMP](../../../named-algorithms/kmp/) for the full walkthrough.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute sliding window | O(n * m) | O(m) |
-| Built-in | O(n) avg | O(1) |
-| KMP | O(n + m) | O(m) |
+| Brute sliding window | $O(n * m)$ | $O(m)$ |
+| Built-in | $O(n)$ avg | $O(1)$ |
+| KMP | $O(n + m)$ | $O(m)$ |
 
-The brute approach is the clearest to reason about and fine for small inputs. Use the built-in in interviews unless the interviewer specifically asks for the algorithm. KMP is the canonical O(n) solution.
+The brute approach is the clearest to reason about and fine for small inputs. Use the built-in in interviews unless the interviewer specifically asks for the algorithm. KMP is the canonical $O(n)$ solution.
 
 ## Test cases
 
@@ -224,6 +224,6 @@ func strStr(haystack string, needle string) int {
 
 ## Related topics
 
-- [KMP algorithm](../../../named-algorithms/kmp/), the O(n + m) solution to this exact problem
+- [KMP algorithm](../../../named-algorithms/kmp/), the $O(n + m)$ solution to this exact problem
 - [Permutation in String](./567-permutation-in-string/), fixed-size sliding window on strings
 - [Longest Substring Without Repeating Characters](./003-longest-substring-without-repeating-characters/), variable sliding window

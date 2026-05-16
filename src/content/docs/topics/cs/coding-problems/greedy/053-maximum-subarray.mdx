@@ -101,14 +101,14 @@ func maxSubArray(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L3, L4, L5 (inner loop)** | **O(1)** | **n(n+1)/2 total** | **O(n²)** ← dominates |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L3, L4, L5 (inner loop)** | **$O(1)$** | **n(n+1)/2 total** | **$O(n²)$** ← dominates |
 
 Every (i, j) subarray pair is visited exactly once; there are n(n+1)/2 such pairs.
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4/L5 (the nested loop over all start/end pairs).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L3/L4/L5 (the nested loop over all start/end pairs).
+- **Space:** $O(1)$.
 
 ## Approach 2: Divide and conquer
 
@@ -203,13 +203,13 @@ func maxSubArray(nums []int) int {
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L4, L5 (recursion) | T(n/2) each | log n levels | drives recurrence |
-| **L6, L7 (cross-sum scan)** | **O(n)** | **at each level** | **O(n log n)** ← dominates |
+| **L6, L7 (cross-sum scan)** | **$O(n)$** | **at each level** | **$O(n log n)$** ← dominates |
 
-The recurrence is T(n) = 2T(n/2) + O(n), which solves to O(n log n) by the Master Theorem (case 2).
+The recurrence is T(n) = 2T(n/2) + $O(n)$, which solves to $O(n log n)$ by the Master Theorem (case 2).
 
 **Complexity**
-- **Time:** O(n log n), driven by L6/L7 (the cross-midpoint scan repeated at each recursion level).
-- **Space:** O(log n) recursion stack depth.
+- **Time:** $O(n log n)$, driven by L6/L7 (the cross-midpoint scan repeated at each recursion level).
+- **Space:** $O(log n)$ recursion stack depth.
 
 **Try this approach:**
 
@@ -276,14 +276,14 @@ func maxSubArray(nums []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| **L2, L3, L4 (loop)** | **O(1)** | **n-1** | **O(n)** ← dominates |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L2, L3, L4 (loop)** | **$O(1)$** | **n-1** | **$O(n)$** ← dominates |
 
 A single pass; each element is touched exactly once.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3/L4 (the single linear scan).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3/L4 (the single linear scan).
+- **Space:** $O(1)$.
 
 ### Why greedy works
 At each position, the best subarray ending here is either "extend the previous best" or "start fresh from here." That's it, a greedy choice (restart vs. extend) at every index suffices, because a negative running total can only hurt future extensions.
@@ -306,9 +306,9 @@ At each position, the best subarray ending here is either "extend the previous b
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Every subarray | O(n²) | O(1) |
-| Divide and conquer | O(n log n) | O(log n) |
-| **Kadane's algorithm** | **O(n)** | **O(1)** |
+| Every subarray | $O(n²)$ | $O(1)$ |
+| Divide and conquer | $O(n log n)$ | $O(log n)$ |
+| **Kadane's algorithm** | **$O(n)$** | **$O(1)$** |
 
 Kadane's is the canonical answer. Same template: Maximum Product Subarray (152) needs a twist (track max AND min); Best Time to Buy/Sell Stock (121) is Kadane on price *differences*.
 

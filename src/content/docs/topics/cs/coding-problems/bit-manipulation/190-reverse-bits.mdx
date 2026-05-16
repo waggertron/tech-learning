@@ -91,15 +91,15 @@ func reverseBits(n uint32) uint32 {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L3 (bit loop)** | **O(1)** | **32** | **O(1)** ← dominates (constant) |
-| L2 (shift + OR) | O(1) | 32 | O(1) |
-| L3 (shift input) | O(1) | 32 | O(1) |
+| **L1-L3 (bit loop)** | **$O(1)$** | **32** | **$O(1)$** ← dominates (constant) |
+| L2 (shift + OR) | $O(1)$ | 32 | $O(1)$ |
+| L3 (shift input) | $O(1)$ | 32 | $O(1)$ |
 
-All 32 iterations are constant-time; the whole function is O(1).
+All 32 iterations are constant-time; the whole function is $O(1)$.
 
 **Complexity**
-- **Time:** O(32) = O(1), driven by L1/L2/L3 (32 fixed iterations).
-- **Space:** O(1).
+- **Time:** $O(32)$ = $O(1)$, driven by L1/L2/L3 (32 fixed iterations).
+- **Space:** $O(1)$.
 
 ## Approach 2: String conversion (cheating)
 
@@ -143,11 +143,11 @@ func reverseBits(n uint32) uint32 {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (format + reverse + parse)** | **O(32)** | **1** | **O(1)** ← dominates (constant) |
+| **L1 (format + reverse + parse)** | **$O(32)$** | **1** | **$O(1)$** ← dominates (constant) |
 
 **Complexity**
-- **Time:** O(32) = O(1).
-- **Space:** O(32) = O(1) for the string.
+- **Time:** $O(32)$ = $O(1)$.
+- **Space:** $O(32)$ = $O(1)$ for the string.
 
 Clear and short, but doesn't show bit mechanics.
 
@@ -213,13 +213,13 @@ func reverseBits(n uint32) uint32 {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L5 (mask swaps)** | **O(1)** | **5** | **O(1)** ← dominates (constant) |
+| **L1-L5 (mask swaps)** | **$O(1)$** | **5** | **$O(1)$** ← dominates (constant) |
 
 Five constant-time bitwise operations regardless of input value.
 
 **Complexity**
-- **Time:** O(1). Constant number of bitwise operations.
-- **Space:** O(1).
+- **Time:** $O(1)$. Constant number of bitwise operations.
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -239,9 +239,9 @@ Five constant-time bitwise operations regardless of input value.
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Bit-by-bit | O(32) | O(1) |
-| String reversal | O(32) | O(32) |
-| **Mask-and-swap** | **O(1)** | **O(1)** |
+| Bit-by-bit | $O(32)$ | $O(1)$ |
+| String reversal | $O(32)$ | $O(32)$ |
+| **Mask-and-swap** | **$O(1)$** | **$O(1)$** |
 
 Mask-and-swap is the classic "known-width bit reversal" trick, also used in FFT bit-reversal permutations.
 

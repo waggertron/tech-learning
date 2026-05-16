@@ -94,13 +94,13 @@ func maxSlidingWindow(nums []int, k int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (max per window)** | **O(k)** | **n - k + 1** | **O(n · k)** ← dominates |
+| **L1 (max per window)** | **$O(k)$** | **n - k + 1** | **$O(n · k)$** ← dominates |
 
-Each `max(nums[i:i+k])` must scan k elements. There are n - k + 1 windows, giving O(n · k) total. No sharing of work between adjacent windows.
+Each `max(nums[i:i+k])` must scan k elements. There are n - k + 1 windows, giving $O(n · k)$ total. No sharing of work between adjacent windows.
 
 **Complexity**
-- **Time:** O(n · k), driven by L1 (max scan per window).
-- **Space:** O(1) extra (output not counted).
+- **Time:** $O(n · k)$, driven by L1 (max scan per window).
+- **Space:** $O(1)$ extra (output not counted).
 
 ## Approach 2: Max-heap with lazy deletion
 
@@ -170,16 +170,16 @@ func maxSlidingWindow(nums []int, k int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | n | O(n) |
-| **L2 (heappush)** | **O(log n)** | **n** | **O(n log n)** ← dominates |
-| L3/L4 (lazy eviction) | O(log n) per pop | at most n total | O(n log n) |
-| L5 (read top) | O(1) | n - k + 1 | O(n) |
+| L1 (loop) | $O(1)$ | n | $O(n)$ |
+| **L2 (heappush)** | **$O(log n)$** | **n** | **$O(n log n)$** ← dominates |
+| L3/L4 (lazy eviction) | $O(log n)$ per pop | at most n total | $O(n log n)$ |
+| L5 (read top) | $O(1)$ | n - k + 1 | $O(n)$ |
 
-Each element is pushed exactly once (L2) and popped at most once (L4). Both are O(log n) per call. The heap can grow up to size n before evictions catch up, so the max heap size is O(n).
+Each element is pushed exactly once (L2) and popped at most once (L4). Both are $O(log n)$ per call. The heap can grow up to size n before evictions catch up, so the max heap size is $O(n)$.
 
 **Complexity**
-- **Time:** O(n log n), driven by L2/L4 (n pushes and n pops, each O(log n)).
-- **Space:** O(n). Heap grows until elements are evicted.
+- **Time:** $O(n log n)$, driven by L2/L4 (n pushes and n pops, each $O(log n)$).
+- **Space:** $O(n)$. Heap grows until elements are evicted.
 
 Good enough to pass but noticeably slower than the optimal.
 
@@ -273,17 +273,17 @@ func maxSlidingWindow(nums []int, k int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | n | O(n) |
-| L2/L3 (front eviction) | O(1) amortized | at most n total | O(n) |
-| **L4/L5 (back eviction)** | **O(1) amortized** | **at most n total** | **O(n)** ← dominates with L6 |
-| L6 (append) | O(1) | n | O(n) |
-| L7 (read front) | O(1) | n - k + 1 | O(n) |
+| L1 (loop) | $O(1)$ | n | $O(n)$ |
+| L2/L3 (front eviction) | $O(1)$ amortized | at most n total | $O(n)$ |
+| **L4/L5 (back eviction)** | **$O(1)$ amortized** | **at most n total** | **$O(n)$** ← dominates with L6 |
+| L6 (append) | $O(1)$ | n | $O(n)$ |
+| L7 (read front) | $O(1)$ | n - k + 1 | $O(n)$ |
 
-Each index enters the deque exactly once (L6) and leaves at most once (L3 or L5). So across the entire run, L3 fires at most n times and L5 fires at most n times. No index is touched more than twice, giving O(n) total despite the nested while loops.
+Each index enters the deque exactly once (L6) and leaves at most once (L3 or L5). So across the entire run, L3 fires at most n times and L5 fires at most n times. No index is touched more than twice, giving $O(n)$ total despite the nested while loops.
 
 **Complexity**
-- **Time:** O(n), driven by L1/L4/L6 (each index enters and leaves the deque at most once).
-- **Space:** O(k). The deque holds at most `k` indices.
+- **Time:** $O(n)$, driven by L1/L4/L6 (each index enters and leaves the deque at most once).
+- **Space:** $O(k)$. The deque holds at most `k` indices.
 
 ### Why it's correct
 If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max once `i` is in the window, so we can safely drop it. The deque therefore always holds the "still possibly useful" indices in decreasing value order.
@@ -303,9 +303,9 @@ If `nums[j] < nums[i]` for some `j < i`, then `j` can never be the window max on
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Per-window max | O(n · k) | O(1) |
-| Max-heap (lazy delete) | O(n log n) | O(n) |
-| **Monotonic deque** | **O(n)** | **O(k)** |
+| Per-window max | $O(n · k)$ | $O(1)$ |
+| Max-heap (lazy delete) | $O(n log n)$ | $O(n)$ |
+| **Monotonic deque** | **$O(n)$** | **$O(k)$** |
 
 The monotonic deque is the canonical answer. The same pattern solves sliding-window minimum and shows up in dynamic programming optimizations (convex-hull trick, monotonic queue DP).
 

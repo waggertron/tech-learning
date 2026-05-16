@@ -120,15 +120,15 @@ function possibleBipartition(n: number, dislikes: number[][]): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (build graph) | O(1) per edge | e | O(e) |
-| L6 (outer loop) | O(1) | n | O(n) |
-| **L11 (dequeue)** | **O(1)** | **once per person** | **O(n)** |
-| **L12 (neighbor scan)** | **O(deg)** | **once per person** | **O(n + e) ← dominates** |
-| L13, L14 (color + enqueue) | O(1) | once per unvisited neighbor | O(n) |
+| L2 (build graph) | $O(1)$ per edge | e | $O(e)$ |
+| L6 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L11 (dequeue)** | **$O(1)$** | **once per person** | **$O(n)$** |
+| **L12 (neighbor scan)** | **$O(deg)$** | **once per person** | **$O(n + e)$ ← dominates** |
+| L13, L14 (color + enqueue) | $O(1)$ | once per unvisited neighbor | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n + e), driven by L12 (each edge examined twice, each node dequeued once).
-- **Space:** O(n + e) for the adjacency list (L1) and color map (L5).
+- **Time:** $O(n + e)$, driven by L12 (each edge examined twice, each node dequeued once).
+- **Space:** $O(n + e)$ for the adjacency list (L1) and color map (L5).
 
 ### Connection to 785
 
@@ -166,9 +166,9 @@ BFS from 1: color[1]=0, color[2]=1, color[3]=1
 
 | Step | Cost |
 | --- | --- |
-| Build adjacency list | O(e) |
-| BFS 2-coloring | O(n + e) |
-| **Total** | **O(n + e)** |
+| Build adjacency list | $O(e)$ |
+| BFS 2-coloring | $O(n + e)$ |
+| **Total** | **$O(n + e)$** |
 
 ## Test cases
 

@@ -76,7 +76,7 @@ result = {k: sum(v for v in vals if v > 0) / len([v for v in vals if v > 0])
           for k, vals in data.items() if any(v > 0 for v in vals)}
 ```
 
-This computes the mean of positive values per key, skipping keys with no positive values. The bug: `len([v for v in vals if v > 0])` iterates through `vals` a second time inside what already looks like a single-pass operation. For large `vals`, this is unexpectedly O(n) twice. More importantly, when this raises a `ZeroDivisionError` because some edge case wasn't handled, the traceback points to this one line. There is no way to inspect intermediate values without rewriting the expression.
+This computes the mean of positive values per key, skipping keys with no positive values. The bug: `len([v for v in vals if v > 0])` iterates through `vals` a second time inside what already looks like a single-pass operation. For large `vals`, this is unexpectedly $O(n)$ twice. More importantly, when this raises a `ZeroDivisionError` because some edge case wasn't handled, the traceback points to this one line. There is no way to inspect intermediate values without rewriting the expression.
 
 The readable version: three lines, three variables (`positives`, `total`, `count`). The bug surfaces immediately. The fix is one line.
 

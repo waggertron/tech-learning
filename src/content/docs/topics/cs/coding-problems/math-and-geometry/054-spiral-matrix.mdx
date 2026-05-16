@@ -128,15 +128,15 @@ func spiralOrder(matrix [][]int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init visited) | O(1) | m·n | O(m·n) |
-| **L3-L6 (walk loop)** | **O(1)** | **m·n** | **O(m·n)** ← dominates |
-| L4 (append) | O(1) amortized | m·n | O(m·n) |
+| L2 (init visited) | $O(1)$ | m·n | $O(m·n)$ |
+| **L3-L6 (walk loop)** | **$O(1)$** | **m·n** | **$O(m·n)$** ← dominates |
+| L4 (append) | $O(1)$ amortized | m·n | $O(m·n)$ |
 
 Every cell is visited exactly once.
 
 **Complexity**
-- **Time:** O(m · n), driven by L3/L4/L5/L6 (one pass over all cells).
-- **Space:** O(m · n) visited array.
+- **Time:** $O(m · n)$, driven by L3/L4/L5/L6 (one pass over all cells).
+- **Space:** $O(m · n)$ visited array.
 
 ## Approach 2: Shrinking boundaries (canonical, optimal space)
 
@@ -242,14 +242,14 @@ func spiralOrder(matrix [][]int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (outer loop) | O(1) | min(m,n)/2 rounds | O(min(m,n)) |
-| **L4-L9 (four-side walks)** | **O(1) per cell** | **m·n total** | **O(m·n)** ← dominates |
+| L3 (outer loop) | $O(1)$ | min(m,n)/2 rounds | $O(min(m,n)$) |
+| **L4-L9 (four-side walks)** | **$O(1)$ per cell** | **m·n total** | **$O(m·n)$** ← dominates |
 
 All four side-walks together visit each cell exactly once across all rounds.
 
 **Complexity**
-- **Time:** O(m · n), driven by L4-L9 (visiting every cell in every layer).
-- **Space:** O(1) extra.
+- **Time:** $O(m · n)$, driven by L4-L9 (visiting every cell in every layer).
+- **Space:** $O(1)$ extra.
 
 The `if top <= bottom` / `if left <= right` guards handle the last single row or column in non-square matrices.
 
@@ -287,16 +287,16 @@ def spiral_order(matrix):
 The rotation lines up the next clockwise side as the new "top row," so the same `peel-the-top-row` rule produces the spiral. Elegant but allocates rotated matrices at each level.
 
 **Complexity**
-- **Time:** O(m · n).
-- **Space:** O(min(m, n)) recursion.
+- **Time:** $O(m · n)$.
+- **Space:** $O(min(m, n)$) recursion.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Visited + direction | O(m · n) | O(m · n) |
-| **Shrinking boundaries** | **O(m · n)** | **O(1)** |
-| Recursive peel | O(m · n) | O(min(m, n)) |
+| Visited + direction | $O(m · n)$ | $O(m · n)$ |
+| **Shrinking boundaries** | **$O(m · n)$** | **$O(1)$** |
+| Recursive peel | $O(m · n)$ | $O(min(m, n)$) |
 
 The boundary-shrink template works for Spiral Matrix II (fill), III (starting offset), and IV (multiple passes).
 

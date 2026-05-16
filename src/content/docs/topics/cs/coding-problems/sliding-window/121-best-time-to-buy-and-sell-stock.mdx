@@ -96,14 +96,14 @@ func maxProfit(prices []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (outer loop) | O(1) | n | O(n) |
-| **L2/L3 (inner loop)** | **O(1)** | **n(n-1)/2** | **O(n²)** ← dominates |
+| L1 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L2/L3 (inner loop)** | **$O(1)$** | **n(n-1)/2** | **$O(n²)$** ← dominates |
 
-Every pair (buy_day, sell_day) with buy_day \< sell_day is evaluated once. There are n(n-1)/2 such pairs, giving the O(n²) total.
+Every pair (buy_day, sell_day) with buy_day \< sell_day is evaluated once. There are n(n-1)/2 such pairs, giving the $O(n²)$ total.
 
 **Complexity**
-- **Time:** O(n²), driven by L2/L3 (the O(n²) inner loop pairs).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L2/L3 (the $O(n²)$ inner loop pairs).
+- **Space:** $O(1)$.
 
 Clear, correct, slow.
 
@@ -175,15 +175,15 @@ func maxProfit(prices []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (allocate array) | O(n) | 1 | O(n) |
-| **L2/L3 (prefix min pass)** | **O(1)** | **n-1** | **O(n)** ← tied for dominance |
-| **L4 (max profit pass)** | **O(1)** | **n** | **O(n)** ← tied for dominance |
+| L1 (allocate array) | $O(n)$ | 1 | $O(n)$ |
+| **L2/L3 (prefix min pass)** | **$O(1)$** | **n-1** | **$O(n)$** ← tied for dominance |
+| **L4 (max profit pass)** | **$O(1)$** | **n** | **$O(n)$** ← tied for dominance |
 
-Two linear scans of the same array. The O(n) space for `min_so_far` is the only cost beyond O(1).
+Two linear scans of the same array. The $O(n)$ space for `min_so_far` is the only cost beyond $O(1)$.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3 and L4 (two linear passes).
-- **Space:** O(n) for the prefix array.
+- **Time:** $O(n)$, driven by L2/L3 and L4 (two linear passes).
+- **Space:** $O(n)$ for the prefix array.
 
 ## Approach 3: Single pass with running min (optimal)
 
@@ -243,16 +243,16 @@ func maxProfit(prices []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (init) | O(1) | 1 | O(1) |
-| **L3 (loop)** | **O(1) body** | **n** | **O(n)** ← dominates |
-| L4/L5 (update min) | O(1) | at most n | O(n) |
-| L6 (profit check) | O(1) | at most n | O(n) |
+| L1/L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L3 (loop)** | **$O(1)$ body** | **n** | **$O(n)$** ← dominates |
+| L4/L5 (update min) | $O(1)$ | at most n | $O(n)$ |
+| L6 (profit check) | $O(1)$ | at most n | $O(n)$ |
 
 One pass, two variables. L5 and L6 are mutually exclusive per iteration (either we found a cheaper buy, or we try a sell), so neither has hidden costs.
 
 **Complexity**
-- **Time:** O(n), driven by L3 (one linear pass).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L3 (one linear pass).
+- **Space:** $O(1)$.
 
 ### Why it's a sliding window
 `left` marks the buy day (always the minimum seen so far); `right` sweeps forward. When a better buy day appears, `left` jumps to it. Each day is visited once; the window width is variable.
@@ -272,9 +272,9 @@ One pass, two variables. L5 and L6 are mutually exclusive per iteration (either 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Every pair | O(n²) | O(1) |
-| Prefix min array | O(n) | O(n) |
-| **Running min + profit** | **O(n)** | **O(1)** |
+| Every pair | $O(n²)$ | $O(1)$ |
+| Prefix min array | $O(n)$ | $O(n)$ |
+| **Running min + profit** | **$O(n)$** | **$O(1)$** |
 
 The single-pass template generalizes to many "best X after running min/max" problems (including Maximum Subarray, also known as Kadane's).
 

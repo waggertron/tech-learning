@@ -126,11 +126,11 @@ func mergeTriplets(triplets [][]int, target []int) bool {
 </TabItem>
 </Tabs>
 
-There are 2^n subsets; each costs O(n) to combine. Total O(n · 2^n). Skip past tiny inputs.
+There are 2^n subsets; each costs $O(n)$ to combine. Total $O(n · 2^n)$. Skip past tiny inputs.
 
 **Complexity**
-- **Time:** O(n · 2^n).
-- **Space:** O(n).
+- **Time:** $O(n · 2^n)$.
+- **Space:** $O(n)$.
 
 ## Approach 2: Greedy channel-wise (canonical)
 
@@ -188,15 +188,15 @@ func mergeTriplets(triplets [][]int, target []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| **L2, L3, L4, L5 (scan)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L6 (all check) | O(1) | 1 | O(1) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L2, L3, L4, L5 (scan)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L6 (all check) | $O(1)$ | 1 | $O(1)$ |
 
 Each triplet is visited once; the inner channel loop is constant (always 3 channels).
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3/L4/L5 (single pass over all triplets).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3/L4/L5 (single pass over all triplets).
+- **Space:** $O(1)$.
 
 ### Why greedy works
 Element-wise max is monotone, once a channel equals the target, subsequent usable triplets can't reduce it below target. So we just need one usable triplet per channel hitting the target value.
@@ -273,8 +273,8 @@ func mergeTripletsEarly(triplets [][]int, target []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L2-L5 (scan)** | **O(1)** | **up to n** | **O(n)** ← dominates |
-| L6 (early exit check) | O(1) | up to n | O(n) |
+| **L2-L5 (scan)** | **$O(1)$** | **up to n** | **$O(n)$** ← dominates |
+| L6 (early exit check) | $O(1)$ | up to n | $O(n)$ |
 
 Same asymptotic complexity as Approach 2 with a constant-factor speedup on lucky inputs where all three channels are hit early.
 
@@ -299,8 +299,8 @@ Same asymptotic complexity as Approach 2 with a constant-factor speedup on lucky
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Enumerate subsets | exponential | O(n) |
-| **Greedy channel-wise** | **O(n)** | **O(1)** |
+| Enumerate subsets | exponential | $O(n)$ |
+| **Greedy channel-wise** | **$O(n)$** | **$O(1)$** |
 
 The "filter then hit each dimension" greedy pattern generalizes to K channels.
 

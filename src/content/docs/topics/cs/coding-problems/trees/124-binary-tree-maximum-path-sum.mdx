@@ -108,15 +108,15 @@ function maxPathSum(root: TreeNode | null): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L4/L5 (`max_gain` calls)** | **O(n)** | **n nodes** | **O(n²)** ← dominates |
-| L6 (update best) | O(1) | n | O(n) |
-| L7 (visit recurse) | O(1) dispatch | n | O(n) |
+| **L4/L5 (`max_gain` calls)** | **$O(n)$** | **n nodes** | **$O(n²)$** ← dominates |
+| L6 (update best) | $O(1)$ | n | $O(n)$ |
+| L7 (visit recurse) | $O(1)$ dispatch | n | $O(n)$ |
 
-`max_gain` is called freshly for every node visited by `visit`. In a balanced tree that's O(n log n) total; in a skewed tree it's O(n²).
+`max_gain` is called freshly for every node visited by `visit`. In a balanced tree that's $O(n log n)$ total; in a skewed tree it's $O(n²)$.
 
 **Complexity**
-- **Time:** O(n²). `max_gain` called at every node, each call O(n), driven by L4/L5.
-- **Space:** O(h) recursion.
+- **Time:** $O(n²)$. `max_gain` called at every node, each call $O(n)$, driven by L4/L5.
+- **Space:** $O(h)$ recursion.
 
 ## Approach 2: Single DFS with side-effect accumulator (optimal)
 
@@ -171,15 +171,15 @@ function maxPathSum(root: TreeNode | null): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (recurse children) | O(1) dispatch | n | O(n) |
-| L3 (update best) | O(1) | n | O(n) |
-| **L4 (compute return val)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L1/L2 (recurse children) | $O(1)$ dispatch | n | $O(n)$ |
+| L3 (update best) | $O(1)$ | n | $O(n)$ |
+| **L4 (compute return val)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 Each node is visited exactly once. The combination of "return local gain" and "update global best" eliminates all redundant traversal.
 
 **Complexity**
-- **Time:** O(n). Each node visited once, driven by L1/L2.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$. Each node visited once, driven by L1/L2.
+- **Space:** $O(h)$ recursion.
 
 ### The three moving parts
 1. **Return value:** `node.val + max(left, right)`, the best path *including this node that can continue up to the parent*. Can only use one child.
@@ -203,8 +203,8 @@ This is the same pattern as problem 543 (Diameter of Binary Tree), refined for w
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS from every node | O(n²) | O(h) |
-| **Single DFS with accumulator** | **O(n)** | **O(h)** |
+| DFS from every node | $O(n²)$ | $O(h)$ |
+| **Single DFS with accumulator** | **$O(n)$** | **$O(h)$** |
 
 This pattern, DFS returns a "local gain to parent," side-effect tracks "global best through this node", is one of the most important templates in tree DP. It also solves problem 543 and 687.
 

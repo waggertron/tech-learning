@@ -103,13 +103,13 @@ func invertTree(root *TreeNode) *TreeNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (swap + two recursive calls)** | **O(1) per node** | **n** | **O(n)** ← dominates |
+| **L1 (swap + two recursive calls)** | **$O(1)$ per node** | **n** | **$O(n)$** ← dominates |
 
 Every node triggers exactly one swap and two recursive calls. No node is visited more than once.
 
 **Complexity**
-- **Time:** O(n), driven by L1 visiting each node once.
-- **Space:** O(h) recursion depth (O(log n) balanced, O(n) skewed).
+- **Time:** $O(n)$, driven by L1 visiting each node once.
+- **Space:** $O(h)$ recursion depth ($O(log n)$ balanced, $O(n)$ skewed).
 
 The one-liner swap is the canonical interview answer.
 
@@ -187,13 +187,13 @@ func invertTree(root *TreeNode) *TreeNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (dequeue) | O(1) | n | O(n) |
-| L3 (swap) | O(1) | n | O(n) |
-| **L4/L5 (enqueue)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L2 (dequeue) | $O(1)$ | n | $O(n)$ |
+| L3 (swap) | $O(1)$ | n | $O(n)$ |
+| **L4/L5 (enqueue)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(w), max width of the tree.
+- **Time:** $O(n)$.
+- **Space:** $O(w)$, max width of the tree.
 
 **Try this approach:**
 
@@ -234,21 +234,21 @@ def invert_tree(root):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (pop) | O(1) | n | O(n) |
-| L3 (swap) | O(1) | n | O(n) |
-| **L4/L5 (push)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L2 (pop) | $O(1)$ | n | $O(n)$ |
+| L3 (swap) | $O(1)$ | n | $O(n)$ |
+| **L4/L5 (push)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(h).
+- **Time:** $O(n)$.
+- **Space:** $O(h)$.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **Recursive DFS** | O(n) | O(h) |
-| Iterative BFS | O(n) | O(w) |
-| Iterative DFS | O(n) | O(h) |
+| **Recursive DFS** | $O(n)$ | $O(h)$ |
+| Iterative BFS | $O(n)$ | $O(w)$ |
+| Iterative DFS | $O(n)$ | $O(h)$ |
 
 All three are optimal in time. The recursive one-liner is the canonical answer; the iterative variants are useful when recursion depth is a concern on skewed trees.
 

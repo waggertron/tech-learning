@@ -138,17 +138,17 @@ func validTree(n int, edges [][]int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (edge count check) | O(1) | 1 | O(1) |
-| L2-L5 (build graph) | O(1) per edge | E | O(E) |
-| L6 (visited set) | O(1) | 1 | O(1) |
-| **L10-L12 (neighbor traversal in DFS)** | **O(1) per edge** | **E total** | **O(V + E)** ← dominates |
-| L13 (len check) | O(1) | 1 | O(1) |
+| L1 (edge count check) | $O(1)$ | 1 | $O(1)$ |
+| L2-L5 (build graph) | $O(1)$ per edge | E | $O(E)$ |
+| L6 (visited set) | $O(1)$ | 1 | $O(1)$ |
+| **L10-L12 (neighbor traversal in DFS)** | **$O(1)$ per edge** | **E total** | **$O(V + E)$** ← dominates |
+| L13 (len check) | $O(1)$ | 1 | $O(1)$ |
 
-Each node is visited at most once (L8 exits immediately on revisit), and each undirected edge is examined twice (once per endpoint). Total DFS work is O(V + E). The L1 guard means we never reach O(E) > O(n) inputs.
+Each node is visited at most once (L8 exits immediately on revisit), and each undirected edge is examined twice (once per endpoint). Total DFS work is $O(V + E)$. The L1 guard means we never reach $O(E)$ > $O(n)$ inputs.
 
 **Complexity**
-- **Time:** O(V + E), driven by L10-L12 (each node and edge visited once).
-- **Space:** O(V + E) for the graph and recursion stack.
+- **Time:** $O(V + E)$, driven by L10-L12 (each node and edge visited once).
+- **Space:** $O(V + E)$ for the graph and recursion stack.
 
 ## Approach 2: Union-Find (optimal, stops at first cycle)
 
@@ -232,13 +232,13 @@ func validTree(n int, edges [][]int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (edge count check) | O(1) | 1 | O(1) |
-| L2 (init parent) | O(n) | 1 | O(n) |
-| **L6-L9 (edge loop with find + union)** | **O(alpha(n)) per edge** | **E** | **O(n · alpha(n))** ← dominates |
+| L1 (edge count check) | $O(1)$ | 1 | $O(1)$ |
+| L2 (init parent) | $O(n)$ | 1 | $O(n)$ |
+| **L6-L9 (edge loop with find + union)** | **$O(alpha(n)$) per edge** | **E** | **$O(n · alpha(n)$)** ← dominates |
 
 **Complexity**
-- **Time:** O(n · alpha(n)) ≈ O(n), driven by L6-L9 (one find+union per edge).
-- **Space:** O(n) for the parent array.
+- **Time:** $O(n · alpha(n)$) ≈ $O(n)$, driven by L6-L9 (one find+union per edge).
+- **Space:** $O(n)$ for the parent array.
 
 **Try this approach:**
 
@@ -258,9 +258,9 @@ func validTree(n int, edges [][]int) bool {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS cycle + visited check | O(V + E) | O(V + E) |
-| BFS cycle + visited check | O(V + E) | O(V + E) |
-| **Union-Find** | **O(n · alpha)** | **O(n)** |
+| DFS cycle + visited check | $O(V + E)$ | $O(V + E)$ |
+| BFS cycle + visited check | $O(V + E)$ | $O(V + E)$ |
+| **Union-Find** | **$O(n · alpha)$** | **$O(n)$** |
 
 Union-Find is the shortest answer and generalizes to incremental graph construction. DFS/BFS are equivalent and often cleaner when you need to also walk the graph for other reasons.
 

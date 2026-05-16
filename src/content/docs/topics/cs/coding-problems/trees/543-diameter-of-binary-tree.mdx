@@ -142,14 +142,14 @@ func diameterOfBinaryTree(root *TreeNode) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L2 (`height` calls)** | **O(n)** | **n nodes** | **O(n²)** ← dominates |
-| L3 (recurse visit) | O(1) dispatch | n | O(n) |
+| **L2 (`height` calls)** | **$O(n)$** | **n nodes** | **$O(n²)$** ← dominates |
+| L3 (recurse visit) | $O(1)$ dispatch | n | $O(n)$ |
 
 `height` is called for every node via `visit`, and each call walks the full subtree. Redundant work accumulates quadratically.
 
 **Complexity**
-- **Time:** O(n²). `height` is called for every node, each call is O(n) worst case, driven by L2.
-- **Space:** O(h) recursion.
+- **Time:** $O(n²)$. `height` is called for every node, each call is $O(n)$ worst case, driven by L2.
+- **Space:** $O(h)$ recursion.
 
 ## Approach 2: Single DFS that returns height and updates diameter (optimal)
 
@@ -230,15 +230,15 @@ func diameterOfBinaryTree(root *TreeNode) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (recurse) | O(1) dispatch | n | O(n) |
-| L3 (update diameter) | O(1) | n | O(n) |
-| **L4 (return height)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L1/L2 (recurse) | $O(1)$ dispatch | n | $O(n)$ |
+| L3 (update diameter) | $O(1)$ | n | $O(n)$ |
+| **L4 (return height)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 Each node is visited exactly once. The side-effect at L3 accumulates the global answer without requiring a second pass.
 
 **Complexity**
-- **Time:** O(n), driven by L1/L2 visiting every node once.
-- **Space:** O(h) recursion depth.
+- **Time:** $O(n)$, driven by L1/L2 visiting every node once.
+- **Space:** $O(h)$ recursion depth.
 
 ### Pattern: "side-effect accumulator during a DFS that returns something else"
 This is the template for a whole class of tree problems, including 124 Max Path Sum, 1245 Tree Diameter, and many others. The DFS returns a "local contribution to the parent" (here, the height), and the diameter is updated as a side effect based on the *combined* contributions from both children.
@@ -261,8 +261,8 @@ This is the template for a whole class of tree problems, including 124 Max Path 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| For each node, recompute heights | O(n²) | O(h) |
-| **Single DFS with accumulator** | **O(n)** | **O(h)** |
+| For each node, recompute heights | $O(n²)$ | $O(h)$ |
+| **Single DFS with accumulator** | **$O(n)$** | **$O(h)$** |
 
 There's no meaningful middle tier here, this is the jump from "obvious recursive statement" to the realization that you can compute height *and* update diameter in one DFS.
 

@@ -86,11 +86,11 @@ func kClosest(points [][]int, k int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n log n), driven by L1.
-- **Space:** O(n).
+- **Time:** $O(n log n)$, driven by L1.
+- **Space:** $O(n)$.
 
 Simple and often accepted.
 
@@ -230,15 +230,15 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | n | O(n) |
-| **L2 (heappush)** | **O(log k)** | **up to k** | **O(k log k)** |
-| **L3 (heapreplace)** | **O(log k)** | **up to n - k** | **O(n log k)** ← dominates |
+| L1 (loop) | $O(1)$ | n | $O(n)$ |
+| **L2 (heappush)** | **$O(log k)$** | **up to k** | **$O(k log k)$** |
+| **L3 (heapreplace)** | **$O(log k)$** | **up to n - k** | **$O(n log k)$** ← dominates |
 
-For the first k points, each push costs O(log k). For the remaining n - k points, each potential replace also costs O(log k). Total: O(n log k).
+For the first k points, each push costs $O(log k)$. For the remaining n - k points, each potential replace also costs $O(log k)$. Total: $O(n log k)$.
 
 **Complexity**
-- **Time:** O(n log k), driven by L2/L3.
-- **Space:** O(k).
+- **Time:** $O(n log k)$, driven by L2/L3.
+- **Space:** $O(k)$.
 
 Strictly better than Approach 1 when k ≪ n.
 
@@ -255,7 +255,7 @@ Strictly better than Approach 1 when k ≪ n.
 
 ## Approach 3: Quickselect (optimal average)
 
-Partition the array in place so the first k elements are the k closest (unordered). Average O(n).
+Partition the array in place so the first k elements are the k closest (unordered). Average $O(n)$.
 
 <Tabs>
 <TabItem label="Python">
@@ -379,14 +379,14 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (partition) | O(subarray size) | log n avg rounds | O(n) avg |
-| **L4 or L5 (recurse)** | **O(1) per frame** | **log n avg** | **O(n) avg** ← dominates |
+| L1-L3 (partition) | $O(subarray size)$ | log n avg rounds | $O(n)$ avg |
+| **L4 or L5 (recurse)** | **$O(1)$ per frame** | **log n avg** | **$O(n)$ avg** ← dominates |
 
-On average each partition halves the search space: n + n/2 + n/4 + ... = 2n = O(n). Worst case O(n²) when pivot is always the extreme (use random pivot to mitigate).
+On average each partition halves the search space: n + n/2 + n/4 + ... = 2n = $O(n)$. Worst case $O(n²)$ when pivot is always the extreme (use random pivot to mitigate).
 
 **Complexity**
-- **Time:** O(n) average, O(n²) worst case (L1-L3 partition cost).
-- **Space:** O(log n) recursion depth.
+- **Time:** $O(n)$ average, $O(n²)$ worst case (L1-L3 partition cost).
+- **Space:** $O(log n)$ recursion depth.
 
 Pick quickselect when you're allowed to mutate the input and want the tightest average complexity.
 
@@ -479,9 +479,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Sort | O(n log n) | O(n) |
-| **Size-K max-heap** | **O(n log k)** | **O(k)** |
-| Quickselect | O(n) avg / O(n²) worst | O(log n) |
+| Sort | $O(n log n)$ | $O(n)$ |
+| **Size-K max-heap** | **$O(n log k)$** | **$O(k)$** |
+| Quickselect | $O(n)$ avg / $O(n²)$ worst | $O(log n)$ |
 
 The heap version is the canonical interview answer. Quickselect is the "optimal-average" answer; know it for when the interviewer pushes on tighter bounds.
 

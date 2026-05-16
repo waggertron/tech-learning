@@ -128,16 +128,16 @@ func groupAnagrams(strs []string) [][]string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| L3 (Counter build) | O(k) | n | O(n·k) |
-| **L5, L6 (inner loop + compare)** | **O(k)** | **up to n per outer** | **O(n²·k)** ← dominates |
-| L7, L8 (append) | O(1) amortized | n | O(n) |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L3 (Counter build) | $O(k)$ | n | $O(n·k)$ |
+| **L5, L6 (inner loop + compare)** | **$O(k)$** | **up to n per outer** | **$O(n²·k)$** ← dominates |
+| L7, L8 (append) | $O(1)$ amortized | n | $O(n)$ |
 
-For each of `n` strings, the inner loop scans up to `n` existing groups and does an O(k) counter comparison each time.
+For each of `n` strings, the inner loop scans up to `n` existing groups and does an $O(k)$ counter comparison each time.
 
 **Complexity**
-- **Time:** O(n²·k), driven by L5/L6 (inner loop with counter comparison).
-- **Space:** O(n·k) for the output plus counters.
+- **Time:** $O(n²·k)$, driven by L5/L6 (inner loop with counter comparison).
+- **Space:** $O(n·k)$ for the output plus counters.
 
 ## Approach 2: Sorted-string as hash key
 
@@ -195,16 +195,16 @@ func groupAnagrams(strs []string) [][]string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (loop) | O(1) | n | O(n) |
-| **L3 (sort + join)** | **O(k log k)** | **n** | **O(n·k log k)** ← dominates |
-| L4 (hash + append) | O(k) avg (key hashing) | n | O(n·k) |
-| L5 (collect values) | O(n) | 1 | O(n) |
+| L2 (loop) | $O(1)$ | n | $O(n)$ |
+| **L3 (sort + join)** | **$O(k log k)$** | **n** | **$O(n·k log k)$** ← dominates |
+| L4 (hash + append) | $O(k)$ avg (key hashing) | n | $O(n·k)$ |
+| L5 (collect values) | $O(n)$ | 1 | $O(n)$ |
 
-The sort step on each string drives the total. Key hashing is O(k) but that's dominated by the sort.
+The sort step on each string drives the total. Key hashing is $O(k)$ but that's dominated by the sort.
 
 **Complexity**
-- **Time:** O(n·k log k), driven by L3 (sorting each string).
-- **Space:** O(n·k) for keys + output.
+- **Time:** $O(n·k log k)$, driven by L3 (sorting each string).
+- **Space:** $O(n·k)$ for keys + output.
 
 **Try this approach:**
 
@@ -283,17 +283,17 @@ func groupAnagrams(strs []string) [][]string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| L3 (init count) | O(1) | n | O(n) |
-| **L4, L5 (char frequency)** | **O(1)** | **n·k total** | **O(n·k)** ← dominates |
-| L6 (tuple + hash) | O(1) (26-slot fixed) | n | O(n) |
-| L7 (collect) | O(n) | 1 | O(n) |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L3 (init count) | $O(1)$ | n | $O(n)$ |
+| **L4, L5 (char frequency)** | **$O(1)$** | **n·k total** | **$O(n·k)$** ← dominates |
+| L6 (tuple + hash) | $O(1)$ (26-slot fixed) | n | $O(n)$ |
+| L7 (collect) | $O(n)$ | 1 | $O(n)$ |
 
-The inner loop counts each character in O(1); no sort is needed. The tuple key is fixed at 26 elements regardless of string length.
+The inner loop counts each character in $O(1)$; no sort is needed. The tuple key is fixed at 26 elements regardless of string length.
 
 **Complexity**
-- **Time:** O(n·k), driven by L4/L5 (character counting). Linear per string, strictly better than the sort-key approach.
-- **Space:** O(n·k) for the output; O(n) hash map slots of fixed-size (26) keys.
+- **Time:** $O(n·k)$, driven by L4/L5 (character counting). Linear per string, strictly better than the sort-key approach.
+- **Space:** $O(n·k)$ for the output; $O(n)$ hash map slots of fixed-size (26) keys.
 
 **Try this approach:**
 
@@ -313,9 +313,9 @@ The inner loop counts each character in O(1); no sort is needed. The tuple key i
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Pairwise Counter compare | O(n²·k) | O(n·k) |
-| Sorted-string key | O(n·k log k) | O(n·k) |
-| **Char-count tuple key** | **O(n·k)** | O(n·k) |
+| Pairwise Counter compare | $O(n²·k)$ | $O(n·k)$ |
+| Sorted-string key | $O(n·k log k)$ | $O(n·k)$ |
+| **Char-count tuple key** | **$O(n·k)$** | $O(n·k)$ |
 
 For bounded alphabets, the count-tuple approach is the tightest. For huge or unbounded alphabets, the sort-key version is simpler and often fast enough.
 

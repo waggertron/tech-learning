@@ -42,7 +42,7 @@ Every subtopic follows a consistent structure so they're easy to scan:
 
 A rough decision flow:
 
-- Need O(1) lookup by value? → **Hash Table**
+- Need $O(1)$ lookup by value? → **Hash Table**
 - Need order preserved and random access? → **Array**
 - Need FIFO (breadth, levels, streams)? → **Queue**
 - Need LIFO (nesting, backtracking, matching)? → **Stack**
@@ -50,7 +50,7 @@ A rough decision flow:
 - Need ordered map / in-order iteration? → **Binary Search Tree**
 - Need hierarchical data or "explore from a node"? → **Tree** or **Graph**
 - Need fast prefix queries? → **Trie**
-- Need O(1) insert/delete at a known node? → **Linked List** (usually as part of a composite like LRU)
+- Need $O(1)$ insert/delete at a known node? → **Linked List** (usually as part of a composite like LRU)
 
 ## References
 
@@ -63,7 +63,7 @@ A rough decision flow:
 
 ## Related posts
 
-- [Data structure complexity cheat sheet](../../../posts/2026-04-27-data-structure-complexity-cheat-sheet/), the operations and big-O for every structure on this page, with Python-specific gotchas (`list.pop(0)` is O(n), etc.).
+- [Data structure complexity cheat sheet](../../../posts/2026-04-27-data-structure-complexity-cheat-sheet/), the operations and big-O for every structure on this page, with Python-specific gotchas (`list.pop(0)` is $O(n)$, etc.).
 - [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), Dijkstra, Kahn, Kruskal, Tarjan, Floyd, KMP, [quickselect](../named-algorithms/quickselect/), Union-Find, with canonical implementations and decision matrix.
 
 ## Related topics

@@ -79,7 +79,7 @@ function fourSumCount(nums1: number[], nums2: number[],
 </TabItem>
 </Tabs>
 
-**Complexity:** O(n^4) time, O(1) space. Completely impractical for n > 50.
+**Complexity:** $O(n^4)$ time, $O(1)$ space. Completely impractical for n > 50.
 
 ## Approach 2: Hash map on pairwise sums (optimal)
 
@@ -127,19 +127,19 @@ function fourSumCount(nums1: number[], nums2: number[],
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init map) | O(1) | 1 | O(1) |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L3, L4 (inner loop + insert)** | **O(1)** | **n^2** | **O(n^2)** ← dominates first half |
-| L5 (init result) | O(1) | 1 | O(1) |
-| L6 (outer loop) | O(1) | n | O(n) |
-| **L7, L8 (inner loop + lookup)** | **O(1)** | **n^2** | **O(n^2)** ← dominates second half |
-| L9 (return) | O(1) | 1 | O(1) |
+| L1 (init map) | $O(1)$ | 1 | $O(1)$ |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L3, L4 (inner loop + insert)** | **$O(1)$** | **n^2** | **$O(n^2)$** ← dominates first half |
+| L5 (init result) | $O(1)$ | 1 | $O(1)$ |
+| L6 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L7, L8 (inner loop + lookup)** | **$O(1)$** | **n^2** | **$O(n^2)$** ← dominates second half |
+| L9 (return) | $O(1)$ | 1 | $O(1)$ |
 
-Two separate O(n^2) passes rather than one O(n^4). The hash map bridges the two halves.
+Two separate $O(n^2)$ passes rather than one $O(n^4)$. The hash map bridges the two halves.
 
 **Complexity**
-- **Time:** O(n^2), driven by L3/L4 and L7/L8 (two double-loops over n * n pairs each).
-- **Space:** O(n^2). The map stores at most n^2 distinct `a + b` sums.
+- **Time:** $O(n^2)$, driven by L3/L4 and L7/L8 (two double-loops over n * n pairs each).
+- **Space:** $O(n^2)$. The map stores at most n^2 distinct `a + b` sums.
 
 **Try this approach:**
 
@@ -154,7 +154,7 @@ Two separate O(n^2) passes rather than one O(n^4). The hash map bridges the two 
 
 ## Why split 4 into 2+2?
 
-Brute force is O(n^4). Splitting into two pairs brings that to O(n^2) + O(n^2) = O(n^2). This is the same "meet in the middle" idea used in many combinatorial problems: hashing half the work lets you look it up instead of re-computing it.
+Brute force is $O(n^4)$. Splitting into two pairs brings that to $O(n^2)$ + $O(n^2)$ = $O(n^2)$. This is the same "meet in the middle" idea used in many combinatorial problems: hashing half the work lets you look it up instead of re-computing it.
 
 ## Test cases
 

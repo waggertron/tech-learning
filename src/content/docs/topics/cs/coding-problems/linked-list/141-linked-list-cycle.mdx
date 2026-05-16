@@ -88,15 +88,15 @@ function hasCycle(head: ListNode | null): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | up to n | O(n) |
-| **L2 (set lookup)** | **O(1)** | **up to n** | **O(n)** ← dominates |
-| L3 (set insert) | O(1) | up to n | O(n) |
+| L1 (loop) | $O(1)$ | up to n | $O(n)$ |
+| **L2 (set lookup)** | **$O(1)$** | **up to n** | **$O(n)$** ← dominates |
+| L3 (set insert) | $O(1)$ | up to n | $O(n)$ |
 
 In the acyclic case all n nodes are visited; in a cyclic case we stop when we revisit the cycle entry. Either way, at most n + cycle_length iterations before returning.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3.
-- **Space:** O(n).
+- **Time:** $O(n)$, driven by L2/L3.
+- **Space:** $O(n)$.
 
 Simple and correct but uses linear extra memory.
 
@@ -135,9 +135,9 @@ function hasCycle(head: ListNode | null): boolean {
 </TabItem>
 </Tabs>
 
-O(n) time, O(1) extra space, but the list is now wrecked: every visited node's value is overwritten with the sentinel.
+$O(n)$ time, $O(1)$ extra space, but the list is now wrecked: every visited node's value is overwritten with the sentinel.
 
-A non-mutating O(1)-space alternative is Approach 3 below.
+A non-mutating $O(1)$-space alternative is Approach 3 below.
 
 ## Approach 3: Floyd's tortoise and hare (optimal)
 
@@ -178,15 +178,15 @@ function hasCycle(head: ListNode | null): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (guard) | O(1) | up to n + c | O(n) |
-| **L2-L3 (advance pointers)** | **O(1)** | **up to n + c** | **O(n)** ← dominates |
-| L4 (meeting check) | O(1) | up to n + c | O(n) |
+| L1 (guard) | $O(1)$ | up to n + c | $O(n)$ |
+| **L2-L3 (advance pointers)** | **$O(1)$** | **up to n + c** | **$O(n)$** ← dominates |
+| L4 (meeting check) | $O(1)$ | up to n + c | $O(n)$ |
 
-In the acyclic case `fast` exits in n/2 iterations. In the cyclic case `fast` enters the cycle after at most n steps; once both pointers are in the cycle of length c, they meet within c more steps. Total: O(n + c) = O(n).
+In the acyclic case `fast` exits in n/2 iterations. In the cyclic case `fast` enters the cycle after at most n steps; once both pointers are in the cycle of length c, they meet within c more steps. Total: $O(n + c)$ = $O(n)$.
 
 **Complexity**
-- **Time:** O(n). In a cycle of length c, the pointers meet within c steps of entering it (L2-L3).
-- **Space:** O(1).
+- **Time:** $O(n)$. In a cycle of length c, the pointers meet within c steps of entering it (L2-L3).
+- **Space:** $O(1)$.
 
 ### Why it works
 Once both pointers are inside the cycle, the gap between them decreases by 1 each step (slow advances 1, fast advances 2, relative to slow that's a +1). Eventually the gap is 0, they meet. If there's no cycle, fast falls off the end.
@@ -300,8 +300,8 @@ console.log("all tests pass");
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Hash set of visited | O(n) | O(n) |
-| **Floyd's tortoise and hare** | **O(n)** | **O(1)** |
+| Hash set of visited | $O(n)$ | $O(n)$ |
+| **Floyd's tortoise and hare** | **$O(n)$** | **$O(1)$** |
 
 The two-pointer technique here extends to 142 (Linked List Cycle II) and 287 (Find the Duplicate Number).
 

@@ -33,7 +33,7 @@ Math & Geometry is a grab-bag of problems where the algorithmic insight is often
 
 - **Transpose + row-reverse**: Rotate Image.
 - **Boundary-shrinking traversal**: Spiral Matrix.
-- **Using first row/column as markers**: Set Matrix Zeroes (O(1) space).
+- **Using first row/column as markers**: Set Matrix Zeroes ($O(1)$ space).
 - **Floyd's on numeric sequence**: Happy Number.
 - **Digit-by-digit carry**: Plus One.
 - **Exponentiation by squaring**: Pow(x, n).

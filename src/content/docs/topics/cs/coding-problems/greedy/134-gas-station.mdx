@@ -110,14 +110,14 @@ func canCompleteCircuit(gas []int, cost []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L3-L5 (inner simulation)** | **O(1)** | **up to n per start** | **O(n²)** ← dominates |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L3-L5 (inner simulation)** | **$O(1)$** | **up to n per start** | **$O(n²)$** ← dominates |
 
 For each candidate start, we simulate up to `n` steps; worst case all `n` starts are tried fully.
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4/L5 (full simulation per candidate start).
-- **Space:** O(1).
+- **Time:** $O(n²)$, driven by L3/L4/L5 (full simulation per candidate start).
+- **Space:** $O(1)$.
 
 ## Approach 2: Greedy single pass (canonical)
 
@@ -189,14 +189,14 @@ func canCompleteCircuit(gas []int, cost []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sum check) | O(n) | 1 | O(n) |
-| **L4-L6 (single pass)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (sum check) | $O(n)$ | 1 | $O(n)$ |
+| **L4-L6 (single pass)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
-Two O(n) passes (one for the sum check, one for the greedy scan); both are O(n) total.
+Two $O(n)$ passes (one for the sum check, one for the greedy scan); both are $O(n)$ total.
 
 **Complexity**
-- **Time:** O(n), driven by L4/L5/L6 (the single greedy scan, plus the O(n) sum check at L1).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L4/L5/L6 (the single greedy scan, plus the $O(n)$ sum check at L1).
+- **Space:** $O(1)$.
 
 ### Why this works
 If you run out of gas between stations `start` and `j`, then no station in `[start, j]` can be a valid start, your cumulative deficit proves each of them fails before reaching `j`. So you can safely jump to `j + 1`. One linear pass suffices.
@@ -219,8 +219,8 @@ If you run out of gas between stations `start` and `j`, then no station in `[sta
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Try every start | O(n²) | O(1) |
-| **Greedy single pass** | **O(n)** | **O(1)** |
+| Try every start | $O(n²)$ | $O(1)$ |
+| **Greedy single pass** | **$O(n)$** | **$O(1)$** |
 
 Classic "skip impossible prefixes" greedy.
 

@@ -10,7 +10,7 @@ updated: 2026-05-04
 
 ## What it does
 
-Given an unsorted array and a target rank `k`, Quickselect returns the `k`th smallest element in **expected O(n) time** without fully sorting the array.
+Given an unsorted array and a target rank `k`, Quickselect returns the `k`th smallest element in **expected $O(n)$ time** without fully sorting the array.
 
 It's the canonical answer to "find the kth largest" interview questions and is the engine behind [LeetCode 215](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/) and 973. Named after Tony Hoare (also the inventor of Quicksort), who published it in 1961.
 
@@ -123,12 +123,12 @@ Final array state: `[1, 2, 3, 4, 5]` (the subarray got sorted as a side effect, 
 
 | Metric       | Cost                      | Notes                                        |
 | ------------ | ------------------------- | -------------------------------------------- |
-| Time (avg)   | O(n) expected             | Geometric series, see below                  |
-| Time (worst) | O(n^2)                    | Sorted input with always-last-element pivot  |
-| Space        | O(1) iterative            | No recursion stack in the iterative form     |
-| Space        | O(n) recursive worst case | Recursion depth equals partition imbalance   |
+| Time (avg)   | $O(n)$ expected             | Geometric series, see below                  |
+| Time (worst) | $O(n^2)$                    | Sorted input with always-last-element pivot  |
+| Space        | $O(1)$ iterative            | No recursion stack in the iterative form     |
+| Space        | $O(n)$ recursive worst case | Recursion depth equals partition imbalance   |
 
-## Why expected O(n)
+## Why expected $O(n)$
 
 When the pivot splits the array roughly in half each time, the work per level halves:
 
@@ -145,9 +145,9 @@ Total = n + n/2 + n/4 + n/8 + ...
       = O(n)
 ```
 
-This is the geometric series converging to 2n. A perfect 50/50 split is not required. Any split with a constant fraction of the array in each side (say 25/75) still gives a geometric series, and that series still converges to O(n).
+This is the geometric series converging to 2n. A perfect 50/50 split is not required. Any split with a constant fraction of the array in each side (say 25/75) still gives a geometric series, and that series still converges to $O(n)$.
 
-The expected qualifier exists because the pivot position is random. On average over all possible pivot choices, the split is close enough to 50/50 for the series to dominate. With adversarial input where every pivot is always the minimum or maximum, every partition eliminates only one element, giving T(n) = T(n-1) + n, which solves to O(n^2).
+The expected qualifier exists because the pivot position is random. On average over all possible pivot choices, the split is close enough to 50/50 for the series to dominate. With adversarial input where every pivot is always the minimum or maximum, every partition eliminates only one element, giving T(n) = T(n-1) + n, which solves to $O(n^2)$.
 
 ## Randomized pivot: making worst case extremely unlikely
 
@@ -171,18 +171,18 @@ def lomuto_partition(arr, lo, hi):
     return store
 ```
 
-With a randomized pivot, the probability of hitting the worst case repeatedly is astronomically small. For any fixed input, the expected runtime is O(n) regardless of input order. This is the version to use in practice.
+With a randomized pivot, the probability of hitting the worst case repeatedly is astronomically small. For any fixed input, the expected runtime is $O(n)$ regardless of input order. This is the version to use in practice.
 
-## Median-of-medians: O(n) worst-case guaranteed
+## Median-of-medians: $O(n)$ worst-case guaranteed
 
-If you need guaranteed O(n) worst case (not just expected), the **median-of-medians** algorithm achieves it by choosing a provably good pivot:
+If you need guaranteed $O(n)$ worst case (not just expected), the **median-of-medians** algorithm achieves it by choosing a provably good pivot:
 
 1. Divide the array into groups of 5.
-2. Find the median of each group (by sorting each group of 5, which costs O(1) per group).
+2. Find the median of each group (by sorting each group of 5, which costs $O(1)$ per group).
 3. Recursively find the median of those medians.
 4. Use that median-of-medians as the pivot.
 
-The resulting pivot is guaranteed to be between the 30th and 70th percentile of the array. That means each partition eliminates at least 30% of the elements. The recurrence is T(n) = T(n/5) + T(7n/10) + O(n), which solves to O(n).
+The resulting pivot is guaranteed to be between the 30th and 70th percentile of the array. That means each partition eliminates at least 30% of the elements. The recurrence is T(n) = T(n/5) + T(7n/10) + $O(n)$, which solves to $O(n)$.
 
 In practice, median-of-medians is roughly 5x slower than randomized Quickselect due to the constant factors in the pivot-finding step. For real workloads, randomized Quickselect is always preferred. Median-of-medians matters for theoretical guarantees, adversarial inputs, or real-time systems where worst-case latency is a hard constraint.
 
@@ -304,24 +304,24 @@ Quickselect modifies the input array. A min-heap or max-heap keeps the array int
 
 | Scenario                        | Quickselect      | Heap                  | Prefer      |
 | ------------------------------- | ---------------- | --------------------- | ----------- |
-| k is tiny (k << n)              | O(n) always      | O(n + k log n)        | Heap for small k |
-| k is large (k close to n)       | O(n) always      | O(n + k log n) = O(n log n) | Quickselect |
-| Data arrives as a stream        | Not applicable   | O(n log k)            | Heap        |
+| k is tiny (k << n)              | $O(n)$ always      | $O(n + k log n)$        | Heap for small k |
+| k is large (k close to n)       | $O(n)$ always      | $O(n + k log n)$ = $O(n log n)$ | Quickselect |
+| Data arrives as a stream        | Not applicable   | $O(n log k)$            | Heap        |
 | Array must stay unmodified      | Need a copy      | Reads only            | Heap        |
-| Average case, array in memory   | O(n) expected    | O(n log k)            | Quickselect |
+| Average case, array in memory   | $O(n)$ expected    | $O(n log k)$            | Quickselect |
 
 The crossover for "tiny k" is roughly when `k log n < n`, which at `n = 10^6` means k under about 50,000. In practice, if you are finding the single minimum or maximum, a single linear scan beats both.
 
-For streaming data (elements arrive one at a time), a max-heap of size k is the standard approach: push each new element, pop if size exceeds k. Final heap contains the k smallest. That is O(n log k) overall and works without loading the full array into memory.
+For streaming data (elements arrive one at a time), a max-heap of size k is the standard approach: push each new element, pop if size exceeds k. Final heap contains the k smallest. That is $O(n log k)$ overall and works without loading the full array into memory.
 
 ## Things that are not Quickselect
 
-- **Sorting the whole array then indexing**: O(n log n) and correct, but slower for a single rank query.
-- **Building a heap and popping k times**: O(n + k log n), reasonable for small k, not for large k.
+- **Sorting the whole array then indexing**: $O(n log n)$ and correct, but slower for a single rank query.
+- **Building a heap and popping k times**: $O(n + k log n)$, reasonable for small k, not for large k.
 - **Binary search on value range**: works only on bounded integers (counting sort territory), not general comparisons.
 - **nth_element in C++ STL**: that is exactly Quickselect (introsort variant), already in your standard library if you use C++.
 
-If the problem asks for the top-k elements (not just one), Quickselect still applies: after the partition the first k elements are the k smallest (unordered). If you need them sorted, sort just those k in O(k log k).
+If the problem asks for the top-k elements (not just one), Quickselect still applies: after the partition the first k elements are the k smallest (unordered). If you need them sorted, sort just those k in $O(k log k)$.
 
 ## LeetCode exercises
 
@@ -330,7 +330,7 @@ If the problem asks for the top-k elements (not just one), Quickselect still app
 
 ## Multiple uses
 
-**K closest points to origin** - Compute squared distances (no sqrt needed), Quickselect to rank k, return all points with rank less than k. O(n) expected vs O(n log n) naive sort.
+**K closest points to origin** - Compute squared distances (no sqrt needed), Quickselect to rank k, return all points with rank less than k. $O(n)$ expected vs $O(n log n)$ naive sort.
 
 ```python
 import random
@@ -365,7 +365,7 @@ def k_closest(points, k):
 # Example: points=[[1,3],[-2,2]], k=1 -> [[-2,2]]
 ```
 
-**Kth largest in a stream** - If the stream has settled to n elements, Quickselect on the array gives O(n) expected. Compare to the heap approach O(n log k): Quickselect wins when k is large relative to n.
+**Kth largest in a stream** - If the stream has settled to n elements, Quickselect on the array gives $O(n)$ expected. Compare to the heap approach $O(n log k)$: Quickselect wins when k is large relative to n.
 
 ```python
 import random
@@ -400,7 +400,7 @@ def kth_largest(nums, k):
 # Example: nums=[3,2,1,5,6,4], k=2 -> 5
 ```
 
-**Median of an unsorted array** - For odd length, Quickselect at index `n//2`. For even length, two Quickselect calls at `n//2` and `n//2 - 1`, average the results. O(n) expected vs O(n log n) sort.
+**Median of an unsorted array** - For odd length, Quickselect at index `n//2`. For even length, two Quickselect calls at `n//2` and `n//2 - 1`, average the results. $O(n)$ expected vs $O(n log n)$ sort.
 
 ```python
 import random

@@ -30,7 +30,7 @@ Given an integer array `nums` and an integer `k`, return the `k` most frequent e
 - `nums = [1,1,1,2,2,3]`, `k = 2` → `[1, 2]`
 - `nums = [1]`, `k = 1` → `[1]`
 
-Follow-up: can you do better than O(n log n)?
+Follow-up: can you do better than $O(n log n)$?
 
 LeetCode 347 · [Link](https://leetcode.com/problems/top-k-frequent-elements/) · *Medium*
 
@@ -99,16 +99,16 @@ func topKFrequent(nums []int, k int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (Counter)** | **O(n)** | **1** | **O(n)** |
-| **L2 (most_common)** | **O(n log k)** | **1** | **O(n log k)** ← dominates |
+| **L1 (Counter)** | **$O(n)$** | **1** | **$O(n)$** |
+| **L2 (most_common)** | **$O(n log k)$** | **1** | **$O(n log k)$** ← dominates |
 
-`most_common(k)` uses a heap internally (O(n log k)), not a full sort.
+`most_common(k)` uses a heap internally ($O(n log k)$), not a full sort.
 
 **Complexity**
-- **Time:** O(n log n). Sorting all distinct elements.
-- **Space:** O(n) for the counter.
+- **Time:** $O(n log n)$. Sorting all distinct elements.
+- **Space:** $O(n)$ for the counter.
 
-`most_common(k)` internally uses a heap (O(n log k)), but for "brute" purposes treat it as a full sort.
+`most_common(k)` internally uses a heap ($O(n log k)$), but for "brute" purposes treat it as a full sort.
 
 ## Approach 2: Size-k min-heap
 
@@ -179,19 +179,19 @@ func topKFrequent(nums []int, k int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (Counter) | O(n) | 1 | O(n) |
-| L3 (loop) | O(1) | d | O(d) |
-| **L4 (heappush)** | **O(log k)** | **d** | **O(d log k)** ← dominates |
-| L6 (heappop) | O(log k) | at most d-k | O(d log k) |
-| L7 (extract) | O(k) | 1 | O(k) |
+| L1 (Counter) | $O(n)$ | 1 | $O(n)$ |
+| L3 (loop) | $O(1)$ | d | $O(d)$ |
+| **L4 (heappush)** | **$O(log k)$** | **d** | **$O(d log k)$** ← dominates |
+| L6 (heappop) | $O(log k)$ | at most d-k | $O(d log k)$ |
+| L7 (extract) | $O(k)$ | 1 | $O(k)$ |
 
-Since d ≤ n, the total is O(n log k).
+Since d ≤ n, the total is $O(n log k)$.
 
 **Complexity**
-- **Time:** O(n log k), driven by L4/L6 (heap push/pop on a size-k heap). Each of up to `n` distinct elements pushed/popped on a size-`k` heap.
-- **Space:** O(n + k). Counter + heap.
+- **Time:** $O(n log k)$, driven by L4/L6 (heap push/pop on a size-k heap). Each of up to `n` distinct elements pushed/popped on a size-`k` heap.
+- **Space:** $O(n + k)$. Counter + heap.
 
-When `k` is small relative to `n`, this is noticeably faster than the O(n log n) sort.
+When `k` is small relative to `n`, this is noticeably faster than the $O(n log n)$ sort.
 
 **Try this approach:**
 
@@ -278,16 +278,16 @@ func topKFrequent(nums []int, k int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (Counter) | O(n) | 1 | O(n) |
-| L2 (init buckets) | O(n) | 1 | O(n) |
-| **L3, L4 (bucketing)** | **O(1)** | **d ≤ n** | **O(n)** |
-| **L5-L9 (scan + collect)** | **O(1) per element** | **at most n** | **O(n)** ← dominates total |
+| L1 (Counter) | $O(n)$ | 1 | $O(n)$ |
+| L2 (init buckets) | $O(n)$ | 1 | $O(n)$ |
+| **L3, L4 (bucketing)** | **$O(1)$** | **d ≤ n** | **$O(n)$** |
+| **L5-L9 (scan + collect)** | **$O(1)$ per element** | **at most n** | **$O(n)$** ← dominates total |
 
-Every distinct element is bucketed once and visited at most once during the scan. The bucket array has n+1 slots, all accessed in O(1).
+Every distinct element is bucketed once and visited at most once during the scan. The bucket array has n+1 slots, all accessed in $O(1)$.
 
 **Complexity**
-- **Time:** O(n), driven by L1/L2 (linear setup) plus the O(n) total scan in L5-L9. Counter is O(n); bucketing is O(n); the scan visits at most `n` elements.
-- **Space:** O(n) for counter and buckets.
+- **Time:** $O(n)$, driven by L1/L2 (linear setup) plus the $O(n)$ total scan in L5-L9. Counter is $O(n)$; bucketing is $O(n)$; the scan visits at most `n` elements.
+- **Space:** $O(n)$ for counter and buckets.
 
 **Try this approach:**
 
@@ -307,9 +307,9 @@ Every distinct element is bucketed once and visited at most once during the scan
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Sort by count | O(n log n) | O(n) |
-| Size-k min-heap | O(n log k) | O(n + k) |
-| **Bucket sort** | **O(n)** | O(n) |
+| Sort by count | $O(n log n)$ | $O(n)$ |
+| Size-k min-heap | $O(n log k)$ | $O(n + k)$ |
+| **Bucket sort** | **$O(n)$** | $O(n)$ |
 
 Bucket sort beats the heap when `k` is not trivially small; the heap wins on streaming input or when you need online updates. Choose based on the scenario.
 

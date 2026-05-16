@@ -88,15 +88,15 @@ function dailyTemperatures(temperatures: number[]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init output) | O(n) | 1 | O(n) |
-| L3 (outer loop) | O(1) | n | O(n) |
-| **L4, L5 (inner scan + compare)** | **O(1)** | **up to n per outer** | **O(n²)** ← dominates |
+| L2 (init output) | $O(n)$ | 1 | $O(n)$ |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L4, L5 (inner scan + compare)** | **$O(1)$** | **up to n per outer** | **$O(n²)$** ← dominates |
 
-Each inner scan can run n-i steps, giving O(n²) in the worst case (monotonically decreasing temperatures).
+Each inner scan can run n-i steps, giving $O(n²)$ in the worst case (monotonically decreasing temperatures).
 
 **Complexity**
-- **Time:** O(n²), driven by L4/L5 (nested scan).
-- **Space:** O(1) extra.
+- **Time:** $O(n²)$, driven by L4/L5 (nested scan).
+- **Space:** $O(1)$ extra.
 
 ## Approach 2: Scan from right-to-left with a monotonic stack of indices
 
@@ -142,15 +142,15 @@ function dailyTemperatures(temperatures: number[]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init output) | O(n) | 1 | O(n) |
-| L3 (backward loop) | O(1) | n | O(n) |
-| **L4-L7 (stack ops)** | **O(1) amortized** | **n total pushes/pops** | **O(n)** ← dominates |
+| L2 (init output) | $O(n)$ | 1 | $O(n)$ |
+| L3 (backward loop) | $O(1)$ | n | $O(n)$ |
+| **L4-L7 (stack ops)** | **$O(1)$ amortized** | **n total pushes/pops** | **$O(n)$** ← dominates |
 
-Each index is pushed once and popped at most once; total stack work across all iterations is O(n).
+Each index is pushed once and popped at most once; total stack work across all iterations is $O(n)$.
 
 **Complexity**
-- **Time:** O(n), driven by L4-L7 (each index pushed and popped at most once).
-- **Space:** O(n) stack.
+- **Time:** $O(n)$, driven by L4-L7 (each index pushed and popped at most once).
+- **Space:** $O(n)$ stack.
 
 **Try this approach:**
 
@@ -207,15 +207,15 @@ function dailyTemperatures(temperatures: number[]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init output) | O(n) | 1 | O(n) |
-| L4 (loop) | O(1) | n | O(n) |
-| **L5-L8 (stack ops + answer fill)** | **O(1) amortized** | **n total pushes/pops** | **O(n)** ← dominates |
+| L2 (init output) | $O(n)$ | 1 | $O(n)$ |
+| L4 (loop) | $O(1)$ | n | $O(n)$ |
+| **L5-L8 (stack ops + answer fill)** | **$O(1)$ amortized** | **n total pushes/pops** | **$O(n)$** ← dominates |
 
-Each index is pushed once and popped at most once. The inner while loop is amortized O(1) per outer iteration, giving O(n) total.
+Each index is pushed once and popped at most once. The inner while loop is amortized $O(1)$ per outer iteration, giving $O(n)$ total.
 
 **Complexity**
-- **Time:** O(n), driven by L5-L8 (amortized O(n) total stack work).
-- **Space:** O(n) for the stack and output.
+- **Time:** $O(n)$, driven by L5-L8 (amortized $O(n)$ total stack work).
+- **Space:** $O(n)$ for the stack and output.
 
 **Try this approach:**
 
@@ -232,9 +232,9 @@ Each index is pushed once and popped at most once. The inner while loop is amort
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force | O(n²) | O(1) |
-| Right-to-left monotonic stack | O(n) | O(n) |
-| **Forward monotonic stack** | **O(n)** | **O(n)** |
+| Brute force | $O(n²)$ | $O(1)$ |
+| Right-to-left monotonic stack | $O(n)$ | $O(n)$ |
+| **Forward monotonic stack** | **$O(n)$** | **$O(n)$** |
 
 The forward monotonic-stack form is the canonical template for "next greater element" problems. Memorize it, it appears everywhere (Next Greater Element I/II, Sum of Subarray Minimums, 496).
 

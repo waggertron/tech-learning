@@ -27,7 +27,7 @@ def backtrack(path, choices):
 
 The three moving parts:
 
-- **The path**: a mutable list of choices made so far. Use `append`/`pop`; passing the path avoids O(n) slicing per call.
+- **The path**: a mutable list of choices made so far. Use `append`/`pop`; passing the path avoids $O(n)$ slicing per call.
 - **The choices**: a list of options at the current level.
 - **The pruning**: predicates that skip dead branches. Pruning is usually what distinguishes a fast backtracking solution from a slow one.
 

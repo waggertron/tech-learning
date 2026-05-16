@@ -117,22 +117,22 @@ function shortestPathBinaryMatrix(grid: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (guards) | O(1) | 1 | O(1) |
-| L4 (seed queue) | O(1) | 1 | O(1) |
-| **L8 (dequeue)** | **O(1)** | **at most n²** | **O(n²)** |
-| **L9 (direction loop)** | **O(1) × 8** | **once per dequeued cell** | **O(n²) ← dominates** |
-| L11 (mark visited) | O(1) | at most n² | O(n²) |
-| L12 (enqueue) | O(1) | at most n² | O(n²) |
+| L2, L3 (guards) | $O(1)$ | 1 | $O(1)$ |
+| L4 (seed queue) | $O(1)$ | 1 | $O(1)$ |
+| **L8 (dequeue)** | **$O(1)$** | **at most n²** | **$O(n²)$** |
+| **L9 (direction loop)** | **$O(1)$ × 8** | **once per dequeued cell** | **$O(n²)$ ← dominates** |
+| L11 (mark visited) | $O(1)$ | at most n² | $O(n²)$ |
+| L12 (enqueue) | $O(1)$ | at most n² | $O(n²)$ |
 
 Each cell enters the queue at most once (L11 marks it visited before L12 enqueues it). The direction constant 8 is absorbed into the O notation.
 
 **Complexity**
-- **Time:** O(n²), driven by L8/L9 (each cell dequeued at most once, 8 directions checked).
-- **Space:** O(n²) queue worst case (all cells 0 and BFS frontier fills the grid).
+- **Time:** $O(n²)$, driven by L8/L9 (each cell dequeued at most once, 8 directions checked).
+- **Space:** $O(n²)$ queue worst case (all cells 0 and BFS frontier fills the grid).
 
 ### Why in-place mutation for visited
 
-Setting `grid[nr][nc] = 1` at L11 serves as the visited marker. Without it, the same 0-cell could be enqueued multiple times from different neighbors, causing O(n² × 8) enqueue operations instead of O(n²). Mark before enqueue, not after dequeue.
+Setting `grid[nr][nc] = 1` at L11 serves as the visited marker. Without it, the same 0-cell could be enqueued multiple times from different neighbors, causing $O(n² × 8)$ enqueue operations instead of $O(n²)$. Mark before enqueue, not after dequeue.
 
 ### 8-direction vs 4-direction
 
@@ -165,8 +165,8 @@ This problem uses 8-direction movement. The neighbor formula adds `(-1,-1)` thro
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| DFS | O(n²) | O(n²) | Does not guarantee shortest path |
-| **BFS** | **O(n²)** | **O(n²)** | **Canonical, guarantees shortest** |
+| DFS | $O(n²)$ | $O(n²)$ | Does not guarantee shortest path |
+| **BFS** | **$O(n²)$** | **$O(n²)$** | **Canonical, guarantees shortest** |
 
 Always use BFS (not DFS) for shortest path on unweighted graphs.
 

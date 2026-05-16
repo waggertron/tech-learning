@@ -149,15 +149,15 @@ func countComponents(n int, edges [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (build adjacency list) | O(1) per edge | E | O(E) |
-| L10 (outer loop) | O(1) | V | O(V) |
-| **L5-L9 (DFS stack loop)** | **O(1) per node/edge** | **V nodes + 2E edge-visits total** | **O(V + E)** ← dominates |
+| L1-L3 (build adjacency list) | $O(1)$ per edge | E | $O(E)$ |
+| L10 (outer loop) | $O(1)$ | V | $O(V)$ |
+| **L5-L9 (DFS stack loop)** | **$O(1)$ per node/edge** | **V nodes + 2E edge-visits total** | **$O(V + E)$** ← dominates |
 
-Each node is added to `visited` exactly once and each edge is pushed onto the stack at most twice (once per direction). The total work across all `dfs()` calls is O(V + E), not O(V + E) per component.
+Each node is added to `visited` exactly once and each edge is pushed onto the stack at most twice (once per direction). The total work across all `dfs()` calls is $O(V + E)$, not $O(V + E)$ per component.
 
 **Complexity**
-- **Time:** O(V + E), driven by L5-L9 summed across all DFS calls.
-- **Space:** O(V + E) for the adjacency list and visited set; the stack holds at most V entries.
+- **Time:** $O(V + E)$, driven by L5-L9 summed across all DFS calls.
+- **Space:** $O(V + E)$ for the adjacency list and visited set; the stack holds at most V entries.
 
 ## Approach 2: Union-Find (optimal)
 
@@ -244,12 +244,12 @@ func countComponents(n int, edges [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init parent array) | O(V) | 1 | O(V) |
-| **L5-L8 (edge processing loop)** | **O(alpha(V)) per edge** | **E** | **O(E * alpha(V))** ← dominates |
+| L1 (init parent array) | $O(V)$ | 1 | $O(V)$ |
+| **L5-L8 (edge processing loop)** | **$O(alpha(V)$) per edge** | **E** | **$O(E * alpha(V)$)** ← dominates |
 
 **Complexity**
-- **Time:** O(V + E * alpha(V)), driven by L5-L8. Effectively O(V + E) in practice.
-- **Space:** O(V) for the parent array; no adjacency list needed.
+- **Time:** $O(V + E * alpha(V)$), driven by L5-L8. Effectively $O(V + E)$ in practice.
+- **Space:** $O(V)$ for the parent array; no adjacency list needed.
 
 **Try this approach:**
 
@@ -269,9 +269,9 @@ func countComponents(n int, edges [][]int) int {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS | O(V + E) | O(V + E) |
-| BFS | O(V + E) | O(V + E) |
-| **Union-Find** | **O(V + E · alpha(V))** | **O(V)** |
+| DFS | $O(V + E)$ | $O(V + E)$ |
+| BFS | $O(V + E)$ | $O(V + E)$ |
+| **Union-Find** | **$O(V + E · alpha(V)$)** | **$O(V)$** |
 
 All optimal. Pick union-find when edges arrive online or you also need "are u and v in the same component?" queries.
 

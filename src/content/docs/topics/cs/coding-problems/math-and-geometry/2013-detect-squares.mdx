@@ -87,8 +87,8 @@ class DetectSquares:
 Iterating `points_list` with duplicates means the multiplicities of A and B are baked in implicitly; only D's multiplicity is read from `counts`. Each square formed by (q, A, B, D) is counted exactly once.
 
 **Complexity**
-- `count`: O(n²).
-- Space: O(n).
+- `count`: $O(n²)$.
+- Space: $O(n)$.
 
 ## Approach 2: Count map + diagonal fix (canonical)
 
@@ -202,15 +202,15 @@ func (ds *DetectSquares) Count(point []int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3, L4 (add) | O(1) amortized | 1 per call | O(1) per add |
-| **L5-L7 (count scan)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L3, L4 (add) | $O(1)$ amortized | 1 per call | $O(1)$ per add |
+| **L5-L7 (count scan)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
-`add` is O(1); `count` scans all distinct stored points.
+`add` is $O(1)$; `count` scans all distinct stored points.
 
 **Complexity**
-- `add`: O(1) amortized.
-- `count`: O(n).
-- Space: O(n).
+- `add`: $O(1)$ amortized.
+- `count`: $O(n)$.
+- Space: $O(n)$.
 
 **Try this approach:**
 
@@ -263,15 +263,15 @@ class DetectSquares:
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L2 (add) | O(1) amortized | 1 per call | O(1) per add |
-| **L3-L6 (count scan)** | **O(1)** | **k** | **O(k)** ← dominates |
+| L1, L2 (add) | $O(1)$ amortized | 1 per call | $O(1)$ per add |
+| **L3-L6 (count scan)** | **$O(1)$** | **k** | **$O(k)$** ← dominates |
 
-`count` is O(k) where k is distinct y-values at `qx`; worst case k = n if all points share the same x.
+`count` is $O(k)$ where k is distinct y-values at `qx`; worst case k = n if all points share the same x.
 
 **Complexity**
-- `add`: O(1) amortized.
-- `count`: O(k) where k = number of distinct y's at `qx`.
-- Space: O(n).
+- `add`: $O(1)$ amortized.
+- `count`: $O(k)$ where k = number of distinct y's at `qx`.
+- Space: $O(n)$.
 
 Slightly more efficient than Approach 2 when points cluster along few columns.
 
@@ -279,9 +279,9 @@ Slightly more efficient than Approach 2 when points cluster along few columns.
 
 | Approach | `count` time | Space |
 | --- | --- | --- |
-| Pairwise scan | O(n²) | O(n) |
-| **Count map + diagonal fix** | **O(n)** | **O(n)** |
-| Keyed by x-coordinate | O(k) per column | O(n) |
+| Pairwise scan | $O(n²)$ | $O(n)$ |
+| **Count map + diagonal fix** | **$O(n)$** | **$O(n)$** |
+| Keyed by x-coordinate | $O(k)$ per column | $O(n)$ |
 
 The "fix a diagonal corner, multiply counts of the other three" pattern applies to many "count configurations" problems.
 

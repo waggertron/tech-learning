@@ -14,16 +14,16 @@ A string is a sequence of characters, usually stored as an array of bytes (C), a
 
 ## In-depth description
 
-**Immutability** matters for complexity analysis. In Python/Java/JS, naive `s = s + c` inside a loop is O(n²) because each concatenation creates a new string, use `StringBuilder` (Java), a list + `"".join()` (Python), or mutable byte buffers. In C and Rust, strings can be mutated in place but you own the memory and encoding.
+**Immutability** matters for complexity analysis. In Python/Java/JS, naive `s = s + c` inside a loop is $O(n²)$ because each concatenation creates a new string, use `StringBuilder` (Java), a list + `"".join()` (Python), or mutable byte buffers. In C and Rust, strings can be mutated in place but you own the memory and encoding.
 
-**Character counting** is the most common string preprocessing step. For ASCII-only input a 128-element integer array outperforms a hash map. For Unicode, fall back to a dict/hash map. Sorting characters of a string is often the simplest anagram canonicalization, O(k log k) where k is string length.
+**Character counting** is the most common string preprocessing step. For ASCII-only input a 128-element integer array outperforms a hash map. For Unicode, fall back to a dict/hash map. Sorting characters of a string is often the simplest anagram canonicalization, $O(k log k)$ where k is string length.
 
 **String matching algorithms** come up occasionally:
 
-- **KMP (Knuth-Morris-Pratt)**: O(n + m) with a precomputed failure function.
+- **KMP (Knuth-Morris-Pratt)**: $O(n + m)$ with a precomputed failure function.
 - **Rabin-Karp**: polynomial rolling hash for fast multi-pattern and approximate matching.
-- **Z-algorithm**: computes prefix-match lengths in O(n), simpler than KMP for some problems.
-- **Manacher's algorithm**: finds the longest palindromic substring in O(n) (the O(n²) expand-around-center version is interview-standard).
+- **Z-algorithm**: computes prefix-match lengths in $O(n)$, simpler than KMP for some problems.
+- **Manacher's algorithm**: finds the longest palindromic substring in $O(n)$ (the $O(n²)$ expand-around-center version is interview-standard).
 
 **String DP**, edit distance, LCS, regex matching, is a recurring theme and one of the hardest interview topic areas.
 
@@ -31,13 +31,13 @@ A string is a sequence of characters, usually stored as an array of bytes (C), a
 
 | Operation | Average | Worst |
 | --- | --- | --- |
-| Access by index | O(1) | O(1) |
-| Concatenation (new string) | O(n + m) | O(n + m) |
-| Substring check (naive) | O(n·m) | O(n·m) |
-| Substring check (KMP / Z) | O(n + m) | O(n + m) |
-| Comparison | O(min(n, m)) | O(min(n, m)) |
-| Sort characters | O(k log k) | O(k log k) |
-| Space | O(n) | O(n) |
+| Access by index | $O(1)$ | $O(1)$ |
+| Concatenation (new string) | $O(n + m)$ | $O(n + m)$ |
+| Substring check (naive) | $O(n·m)$ | $O(n·m)$ |
+| Substring check (KMP / Z) | $O(n + m)$ | $O(n + m)$ |
+| Comparison | $O(min(n, m)$) | $O(min(n, m)$) |
+| Sort characters | $O(k log k)$ | $O(k log k)$ |
+| Space | $O(n)$ | $O(n)$ |
 
 ## Common uses in DSA
 

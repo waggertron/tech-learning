@@ -187,19 +187,19 @@ func criticalConnections(n int, connections [][]int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (build graph) | O(1) | E | O(E) |
-| L3-L4 (init arrays) | O(1) | V | O(V) |
-| L7-L8 (timestamp) | O(1) | V | O(V) |
-| **L9 (neighbor loop)** | **O(1) per neighbor** | **2E total** | **O(E)** ← dominates |
-| L12 (recurse) | O(1) dispatch | V | O(V) |
-| L13/L14 (low update + bridge check) | O(1) | V | O(V) |
-| L16 (back edge low) | O(1) | up to E | O(E) |
+| L1-L2 (build graph) | $O(1)$ | E | $O(E)$ |
+| L3-L4 (init arrays) | $O(1)$ | V | $O(V)$ |
+| L7-L8 (timestamp) | $O(1)$ | V | $O(V)$ |
+| **L9 (neighbor loop)** | **$O(1)$ per neighbor** | **2E total** | **$O(E)$** ← dominates |
+| L12 (recurse) | $O(1)$ dispatch | V | $O(V)$ |
+| L13/L14 (low update + bridge check) | $O(1)$ | V | $O(V)$ |
+| L16 (back edge low) | $O(1)$ | up to E | $O(E)$ |
 
-Each node is visited exactly once; each edge is examined twice (once from each endpoint). Total work is O(V + E).
+Each node is visited exactly once; each edge is examined twice (once from each endpoint). Total work is $O(V + E)$.
 
 **Complexity**
-- **Time:** O(V + E). Each node and each edge processed once.
-- **Space:** O(V + E) for the adjacency list, disc/low arrays, and recursion stack.
+- **Time:** $O(V + E)$. Each node and each edge processed once.
+- **Space:** $O(V + E)$ for the adjacency list, disc/low arrays, and recursion stack.
 
 **Try this approach:**
 
@@ -256,7 +256,7 @@ The parent-skip at L10 uses `neighbor == parent`. If the graph has multiple edge
 | `low[v]` | Earliest ancestor reachable from subtree of `v` |
 | `low[v] > disc[u]` | No back edge from subtree of `v` reaches `u` or above: bridge |
 
-Tarjan's bridge algorithm is the standard O(V+E) solution for finding all bridges. The same DFS skeleton (with `low` values) also finds articulation points.
+Tarjan's bridge algorithm is the standard $O(V+E)$ solution for finding all bridges. The same DFS skeleton (with `low` values) also finds articulation points.
 
 ## Test cases
 

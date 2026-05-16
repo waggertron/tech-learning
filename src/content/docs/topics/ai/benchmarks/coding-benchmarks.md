@@ -180,7 +180,7 @@ This combines shortest-path (Dijkstra) with a state-space extension (tracking wh
 
 > You are given a string s consisting of digits. Find the number of non-empty substrings of s such that the number represented by the substring is divisible by all of its non-zero digits.
 
-This requires iterating over all O(n²) substrings, but doing so naively is too slow for large n. The insight is that the digit 0 resets divisibility analysis and the dividend grows fast -- the LCM of digits 1-9 is 2520, which bounds how far you need to look. Post-cutoff problems like this have no worked solution online; the model must reason through the bound.
+This requires iterating over all $O(n²)$ substrings, but doing so naively is too slow for large n. The insight is that the digit 0 resets divisibility analysis and the dividend grows fast -- the LCM of digits 1-9 is 2520, which bounds how far you need to look. Post-cutoff problems like this have no worked solution online; the model must reason through the bound.
 
 ### The four evaluation scenarios
 

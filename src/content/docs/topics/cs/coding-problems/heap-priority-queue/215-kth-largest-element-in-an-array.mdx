@@ -84,12 +84,12 @@ func findKthLargest(nums []int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2 (index) | O(1) | 1 | O(1) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2 (index) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n log n), driven by L1.
-- **Space:** O(1) or O(log n) depending on sort.
+- **Time:** $O(n log n)$, driven by L1.
+- **Space:** $O(1)$ or $O(log n)$ depending on sort.
 
 Fastest to write; doesn't meet the "without sorting" challenge.
 
@@ -215,15 +215,15 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | n | O(n) |
-| **L2 (heappush)** | **O(log k)** | **n** | **O(n log k)** ← dominates |
-| L3 (heappop) | O(log k) | n - k | O(n log k) |
+| L1 (loop) | $O(1)$ | n | $O(n)$ |
+| **L2 (heappush)** | **$O(log k)$** | **n** | **$O(n log k)$** ← dominates |
+| L3 (heappop) | $O(log k)$ | n - k | $O(n log k)$ |
 
-The heap never exceeds k entries. Every push and pop costs O(log k). Since we process n elements, total cost is O(n log k).
+The heap never exceeds k entries. Every push and pop costs $O(log k)$. Since we process n elements, total cost is $O(n log k)$.
 
 **Complexity**
-- **Time:** O(n log k), driven by L2/L3.
-- **Space:** O(k).
+- **Time:** $O(n log k)$, driven by L2/L3.
+- **Space:** $O(k)$.
 
 **Try this approach:**
 
@@ -369,15 +369,15 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (random pivot) | O(1) | log n avg rounds | O(log n) |
-| **L2 (three-way partition)** | **O(subarray size)** | **log n avg rounds** | **O(n) avg** ← dominates |
-| L3 (partition call) | O(n) first round | log n avg | O(n) avg |
+| L1 (random pivot) | $O(1)$ | log n avg rounds | $O(log n)$ |
+| **L2 (three-way partition)** | **$O(subarray size)$** | **log n avg rounds** | **$O(n)$ avg** ← dominates |
+| L3 (partition call) | $O(n)$ first round | log n avg | $O(n)$ avg |
 
-On average, each round halves the search space: n + n/2 + n/4 + ... = 2n = O(n). With random pivot, worst case O(n²) is extremely unlikely.
+On average, each round halves the search space: n + n/2 + n/4 + ... = 2n = $O(n)$. With random pivot, worst case $O(n²)$ is extremely unlikely.
 
 **Complexity**
-- **Time:** O(n) average, O(n²) worst case (mitigated by random pivot at L1).
-- **Space:** O(1) extra (iterative loop avoids recursion).
+- **Time:** $O(n)$ average, $O(n²)$ worst case (mitigated by random pivot at L1).
+- **Space:** $O(1)$ extra (iterative loop avoids recursion).
 
 The three-way partition handles duplicate values efficiently, important when the array contains many repeats.
 
@@ -443,9 +443,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Sort | O(n log n) | O(1) |
-| Size-K min-heap | O(n log k) | O(k) |
-| **Quickselect** | **O(n)** avg / O(n²) worst | O(1) |
+| Sort | $O(n log n)$ | $O(1)$ |
+| Size-K min-heap | $O(n log k)$ | $O(k)$ |
+| **Quickselect** | **$O(n)$** avg / $O(n²)$ worst | $O(1)$ |
 
 The heap is the interview-safe answer. Quickselect is the "show you understand selection algorithms" answer. In practice, std-lib `nlargest` is often the fastest due to constant factors.
 

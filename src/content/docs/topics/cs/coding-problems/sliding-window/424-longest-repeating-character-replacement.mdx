@@ -114,16 +114,16 @@ func characterReplacement(s string, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (outer loop) | O(1) | n | O(n) |
-| L2 (inner loop) | O(1) | O(n²) total | O(n²) |
-| **L3 (Counter build)** | **O(n)** | **O(n²)** | **O(n³)** ← dominates |
-| L4 (max over counts) | O(k) | O(n²) | O(n² · k) |
+| L1 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L2 (inner loop) | $O(1)$ | $O(n²)$ total | $O(n²)$ |
+| **L3 (Counter build)** | **$O(n)$** | **$O(n²)$** | **$O(n³)$** ← dominates |
+| L4 (max over counts) | $O(k)$ | $O(n²)$ | $O(n² · k)$ |
 
-L3 allocates a new slice and builds a Counter for every (i, j) pair, which is O(n) work done O(n²) times.
+L3 allocates a new slice and builds a Counter for every (i, j) pair, which is $O(n)$ work done $O(n²)$ times.
 
 **Complexity**
-- **Time:** O(n³), driven by L3 (Counter on every substring pair).
-- **Space:** O(k) where k = alphabet size.
+- **Time:** $O(n³)$, driven by L3 (Counter on every substring pair).
+- **Space:** $O(k)$ where k = alphabet size.
 
 ## Approach 2: Per-target-letter sliding window
 
@@ -205,16 +205,16 @@ func characterReplacement(s string, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (targets loop) | O(1) | up to 26 | O(26) |
-| **L2 (inner loop)** | **O(1) body** | **n per target** | **O(26n) = O(n)** ← dominates |
-| L5-L7 (shrink) | O(1) amortized | at most n per target | O(26n) = O(n) |
-| L8 (best update) | O(1) | n per target | O(26n) = O(n) |
+| L1 (targets loop) | $O(1)$ | up to 26 | $O(26)$ |
+| **L2 (inner loop)** | **$O(1)$ body** | **n per target** | **$O(26n)$ = $O(n)$** ← dominates |
+| L5-L7 (shrink) | $O(1)$ amortized | at most n per target | $O(26n)$ = $O(n)$ |
+| L8 (best update) | $O(1)$ | n per target | $O(26n)$ = $O(n)$ |
 
-The outer loop runs at most 26 times (26-character alphabet). For each target, `left` advances at most n times total across all iterations of L5-L7. So the total work per target is O(n), and O(26n) overall.
+The outer loop runs at most 26 times (26-character alphabet). For each target, `left` advances at most n times total across all iterations of L5-L7. So the total work per target is $O(n)$, and $O(26n)$ overall.
 
 **Complexity**
-- **Time:** O(26 · n) = O(n), driven by L2 (n iterations for each of the 26 targets).
-- **Space:** O(1).
+- **Time:** $O(26 · n)$ = $O(n)$, driven by L2 (n iterations for each of the 26 targets).
+- **Space:** $O(1)$.
 
 Already optimal in Big-O; the third approach drops the constant factor of 26.
 
@@ -297,16 +297,16 @@ func characterReplacement(s string, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (expand right)** | **O(1) body** | **n** | **O(n)** ← dominates |
-| L2/L3 (update counts + max_freq) | O(1) | n | O(n) |
-| L4-L6 (shrink left) | O(1) amortized | at most n total | O(n) |
-| L7 (best update) | O(1) | n | O(n) |
+| **L1 (expand right)** | **$O(1)$ body** | **n** | **$O(n)$** ← dominates |
+| L2/L3 (update counts + max_freq) | $O(1)$ | n | $O(n)$ |
+| L4-L6 (shrink left) | $O(1)$ amortized | at most n total | $O(n)$ |
+| L7 (best update) | $O(1)$ | n | $O(n)$ |
 
-The key insight for L3: we never decrease `max_freq` even when shrinking. This is safe because a smaller `max_freq` could only produce a window no larger than the current `best`, so there's no value in tracking the exact maximum after a shrink. `left` advances at most n times total across the whole run (amortized O(1) per step).
+The key insight for L3: we never decrease `max_freq` even when shrinking. This is safe because a smaller `max_freq` could only produce a window no larger than the current `best`, so there's no value in tracking the exact maximum after a shrink. `left` advances at most n times total across the whole run (amortized $O(1)$ per step).
 
 **Complexity**
-- **Time:** O(n), driven by L1 (single pass; `left` and `right` each advance at most n times total).
-- **Space:** O(k) for the counter (at most alphabet size).
+- **Time:** $O(n)$, driven by L1 (single pass; `left` and `right` each advance at most n times total).
+- **Space:** $O(k)$ for the counter (at most alphabet size).
 
 **Try this approach:**
 
@@ -323,9 +323,9 @@ The key insight for L3: we never decrease `max_freq` even when shrinking. This i
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force | O(n³) | O(k) |
-| Per-letter sliding window | O(26 · n) = O(n) | O(1) |
-| **Single sliding window** | **O(n)** | O(k) |
+| Brute force | $O(n³)$ | $O(k)$ |
+| Per-letter sliding window | $O(26 · n)$ = $O(n)$ | $O(1)$ |
+| **Single sliding window** | **$O(n)$** | $O(k)$ |
 
 The max-freq trick is the hallmark of this problem: it lets us skip the "decrement max_freq when shrinking" step entirely, because it only affects candidate windows that are shorter than what we've already seen.
 

@@ -70,8 +70,8 @@ def subsets_with_dup(nums):
 ```
 
 **Complexity**
-- **Time:** O(n · 2^n) + set hashing.
-- **Space:** O(n · 2^n).
+- **Time:** $O(n · 2^n)$ + set hashing.
+- **Space:** $O(n · 2^n)$.
 
 Works but wastes effort generating then filtering duplicates.
 
@@ -157,16 +157,16 @@ func subsetsWithDup(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sort) | O(n log n) | 1 | O(n log n) |
-| **L2 (copy)** | **O(k)** | **2^n nodes** | **O(n · 2^n)** ← dominates |
-| L3 (skip dup) | O(1) | dup nodes | O(dup) |
-| L5 (recurse) | O(1) dispatch | 2^n | O(2^n) |
+| L1 (sort) | $O(n log n)$ | 1 | $O(n log n)$ |
+| **L2 (copy)** | **$O(k)$** | **2^n nodes** | **$O(n · 2^n)$** ← dominates |
+| L3 (skip dup) | $O(1)$ | dup nodes | $O(dup)$ |
+| L5 (recurse) | $O(1)$ dispatch | 2^n | $O(2^n)$ |
 
 Every node in the recursion tree emits a result (unlike Combination Sum where only leaves do). The duplicate skip at L3 keeps the tree to 2^(distinct elements) nodes, eliminating redundant branches.
 
 **Complexity**
-- **Time:** O(n · 2^n) in the worst case; significantly fewer visits when duplicates are present, driven by L2/L5.
-- **Space:** O(n) recursion.
+- **Time:** $O(n · 2^n)$ in the worst case; significantly fewer visits when duplicates are present, driven by L2/L5.
+- **Space:** $O(n)$ recursion.
 
 ### Why "at the same level"?
 `i > start` means we've already considered one occurrence of this value at this recursion depth, taking a second one would produce a duplicate subset. But `i == start` is fine: that's a different level, where we *do* want to include the duplicate.
@@ -220,21 +220,21 @@ def subsets_with_dup(nums):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (count) | O(n) | 1 | O(n) |
-| L3 (inner loop) | O(cnt) | d levels | O(n) |
-| **L4 (recurse)** | **O(1) dispatch** | **product(cnt+1)** | **O(2^n)** ← dominates |
+| L1 (count) | $O(n)$ | 1 | $O(n)$ |
+| L3 (inner loop) | $O(cnt)$ | d levels | $O(n)$ |
+| **L4 (recurse)** | **$O(1)$ dispatch** | **product(cnt+1)** | **$O(2^n)$** ← dominates |
 
 **Complexity**
 - **Time:** Same asymptotic, often faster in practice with heavy duplicates.
-- **Space:** O(n) recursion.
+- **Space:** $O(n)$ recursion.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Generate + dedup | O(n · 2^n) + hashing | O(n · 2^n) |
-| **Sort + skip same-level duplicates** | O(n · 2^n) | O(n) |
-| Counter / multiset | O(n · 2^n) | O(n) |
+| Generate + dedup | $O(n · 2^n)$ + hashing | $O(n · 2^n)$ |
+| **Sort + skip same-level duplicates** | $O(n · 2^n)$ | $O(n)$ |
+| Counter / multiset | $O(n · 2^n)$ | $O(n)$ |
 
 The sort + skip template is the one to memorize, same pattern applies to Combination Sum II (40) and Permutations II (47).
 

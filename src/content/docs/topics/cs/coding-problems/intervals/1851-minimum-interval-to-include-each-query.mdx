@@ -99,8 +99,8 @@ func minInterval(intervals [][]int, queries []int) []int {
 Each query independently scans every interval. No state shared across queries.
 
 **Complexity**
-- **Time:** O(n · q).
-- **Space:** O(q).
+- **Time:** $O(n · q)$.
+- **Space:** $O(q)$.
 
 Acceptable only when both n and q are small.
 
@@ -227,19 +227,19 @@ func minInterval(intervals [][]int, queries []int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sort intervals) | O(n log n) | 1 | O(n log n) |
-| L2 (sort queries) | O(q log q) | 1 | O(q log q) |
-| L3 (init result) | O(q) | 1 | O(q) |
-| L6 (outer loop) | O(1) | q | O(q) |
-| **L7, L8 (push intervals)** | **O(log n)** | **n total** | **O(n log n)** ← dominates with L10 |
-| **L9, L10 (pop stale)** | **O(log n)** | **n total** | **O(n log n)** ← dominates |
-| L11 (read top) | O(1) | q | O(q) |
+| L1 (sort intervals) | $O(n log n)$ | 1 | $O(n log n)$ |
+| L2 (sort queries) | $O(q log q)$ | 1 | $O(q log q)$ |
+| L3 (init result) | $O(q)$ | 1 | $O(q)$ |
+| L6 (outer loop) | $O(1)$ | q | $O(q)$ |
+| **L7, L8 (push intervals)** | **$O(log n)$** | **n total** | **$O(n log n)$** ← dominates with L10 |
+| **L9, L10 (pop stale)** | **$O(log n)$** | **n total** | **$O(n log n)$** ← dominates |
+| L11 (read top) | $O(1)$ | q | $O(q)$ |
 
-Each interval is pushed at most once (L8) and popped at most once (L10). The outer loop sees q queries. Combined: O((n + q) log(n + q)).
+Each interval is pushed at most once (L8) and popped at most once (L10). The outer loop sees q queries. Combined: $O((n + q)$ log(n + q)).
 
 **Complexity**
-- **Time:** O((n + q) log(n + q)), driven by L1/L2 sorts and L8/L10 heap operations.
-- **Space:** O(n + q).
+- **Time:** $O((n + q)$ log(n + q)), driven by L1/L2 sorts and L8/L10 heap operations.
+- **Space:** $O(n + q)$.
 
 ### Why offline sorting helps
 Processing queries out of order turns a "for each query, find the best interval" problem into a stream. Sorting queries by value + sorting intervals by start makes the two monotonic, so a single sweep can answer every query.
@@ -301,15 +301,15 @@ def min_interval(intervals, queries):
     return result
 ```
 
-Skip unless the interviewer asks for O(log n) per query online.
+Skip unless the interviewer asks for $O(log n)$ per query online.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Per-query scan | O(n · q) | O(q) |
-| **Offline + heap sweep** | **O((n + q) log (n + q))** | **O(n + q)** |
-| Segment tree | O((n + q) log n) | O(n) |
+| Per-query scan | $O(n · q)$ | $O(q)$ |
+| **Offline + heap sweep** | **$O((n + q)$ log (n + q))** | **$O(n + q)$** |
+| Segment tree | $O((n + q)$ log n) | $O(n)$ |
 
 Offline query processing is a broadly useful pattern whenever you have a batch of queries that can be answered by a single sorted sweep.
 

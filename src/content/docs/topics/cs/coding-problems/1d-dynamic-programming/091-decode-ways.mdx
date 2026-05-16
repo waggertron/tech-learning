@@ -116,15 +116,15 @@ func numDecodings(s string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L2 (base/guard) | O(1) | once per call | O(1) per call |
-| L3 (single-digit branch) | O(1) + recursive subtree | up to 2^n leaf paths | -- |
-| **L4, L5 (two-digit branch)** | **O(1) + recursive subtree** | **up to 2^n** | **O(2^n)** ← dominates |
+| L1, L2 (base/guard) | $O(1)$ | once per call | $O(1)$ per call |
+| L3 (single-digit branch) | $O(1)$ + recursive subtree | up to 2^n leaf paths | -- |
+| **L4, L5 (two-digit branch)** | **$O(1)$ + recursive subtree** | **up to 2^n** | **$O(2^n)$** ← dominates |
 
-Each call spawns up to two recursive calls, and there is no memoization, so the call tree is a full binary tree of depth n. The total number of calls is O(2^n).
+Each call spawns up to two recursive calls, and there is no memoization, so the call tree is a full binary tree of depth n. The total number of calls is $O(2^n)$.
 
 **Complexity**
-- **Time:** O(2^n), driven by L3/L5 (each position branches into at most two sub-calls with no deduplication).
-- **Space:** O(n) for the call stack.
+- **Time:** $O(2^n)$, driven by L3/L5 (each position branches into at most two sub-calls with no deduplication).
+- **Space:** $O(n)$ for the call stack.
 
 ## Approach 2: Top-down memoized
 
@@ -204,15 +204,15 @@ func numDecodings(s string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1, L2 (base/guard) | O(1) | n+1 unique calls | O(n) |
-| **L3 (single-digit call)** | **O(1) with cache** | **n unique calls** | **O(n)** ← dominates |
-| L4, L5 (two-digit call) | O(1) with cache | up to n calls | O(n) |
+| L1, L2 (base/guard) | $O(1)$ | n+1 unique calls | $O(n)$ |
+| **L3 (single-digit call)** | **$O(1)$ with cache** | **n unique calls** | **$O(n)$** ← dominates |
+| L4, L5 (two-digit call) | $O(1)$ with cache | up to n calls | $O(n)$ |
 
-With memoization, each of the n+1 unique indices is computed exactly once. Both recursive calls at L3 and L5 hit the cache on every repeated access, reducing total work to O(n).
+With memoization, each of the n+1 unique indices is computed exactly once. Both recursive calls at L3 and L5 hit the cache on every repeated access, reducing total work to $O(n)$.
 
 **Complexity**
-- **Time:** O(n), driven by L3/L5 (n unique subproblems, each solved once and cached).
-- **Space:** O(n) for the call stack and the cache.
+- **Time:** $O(n)$, driven by L3/L5 (n unique subproblems, each solved once and cached).
+- **Space:** $O(n)$ for the call stack and the cache.
 
 **Try this approach:**
 
@@ -296,17 +296,17 @@ func numDecodings(s string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (early exit) | O(1) | 1 | O(1) |
-| L2 (init) | O(1) | 1 | O(1) |
-| **L3 (loop)** | **O(1)** | **n-1** | **O(n)** ← dominates |
-| L5, L7, L8 (checks inside loop) | O(1) each | n-1 each | O(n) |
-| L10 (slide window) | O(1) | n-1 | O(n) |
+| L1 (early exit) | $O(1)$ | 1 | $O(1)$ |
+| L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L3 (loop)** | **$O(1)$** | **n-1** | **$O(n)$** ← dominates |
+| L5, L7, L8 (checks inside loop) | $O(1)$ each | n-1 each | $O(n)$ |
+| L10 (slide window) | $O(1)$ | n-1 | $O(n)$ |
 
-Every position is visited exactly once. The two-variable rolling window replaces the O(n) dp array: `prev1` holds `dp[i]` and `prev2` holds `dp[i-1]`, so no array is needed at all.
+Every position is visited exactly once. The two-variable rolling window replaces the $O(n)$ dp array: `prev1` holds `dp[i]` and `prev2` holds `dp[i-1]`, so no array is needed at all.
 
 **Complexity**
-- **Time:** O(n), driven by L3 (single pass through the string).
-- **Space:** O(1), two scalar variables instead of an array.
+- **Time:** $O(n)$, driven by L3 (single pass through the string).
+- **Space:** $O(1)$, two scalar variables instead of an array.
 
 **Try this approach:**
 
@@ -326,9 +326,9 @@ Every position is visited exactly once. The two-variable rolling window replaces
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(2^n) | O(n) |
-| Memoized | O(n) | O(n) |
-| **Bottom-up, two vars** | **O(n)** | **O(1)** |
+| Naive recursion | $O(2^n)$ | $O(n)$ |
+| Memoized | $O(n)$ | $O(n)$ |
+| **Bottom-up, two vars** | **$O(n)$** | **$O(1)$** |
 
 Index-DP on strings with local transition rules, template for Unique BSTs, Partition DP, and similar problems.
 

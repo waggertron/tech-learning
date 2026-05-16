@@ -101,15 +101,15 @@ func (na *NumArray) sumRange(left int, right int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (store) | O(n) | 1 | O(n) build |
-| **L2 (sum slice)** | **O(n)** | **q** | **O(q * n)** ← dominates for many queries |
+| L1 (store) | $O(n)$ | 1 | $O(n)$ build |
+| **L2 (sum slice)** | **$O(n)$** | **q** | **$O(q * n)$** ← dominates for many queries |
 
 **Complexity**
-- **Build:** O(n)
-- **Query:** O(n) per call, O(q * n) total
-- **Space:** O(n)
+- **Build:** $O(n)$
+- **Query:** $O(n)$ per call, $O(q * n)$ total
+- **Space:** $O(n)$
 
-Adequate for one or two queries, but each additional query costs another O(n) pass.
+Adequate for one or two queries, but each additional query costs another $O(n)$ pass.
 
 ## Approach 2: Prefix sums (optimal)
 
@@ -174,14 +174,14 @@ func (na *NumArray) sumRange(left int, right int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (allocate) | O(n) | 1 | O(n) |
-| **L2/L3 (build prefix)** | **O(1)** | **n** | **O(n)** ← build dominates |
-| **L4 (query)** | **O(1)** | **q** | **O(q)** ← query is O(1) each |
+| L1 (allocate) | $O(n)$ | 1 | $O(n)$ |
+| **L2/L3 (build prefix)** | **$O(1)$** | **n** | **$O(n)$** ← build dominates |
+| **L4 (query)** | **$O(1)$** | **q** | **$O(q)$** ← query is $O(1)$ each |
 
 **Complexity**
-- **Build:** O(n), driven by L2/L3.
-- **Query:** O(1), driven by L4 (single subtraction).
-- **Space:** O(n) for the prefix array.
+- **Build:** $O(n)$, driven by L2/L3.
+- **Query:** $O(1)$, driven by L4 (single subtraction).
+- **Space:** $O(n)$ for the prefix array.
 
 **Try this approach:**
 

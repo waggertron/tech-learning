@@ -82,15 +82,15 @@ function minCostClimbingStairs(cost: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (base case) | O(1) | O(2ⁿ) leaves | O(2ⁿ) |
-| **L2 (two recursive calls)** | **O(1) + subtree** | **O(2ⁿ) nodes** | **O(2ⁿ)** ← dominates |
-| L3 (initial call) | O(1) | 1 | O(1) |
+| L1 (base case) | $O(1)$ | $O(2ⁿ)$ leaves | $O(2ⁿ)$ |
+| **L2 (two recursive calls)** | **$O(1)$ + subtree** | **$O(2ⁿ)$ nodes** | **$O(2ⁿ)$** ← dominates |
+| L3 (initial call) | $O(1)$ | 1 | $O(1)$ |
 
 Each call spawns two more; the tree doubles in width at every level, giving an exponential node count.
 
 **Complexity**
-- **Time:** O(2ⁿ), driven by L2 (exponential branching, no caching).
-- **Space:** O(n) recursion stack.
+- **Time:** $O(2ⁿ)$, driven by L2 (exponential branching, no caching).
+- **Space:** $O(n)$ recursion stack.
 
 ## Approach 2: Memoized recursion
 
@@ -133,15 +133,15 @@ function minCostClimbingStairs(cost: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (base case) | O(1) | 2 | O(1) |
-| **L2 (cached sub-calls)** | **O(1) each** | **n unique states** | **O(n)** ← dominates |
-| L3 (initial call) | O(1) | 1 | O(1) |
+| L1 (base case) | $O(1)$ | 2 | $O(1)$ |
+| **L2 (cached sub-calls)** | **$O(1)$ each** | **n unique states** | **$O(n)$** ← dominates |
+| L3 (initial call) | $O(1)$ | 1 | $O(1)$ |
 
-Each of the n steps is computed exactly once; subsequent calls hit the cache in O(1).
+Each of the n steps is computed exactly once; subsequent calls hit the cache in $O(1)$.
 
 **Complexity**
-- **Time:** O(n), driven by L2 (n unique states, each computed once).
-- **Space:** O(n) cache + stack.
+- **Time:** $O(n)$, driven by L2 (n unique states, each computed once).
+- **Space:** $O(n)$ cache + stack.
 
 **Try this approach:**
 
@@ -192,14 +192,14 @@ function minCostClimbingStairs(cost: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (allocate dp) | O(n) | 1 | O(n) |
-| L2 (seed) | O(1) | 1 | O(1) |
-| **L3, L4 (loop + recurrence)** | **O(1)** | **n - 2** | **O(n)** ← dominates |
-| L5 (return) | O(1) | 1 | O(1) |
+| L1 (allocate dp) | $O(n)$ | 1 | $O(n)$ |
+| L2 (seed) | $O(1)$ | 1 | $O(1)$ |
+| **L3, L4 (loop + recurrence)** | **$O(1)$** | **n - 2** | **$O(n)$** ← dominates |
+| L5 (return) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n), driven by L3/L4 (n - 2 iterations).
-- **Space:** O(n) for the dp array.
+- **Time:** $O(n)$, driven by L3/L4 (n - 2 iterations).
+- **Space:** $O(n)$ for the dp array.
 
 **Try this approach:**
 
@@ -247,17 +247,17 @@ function minCostClimbingStairs(cost: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (length) | O(1) | 1 | O(1) |
-| L2 (init) | O(1) | 1 | O(1) |
-| **L3 (loop)** | **O(1)** | **n - 2** | **O(n)** ← dominates |
-| L4 (update) | O(1) | n - 2 | O(n) |
-| L5 (final min) | O(1) | 1 | O(1) |
+| L1 (length) | $O(1)$ | 1 | $O(1)$ |
+| L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L3 (loop)** | **$O(1)$** | **n - 2** | **$O(n)$** ← dominates |
+| L4 (update) | $O(1)$ | n - 2 | $O(n)$ |
+| L5 (final min) | $O(1)$ | 1 | $O(1)$ |
 
 The loop runs exactly n - 2 times, each iteration is a constant-cost update. No allocation beyond two scalars.
 
 **Complexity**
-- **Time:** O(n), driven by L3/L4.
-- **Space:** O(1), just two scalars.
+- **Time:** $O(n)$, driven by L3/L4.
+- **Space:** $O(1)$, just two scalars.
 
 **Try this approach:**
 
@@ -274,10 +274,10 @@ The loop runs exactly n - 2 times, each iteration is a constant-cost update. No 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(2ⁿ) | O(n) |
-| Memoized | O(n) | O(n) |
-| Bottom-up, dp array | O(n) | O(n) |
-| **Bottom-up, two vars** | **O(n)** | **O(1)** |
+| Naive recursion | $O(2ⁿ)$ | $O(n)$ |
+| Memoized | $O(n)$ | $O(n)$ |
+| Bottom-up, dp array | $O(n)$ | $O(n)$ |
+| **Bottom-up, two vars** | **$O(n)$** | **$O(1)$** |
 
 ## Test cases
 

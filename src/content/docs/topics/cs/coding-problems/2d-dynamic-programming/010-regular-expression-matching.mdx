@@ -91,15 +91,15 @@ function isMatch(s: string, p: string): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L4 (setup + checks) | O(1) | per call | O(1) each |
-| **L5 (two recursive branches on '\*')** | **O(1) work + 2 calls** | **up to O(2^(m+n)) calls total** | **O(2^(m+n))** ← dominates |
-| L6 (one recursive branch) | O(1) work + 1 call | per call | O(2^(m+n)) same tree |
+| L1-L4 (setup + checks) | $O(1)$ | per call | $O(1)$ each |
+| **L5 (two recursive branches on '\*')** | **$O(1)$ work + 2 calls** | **up to $O(2^{m+n})$ calls total** | **$O(2^{m+n})$** ← dominates |
+| L6 (one recursive branch) | $O(1)$ work + 1 call | per call | $O(2^{m+n})$ same tree |
 
 The exponential blowup comes from the `*` branch at L5: each `*` pair can spawn two calls. Without memoization the same `(i, j)` pair is recomputed many times.
 
 **Complexity**
-- **Time:** O(2^(m + n)) worst case due to overlapping subproblems (driven by L5 double-branching).
-- **Space:** O(m + n) recursion depth.
+- **Time:** $O(2^{m+n})$ worst case due to overlapping subproblems (driven by L5 double-branching).
+- **Space:** $O(m + n)$ recursion depth.
 
 ## Approach 2: Top-down memoized (canonical)
 
@@ -151,15 +151,15 @@ function isMatch(s: string, p: string): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (lru_cache) | O(1) | 1 | O(1) |
-| L2-L4 (checks) | O(1) | once per unique (i,j) | O(m · n) total |
-| **L5, L6 (recursive calls)** | **O(1) per call (cache hit after first)** | **at most m · n unique states** | **O(m · n)** ← dominates |
+| L1 (lru_cache) | $O(1)$ | 1 | $O(1)$ |
+| L2-L4 (checks) | $O(1)$ | once per unique (i,j) | $O(m · n)$ total |
+| **L5, L6 (recursive calls)** | **$O(1)$ per call (cache hit after first)** | **at most m · n unique states** | **$O(m · n)$** ← dominates |
 
-With memoization, each unique `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pairs, each doing O(1) work.
+With memoization, each unique `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pairs, each doing $O(1)$ work.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 over all unique (i,j) states.
-- **Space:** O(m · n) for the memo table.
+- **Time:** $O(m · n)$, driven by L5/L6 over all unique (i,j) states.
+- **Space:** $O(m · n)$ for the memo table.
 
 **Try this approach:**
 
@@ -236,16 +236,16 @@ function isMatch(s: string, p: string): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(1) or O(m·n) | 1 | O(m · n) |
-| L4 (base-case loop) | O(1) | n | O(n) |
-| **L5+L6 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
-| L7-L12 (table fills) | O(1) | once each | included above |
+| L1-L3 (init) | $O(1)$ or $O(m·n)$ | 1 | $O(m · n)$ |
+| L4 (base-case loop) | $O(1)$ | n | $O(n)$ |
+| **L5+L6 (double loop)** | **$O(1)$ body** | **m · n** | **$O(m · n)$** ← dominates |
+| L7-L12 (table fills) | $O(1)$ | once each | included above |
 
-Every cell is filled in O(1) with a constant number of table lookups. The double loop at L5/L6 visits all `m * n` cells exactly once.
+Every cell is filled in $O(1)$ with a constant number of table lookups. The double loop at L5/L6 visits all `m * n` cells exactly once.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 (the full double loop over all DP cells).
-- **Space:** O(m · n) for the DP table.
+- **Time:** $O(m · n)$, driven by L5/L6 (the full double loop over all DP cells).
+- **Space:** $O(m · n)$ for the DP table.
 
 **Try this approach:**
 
@@ -262,9 +262,9 @@ Every cell is filled in O(1) with a constant number of table lookups. The double
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(2^(m + n)) | O(m + n) |
-| **Top-down memoized** | **O(m · n)** | **O(m · n)** |
-| Bottom-up 2-D DP | O(m · n) | O(m · n) |
+| Naive recursion | $O(2^{m+n})$ | $O(m + n)$ |
+| **Top-down memoized** | **$O(m · n)$** | **$O(m · n)$** |
+| Bottom-up 2-D DP | $O(m · n)$ | $O(m · n)$ |
 
 This problem rewards memorization, the recurrence is fiddly and the edge cases around `*` at the start are easy to bungle. Interview-standard answer is memoized recursion for clarity.
 

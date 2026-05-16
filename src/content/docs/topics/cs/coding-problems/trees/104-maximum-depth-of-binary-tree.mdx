@@ -100,14 +100,14 @@ func maxDepth(root *TreeNode) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (base case) | O(1) | n+1 null checks | O(n) |
-| **L2 (recurse + max)** | **O(1) per node** | **n** | **O(n)** ← dominates (both lines tie) |
+| L1 (base case) | $O(1)$ | n+1 null checks | $O(n)$ |
+| **L2 (recurse + max)** | **$O(1)$ per node** | **n** | **$O(n)$** ← dominates (both lines tie) |
 
 Every node triggers exactly two recursive calls (left, right) and one `max`. No node is visited more than once because the recursion tree mirrors the tree structure.
 
 **Complexity**
-- **Time:** O(n), driven by L2 visiting each node once.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$, driven by L2 visiting each node once.
+- **Space:** $O(h)$ recursion.
 
 ## Approach 2: BFS level count
 
@@ -193,13 +193,13 @@ func maxDepth(root *TreeNode) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (depth++) | O(1) | h levels | O(h) |
-| L3 (dequeue) | O(1) | n | O(n) |
-| **L4/L5 (enqueue)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L2 (depth++) | $O(1)$ | h levels | $O(h)$ |
+| L3 (dequeue) | $O(1)$ | n | $O(n)$ |
+| **L4/L5 (enqueue)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(w).
+- **Time:** $O(n)$.
+- **Space:** $O(w)$.
 
 Useful when recursion depth is a concern; also the starting point for level-order problems.
 
@@ -243,21 +243,21 @@ def max_depth(root):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (pop) | O(1) | n | O(n) |
-| L3 (max) | O(1) | n | O(n) |
-| **L4/L5 (push)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L2 (pop) | $O(1)$ | n | $O(n)$ |
+| L3 (max) | $O(1)$ | n | $O(n)$ |
+| **L4/L5 (push)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(h).
+- **Time:** $O(n)$.
+- **Space:** $O(h)$.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **Recursive DFS** | O(n) | O(h) |
-| BFS level count | O(n) | O(w) |
-| Iterative DFS with depth | O(n) | O(h) |
+| **Recursive DFS** | $O(n)$ | $O(h)$ |
+| BFS level count | $O(n)$ | $O(w)$ |
+| Iterative DFS with depth | $O(n)$ | $O(h)$ |
 
 All optimal; the one-line recursion is the canonical answer.
 

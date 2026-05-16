@@ -90,14 +90,14 @@ func isAnagram(s string, t string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (length guard) | O(1) | 1 | O(1) |
-| **L2 (sort + compare)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
+| L1 (length guard) | $O(1)$ | 1 | $O(1)$ |
+| **L2 (sort + compare)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
 
-Sorting each string costs O(n log n); the final equality check scans both sorted lists in O(n).
+Sorting each string costs $O(n log n)$; the final equality check scans both sorted lists in $O(n)$.
 
 **Complexity**
-- **Time:** O(n log n), driven by L2 (sorting each string).
-- **Space:** O(n). Python's `sorted` returns a new list per string.
+- **Time:** $O(n log n)$, driven by L2 (sorting each string).
+- **Space:** $O(n)$. Python's `sorted` returns a new list per string.
 
 "Brute" in the sense of doing more work than necessary, but this is surprisingly common and acceptable for small inputs.
 
@@ -151,13 +151,13 @@ func isAnagram(s string, t string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (build + compare)** | **O(n) + O(k)** | **1** | **O(n)** ← dominates |
+| **L1 (build + compare)** | **$O(n)$ + $O(k)$** | **1** | **$O(n)$** ← dominates |
 
-Building each Counter is O(n); comparing two Counters is O(k) over distinct characters where k ≤ n.
+Building each Counter is $O(n)$; comparing two Counters is $O(k)$ over distinct characters where k ≤ n.
 
 **Complexity**
-- **Time:** O(n), driven by L1 (Counter construction). One pass per string to build the counter; equality check is O(k) over distinct characters.
-- **Space:** O(k), where `k` is the alphabet size (at most `n` distinct characters).
+- **Time:** $O(n)$, driven by L1 (Counter construction). One pass per string to build the counter; equality check is $O(k)$ over distinct characters.
+- **Space:** $O(k)$, where `k` is the alphabet size (at most `n` distinct characters).
 
 Clean, correct, Unicode-safe. This is usually the right production answer.
 
@@ -235,16 +235,16 @@ func isAnagram(s string, t string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (guard) | O(1) | 1 | O(1) |
-| L2 (init array) | O(1) | 1 | O(1) |
-| **L3, L4 (s frequency pass)** | **O(1)** | **n** | **O(n)** ← dominates |
-| **L5-L8 (t decrement pass)** | **O(1)** | **n** | **O(n)** ← dominates |
+| L1 (guard) | $O(1)$ | 1 | $O(1)$ |
+| L2 (init array) | $O(1)$ | 1 | $O(1)$ |
+| **L3, L4 (s frequency pass)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| **L5-L8 (t decrement pass)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
 
-Two linear passes of O(1) work each. The 26-slot array makes both passes O(n) total.
+Two linear passes of $O(1)$ work each. The 26-slot array makes both passes $O(n)$ total.
 
 **Complexity**
-- **Time:** O(n), driven by L3/L4 and L5-L8 (two linear passes). Two linear passes.
-- **Space:** O(1), a fixed 26-element array regardless of `n`. For an arbitrary alphabet it's O(k) where k is the alphabet size.
+- **Time:** $O(n)$, driven by L3/L4 and L5-L8 (two linear passes). Two linear passes.
+- **Space:** $O(1)$, a fixed 26-element array regardless of `n`. For an arbitrary alphabet it's $O(k)$ where k is the alphabet size.
 
 For Unicode input, substitute a `dict` (which is equivalent to the Counter approach).
 
@@ -266,11 +266,11 @@ For Unicode input, substitute a `dict` (which is equivalent to the Counter appro
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Sort both | O(n log n) | O(n) | Shortest code; worst time |
-| Counter (hash map) | O(n) | O(k) | Unicode-safe |
-| Fixed count array | **O(n)** | **O(1)** bounded alphabet | Tightest for lowercase |
+| Sort both | $O(n log n)$ | $O(n)$ | Shortest code; worst time |
+| Counter (hash map) | $O(n)$ | $O(k)$ | Unicode-safe |
+| Fixed count array | **$O(n)$** | **$O(1)$** bounded alphabet | Tightest for lowercase |
 
-The Counter approach is usually what you want unless the problem strictly limits the alphabet. The fixed-array version is the optimal "asked for O(1) space" answer.
+The Counter approach is usually what you want unless the problem strictly limits the alphabet. The fixed-array version is the optimal "asked for $O(1)$ space" answer.
 
 ## Test cases
 

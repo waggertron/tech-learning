@@ -101,15 +101,15 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (base + match check) | O(1) | per call | O(1) each |
-| L3 (one call on match) | O(1) work + 1 call | per match | included below |
-| **L4 (two calls on mismatch)** | **O(1) work + 2 calls** | **worst case every call** | **O(2^(m+n))** ← dominates |
+| L1-L2 (base + match check) | $O(1)$ | per call | $O(1)$ each |
+| L3 (one call on match) | $O(1)$ work + 1 call | per match | included below |
+| **L4 (two calls on mismatch)** | **$O(1)$ work + 2 calls** | **worst case every call** | **$O(2^{m+n})$** ← dominates |
 
 Every mismatch doubles the call tree. Without memoization the same `(i, j)` is recomputed at every overlapping node.
 
 **Complexity**
-- **Time:** O(2^(m + n)), driven by L4 double-branching on mismatches.
-- **Space:** O(m + n) recursion depth.
+- **Time:** $O(2^{m+n})$, driven by L4 double-branching on mismatches.
+- **Space:** $O(m + n)$ recursion depth.
 
 ## Approach 2: 2-D bottom-up DP (canonical)
 
@@ -176,15 +176,15 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (init) | O(1) or O(m·n) | 1 | O(m · n) |
-| **L3+L4 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
-| L5-L7 (cell fill) | O(1) | once per cell | included above |
+| L1-L2 (init) | $O(1)$ or $O(m·n)$ | 1 | $O(m · n)$ |
+| **L3+L4 (double loop)** | **$O(1)$ body** | **m · n** | **$O(m · n)$** ← dominates |
+| L5-L7 (cell fill) | $O(1)$ | once per cell | included above |
 
-Each cell fill is a single comparison plus one or two table lookups, all O(1). The double loop at L3/L4 drives the total.
+Each cell fill is a single comparison plus one or two table lookups, all $O(1)$. The double loop at L3/L4 drives the total.
 
 **Complexity**
-- **Time:** O(m · n), driven by L3/L4 (the full double loop).
-- **Space:** O(m · n) for the DP table.
+- **Time:** $O(m · n)$, driven by L3/L4 (the full double loop).
+- **Space:** $O(m · n)$ for the DP table.
 
 **Try this approach:**
 
@@ -278,16 +278,16 @@ func longestCommonSubsequence(text1 string, text2 string) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (init) | O(n) | 1 | O(n) |
-| L5 (row alloc) | O(n) | m | O(m · n) |
-| **L4+L6 (double loop)** | **O(1) body** | **m · n** | **O(m · n)** ← dominates |
-| L7-L9 (cell fill) | O(1) | once per cell | included above |
+| L1-L3 (init) | $O(n)$ | 1 | $O(n)$ |
+| L5 (row alloc) | $O(n)$ | m | $O(m · n)$ |
+| **L4+L6 (double loop)** | **$O(1)$ body** | **m · n** | **$O(m · n)$** ← dominates |
+| L7-L9 (cell fill) | $O(1)$ | once per cell | included above |
 
-Same time as 2-D DP but space is O(n) (two rows of size n). The swap at L2 ensures we allocate the shorter dimension.
+Same time as 2-D DP but space is $O(n)$ (two rows of size n). The swap at L2 ensures we allocate the shorter dimension.
 
 **Complexity**
-- **Time:** O(m · n), driven by L4/L6 (the double loop).
-- **Space:** O(min(m, n)) for the two rolling rows.
+- **Time:** $O(m · n)$, driven by L4/L6 (the double loop).
+- **Space:** $O(min(m, n)$) for the two rolling rows.
 
 **Try this approach:**
 
@@ -307,9 +307,9 @@ Same time as 2-D DP but space is O(n) (two rows of size n). The swap at L2 ensur
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Recursive | O(2^(m+n)) | O(m+n) |
-| 2-D DP | O(m · n) | O(m · n) |
-| **1-D rolling DP** | **O(m · n)** | **O(min(m, n))** |
+| Recursive | $O(2^{m+n})$ | $O(m+n)$ |
+| 2-D DP | $O(m · n)$ | $O(m · n)$ |
+| **1-D rolling DP** | **$O(m · n)$** | **$O(min(m, n)$)** |
 
 LCS is the prototype of the "compare two sequences" DP. Its recurrence pattern, `if match then diagonal+1 else max(up, left)`, shows up in Edit Distance, Shortest Common Supersequence, Minimum ASCII Delete Sum.
 

@@ -97,12 +97,12 @@ func searchMatrix(matrix [][]int, target int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (row loop) | O(1) | m | O(m) |
-| **L2 (scan row)** | **O(n)** | **m** | **O(m · n)** ← dominates |
+| L1 (row loop) | $O(1)$ | m | $O(m)$ |
+| **L2 (scan row)** | **$O(n)$** | **m** | **$O(m · n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(m · n), driven by L2 (scanning every cell in the worst case).
-- **Space:** O(1).
+- **Time:** $O(m · n)$, driven by L2 (scanning every cell in the worst case).
+- **Space:** $O(1)$.
 
 ## Approach 2: Binary search per row
 
@@ -172,15 +172,15 @@ func searchMatrix(matrix [][]int, target int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (row loop) | O(1) | m | O(m) |
-| L2 (range check) | O(1) | m | O(m) |
-| **L3 (bisect)** | **O(log n)** | **m** | **O(m · log n)** ← dominates |
+| L1 (row loop) | $O(1)$ | m | $O(m)$ |
+| L2 (range check) | $O(1)$ | m | $O(m)$ |
+| **L3 (bisect)** | **$O(log n)$** | **m** | **$O(m · log n)$** ← dominates |
 
 The range check at L2 prunes rows that can't contain the target, but in the worst case (all rows could contain it) we still do m binary searches.
 
 **Complexity**
-- **Time:** O(m · log n), driven by L3 (binary search per row).
-- **Space:** O(1).
+- **Time:** $O(m · log n)$, driven by L3 (binary search per row).
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -263,18 +263,18 @@ func searchMatrix(matrix [][]int, target int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| **L2-L5 (loop body)** | **O(1)** | **log(m · n)** | **O(log(m · n))** ← dominates |
-| L6 or L7 (narrow) | O(1) | log(m · n) | O(log(m · n)) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L2-L5 (loop body)** | **$O(1)$** | **log(m · n)** | **$O(log(m · n)$)** ← dominates |
+| L6 or L7 (narrow) | $O(1)$ | log(m · n) | $O(log(m · n)$) |
 
 The matrix's two structural properties (sorted rows, each row's first element exceeds the previous row's last) mean that reading the elements in row-major order gives a sorted sequence of length m · n. A single binary search over that conceptual 1D array uses log(m · n) = log m + log n steps.
 
 **Complexity**
-- **Time:** O(log(m · n)) = O(log m + log n), driven by L2 (single binary search over m · n elements).
-- **Space:** O(1).
+- **Time:** $O(log(m · n)$) = $O(log m + log n)$, driven by L2 (single binary search over m · n elements).
+- **Space:** $O(1)$.
 
 ### Two-binary-search alternative
-Pick the row first with binary search on the first column (O(log m)), then binary-search that row (O(log n)). Same total complexity, one more index calculation to get wrong.
+Pick the row first with binary search on the first column ($O(log m)$), then binary-search that row ($O(log n)$). Same total complexity, one more index calculation to get wrong.
 
 **Try this approach:**
 
@@ -294,11 +294,11 @@ Pick the row first with binary search on the first column (O(log m)), then binar
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Linear scan | O(m · n) | O(1) |
-| Per-row binary search | O(m · log n) | O(1) |
-| **Flattened 1D binary search** | **O(log(m · n))** | **O(1)** |
+| Linear scan | $O(m · n)$ | $O(1)$ |
+| Per-row binary search | $O(m · log n)$ | $O(1)$ |
+| **Flattened 1D binary search** | **$O(log(m · n)$)** | **$O(1)$** |
 
-If the problem becomes 240 (**Search a 2D Matrix II**), rows and columns sorted *independently*, this approach no longer applies. Use a staircase walk from the top-right in O(m + n).
+If the problem becomes 240 (**Search a 2D Matrix II**), rows and columns sorted *independently*, this approach no longer applies. Use a staircase walk from the top-right in $O(m + n)$.
 
 ## Test cases
 

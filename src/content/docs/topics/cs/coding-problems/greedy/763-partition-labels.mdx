@@ -106,11 +106,11 @@ func partitionLabels(s string) []int {
 </TabItem>
 </Tabs>
 
-Building both sets is O(n) per candidate cut, and we try up to n cuts → O(n²) total.
+Building both sets is $O(n)$ per candidate cut, and we try up to n cuts → $O(n²)$ total.
 
 **Complexity**
-- **Time:** O(n²).
-- **Space:** O(n).
+- **Time:** $O(n²)$.
+- **Space:** $O(n)$.
 
 ## Approach 2: Precompute last-seen index + greedy extension (canonical)
 
@@ -176,16 +176,16 @@ func partitionLabels(s string) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build last map) | O(1) | n | O(n) |
-| **L4-L8 (greedy scan)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L5 (extend end) | O(1) | n | O(n) |
-| L6-L8 (emit partition) | O(1) amortized | at most n | O(n) |
+| L1 (build last map) | $O(1)$ | n | $O(n)$ |
+| **L4-L8 (greedy scan)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L5 (extend end) | $O(1)$ | n | $O(n)$ |
+| L6-L8 (emit partition) | $O(1)$ amortized | at most n | $O(n)$ |
 
-Two O(n) passes: one to build `last`, one to scan and emit partitions.
+Two $O(n)$ passes: one to build `last`, one to scan and emit partitions.
 
 **Complexity**
-- **Time:** O(n), driven by L4/L5/L6-L8 (two linear passes).
-- **Space:** O(26) = O(1) for ASCII alphabets.
+- **Time:** $O(n)$, driven by L4/L5/L6-L8 (two linear passes).
+- **Space:** $O(26)$ = $O(1)$ for ASCII alphabets.
 
 ### Why greedy works
 The moment the walking index equals `end`, every character in `[start, end]` is fully contained in the window (no later occurrence anywhere past `end`). So `[start, end]` is valid, and it's the **smallest** such window, any earlier cut would miss a later occurrence of some character.
@@ -206,7 +206,7 @@ The moment the walking index equals `end`, every character in `[start, end]` is 
 
 ## Approach 3: Union-Find / interval-merge formulation (conceptually equivalent)
 
-Each character's first and last occurrence form an interval. Merge overlapping intervals; the merged sizes are the answer. Same O(n) via the same last-index trick, included as a conceptual map to problem 56 (Merge Intervals).
+Each character's first and last occurrence form an interval. Merge overlapping intervals; the merged sizes are the answer. Same $O(n)$ via the same last-index trick, included as a conceptual map to problem 56 (Merge Intervals).
 
 <Tabs>
 <TabItem label="Python">
@@ -286,8 +286,8 @@ func partitionLabels(s string) []int {
 Same answer, derived as the canonical "sort + sweep" merge-intervals template applied to per-character ranges. With a fixed alphabet (e.g., 26 letters), the sort is constant.
 
 **Complexity**
-- **Time:** O(n) given the bounded alphabet.
-- **Space:** O(1) extra (alphabet-sized).
+- **Time:** $O(n)$ given the bounded alphabet.
+- **Space:** $O(1)$ extra (alphabet-sized).
 
 **Try this approach:**
 
@@ -307,8 +307,8 @@ Same answer, derived as the canonical "sort + sweep" merge-intervals template ap
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Try all splits | O(n²) | O(1) |
-| **Last-seen + greedy extension** | **O(n)** | **O(1)** |
+| Try all splits | $O(n²)$ | $O(1)$ |
+| **Last-seen + greedy extension** | **$O(n)$** | **$O(1)$** |
 
 Pattern: "first index encountering a character starts its interval; `max(last[ch])` grows the window."
 

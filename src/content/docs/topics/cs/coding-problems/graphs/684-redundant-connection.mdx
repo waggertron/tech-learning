@@ -48,16 +48,16 @@ LeetCode 684 · [Link](https://leetcode.com/problems/redundant-connection/) · *
 Remove each edge in turn; run a DFS/BFS on the rest; test for connectivity and acyclicity.
 
 **Complexity**
-- **Time:** O(V²), driven by V iterations each triggering an O(V) tree-check call.
-- **Space:** O(V) for the adjacency list and DFS stack.
+- **Time:** $O(V²)$, driven by V iterations each triggering an $O(V)$ tree-check call.
+- **Space:** $O(V)$ for the adjacency list and DFS stack.
 
 ## Approach 2: DFS to find the cycle, pick the last edge on it
 
 Build the full graph; run a DFS that finds a back edge, walk the parent chain to collect all edges on the cycle, then iterate the input edges in reverse and return the first one whose index is in the cycle.
 
 **Complexity**
-- **Time:** O(V + E).
-- **Space:** O(V + E) for the graph and recursion stack.
+- **Time:** $O(V + E)$.
+- **Space:** $O(V + E)$ for the graph and recursion stack.
 
 ## Approach 3: Union-Find (canonical)
 
@@ -125,15 +125,15 @@ function findRedundantConnection(edges: number[][]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init parent) | O(V) | 1 | O(V) |
-| L4-L6 (find, path-halving) | O(α(V)) amortized | 2 per edge = 2V | O(V · α(V)) |
-| L9 (same-component test) | O(1) | V | O(V) |
-| L10 (merge) | O(1) | up to V - 1 | O(V) |
-| **L11-L12 (edge loop + union)** | **O(α(V)) per edge** | **V** | **O(V · α(V)) ← dominates** |
+| L2 (init parent) | $O(V)$ | 1 | $O(V)$ |
+| L4-L6 (find, path-halving) | $O(α(V)$) amortized | 2 per edge = 2V | $O(V · α(V)$) |
+| L9 (same-component test) | $O(1)$ | V | $O(V)$ |
+| L10 (merge) | $O(1)$ | up to V - 1 | $O(V)$ |
+| **L11-L12 (edge loop + union)** | **$O(α(V)$) per edge** | **V** | **$O(V · α(V)$) ← dominates** |
 
 **Complexity**
-- **Time:** O(V · α(V)) ≈ O(V), driven by L11-L12 (V union operations each costing O(α(V)) amortized).
-- **Space:** O(V) for the parent array.
+- **Time:** $O(V · α(V)$) ≈ $O(V)$, driven by L11-L12 (V union operations each costing $O(α(V)$) amortized).
+- **Space:** $O(V)$ for the parent array.
 
 ### Why this works
 
@@ -157,9 +157,9 @@ If the graph has exactly one cycle, then exactly one edge causes a "same-compone
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Per-edge removal + tree check | O(V²) | O(V) |
-| Cycle-finding DFS | O(V) | O(V) |
-| **Union-Find** | **O(V · α(V))** | **O(V)** |
+| Per-edge removal + tree check | $O(V²)$ | $O(V)$ |
+| Cycle-finding DFS | $O(V)$ | $O(V)$ |
+| **Union-Find** | **$O(V · α(V)$)** | **$O(V)$** |
 
 Union-Find is the canonical solution and the template for any incremental connectivity problem.
 

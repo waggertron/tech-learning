@@ -129,15 +129,15 @@ function calculate(s: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L5 (loop) | O(1) | n | O(n) |
-| **L6-L17 (per-char work)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L18 (flush trailing number) | O(1) | 1 | O(1) |
+| L5 (loop) | $O(1)$ | n | $O(n)$ |
+| **L6-L17 (per-char work)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L18 (flush trailing number) | $O(1)$ | 1 | $O(1)$ |
 
-Each character triggers exactly one branch, all O(1). Each `'('` causes one push and each `')'` causes one pop, so total stack work is O(n).
+Each character triggers exactly one branch, all $O(1)$. Each `'('` causes one push and each `')'` causes one pop, so total stack work is $O(n)$.
 
 **Complexity**
-- **Time:** O(n), one pass through the string.
-- **Space:** O(n) stack depth (at most n/2 open parens).
+- **Time:** $O(n)$, one pass through the string.
+- **Space:** $O(n)$ stack depth (at most n/2 open parens).
 
 **Try this approach:**
 

@@ -25,7 +25,7 @@ Matrix problems ask you to operate on 2D grids, either transforming them in plac
 
 ## Key patterns
 
-- **First row/col as markers**: Set Matrix Zeroes avoids O(m + n) space by reusing the matrix's own first row and column as flag arrays.
+- **First row/col as markers**: Set Matrix Zeroes avoids $O(m + n)$ space by reusing the matrix's own first row and column as flag arrays.
 - **Transpose + row reverse**: Rotating 90° clockwise = transpose the matrix, then reverse each row. Counter-clockwise = reverse each row first, then transpose.
 - **Shrinking boundary**: Walk the top row, right column, bottom row, left column in order; shrink each boundary after walking it. Guards handle the last single row or column.
 - **DFS with in-place marking**: Mark a cell visited by mutating it (e.g., `matrix[r][c] = '#'`), recurse, then restore. Avoids a separate `visited` set.

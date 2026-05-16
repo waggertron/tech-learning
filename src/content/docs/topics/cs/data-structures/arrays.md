@@ -10,31 +10,31 @@ updated: 2026-04-23
 
 ## Intro
 
-An array is a contiguous block of memory storing elements of the same type, indexed from 0. Because elements are contiguous and fixed-size, the offset of any index can be computed in constant time, which makes random access O(1). Arrays are the substrate beneath many higher-level [data structures](./) (strings, stacks, queues, heaps, hash-table buckets), so time spent mastering array manipulation pays off everywhere.
+An array is a contiguous block of memory storing elements of the same type, indexed from 0. Because elements are contiguous and fixed-size, the offset of any index can be computed in constant time, which makes random access $O(1)$. Arrays are the substrate beneath many higher-level [data structures](./) (strings, stacks, queues, heaps, hash-table buckets), so time spent mastering array manipulation pays off everywhere.
 
 ## In-depth description
 
-A **static array** has a fixed size chosen at allocation time (C `int a[10]`). A **dynamic array**, Python `list`, Java `ArrayList`, C++ `std::vector`, Go `slice`, JavaScript `Array`, resizes automatically, typically by **doubling capacity** when the backing store fills up. This gives amortized O(1) append: most appends are O(1), with the occasional O(n) copy amortized across the preceding n cheap appends.
+A **static array** has a fixed size chosen at allocation time (C `int a[10]`). A **dynamic array**, Python `list`, Java `ArrayList`, C++ `std::vector`, Go `slice`, JavaScript `Array`, resizes automatically, typically by **doubling capacity** when the backing store fills up. This gives amortized $O(1)$ append: most appends are $O(1)$, with the occasional $O(n)$ copy amortized across the preceding n cheap appends.
 
-Because elements are contiguous, inserting or deleting in the middle requires shifting everything after that index, O(n). If the array is sorted, binary search reduces lookup to O(log n). Many interview problems exploit one of three array-specific patterns:
+Because elements are contiguous, inserting or deleting in the middle requires shifting everything after that index, $O(n)$. If the array is sorted, binary search reduces lookup to $O(log n)$. Many interview problems exploit one of three array-specific patterns:
 
 - **Two pointers**: walk from both ends or at different speeds; common when the array is sorted or when pairing elements.
-- **Sliding window**: maintain a contiguous range `[left, right]` and move the boundaries to satisfy a constraint; converts many O(n²) brute forces to O(n).
-- **Prefix sums**: precompute `prefix[i] = sum of elements up to i` once, then answer any range-sum query in O(1).
+- **Sliding window**: maintain a contiguous range `[left, right]` and move the boundaries to satisfy a constraint; converts many $O(n²)$ brute forces to $O(n)$.
+- **Prefix sums**: precompute `prefix[i] = sum of elements up to i` once, then answer any range-sum query in $O(1)$.
 
-Multi-dimensional arrays are rows-of-rows (C-style), or use strides for O(1) slicing (NumPy). In-place algorithms (Dutch National Flag, reverse, rotate) are a frequent source of interview questions because they force careful pointer bookkeeping.
+Multi-dimensional arrays are rows-of-rows (C-style), or use strides for $O(1)$ slicing (NumPy). In-place algorithms (Dutch National Flag, reverse, rotate) are a frequent source of interview questions because they force careful pointer bookkeeping.
 
 ## Time complexity
 
 | Operation | Average | Worst |
 | --- | --- | --- |
-| Access by index | O(1) | O(1) |
-| Search (unsorted) | O(n) | O(n) |
-| Search (sorted, binary) | O(log n) | O(log n) |
-| Append (dynamic array) | O(1) amortized | O(n) (resize) |
-| Insert at index | O(n) | O(n) |
-| Delete at index | O(n) | O(n) |
-| Space | O(n) | O(n) |
+| Access by index | $O(1)$ | $O(1)$ |
+| Search (unsorted) | $O(n)$ | $O(n)$ |
+| Search (sorted, binary) | $O(log n)$ | $O(log n)$ |
+| Append (dynamic array) | $O(1)$ amortized | $O(n)$ (resize) |
+| Insert at index | $O(n)$ | $O(n)$ |
+| Delete at index | $O(n)$ | $O(n)$ |
+| Space | $O(n)$ | $O(n)$ |
 
 ## Common uses in DSA
 

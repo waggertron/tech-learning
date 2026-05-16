@@ -22,7 +22,7 @@ import approach3GoCode from './155-min-stack-approach3.go?raw';
 
 ## Problem
 
-Design a stack that supports `push`, `pop`, `top`, and `getMin`, all in O(1) time.
+Design a stack that supports `push`, `pop`, `top`, and `getMin`, all in $O(1)$ time.
 
 **Example**
 ```
@@ -115,19 +115,19 @@ func (ms *MinStack) GetMin() int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (push) | O(1) amortized | per call | O(1) per push |
-| L3 (pop) | O(1) | per call | O(1) per pop |
-| L4 (top) | O(1) | per call | O(1) per top |
-| **L5 (getMin scan)** | **O(n)** | **per call** | **O(n) per getMin** ← bottleneck |
+| L2 (push) | $O(1)$ amortized | per call | $O(1)$ per push |
+| L3 (pop) | $O(1)$ | per call | $O(1)$ per pop |
+| L4 (top) | $O(1)$ | per call | $O(1)$ per top |
+| **L5 (getMin scan)** | **$O(n)$** | **per call** | **$O(n)$ per getMin** ← bottleneck |
 
 `min(stack)` must scan all n elements every time.
 
 **Complexity**
-- `push`, `pop`, `top`: O(1).
-- `getMin`: **O(n)**.
-- Space: O(n).
+- `push`, `pop`, `top`: $O(1)$.
+- `getMin`: **$O(n)$**.
+- Space: $O(n)$.
 
-Fails the problem's O(1) requirement for `getMin`.
+Fails the problem's $O(1)$ requirement for `getMin`.
 
 ## Approach 2: Auxiliary min-stack
 
@@ -215,16 +215,16 @@ func (ms *MinStack) GetMin() int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3, L4 (push both stacks) | O(1) | per push | O(1) per push |
-| L5, L6 (pop both stacks) | O(1) | per pop | O(1) per pop |
-| L7 (top) | O(1) | per call | O(1) per top |
-| **L8 (getMin)** | **O(1)** | **per call** | **O(1) per getMin** ← optimal |
+| L3, L4 (push both stacks) | $O(1)$ | per push | $O(1)$ per push |
+| L5, L6 (pop both stacks) | $O(1)$ | per pop | $O(1)$ per pop |
+| L7 (top) | $O(1)$ | per call | $O(1)$ per top |
+| **L8 (getMin)** | **$O(1)$** | **per call** | **$O(1)$ per getMin** ← optimal |
 
-Every operation is O(1); the mins stack mirrors every push/pop.
+Every operation is $O(1)$; the mins stack mirrors every push/pop.
 
 **Complexity**
-- All operations: **O(1)**.
-- Space: O(n) + O(n) = O(n).
+- All operations: **$O(1)$**.
+- Space: $O(n)$ + $O(n)$ = $O(n)$.
 
 **Try this approach:**
 
@@ -322,16 +322,16 @@ func (ms *MinStack) GetMin() int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (push: compute min + append tuple) | O(1) | per push | O(1) per push |
-| L4 (pop) | O(1) | per pop | O(1) per pop |
-| L5 (top) | O(1) | per call | O(1) per top |
-| **L6 (getMin)** | **O(1)** | **per call** | **O(1) per getMin** ← optimal |
+| L2, L3 (push: compute min + append tuple) | $O(1)$ | per push | $O(1)$ per push |
+| L4 (pop) | $O(1)$ | per pop | $O(1)$ per pop |
+| L5 (top) | $O(1)$ | per call | $O(1)$ per top |
+| **L6 (getMin)** | **$O(1)$** | **per call** | **$O(1)$ per getMin** ← optimal |
 
-All operations remain O(1) by keeping the running minimum embedded in each stack frame.
+All operations remain $O(1)$ by keeping the running minimum embedded in each stack frame.
 
 **Complexity**
-- All operations: **O(1)**.
-- Space: O(n).
+- All operations: **$O(1)$**.
+- Space: $O(n)$.
 
 ### Optional refinement: store only min-changes on a second stack
 A third variant pushes to the aux min-stack **only** when a new minimum is established (and pops when popping a value equal to the current min). Saves memory on heavily-duplicated stacks. Same asymptotics.
@@ -354,9 +354,9 @@ A third variant pushes to the aux min-stack **only** when a new minimum is estab
 
 | Approach | push/pop/top | getMin | Space |
 | --- | --- | --- | --- |
-| Scan on getMin | O(1) | O(n) | O(n) |
-| **Auxiliary min-stack** | O(1) | **O(1)** | O(n) |
-| **Tuple stack** | O(1) | **O(1)** | O(n) |
+| Scan on getMin | $O(1)$ | $O(n)$ | $O(n)$ |
+| **Auxiliary min-stack** | $O(1)$ | **$O(1)$** | $O(n)$ |
+| **Tuple stack** | $O(1)$ | **$O(1)$** | $O(n)$ |
 
 The tuple-stack and auxiliary-stack approaches are equivalent in Big-O. Pick by taste.
 

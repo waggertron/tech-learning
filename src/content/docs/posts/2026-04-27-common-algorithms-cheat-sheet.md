@@ -42,13 +42,13 @@ def dijkstra(graph, source):
     return dist
 ```
 
-**Complexity**: O((V + E) log V) time, O(V) space.
+**Complexity**: $O((V + E)$ log V) time, $O(V)$ space.
 
 **Gotchas**:
 
 - **Negative weights break it.** Dijkstra assumes once you pop a node, you've found its final distance. A negative edge could have given you a shorter path through an unvisited node. Use Bellman-Ford instead.
 - **The "stale entry" check matters.** When you find a shorter path to `v`, you push a new `(nd, v)` rather than updating the existing one (Python's heap doesn't support decrease-key cheaply). The check `if d > dist[u]: continue` discards the older, longer entries.
-- **Dense graphs:** if V² ≈ E, an array-based priority queue gives O(V²) which beats O(E log V) for dense input.
+- **Dense graphs:** if V² ≈ E, an array-based priority queue gives $O(V²)$ which beats $O(E log V)$ for dense input.
 
 ---
 
@@ -76,7 +76,7 @@ def bellman_ford(edges, V, source):
     return dist
 ```
 
-**Complexity**: O(V · E) time, O(V) space.
+**Complexity**: $O(V · E)$ time, $O(V)$ space.
 
 **Gotchas**:
 
@@ -105,12 +105,12 @@ def floyd_warshall(W, V):
     return dist
 ```
 
-**Complexity**: O(V³) time, O(V²) space.
+**Complexity**: $O(V³)$ time, $O(V²)$ space.
 
 **Gotchas**:
 
 - The loop order matters. `k` (intermediate) must be the **outer** loop. Swapping it with `i` or `j` produces wrong answers.
-- O(V³) is fine for V ≤ 500. Past that, run Dijkstra V times (O(V · (V+E) log V)) and beat Floyd-Warshall on sparse graphs.
+- $O(V³)$ is fine for V ≤ 500. Past that, run Dijkstra V times ($O(V · (V+E)$ log V)) and beat Floyd-Warshall on sparse graphs.
 
 ---
 
@@ -146,7 +146,7 @@ def topo_sort_kahn(graph, V):
     return order
 ```
 
-**Complexity**: O(V + E) time, O(V) space.
+**Complexity**: $O(V + E)$ time, $O(V)$ space.
 
 **Gotchas**:
 
@@ -186,7 +186,7 @@ def topo_sort_dfs(graph, V):
     return order[::-1]
 ```
 
-**Complexity**: O(V + E) time, O(V) space (recursion stack).
+**Complexity**: $O(V + E)$ time, $O(V)$ space (recursion stack).
 
 **Gotchas**:
 
@@ -233,11 +233,11 @@ def kruskal(edges, V):
     return mst
 ```
 
-**Complexity**: O(E log E) time (the sort), O(V) space (Union-Find).
+**Complexity**: $O(E log E)$ time (the sort), $O(V)$ space (Union-Find).
 
 **Gotchas**:
 
-- Sort dominates. Path compression + union by rank makes Union-Find effectively O(1), so the sort is the bottleneck.
+- Sort dominates. Path compression + union by rank makes Union-Find effectively $O(1)$, so the sort is the bottleneck.
 - Stops early once you have V - 1 edges. A spanning tree has exactly that many.
 
 ---
@@ -271,12 +271,12 @@ def prim(graph, V):
     return total
 ```
 
-**Complexity**: O((V + E) log V) time with a heap, O(V²) with an adjacency matrix and array-based priority queue.
+**Complexity**: $O((V + E)$ log V) time with a heap, $O(V²)$ with an adjacency matrix and array-based priority queue.
 
 **Gotchas**:
 
 - Prim is to Kruskal as Dijkstra is to Bellman-Ford: the heap-based growing-frontier algorithm vs the global-edge-relaxation algorithm.
-- For dense graphs, the V² array-based variant beats the O(E log V) heap variant.
+- For dense graphs, the V² array-based variant beats the $O(E log V)$ heap variant.
 
 ---
 
@@ -311,11 +311,11 @@ class UnionFind:
         return True
 ```
 
-**Complexity**: O(α(n)) amortized per operation. α is the inverse Ackermann function -- effectively constant.
+**Complexity**: $O(α(n)$) amortized per operation. α is the inverse Ackermann function -- effectively constant.
 
 **Gotchas**:
 
-- **Both** path compression and union by rank are required for the α(n) bound. Either alone gives you O(log n).
+- **Both** path compression and union by rank are required for the α(n) bound. Either alone gives you $O(log n)$.
 - The `components` counter (decremented on every successful union) is a free side-channel for "how many connected components do I have?"
 
 ---
@@ -368,7 +368,7 @@ def tarjan_scc(graph, V):
     return sccs
 ```
 
-**Complexity**: O(V + E) time, O(V) space.
+**Complexity**: $O(V + E)$ time, $O(V)$ space.
 
 **Gotchas**:
 
@@ -404,7 +404,7 @@ def a_star(graph, start, goal, h):
     return float('inf')
 ```
 
-**Complexity**: O(b^d) worst case, where b is branching factor and d is depth. Heuristic quality determines how close to linear it gets.
+**Complexity**: $O(b^d)$ worst case, where b is branching factor and d is depth. Heuristic quality determines how close to linear it gets.
 
 **Gotchas**:
 
@@ -416,7 +416,7 @@ def a_star(graph, start, goal, h):
 
 ## Floyd's cycle detection (tortoise and hare)
 
-**What**: detect a cycle in a linked list (or any function iteration) using **O(1) space**.
+**What**: detect a cycle in a linked list (or any function iteration) using **$O(1)$ space**.
 
 **When**: linked list cycle detection, finding the start of a cycle, hash function cycle detection.
 
@@ -449,7 +449,7 @@ def find_cycle_start(head):
     return slow
 ```
 
-**Complexity**: O(n) time, O(1) space.
+**Complexity**: $O(n)$ time, $O(1)$ space.
 
 **Gotchas**:
 
@@ -460,7 +460,7 @@ def find_cycle_start(head):
 
 ## [Quickselect](../topics/cs/named-algorithms/quickselect/) (kth smallest)
 
-**What**: find the kth smallest element in O(n) average time **without sorting**.
+**What**: find the kth smallest element in $O(n)$ average time **without sorting**.
 
 **When**: "find the kth largest/smallest," median-finding when you only need the median, percentile estimation.
 
@@ -489,19 +489,19 @@ def quickselect(nums, k):
     return nums[lo]
 ```
 
-**Complexity**: O(n) average, O(n²) worst case. With a random pivot, the worst case is unlikely.
+**Complexity**: $O(n)$ average, $O(n²)$ worst case. With a random pivot, the worst case is unlikely.
 
 **Gotchas**:
 
-- Without random pivots, sorted input degrades to O(n²). Always randomize.
-- Median-of-medians gives a deterministic O(n), but the constants are bad enough that random pivot quickselect wins in practice.
-- Python's `heapq.nsmallest(k, nums)[-1]` is often easier to write and gives O(n log k). For small k, it competes with quickselect.
+- Without random pivots, sorted input degrades to $O(n²)$. Always randomize.
+- Median-of-medians gives a deterministic $O(n)$, but the constants are bad enough that random pivot quickselect wins in practice.
+- Python's `heapq.nsmallest(k, nums)[-1]` is often easier to write and gives $O(n log k)$. For small k, it competes with quickselect.
 
 ---
 
 ## KMP string matching
 
-**What**: find a pattern of length m inside a text of length n in **O(n + m)**, no reset on partial match.
+**What**: find a pattern of length m inside a text of length n in **$O(n + m)$**, no reset on partial match.
 
 **When**: substring search, plagiarism detection, DNA sequence matching.
 
@@ -540,7 +540,7 @@ def kmp_search(text, pattern):
     return -1
 ```
 
-**Complexity**: O(n + m) time, O(m) space.
+**Complexity**: $O(n + m)$ time, $O(m)$ space.
 
 **Gotchas**:
 
@@ -577,7 +577,7 @@ def has_cycle(graph, V):
     return False
 ```
 
-**Complexity**: O(V + E) time, O(V) space.
+**Complexity**: $O(V + E)$ time, $O(V)$ space.
 
 **Gotchas**:
 
@@ -601,7 +601,7 @@ def has_cycle(graph, V):
 | SCC | Tarjan or Kosaraju |
 | Connected components, undirected | DFS or Union-Find |
 | Dynamic connectivity (online unions) | Union-Find |
-| Cycle in linked list, O(1) space | Floyd's tortoise-and-hare |
+| Cycle in linked list, $O(1)$ space | Floyd's tortoise-and-hare |
 | Kth smallest without sorting | Quickselect |
 | Substring search, custom | KMP |
 
@@ -613,15 +613,15 @@ The reflexes worth memorizing:
 
 | Shape | Time | Space |
 |---|---|---|
-| Single-source shortest path (heap) | O((V+E) log V) | O(V) |
-| Single-source shortest path (with negatives) | O(V·E) | O(V) |
-| All-pairs shortest path | O(V³) | O(V²) |
-| Topological sort | O(V+E) | O(V) |
-| MST | O(E log E) | O(V) |
-| SCC | O(V+E) | O(V) |
-| Quickselect | O(n) avg | O(1) |
-| KMP search | O(n + m) | O(m) |
-| Union-Find op | O(α(n)) ≈ O(1) | O(n) |
+| Single-source shortest path (heap) | $O((V+E)$ log V) | $O(V)$ |
+| Single-source shortest path (with negatives) | $O(V·E)$ | $O(V)$ |
+| All-pairs shortest path | $O(V³)$ | $O(V²)$ |
+| Topological sort | $O(V+E)$ | $O(V)$ |
+| MST | $O(E log E)$ | $O(V)$ |
+| SCC | $O(V+E)$ | $O(V)$ |
+| Quickselect | $O(n)$ avg | $O(1)$ |
+| KMP search | $O(n + m)$ | $O(m)$ |
+| Union-Find op | $O(α(n)$) ≈ $O(1)$ | $O(n)$ |
 
 If you can name the shape, you can quote the bound. Half the interview battle is recognizing **which named algorithm fits** and saying its complexity in the same breath.
 

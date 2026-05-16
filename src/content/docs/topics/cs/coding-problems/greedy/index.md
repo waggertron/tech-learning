@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Overview
 
-A greedy algorithm makes the locally-optimal choice at each step, betting that local optima accumulate to a global optimum. Greedy is **fast** (usually O(n) or O(n log n)) but **hard to justify**: the subtle work is proving that the greedy choice doesn't paint you into a corner.
+A greedy algorithm makes the locally-optimal choice at each step, betting that local optima accumulate to a global optimum. Greedy is **fast** (usually $O(n)$ or $O(n log n)$) but **hard to justify**: the subtle work is proving that the greedy choice doesn't paint you into a corner.
 
 Two classic proof structures:
 

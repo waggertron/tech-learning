@@ -139,16 +139,16 @@ Return `[]`.
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L4-L11 (while loop)** | **O(1) per iteration** | **at most n total** | **O(n)** ← amortized |
-| L13 (push) | O(1) | at most n | O(n) |
-| L14 (return) | O(1) | 1 | O(1) |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L4-L11 (while loop)** | **$O(1)$ per iteration** | **at most n total** | **$O(n)$** ← amortized |
+| L13 (push) | $O(1)$ | at most n | $O(n)$ |
+| L14 (return) | $O(1)$ | 1 | $O(1)$ |
 
-The while loop looks nested but each asteroid is pushed at most once and popped at most once across the entire run. Total push + pop operations = O(n).
+The while loop looks nested but each asteroid is pushed at most once and popped at most once across the entire run. Total push + pop operations = $O(n)$.
 
 **Complexity**
-- **Time:** O(n), amortized: each asteroid is pushed once and popped at most once.
-- **Space:** O(n) for the stack (all asteroids survive in the worst case).
+- **Time:** $O(n)$, amortized: each asteroid is pushed once and popped at most once.
+- **Space:** $O(n)$ for the stack (all asteroids survive in the worst case).
 
 **Try this approach:**
 
@@ -173,7 +173,7 @@ The while loop looks nested but each asteroid is pushed at most once and popped 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **Stack of survivors** | **O(n)** | **O(n)** |
+| **Stack of survivors** | **$O(n)$** | **$O(n)$** |
 
 ## Related topics
 

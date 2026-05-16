@@ -12,7 +12,7 @@ updated: 2026-05-06
 
 Given two large integers each with `n` digits, compute their product faster than the $O(n^2)$ schoolbook algorithm that every student learns.
 
-Named after Anatoly Karatsuba, who discovered it in 1960 and published with Yuri Ofman in 1962. Before this result, it was widely believed that O(n^2) was the theoretical lower bound for integer multiplication. Karatsuba showed that belief was wrong, and opened the door to a whole hierarchy of faster algorithms that culminates in near-linear FFT-based methods used in production today.
+Named after Anatoly Karatsuba, who discovered it in 1960 and published with Yuri Ofman in 1962. Before this result, it was widely believed that $O(n^2)$ was the theoretical lower bound for integer multiplication. Karatsuba showed that belief was wrong, and opened the door to a whole hierarchy of faster algorithms that culminates in near-linear FFT-based methods used in production today.
 
 ## The core idea, in one sentence
 
@@ -29,7 +29,7 @@ x = 12 34   (a = 12, b = 34, so x = 12·10^2 + 34)
 y = 56 78   (c = 56, d = 78, so y = 56·10^2 + 78)
 ```
 
-To expand `x · y = (a·10^m + b)(c·10^m + d)`:
+To expand $x \cdot y = (a \cdot 10^m + b)(c \cdot 10^m + d)$:
 
 ```
 = a·c · 10^(2m)
@@ -40,7 +40,7 @@ To expand `x · y = (a·10^m + b)(c·10^m + d)`:
 
 Four multiplications: `ac`, `ad`, `bc`, `bd`. The middle two (`ad` and `bc`) are the problem. They're independent, so you can't avoid either one with naive algebra. You need all four.
 
-At each level of a divide-and-conquer recursion, you split again. The branching factor is 4, so the recurrence is `T(n) = 4T(n/2) + O(n)`. Master Theorem gives O(n^2). Schoolbook, exactly.
+At each level of a divide-and-conquer recursion, you split again. The branching factor is 4, so the recurrence is `T(n) = 4T(n/2) + O(n)`. Master Theorem gives $O(n^2)$. Schoolbook, exactly.
 
 ## The Karatsuba identity
 
@@ -95,12 +95,12 @@ def karatsuba(x, y):
     return z2 * (power ** 2) + z1 * power + z0
 ```
 
-The recursion bottoms out at single-digit numbers (or near-single-digit, depending on the threshold). Each level splits the problem into three sub-problems of half the size, plus O(n) work for the additions and shifts.
+The recursion bottoms out at single-digit numbers (or near-single-digit, depending on the threshold). Each level splits the problem into three sub-problems of half the size, plus $O(n)$ work for the additions and shifts.
 
 ### Notes on the implementation
 
 - `divmod(x, power)` splits `x` into its top and bottom halves at digit `m`. No string manipulation needed.
-- The power-of-ten shifts (`* power` and `* power ** 2`) are cheap: they're digit shifts, O(n) work.
+- The power-of-ten shifts (`* power` and `* power ** 2`) are cheap: they're digit shifts, $O(n)$ work.
 - The threshold `x < 10 or y < 10` is deliberately small here for clarity. In a production library like GNU MP, the cutoff is around 32 to 64 machine words, tuned empirically.
 
 ## Walk through: 1234 x 5678
@@ -180,17 +180,15 @@ $$T(n) = 3 \cdot T(n/2) + O(n)$$
 
 The $O(n)$ term covers the additions, subtractions, and digit-shift operations at each level.
 
-Apply the **Master Theorem**: `T(n) = a·T(n/b) + f(n)` with `a = 3`, `b = 2`, `f(n) = O(n)`.
+Apply the **Master Theorem**: $T(n) = a \cdot T(n/b) + f(n)$ with $a = 3$, $b = 2$, $f(n) = O(n)$.
 
-Compare `f(n) = O(n)` against `n^(log_b a) = n^(log_2 3) ≈ n^1.585`.
+Compare $f(n) = O(n)$ against $n^{\log_b a} = n^{\log_2 3} \approx n^{1.585}$.
 
-Since `f(n) = O(n^1.585 / n^0.585) = O(n^(1.585 - 0.585))` which is polynomially smaller than `n^log_2(3)`, we fall into Master Theorem Case 1:
+Since $f(n) = O(n^{1.585} / n^{0.585}) = O(n^{1.585 - 0.585})$ which is polynomially smaller than $n^{\log_2 3}$, we fall into Master Theorem Case 1:
 
-```
-T(n) = O(n^(log_2 3)) = O(n^1.585)
-```
+$$T(n) = O(n^{\log_2 3}) = O(n^{1.585})$$
 
-Compare this to the schoolbook O(n^2). The branching factor 4 vs 3 is what drives the difference: log_2(4) = 2 exactly, log_2(3) ≈ 1.585.
+Compare this to the schoolbook $O(n^2)$. The branching factor 4 vs 3 is what drives the difference: $\log_2(4) = 2$ exactly, $\log_2(3) \approx 1.585$.
 
 ### Concrete operation counts
 
@@ -206,8 +204,8 @@ For `n = 10,000` digits (common in high-precision libraries):
 
 | Algorithm | Approximate operations |
 | --- | --- |
-| Schoolbook O(n^2) | 100,000,000 |
-| Karatsuba O(n^1.585) | ~500,000 |
+| Schoolbook $O(n^2)$ | 100,000,000 |
+| Karatsuba $O(n^{1.585})$ | ~500,000 |
 | Ratio | ~200x fewer |
 
 The gap widens as `n` grows because the exponent difference (2.0 vs 1.585) compounds. For library-scale big-integer arithmetic, this is not a micro-optimization. It's a qualitative change in what's tractable.
@@ -226,7 +224,7 @@ GNU MP (GMP), the most widely used arbitrary-precision library (used by Python, 
 
 ### Historical significance
 
-Karatsuba's 1962 result disproved a conjecture Kolmogorov had just made in 1960 at a seminar: that O(n^2) was a fundamental lower bound for multiplication. Karatsuba was a student in the audience and produced a counterexample within a week. The result showed that divide-and-conquer could break algebraic lower bounds that seemed obvious. It seeded the entire field of fast arithmetic.
+Karatsuba's 1962 result disproved a conjecture Kolmogorov had just made in 1960 at a seminar: that $O(n^2)$ was a fundamental lower bound for multiplication. Karatsuba was a student in the audience and produced a counterexample within a week. The result showed that divide-and-conquer could break algebraic lower bounds that seemed obvious. It seeded the entire field of fast arithmetic.
 
 ## The base case and the threshold
 
@@ -261,27 +259,27 @@ The Karatsuba result launched a research program. Each step reduces the exponent
 
 Toom-Cook splits each number into `k` pieces instead of 2. With `k` pieces you need `2k - 1` multiplications instead of `k^2`. Karatsuba is the special case `k = 2` (giving `2*2 - 1 = 3` multiplications).
 
-Toom-Cook 3 (Toom-3) splits into 3 pieces and uses 5 multiplications. Its complexity is O(n^(log_3 5)) = O(n^1.465). GMP uses Toom-3, Toom-4, and Toom-8 for progressively larger inputs.
+Toom-Cook 3 (Toom-3) splits into 3 pieces and uses 5 multiplications. Its complexity is $O(n^{\log_3 5})$ = $O(n^{1.465})$. GMP uses Toom-3, Toom-4, and Toom-8 for progressively larger inputs.
 
 The tradeoff: more pieces means more complex evaluation and interpolation code, and a larger constant factor. At some input size the next level becomes worth it.
 
 ### Schönhage-Strassen (FFT-based)
 
-At very large sizes (millions of digits), even Toom-Cook isn't fast enough. The Schönhage-Strassen algorithm (1971) converts integer multiplication into polynomial multiplication via the Fast Fourier Transform, achieving O(n log n log log n). GMP switches to this for inputs above roughly 1,000 GMP limbs.
+At very large sizes (millions of digits), even Toom-Cook isn't fast enough. The Schönhage-Strassen algorithm (1971) converts integer multiplication into polynomial multiplication via the Fast Fourier Transform, achieving $O(n log n log log n)$. GMP switches to this for inputs above roughly 1,000 GMP limbs.
 
 ### Harvey-Hoeven (2019)
 
-The current theoretical record is O(n log n), achieved by Harvey and van der Hoeven in 2019. It's not yet practical at typical sizes because the constant factors and implementation complexity are enormous, but it's the asymptotic optimum if you believe a conjectured lower bound of Omega(n log n).
+The current theoretical record is $O(n log n)$, achieved by Harvey and van der Hoeven in 2019. It's not yet practical at typical sizes because the constant factors and implementation complexity are enormous, but it's the asymptotic optimum if you believe a conjectured lower bound of Omega(n log n).
 
 ### Summary of the hierarchy
 
 | Algorithm | Complexity | Practical use |
 | --- | --- | --- |
-| Schoolbook | O(n^2) | Small inputs, hardware |
-| Karatsuba | O(n^1.585) | Medium inputs (~70-1000 digits) |
-| Toom-Cook 3 | O(n^1.465) | Large inputs |
-| Schönhage-Strassen | O(n log n log log n) | Very large (millions of digits) |
-| Harvey-Hoeven | O(n log n) | Theoretical; not practical yet |
+| Schoolbook | $O(n^2)$ | Small inputs, hardware |
+| Karatsuba | $O(n^{1.585})$ | Medium inputs (~70-1000 digits) |
+| Toom-Cook 3 | $O(n^{1.465})$ | Large inputs |
+| Schönhage-Strassen | $O(n log n log log n)$ | Very large (millions of digits) |
+| Harvey-Hoeven | $O(n log n)$ | Theoretical; not practical yet |
 
 ## When CPython uses Karatsuba
 
@@ -316,7 +314,7 @@ Karatsuba rarely appears as a direct "implement this" interview question, but th
 ### When an interviewer is thinking about Karatsuba
 
 - "How would you multiply two very large integers that don't fit in a machine word?"
-- "Can you do better than O(n^2) for polynomial multiplication?" (Polynomial multiplication is structurally identical: `(a·x + b)(c·x + d) = ac·x^2 + (ad+bc)·x + bd`, three coefficients from three products.)
+- "Can you do better than $O(n^2)$ for polynomial multiplication?" (Polynomial multiplication is structurally identical: `(a·x + b)(c·x + d) = ac·x^2 + (ad+bc)·x + bd`, three coefficients from three products.)
 - "How does Python handle arbitrarily large integers?" (Answer includes: Karatsuba above a threshold.)
 - Any question about big integer arithmetic in a systems or cryptography context.
 
@@ -336,11 +334,11 @@ The mental model: **if you have two sub-results and you can get a third sub-resu
 
 - Not dynamic programming: no overlapping sub-problems being memoized, just a clean split
 - Not greedy: no locally optimal choice; the split is fixed at n/2
-- Not O(n log n): that requires FFT. Karatsuba is strictly slower than Schönhage-Strassen for very large n
+- Not $O(n log n)$: that requires FFT. Karatsuba is strictly slower than Schönhage-Strassen for very large n
 
 ## Multiple uses
 
-**Polynomial multiplication** - Two polynomials of degree n are coefficient lists of length n+1. Multiply using the same split-and-combine strategy. Karatsuba reduces 4 sub-multiplications to 3, giving O(n^1.585) vs O(n^2) naive convolution (for sizes where FFT isn't worth it).
+**Polynomial multiplication** - Two polynomials of degree n are coefficient lists of length n+1. Multiply using the same split-and-combine strategy. Karatsuba reduces 4 sub-multiplications to 3, giving $O(n^{1.585})$ vs $O(n^2)$ naive convolution (for sizes where FFT isn't worth it).
 
 ```python
 def poly_karatsuba(a, b):
@@ -524,6 +522,6 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Merge sort](./merge-sort/), the canonical divide-and-conquer example with the same O(n log n) recurrence structure
+- [Merge sort](./merge-sort/), the canonical divide-and-conquer example with the same $O(n log n)$ recurrence structure
 - [Quickselect](./quickselect/), another divide-and-conquer algorithm where the analysis depends critically on the branching factor
 - [Data structures](../data-structures/), background on how integers are represented in memory at the level these algorithms operate on

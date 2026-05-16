@@ -136,7 +136,7 @@ Each level tries C(n, k) groups; the recursion has n/k levels. Total combinatori
 
 **Complexity**
 - **Time:** exponential.
-- **Space:** O(n) recursion.
+- **Space:** $O(n)$ recursion.
 
 ## Approach 2: Sort + per-smallest consumption (canonical greedy)
 
@@ -211,15 +211,15 @@ func isNStraightHand(hand []int, groupSize int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (Counter) | O(1) | n | O(n) |
-| **L3 (sorted iteration)** | **O(u log u)** | **1** | **O(n log n)** ← dominates |
-| L5-L7 (group consumption) | O(group_size) | u times | O(n · k) |
+| L2 (Counter) | $O(1)$ | n | $O(n)$ |
+| **L3 (sorted iteration)** | **$O(u log u)$** | **1** | **$O(n log n)$** ← dominates |
+| L5-L7 (group consumption) | $O(group_size)$ | u times | $O(n · k)$ |
 
-Sorting the distinct values is O(u log u) where u ≤ n, so O(n log n). The inner consumption loop does O(group_size) work per distinct value; total work across all distinct values is bounded by O(n · group_size).
+Sorting the distinct values is $O(u log u)$ where u ≤ n, so $O(n log n)$. The inner consumption loop does $O(group_size)$ work per distinct value; total work across all distinct values is bounded by $O(n · group_size)$.
 
 **Complexity**
-- **Time:** O(n log n + n · k), driven by L3 (sort) and L5/L6/L7 (group consumption).
-- **Space:** O(n) for the Counter.
+- **Time:** $O(n log n + n · k)$, driven by L3 (sort) and L5/L6/L7 (group consumption).
+- **Space:** $O(n)$ for the Counter.
 
 **Try this approach:**
 
@@ -317,16 +317,16 @@ func isNStraightHandHeap(hand []int, groupSize int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (Counter) | O(1) | n | O(n) |
-| L4 (heapify) | O(u) | 1 | O(n) |
-| **L7, L10 (heap pops)** | **O(log u)** | **up to u** | **O(n log n)** ← dominates |
-| L8-L9 (consumption) | O(group_size) | n/group_size groups | O(n · k) |
+| L2 (Counter) | $O(1)$ | n | $O(n)$ |
+| L4 (heapify) | $O(u)$ | 1 | $O(n)$ |
+| **L7, L10 (heap pops)** | **$O(log u)$** | **up to u** | **$O(n log n)$** ← dominates |
+| L8-L9 (consumption) | $O(group_size)$ | n/group_size groups | $O(n · k)$ |
 
-Heap pops cost O(log u) and happen at most u times; consumption loops cost O(group_size) per group, totaling O(n · group_size / group_size) = O(n) consumption steps.
+Heap pops cost $O(log u)$ and happen at most u times; consumption loops cost $O(group_size)$ per group, totaling $O(n · group_size / group_size)$ = $O(n)$ consumption steps.
 
 **Complexity**
-- **Time:** O(n log n + n · k), same as Approach 2.
-- **Space:** O(n) for Counter and heap.
+- **Time:** $O(n log n + n · k)$, same as Approach 2.
+- **Space:** $O(n)$ for Counter and heap.
 
 **Try this approach:**
 
@@ -346,9 +346,9 @@ Heap pops cost O(log u) and happen at most u times; consumption loops cost O(gro
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Enumerate partitions | exponential | O(n) |
-| **Sort + per-smallest** | **O(n log n + n · k)** | **O(n)** |
-| Min-heap + lazy | O(n log n + n · k) | O(n) |
+| Enumerate partitions | exponential | $O(n)$ |
+| **Sort + per-smallest** | **$O(n log n + n · k)$** | **$O(n)$** |
+| Min-heap + lazy | $O(n log n + n · k)$ | $O(n)$ |
 
 The greedy choice, always start the next group from the smallest remaining value, is forced: if the smallest value can't start a group, no group can contain it, so the answer is false.
 

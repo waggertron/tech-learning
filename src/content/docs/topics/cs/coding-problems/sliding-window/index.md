@@ -10,7 +10,7 @@ updated: 2026-05-07
 
 ## Overview
 
-A sliding window is a pair of indices `[left, right]` that defines a contiguous range. At each step, you *expand* (move `right`) or *contract* (move `left`) to maintain an invariant, distinct characters, bounded frequency, sum ≤ target, etc. Each element enters and leaves the window at most once, so total work is O(n) even though the window size varies.
+A sliding window is a pair of indices `[left, right]` that defines a contiguous range. At each step, you *expand* (move `right`) or *contract* (move `left`) to maintain an invariant, distinct characters, bounded frequency, sum ≤ target, etc. Each element enters and leaves the window at most once, so total work is $O(n)$ even though the window size varies.
 
 There are two flavors:
 
@@ -28,7 +28,7 @@ There are two flavors:
 
 **Bonus problems (same pattern, outside NeetCode 150):**
 
-- [28. Find the Index of the First Occurrence in a String (Easy)](./028-find-the-index-of-the-first-occurrence/) -- O(n*m) sliding window over character windows.
+- [28. Find the Index of the First Occurrence in a String (Easy)](./028-find-the-index-of-the-first-occurrence/) -- $O(n*m)$ sliding window over character windows.
 - [560. Subarray Sum Equals K (Medium)](./560-subarray-sum-equals-k/) -- prefix sum + hash map; the window isn't contiguous in the traditional sense but uses the same "complement in a map" idea.
 
 ## Key patterns unlocked here

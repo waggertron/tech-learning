@@ -125,17 +125,17 @@ func maxProbability(n int, edges [][]int, succProb []float64, start int, end int
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (init) | O(1) | V | O(V) |
-| L3 (outer rounds) | O(1) | up to V-1 | O(V) |
-| **L4 (edge scan)** | **O(1)** | **E * (V-1)** | **O(V * E)** ← dominates |
-| L5/L6 (relax) | O(1) | up to 2E per round | O(V * E) |
-| L7 (early exit) | O(1) | up to V-1 | O(V) |
+| L1-L2 (init) | $O(1)$ | V | $O(V)$ |
+| L3 (outer rounds) | $O(1)$ | up to V-1 | $O(V)$ |
+| **L4 (edge scan)** | **$O(1)$** | **E * (V-1)** | **$O(V * E)$** ← dominates |
+| L5/L6 (relax) | $O(1)$ | up to 2E per round | $O(V * E)$ |
+| L7 (early exit) | $O(1)$ | up to V-1 | $O(V)$ |
 
-With early exit this is fast in practice, but worst-case is O(V * E). For a dense graph that is O(V^3).
+With early exit this is fast in practice, but worst-case is $O(V * E)$. For a dense graph that is $O(V^3)$.
 
 **Complexity**
-- **Time:** O(V * E), driven by L4 (edge scan per round).
-- **Space:** O(V).
+- **Time:** $O(V * E)$, driven by L4 (edge scan per round).
+- **Space:** $O(V)$.
 
 ## Approach 2: Modified Dijkstra with max-heap (optimal)
 
@@ -250,19 +250,19 @@ func maxProbability(n int, edges [][]int, succProb []float64, start int, end int
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (build graph) | O(1) | E | O(E) |
-| L3-L5 (init) | O(1) | V | O(V) |
-| L6 (loop) | O(1) | up to E | O(E) |
-| **L7 (heappop)** | **O(log V)** | **up to E** | **O(E log V)** ← dominates |
-| L8/L9 (checks) | O(1) | up to E | O(E) |
-| L10 (neighbors) | O(1) | E total | O(E) |
-| **L14 (heappush)** | **O(log V)** | **up to E** | **O(E log V)** ← dominates |
+| L1-L2 (build graph) | $O(1)$ | E | $O(E)$ |
+| L3-L5 (init) | $O(1)$ | V | $O(V)$ |
+| L6 (loop) | $O(1)$ | up to E | $O(E)$ |
+| **L7 (heappop)** | **$O(log V)$** | **up to E** | **$O(E log V)$** ← dominates |
+| L8/L9 (checks) | $O(1)$ | up to E | $O(E)$ |
+| L10 (neighbors) | $O(1)$ | E total | $O(E)$ |
+| **L14 (heappush)** | **$O(log V)$** | **up to E** | **$O(E log V)$** ← dominates |
 
-Each edge can produce at most one push (L14). With at most E pushes and each costing O(log V) (heap size bounded by V), total heap work is O(E log V).
+Each edge can produce at most one push (L14). With at most E pushes and each costing $O(log V)$ (heap size bounded by V), total heap work is $O(E log V)$.
 
 **Complexity**
-- **Time:** O((V + E) log V), driven by L7/L14 (heap operations).
-- **Space:** O(V + E) for the adjacency list and heap.
+- **Time:** $O((V + E)$ log V), driven by L7/L14 (heap operations).
+- **Space:** $O(V + E)$ for the adjacency list and heap.
 
 ### Why negation works
 
@@ -311,8 +311,8 @@ Pop (-0.25, 2), p=0.25: u==end -> return 0.25
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Bellman-Ford relaxation | O(V * E) | O(V) | Simple, handles all cases |
-| **Modified Dijkstra** | **O((V+E) log V)** | **O(V+E)** | **Optimal for non-zero probabilities** |
+| Bellman-Ford relaxation | $O(V * E)$ | $O(V)$ | Simple, handles all cases |
+| **Modified Dijkstra** | **$O((V+E)$ log V)** | **$O(V+E)$** | **Optimal for non-zero probabilities** |
 
 The mapping from standard Dijkstra: `min distance` becomes `max probability`, `sum of weights` becomes `product of probabilities`, `infinity` becomes `0.0`, `0` (source distance) becomes `1.0` (certainty at source).
 

@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Overview
 
-"Two pointers" is a family of array/string algorithms where two indices move through the input together, maintaining an invariant that lets you prune or conclude without re-scanning. The pattern most often works on **sorted** data or on **palindrome-shaped** symmetry; it converts many O(n²) brute forces into O(n).
+"Two pointers" is a family of array/string algorithms where two indices move through the input together, maintaining an invariant that lets you prune or conclude without re-scanning. The pattern most often works on **sorted** data or on **palindrome-shaped** symmetry; it converts many $O(n²)$ brute forces into $O(n)$.
 
 Three pointer movements cover almost all problems:
 

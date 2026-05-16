@@ -87,8 +87,8 @@ function sumSubarrayMins(arr: number[]): number {
 </Tabs>
 
 **Complexity**
-- **Time:** O(n²), nested loops each running up to n.
-- **Space:** O(1) extra.
+- **Time:** $O(n²)$, nested loops each running up to n.
+- **Space:** $O(1)$ extra.
 
 ## Approach 2: Contribution counting with monotonic stack (optimal)
 
@@ -166,15 +166,15 @@ function sumSubarrayMins(arr: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L5 (left span pass) | O(1) amortized | n total pushes/pops | O(n) |
-| L6-L10 (right span pass) | O(1) amortized | n total pushes/pops | O(n) |
-| **L11-L12 (contribution sum)** | **O(1)** | **n** | **O(n)** |
+| L1-L5 (left span pass) | $O(1)$ amortized | n total pushes/pops | $O(n)$ |
+| L6-L10 (right span pass) | $O(1)$ amortized | n total pushes/pops | $O(n)$ |
+| **L11-L12 (contribution sum)** | **$O(1)$** | **n** | **$O(n)$** |
 
-Each index is pushed once and popped at most once in each pass. Both passes are O(n).
+Each index is pushed once and popped at most once in each pass. Both passes are $O(n)$.
 
 **Complexity**
-- **Time:** O(n), two monotonic stack passes plus one summation pass.
-- **Space:** O(n) for left, right, and stack arrays.
+- **Time:** $O(n)$, two monotonic stack passes plus one summation pass.
+- **Space:** $O(n)$ for left, right, and stack arrays.
 
 **Try this approach:**
 

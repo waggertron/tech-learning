@@ -83,15 +83,15 @@ function countSubstrings(s: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (nested loops) | O(1) | n² pairs | O(n²) |
-| **L4 (slice + palindrome check)** | **O(k) per pair** | **n² pairs, avg k = n/2** | **O(n³)** ← dominates |
-| L5 (increment) | O(1) | up to n² | O(n²) |
+| L2, L3 (nested loops) | $O(1)$ | n² pairs | $O(n²)$ |
+| **L4 (slice + palindrome check)** | **$O(k)$ per pair** | **n² pairs, avg k = n/2** | **$O(n³)$** ← dominates |
+| L5 (increment) | $O(1)$ | up to n² | $O(n²)$ |
 
-The slice `s[i:j+1]` allocates a new string of length k, and the reverse comparison scans it again. Over all O(n²) pairs the average substring length is O(n), giving O(n³) total.
+The slice `s[i:j+1]` allocates a new string of length k, and the reverse comparison scans it again. Over all $O(n²)$ pairs the average substring length is $O(n)$, giving $O(n³)$ total.
 
 **Complexity**
-- **Time:** O(n³), driven by L4 (slice + reverse per pair).
-- **Space:** O(n) per slice (the largest slice is the whole string).
+- **Time:** $O(n³)$, driven by L4 (slice + reverse per pair).
+- **Space:** $O(n)$ per slice (the largest slice is the whole string).
 
 ## Approach 2: Expand around center (canonical)
 
@@ -140,16 +140,16 @@ function countSubstrings(s: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L5 (loop over centers) | O(1) | 2n - 1 centers | O(n) calls |
-| L1 (expand while condition) | O(1) | up to n per center | varies |
-| **L1-L4 (total expansion work)** | **O(1) per step** | **O(n) steps total** | **O(n²)** ← dominates |
-| L2-L4 (count + advance) | O(1) | same as L1 | O(n²) |
+| L5 (loop over centers) | $O(1)$ | 2n - 1 centers | $O(n)$ calls |
+| L1 (expand while condition) | $O(1)$ | up to n per center | varies |
+| **L1-L4 (total expansion work)** | **$O(1)$ per step** | **$O(n)$ steps total** | **$O(n²)$** ← dominates |
+| L2-L4 (count + advance) | $O(1)$ | same as L1 | $O(n²)$ |
 
-Each character can be the turning point of at most O(n) expansion steps, but summed across all 2n-1 centers the total expansion steps are bounded by O(n²) in the worst case (e.g., "aaaa...").
+Each character can be the turning point of at most $O(n)$ expansion steps, but summed across all 2n-1 centers the total expansion steps are bounded by $O(n²)$ in the worst case (e.g., "aaaa...").
 
 **Complexity**
-- **Time:** O(n²), driven by L1-L4 (expansion work summed across all centers).
-- **Space:** O(1) (no auxiliary structure; just two integer pointers).
+- **Time:** $O(n²)$, driven by L1-L4 (expansion work summed across all centers).
+- **Space:** $O(1)$ (no auxiliary structure; just two integer pointers).
 
 **Try this approach:**
 
@@ -216,16 +216,16 @@ function countSubstrings(s: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (allocate dp) | O(n²) | 1 | O(n²) |
-| L3-L5 (base cases) | O(1) | n | O(n) |
-| L6, L7 (nested loops) | O(1) | n(n-1)/2 pairs | O(n²) |
-| **L8-L11 (fill + count)** | **O(1)** | **O(n²) pairs** | **O(n²)** ← dominates |
+| L2 (allocate dp) | $O(n²)$ | 1 | $O(n²)$ |
+| L3-L5 (base cases) | $O(1)$ | n | $O(n)$ |
+| L6, L7 (nested loops) | $O(1)$ | n(n-1)/2 pairs | $O(n²)$ |
+| **L8-L11 (fill + count)** | **$O(1)$** | **$O(n²)$ pairs** | **$O(n²)$** ← dominates |
 
-Each cell is filled in O(1) using a previously-computed shorter-length result. The outer loop sweeps lengths 2..n; the inner loop covers all valid start positions for that length, giving exactly n(n-1)/2 iterations total.
+Each cell is filled in $O(1)$ using a previously-computed shorter-length result. The outer loop sweeps lengths 2..n; the inner loop covers all valid start positions for that length, giving exactly n(n-1)/2 iterations total.
 
 **Complexity**
-- **Time:** O(n²), driven by L6/L7/L8-L11 (the nested length-and-index loops).
-- **Space:** O(n²) for the dp table.
+- **Time:** $O(n²)$, driven by L6/L7/L8-L11 (the nested length-and-index loops).
+- **Space:** $O(n²)$ for the dp table.
 
 **Try this approach:**
 
@@ -242,11 +242,11 @@ Each cell is filled in O(1) using a previously-computed shorter-length result. T
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| All substrings | O(n³) | O(n) |
-| **Expand around center** | **O(n²)** | **O(1)** |
-| DP table | O(n²) | O(n²) |
+| All substrings | $O(n³)$ | $O(n)$ |
+| **Expand around center** | **$O(n²)$** | **$O(1)$** |
+| DP table | $O(n²)$ | $O(n²)$ |
 
-Same pattern as problem 5. Manacher's gives O(n) if you need it.
+Same pattern as problem 5. Manacher's gives $O(n)$ if you need it.
 
 ## Test cases
 

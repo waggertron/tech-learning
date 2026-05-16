@@ -109,14 +109,14 @@ func checkInclusion(s1 string, s2 string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (permutations)** | **O(n)** | **n!** | **O(n! · n)** ← dominates |
-| L2 (join + in) | O(n + m) | up to n! | O(n! · (n + m)) |
+| **L1 (permutations)** | **$O(n)$** | **n!** | **$O(n! · n)$** ← dominates |
+| L2 (join + in) | $O(n + m)$ | up to n! | $O(n! · (n + m)$) |
 
 `n!` grows faster than any polynomial. For n = 10 (len(s1) = 10), that's 3.6 million permutations; for n = 12, over 479 million.
 
 **Complexity**
-- **Time:** O(n! · m) where n = `len(s1)`, m = `len(s2)`. Effectively unusable for n > 10.
-- **Space:** O(n) per permutation.
+- **Time:** $O(n! · m)$ where n = `len(s1)`, m = `len(s2)`. Effectively unusable for n > 10.
+- **Space:** $O(n)$ per permutation.
 
 Included to emphasize "permutation substring = anagram substring", don't actually enumerate permutations.
 
@@ -205,19 +205,19 @@ func checkInclusion(s1 string, s2 string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (Counter s1) | O(n) | 1 | O(n) |
-| L2 (loop) | O(1) | m - n + 1 | O(m) |
-| **L3 (Counter + compare)** | **O(n)** | **m - n + 1** | **O(m · n)** ← dominates |
+| L1 (Counter s1) | $O(n)$ | 1 | $O(n)$ |
+| L2 (loop) | $O(1)$ | m - n + 1 | $O(m)$ |
+| **L3 (Counter + compare)** | **$O(n)$** | **m - n + 1** | **$O(m · n)$** ← dominates |
 
 For every window position we build a brand-new Counter from a slice, which scans n characters. No sharing across adjacent windows.
 
 **Complexity**
-- **Time:** O(m · n), driven by L3 (Counter build on every window).
-- **Space:** O(n).
+- **Time:** $O(m · n)$, driven by L3 (Counter build on every window).
+- **Space:** $O(n)$.
 
 ## Approach 3: Fixed-size sliding window with running frequency (optimal)
 
-Maintain a single running `Counter` over the current window. On each slide, increment the new character and decrement the old one. Compare counters in O(26) each step.
+Maintain a single running `Counter` over the current window. On each slide, increment the new character and decrement the old one. Compare counters in $O(26)$ each step.
 
 <Tabs>
 <TabItem label="Python">
@@ -323,20 +323,20 @@ func checkInclusion(s1 string, s2 string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (init) | O(n) | 1 | O(n) |
-| L3 (initial check) | O(k) | 1 | O(k) |
-| **L4 (slide loop)** | **O(1) body** | **m - n** | **O(m)** ← dominates |
-| L5/L6/L7 (update window) | O(1) | m - n | O(m) |
-| L8 (compare) | O(k) | m - n | O(m · k) = O(m) since k ≤ 26 |
+| L1/L2 (init) | $O(n)$ | 1 | $O(n)$ |
+| L3 (initial check) | $O(k)$ | 1 | $O(k)$ |
+| **L4 (slide loop)** | **$O(1)$ body** | **m - n** | **$O(m)$** ← dominates |
+| L5/L6/L7 (update window) | $O(1)$ | m - n | $O(m)$ |
+| L8 (compare) | $O(k)$ | m - n | $O(m · k)$ = $O(m)$ since k ≤ 26 |
 
-Instead of rebuilding the Counter each step, we do two O(1) updates (L5/L6) and one O(k) comparison (L8). Since k ≤ 26, L8 is effectively O(1), making the total O(m).
+Instead of rebuilding the Counter each step, we do two $O(1)$ updates (L5/L6) and one $O(k)$ comparison (L8). Since k ≤ 26, L8 is effectively $O(1)$, making the total $O(m)$.
 
 **Complexity**
-- **Time:** O(m), driven by L4/L8 (single pass with O(1) window updates and O(26) comparison).
-- **Space:** O(k).
+- **Time:** $O(m)$, driven by L4/L8 (single pass with $O(1)$ window updates and $O(26)$ comparison).
+- **Space:** $O(k)$.
 
 ### Even tighter: matching counter with "matches" counter
-Instead of comparing full counters every step, maintain a `matches` integer that counts how many characters in the alphabet have the correct count. Increment/decrement `matches` when a character's running count crosses its target. Check `matches == 26` each step. Same O(m), smaller constant factor.
+Instead of comparing full counters every step, maintain a `matches` integer that counts how many characters in the alphabet have the correct count. Increment/decrement `matches` when a character's running count crosses its target. Check `matches == 26` each step. Same $O(m)$, smaller constant factor.
 
 **Try this approach:**
 
@@ -353,9 +353,9 @@ Instead of comparing full counters every step, maintain a `matches` integer that
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Enumerate permutations | O(n! · m) | O(n) |
-| Per-window Counter | O(m · n) | O(n) |
-| **Running counter window** | **O(m)** | **O(k)** |
+| Enumerate permutations | $O(n! · m)$ | $O(n)$ |
+| Per-window Counter | $O(m · n)$ | $O(n)$ |
+| **Running counter window** | **$O(m)$** | **$O(k)$** |
 
 The key realization is "permutation substring = anagram substring"; once you see it, the fixed-size sliding window falls out.
 

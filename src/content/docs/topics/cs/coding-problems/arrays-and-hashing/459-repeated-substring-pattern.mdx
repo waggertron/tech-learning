@@ -78,17 +78,17 @@ function repeatedSubstringPattern(s: string): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (length) | O(1) | 1 | O(1) |
-| L2 (loop) | O(1) | n/2 | O(n) |
-| L3 (mod check) | O(1) | n/2 | O(n) |
-| **L4 (build + compare)** | **O(n)** | **up to n/2** | **O(n^2)** ← dominates |
-| L5, L6 (returns) | O(1) | 1 | O(1) |
+| L1 (length) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop) | $O(1)$ | n/2 | $O(n)$ |
+| L3 (mod check) | $O(1)$ | n/2 | $O(n)$ |
+| **L4 (build + compare)** | **$O(n)$** | **up to n/2** | **$O(n^2)$** ← dominates |
+| L5, L6 (returns) | $O(1)$ | 1 | $O(1)$ |
 
-The string construction `s[:p] * (n // p)` allocates and fills a string of length `n`, then the `==` comparison scans all `n` characters. Done at up to n/2 positions, that is O(n^2) total.
+The string construction `s[:p] * (n // p)` allocates and fills a string of length `n`, then the `==` comparison scans all `n` characters. Done at up to n/2 positions, that is $O(n^2)$ total.
 
 **Complexity**
-- **Time:** O(n^2), driven by L4 (the O(n) build-and-compare inside an O(n) loop).
-- **Space:** O(n) for the constructed candidate string at each step.
+- **Time:** $O(n^2)$, driven by L4 (the $O(n)$ build-and-compare inside an $O(n)$ loop).
+- **Space:** $O(n)$ for the constructed candidate string at each step.
 
 ## Approach 2: The (s + s)[1:-1] trick
 
@@ -118,14 +118,14 @@ function repeatedSubstringPattern(s: string): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (s + s then slice)** | **O(n)** | **1** | **O(n)** |
-| **L2 (substring search)** | **O(n)** | **1** | **O(n)** ← dominates |
+| **L1 (s + s then slice)** | **$O(n)$** | **1** | **$O(n)$** |
+| **L2 (substring search)** | **$O(n)$** | **1** | **$O(n)$** ← dominates |
 
-Python's `in` operator for strings uses an optimized search (similar to Boyer-Moore-Horspool). Both lines are O(n).
+Python's `in` operator for strings uses an optimized search (similar to Boyer-Moore-Horspool). Both lines are $O(n)$.
 
 **Complexity**
-- **Time:** O(n), driven by L1/L2 (linear string operations).
-- **Space:** O(n) for `doubled`.
+- **Time:** $O(n)$, driven by L1/L2 (linear string operations).
+- **Space:** $O(n)$ for `doubled`.
 
 **Try this approach:**
 
@@ -160,14 +160,14 @@ Does "aba" appear in "baab"? No. Correctly returns False.
 
 Removing the first character breaks the leading copy of `s`; removing the last breaks the trailing copy. Any remaining occurrence of `s` must be an internal one, which only exists when `s` is genuinely periodic.
 
-Note: with KMP for the substring search inside L2, the full algorithm is O(n) with no hidden constant. See [KMP](../../../named-algorithms/kmp/) for details.
+Note: with KMP for the substring search inside L2, the full algorithm is $O(n)$ with no hidden constant. See [KMP](../../../named-algorithms/kmp/) for details.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Try all divisors | O(n^2) | O(n) |
-| **(s+s)[1:-1] trick** | **O(n)** | O(n) |
+| Try all divisors | $O(n^2)$ | $O(n)$ |
+| **(s+s)[1:-1] trick** | **$O(n)$** | $O(n)$ |
 
 ## Test cases
 
@@ -216,5 +216,5 @@ console.log("all tests pass");
 
 ## Related topics
 
-- [KMP algorithm](../../../named-algorithms/kmp/), O(n) substring search used inside approach 2
+- [KMP algorithm](../../../named-algorithms/kmp/), $O(n)$ substring search used inside approach 2
 - [Find the Index of the First Occurrence in a String](../sliding-window/028-find-the-index-of-the-first-occurrence/), substring search problem

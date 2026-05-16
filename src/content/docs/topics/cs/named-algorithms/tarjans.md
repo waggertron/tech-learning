@@ -185,10 +185,10 @@ Note that vertex 3 is identified as an SCC root while still nested inside the re
 
 | Metric | Cost | Why |
 | ------ | ---- | --- |
-| Time   | O(V + E) | Each vertex is visited once, each edge is examined once |
-| Space  | O(V) | `disc`, `low`, `on_stack` arrays each of size V; stack holds at most V vertices |
+| Time   | $O(V + E)$ | Each vertex is visited once, each edge is examined once |
+| Space  | $O(V)$ | `disc`, `low`, `on_stack` arrays each of size V; stack holds at most V vertices |
 
-The single DFS pass is what makes O(V + E) achievable. No graph is traversed twice.
+The single DFS pass is what makes $O(V + E)$ achievable. No graph is traversed twice.
 
 ## Application: bridges and articulation points
 
@@ -211,7 +211,7 @@ if low[v] > disc[u]:   # v's subtree cannot reach u or above
 
 The intuition: if `low[v] >= disc[u]`, then `v`'s entire subtree is "trapped below" `u`. Removing `u` disconnects that subtree. If `low[v] > disc[u]` (strictly greater), even the edge `u->v` itself is a bridge: no back edge exists from `v`'s subtree back to `u` or higher.
 
-This is the same algorithm, same O(V + E), same single DFS. The only differences are: undirected graph (edges go both ways), no on-stack set needed, and the comparison operator changes.
+This is the same algorithm, same $O(V + E)$, same single DFS. The only differences are: undirected graph (edges go both ways), no on-stack set needed, and the comparison operator changes.
 
 ## Application: condensation DAG
 
@@ -235,11 +235,11 @@ The condensation DAG is useful for:
 
 - **Shortest paths with structure**: if your directed graph has cycles but you need shortest paths, compress the SCCs first. Within an SCC, all vertices are mutually reachable at zero extra cost (assuming non-negative weights). Then run Dijkstra or Bellman-Ford on the condensation.
 
-Computing the condensation takes O(V + E) additional work after Tarjan runs: assign each vertex its SCC ID, scan all edges, add inter-SCC edges. Total remains O(V + E).
+Computing the condensation takes $O(V + E)$ additional work after Tarjan runs: assign each vertex its SCC ID, scan all edges, add inter-SCC edges. Total remains $O(V + E)$.
 
 ## Comparison with Kosaraju's algorithm
 
-Kosaraju's algorithm also finds SCCs in O(V + E), but uses two DFS passes:
+Kosaraju's algorithm also finds SCCs in $O(V + E)$, but uses two DFS passes:
 
 1. Run DFS on the original graph, recording finish times.
 2. Run DFS on the **reversed** graph in decreasing finish-time order. Each DFS tree in pass 2 is one SCC.
@@ -426,7 +426,7 @@ def two_sat(n, clauses):
     return assignment
 ```
 
-**Condensation DAG for reachability**: compress each SCC into a single super-node to produce a DAG. Dynamic programming on the condensation DAG answers "from node u, what is the maximum value reachable?" in O(V+E) instead of O(V^2).
+**Condensation DAG for reachability**: compress each SCC into a single super-node to produce a DAG. Dynamic programming on the condensation DAG answers "from node u, what is the maximum value reachable?" in $O(V+E)$ instead of $O(V^2)$.
 
 ```python
 def max_value_reachable(graph, values):

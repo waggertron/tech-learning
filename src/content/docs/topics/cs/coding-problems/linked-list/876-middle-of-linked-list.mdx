@@ -84,12 +84,12 @@ function middleNode(head: ListNode | null): ListNode | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (count pass)** | **O(1)** | **n** | **O(n)** |
-| L2 (walk to middle) | O(1) | n/2 | O(n) |
+| **L1 (count pass)** | **$O(1)$** | **n** | **$O(n)$** |
+| L2 (walk to middle) | $O(1)$ | n/2 | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n), two passes
-- **Space:** O(1)
+- **Time:** $O(n)$, two passes
+- **Space:** $O(1)$
 
 Correct but walks the list twice.
 
@@ -128,15 +128,15 @@ function middleNode(head: ListNode | null): ListNode | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop guard) | O(1) | n/2 | O(n) |
-| **L2/L3 (advance pointers)** | **O(1)** | **n/2** | **O(n)** ← dominates |
-| L4 (return) | O(1) | 1 | O(1) |
+| L1 (loop guard) | $O(1)$ | n/2 | $O(n)$ |
+| **L2/L3 (advance pointers)** | **$O(1)$** | **n/2** | **$O(n)$** ← dominates |
+| L4 (return) | $O(1)$ | 1 | $O(1)$ |
 
 The loop runs exactly floor(n/2) times (for odd n) or n/2 times (for even n). One pass, constant space.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3 (one pass with two pointers).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3 (one pass with two pointers).
+- **Space:** $O(1)$.
 
 ### Step-by-step trace
 

@@ -83,15 +83,15 @@ function rob(nums: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (base case) | O(1) | O(2ⁿ) unique + repeated calls | O(2ⁿ) |
-| **L3 (two recursive branches)** | **O(1) + subtree cost** | **O(2ⁿ) calls** | **O(2ⁿ)** ← dominates |
-| L4 (entry) | O(1) | 1 | O(1) |
+| L2 (base case) | $O(1)$ | $O(2ⁿ)$ unique + repeated calls | $O(2ⁿ)$ |
+| **L3 (two recursive branches)** | **$O(1)$ + subtree cost** | **$O(2ⁿ)$ calls** | **$O(2ⁿ)$** ← dominates |
+| L4 (entry) | $O(1)$ | 1 | $O(1)$ |
 
-Every call fans out into two subproblems with no memoization, so the call tree is a full binary tree of depth n. Total nodes: O(2ⁿ).
+Every call fans out into two subproblems with no memoization, so the call tree is a full binary tree of depth n. Total nodes: $O(2ⁿ)$.
 
 **Complexity**
-- **Time:** O(2ⁿ), driven by L3 (unbounded branching without caching).
-- **Space:** O(n) for the recursion stack at depth n.
+- **Time:** $O(2ⁿ)$, driven by L3 (unbounded branching without caching).
+- **Space:** $O(n)$ for the recursion stack at depth n.
 
 ## Approach 2: Memoized
 
@@ -134,16 +134,16 @@ function rob(nums: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (lru_cache setup) | O(1) | 1 | O(1) |
-| L2 (base case) | O(1) | n+1 unique calls | O(n) |
-| **L3 (compute + cache store)** | **O(1)** | **n unique calls** | **O(n)** ← dominates |
-| L4 (entry) | O(1) | 1 | O(1) |
+| L1 (lru_cache setup) | $O(1)$ | 1 | $O(1)$ |
+| L2 (base case) | $O(1)$ | n+1 unique calls | $O(n)$ |
+| **L3 (compute + cache store)** | **$O(1)$** | **n unique calls** | **$O(n)$** ← dominates |
+| L4 (entry) | $O(1)$ | 1 | $O(1)$ |
 
-Each index `i` is computed exactly once; subsequent calls return a cached result in O(1). The n subproblems each do O(1) work, giving O(n) total.
+Each index `i` is computed exactly once; subsequent calls return a cached result in $O(1)$. The n subproblems each do $O(1)$ work, giving $O(n)$ total.
 
 **Complexity**
-- **Time:** O(n), driven by L3 (n unique subproblems, each computed once).
-- **Space:** O(n) for the cache and recursion stack.
+- **Time:** $O(n)$, driven by L3 (n unique subproblems, each computed once).
+- **Space:** $O(n)$ for the cache and recursion stack.
 
 **Try this approach:**
 
@@ -198,14 +198,14 @@ function rob(nums: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (allocate dp) | O(n) | 1 | O(n) |
-| L2, L3 (base cases) | O(1) | 1 each | O(1) |
-| **L4, L5 (loop + recurrence)** | **O(1)** | **n - 2** | **O(n)** ← dominates |
-| L6 (return) | O(1) | 1 | O(1) |
+| L1 (allocate dp) | $O(n)$ | 1 | $O(n)$ |
+| L2, L3 (base cases) | $O(1)$ | 1 each | $O(1)$ |
+| **L4, L5 (loop + recurrence)** | **$O(1)$** | **n - 2** | **$O(n)$** ← dominates |
+| L6 (return) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(n), driven by L4/L5 (n - 2 iterations).
-- **Space:** O(n) for the dp array.
+- **Time:** $O(n)$, driven by L4/L5 (n - 2 iterations).
+- **Space:** $O(n)$ for the dp array.
 
 **Try this approach:**
 
@@ -251,16 +251,16 @@ function rob(nums: number[]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init vars) | O(1) | 1 | O(1) |
-| L2 (loop header) | O(1) | n+1 (including exit test) | O(n) |
-| **L3 (update vars)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L4 (return) | O(1) | 1 | O(1) |
+| L1 (init vars) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop header) | $O(1)$ | n+1 (including exit test) | $O(n)$ |
+| **L3 (update vars)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L4 (return) | $O(1)$ | 1 | $O(1)$ |
 
 The entire DP table is collapsed to two scalars. Each step only needs the previous two values, so we discard everything else. No array allocation, no recursion overhead.
 
 **Complexity**
-- **Time:** O(n), driven by L3 (single pass over nums).
-- **Space:** O(1), only two scalar variables regardless of input size.
+- **Time:** $O(n)$, driven by L3 (single pass over nums).
+- **Space:** $O(1)$, only two scalar variables regardless of input size.
 
 **Try this approach:**
 
@@ -277,10 +277,10 @@ The entire DP table is collapsed to two scalars. Each step only needs the previo
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive take/skip | O(2ⁿ) | O(n) |
-| Memoized | O(n) | O(n) |
-| Bottom-up, dp array | O(n) | O(n) |
-| **Bottom-up, two vars** | **O(n)** | **O(1)** |
+| Naive take/skip | $O(2ⁿ)$ | $O(n)$ |
+| Memoized | $O(n)$ | $O(n)$ |
+| Bottom-up, dp array | $O(n)$ | $O(n)$ |
+| **Bottom-up, two vars** | **$O(n)$** | **$O(1)$** |
 
 This is the canonical "take or skip" DP pattern. Reappears in Paint House, Delete and Earn, and Best Time to Buy/Sell with Cooldown.
 

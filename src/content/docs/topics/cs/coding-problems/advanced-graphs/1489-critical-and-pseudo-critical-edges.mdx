@@ -259,17 +259,17 @@ func findCriticalAndPseudoCriticalEdges(n int, edges [][]int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (index + sort) | O(E log E) | 1 | O(E log E) |
-| L9 (base Kruskal) | O(E alpha(V)) | 1 | O(E alpha(V)) |
-| **L10 (outer loop)** | O(1) | E | O(E) |
-| **L11/L12 (Kruskal calls)** | **O(E alpha(V))** | **2E** | **O(E^2 alpha(V))** ← dominates |
-| L13 (sort results) | O(E log E) | 1 | O(E log E) |
+| L1-L2 (index + sort) | $O(E log E)$ | 1 | $O(E log E)$ |
+| L9 (base Kruskal) | $O(E alpha(V)$) | 1 | $O(E alpha(V)$) |
+| **L10 (outer loop)** | $O(1)$ | E | $O(E)$ |
+| **L11/L12 (Kruskal calls)** | **$O(E alpha(V)$)** | **2E** | **$O(E^2 alpha(V)$)** ← dominates |
+| L13 (sort results) | $O(E log E)$ | 1 | $O(E log E)$ |
 
-For each of E edges, we run two O(E alpha(V)) Kruskal passes, giving O(E^2 alpha(V)) total. Since alpha(V) is effectively constant (< 5 for all practical inputs), this is essentially O(E^2).
+For each of E edges, we run two $O(E alpha(V)$) Kruskal passes, giving $O(E^2 alpha(V)$) total. Since alpha(V) is effectively constant (< 5 for all practical inputs), this is essentially $O(E^2)$.
 
 **Complexity**
-- **Time:** O(E^2 alpha(V)), driven by L11/L12 (two Kruskal passes per edge).
-- **Space:** O(V + E) for the Union-Find and edge list.
+- **Time:** $O(E^2 alpha(V)$), driven by L11/L12 (two Kruskal passes per edge).
+- **Space:** $O(V + E)$ for the Union-Find and edge list.
 
 **Try this approach:**
 
@@ -285,9 +285,9 @@ For each of E edges, we run two O(E alpha(V)) Kruskal passes, giving O(E^2 alpha
   </TabItem>
 </Tabs>
 
-### Why not O(E log E) for the whole problem?
+### Why not $O(E log E)$ for the whole problem?
 
-We run Kruskal O(E) times (once per edge, twice per test). Each Kruskal is O(E alpha(V)). There is no known algorithm better than O(E^2) for this problem in the general case, though matroid intersection theory can improve it in practice.
+We run Kruskal $O(E)$ times (once per edge, twice per test). Each Kruskal is $O(E alpha(V)$). There is no known algorithm better than $O(E^2)$ for this problem in the general case, though matroid intersection theory can improve it in practice.
 
 ### Classifying edge types visually
 
@@ -306,8 +306,8 @@ Test e2 (exclude): e3 steps in with same weight -> MST weight still 7.
 
 | Step | Operation | Purpose |
 | --- | --- | --- |
-| Sort edges | O(E log E) | Kruskal prerequisite |
-| Base MST | O(E alpha(V)) | Reference weight |
+| Sort edges | $O(E log E)$ | Kruskal prerequisite |
+| Base MST | $O(E alpha(V)$) | Reference weight |
 | Critical test | Kruskal excluding edge | Weight increases? |
 | Pseudo-critical test | Kruskal forcing edge | Weight stays same? |
 

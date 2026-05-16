@@ -13,7 +13,7 @@ updated: 2026-04-23
 Bit manipulation is a small but useful toolkit. Memorize the primitives:
 
 - **XOR identities**: `a ^ a = 0`, `a ^ 0 = a`, XOR is commutative and associative. Used for "find the unique element."
-- **Brian Kernighan's trick**: `n & (n, 1)` clears the lowest set bit. Counts set bits in O(popcount).
+- **Brian Kernighan's trick**: `n & (n, 1)` clears the lowest set bit. Counts set bits in $O(popcount)$.
 - **Bit-wise iteration**: `n & 1` tests the LSB; `n >>= 1` shifts right.
 - **Sum without `+`**: `a ^ b` is sum-without-carry, `(a & b) << 1` is the carry. Loop until carry = 0.
 

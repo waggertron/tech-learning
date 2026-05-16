@@ -92,14 +92,14 @@ func uniquePaths(m int, n int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (base case) | O(1) | once per leaf call | O(1) each |
-| **L3 (two recursive calls)** | **O(1) work + 2 calls** | **O(2^(m+n)) call tree** | **O(2^(m+n))** ← dominates |
+| L2 (base case) | $O(1)$ | once per leaf call | $O(1)$ each |
+| **L3 (two recursive calls)** | **$O(1)$ work + 2 calls** | **$O(2^{m+n})$ call tree** | **$O(2^{m+n})$** ← dominates |
 
 Without caching, the same `(r, c)` is recomputed at every node of a binary tree of depth `m + n`. The exponential blowup is identical to naive Fibonacci.
 
 **Complexity**
-- **Time:** O(2^(m + n)), driven by L3's double branching without memoization.
-- **Space:** O(m + n) recursion depth.
+- **Time:** $O(2^{m+n})$, driven by L3's double branching without memoization.
+- **Space:** $O(m + n)$ recursion depth.
 
 ## Approach 2: 2-D bottom-up DP
 
@@ -154,16 +154,16 @@ func uniquePaths(m int, n int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (table init) | O(1) per cell | m · n | O(m · n) |
-| **L2+L3 (double loop)** | **O(1) body** | **(m-1) · (n-1)** | **O(m · n)** ← dominates |
-| L4 (recurrence fill) | O(1) | (m-1) · (n-1) | O(m · n) |
-| L5 (answer read) | O(1) | 1 | O(1) |
+| L1 (table init) | $O(1)$ per cell | m · n | $O(m · n)$ |
+| **L2+L3 (double loop)** | **$O(1)$ body** | **(m-1) · (n-1)** | **$O(m · n)$** ← dominates |
+| L4 (recurrence fill) | $O(1)$ | (m-1) · (n-1) | $O(m · n)$ |
+| L5 (answer read) | $O(1)$ | 1 | $O(1)$ |
 
 Every cell is visited once; each fill is a single addition. The double loop is the only work.
 
 **Complexity**
-- **Time:** O(m · n), driven by L2+L3+L4 (the full grid traversal).
-- **Space:** O(m · n) for the DP table.
+- **Time:** $O(m · n)$, driven by L2+L3+L4 (the full grid traversal).
+- **Space:** $O(m · n)$ for the DP table.
 
 **Try this approach:**
 
@@ -229,18 +229,18 @@ func uniquePaths(m int, n int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) per element | n | O(n) |
-| **L2+L3 (double loop)** | **O(1) body** | **(m-1) · (n-1)** | **O(m · n)** ← dominates |
-| L4 (rolling update) | O(1) | (m-1) · (n-1) | O(m · n) |
+| L1 (init) | $O(1)$ per element | n | $O(n)$ |
+| **L2+L3 (double loop)** | **$O(1)$ body** | **(m-1) · (n-1)** | **$O(m · n)$** ← dominates |
+| L4 (rolling update) | $O(1)$ | (m-1) · (n-1) | $O(m · n)$ |
 
-Same time complexity as 2-D DP but the space drops from O(m · n) to O(n) by reusing one array. `dp[c]` before the update is `dp[r-1][c]` (from the previous row); `dp[c-1]` just updated is `dp[r][c-1]` from the current row. The rolling update is sound because we traverse left to right.
+Same time complexity as 2-D DP but the space drops from $O(m · n)$ to $O(n)$ by reusing one array. `dp[c]` before the update is `dp[r-1][c]` (from the previous row); `dp[c-1]` just updated is `dp[r][c-1]` from the current row. The rolling update is sound because we traverse left to right.
 
 **Complexity**
-- **Time:** O(m · n), driven by L2+L3+L4.
-- **Space:** O(n) for the single rolling row.
+- **Time:** $O(m · n)$, driven by L2+L3+L4.
+- **Space:** $O(n)$ for the single rolling row.
 
 ### Closed-form (math variant)
-The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` total moves are "down." O(min(m, n)) using iterative factorial.
+The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` total moves are "down." $O(min(m, n)$) using iterative factorial.
 
 **Try this approach:**
 
@@ -260,10 +260,10 @@ The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` tot
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Recursive | O(2^(m+n)) | O(m + n) |
-| 2-D DP | O(m · n) | O(m · n) |
-| **1-D rolling DP** | **O(m · n)** | **O(n)** |
-| Closed-form | O(min(m, n)) | O(1) |
+| Recursive | $O(2^{m+n})$ | $O(m + n)$ |
+| 2-D DP | $O(m · n)$ | $O(m · n)$ |
+| **1-D rolling DP** | **$O(m · n)$** | **$O(n)$** |
+| Closed-form | $O(min(m, n)$) | $O(1)$ |
 
 The 1-D rolling array is the standard interview answer. The closed-form is a neat math flex when permitted.
 

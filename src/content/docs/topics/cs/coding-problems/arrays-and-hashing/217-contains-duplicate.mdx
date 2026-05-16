@@ -99,16 +99,16 @@ func containsDuplicate(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (len) | O(1) | 1 | O(1) |
-| L2 (outer loop) | O(1) | n | O(n) |
-| **L3, L4 (inner loop + compare)** | **O(1)** | **~n²/2 worst case** | **O(n²)** ← dominates |
-| L5 (return) | O(1) | at most 1 | O(1) |
+| L1 (len) | $O(1)$ | 1 | $O(1)$ |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L3, L4 (inner loop + compare)** | **$O(1)$** | **~n²/2 worst case** | **$O(n²)$** ← dominates |
+| L5 (return) | $O(1)$ | at most 1 | $O(1)$ |
 
 The nested loops each run up to n, yielding ~n²/2 comparisons in the worst case (no duplicates).
 
 **Complexity**
-- **Time:** O(n²), driven by L3/L4 (nested loop comparisons).
-- **Space:** O(1). No extra structures; only the loop indices.
+- **Time:** $O(n²)$, driven by L3/L4 (nested loop comparisons).
+- **Space:** $O(1)$. No extra structures; only the loop indices.
 
 This is the most direct approach but quadratic time makes it unusable for large inputs.
 
@@ -159,15 +159,15 @@ func containsDuplicate(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2, L3 (linear scan) | O(1) | n-1 | O(n) |
-| L4 (return) | O(1) | at most 1 | O(1) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2, L3 (linear scan) | $O(1)$ | n-1 | $O(n)$ |
+| L4 (return) | $O(1)$ | at most 1 | $O(1)$ |
 
 The sort is the only meaningful cost; the scan after it is linear.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (the sort).
-- **Space:** O(n) for `sorted(nums)` (Python returns a new list). If you mutate in place with `nums.sort()`, it's O(log n) for the sort's stack frames (Timsort).
+- **Time:** $O(n log n)$, driven by L1 (the sort).
+- **Space:** $O(n)$ for `sorted(nums)` (Python returns a new list). If you mutate in place with `nums.sort()`, it's $O(log n)$ for the sort's stack frames (Timsort).
 
 Improvement: we dropped one order of growth. Worth knowing as an alternative when memory is tight and in-place sort is available.
 
@@ -235,17 +235,17 @@ func containsDuplicate(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init set) | O(1) | 1 | O(1) |
-| L2 (loop) | O(1) | n | O(n) |
-| **L3 (set lookup)** | **O(1) avg** | **n** | **O(n)** ← dominates |
-| L4 (return) | O(1) | at most 1 | O(1) |
-| L5 (set insert) | O(1) avg | up to n | O(n) |
+| L1 (init set) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop) | $O(1)$ | n | $O(n)$ |
+| **L3 (set lookup)** | **$O(1)$ avg** | **n** | **$O(n)$** ← dominates |
+| L4 (return) | $O(1)$ | at most 1 | $O(1)$ |
+| L5 (set insert) | $O(1)$ avg | up to n | $O(n)$ |
 
-Each iteration does constant-time hash operations. Single pass, O(1) average per step.
+Each iteration does constant-time hash operations. Single pass, $O(1)$ average per step.
 
 **Complexity**
-- **Time:** O(n), driven by L3/L5 (hash operations per element).
-- **Space:** O(n). The set can hold up to all `n` values before a duplicate is found.
+- **Time:** $O(n)$, driven by L3/L5 (hash operations per element).
+- **Space:** $O(n)$. The set can hold up to all `n` values before a duplicate is found.
 
 ### One-liner
 
@@ -274,9 +274,9 @@ def contains_duplicate(nums: list[int]) -> bool:
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force (every pair) | O(n²) | O(1) |
-| Sort + adjacent check | O(n log n) | O(n) (or O(log n) in-place) |
-| **Hash set** | **O(n)** | O(n) |
+| Brute force (every pair) | $O(n²)$ | $O(1)$ |
+| Sort + adjacent check | $O(n log n)$ | $O(n)$ (or $O(log n)$ in-place) |
+| **Hash set** | **$O(n)$** | $O(n)$ |
 
 The hash-set approach is strictly best on time. Use the sort variant only when memory is constrained *and* you can sort in place.
 
@@ -360,4 +360,4 @@ func main() {
 ## Related data structures
 
 - [Arrays](../../../data-structures/arrays/), input container
-- [Hash Tables](../../../data-structures/hash-tables/), set membership for O(1) dedup (optimal)
+- [Hash Tables](../../../data-structures/hash-tables/), set membership for $O(1)$ dedup (optimal)

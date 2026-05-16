@@ -163,13 +163,13 @@ func (t *Twitter) GetNewsFeed(userId int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (postTweet/follow/unfollow) | O(1) | 1 per call | O(1) |
-| L4 (collect all tweets) | O(T) | 1 per getNewsFeed | O(T) |
-| **L5 (sort feed)** | **O(T log T)** | **1 per getNewsFeed** | **O(T log T)** ← dominates getNewsFeed |
+| L1-L3 (postTweet/follow/unfollow) | $O(1)$ | 1 per call | $O(1)$ |
+| L4 (collect all tweets) | $O(T)$ | 1 per getNewsFeed | $O(T)$ |
+| **L5 (sort feed)** | **$O(T log T)$** | **1 per getNewsFeed** | **$O(T log T)$** ← dominates getNewsFeed |
 
 **Complexity**
-- `getNewsFeed`: O(T log T) where T is total tweets across followed users (L5).
-- Others: O(1).
+- `getNewsFeed`: $O(T log T)$ where T is total tweets across followed users (L5).
+- Others: $O(1)$.
 
 ## Approach 2: Per-user sorted list + k-way merge with a heap (optimal)
 
@@ -403,15 +403,15 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (postTweet/follow/unfollow) | O(1) | 1 per call | O(1) |
-| L4-L5 (seed + heapify) | O(k) | 1 per getNewsFeed | O(k) |
-| **L6-L8 (drain 10 from heap)** | **O(log k) each** | **10** | **O(10 log k) = O(log k)** ← dominates getNewsFeed |
+| L1-L3 (postTweet/follow/unfollow) | $O(1)$ | 1 per call | $O(1)$ |
+| L4-L5 (seed + heapify) | $O(k)$ | 1 per getNewsFeed | $O(k)$ |
+| **L6-L8 (drain 10 from heap)** | **$O(log k)$ each** | **10** | **$O(10 log k)$ = $O(log k)$** ← dominates getNewsFeed |
 
-The heap never exceeds k + 1 entries. Each of the 10 pops and up to 10 pushes costs O(log k). The seed phase at L4-L5 is O(k).
+The heap never exceeds k + 1 entries. Each of the 10 pops and up to 10 pushes costs $O(log k)$. The seed phase at L4-L5 is $O(k)$.
 
 **Complexity**
-- `getNewsFeed`: O(k + 10 log k) = O(k) for seeding + O(log k) for draining (L4-L8).
-- Others: O(1) amortized.
+- `getNewsFeed`: $O(k + 10 log k)$ = $O(k)$ for seeding + $O(log k)$ for draining (L4-L8).
+- Others: $O(1)$ amortized.
 
 Same pattern as problem 23 (Merge k Sorted Lists).
 
@@ -431,8 +431,8 @@ Same pattern as problem 23 (Merge k Sorted Lists).
 If each user only ever needs the last 10 tweets, truncate the per-user list to length 10 (a rolling window). Then merge at most `10 · k` tweets on `getNewsFeed`.
 
 **Complexity**
-- `getNewsFeed`: O(10 · k).
-- Others: O(1).
+- `getNewsFeed`: $O(10 · k)$.
+- Others: $O(1)$.
 
 Lower memory if you don't need long-term history.
 
@@ -539,9 +539,9 @@ console.log("all tests pass");
 
 | Approach | getNewsFeed | postTweet | Notes |
 | --- | --- | --- | --- |
-| Collect all + sort | O(T log T) | O(1) | Simplest |
-| **Heap k-way merge** | **O(10 log k)** | O(1) | Canonical answer |
-| Rolling per-user window | O(10 · k) | O(1) | If history truncation is OK |
+| Collect all + sort | $O(T log T)$ | $O(1)$ | Simplest |
+| **Heap k-way merge** | **$O(10 log k)$** | $O(1)$ | Canonical answer |
+| Rolling per-user window | $O(10 · k)$ | $O(1)$ | If history truncation is OK |
 
 The k-way merge pattern is the right generalization: it's the same code you'd use to implement Kafka partition consumers, merged log readers, or any "top-N across ordered streams" system.
 
@@ -549,4 +549,4 @@ The k-way merge pattern is the right generalization: it's the same code you'd us
 
 - [Heaps / Priority Queues](../../../data-structures/heaps/), k-way merge on per-user feeds
 - [Hash Tables](../../../data-structures/hash-tables/), user → tweets, follower → followees
-- [Linked Lists](../../../data-structures/linked-lists/), could replace the per-user list if you need O(1) prepend
+- [Linked Lists](../../../data-structures/linked-lists/), could replace the per-user list if you need $O(1)$ prepend

@@ -90,15 +90,15 @@ function coinChange(coins: number[], amount: number): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (base cases) | O(1) | once per call | O(1) each |
-| L5 (coin loop) | O(1) | n per call | O(n) per call |
-| **L6 (recurse)** | **O(n) per branch** | **branches up to n^A** | **O(n · n^A)** ← dominates |
+| L2, L3 (base cases) | $O(1)$ | once per call | $O(1)$ each |
+| L5 (coin loop) | $O(1)$ | n per call | $O(n)$ per call |
+| **L6 (recurse)** | **$O(n)$ per branch** | **branches up to n^A** | **$O(n · n^A)$** ← dominates |
 
 Without memoization every sub-problem is recomputed from scratch. The call tree has up to n choices at each of A levels, giving an exponential blowup.
 
 **Complexity**
-- **Time:** O(n^A), driven by L6. Exponential, unusable.
-- **Space:** O(A) for the recursion stack.
+- **Time:** $O(n^A)$, driven by L6. Exponential, unusable.
+- **Space:** $O(A)$ for the recursion stack.
 
 ## Approach 2: Top-down memoized
 
@@ -150,15 +150,15 @@ function coinChange(coins: number[], amount: number): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (base cases) | O(1) | once per unique n | O(A) total |
-| **L5, L6 (coin loop)** | **O(n) per unique call** | **A unique values of n** | **O(n · A)** ← dominates |
-| L7 (initial call) | O(1) | 1 | O(1) |
+| L2, L3 (base cases) | $O(1)$ | once per unique n | $O(A)$ total |
+| **L5, L6 (coin loop)** | **$O(n)$ per unique call** | **A unique values of n** | **$O(n · A)$** ← dominates |
+| L7 (initial call) | $O(1)$ | 1 | $O(1)$ |
 
-Each value from 0 to A is computed exactly once. The coin loop inside each call is O(n). Cache lookup and store are O(1) amortized.
+Each value from 0 to A is computed exactly once. The coin loop inside each call is $O(n)$. Cache lookup and store are $O(1)$ amortized.
 
 **Complexity**
-- **Time:** O(n · A), driven by L5/L6.
-- **Space:** O(A) for the memo table plus O(A) for the call stack.
+- **Time:** $O(n · A)$, driven by L5/L6.
+- **Space:** $O(A)$ for the memo table plus $O(A)$ for the call stack.
 
 **Try this approach:**
 
@@ -212,17 +212,17 @@ function coinChange(coins: number[], amount: number): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init dp) | O(1) | A+1 | O(A) |
-| L3 (base case) | O(1) | 1 | O(1) |
-| L4 (outer loop) | O(1) | A | O(A) |
-| **L5, L7 (inner loop + recurrence)** | **O(1)** | **A · n** | **O(A · n)** ← dominates |
-| L8 (return) | O(1) | 1 | O(1) |
+| L2 (init dp) | $O(1)$ | A+1 | $O(A)$ |
+| L3 (base case) | $O(1)$ | 1 | $O(1)$ |
+| L4 (outer loop) | $O(1)$ | A | $O(A)$ |
+| **L5, L7 (inner loop + recurrence)** | **$O(1)$** | **A · n** | **$O(A · n)$** ← dominates |
+| L8 (return) | $O(1)$ | 1 | $O(1)$ |
 
-The double loop at L4/L5 is the whole story. Every `(amount, coin)` pair is visited exactly once, and L7 is O(1) table lookup plus comparison. No inner recursion, no re-scanning; the DP order guarantees `dp[i - c]` is already filled when we need it.
+The double loop at L4/L5 is the whole story. Every `(amount, coin)` pair is visited exactly once, and L7 is $O(1)$ table lookup plus comparison. No inner recursion, no re-scanning; the DP order guarantees `dp[i - c]` is already filled when we need it.
 
 **Complexity**
-- **Time:** O(A · n), driven by L5/L7 (the double loop).
-- **Space:** O(A) for the dp table.
+- **Time:** $O(A · n)$, driven by L5/L7 (the double loop).
+- **Space:** $O(A)$ for the dp table.
 
 ### Unbounded vs. 0/1 knapsack
 Coin Change is **unbounded**, each coin can be used infinitely. The outer loop over amounts lets the DP "re-use" a coin naturally. Compare with 0/1 knapsack (problem 416 Partition Equal Subset Sum), where each item is used at most once and loop order matters.
@@ -248,9 +248,9 @@ Coin Change is **unbounded**, each coin can be used infinitely. The outer loop o
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(n^A) | O(A) |
-| Top-down memo | O(A · n) | O(A) |
-| **Bottom-up DP** | **O(A · n)** | **O(A)** |
+| Naive recursion | $O(n^A)$ | $O(A)$ |
+| Top-down memo | $O(A · n)$ | $O(A)$ |
+| **Bottom-up DP** | **$O(A · n)$** | **$O(A)$** |
 
 Template for "min operations to reach target" under free reuse: Coin Change, Perfect Squares, Minimum Cost For Tickets.
 

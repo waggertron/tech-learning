@@ -19,7 +19,7 @@ The algorithm runs two passes:
 - **Phase 1:** detect whether a cycle exists (tortoise and hare meet inside the cycle, or hare falls off the end)
 - **Phase 2:** find the exact node where the cycle begins (reset one pointer to head, step both at speed 1)
 
-Both passes are O(n) time, O(1) space. No visited-set needed.
+Both passes are $O(n)$ time, $O(1)$ space. No visited-set needed.
 
 ## Core idea, in one sentence
 
@@ -170,11 +170,11 @@ They meet at node 3, which is the cycle entrance. Correct.
 
 | Metric | Cost |
 | ------ | ---- |
-| Time (phase 1) | O(F + C) = O(n) |
-| Time (phase 2) | O(F) = O(n) |
-| Space | O(1), two pointer variables |
+| Time (phase 1) | $O(F + C)$ = $O(n)$ |
+| Time (phase 2) | $O(F)$ = $O(n)$ |
+| Space | $O(1)$, two pointer variables |
 
-Phase 1 takes at most `F + C` steps: `F` steps to enter the cycle, then at most `C` more before `fast` laps `slow`. Phase 2 takes exactly `F` steps. Total is O(n).
+Phase 1 takes at most `F + C` steps: `F` steps to enter the cycle, then at most `C` more before `fast` laps `slow`. Phase 2 takes exactly `F` steps. Total is $O(n)$.
 
 ## Why not just use a hash set?
 
@@ -192,13 +192,13 @@ def has_cycle_hashset(head):
     return False
 ```
 
-This is O(n) time but also O(n) space: in the worst case you store every node before hitting the duplicate. Floyd's algorithm solves the same problem in O(1) space. The hash-set approach is simpler to explain and perfectly fine for code that already tracks nodes for other reasons, but whenever the interviewer says "can you do it in constant space?", Floyd's is the answer.
+This is $O(n)$ time but also $O(n)$ space: in the worst case you store every node before hitting the duplicate. Floyd's algorithm solves the same problem in $O(1)$ space. The hash-set approach is simpler to explain and perfectly fine for code that already tracks nodes for other reasons, but whenever the interviewer says "can you do it in constant space?", Floyd's is the answer.
 
-The O(1) constraint also matters for very large lists where heap pressure is a real concern, and for embedded or memory-constrained environments where allocating a variable-size set isn't acceptable.
+The $O(1)$ constraint also matters for very large lists where heap pressure is a real concern, and for embedded or memory-constrained environments where allocating a variable-size set isn't acceptable.
 
 ## Application 1: find the duplicate number ([LeetCode 287](../coding-problems/linked-list/287-find-the-duplicate-number/))
 
-The problem: given an array `nums` of `n+1` integers where each value is in `[1, n]`, find the one duplicate. You must not modify the array and must use O(1) extra space.
+The problem: given an array `nums` of `n+1` integers where each value is in `[1, n]`, find the one duplicate. You must not modify the array and must use $O(1)$ extra space.
 
 The trick: treat the array as an implicit linked list where `nums[i]` is the "next" pointer from index `i`. Because every value is in `[1, n]` and indices are in `[0, n]`, following `nums[i]` always lands on a valid index. Because there are `n+1` slots but only `n` distinct valid values, the duplicate creates a cycle (two indices point to the same next index).
 
@@ -274,7 +274,7 @@ Start with 141 to get the detection loop clean, then move to 142 to cement the p
 
 ## Multiple uses
 
-**Detect duplicate in array (no extra space)** - Treat the array as a linked list where index i points to `nums[i]`. A duplicate value means two indices point to the same next node, creating a cycle. Floyd's finds the entry point, which is the duplicate. O(n) time, O(1) space.
+**Detect duplicate in array (no extra space)** - Treat the array as a linked list where index i points to `nums[i]`. A duplicate value means two indices point to the same next node, creating a cycle. Floyd's finds the entry point, which is the duplicate. $O(n)$ time, $O(1)$ space.
 
 ```python
 def find_duplicate(nums):
@@ -307,7 +307,7 @@ def middle_node(head):
 # For even length, returns the second of the two middle nodes.
 ```
 
-**Palindrome linked list check** - Find middle with Floyd's, reverse the second half, compare both halves node by node. Restore the list if needed. O(n) time, O(1) space.
+**Palindrome linked list check** - Find middle with Floyd's, reverse the second half, compare both halves node by node. Restore the list if needed. $O(n)$ time, $O(1)$ space.
 
 ```python
 def is_palindrome(head):

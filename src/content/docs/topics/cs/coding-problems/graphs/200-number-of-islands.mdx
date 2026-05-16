@@ -133,16 +133,16 @@ func numIslands(grid [][]byte) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L7, L8 (scan) | O(1) | m · n | O(m · n) |
-| L4 (boundary check) | O(1) | once per cell entered via DFS | O(m · n) total |
-| L5 (mark visited) | O(1) | at most once per land cell | O(m · n) total |
-| **L6 (recurse)** | **O(1) per call** | **each cell visited at most once** | **O(m · n) ← dominates** |
+| L7, L8 (scan) | $O(1)$ | m · n | $O(m · n)$ |
+| L4 (boundary check) | $O(1)$ | once per cell entered via DFS | $O(m · n)$ total |
+| L5 (mark visited) | $O(1)$ | at most once per land cell | $O(m · n)$ total |
+| **L6 (recurse)** | **$O(1)$ per call** | **each cell visited at most once** | **$O(m · n)$ ← dominates** |
 
 Every land cell is flipped from `"1"` to `"0"` exactly once, so L6 fires at most m · n times total across the entire outer loop, not per island. The recursion stack depth is at most m · n in a pathological all-land grid.
 
 **Complexity**
-- **Time:** O(m · n), driven by L6/L9 (each cell visited at most once in total).
-- **Space:** O(m · n) recursion worst case.
+- **Time:** $O(m · n)$, driven by L6/L9 (each cell visited at most once in total).
+- **Space:** $O(m · n)$ recursion worst case.
 
 ## Approach 2: BFS with a queue
 
@@ -258,16 +258,16 @@ func numIslands(grid [][]byte) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L10, L11 (scan) | O(1) | m · n | O(m · n) |
-| L7 (dequeue) | O(1) | at most once per land cell | O(m · n) total |
-| L8 (mark visited) | O(1) | at most once per land cell | O(m · n) total |
-| **L9 (enqueue)** | **O(1)** | **each land cell enqueued at most once** | **O(m · n) ← dominates** |
+| L10, L11 (scan) | $O(1)$ | m · n | $O(m · n)$ |
+| L7 (dequeue) | $O(1)$ | at most once per land cell | $O(m · n)$ total |
+| L8 (mark visited) | $O(1)$ | at most once per land cell | $O(m · n)$ total |
+| **L9 (enqueue)** | **$O(1)$** | **each land cell enqueued at most once** | **$O(m · n)$ ← dominates** |
 
 The queue holds at most min(m, n) cells at any instant (the BFS frontier cannot exceed the shorter grid dimension), but total enqueue operations across the whole run are bounded by m · n.
 
 **Complexity**
-- **Time:** O(m · n), driven by L9/L12 (each cell enqueued at most once in total).
-- **Space:** O(min(m, n)) queue (max frontier width).
+- **Time:** $O(m · n)$, driven by L9/L12 (each cell enqueued at most once in total).
+- **Space:** $O(min(m, n)$) queue (max frontier width).
 
 **Try this approach:**
 
@@ -287,9 +287,9 @@ The queue holds at most min(m, n) cells at any instant (the BFS frontier cannot 
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| **DFS** | O(m · n) | O(m · n) recursion | Canonical |
-| **BFS** | O(m · n) | O(min(m, n)) | Use when grids are deep (avoid recursion depth) |
-| Union-Find | O(m · n · α) | O(m · n) | Overkill here, template for incremental updates |
+| **DFS** | $O(m · n)$ | $O(m · n)$ recursion | Canonical |
+| **BFS** | $O(m · n)$ | $O(min(m, n)$) | Use when grids are deep (avoid recursion depth) |
+| Union-Find | $O(m · n · α)$ | $O(m · n)$ | Overkill here, template for incremental updates |
 
 DFS/BFS are equivalent in Big-O. Choose Union-Find when the graph is growing over time, adding edges online and asking "how many components now?"
 

@@ -101,19 +101,19 @@ func minEatingSpeed(piles []int, h int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | up to M | O(M) |
-| **L2 (feasibility sum)** | **O(n)** | **up to M** | **O(n · M)** ← dominates |
-| L3 (increment) | O(1) | up to M | O(M) |
+| L1 (loop) | $O(1)$ | up to M | $O(M)$ |
+| **L2 (feasibility sum)** | **$O(n)$** | **up to M** | **$O(n · M)$** ← dominates |
+| L3 (increment) | $O(1)$ | up to M | $O(M)$ |
 
 In the worst case k must reach max(piles) before succeeding. Each check scans all n piles.
 
 **Complexity**
-- **Time:** O(n · max(piles)) worst case, driven by L2.
-- **Space:** O(1).
+- **Time:** $O(n · max(piles)$) worst case, driven by L2.
+- **Space:** $O(1)$.
 
 ## Approach 2: Linear search from max downward (no improvement)
 
-Starting from `k = max(piles)` and decrementing doesn't help, we'd still do O(max) iterations.
+Starting from `k = max(piles)` and decrementing doesn't help, we'd still do $O(max)$ iterations.
 
 <Tabs>
 <TabItem label="Python">
@@ -159,13 +159,13 @@ func minEatingSpeed(piles []int, h int) int {
 </TabItem>
 </Tabs>
 
-`max(piles)` always works (h ≥ n is guaranteed by the problem), so we walk down until the first speed that fails. Same O(n · M) profile as Approach 1; just goes the other direction.
+`max(piles)` always works (h ≥ n is guaranteed by the problem), so we walk down until the first speed that fails. Same $O(n · M)$ profile as Approach 1; just goes the other direction.
 
 A genuine middle tier is the **realization that feasibility is monotonic**: if speed `k` works, every `k' > k` also works. That monotonicity is the signal for binary search.
 
 **Complexity**
-- **Time:** O(n · max(piles)).
-- **Space:** O(1).
+- **Time:** $O(n · max(piles)$).
+- **Space:** $O(1)$.
 
 ## Approach 3: Binary search on the answer (optimal)
 
@@ -242,16 +242,16 @@ func minEatingSpeed(piles []int, h int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (find max) | O(n) | 1 | O(n) |
-| L3 (loop) | O(1) | log M | O(log M) |
-| **L5 (feasibility check)** | **O(n)** | **log M** | **O(n · log M)** ← dominates |
-| L6 or L7 (narrow) | O(1) | log M | O(log M) |
+| L2 (find max) | $O(n)$ | 1 | $O(n)$ |
+| L3 (loop) | $O(1)$ | log M | $O(log M)$ |
+| **L5 (feasibility check)** | **$O(n)$** | **log M** | **$O(n · log M)$** ← dominates |
+| L6 or L7 (narrow) | $O(1)$ | log M | $O(log M)$ |
 
-The search space for k is [1, max(piles)], so the binary search runs log(max(piles)) steps. Each step calls `hours(k)` which sums over all n piles in O(n).
+The search space for k is [1, max(piles)], so the binary search runs log(max(piles)) steps. Each step calls `hours(k)` which sums over all n piles in $O(n)$.
 
 **Complexity**
-- **Time:** O(n · log(max(piles))), driven by L5 (O(n) feasibility check repeated log M times).
-- **Space:** O(1).
+- **Time:** $O(n · log(max(piles)$)), driven by L5 ($O(n)$ feasibility check repeated log M times).
+- **Space:** $O(1)$.
 
 ### Integer-only hours (avoid float `ceil`)
 `ceil(p / k)` can be replaced with `(p + k - 1) // k` to avoid floating point entirely:
@@ -279,8 +279,8 @@ def hours(k: int) -> int:
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Linear scan on k | O(n · max(piles)) | O(1) |
-| **Binary search on k** | **O(n · log(max(piles)))** | **O(1)** |
+| Linear scan on k | $O(n · max(piles)$) | $O(1)$ |
+| **Binary search on k** | **$O(n · log(max(piles)$))** | **$O(1)$** |
 
 This is the template for every "minimum/maximum value that satisfies a monotonic predicate" problem. Once you recognize the monotonicity, you have the algorithm.
 

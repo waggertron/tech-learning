@@ -134,15 +134,15 @@ func leastInterval(tasks []byte, n int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (outer loop) | O(1) | T | O(T) |
-| **L2 (scan tasks)** | **O(t)** | **T** | **O(T · t)** ← dominates |
-| L3-L4 (update) | O(1) | up to T | O(T) |
+| L1 (outer loop) | $O(1)$ | T | $O(T)$ |
+| **L2 (scan tasks)** | **$O(t)$** | **T** | **$O(T · t)$** ← dominates |
+| L3-L4 (update) | $O(1)$ | up to T | $O(T)$ |
 
-At each time step we scan all task types (at most 26). Since t is bounded by 26, O(T · 26) = O(T).
+At each time step we scan all task types (at most 26). Since t is bounded by 26, $O(T · 26)$ = $O(T)$.
 
 **Complexity**
-- **Time:** O(T · t) = O(T) since t ≤ 26. Correct but slow on large T (L2 scan).
-- **Space:** O(t) = O(26).
+- **Time:** $O(T · t)$ = $O(T)$ since t ≤ 26. Correct but slow on large T (L2 scan).
+- **Space:** $O(t)$ = $O(26)$.
 
 Choosing highest-remaining-count is key, otherwise you strand long runs.
 
@@ -301,17 +301,17 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (heapify) | O(t) | 1 | O(t) |
-| L2 (outer loop) | O(1) | T | O(T) |
-| **L3 (heappop)** | **O(log t)** | **up to T** | **O(T log t)** ← dominates |
-| L4 (enqueue) | O(1) | up to T | O(T) |
-| L5 (heappush) | O(log t) | up to T | O(T log t) |
+| L1 (heapify) | $O(t)$ | 1 | $O(t)$ |
+| L2 (outer loop) | $O(1)$ | T | $O(T)$ |
+| **L3 (heappop)** | **$O(log t)$** | **up to T** | **$O(T log t)$** ← dominates |
+| L4 (enqueue) | $O(1)$ | up to T | $O(T)$ |
+| L5 (heappush) | $O(log t)$ | up to T | $O(T log t)$ |
 
-Since t ≤ 26, O(T log t) = O(T log 26) = O(T).
+Since t ≤ 26, $O(T log t)$ = $O(T log 26)$ = $O(T)$.
 
 **Complexity**
-- **Time:** O(T log t) = O(T) since t ≤ 26 (L3/L5 dominate).
-- **Space:** O(t) = O(26).
+- **Time:** $O(T log t)$ = $O(T)$ since t ≤ 26 (L3/L5 dominate).
+- **Space:** $O(t)$ = $O(26)$.
 
 Cleaner than the brute force; a natural fit for "greedy scheduling with recurring cooldowns."
 
@@ -407,16 +407,16 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (Counter / freq build)** | **O(T)** | **1** | **O(T)** ← dominates |
-| L2 (max) | O(t) | 1 | O(t) |
-| L3 (count ties) | O(t) | 1 | O(t) |
-| L4 (formula) | O(1) | 1 | O(1) |
+| **L1 (Counter / freq build)** | **$O(T)$** | **1** | **$O(T)$** ← dominates |
+| L2 (max) | $O(t)$ | 1 | $O(t)$ |
+| L3 (count ties) | $O(t)$ | 1 | $O(t)$ |
+| L4 (formula) | $O(1)$ | 1 | $O(1)$ |
 
 Building the Counter at L1 touches every task once. The remaining steps scan at most 26 entries. The formula at L4 is a single expression: no simulation, no heap.
 
 **Complexity**
-- **Time:** O(T) where T = len(tasks), driven by L1 (Counter construction).
-- **Space:** O(t) = O(26).
+- **Time:** $O(T)$ where T = len(tasks), driven by L1 (Counter construction).
+- **Space:** $O(t)$ = $O(26)$.
 
 **Try this approach:**
 
@@ -480,9 +480,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Simulation | O(T · 26) | O(26) | Direct; slow on large T |
-| **Max-heap + cooldown queue** | O(T) | O(26) | Generalizes to heterogeneous cooldowns |
-| **Closed-form math** | O(T) | O(26) | Tightest for this specific problem |
+| Simulation | $O(T · 26)$ | $O(26)$ | Direct; slow on large T |
+| **Max-heap + cooldown queue** | $O(T)$ | $O(26)$ | Generalizes to heterogeneous cooldowns |
+| **Closed-form math** | $O(T)$ | $O(26)$ | Tightest for this specific problem |
 
 The closed-form is fast and exact; the heap variant is what you reach for when cooldowns vary per task or priorities change dynamically.
 

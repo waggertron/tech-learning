@@ -113,13 +113,13 @@ func (mf *MedianFinder) FindMedian() float64 {
 
 | Line | Per-call cost | Times executed | Contribution per call |
 | --- | --- | --- | --- |
-| L1 (addNum append) | O(1) | 1 per addNum | O(1) |
-| **L2 (findMedian sort)** | **O(n log n)** | **1 per findMedian** | **O(n log n)** ← dominates |
+| L1 (addNum append) | $O(1)$ | 1 per addNum | $O(1)$ |
+| **L2 (findMedian sort)** | **$O(n log n)$** | **1 per findMedian** | **$O(n log n)$** ← dominates |
 
 **Complexity**
-- `addNum`: O(1) (L1).
-- `findMedian`: O(n log n) (L2).
-- Space: O(n).
+- `addNum`: $O(1)$ (L1).
+- `findMedian`: $O(n log n)$ (L2).
+- Space: $O(n)$.
 
 ## Approach 2: Insertion sort via `bisect.insort`
 
@@ -195,15 +195,15 @@ func (mf *MedianFinder) FindMedian() float64 {
 
 | Line | Per-call cost | Times executed | Contribution per call |
 | --- | --- | --- | --- |
-| **L1 (insort / splice)** | **O(n)** | **1 per addNum** | **O(n)** ← dominates addNum |
-| L2 (findMedian index) | O(1) | 1 per findMedian | O(1) |
+| **L1 (insort / splice)** | **$O(n)$** | **1 per addNum** | **$O(n)$** ← dominates addNum |
+| L2 (findMedian index) | $O(1)$ | 1 per findMedian | $O(1)$ |
 
-`bisect.insort` / `splice` uses binary search (O(log n)) to find the insertion point but then shifts all elements after it (O(n)).
+`bisect.insort` / `splice` uses binary search ($O(log n)$) to find the insertion point but then shifts all elements after it ($O(n)$).
 
 **Complexity**
-- `addNum`: O(n) (L1 shift dominates).
-- `findMedian`: O(1) (L2).
-- Space: O(n).
+- `addNum`: $O(n)$ (L1 shift dominates).
+- `findMedian`: $O(1)$ (L2).
+- Space: $O(n)$.
 
 ## Approach 3: Two heaps (canonical, optimal)
 
@@ -383,17 +383,17 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution per call |
 | --- | --- | --- | --- |
-| **L1 (push to lo)** | **O(log n)** | **1 per addNum** | **O(log n)** ← dominates addNum |
-| L2 (pop lo + push hi) | O(log n) | 1 per addNum | O(log n) |
-| L3 (rebalance, conditional) | O(log n) | up to 1 per addNum | O(log n) |
-| L4-L5 (findMedian) | O(1) | 1 per findMedian | O(1) |
+| **L1 (push to lo)** | **$O(log n)$** | **1 per addNum** | **$O(log n)$** ← dominates addNum |
+| L2 (pop lo + push hi) | $O(log n)$ | 1 per addNum | $O(log n)$ |
+| L3 (rebalance, conditional) | $O(log n)$ | up to 1 per addNum | $O(log n)$ |
+| L4-L5 (findMedian) | $O(1)$ | 1 per findMedian | $O(1)$ |
 
-Each `addNum` does at most 3 heap operations, each O(log n). The heaps together hold all n elements, so heap size is O(n). The median read is always O(1) because it only looks at the tops.
+Each `addNum` does at most 3 heap operations, each $O(log n)$. The heaps together hold all n elements, so heap size is $O(n)$. The median read is always $O(1)$ because it only looks at the tops.
 
 **Complexity**
-- `addNum`: O(log n), driven by L1-L3.
-- `findMedian`: O(1) (L4 or L5).
-- Space: O(n).
+- `addNum`: $O(log n)$, driven by L1-L3.
+- `findMedian`: $O(1)$ (L4 or L5).
+- Space: $O(n)$.
 
 ### Invariant
 After each `addNum`:
@@ -502,9 +502,9 @@ console.log("all tests pass");
 
 | Approach | addNum | findMedian | Space |
 | --- | --- | --- | --- |
-| Append + sort on query | O(1) | O(n log n) | O(n) |
-| Insertion sort | O(n) | O(1) | O(n) |
-| **Two heaps** | **O(log n)** | **O(1)** | **O(n)** |
+| Append + sort on query | $O(1)$ | $O(n log n)$ | $O(n)$ |
+| Insertion sort | $O(n)$ | $O(1)$ | $O(n)$ |
+| **Two heaps** | **$O(log n)$** | **$O(1)$** | **$O(n)$** |
 
 The two-heap technique is one of the most important design patterns in interviews. It also powers the sliding-window median (480) and percentile-tracking streaming systems.
 

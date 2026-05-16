@@ -61,7 +61,7 @@ Negative prefix is dead weight. Cut it loose. That's the proof.
 
 Answer: `6`, from the subarray `[4, -1, 2, 1]`.
 
-The restart at `x=4` is the key moment: when `cur` was `-2`, we threw it away. We never look backward, never reconsider. That's what makes the whole thing O(n).
+The restart at `x=4` is the key moment: when `cur` was `-2`, we threw it away. We never look backward, never reconsider. That's what makes the whole thing $O(n)$.
 
 ## Edge cases the formula handles for free
 
@@ -73,8 +73,8 @@ The restart at `x=4` is the key moment: when `cur` was `-2`, we threw it away. W
 
 | Metric | Cost |
 | --- | --- |
-| Time | O(n), single pass |
-| Space | O(1), two scalars |
+| Time | $O(n)$, single pass |
+| Space | $O(1)$, two scalars |
 
 ## The pattern
 
@@ -123,7 +123,7 @@ Walk through `[-2, 3, -4]`:
 
 The min `-6` was the bridge: holding it across the sign flip captured the `-2 · 3 · -4 = 24` product.
 
-**Same shape as Kadane.** Same O(n) single pass. Same `extend or restart` choice. Just two running scalars instead of one because multiplication's symmetry forces it.
+**Same shape as Kadane.** Same $O(n)$ single pass. Same `extend or restart` choice. Just two running scalars instead of one because multiplication's symmetry forces it.
 
 Detailed walkthrough: [LeetCode 152, Maximum Product Subarray](../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/).
 
@@ -163,7 +163,7 @@ def max_profit(prices):
     return best
 ```
 
-Both are O(n), O(1). The second is what most people write because it's the more direct phrasing, but it's the same algorithm: the running `cur` in the first version equals `prices[i] - min_price` in the second.
+Both are $O(n)$, $O(1)$. The second is what most people write because it's the more direct phrasing, but it's the same algorithm: the running `cur` in the first version equals `prices[i] - min_price` in the second.
 
 Walk through `[7, 1, 5, 3, 6, 4]` with the diff form:
 
@@ -243,7 +243,7 @@ def max_profit_two_transactions(prices):
     return sell2
 ```
 
-**Maximum sum submatrix** - For each pair of rows (r1, r2), collapse the 2D problem into a 1D Kadane on column sums. The column sum at index `c` is the sum of `matrix[r][c]` for `r` in `[r1, r2]`. One Kadane pass over those column sums gives the best rectangle bounded by those two rows. Iterating all row pairs is O(n^2) and each Kadane pass is O(m), for O(n^2 * m) total.
+**Maximum sum submatrix** - For each pair of rows (r1, r2), collapse the 2D problem into a 1D Kadane on column sums. The column sum at index `c` is the sum of `matrix[r][c]` for `r` in `[r1, r2]`. One Kadane pass over those column sums gives the best rectangle bounded by those two rows. Iterating all row pairs is $O(n^2)$ and each Kadane pass is $O(m)$, for $O(n^2 * m)$ total.
 
 ```python
 def max_sum_submatrix(matrix):

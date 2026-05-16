@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A **binary tree** is a hierarchical structure where each node has up to two children (left, right). A **binary search tree (BST)** adds a single invariant: for every node, all values in its left subtree are less, and all values in its right subtree are greater. That invariant is what enables O(log n) search, insert, and delete in a balanced tree. Most interview tree problems reduce to recursion, define a function on a node and combine subtree results.
+A **binary tree** is a hierarchical structure where each node has up to two children (left, right). A **binary search tree (BST)** adds a single invariant: for every node, all values in its left subtree are less, and all values in its right subtree are greater. That invariant is what enables $O(log n)$ search, insert, and delete in a balanced tree. Most interview tree problems reduce to recursion, define a function on a node and combine subtree results.
 
 ## In-depth description
 
@@ -21,7 +21,7 @@ A **binary tree** is a hierarchical structure where each node has up to two chil
 - **Postorder** (left → right → root): useful for subtree computations (delete, aggregate up).
 - **Level-order** (BFS): traverse by depth using a queue; used for level-dependent problems.
 
-Vanilla BSTs degrade to O(n) on sorted input (they become a linked list). **Self-balancing variants**, AVL, red-black trees, B-trees, maintain O(log n) depth via rotations. Java's `TreeMap`/`TreeSet` and C++'s `std::map`/`std::set` are red-black trees. Python has no built-in balanced BST; use `sortedcontainers.SortedList` or build workarounds.
+Vanilla BSTs degrade to $O(n)$ on sorted input (they become a linked list). **Self-balancing variants**, AVL, red-black trees, B-trees, maintain $O(log n)$ depth via rotations. Java's `TreeMap`/`TreeSet` and C++'s `std::map`/`std::set` are red-black trees. Python has no built-in balanced BST; use `sortedcontainers.SortedList` or build workarounds.
 
 **Interview patterns:**
 
@@ -35,11 +35,11 @@ Vanilla BSTs degrade to O(n) on sorted input (they become a linked list). **Self
 
 | Operation | Balanced BST | Unbalanced | Vanilla binary tree |
 | --- | --- | --- | --- |
-| Search | O(log n) | O(n) | O(n) |
-| Insert | O(log n) | O(n) | - |
-| Delete | O(log n) | O(n) | - |
-| Traversal | O(n) | O(n) | O(n) |
-| Space | O(n) | O(n) | O(n) |
+| Search | $O(log n)$ | $O(n)$ | $O(n)$ |
+| Insert | $O(log n)$ | $O(n)$ | - |
+| Delete | $O(log n)$ | $O(n)$ | - |
+| Traversal | $O(n)$ | $O(n)$ | $O(n)$ |
+| Space | $O(n)$ | $O(n)$ | $O(n)$ |
 
 ## Common uses in DSA
 

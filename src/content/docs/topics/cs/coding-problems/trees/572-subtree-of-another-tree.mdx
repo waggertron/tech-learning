@@ -124,14 +124,14 @@ func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (`is_same_tree`)** | **O(m)** | **n nodes** | **O(m · n)** ← dominates |
-| L2 (recurse children) | O(1) dispatch | n | O(n) |
+| **L1 (`is_same_tree`)** | **$O(m)$** | **n nodes** | **$O(m · n)$** ← dominates |
+| L2 (recurse children) | $O(1)$ dispatch | n | $O(n)$ |
 
-At each of the n nodes in `root`, we do a full O(m) equality check of `subRoot`.
+At each of the n nodes in `root`, we do a full $O(m)$ equality check of `subRoot`.
 
 **Complexity**
-- **Time:** O(m · n). For each of n nodes in `root`, do an O(m) check.
-- **Space:** O(h_root + h_sub) recursion.
+- **Time:** $O(m · n)$. For each of n nodes in `root`, do an $O(m)$ check.
+- **Space:** $O(h_root + h_sub)$ recursion.
 
 The most common interview answer and usually acceptable.
 
@@ -191,14 +191,14 @@ func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (serialize) | O(n) total for root, O(m) for sub | 2 calls | O(n + m) |
-| **L2 (substring search)** | **O(n · m) naive** | **1** | **O(n · m)** ← dominates |
+| L1 (serialize) | $O(n)$ total for root, $O(m)$ for sub | 2 calls | $O(n + m)$ |
+| **L2 (substring search)** | **$O(n · m)$ naive** | **1** | **$O(n · m)$** ← dominates |
 
-Python's `in` for strings is naive O(n · m) in the worst case. With KMP or Z-function, L2 drops to O(n + m).
+Python's `in` for strings is naive $O(n · m)$ in the worst case. With KMP or Z-function, L2 drops to $O(n + m)$.
 
 **Complexity**
-- **Time:** O((m + n)²) worst case using Python's `in`. With **KMP** or **Z-function**, drops to O(m + n).
-- **Space:** O(m + n) for the strings.
+- **Time:** $O((m + n)$²) worst case using Python's `in`. With **KMP** or **Z-function**, drops to $O(m + n)$.
+- **Space:** $O(m + n)$ for the strings.
 
 ### Why the delimiters matter
 Without unique delimiters, `serialize(subRoot)` could match a substring of `serialize(root)` that doesn't correspond to an actual subtree. The delimiter pattern `,val,(L)(R)` ensures a node's serialization has unambiguous start and end.
@@ -261,13 +261,13 @@ def is_subtree(root, subRoot):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (hash subRoot) | O(m) | 1 | O(m) |
-| **L3 (hash root)** | **O(1) per node** | **n** | **O(n)** ← dominates |
-| confirmation `_same` | O(m) | O(1) expected | O(m) amortized |
+| L2 (hash subRoot) | $O(m)$ | 1 | $O(m)$ |
+| **L3 (hash root)** | **$O(1)$ per node** | **n** | **$O(n)$** ← dominates |
+| confirmation `_same` | $O(m)$ | $O(1)$ expected | $O(m)$ amortized |
 
 **Complexity**
-- **Time:** O(m + n) amortized (assuming no hash collisions); O(m · n) worst case with collision confirmation.
-- **Space:** O(h_root).
+- **Time:** $O(m + n)$ amortized (assuming no hash collisions); $O(m · n)$ worst case with collision confirmation.
+- **Space:** $O(h_root)$.
 
 Included because the hash-each-subtree pattern appears in problem 652 (Find Duplicate Subtrees) and generalizes to Merkle trees outside LeetCode.
 
@@ -275,9 +275,9 @@ Included because the hash-each-subtree pattern appears in problem 652 (Find Dupl
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **Nested DFS + isSameTree** | O(m · n) | O(h) |
-| Serialize + substring | O(m + n) with KMP; O(mn) naive | O(m + n) |
-| Subtree hashing | O(m + n) expected | O(h) |
+| **Nested DFS + isSameTree** | $O(m · n)$ | $O(h)$ |
+| Serialize + substring | $O(m + n)$ with KMP; $O(mn)$ naive | $O(m + n)$ |
+| Subtree hashing | $O(m + n)$ expected | $O(h)$ |
 
 Approach 1 is what most interviewers expect; Approach 2 with KMP is the asymptotically-optimal answer; Approach 3 is the deepest but most bug-prone.
 

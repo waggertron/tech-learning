@@ -115,17 +115,17 @@ func longestPalindrome(s string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (is_pal reversal) | O(k) where k = substring length | once per (i,j) pair | O(n) amortized per outer i |
-| L2 (outer loop) | O(1) | n | O(n) |
-| L3 (inner loop) | O(1) | O(n) per outer i | O(n²) iterations total |
-| **L4 (slice + is_pal)** | **O(n)** | **O(n²) times** | **O(n³)** ← dominates |
-| L5 (best update) | O(n) | at most n times | O(n²) worst case |
+| L1 (is_pal reversal) | $O(k)$ where k = substring length | once per (i,j) pair | $O(n)$ amortized per outer i |
+| L2 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L3 (inner loop) | $O(1)$ | $O(n)$ per outer i | $O(n²)$ iterations total |
+| **L4 (slice + is_pal)** | **$O(n)$** | **$O(n²)$ times** | **$O(n³)$** ← dominates |
+| L5 (best update) | $O(n)$ | at most n times | $O(n²)$ worst case |
 
-The bottleneck is L4: each of the O(n²) substring pairs triggers an O(n) palindrome check via slice and reversal. Slicing `s[i:j+1]` already copies O(n) characters before the comparison even starts.
+The bottleneck is L4: each of the $O(n²)$ substring pairs triggers an $O(n)$ palindrome check via slice and reversal. Slicing `s[i:j+1]` already copies $O(n)$ characters before the comparison even starts.
 
 **Complexity**
-- **Time:** O(n³), driven entirely by L4 (O(n) palindrome check across O(n²) pairs).
-- **Space:** O(n) for the slice copies.
+- **Time:** $O(n³)$, driven entirely by L4 ($O(n)$ palindrome check across $O(n²)$ pairs).
+- **Space:** $O(n)$ for the slice copies.
 
 ## Approach 2: Expand around center (canonical)
 
@@ -202,17 +202,17 @@ func longestPalindrome(s string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L5 (outer loop) | O(1) | n | O(n) |
+| L5 (outer loop) | $O(1)$ | n | $O(n)$ |
 | L6 (two expand calls) | varies | 2n total | see L1 |
-| **L1 (expand while loop)** | **O(1) per step** | **O(n) total across all centers** | **O(n²)** ← dominates |
-| L4 (slice result) | O(k) | 2n calls | O(n) total amortized |
-| L7, L8 (best update) | O(1) | 2n | O(n) |
+| **L1 (expand while loop)** | **$O(1)$ per step** | **$O(n)$ total across all centers** | **$O(n²)$** ← dominates |
+| L4 (slice result) | $O(k)$ | 2n calls | $O(n)$ total amortized |
+| L7, L8 (best update) | $O(1)$ | 2n | $O(n)$ |
 
-The key insight is that all expand calls together do at most O(n²) work: each character can be the boundary of at most O(n) distinct palindromes, and boundaries are never revisited per center. In the worst case (e.g., `"aaaa...a"`), every center expands all the way out, giving exactly O(n²) character comparisons total.
+The key insight is that all expand calls together do at most $O(n²)$ work: each character can be the boundary of at most $O(n)$ distinct palindromes, and boundaries are never revisited per center. In the worst case (e.g., `"aaaa...a"`), every center expands all the way out, giving exactly $O(n²)$ character comparisons total.
 
 **Complexity**
-- **Time:** O(n²), driven by L1 (total expand steps across all 2n-1 centers).
-- **Space:** O(1) auxiliary (the returned slice is unavoidable output, not overhead).
+- **Time:** $O(n²)$, driven by L1 (total expand steps across all 2n-1 centers).
+- **Space:** $O(1)$ auxiliary (the returned slice is unavoidable output, not overhead).
 
 Most interview-friendly. Short code, easy to reason about.
 
@@ -318,17 +318,17 @@ func longestPalindrome(s string) string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (table allocation) | O(n²) | 1 | O(n²) |
-| L3 (diagonal init) | O(1) | n | O(n) |
-| L5 (length loop) | O(1) | n-1 | O(n) |
-| **L6 (start loop) + L8 (DP check)** | **O(1)** | **O(n²) total (i,j) pairs** | **O(n²)** ← dominates |
-| L10 (best update slice) | O(n) | at most n updates | O(n²) worst case |
+| L2 (table allocation) | $O(n²)$ | 1 | $O(n²)$ |
+| L3 (diagonal init) | $O(1)$ | n | $O(n)$ |
+| L5 (length loop) | $O(1)$ | n-1 | $O(n)$ |
+| **L6 (start loop) + L8 (DP check)** | **$O(1)$** | **$O(n²)$ total (i,j) pairs** | **$O(n²)$** ← dominates |
+| L10 (best update slice) | $O(n)$ | at most n updates | $O(n²)$ worst case |
 
-The O(n²) work is spread evenly: each of the O(n²) substrings gets a constant-time DP cell fill (L8). The space cost is also O(n²) for the table, which is why this approach loses to expand-around-center on space despite matching it on time. It earns its keep when the problem needs every `dp[i][j]` answer (e.g., problem 131 Palindrome Partitioning).
+The $O(n²)$ work is spread evenly: each of the $O(n²)$ substrings gets a constant-time DP cell fill (L8). The space cost is also $O(n²)$ for the table, which is why this approach loses to expand-around-center on space despite matching it on time. It earns its keep when the problem needs every `dp[i][j]` answer (e.g., problem 131 Palindrome Partitioning).
 
 **Complexity**
-- **Time:** O(n²), driven by the O(n²) DP cell fills at L6/L8.
-- **Space:** O(n²) for the boolean table.
+- **Time:** $O(n²)$, driven by the $O(n²)$ DP cell fills at L6/L8.
+- **Space:** $O(n²)$ for the boolean table.
 
 Worse on space than Approach 2; useful when you also need answers for *every* `(i, j)` (e.g., problem 131 Palindrome Partitioning).
 
@@ -346,17 +346,17 @@ Worse on space than Approach 2; useful when you also need answers for *every* `(
   </TabItem>
 </Tabs>
 
-### Optional: Manacher's O(n)
-Manacher's algorithm solves the problem in O(n); it's rarely expected in interviews but worth knowing.
+### Optional: Manacher's $O(n)$
+Manacher's algorithm solves the problem in $O(n)$; it's rarely expected in interviews but worth knowing.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| All substrings | O(n³) | O(n) |
-| **Expand around center** | **O(n²)** | **O(1)** |
-| DP table | O(n²) | O(n²) |
-| Manacher's | O(n) | O(n) |
+| All substrings | $O(n³)$ | $O(n)$ |
+| **Expand around center** | **$O(n²)$** | **$O(1)$** |
+| DP table | $O(n²)$ | $O(n²)$ |
+| Manacher's | $O(n)$ | $O(n)$ |
 
 Expand-around-center is the canonical interview answer. Same template solves problem 647 (Palindromic Substrings).
 

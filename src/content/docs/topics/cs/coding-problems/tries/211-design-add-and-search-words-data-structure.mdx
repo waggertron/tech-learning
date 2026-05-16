@@ -134,14 +134,14 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (addWord) | O(1) | 1 per call | O(1) per addWord |
-| L2 (compile) | O(L) | 1 per search | O(L) |
-| **L3 (scan + match)** | **O(L)** | **W** | **O(W · L) per search** ← dominates |
+| L1 (addWord) | $O(1)$ | 1 per call | $O(1)$ per addWord |
+| L2 (compile) | $O(L)$ | 1 per search | $O(L)$ |
+| **L3 (scan + match)** | **$O(L)$** | **W** | **$O(W · L)$ per search** ← dominates |
 
 **Complexity**
-- `addWord`: O(1).
-- `search`: O(W · L), driven by L3 (scanning all words). Degrades as words accumulate.
-- Space: O(total chars).
+- `addWord`: $O(1)$.
+- `search`: $O(W · L)$, driven by L3 (scanning all words). Degrades as words accumulate.
+- Space: $O(total chars)$.
 
 ## Approach 2: Hash map bucketed by length + per-position scan
 
@@ -255,15 +255,15 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (addWord) | O(1) amortized | 1 per call | O(1) per addWord |
-| L2 (group scan) | O(1) | W_L | O(W_L) |
-| **L3 (char compare)** | **O(L)** | **W_L** | **O(W_L · L) per search** ← dominates |
+| L1 (addWord) | $O(1)$ amortized | 1 per call | $O(1)$ per addWord |
+| L2 (group scan) | $O(1)$ | W_L | $O(W_L)$ |
+| **L3 (char compare)** | **$O(L)$** | **W_L** | **$O(W_L · L)$ per search** ← dominates |
 
 Bucketing by length prunes same-length candidates immediately, but within the bucket we still scan linearly.
 
 **Complexity**
-- `addWord`: O(L), driven by hashing the length key.
-- `search`: O(W_L · L), driven by L3 (per-word character comparison within the same-length bucket).
+- `addWord`: $O(L)$, driven by hashing the length key.
+- `search`: $O(W_L · L)$, driven by L3 (per-word character comparison within the same-length bucket).
 
 Reasonable for small L and small W_L.
 
@@ -440,16 +440,16 @@ func main() { runTests() }
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L4 (addWord loop)** | **O(1) per char** | **L** | **O(L) per addWord** ← dominates for addWord |
-| L5-L6/L8 (exact match path) | O(1) per level | L levels | O(L) avg search |
-| **L7 (wildcard branch)** | **O(k) per level** | **up to L levels** | **O(k^L) worst case** ← dominates for all-wildcard |
+| **L1-L4 (addWord loop)** | **$O(1)$ per char** | **L** | **$O(L)$ per addWord** ← dominates for addWord |
+| L5-L6/L8 (exact match path) | $O(1)$ per level | L levels | $O(L)$ avg search |
+| **L7 (wildcard branch)** | **$O(k)$ per level** | **up to L levels** | **$O(k^L)$ worst case** ← dominates for all-wildcard |
 
-For exact character matches, each DFS call moves one level deeper and is O(1). For `.` wildcards, each level branches to up to k = 26 children, giving O(26^L) in the worst case (all wildcards, dense trie).
+For exact character matches, each DFS call moves one level deeper and is $O(1)$. For `.` wildcards, each level branches to up to k = 26 children, giving $O(26^L)$ in the worst case (all wildcards, dense trie).
 
 **Complexity**
-- `addWord`: O(L), driven by L1-L4.
-- `search`: O(L) average (no wildcards), O(26^L) worst (all wildcards in a dense trie).
-- Space: O(total chars).
+- `addWord`: $O(L)$, driven by L1-L4.
+- `search`: $O(L)$ average (no wildcards), $O(26^L)$ worst (all wildcards in a dense trie).
+- Space: $O(total chars)$.
 
 The wildcard branches are where performance can degrade: a query like `"......"` against a dense dictionary is the pathological case.
 
@@ -471,9 +471,9 @@ The wildcard branches are where performance can degrade: a query like `"......"`
 
 | Approach | addWord | search | Notes |
 | --- | --- | --- | --- |
-| List + regex | O(1) | O(W · L) | Naive |
-| Length-bucketed list | O(L) | O(W_L · L) | Better pruning |
-| **Trie + DFS wildcard** | **O(L)** | **O(L)** avg | Canonical |
+| List + regex | $O(1)$ | $O(W · L)$ | Naive |
+| Length-bucketed list | $O(L)$ | $O(W_L · L)$ | Better pruning |
+| **Trie + DFS wildcard** | **$O(L)$** | **$O(L)$** avg | Canonical |
 
 The trie approach generalizes to **212 Word Search II** (the next problem) where we DFS a grid against a trie of candidate words.
 

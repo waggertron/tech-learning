@@ -107,15 +107,15 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (length check) | O(1) | 1 | O(1) |
-| L2-L3 (index + base) | O(1) | per call | O(1) each |
-| **L4, L5 (two recursive branches)** | **O(1) work + up to 2 calls** | **O(2^(m+n)) call tree** | **O(2^(m+n))** ← dominates |
+| L1 (length check) | $O(1)$ | 1 | $O(1)$ |
+| L2-L3 (index + base) | $O(1)$ | per call | $O(1)$ each |
+| **L4, L5 (two recursive branches)** | **$O(1)$ work + up to 2 calls** | **$O(2^{m+n})$ call tree** | **$O(2^{m+n})$** ← dominates |
 
 At each step, both `s1[i]` and `s2[j]` might match `s3[k]`, spawning two branches. Without caching the same `(i, j)` is recomputed many times.
 
 **Complexity**
-- **Time:** O(2^(m + n)), driven by L4/L5 double-branching on ambiguous matches.
-- **Space:** O(m + n) recursion depth.
+- **Time:** $O(2^{m+n})$, driven by L4/L5 double-branching on ambiguous matches.
+- **Space:** $O(m + n)$ recursion depth.
 
 ## Approach 2: Top-down memoized
 
@@ -168,15 +168,15 @@ function isInterleave(s1: string, s2: string, s3: string): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (guard + cache) | O(1) | 1 | O(1) |
-| L3-L4 (index + base) | O(1) | once per unique (i,j) | O(m · n) total |
-| **L5, L6 (recursive calls, cache hits after first)** | **O(1) per call** | **at most (m+1)(n+1) states** | **O(m · n)** ← dominates |
+| L1-L2 (guard + cache) | $O(1)$ | 1 | $O(1)$ |
+| L3-L4 (index + base) | $O(1)$ | once per unique (i,j) | $O(m · n)$ total |
+| **L5, L6 (recursive calls, cache hits after first)** | **$O(1)$ per call** | **at most (m+1)(n+1) states** | **$O(m · n)$** ← dominates |
 
 With memoization each `(i, j)` is computed once. Short-circuit evaluation means the second branch at L6 is only evaluated if L5 returns False.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 across all unique (i,j) states.
-- **Space:** O(m · n) memo table.
+- **Time:** $O(m · n)$, driven by L5/L6 across all unique (i,j) states.
+- **Space:** $O(m · n)$ memo table.
 
 **Try this approach:**
 
@@ -267,15 +267,15 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L4 (init) | O(1) or O(m·n) | 1 | O(m · n) |
-| **L5+L6 (double loop)** | **O(1) body** | **(m+1)(n+1)** | **O(m · n)** ← dominates |
-| L7-L9 (cell fill) | O(1) | once per cell | included above |
+| L1-L4 (init) | $O(1)$ or $O(m·n)$ | 1 | $O(m · n)$ |
+| **L5+L6 (double loop)** | **$O(1)$ body** | **(m+1)(n+1)** | **$O(m · n)$** ← dominates |
+| L7-L9 (cell fill) | $O(1)$ | once per cell | included above |
 
-Each cell requires at most two O(1) lookups. The double loop at L5/L6 drives the total cost.
+Each cell requires at most two $O(1)$ lookups. The double loop at L5/L6 drives the total cost.
 
 **Complexity**
-- **Time:** O(m · n), driven by L5/L6 (the full double loop).
-- **Space:** O(m · n). Can be reduced to O(min(m, n)) via rolling array.
+- **Time:** $O(m · n)$, driven by L5/L6 (the full double loop).
+- **Space:** $O(m · n)$. Can be reduced to $O(min(m, n)$) via rolling array.
 
 **Try this approach:**
 
@@ -295,9 +295,9 @@ Each cell requires at most two O(1) lookups. The double loop at L5/L6 drives the
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | O(2^(m + n)) | O(m + n) |
-| Top-down memo | O(m · n) | O(m · n) |
-| **Bottom-up 2-D DP** | **O(m · n)** | **O(m · n)** |
+| Naive recursion | $O(2^{m+n})$ | $O(m + n)$ |
+| Top-down memo | $O(m · n)$ | $O(m · n)$ |
+| **Bottom-up 2-D DP** | **$O(m · n)$** | **$O(m · n)$** |
 
 ## Test cases
 

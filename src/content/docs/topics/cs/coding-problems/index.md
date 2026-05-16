@@ -16,7 +16,7 @@ This section covers 180+ LeetCode problems organized by pattern category. The co
 
 Every problem page includes:
 
-1. **Brute force**: the most direct approach, always correct, often O(n²) or worse.
+1. **Brute force**: the most direct approach, always correct, often $O(n²)$ or worse.
 2. **Improved / optimal**: the interview-level answer, best achievable time and space.
 
 Each approach has working Python, line-labeled code, and a per-line complexity table. Many pages also include a **How to recognize this pattern** section covering the signal in the problem statement, a counterexample that breaks the tempting-but-wrong approach, and a table of related problems with the same shape.

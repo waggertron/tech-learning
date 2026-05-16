@@ -45,7 +45,7 @@ LeetCode 349 · [Link](https://leetcode.com/problems/intersection-of-two-arrays/
 
 ## Approach: Set intersection
 
-Convert both arrays to sets (deduplication in O(n)), then compute the intersection using Python's `&` operator.
+Convert both arrays to sets (deduplication in $O(n)$), then compute the intersection using Python's `&` operator.
 
 <Tabs>
 <TabItem label="Python">
@@ -80,15 +80,15 @@ function intersection(nums1: number[], nums2: number[]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (set(nums1))** | **O(m)** | **1** | **O(m)** |
-| **L2 (set(nums2))** | **O(n)** | **1** | **O(n)** |
-| L3 (intersection + list) | O(min(m, n)) | 1 | O(min(m, n)) |
+| **L1 (set(nums1))** | **$O(m)$** | **1** | **$O(m)$** |
+| **L2 (set(nums2))** | **$O(n)$** | **1** | **$O(n)$** |
+| L3 (intersection + list) | $O(min(m, n)$) | 1 | $O(min(m, n)$) |
 
-Building both sets dominates. The `&` operation iterates the smaller set and checks membership in the larger (hash lookup, O(1) average per element).
+Building both sets dominates. The `&` operation iterates the smaller set and checks membership in the larger (hash lookup, $O(1)$ average per element).
 
 **Complexity**
-- **Time:** O(m + n), driven by L1/L2 (constructing the two sets).
-- **Space:** O(m + n) in the worst case, storing both sets plus the result.
+- **Time:** $O(m + n)$, driven by L1/L2 (constructing the two sets).
+- **Space:** $O(m + n)$ in the worst case, storing both sets plus the result.
 
 **Try this approach:**
 

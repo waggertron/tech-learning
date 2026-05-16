@@ -127,14 +127,14 @@ func reverseList(head *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (collect)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L2 (rebuild in reverse) | O(1) | n | O(n) |
+| **L1 (collect)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L2 (rebuild in reverse) | $O(1)$ | n | $O(n)$ |
 
-Both passes are O(n). The extra O(n) space comes from two sources: the `values` array and the new list.
+Both passes are $O(n)$. The extra $O(n)$ space comes from two sources: the `values` array and the new list.
 
 **Complexity**
-- **Time:** O(n), driven by L1 and L2 equally.
-- **Space:** O(n) for the values array + new list.
+- **Time:** $O(n)$, driven by L1 and L2 equally.
+- **Space:** $O(n)$ for the values array + new list.
 
 Correct but wasteful.
 
@@ -198,14 +198,14 @@ func reverseList(head *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop) | O(1) | n | O(n) |
-| **L2-L5 (pointer dance)** | **O(1) each** | **n** | **O(n)** ← dominates |
+| L1 (loop) | $O(1)$ | n | $O(n)$ |
+| **L2-L5 (pointer dance)** | **$O(1)$ each** | **n** | **$O(n)$** ← dominates |
 
-Four O(1) operations per iteration for exactly n iterations. The canonical interview answer. Memorize the three-pointer dance: it underlies Reverse Nodes in k-Group (25) and Reverse Between (92).
+Four $O(1)$ operations per iteration for exactly n iterations. The canonical interview answer. Memorize the three-pointer dance: it underlies Reverse Nodes in k-Group (25) and Reverse Between (92).
 
 **Complexity**
-- **Time:** O(n), driven by L2-L5.
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2-L5.
+- **Space:** $O(1)$.
 
 **Try this approach:**
 
@@ -271,15 +271,15 @@ func reverseList(head *ListNode) *ListNode {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (base case) | O(1) | 1 | O(1) |
-| **L2 (recurse)** | **O(1) per frame** | **n** | **O(n)** ← dominates (stack depth) |
-| L3-L4 (flip links) | O(1) | n | O(n) |
+| L1 (base case) | $O(1)$ | 1 | $O(1)$ |
+| **L2 (recurse)** | **$O(1)$ per frame** | **n** | **$O(n)$** ← dominates (stack depth) |
+| L3-L4 (flip links) | $O(1)$ | n | $O(n)$ |
 
 Each call processes one node and recurses on the rest. Stack depth = n. Python's default recursion limit (1000) means this can fail on long lists.
 
 **Complexity**
-- **Time:** O(n), driven by L2 recursion depth.
-- **Space:** O(n) recursion depth.
+- **Time:** $O(n)$, driven by L2 recursion depth.
+- **Space:** $O(n)$ recursion depth.
 
 Elegant but uses stack frames proportional to n, can stack-overflow for very long lists (Python's default recursion limit is 1000).
 
@@ -391,9 +391,9 @@ console.log("all tests pass");
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Collect + rebuild | O(n) | O(n) |
-| **Iterative three-pointer** | **O(n)** | **O(1)** |
-| Recursive | O(n) | O(n) stack |
+| Collect + rebuild | $O(n)$ | $O(n)$ |
+| **Iterative three-pointer** | **$O(n)$** | **$O(1)$** |
+| Recursive | $O(n)$ | $O(n)$ stack |
 
 ## Related data structures
 

@@ -97,15 +97,15 @@ function longestIncreasingPath(matrix: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (guard + init) | O(1) | once | O(1) |
-| L4-L5 (4 neighbor DFS) | O(1) work + up to 4 calls | per cell | without cache: exponential |
-| **L6 (launch from every cell, no cache)** | **O(2^(m·n)) per launch** | **m · n launches** | **O(2^(m·n))** ← dominates |
+| L1-L3 (guard + init) | $O(1)$ | once | $O(1)$ |
+| L4-L5 (4 neighbor DFS) | $O(1)$ work + up to 4 calls | per cell | without cache: exponential |
+| **L6 (launch from every cell, no cache)** | **$O(2^{m·n})$ per launch** | **m · n launches** | **$O(2^{m·n})$** ← dominates |
 
 Without memoization, each DFS from a cell can revisit the same sub-paths that other cells already explored, leading to exponential recomputation.
 
 **Complexity**
-- **Time:** O(2^(m · n)) worst case, driven by repeated DFS sub-paths across all launches at L6.
-- **Space:** O(m · n) recursion depth.
+- **Time:** $O(2^{m·n})$ worst case, driven by repeated DFS sub-paths across all launches at L6.
+- **Space:** $O(m · n)$ recursion depth.
 
 ## Approach 2: Memoized DFS (canonical)
 
@@ -168,16 +168,16 @@ function longestIncreasingPath(matrix: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L3 (guard + cache setup) | O(1) | 1 | O(1) |
-| L4-L5 (init + direction loop) | O(1) | once per unique cell | O(m · n) total |
-| **L6 (cached neighbor calls)** | **O(1) per call** | **at most 4 per cell, m · n cells** | **O(m · n)** ← dominates |
-| L7 (launch from every cell) | O(1) per cell (cached) | m · n | O(m · n) |
+| L1-L3 (guard + cache setup) | $O(1)$ | 1 | $O(1)$ |
+| L4-L5 (init + direction loop) | $O(1)$ | once per unique cell | $O(m · n)$ total |
+| **L6 (cached neighbor calls)** | **$O(1)$ per call** | **at most 4 per cell, m · n cells** | **$O(m · n)$** ← dominates |
+| L7 (launch from every cell) | $O(1)$ per cell (cached) | m · n | $O(m · n)$ |
 
-Each cell is computed exactly once (via `lru_cache`). Each computation checks at most 4 neighbors, each a cache lookup. The total work is O(4 · m · n) = O(m · n).
+Each cell is computed exactly once (via `lru_cache`). Each computation checks at most 4 neighbors, each a cache lookup. The total work is $O(4 · m · n)$ = $O(m · n)$.
 
 **Complexity**
-- **Time:** O(m · n), driven by L6/L7: each cell computed once with O(1) neighbor checks.
-- **Space:** O(m · n) for the memo cache and recursion stack.
+- **Time:** $O(m · n)$, driven by L6/L7: each cell computed once with $O(1)$ neighbor checks.
+- **Space:** $O(m · n)$ for the memo cache and recursion stack.
 
 ### Why no "visited" set is needed
 Strict inequality implies no cycles, the sequence of values on any path is strictly increasing, so revisit is impossible. This is what allows the memoization to be sound.
@@ -280,15 +280,15 @@ function longestIncreasingPath(matrix: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3-L4 (in-degree build) | O(1) per cell | m · n cells, 4 neighbors each | O(m · n) |
-| L5-L6 (seed queue) | O(1) per cell | m · n | O(m · n) |
-| **L8-L11 (BFS)** | **O(1) per cell** | **each cell dequeued once** | **O(m · n)** ← dominates |
+| L3-L4 (in-degree build) | $O(1)$ per cell | m · n cells, 4 neighbors each | $O(m · n)$ |
+| L5-L6 (seed queue) | $O(1)$ per cell | m · n | $O(m · n)$ |
+| **L8-L11 (BFS)** | **$O(1)$ per cell** | **each cell dequeued once** | **$O(m · n)$** ← dominates |
 
-Each cell is enqueued and dequeued at most once. Each dequeue checks 4 neighbors. Total work is O(m · n). The number of BFS levels equals the longest increasing path length.
+Each cell is enqueued and dequeued at most once. Each dequeue checks 4 neighbors. Total work is $O(m · n)$. The number of BFS levels equals the longest increasing path length.
 
 **Complexity**
-- **Time:** O(m · n), driven by L8-L11 (BFS processes each cell once).
-- **Space:** O(m · n) for in-degree table and queue.
+- **Time:** $O(m · n)$, driven by L8-L11 (BFS processes each cell once).
+- **Space:** $O(m · n)$ for in-degree table and queue.
 
 Useful when recursion depth is a concern (very tall/wide matrices).
 
@@ -307,9 +307,9 @@ Useful when recursion depth is a concern (very tall/wide matrices).
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| DFS from every cell | O(2^(m · n)) | O(m · n) |
-| **Memoized DFS** | **O(m · n)** | **O(m · n)** |
-| Topological BFS | O(m · n) | O(m · n) |
+| DFS from every cell | $O(2^{m·n})$ | $O(m · n)$ |
+| **Memoized DFS** | **$O(m · n)$** | **$O(m · n)$** |
+| Topological BFS | $O(m · n)$ | $O(m · n)$ |
 
 Memoized DFS is the canonical answer. Topological sort is the "avoid recursion" alternative.
 

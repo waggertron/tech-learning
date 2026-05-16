@@ -84,12 +84,12 @@ function nextGreaterElement(nums1: number[], nums2: number[]): number[] {
 </Tabs>
 
 **Complexity**
-- **Time:** O(m * n), m queries each requiring O(n) to scan nums2.
-- **Space:** O(1) extra.
+- **Time:** $O(m * n)$, m queries each requiring $O(n)$ to scan nums2.
+- **Space:** $O(1)$ extra.
 
 ## Approach 2: Monotonic stack precomputation (optimal)
 
-The trick: answer *all* next-greater queries for nums2 in a single O(n) pass, storing answers in a hash map. Then look up each nums1 element in O(1).
+The trick: answer *all* next-greater queries for nums2 in a single $O(n)$ pass, storing answers in a hash map. Then look up each nums1 element in $O(1)$.
 
 Use a **monotonic decreasing stack** (values decrease from bottom to top). When a new element is larger than the stack top, the stack top has found its next-greater answer.
 
@@ -137,16 +137,16 @@ function nextGreaterElement(nums1: number[], nums2: number[]): number[] {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (outer loop) | O(1) | n | O(n) |
-| **L4-L6 (stack ops)** | **O(1) amortized** | **n total pushes/pops** | **O(n)** ← dominates |
-| L7-L8 (mark remaining) | O(1) | at most n | O(n) |
-| L9 (lookup) | O(1) per element | m | O(m) |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L4-L6 (stack ops)** | **$O(1)$ amortized** | **n total pushes/pops** | **$O(n)$** ← dominates |
+| L7-L8 (mark remaining) | $O(1)$ | at most n | $O(n)$ |
+| L9 (lookup) | $O(1)$ per element | m | $O(m)$ |
 
-Each element of nums2 is pushed once and popped at most once. Total stack work is O(n), not O(n) per element.
+Each element of nums2 is pushed once and popped at most once. Total stack work is $O(n)$, not $O(n)$ per element.
 
 **Complexity**
-- **Time:** O(m + n): O(n) to build the map, O(m) to answer queries.
-- **Space:** O(n) for the hash map and stack.
+- **Time:** $O(m + n)$: $O(n)$ to build the map, $O(m)$ to answer queries.
+- **Space:** $O(n)$ for the hash map and stack.
 
 **Try this approach:**
 
@@ -176,7 +176,7 @@ nums1=[4,1,2] -> [nge[4], nge[1], nge[2]] = [-1, 3, -1]
 
 ## Key takeaways
 
-- The monotonic stack solves all "next greater" queries for an array in O(n) by letting elements announce themselves as answers when they finally exceed something waiting on the stack.
+- The monotonic stack solves all "next greater" queries for an array in $O(n)$ by letting elements announce themselves as answers when they finally exceed something waiting on the stack.
 - Separating precomputation (stack over nums2) from querying (hash map lookup for nums1) is a clean pattern: build once, query many times.
 - The stack stores values here (not indices) because nums1 queries are by value. For index-based problems like 503 or 739, store indices instead.
 - Elements that are never popped (nothing greater to their right) get marked -1 in the cleanup loop.

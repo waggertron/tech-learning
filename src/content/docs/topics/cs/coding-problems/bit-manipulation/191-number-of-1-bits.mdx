@@ -88,15 +88,15 @@ func hammingWeight(n uint32) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L3 (shift loop)** | **O(1)** | **B** | **O(B) = O(1)** ← dominates (constant) |
-| L2 (test LSB) | O(1) | B | O(B) |
-| L3 (shift right) | O(1) | B | O(B) |
+| **L1-L3 (shift loop)** | **$O(1)$** | **B** | **$O(B)$ = $O(1)$** ← dominates (constant) |
+| L2 (test LSB) | $O(1)$ | B | $O(B)$ |
+| L3 (shift right) | $O(1)$ | B | $O(B)$ |
 
 The loop runs at most B = 32 iterations regardless of input value.
 
 **Complexity**
-- **Time:** O(B) where B = number of bits (32 for this problem).
-- **Space:** O(1).
+- **Time:** $O(B)$ where B = number of bits (32 for this problem).
+- **Space:** $O(1)$.
 
 ## Approach 2: Brian Kernighan's trick (canonical)
 
@@ -145,14 +145,14 @@ func hammingWeight(n uint32) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L3 (Kernighan loop)** | **O(1)** | **popcount(n)** | **O(popcount)** ← dominates |
-| L2 (clear lowest bit) | O(1) | popcount(n) | O(popcount) |
+| **L1-L3 (Kernighan loop)** | **$O(1)$** | **popcount(n)** | **$O(popcount)$** ← dominates |
+| L2 (clear lowest bit) | $O(1)$ | popcount(n) | $O(popcount)$ |
 
 The loop runs exactly popcount(n) times, not B times. For sparse inputs this is much faster than Approach 1.
 
 **Complexity**
-- **Time:** O(popcount). Iterations = number of set bits.
-- **Space:** O(1).
+- **Time:** $O(popcount)$. Iterations = number of set bits.
+- **Space:** $O(1)$.
 
 Faster than Approach 1 when the integer has few set bits.
 
@@ -185,21 +185,21 @@ def hamming_weight(n):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (bit_count)** | **O(1) hardware** | **1** | **O(1)** ← dominates |
+| **L1 (bit_count)** | **$O(1)$ hardware** | **1** | **$O(1)$** ← dominates |
 
 On CPUs with a POPCNT instruction this compiles to a single instruction.
 
 **Complexity**
-- **Time:** O(1) on most modern hardware, O(B) worst.
-- **Space:** O(1).
+- **Time:** $O(1)$ on most modern hardware, $O(B)$ worst.
+- **Space:** $O(1)$.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Shift + test | O(B) | O(1) |
-| **Kernighan (`n &= n - 1`)** | **O(popcount)** | **O(1)** |
-| Built-in `bit_count` | O(1) on modern HW | O(1) |
+| Shift + test | $O(B)$ | $O(1)$ |
+| **Kernighan (`n &= n - 1`)** | **$O(popcount)$** | **$O(1)$** |
+| Built-in `bit_count` | $O(1)$ on modern HW | $O(1)$ |
 
 Kernighan's is the interview-canonical trick. Know it for problem 338 and any "count bits" variant.
 

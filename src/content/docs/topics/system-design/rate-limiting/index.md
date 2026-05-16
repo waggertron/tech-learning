@@ -95,7 +95,7 @@ Store a timestamp for each request in a sorted set. On each request, remove time
 
 **Properties**: accurate. No boundary problem.
 
-**Cost**: O(requests per window) memory per client. For a limit of 1000 req/min with many clients, the memory adds up.
+**Cost**: $O(requests per window)$ memory per client. For a limit of 1000 req/min with many clients, the memory adds up.
 
 ### Sliding window counter (hybrid)
 
@@ -105,7 +105,7 @@ Maintain two fixed window counters: the previous window and the current window. 
 estimated = current_count + prev_count * (window_size - elapsed) / window_size
 ```
 
-**Properties**: O(1) memory per client, good approximation of the sliding window (usually within 1% of accurate).
+**Properties**: $O(1)$ memory per client, good approximation of the sliding window (usually within 1% of accurate).
 
 This is the algorithm Redis uses internally in its rate limiter cell modules, and it is the best general-purpose choice.
 

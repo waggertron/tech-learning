@@ -125,17 +125,17 @@ Return `"accaccacc"`.
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L4 (loop) | O(1) | n | O(n) |
-| L6 (digit accumulate) | O(1) | at most n | O(n) |
-| L8, L12 (push/pop) | O(1) | at most n/2 each | O(n) |
-| **L13 (string expand)** | **O(D)** | **once per `]`** | **O(D)** ← dominates |
-| L15 (append letter) | O(1) amortized | at most n | O(n) |
+| L4 (loop) | $O(1)$ | n | $O(n)$ |
+| L6 (digit accumulate) | $O(1)$ | at most n | $O(n)$ |
+| L8, L12 (push/pop) | $O(1)$ | at most n/2 each | $O(n)$ |
+| **L13 (string expand)** | **$O(D)$** | **once per `]`** | **$O(D)$** ← dominates |
+| L15 (append letter) | $O(1)$ amortized | at most n | $O(n)$ |
 
 String concatenation at L13 dominates: each character of the final output is written once.
 
 **Complexity**
-- **Time:** O(D), where D is the length of the decoded string. In the worst case (`"10000[a]"`) this is much larger than n.
-- **Space:** O(n + D) for the stack entries and current_string at each nesting level.
+- **Time:** $O(D)$, where D is the length of the decoded string. In the worst case (`"10000[a]"`) this is much larger than n.
+- **Space:** $O(n + D)$ for the stack entries and current_string at each nesting level.
 
 **Try this approach:**
 
@@ -164,9 +164,9 @@ The stack holds work that is waiting to be resolved. When you enter `[`, you pus
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **Stack of (count, prefix)** | **O(D)** | **O(n + D)** |
+| **Stack of (count, prefix)** | **$O(D)$** | **$O(n + D)$** |
 
-This is the canonical O(D) single-pass approach. Recursive DFS on the string is equivalent and has the same complexity.
+This is the canonical $O(D)$ single-pass approach. Recursive DFS on the string is equivalent and has the same complexity.
 
 ## Related topics
 

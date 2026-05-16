@@ -129,11 +129,11 @@ func merge(intervals [][]int) [][]int {
 </TabItem>
 </Tabs>
 
-Each outer pass touches every pair (L2 × L3 = O(n²)). The outer loop runs until a pass produces no merges; in the worst case (a chain like `[[1,2],[2,3],[3,4],...]`) that's another O(n) factor → O(n³) overall.
+Each outer pass touches every pair (L2 × L3 = $O(n²)$). The outer loop runs until a pass produces no merges; in the worst case (a chain like `[[1,2],[2,3],[3,4],...]`) that's another $O(n)$ factor → $O(n³)$ overall.
 
 **Complexity**
-- **Time:** O(n²) or worse.
-- **Space:** O(n).
+- **Time:** $O(n²)$ or worse.
+- **Space:** $O(n)$.
 
 ## Approach 2: Sort by start + linear merge (canonical)
 
@@ -197,18 +197,18 @@ func merge(intervals [][]int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L2 (init) | O(1) | 1 | O(1) |
-| L3 (loop) | O(1) | n | O(n) |
-| L4 (overlap check) | O(1) | n | O(n) |
-| L5 (extend) | O(1) | up to n | O(n) |
-| L6 (append) | O(1) amortized | up to n | O(n) |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| L3 (loop) | $O(1)$ | n | $O(n)$ |
+| L4 (overlap check) | $O(1)$ | n | $O(n)$ |
+| L5 (extend) | $O(1)$ | up to n | $O(n)$ |
+| L6 (append) | $O(1)$ amortized | up to n | $O(n)$ |
 
-L1 dominates: sorting requires O(n log n) comparisons, and the linear sweep that follows is O(n). Everything after the sort is a single pass.
+L1 dominates: sorting requires $O(n log n)$ comparisons, and the linear sweep that follows is $O(n)$. Everything after the sort is a single pass.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (the sort).
-- **Space:** O(n) output.
+- **Time:** $O(n log n)$, driven by L1 (the sort).
+- **Space:** $O(n)$ output.
 
 **Try this approach:**
 
@@ -320,8 +320,8 @@ func merge(intervals [][]int) [][]int {
 Rarely worth it in practice; the constant factors and the array allocation only pay off for tiny bounded ranges.
 
 **Complexity**
-- **Time:** O(max_value).
-- **Space:** O(max_value).
+- **Time:** $O(max_value)$.
+- **Space:** $O(max_value)$.
 
 **Try this approach:**
 
@@ -341,9 +341,9 @@ Rarely worth it in practice; the constant factors and the array allocation only 
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Quadratic pairwise | O(n²) | O(n) |
-| **Sort + linear merge** | **O(n log n)** | **O(n)** |
-| Bucket sort | O(max_value) | O(max_value) |
+| Quadratic pairwise | $O(n²)$ | $O(n)$ |
+| **Sort + linear merge** | **$O(n log n)$** | **$O(n)$** |
+| Bucket sort | $O(max_value)$ | $O(max_value)$ |
 
 Standard answer is sort + sweep. The same template feeds Insert Interval, Meeting Rooms II, and more.
 

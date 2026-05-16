@@ -107,16 +107,16 @@ func isSameTree(p *TreeNode, q *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (null check) | O(1) | up to n | O(n) |
-| L2 (structure check) | O(1) | up to n | O(n) |
-| L3 (value compare) | O(1) | up to n | O(n) |
-| **L4/L5 (recurse children)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+| L1 (null check) | $O(1)$ | up to n | $O(n)$ |
+| L2 (structure check) | $O(1)$ | up to n | $O(n)$ |
+| L3 (value compare) | $O(1)$ | up to n | $O(n)$ |
+| **L4/L5 (recurse children)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
-Each node pair is visited at most once. The recursion short-circuits as soon as a mismatch is found, so best case is O(1) (root values differ), worst case O(n) (identical trees).
+Each node pair is visited at most once. The recursion short-circuits as soon as a mismatch is found, so best case is $O(1)$ (root values differ), worst case $O(n)$ (identical trees).
 
 **Complexity**
-- **Time:** O(n), driven by L4/L5 visiting every node pair once.
-- **Space:** O(h) recursion depth.
+- **Time:** $O(n)$, driven by L4/L5 visiting every node pair once.
+- **Space:** $O(h)$ recursion depth.
 
 ## Approach 2: Iterative BFS over paired nodes
 
@@ -192,15 +192,15 @@ func isSameTree(p *TreeNode, q *TreeNode) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (dequeue) | O(1) | n | O(n) |
-| L4 (check) | O(1) | n | O(n) |
-| **L5/L6 (enqueue children)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L2 (dequeue) | $O(1)$ | n | $O(n)$ |
+| L4 (check) | $O(1)$ | n | $O(n)$ |
+| **L5/L6 (enqueue children)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
-Same O(n) total; queue holds at most O(w) pairs where w is the max tree width.
+Same $O(n)$ total; queue holds at most $O(w)$ pairs where w is the max tree width.
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(w), width of the trees.
+- **Time:** $O(n)$.
+- **Space:** $O(w)$, width of the trees.
 
 **Try this approach:**
 
@@ -235,15 +235,15 @@ def is_same_tree(p, q):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (DFS dispatch) | O(1) | n | O(n) |
-| **L2 (string concat)** | **O(n) per node due to f-string** | **n** | **O(n²)** ← dominates |
-| L3 (string compare) | O(n) | 1 | O(n) |
+| L1 (DFS dispatch) | $O(1)$ | n | $O(n)$ |
+| **L2 (string concat)** | **$O(n)$ per node due to f-string** | **n** | **$O(n²)$** ← dominates |
+| L3 (string compare) | $O(n)$ | 1 | $O(n)$ |
 
-The f-string approach creates a new string at each node by concatenating partial results, making it O(n²) in practice. Using `parts.append` + `"".join` at the end would make it O(n).
+The f-string approach creates a new string at each node by concatenating partial results, making it $O(n²)$ in practice. Using `parts.append` + `"".join` at the end would make it $O(n)$.
 
 **Complexity**
-- **Time:** O(n) with `join`; O(n²) as written due to string concatenation.
-- **Space:** O(n) for the serialized strings.
+- **Time:** $O(n)$ with `join`; $O(n²)$ as written due to string concatenation.
+- **Space:** $O(n)$ for the serialized strings.
 
 Correct but wasteful; included because it shows the structural equality of the problem and serialization.
 
@@ -251,9 +251,9 @@ Correct but wasteful; included because it shows the structural equality of the p
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **Recursive DFS** | O(n) | O(h) |
-| Iterative BFS on pairs | O(n) | O(w) |
-| Serialize + compare | O(n) | O(n) |
+| **Recursive DFS** | $O(n)$ | $O(h)$ |
+| Iterative BFS on pairs | $O(n)$ | $O(w)$ |
+| Serialize + compare | $O(n)$ | $O(n)$ |
 
 The recursive one-liner is the canonical answer. The paired-BFS variant is the template for iterative structural comparisons.
 

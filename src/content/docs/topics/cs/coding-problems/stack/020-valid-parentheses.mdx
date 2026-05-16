@@ -89,15 +89,15 @@ func isValid(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (scan for pairs)** | **O(n)** | **up to n/2** | **O(n²)** ← dominates |
-| **L2 (three replaces)** | **O(n) each** | **up to n/2** | **O(n²)** ← dominates |
-| L3 (final check) | O(n) | 1 | O(n) |
+| **L1 (scan for pairs)** | **$O(n)$** | **up to n/2** | **$O(n²)$** ← dominates |
+| **L2 (three replaces)** | **$O(n)$ each** | **up to n/2** | **$O(n²)$** ← dominates |
+| L3 (final check) | $O(n)$ | 1 | $O(n)$ |
 
-Each pass removes at least one pair and shrinks the string by 2. Up to n/2 passes, each O(n), gives O(n²) total.
+Each pass removes at least one pair and shrinks the string by 2. Up to n/2 passes, each $O(n)$, gives $O(n²)$ total.
 
 **Complexity**
-- **Time:** O(n²), driven by L1/L2 (up to n/2 passes, each O(n)).
-- **Space:** O(n) for each intermediate string.
+- **Time:** $O(n²)$, driven by L1/L2 (up to n/2 passes, each $O(n)$).
+- **Space:** $O(n)$ for each intermediate string.
 
 Cute but genuinely quadratic. Shows the intuition (innermost pairs cancel) without the optimal representation.
 
@@ -174,16 +174,16 @@ func isValid(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| L2 (loop) | O(1) | n | O(n) |
-| **L3-L7 (per-char work)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L8 (final check) | O(1) | 1 | O(1) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| L2 (loop) | $O(1)$ | n | $O(n)$ |
+| **L3-L7 (per-char work)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L8 (final check) | $O(1)$ | 1 | $O(1)$ |
 
 Each character is pushed or popped exactly once.
 
 **Complexity**
-- **Time:** O(n), driven by L3-L7 (one push or pop per character).
-- **Space:** O(n) for the stack (at most n/2 open brackets).
+- **Time:** $O(n)$, driven by L3-L7 (one push or pop per character).
+- **Space:** $O(n)$ for the stack (at most n/2 open brackets).
 
 **Try this approach:**
 
@@ -262,16 +262,16 @@ func isValid(s string) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (init) | O(1) | 1 | O(1) |
-| L3 (loop) | O(1) | n | O(n) |
-| **L4-L6 (per-char: push or pop+check)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L7 (final check) | O(1) | 1 | O(1) |
+| L1-L2 (init) | $O(1)$ | 1 | $O(1)$ |
+| L3 (loop) | $O(1)$ | n | $O(n)$ |
+| **L4-L6 (per-char: push or pop+check)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L7 (final check) | $O(1)$ | 1 | $O(1)$ |
 
-Same O(n) work, but the pair-map removes all branching.
+Same $O(n)$ work, but the pair-map removes all branching.
 
 **Complexity**
-- **Time:** O(n), driven by L4-L6 (one push or pop+check per character).
-- **Space:** O(n) for the stack.
+- **Time:** $O(n)$, driven by L4-L6 (one push or pop+check per character).
+- **Space:** $O(n)$ for the stack.
 
 **Try this approach:**
 
@@ -329,9 +329,9 @@ End     →  any pending items? Fail (unclosed openers).
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Repeated replacement | O(n²) | O(n) |
-| Stack + if/elif | O(n) | O(n) |
-| **Stack + pair-map** | **O(n)** | **O(n)** |
+| Repeated replacement | $O(n²)$ | $O(n)$ |
+| Stack + if/elif | $O(n)$ | $O(n)$ |
+| **Stack + pair-map** | **$O(n)$** | **$O(n)$** |
 
 All stack approaches have the same asymptotic complexity; the pair-map version is the cleanest to write and generalizes to larger character sets.
 

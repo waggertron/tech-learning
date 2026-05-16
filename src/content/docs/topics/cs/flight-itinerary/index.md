@@ -45,7 +45,7 @@ The third candidate `ORD → JFK (900→1200)` is invalid because we cannot boar
 
 ## Why this isn't just BFS or DFS on a static graph
 
-If you ignore times and treat the input as a directed graph with edges `(src, dst)`, BFS finds a path in O(V + E) and you're done. That answer is wrong: edges aren't always available.
+If you ignore times and treat the input as a directed graph with edges `(src, dst)`, BFS finds a path in $O(V + E)$ and you're done. That answer is wrong: edges aren't always available.
 
 Three properties make this problem distinct from the textbook "find a path" problems:
 
@@ -80,7 +80,7 @@ def index_by_source(flights):
     return by_src
 ```
 
-Sorting each bucket by departure time costs O(F log F) total, where F = `len(flights)`. It pays for itself in every approach below by allowing early-exits when a flight's departure is too early.
+Sorting each bucket by departure time costs $O(F log F)$ total, where F = `len(flights)`. It pays for itself in every approach below by allowing early-exits when a flight's departure is too early.
 
 ## Approach 1: Recursive DFS, find any valid itinerary
 
@@ -115,17 +115,17 @@ def find_itinerary_dfs(flights, start, destination, earliest_depart=0, min_conn=
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (preprocess) | O(F log F) | 1 | O(F log F) |
-| L4 (per-airport loop) | O(deg) per call | up to F nodes in DFS tree | O(F) total edge traversals (with visited) |
-| L6 (timing filter) | O(1) | per flight visited | O(F) |
-| **L8 (recursion)** | **subtree** | **worst case all F flights** | **O(F)** ← dominates if no pruning |
+| L1 (preprocess) | $O(F log F)$ | 1 | $O(F log F)$ |
+| L4 (per-airport loop) | $O(deg)$ per call | up to F nodes in DFS tree | $O(F)$ total edge traversals (with visited) |
+| L6 (timing filter) | $O(1)$ | per flight visited | $O(F)$ |
+| **L8 (recursion)** | **subtree** | **worst case all F flights** | **$O(F)$** ← dominates if no pruning |
 
 With the `visited_flights` set, each flight is tried at most once along any one path. Without good pruning the worst-case enumeration of orderings is exponential, but in practice the timing filter cuts the search space dramatically.
 
 **Complexity**
 
-- **Time:** O(F log F) preprocessing + O(F + R) where R is the number of nodes the recursion actually visits. With timing filters R is typically small; in adversarial inputs (every flight chains into every other) it can approach 2^F.
-- **Space:** O(F) for the visited set + O(D) recursion depth where D is the longest valid itinerary length.
+- **Time:** $O(F log F)$ preprocessing + $O(F + R)$ where R is the number of nodes the recursion actually visits. With timing filters R is typically small; in adversarial inputs (every flight chains into every other) it can approach 2^F.
+- **Space:** $O(F)$ for the visited set + $O(D)$ recursion depth where D is the longest valid itinerary length.
 
 **When to use:** when "any" valid itinerary is the answer and the input is small or chain-like. Easiest to write; rarely the right call in production.
 
@@ -165,17 +165,17 @@ def find_itinerary_fewest_hops(flights, start, destination, earliest_depart=0, m
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (preprocess) | O(F log F) | 1 | O(F log F) |
-| L4 (BFS loop) | O(1) | up to F * A states | O(F · A) |
-| **L7 (neighbor scan)** | **O(deg)** | **per state** | **O(F · A)** ← dominates |
-| L12 (path append) | O(D) | per enqueue | O(F · A · D) worst case |
+| L1 (preprocess) | $O(F log F)$ | 1 | $O(F log F)$ |
+| L4 (BFS loop) | $O(1)$ | up to F * A states | $O(F · A)$ |
+| **L7 (neighbor scan)** | **$O(deg)$** | **per state** | **$O(F · A)$** ← dominates |
+| L12 (path append) | $O(D)$ | per enqueue | $O(F · A · D)$ worst case |
 
-The dominance check at L10 keeps the seen-set bounded: at each hop count we only keep the best (earliest-arrival) state per airport. In practice this collapses the explored states to O(A · max_hops).
+The dominance check at L10 keeps the seen-set bounded: at each hop count we only keep the best (earliest-arrival) state per airport. In practice this collapses the explored states to $O(A · max_hops)$.
 
 **Complexity**
 
-- **Time:** O(F log F + F · A) for the search itself; O(F · A · D) if you account for path-list copies. To eliminate the D factor, store predecessors instead of full paths and reconstruct at the end.
-- **Space:** O(F · A) for the seen-set + O(F · A · D) for queued path copies, or O(A · max_hops) if you reconstruct from predecessors.
+- **Time:** $O(F log F + F · A)$ for the search itself; $O(F · A · D)$ if you account for path-list copies. To eliminate the D factor, store predecessors instead of full paths and reconstruct at the end.
+- **Space:** $O(F · A)$ for the seen-set + $O(F · A · D)$ for queued path copies, or $O(A · max_hops)$ if you reconstruct from predecessors.
 
 **When to use:** "I have a deadline and want the fewest connections" or "I want the shortest schedule by number of legs."
 
@@ -213,17 +213,17 @@ def find_itinerary_earliest_arrival(flights, start, destination, earliest_depart
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (preprocess) | O(F log F) | 1 | O(F log F) |
-| L5 (heap pop) | O(log F) | up to F | O(F log F) |
-| L8 (neighbor scan) | O(deg) | per pop | O(F) total across all pops |
-| **L12 (heap push)** | **O(log F)** | **up to F** | **O(F log F)** ← dominates |
+| L1 (preprocess) | $O(F log F)$ | 1 | $O(F log F)$ |
+| L5 (heap pop) | $O(log F)$ | up to F | $O(F log F)$ |
+| L8 (neighbor scan) | $O(deg)$ | per pop | $O(F)$ total across all pops |
+| **L12 (heap push)** | **$O(log F)$** | **up to F** | **$O(F log F)$** ← dominates |
 
 Standard Dijkstra analysis. Each edge is relaxed at most once because the dominance check at L10 short-circuits.
 
 **Complexity**
 
-- **Time:** O((F + A) log F). The `+ A` is the destination check; in dense flight networks F dominates.
-- **Space:** O(F + A) for the heap + best-arrival table. O(F · D) if you also store paths inline; reconstruct from predecessors to avoid that.
+- **Time:** $O((F + A)$ log F). The `+ A` is the destination check; in dense flight networks F dominates.
+- **Space:** $O(F + A)$ for the heap + best-arrival table. $O(F · D)$ if you also store paths inline; reconstruct from predecessors to avoid that.
 
 **When to use:** "What's the earliest I can possibly arrive at JFK?" This is the answer most real travel sites optimize.
 
@@ -278,7 +278,7 @@ def build_time_expanded_graph(flights, start, destination, earliest_depart=0):
 
 **Why bother:** with the TEG built explicitly, every variant becomes a one-liner over a graph library. The downside is that the TEG has up to 2F nodes (one per flight endpoint) plus the waiting edges, so the constant factor is higher. The implicit search in Approach 3 above is asymptotically equivalent and avoids materializing the graph.
 
-**Complexity (build):** O(F log F) sort across all airport-time bucket lists. O(F) nodes, O(F) flight-edges, O(F) waiting-edges → O(F) total graph size.
+**Complexity (build):** $O(F log F)$ sort across all airport-time bucket lists. $O(F)$ nodes, $O(F)$ flight-edges, $O(F)$ waiting-edges → $O(F)$ total graph size.
 
 ## Approach 5: Find ALL valid itineraries (DFS with collection)
 
@@ -308,7 +308,7 @@ def find_all_itineraries(flights, start, destination, earliest_depart=0, min_con
     return results
 ```
 
-**Complexity:** worst case O(F!) when every flight chains into every other; in practice the timing constraint prunes aggressively. For travel-planner UIs you would cap the depth (e.g., max 3 layovers) and rank by some criterion.
+**Complexity:** worst case $O(F!)$ when every flight chains into every other; in practice the timing constraint prunes aggressively. For travel-planner UIs you would cap the depth (e.g., max 3 layovers) and rank by some criterion.
 
 ## Variants, common interview follow-ups
 

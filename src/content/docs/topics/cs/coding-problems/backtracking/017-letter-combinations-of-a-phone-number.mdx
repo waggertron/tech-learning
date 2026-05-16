@@ -125,14 +125,14 @@ func letterCombinations(digits string) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (outer loop) | O(1) overhead | n | O(n) |
-| **L2 (list comprehension)** | **O(k · \|result\|)** | **n** | **O(k^n · n)** ← dominates |
+| L1 (outer loop) | $O(1)$ overhead | n | $O(n)$ |
+| **L2 (list comprehension)** | **$O(k · \|result\|)$** | **n** | **$O(k^n · n)$** ← dominates |
 
-After processing digit i, `result` has k^i entries each of length i. The comprehension at step i processes k^(i-1) × k entries. Total work is the sum over i of i × k^i = O(n · k^n).
+After processing digit i, `result` has k^i entries each of length i. The comprehension at step i processes k^(i-1) × k entries. Total work is the sum over i of i × k^i = $O(n · k^n)$.
 
 **Complexity**
-- **Time:** O(4^n · n) worst case, driven by L2 growing result at every step.
-- **Space:** O(4^n · n) for the output.
+- **Time:** $O(4^n · n)$ worst case, driven by L2 growing result at every step.
+- **Space:** $O(4^n · n)$ for the output.
 
 **Try this approach:**
 
@@ -243,15 +243,15 @@ func letterCombinations(digits string) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (join + append) | O(n) | k^n leaves | O(k^n · n) |
-| L2 (letter loop) | O(1) | k^n total | O(k^n) |
-| **L3/L4/L5 (push/recurse/pop)** | **O(1)** | **k^n · n** | **O(k^n · n)** ← dominates |
+| L1 (join + append) | $O(n)$ | k^n leaves | $O(k^n · n)$ |
+| L2 (letter loop) | $O(1)$ | k^n total | $O(k^n)$ |
+| **L3/L4/L5 (push/recurse/pop)** | **$O(1)$** | **k^n · n** | **$O(k^n · n)$** ← dominates |
 
 The recursion tree has k^n leaves (one per combination) and n levels. Most work is at the leaves.
 
 **Complexity**
-- **Time:** O(4^n · n), driven by L1/L4 building k^n combinations of length n.
-- **Space:** O(n) recursion + output.
+- **Time:** $O(4^n · n)$, driven by L1/L4 building k^n combinations of length n.
+- **Space:** $O(n)$ recursion + output.
 
 **Try this approach:**
 
@@ -288,11 +288,11 @@ def letter_combinations(digits):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (product + join)** | **O(n) per combo** | **k^n** | **O(k^n · n)** ← dominates |
+| **L1 (product + join)** | **$O(n)$ per combo** | **k^n** | **$O(k^n · n)$** ← dominates |
 
 **Complexity**
-- **Time:** O(4^n · n).
-- **Space:** O(4^n · n).
+- **Time:** $O(4^n · n)$.
+- **Space:** $O(4^n · n)$.
 
 Production-correct; rarely accepted in an interview that wants the algorithm.
 
@@ -300,9 +300,9 @@ Production-correct; rarely accepted in an interview that wants the algorithm.
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Iterative cartesian product | O(4^n · n) | O(4^n · n) |
-| **Backtracking DFS** | **O(4^n · n)** | **O(n)** recursion |
-| `itertools.product` | O(4^n · n) | O(4^n · n) |
+| Iterative cartesian product | $O(4^n · n)$ | $O(4^n · n)$ |
+| **Backtracking DFS** | **$O(4^n · n)$** | **$O(n)$** recursion |
+| `itertools.product` | $O(4^n · n)$ | $O(4^n · n)$ |
 
 All optimal in time. Backtracking is smallest in recursion-stack terms and is the "show you understand the algorithm" interview answer.
 

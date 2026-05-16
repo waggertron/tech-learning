@@ -119,12 +119,12 @@ function alienOrder(words: string[]): string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (generate permutations) | O(K!) | 1 | O(K!) |
-| **L2 (test each permutation against words)** | **O(W · L)** | **K!** | **O(K! · W · L)** ← dominates |
+| L1 (generate permutations) | $O(K!)$ | 1 | $O(K!)$ |
+| **L2 (test each permutation against words)** | **$O(W · L)$** | **K!** | **$O(K! · W · L)$** ← dominates |
 
 **Complexity**
-- **Time:** O(K! · W · L), driven by L2. Infeasible past K around 8.
-- **Space:** O(K).
+- **Time:** $O(K! · W · L)$, driven by L2. Infeasible past K around 8.
+- **Space:** $O(K)$.
 
 Educational only; don't actually write this.
 
@@ -221,15 +221,15 @@ function alienOrder(words: string[]): string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build in_deg) | O(1) | W * L chars | O(W * L) |
-| L3-L6 (edge extraction) | O(L) per pair | W - 1 pairs | O(W * L) |
-| L7 (seed queue) | O(K) | 1 | O(K) |
-| **L8-L11 (Kahn's BFS)** | **O(1) per node/edge** | **K nodes + E edges** | **O(K + E)** ← dominates on large inputs |
-| L12 (join) | O(K) | 1 | O(K) |
+| L1 (build in_deg) | $O(1)$ | W * L chars | $O(W * L)$ |
+| L3-L6 (edge extraction) | $O(L)$ per pair | W - 1 pairs | $O(W * L)$ |
+| L7 (seed queue) | $O(K)$ | 1 | $O(K)$ |
+| **L8-L11 (Kahn's BFS)** | **$O(1)$ per node/edge** | **K nodes + E edges** | **$O(K + E)$** ← dominates on large inputs |
+| L12 (join) | $O(K)$ | 1 | $O(K)$ |
 
 **Complexity**
-- **Time:** O(W * L + K + E), driven by L3-L6 and L8-L11. Since K ≤ 26, this simplifies to O(W * L) in practice.
-- **Space:** O(K + E) for the graph and in-degree map.
+- **Time:** $O(W * L + K + E)$, driven by L3-L6 and L8-L11. Since K ≤ 26, this simplifies to $O(W * L)$ in practice.
+- **Space:** $O(K + E)$ for the graph and in-degree map.
 
 **Try this approach:**
 
@@ -249,9 +249,9 @@ function alienOrder(words: string[]): string {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Try every permutation | O(K! · W · L) | O(K) |
-| **Kahn's BFS** | **O(W * L + K + E)** | **O(K + E)** |
-| DFS post-order reversed | O(W * L + K + E) | O(K + E) |
+| Try every permutation | $O(K! · W · L)$ | $O(K)$ |
+| **Kahn's BFS** | **$O(W * L + K + E)$** | **$O(K + E)$** |
+| DFS post-order reversed | $O(W * L + K + E)$ | $O(K + E)$ |
 
 Kahn's is the canonical answer -- you extract edges in one pass and topologically sort in another. The prefix-contradiction check is the easy-to-miss gotcha.
 

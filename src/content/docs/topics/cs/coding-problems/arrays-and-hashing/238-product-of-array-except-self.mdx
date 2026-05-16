@@ -26,7 +26,7 @@ import approach3GoCode from './238-product-of-array-except-self-approach3.go?raw
 
 Given an integer array `nums`, return an array `answer` such that `answer[i]` equals the product of all elements of `nums` except `nums[i]`.
 
-The algorithm must run in O(n) time **and must not use the division operation**. Follow-up: can you solve in O(1) extra space (the output array doesn't count)?
+The algorithm must run in $O(n)$ time **and must not use the division operation**. Follow-up: can you solve in $O(1)$ extra space (the output array doesn't count)?
 
 **Example**
 - `nums = [1, 2, 3, 4]` → `[24, 12, 8, 6]`
@@ -107,16 +107,16 @@ func productExceptSelf(nums []int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init output) | O(n) | 1 | O(n) |
-| L3 (outer loop) | O(1) | n | O(n) |
-| **L5, L7 (inner loop + multiply)** | **O(1)** | **n² total** | **O(n²)** ← dominates |
-| L8 (assign) | O(1) | n | O(n) |
+| L2 (init output) | $O(n)$ | 1 | $O(n)$ |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L5, L7 (inner loop + multiply)** | **$O(1)$** | **n² total** | **$O(n²)$** ← dominates |
+| L8 (assign) | $O(1)$ | n | $O(n)$ |
 
 The nested multiply gives exactly n*(n-1) multiplications.
 
 **Complexity**
-- **Time:** O(n²), driven by L5/L7 (nested loop multiplications).
-- **Space:** O(1) excluding the output.
+- **Time:** $O(n²)$, driven by L5/L7 (nested loop multiplications).
+- **Space:** $O(1)$ excluding the output.
 
 Too slow for the problem's stated constraint but useful as a sanity check.
 
@@ -124,7 +124,7 @@ Too slow for the problem's stated constraint but useful as a sanity check.
 
 `answer[i]` = (product of everything left of `i`) × (product of everything right of `i`).
 
-Compute both in O(n) and combine.
+Compute both in $O(n)$ and combine.
 
 <Tabs>
 <TabItem label="Python">
@@ -190,16 +190,16 @@ func productExceptSelf(nums []int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (init arrays) | O(n) | 1 each | O(n) |
-| **L4, L5 (prefix pass)** | **O(1)** | **n-1** | **O(n)** |
-| **L6, L7 (suffix pass)** | **O(1)** | **n-1** | **O(n)** |
-| L8 (combine) | O(1) per element | n | O(n) |
+| L2, L3 (init arrays) | $O(n)$ | 1 each | $O(n)$ |
+| **L4, L5 (prefix pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
+| **L6, L7 (suffix pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
+| L8 (combine) | $O(1)$ per element | n | $O(n)$ |
 
-Three linear passes, each O(n). All three contribute equally; none dominates asymptotically.
+Three linear passes, each $O(n)$. All three contribute equally; none dominates asymptotically.
 
 **Complexity**
-- **Time:** O(n), driven by the three linear passes (L4/L5, L6/L7, L8).
-- **Space:** O(n) for the two auxiliary arrays.
+- **Time:** $O(n)$, driven by the three linear passes (L4/L5, L6/L7, L8).
+- **Space:** $O(n)$ for the two auxiliary arrays.
 
 **Try this approach:**
 
@@ -215,7 +215,7 @@ Three linear passes, each O(n). All three contribute equally; none dominates asy
   </TabItem>
 </Tabs>
 
-## Approach 3: Space-optimized (O(1) extra space)
+## Approach 3: Space-optimized ($O(1)$ extra space)
 
 Reuse the output array for the prefix pass; track the suffix product as a single running scalar on a second pass.
 
@@ -288,16 +288,16 @@ func productExceptSelf(nums []int) []int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init output) | O(n) | 1 | O(n) |
-| **L3, L4 (prefix pass)** | **O(1)** | **n-1** | **O(n)** |
-| L5 (init suffix) | O(1) | 1 | O(1) |
-| **L6, L7, L8 (suffix pass)** | **O(1)** | **n-1** | **O(n)** |
+| L2 (init output) | $O(n)$ | 1 | $O(n)$ |
+| **L3, L4 (prefix pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
+| L5 (init suffix) | $O(1)$ | 1 | $O(1)$ |
+| **L6, L7, L8 (suffix pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
 
 Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the need for a separate `suffix[]` array.
 
 **Complexity**
-- **Time:** O(n), driven by L3/L4 and L6/L7/L8 (two linear passes).
-- **Space:** O(1) extra (the output array is not counted per the problem).
+- **Time:** $O(n)$, driven by L3/L4 and L6/L7/L8 (two linear passes).
+- **Space:** $O(1)$ extra (the output array is not counted per the problem).
 
 **Try this approach:**
 
@@ -317,11 +317,11 @@ Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the ne
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Nested product | O(n²) | O(1) |
-| Prefix + suffix arrays | O(n) | O(n) |
-| **Space-optimized** | **O(n)** | **O(1)** extra |
+| Nested product | $O(n²)$ | $O(1)$ |
+| Prefix + suffix arrays | $O(n)$ | $O(n)$ |
+| **Space-optimized** | **$O(n)$** | **$O(1)$** extra |
 
-Division would give an O(n) single-pass solution, forbidden here because of how it handles zeros (and to force the prefix/suffix idea, which generalizes to many problems).
+Division would give an $O(n)$ single-pass solution, forbidden here because of how it handles zeros (and to force the prefix/suffix idea, which generalizes to many problems).
 
 ## Test cases
 

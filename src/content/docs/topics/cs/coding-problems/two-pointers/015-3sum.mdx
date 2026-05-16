@@ -119,16 +119,16 @@ func threeSum(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (outer loop) | O(1) | n | O(n) |
-| L4 (middle loop) | O(1) | n² | O(n²) |
-| **L5, L6, L7 (inner loop + check)** | **O(1)** | **~n³/6** | **O(n³)** ← dominates |
-| L8 (collect) | O(m) | 1 | O(m) |
+| L3 (outer loop) | $O(1)$ | n | $O(n)$ |
+| L4 (middle loop) | $O(1)$ | n² | $O(n²)$ |
+| **L5, L6, L7 (inner loop + check)** | **$O(1)$** | **~n³/6** | **$O(n³)$** ← dominates |
+| L8 (collect) | $O(m)$ | 1 | $O(m)$ |
 
 Triple nested loops, one per triplet position.
 
 **Complexity**
-- **Time:** O(n³), driven by L5/L6 (triple nested loop).
-- **Space:** O(m) where m is the number of unique triplets.
+- **Time:** $O(n³)$, driven by L5/L6 (triple nested loop).
+- **Space:** $O(m)$ where m is the number of unique triplets.
 
 Too slow for the problem's n ≤ 3000 constraint.
 
@@ -219,15 +219,15 @@ func threeSum(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** |
-| L4 (outer loop) | O(1) | n | O(n) |
-| **L8-L14 (inner scan)** | **O(1) per step** | **n per outer** | **O(n²)** ← dominates |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** |
+| L4 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L8-L14 (inner scan)** | **$O(1)$ per step** | **n per outer** | **$O(n²)$** ← dominates |
 
-The sort is O(n log n); the double loop is O(n²). The loop dominates for large n.
+The sort is $O(n log n)$; the double loop is $O(n²)$. The loop dominates for large n.
 
 **Complexity**
-- **Time:** O(n²), driven by L4/L8 (outer loop times inner scan). Sort is O(n log n); the outer loop x inner scan is O(n²).
-- **Space:** O(n) for the hash set per outer iteration.
+- **Time:** $O(n²)$, driven by L4/L8 (outer loop times inner scan). Sort is $O(n log n)$; the outer loop x inner scan is $O(n²)$.
+- **Space:** $O(n)$ for the hash set per outer iteration.
 
 **Try this approach:**
 
@@ -245,7 +245,7 @@ The sort is O(n log n); the double loop is O(n²). The loop dominates for large 
 
 ## Approach 3: Sort + two pointers (optimal)
 
-Sort, then for each anchor `i`, converge pointers `l` and `r` from both ends of the remaining suffix. Same O(n²) time but O(1) extra space.
+Sort, then for each anchor `i`, converge pointers `l` and `r` from both ends of the remaining suffix. Same $O(n²)$ time but $O(1)$ extra space.
 
 <Tabs>
 <TabItem label="Python">
@@ -345,15 +345,15 @@ func threeSum(nums []int) [][]int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort)** | **O(n log n)** | **1** | **O(n log n)** |
-| L4 (outer loop) | O(1) | n | O(n) |
-| **L8-L18 (two-pointer scan)** | **O(1) per step** | **n per outer** | **O(n²)** ← dominates |
+| **L1 (sort)** | **$O(n log n)$** | **1** | **$O(n log n)$** |
+| L4 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L8-L18 (two-pointer scan)** | **$O(1)$ per step** | **n per outer** | **$O(n²)$** ← dominates |
 
 Each outer iteration does at most one linear pass of the suffix (l and r converge). Dedup skips are absorbed into the linear pass.
 
 **Complexity**
-- **Time:** O(n²), driven by L4/L8 (outer loop x two-pointer scan). Sort is O(n log n); the outer loop x two-pointer sweep is O(n²).
-- **Space:** O(1) extra (ignoring sort's stack frames and the output list).
+- **Time:** $O(n²)$, driven by L4/L8 (outer loop x two-pointer scan). Sort is $O(n log n)$; the outer loop x two-pointer sweep is $O(n²)$.
+- **Space:** $O(1)$ extra (ignoring sort's stack frames and the output list).
 
 **Try this approach:**
 
@@ -373,9 +373,9 @@ Each outer iteration does at most one linear pass of the suffix (l and r converg
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute force + set dedup | O(n³) | O(m) |
-| Sort + hash two-sum | O(n²) | O(n) |
-| **Sort + two pointers** | **O(n²)** | **O(1)** extra |
+| Brute force + set dedup | $O(n³)$ | $O(m)$ |
+| Sort + hash two-sum | $O(n²)$ | $O(n)$ |
+| **Sort + two pointers** | **$O(n²)$** | **$O(1)$** extra |
 
 Sort + two pointers is the canonical answer; it handles duplicates cleanly and uses no extra memory. The template generalizes to 4Sum and kSum.
 

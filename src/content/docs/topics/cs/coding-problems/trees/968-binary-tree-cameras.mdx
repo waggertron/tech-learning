@@ -127,18 +127,18 @@ function minCameraCover(root: TreeNode | null): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init counter) | O(1) | 1 | O(1) |
-| L2 (null base case) | O(1) | up to n+1 | O(n) |
-| **L3/L4 (recurse)** | **O(1) dispatch** | **n** | **O(n)** ← dominates |
-| L5/L6 (place camera) | O(1) | n | O(n) |
-| L7/L8 (return state) | O(1) | n | O(n) |
-| L9 (root check) | O(1) | 1 | O(1) |
+| L1 (init counter) | $O(1)$ | 1 | $O(1)$ |
+| L2 (null base case) | $O(1)$ | up to n+1 | $O(n)$ |
+| **L3/L4 (recurse)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates |
+| L5/L6 (place camera) | $O(1)$ | n | $O(n)$ |
+| L7/L8 (return state) | $O(1)$ | n | $O(n)$ |
+| L9 (root check) | $O(1)$ | 1 | $O(1)$ |
 
-Each node is visited exactly once. Every decision is O(1) based on two child states. No memoization needed since we process bottom-up with no revisits.
+Each node is visited exactly once. Every decision is $O(1)$ based on two child states. No memoization needed since we process bottom-up with no revisits.
 
 **Complexity**
-- **Time:** O(n). Each node visited once in post-order, driven by L3/L4.
-- **Space:** O(h) for the recursion stack.
+- **Time:** $O(n)$. Each node visited once in post-order, driven by L3/L4.
+- **Space:** $O(h)$ for the recursion stack.
 
 **Try this approach:**
 
@@ -198,7 +198,7 @@ Answer: 2
 
 | Strategy | Cameras placed | Why |
 | --- | --- | --- |
-| Camera on every leaf | O(n/2) | Too many, leaves have little coverage |
+| Camera on every leaf | $O(n/2)$ | Too many, leaves have little coverage |
 | Camera on every parent of leaf | Optimal or near | Covers leaf, sibling, parent itself |
 | **Greedy post-order DFS** | **Minimum** | **Forces delay until unavoidable** |
 

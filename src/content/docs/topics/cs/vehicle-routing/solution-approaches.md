@@ -42,7 +42,7 @@ The savings algorithm is the algorithmic heart of the `SAVINGS` strategy and one
 3. Sort pairs by `s(i, j)` descending.
 4. Walk the sorted list; merge the two routes containing `i` and `j` if both are still endpoints of their routes and the merge is feasible under capacity.
 
-It's human-readable, runs in O(n² log n), and typically gets within 10–15% of optimum on CVRP.
+It's human-readable, runs in $O(n² log n)$, and typically gets within 10–15% of optimum on CVRP.
 
 ## Phase 2, local search
 

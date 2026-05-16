@@ -131,14 +131,14 @@ func generateParenthesis(n int) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1-L5 (full enumeration)** | **O(n) at leaves** | **4^n nodes** | **O(4^n · n)** ← dominates |
-| L3 (is_valid at leaf) | O(n) | 4^n leaves | O(4^n · n) |
+| **L1-L5 (full enumeration)** | **$O(n)$ at leaves** | **4^n nodes** | **$O(4^n · n)$** ← dominates |
+| L3 (is_valid at leaf) | $O(n)$ | 4^n leaves | $O(4^n · n)$ |
 
-The recursion tree has 4^n leaves (all 2n-length strings of `(` and `)`); each is validated in O(n).
+The recursion tree has 4^n leaves (all 2n-length strings of `(` and `)`); each is validated in $O(n)$.
 
 **Complexity**
-- **Time:** O(2^(2n) · n), driven by L1-L5 (exponentially many strings, each validated in O(n)).
-- **Space:** O(n) recursion depth (plus output).
+- **Time:** $O(2^{2n} \cdot n)$, driven by L1-L5 (exponentially many strings, each validated in $O(n)$).
+- **Space:** $O(n)$ recursion depth (plus output).
 
 ## Approach 2: Prune invalid strings during generation
 
@@ -200,14 +200,14 @@ func generateParenthesis(n int) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (prune check) | O(1) | at each node | reduces tree to ~4·C(n) nodes |
-| **L4, L5 (recurse)** | **O(n) at leaves** | **C(n) leaves** | **O(C(n) · n)** ← dominates |
+| L2 (prune check) | $O(1)$ | at each node | reduces tree to ~4·C(n) nodes |
+| **L4, L5 (recurse)** | **$O(n)$ at leaves** | **C(n) leaves** | **$O(C(n)$ · n)** ← dominates |
 
 Pruning reduces the explored space from 4^n to the Catalan number C(n) ≈ 4^n / (n^(3/2) · sqrt(pi)).
 
 **Complexity**
-- **Time:** O(4^n / sqrt(n)), the n-th Catalan number times a linear factor. Much smaller than the brute-force 4^n.
-- **Space:** O(n) recursion depth.
+- **Time:** $O(4^n / sqrt(n)$), the n-th Catalan number times a linear factor. Much smaller than the brute-force 4^n.
+- **Space:** $O(n)$ recursion depth.
 
 **Try this approach:**
 
@@ -314,17 +314,17 @@ func generateParenthesis(n int) []string {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3-L4 (base case + join) | O(n) | C(n) leaves | O(C(n) · n) |
-| L5-L12 (append/recurse/pop) | O(1) amortized | ~4·C(n) nodes | O(C(n)) |
-| **Total** | | | **O(C(n) · n)** ← dominates |
+| L3-L4 (base case + join) | $O(n)$ | C(n) leaves | $O(C(n)$ · n) |
+| L5-L12 (append/recurse/pop) | $O(1)$ amortized | ~4·C(n) nodes | $O(C(n)$) |
+| **Total** | | | **$O(C(n)$ · n)** ← dominates |
 
-Using a single `path` list with `append`/`pop` avoids O(n) string concatenation on each internal node; the join cost O(n) is paid only at the C(n) leaves.
+Using a single `path` list with `append`/`pop` avoids $O(n)$ string concatenation on each internal node; the join cost $O(n)$ is paid only at the C(n) leaves.
 
 **Complexity**
-- **Time:** O(4^n / sqrt(n)), driven by L4/L7/L11 (Catalan-many recursive calls). Same asymptotic as Approach 2; the count of well-formed sequences is the n-th Catalan number.
-- **Space:** O(n) recursion depth + output.
+- **Time:** $O(4^n / sqrt(n)$), driven by L4/L7/L11 (Catalan-many recursive calls). Same asymptotic as Approach 2; the count of well-formed sequences is the n-th Catalan number.
+- **Space:** $O(n)$ recursion depth + output.
 
-Using a single `path` list with `append`/`pop` avoids string concatenation (O(n) per append); the final join happens only on full paths.
+Using a single `path` list with `append`/`pop` avoids string concatenation ($O(n)$ per append); the final join happens only on full paths.
 
 **Try this approach:**
 
@@ -344,9 +344,9 @@ Using a single `path` list with `append`/`pop` avoids string concatenation (O(n)
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Enumerate all + validate | O(2^(2n) · n) | O(n) |
-| Prune during generation | O(4^n / sqrt(n)) | O(n) |
-| **Backtracking with invariants** | **O(4^n / sqrt(n))** | **O(n)** |
+| Enumerate all + validate | $O(2^{2n} \cdot n)$ | $O(n)$ |
+| Prune during generation | $O(4^n / sqrt(n)$) | $O(n)$ |
+| **Backtracking with invariants** | **$O(4^n / sqrt(n)$)** | **$O(n)$** |
 
 Approach 3 is the canonical answer and the cleanest expression of the idea. The output is inherently exponential, so you can't beat the Catalan bound.
 

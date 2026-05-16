@@ -16,14 +16,14 @@ Linked lists are less common in modern application code (dynamic arrays dominate
 
 ## In-depth description
 
-A **singly linked list** has a `head` pointer and each node has a `next` field. Traversal is forward-only. Insert/delete at the head is O(1); at an arbitrary index given the previous node pointer is O(1); at a given index (without a cached pointer) is O(n) because you have to walk to it. A tail pointer makes append O(1).
+A **singly linked list** has a `head` pointer and each node has a `next` field. Traversal is forward-only. Insert/delete at the head is $O(1)$; at an arbitrary index given the previous node pointer is $O(1)$; at a given index (without a cached pointer) is $O(n)$ because you have to walk to it. A tail pointer makes append $O(1)$.
 
-A **doubly linked list** has `prev` and `next` on each node. The extra pointer enables O(1) removal given any node reference, critical for LRU caches where you get a node from a hash map and need to splice it out. Cost: 1 extra pointer per node.
+A **doubly linked list** has `prev` and `next` on each node. The extra pointer enables $O(1)$ removal given any node reference, critical for LRU caches where you get a node from a hash map and need to splice it out. Cost: 1 extra pointer per node.
 
 Core interview techniques:
 
 - **Reversal**: iterative (three-pointer: prev, curr, next) and recursive; a fundamental building block.
-- **Floyd's cycle detection** (tortoise and hare): two pointers at different speeds detect cycles in O(n) with O(1) space; also finds cycle start and array-as-linked-list duplicates.
+- **Floyd's cycle detection** (tortoise and hare): two pointers at different speeds detect cycles in $O(n)$ with $O(1)$ space; also finds cycle start and array-as-linked-list duplicates.
 - **Two-pointer (slow/fast)**: find the middle in one pass, find the n-th from end, etc.
 - **Dummy head nodes**: prepend a sentinel to simplify edge cases around the head.
 - **Merge**: classic two-pointer merge of sorted lists; basis of [merge sort](../named-algorithms/merge-sort/) on lists.
@@ -32,12 +32,12 @@ Core interview techniques:
 
 | Operation | Singly (best case) | Doubly |
 | --- | --- | --- |
-| Access by index | O(n) | O(n) |
-| Search | O(n) | O(n) |
-| Insert/delete at head | O(1) | O(1) |
-| Insert/delete at tail (with tail pointer) | O(1) | O(1) |
-| Insert/delete given node | O(1) w/ prev | O(1) |
-| Space | O(n) | O(n) |
+| Access by index | $O(n)$ | $O(n)$ |
+| Search | $O(n)$ | $O(n)$ |
+| Insert/delete at head | $O(1)$ | $O(1)$ |
+| Insert/delete at tail (with tail pointer) | $O(1)$ | $O(1)$ |
+| Insert/delete given node | $O(1)$ w/ prev | $O(1)$ |
+| Space | $O(n)$ | $O(n)$ |
 
 ## Common uses in DSA
 
@@ -45,7 +45,7 @@ Core interview techniques:
 2. **Cycle detection and related**: Linked List Cycle (has cycle?), Linked List Cycle II (find cycle start), Find the Duplicate Number (array-as-list).
 3. **Merging and sorting**: Merge Two Sorted Lists, Merge k Sorted Lists (heap + list), Sort List (merge sort on list).
 4. **Two-pointer distance problems**: Remove Nth Node From End, Middle of the Linked List, Intersection of Two Linked Lists.
-5. **LRU cache**: Doubly linked list + hash map for O(1) get/put; canonical interview composite problem.
+5. **LRU cache**: Doubly linked list + hash map for $O(1)$ get/put; canonical interview composite problem.
 
 **Canonical LeetCode problems:** #19 Remove Nth Node From End, #21 Merge Two Sorted Lists, #138 Copy List with Random Pointer, #141 Linked List Cycle, #142 Linked List Cycle II, #143 Reorder List, #146 LRU Cache, #206 Reverse Linked List, #287 Find the Duplicate Number.
 

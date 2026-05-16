@@ -99,17 +99,17 @@ function maxAreaOfIsland(grid: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L6, L7 (scan) | O(1) | m * n | O(m * n) |
-| L3 (bounds check) | O(1) | once per DFS call | O(m * n) total |
-| L4 (mark visited) | O(1) | once per land cell | O(m * n) total |
-| **L5 (recurse 4 neighbors)** | **O(1) per frame** | **each cell visited once** | **O(m * n) ← dominates** |
-| L8 (max update) | O(1) | m * n | O(m * n) |
+| L6, L7 (scan) | $O(1)$ | m * n | $O(m * n)$ |
+| L3 (bounds check) | $O(1)$ | once per DFS call | $O(m * n)$ total |
+| L4 (mark visited) | $O(1)$ | once per land cell | $O(m * n)$ total |
+| **L5 (recurse 4 neighbors)** | **$O(1)$ per frame** | **each cell visited once** | **$O(m * n)$ ← dominates** |
+| L8 (max update) | $O(1)$ | m * n | $O(m * n)$ |
 
 Each cell is visited at most once: L4 marks it `0` before recursing, so no cell is processed twice. Total work across all DFS calls is proportional to the number of cells.
 
 **Complexity**
-- **Time:** O(m * n), driven by L5 (each cell entered at most once across all DFS calls).
-- **Space:** O(m * n) recursion worst case (a fully-land grid produces a call stack m * n deep).
+- **Time:** $O(m * n)$, driven by L5 (each cell entered at most once across all DFS calls).
+- **Space:** $O(m * n)$ recursion worst case (a fully-land grid produces a call stack m * n deep).
 
 ## Approach 2: BFS with area counting
 
@@ -180,8 +180,8 @@ function maxAreaOfIsland(grid: number[][]): number {
 </Tabs>
 
 **Complexity**
-- **Time:** O(m * n), driven by L7/L10 (each land cell enqueued and dequeued exactly once).
-- **Space:** O(min(m, n)) queue frontier.
+- **Time:** $O(m * n)$, driven by L7/L10 (each land cell enqueued and dequeued exactly once).
+- **Space:** $O(min(m, n)$) queue frontier.
 
 **Try this approach:**
 
@@ -201,9 +201,9 @@ function maxAreaOfIsland(grid: number[][]): number {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| **DFS with area return** | O(m * n) | O(m * n) recursion |
-| BFS with area counter | O(m * n) | O(min(m, n)) |
-| Union-Find with sizes | O(m * n * alpha) | O(m * n) |
+| **DFS with area return** | $O(m * n)$ | $O(m * n)$ recursion |
+| BFS with area counter | $O(m * n)$ | $O(min(m, n)$) |
+| Union-Find with sizes | $O(m * n * alpha)$ | $O(m * n)$ |
 
 The DFS-return-area pattern is the cleanest here, it generalizes to "for each component, compute some aggregate" (sum, min, max, perimeter).
 

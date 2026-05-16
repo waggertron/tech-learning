@@ -51,7 +51,7 @@ There are four representations in common use. Choosing the right one affects bot
 
 ### Adjacency list (default choice)
 
-Space: O(V + E). Iteration over neighbors: O(degree(u)). Edge existence check: O(degree(u)).
+Space: $O(V + E)$. Iteration over neighbors: $O(degree(u)$). Edge existence check: $O(degree(u)$).
 
 Use this unless you have a reason not to. It handles sparse graphs cleanly and is what every standard graph algorithm assumes.
 
@@ -85,7 +85,7 @@ for neighbor, weight in adj[u]:
 
 ### Adjacency matrix
 
-Space: O(V²). Iteration over neighbors: O(V). Edge existence check: O(1).
+Space: $O(V²)$. Iteration over neighbors: $O(V)$. Edge existence check: $O(1)$.
 
 Use when V is small (V <= 1000) and you need fast edge lookup. Also useful when the graph is dense (E close to V²).
 
@@ -108,11 +108,11 @@ for v in range(n):
         pass  # edge u -> v with weight mat[u][v]
 ```
 
-The O(V) neighbor iteration is the main cost. If V = 10000 and E = 20000, you pay 10000 iterations per vertex instead of 2 on average. That is why adjacency matrix is a bad default for sparse graphs.
+The $O(V)$ neighbor iteration is the main cost. If V = 10000 and E = 20000, you pay 10000 iterations per vertex instead of 2 on average. That is why adjacency matrix is a bad default for sparse graphs.
 
 ### Edge list
 
-Space: O(E). Useful when you want to process edges globally rather than per-vertex.
+Space: $O(E)$. Useful when you want to process edges globally rather than per-vertex.
 
 Used by:
 - **Bellman-Ford**: iterates over all edges V-1 times.
@@ -141,7 +141,7 @@ def bellman_ford(n, edges, src):
 
 ### Implicit graph
 
-Space: O(1) for the graph itself (you store only the problem state). Neighbors are computed on the fly from the current node's coordinates or state.
+Space: $O(1)$ for the graph itself (you store only the problem state). Neighbors are computed on the fly from the current node's coordinates or state.
 
 Grid problems are the canonical example. The graph is never materialized: you just define a `get_neighbors` function.
 
@@ -183,10 +183,10 @@ State machines generalize the implicit graph idea: instead of `(row, col)`, the 
 
 | Representation | Space | Neighbor iteration | Edge check | Best for |
 | --- | --- | --- | --- | --- |
-| Adjacency list | O(V + E) | O(degree(u)) | O(degree(u)) | Sparse graphs (default) |
-| Adjacency matrix | O(V²) | O(V) | O(1) | Dense graphs, fast edge lookup |
-| Edge list | O(E) | N/A | O(E) | Bellman-Ford, Kruskal's |
-| Implicit | O(1) | O(1) per neighbor | N/A | Grids, state machines |
+| Adjacency list | $O(V + E)$ | $O(degree(u)$) | $O(degree(u)$) | Sparse graphs (default) |
+| Adjacency matrix | $O(V²)$ | $O(V)$ | $O(1)$ | Dense graphs, fast edge lookup |
+| Edge list | $O(E)$ | N/A | $O(E)$ | Bellman-Ford, Kruskal's |
+| Implicit | $O(1)$ | $O(1)$ per neighbor | N/A | Grids, state machines |
 
 ---
 
@@ -538,7 +538,7 @@ def naive_sccs(adj, n):
     return sccs
 ```
 
-For large graphs, use Tarjan's algorithm or Kosaraju's algorithm (both O(V + E)). See [Tarjan's algorithm](../named-algorithms/tarjans/).
+For large graphs, use Tarjan's algorithm or Kosaraju's algorithm (both $O(V + E)$). See [Tarjan's algorithm](../named-algorithms/tarjans/).
 
 ---
 
@@ -760,7 +760,7 @@ def min_conversions(pairs, source, target):
 
 **Problem**: Routers are vertices. Network links are directed edges with capacity (weight = Mbps). What is the maximum data flow from a source server to a destination server?
 
-This is a max flow problem. The graph setup: vertices = routers, directed edges with capacity weights. The algorithm is Ford-Fulkerson (DFS-based, O(E * max_flow)) or Dinic's (BFS-based, O(V² * E), better for large instances). Max flow is a separate topic, but the modeling is pure weighted directed graph.
+This is a max flow problem. The graph setup: vertices = routers, directed edges with capacity weights. The algorithm is Ford-Fulkerson (DFS-based, $O(E * max_flow)$) or Dinic's (BFS-based, $O(V² * E)$, better for large instances). Max flow is a separate topic, but the modeling is pure weighted directed graph.
 
 ### 4. Minimum cost to span all offices (Kruskal's MST)
 
@@ -904,7 +904,7 @@ For the LeetCode problems themselves:
 - [DFS](../named-algorithms/dfs/): reachability, cycle detection, topological sort, SCCs
 - [Kahn's algorithm](../named-algorithms/kahns/): topological sort via BFS on in-degree
 - [Bellman-Ford](../named-algorithms/bellman-ford/): shortest paths with negative edge weights, negative cycle detection
-- [Tarjan's algorithm](../named-algorithms/tarjans/): SCCs and bridges in O(V + E)
+- [Tarjan's algorithm](../named-algorithms/tarjans/): SCCs and bridges in $O(V + E)$
 - [Graphs (data structures)](../data-structures/graphs/): implementations and algorithm complexity table
 - [LeetCode 150: Graphs](../coding-problems/graphs/): the 13 standard graph problems
 - [LeetCode 150: Advanced Graphs](../coding-problems/advanced-graphs/): Dijkstra, MST, Bellman-Ford problems

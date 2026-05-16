@@ -79,14 +79,14 @@ def good_nodes(root):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2/L3 (BFS build) | O(1) | n | O(n) |
-| **L4 (ancestor walk)** | **O(h)** | **n** | **O(n · h)** ← dominates |
+| L2/L3 (BFS build) | $O(1)$ | n | $O(n)$ |
+| **L4 (ancestor walk)** | **$O(h)$** | **n** | **$O(n · h)$** ← dominates |
 
-Each of the n nodes walks up to O(h) ancestors. In a balanced tree this is O(n log n); in a skewed tree it's O(n²).
+Each of the n nodes walks up to $O(h)$ ancestors. In a balanced tree this is $O(n log n)$; in a skewed tree it's $O(n²)$.
 
 **Complexity**
-- **Time:** O(n · h). Each of n nodes walks up O(h).
-- **Space:** O(n) for the parent map.
+- **Time:** $O(n · h)$. Each of n nodes walks up $O(h)$.
+- **Space:** $O(n)$ for the parent map.
 
 Wasteful, we're re-walking ancestor chains that largely overlap.
 
@@ -163,15 +163,15 @@ func goodNodes(root *TreeNode) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (good check) | O(1) | n | O(n) |
-| L2 (update max) | O(1) | n | O(n) |
-| **L3 (recurse both)** | **O(1) dispatch** | **n** | **O(n)** ← dominates (all lines tie) |
+| L1 (good check) | $O(1)$ | n | $O(n)$ |
+| L2 (update max) | $O(1)$ | n | $O(n)$ |
+| **L3 (recurse both)** | **$O(1)$ dispatch** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
-Each node is visited exactly once with O(1) work, carrying the running max as a parameter.
+Each node is visited exactly once with $O(1)$ work, carrying the running max as a parameter.
 
 **Complexity**
-- **Time:** O(n), driven by L3 visiting every node once.
-- **Space:** O(h) recursion.
+- **Time:** $O(n)$, driven by L3 visiting every node once.
+- **Space:** $O(h)$ recursion.
 
 ### Pattern: "path-state DFS"
 Carry a running invariant (max, min, sum, seen-set) as a parameter. Works for every "a node is X iff the root-to-node path is Y" problem.
@@ -218,21 +218,21 @@ def good_nodes(root):
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (pop) | O(1) | n | O(n) |
-| L3/L4 (check + update) | O(1) | n | O(n) |
-| **L5/L6 (push children)** | **O(1)** | **n** | **O(n)** ← dominates (all lines tie) |
+| L2 (pop) | $O(1)$ | n | $O(n)$ |
+| L3/L4 (check + update) | $O(1)$ | n | $O(n)$ |
+| **L5/L6 (push children)** | **$O(1)$** | **n** | **$O(n)$** ← dominates (all lines tie) |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(h).
+- **Time:** $O(n)$.
+- **Space:** $O(h)$.
 
 ## Summary
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Ancestor walks | O(n · h) | O(n) |
-| **DFS with running max** | **O(n)** | **O(h)** |
-| Iterative DFS with state | O(n) | O(h) |
+| Ancestor walks | $O(n · h)$ | $O(n)$ |
+| **DFS with running max** | **$O(n)$** | **$O(h)$** |
+| Iterative DFS with state | $O(n)$ | $O(h)$ |
 
 The recursive path-state DFS is the canonical answer and the template for many "longest increasing path" / "valid-along-path" tree problems.
 

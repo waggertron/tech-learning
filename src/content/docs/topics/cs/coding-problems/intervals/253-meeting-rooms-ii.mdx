@@ -103,8 +103,8 @@ func minMeetingRooms(intervals [][]int) int {
 Direct but quadratic in (T · n). Useful as a sanity-check oracle, never as a real solution.
 
 **Complexity**
-- **Time:** O(T · n). Infeasible on big time ranges.
-- **Space:** O(1).
+- **Time:** $O(T · n)$. Infeasible on big time ranges.
+- **Space:** $O(1)$.
 
 ## Approach 2: Min-heap of end times (canonical)
 
@@ -170,19 +170,19 @@ func minMeetingRooms(intervals [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (sort) | O(n log n) | 1 | O(n log n) |
-| L2 (init heap) | O(1) | 1 | O(1) |
-| L3 (loop) | O(1) | n | O(n) |
-| L4 (peek) | O(1) | n | O(n) |
-| L5 (heappop) | O(log n) | at most n | O(n log n) |
-| **L6 (heappush)** | **O(log n)** | **n** | **O(n log n)** ← dominates |
-| L7 (len) | O(1) | 1 | O(1) |
+| L1 (sort) | $O(n log n)$ | 1 | $O(n log n)$ |
+| L2 (init heap) | $O(1)$ | 1 | $O(1)$ |
+| L3 (loop) | $O(1)$ | n | $O(n)$ |
+| L4 (peek) | $O(1)$ | n | $O(n)$ |
+| L5 (heappop) | $O(log n)$ | at most n | $O(n log n)$ |
+| **L6 (heappush)** | **$O(log n)$** | **n** | **$O(n log n)$** ← dominates |
+| L7 (len) | $O(1)$ | 1 | $O(1)$ |
 
-L1 (sort) and L6 (n pushes) both contribute O(n log n); neither strictly dominates the other, they tie. L5 pops at most n times total across the entire loop, not once per iteration, because each interval is pushed once and popped at most once.
+L1 (sort) and L6 (n pushes) both contribute $O(n log n)$; neither strictly dominates the other, they tie. L5 pops at most n times total across the entire loop, not once per iteration, because each interval is pushed once and popped at most once.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 (sort) and L6 (heap pushes, n total).
-- **Space:** O(n) for the heap in the worst case (all meetings overlap).
+- **Time:** $O(n log n)$, driven by L1 (sort) and L6 (heap pushes, n total).
+- **Space:** $O(n)$ for the heap in the worst case (all meetings overlap).
 
 **Try this approach:**
 
@@ -273,18 +273,18 @@ func minMeetingRooms(intervals [][]int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (sort starts)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| **L2 (sort ends)** | **O(n log n)** | **1** | **O(n log n)** ← dominates |
-| L3, L4 (init) | O(1) | 1 | O(1) |
-| L5 (loop test) | O(1) | n | O(n) |
-| L6-L11 (body) | O(1) | n | O(n) |
-| L12 (return) | O(1) | 1 | O(1) |
+| **L1 (sort starts)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| **L2 (sort ends)** | **$O(n log n)$** | **1** | **$O(n log n)$** ← dominates |
+| L3, L4 (init) | $O(1)$ | 1 | $O(1)$ |
+| L5 (loop test) | $O(1)$ | n | $O(n)$ |
+| L6-L11 (body) | $O(1)$ | n | $O(n)$ |
+| L12 (return) | $O(1)$ | 1 | $O(1)$ |
 
-After sorting, the while loop runs exactly n times (i advances once per iteration until `i == n`). Every comparison and counter update is O(1), so the loop contributes only O(n). All the cost lives in the two sorts.
+After sorting, the while loop runs exactly n times (i advances once per iteration until `i == n`). Every comparison and counter update is $O(1)$, so the loop contributes only $O(n)$. All the cost lives in the two sorts.
 
 **Complexity**
-- **Time:** O(n log n), driven by L1 and L2 (the two sorts).
-- **Space:** O(n) for the two auxiliary sorted arrays.
+- **Time:** $O(n log n)$, driven by L1 and L2 (the two sorts).
+- **Space:** $O(n)$ for the two auxiliary sorted arrays.
 
 ### Why it works
 Intuitively: whenever a meeting's start comes before the earliest current end, we need a new room. Whenever an end arrives first, a room frees up. The running count of active rooms is exactly what we want.
@@ -307,9 +307,9 @@ Intuitively: whenever a meeting's start comes before the earliest current end, w
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Brute time tick | O(T · n) | O(1) |
-| **Heap of end times** | **O(n log n)** | **O(n)** |
-| **Sweep-line counters** | **O(n log n)** | **O(n)** |
+| Brute time tick | $O(T · n)$ | $O(1)$ |
+| **Heap of end times** | **$O(n log n)$** | **$O(n)$** |
+| **Sweep-line counters** | **$O(n log n)$** | **$O(n)$** |
 
 Heap version is the canonical answer. Sweep-line is the shortest.
 

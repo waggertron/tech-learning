@@ -140,16 +140,16 @@ class Codec {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2/L3/L4/L5/L6 (per token) | O(1) | 2n+1 tokens | O(n) |
-| **L7 (join)** | **O(n)** | **1** | **O(n)** ← dominates (all lines tie) |
-| L8 (split) | O(n) | 1 | O(n) |
-| L9/L10/L11 (deserialize) | O(1) | n | O(n) |
+| L2/L3/L4/L5/L6 (per token) | $O(1)$ | 2n+1 tokens | $O(n)$ |
+| **L7 (join)** | **$O(n)$** | **1** | **$O(n)$** ← dominates (all lines tie) |
+| L8 (split) | $O(n)$ | 1 | $O(n)$ |
+| L9/L10/L11 (deserialize) | $O(1)$ | n | $O(n)$ |
 
 Every node produces exactly one value token and both missing children produce `#` tokens. A tree with n nodes has 2n+1 tokens total (n values + n+1 nulls).
 
 **Complexity**
-- **Time:** O(n) for both serialize and deserialize, driven by L7/L8.
-- **Space:** O(n) output + O(w) queue.
+- **Time:** $O(n)$ for both serialize and deserialize, driven by L7/L8.
+- **Space:** $O(n)$ output + $O(w)$ queue.
 
 The LeetCode's own serialization format uses this approach; it's the easiest to debug visually.
 
@@ -225,15 +225,15 @@ class Codec {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2 (emit) | O(1) | 2n+1 | O(n) |
-| L3/L4 (recurse) | O(1) dispatch | n | O(n) |
-| **L5 (join)** | **O(n)** | **1** | **O(n)** ← dominates (all lines tie) |
-| L6 (split) | O(n) | 1 | O(n) |
-| L8/L9 (recurse) | O(1) dispatch | n | O(n) |
+| L1/L2 (emit) | $O(1)$ | 2n+1 | $O(n)$ |
+| L3/L4 (recurse) | $O(1)$ dispatch | n | $O(n)$ |
+| **L5 (join)** | **$O(n)$** | **1** | **$O(n)$** ← dominates (all lines tie) |
+| L6 (split) | $O(n)$ | 1 | $O(n)$ |
+| L8/L9 (recurse) | $O(1)$ dispatch | n | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(n) output + O(h) recursion.
+- **Time:** $O(n)$.
+- **Space:** $O(n)$ output + $O(h)$ recursion.
 
 Shortest correct answer and arguably the cleanest.
 
@@ -286,13 +286,13 @@ class Codec:
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1/L2/L3 (recurse + emit) | O(1) | n | O(n) |
-| **L4 (pop)** | **O(1)** | **2n+1** | **O(n)** ← dominates (all lines tie) |
-| L5 (recurse) | O(1) dispatch | n | O(n) |
+| L1/L2/L3 (recurse + emit) | $O(1)$ | n | $O(n)$ |
+| **L4 (pop)** | **$O(1)$** | **2n+1** | **$O(n)$** ← dominates (all lines tie) |
+| L5 (recurse) | $O(1)$ dispatch | n | $O(n)$ |
 
 **Complexity**
-- **Time:** O(n).
-- **Space:** O(n) + O(h).
+- **Time:** $O(n)$.
+- **Space:** $O(n)$ + $O(h)$.
 
 Less common in practice; included to show the symmetry.
 
@@ -300,9 +300,9 @@ Less common in practice; included to show the symmetry.
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| **BFS with null markers** | O(n) | O(n) + O(w) | Matches LeetCode's own display format |
-| **Preorder DFS** | O(n) | O(n) + O(h) | Shortest and cleanest |
-| Postorder DFS | O(n) | O(n) + O(h) | Symmetric curiosity |
+| **BFS with null markers** | $O(n)$ | $O(n)$ + $O(w)$ | Matches LeetCode's own display format |
+| **Preorder DFS** | $O(n)$ | $O(n)$ + $O(h)$ | Shortest and cleanest |
+| Postorder DFS | $O(n)$ | $O(n)$ + $O(h)$ | Symmetric curiosity |
 
 Preorder DFS is the interview-favorite. BFS is easier to eyeball-debug.
 

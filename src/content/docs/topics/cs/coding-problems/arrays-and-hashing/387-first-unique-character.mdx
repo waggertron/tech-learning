@@ -79,19 +79,19 @@ function firstUniqChar(s: string): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1 (Counter)** | **O(n)** | **1** | **O(n)** |
-| **L2 (second scan)** | **O(1) body** | **n** | **O(n)** ← ties L1 |
-| L3 (lookup) | O(1) | n | O(n) |
-| L4 (return) | O(1) | 1 | O(1) |
-| L5 (return -1) | O(1) | 1 | O(1) |
+| **L1 (Counter)** | **$O(n)$** | **1** | **$O(n)$** |
+| **L2 (second scan)** | **$O(1)$ body** | **n** | **$O(n)$** ← ties L1 |
+| L3 (lookup) | $O(1)$ | n | $O(n)$ |
+| L4 (return) | $O(1)$ | 1 | $O(1)$ |
+| L5 (return -1) | $O(1)$ | 1 | $O(1)$ |
 
-Both passes are O(n). The total is O(n) even though we traverse the string twice.
+Both passes are $O(n)$. The total is $O(n)$ even though we traverse the string twice.
 
 **Complexity**
-- **Time:** O(n), driven by L1 (Counter) and L2 (second scan). Two linear passes.
-- **Space:** O(1). The `Counter` holds at most 26 entries for lowercase Latin letters regardless of `n`.
+- **Time:** $O(n)$, driven by L1 (Counter) and L2 (second scan). Two linear passes.
+- **Space:** $O(1)$. The `Counter` holds at most 26 entries for lowercase Latin letters regardless of `n`.
 
-The space bound is O(1) because the problem constrains `s` to lowercase English letters: the alphabet is fixed at 26 characters. No matter how long the string is, the frequency map never exceeds 26 entries.
+The space bound is $O(1)$ because the problem constrains `s` to lowercase English letters: the alphabet is fixed at 26 characters. No matter how long the string is, the frequency map never exceeds 26 entries.
 
 **Try this approach:**
 
@@ -108,9 +108,9 @@ The space bound is O(1) because the problem constrains `s` to lowercase English 
 
 | Step | Cost |
 | --- | --- |
-| Build Counter | O(n) |
-| Scan for first count == 1 | O(n) |
-| **Total** | **O(n) time, O(1) space** |
+| Build Counter | $O(n)$ |
+| Scan for first count == 1 | $O(n)$ |
+| **Total** | **$O(n)$ time, $O(1)$ space** |
 
 ## Test cases
 

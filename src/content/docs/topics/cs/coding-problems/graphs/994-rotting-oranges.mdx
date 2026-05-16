@@ -55,8 +55,8 @@ LeetCode 994 · [Link](https://leetcode.com/problems/rotting-oranges/) · *Mediu
 On each tick, scan the grid and mark any fresh orange adjacent to a rotten one. Keep ticking until no more changes.
 
 **Complexity**
-- **Time:** O((m * n)²), driven by up to m * n ticks, each doing an O(m * n) scan.
-- **Space:** O(m * n) for the to_rot list.
+- **Time:** $O((m * n)$²), driven by up to m * n ticks, each doing an $O(m * n)$ scan.
+- **Space:** $O(m * n)$ for the to_rot list.
 
 Correct but slow.
 
@@ -133,18 +133,18 @@ function orangesRotting(grid: number[][]): number {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (seed scan) | O(1) | m * n | O(m * n) |
-| L3, L4 (enqueue/count) | O(1) | m * n | O(m * n) |
-| **L6 (dequeue)** | **O(1)** | **once per cell** | **O(m * n) ← dominates** |
-| L8, L9 (rot + decrement) | O(1) | once per fresh cell | O(m * n) |
-| L10 (enqueue) | O(1) | once per fresh cell | O(m * n) |
-| L11 (return check) | O(1) | 1 | O(1) |
+| L2 (seed scan) | $O(1)$ | m * n | $O(m * n)$ |
+| L3, L4 (enqueue/count) | $O(1)$ | m * n | $O(m * n)$ |
+| **L6 (dequeue)** | **$O(1)$** | **once per cell** | **$O(m * n)$ ← dominates** |
+| L8, L9 (rot + decrement) | $O(1)$ | once per fresh cell | $O(m * n)$ |
+| L10 (enqueue) | $O(1)$ | once per fresh cell | $O(m * n)$ |
+| L11 (return check) | $O(1)$ | 1 | $O(1)$ |
 
 Each cell enters the queue at most once (L8 marks it `2` before L10 enqueues it, preventing re-entry). The scan in L2 and the BFS in L5 together visit every cell a constant number of times.
 
 **Complexity**
-- **Time:** O(m * n), driven by L6/L10 (each cell enqueued and dequeued at most once).
-- **Space:** O(m * n) queue worst case (all cells rotten from the start).
+- **Time:** $O(m * n)$, driven by L6/L10 (each cell enqueued and dequeued at most once).
+- **Space:** $O(m * n)$ queue worst case (all cells rotten from the start).
 
 ### Why multi-source BFS works
 
@@ -222,8 +222,8 @@ function orangesRotting(grid: number[][]): number {
 </Tabs>
 
 **Complexity**
-- **Time:** O(m * n), driven by L8/L11 (each cell processed once).
-- **Space:** O(m * n) queue; slightly less memory per entry than Approach 2 (no `t` tuple element).
+- **Time:** $O(m * n)$, driven by L8/L11 (each cell processed once).
+- **Space:** $O(m * n)$ queue; slightly less memory per entry than Approach 2 (no `t` tuple element).
 
 **Try this approach:**
 
@@ -243,9 +243,9 @@ function orangesRotting(grid: number[][]): number {
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Simulate minute-by-minute | O((m * n)^2) | O(m * n) |
-| **Multi-source BFS** | **O(m * n)** | **O(m * n)** |
-| Multi-source BFS + level batching | O(m * n) | O(m * n) |
+| Simulate minute-by-minute | $O((m * n)$^2) | $O(m * n)$ |
+| **Multi-source BFS** | **$O(m * n)$** | **$O(m * n)$** |
+| Multi-source BFS + level batching | $O(m * n)$ | $O(m * n)$ |
 
 Multi-source BFS is the canonical template for "fire/water/infection spreads from multiple starts" problems. Same pattern: Walls and Gates (286), 01 Matrix (542), As Far From Land As Possible (1162).
 

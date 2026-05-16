@@ -91,14 +91,14 @@ function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): Li
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| **L1/L2 (walk A)** | **O(1)** | **m** | **O(m)** |
-| **L3/L4 (walk B)** | **O(1)** | **n** | **O(n)** |
+| **L1/L2 (walk A)** | **$O(1)$** | **m** | **$O(m)$** |
+| **L3/L4 (walk B)** | **$O(1)$** | **n** | **$O(n)$** |
 
 **Complexity**
-- **Time:** O(m + n)
-- **Space:** O(m) for the visited set
+- **Time:** $O(m + n)$
+- **Space:** $O(m)$ for the visited set
 
-Correct but uses O(m) extra memory.
+Correct but uses $O(m)$ extra memory.
 
 ## Approach 2: Two pointers, equal-distance trick (optimal)
 
@@ -140,13 +140,13 @@ function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): Li
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (loop guard) | O(1) | at most m+n | O(m+n) |
-| **L2/L3 (advance + redirect)** | **O(1)** | **at most m+n** | **O(m+n)** ← dominates |
-| L4 (return) | O(1) | 1 | O(1) |
+| L1 (loop guard) | $O(1)$ | at most m+n | $O(m+n)$ |
+| **L2/L3 (advance + redirect)** | **$O(1)$** | **at most m+n** | **$O(m+n)$** ← dominates |
+| L4 (return) | $O(1)$ | 1 | $O(1)$ |
 
 **Complexity**
-- **Time:** O(m + n), each pointer traverses at most m + n nodes before meeting.
-- **Space:** O(1).
+- **Time:** $O(m + n)$, each pointer traverses at most m + n nodes before meeting.
+- **Space:** $O(1)$.
 
 ### Path diagram
 

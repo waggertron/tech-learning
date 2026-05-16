@@ -115,18 +115,18 @@ func networkDelayTime(times [][]int, n int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init dist) | O(1) | V+1 | O(V) |
-| L2 (set source) | O(1) | 1 | O(1) |
-| L3 (outer loop) | O(1) | V-1 | O(V) |
-| **L4 (edge scan)** | **O(1)** | **E × (V-1)** | **O(V · E)** ← dominates |
-| L5 (relaxation) | O(1) | up to E per round | O(V · E) |
-| L6 (max) | O(V) | 1 | O(V) |
+| L1 (init dist) | $O(1)$ | V+1 | $O(V)$ |
+| L2 (set source) | $O(1)$ | 1 | $O(1)$ |
+| L3 (outer loop) | $O(1)$ | V-1 | $O(V)$ |
+| **L4 (edge scan)** | **$O(1)$** | **E × (V-1)** | **$O(V · E)$** ← dominates |
+| L5 (relaxation) | $O(1)$ | up to E per round | $O(V · E)$ |
+| L6 (max) | $O(V)$ | 1 | $O(V)$ |
 
 L4 drives the cost: we walk all E edges once per round, for V-1 rounds. No priority ordering, no early-exit. Works for negative edges (given none here), but wastes work when only a fraction of edges improve each round.
 
 **Complexity**
-- **Time:** O(V · E), driven by L4 (the full edge scan repeated V-1 times).
-- **Space:** O(V).
+- **Time:** $O(V · E)$, driven by L4 (the full edge scan repeated V-1 times).
+- **Space:** $O(V)$.
 
 Works; overkill for non-negative weights.
 
@@ -213,19 +213,19 @@ func networkDelayTime(times [][]int, n int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init matrix) | O(1) | V² | O(V²) |
-| L2 (diagonal) | O(1) | V | O(V) |
-| L3 (seed edges) | O(1) | E | O(E) |
-| L4 (pivot loop) | O(1) | V | O(V) |
-| L5 (row loop) | O(1) | V² | O(V²) |
-| **L6, L7 (col + relax)** | **O(1)** | **V³** | **O(V³)** ← dominates |
-| L8 (max) | O(V) | 1 | O(V) |
+| L1 (init matrix) | $O(1)$ | V² | $O(V²)$ |
+| L2 (diagonal) | $O(1)$ | V | $O(V)$ |
+| L3 (seed edges) | $O(1)$ | E | $O(E)$ |
+| L4 (pivot loop) | $O(1)$ | V | $O(V)$ |
+| L5 (row loop) | $O(1)$ | V² | $O(V²)$ |
+| **L6, L7 (col + relax)** | **$O(1)$** | **V³** | **$O(V³)$** ← dominates |
+| L8 (max) | $O(V)$ | 1 | $O(V)$ |
 
 The triple nested loop (L4/L5/L6) is the signature of Floyd-Warshall. Every (i, j, mid) triple is visited exactly once. This gives us all-pairs shortest paths, but for single-source we only need the `k`-th row -- all the other rows are wasted work.
 
 **Complexity**
-- **Time:** O(V³), driven by L6/L7 (the triple nested relaxation loop).
-- **Space:** O(V²).
+- **Time:** $O(V³)$, driven by L6/L7 (the triple nested relaxation loop).
+- **Space:** $O(V²)$.
 
 Single-source only needs `V²`; Floyd-Warshall is wasteful here.
 
@@ -351,20 +351,20 @@ func networkDelayTime(times [][]int, n int, k int) int {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (build graph) | O(1) | E | O(E) |
-| L3-L4 (seed) | O(1) | 1 | O(1) |
-| L5 (loop test) | O(1) | up to E+1 | O(E) |
-| **L6 (heappop)** | **O(log V)** | **up to E** | **O(E log V)** ← dominates |
-| L7 (stale check) | O(1) | up to E | O(E) |
-| L8 (neighbor scan) | O(1) | E total | O(E) |
-| **L10 (heappush)** | **O(log V)** | **up to E** | **O(E log V)** ← dominates |
-| L12 (max) | O(V) | 1 | O(V) |
+| L1-L2 (build graph) | $O(1)$ | E | $O(E)$ |
+| L3-L4 (seed) | $O(1)$ | 1 | $O(1)$ |
+| L5 (loop test) | $O(1)$ | up to E+1 | $O(E)$ |
+| **L6 (heappop)** | **$O(log V)$** | **up to E** | **$O(E log V)$** ← dominates |
+| L7 (stale check) | $O(1)$ | up to E | $O(E)$ |
+| L8 (neighbor scan) | $O(1)$ | E total | $O(E)$ |
+| **L10 (heappush)** | **$O(log V)$** | **up to E** | **$O(E log V)$** ← dominates |
+| L12 (max) | $O(V)$ | 1 | $O(V)$ |
 
-Each edge can produce at most one push (L10), so the heap holds at most E entries. Each pop and push costs O(log(heap size)) = O(log E) = O(log V) since E ≤ V². The loop runs at most E times total (once per edge in the worst case). Combining: O(E log V) for the heap work, plus O(E) for the edge scanning, gives O((V + E) log V) overall.
+Each edge can produce at most one push (L10), so the heap holds at most E entries. Each pop and push costs $O(log(heap size)$) = $O(log E)$ = $O(log V)$ since E ≤ V². The loop runs at most E times total (once per edge in the worst case). Combining: $O(E log V)$ for the heap work, plus $O(E)$ for the edge scanning, gives $O((V + E)$ log V) overall.
 
 **Complexity**
-- **Time:** O((V + E) log V), driven by L6/L10 (heap pop/push inside the main loop).
-- **Space:** O(V + E).
+- **Time:** $O((V + E)$ log V), driven by L6/L10 (heap pop/push inside the main loop).
+- **Space:** $O(V + E)$.
 
 **Try this approach:**
 
@@ -384,9 +384,9 @@ Each edge can produce at most one push (L10), so the heap holds at most E entrie
 
 | Approach | Time | Space | When to use |
 | --- | --- | --- | --- |
-| Bellman-Ford | O(V · E) | O(V) | When negative edges are possible |
-| Floyd-Warshall | O(V³) | O(V²) | All-pairs shortest paths |
-| **Dijkstra** | **O((V + E) log V)** | **O(V + E)** | **Non-negative edges, single source** |
+| Bellman-Ford | $O(V · E)$ | $O(V)$ | When negative edges are possible |
+| Floyd-Warshall | $O(V³)$ | $O(V²)$ | All-pairs shortest paths |
+| **Dijkstra** | **$O((V + E)$ log V)** | **$O(V + E)$** | **Non-negative edges, single source** |
 
 Dijkstra is the canonical SSSP for non-negative weights. Memorize the heap-based template.
 

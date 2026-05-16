@@ -108,15 +108,15 @@ function copyRandomList(head: Node | null): Node | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1-L2 (collect + copy) | O(1) | n | O(n) |
-| L3 (build index map) | O(n) | 1 | O(n) |
-| **L4-L5 (wire pointers)** | **O(1)** | **n** | **O(n)** ← all phases equal |
+| L1-L2 (collect + copy) | $O(1)$ | n | $O(n)$ |
+| L3 (build index map) | $O(n)$ | 1 | $O(n)$ |
+| **L4-L5 (wire pointers)** | **$O(1)$** | **n** | **$O(n)$** ← all phases equal |
 
-All phases are O(n); the bottleneck is the constant factor from three separate passes. L3 builds the index map in O(n); L5 uses it in O(1) per node.
+All phases are $O(n)$; the bottleneck is the constant factor from three separate passes. L3 builds the index map in $O(n)$; L5 uses it in $O(1)$ per node.
 
 **Complexity**
-- **Time:** O(n), driven by all three phases equally.
-- **Space:** O(n).
+- **Time:** $O(n)$, driven by all three phases equally.
+- **Space:** $O(n)$.
 
 ## Approach 2: Hash map old → new
 
@@ -170,14 +170,14 @@ function copyRandomList(head: Node | null): Node | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (create copies) | O(1) | n | O(n) |
-| **L2-L3 (wire pointers)** | **O(1) each** | **n each** | **O(n)** ← all phases equal |
+| L1 (create copies) | $O(1)$ | n | $O(n)$ |
+| **L2-L3 (wire pointers)** | **$O(1)$ each** | **n each** | **$O(n)$** ← all phases equal |
 
-Two clean passes, each O(n). No index arithmetic needed: `oldToNew.get(cur.random)` returns `undefined` when `cur.random is null`, handling the null case automatically.
+Two clean passes, each $O(n)$. No index arithmetic needed: `oldToNew.get(cur.random)` returns `undefined` when `cur.random is null`, handling the null case automatically.
 
 **Complexity**
-- **Time:** O(n), driven by L1 and L2/L3 equally.
-- **Space:** O(n) for the map.
+- **Time:** $O(n)$, driven by L1 and L2/L3 equally.
+- **Space:** $O(n)$ for the map.
 
 Cleaner than Approach 1; same asymptotics. This is usually the interview-acceptable answer.
 
@@ -189,7 +189,7 @@ Cleaner than Approach 1; same asymptotics. This is usually the interview-accepta
   </TabItem>
 </Tabs>
 
-## Approach 3: Interwoven nodes (optimal, O(1) extra space)
+## Approach 3: Interwoven nodes (optimal, $O(1)$ extra space)
 
 Three passes, no hash map:
 
@@ -274,15 +274,15 @@ function copyRandomList(head: Node | null): Node | null {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (interleave) | O(1) | n | O(n) |
-| **L2 (set random)** | **O(1)** | **n** | **O(n)** ← all three passes equal |
-| L3-L4 (unzip) | O(1) | n | O(n) |
+| L1 (interleave) | $O(1)$ | n | $O(n)$ |
+| **L2 (set random)** | **$O(1)$** | **n** | **$O(n)$** ← all three passes equal |
+| L3-L4 (unzip) | $O(1)$ | n | $O(n)$ |
 
-Three O(n) passes; no hash map allocated. The key insight at L2: `cur.random.next` is precisely the copy of `cur.random` because every original node is immediately followed by its copy in the interleaved list.
+Three $O(n)$ passes; no hash map allocated. The key insight at L2: `cur.random.next` is precisely the copy of `cur.random` because every original node is immediately followed by its copy in the interleaved list.
 
 **Complexity**
-- **Time:** O(n). Three linear passes (L1, L2, L3/L4).
-- **Space:** O(1) extra (excluding output).
+- **Time:** $O(n)$. Three linear passes (L1, L2, L3/L4).
+- **Space:** $O(1)$ extra (excluding output).
 
 ## Test cases
 
@@ -390,11 +390,11 @@ console.log("all tests pass");
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| Index map | O(n) | O(n) | Straightforward but extra bookkeeping |
-| **Hash map old → new** | **O(n)** | **O(n)** | Cleanest to write |
-| Interwoven nodes | O(n) | **O(1)** | Optimal space; trickier to bookkeep |
+| Index map | $O(n)$ | $O(n)$ | Straightforward but extra bookkeeping |
+| **Hash map old → new** | **$O(n)$** | **$O(n)$** | Cleanest to write |
+| Interwoven nodes | $O(n)$ | **$O(1)$** | Optimal space; trickier to bookkeep |
 
-The hash-map approach is the production-style answer. The interwoven-nodes trick is the canonical "optimize to O(1) extra space" flex.
+The hash-map approach is the production-style answer. The interwoven-nodes trick is the canonical "optimize to $O(1)$ extra space" flex.
 
 ## Related data structures
 

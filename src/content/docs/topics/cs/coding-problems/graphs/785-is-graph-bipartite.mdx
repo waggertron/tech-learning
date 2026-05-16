@@ -110,17 +110,17 @@ function isBipartite(graph: number[][]): boolean {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init color) | O(1) per node | V | O(V) |
-| L3 (outer loop) | O(1) | V | O(V) |
-| **L8 (dequeue)** | **O(1)** | **once per node** | **O(V)** |
-| **L9 (neighbor scan)** | **O(deg(node))** | **once per node** | **O(E) total ← dominates** |
-| L10, L11 (color + enqueue) | O(1) | once per unvisited neighbor | O(V) |
+| L2 (init color) | $O(1)$ per node | V | $O(V)$ |
+| L3 (outer loop) | $O(1)$ | V | $O(V)$ |
+| **L8 (dequeue)** | **$O(1)$** | **once per node** | **$O(V)$** |
+| **L9 (neighbor scan)** | **$O(deg(node)$)** | **once per node** | **$O(E)$ total ← dominates** |
+| L10, L11 (color + enqueue) | $O(1)$ | once per unvisited neighbor | $O(V)$ |
 
-Each node enters the queue at most once (L10 only runs when `color == -1`). Each edge is examined twice (once from each endpoint), so L9 totals O(E) across the entire BFS.
+Each node enters the queue at most once (L10 only runs when `color == -1`). Each edge is examined twice (once from each endpoint), so L9 totals $O(E)$ across the entire BFS.
 
 **Complexity**
-- **Time:** O(V + E), driven by L9 (each edge examined twice, each node dequeued once).
-- **Space:** O(V) color array plus O(V) queue.
+- **Time:** $O(V + E)$, driven by L9 (each edge examined twice, each node dequeued once).
+- **Space:** $O(V)$ color array plus $O(V)$ queue.
 
 ### Why 2-coloring detects odd cycles
 
@@ -152,8 +152,8 @@ colors: 0-1-0-1 (OK)            colors: 0-1-0, but 0-2 conflict
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| **BFS 2-coloring** | O(V + E) | O(V) | Canonical |
-| DFS 2-coloring | O(V + E) | O(V) | Identical complexity, recursive stack |
+| **BFS 2-coloring** | $O(V + E)$ | $O(V)$ | Canonical |
+| DFS 2-coloring | $O(V + E)$ | $O(V)$ | Identical complexity, recursive stack |
 
 ## Test cases
 

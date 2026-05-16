@@ -99,14 +99,14 @@ func canJump(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (base check) | O(1) | once per call | O(calls) |
-| **L3, L4 (recursive fan-out)** | **O(calls)** | **exponential** | **O(n^n)** ← dominates |
+| L2 (base check) | $O(1)$ | once per call | $O(calls)$ |
+| **L3, L4 (recursive fan-out)** | **$O(calls)$** | **exponential** | **$O(n^n)$** ← dominates |
 
 Without memoization, the same subproblem `f(i)` is called many times; worst case is exponential.
 
 **Complexity**
 - **Time:** Exponential, driven by L3/L4 (unbounded recursive fan-out).
-- **Space:** O(n) recursion depth.
+- **Space:** $O(n)$ recursion depth.
 
 ## Approach 2: Top-down or bottom-up DP
 
@@ -172,15 +172,15 @@ func canJump(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init dp) | O(1) | n | O(n) |
-| L4 (outer loop) | O(1) | n-1 | O(n) |
-| **L5 (inner loop)** | **O(1)** | **up to n per i** | **O(n²)** ← dominates |
+| L2 (init dp) | $O(1)$ | n | $O(n)$ |
+| L4 (outer loop) | $O(1)$ | n-1 | $O(n)$ |
+| **L5 (inner loop)** | **$O(1)$** | **up to n per i** | **$O(n²)$** ← dominates |
 
 The inner scan at each `i` can range over the entire remaining array in the worst case.
 
 **Complexity**
-- **Time:** O(n²), driven by L5 (inner scan for reachable positions).
-- **Space:** O(n) for the dp array.
+- **Time:** $O(n²)$, driven by L5 (inner scan for reachable positions).
+- **Space:** $O(n)$ for the dp array.
 
 **Try this approach:**
 
@@ -248,16 +248,16 @@ func canJump(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | O(1) | 1 | O(1) |
-| **L2-L5 (loop)** | **O(1)** | **n** | **O(n)** ← dominates |
-| L3 (stuck check) | O(1) | n | O(n) |
-| L4 (update reach) | O(1) | n | O(n) |
+| L1 (init) | $O(1)$ | 1 | $O(1)$ |
+| **L2-L5 (loop)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| L3 (stuck check) | $O(1)$ | n | $O(n)$ |
+| L4 (update reach) | $O(1)$ | n | $O(n)$ |
 
 A single linear scan; each element is visited once.
 
 **Complexity**
-- **Time:** O(n), driven by L2/L3/L4 (single linear scan).
-- **Space:** O(1).
+- **Time:** $O(n)$, driven by L2/L3/L4 (single linear scan).
+- **Space:** $O(1)$.
 
 ### Why greedy works
 If the furthest reachable index is `R`, every position `i ≤ R` is reachable. So we only need to update `R = max(R, i + nums[i])` as we walk. No DP table needed.
@@ -280,9 +280,9 @@ If the furthest reachable index is `R`, every position `i ≤ R` is reachable. S
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | exponential | O(n) |
-| DP | O(n²) | O(n) |
-| **Greedy max-reach** | **O(n)** | **O(1)** |
+| Naive recursion | exponential | $O(n)$ |
+| DP | $O(n²)$ | $O(n)$ |
+| **Greedy max-reach** | **$O(n)$** | **$O(1)$** |
 
 Monotone-invariant greedy, `max_reach` is non-decreasing; the algorithm fails fast the moment it's exceeded.
 

@@ -118,21 +118,21 @@ function ladderLength(beginWord: string, endWord: string, wordList: string[]): n
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (endWord check) | O(N) | 1 | O(N) |
-| L2 (set build) | O(N) | 1 | O(N) |
-| L6 (BFS loop) | O(1) | up to N iters | O(N) |
-| L8 (scan all words) | O(N) | once per dequeued word | O(N) per dequeue |
-| **L9 (one_away check)** | **O(L)** | **N times per dequeued word** | **O(N² · L)** ← dominates |
+| L1 (endWord check) | $O(N)$ | 1 | $O(N)$ |
+| L2 (set build) | $O(N)$ | 1 | $O(N)$ |
+| L6 (BFS loop) | $O(1)$ | up to N iters | $O(N)$ |
+| L8 (scan all words) | $O(N)$ | once per dequeued word | $O(N)$ per dequeue |
+| **L9 (one_away check)** | **$O(L)$** | **N times per dequeued word** | **$O(N² · L)$** ← dominates |
 
-Each dequeued word scans the entire word list (L8, O(N)) and calls `one_away` for each candidate (L9, O(L)). In the worst case every word is dequeued, giving O(N) dequeues × O(N · L) work = **O(N² · L)**. This is why the pattern-bucket approach replaces L8+L9 with an O(L)-per-word neighbor lookup.
+Each dequeued word scans the entire word list (L8, $O(N)$) and calls `one_away` for each candidate (L9, $O(L)$). In the worst case every word is dequeued, giving $O(N)$ dequeues × $O(N · L)$ work = **$O(N² · L)$**. This is why the pattern-bucket approach replaces L8+L9 with an $O(L)$-per-word neighbor lookup.
 
 **Complexity**
-- **Time:** O(N² · L), driven by L8/L9 (scanning all words and doing O(L) comparison per candidate per dequeued word).
-- **Space:** O(N · L).
+- **Time:** $O(N² · L)$, driven by L8/L9 (scanning all words and doing $O(L)$ comparison per candidate per dequeued word).
+- **Space:** $O(N · L)$.
 
 ## Approach 2: Pattern buckets + BFS (optimal single-direction)
 
-Preprocess: for each word, generate patterns like `"h*t"`, `"*ot"`, `"ho*"` (one wildcard). Two words are one-away iff they share a pattern. A dict `pattern → [words]` gives O(L) neighbor lookup.
+Preprocess: for each word, generate patterns like `"h*t"`, `"*ot"`, `"ho*"` (one wildcard). Two words are one-away iff they share a pattern. A dict `pattern → [words]` gives $O(L)$ neighbor lookup.
 
 <Tabs>
 <TabItem label="Python">
@@ -209,17 +209,17 @@ function ladderLength(beginWord: string, endWord: string, wordList: string[]): n
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L4-L6 (build pattern dict) | O(L) per word per position | N × L | O(N · L²) |
-| L9 (BFS loop) | O(1) | up to N iters | O(N) |
-| L11-L12 (generate key) | O(L) | L times per dequeued word | O(L) per word |
-| **L13 (neighbor lookup)** | **O(neighbors per pattern)** | **L per word, amortized O(N) total** | **O(N · L²)** ← dominates |
-| L14 (prune bucket) | O(1) | L per dequeued word | O(N · L) |
+| L4-L6 (build pattern dict) | $O(L)$ per word per position | N × L | $O(N · L²)$ |
+| L9 (BFS loop) | $O(1)$ | up to N iters | $O(N)$ |
+| L11-L12 (generate key) | $O(L)$ | L times per dequeued word | $O(L)$ per word |
+| **L13 (neighbor lookup)** | **$O(neighbors per pattern)$** | **L per word, amortized $O(N)$ total** | **$O(N · L²)$** ← dominates |
+| L14 (prune bucket) | $O(1)$ | L per dequeued word | $O(N · L)$ |
 
-The bottleneck is the preprocessing (L4-L6) plus the BFS neighbor lookups (L13). Each word generates L pattern keys, each of length L, so building the pattern dict costs O(N · L²). BFS visits each edge at most once (via L14 pruning), and there are at most O(N · L) edges (each word shares O(L) patterns with each neighbor), giving total BFS work O(N · L²).
+The bottleneck is the preprocessing (L4-L6) plus the BFS neighbor lookups (L13). Each word generates L pattern keys, each of length L, so building the pattern dict costs $O(N · L²)$. BFS visits each edge at most once (via L14 pruning), and there are at most $O(N · L)$ edges (each word shares $O(L)$ patterns with each neighbor), giving total BFS work $O(N · L²)$.
 
 **Complexity**
-- **Time:** O(N · L²), driven by L4-L6/L13 (pattern construction and BFS neighbor traversal, each O(N · L²) total).
-- **Space:** O(N · L²).
+- **Time:** $O(N · L²)$, driven by L4-L6/L13 (pattern construction and BFS neighbor traversal, each $O(N · L²)$ total).
+- **Space:** $O(N · L²)$.
 
 **Try this approach:**
 
@@ -318,24 +318,24 @@ function ladderLength(beginWord: string, endWord: string, wordList: string[]): n
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build set) | O(N) | 1 | O(N) |
-| L7 (BFS levels) | O(1) | O(diameter) levels | O(diameter) |
-| L9-L12 (frontier expansion) | O(L²) per word in frontier | frontier size per level | O(frontier · L²) |
-| **L13-L14 (candidate test)** | **O(1)** | **26 · L per frontier word** | **O(N · L²)** ← dominates worst case |
+| L1 (build set) | $O(N)$ | 1 | $O(N)$ |
+| L7 (BFS levels) | $O(1)$ | $O(diameter)$ levels | $O(diameter)$ |
+| L9-L12 (frontier expansion) | $O(L²)$ per word in frontier | frontier size per level | $O(frontier · L²)$ |
+| **L13-L14 (candidate test)** | **$O(1)$** | **26 · L per frontier word** | **$O(N · L²)$** ← dominates worst case |
 
-In the worst case both frontiers grow to O(sqrt(N)) (bidirectional BFS squares the branching rate), giving O(N · L²) total. In practice, the smaller frontier stays tiny and the search terminates far earlier than unidirectional BFS.
+In the worst case both frontiers grow to $O(sqrt(N)$) (bidirectional BFS squares the branching rate), giving $O(N · L²)$ total. In practice, the smaller frontier stays tiny and the search terminates far earlier than unidirectional BFS.
 
 **Complexity**
-- **Time:** O(N · L²) worst case, driven by L13/L14; typically much faster than unidirectional BFS.
-- **Space:** O(N · L).
+- **Time:** $O(N · L²)$ worst case, driven by L13/L14; typically much faster than unidirectional BFS.
+- **Space:** $O(N · L)$.
 
 ## Summary
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| BFS with pairwise check | O(N² · L) | O(N · L) | Too slow for large inputs |
-| **BFS with pattern buckets** | **O(N · L²)** | **O(N · L²)** | Canonical |
-| **Bidirectional BFS** | O(N · L²) worst; much faster practically | O(N · L) | Best in practice |
+| BFS with pairwise check | $O(N² · L)$ | $O(N · L)$ | Too slow for large inputs |
+| **BFS with pattern buckets** | **$O(N · L²)$** | **$O(N · L²)$** | Canonical |
+| **Bidirectional BFS** | $O(N · L²)$ worst; much faster practically | $O(N · L)$ | Best in practice |
 
 Bidirectional BFS is a general technique for "minimum number of edits" problems where both source and target are known.
 

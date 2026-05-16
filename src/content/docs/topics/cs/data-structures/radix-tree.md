@@ -62,11 +62,11 @@ Three things to notice:
 
 | Operation | Time | Notes |
 | --- | --- | --- |
-| Search | O(k) | k = key length; proportional to key, not dict size |
-| Insert | O(k) | At most one split per operation |
-| Delete | O(k) | Plus possible upward merge |
-| Prefix scan returning m results | O(k + m) | Walk prefix once, then enumerate |
-| Space | O(n × k) | n keys, average length k; better than trie for sparse alphabets |
+| Search | $O(k)$ | k = key length; proportional to key, not dict size |
+| Insert | $O(k)$ | At most one split per operation |
+| Delete | $O(k)$ | Plus possible upward merge |
+| Prefix scan returning m results | $O(k + m)$ | Walk prefix once, then enumerate |
+| Space | $O(n × k)$ | n keys, average length k; better than trie for sparse alphabets |
 
 ## Python implementation
 

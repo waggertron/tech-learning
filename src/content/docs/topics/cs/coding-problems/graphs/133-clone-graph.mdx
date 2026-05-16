@@ -130,16 +130,16 @@ func cloneGraph(node *Node) *Node {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L3 (cache hit check) | O(1) | V total across all calls | O(V) |
-| L4 (create clone) | O(1) | V (one per node) | O(V) |
-| L5 (register in map) | O(1) | V | O(V) |
-| **L6 (neighbor loop)** | **O(1) per edge** | **E total across all calls** | **O(E)** ← dominates for dense graphs |
+| L3 (cache hit check) | $O(1)$ | V total across all calls | $O(V)$ |
+| L4 (create clone) | $O(1)$ | V (one per node) | $O(V)$ |
+| L5 (register in map) | $O(1)$ | V | $O(V)$ |
+| **L6 (neighbor loop)** | **$O(1)$ per edge** | **E total across all calls** | **$O(E)$** ← dominates for dense graphs |
 
-Each node is created exactly once (L3 short-circuits revisits). Each edge is traversed exactly once per direction in an undirected graph, so the neighbor loop across all nodes totals O(E). The map lookup/insert at L3/L5 is O(1) average for a hash map. Total: O(V + E).
+Each node is created exactly once (L3 short-circuits revisits). Each edge is traversed exactly once per direction in an undirected graph, so the neighbor loop across all nodes totals $O(E)$. The map lookup/insert at L3/L5 is $O(1)$ average for a hash map. Total: $O(V + E)$.
 
 **Complexity**
-- **Time:** O(V + E), driven by L6 (each edge visited once per direction).
-- **Space:** O(V) for the hash map, plus O(V) recursion stack depth in the worst case (a path graph).
+- **Time:** $O(V + E)$, driven by L6 (each edge visited once per direction).
+- **Space:** $O(V)$ for the hash map, plus $O(V)$ recursion stack depth in the worst case (a path graph).
 
 Canonical, cleanest.
 
@@ -219,17 +219,17 @@ func cloneGraph(node *Node) *Node {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2, L3 (init) | O(1) | 1 | O(1) |
-| L5 (dequeue) | O(1) | V | O(V) |
-| L7 (create clone) | O(1) | V | O(V) |
-| L8 (enqueue) | O(1) | V | O(V) |
-| **L6, L9 (edge wiring)** | **O(1) per edge** | **E total** | **O(E)** ← dominates for dense graphs |
+| L2, L3 (init) | $O(1)$ | 1 | $O(1)$ |
+| L5 (dequeue) | $O(1)$ | V | $O(V)$ |
+| L7 (create clone) | $O(1)$ | V | $O(V)$ |
+| L8 (enqueue) | $O(1)$ | V | $O(V)$ |
+| **L6, L9 (edge wiring)** | **$O(1)$ per edge** | **E total** | **$O(E)$** ← dominates for dense graphs |
 
-Each node is enqueued and dequeued exactly once. Each edge is wired at L9 exactly once per direction. The queue size is bounded by O(V) in the worst case (a star graph where the center fans out to all other nodes).
+Each node is enqueued and dequeued exactly once. Each edge is wired at L9 exactly once per direction. The queue size is bounded by $O(V)$ in the worst case (a star graph where the center fans out to all other nodes).
 
 **Complexity**
-- **Time:** O(V + E), driven by L6/L9 (iterating every edge).
-- **Space:** O(V) for the map and queue.
+- **Time:** $O(V + E)$, driven by L6/L9 (iterating every edge).
+- **Space:** $O(V)$ for the map and queue.
 
 **Try this approach:**
 
@@ -249,8 +249,8 @@ Each node is enqueued and dequeued exactly once. Each edge is wired at L9 exactl
 
 | Approach | Time | Space | Notes |
 | --- | --- | --- | --- |
-| **DFS + old->new map** | **O(V + E)** | **O(V)** | Canonical |
-| BFS + old->new map | O(V + E) | O(V) | Avoids deep recursion |
+| **DFS + old->new map** | **$O(V + E)$** | **$O(V)$** | Canonical |
+| BFS + old->new map | $O(V + E)$ | $O(V)$ | Avoids deep recursion |
 
 All three are optimal in Big-O. DFS is the shortest to write.
 

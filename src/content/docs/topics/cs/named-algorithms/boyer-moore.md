@@ -17,7 +17,7 @@ Named after Robert S. Boyer and J Strother Moore, who described it in a 1981 tec
 Two properties must hold for the algorithm to be meaningful:
 
 1. A majority element exists (appears more than `n/2` times).
-2. You want O(n) time and O(1) space (otherwise a hash map or sort is fine).
+2. You want $O(n)$ time and $O(1)$ space (otherwise a hash map or sort is fine).
 
 If neither constraint matters, simpler approaches work. Boyer-Moore shines when both do.
 
@@ -31,11 +31,11 @@ That single insight drives everything else. The implementation is just a mechani
 
 Before Boyer-Moore, the obvious answers:
 
-**Sorting:** Sort the array and return `nums[n // 2]`. The majority element must occupy the middle index. Time is O(n log n), space is O(1) or O(log n) depending on sort. Correct, but slower than necessary.
+**Sorting:** Sort the array and return `nums[n // 2]`. The majority element must occupy the middle index. Time is $O(n log n)$, space is $O(1)$ or $O(log n)$ depending on sort. Correct, but slower than necessary.
 
-**Hash map frequency count:** Count occurrences of every element, then scan for the one with count > n/2. Time is O(n), but space is O(n) because you store every distinct element. Fine for small inputs, but the space blows up for large streaming data.
+**Hash map frequency count:** Count occurrences of every element, then scan for the one with count > n/2. Time is $O(n)$, but space is $O(n)$ because you store every distinct element. Fine for small inputs, but the space blows up for large streaming data.
 
-Boyer-Moore matches the hash map on time and beats both on space: O(n) time, O(1) space. It does this by not remembering all counts, just one candidate and one counter.
+Boyer-Moore matches the hash map on time and beats both on space: $O(n)$ time, $O(1)$ space. It does this by not remembering all counts, just one candidate and one counter.
 
 ## The algorithm
 
@@ -141,15 +141,15 @@ def majority_element_verified(nums):
 
 [LeetCode 169](https://leetcode.com/problems/majority-element/) guarantees a majority element exists, so the verification pass is not needed there. In production code, assume nothing and always verify.
 
-The two-pass version is still O(n) time, O(1) space. The second pass is just a linear count, no extra storage.
+The two-pass version is still $O(n)$ time, $O(1)$ space. The second pass is just a linear count, no extra storage.
 
 ## Complexity
 
 | Metric | Cost |
 | --- | --- |
-| Time (pass 1) | O(n) |
-| Time (pass 2, verification) | O(n) |
-| Space | O(1), two scalars only |
+| Time (pass 1) | $O(n)$ |
+| Time (pass 2, verification) | $O(n)$ |
+| Space | $O(1)$, two scalars only |
 
 Nothing is stored per element. The `candidate` and `count` variables are the entire state.
 
@@ -157,11 +157,11 @@ Compare to the hash map approach:
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Sort + middle | O(n log n) | O(1) or O(log n) |
-| Hash map count | O(n) | O(n) |
-| Boyer-Moore | O(n) | O(1) |
+| Sort + middle | $O(n log n)$ | $O(1)$ or $O(log n)$ |
+| Hash map count | $O(n)$ | $O(n)$ |
+| Boyer-Moore | $O(n)$ | $O(1)$ |
 
-Boyer-Moore dominates for space. It is the only approach that hits both O(n) time and O(1) space simultaneously.
+Boyer-Moore dominates for space. It is the only approach that hits both $O(n)$ time and $O(1)$ space simultaneously.
 
 ## Variant: elements appearing more than n/3 times ([LeetCode 229](https://leetcode.com/problems/majority-element-ii/))
 
@@ -392,6 +392,6 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Kadane's algorithm](./kadane/), another single-pass array algorithm with a similarly surprising O(n) result
-- [Quickselect](./quickselect/), finds the k-th smallest element in O(n) average; complementary to majority vote for "find the dominant element" problems
+- [Kadane's algorithm](./kadane/), another single-pass array algorithm with a similarly surprising $O(n)$ result
+- [Quickselect](./quickselect/), finds the k-th smallest element in $O(n)$ average; complementary to majority vote for "find the dominant element" problems
 - [Data structures](../data-structures/), the array properties (random access, contiguous memory) that make single-pass algorithms like this possible

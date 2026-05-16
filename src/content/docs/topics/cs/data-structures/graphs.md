@@ -16,19 +16,19 @@ A **graph** is a set of nodes (vertices) connected by edges. Edges can be direct
 
 ### Representations
 
-- **Adjacency list**: map from node to list of neighbors. `defaultdict(list)` in Python. O(V + E) space, efficient for sparse graphs (most real-world graphs).
-- **Adjacency matrix**: `V × V` boolean or weight matrix. O(V²) space, O(1) edge lookup. Good for dense graphs or where you need fast edge queries.
+- **Adjacency list**: map from node to list of neighbors. `defaultdict(list)` in Python. $O(V + E)$ space, efficient for sparse graphs (most real-world graphs).
+- **Adjacency matrix**: `V × V` boolean or weight matrix. $O(V²)$ space, $O(1)$ edge lookup. Good for dense graphs or where you need fast edge queries.
 - **Edge list**: list of `(u, v, weight)` tuples. Compact; used by Kruskal's MST and Bellman-Ford.
 
 ### Core algorithms
 
-- **BFS**: O(V + E). Shortest path in an unweighted graph, level-based exploration. Uses a queue.
-- **DFS**: O(V + E). Cycle detection, topological sort, connected components, path existence. Uses recursion or an explicit stack.
-- **[Dijkstra's algorithm](../named-algorithms/dijkstra/)**: O((V + E) log V) with a binary heap. Single-source shortest path with non-negative weights.
-- **Bellman-Ford**: O(V · E). Single-source shortest path allowing negative weights; detects negative cycles.
-- **Floyd-Warshall**: O(V³). All-pairs shortest paths via DP over intermediate nodes.
-- **Union-Find (Disjoint Set Union)**: nearly O(1) per op with path compression and union by rank. Connectivity, cycle detection in undirected graphs, Kruskal's MST.
-- **Topological sort**: O(V + E). [Kahn's algorithm](../named-algorithms/kahns/) (BFS on zero-in-degree nodes) or DFS post-order reversed. Only defined on DAGs.
+- **BFS**: $O(V + E)$. Shortest path in an unweighted graph, level-based exploration. Uses a queue.
+- **DFS**: $O(V + E)$. Cycle detection, topological sort, connected components, path existence. Uses recursion or an explicit stack.
+- **[Dijkstra's algorithm](../named-algorithms/dijkstra/)**: $O((V + E)$ log V) with a binary heap. Single-source shortest path with non-negative weights.
+- **Bellman-Ford**: $O(V · E)$. Single-source shortest path allowing negative weights; detects negative cycles.
+- **Floyd-Warshall**: $O(V³)$. All-pairs shortest paths via DP over intermediate nodes.
+- **Union-Find (Disjoint Set Union)**: nearly $O(1)$ per op with path compression and union by rank. Connectivity, cycle detection in undirected graphs, Kruskal's MST.
+- **Topological sort**: $O(V + E)$. [Kahn's algorithm](../named-algorithms/kahns/) (BFS on zero-in-degree nodes) or DFS post-order reversed. Only defined on DAGs.
 - **Kruskal's / Prim's MST**: minimum spanning tree. Kruskal's uses edge list + union-find; Prim's uses a priority queue.
 
 ### Directed vs. undirected, a trap
@@ -39,13 +39,13 @@ Many algorithms behave differently on directed graphs. Topological sort requires
 
 | Algorithm | Time | Space |
 | --- | --- | --- |
-| BFS / DFS | O(V + E) | O(V) |
-| Dijkstra (binary heap) | O((V + E) log V) | O(V) |
-| Bellman-Ford | O(V · E) | O(V) |
-| Floyd-Warshall | O(V³) | O(V²) |
-| Topological sort | O(V + E) | O(V) |
-| Union-Find (ops) | near O(1) per op, O(α(n)) amortized | O(V) |
-| Kruskal's / Prim's MST | O(E log V) | O(V + E) |
+| BFS / DFS | $O(V + E)$ | $O(V)$ |
+| Dijkstra (binary heap) | $O((V + E)$ log V) | $O(V)$ |
+| Bellman-Ford | $O(V · E)$ | $O(V)$ |
+| Floyd-Warshall | $O(V³)$ | $O(V²)$ |
+| Topological sort | $O(V + E)$ | $O(V)$ |
+| Union-Find (ops) | near $O(1)$ per op, $O(α(n)$) amortized | $O(V)$ |
+| Kruskal's / Prim's MST | $O(E log V)$ | $O(V + E)$ |
 
 ## Common uses in DSA
 
