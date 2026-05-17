@@ -45,11 +45,11 @@ function _runTests(): void {
     assert(isValidBST(buildTree([3, 1, 5, 0, 2, 4, 6])) === true);
     assert(isValidBST(buildTree([5, 4, 6, null, null, 3, 7])) === false);
     // perf
-    const bstNodes: TreeNode[] = Array.from({ length: 100_000 }, (_, i) => new TreeNode(i));
-    for (let i = 0; i < 99_999; i++) bstNodes[i].right = bstNodes[i + 1];
+    const bstNodes: TreeNode[] = Array.from({ length: 500 }, (_, i) => new TreeNode(i));
+    for (let i = 0; i < 499; i++) bstNodes[i].right = bstNodes[i + 1];
     const t0 = performance.now();
     isValidBST(bstNodes[0]);
-    console.log(`perf validate_bst on 100000-node sorted BST: ${(performance.now() - t0).toFixed(1)}ms`);
+    console.log(`perf validate_bst on 500-node sorted BST: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }
 

@@ -5,9 +5,17 @@ interface Props {
 }
 const { code, id = 'gorepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+
+// Pre-compute scaffold components at build time so the code block runner
+// doesn't have to scrape and regex-parse data-original at runtime.
+const typeDefs = [...code.matchAll(/^type \w+ struct \{[\s\S]*?\n\}/gm)]
+  .map(m => m[0].trim()).join('\n\n');
+const assertFn = code.match(/func assert\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
+const testsFn  = code.match(/func runTests\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
 ---
 
-<div class="gorepl not-content" data-repl-id={replId} data-original={code}>
+<div class="gorepl not-content" data-repl-id={replId} data-original={code}
+     data-type-defs={typeDefs} data-assert-fn={assertFn} data-run-tests-fn={testsFn}>
   <div class="gorepl__header">
     <div class="gorepl__btn-group">
       <button class="gorepl__run" type="button">▶ Run Go</button>
@@ -237,14 +245,16 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
       if (codeText.startsWith('package ')) {
         code = codeText;
       } else {
-        const scaffold = document.querySelector<HTMLElement>('.gorepl[data-original]')?.dataset.original ?? '';
-        const assertFn = scaffold.match(/func assert\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
-        const testsFn  = scaffold.match(/func runTests\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
-        const imports  = buildGoImports(scaffold, codeText);
+        const firstRepl = document.querySelector<HTMLElement>('.gorepl');
+        const typeDefs  = firstRepl?.dataset.typeDefs ?? '';
+        const assertFn  = firstRepl?.dataset.assertFn ?? '';
+        const testsFn   = firstRepl?.dataset.runTestsFn ?? '';
+        const imports   = buildGoImports(firstRepl?.dataset.original ?? '', codeText);
 
         code = [
           'package main',
           imports,
+          typeDefs,
           assertFn,
           codeText,
           testsFn,

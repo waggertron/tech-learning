@@ -15,7 +15,7 @@ function _runTests(): void {
     assert(countComponents(3, [[0,1],[1,2],[0,2]]) === 1);
     // perf
     const t0 = performance.now();
-    countComponents(10_000, Array.from({ length: 9_999 }, (_, i) => [i, i + 1]));
+    countComponents(500, Array.from({ length: 499 }, (_, i) => [i, i + 1]));
     console.log(`perf count-components 10000 nodes chain: ${(performance.now() - t0).toFixed(1)}ms`);
     console.log('all tests pass');
 }

@@ -6,9 +6,13 @@ interface Props {
 }
 const { code, id = 'tsrepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+
+// Pre-compute test runner at build time for use by the code block runner.
+const testsFn = code.match(/function _runTests[\s\S]*/)?.[0]?.trim() ?? '';
 ---
 
-<div class="tsrepl not-content" data-repl-id={replId} data-original={code}>
+<div class="tsrepl not-content" data-repl-id={replId} data-original={code}
+     data-run-tests-fn={testsFn}>
   <div class="tsrepl__header">
     <div class="tsrepl__btn-group">
       <button class="tsrepl__run" type="button">▶ Run TS</button>
@@ -254,11 +258,11 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     const runtimes: number[] = [];
 
     runBtn.addEventListener('click', async () => {
-      // Grab _runTests from the page's TypeScript REPL scaffold so the
-      // approach code (which provides the implementation) can be tested.
-      const tsScaffold = document.querySelector<HTMLElement>('.tsrepl[data-original]')?.dataset.original ?? '';
-      const testMatch = tsScaffold.match(/function _runTests[\s\S]*/);
-      const testSnippet = testMatch?.[0]?.trim() ?? '';
+      // Read the pre-computed test runner from the first REPL's data attribute.
+      // Strip the // perf section so O(n²) brute-force approach blocks don't hang.
+      const firstRepl = document.querySelector<HTMLElement>('.tsrepl');
+      const testSnippet = (firstRepl?.dataset.runTestsFn ?? '')
+        .replace(/\n[ \t]*\/\/ perf[\s\S]*?\n\}/, '\n}');
       // assert is defined in the scaffold's .ts file but only _runTests is
       // extracted above, so inject it here so approach blocks can use it.
       const assertPolyfill = `function assert(condition: boolean, msg: string = ''): void { if (!condition) throw new Error(msg || 'Assertion failed'); }`;
