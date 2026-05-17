@@ -259,10 +259,15 @@ const testsFn = code.match(/function _runTests[\s\S]*/)?.[0]?.trim() ?? '';
 
     runBtn.addEventListener('click', async () => {
       // Read the pre-computed test runner from the first REPL's data attribute.
-      // Strip the // perf section so O(n²) brute-force approach blocks don't hang.
+      // Cap array lengths at 1_000 so O(n²) brute-force approach blocks don't
+      // hang; the target values stay large so the loop must run to completion,
+      // making the timing difference between approaches visible.
       const firstRepl = document.querySelector<HTMLElement>('.tsrepl');
       const testSnippet = (firstRepl?.dataset.runTestsFn ?? '')
-        .replace(/\n[ \t]*\/\/ perf[\s\S]*?\n\}/, '\n}');
+        .replace(/\blength: (\d[\d_]*)\b/g, (m, n) => {
+          const num = parseInt(n.replace(/_/g, ''), 10);
+          return num > 1_000 ? 'length: 1_000' : m;
+        });
       // assert is defined in the scaffold's .ts file but only _runTests is
       // extracted above, so inject it here so approach blocks can use it.
       const assertPolyfill = `function assert(condition: boolean, msg: string = ''): void { if (!condition) throw new Error(msg || 'Assertion failed'); }`;
