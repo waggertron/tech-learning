@@ -1,0 +1,337 @@
+---
+title: "Case Study: Facebook News Feed"
+description: "Full system design walkthrough for Facebook News Feed: fan-out on write vs fan-out on read, the celebrity problem and hybrid strategy, Redis sorted sets as feed storage, and ML ranking as a second pass over candidates."
+parent: case-studies
+tags: [system-design, case-studies, interviews]
+status: draft
+created: 2026-05-21
+updated: 2026-05-21
+---
+
+The Facebook News Feed is a read amplification problem. One post from a user with 5,000 friends must appear in 5,000 feeds within seconds. At 3 billion users and 100 million posts per day, the read-to-write ratio approaches 100:1. The architecture is driven entirely by this ratio: every design decision optimizes for read throughput, not write throughput. The most important interview question here is not "how do you store posts?" but "how do you fanout a post to follower feeds efficiently?" -- and the answer requires knowing when to push (fan-out on write) and when to pull (fan-out on read).
+
+An existing [Social Feed case study](./social-feed/) covers this problem in depth from first principles. This entry focuses on the Facebook-specific angle (EdgeRank, the privacy graph, reactions) and on the fanout pattern that carries forward into WhatsApp and Ticketmaster.
+
+## Series concepts
+
+### Introduced here
+
+- **Fan-out on write (push model):** on post creation, write the post_id into every follower's feed cache. Fast reads, expensive writes for high-follower accounts.
+- **Fan-out on read (pull model):** on feed load, query all followees' recent posts and merge. Cheap writes, expensive reads. Impractical at 100:1 read/write ratio.
+- **Celebrity problem:** fan-out on write for an account with 10 million followers means 10 million Redis writes per post. The hybrid strategy pushes for regular users and pulls for celebrities at read time.
+- **Redis sorted set as a feed:** `ZADD feed:{user_id} {timestamp} {post_id}`. O(log n) insert, O(log n + k) range read. Score is timestamp; members are post IDs. Feed retrieval is a single Redis command.
+- **ML ranking as a second pass:** the sorted set holds recency-ordered candidates; a scoring service re-ranks by engagement probability, affinity, and content quality before returning the top 20 to the client.
+
+### Carried forward from prior entries
+
+- **Kafka ([Bitly](./bitly/)):** post creation events publish to Kafka; fanout workers consume and write to follower feeds.
+- **Redis ([Bitly](./bitly/)):** feed storage uses Redis sorted sets, same cluster introduced for URL caching.
+- **Distributed locking ([Ticketmaster](./ticketmaster/)):** feed mutation consistency uses locking to prevent concurrent fanout workers from corrupting the same user's feed.
+
+## Clarifying questions
+
+Ask these before drawing anything:
+
+- **Scale**: how many users? DAU? Posts per day?
+- **Social graph type**: directed (follow) or undirected (friend)? Mutual required?
+- **Feed composition**: only text/image posts, or also stories, ads, events, suggested content?
+- **Privacy**: can users restrict who sees their posts?
+- **Ranking**: chronological or algorithmic ranking?
+- **Real-time**: how stale is acceptable? Minutes? Seconds?
+
+What the answers reveal:
+
+- Directed follow vs mutual friendship changes the fanout fan-in ratio (celebrities have asymmetric graphs)
+- Ads and suggested content mean the feed service must merge organic content with separate ranked pipelines
+- Privacy restrictions require filtering at fanout time or at read time
+- Algorithmic ranking (EdgeRank) adds a scoring pipeline between candidate retrieval and delivery
+
+For this walkthrough: 3B users, 1B DAU, directed follow graph, 0.1 posts/user/day, algorithmic ranking, privacy enforced at write time, posts stale by up to 10 seconds is acceptable.
+
+## Estimation
+
+```
+Write QPS (posts):
+  1B DAU * 0.1 posts/day = 100M posts/day
+  100M / 86,400 = 1,157 post writes/sec
+
+Fanout writes per post:
+  Average follower count: 200
+  Fanout writes/sec: 1,157 * 200 = 231,400 Redis writes/sec
+
+Celebrity posts:
+  Account with 10M followers: 10M Redis writes for 1 post
+  Must be handled separately (pull strategy)
+
+Feed reads:
+  1B DAU * 10 feed loads/day = 10B reads/day
+  10B / 86,400 = 115,741 read QPS
+  Peak (3x): ~347,000 read QPS
+
+Feed storage in Redis:
+  500M active users (half of DAU have active feeds)
+  1,000 post IDs per feed (trimmed)
+  Each post ID: 8 bytes + sorted set overhead ~58 bytes/entry
+  500M * 1,000 * 58 bytes = ~29 TB Redis Cluster required
+
+Post content DB:
+  100M posts/day * 1 KB average = 100 GB/day
+  5 years: ~182 TB
+```
+
+**Conclusion**: 115K read QPS dwarfs 1,157 write QPS. The system exists to serve reads. 29 TB of Redis requires a large cluster (Redis Cluster with 10+ shards). Feed storage is expensive; trimming feeds to 1,000 entries per user keeps memory bounded.
+
+## High-level design
+
+```mermaid
+flowchart TD
+    User -->|POST /posts| PostSvc[Post Service]
+    PostSvc --> PostDB[(Post DB\nMySQL / Cassandra)]
+    PostSvc --> Kafka[Kafka: post.created]
+
+    Kafka --> FanoutWorker[Fanout Workers]
+    FanoutWorker -->|ZADD feed:userId| Redis[(Redis Cluster\nFeed Sorted Sets)]
+    FanoutWorker -->|skip celebrities| CelebCheck{followers > 1M?}
+    CelebCheck -->|yes: skip push| Redis
+
+    User -->|GET /feed| FeedSvc[Feed Service]
+    FeedSvc -->|ZREVRANGEBYSCORE| Redis
+    FeedSvc -->|pull celeb posts| CelebFetch[Celebrity Fetch]
+    CelebFetch --> PostDB
+    FeedSvc -->|merge + score| RankSvc[Ranking Service]
+    RankSvc --> FeedSvc
+    FeedSvc -->|hydrate post content| PostDB
+    FeedSvc --> User
+```
+
+Core endpoints:
+
+```
+POST /posts
+  body:    { content, media_urls: [], privacy: 'public' | 'friends' | 'custom' }
+  returns: { post_id, created_at }
+
+GET /feed
+  params:  { cursor?: string, limit?: int }
+  returns: { posts: [...], next_cursor: string }
+
+POST /posts/{post_id}/reactions
+  body:    { reaction_type: 'like' | 'love' | 'haha' | 'wow' | 'sad' | 'angry' }
+  returns: { reaction_id, post_id, reaction_count }
+```
+
+## Deep dive: fan-out strategies
+
+**Fan-out on write (push):** when a user posts, a fanout worker writes the post_id to every follower's feed sorted set.
+
+```python
+from kafka import KafkaConsumer
+import json
+
+r = redis.Redis(cluster=True, host='redis-cluster')
+
+FEED_MAX_LENGTH = 1000
+CELEBRITY_THRESHOLD = 1_000_000
+
+def fanout_worker():
+    consumer = KafkaConsumer('post.created', group_id='fanout-workers')
+    for msg in consumer:
+        event = json.loads(msg.value)
+        post_id = event['post_id']
+        author_id = event['author_id']
+        timestamp = event['created_at_ms']  # Unix ms as score
+
+        followers = get_followers(author_id)
+
+        if len(followers) > CELEBRITY_THRESHOLD:
+            # celebrity: skip push, will pull at read time
+            mark_celebrity_post(author_id, post_id, timestamp)
+            continue
+
+        # push to all follower feeds
+        pipe = r.pipeline(transaction=False)
+        for follower_id in followers:
+            feed_key = f"feed:{follower_id}"
+            pipe.zadd(feed_key, {post_id: timestamp})
+            # trim to max length (remove oldest entries beyond 1000)
+            pipe.zremrangebyrank(feed_key, 0, -(FEED_MAX_LENGTH + 1))
+        pipe.execute()
+```
+
+**Fan-out on read (pull):** for celebrities, fetch their recent posts at read time and merge into the candidate set.
+
+```python
+def get_celebrity_posts(user_id: str) -> list[dict]:
+    """Fetch recent posts from all celebrities the user follows."""
+    celebrity_followees = get_celebrity_followees(user_id)
+    all_posts = []
+    for celeb_id in celebrity_followees:
+        posts = post_db.query("""
+            SELECT post_id, created_at
+            FROM posts
+            WHERE author_id = %s
+            ORDER BY created_at DESC
+            LIMIT 50
+        """, celeb_id)
+        all_posts.extend(posts)
+    return all_posts
+```
+
+**Hybrid read path:**
+
+```python
+def get_feed_candidates(user_id: str, limit: int = 200) -> list[str]:
+    # 1. read from push feed (regular followees)
+    feed_key = f"feed:{user_id}"
+    push_post_ids = r.zrevrangebyscore(
+        feed_key, '+inf', '-inf', start=0, num=limit
+    )
+
+    # 2. pull from celebrities the user follows
+    celeb_posts = get_celebrity_posts(user_id)
+    celeb_post_ids = [p['post_id'] for p in celeb_posts]
+
+    # 3. merge and deduplicate
+    all_candidates = list(dict.fromkeys(push_post_ids + celeb_post_ids))
+    return all_candidates[:limit]
+```
+
+## Deep dive: feed storage with Redis sorted sets
+
+A Redis sorted set maps score (timestamp) to member (post_id). ZADD is O(log n); ZREVRANGEBYSCORE is O(log n + k) where k is the number of results returned. The data structure is a perfect fit for recency-ordered feeds.
+
+```python
+import time
+
+def add_to_feed(follower_id: str, post_id: str, timestamp_ms: float):
+    """Add a post to a user's feed. Trim to max length."""
+    key = f"feed:{follower_id}"
+    r.zadd(key, {post_id: timestamp_ms})
+    # keep only the 1000 most recent (highest scores)
+    r.zremrangebyrank(key, 0, -(FEED_MAX_LENGTH + 1))
+
+def read_feed_page(user_id: str, cursor_score: float = None, page_size: int = 20) -> tuple[list, float]:
+    """
+    Read a page of feed entries using cursor-based pagination.
+    cursor_score is the score of the last item on the previous page.
+    """
+    key = f"feed:{user_id}"
+    max_score = cursor_score - 1 if cursor_score else '+inf'
+
+    entries = r.zrevrangebyscore(
+        key,
+        max_score,
+        '-inf',
+        start=0,
+        num=page_size,
+        withscores=True
+    )
+
+    post_ids = [post_id.decode() for post_id, _ in entries]
+    next_cursor = entries[-1][1] if entries else None
+    return post_ids, next_cursor
+```
+
+The sorted set stores only post IDs, never content. At read time, post content is bulk-fetched from the post database (with read replicas) using a single multi-key lookup. This keeps Redis memory usage at 58 bytes/entry rather than 1 KB/entry, enabling 29 TB to fit in a manageable cluster.
+
+## Deep dive: EdgeRank and ML ranking
+
+Chronological order is not the same as relevance. Facebook's EdgeRank (now a deep learning model) re-ranks candidates by predicted engagement.
+
+```python
+from dataclasses import dataclass
+from typing import Protocol
+
+@dataclass
+class Post:
+    post_id: str
+    author_id: str
+    content_type: str  # 'text', 'photo', 'video', 'link'
+    created_at_ms: float
+    reaction_count: int
+    comment_count: int
+    share_count: int
+
+class RankingFeatures:
+    @staticmethod
+    def affinity_score(viewer_id: str, author_id: str) -> float:
+        """How much does viewer interact with author? (0.0 - 1.0)"""
+        interactions = interaction_db.count_recent(
+            viewer_id, author_id, days=90
+        )
+        return min(interactions / 100.0, 1.0)
+
+    @staticmethod
+    def edge_weight(post: Post) -> float:
+        """Weight by content type and engagement signals."""
+        type_weights = {'video': 1.5, 'photo': 1.2, 'link': 0.9, 'text': 1.0}
+        base = type_weights.get(post.content_type, 1.0)
+        engagement = (
+            post.reaction_count * 1.0 +
+            post.comment_count * 2.0 +
+            post.share_count * 3.0
+        )
+        return base * (1 + 0.01 * engagement)
+
+    @staticmethod
+    def time_decay(post: Post, now_ms: float) -> float:
+        """Newer posts score higher."""
+        age_hours = (now_ms - post.created_at_ms) / 3_600_000
+        return 1.0 / (1.0 + age_hours * 0.1)
+
+def rank_candidates(viewer_id: str, candidates: list[Post]) -> list[Post]:
+    now_ms = time.time() * 1000
+    scored = []
+    for post in candidates:
+        score = (
+            RankingFeatures.affinity_score(viewer_id, post.author_id)
+            * RankingFeatures.edge_weight(post)
+            * RankingFeatures.time_decay(post, now_ms)
+        )
+        scored.append((score, post))
+    scored.sort(reverse=True)
+    return [post for _, post in scored]
+```
+
+The ML model in production is far more complex (hundreds of features, deep learning), but the pipeline shape is the same: candidates from the sorted set, features computed per candidate, ranked by predicted engagement score, top N returned to the client.
+
+## Failure modes
+
+**Fanout worker lag**: the Kafka consumer group falls behind during a traffic spike. Users see stale feeds. Add more fanout workers (they join the consumer group and split load immediately). The lag is not dangerous (no data loss), but user experience degrades.
+
+**Redis cluster node failure**: if a node holding feed data fails, users on that shard see empty feeds. Mitigate with Redis Cluster replication (each primary has a replica); AOF persistence for durability on restart.
+
+**Feed cache cold start**: after a Redis cluster replacement or major failure, all 500M feeds are cache-cold. Rebuilding 29 TB of sorted sets from the database is slow (hours to days). Mitigate by keeping read replicas warm (Replica Of No One pattern) and by graceful degradation: fall back to pure pull mode while feeds are rebuilt.
+
+**Celebrity post causes read hotspot**: a celebrity with 50M followers posts once. 50M feed reads in the next minute all include a pull query for that celebrity's posts. Cache recent celebrity posts per celebrity in Redis with a 60-second TTL; celebrity reads become a single Redis lookup rather than 50M database queries.
+
+**Privacy graph inconsistency**: a user updates their privacy settings after a post is published. Fanout has already written the post to some followers' feeds. Enforce privacy at read time (not just write time) as a second filter: if the post is no longer visible to the viewer, skip it during feed hydration.
+
+## Key takeaways
+
+**Design for reads, not writes.** The 100:1 read/write ratio means every architectural decision should optimize for the 115K read QPS path. Fan-out on write pre-computes the expensive read-time merge into a cheap Redis range scan.
+
+**Celebrity accounts break fan-out on write.** A single design that fans out to all followers fails at 10M followers per post. The hybrid strategy (push for regular users, pull for celebrities at read time) is the only way to handle both extremes without over-engineering the common case.
+
+**Sorted sets are the right data structure for time-ordered feeds.** ZADD and ZREVRANGEBYSCORE are O(log n); cursor-based pagination is trivially implementable with score as the cursor. Do not store full post content in the sorted set: store only IDs and hydrate separately.
+
+**Ranking is a second-pass operation over candidates.** Never rank at write time (the ranker does not know who will read the feed or when). Produce candidates from the sorted set, then score and re-rank at read time with per-viewer features.
+
+**Feed trimming bounds memory.** Keeping only the 1,000 most recent entries per user keeps the sorted set bounded. Users who scroll to the 1,001st post get a database query rather than a cache hit: acceptable because deep scrolling is rare.
+
+## References
+
+- [Meta Engineering: How the news feed works](https://engineering.fb.com/2021/01/26/ml-applications/news-feed-ranking/)
+- [Meta Engineering: Scaling the Facebook news feed](https://engineering.fb.com/2012/03/22/core-infra/introduction-to-facebook-s-data-infrastructure/)
+- [System Design Interview Vol 2, Alex Xu, Chapter 11](https://bytebytego.com/)
+- [Redis sorted sets documentation](https://redis.io/docs/data-types/sorted-sets/)
+
+## Related topics
+
+- [Social Feed case study](./social-feed/), foundational walkthrough of the same problem
+- [Ticketmaster case study](./ticketmaster/), distributed locking carried forward here
+- [WhatsApp case study](./whatsapp/), carries forward Redis connection routing and Kafka
+- [Caching](../caching/), Redis sorted set patterns and cluster sizing
+- [Message Queues](../message-queues/), Kafka fanout worker design
+- [Scalability](../scalability/), handling 115K read QPS with Redis Cluster
+- [Databases](../databases/), read replicas for post content hydration

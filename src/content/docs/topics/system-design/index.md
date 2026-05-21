@@ -31,7 +31,9 @@ The same skills matter in production. A system that starts as a single process e
 
 ## Case studies
 
-End-to-end walkthroughs of six canonical interview problems, each with clarifying questions, estimation, high-level design, deep dives, failure modes, and key takeaways.
+End-to-end walkthroughs of sixteen canonical interview problems, each with clarifying questions, estimation, Mermaid high-level design, deep dives, failure modes, and key takeaways.
+
+**Standalone walkthroughs:**
 
 - [URL Shortener](./case-studies/url-shortener/), ID generation, base62 encoding, redirect caching, analytics pipeline
 - [Social Feed](./case-studies/social-feed/), fanout strategies, hybrid push/pull, the celebrity problem, ML ranking
@@ -39,6 +41,20 @@ End-to-end walkthroughs of six canonical interview problems, each with clarifyin
 - [Chat System](./case-studies/chat-system/), message ordering, WebSocket routing, exactly-once delivery, group chat
 - [Notification System](./case-studies/notification-system/), multi-channel delivery, priority queues, deduplication, per-user rate limiting
 - [Ride Sharing](./case-studies/ride-sharing/), geospatial indexing at scale, matching, real-time tracking, surge pricing
+
+**Progressive ten-part series** (each entry reuses and names the patterns from every prior entry):
+
+- [Bitly](./case-studies/bitly/), Snowflake ID generation, Redis redirect cache, Kafka analytics pipeline
+- [Dropbox](./case-studies/dropbox/), block deduplication, delta sync, metadata vs block storage
+- [Ticketmaster](./case-studies/ticketmaster/), distributed locking, flash sale queue, inventory reservation
+- [Facebook News Feed](./case-studies/facebook-news-feed/), fan-out strategies, celebrity problem, Redis sorted sets
+- [WhatsApp](./case-studies/whatsapp/), WebSocket fleet, sequence-number ordering, exactly-once delivery, presence
+- [LeetCode](./case-studies/leetcode/), sandboxed execution, warm container pools, contest leaderboard
+- [Uber](./case-studies/uber/), Redis GEO, ETA-based matching, stream-based surge pricing
+- [Web Crawler](./case-studies/web-crawler/), URL frontier, politeness, Bloom filter deduplication
+- [Ad Click Aggregator](./case-studies/ad-click-aggregator/), time-windowed aggregation, idempotent counting, lambda architecture
+- [Facebook Post Search](./case-studies/facebook-post-search/), inverted index, BM25 ranking, typeahead, privacy filtering
+- [eBay](./case-studies/ebay/), auction state machine, proxy bidding, bid sniper problem, payment escrow
 
 ## Advanced patterns
 
