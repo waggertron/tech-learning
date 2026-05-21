@@ -162,6 +162,11 @@ def get_user(user_id):
 
 Most databases have a hard cap on simultaneous connections (PostgreSQL default: 100). PgBouncer and RDS Proxy sit between application servers and the database, multiplexing thousands of application-level connections into a smaller pool.
 
+## Subtopics
+
+- [MySQL vs PostgreSQL](./mysql-vs-postgres/), InnoDB clustered index vs heap storage, MVCC implementations, WAL, index types, and when to pick each
+- [SpacetimeDB](./spacetimedb/), WASM modules as server logic, reducers, subscription push model, and trade-offs vs traditional backend + DB
+
 ## References
 
 - [Designing Data-Intensive Applications, Kleppmann, Chapters 5-6](https://dataintensive.net/)

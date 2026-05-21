@@ -216,6 +216,10 @@ for t in threads:
 print(f"DLQ size: {dlq.qsize()}")
 ```
 
+## Subtopics
+
+- [Kafka](./kafka/), log segments, sequential writes, page cache, zero-copy, ISR replication, consumer groups, and KRaft
+
 ## References
 
 - [Designing Data-Intensive Applications, Kleppmann, Chapter 11](https://dataintensive.net/)

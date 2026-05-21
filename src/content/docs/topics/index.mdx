@@ -176,8 +176,12 @@ Topics are the durable knowledge base. Each topic lives at `topics/<category>/<s
 - [Scalability](./system-design/scalability/), vertical vs horizontal scaling, stateless services, the scale cube
 - [Load Balancing](./system-design/load-balancing/), algorithms, L4 vs L7, health checks, sticky sessions
 - [Caching](./system-design/caching/), cache-aside, read-through, write-through, eviction, CDN, invalidation
+  - [Redis](./system-design/caching/redis/), data structures, memory model, RDB vs AOF persistence, Sentinel vs Cluster
 - [Databases at Scale](./system-design/databases/), SQL vs NoSQL trade-offs, sharding, replication, indexing
+  - [MySQL vs PostgreSQL](./system-design/databases/mysql-vs-postgres/), InnoDB vs heap storage, MVCC, WAL, index types, when to pick each
+  - [SpacetimeDB](./system-design/databases/spacetimedb/), WASM modules, reducers, subscription push model, trade-offs
 - [Message Queues](./system-design/message-queues/), queue vs pub/sub, delivery guarantees, Kafka, RabbitMQ
+  - [Kafka](./system-design/message-queues/kafka/), log segments, sequential writes, ISR replication, consumer groups, KRaft
 - [API Design](./system-design/api-design/), REST, GraphQL, gRPC, versioning, idempotency, pagination
 - [Rate Limiting](./system-design/rate-limiting/), token bucket, leaky bucket, sliding window, where to enforce
 - [CAP Theorem](./system-design/cap-theorem/), consistency vs availability under partition, PACELC

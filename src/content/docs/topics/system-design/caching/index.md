@@ -228,6 +228,10 @@ def get_with_stampede_protection(key, fetch_fn, ttl=300):
 - **Write-heavy paths**: caching a value you immediately overwrite provides no hit rate benefit.
 - **Small datasets**: if the entire dataset fits in database memory (buffer pool), the DB is already serving from RAM. A separate cache layer just adds a network hop.
 
+## Subtopics
+
+- [Redis](./redis/), data structures with internal encodings, memory model, RDB vs AOF persistence, eviction policies, Sentinel vs Cluster
+
 ## References
 
 - [Redis documentation: eviction policies](https://redis.io/docs/reference/eviction/)
