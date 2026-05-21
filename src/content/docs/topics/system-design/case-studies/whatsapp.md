@@ -175,6 +175,119 @@ def deliver_message(to_user_id: str, message: dict) -> str:
     return 'delivered' if delivered_to else 'queued'
 ```
 
+```typescript
+import { createClient } from 'redis';
+
+const r = createClient({ url: 'redis://redis-routing:6379' });
+await r.connect();
+
+const THIS_SERVER_ID = process.env.GATEWAY_SERVER_ID!;
+
+// On client connection:
+async function registerConnection(userId: string, deviceId: string, gatewayServerId: string): Promise<void> {
+  const key = `conn:${userId}:${deviceId}`;
+  await r.setEx(key, 300, gatewayServerId); // 5-min TTL, refreshed by heartbeat
+  await r.sAdd(`user:devices:${userId}`, deviceId);
+}
+
+// On client disconnect or TTL expiry:
+async function deregisterConnection(userId: string, deviceId: string): Promise<void> {
+  await r.del(`conn:${userId}:${deviceId}`);
+  await r.sRem(`user:devices:${userId}`, deviceId);
+}
+
+// On message delivery:
+async function deliverMessage(toUserId: string, message: object): Promise<string> {
+  const deviceIds = await r.sMembers(`user:devices:${toUserId}`);
+
+  if (deviceIds.length === 0) {
+    return 'queued';
+  }
+
+  const deliveredTo: string[] = [];
+  for (const deviceId of deviceIds) {
+    const gatewayId = await r.get(`conn:${toUserId}:${deviceId}`);
+    if (!gatewayId) continue;
+
+    if (gatewayId === THIS_SERVER_ID) {
+      pushToWebSocket(toUserId, deviceId, message);
+    } else {
+      const channel = `gateway:${gatewayId}:inbox`;
+      await r.publish(channel, JSON.stringify({ user_id: toUserId, device_id: deviceId, message }));
+    }
+    deliveredTo.push(deviceId);
+  }
+
+  return deliveredTo.length > 0 ? 'delivered' : 'queued';
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"os"
+
+	"github.com/redis/go-redis/v9"
+)
+
+var rdb = redis.NewClient(&redis.Options{Addr: "redis-routing:6379"})
+
+var thisServerID = os.Getenv("GATEWAY_SERVER_ID")
+
+// On client connection:
+func registerConnection(ctx context.Context, userID, deviceID, gatewayServerID string) error {
+	key := fmt.Sprintf("conn:%s:%s", userID, deviceID)
+	if err := rdb.SetEx(ctx, key, gatewayServerID, 300*1e9).Err(); err != nil {
+		return err
+	}
+	return rdb.SAdd(ctx, fmt.Sprintf("user:devices:%s", userID), deviceID).Err()
+}
+
+// On client disconnect or TTL expiry:
+func deregisterConnection(ctx context.Context, userID, deviceID string) error {
+	rdb.Del(ctx, fmt.Sprintf("conn:%s:%s", userID, deviceID))
+	return rdb.SRem(ctx, fmt.Sprintf("user:devices:%s", userID), deviceID).Err()
+}
+
+// On message delivery:
+func deliverMessage(ctx context.Context, toUserID string, message map[string]interface{}) (string, error) {
+	deviceIDs, err := rdb.SMembers(ctx, fmt.Sprintf("user:devices:%s", toUserID)).Result()
+	if err != nil || len(deviceIDs) == 0 {
+		return "queued", err
+	}
+
+	var deliveredTo []string
+	for _, deviceID := range deviceIDs {
+		gatewayID, err := rdb.Get(ctx, fmt.Sprintf("conn:%s:%s", toUserID, deviceID)).Result()
+		if err != nil {
+			continue
+		}
+
+		if gatewayID == thisServerID {
+			pushToWebSocket(toUserID, deviceID, message)
+		} else {
+			channel := fmt.Sprintf("gateway:%s:inbox", gatewayID)
+			payload, _ := json.Marshal(map[string]interface{}{
+				"user_id":   toUserID,
+				"device_id": deviceID,
+				"message":   message,
+			})
+			rdb.Publish(ctx, channel, payload)
+		}
+		deliveredTo = append(deliveredTo, deviceID)
+	}
+
+	if len(deliveredTo) > 0 {
+		return "delivered", nil
+	}
+	return "queued", nil
+}
+```
+
 Each gateway server subscribes to its own inbox channel. Messages arrive as pub/sub events and are pushed to the appropriate WebSocket.
 
 ## Deep dive: message ordering with sequence numbers
@@ -220,6 +333,99 @@ def send_message(
     return message
 ```
 
+```typescript
+async function assignSequenceNumber(conversationId: string): Promise<number> {
+  const key = `seq:${conversationId}`;
+  return await r.incr(key);
+}
+
+interface Message {
+  message_id: string;
+  conversation_id: string;
+  sender_id: string;
+  content: Buffer;
+  sequence_number: number;
+  client_msg_id: string;
+  created_at: number;
+}
+
+async function sendMessage(
+  senderId: string,
+  conversationId: string,
+  content: Buffer,
+  clientMsgId: string
+): Promise<Message> {
+  const existing = await messageDb.getByClientMsgId(clientMsgId, senderId);
+  if (existing) {
+    return existing;
+  }
+
+  const seqNum = await assignSequenceNumber(conversationId);
+  const messageId = generateSnowflakeId();
+
+  const message: Message = {
+    message_id: messageId,
+    conversation_id: conversationId,
+    sender_id: senderId,
+    content,
+    sequence_number: seqNum,
+    client_msg_id: clientMsgId,
+    created_at: Date.now(),
+  };
+
+  await messageDb.insert(message);
+  await deliverMessage(await getRecipients(conversationId), message);
+  return message;
+}
+```
+
+```go
+func assignSequenceNumber(ctx context.Context, conversationID string) (int64, error) {
+	key := fmt.Sprintf("seq:%s", conversationID)
+	return rdb.Incr(ctx, key).Result()
+}
+
+type Message struct {
+	MessageID      string
+	ConversationID string
+	SenderID       string
+	Content        []byte // ciphertext; server cannot read this
+	SequenceNumber int64
+	ClientMsgID    string
+	CreatedAt      int64
+}
+
+func sendMessage(ctx context.Context, senderID, conversationID string, content []byte, clientMsgID string) (*Message, error) {
+	existing, err := messageDB.GetByClientMsgID(ctx, clientMsgID, senderID)
+	if err == nil && existing != nil {
+		return existing, nil
+	}
+
+	seqNum, err := assignSequenceNumber(ctx, conversationID)
+	if err != nil {
+		return nil, err
+	}
+	messageID := generateSnowflakeID()
+
+	msg := &Message{
+		MessageID:      messageID,
+		ConversationID: conversationID,
+		SenderID:       senderID,
+		Content:        content,
+		SequenceNumber: seqNum,
+		ClientMsgID:    clientMsgID,
+		CreatedAt:      time.Now().UnixMilli(),
+	}
+
+	if err := messageDB.Insert(ctx, msg); err != nil {
+		return nil, err
+	}
+	recipients, _ := getRecipients(ctx, conversationID)
+	deliverMessage(ctx, recipients, msg)
+	return msg, nil
+}
+```
+
 Clients sort displayed messages by `sequence_number`, not by `created_at`. If a message with seq 5 arrives before seq 4 (out-of-order delivery), the client buffers seq 5 and waits briefly for seq 4. After a timeout, it requests the missing message explicitly.
 
 ## Deep dive: multi-device sync
@@ -256,6 +462,70 @@ def handle_read_receipt(user_id: str, device_id: str, message_id: str):
         })
 ```
 
+```typescript
+async function syncMessageToDevices(userId: string, message: object): Promise<void> {
+  const deviceIds = await getActiveDevices(userId);
+  for (const deviceId of deviceIds) {
+    await deliverToDevice(userId, deviceId, message);
+  }
+}
+
+async function handleReadReceipt(userId: string, deviceId: string, messageId: string): Promise<void> {
+  const conversationId = await getConversationForMessage(messageId);
+  const seqNum = await getSequenceNumber(messageId);
+
+  await r.set(`read_pos:${conversationId}:${userId}`, seqNum);
+
+  const allDevices = await getActiveDevices(userId);
+  const otherDevices = allDevices.filter(d => d !== deviceId);
+  for (const otherDeviceId of otherDevices) {
+    await deliverToDevice(userId, otherDeviceId, {
+      type: 'read_sync',
+      conversation_id: conversationId,
+      read_through_seq: seqNum,
+    });
+  }
+}
+```
+
+```go
+func syncMessageToDevices(ctx context.Context, userID string, message map[string]interface{}) {
+	deviceIDs, _ := getActiveDevices(ctx, userID)
+	for _, deviceID := range deviceIDs {
+		deliverToDevice(ctx, userID, deviceID, message)
+	}
+}
+
+func handleReadReceipt(ctx context.Context, userID, deviceID, messageID string) error {
+	conversationID, err := getConversationForMessage(ctx, messageID)
+	if err != nil {
+		return err
+	}
+	seqNum, err := getSequenceNumber(ctx, messageID)
+	if err != nil {
+		return err
+	}
+
+	readPosKey := fmt.Sprintf("read_pos:%s:%s", conversationID, userID)
+	if err := rdb.Set(ctx, readPosKey, seqNum, 0).Err(); err != nil {
+		return err
+	}
+
+	allDevices, _ := getActiveDevices(ctx, userID)
+	for _, otherDeviceID := range allDevices {
+		if otherDeviceID == deviceID {
+			continue
+		}
+		deliverToDevice(ctx, userID, otherDeviceID, map[string]interface{}{
+			"type":              "read_sync",
+			"conversation_id":   conversationID,
+			"read_through_seq":  seqNum,
+		})
+	}
+	return nil
+}
+```
+
 The read position (`read_pos:{conversation_id}:{user_id}`) is a single integer in Redis: the highest sequence number the user has read. Any device can compute "unread count" as `max_seq - read_pos`. When the user reads on one device, the sync event propagates to all others within milliseconds.
 
 ## Deep dive: end-to-end encryption implications
@@ -276,6 +546,58 @@ CREATE TABLE messages (
 
 -- No content column. No plaintext. No search index.
 -- The server is a routing and storage intermediary, nothing more.
+```
+
+```typescript
+// What the server stores (ciphertext blob, opaque to server):
+// CREATE TABLE messages (
+//   message_id      BIGINT PRIMARY KEY,
+//   conversation_id UUID NOT NULL,
+//   sender_id       BIGINT NOT NULL,
+//   ciphertext      BYTEA NOT NULL,    -- server cannot decrypt this
+//   sequence_number BIGINT NOT NULL,
+//   client_msg_id   UUID UNIQUE NOT NULL,
+//   created_at      TIMESTAMPTZ NOT NULL
+// );
+//
+// No content column. No plaintext. No search index.
+// The server is a routing and storage intermediary, nothing more.
+
+interface StoredMessage {
+  message_id: bigint;
+  conversation_id: string;
+  sender_id: bigint;
+  ciphertext: Buffer;    // server cannot decrypt this
+  sequence_number: bigint;
+  client_msg_id: string;
+  created_at: Date;
+}
+```
+
+```go
+// What the server stores (ciphertext blob, opaque to server):
+// CREATE TABLE messages (
+//   message_id      BIGINT PRIMARY KEY,
+//   conversation_id UUID NOT NULL,
+//   sender_id       BIGINT NOT NULL,
+//   ciphertext      BYTEA NOT NULL,
+//   sequence_number BIGINT NOT NULL,
+//   client_msg_id   UUID UNIQUE NOT NULL,
+//   created_at      TIMESTAMPTZ NOT NULL
+// );
+//
+// No content column. No plaintext. No search index.
+// The server is a routing and storage intermediary, nothing more.
+
+type StoredMessage struct {
+	MessageID      int64
+	ConversationID string
+	SenderID       int64
+	Ciphertext     []byte // server cannot decrypt this
+	SequenceNumber int64
+	ClientMsgID    string
+	CreatedAt      time.Time
+}
 ```
 
 Operational implications the interview should address:
@@ -310,6 +632,68 @@ def encrypt_for_group(plaintext: bytes, group_session_key: bytes) -> bytes:
     Server receives one ciphertext; each member decrypts independently.
     """
     return aes_gcm_encrypt(plaintext, group_session_key)
+```
+
+```typescript
+// 1. Server cannot search message content
+//    Full-text search is impossible server-side.
+//    WhatsApp's "Search messages" feature runs entirely on the device,
+//    searching the local decrypted message store.
+
+// 2. Server cannot filter spam or CSAM by content
+//    Content moderation must be done differently:
+//    - hash-based matching on media (perceptual hashes sent alongside ciphertext)
+//    - metadata analysis (send frequency, group membership patterns)
+//    - user reports (sender identity, not content)
+
+// 3. Key loss = message loss
+//    If a user loses their device and did not back up their keys,
+//    all past messages are irrecoverable. WhatsApp offers optional
+//    encrypted backups to Google Drive / iCloud, but this is opt-in.
+
+// 4. Group key distribution
+//    For a group of N members, the sender encrypts the message N times
+//    (once per member's public key) or uses a group session key
+//    (Signal's Sender Keys protocol). Sender Keys: one encryption,
+//    each member can decrypt with their copy of the group session key.
+
+function encryptForGroup(plaintext: Buffer, groupSessionKey: Buffer): Buffer {
+  // With Sender Keys: encrypt once with the group session key.
+  // Each member has a copy of this key (distributed out-of-band).
+  // Server receives one ciphertext; each member decrypts independently.
+  return aesGcmEncrypt(plaintext, groupSessionKey);
+}
+```
+
+```go
+// 1. Server cannot search message content
+//    Full-text search is impossible server-side.
+//    WhatsApp's "Search messages" feature runs entirely on the device,
+//    searching the local decrypted message store.
+
+// 2. Server cannot filter spam or CSAM by content
+//    Content moderation must be done differently:
+//    - hash-based matching on media (perceptual hashes sent alongside ciphertext)
+//    - metadata analysis (send frequency, group membership patterns)
+//    - user reports (sender identity, not content)
+
+// 3. Key loss = message loss
+//    If a user loses their device and did not back up their keys,
+//    all past messages are irrecoverable. WhatsApp offers optional
+//    encrypted backups to Google Drive / iCloud, but this is opt-in.
+
+// 4. Group key distribution
+//    For a group of N members, the sender encrypts the message N times
+//    (once per member's public key) or uses a group session key
+//    (Signal's Sender Keys protocol). Sender Keys: one encryption,
+//    each member can decrypt with their copy of the group session key.
+
+func encryptForGroup(plaintext []byte, groupSessionKey []byte) ([]byte, error) {
+	// With Sender Keys: encrypt once with the group session key.
+	// Each member has a copy of this key (distributed out-of-band).
+	// Server receives one ciphertext; each member decrypts independently.
+	return aesGCMEncrypt(plaintext, groupSessionKey)
+}
 ```
 
 ## Failure modes

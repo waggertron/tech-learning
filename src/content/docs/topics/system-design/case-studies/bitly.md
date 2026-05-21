@@ -138,6 +138,71 @@ print(encode_base62(1_000_000))   # '4c92'
 print(decode_base62('4c92'))      # 1000000
 ```
 
+```typescript
+const CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; // 62 chars
+
+function encodeBase62(n: number): string {
+  if (n === 0) return CHARS[0];
+  const result: string[] = [];
+  while (n > 0) {
+    result.push(CHARS[n % 62]);
+    n = Math.floor(n / 62);
+  }
+  return result.reverse().join('');
+}
+
+function decodeBase62(s: string): number {
+  let result = 0;
+  for (const ch of s) {
+    result = result * 62 + CHARS.indexOf(ch);
+  }
+  return result;
+}
+
+console.log(encodeBase62(1));         // '1'
+console.log(encodeBase62(100000));    // 'q0U'
+console.log(encodeBase62(1000000));   // '4c92'
+console.log(decodeBase62('4c92'));    // 1000000
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+func encodeBase62(n int) string {
+	if n == 0 {
+		return string(chars[0])
+	}
+	result := []byte{}
+	for n > 0 {
+		result = append([]byte{chars[n%62]}, result...)
+		n /= 62
+	}
+	return string(result)
+}
+
+func decodeBase62(s string) int {
+	result := 0
+	for _, ch := range s {
+		result = result*62 + strings.IndexRune(chars, ch)
+	}
+	return result
+}
+
+func main() {
+	fmt.Println(encodeBase62(1))         // "1"
+	fmt.Println(encodeBase62(100000))    // "q0U"
+	fmt.Println(encodeBase62(1000000))   // "4c92"
+	fmt.Println(decodeBase62("4c92"))    // 1000000
+}
+```
+
 Problem: the database auto-increment becomes a write bottleneck at 3,500 writes/sec. Every write must hit the primary to get the next ID. If the primary is down, URL creation halts.
 
 **Option 2: Snowflake-style distributed ID service**
@@ -180,6 +245,91 @@ class SnowflakeGenerator:
 gen = SnowflakeGenerator(machine_id=1)
 id1 = gen.next_id()
 print(encode_base62(id1))  # 7-character short code
+```
+
+```typescript
+const EPOCH = 1_700_000_000_000n; // custom epoch (milliseconds), BigInt for bit ops
+
+class SnowflakeGenerator {
+  private machineId: bigint;
+  private sequence: bigint = 0n;
+  private lastMs: bigint = -1n;
+
+  constructor(machineId: number) {
+    if (machineId < 0 || machineId >= 1024) throw new Error('machineId must be 0-1023');
+    this.machineId = BigInt(machineId);
+  }
+
+  nextId(): bigint {
+    let ms = BigInt(Date.now()) - EPOCH;
+    if (ms === this.lastMs) {
+      this.sequence = (this.sequence + 1n) & 0xFFFn; // 12-bit mask
+      if (this.sequence === 0n) {
+        // sequence exhausted: wait for next millisecond
+        while (ms <= this.lastMs) {
+          ms = BigInt(Date.now()) - EPOCH;
+        }
+      }
+    } else {
+      this.sequence = 0n;
+    }
+    this.lastMs = ms;
+    return (ms << 22n) | (this.machineId << 12n) | this.sequence;
+  }
+}
+
+const gen = new SnowflakeGenerator(1);
+const id1 = gen.nextId();
+console.log(encodeBase62(Number(id1))); // 7-character short code
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+const snowflakeEpoch = int64(1_700_000_000_000) // custom epoch (milliseconds)
+
+type SnowflakeGenerator struct {
+	mu        sync.Mutex
+	machineID int64
+	sequence  int64
+	lastMs    int64
+}
+
+func NewSnowflakeGenerator(machineID int64) *SnowflakeGenerator {
+	return &SnowflakeGenerator{machineID: machineID, lastMs: -1}
+}
+
+func (g *SnowflakeGenerator) NextID() int64 {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+
+	ms := time.Now().UnixMilli() - snowflakeEpoch
+	if ms == g.lastMs {
+		g.sequence = (g.sequence + 1) & 0xFFF // 12-bit mask
+		if g.sequence == 0 {
+			// sequence exhausted: wait for next millisecond
+			for ms <= g.lastMs {
+				ms = time.Now().UnixMilli() - snowflakeEpoch
+			}
+		}
+	} else {
+		g.sequence = 0
+	}
+	g.lastMs = ms
+	return (ms << 22) | (g.machineID << 12) | g.sequence
+}
+
+func main() {
+	gen := NewSnowflakeGenerator(1)
+	id1 := gen.NextID()
+	fmt.Println(encodeBase62(int(id1))) // 7-character short code
+}
 ```
 
 App servers request IDs from the service in bulk (10,000 at a time), then serve from local memory. This removes the ID bottleneck entirely and survives brief service outages via local buffer.
@@ -240,6 +390,73 @@ def redirect(short_code: str) -> str | None:
     return record['long_url']
 ```
 
+```typescript
+import { createClient } from 'redis';
+
+const client = createClient({ url: 'redis://cache-cluster:6379' });
+await client.connect();
+
+async function redirect(shortCode: string): Promise<string | null> {
+  // 1. Check cache
+  const cached = await client.get(`url:${shortCode}`);
+  if (cached) return cached;
+
+  // 2. Cache miss: fetch from DB
+  const record = await db.queryOne<{ longUrl: string; expiresAt: Date | null }>(
+    'SELECT long_url, expires_at FROM urls WHERE short_code = $1',
+    [shortCode]
+  );
+  if (!record) return null;
+
+  // 3. Populate cache (skip expired URLs)
+  if (!record.expiresAt || record.expiresAt > new Date()) {
+    await client.setEx(`url:${shortCode}`, 3600, record.longUrl);
+  }
+
+  return record.longUrl;
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+)
+
+var rdb = redis.NewClient(&redis.Options{Addr: "cache-cluster:6379"})
+
+type URLRecord struct {
+	LongURL   string
+	ExpiresAt *time.Time
+}
+
+func redirect(ctx context.Context, shortCode string) (string, error) {
+	// 1. Check cache
+	cached, err := rdb.Get(ctx, fmt.Sprintf("url:%s", shortCode)).Result()
+	if err == nil {
+		return cached, nil
+	}
+
+	// 2. Cache miss: fetch from DB
+	record, err := dbQueryOne(ctx, shortCode)
+	if err != nil {
+		return "", err
+	}
+
+	// 3. Populate cache (skip expired URLs)
+	if record.ExpiresAt == nil || record.ExpiresAt.After(time.Now()) {
+		rdb.SetEx(ctx, fmt.Sprintf("url:%s", shortCode), record.LongURL, time.Hour)
+	}
+
+	return record.LongURL, nil
+}
+```
+
 Cache sizing: 10 GB Redis holds roughly 50M URL mappings at ~200 bytes each. The hot 1% of 5B URLs is 50M entries. A 10 GB cluster covers the hot tail entirely. Cache hit rate in production exceeds 99% for a mature system.
 
 LRU eviction means cold URLs age out naturally. If a URL goes viral after being cold for six months, it gets cached again on first hit.
@@ -289,6 +506,127 @@ def analytics_consumer():
             "INSERT INTO clicks VALUES",
             [event]
         )
+```
+
+```typescript
+import { Kafka } from 'kafkajs';
+
+interface ClickEvent {
+  shortCode: string;
+  timestamp: string;
+  ip: string;
+  userAgent: string;
+  referrer: string;
+}
+
+const kafka = new Kafka({ brokers: ['kafka-1:9092', 'kafka-2:9092'] });
+const producer = kafka.producer();
+await producer.connect();
+
+async function handleRedirect(shortCode: string, req: Request): Promise<string | null> {
+  const longUrl = await redirect(shortCode);
+  if (!longUrl) return null;
+
+  // fire-and-forget analytics event
+  producer.send({
+    topic: 'url.clicked',
+    messages: [{
+      value: JSON.stringify({
+        shortCode,
+        timestamp: new Date().toISOString(),
+        ip: req.headers.get('x-forwarded-for') ?? '',
+        userAgent: req.headers.get('user-agent') ?? '',
+        referrer: req.headers.get('referer') ?? '',
+      } satisfies ClickEvent),
+    }],
+  });
+
+  return longUrl; // caller issues 302
+}
+
+// Kafka consumer -- runs separately
+async function analyticsConsumer(): Promise<void> {
+  const consumer = kafka.consumer({ groupId: 'analytics-writers' });
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'url.clicked' });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const event: ClickEvent = JSON.parse(message.value!.toString());
+      await clickhouseClient.insert('INSERT INTO clicks VALUES', [event]);
+    },
+  });
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+	"net/http"
+	"time"
+
+	"github.com/segmentio/kafka-go"
+)
+
+type ClickEvent struct {
+	ShortCode string `json:"short_code"`
+	Timestamp string `json:"timestamp"`
+	IP        string `json:"ip"`
+	UserAgent string `json:"user_agent"`
+	Referrer  string `json:"referrer"`
+}
+
+var writer = &kafka.Writer{
+	Addr:  kafka.TCP("kafka-1:9092", "kafka-2:9092"),
+	Topic: "url.clicked",
+}
+
+func handleRedirect(ctx context.Context, shortCode string, r *http.Request) (string, error) {
+	longURL, err := redirectLookup(ctx, shortCode)
+	if err != nil || longURL == "" {
+		return "", err
+	}
+
+	// fire-and-forget analytics event
+	event := ClickEvent{
+		ShortCode: shortCode,
+		Timestamp: time.Now().UTC().Format(time.RFC3339),
+		IP:        r.RemoteAddr,
+		UserAgent: r.Header.Get("User-Agent"),
+		Referrer:  r.Header.Get("Referer"),
+	}
+	payload, _ := json.Marshal(event)
+	go writer.WriteMessages(ctx, kafka.Message{Value: payload})
+
+	return longURL, nil // caller issues 302
+}
+
+// Kafka consumer -- runs separately
+func analyticsConsumer(ctx context.Context) {
+	reader := kafka.NewReader(kafka.ReaderConfig{
+		Brokers: []string{"kafka-1:9092"},
+		Topic:   "url.clicked",
+		GroupID: "analytics-writers",
+	})
+	defer reader.Close()
+
+	for {
+		msg, err := reader.ReadMessage(ctx)
+		if err != nil {
+			log.Printf("consumer error: %v", err)
+			break
+		}
+		var event ClickEvent
+		if err := json.Unmarshal(msg.Value, &event); err != nil {
+			continue
+		}
+		clickhouseInsert(ctx, event)
+	}
+}
 ```
 
 The redirect path stays at under 10ms. The analytics pipeline has seconds of latency, but nobody needs real-time click analytics to the millisecond.

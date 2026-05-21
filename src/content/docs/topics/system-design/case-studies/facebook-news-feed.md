@@ -158,6 +158,113 @@ def fanout_worker():
         pipe.execute()
 ```
 
+```typescript
+import { Kafka } from 'kafkajs';
+import { createClient } from 'redis';
+
+const r = createClient({ url: 'redis://redis-cluster:6379' });
+await r.connect();
+
+const FEED_MAX_LENGTH = 1000;
+const CELEBRITY_THRESHOLD = 1_000_000;
+
+interface PostCreatedEvent {
+  post_id: string;
+  author_id: string;
+  created_at_ms: number;
+}
+
+async function fanoutWorker(): Promise<void> {
+  const kafka = new Kafka({ clientId: 'fanout', brokers: ['kafka:9092'] });
+  const consumer = kafka.consumer({ groupId: 'fanout-workers' });
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'post.created' });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const event: PostCreatedEvent = JSON.parse(message.value!.toString());
+      const { post_id, author_id, created_at_ms: timestamp } = event;
+
+      const followers = await getFollowers(author_id);
+
+      if (followers.length > CELEBRITY_THRESHOLD) {
+        await markCelebrityPost(author_id, post_id, timestamp);
+        return;
+      }
+
+      // push to all follower feeds
+      const pipeline = r.multi();
+      for (const followerId of followers) {
+        const feedKey = `feed:${followerId}`;
+        pipeline.zAdd(feedKey, [{ score: timestamp, value: post_id }]);
+        pipeline.zRemRangeByRank(feedKey, 0, -(FEED_MAX_LENGTH + 1));
+      }
+      await pipeline.exec();
+    },
+  });
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+
+	"github.com/redis/go-redis/v9"
+	kafka "github.com/segmentio/kafka-go"
+)
+
+var rdb = redis.NewClient(&redis.Options{Addr: "redis-cluster:6379"})
+
+const feedMaxLength = 1000
+const celebrityThreshold = 1_000_000
+
+type PostCreatedEvent struct {
+	PostID      string  `json:"post_id"`
+	AuthorID    string  `json:"author_id"`
+	CreatedAtMs float64 `json:"created_at_ms"`
+}
+
+func fanoutWorker(ctx context.Context) {
+	reader := kafka.NewReader(kafka.ReaderConfig{
+		Brokers: []string{"kafka:9092"},
+		Topic:   "post.created",
+		GroupID: "fanout-workers",
+	})
+	defer reader.Close()
+
+	for {
+		msg, err := reader.ReadMessage(ctx)
+		if err != nil {
+			break
+		}
+
+		var event PostCreatedEvent
+		if err := json.Unmarshal(msg.Value, &event); err != nil {
+			continue
+		}
+
+		followers, _ := getFollowers(ctx, event.AuthorID)
+
+		if len(followers) > celebrityThreshold {
+			markCelebrityPost(ctx, event.AuthorID, event.PostID, event.CreatedAtMs)
+			continue
+		}
+
+		pipe := rdb.Pipeline()
+		for _, followerID := range followers {
+			feedKey := fmt.Sprintf("feed:%s", followerID)
+			pipe.ZAdd(ctx, feedKey, redis.Z{Score: event.CreatedAtMs, Member: event.PostID})
+			pipe.ZRemRangeByRank(ctx, feedKey, 0, int64(-(feedMaxLength + 1)))
+		}
+		pipe.Exec(ctx)
+	}
+}
+```
+
 **Fan-out on read (pull):** for celebrities, fetch their recent posts at read time and merge into the candidate set.
 
 ```python
@@ -177,6 +284,50 @@ def get_celebrity_posts(user_id: str) -> list[dict]:
     return all_posts
 ```
 
+```typescript
+async function getCelebrityPosts(userId: string): Promise<Array<{ post_id: string; created_at: number }>> {
+  const celebrityFollowees = await getCelebrityFollowees(userId);
+  const allPosts: Array<{ post_id: string; created_at: number }> = [];
+
+  for (const celebId of celebrityFollowees) {
+    const posts = await postDb.query(
+      `SELECT post_id, created_at
+       FROM posts
+       WHERE author_id = $1
+       ORDER BY created_at DESC
+       LIMIT 50`,
+      [celebId]
+    );
+    allPosts.push(...posts);
+  }
+  return allPosts;
+}
+```
+
+```go
+func getCelebrityPosts(ctx context.Context, userID string) ([]map[string]interface{}, error) {
+	celebrityFollowees, err := getCelebrityFollowees(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	var allPosts []map[string]interface{}
+	for _, celebID := range celebrityFollowees {
+		posts, err := postDB.QueryContext(ctx, `
+			SELECT post_id, created_at
+			FROM posts
+			WHERE author_id = $1
+			ORDER BY created_at DESC
+			LIMIT 50`, celebID)
+		if err != nil {
+			continue
+		}
+		allPosts = append(allPosts, posts...)
+	}
+	return allPosts, nil
+}
+```
+
 **Hybrid read path:**
 
 ```python
@@ -194,6 +345,71 @@ def get_feed_candidates(user_id: str, limit: int = 200) -> list[str]:
     # 3. merge and deduplicate
     all_candidates = list(dict.fromkeys(push_post_ids + celeb_post_ids))
     return all_candidates[:limit]
+```
+
+```typescript
+async function getFeedCandidates(userId: string, limit: number = 200): Promise<string[]> {
+  const feedKey = `feed:${userId}`;
+
+  // 1. read from push feed (regular followees)
+  const pushEntries = await r.zRangeWithScores(feedKey, 0, limit - 1, { REV: true });
+  const pushPostIds = pushEntries.map(e => e.value);
+
+  // 2. pull from celebrities the user follows
+  const celebPosts = await getCelebrityPosts(userId);
+  const celebPostIds = celebPosts.map(p => p.post_id);
+
+  // 3. merge and deduplicate
+  const seen = new Set<string>();
+  const allCandidates: string[] = [];
+  for (const id of [...pushPostIds, ...celebPostIds]) {
+    if (!seen.has(id)) {
+      seen.add(id);
+      allCandidates.push(id);
+    }
+  }
+  return allCandidates.slice(0, limit);
+}
+```
+
+```go
+func getFeedCandidates(ctx context.Context, userID string, limit int) ([]string, error) {
+	if limit == 0 {
+		limit = 200
+	}
+	feedKey := fmt.Sprintf("feed:%s", userID)
+
+	// 1. read from push feed (regular followees)
+	pushEntries, err := rdb.ZRevRangeWithScores(ctx, feedKey, 0, int64(limit-1)).Result()
+	if err != nil {
+		return nil, err
+	}
+	pushPostIDs := make([]string, 0, len(pushEntries))
+	for _, e := range pushEntries {
+		pushPostIDs = append(pushPostIDs, e.Member.(string))
+	}
+
+	// 2. pull from celebrities the user follows
+	celebPosts, _ := getCelebrityPosts(ctx, userID)
+	celebPostIDs := make([]string, 0, len(celebPosts))
+	for _, p := range celebPosts {
+		celebPostIDs = append(celebPostIDs, fmt.Sprintf("%v", p["post_id"]))
+	}
+
+	// 3. merge and deduplicate
+	seen := make(map[string]bool)
+	var allCandidates []string
+	for _, id := range append(pushPostIDs, celebPostIDs...) {
+		if !seen[id] {
+			seen[id] = true
+			allCandidates = append(allCandidates, id)
+		}
+	}
+	if len(allCandidates) > limit {
+		allCandidates = allCandidates[:limit]
+	}
+	return allCandidates, nil
+}
 ```
 
 ## Deep dive: feed storage with Redis sorted sets
@@ -230,6 +446,88 @@ def read_feed_page(user_id: str, cursor_score: float = None, page_size: int = 20
     post_ids = [post_id.decode() for post_id, _ in entries]
     next_cursor = entries[-1][1] if entries else None
     return post_ids, next_cursor
+```
+
+```typescript
+async function addToFeed(followerId: string, postId: string, timestampMs: number): Promise<void> {
+  const key = `feed:${followerId}`;
+  await r.zAdd(key, [{ score: timestampMs, value: postId }]);
+  // keep only the 1000 most recent (highest scores)
+  await r.zRemRangeByRank(key, 0, -(FEED_MAX_LENGTH + 1));
+}
+
+interface FeedPage {
+  postIds: string[];
+  nextCursor: number | null;
+}
+
+async function readFeedPage(
+  userId: string,
+  cursorScore: number | null = null,
+  pageSize: number = 20
+): Promise<FeedPage> {
+  const key = `feed:${userId}`;
+  const maxScore = cursorScore != null ? cursorScore - 1 : '+inf';
+
+  const entries = await r.zRangeByScoreWithScores(key, maxScore, '-inf', {
+    REV: true,
+    LIMIT: { offset: 0, count: pageSize },
+  });
+
+  const postIds = entries.map(e => e.value);
+  const nextCursor = entries.length > 0 ? entries[entries.length - 1].score : null;
+  return { postIds, nextCursor };
+}
+```
+
+```go
+func addToFeed(ctx context.Context, followerID string, postID string, timestampMs float64) error {
+	key := fmt.Sprintf("feed:%s", followerID)
+	if err := rdb.ZAdd(ctx, key, redis.Z{Score: timestampMs, Member: postID}).Err(); err != nil {
+		return err
+	}
+	// keep only the 1000 most recent (highest scores)
+	return rdb.ZRemRangeByRank(ctx, key, 0, int64(-(feedMaxLength+1))).Err()
+}
+
+type FeedPage struct {
+	PostIDs    []string
+	NextCursor *float64
+}
+
+func readFeedPage(ctx context.Context, userID string, cursorScore *float64, pageSize int) (FeedPage, error) {
+	if pageSize == 0 {
+		pageSize = 20
+	}
+	key := fmt.Sprintf("feed:%s", userID)
+
+	maxScore := "+inf"
+	if cursorScore != nil {
+		maxScore = fmt.Sprintf("(%f", *cursorScore)
+	}
+
+	entries, err := rdb.ZRevRangeByScoreWithScores(ctx, key, &redis.ZRangeBy{
+		Max:    maxScore,
+		Min:    "-inf",
+		Offset: 0,
+		Count:  int64(pageSize),
+	}).Result()
+	if err != nil {
+		return FeedPage{}, err
+	}
+
+	postIDs := make([]string, len(entries))
+	for i, e := range entries {
+		postIDs[i] = e.Member.(string)
+	}
+
+	var nextCursor *float64
+	if len(entries) > 0 {
+		s := entries[len(entries)-1].Score
+		nextCursor = &s
+	}
+	return FeedPage{PostIDs: postIDs, NextCursor: nextCursor}, nil
+}
 ```
 
 The sorted set stores only post IDs, never content. At read time, post content is bulk-fetched from the post database (with read replicas) using a single multi-key lookup. This keeps Redis memory usage at 58 bytes/entry rather than 1 KB/entry, enabling 29 TB to fit in a manageable cluster.
@@ -291,6 +589,117 @@ def rank_candidates(viewer_id: str, candidates: list[Post]) -> list[Post]:
         scored.append((score, post))
     scored.sort(reverse=True)
     return [post for _, post in scored]
+```
+
+```typescript
+interface Post {
+  post_id: string;
+  author_id: string;
+  content_type: 'text' | 'photo' | 'video' | 'link';
+  created_at_ms: number;
+  reaction_count: number;
+  comment_count: number;
+  share_count: number;
+}
+
+class RankingFeatures {
+  static async affinityScore(viewerId: string, authorId: string): Promise<number> {
+    const interactions = await interactionDb.countRecent(viewerId, authorId, 90);
+    return Math.min(interactions / 100.0, 1.0);
+  }
+
+  static edgeWeight(post: Post): number {
+    const typeWeights: Record<string, number> = { video: 1.5, photo: 1.2, link: 0.9, text: 1.0 };
+    const base = typeWeights[post.content_type] ?? 1.0;
+    const engagement =
+      post.reaction_count * 1.0 +
+      post.comment_count * 2.0 +
+      post.share_count * 3.0;
+    return base * (1 + 0.01 * engagement);
+  }
+
+  static timeDecay(post: Post, nowMs: number): number {
+    const ageHours = (nowMs - post.created_at_ms) / 3_600_000;
+    return 1.0 / (1.0 + ageHours * 0.1);
+  }
+}
+
+async function rankCandidates(viewerId: string, candidates: Post[]): Promise<Post[]> {
+  const nowMs = Date.now();
+  const scored: Array<[number, Post]> = await Promise.all(
+    candidates.map(async post => {
+      const score =
+        (await RankingFeatures.affinityScore(viewerId, post.author_id)) *
+        RankingFeatures.edgeWeight(post) *
+        RankingFeatures.timeDecay(post, nowMs);
+      return [score, post] as [number, Post];
+    })
+  );
+  scored.sort((a, b) => b[0] - a[0]);
+  return scored.map(([, post]) => post);
+}
+```
+
+```go
+type Post struct {
+	PostID        string
+	AuthorID      string
+	ContentType   string // "text", "photo", "video", "link"
+	CreatedAtMs   float64
+	ReactionCount int
+	CommentCount  int
+	ShareCount    int
+}
+
+func affinityScore(ctx context.Context, viewerID, authorID string) float64 {
+	interactions := interactionDB.CountRecent(ctx, viewerID, authorID, 90)
+	score := float64(interactions) / 100.0
+	if score > 1.0 {
+		return 1.0
+	}
+	return score
+}
+
+func edgeWeight(post Post) float64 {
+	typeWeights := map[string]float64{"video": 1.5, "photo": 1.2, "link": 0.9, "text": 1.0}
+	base, ok := typeWeights[post.ContentType]
+	if !ok {
+		base = 1.0
+	}
+	engagement := float64(post.ReactionCount)*1.0 +
+		float64(post.CommentCount)*2.0 +
+		float64(post.ShareCount)*3.0
+	return base * (1 + 0.01*engagement)
+}
+
+func timeDecay(post Post, nowMs float64) float64 {
+	ageHours := (nowMs - post.CreatedAtMs) / 3_600_000
+	return 1.0 / (1.0 + ageHours*0.1)
+}
+
+type scoredPost struct {
+	score float64
+	post  Post
+}
+
+func rankCandidates(ctx context.Context, viewerID string, candidates []Post) []Post {
+	nowMs := float64(time.Now().UnixMilli())
+	scored := make([]scoredPost, len(candidates))
+	for i, post := range candidates {
+		s := affinityScore(ctx, viewerID, post.AuthorID) *
+			edgeWeight(post) *
+			timeDecay(post, nowMs)
+		scored[i] = scoredPost{score: s, post: post}
+	}
+	sort.Slice(scored, func(i, j int) bool {
+		return scored[i].score > scored[j].score
+	})
+	result := make([]Post, len(scored))
+	for i, sp := range scored {
+		result[i] = sp.post
+	}
+	return result
+}
 ```
 
 The ML model in production is far more complex (hundreds of features, deep learning), but the pipeline shape is the same: candidates from the sorted set, features computed per candidate, ranked by predicted engagement score, top N returned to the client.

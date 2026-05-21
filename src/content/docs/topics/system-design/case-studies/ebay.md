@@ -182,6 +182,167 @@ def place_bid(auction_id: str, user_id: str, max_bid: float, idempotency_key: st
         release_lock(r, lock_key, lock_val)
 ```
 
+```typescript
+import { createClient } from 'redis';
+import { randomUUID } from 'crypto';
+
+const redis = createClient({ url: 'redis://redis-locks:6379' });
+await redis.connect();
+
+interface BidResult {
+  bid_id?: string;
+  current_price: number;
+  is_winning: boolean;
+}
+
+async function placeBid(
+  auctionId: string,
+  userId: string,
+  maxBid: number,
+  idempotencyKey: string
+): Promise<BidResult> {
+  const lockKey = `auction:lock:${auctionId}`;
+  const lockVal = randomUUID();
+  // Acquire per-auction lock (10-second TTL -- enough for one bid processing cycle)
+  const acquired = await redis.set(lockKey, lockVal, { NX: true, PX: 10_000 });
+  if (!acquired) {
+    throw new RetryableError('auction temporarily busy, retry');
+  }
+
+  try {
+    const auction = await db.getAuction(auctionId);
+
+    if (auction.status !== 'ACTIVE') throw new AuctionEndedError();
+    if (auction.end_time <= now()) throw new AuctionEndedError();
+
+    // Check for existing bid from this user (proxy bid update)
+    const existing = await db.getBid(auctionId, userId);
+    if (existing && existing.max_bid >= maxBid) {
+      throw new BidTooLowError('your existing max bid is already higher');
+    }
+
+    // Proxy bid resolution: new current_price = min(max_bid, second_highest_max + increment)
+    const secondHighest = await db.getSecondHighestMaxBid(auctionId, { excludeUser: userId });
+    const increment = getBidIncrement(auction.current_price);
+    const newCurrent = secondHighest
+      ? Math.min(maxBid, secondHighest + increment)
+      : auction.start_price;
+
+    if (maxBid <= auction.current_price) {
+      return { is_winning: false, current_price: auction.current_price };
+    }
+
+    // Idempotency: check if this key was already processed
+    if (await db.bidExistsByIdempotencyKey(idempotencyKey)) {
+      return db.getBidResult(idempotencyKey);
+    }
+
+    const bidId = snowflakeId();
+    await db.writeBid(auctionId, userId, bidId, maxBid, newCurrent, idempotencyKey);
+    await db.updateAuctionCurrentPrice(auctionId, newCurrent, userId);
+
+    // Anti-snipe: if bid arrives within 5 minutes of end, extend by 5 minutes
+    if (auction.end_time - now() < 300) {
+      await db.extendAuction(auctionId, 300);
+    }
+
+    await publishBidEvent(auctionId, bidId, newCurrent);
+
+    return { bid_id: bidId, current_price: newCurrent, is_winning: true };
+  } finally {
+    // Release lock only if we still own it
+    await releaseLock(redis, lockKey, lockVal);
+  }
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"math"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
+)
+
+type BidResult struct {
+	BidID        string  `json:"bid_id,omitempty"`
+	CurrentPrice float64 `json:"current_price"`
+	IsWinning    bool    `json:"is_winning"`
+}
+
+func placeBid(ctx context.Context, auctionID, userID string, maxBid float64, idempotencyKey string) (*BidResult, error) {
+	lockKey := fmt.Sprintf("auction:lock:%s", auctionID)
+	lockVal := uuid.New().String()
+	// Acquire per-auction lock (10-second TTL -- enough for one bid processing cycle)
+	acquired, err := rdb.SetNX(ctx, lockKey, lockVal, 10*time.Second).Result()
+	if err != nil {
+		return nil, err
+	}
+	if !acquired {
+		return nil, &RetryableError{msg: "auction temporarily busy, retry"}
+	}
+
+	defer releaseLock(ctx, rdb, lockKey, lockVal)
+
+	auction, err := db.GetAuction(ctx, auctionID)
+	if err != nil {
+		return nil, err
+	}
+
+	if auction.Status != "ACTIVE" {
+		return nil, &AuctionEndedError{}
+	}
+	if auction.EndTime <= time.Now().Unix() {
+		return nil, &AuctionEndedError{}
+	}
+
+	// Check for existing bid from this user (proxy bid update)
+	existing, _ := db.GetBid(ctx, auctionID, userID)
+	if existing != nil && existing.MaxBid >= maxBid {
+		return nil, &BidTooLowError{msg: "your existing max bid is already higher"}
+	}
+
+	// Proxy bid resolution: new current_price = min(max_bid, second_highest_max + increment)
+	secondHighest, _ := db.GetSecondHighestMaxBid(ctx, auctionID, userID)
+	increment := getBidIncrement(auction.CurrentPrice)
+	newCurrent := auction.StartPrice
+	if secondHighest > 0 {
+		newCurrent = math.Min(maxBid, secondHighest+increment)
+	}
+
+	if maxBid <= auction.CurrentPrice {
+		return &BidResult{IsWinning: false, CurrentPrice: auction.CurrentPrice}, nil
+	}
+
+	// Idempotency: check if this key was already processed
+	if existing, _ := db.BidExistsByIdempotencyKey(ctx, idempotencyKey); existing {
+		return db.GetBidResult(ctx, idempotencyKey)
+	}
+
+	bidID := snowflakeID()
+	if err := db.WriteBid(ctx, auctionID, userID, bidID, maxBid, newCurrent, idempotencyKey); err != nil {
+		return nil, err
+	}
+	if err := db.UpdateAuctionCurrentPrice(ctx, auctionID, newCurrent, userID); err != nil {
+		return nil, err
+	}
+
+	// Anti-snipe: if bid arrives within 5 minutes of end, extend by 5 minutes
+	if auction.EndTime-time.Now().Unix() < 300 {
+		db.ExtendAuction(ctx, auctionID, 300)
+	}
+
+	publishBidEvent(ctx, auctionID, bidID, newCurrent)
+
+	return &BidResult{BidID: bidID, CurrentPrice: newCurrent, IsWinning: true}, nil
+}
+```
+
 The per-auction lock (not a global lock) means 10M active auctions have 10M independent lock namespaces. Contention only occurs within a single auction, and only in the final minutes when bid frequency is highest.
 
 ## Deep dive: proxy bidding
@@ -221,6 +382,105 @@ def resolve_proxy_bids(auction_id: str):
     return current_price
 ```
 
+```typescript
+const BID_INCREMENTS: [number, number][] = [
+  [1.00,     0.05],
+  [5.00,     0.25],
+  [25.00,    0.50],
+  [100.00,   1.00],
+  [250.00,   2.50],
+  [500.00,   5.00],
+  [1000.00,  10.00],
+  [2500.00,  25.00],
+  [Infinity, 50.00],
+];
+
+function getBidIncrement(currentPrice: number): number {
+  for (const [threshold, increment] of BID_INCREMENTS) {
+    if (currentPrice < threshold) return increment;
+  }
+  return 50.00;
+}
+
+interface MaxBidRow {
+  user_id: string;
+  max_bid: number;
+}
+
+async function resolveProxyBids(auctionId: string): Promise<number> {
+  // Re-resolve after any bid to set correct current price
+  const topTwo: MaxBidRow[] = await db.getTopTwoMaxBids(auctionId);
+  if (topTwo.length < 2) {
+    return topTwo[0]?.max_bid ?? 0;
+  }
+
+  const winnerMax = topTwo[0].max_bid;
+  const secondMax = topTwo[1].max_bid;
+  const increment = getBidIncrement(secondMax);
+  const currentPrice = Math.min(winnerMax, secondMax + increment);
+  await db.setCurrentPrice(auctionId, currentPrice, topTwo[0].user_id);
+  return currentPrice;
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"math"
+)
+
+var bidIncrements = [][2]float64{
+	{1.00,     0.05},
+	{5.00,     0.25},
+	{25.00,    0.50},
+	{100.00,   1.00},
+	{250.00,   2.50},
+	{500.00,   5.00},
+	{1000.00,  10.00},
+	{2500.00,  25.00},
+	{math.Inf(1), 50.00},
+}
+
+func getBidIncrement(currentPrice float64) float64 {
+	for _, pair := range bidIncrements {
+		if currentPrice < pair[0] {
+			return pair[1]
+		}
+	}
+	return 50.00
+}
+
+type MaxBidRow struct {
+	UserID string
+	MaxBid float64
+}
+
+// resolveProxyBids re-resolves after any bid to set the correct current price.
+func resolveProxyBids(ctx context.Context, auctionID string) (float64, error) {
+	topTwo, err := db.GetTopTwoMaxBids(ctx, auctionID)
+	if err != nil {
+		return 0, err
+	}
+	if len(topTwo) < 2 {
+		if len(topTwo) == 1 {
+			return topTwo[0].MaxBid, nil
+		}
+		return 0, nil
+	}
+
+	winnerMax := topTwo[0].MaxBid
+	secondMax := topTwo[1].MaxBid
+	increment := getBidIncrement(secondMax)
+	currentPrice := math.Min(winnerMax, secondMax+increment)
+	if err := db.SetCurrentPrice(ctx, auctionID, currentPrice, topTwo[0].UserID); err != nil {
+		return 0, err
+	}
+	return currentPrice, nil
+}
+```
+
 A critical invariant: the displayed current price is always less than or equal to the winning bidder's max_bid, and always one increment above the second-highest max_bid. Max bids are never revealed to other users or the seller -- only the current price is visible.
 
 ## Deep dive: real-time bid updates
@@ -254,6 +514,124 @@ def handle_bid_event(event: dict):
         # Offline watchers get a push notification via notification service
 ```
 
+```typescript
+import { Kafka } from 'kafkajs';
+import { createClient } from 'redis';
+
+const kafka = new Kafka({ brokers: ['kafka:9092'] });
+const producer = kafka.producer();
+await producer.connect();
+
+const redis = createClient({ url: 'redis://redis-conn:6379' });
+await redis.connect();
+
+interface BidEvent {
+  type: 'new_bid';
+  auction_id: string;
+  bid_id: string;
+  current_price: number;
+  bid_count: number;
+  time_remaining_seconds: number;
+}
+
+async function publishBidEvent(auctionId: string, bidId: string, newPrice: number): Promise<void> {
+  const event: BidEvent = {
+    type: 'new_bid',
+    auction_id: auctionId,
+    bid_id: bidId,
+    current_price: newPrice,
+    bid_count: await db.getBidCount(auctionId),
+    time_remaining_seconds: await db.getTimeRemaining(auctionId),
+  };
+  // Publish to Kafka for durability and fan-out
+  await producer.send({
+    topic: 'bid-events',
+    messages: [{ key: auctionId, value: JSON.stringify(event) }],
+  });
+}
+
+// Watch fanout consumer
+async function handleBidEvent(event: BidEvent): Promise<void> {
+  const watchers = await db.getAuctionWatchers(event.auction_id); // users who have this auction open
+  for (const userId of watchers) {
+    const gatewayId = await redis.get(`conn:${userId}`);
+    if (gatewayId) {
+      await redis.publish(`gateway:${gatewayId}`, JSON.stringify({
+        user_id: userId,
+        payload: event,
+      }));
+    }
+    // Offline watchers get a push notification via notification service
+  }
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+
+	"github.com/segmentio/kafka-go"
+)
+
+type BidEvent struct {
+	Type                 string  `json:"type"`
+	AuctionID            string  `json:"auction_id"`
+	BidID                string  `json:"bid_id"`
+	CurrentPrice         float64 `json:"current_price"`
+	BidCount             int     `json:"bid_count"`
+	TimeRemainingSeconds int64   `json:"time_remaining_seconds"`
+}
+
+func publishBidEvent(ctx context.Context, auctionID, bidID string, newPrice float64) error {
+	bidCount, _ := db.GetBidCount(ctx, auctionID)
+	timeRemaining, _ := db.GetTimeRemaining(ctx, auctionID)
+	event := BidEvent{
+		Type:                 "new_bid",
+		AuctionID:            auctionID,
+		BidID:                bidID,
+		CurrentPrice:         newPrice,
+		BidCount:             bidCount,
+		TimeRemainingSeconds: timeRemaining,
+	}
+	data, err := json.Marshal(event)
+	if err != nil {
+		return err
+	}
+	// Publish to Kafka for durability and fan-out
+	w := kafka.NewWriter(kafka.WriterConfig{
+		Brokers: []string{"kafka:9092"},
+		Topic:   "bid-events",
+	})
+	defer w.Close()
+	return w.WriteMessages(ctx, kafka.Message{Key: []byte(auctionID), Value: data})
+}
+
+// handleBidEvent is the watch fanout consumer.
+func handleBidEvent(ctx context.Context, event BidEvent) error {
+	watchers, err := db.GetAuctionWatchers(ctx, event.AuctionID) // users who have this auction open
+	if err != nil {
+		return err
+	}
+	payload, _ := json.Marshal(event)
+	for _, userID := range watchers {
+		gatewayID, err := rdb.Get(ctx, fmt.Sprintf("conn:%s", userID)).Result()
+		if err == nil && gatewayID != "" {
+			msg, _ := json.Marshal(map[string]interface{}{
+				"user_id": userID,
+				"payload": json.RawMessage(payload),
+			})
+			rdb.Publish(ctx, fmt.Sprintf("gateway:%s", gatewayID), string(msg))
+		}
+		// Offline watchers get a push notification via notification service
+	}
+	return nil
+}
+```
+
 Auction watcher lists are stored in Redis as a set: `SADD watchers:{auction_id} {user_id}` on WebSocket connect, `SREM` on disconnect. TTL = auction end time. For a popular auction with 10,000 watchers and 100 bids/sec in the final minute, that is 1M Redis publishes/sec peak for that one auction. Mitigate with broadcast to a pub/sub channel instead of per-user publishes:
 
 ```python
@@ -262,6 +640,22 @@ r.publish(f"auction:{auction_id}:bids", json.dumps(event))
 
 # Gateway servers subscribe to all auctions their connected users are watching
 # On receiving a channel message, fan out to all local WebSocket connections watching that auction
+```
+
+```typescript
+// Instead of per-user publish, publish once to auction channel
+await redis.publish(`auction:${auctionId}:bids`, JSON.stringify(event));
+
+// Gateway servers subscribe to all auctions their connected users are watching
+// On receiving a channel message, fan out to all local WebSocket connections watching that auction
+```
+
+```go
+// Instead of per-user publish, publish once to auction channel
+rdb.Publish(ctx, fmt.Sprintf("auction:%s:bids", auctionID), string(payload))
+
+// Gateway servers subscribe to all auctions their connected users are watching
+// On receiving a channel message, fan out to all local WebSocket connections watching that auction
 ```
 
 ## Deep dive: auction end and payment
@@ -291,6 +685,110 @@ def close_auction(auction_id: str):
             db.update_auction(auction_id, status="ENDED_NO_SALE")
 
         r.zrem("auctions:ending", auction_id)
+```
+
+```typescript
+import { Kafka } from 'kafkajs';
+import { createClient } from 'redis';
+
+const kafka = new Kafka({ brokers: ['kafka:9092'] });
+const producer = kafka.producer();
+await producer.connect();
+
+const redis = createClient({ url: 'redis://redis-auctions:6379' });
+await redis.connect();
+
+async function closeAuction(auctionId: string): Promise<void> {
+  await db.transaction(async (tx) => {
+    const auction = await tx.lockAndGet(auctionId);
+    if (auction.status !== 'ACTIVE') {
+      return; // idempotent: already closed
+    }
+
+    const winner = await tx.getWinningBidder(auctionId);
+    const finalPrice = auction.current_price;
+
+    if (winner && finalPrice >= (auction.reserve_price ?? 0)) {
+      await tx.updateAuction(auctionId, { status: 'ENDED', winner_id: winner, final_price: finalPrice });
+      await paymentService.createEscrow({
+        buyer_id: winner,
+        seller_id: auction.seller_id,
+        amount: finalPrice,
+        auction_id: auctionId,
+      });
+      await producer.send({
+        topic: 'auction-ended',
+        messages: [{ key: auctionId, value: JSON.stringify({ auction_id: auctionId, winner, price: finalPrice }) }],
+      });
+    } else {
+      await tx.updateAuction(auctionId, { status: 'ENDED_NO_SALE' });
+    }
+
+    await redis.zRem('auctions:ending', auctionId);
+  });
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+
+	"github.com/segmentio/kafka-go"
+)
+
+func closeAuction(ctx context.Context, auctionID string) error {
+	return db.Transaction(ctx, func(ctx context.Context, tx DB) error {
+		auction, err := tx.LockAndGet(ctx, auctionID)
+		if err != nil {
+			return err
+		}
+		if auction.Status != "ACTIVE" {
+			return nil // idempotent: already closed
+		}
+
+		winner, err := tx.GetWinningBidder(ctx, auctionID)
+		if err != nil {
+			return err
+		}
+		finalPrice := auction.CurrentPrice
+
+		if winner != "" && finalPrice >= auction.ReservePrice {
+			if err := tx.UpdateAuction(ctx, auctionID, AuctionUpdate{
+				Status:     "ENDED",
+				WinnerID:   winner,
+				FinalPrice: finalPrice,
+			}); err != nil {
+				return err
+			}
+			if err := paymentService.CreateEscrow(ctx, EscrowRequest{
+				BuyerID:   winner,
+				SellerID:  auction.SellerID,
+				Amount:    finalPrice,
+				AuctionID: auctionID,
+			}); err != nil {
+				return err
+			}
+			msg, _ := json.Marshal(map[string]interface{}{
+				"auction_id": auctionID,
+				"winner":     winner,
+				"price":      finalPrice,
+			})
+			w := kafka.NewWriter(kafka.WriterConfig{Brokers: []string{"kafka:9092"}, Topic: "auction-ended"})
+			defer w.Close()
+			w.WriteMessages(ctx, kafka.Message{Key: []byte(auctionID), Value: msg})
+		} else {
+			if err := tx.UpdateAuction(ctx, auctionID, AuctionUpdate{Status: "ENDED_NO_SALE"}); err != nil {
+				return err
+			}
+		}
+
+		rdb.ZRem(ctx, "auctions:ending", auctionID)
+		return nil
+	})
+}
 ```
 
 The payment escrow flow: buyer is charged immediately. Funds are held by eBay. When the seller marks the item as shipped and the buyer confirms receipt (or a 14-day window expires), eBay releases funds to the seller. Disputes pause the release and route to customer support.

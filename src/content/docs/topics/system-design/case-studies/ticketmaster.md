@@ -166,6 +166,119 @@ def confirm_booking(booking_id: str, seat_ids: list[str], user_id: str):
         # lock can stay until it expires: confirmed booking supersedes it
 ```
 
+```typescript
+import { createClient } from 'redis';
+
+const client = createClient({ url: 'redis://redis-cluster:6379' });
+await client.connect();
+
+const HOLD_DURATION_MS = 10 * 60 * 1000; // 10 minutes
+
+async function tryReserveSeat(seatId: string, userId: string): Promise<boolean> {
+  // SET key value NX PX milliseconds -- atomic, sets only if key does not exist
+  const result = await client.set(`seat:lock:${seatId}`, userId, {
+    NX: true,
+    PX: HOLD_DURATION_MS,
+  });
+  return result !== null;
+}
+
+async function releaseSeat(seatId: string, userId: string): Promise<boolean> {
+  // Lua script: release only if this user holds the lock
+  const luaScript = `
+    if redis.call("GET", KEYS[1]) == ARGV[1] then
+      return redis.call("DEL", KEYS[1])
+    else
+      return 0
+    end
+  `;
+  const result = await client.eval(luaScript, {
+    keys: [`seat:lock:${seatId}`],
+    arguments: [userId],
+  });
+  return result === 1;
+}
+
+async function confirmBooking(bookingId: string, seatIds: string[], userId: string): Promise<void> {
+  // Write confirmed booking to DB
+  await db.execute(
+    `INSERT INTO bookings (booking_id, user_id, seat_ids, status, confirmed_at)
+     VALUES ($1, $2, $3, 'confirmed', NOW())`,
+    [bookingId, userId, seatIds]
+  );
+
+  // Mark seats as sold in the DB and cache
+  for (const seatId of seatIds) {
+    await db.execute('UPDATE seats SET status = $1 WHERE seat_id = $2', ['sold', seatId]);
+    await client.set(`seat:status:${seatId}`, 'sold');
+    // lock can stay until it expires: confirmed booking supersedes it
+  }
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+)
+
+var rdb = redis.NewClient(&redis.Options{Addr: "redis-cluster:6379"})
+
+const holdDuration = 10 * time.Minute
+
+func tryReserveSeat(ctx context.Context, seatID, userID string) (bool, error) {
+	// SET key value NX PX -- atomic, sets only if key does not exist
+	result, err := rdb.SetNX(ctx, fmt.Sprintf("seat:lock:%s", seatID), userID, holdDuration).Result()
+	if err != nil {
+		return false, err
+	}
+	return result, nil
+}
+
+// luaRelease releases the lock only if the caller is the lock holder.
+var luaRelease = redis.NewScript(`
+	if redis.call("GET", KEYS[1]) == ARGV[1] then
+		return redis.call("DEL", KEYS[1])
+	else
+		return 0
+	end
+`)
+
+func releaseSeat(ctx context.Context, seatID, userID string) (bool, error) {
+	result, err := luaRelease.Run(ctx, rdb, []string{fmt.Sprintf("seat:lock:%s", seatID)}, userID).Int()
+	if err != nil {
+		return false, err
+	}
+	return result == 1, nil
+}
+
+func confirmBooking(ctx context.Context, bookingID string, seatIDs []string, userID string) error {
+	// Write confirmed booking to DB
+	if err := db.ExecContext(ctx, `
+		INSERT INTO bookings (booking_id, user_id, seat_ids, status, confirmed_at)
+		VALUES ($1, $2, $3, 'confirmed', NOW())`,
+		bookingID, userID, seatIDs,
+	); err != nil {
+		return err
+	}
+
+	// Mark seats as sold in the DB and cache
+	for _, seatID := range seatIDs {
+		if err := db.ExecContext(ctx, "UPDATE seats SET status = 'sold' WHERE seat_id = $1", seatID); err != nil {
+			return err
+		}
+		rdb.Set(ctx, fmt.Sprintf("seat:status:%s", seatID), "sold", 0)
+		// lock can stay until it expires: confirmed booking supersedes it
+	}
+	return nil
+}
+```
+
 The Lua script for release is critical: it checks that the caller is the lock holder before deleting. Without this check, a slow payment process could expire the lock, a second user could acquire it, and then the first user's delayed release would evict the second user's lock.
 
 ## Deep dive: flash sale queue
@@ -228,6 +341,180 @@ for msg in consumer:
         })
 ```
 
+```typescript
+import { Kafka } from 'kafkajs';
+import { createClient } from 'redis';
+
+interface SaleRequest {
+  requestId: string;
+  userId: string;
+  eventId: string;
+  seatIds: string[];
+  enqueuedAt: number;
+}
+
+const kafka = new Kafka({ brokers: ['kafka-1:9092'] });
+const producer = kafka.producer();
+await producer.connect();
+
+const redisClient = createClient({ url: 'redis://redis-cluster:6379' });
+await redisClient.connect();
+
+async function enqueueReservationRequest(
+  userId: string,
+  eventId: string,
+  seatIds: string[],
+): Promise<string> {
+  const requestId = generateSnowflakeId();
+  const queuePosition = (await getQueueDepth(eventId)) + 1;
+
+  await producer.send({
+    topic: 'sale.requests',
+    messages: [{
+      value: JSON.stringify({
+        requestId,
+        userId,
+        eventId,
+        seatIds,
+        enqueuedAt: Date.now() / 1000,
+      } satisfies SaleRequest),
+    }],
+  });
+
+  // store queue position in Redis for polling
+  await redisClient.setEx(`queue:position:${requestId}`, 3600, String(queuePosition));
+
+  return requestId;
+}
+
+// Worker: drains the queue at a controlled rate
+async function startBookingWorker(): Promise<void> {
+  const consumer = kafka.consumer({ groupId: 'booking-workers' });
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'sale.requests' });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const req: SaleRequest = JSON.parse(message.value!.toString());
+      let success = true;
+
+      for (const seatId of req.seatIds) {
+        const reserved = await tryReserveSeat(seatId, req.userId);
+        if (!reserved) {
+          // seat taken: notify user, suggest alternatives
+          await notifyUser(req.userId, 'seat_unavailable', seatId);
+          success = false;
+          break;
+        }
+      }
+
+      if (success) {
+        const bookingId = await createPendingBooking(req);
+        await notifyUser(req.userId, 'seats_held', {
+          bookingId,
+          heldUntil: Date.now() / 1000 + 600,
+          paymentUrl: `/bookings/${bookingId}/pay`,
+        });
+      }
+    },
+  });
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+	"github.com/segmentio/kafka-go"
+)
+
+type SaleRequest struct {
+	RequestID  string   `json:"request_id"`
+	UserID     string   `json:"user_id"`
+	EventID    string   `json:"event_id"`
+	SeatIDs    []string `json:"seat_ids"`
+	EnqueuedAt float64  `json:"enqueued_at"`
+}
+
+var saleWriter = &kafka.Writer{
+	Addr:  kafka.TCP("kafka-1:9092"),
+	Topic: "sale.requests",
+}
+
+func enqueueReservationRequest(ctx context.Context, userID, eventID string, seatIDs []string) (string, error) {
+	requestID := generateSnowflakeID()
+	queuePosition, err := getQueueDepth(ctx, eventID)
+	if err != nil {
+		return "", err
+	}
+
+	req := SaleRequest{
+		RequestID:  requestID,
+		UserID:     userID,
+		EventID:    eventID,
+		SeatIDs:    seatIDs,
+		EnqueuedAt: float64(time.Now().UnixMilli()) / 1000,
+	}
+	payload, _ := json.Marshal(req)
+	if err := saleWriter.WriteMessages(ctx, kafka.Message{Value: payload}); err != nil {
+		return "", err
+	}
+
+	// store queue position in Redis for polling
+	rdb.SetEx(ctx, fmt.Sprintf("queue:position:%s", requestID), fmt.Sprintf("%d", queuePosition+1), time.Hour)
+
+	return requestID, nil
+}
+
+// startBookingWorker drains the queue at a controlled rate.
+func startBookingWorker(ctx context.Context) {
+	reader := kafka.NewReader(kafka.ReaderConfig{
+		Brokers: []string{"kafka-1:9092"},
+		Topic:   "sale.requests",
+		GroupID: "booking-workers",
+	})
+	defer reader.Close()
+
+	for {
+		m, err := reader.ReadMessage(ctx)
+		if err != nil {
+			log.Printf("worker read error: %v", err)
+			break
+		}
+		var req SaleRequest
+		if err := json.Unmarshal(m.Value, &req); err != nil {
+			continue
+		}
+
+		success := true
+		for _, seatID := range req.SeatIDs {
+			reserved, err := tryReserveSeat(ctx, seatID, req.UserID)
+			if err != nil || !reserved {
+				notifyUser(ctx, req.UserID, "seat_unavailable", seatID)
+				success = false
+				break
+			}
+		}
+
+		if success {
+			bookingID, _ := createPendingBooking(ctx, req)
+			notifyUser(ctx, req.UserID, "seats_held", map[string]interface{}{
+				"booking_id":  bookingID,
+				"held_until":  time.Now().Unix() + 600,
+				"payment_url": fmt.Sprintf("/bookings/%s/pay", bookingID),
+			})
+		}
+	}
+}
+```
+
 Workers can scale horizontally. Each worker processes one request at a time, performing the Redis SET NX and database write sequentially. The Redis lock ensures two workers never double-book the same seat even if they process requests concurrently.
 
 ## Deep dive: seat map caching
@@ -264,6 +551,113 @@ def get_seat_availability(event_id: str) -> dict:
     # cache the merged result, short TTL during active sale
     r.setex(cache_key, 10, json.dumps(seat_map))  # 10-second TTL
     return seat_map
+```
+
+```typescript
+import { createClient } from 'redis';
+
+const client = createClient({ url: 'redis://redis-cluster:6379' });
+await client.connect();
+
+interface SeatRecord {
+  seatId: string;
+  section: string;
+  row: string;
+  number: number;
+  status: string;
+  priceTier: string;
+}
+
+interface SeatMapEntry extends SeatRecord {
+  status: string; // may be overridden to 'held'
+}
+
+async function getSeatAvailability(eventId: string): Promise<Record<string, SeatMapEntry>> {
+  const cacheKey = `event:seats:${eventId}`;
+
+  // try cache first
+  const cached = await client.get(cacheKey);
+  if (cached) return JSON.parse(cached);
+
+  // cache miss: query DB
+  const seats = await db.query<SeatRecord>(
+    `SELECT seat_id, section, row, number, status, price_tier
+     FROM seats
+     WHERE event_id = $1
+     ORDER BY section, row, number`,
+    [eventId]
+  );
+
+  // overlay lock status from Redis
+  const seatMap: Record<string, SeatMapEntry> = {};
+  for (const seat of seats) {
+    const lockHolder = await client.get(`seat:lock:${seat.seatId}`);
+    seatMap[seat.seatId] = {
+      ...seat,
+      status: lockHolder ? 'held' : seat.status,
+    };
+  }
+
+  // cache the merged result, short TTL during active sale
+  await client.setEx(cacheKey, 10, JSON.stringify(seatMap)); // 10-second TTL
+  return seatMap;
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+)
+
+type SeatRecord struct {
+	SeatID    string `json:"seat_id" db:"seat_id"`
+	Section   string `json:"section" db:"section"`
+	Row       string `json:"row"     db:"row"`
+	Number    int    `json:"number"  db:"number"`
+	Status    string `json:"status"  db:"status"`
+	PriceTier string `json:"price_tier" db:"price_tier"`
+}
+
+func getSeatAvailability(ctx context.Context, eventID string) (map[string]SeatRecord, error) {
+	cacheKey := fmt.Sprintf("event:seats:%s", eventID)
+
+	// try cache first
+	cached, err := rdb.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var seatMap map[string]SeatRecord
+		if jsonErr := json.Unmarshal([]byte(cached), &seatMap); jsonErr == nil {
+			return seatMap, nil
+		}
+	}
+
+	// cache miss: query DB
+	seats, err := dbQuerySeats(ctx, eventID)
+	if err != nil {
+		return nil, err
+	}
+
+	// overlay lock status from Redis
+	seatMap := make(map[string]SeatRecord, len(seats))
+	for _, seat := range seats {
+		lockHolder, _ := rdb.Get(ctx, fmt.Sprintf("seat:lock:%s", seat.SeatID)).Result()
+		if lockHolder != "" {
+			seat.Status = "held"
+		}
+		seatMap[seat.SeatID] = seat
+	}
+
+	// cache the merged result, short TTL during active sale
+	payload, _ := json.Marshal(seatMap)
+	rdb.SetEx(ctx, cacheKey, string(payload), 10*time.Second) // 10-second TTL
+	return seatMap, nil
+}
 ```
 
 During peak sale: 10-second TTL means at most 10 seconds of stale data. Users may see a seat as available that was just locked, which leads to a failed reservation attempt. This is acceptable: the user gets an error message and can select another seat. Overselling (the dangerous failure mode) is prevented by the Redis lock, not by the cache.
@@ -305,6 +699,110 @@ def reserve_seats(user_id: str, event_id: str, seat_ids: list[str], idempotency_
             return {'booking_id': booking_id, 'status': 'failed'}
 
     return {'booking_id': booking_id, 'status': 'pending', 'replayed': False}
+```
+
+```typescript
+interface BookingResult {
+  bookingId: string;
+  status: 'pending' | 'failed';
+  replayed: boolean;
+}
+
+interface ExistingBooking {
+  bookingId: string;
+  status: string;
+}
+
+async function reserveSeats(
+  userId: string,
+  eventId: string,
+  seatIds: string[],
+  idempotencyKey: string,
+): Promise<BookingResult> {
+  // check if this request was already processed
+  const existing = await db.queryOne<ExistingBooking>(
+    `SELECT booking_id, status FROM bookings
+     WHERE idempotency_key = $1 AND user_id = $2`,
+    [idempotencyKey, userId]
+  );
+
+  if (existing) {
+    // return the original result -- do not process again
+    return { bookingId: existing.bookingId, status: existing.status as 'pending' | 'failed', replayed: true };
+  }
+
+  // first time: process normally
+  const bookingId = generateSnowflakeId();
+  await db.execute(
+    `INSERT INTO bookings (booking_id, user_id, event_id, seat_ids, status, idempotency_key)
+     VALUES ($1, $2, $3, $4, 'pending', $5)`,
+    [bookingId, userId, eventId, seatIds, idempotencyKey]
+  );
+
+  for (const seatId of seatIds) {
+    const reserved = await tryReserveSeat(seatId, userId);
+    if (!reserved) {
+      await db.execute(
+        "UPDATE bookings SET status = 'failed' WHERE booking_id = $1",
+        [bookingId]
+      );
+      return { bookingId, status: 'failed', replayed: false };
+    }
+  }
+
+  return { bookingId, status: 'pending', replayed: false };
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+)
+
+type BookingResult struct {
+	BookingID string `json:"booking_id"`
+	Status    string `json:"status"`
+	Replayed  bool   `json:"replayed"`
+}
+
+type ExistingBooking struct {
+	BookingID string
+	Status    string
+}
+
+func reserveSeats(ctx context.Context, userID, eventID string, seatIDs []string, idempotencyKey string) (BookingResult, error) {
+	// check if this request was already processed
+	existing, err := dbQueryExistingBooking(ctx, idempotencyKey, userID)
+	if err != nil {
+		return BookingResult{}, err
+	}
+	if existing != nil {
+		// return the original result -- do not process again
+		return BookingResult{BookingID: existing.BookingID, Status: existing.Status, Replayed: true}, nil
+	}
+
+	// first time: process normally
+	bookingID := generateSnowflakeID()
+	if err := db.ExecContext(ctx, `
+		INSERT INTO bookings (booking_id, user_id, event_id, seat_ids, status, idempotency_key)
+		VALUES ($1, $2, $3, $4, 'pending', $5)`,
+		bookingID, userID, eventID, seatIDs, idempotencyKey,
+	); err != nil {
+		return BookingResult{}, err
+	}
+
+	for _, seatID := range seatIDs {
+		reserved, err := tryReserveSeat(ctx, seatID, userID)
+		if err != nil || !reserved {
+			db.ExecContext(ctx, "UPDATE bookings SET status = 'failed' WHERE booking_id = $1", bookingID)
+			return BookingResult{BookingID: bookingID, Status: "failed", Replayed: false}, nil
+		}
+	}
+
+	return BookingResult{BookingID: bookingID, Status: "pending", Replayed: false}, nil
+}
 ```
 
 The `idempotency_key` is generated by the client (typically a UUID). The unique constraint on `(idempotency_key, user_id)` ensures the database rejects duplicate inserts even under concurrent retries.

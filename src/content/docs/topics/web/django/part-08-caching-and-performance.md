@@ -160,7 +160,7 @@ Caches the **full response**, keyed by URL + `Vary` headers. Great for public pa
 
 ### Template fragment caching
 
-```django
+```html
 {% load cache %}
 
 {% cache 300 sidebar request.user.id %}

@@ -97,7 +97,7 @@ url = reverse("blog:detail", kwargs={"slug": "hello-world"})
 
 In templates:
 
-```django
+```html
 <a href="{% url 'blog:detail' slug=post.slug %}">{{ post.title }}</a>
 ```
 
@@ -107,7 +107,7 @@ In templates:
 
 Django's template language is intentionally weak, no arbitrary Python, to keep logic in views.
 
-```django
+```html
 {# blog/templates/blog/post_list.html #}
 {% extends "base.html" %}
 
@@ -142,7 +142,7 @@ Django's template language is intentionally weak, no arbitrary Python, to keep l
 
 Base template (`templates/base.html`):
 
-```django
+```html
 <!DOCTYPE html>
 <html>
 <head>

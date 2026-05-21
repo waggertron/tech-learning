@@ -160,6 +160,130 @@ def run_submission(source_code: str, language: str, stdin: str) -> dict:
         pool.release(container_id)
 ```
 
+```typescript
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+
+const execFileAsync = promisify(execFile);
+
+const SANDBOX_LIMITS = {
+  cpu_seconds: 5,
+  memory_bytes: 256 * 1024 * 1024, // 256 MB
+  wall_seconds: 10,
+};
+
+const DOCKER_RUN_ARGS = [
+  'run',
+  '--rm',
+  '--network=none',
+  '--read-only',
+  '--tmpfs', '/tmp:size=64m',
+  '--memory', '256m',
+  '--cpus', '1',
+  '--security-opt', 'seccomp=sandbox.json',
+  '--pids-limit', '50',
+  'judge-runner:latest',
+];
+
+interface RunResult {
+  stdout: string;
+  stderr: string;
+  exit_code: number;
+  verdict?: string;
+}
+
+async function runSubmission(sourceCode: string, language: string, stdin: string): Promise<RunResult> {
+  const containerId = await pool.acquire();
+  try {
+    const { stdout, stderr } = await execFileAsync(
+      'docker',
+      [...DOCKER_RUN_ARGS, 'python3', '-c', sourceCode],
+      { input: stdin, timeout: SANDBOX_LIMITS.wall_seconds * 1000 }
+    );
+    return { stdout, stderr, exit_code: 0 };
+  } catch (err: any) {
+    if (err.killed || err.signal === 'SIGTERM') {
+      return { verdict: 'TLE', stdout: '', stderr: '', exit_code: 1 };
+    }
+    return { stdout: '', stderr: err.stderr ?? '', exit_code: err.code ?? 1 };
+  } finally {
+    await pool.release(containerId);
+  }
+}
+```
+
+```go
+package main
+
+import (
+	"bytes"
+	"context"
+	"os/exec"
+	"time"
+)
+
+var sandboxLimits = struct {
+	CPUSeconds  int
+	MemoryBytes int
+	WallSeconds int
+}{
+	CPUSeconds:  5,
+	MemoryBytes: 256 * 1024 * 1024,
+	WallSeconds: 10,
+}
+
+var dockerRunArgs = []string{
+	"run", "--rm",
+	"--network=none",
+	"--read-only",
+	"--tmpfs", "/tmp:size=64m",
+	"--memory", "256m",
+	"--cpus", "1",
+	"--security-opt", "seccomp=sandbox.json",
+	"--pids-limit", "50",
+	"judge-runner:latest",
+}
+
+type RunResult struct {
+	Stdout   string
+	Stderr   string
+	ExitCode int
+	Verdict  string
+}
+
+func runSubmission(ctx context.Context, sourceCode, language, stdin string) RunResult {
+	containerID, _ := pool.Acquire()
+	defer pool.Release(containerID)
+
+	wallCtx, cancel := context.WithTimeout(ctx, time.Duration(sandboxLimits.WallSeconds)*time.Second)
+	defer cancel()
+
+	args := append(dockerRunArgs, "python3", "-c", sourceCode)
+	cmd := exec.CommandContext(wallCtx, "docker", args...)
+	cmd.Stdin = bytes.NewBufferString(stdin)
+
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if wallCtx.Err() == context.DeadlineExceeded {
+		return RunResult{Verdict: "TLE"}
+	}
+	exitCode := 0
+	if err != nil {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			exitCode = exitErr.ExitCode()
+		}
+	}
+	return RunResult{
+		Stdout:   stdout.String(),
+		Stderr:   stderr.String(),
+		ExitCode: exitCode,
+	}
+}
+```
+
 The seccomp profile (`sandbox.json`) blocks syscalls that are not needed for computation: `ptrace`, `clone` with `CLONE_NEWUSER`, `mount`, `unshare`, and raw socket creation. This shrinks the attack surface significantly without affecting normal code execution.
 
 The warm container pool manager runs as a separate process:
@@ -197,6 +321,123 @@ class ContainerPool:
             if self.pool.qsize() < 10:
                 self.pool.put(self._start_container())
             time.sleep(0.1)
+```
+
+```typescript
+import { execFile } from 'child_process';
+import { promisify } from 'util';
+
+const execFileAsync = promisify(execFile);
+
+class ContainerPool {
+  private pool: string[] = [];
+  private waiters: Array<(id: string) => void> = [];
+
+  constructor(private size: number, private image: string) {
+    this.initialize();
+    this.startRefillLoop();
+  }
+
+  private async initialize(): Promise<void> {
+    for (let i = 0; i < this.size; i++) {
+      this.pool.push(await this.startContainer());
+    }
+  }
+
+  private async startContainer(): Promise<string> {
+    const { stdout } = await execFileAsync('docker', [
+      'run', '-d', '--network=none', this.image, 'sleep', 'infinity',
+    ]);
+    return stdout.trim();
+  }
+
+  async acquire(): Promise<string> {
+    if (this.pool.length > 0) {
+      return this.pool.pop()!;
+    }
+    return new Promise(resolve => this.waiters.push(resolve));
+  }
+
+  async release(containerId: string): Promise<void> {
+    await execFileAsync('docker', ['exec', containerId, 'rm', '-rf', '/tmp/*']);
+    if (this.waiters.length > 0) {
+      this.waiters.shift()!(containerId);
+    } else {
+      this.pool.push(containerId);
+    }
+  }
+
+  private startRefillLoop(): void {
+    setInterval(async () => {
+      if (this.pool.length < 10) {
+        this.pool.push(await this.startContainer());
+      }
+    }, 100);
+  }
+}
+```
+
+```go
+import (
+	"context"
+	"os/exec"
+	"strings"
+	"sync"
+	"time"
+)
+
+type ContainerPool struct {
+	pool    chan string
+	image   string
+	mu      sync.Mutex
+}
+
+func NewContainerPool(size int, image string) *ContainerPool {
+	cp := &ContainerPool{
+		pool:  make(chan string, size*2),
+		image: image,
+	}
+	for i := 0; i < size; i++ {
+		if id, err := cp.startContainer(); err == nil {
+			cp.pool <- id
+		}
+	}
+	go cp.refillLoop()
+	return cp
+}
+
+func (cp *ContainerPool) startContainer() (string, error) {
+	out, err := exec.Command("docker", "run", "-d", "--network=none", cp.image, "sleep", "infinity").Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(out)), nil
+}
+
+func (cp *ContainerPool) Acquire() (string, error) {
+	select {
+	case id := <-cp.pool:
+		return id, nil
+	case <-time.After(5 * time.Second):
+		return "", fmt.Errorf("container pool timeout")
+	}
+}
+
+func (cp *ContainerPool) Release(containerID string) {
+	exec.Command("docker", "exec", containerID, "rm", "-rf", "/tmp/*").Run()
+	cp.pool <- containerID
+}
+
+func (cp *ContainerPool) refillLoop() {
+	for {
+		if len(cp.pool) < 10 {
+			if id, err := cp.startContainer(); err == nil {
+				cp.pool <- id
+			}
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+}
 ```
 
 ## Deep dive: test case runner
@@ -243,6 +484,104 @@ def run_test_cases(submission_id: str, source_code: str, language: str, problem_
     }
 ```
 
+```typescript
+interface TestCase {
+  input: string;
+  expected_output: string;
+}
+
+interface TestResult {
+  verdict: string;
+  failed_case?: number;
+  passed: number;
+  total?: number;
+  stderr?: string;
+}
+
+async function runTestCases(
+  submissionId: string,
+  sourceCode: string,
+  language: string,
+  problemId: string
+): Promise<TestResult> {
+  const testCases: TestCase[] = await loadTestCases(problemId);
+
+  for (let i = 0; i < testCases.length; i++) {
+    const tc = testCases[i];
+    const output = await runInSandbox(sourceCode, language, tc.input);
+
+    if (output.verdict === 'TLE') {
+      return { verdict: 'Time Limit Exceeded', failed_case: i + 1, passed: i, total: testCases.length };
+    }
+
+    if (output.exit_code !== 0) {
+      return { verdict: 'Runtime Error', failed_case: i + 1, passed: i, stderr: output.stderr.slice(0, 500) };
+    }
+
+    const expected = tc.expected_output.trim();
+    const actual = output.stdout.trim();
+    if (actual !== expected) {
+      return { verdict: 'Wrong Answer', failed_case: i + 1, passed: i };
+    }
+  }
+
+  return { verdict: 'Accepted', passed: testCases.length, total: testCases.length };
+}
+```
+
+```go
+type TestCase struct {
+	Input          string `json:"input"`
+	ExpectedOutput string `json:"expected_output"`
+}
+
+type TestResult struct {
+	Verdict    string
+	FailedCase int
+	Passed     int
+	Total      int
+	Stderr     string
+}
+
+func runTestCases(ctx context.Context, submissionID, sourceCode, language, problemID string) TestResult {
+	testCases, _ := loadTestCases(ctx, problemID)
+
+	for i, tc := range testCases {
+		output := runInSandbox(ctx, sourceCode, language, tc.Input)
+
+		if output.Verdict == "TLE" {
+			return TestResult{
+				Verdict:    "Time Limit Exceeded",
+				FailedCase: i + 1,
+				Passed:     i,
+				Total:      len(testCases),
+			}
+		}
+
+		if output.ExitCode != 0 {
+			stderr := output.Stderr
+			if len(stderr) > 500 {
+				stderr = stderr[:500]
+			}
+			return TestResult{
+				Verdict:    "Runtime Error",
+				FailedCase: i + 1,
+				Passed:     i,
+				Stderr:     stderr,
+			}
+		}
+
+		expected := strings.TrimSpace(tc.ExpectedOutput)
+		actual := strings.TrimSpace(output.Stdout)
+		if actual != expected {
+			return TestResult{Verdict: "Wrong Answer", FailedCase: i + 1, Passed: i}
+		}
+	}
+
+	return TestResult{Verdict: "Accepted", Passed: len(testCases), Total: len(testCases)}
+}
+```
+
 Test cases are stored in S3 keyed by `{problem_id}/{case_index}.json`. Workers cache test cases in local memory for the duration of a contest (the same problem is resubmitted hundreds of times). After the contest, evict from local cache and rely on S3 for cold reads.
 
 ## Deep dive: contest leaderboard
@@ -279,6 +618,106 @@ def get_leaderboard(contest_id: str, top_n: int = 100):
         {"rank": i + 1, "user_id": uid.decode(), "penalty_ms": -int(score)}
         for i, (uid, score) in enumerate(entries)
     ]
+```
+
+```typescript
+import { createClient } from 'redis';
+
+const r = createClient({ url: 'redis://redis-cluster:6379' });
+await r.connect();
+
+const PENALTY_PER_WRONG = 20 * 60 * 1000; // 20 minutes in ms, ICPC style
+
+async function recordAcceptedSubmission(
+  contestId: string,
+  userId: string,
+  problemId: string,
+  submissionTimeMs: number,
+  wrongAttempts: number
+): Promise<void> {
+  const contestStart = await getContestStartMs(contestId);
+  const elapsedMs = submissionTimeMs - contestStart;
+  const penaltyMs = wrongAttempts * PENALTY_PER_WRONG;
+  const totalScoreMs = elapsedMs + penaltyMs;
+
+  await r.zAdd(
+    `leaderboard:${contestId}`,
+    [{ score: -totalScoreMs, value: userId }],
+    { GT: true }
+  );
+}
+
+interface LeaderboardEntry {
+  rank: number;
+  user_id: string;
+  penalty_ms: number;
+}
+
+async function getLeaderboard(contestId: string, topN: number = 100): Promise<LeaderboardEntry[]> {
+  const entries = await r.zRangeWithScores(`leaderboard:${contestId}`, 0, topN - 1, { REV: true });
+  return entries.map((e, i) => ({
+    rank: i + 1,
+    user_id: e.value,
+    penalty_ms: -Math.round(e.score),
+  }));
+}
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/redis/go-redis/v9"
+)
+
+const penaltyPerWrongMs = 20 * 60 * 1000 // 20 minutes in ms, ICPC style
+
+func recordAcceptedSubmission(
+	ctx context.Context,
+	contestID, userID, problemID string,
+	submissionTimeMs int64,
+	wrongAttempts int,
+) error {
+	contestStart, err := getContestStartMs(ctx, contestID)
+	if err != nil {
+		return err
+	}
+	elapsedMs := submissionTimeMs - contestStart
+	penaltyMs := int64(wrongAttempts) * penaltyPerWrongMs
+	totalScoreMs := elapsedMs + penaltyMs
+
+	return rdb.ZAddArgs(ctx, fmt.Sprintf("leaderboard:%s", contestID), redis.ZAddArgs{
+		GT: true,
+		Members: []redis.Z{{Score: float64(-totalScoreMs), Member: userID}},
+	}).Err()
+}
+
+type LeaderboardEntry struct {
+	Rank      int
+	UserID    string
+	PenaltyMs int64
+}
+
+func getLeaderboard(ctx context.Context, contestID string, topN int) ([]LeaderboardEntry, error) {
+	if topN == 0 {
+		topN = 100
+	}
+	entries, err := rdb.ZRevRangeWithScores(ctx, fmt.Sprintf("leaderboard:%s", contestID), 0, int64(topN-1)).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	result := make([]LeaderboardEntry, len(entries))
+	for i, e := range entries {
+		result[i] = LeaderboardEntry{
+			Rank:      i + 1,
+			UserID:    e.Member.(string),
+			PenaltyMs: int64(-e.Score),
+		}
+	}
+	return result, nil
+}
 ```
 
 The sorted set is checkpointed to PostgreSQL every 60 seconds by a background job. This handles a Redis failover: the contest service rebuilds the sorted set from the checkpoint plus any Kafka replay of result events since the checkpoint.

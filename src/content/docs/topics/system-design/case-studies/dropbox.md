@@ -162,6 +162,160 @@ def upload_file(filepath: str, metadata_client, s3_client):
     })
 ```
 
+```typescript
+import * as fs from 'fs';
+import * as path from 'path';
+import * as crypto from 'crypto';
+
+const BLOCK_SIZE = 4 * 1024 * 1024; // 4 MB
+
+interface Block {
+  blockHash: string;
+  blockBytes: Buffer;
+}
+
+interface InitResponse {
+  uploadId: string;
+  missingBlocks: string[];
+}
+
+function chunkFile(filepath: string): Block[] {
+  const blocks: Block[] = [];
+  const fd = fs.openSync(filepath, 'r');
+  const buf = Buffer.alloc(BLOCK_SIZE);
+  let bytesRead: number;
+  while ((bytesRead = fs.readSync(fd, buf, 0, BLOCK_SIZE, null)) > 0) {
+    const blockBytes = buf.slice(0, bytesRead);
+    const blockHash = crypto.createHash('sha256').update(blockBytes).digest('hex');
+    blocks.push({ blockHash, blockBytes: Buffer.from(blockBytes) });
+  }
+  fs.closeSync(fd);
+  return blocks;
+}
+
+async function uploadFile(filepath: string, metadataClient: MetadataClient, s3Client: S3Client): Promise<unknown> {
+  const blocks = chunkFile(filepath);
+  const blockHashes = blocks.map(b => b.blockHash);
+
+  // ask metadata service which blocks it has never seen
+  const resp: InitResponse = await metadataClient.post('/upload/init', {
+    filename: path.basename(filepath),
+    size: fs.statSync(filepath).size,
+    blockHashes,
+  });
+  const { uploadId } = resp;
+  const missing = new Set(resp.missingBlocks);
+
+  // upload only the blocks the server does not already have
+  for (const { blockHash, blockBytes } of blocks) {
+    if (missing.has(blockHash)) {
+      await s3Client.putObject({
+        Bucket: 'dropbox-blocks',
+        Key: blockHash,    // content-addressable: key IS the hash
+        Body: blockBytes,
+      });
+      await metadataClient.put(`/upload/${uploadId}/block/${blockHash}`);
+    }
+  }
+
+  return metadataClient.post(`/upload/${uploadId}/complete`, { blockHashes });
+}
+```
+
+```go
+package main
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"io"
+	"os"
+)
+
+const blockSize = 4 * 1024 * 1024 // 4 MB
+
+type Block struct {
+	BlockHash  string
+	BlockBytes []byte
+}
+
+type InitResponse struct {
+	UploadID      string   `json:"upload_id"`
+	MissingBlocks []string `json:"missing_blocks"`
+}
+
+func chunkFile(filepath string) ([]Block, error) {
+	f, err := os.Open(filepath)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var blocks []Block
+	buf := make([]byte, blockSize)
+	for {
+		n, err := io.ReadFull(f, buf)
+		if n == 0 {
+			break
+		}
+		data := make([]byte, n)
+		copy(data, buf[:n])
+		sum := sha256.Sum256(data)
+		blocks = append(blocks, Block{
+			BlockHash:  hex.EncodeToString(sum[:]),
+			BlockBytes: data,
+		})
+		if err == io.EOF || err == io.ErrUnexpectedEOF {
+			break
+		}
+	}
+	return blocks, nil
+}
+
+func uploadFile(ctx context.Context, filepath string, metaClient MetadataClient, s3Client S3Client) error {
+	blocks, err := chunkFile(filepath)
+	if err != nil {
+		return err
+	}
+
+	blockHashes := make([]string, len(blocks))
+	for i, b := range blocks {
+		blockHashes[i] = b.BlockHash
+	}
+
+	// ask metadata service which blocks it has never seen
+	info, err := os.Stat(filepath)
+	if err != nil {
+		return err
+	}
+	resp, err := metaClient.PostInit(ctx, path.Base(filepath), info.Size(), blockHashes)
+	if err != nil {
+		return err
+	}
+
+	missing := make(map[string]struct{}, len(resp.MissingBlocks))
+	for _, h := range resp.MissingBlocks {
+		missing[h] = struct{}{}
+	}
+
+	// upload only the blocks the server does not already have
+	for _, b := range blocks {
+		if _, ok := missing[b.BlockHash]; ok {
+			if err := s3Client.PutObject(ctx, "dropbox-blocks", b.BlockHash, bytes.NewReader(b.BlockBytes)); err != nil {
+				return err
+			}
+			if err := metaClient.PutBlock(ctx, resp.UploadID, b.BlockHash); err != nil {
+				return err
+			}
+		}
+	}
+
+	return metaClient.PostComplete(ctx, resp.UploadID, blockHashes)
+}
+```
+
 When two users upload the same file, the second user's `/upload/init` call receives `missing_blocks: []` because all block hashes already exist. The second upload costs zero bytes of S3 storage and completes in milliseconds.
 
 ## Deep dive: sync protocol and delta sync
@@ -210,6 +364,155 @@ class SyncClient:
         self.local_index[file_id] = new_hashes
 ```
 
+```typescript
+import WebSocket from 'ws';
+
+interface FileUpdatedEvent {
+  type: 'file.updated';
+  fileId: string;
+  blockHashes: string[];
+}
+
+interface AuthMessage {
+  type: 'auth';
+  userId: string;
+  deviceId: string;
+}
+
+class SyncClient {
+  private localIndex: Map<string, string[]> = new Map(); // fileId -> blockHashes
+
+  constructor(private userId: string, private deviceId: string) {}
+
+  async listen(wsUrl: string): Promise<void> {
+    const ws = new WebSocket(wsUrl);
+
+    ws.on('open', () => {
+      const auth: AuthMessage = { type: 'auth', userId: this.userId, deviceId: this.deviceId };
+      ws.send(JSON.stringify(auth));
+    });
+
+    ws.on('message', async (data: WebSocket.RawData) => {
+      const event = JSON.parse(data.toString());
+      if (event.type === 'file.updated') {
+        await this.handleFileUpdate(event as FileUpdatedEvent);
+      }
+    });
+  }
+
+  async handleFileUpdate(event: FileUpdatedEvent): Promise<void> {
+    const { fileId, blockHashes: newHashes } = event;
+    const oldHashes = this.localIndex.get(fileId) ?? [];
+
+    // compute which blocks we don't have locally
+    const oldSet = new Set(oldHashes);
+    const missing = newHashes.filter(h => !oldSet.has(h));
+
+    // download only missing blocks
+    for (const blockHash of missing) {
+      const blockBytes = await fetchBlock(blockHash);
+      writeBlockToDisk(blockHash, blockBytes);
+    }
+
+    // reassemble file from blocks (in order)
+    reassembleFile(fileId, newHashes);
+    this.localIndex.set(fileId, newHashes);
+  }
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+
+	"nhooyr.io/websocket"
+)
+
+type FileUpdatedEvent struct {
+	Type        string   `json:"type"`
+	FileID      string   `json:"file_id"`
+	BlockHashes []string `json:"block_hashes"`
+}
+
+type AuthMessage struct {
+	Type     string `json:"type"`
+	UserID   string `json:"user_id"`
+	DeviceID string `json:"device_id"`
+}
+
+type SyncClient struct {
+	userID     string
+	deviceID   string
+	localIndex map[string][]string // fileID -> blockHashes
+}
+
+func NewSyncClient(userID, deviceID string) *SyncClient {
+	return &SyncClient{userID: userID, deviceID: deviceID, localIndex: make(map[string][]string)}
+}
+
+func (c *SyncClient) Listen(ctx context.Context, wsURL string) error {
+	conn, _, err := websocket.Dial(ctx, wsURL, nil)
+	if err != nil {
+		return err
+	}
+	defer conn.Close(websocket.StatusNormalClosure, "")
+
+	auth := AuthMessage{Type: "auth", UserID: c.userID, DeviceID: c.deviceID}
+	authBytes, _ := json.Marshal(auth)
+	if err := conn.Write(ctx, websocket.MessageText, authBytes); err != nil {
+		return err
+	}
+
+	for {
+		_, data, err := conn.Read(ctx)
+		if err != nil {
+			return err
+		}
+		var event FileUpdatedEvent
+		if err := json.Unmarshal(data, &event); err != nil {
+			log.Printf("parse error: %v", err)
+			continue
+		}
+		if event.Type == "file.updated" {
+			if err := c.handleFileUpdate(ctx, event); err != nil {
+				log.Printf("handle error: %v", err)
+			}
+		}
+	}
+}
+
+func (c *SyncClient) handleFileUpdate(ctx context.Context, event FileUpdatedEvent) error {
+	newHashes := event.BlockHashes
+	oldHashes := c.localIndex[event.FileID]
+
+	// compute which blocks we don't have locally
+	oldSet := make(map[string]struct{}, len(oldHashes))
+	for _, h := range oldHashes {
+		oldSet[h] = struct{}{}
+	}
+
+	// download only missing blocks
+	for _, blockHash := range newHashes {
+		if _, exists := oldSet[blockHash]; !exists {
+			blockBytes, err := fetchBlock(ctx, blockHash)
+			if err != nil {
+				return err
+			}
+			writeBlockToDisk(blockHash, blockBytes)
+		}
+	}
+
+	// reassemble file from blocks (in order)
+	reassembleFile(event.FileID, newHashes)
+	c.localIndex[event.FileID] = newHashes
+	return nil
+}
+```
+
 On the server side, Kafka carries the delta event:
 
 ```python
@@ -233,6 +536,122 @@ for msg in consumer:
     connections = connection_registry.get_connections(user_id)
     for conn in connections:
         conn.send(event)
+```
+
+```typescript
+import { Kafka } from 'kafkajs';
+
+interface FileUpdatedMessage {
+  fileId: string;
+  userId: string;
+  blockHashes: string[];
+  timestamp: string;
+}
+
+const kafka = new Kafka({ brokers: ['kafka-1:9092', 'kafka-2:9092'] });
+const producer = kafka.producer();
+await producer.connect();
+
+// When a file version is confirmed, publish delta
+async function publishFileUpdated(fileId: string, userId: string, blockHashes: string[]): Promise<void> {
+  await producer.send({
+    topic: 'file.updated',
+    messages: [{
+      value: JSON.stringify({
+        fileId,
+        userId,
+        blockHashes,
+        timestamp: new Date().toISOString(),
+      } satisfies FileUpdatedMessage),
+    }],
+  });
+}
+
+// Sync service consumes and pushes to connected WebSockets
+async function startSyncConsumer(): Promise<void> {
+  const consumer = kafka.consumer({ groupId: 'sync-delivery' });
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'file.updated' });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const event: FileUpdatedMessage = JSON.parse(message.value!.toString());
+      const { userId } = event;
+      // look up which WebSocket connections belong to this user
+      const connections = connectionRegistry.getConnections(userId);
+      for (const conn of connections) {
+        conn.send(JSON.stringify(event));
+      }
+    },
+  });
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+	"time"
+
+	"github.com/segmentio/kafka-go"
+)
+
+type FileUpdatedMessage struct {
+	FileID      string   `json:"file_id"`
+	UserID      string   `json:"user_id"`
+	BlockHashes []string `json:"block_hashes"`
+	Timestamp   string   `json:"timestamp"`
+}
+
+var writer = &kafka.Writer{
+	Addr:  kafka.TCP("kafka-1:9092", "kafka-2:9092"),
+	Topic: "file.updated",
+}
+
+// When a file version is confirmed, publish delta
+func publishFileUpdated(ctx context.Context, fileID, userID string, blockHashes []string) error {
+	msg := FileUpdatedMessage{
+		FileID:      fileID,
+		UserID:      userID,
+		BlockHashes: blockHashes,
+		Timestamp:   time.Now().UTC().Format(time.RFC3339),
+	}
+	payload, err := json.Marshal(msg)
+	if err != nil {
+		return err
+	}
+	return writer.WriteMessages(ctx, kafka.Message{Value: payload})
+}
+
+// Sync service consumes and pushes to connected WebSockets
+func startSyncConsumer(ctx context.Context) {
+	reader := kafka.NewReader(kafka.ReaderConfig{
+		Brokers: []string{"kafka-1:9092"},
+		Topic:   "file.updated",
+		GroupID: "sync-delivery",
+	})
+	defer reader.Close()
+
+	for {
+		m, err := reader.ReadMessage(ctx)
+		if err != nil {
+			log.Printf("consumer error: %v", err)
+			break
+		}
+		var event FileUpdatedMessage
+		if err := json.Unmarshal(m.Value, &event); err != nil {
+			continue
+		}
+		// look up which WebSocket connections belong to this user
+		connections := connectionRegistry.GetConnections(event.UserID)
+		for _, conn := range connections {
+			conn.Send(event)
+		}
+	}
+}
 ```
 
 ## Deep dive: metadata service
@@ -260,6 +679,55 @@ CREATE TABLE file_versions (
 CREATE INDEX ON file_versions (file_id, created_at DESC);
 ```
 
+```typescript
+// PostgreSQL schema (simplified) -- TypeScript model types
+
+interface File {
+  fileId: bigint;       // Snowflake ID, primary key
+  ownerId: bigint;      // sharding key
+  name: string;
+  createdAt: Date;
+  deletedAt: Date | null; // soft delete
+}
+
+interface FileVersion {
+  versionId: bigint;    // Snowflake ID, primary key
+  fileId: bigint;       // foreign key -> files.file_id
+  blockHashes: string[]; // ordered array of SHA-256 hashes
+  sizeBytes: bigint;
+  createdAt: Date;
+}
+
+// Index: (file_id, created_at DESC) on file_versions
+```
+
+```go
+package main
+
+import "time"
+
+// PostgreSQL schema (simplified) -- Go struct types
+
+// File maps to the files table; sharded by OwnerID.
+type File struct {
+	FileID    int64      `db:"file_id"`   // Snowflake ID, primary key
+	OwnerID   int64      `db:"owner_id"`  // sharding key
+	Name      string     `db:"name"`
+	CreatedAt time.Time  `db:"created_at"`
+	DeletedAt *time.Time `db:"deleted_at"` // soft delete
+}
+
+// FileVersion maps to the file_versions table.
+// Index: (file_id, created_at DESC).
+type FileVersion struct {
+	VersionID   int64     `db:"version_id"`   // Snowflake ID, primary key
+	FileID      int64     `db:"file_id"`      // foreign key -> files.file_id
+	BlockHashes []string  `db:"block_hashes"` // ordered SHA-256 hashes
+	SizeBytes   int64     `db:"size_bytes"`
+	CreatedAt   time.Time `db:"created_at"`
+}
+```
+
 Sharding by `owner_id` keeps all files for a user on the same shard. Cross-user queries (shared folders) require a lookup in a separate sharing table, but single-user operations never cross shard boundaries.
 
 ```python
@@ -274,6 +742,63 @@ def get_latest_version(file_id: int, user_id: int) -> dict | None:
         LIMIT 1
     """, file_id, user_id)
     return dict(row) if row else None
+```
+
+```typescript
+interface VersionRow {
+  versionId: bigint;
+  blockHashes: string[];
+  sizeBytes: bigint;
+  createdAt: Date;
+}
+
+async function getLatestVersion(fileId: bigint, userId: bigint): Promise<VersionRow | null> {
+  const shard = shardForUser(userId);
+  const row = await shard.queryOne<VersionRow>(`
+    SELECT v.version_id, v.block_hashes, v.size_bytes, v.created_at
+    FROM file_versions v
+    JOIN files f ON f.file_id = v.file_id
+    WHERE v.file_id = $1 AND f.owner_id = $2
+    ORDER BY v.created_at DESC
+    LIMIT 1
+  `, [fileId, userId]);
+  return row ?? null;
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"time"
+)
+
+type VersionRow struct {
+	VersionID   int64
+	BlockHashes []string
+	SizeBytes   int64
+	CreatedAt   time.Time
+}
+
+func getLatestVersion(ctx context.Context, fileID, userID int64) (*VersionRow, error) {
+	shard := shardForUser(userID)
+	row, err := shard.QueryOne(ctx, `
+		SELECT v.version_id, v.block_hashes, v.size_bytes, v.created_at
+		FROM file_versions v
+		JOIN files f ON f.file_id = v.file_id
+		WHERE v.file_id = $1 AND f.owner_id = $2
+		ORDER BY v.created_at DESC
+		LIMIT 1
+	`, fileID, userID)
+	if err != nil {
+		return nil, err
+	}
+	if row == nil {
+		return nil, nil
+	}
+	return row.(*VersionRow), nil
+}
 ```
 
 ## Deep dive: conflict resolution
@@ -303,6 +828,82 @@ def resolve_conflict(
     # no conflict: apply the new version normally
     apply_version(file_id, incoming_version)
     return 'applied'
+```
+
+```typescript
+interface Version {
+  versionId: string;
+  parentVersionId: string | null;
+  blockHashes: string[];
+}
+
+type ConflictResult = 'conflict_copy_created' | 'applied';
+
+async function resolveConflict(
+  fileId: string,
+  incomingVersion: Version,
+  currentVersion: Version,
+  userDisplayName: string,
+): Promise<ConflictResult> {
+  if (incomingVersion.parentVersionId !== currentVersion.versionId) {
+    // concurrent edit detected: save as a new file with "(conflicted copy)" suffix
+    const conflictName = `${fileId}_conflicted_copy_${userDisplayName}_${new Date().toISOString()}`;
+    await createNewFile(conflictName, incomingVersion.blockHashes);
+    return 'conflict_copy_created';
+  }
+
+  // no conflict: apply the new version normally
+  await applyVersion(fileId, incomingVersion);
+  return 'applied';
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+type Version struct {
+	VersionID       string
+	ParentVersionID string
+	BlockHashes     []string
+}
+
+type ConflictResult string
+
+const (
+	ConflictCopyCreated ConflictResult = "conflict_copy_created"
+	Applied             ConflictResult = "applied"
+)
+
+func resolveConflict(
+	ctx context.Context,
+	fileID string,
+	incomingVersion, currentVersion Version,
+	userDisplayName string,
+) (ConflictResult, error) {
+	if incomingVersion.ParentVersionID != currentVersion.VersionID {
+		// concurrent edit detected: save as a new file with "(conflicted copy)" suffix
+		conflictName := fmt.Sprintf(
+			"%s_conflicted_copy_%s_%s",
+			fileID, userDisplayName, time.Now().UTC().Format(time.RFC3339),
+		)
+		if err := createNewFile(ctx, conflictName, incomingVersion.BlockHashes); err != nil {
+			return "", err
+		}
+		return ConflictCopyCreated, nil
+	}
+
+	// no conflict: apply the new version normally
+	if err := applyVersion(ctx, fileID, incomingVersion); err != nil {
+		return "", err
+	}
+	return Applied, nil
+}
 ```
 
 The user sees both the current file and their conflicted copy in the folder. They must manually reconcile. Simpler systems (Google Docs) use operational transforms for true real-time collaboration, but that is a much harder problem and not what Dropbox is optimized for.

@@ -149,6 +149,105 @@ def handle_click(event: dict):
     fanout_to_aggregations(event)
 ```
 
+```typescript
+import { createClient } from 'redis';
+
+const client = createClient({ url: 'redis://redis-dedup:6379' });
+await client.connect();
+
+interface ClickEvent {
+  ad_id: string;
+  event_id: string; // client-generated UUID
+  timestamp: string;
+}
+
+async function processClickEvent(event: ClickEvent): Promise<boolean> {
+  const eventTs = new Date(event.timestamp);
+  // Bucket by minute for dedup key scoping
+  const minuteBucket = eventTs.toISOString().slice(0, 16).replace(/[-T:]/g, '');
+  const dedupKey = `dedup:${event.ad_id}:${minuteBucket}`;
+
+  // sAdd returns the number of elements added (1 = new, 0 = duplicate)
+  const added = await client.sAdd(dedupKey, event.event_id);
+
+  if (added > 0) {
+    // Set TTL on first add to bound memory usage
+    await client.expire(dedupKey, 3600); // 1 hour: enough to catch late-arriving duplicates
+  }
+
+  return added > 0;
+}
+
+async function handleClick(event: ClickEvent): Promise<void> {
+  const isNew = await processClickEvent(event);
+  if (!isNew) {
+    return; // duplicate, skip
+  }
+
+  // Fan out to aggregation dimensions
+  await fanoutToAggregations(event);
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+)
+
+var rdb = redis.NewClient(&redis.Options{
+	Addr: "redis-dedup:6379",
+})
+
+type ClickEvent struct {
+	AdID      string `json:"ad_id"`
+	EventID   string `json:"event_id"` // client-generated UUID
+	Timestamp string `json:"timestamp"`
+}
+
+func processClickEvent(ctx context.Context, event ClickEvent) (bool, error) {
+	eventTs, err := time.Parse(time.RFC3339, event.Timestamp)
+	if err != nil {
+		return false, err
+	}
+
+	// Bucket by minute for dedup key scoping
+	minuteBucket := eventTs.UTC().Format("200601021504")
+	dedupKey := fmt.Sprintf("dedup:%s:%s", event.AdID, minuteBucket)
+
+	// SAdd returns the number of elements added (1 = new, 0 = duplicate)
+	added, err := rdb.SAdd(ctx, dedupKey, event.EventID).Result()
+	if err != nil {
+		return false, err
+	}
+
+	if added > 0 {
+		// Set TTL on first add to bound memory usage
+		rdb.Expire(ctx, dedupKey, time.Hour) // 1 hour: enough to catch late-arriving duplicates
+	}
+
+	return added > 0, nil
+}
+
+func handleClick(ctx context.Context, event ClickEvent) error {
+	isNew, err := processClickEvent(ctx, event)
+	if err != nil {
+		return err
+	}
+	if !isNew {
+		return nil // duplicate, skip
+	}
+
+	// Fan out to aggregation dimensions
+	return fanoutToAggregations(ctx, event)
+}
+```
+
 Why client-side UUID rather than server-assigned ID: network retries. If the client's POST to `/clicks` times out, it retries. Without a client-side UUID, the server sees two distinct requests and counts both. With the UUID, the deduplication set catches the retry even if it arrives minutes later.
 
 The 1-hour TTL on the dedup set means duplicates arriving more than one hour late will slip through. This is an explicit tradeoff: duplicate events that arrive within 1 hour are filtered (covers 99.9%+ of network retries), and late-arriving duplicates beyond 1 hour are corrected by the nightly Spark batch job which re-reads the raw Kafka log and recomputes exact counts.
@@ -200,6 +299,176 @@ aggregated = aggregate_by_ad(click_stream).union(
 aggregated.add_sink(kafka_sink("aggregated-clicks"))
 ```
 
+```typescript
+import { Kafka } from 'kafkajs';
+
+// Note: production Flink-equivalent stream processing in Node.js typically uses
+// a framework like Apache Kafka Streams or a custom consumer loop.
+// This shows the equivalent aggregation logic as a Kafka consumer.
+
+const kafka = new Kafka({ brokers: ['kafka:9092'] });
+const consumer = kafka.consumer({ groupId: 'click-aggregator' });
+
+interface ClickEvent {
+  ad_id: string;
+  country: string;
+  device: string;
+  timestamp_ms: number;
+  is_new: boolean;
+}
+
+interface AggregationKey {
+  ad_id: string;
+  dimension?: string;
+  minute_bucket: string;
+}
+
+// In-memory tumbling window accumulator (flushed to Kafka every minute)
+const windowCounts = new Map<string, number>();
+
+function getMinuteBucket(timestampMs: number): string {
+  const d = new Date(timestampMs);
+  return d.toISOString().slice(0, 16).replace(/[-T:]/g, '');
+}
+
+function aggregateByAd(event: ClickEvent): void {
+  if (!event.is_new) return; // deduplication already applied upstream
+  const bucket = getMinuteBucket(event.timestamp_ms);
+  const key = `ad:${event.ad_id}:${bucket}`;
+  windowCounts.set(key, (windowCounts.get(key) ?? 0) + 1);
+}
+
+function aggregateByAdCountry(event: ClickEvent): void {
+  if (!event.is_new) return;
+  const bucket = getMinuteBucket(event.timestamp_ms);
+  const key = `ad:${event.ad_id}:country:${event.country}:${bucket}`;
+  windowCounts.set(key, (windowCounts.get(key) ?? 0) + 1);
+}
+
+function aggregateByAdDevice(event: ClickEvent): void {
+  if (!event.is_new) return;
+  const bucket = getMinuteBucket(event.timestamp_ms);
+  const key = `ad:${event.ad_id}:device:${event.device}:${bucket}`;
+  windowCounts.set(key, (windowCounts.get(key) ?? 0) + 1);
+}
+
+async function runAggregator(): Promise<void> {
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'click-events', fromBeginning: false });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const event: ClickEvent = JSON.parse(message.value!.toString());
+      aggregateByAd(event);
+      aggregateByAdCountry(event);
+      aggregateByAdDevice(event);
+    },
+  });
+
+  // Flush window counts to aggregated-clicks topic every 60 seconds
+  // Allow events up to 5 minutes late (handles clock skew and buffered mobile clicks)
+  setInterval(() => flushWindowCounts(), 60_000);
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"sync"
+	"time"
+
+	"github.com/segmentio/kafka-go"
+)
+
+type ClickEvent struct {
+	AdID        string `json:"ad_id"`
+	Country     string `json:"country"`
+	Device      string `json:"device"`
+	TimestampMs int64  `json:"timestamp_ms"`
+	IsNew       bool   `json:"is_new"`
+}
+
+// In-memory tumbling window accumulator (flushed to Kafka every minute)
+var (
+	windowCounts = make(map[string]int64)
+	windowMu     sync.Mutex
+)
+
+func getMinuteBucket(tsMs int64) string {
+	t := time.UnixMilli(tsMs).UTC()
+	return t.Format("200601021504")
+}
+
+func aggregateByAd(event ClickEvent) {
+	if !event.IsNew {
+		return // deduplication already applied upstream
+	}
+	bucket := getMinuteBucket(event.TimestampMs)
+	key := fmt.Sprintf("ad:%s:%s", event.AdID, bucket)
+	windowMu.Lock()
+	windowCounts[key]++
+	windowMu.Unlock()
+}
+
+func aggregateByAdCountry(event ClickEvent) {
+	if !event.IsNew {
+		return
+	}
+	bucket := getMinuteBucket(event.TimestampMs)
+	key := fmt.Sprintf("ad:%s:country:%s:%s", event.AdID, event.Country, bucket)
+	windowMu.Lock()
+	windowCounts[key]++
+	windowMu.Unlock()
+}
+
+func aggregateByAdDevice(event ClickEvent) {
+	if !event.IsNew {
+		return
+	}
+	bucket := getMinuteBucket(event.TimestampMs)
+	key := fmt.Sprintf("ad:%s:device:%s:%s", event.AdID, event.Device, bucket)
+	windowMu.Lock()
+	windowCounts[key]++
+	windowMu.Unlock()
+}
+
+func runAggregator(ctx context.Context) error {
+	r := kafka.NewReader(kafka.ReaderConfig{
+		Brokers: []string{"kafka:9092"},
+		Topic:   "click-events",
+		GroupID: "click-aggregator",
+	})
+	defer r.Close()
+
+	// Allow events up to 5 minutes late (handles clock skew and buffered mobile clicks)
+	// Flush window counts to aggregated-clicks topic every 60 seconds
+	go func() {
+		for {
+			time.Sleep(time.Minute)
+			flushWindowCounts(ctx)
+		}
+	}()
+
+	for {
+		msg, err := r.ReadMessage(ctx)
+		if err != nil {
+			return err
+		}
+		var event ClickEvent
+		if err := json.Unmarshal(msg.Value, &event); err != nil {
+			continue
+		}
+		aggregateByAd(event)
+		aggregateByAdCountry(event)
+		aggregateByAdDevice(event)
+	}
+}
+```
+
 The 5-minute watermark means the job waits up to 5 minutes after a window closes before emitting the final count. Events arriving after 5 minutes are treated as late and handled by the batch recompute. This tradeoff balances latency (dashboards update within 6 minutes) against correctness (captures most mobile buffering scenarios).
 
 ## Deep dive: lambda architecture query merge
@@ -248,6 +517,145 @@ def query_redis_realtime(ad_id: str, start: datetime, end: datetime, granularity
         count = r.get(f"clicks:{ad_id}:{bucket}") or 0
         results.append({"bucket": bucket, "clicks": int(count)})
     return results
+```
+
+```typescript
+import { createClient } from 'redis';
+
+const redis = createClient({ url: 'redis://redis-realtime:6379' });
+await redis.connect();
+
+const REALTIME_HORIZON_MS = 60 * 60 * 1000; // 1 hour
+
+interface ClickBucket {
+  bucket: string;
+  clicks: number;
+}
+
+async function queryClicks(
+  adId: string,
+  start: Date,
+  end: Date,
+  granularity: string
+): Promise<ClickBucket[]> {
+  const now = new Date();
+  const realtimeCutoff = new Date(now.getTime() - REALTIME_HORIZON_MS);
+
+  const results: ClickBucket[] = [];
+
+  // Historical portion: ClickHouse
+  if (start < realtimeCutoff) {
+    const historicalEnd = end < realtimeCutoff ? end : realtimeCutoff;
+    const rows = await clickhouseClient.query({
+      query: `
+        SELECT
+          toStartOfInterval(window_start, INTERVAL 1 {gran:String}) AS bucket,
+          sum(click_count) AS clicks
+        FROM click_aggregates
+        WHERE ad_id = {adId:String}
+          AND window_start >= {start:DateTime}
+          AND window_start < {end:DateTime}
+        GROUP BY bucket
+        ORDER BY bucket
+      `,
+      query_params: { adId, start: start.toISOString(), end: historicalEnd.toISOString(), gran: granularity },
+    });
+    results.push(...rows);
+  }
+
+  // Real-time portion: Redis
+  if (end > realtimeCutoff) {
+    const rtStart = start > realtimeCutoff ? start : realtimeCutoff;
+    const rtRows = await queryRedisRealtime(adId, rtStart, end);
+    results.push(...rtRows);
+  }
+
+  return mergeAndSort(results);
+}
+
+async function queryRedisRealtime(
+  adId: string,
+  start: Date,
+  end: Date
+): Promise<ClickBucket[]> {
+  const buckets = generateMinuteBuckets(start, end);
+  const results: ClickBucket[] = [];
+  for (const bucket of buckets) {
+    const raw = await redis.get(`clicks:${adId}:${bucket}`);
+    results.push({ bucket, clicks: raw ? parseInt(raw, 10) : 0 });
+  }
+  return results;
+}
+```
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+)
+
+const realtimeHorizon = time.Hour
+
+type ClickBucket struct {
+	Bucket string
+	Clicks int64
+}
+
+func queryClicks(ctx context.Context, adID string, start, end time.Time, granularity string) ([]ClickBucket, error) {
+	now := time.Now().UTC()
+	realtimeCutoff := now.Add(-realtimeHorizon)
+
+	var results []ClickBucket
+
+	// Historical portion: ClickHouse
+	if start.Before(realtimeCutoff) {
+		historicalEnd := end
+		if end.After(realtimeCutoff) {
+			historicalEnd = realtimeCutoff
+		}
+		rows, err := queryClickHouse(ctx, adID, start, historicalEnd, granularity)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, rows...)
+	}
+
+	// Real-time portion: Redis
+	if end.After(realtimeCutoff) {
+		rtStart := start
+		if start.Before(realtimeCutoff) {
+			rtStart = realtimeCutoff
+		}
+		rtRows, err := queryRedisRealtime(ctx, adID, rtStart, end)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, rtRows...)
+	}
+
+	return mergeAndSort(results), nil
+}
+
+func queryRedisRealtime(ctx context.Context, adID string, start, end time.Time) ([]ClickBucket, error) {
+	buckets := generateMinuteBuckets(start, end)
+	results := make([]ClickBucket, 0, len(buckets))
+	for _, bucket := range buckets {
+		key := fmt.Sprintf("clicks:%s:%s", adID, bucket)
+		val, err := rdb.Get(ctx, key).Int64()
+		if err == redis.Nil {
+			val = 0
+		} else if err != nil {
+			return nil, err
+		}
+		results = append(results, ClickBucket{Bucket: bucket, Clicks: val})
+	}
+	return results, nil
+}
 ```
 
 The merge is simple because the two data sources cover non-overlapping time ranges. The only edge case is the boundary minute (currently being aggregated by Flink): counts for the current minute may be incomplete in both Redis and ClickHouse. The API response includes a `last_complete_minute` timestamp so dashboards can indicate incomplete data.

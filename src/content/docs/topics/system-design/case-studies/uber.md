@@ -149,6 +149,133 @@ def find_nearby_drivers(city: str, rider_lon: float, rider_lat: float,
     ]
 ```
 
+```typescript
+import { createClient } from 'redis';
+
+const client = createClient({ url: 'redis://redis-geo-cluster:6379' });
+await client.connect();
+
+interface NearbyDriver {
+  driver_id: string;
+  lon: number;
+  lat: number;
+}
+
+async function updateDriverLocation(
+  driver_id: string,
+  city: string,
+  lon: number,
+  lat: number,
+  available: boolean
+): Promise<void> {
+  const key = available ? `drivers:available:${city}` : `drivers:busy:${city}`;
+  await client.geoAdd(key, { longitude: lon, latitude: lat, member: driver_id });
+
+  // Separate expiry key: if no update in 30s, driver is considered offline
+  await client.setEx(`driver:alive:${driver_id}`, 30, '1');
+}
+
+async function findNearbyDrivers(
+  city: string,
+  rider_lon: number,
+  rider_lat: number,
+  radius_km: number = 5.0,
+  max_count: number = 50
+): Promise<NearbyDriver[]> {
+  const results = await client.geoRadius(
+    `drivers:available:${city}`,
+    { longitude: rider_lon, latitude: rider_lat },
+    radius_km,
+    'km',
+    { SORT: 'ASC', COUNT: max_count, WITHCOORD: true }
+  );
+  // Filter out drivers whose alive key has expired
+  const alive = await Promise.all(
+    results.map(async (r) => ({
+      entry: r,
+      isAlive: await client.exists(`driver:alive:${r.member}`),
+    }))
+  );
+  return alive
+    .filter(({ isAlive }) => isAlive)
+    .map(({ entry }) => ({
+      driver_id: entry.member,
+      lon: entry.coordinates!.longitude,
+      lat: entry.coordinates!.latitude,
+    }));
+}
+```
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+
+    "github.com/redis/go-redis/v9"
+)
+
+var rdb = redis.NewClient(&redis.Options{
+    Addr: "redis-geo-cluster:6379",
+})
+
+type NearbyDriver struct {
+    DriverID string
+    Lon      float64
+    Lat      float64
+}
+
+func updateDriverLocation(ctx context.Context, driverID, city string, lon, lat float64, available bool) error {
+    var key string
+    if available {
+        key = fmt.Sprintf("drivers:available:%s", city)
+    } else {
+        key = fmt.Sprintf("drivers:busy:%s", city)
+    }
+    err := rdb.GeoAdd(ctx, key, &redis.GeoLocation{
+        Name:      driverID,
+        Longitude: lon,
+        Latitude:  lat,
+    }).Err()
+    if err != nil {
+        return err
+    }
+    // Separate expiry key: if no update in 30s, driver is considered offline
+    return rdb.SetEx(ctx, fmt.Sprintf("driver:alive:%s", driverID), "1", 30).Err()
+}
+
+func findNearbyDrivers(ctx context.Context, city string, riderLon, riderLat, radiusKm float64, maxCount int) ([]NearbyDriver, error) {
+    results, err := rdb.GeoRadius(ctx, fmt.Sprintf("drivers:available:%s", city),
+        riderLon, riderLat,
+        &redis.GeoRadiusQuery{
+            Radius:    radiusKm,
+            Unit:      "km",
+            WithCoord: true,
+            Count:     maxCount,
+            Sort:      "ASC",
+        },
+    ).Result()
+    if err != nil {
+        return nil, err
+    }
+
+    var drivers []NearbyDriver
+    for _, r := range results {
+        exists, err := rdb.Exists(ctx, fmt.Sprintf("driver:alive:%s", r.Name)).Result()
+        if err != nil || exists == 0 {
+            continue // filter stale entries
+        }
+        drivers = append(drivers, NearbyDriver{
+            DriverID: r.Name,
+            Lon:      r.Longitude,
+            Lat:      r.Latitude,
+        })
+    }
+    return drivers, nil
+}
+```
+
 One subtlety: `GEORADIUS` returns drivers ordered by distance, but distance and ETA diverge significantly in dense urban areas. A driver 0.5 km away on a one-way street system may take four minutes to reach you; a driver 1.2 km away on a clear arterial may take two minutes. The ETA layer handles this.
 
 The city-level partition key (`drivers:available:{city}`) keeps each Redis cluster bounded. A city like New York with 50K active drivers at peak is a manageable sorted set. Do not use a global key: it creates a hot spot and makes partial failure handling difficult.
@@ -194,6 +321,109 @@ def estimate_eta(origin: tuple, destination: tuple, city: str) -> float:
     return travel_time_grid_lookup(grid_key, cell_from, cell_to)
 ```
 
+```typescript
+interface RiderLocation {
+  lon: number;
+  lat: number;
+}
+
+async function matchRiderToDriver(
+  ride_id: string,
+  rider_location: RiderLocation,
+  city: string
+): Promise<string | null> {
+  const candidates = await findNearbyDrivers(city, rider_location.lon, rider_location.lat);
+  if (candidates.length === 0) return null;
+
+  // Compute ETA for each candidate using pre-computed travel time grid
+  const withEta = await Promise.all(
+    candidates.map(async (driver) => ({
+      driver_id: driver.driver_id,
+      eta: await estimateEta(
+        { lon: driver.lon, lat: driver.lat },
+        rider_location,
+        city
+      ),
+    }))
+  );
+
+  // Sort by ETA ascending, offer in order, cascade on decline
+  withEta.sort((a, b) => a.eta - b.eta);
+  for (const { driver_id } of withEta) {
+    const accepted = await sendRideOffer(driver_id, ride_id, 10);
+    if (accepted) return driver_id;
+  }
+
+  return null; // no driver accepted
+}
+
+async function estimateEta(
+  origin: RiderLocation,
+  destination: RiderLocation,
+  city: string
+): Promise<number> {
+  // Travel time grid: pre-computed 500m x 500m cells, updated every 5 minutes
+  // by a background job that analyzes historical trip speed data
+  const grid_key = `travel_grid:${city}`;
+  const cell_from = latlonToCell(origin);
+  const cell_to = latlonToCell(destination);
+  // Simple lookup; production uses A* over the grid
+  return travelTimeGridLookup(grid_key, cell_from, cell_to);
+}
+```
+
+```go
+package main
+
+import "sort"
+
+type DriverETA struct {
+    DriverID string
+    ETA      float64
+}
+
+func matchRiderToDriver(ctx context.Context, rideID string, riderLon, riderLat float64, city string) (string, error) {
+    candidates, err := findNearbyDrivers(ctx, city, riderLon, riderLat, 5.0, 50)
+    if err != nil {
+        return "", err
+    }
+    if len(candidates) == 0 {
+        return "", nil // no driver found
+    }
+
+    // Compute ETA for each candidate using pre-computed travel time grid
+    etaList := make([]DriverETA, 0, len(candidates))
+    for _, driver := range candidates {
+        eta, err := estimateETA(ctx, driver.Lon, driver.Lat, riderLon, riderLat, city)
+        if err != nil {
+            continue
+        }
+        etaList = append(etaList, DriverETA{DriverID: driver.DriverID, ETA: eta})
+    }
+
+    // Offer to drivers in ETA order, cascade on decline
+    sort.Slice(etaList, func(i, j int) bool { return etaList[i].ETA < etaList[j].ETA })
+    for _, d := range etaList {
+        accepted, err := sendRideOffer(ctx, d.DriverID, rideID, 10)
+        if err == nil && accepted {
+            return d.DriverID, nil
+        }
+    }
+
+    return "", nil // no driver accepted
+}
+
+func estimateETA(ctx context.Context, originLon, originLat, destLon, destLat float64, city string) (float64, error) {
+    // Travel time grid: pre-computed 500m x 500m cells, updated every 5 minutes
+    // by a background job that analyzes historical trip speed data
+    gridKey := fmt.Sprintf("travel_grid:%s", city)
+    cellFrom := latlonToCell(originLon, originLat)
+    cellTo := latlonToCell(destLon, destLat)
+    // Simple lookup; production uses A* over the grid
+    return travelTimeGridLookup(ctx, gridKey, cellFrom, cellTo)
+}
+```
+
 The travel time grid is a 2D array of average travel speeds per grid cell, updated every five minutes by a batch job that reads recent trip GPS traces. It is stored in Redis as a serialized numpy array per city. This avoids calling an external routing service (Google Maps, OSRM) on every match request, which would add 50-200ms of latency and significant cost.
 
 ## Deep dive: real-time driver location push to rider
@@ -231,6 +461,138 @@ def handle_driver_location_update(driver_id: str, lon: float, lat: float):
             "eta_seconds": estimate_eta_to_rider(driver_id, rider_id),
         }
     )
+```
+
+```typescript
+import { Kafka } from 'kafkajs';
+import { createClient } from 'redis';
+
+const kafka = new Kafka({ clientId: 'location-service', brokers: ['kafka:9092'] });
+const producer = kafka.producer();
+const rGeo = createClient({ url: 'redis://redis-geo-cluster:6379' });
+const r = createClient({ url: 'redis://redis-main:6379' });
+
+interface DriverLocationEvent {
+  type: string;
+  rider_id: string;
+  driver_id: string;
+  lon: number;
+  lat: number;
+  eta_seconds: number;
+}
+
+async function handleDriverLocationUpdate(
+  driver_id: string,
+  lon: number,
+  lat: number
+): Promise<void> {
+  // 1. Update GEO index (driver is now busy, not available)
+  const city = await getDriverCity(driver_id);
+  await rGeo.geoAdd(`drivers:busy:${city}`, { longitude: lon, latitude: lat, member: driver_id });
+
+  // 2. Find the rider for this driver's current trip
+  const trip_id = await r.get(`driver:current_trip:${driver_id}`);
+  if (!trip_id) return; // driver not on a trip
+
+  const rider_id = await r.get(`trip:rider:${trip_id}`);
+  if (!rider_id) return;
+
+  // 3. Find the rider's WebSocket gateway (same conn table as WhatsApp)
+  const gateway_node = await r.hGet('conn:gateway', rider_id);
+  if (!gateway_node) return; // rider not connected
+
+  // 4. Publish location event to that gateway node
+  const event: DriverLocationEvent = {
+    type: 'driver_location',
+    rider_id,
+    driver_id,
+    lon,
+    lat,
+    eta_seconds: await estimateEtaToRider(driver_id, rider_id),
+  };
+  await producer.send({
+    topic: `gateway-events:${gateway_node}`,
+    messages: [{ value: JSON.stringify(event) }],
+  });
+}
+```
+
+```go
+package main
+
+import (
+    "context"
+    "encoding/json"
+    "fmt"
+
+    "github.com/redis/go-redis/v9"
+    "github.com/segmentio/kafka-go"
+)
+
+type DriverLocationEvent struct {
+    Type       string  `json:"type"`
+    RiderID    string  `json:"rider_id"`
+    DriverID   string  `json:"driver_id"`
+    Lon        float64 `json:"lon"`
+    Lat        float64 `json:"lat"`
+    ETASeconds float64 `json:"eta_seconds"`
+}
+
+func handleDriverLocationUpdate(ctx context.Context, driverID string, lon, lat float64) error {
+    // 1. Update GEO index (driver is now busy, not available)
+    city, err := getDriverCity(ctx, driverID)
+    if err != nil {
+        return err
+    }
+    if err := rGeo.GeoAdd(ctx, fmt.Sprintf("drivers:busy:%s", city), &redis.GeoLocation{
+        Name: driverID, Longitude: lon, Latitude: lat,
+    }).Err(); err != nil {
+        return err
+    }
+
+    // 2. Find the rider for this driver's current trip
+    tripID, err := rdb.Get(ctx, fmt.Sprintf("driver:current_trip:%s", driverID)).Result()
+    if err == redis.Nil {
+        return nil // driver not on a trip
+    }
+    if err != nil {
+        return err
+    }
+
+    riderID, err := rdb.Get(ctx, fmt.Sprintf("trip:rider:%s", tripID)).Result()
+    if err == redis.Nil {
+        return nil
+    }
+    if err != nil {
+        return err
+    }
+
+    // 3. Find the rider's WebSocket gateway (same conn table as WhatsApp)
+    gatewayNode, err := rdb.HGet(ctx, "conn:gateway", riderID).Result()
+    if err == redis.Nil {
+        return nil // rider not connected
+    }
+    if err != nil {
+        return err
+    }
+
+    // 4. Publish location event to that gateway node
+    eta, _ := estimateETAToRider(ctx, driverID, riderID)
+    event := DriverLocationEvent{
+        Type: "driver_location", RiderID: riderID, DriverID: driverID,
+        Lon: lon, Lat: lat, ETASeconds: eta,
+    }
+    payload, err := json.Marshal(event)
+    if err != nil {
+        return err
+    }
+    w := kafka.NewWriter(kafka.WriterConfig{
+        Brokers: []string{"kafka:9092"},
+        Topic:   fmt.Sprintf("gateway-events:%s", gatewayNode),
+    })
+    defer w.Close()
+    return w.WriteMessages(ctx, kafka.Message{Value: payload})
+}
 ```
 
 The gateway node consumes from its own Kafka partition (`gateway-events:{node_id}`) and pushes the event over the rider's WebSocket. The rider's map updates in near-real-time without polling.
@@ -279,6 +641,112 @@ def compute_surge(cell: str, supply_count: int, demand_count: int) -> float:
 
 # Write surge multipliers to Redis with 60s TTL
 # Consumer writes: SET surge:{geohash_cell} {multiplier} EX 60
+```
+
+```typescript
+import { Kafka } from 'kafkajs';
+import { createClient } from 'redis';
+
+// Surge pricing consumer: reads aggregated supply/demand counts from Kafka
+// and writes multipliers to Redis. A separate stream processor (e.g. Kafka Streams)
+// produces those aggregated counts from the raw driver-locations and ride-requests topics.
+
+const kafka = new Kafka({ clientId: 'surge-consumer', brokers: ['kafka:9092'] });
+const consumer = kafka.consumer({ groupId: 'surge-pricing' });
+const redisClient = createClient({ url: 'redis://redis-main:6379' });
+
+interface SurgeAggregate {
+  cell: string;        // geohash cell at precision 5
+  supply_count: number;
+  demand_count: number;
+}
+
+function computeSurge(supply_count: number, demand_count: number): number {
+  const ratio = demand_count / Math.max(supply_count, 1);
+  if (ratio < 1.2) return 1.0;
+  if (ratio < 2.0) return 1.5;
+  if (ratio < 3.0) return 2.0;
+  return Math.min(ratio * 0.8, 4.0); // cap at 4x
+}
+
+async function runSurgeConsumer(): Promise<void> {
+  await consumer.connect();
+  await redisClient.connect();
+  await consumer.subscribe({ topic: 'surge-aggregates', fromBeginning: false });
+
+  await consumer.run({
+    eachMessage: async ({ message }) => {
+      const agg: SurgeAggregate = JSON.parse(message.value!.toString());
+      const multiplier = computeSurge(agg.supply_count, agg.demand_count);
+      // Write surge multiplier to Redis with 60s TTL
+      await redisClient.setEx(`surge:${agg.cell}`, 60, String(multiplier));
+    },
+  });
+}
+```
+
+```go
+package main
+
+import (
+    "context"
+    "encoding/json"
+    "fmt"
+    "math"
+    "time"
+
+    "github.com/redis/go-redis/v9"
+    "github.com/segmentio/kafka-go"
+)
+
+// SurgeAggregate is produced by the upstream stream processor (Kafka Streams / Flink)
+// and consumed here to write multipliers to Redis.
+type SurgeAggregate struct {
+    Cell         string `json:"cell"`          // geohash cell at precision 5
+    SupplyCount  int    `json:"supply_count"`
+    DemandCount  int    `json:"demand_count"`
+}
+
+func computeSurge(supplyCount, demandCount int) float64 {
+    supply := math.Max(float64(supplyCount), 1)
+    ratio := float64(demandCount) / supply
+    switch {
+    case ratio < 1.2:
+        return 1.0
+    case ratio < 2.0:
+        return 1.5
+    case ratio < 3.0:
+        return 2.0
+    default:
+        return math.Min(ratio*0.8, 4.0) // cap at 4x
+    }
+}
+
+func runSurgeConsumer(ctx context.Context, rdb *redis.Client) error {
+    r := kafka.NewReader(kafka.ReaderConfig{
+        Brokers: []string{"kafka:9092"},
+        Topic:   "surge-aggregates",
+        GroupID: "surge-pricing",
+    })
+    defer r.Close()
+
+    for {
+        msg, err := r.ReadMessage(ctx)
+        if err != nil {
+            return err
+        }
+        var agg SurgeAggregate
+        if err := json.Unmarshal(msg.Value, &agg); err != nil {
+            continue
+        }
+        multiplier := computeSurge(agg.SupplyCount, agg.DemandCount)
+        // Write surge multiplier to Redis with 60s TTL
+        key := fmt.Sprintf("surge:%s", agg.Cell)
+        if err := rdb.SetEx(ctx, key, fmt.Sprintf("%.2f", multiplier), 60*time.Second).Err(); err != nil {
+            return err
+        }
+    }
+}
 ```
 
 The surge multiplier is applied at ride request time: the fare estimate shown to the rider uses `base_fare * surge_multiplier`. Because the multiplier has a 60-second TTL, stale data degrades gracefully: if the Flink job is delayed, the multiplier defaults to 1.0 (no surge) rather than showing an incorrect value.

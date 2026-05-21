@@ -99,7 +99,7 @@ def post_create(request):
 
 ## Rendering
 
-```django
+```html
 <form method="post">
   {% csrf_token %}
 
@@ -111,7 +111,7 @@ def post_create(request):
 
 For full control, render fields individually:
 
-```django
+```html
 <div>
   {{ form.title.label_tag }}
   {{ form.title }}
