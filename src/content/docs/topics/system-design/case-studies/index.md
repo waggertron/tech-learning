@@ -1,6 +1,6 @@
 ---
 title: System Design Case Studies
-description: "End-to-end walkthroughs of seventeen canonical system design interview problems: URL shortener, social feed, video streaming, chat, notifications, ride sharing, plus an eleven-part progressive series from Bitly through eBay."
+description: "End-to-end walkthroughs of sixteen canonical system design interview problems: URL shortener, social feed, video streaming, chat, notifications, ride sharing, plus an eleven-part progressive series from Bitly through ad click aggregation."
 parent: system-design
 tags: [system-design, case-studies, interviews]
 status: draft
@@ -39,7 +39,7 @@ This ten-part series builds up a shared vocabulary one entry at a time. Each sys
 | 8 | [Web Crawler](./web-crawler/) | URL frontier, politeness, Bloom filter dedup, SimHash | Kafka URL queue, consistent hashing, Redis |
 | 9 | [Ad Click Aggregator](./ad-click-aggregator/) | Time-windowed aggregation, idempotent counting, lambda architecture | Kafka stream, consistent hashing, Redis counters |
 | 10 | [Facebook Post Search](./facebook-post-search/) | Inverted index, BM25 ranking, typeahead, privacy filtering | Kafka indexing pipeline, consistent hashing, Redis cache |
-| 11 | [eBay](./ebay/) | Auction state machine, proxy bidding, bid sniper problem, payment escrow | Distributed locking, Redis sorted sets, WebSocket routing, Kafka, idempotent writes |
+
 
 ## The underlying patterns
 

@@ -54,7 +54,7 @@ End-to-end walkthroughs of sixteen canonical interview problems, each with clari
 - [Web Crawler](./case-studies/web-crawler/), URL frontier, politeness, Bloom filter deduplication
 - [Ad Click Aggregator](./case-studies/ad-click-aggregator/), time-windowed aggregation, idempotent counting, lambda architecture
 - [Facebook Post Search](./case-studies/facebook-post-search/), inverted index, BM25 ranking, typeahead, privacy filtering
-- [eBay](./case-studies/ebay/), auction state machine, proxy bidding, bid sniper problem, payment escrow
+
 
 ## Advanced patterns
 
