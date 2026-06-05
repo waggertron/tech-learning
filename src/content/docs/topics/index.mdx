@@ -130,6 +130,7 @@ Topics are the durable knowledge base. Each topic lives at `topics/<category>/<s
   - [Singleton](./cs/design-patterns/singleton/), one instance, global access
   - [Adapter](./cs/design-patterns/adapter/), incompatible interfaces made compatible
   - [Proxy](./cs/design-patterns/proxy/), controlled access through a surrogate
+- [Kademlia DHT](./cs/kademlia-dht/), XOR metric, k-buckets, iterative lookup, and the four RPCs behind BitTorrent mainline DHT, IPFS, and Ethereum devp2p
 
 ## Python
 
@@ -252,6 +253,30 @@ Topics are the durable knowledge base. Each topic lives at `topics/<category>/<s
 - [Gitflow](./ops/gitflow/), Vincent Driessen's 2010 branching model and its modern alternatives
 - [MLOps](./ops/mlops/), the engineering discipline around getting ML models into production
 - [Tokens, Keys, Secrets, and Environment Variables](./ops/secrets-keys-tokens/), what each credential type is, how they differ, where they live, and the mistakes that expose them
+
+## Cryptographic Systems
+
+- [Cryptographic Systems, category overview](./cryptographic-systems/)
+- [Distributed Cryptography](./cryptographic-systems/distributed-cryptography/), protocols that split keys and secrets across multiple parties so no single party holds the whole: secret sharing, MPC, threshold signatures, ZKPs, and distributed key generation
+  - [Secret Sharing](./cryptographic-systems/distributed-cryptography/secret-sharing/), Shamir's scheme and verifiable variants: split a secret into n shares, require any t to reconstruct
+  - [Multi-Party Computation](./cryptographic-systems/distributed-cryptography/multi-party-computation/), compute a function over distributed private inputs without revealing them
+  - [Threshold Signatures](./cryptographic-systems/distributed-cryptography/threshold-signatures/), sign with a t-of-n key where no party holds the full private key
+  - [Zero-Knowledge Proofs](./cryptographic-systems/distributed-cryptography/zero-knowledge-proofs/), prove a statement is true without revealing why
+  - [Distributed Key Generation](./cryptographic-systems/distributed-cryptography/distributed-key-generation/), generate a shared keypair across n parties with no trusted dealer
+
+## Blockchain
+
+- [Blockchain, category overview](./blockchain/)
+- [Bitcoin](./blockchain/bitcoin/), UTXO model, SHA-256 PoW, 21M cap, Lightning Network, SegWit, and Taproot
+- [Ethereum](./blockchain/ethereum/), the account model, EVM, gas, PoS (The Merge), ERC-20/721, L2 rollups, and MEV
+- [Monero](./blockchain/monero/), ring signatures, stealth addresses, RingCT, and RandomX ASIC-resistant mining
+- [Tether and Stablecoins](./blockchain/tether/), fiat-backed, crypto-collateralized, and algorithmic stablecoins and the UST/LUNA collapse
+- [Wrapped Currencies](./blockchain/wrapped-currencies/), WBTC, wETH, and bridge protocols: lock-and-mint, bridge exploits, and IBC
+- [Staking](./blockchain/staking/), Ethereum validator duties, slashing, inactivity leak, liquid staking (stETH/rETH), and restaking
+- [Consensus Mechanisms](./blockchain/consensus-mechanisms/), how distributed nodes agree on the canonical chain
+  - [Proof-of-Work](./blockchain/consensus-mechanisms/proof-of-work/), SHA-256, Ethash, RandomX, ASIC mining, and 51% attacks
+  - [Proof-of-Stake](./blockchain/consensus-mechanisms/proof-of-stake/), Casper FFG, LMD-GHOST, slashing, Ouroboros, and Tendermint
+  - [Other Consensus Mechanisms](./blockchain/consensus-mechanisms/other-consensus/), DPoS, PoA, PoH, PoSpace, and HotStuff
 
 ## Conventions
 
