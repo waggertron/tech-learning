@@ -124,7 +124,7 @@ Namecoin (the first Bitcoin merge-mined chain) and Dogecoin both use merge minin
 
 ## Related topics
 
-- [Bitcoin](../bitcoin/), the largest PoW chain
-- [Monero](../monero/), PoW with ASIC resistance via RandomX
+- [Bitcoin](../cryptocurrency/bitcoin/), the largest PoW chain
+- [Monero](../cryptocurrency/monero/), PoW with ASIC resistance via RandomX
 - [Proof-of-Stake](./proof-of-stake/), the energy-efficient alternative
 - [Other Consensus Mechanisms](./other-consensus/), PoA, DPoS, PoH, and PoSpace

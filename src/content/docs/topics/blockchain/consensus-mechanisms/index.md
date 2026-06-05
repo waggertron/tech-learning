@@ -16,18 +16,22 @@ The solution in every case: make disagreement expensive. In proof-of-work, forki
 
 - [Proof-of-Work](./proof-of-work/), computational puzzles as the cost of participation: SHA-256, Ethash, RandomX, mining pools, and 51% attacks
 - [Proof-of-Stake](./proof-of-stake/), bonded capital as the cost of participation: Ethereum Casper, validator duties, slashing, and alternative PoS designs
-- [Other Consensus Mechanisms](./other-consensus/), DPoS, Proof-of-Authority, Proof-of-History, Proof-of-Space, and BFT variants
+- [Delegated Proof-of-Stake](./delegated-proof-of-stake/), token holders elect a small set of block producers who take turns proposing blocks
+- [Byzantine Fault Tolerance](./byzantine-fault-tolerance/), explicit multi-round voting for deterministic single-block finality: PBFT, Tendermint, HotStuff
+- [Proof-of-Authority](./proof-of-authority/), only whitelisted, identified validators can sign blocks: Clique, Aura, enterprise chains
+- [Proof-of-Space](./proof-of-space/), pre-committed disk storage replaces hash computation: Chia's plotting, farming, and Proof-of-Time
+- [Other Consensus Mechanisms](./other-consensus/), Proof-of-History and broader comparisons
 
 ## The key tradeoffs
 
 | Mechanism | Energy | Decentralization | Finality | Throughput |
 | --- | --- | --- | --- | --- |
-| Proof-of-Work | High | High (anyone can mine) | Probabilistic (~1 hr) | Low (~7-15 TPS) |
-| Proof-of-Stake | Low | Medium (stake required) | Fast (~12 min on Ethereum) | Medium (~15 TPS + L2) |
-| DPoS | Very low | Low (elected delegates) | Fast | High |
-| BFT (Tendermint) | Very low | Medium | Instant (1 block) | Medium |
-| Proof-of-Authority | Minimal | Very low (known validators) | Instant | High |
-| Proof-of-Space | Low | Medium | Probabilistic | Low |
+| **[Proof-of-Work](./proof-of-work/)**: nodes compete to solve a cryptographic hash puzzle; the winner adds the next block and earns the block reward. Difficulty adjusts so blocks arrive at a steady rate regardless of total hash power. | High | High (anyone can mine) | Probabilistic (~1 hr) | Low (~7-15 TPS) |
+| **[Proof-of-Stake](./proof-of-stake/)**: validators lock tokens as collateral to earn the right to propose and attest to blocks. Misbehavior (double-signing) is punished by automatically destroying a portion of the stake (slashing). | Low | Medium (stake required) | Fast (~12 min on Ethereum) | Medium (~15 TPS + L2) |
+| **[Delegated Proof-of-Stake](./delegated-proof-of-stake/)**: token holders vote to elect a small fixed set of block producers (typically 21-27). Elected producers take turns proposing blocks in a round-robin schedule. | Very low | Low (elected delegates) | Fast | High |
+| **[Byzantine Fault Tolerance](./byzantine-fault-tolerance/)**: a known validator set runs a multi-round voting protocol. A block is committed only when 2/3+ of validators explicitly pre-vote and pre-commit to it. One bad round restarts with a new proposer. | Very low | Medium | Instant (1 block) | Medium |
+| **[Proof-of-Authority](./proof-of-authority/)**: only pre-approved, identified validators can sign blocks. Validators take turns in a round-robin; a block is valid if signed by an authorized address. Used in enterprise chains and testnets. | Minimal | Very low (known validators) | Instant | High |
+| **[Proof-of-Space](./proof-of-space/)**: nodes pre-compute large lookup tables (plots) stored on disk. To win a block, a farmer finds the best matching value in their plots for a network-broadcast challenge. Storage capacity replaces hash power. | Low | Medium | Probabilistic | Low |
 
 ## How to read the table
 
@@ -41,7 +45,7 @@ The solution in every case: make disagreement expensive. In proof-of-work, forki
 
 ## Related topics
 
-- [Bitcoin](../bitcoin/), the original PoW chain
-- [Ethereum](../ethereum/), the largest PoS chain
-- [Staking](../staking/), the economics of PoS participation
+- [Bitcoin](../cryptocurrency/bitcoin/), the original PoW chain
+- [Ethereum](../cryptocurrency/ethereum/), the largest PoS chain
+- [Staking](../cryptocurrency/staking/), the economics of PoS participation
 - [Distributed Cryptography](../../cryptographic-systems/distributed-cryptography/), the cryptographic building blocks behind PoS signing

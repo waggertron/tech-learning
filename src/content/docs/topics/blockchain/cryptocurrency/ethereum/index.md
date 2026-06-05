@@ -1,7 +1,7 @@
 ---
 title: Ethereum
 description: "The programmable blockchain: EVM execution, smart contracts, the account model, proof-of-stake after the Merge, ERC token standards, rollup scaling, and MEV."
-category: blockchain
+parent: cryptocurrency
 tags: [blockchain, ethereum, evm, smart-contracts, proof-of-stake, rollups]
 status: draft
 created: 2026-06-04
@@ -164,5 +164,5 @@ MEV-Boost separates block building from block proposing. Specialized block build
 
 - [Bitcoin](../bitcoin/), the UTXO-model alternative
 - [Staking](../staking/), the economics of Ethereum validator participation
-- [Consensus Mechanisms](../consensus-mechanisms/), proof-of-stake in detail
-- [Zero-Knowledge Proofs](../../cryptographic-systems/distributed-cryptography/zero-knowledge-proofs/), the cryptography behind ZK-rollups
+- [Consensus Mechanisms](../../consensus-mechanisms/), proof-of-stake in detail
+- [Zero-Knowledge Proofs](../../../cryptographic-systems/distributed-cryptography/zero-knowledge-proofs/), the cryptography behind ZK-rollups

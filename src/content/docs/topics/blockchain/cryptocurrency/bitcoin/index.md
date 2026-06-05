@@ -1,7 +1,7 @@
 ---
 title: Bitcoin
 description: "The original proof-of-work blockchain: UTXO model, SHA-256 mining, the 21M supply cap, Lightning Network payment channels, and Taproot Schnorr signatures."
-category: blockchain
+parent: cryptocurrency
 tags: [blockchain, bitcoin, proof-of-work, utxo, lightning-network]
 status: draft
 created: 2026-06-04
@@ -156,7 +156,7 @@ The combined effect: multisig wallets, DLCs, and Lightning channel opens all loo
 
 ## Related topics
 
-- [Consensus Mechanisms](../consensus-mechanisms/), proof-of-work in detail
+- [Consensus Mechanisms](../../consensus-mechanisms/), proof-of-work in detail
 - [Ethereum](../ethereum/), the account-model alternative
 - [Monero](../monero/), privacy extensions to the UTXO model
-- [Threshold Signatures](../../cryptographic-systems/distributed-cryptography/threshold-signatures/), the cryptography behind multisig and MuSig2
+- [Threshold Signatures](../../../cryptographic-systems/distributed-cryptography/threshold-signatures/), the cryptography behind multisig and MuSig2

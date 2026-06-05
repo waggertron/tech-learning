@@ -1,7 +1,7 @@
 ---
 title: Wrapped Currencies
 description: "Tokenized cross-chain representations of assets: how WBTC, wETH, and bridge protocols lock assets on one chain and mint equivalents on another, and why bridges attract the largest exploits in crypto."
-parent: blockchain
+parent: cryptocurrency
 tags: [blockchain, wrapped-tokens, bridges, wbtc, weth, defi]
 status: draft
 created: 2026-06-04
@@ -128,4 +128,4 @@ Ethereum L2s have canonical bridges maintained by the L2 team, with optimistic w
 - [Ethereum](./ethereum/), the primary destination chain for most wrapped assets
 - [Bitcoin](./bitcoin/), the origin chain for WBTC
 - [Tether and Stablecoins](./tether/), stablecoins run on the same bridge infrastructure
-- [Consensus Mechanisms](./consensus-mechanisms/), bridge security often depends on the consensus of both connected chains
+- [Consensus Mechanisms](../consensus-mechanisms/), bridge security often depends on the consensus of both connected chains

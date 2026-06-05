@@ -1,7 +1,7 @@
 ---
 title: Staking
 description: "Locking tokens to participate in proof-of-stake consensus: Ethereum validator duties, slashing conditions, liquid staking with stETH and rETH, yield sources, and the risks of restaking."
-parent: blockchain
+parent: cryptocurrency
 tags: [blockchain, staking, ethereum, proof-of-stake, liquid-staking, validators]
 status: draft
 created: 2026-06-04
@@ -127,6 +127,6 @@ The risk: a validator could be slashed by EigenLayer's contracts even if they ar
 ## Related topics
 
 - [Ethereum](./ethereum/), the primary staking platform
-- [Consensus Mechanisms: Proof-of-Stake](./consensus-mechanisms/proof-of-stake/), the full PoS mechanism
+- [Consensus Mechanisms: Proof-of-Stake](../consensus-mechanisms/proof-of-stake/), the full PoS mechanism
 - [Wrapped Currencies](./wrapped-currencies/), stETH and rETH trade as ERC-20 tokens on secondary markets
-- [Distributed Key Generation](../cryptographic-systems/distributed-cryptography/distributed-key-generation/), used in DVT to distribute validator keys
+- [Distributed Key Generation](../../cryptographic-systems/distributed-cryptography/distributed-key-generation/), used in DVT to distribute validator keys

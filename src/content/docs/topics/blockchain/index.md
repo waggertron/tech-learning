@@ -14,12 +14,13 @@ This category covers the major networks, the assets they carry, and the mechanis
 
 ## Topics
 
-- [Bitcoin](./bitcoin/), the original proof-of-work blockchain: UTXO model, SHA-256 mining, the halving, Lightning Network, and Taproot
-- [Ethereum](./ethereum/), the programmable blockchain: EVM, smart contracts, proof-of-stake, ERC standards, and the rollup ecosystem
-- [Monero](./monero/), the privacy-first coin: ring signatures, stealth addresses, RingCT, and ASIC-resistant mining
-- [Tether and Stablecoins](./tether/), fiat-pegged tokens: USDT, USDC, DAI, how reserves work, and where they break
-- [Wrapped Currencies](./wrapped-currencies/), tokenized cross-chain representations: WBTC, wETH, bridges, and bridge exploits
-- [Staking](./staking/), locking tokens to participate in proof-of-stake: validators, slashing, liquid staking, and yield
+- [Cryptocurrency](./cryptocurrency/), the major networks and assets: Bitcoin, Ethereum, Monero, stablecoins, wrapped assets, and staking
+  - [Bitcoin](./cryptocurrency/bitcoin/), the original proof-of-work blockchain: UTXO model, SHA-256 mining, the halving, Lightning Network, and Taproot
+  - [Ethereum](./cryptocurrency/ethereum/), the programmable blockchain: EVM, smart contracts, proof-of-stake, ERC standards, and the rollup ecosystem
+  - [Monero](./cryptocurrency/monero/), the privacy-first coin: ring signatures, stealth addresses, RingCT, and ASIC-resistant mining
+  - [Tether and Stablecoins](./cryptocurrency/tether/), fiat-pegged tokens: USDT, USDC, DAI, how reserves work, and where they break
+  - [Wrapped Currencies](./cryptocurrency/wrapped-currencies/), tokenized cross-chain representations: WBTC, wETH, bridges, and bridge exploits
+  - [Staking](./cryptocurrency/staking/), locking tokens to participate in proof-of-stake: validators, slashing, liquid staking, and yield
 - [Consensus Mechanisms](./consensus-mechanisms/), how blockchains agree: proof-of-work, proof-of-stake, and the alternatives
 
 ## How the topics connect

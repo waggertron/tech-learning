@@ -1,7 +1,7 @@
 ---
 title: Tether and Stablecoins
 description: "Fiat-pegged tokens: how USDT, USDC, and DAI maintain their pegs, what backs them, the reserve controversy, and how the three stablecoin models each break differently."
-parent: blockchain
+parent: cryptocurrency
 tags: [blockchain, stablecoins, tether, usdt, usdc, dai, defi]
 status: draft
 created: 2026-06-04

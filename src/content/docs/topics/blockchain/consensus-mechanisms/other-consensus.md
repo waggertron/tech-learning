@@ -148,5 +148,5 @@ HotStuff or variants appear in Diem (Facebook's canceled stablecoin project), Ap
 
 - [Proof-of-Work](./proof-of-work/), the energy-intensive original
 - [Proof-of-Stake](./proof-of-stake/), the capital-based alternative
-- [Bitcoin](../bitcoin/), the original PoW chain
-- [Ethereum](../ethereum/), the largest PoS chain
+- [Bitcoin](../cryptocurrency/bitcoin/), the original PoW chain
+- [Ethereum](../cryptocurrency/ethereum/), the largest PoS chain
