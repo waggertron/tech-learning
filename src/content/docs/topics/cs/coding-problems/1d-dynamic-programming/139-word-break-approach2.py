@@ -1,9 +1,9 @@
 from functools import lru_cache
 
-def word_break(s, word_dict):
+def word_break(s: str, word_dict: list[str]) -> bool:
     words = set(word_dict)
     @lru_cache(maxsize=None)
-    def f(start):
+    def f(start: int) -> bool:
         if start == len(s):
             return True
         for end in range(start + 1, len(s) + 1):

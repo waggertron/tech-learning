@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def num_distinct(s, t):
+def num_distinct(s: str, t: str) -> int:
     @lru_cache(maxsize=None)
     def f(i, j):
         if j == len(t):

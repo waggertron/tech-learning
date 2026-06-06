@@ -1,6 +1,6 @@
 def generate_parenthesis(n: int) -> list[str]:
     result = []
-    def rec(s, opens, closes):
+    def rec(s: str, opens: int, closes: int) -> None:
         if opens > n or closes > opens:
             return
         if len(s) == 2 * n:

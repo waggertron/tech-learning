@@ -1,11 +1,14 @@
+from __future__ import annotations
+
+
 class TreeNode:
 
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals:
         return None
     from collections import deque
@@ -24,7 +27,7 @@ def build_tree(vals):
         i += 1
     return root
 
-def tree_to_list(root):
+def tree_to_list(root: TreeNode | None) -> list[int | None]:
     from collections import deque
     if not root:
         return []
@@ -43,13 +46,13 @@ def tree_to_list(root):
 
 class Codec:
 
-    def serialize(self, root):
+    def serialize(self, root: TreeNode | None) -> str:
         pass  # TODO: implement
 
-    def deserialize(self, data):
+    def deserialize(self, data: str) -> TreeNode | None:
         pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     codec = Codec()
     t = build_tree([1, 2, 3, None, None, 4, 5])
     assert tree_to_list(codec.deserialize(codec.serialize(t))) == [1, 2, 3, None, None, 4, 5]

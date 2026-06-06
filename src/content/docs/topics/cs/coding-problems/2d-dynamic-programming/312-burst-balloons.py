@@ -1,7 +1,7 @@
-def max_coins(nums):
+def max_coins(nums: list[int]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert max_coins([3, 1, 5, 8]) == 167
     assert max_coins([1, 5]) == 10
     assert max_coins([5]) == 5

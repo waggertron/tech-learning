@@ -1,11 +1,11 @@
-def solve_n_queens(n):
+def solve_n_queens(n: int) -> list[list[str]]:
     result = []
     cols_used = set()
     diag1 = set()   # row + col
     diag2 = set()   # row - col
     placement = [-1] * n
 
-    def backtrack(r):
+    def backtrack(r: int) -> None:
         if r == n:
             board = ["".join("Q" if placement[i] == j else "." for j in range(n)) for i in range(n)]
             result.append(board)                      # L1: O(n^2) build board

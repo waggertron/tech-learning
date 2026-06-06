@@ -1,6 +1,6 @@
 import heapq
 
-def min_meeting_rooms(intervals):
+def min_meeting_rooms(intervals: list[list[int]]) -> int:
     intervals.sort(key=lambda x: x[0])
     heap = []
     for s, e in intervals:

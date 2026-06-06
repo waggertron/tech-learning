@@ -1,4 +1,4 @@
-def spiral_order(matrix):
+def spiral_order(matrix: list[list[int]]) -> list[int]:
     if not matrix:
         return []
     result = []

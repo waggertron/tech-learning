@@ -1,4 +1,4 @@
-def num_decodings(s):
+def num_decodings(s: str) -> int:
     if not s or s[0] == '0':
         return 0
     prev2, prev1 = 1, 1

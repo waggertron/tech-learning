@@ -1,16 +1,16 @@
-def swim_in_water(grid):
+def swim_in_water(grid: list[list[int]]) -> int:
     n = len(grid)
     cells = sorted((grid[r][c], r, c) for r in range(n) for c in range(n))
     parent = list(range(n * n))
     active = [False] * (n * n)
 
-    def find(x):
+    def find(x: int) -> int:
         while parent[x] != x:
             parent[x] = parent[parent[x]]
             x = parent[x]
         return x
 
-    def union(a, b):
+    def union(a: int, b: int) -> None:
         ra, rb = find(a), find(b)
         if ra != rb:
             parent[ra] = rb

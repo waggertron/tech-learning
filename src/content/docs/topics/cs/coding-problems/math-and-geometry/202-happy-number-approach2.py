@@ -1,5 +1,5 @@
-def is_happy(n):
-    def next_n(x):
+def is_happy(n: int) -> bool:
+    def next_n(x: int) -> int:
         total = 0
         while x:                        # L1: O(log x) digit extraction
             total += (x % 10) ** 2

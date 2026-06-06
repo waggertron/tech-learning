@@ -1,7 +1,7 @@
-def get_sum(a, b):
+def get_sum(a: int, b: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert get_sum(1, 2) == 3
     assert get_sum(2, 3) == 5
     assert get_sum(0, 0) == 0

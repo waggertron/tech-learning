@@ -1,8 +1,8 @@
-def permute(nums):
+def permute(nums: list[int]) -> list[list[int]]:
     result = []
     nums = list(nums)
 
-    def backtrack(start):
+    def backtrack(start: int) -> None:
         if start == len(nums):
             result.append(nums[:])          # L1: O(n) copy
             return

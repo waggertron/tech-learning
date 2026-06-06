@@ -1,4 +1,4 @@
-def find_critical_and_pseudo_critical_edges(n, edges):
+def find_critical_and_pseudo_critical_edges(n: int, edges: list[list[int]]) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

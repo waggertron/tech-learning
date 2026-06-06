@@ -32,6 +32,7 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 - [454. 4Sum II (Medium)](./454-4sum-ii/)
 - [459. Repeated Substring Pattern (Easy)](./459-repeated-substring-pattern/)
 - [1010. Pairs of Songs With Total Durations Divisible by 60 (Medium)](./1010-pairs-of-songs-divisible-by-60/)
+- [1071. Greatest Common Divisor of Strings (Easy)](./1071-greatest-common-divisor-of-strings/)
 
 ## Key patterns unlocked here
 

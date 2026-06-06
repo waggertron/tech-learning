@@ -1,4 +1,4 @@
-def min_cost_connect_points(points):
+def min_cost_connect_points(points: list[list[int]]) -> int:
     n = len(points)
     edges = []
     for i in range(n):
@@ -9,7 +9,7 @@ def min_cost_connect_points(points):
 
     parent = list(range(n))
 
-    def find(x):
+    def find(x: int) -> int:
         while parent[x] != x:
             parent[x] = parent[parent[x]]
             x = parent[x]

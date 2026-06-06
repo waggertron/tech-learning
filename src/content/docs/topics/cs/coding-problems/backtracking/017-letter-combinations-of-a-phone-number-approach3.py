@@ -1,6 +1,6 @@
 from itertools import product
 
-def letter_combinations(digits):
+def letter_combinations(digits: str) -> list[str]:
     if not digits:
         return []
     mapping = {"2":"abc","3":"def","4":"ghi","5":"jkl",

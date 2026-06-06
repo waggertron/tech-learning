@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     from collections import deque
     root = TreeNode(vals[0])
@@ -22,7 +25,7 @@ def build_tree(vals):
         i += 1
     return root
 
-def tree_to_list(root):
+def tree_to_list(root: TreeNode | None) -> list[int | None]:
     from collections import deque
     if not root: return []
     result, q = [], deque([root])
@@ -39,9 +42,9 @@ def tree_to_list(root):
     return result
 
 class Codec:
-    def serialize(self, root):
-        parts = []
-        def rec(node):
+    def serialize(self, root: TreeNode | None) -> str:
+        parts: list[str] = []
+        def rec(node: TreeNode | None) -> None:
             if not node:
                 parts.append("#")             # L1: O(1) emit null
                 return
@@ -51,9 +54,9 @@ class Codec:
         rec(root)
         return ",".join(parts)                # L5: O(n) join
 
-    def deserialize(self, data):
+    def deserialize(self, data: str) -> TreeNode | None:
         tokens = iter(data.split(","))        # L6: O(n) split + iterator
-        def rec():
+        def rec() -> TreeNode | None:
             val = next(tokens)
             if val == "#":
                 return None                   # L7: null marker

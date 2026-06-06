@@ -1,4 +1,4 @@
-def longest_palindrome(s):
+def longest_palindrome(s: str) -> str:
     n = len(s)
     if n <= 1:
         return s

@@ -1,4 +1,4 @@
-def min_distance(word1, word2):
+def min_distance(word1: str, word2: str) -> int:
     m, n = len(word1), len(word2)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     for i in range(m + 1):

@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def accounts_merge(accounts):
+def accounts_merge(accounts: list[list[str]]) -> list[list[str]]:
     parent = {}
 
     def find(x):

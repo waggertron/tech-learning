@@ -1,4 +1,4 @@
-def valid_tree(n, edges):
+def valid_tree(n: int, edges: list[list[int]]) -> bool:
     if len(edges) != n - 1:
         return False
     parent = list(range(n))

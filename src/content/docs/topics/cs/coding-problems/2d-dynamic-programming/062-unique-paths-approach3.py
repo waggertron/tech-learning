@@ -1,4 +1,4 @@
-def unique_paths(m, n):
+def unique_paths(m: int, n: int) -> int:
     dp = [1] * n
     for _ in range(1, m):
         for c in range(1, n):

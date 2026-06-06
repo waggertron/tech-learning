@@ -1,4 +1,4 @@
-def min_cost_connect_points(points):
+def min_cost_connect_points(points: list[list[int]]) -> int:
     n = len(points)
     in_mst = [False] * n
     min_dist = [float('inf')] * n

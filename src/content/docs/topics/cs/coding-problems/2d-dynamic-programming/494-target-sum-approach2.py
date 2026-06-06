@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def find_target_sum_ways(nums, target):
+def find_target_sum_ways(nums: list[int], target: int) -> int:
     @lru_cache(maxsize=None)
     def f(i, cur):
         if i == len(nums):

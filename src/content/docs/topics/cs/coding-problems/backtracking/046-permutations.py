@@ -1,4 +1,4 @@
-def permute(nums):
+def permute(nums: list[int]) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

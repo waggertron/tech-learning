@@ -1,4 +1,4 @@
-def partition_labels(s):
+def partition_labels(s: str) -> list[int]:
     first, last = {}, {}
     for i, ch in enumerate(s):
         first.setdefault(ch, i)

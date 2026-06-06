@@ -1,4 +1,4 @@
-def reverse_bits(n):
+def reverse_bits(n: int) -> int:
     return int(f"{n:032b}"[::-1], 2)        # L1: O(32) format + reverse + parse
 
 assert reverse_bits(43261596) == 964176192

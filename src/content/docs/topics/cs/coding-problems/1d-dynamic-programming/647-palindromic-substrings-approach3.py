@@ -1,4 +1,4 @@
-def count_substrings(s):
+def count_substrings(s: str) -> int:
     n = len(s)
     dp = [[False] * n for _ in range(n)]
     count = 0

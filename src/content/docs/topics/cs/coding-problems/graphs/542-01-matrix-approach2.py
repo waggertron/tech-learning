@@ -1,6 +1,6 @@
 from collections import deque
 
-def update_matrix(mat):
+def update_matrix(mat: list[list[int]]) -> list[list[int]]:
     rows, cols = len(mat), len(mat[0])
     dist = [[float('inf')] * cols for _ in range(rows)]
     q = deque()

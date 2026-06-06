@@ -1,4 +1,4 @@
-def combination_sum(candidates, target):
+def combination_sum(candidates: list[int], target: int) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

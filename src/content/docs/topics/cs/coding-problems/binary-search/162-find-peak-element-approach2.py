@@ -1,4 +1,4 @@
-def find_peak_element(nums: list) -> int:
+def find_peak_element(nums: list[int]) -> int:
     lo, hi = 0, len(nums) - 1
     while lo < hi:
         mid = (lo + hi) // 2

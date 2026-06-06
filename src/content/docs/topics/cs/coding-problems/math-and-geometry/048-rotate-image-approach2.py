@@ -1,4 +1,4 @@
-def rotate(matrix):
+def rotate(matrix: list[list[int]]) -> None:
     n = len(matrix)                                 # L1: O(1)
     for r in range(n // 2):                         # L2: n/2 rings
         for c in range(r, n - r - 1):               # L3: n-2r-1 cells per ring

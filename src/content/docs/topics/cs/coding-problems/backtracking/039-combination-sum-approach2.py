@@ -1,8 +1,8 @@
-def combination_sum(candidates, target):
+def combination_sum(candidates: list[int], target: int) -> list[list[int]]:
     result = []
     path = []
 
-    def backtrack(start, remaining):
+    def backtrack(start: int, remaining: int) -> None:
         if remaining == 0:
             result.append(path[:])     # L1: O(k) copy at leaf
             return

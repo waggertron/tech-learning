@@ -1,4 +1,4 @@
-def exist(board, word):
+def exist(board: list[list[str]], word: str) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

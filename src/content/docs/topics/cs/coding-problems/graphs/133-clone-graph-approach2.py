@@ -1,11 +1,12 @@
+from __future__ import annotations
 from collections import deque
 
 class Node:
-    def __init__(self, val=0, neighbors=None):
+    def __init__(self, val: int = 0, neighbors: list[Node] | None = None) -> None:
         self.val = val
         self.neighbors = neighbors or []
 
-def clone_graph(node):
+def clone_graph(node: Node | None) -> Node | None:
     if not node:
         return None
     old_to_new = {node: Node(node.val)}

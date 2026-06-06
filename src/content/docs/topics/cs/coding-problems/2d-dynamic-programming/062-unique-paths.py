@@ -1,7 +1,7 @@
-def unique_paths(m, n):
+def unique_paths(m: int, n: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert unique_paths(3, 7) == 28
     assert unique_paths(3, 2) == 3
     assert unique_paths(1, 1) == 1

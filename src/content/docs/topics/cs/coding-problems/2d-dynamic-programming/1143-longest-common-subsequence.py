@@ -1,7 +1,7 @@
-def longest_common_subsequence(text1, text2):
+def longest_common_subsequence(text1: str, text2: str) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert longest_common_subsequence('abcde', 'ace') == 3
     assert longest_common_subsequence('abc', 'abc') == 3
     assert longest_common_subsequence('abc', 'def') == 0

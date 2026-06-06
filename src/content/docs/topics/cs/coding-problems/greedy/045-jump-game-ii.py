@@ -1,7 +1,7 @@
-def jump(nums):
+def jump(nums: list[int]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert jump([2, 3, 1, 1, 4]) == 2
     assert jump([2, 3, 0, 1, 4]) == 2
     assert jump([1]) == 0

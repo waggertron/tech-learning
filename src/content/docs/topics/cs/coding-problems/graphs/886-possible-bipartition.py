@@ -1,6 +1,6 @@
 from collections import defaultdict, deque
 
-def possible_bipartition(n, dislikes):
+def possible_bipartition(n: int, dislikes: list[list[int]]) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

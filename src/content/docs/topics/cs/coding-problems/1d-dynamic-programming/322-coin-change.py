@@ -1,4 +1,4 @@
-def coin_change(coins, amount):
+def coin_change(coins: list[int], amount: int) -> int:
     pass  # TODO: implement
 
 def _run_tests():

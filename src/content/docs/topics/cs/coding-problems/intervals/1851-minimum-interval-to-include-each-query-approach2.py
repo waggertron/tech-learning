@@ -1,6 +1,6 @@
 import heapq
 
-def min_interval(intervals, queries):
+def min_interval(intervals: list[list[int]], queries: list[int]) -> list[int]:
     intervals.sort(key=lambda x: x[0])
     sorted_queries = sorted(enumerate(queries), key=lambda p: p[1])
 

@@ -1,7 +1,7 @@
-def multiply(num1, num2):
+def multiply(num1: str, num2: str) -> str:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert multiply('2', '3') == '6'
     assert multiply('123', '456') == '56088'
     assert multiply('0', '12345') == '0'

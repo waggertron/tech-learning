@@ -1,4 +1,4 @@
-def count_components(n, edges):
+def count_components(n: int, edges: list[list[int]]) -> int:
     parent = list(range(n))
     count = n
 

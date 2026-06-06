@@ -1,4 +1,4 @@
-def num_distinct(s, t):
+def num_distinct(s: str, t: str) -> int:
     m, n = len(s), len(t)
     dp = [0] * (n + 1)
     dp[0] = 1

@@ -1,4 +1,4 @@
-def max_profit(prices: list) -> int:
+def max_profit(prices: list[int]) -> int:
     lowest = float('inf')             # L1: O(1)
     best = 0                          # L2: O(1)
     for price in prices:              # L3: single loop, n iterations

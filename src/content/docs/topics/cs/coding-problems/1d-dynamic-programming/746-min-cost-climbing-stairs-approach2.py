@@ -1,9 +1,9 @@
 from functools import lru_cache
 
-def min_cost_climbing_stairs(cost):
+def min_cost_climbing_stairs(cost: list[int]) -> int:
     n = len(cost)
     @lru_cache(maxsize=None)
-    def f(i):
+    def f(i: int) -> int:
         if i >= n:
             return 0
         return cost[i] + min(f(i + 1), f(i + 2))

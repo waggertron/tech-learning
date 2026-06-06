@@ -1,4 +1,4 @@
-def search_matrix(matrix: list, target: int) -> bool:
+def search_matrix(matrix: list[list[int]], target: int) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

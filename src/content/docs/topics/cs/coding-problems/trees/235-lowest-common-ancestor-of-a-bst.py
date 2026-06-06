@@ -1,11 +1,14 @@
+from __future__ import annotations
+
+
 class TreeNode:
 
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals:
         return None
     root = TreeNode(vals[0])
@@ -23,17 +26,17 @@ def build_tree(vals):
         i += 1
     return root
 
-def find_node(root, val):
+def find_node(root: TreeNode | None, val: int) -> TreeNode | None:
     while root:
         if val == root.val:
             return root
         root = root.left if val < root.val else root.right
     return None
 
-def lowest_common_ancestor(root, p, q):
+def lowest_common_ancestor(root: TreeNode | None, p: TreeNode, q: TreeNode) -> TreeNode | None:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     t = build_tree([6, 2, 8, 0, 4, 7, 9, None, None, 3, 5])
     assert lowest_common_ancestor(t, find_node(t, 2), find_node(t, 8)).val == 6
     assert lowest_common_ancestor(t, find_node(t, 2), find_node(t, 4)).val == 2

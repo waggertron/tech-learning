@@ -1,4 +1,4 @@
-def climb_stairs(n):
+def climb_stairs(n: int) -> int:
     if n <= 2:
         return n
     dp = [0] * (n + 1)

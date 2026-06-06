@@ -1,18 +1,20 @@
+from __future__ import annotations
+
 class TrieNode:
 
-    def __init__(self):
-        self.children = {}
+    def __init__(self) -> None:
+        self.children: dict[str, TrieNode] = {}
         self.is_end = False
 
 class WordDictionary:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass  # TODO: implement
 
-    def addWord(self, word):
+    def addWord(self, word: str) -> None:
         pass  # TODO: implement
 
-    def search(self, word):
+    def search(self, word: str) -> bool:
         pass  # TODO: implement
 
 def _run_tests():

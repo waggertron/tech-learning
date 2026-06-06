@@ -1,6 +1,6 @@
 import heapq
 
-def min_cost_connect_points(points):
+def min_cost_connect_points(points: list[list[int]]) -> int:
     n = len(points)
     visited = [False] * n
     heap = [(0, 0)]

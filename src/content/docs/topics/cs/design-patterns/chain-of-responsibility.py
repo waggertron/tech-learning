@@ -1,45 +1,44 @@
 from __future__ import annotations
-from typing import Optional
 
 
 class Handler:
-    def set_next(self, handler: 'Handler') -> 'Handler':
+    def set_next(self, handler: Handler) -> Handler:
         raise NotImplementedError
 
-    def handle(self, request: str) -> Optional[str]:
+    def handle(self, request: str) -> str | None:
         raise NotImplementedError
 
 
 class BaseHandler(Handler):
     def __init__(self) -> None:
-        self._next: Optional[Handler] = None
+        self._next: Handler | None = None
 
     def set_next(self, handler: Handler) -> Handler:
         self._next = handler
         return handler
 
-    def handle(self, request: str) -> Optional[str]:
+    def handle(self, request: str) -> str | None:
         if self._next:
             return self._next.handle(request)
         return None
 
 
 class Level1Support(BaseHandler):
-    def handle(self, request: str) -> Optional[str]:
+    def handle(self, request: str) -> str | None:
         if request == 'password-reset':
             return 'Level 1 resolved: password reset'
         return super().handle(request)
 
 
 class Level2Support(BaseHandler):
-    def handle(self, request: str) -> Optional[str]:
+    def handle(self, request: str) -> str | None:
         if request == 'billing-dispute':
             return 'Level 2 resolved: billing dispute'
         return super().handle(request)
 
 
 class Level3Support(BaseHandler):
-    def handle(self, request: str) -> Optional[str]:
+    def handle(self, request: str) -> str | None:
         if request == 'data-corruption':
             return 'Level 3 resolved: data corruption'
         return super().handle(request)

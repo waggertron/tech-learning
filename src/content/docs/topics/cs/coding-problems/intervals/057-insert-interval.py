@@ -1,7 +1,7 @@
-def insert(intervals, new_interval):
+def insert(intervals: list[list[int]], new_interval: list[int]) -> list[list[int]]:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert insert([[1, 3], [6, 9]], [2, 5]) == [[1, 5], [6, 9]]
     assert insert([[1, 2], [3, 5], [6, 7], [8, 10], [12, 16]], [4, 8]) == [[1, 2], [3, 10], [12, 16]]
     assert insert([[3, 5], [6, 9]], [1, 2]) == [[1, 2], [3, 5], [6, 9]]

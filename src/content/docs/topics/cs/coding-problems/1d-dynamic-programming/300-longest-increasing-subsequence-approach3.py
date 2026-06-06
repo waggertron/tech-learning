@@ -1,6 +1,6 @@
 from bisect import bisect_left
 
-def length_of_lis(nums):
+def length_of_lis(nums: list[int]) -> int:
     tails = []
     for x in nums:
         i = bisect_left(tails, x)

@@ -1,4 +1,4 @@
-def multiply(num1, num2):
+def multiply(num1: str, num2: str) -> str:
     if num1 == "0" or num2 == "0":              # L1: O(1) early exit
         return "0"
     n, m = len(num1), len(num2)                 # L2: O(1)

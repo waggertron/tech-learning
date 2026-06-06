@@ -1,6 +1,6 @@
 from collections import deque
 
-def shortest_path_binary_matrix(grid):
+def shortest_path_binary_matrix(grid: list[list[int]]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

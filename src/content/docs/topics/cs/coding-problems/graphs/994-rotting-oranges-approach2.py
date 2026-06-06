@@ -1,6 +1,6 @@
 from collections import deque
 
-def oranges_rotting(grid):
+def oranges_rotting(grid: list[list[int]]) -> int:
     rows, cols = len(grid), len(grid[0])
     q = deque()
     fresh = 0

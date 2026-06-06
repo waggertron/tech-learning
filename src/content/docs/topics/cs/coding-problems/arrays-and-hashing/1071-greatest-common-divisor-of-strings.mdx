@@ -1,0 +1,235 @@
+---
+title: "1071. Greatest Common Divisor of Strings (Easy)"
+description: "Find the largest string dividing both inputs: check concatenation symmetry to rule out the impossible case, then slice at the Euclidean GCD of the two lengths."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, strings, math, easy]
+status: draft
+created: 2026-06-05
+updated: 2026-06-05
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './1071-greatest-common-divisor-of-strings.py?raw';
+import practiceCodeTs from './1071-greatest-common-divisor-of-strings.ts?raw';
+import practiceCodeGo from './1071-greatest-common-divisor-of-strings.go?raw';
+import approach2PyCode from './1071-greatest-common-divisor-of-strings-approach2.py?raw';
+import approach2TsCode from './1071-greatest-common-divisor-of-strings-approach2.ts?raw';
+import approach2GoCode from './1071-greatest-common-divisor-of-strings-approach2.go?raw';
+
+## Problem
+
+For two strings `s` and `t`, we say `t` divides `s` if `s = t + t + ... + t` (one or more repetitions). Given `str1` and `str2`, return the largest string `x` such that `x` divides both.
+
+**Examples**
+- `str1 = "ABCABC"`, `str2 = "ABC"` → `"ABC"` (`"ABC"` repeated 2 and 1 times)
+- `str1 = "ABABAB"`, `str2 = "ABAB"` → `"AB"` (`"AB"` repeated 3 and 2 times)
+- `str1 = "LEET"`, `str2 = "CODE"` → `""` (no common divisor)
+- `str1 = "AAAAAB"`, `str2 = "AAA"` → `""` (gcd(6,3)=3, but `"AAA"` doesn't divide `"AAAAAB"`)
+
+**Constraints:** `1 <= str1.length, str2.length <= 1000`, uppercase English letters only.
+
+LeetCode 1071 · [Link](https://leetcode.com/problems/greatest-common-divisor-of-strings/) · *Easy*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="gcd-of-strings-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="gcd-of-strings-ts" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Try all prefix lengths
+
+If `x` divides `str1`, then `len(x)` must divide `len(str1)`. Try every valid prefix length of the shorter string, largest first, and verify it reconstructs both strings.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def gcd_of_strings(str1: str, str2: str) -> str:
+    m, n = len(str1), len(str2)
+    for p in range(min(m, n), 0, -1):                    # L1: try longest prefix first
+        if m % p != 0 or n % p != 0:                    # L2: p must divide both lengths
+            continue
+        candidate = str1[:p]                             # L3: O(p) slice
+        if candidate * (m // p) == str1 and \
+           candidate * (n // p) == str2:                 # L4: O(m+n) build and compare
+            return candidate                             # L5: first match is longest
+    return ""                                            # L6: no common divisor
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function gcdOfStrings(str1: string, str2: string): string {
+    const m = str1.length, n = str2.length;
+    for (let p = Math.min(m, n); p >= 1; p--) {         // L1: try longest prefix first
+        if (m % p !== 0 || n % p !== 0) continue;       // L2: p must divide both lengths
+        const candidate = str1.slice(0, p);              // L3: O(p) slice
+        if (candidate.repeat(m / p) === str1 &&
+            candidate.repeat(n / p) === str2) {          // L4: O(m+n) build and compare
+            return candidate;                            // L5: first match is longest
+        }
+    }
+    return "";                                           // L6: no common divisor
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: m = len(str1), n = len(str2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (loop) | $O(1)$ | up to $\min(m,n)$ | $O(\min(m,n))$ |
+| L2 (mod checks) | $O(1)$ | up to $\min(m,n)$ | $O(\min(m,n))$ |
+| L3 (slice) | $O(p)$ | up to $\min(m,n)$ | $O(\min(m,n)^2)$ |
+| **L4 (build + compare)** | **$O(m+n)$** | **up to $\min(m,n)$** | **$O(\min(m,n) \cdot (m+n))$** |
+| L5, L6 (returns) | $O(1)$ | 1 | $O(1)$ |
+
+**Complexity**
+- **Time:** $O(\min(m,n) \cdot (m+n))$, driven by L4 (string construction and comparison inside the loop).
+- **Space:** $O(\min(m,n))$ for `candidate`.
+
+## Approach 2: GCD math
+
+If any common divisor exists at all, then `str1 + str2 == str2 + str1`. Once that check passes, the longest common divisor has length exactly `gcd(len(str1), len(str2))`.
+
+<Tabs>
+<TabItem label="Python">
+```python
+from math import gcd
+
+def gcd_of_strings(str1: str, str2: str) -> str:
+    if str1 + str2 != str2 + str1:               # L1: O(m+n) concatenate and compare
+        return ""                                 # L2: no common divisor possible
+    return str1[:gcd(len(str1), len(str2))]      # L3: O(log(min(m,n))) GCD, O(1) slice
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function gcdOfStrings(str1: string, str2: string): string {
+    if (str1 + str2 !== str2 + str1) return "";  // L1: O(m+n) concatenate and compare
+    const gcd = (a: number, b: number): number =>
+        b === 0 ? a : gcd(b, a % b);             // L2: Euclidean GCD, O(log(min(m,n)))
+    return str1.slice(0, gcd(str1.length, str2.length));  // L3: O(1) slice
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: m = len(str1), n = len(str2).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| **L1 (concatenate + compare)** | **$O(m+n)$** | **1** | **$O(m+n)$** |
+| L2 (Euclidean GCD) | $O(\log(\min(m,n)))$ | 1 | $O(\log(\min(m,n)))$ |
+| L3 (slice) | $O(\gcd(m,n))$ | 1 | $O(\min(m,n))$ |
+
+**Complexity**
+- **Time:** $O(m+n)$, driven by L1 (the two concatenations and their comparison).
+- **Space:** $O(m+n)$ for the two concatenated strings built in L1.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="gcd-of-strings-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="gcd-of-strings-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="gcd-of-strings-approach2-go" />
+  </TabItem>
+</Tabs>
+
+## Why the GCD trick works
+
+**Forward direction:** if `t` divides both strings, then `str1 = t * k` and `str2 = t * j` for some integers k and j. Then:
+
+```
+str1 + str2 = (t repeated k times) + (t repeated j times) = t repeated (k+j) times
+str2 + str1 = (t repeated j times) + (t repeated k times) = t repeated (j+k) times
+```
+
+Both are `t` repeated `(k+j)` times, so they are always equal when a common divisor exists.
+
+**Backward direction:** if `str1 + str2 == str2 + str1`, a common periodic unit must exist. A formal proof uses the Fine and Wilf theorem, but the intuition is that the only way two strings produce the same interleaving under both orderings is if they share a repeating tile.
+
+**Worked example (Example 2):**
+
+```
+str1 = "ABABAB"  (m=6)
+str2 = "ABAB"    (n=4)
+
+str1 + str2 = "ABABABABAB"
+str2 + str1 = "ABABABABAB"   <- equal, GCD exists
+
+gcd(6, 4) = 2
+answer = str1[:2] = "AB"
+```
+
+**Worked example (Example 3, the "no" case):**
+
+```
+str1 + str2 = "LEET" + "CODE" = "LEETCODE"
+str2 + str1 = "CODE" + "LEET" = "CODELEET"   <- not equal, return ""
+```
+
+## How to recognize this pattern
+
+The problem says "t divides s," borrowing exact phrasing from number theory. That language is the signal: translate to GCD immediately.
+
+**Wrong first instinct:** compare character frequencies or use a sliding window. Frequency matching would incorrectly accept `str1 = "ABBA"`, `str2 = "AB"` because both have 2 A's and 2 B's. But `"AB" * 2 = "ABAB" != "ABBA"`, so `"AB"` does not divide `str1`.
+
+**The mental model:** treat strings like integers. "t divides str1" means `str1 = t * k`. Finding the string GCD is the same problem as finding the numeric GCD, just spelled out in characters.
+
+**The discovery test -- try it on any example:**
+
+Pick `str1 = "ABABAB"`, `str2 = "ABAB"` and concatenate both ways:
+
+```
+str1 + str2 = "ABABAB" + "ABAB" = "ABABABABAB"
+str2 + str1 = "ABAB" + "ABABAB" = "ABABABABAB"
+```
+
+They're equal. That equality is not a coincidence -- it's a guarantee. If `t` divides both strings, then:
+
+```
+str1 = t * k    str2 = t * j
+str1 + str2 = t * (k+j)
+str2 + str1 = t * (j+k)   <- same thing
+```
+
+So equal concatenations mean a common divisor must exist. Unequal concatenations mean no common divisor can possibly exist at any length -- return `""` immediately without trying anything else.
+
+**Why the answer is `str1[:gcd(m, n)]` and not something longer:** if `t` divides `str1`, then `len(t)` must divide `len(str1)` (because `str1 = t * k` means `m = len(t) * k`). The same holds for `str2`. So `len(t)` must divide both `m` and `n`. The largest such length is `gcd(m, n)`, and the string of that length at the front of `str1` is exactly the answer.
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Try all prefix lengths | $O(\min(m,n) \cdot (m+n))$ | $O(\min(m,n))$ |
+| **GCD math** | **$O(m+n)$** | $O(m+n)$ |
+
+## Key takeaways
+
+- "t divides s" is GCD language: translate to number theory immediately.
+- If `str1 + str2 != str2 + str1`, no common divisor exists at all.
+- Once a common divisor is confirmed, its length is `gcd(len(str1), len(str2))`.
+- Frequency matching is the classic wrong approach here: it ignores order.
+
+## Related topics
+
+- [459. Repeated Substring Pattern (Easy)](./459-repeated-substring-pattern/), same periodic-string idea, different check
+- [1. Two Sum (Easy)](./001-two-sum/), complement-lookup pattern that anchors this category
+- [242. Valid Anagram (Easy)](./242-valid-anagram/), another string structure problem with a frequency-matching trap

@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def critical_connections(n, connections):
+def critical_connections(n: int, connections: list[list[int]]) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

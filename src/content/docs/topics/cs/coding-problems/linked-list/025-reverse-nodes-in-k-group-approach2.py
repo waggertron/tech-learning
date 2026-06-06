@@ -1,16 +1,18 @@
+from __future__ import annotations
+
 class ListNode:
-    def __init__(self, val=0, next=None):
+    def __init__(self, val: int = 0, next: ListNode | None = None) -> None:
         self.val = val
         self.next = next
 
-def to_list(head):
+def to_list(head: ListNode | None) -> list[int]:
     out = []
     while head:
         out.append(head.val)
         head = head.next
     return out
 
-def from_list(vals):
+def from_list(vals: list[int]) -> ListNode | None:
     dummy = ListNode()
     cur = dummy
     for v in vals:
@@ -18,7 +20,7 @@ def from_list(vals):
         cur = cur.next
     return dummy.next
 
-def reverse_k_group(head, k):
+def reverse_k_group(head: ListNode | None, k: int) -> ListNode | None:
     dummy = ListNode(0, head)
     group_prev = dummy
     while True:

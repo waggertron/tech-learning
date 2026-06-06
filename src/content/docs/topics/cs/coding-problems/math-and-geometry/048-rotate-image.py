@@ -1,7 +1,7 @@
-def rotate(matrix):
+def rotate(matrix: list[list[int]]) -> None:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     m = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     rotate(m)
     assert m == [[7, 4, 1], [8, 5, 2], [9, 6, 3]]

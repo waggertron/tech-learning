@@ -1,4 +1,4 @@
-def oranges_rotting(grid):
+def oranges_rotting(grid: list[list[int]]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

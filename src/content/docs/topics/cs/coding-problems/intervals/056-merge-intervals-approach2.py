@@ -1,4 +1,4 @@
-def merge(intervals):
+def merge(intervals: list[list[int]]) -> list[list[int]]:
     intervals.sort(key=lambda x: x[0])
     result = []
     for interval in intervals:

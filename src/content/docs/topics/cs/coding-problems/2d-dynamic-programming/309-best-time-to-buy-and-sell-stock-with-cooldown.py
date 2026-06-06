@@ -1,7 +1,7 @@
-def max_profit(prices):
+def max_profit(prices: list[int]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert max_profit([1, 2, 3, 0, 2]) == 3
     assert max_profit([1]) == 0
     assert max_profit([]) == 0

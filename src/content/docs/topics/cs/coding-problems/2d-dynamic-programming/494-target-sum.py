@@ -1,7 +1,7 @@
-def find_target_sum_ways(nums, target):
+def find_target_sum_ways(nums: list[int], target: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert find_target_sum_ways([1, 1, 1, 1, 1], 3) == 5
     assert find_target_sum_ways([1], 1) == 1
     assert find_target_sum_ways([1, 1], 0) == 2

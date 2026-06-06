@@ -1,5 +1,5 @@
-def rob(nums):
-    def rob_range(lo, hi):
+def rob(nums: list[int]) -> int:
+    def rob_range(lo: int, hi: int) -> int:
         prev2, prev1 = 0, 0
         for i in range(lo, hi):
             prev2, prev1 = prev1, max(prev1, prev2 + nums[i])

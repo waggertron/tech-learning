@@ -1,7 +1,7 @@
-def check_valid_string(s):
+def check_valid_string(s: str) -> bool:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert check_valid_string('()') == True
     assert check_valid_string('(*)') == True
     assert check_valid_string('(*))') == True

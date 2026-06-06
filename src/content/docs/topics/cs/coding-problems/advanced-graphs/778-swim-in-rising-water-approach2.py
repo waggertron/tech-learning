@@ -1,6 +1,6 @@
 import heapq
 
-def swim_in_water(grid):
+def swim_in_water(grid: list[list[int]]) -> int:
     n = len(grid)
     heap = [(grid[0][0], 0, 0)]
     visited = set()

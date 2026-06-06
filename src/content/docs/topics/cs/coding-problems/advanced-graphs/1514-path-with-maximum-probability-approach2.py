@@ -1,7 +1,7 @@
 import heapq
 from collections import defaultdict
 
-def max_probability(n, edges, succ_prob, start, end):
+def max_probability(n: int, edges: list[list[int]], succ_prob: list[float], start: int, end: int) -> float:
     graph = defaultdict(list)
     for i, (u, v) in enumerate(edges):
         graph[u].append((v, succ_prob[i]))

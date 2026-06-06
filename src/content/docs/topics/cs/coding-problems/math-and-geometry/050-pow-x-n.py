@@ -1,7 +1,7 @@
-def my_pow(x, n):
+def my_pow(x: float, n: int) -> float:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert abs(my_pow(2.0, 10) - 1024.0) < 1e-09
     assert abs(my_pow(2.0, -2) - 0.25) < 1e-09
     assert abs(my_pow(2.0, 0) - 1.0) < 1e-09

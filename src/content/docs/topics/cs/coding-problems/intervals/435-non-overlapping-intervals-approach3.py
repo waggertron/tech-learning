@@ -1,4 +1,4 @@
-def erase_overlap_intervals(intervals):
+def erase_overlap_intervals(intervals: list[list[int]]) -> int:
     intervals.sort(key=lambda x: x[0])
     count = 0
     prev_end = float('-inf')

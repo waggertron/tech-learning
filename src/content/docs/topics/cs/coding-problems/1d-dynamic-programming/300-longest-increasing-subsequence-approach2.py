@@ -1,4 +1,4 @@
-def length_of_lis(nums):
+def length_of_lis(nums: list[int]) -> int:
     n = len(nums)
     dp = [1] * n
     for i in range(1, n):

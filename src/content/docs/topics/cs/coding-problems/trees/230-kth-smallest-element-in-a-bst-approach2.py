@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     root = TreeNode(vals[0])
     q = [root]
@@ -21,10 +24,10 @@ def build_tree(vals):
         i += 1
     return root
 
-def kth_smallest(root, k):
+def kth_smallest(root: TreeNode | None, k: int) -> int:
     count = [0]
     result = [None]
-    def inorder(node):
+    def inorder(node: TreeNode | None) -> None:
         if not node or result[0] is not None:
             return                              # L1: base / already found
         inorder(node.left)                     # L2: recurse left

@@ -1,4 +1,4 @@
-def find_median_sorted_arrays(nums1: list, nums2: list) -> float:
+def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
     m, n = len(nums1), len(nums2)
     total = m + n
     need = total // 2 + 1

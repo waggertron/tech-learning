@@ -1,7 +1,7 @@
-def erase_overlap_intervals(intervals):
+def erase_overlap_intervals(intervals: list[list[int]]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert erase_overlap_intervals([[1, 2], [2, 3], [3, 4], [1, 3]]) == 1
     assert erase_overlap_intervals([[1, 2], [1, 2], [1, 2]]) == 2
     assert erase_overlap_intervals([[1, 2], [2, 3]]) == 0

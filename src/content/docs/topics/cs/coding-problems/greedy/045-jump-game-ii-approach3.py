@@ -1,4 +1,4 @@
-def jump(nums):
+def jump(nums: list[int]) -> int:
     jumps = 0
     current_end = 0
     farthest = 0

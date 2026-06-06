@@ -1,9 +1,9 @@
-def subsets_with_dup(nums):
+def subsets_with_dup(nums: list[int]) -> list[list[int]]:
     nums.sort()                               # L1: O(n log n) sort
     result = []
     path = []
 
-    def backtrack(start):
+    def backtrack(start: int) -> None:
         result.append(path[:])                # L2: O(k) copy at every node (not just leaves)
         for i in range(start, len(nums)):
             if i > start and nums[i] == nums[i - 1]:

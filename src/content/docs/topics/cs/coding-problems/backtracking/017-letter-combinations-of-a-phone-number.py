@@ -1,4 +1,4 @@
-def letter_combinations(digits):
+def letter_combinations(digits: str) -> list[str]:
     pass  # TODO: implement
 
 def _run_tests():

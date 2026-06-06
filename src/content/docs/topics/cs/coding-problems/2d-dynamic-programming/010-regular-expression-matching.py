@@ -1,7 +1,7 @@
-def is_match(s, p):
+def is_match(s: str, p: str) -> bool:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert is_match('aa', 'a') == False
     assert is_match('aa', 'a*') == True
     assert is_match('ab', '.*') == True

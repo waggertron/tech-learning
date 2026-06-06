@@ -1,4 +1,4 @@
-def find_itinerary(tickets):
+def find_itinerary(tickets: list[list[str]]) -> list[str]:
     pass  # TODO: implement
 
 def _run_tests():

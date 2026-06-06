@@ -7,7 +7,7 @@ def group_anagrams(strs: list[str]) -> list[list[str]]:
         groups[key].append(s)
     return list(groups.values())
 
-def normalize(result):
+def normalize(result: list[list[str]]) -> list[list[str]]:
     return sorted(sorted(g) for g in result)
 
 assert normalize(group_anagrams(['eat', 'tea', 'tan', 'ate', 'nat', 'bat'])) == [['ate', 'eat', 'tea'], ['bat'], ['nat', 'tan']]

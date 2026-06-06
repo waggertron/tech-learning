@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 class TrieNode:
-    def __init__(self):
-        self.children = {}
+    def __init__(self) -> None:
+        self.children: dict[str, TrieNode] = {}
         self.is_end = False
 
 class WordDictionary:
-    def __init__(self):
+    def __init__(self) -> None:
         self.root = TrieNode()
 
-    def addWord(self, word):
+    def addWord(self, word: str) -> None:
         node = self.root
         for ch in word:
             if ch not in node.children:
@@ -15,7 +17,7 @@ class WordDictionary:
             node = node.children[ch]
         node.is_end = True
 
-    def search(self, word):
+    def search(self, word: str) -> bool:
         def dfs(i, node):
             if i == len(word):
                 return node.is_end

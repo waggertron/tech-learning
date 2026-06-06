@@ -1,11 +1,14 @@
+from __future__ import annotations
+
+
 class TreeNode:
 
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals:
         return None
     root = TreeNode(vals[0])
@@ -23,10 +26,10 @@ def build_tree(vals):
         i += 1
     return root
 
-def good_nodes(root):
+def good_nodes(root: TreeNode | None) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert good_nodes(build_tree([3, 1, 4, 3, None, 1, 5])) == 4
     assert good_nodes(build_tree([3, 3, None, 4, 2])) == 3
     assert good_nodes(build_tree([1])) == 1

@@ -1,7 +1,7 @@
-def can_attend_meetings(intervals):
+def can_attend_meetings(intervals: list[list[int]]) -> bool:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert can_attend_meetings([[0, 30], [5, 10], [15, 20]]) == False
     assert can_attend_meetings([[7, 10], [2, 4]]) == True
     assert can_attend_meetings([]) == True

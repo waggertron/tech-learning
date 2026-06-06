@@ -1,13 +1,13 @@
 from collections import defaultdict
 import heapq
 
-def find_itinerary(tickets):
+def find_itinerary(tickets: list[list[str]]) -> list[str]:
     graph = defaultdict(list)
     for src, dst in tickets:
         heapq.heappush(graph[src], dst)
 
-    itinerary = []
-    def dfs(node):
+    itinerary: list[str] = []
+    def dfs(node: str) -> None:
         while graph[node]:
             nb = heapq.heappop(graph[node])
             dfs(nb)

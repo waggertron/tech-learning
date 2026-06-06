@@ -1,4 +1,4 @@
-def partition(s):
+def partition(s: str) -> list[list[str]]:
     pass  # TODO: implement
 
 def _run_tests():

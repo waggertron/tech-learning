@@ -1,4 +1,4 @@
-def word_break(s, word_dict):
+def word_break(s: str, word_dict: list[str]) -> bool:
     words = set(word_dict)
     n = len(s)
     dp = [False] * (n + 1)

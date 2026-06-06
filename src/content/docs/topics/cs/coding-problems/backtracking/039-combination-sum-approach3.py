@@ -1,9 +1,9 @@
-def combination_sum(candidates, target):
+def combination_sum(candidates: list[int], target: int) -> list[list[int]]:
     candidates.sort()                  # L1: O(n log n) sort once
     result = []
     path = []
 
-    def backtrack(start, remaining):
+    def backtrack(start: int, remaining: int) -> None:
         if remaining == 0:
             result.append(path[:])     # L2: O(k) copy at leaf
             return

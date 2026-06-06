@@ -1,16 +1,18 @@
+from __future__ import annotations
+
 class ListNode:
-    def __init__(self, val=0, next=None):
+    def __init__(self, val: int = 0, next: ListNode | None = None) -> None:
         self.val = val
         self.next = next
 
-def to_list(head):
+def to_list(head: ListNode | None) -> list[int]:
     out = []
     while head:
         out.append(head.val)
         head = head.next
     return out
 
-def from_list(vals):
+def from_list(vals: list[int]) -> ListNode | None:
     dummy = ListNode()
     cur = dummy
     for v in vals:
@@ -18,7 +20,7 @@ def from_list(vals):
         cur = cur.next
     return dummy.next
 
-def merge_two(l1, l2):
+def merge_two(l1: ListNode | None, l2: ListNode | None) -> ListNode | None:
     dummy = ListNode()
     tail = dummy
     while l1 and l2:
@@ -30,7 +32,7 @@ def merge_two(l1, l2):
     tail.next = l1 or l2
     return dummy.next
 
-def merge_k_lists(lists):
+def merge_k_lists(lists: list[ListNode | None]) -> ListNode | None:
     if not lists:
         return None
     while len(lists) > 1:

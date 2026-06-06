@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def max_profit(prices):
+def max_profit(prices: list[int]) -> int:
     n = len(prices)
     @lru_cache(maxsize=None)
     def f(i, holding, cooldown):

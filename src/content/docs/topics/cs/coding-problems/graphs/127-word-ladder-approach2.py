@@ -1,6 +1,6 @@
 from collections import defaultdict, deque
 
-def ladder_length(beginWord, endWord, wordList):
+def ladder_length(beginWord: str, endWord: str, wordList: list[str]) -> int:
     if endWord not in wordList:
         return 0
     L = len(beginWord)

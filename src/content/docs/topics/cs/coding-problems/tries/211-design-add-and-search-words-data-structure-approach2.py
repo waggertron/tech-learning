@@ -1,13 +1,13 @@
 from collections import defaultdict
 
 class WordDictionary:
-    def __init__(self):
-        self.by_len = defaultdict(list)
+    def __init__(self) -> None:
+        self.by_len: defaultdict[int, list[str]] = defaultdict(list)
 
-    def addWord(self, word):
+    def addWord(self, word: str) -> None:
         self.by_len[len(word)].append(word)
 
-    def search(self, word):
+    def search(self, word: str) -> bool:
         for w in self.by_len.get(len(word), []):
             if all(p == '.' or p == c for p, c in zip(word, w)):
                 return True

@@ -1,7 +1,7 @@
-def can_jump(nums):
+def can_jump(nums: list[int]) -> bool:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert can_jump([2, 3, 1, 1, 4]) == True
     assert can_jump([3, 2, 1, 0, 4]) == False
     assert can_jump([0]) == True

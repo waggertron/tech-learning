@@ -1,4 +1,4 @@
-def single_number(nums):
+def single_number(nums: list[int]) -> int:
     nums.sort()                             # L1: O(n log n)
     for i in range(0, len(nums) - 1, 2):   # L2: scan in steps of 2
         if nums[i] != nums[i + 1]:         # L3: O(1)

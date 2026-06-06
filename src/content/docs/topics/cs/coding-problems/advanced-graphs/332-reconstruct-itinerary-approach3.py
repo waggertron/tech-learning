@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def find_itinerary(tickets):
+def find_itinerary(tickets: list[list[str]]) -> list[str]:
     graph = defaultdict(list)
     for src, dst in sorted(tickets, reverse=True):
         graph[src].append(dst)

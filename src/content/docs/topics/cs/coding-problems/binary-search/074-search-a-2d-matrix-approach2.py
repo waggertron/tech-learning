@@ -1,6 +1,6 @@
 from bisect import bisect_left
 
-def search_matrix(matrix: list, target: int) -> bool:
+def search_matrix(matrix: list[list[int]], target: int) -> bool:
     for row in matrix:
         if row[0] <= target <= row[-1]:
             i = bisect_left(row, target)

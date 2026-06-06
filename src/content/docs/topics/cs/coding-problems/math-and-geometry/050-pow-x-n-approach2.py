@@ -1,9 +1,9 @@
-def my_pow(x, n):
+def my_pow(x: float, n: int) -> float:
     if n < 0:                           # L1: O(1)
         x = 1 / x                       # L2: O(1)
         n = -n                          # L3: O(1)
 
-    def helper(base, exp):
+    def helper(base: float, exp: int) -> float:
         if exp == 0:
             return 1                    # L4: base case O(1)
         half = helper(base, exp // 2)   # L5: recurse on half exponent

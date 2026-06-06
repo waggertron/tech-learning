@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def min_distance(word1, word2):
+def min_distance(word1: str, word2: str) -> int:
     @lru_cache(maxsize=None)
     def f(i, j):
         if i == len(word1):

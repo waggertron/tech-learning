@@ -1,4 +1,4 @@
-def max_product(nums):
+def max_product(nums: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

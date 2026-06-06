@@ -1,4 +1,4 @@
-def find_circle_num(isConnected):
+def find_circle_num(isConnected: list[list[int]]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

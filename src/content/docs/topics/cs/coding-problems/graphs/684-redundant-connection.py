@@ -1,4 +1,4 @@
-def find_redundant_connection(edges):
+def find_redundant_connection(edges: list[list[int]]) -> list[int]:
     pass  # TODO: implement
 
 def _run_tests():

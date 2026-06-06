@@ -1,4 +1,4 @@
-def coin_change(coins, amount):
+def coin_change(coins: list[int], amount: int) -> int:
     INF = amount + 1
     dp = [INF] * (amount + 1)
     dp[0] = 0

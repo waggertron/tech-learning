@@ -1,7 +1,7 @@
-def hamming_weight(n):
+def hamming_weight(n: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert hamming_weight(11) == 3
     assert hamming_weight(128) == 1
     assert hamming_weight(0) == 0

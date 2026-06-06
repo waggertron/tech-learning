@@ -1,5 +1,5 @@
 class NumArray:
-    def __init__(self, nums: list):
+    def __init__(self, nums: list[int]) -> None:
         pass  # TODO: implement
 
     def sum_range(self, left: int, right: int) -> int:

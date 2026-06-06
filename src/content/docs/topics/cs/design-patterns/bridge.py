@@ -25,72 +25,72 @@ class Device(ABC):
 
 
 class TV(Device):
-    def __init__(self):
+    def __init__(self) -> None:
         self._on = False
         self._volume = 30
         self._channel = 1
 
-    def is_enabled(self): return self._on
-    def enable(self):
+    def is_enabled(self) -> bool: return self._on
+    def enable(self) -> None:
         self._on = True
         print("TV: powered on")
-    def disable(self):
+    def disable(self) -> None:
         self._on = False
         print("TV: powered off")
-    def get_volume(self): return self._volume
-    def set_volume(self, percent):
+    def get_volume(self) -> int: return self._volume
+    def set_volume(self, percent: int) -> None:
         self._volume = max(0, min(100, percent))
         print(f"TV: volume set to {self._volume}")
-    def get_channel(self): return self._channel
-    def set_channel(self, channel):
+    def get_channel(self) -> int: return self._channel
+    def set_channel(self, channel: int) -> None:
         self._channel = channel
         print(f"TV: channel set to {self._channel}")
 
 
 class Radio(Device):
-    def __init__(self):
+    def __init__(self) -> None:
         self._on = False
         self._volume = 50
         self._channel = 1
 
-    def is_enabled(self): return self._on
-    def enable(self):
+    def is_enabled(self) -> bool: return self._on
+    def enable(self) -> None:
         self._on = True
         print("Radio: powered on")
-    def disable(self):
+    def disable(self) -> None:
         self._on = False
         print("Radio: powered off")
-    def get_volume(self): return self._volume
-    def set_volume(self, percent):
+    def get_volume(self) -> int: return self._volume
+    def set_volume(self, percent: int) -> None:
         self._volume = max(0, min(100, percent))
         print(f"Radio: volume set to {self._volume}")
-    def get_channel(self): return self._channel
-    def set_channel(self, channel):
+    def get_channel(self) -> int: return self._channel
+    def set_channel(self, channel: int) -> None:
         self._channel = channel
         print(f"Radio: channel set to {self._channel}")
 
 
 # Abstraction side
 class RemoteControl(ABC):
-    def __init__(self, device: Device):
+    def __init__(self, device: Device) -> None:
         self._device = device
 
-    def toggle_power(self):
+    def toggle_power(self) -> None:
         if self._device.is_enabled():
             self._device.disable()
         else:
             self._device.enable()
 
-    def volume_down(self):
+    def volume_down(self) -> None:
         self._device.set_volume(self._device.get_volume() - 10)
 
-    def volume_up(self):
+    def volume_up(self) -> None:
         self._device.set_volume(self._device.get_volume() + 10)
 
-    def channel_down(self):
+    def channel_down(self) -> None:
         self._device.set_channel(self._device.get_channel() - 1)
 
-    def channel_up(self):
+    def channel_up(self) -> None:
         self._device.set_channel(self._device.get_channel() + 1)
 
 
@@ -99,7 +99,7 @@ class BasicRemote(RemoteControl):
 
 
 class AdvancedRemote(RemoteControl):
-    def mute(self):
+    def mute(self) -> None:
         print("AdvancedRemote: muting device")
         self._device.set_volume(0)
 

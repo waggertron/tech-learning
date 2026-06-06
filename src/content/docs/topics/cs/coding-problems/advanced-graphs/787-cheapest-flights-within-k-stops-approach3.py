@@ -1,4 +1,4 @@
-def find_cheapest_price(n, flights, src, dst, k):
+def find_cheapest_price(n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
     INF = float('inf')
     dist = [INF] * n
     dist[src] = 0

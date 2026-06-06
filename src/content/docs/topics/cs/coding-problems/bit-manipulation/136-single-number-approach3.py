@@ -1,4 +1,4 @@
-def single_number(nums):
+def single_number(nums: list[int]) -> int:
     result = 0                              # L1: O(1)
     for x in nums:                          # L2: single pass, n iterations
         result ^= x                         # L3: O(1), XOR accumulate

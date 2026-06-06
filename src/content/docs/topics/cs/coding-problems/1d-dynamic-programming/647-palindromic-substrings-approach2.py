@@ -1,5 +1,5 @@
-def count_substrings(s):
-    def expand(l, r):
+def count_substrings(s: str) -> int:
+    def expand(l: int, r: int) -> int:
         count = 0
         while l >= 0 and r < len(s) and s[l] == s[r]:
             count += 1

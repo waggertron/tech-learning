@@ -1,4 +1,4 @@
-def longest_common_subsequence(text1, text2):
+def longest_common_subsequence(text1: str, text2: str) -> int:
     m, n = len(text1), len(text2)
     if m < n:
         text1, text2 = text2, text1

@@ -2,10 +2,10 @@ INT_MIN = -2 ** 31
 
 INT_MAX = 2 ** 31 - 1
 
-def reverse(x):
+def reverse(x: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert reverse(123) == 321
     assert reverse(-123) == -321
     assert reverse(120) == 21

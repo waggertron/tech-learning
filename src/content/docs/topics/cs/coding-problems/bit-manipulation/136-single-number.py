@@ -1,7 +1,7 @@
-def single_number(nums):
+def single_number(nums: list[int]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert single_number([2, 2, 1]) == 1
     assert single_number([4, 1, 2, 1, 2]) == 4
     assert single_number([1]) == 1

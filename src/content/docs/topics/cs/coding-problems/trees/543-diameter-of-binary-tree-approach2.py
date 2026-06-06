@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     root = TreeNode(vals[0])
     q = [root]
@@ -21,10 +24,10 @@ def build_tree(vals):
         i += 1
     return root
 
-def diameter_of_binary_tree(root):
+def diameter_of_binary_tree(root: TreeNode | None) -> int:
     best = 0
 
-    def height(node):
+    def height(node: TreeNode | None) -> int:
         nonlocal best
         if not node:
             return 0

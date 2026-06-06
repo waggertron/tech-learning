@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     root = TreeNode(vals[0])
     q = [root]
@@ -21,13 +24,13 @@ def build_tree(vals):
         i += 1
     return root
 
-def find_node(root, val):
+def find_node(root: TreeNode | None, val: int) -> TreeNode | None:
     while root:
         if val == root.val: return root
         root = root.left if val < root.val else root.right
     return None
 
-def lowest_common_ancestor(root, p, q):
+def lowest_common_ancestor(root: TreeNode | None, p: TreeNode, q: TreeNode) -> TreeNode | None:
     while root:
         if p.val < root.val and q.val < root.val:
             root = root.left          # L1: move left

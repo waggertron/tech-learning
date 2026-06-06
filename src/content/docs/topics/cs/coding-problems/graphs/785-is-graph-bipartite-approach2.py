@@ -1,6 +1,6 @@
 from collections import deque
 
-def is_bipartite(graph):
+def is_bipartite(graph: list[list[int]]) -> bool:
     n = len(graph)
     color = [-1] * n
 

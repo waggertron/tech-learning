@@ -1,7 +1,7 @@
-def is_happy(n):
+def is_happy(n: int) -> bool:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert is_happy(19) == True
     assert is_happy(2) == False
     assert is_happy(1) == True

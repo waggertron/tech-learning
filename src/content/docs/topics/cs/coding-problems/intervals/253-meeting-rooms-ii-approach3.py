@@ -1,4 +1,4 @@
-def min_meeting_rooms(intervals):
+def min_meeting_rooms(intervals: list[list[int]]) -> int:
     starts = sorted(s for s, _ in intervals)
     ends   = sorted(e for _, e in intervals)
     i = j = 0

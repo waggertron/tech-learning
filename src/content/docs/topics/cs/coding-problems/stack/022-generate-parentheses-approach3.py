@@ -2,7 +2,7 @@ def generate_parenthesis(n: int) -> list[str]:
     result = []
     path = []
 
-    def backtrack(opens, closes):
+    def backtrack(opens: int, closes: int) -> None:
         if opens == n and closes == n:
             result.append("".join(path))
             return

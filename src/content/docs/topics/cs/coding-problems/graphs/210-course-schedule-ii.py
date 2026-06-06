@@ -1,4 +1,4 @@
-def find_order(num_courses, prerequisites):
+def find_order(num_courses: int, prerequisites: list[list[int]]) -> list[int]:
     pass  # TODO: implement
 
 def _run_tests():

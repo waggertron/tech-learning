@@ -1,4 +1,4 @@
-def max_profit(prices):
+def max_profit(prices: list[int]) -> int:
     if not prices:
         return 0
     hold = -prices[0]

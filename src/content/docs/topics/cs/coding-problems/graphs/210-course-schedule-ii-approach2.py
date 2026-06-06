@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def find_order(num_courses, prerequisites):
+def find_order(num_courses: int, prerequisites: list[list[int]]) -> list[int]:
     graph = defaultdict(list)
     for a, b in prerequisites:
         graph[b].append(a)

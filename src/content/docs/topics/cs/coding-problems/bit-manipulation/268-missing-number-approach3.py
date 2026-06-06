@@ -1,4 +1,4 @@
-def missing_number(nums):
+def missing_number(nums: list[int]) -> int:
     result = len(nums)                      # L1: O(1), start with n
     for i, x in enumerate(nums):            # L2: single pass, n iterations
         result ^= i ^ x                     # L3: O(1), cancel paired values

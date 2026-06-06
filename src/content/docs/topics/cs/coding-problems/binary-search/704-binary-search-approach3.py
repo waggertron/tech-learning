@@ -1,4 +1,4 @@
-def search(nums: list, target: int) -> int:
+def search(nums: list[int], target: int) -> int:
     lo, hi = 0, len(nums) - 1
     while lo <= hi:
         mid = (lo + hi) // 2

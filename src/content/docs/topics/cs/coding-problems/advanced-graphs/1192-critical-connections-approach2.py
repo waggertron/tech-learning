@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def critical_connections(n, connections):
+def critical_connections(n: int, connections: list[list[int]]) -> list[list[int]]:
     graph = defaultdict(list)
     for u, v in connections:
         graph[u].append(v)
@@ -11,7 +11,7 @@ def critical_connections(n, connections):
     bridges = []
     timer = [0]
 
-    def dfs(node, parent):
+    def dfs(node: int, parent: int) -> None:
         disc[node] = low[node] = timer[0]
         timer[0] += 1
         for neighbor in graph[node]:

@@ -1,6 +1,6 @@
 import heapq
 
-def last_stone_weight(stones):
+def last_stone_weight(stones: list[int]) -> int:
     heap = [-(stone) for stone in stones]
     heapq.heapify(heap)
 
@@ -17,7 +17,7 @@ def last_stone_weight(stones):
 
 
             
-def _run_tests():
+def _run_tests() -> None:
     assert last_stone_weight([2, 7, 4, 1, 8, 1]) == 1     # canonical: ends at 1
     assert last_stone_weight([1]) == 1                     # single stone
     assert last_stone_weight([31, 26, 33, 21, 40]) == 9    # no annihilations

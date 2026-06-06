@@ -1,8 +1,8 @@
 from functools import lru_cache
 
-def num_decodings(s):
+def num_decodings(s: str) -> int:
     @lru_cache(maxsize=None)
-    def f(i):
+    def f(i: int) -> int:
         if i == len(s):
             return 1
         if s[i] == '0':

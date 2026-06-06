@@ -1,4 +1,4 @@
-def can_jump(nums):
+def can_jump(nums: list[int]) -> bool:
     n = len(nums)
     dp = [False] * n
     dp[n - 1] = True

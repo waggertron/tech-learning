@@ -1,4 +1,4 @@
-def find_target_sum_ways(nums, target):
+def find_target_sum_ways(nums: list[int], target: int) -> int:
     total = sum(nums)
     if (total + target) % 2 or total < abs(target):
         return 0

@@ -1,4 +1,4 @@
-def search_matrix(matrix: list, target: int) -> bool:
+def search_matrix(matrix: list[list[int]], target: int) -> bool:
     m, n = len(matrix), len(matrix[0])
     lo, hi = 0, m * n - 1
     while lo <= hi:

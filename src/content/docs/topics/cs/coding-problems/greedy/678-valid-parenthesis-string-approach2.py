@@ -1,8 +1,8 @@
 from functools import lru_cache
 
-def check_valid_string(s):
+def check_valid_string(s: str) -> bool:
     @lru_cache(maxsize=None)
-    def f(i, opens):
+    def f(i: int, opens: int) -> bool:
         if opens < 0:
             return False
         if i == len(s):

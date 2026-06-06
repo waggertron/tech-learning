@@ -1,4 +1,4 @@
-def pacific_atlantic(heights):
+def pacific_atlantic(heights: list[list[int]]) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

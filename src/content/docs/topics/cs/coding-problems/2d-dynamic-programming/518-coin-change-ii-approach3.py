@@ -1,4 +1,4 @@
-def change(amount, coins):
+def change(amount: int, coins: list[int]) -> int:
     dp = [0] * (amount + 1)
     dp[0] = 1
     for c in coins:

@@ -1,7 +1,7 @@
-def count_bits(n):
+def count_bits(n: int) -> list[int]:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert count_bits(2) == [0, 1, 1]
     assert count_bits(5) == [0, 1, 1, 2, 1, 2]
     assert count_bits(0) == [0]

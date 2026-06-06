@@ -1,4 +1,4 @@
-def max_profit(prices: list) -> int:
+def max_profit(prices: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

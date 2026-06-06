@@ -1,4 +1,4 @@
-def solve(board):
+def solve(board: list[list[str]]) -> None:
     pass  # TODO: implement
 
 def _run_tests():

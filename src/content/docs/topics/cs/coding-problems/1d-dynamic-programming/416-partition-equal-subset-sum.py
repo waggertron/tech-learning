@@ -1,4 +1,4 @@
-def can_partition(nums):
+def can_partition(nums: list[int]) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

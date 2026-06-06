@@ -1,6 +1,6 @@
 import heapq
 
-def last_stone_weight(stones):
+def last_stone_weight(stones: list[int]) -> int:
     heap = [-s for s in stones]            # L1: O(n)
     heapq.heapify(heap)                    # L2: O(n) (Floyd's bottom-up)
     while len(heap) > 1:                   # L3: outer loop, up to n-1 rounds

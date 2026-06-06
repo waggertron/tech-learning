@@ -1,8 +1,8 @@
-def subsets(nums):
+def subsets(nums: list[int]) -> list[list[int]]:
     result = []
     path = []
 
-    def backtrack(i):
+    def backtrack(i: int) -> None:
         if i == len(nums):
             result.append(path[:])    # L1: O(n) copy at leaf
             return

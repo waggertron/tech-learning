@@ -1,7 +1,7 @@
-def can_complete_circuit(gas, cost):
+def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert can_complete_circuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
     assert can_complete_circuit([2, 3, 4], [3, 4, 3]) == -1
     assert can_complete_circuit([1], [1]) == 0

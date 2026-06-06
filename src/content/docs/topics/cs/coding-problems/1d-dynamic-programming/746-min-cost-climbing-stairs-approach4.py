@@ -1,4 +1,4 @@
-def min_cost_climbing_stairs(cost):
+def min_cost_climbing_stairs(cost: list[int]) -> int:
     n = len(cost)
     a, b = cost[0], cost[1]
     for i in range(2, n):

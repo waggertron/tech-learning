@@ -1,4 +1,4 @@
-def count_substrings(s):
+def count_substrings(s: str) -> int:
     pass  # TODO: implement
 
 def _run_tests():

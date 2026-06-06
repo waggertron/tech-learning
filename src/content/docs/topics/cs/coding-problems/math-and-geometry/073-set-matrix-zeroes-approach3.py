@@ -1,4 +1,4 @@
-def set_zeroes(matrix):
+def set_zeroes(matrix: list[list[int]]) -> None:
     rows, cols = len(matrix), len(matrix[0])
     first_row_zero = any(matrix[0][c] == 0 for c in range(cols))    # L1: O(n)
     first_col_zero = any(matrix[r][0] == 0 for r in range(rows))    # L2: O(m)

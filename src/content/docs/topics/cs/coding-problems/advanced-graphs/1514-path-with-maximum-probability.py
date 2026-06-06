@@ -1,7 +1,7 @@
 import heapq
 from collections import defaultdict
 
-def max_probability(n, edges, succ_prob, start, end):
+def max_probability(n: int, edges: list[list[int]], succ_prob: list[float], start: int, end: int) -> float:
     pass  # TODO: implement
 
 def _run_tests():

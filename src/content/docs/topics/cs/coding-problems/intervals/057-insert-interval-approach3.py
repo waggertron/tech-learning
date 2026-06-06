@@ -1,4 +1,4 @@
-def insert(intervals, new_interval):
+def insert(intervals: list[list[int]], new_interval: list[int]) -> list[list[int]]:
     result = []
     i = 0
     n = len(intervals)

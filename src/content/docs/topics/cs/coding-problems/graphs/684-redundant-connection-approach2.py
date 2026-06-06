@@ -1,4 +1,4 @@
-def find_redundant_connection(edges):
+def find_redundant_connection(edges: list[list[int]]) -> list[int]:
     n = len(edges)
     parent = list(range(n + 1))
 

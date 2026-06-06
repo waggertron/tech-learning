@@ -1,4 +1,4 @@
-def rob(nums):
+def rob(nums: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

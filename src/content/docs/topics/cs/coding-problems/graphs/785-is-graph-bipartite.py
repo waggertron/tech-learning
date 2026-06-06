@@ -1,6 +1,6 @@
 from collections import deque
 
-def is_bipartite(graph):
+def is_bipartite(graph: list[list[int]]) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

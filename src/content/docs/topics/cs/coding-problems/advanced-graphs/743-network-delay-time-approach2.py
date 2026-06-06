@@ -1,4 +1,4 @@
-def network_delay_time(times, n, k):
+def network_delay_time(times: list[list[int]], n: int, k: int) -> int:
     INF = float('inf')
     dist = [[INF] * (n + 1) for _ in range(n + 1)]
     for i in range(n + 1):

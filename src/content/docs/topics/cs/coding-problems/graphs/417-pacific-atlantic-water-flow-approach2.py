@@ -1,4 +1,4 @@
-def pacific_atlantic(heights):
+def pacific_atlantic(heights: list[list[int]]) -> list[list[int]]:
     if not heights:
         return []
     rows, cols = len(heights), len(heights[0])

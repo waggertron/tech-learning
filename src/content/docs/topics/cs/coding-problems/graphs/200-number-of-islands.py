@@ -1,4 +1,4 @@
-def num_islands(grid):
+def num_islands(grid: list[list[str]]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

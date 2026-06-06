@@ -1,10 +1,10 @@
-def permute(nums):
+def permute(nums: list[int]) -> list[list[int]]:
     result = []
     n = len(nums)
     used = [False] * n
     path = []
 
-    def backtrack():
+    def backtrack() -> None:
         if len(path) == n:
             result.append(path[:])      # L1: O(n) copy at leaf
             return

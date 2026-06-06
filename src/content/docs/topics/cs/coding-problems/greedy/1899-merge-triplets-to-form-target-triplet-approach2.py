@@ -1,4 +1,4 @@
-def merge_triplets(triplets, target):
+def merge_triplets(triplets: list[list[int]], target: list[int]) -> bool:
     hit = [False, False, False]
     for t in triplets:
         if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:

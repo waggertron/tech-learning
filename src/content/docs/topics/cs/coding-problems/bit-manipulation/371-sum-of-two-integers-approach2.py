@@ -1,4 +1,4 @@
-def get_sum(a, b):
+def get_sum(a: int, b: int) -> int:
     MASK = 0xFFFFFFFF
     MAX_INT = 0x7FFFFFFF
     while b != 0:                               # L1: loop at most 32 times

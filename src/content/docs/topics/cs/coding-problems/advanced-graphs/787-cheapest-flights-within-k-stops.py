@@ -1,4 +1,4 @@
-def find_cheapest_price(n, flights, src, dst, k):
+def find_cheapest_price(n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
     pass  # TODO: implement
 
 def _run_tests():

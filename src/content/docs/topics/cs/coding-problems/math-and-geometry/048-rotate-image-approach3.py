@@ -1,4 +1,4 @@
-def rotate(matrix):
+def rotate(matrix: list[list[int]]) -> None:
     n = len(matrix)
     # Transpose
     for i in range(n):                              # L1: outer loop, n iterations

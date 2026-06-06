@@ -1,4 +1,4 @@
-def plus_one(digits):
+def plus_one(digits: list[int]) -> list[int]:
     for i in range(len(digits) - 1, -1, -1):    # L1: walk right to left
         if digits[i] < 9:                        # L2: O(1)
             digits[i] += 1                       # L3: O(1), no carry needed

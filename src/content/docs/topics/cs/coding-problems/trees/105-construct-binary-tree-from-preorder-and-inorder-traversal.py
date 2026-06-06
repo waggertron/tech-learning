@@ -1,14 +1,17 @@
+from __future__ import annotations
+
+
 class TreeNode:
 
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(preorder, inorder):
+def build_tree(preorder: list[int], inorder: list[int]) -> TreeNode | None:
     pass  # TODO: implement
 
-def tree_to_list(root):
+def tree_to_list(root: TreeNode | None) -> list[int | None]:
     """Level-order serialize for comparison."""
     if not root:
         return []
@@ -26,7 +29,7 @@ def tree_to_list(root):
         result.pop()
     return result
 
-def _run_tests():
+def _run_tests() -> None:
     t = build_tree([3, 9, 20, 15, 7], [9, 3, 15, 20, 7])
     assert tree_to_list(t) == [3, 9, 20, None, None, 15, 7]
     t2 = build_tree([-1], [-1])

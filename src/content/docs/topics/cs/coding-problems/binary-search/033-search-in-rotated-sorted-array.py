@@ -1,4 +1,4 @@
-def search(nums: list, target: int) -> int:
+def search(nums: list[int], target: int) -> int:
     pass  # TODO: implement
 
 def _run_tests():

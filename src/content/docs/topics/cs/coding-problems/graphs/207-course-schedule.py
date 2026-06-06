@@ -1,4 +1,4 @@
-def can_finish(num_courses, prerequisites):
+def can_finish(num_courses: int, prerequisites: list[list[int]]) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

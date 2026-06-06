@@ -1,4 +1,4 @@
-def ladder_length(beginWord, endWord, wordList):
+def ladder_length(beginWord: str, endWord: str, wordList: list[str]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

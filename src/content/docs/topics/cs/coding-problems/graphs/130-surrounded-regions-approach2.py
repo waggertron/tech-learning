@@ -1,4 +1,4 @@
-def solve(board):
+def solve(board: list[list[str]]) -> None:
     if not board:
         return
     rows, cols = len(board), len(board[0])

@@ -1,6 +1,6 @@
 from collections import deque
 
-def num_islands(grid):
+def num_islands(grid: list[list[str]]) -> int:
     if not grid:
         return 0
     rows, cols = len(grid), len(grid[0])

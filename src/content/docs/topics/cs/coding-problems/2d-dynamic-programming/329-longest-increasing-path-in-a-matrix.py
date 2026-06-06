@@ -1,7 +1,7 @@
-def longest_increasing_path(matrix):
+def longest_increasing_path(matrix: list[list[int]]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert longest_increasing_path([[9, 9, 4], [6, 6, 8], [2, 1, 1]]) == 4
     assert longest_increasing_path([[3, 4, 5], [3, 2, 6], [2, 2, 1]]) == 4
     assert longest_increasing_path([[1]]) == 1

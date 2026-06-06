@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 class TrieNode:
-    def __init__(self):
-        self.children = {}
+    def __init__(self) -> None:
+        self.children: dict[str, TrieNode] = {}
         self.is_end = False
 
 class Trie:
-    def __init__(self):
+    def __init__(self) -> None:
         self.root = TrieNode()
 
-    def insert(self, word):
+    def insert(self, word: str) -> None:
         node = self.root
         for ch in word:
             if ch not in node.children:
@@ -15,14 +17,14 @@ class Trie:
             node = node.children[ch]
         node.is_end = True
 
-    def search(self, word):
+    def search(self, word: str) -> bool:
         node = self._walk(word)
         return node is not None and node.is_end
 
-    def startsWith(self, prefix):
+    def startsWith(self, prefix: str) -> bool:
         return self._walk(prefix) is not None
 
-    def _walk(self, s):
+    def _walk(self, s: str) -> TrieNode | None:
         node = self.root
         for ch in s:
             if ch not in node.children:

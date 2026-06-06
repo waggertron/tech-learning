@@ -1,4 +1,4 @@
-def hamming_weight(n):
+def hamming_weight(n: int) -> int:
     count = 0
     while n:                        # L1: loop popcount(n) times
         n &= n - 1                  # L2: O(1), clear lowest set bit

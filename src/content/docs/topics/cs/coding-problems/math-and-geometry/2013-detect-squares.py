@@ -3,13 +3,13 @@ class DetectSquares:
     def __init__(self):
         pass  # TODO: implement
 
-    def add(self, point):
+    def add(self, point: list[int]) -> None:
         pass  # TODO: implement
 
-    def count(self, point):
+    def count(self, point: list[int]) -> int:
         pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     d = DetectSquares()
     d.add([3, 10])
     d.add([11, 2])

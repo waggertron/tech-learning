@@ -1,11 +1,14 @@
+from __future__ import annotations
+
+
 class TreeNode:
 
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals:
         return None
     root = TreeNode(vals[0])
@@ -23,10 +26,10 @@ def build_tree(vals):
         i += 1
     return root
 
-def kth_smallest(root, k):
+def kth_smallest(root: TreeNode | None, k: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert kth_smallest(build_tree([3, 1, 4, None, 2]), 1) == 1
     assert kth_smallest(build_tree([5, 3, 6, 2, 4, None, None, 1]), 3) == 3
     assert kth_smallest(build_tree([1]), 1) == 1

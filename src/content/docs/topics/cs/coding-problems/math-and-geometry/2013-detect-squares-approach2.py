@@ -5,12 +5,12 @@ class DetectSquares:
         self.counts = defaultdict(int)          # L1: O(1)
         self.points = set()                     # L2: O(1), distinct points for iteration
 
-    def add(self, point):
+    def add(self, point: list[int]) -> None:
         p = (point[0], point[1])
         self.counts[p] += 1                     # L3: O(1) amortized
         self.points.add(p)                      # L4: O(1) amortized
 
-    def count(self, point):
+    def count(self, point: list[int]) -> int:
         qx, qy = point
         total = 0
         for x, y in list(self.points):          # L5: iterate all distinct points, O(n)

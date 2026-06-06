@@ -1,4 +1,4 @@
-def network_delay_time(times, n, k):
+def network_delay_time(times: list[list[int]], n: int, k: int) -> int:
     pass  # TODO: implement
 
 def _run_tests():

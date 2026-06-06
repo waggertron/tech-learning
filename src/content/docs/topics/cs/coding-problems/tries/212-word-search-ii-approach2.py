@@ -1,9 +1,11 @@
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.word = None
+from __future__ import annotations
 
-def find_words(board, words):
+class TrieNode:
+    def __init__(self) -> None:
+        self.children: dict[str, TrieNode] = {}
+        self.word: str | None = None
+
+def find_words(board: list[list[str]], words: list[str]) -> list[str]:
     root = TrieNode()
     for w in words:
         node = root

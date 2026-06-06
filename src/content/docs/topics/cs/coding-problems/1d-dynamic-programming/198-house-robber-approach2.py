@@ -1,9 +1,9 @@
 from functools import lru_cache
 
-def rob(nums):
+def rob(nums: list[int]) -> int:
     n = len(nums)
     @lru_cache(maxsize=None)
-    def f(i):
+    def f(i: int) -> int:
         if i >= n:
             return 0
         return max(nums[i] + f(i + 2), f(i + 1))

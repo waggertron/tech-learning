@@ -1,7 +1,7 @@
-def partition_labels(s):
+def partition_labels(s: str) -> list[int]:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert partition_labels('ababcbacadefegdehijhklij') == [9, 7, 8]
     assert partition_labels('eccbbbbdec') == [10]
     assert partition_labels('a') == [1]

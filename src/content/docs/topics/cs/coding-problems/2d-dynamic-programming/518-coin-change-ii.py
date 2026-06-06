@@ -1,7 +1,7 @@
-def change(amount, coins):
+def change(amount: int, coins: list[int]) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert change(5, [1, 2, 5]) == 4
     assert change(3, [2]) == 0
     assert change(0, [1, 2, 5]) == 1

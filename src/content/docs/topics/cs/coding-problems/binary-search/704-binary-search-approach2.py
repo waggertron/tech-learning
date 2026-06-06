@@ -1,4 +1,4 @@
-def search(nums: list, target: int) -> int:
+def search(nums: list[int], target: int) -> int:
     def helper(lo: int, hi: int) -> int:
         if lo > hi:
             return -1

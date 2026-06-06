@@ -1,17 +1,19 @@
+from __future__ import annotations
+
 class ListNode:
 
-    def __init__(self, val=0, next=None):
+    def __init__(self, val: int = 0, next: ListNode | None = None) -> None:
         self.val = val
         self.next = next
 
-def to_list(head):
+def to_list(head: ListNode | None) -> list[int]:
     out = []
     while head:
         out.append(head.val)
         head = head.next
     return out
 
-def from_list(vals):
+def from_list(vals: list[int]) -> ListNode | None:
     dummy = ListNode()
     cur = dummy
     for v in vals:
@@ -19,7 +21,7 @@ def from_list(vals):
         cur = cur.next
     return dummy.next
 
-def remove_nth_from_end(head, n):
+def remove_nth_from_end(head: ListNode | None, n: int) -> ListNode | None:
     pass  # TODO: implement
 
 def _run_tests():

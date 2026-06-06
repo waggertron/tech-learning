@@ -1,5 +1,5 @@
-def max_subarray(nums):
-    def helper(lo, hi):
+def max_subarray(nums: list[int]) -> int:
+    def helper(lo: int, hi: int) -> int:
         if lo == hi:
             return nums[lo]
         mid = (lo + hi) // 2

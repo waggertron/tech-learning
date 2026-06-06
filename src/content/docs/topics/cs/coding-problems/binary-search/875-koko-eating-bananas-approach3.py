@@ -1,6 +1,6 @@
 from math import ceil
 
-def min_eating_speed(piles: list, h: int) -> int:
+def min_eating_speed(piles: list[int], h: int) -> int:
     def hours(k: int) -> int:
         return sum(ceil(p / k) for p in piles)
 

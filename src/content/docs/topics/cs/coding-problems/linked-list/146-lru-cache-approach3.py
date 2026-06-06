@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 class Node:
     __slots__ = ("key", "val", "prev", "next")
-    def __init__(self, key=0, val=0):
+    def __init__(self, key: int = 0, val: int = 0) -> None:
         self.key = key; self.val = val
-        self.prev = None; self.next = None
+        self.prev: Node | None = None; self.next: Node | None = None
 
 class LRUCache:
     def __init__(self, capacity: int):

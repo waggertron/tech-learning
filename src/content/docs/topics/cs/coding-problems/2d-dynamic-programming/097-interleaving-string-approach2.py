@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def is_interleave(s1, s2, s3):
+def is_interleave(s1: str, s2: str, s3: str) -> bool:
     if len(s1) + len(s2) != len(s3):
         return False
     @lru_cache(maxsize=None)

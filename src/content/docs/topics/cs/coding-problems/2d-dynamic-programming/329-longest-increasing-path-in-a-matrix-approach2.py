@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def longest_increasing_path(matrix):
+def longest_increasing_path(matrix: list[list[int]]) -> int:
     if not matrix:
         return 0
     rows, cols = len(matrix), len(matrix[0])

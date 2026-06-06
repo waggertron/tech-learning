@@ -1,6 +1,6 @@
 from collections import defaultdict, deque
 
-def possible_bipartition(n, dislikes):
+def possible_bipartition(n: int, dislikes: list[list[int]]) -> bool:
     graph = defaultdict(list)
     for a, b in dislikes:
         graph[a].append(b)

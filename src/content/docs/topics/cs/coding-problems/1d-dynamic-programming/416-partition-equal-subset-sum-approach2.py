@@ -1,13 +1,13 @@
 from functools import lru_cache
 
-def can_partition(nums):
+def can_partition(nums: list[int]) -> bool:
     total = sum(nums)
     if total % 2:
         return False
     target = total // 2
 
     @lru_cache(maxsize=None)
-    def f(i, cur):
+    def f(i: int, cur: int) -> bool:
         if cur == target:
             return True
         if i == len(nums) or cur > target:

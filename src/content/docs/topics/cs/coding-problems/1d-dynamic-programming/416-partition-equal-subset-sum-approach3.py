@@ -1,4 +1,4 @@
-def can_partition(nums):
+def can_partition(nums: list[int]) -> bool:
     total = sum(nums)
     if total % 2:
         return False

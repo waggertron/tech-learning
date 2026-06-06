@@ -1,4 +1,4 @@
-def num_decodings(s):
+def num_decodings(s: str) -> int:
     pass  # TODO: implement
 
 def _run_tests():

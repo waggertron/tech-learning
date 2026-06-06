@@ -1,4 +1,4 @@
-def find_min(nums: list) -> int:
+def find_min(nums: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

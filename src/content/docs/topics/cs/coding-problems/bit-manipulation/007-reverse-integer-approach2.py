@@ -1,7 +1,7 @@
 INT_MIN = -2 ** 31
 INT_MAX = 2 ** 31 - 1
 
-def reverse(x):
+def reverse(x: int) -> int:
     sign = -1 if x < 0 else 1              # L1: O(1)
     x = abs(x)                             # L2: O(1)
     result = 0

@@ -1,7 +1,7 @@
-def exist(board, word):
+def exist(board: list[list[str]], word: str) -> bool:
     rows, cols = len(board), len(board[0])
 
-    def dfs(r, c, i):
+    def dfs(r: int, c: int, i: int) -> bool:
         if i == len(word):
             return True                               # L1: full match
         if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[i]:

@@ -1,7 +1,7 @@
-def merge_triplets(triplets, target):
+def merge_triplets(triplets: list[list[int]], target: list[int]) -> bool:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert merge_triplets([[2, 5, 3], [1, 8, 4], [1, 7, 5]], [2, 7, 5]) == True
     assert merge_triplets([[1, 3, 4], [2, 5, 8]], [2, 5, 8]) == True
     assert merge_triplets([[3, 4, 5]], [2, 5, 8]) == False

@@ -1,4 +1,4 @@
-def rob(nums):
+def rob(nums: list[int]) -> int:
     n = len(nums)
     if n == 1:
         return nums[0]

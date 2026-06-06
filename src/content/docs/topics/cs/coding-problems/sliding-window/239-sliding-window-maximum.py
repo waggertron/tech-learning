@@ -1,4 +1,4 @@
-def max_sliding_window(nums: list, k: int) -> list:
+def max_sliding_window(nums: list[int], k: int) -> list[int]:
     pass  # TODO: implement
 
 def _run_tests():

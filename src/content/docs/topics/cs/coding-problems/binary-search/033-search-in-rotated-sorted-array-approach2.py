@@ -1,4 +1,4 @@
-def search(nums: list, target: int) -> int:
+def search(nums: list[int], target: int) -> int:
     # Step 1: find rotation pivot (index of min)
     lo, hi = 0, len(nums) - 1
     while lo < hi:

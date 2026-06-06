@@ -1,5 +1,5 @@
-def longest_palindrome(s):
-    def expand(l, r):
+def longest_palindrome(s: str) -> str:
+    def expand(l: int, r: int) -> str:
         while l >= 0 and r < len(s) and s[l] == s[r]:
             l -= 1
             r += 1

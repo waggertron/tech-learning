@@ -1,4 +1,4 @@
-def climb_stairs(n):
+def climb_stairs(n: int) -> int:
     pass  # TODO: implement
 
 def _run_tests():

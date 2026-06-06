@@ -1,14 +1,14 @@
 class UnionFind:
-    def __init__(self, n):
+    def __init__(self, n: int) -> None:
         self.parent = list(range(n))
         self.rank = [0] * n
 
-    def find(self, x):
+    def find(self, x: int) -> int:
         if self.parent[x] != x:
             self.parent[x] = self.find(self.parent[x])
         return self.parent[x]
 
-    def union(self, x, y):
+    def union(self, x: int, y: int) -> bool:
         rx, ry = self.find(x), self.find(y)
         if rx == ry:
             return False
@@ -19,11 +19,11 @@ class UnionFind:
             self.rank[rx] += 1
         return True
 
-def find_critical_and_pseudo_critical_edges(n, edges):
+def find_critical_and_pseudo_critical_edges(n: int, edges: list[list[int]]) -> list[list[int]]:
     indexed = [(w, u, v, i) for i, (u, v, w) in enumerate(edges)]
     indexed.sort()
 
-    def kruskal(skip=-1, force=-1):
+    def kruskal(skip: int = -1, force: int = -1) -> float:
         uf = UnionFind(n)
         weight = 0
         count = 0

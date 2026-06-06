@@ -24,7 +24,7 @@ def three_sum(nums: list[int]) -> list[list[int]]:
                     r -= 1
     return result
 
-def normalize(result):
+def normalize(result: list[list[int]]) -> list[tuple[int, ...]]:
     return sorted(tuple(t) for t in result)
 
 assert normalize(three_sum([-1, 0, 1, 2, -1, -4])) == [(-1, -1, 2), (-1, 0, 1)]

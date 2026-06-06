@@ -1,6 +1,6 @@
 from collections import defaultdict, deque
 
-def alien_order(words):
+def alien_order(words: list[str]) -> str:
     in_deg = {c: 0 for w in words for c in w}
     graph = defaultdict(set)
 

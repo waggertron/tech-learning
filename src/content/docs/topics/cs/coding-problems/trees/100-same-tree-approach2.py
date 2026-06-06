@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 from collections import deque
 
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     root = TreeNode(vals[0])
     q = [root]
@@ -23,7 +25,7 @@ def build_tree(vals):
         i += 1
     return root
 
-def is_same_tree(p, q):
+def is_same_tree(p: TreeNode | None, q: TreeNode | None) -> bool:
     q_pairs = deque([(p, q)])           # L1: O(1) init
     while q_pairs:
         a, b = q_pairs.popleft()        # L2: O(1) dequeue

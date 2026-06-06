@@ -1,6 +1,6 @@
 from collections import deque
 
-def shortest_path_binary_matrix(grid):
+def shortest_path_binary_matrix(grid: list[list[int]]) -> int:
     n = len(grid)
     if grid[0][0] == 1 or grid[n-1][n-1] == 1:
         return -1

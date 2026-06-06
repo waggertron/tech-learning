@@ -1,11 +1,14 @@
+from __future__ import annotations
+
+
 class TreeNode:
 
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals:
         return None
     root = TreeNode(vals[0])
@@ -23,10 +26,10 @@ def build_tree(vals):
         i += 1
     return root
 
-def min_camera_cover(root):
+def min_camera_cover(root: TreeNode | None) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert min_camera_cover(build_tree([0, 0, None, 0, 0])) == 1
     assert min_camera_cover(build_tree([0, 0, None, 0, None, 0, None, None, 0])) == 2
     # single node must have a camera

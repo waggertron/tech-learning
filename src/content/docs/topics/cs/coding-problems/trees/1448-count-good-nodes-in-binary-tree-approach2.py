@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     root = TreeNode(vals[0])
     q = [root]
@@ -21,8 +24,8 @@ def build_tree(vals):
         i += 1
     return root
 
-def good_nodes(root):
-    def dfs(node, max_so_far):
+def good_nodes(root: TreeNode | None) -> int:
+    def dfs(node: TreeNode | None, max_so_far: float) -> int:
         if not node:
             return 0
         good = 1 if node.val >= max_so_far else 0    # L1: O(1) check

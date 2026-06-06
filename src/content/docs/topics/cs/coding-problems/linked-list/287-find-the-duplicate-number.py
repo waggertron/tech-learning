@@ -1,4 +1,4 @@
-def find_duplicate(nums):
+def find_duplicate(nums: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

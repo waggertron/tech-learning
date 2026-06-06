@@ -1,5 +1,5 @@
-def rob(nums):
-    def rob_linear(arr):
+def rob(nums: list[int]) -> int:
+    def rob_linear(arr: list[int]) -> int:
         prev2, prev1 = 0, 0
         for x in arr:
             prev2, prev1 = prev1, max(prev1, prev2 + x)

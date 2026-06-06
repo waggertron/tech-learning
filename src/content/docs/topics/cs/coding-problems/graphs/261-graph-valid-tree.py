@@ -1,4 +1,4 @@
-def valid_tree(n, edges):
+def valid_tree(n: int, edges: list[list[int]]) -> bool:
     pass  # TODO: implement
 
 def _run_tests():

@@ -1,4 +1,4 @@
-def check_valid_string(s):
+def check_valid_string(s: str) -> bool:
     lo = hi = 0
     for ch in s:
         if ch == '(':

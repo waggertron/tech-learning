@@ -1,4 +1,4 @@
-def min_cost_climbing_stairs(cost):
+def min_cost_climbing_stairs(cost: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

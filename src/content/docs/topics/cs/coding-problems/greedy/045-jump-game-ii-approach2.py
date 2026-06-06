@@ -1,4 +1,4 @@
-def jump(nums):
+def jump(nums: list[int]) -> int:
     n = len(nums)
     if n <= 1:
         return 0

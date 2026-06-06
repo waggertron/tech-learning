@@ -1,4 +1,4 @@
-def max_product(nums):
+def max_product(nums: list[int]) -> int:
     max_here = min_here = best = nums[0]
     for x in nums[1:]:
         if x < 0:

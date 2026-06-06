@@ -1,7 +1,7 @@
-def reverse_bits(n):
+def reverse_bits(n: int) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert reverse_bits(43261596) == 964176192
     assert reverse_bits(4294967293) == 3221225471
     assert reverse_bits(0) == 0

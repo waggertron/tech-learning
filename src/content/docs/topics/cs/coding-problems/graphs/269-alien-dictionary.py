@@ -1,4 +1,4 @@
-def alien_order(words):
+def alien_order(words: list[str]) -> str:
     pass  # TODO: implement
 
 def _run_tests():

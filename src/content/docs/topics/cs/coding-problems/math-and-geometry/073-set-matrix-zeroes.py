@@ -1,7 +1,7 @@
-def set_zeroes(matrix):
+def set_zeroes(matrix: list[list[int]]) -> None:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     m = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
     set_zeroes(m)
     assert m == [[1, 0, 1], [0, 0, 0], [1, 0, 1]]

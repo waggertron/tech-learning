@@ -1,8 +1,8 @@
 from functools import lru_cache
 
-def coin_change(coins, amount):
+def coin_change(coins: list[int], amount: int) -> int:
     @lru_cache(maxsize=None)
-    def f(n):
+    def f(n: int) -> float:
         if n == 0:
             return 0
         if n < 0:

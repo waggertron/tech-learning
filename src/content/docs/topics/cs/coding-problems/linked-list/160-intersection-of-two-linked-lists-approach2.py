@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 class ListNode:
-    def __init__(self, val=0, next=None):
+    def __init__(self, val: int = 0, next: ListNode | None = None) -> None:
         self.val = val
         self.next = next
 
-def get_intersection_node(headA, headB):
+def get_intersection_node(headA: ListNode | None, headB: ListNode | None) -> ListNode | None:
     pA, pB = headA, headB
     while pA is not pB:
         pA = pA.next if pA else headB

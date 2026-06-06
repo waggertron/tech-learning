@@ -1,7 +1,7 @@
 import heapq
 from collections import defaultdict
 
-def network_delay_time(times, n, k):
+def network_delay_time(times: list[list[int]], n: int, k: int) -> int:
     graph = defaultdict(list)
     for u, v, w in times:
         graph[u].append((v, w))

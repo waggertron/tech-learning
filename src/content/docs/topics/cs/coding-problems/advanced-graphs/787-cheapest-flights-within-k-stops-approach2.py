@@ -1,7 +1,7 @@
 import heapq
 from collections import defaultdict
 
-def find_cheapest_price(n, flights, src, dst, k):
+def find_cheapest_price(n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
     graph = defaultdict(list)
     for u, v, w in flights:
         graph[u].append((v, w))

@@ -1,4 +1,4 @@
-def can_complete_circuit(gas, cost):
+def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
     if sum(gas) < sum(cost):
         return -1
     tank = 0

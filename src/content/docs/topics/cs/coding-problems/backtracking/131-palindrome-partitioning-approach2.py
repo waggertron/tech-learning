@@ -1,9 +1,9 @@
-def partition(s):
+def partition(s: str) -> list[list[str]]:
     result = []
     path = []
     n = len(s)
 
-    def is_pal(l, r):
+    def is_pal(l: int, r: int) -> bool:
         while l < r:
             if s[l] != s[r]:
                 return False
@@ -11,7 +11,7 @@ def partition(s):
             r -= 1                      # L1: O(k) two-pointer check
         return True
 
-    def backtrack(start):
+    def backtrack(start: int) -> None:
         if start == n:
             result.append(path[:])      # L2: O(n) copy
             return

@@ -1,4 +1,4 @@
-def find_peak_element(nums: list) -> int:
+def find_peak_element(nums: list[int]) -> int:
     pass  # TODO: implement
 
 def _run_tests():

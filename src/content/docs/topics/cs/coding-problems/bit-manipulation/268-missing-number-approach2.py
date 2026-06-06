@@ -1,4 +1,4 @@
-def missing_number(nums):
+def missing_number(nums: list[int]) -> int:
     n = len(nums)                           # L1: O(1)
     return n * (n + 1) // 2 - sum(nums)    # L2: O(n)
 

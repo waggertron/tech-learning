@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 class TrieNode:
 
-    def __init__(self):
-        self.children = {}
-        self.word = None
+    def __init__(self) -> None:
+        self.children: dict[str, TrieNode] = {}
+        self.word: str | None = None
 
-def find_words(board, words):
+def find_words(board: list[list[str]], words: list[str]) -> list[str]:
     pass  # TODO: implement
 
 def _run_tests():

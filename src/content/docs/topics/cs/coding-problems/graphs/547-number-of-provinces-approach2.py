@@ -1,4 +1,4 @@
-def find_circle_num(isConnected):
+def find_circle_num(isConnected: list[list[int]]) -> int:
     n = len(isConnected)
     visited = [False] * n
     provinces = 0

@@ -1,4 +1,4 @@
-def find_min(nums: list) -> int:
+def find_min(nums: list[int]) -> int:
     lo, hi = 0, len(nums) - 1
     while lo < hi:
         mid = (lo + hi) // 2

@@ -1,6 +1,6 @@
 import bisect
 
-def insert(intervals, new_interval):
+def insert(intervals: list[list[int]], new_interval: list[int]) -> list[list[int]]:
     intervals = [list(iv) for iv in intervals]
     starts = [iv[0] for iv in intervals]
     idx = bisect.bisect_left(starts, new_interval[0])

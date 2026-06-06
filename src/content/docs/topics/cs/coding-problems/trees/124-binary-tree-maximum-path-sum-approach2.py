@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(vals):
+def build_tree(vals: list[int | None]) -> TreeNode | None:
     if not vals: return None
     root = TreeNode(vals[0])
     q = [root]
@@ -21,10 +24,10 @@ def build_tree(vals):
         i += 1
     return root
 
-def max_path_sum(root):
+def max_path_sum(root: TreeNode | None) -> int:
     best = float('-inf')
 
-    def max_gain(node):
+    def max_gain(node: TreeNode | None) -> int:
         nonlocal best
         if not node:
             return 0
@@ -34,7 +37,7 @@ def max_path_sum(root):
         return node.val + max(left, right)           # L4: O(1) return
 
     max_gain(root)
-    return best
+    return int(best)
 
 assert max_path_sum(build_tree([1, 2, 3])) == 6
 assert max_path_sum(build_tree([-10, 9, 20, None, None, 15, 7])) == 42

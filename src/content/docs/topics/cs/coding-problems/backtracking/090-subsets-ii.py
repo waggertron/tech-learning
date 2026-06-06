@@ -1,4 +1,4 @@
-def subsets_with_dup(nums):
+def subsets_with_dup(nums: list[int]) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

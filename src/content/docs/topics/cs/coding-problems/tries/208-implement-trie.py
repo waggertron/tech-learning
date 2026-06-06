@@ -1,24 +1,26 @@
+from __future__ import annotations
+
 class TrieNode:
 
-    def __init__(self):
-        self.children = {}
+    def __init__(self) -> None:
+        self.children: dict[str, TrieNode] = {}
         self.is_end = False
 
 class Trie:
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass  # TODO: implement
 
-    def insert(self, word):
+    def insert(self, word: str) -> None:
         pass  # TODO: implement
 
-    def search(self, word):
+    def search(self, word: str) -> bool:
         pass  # TODO: implement
 
-    def startsWith(self, prefix):
+    def startsWith(self, prefix: str) -> bool:
         pass  # TODO: implement
 
-    def _walk(self, s):
+    def _walk(self, s: str) -> TrieNode | None:
         pass  # TODO: implement
 
 def _run_tests():

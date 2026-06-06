@@ -1,4 +1,4 @@
-def letter_combinations(digits):
+def letter_combinations(digits: str) -> list[str]:
     if not digits:
         return []
     mapping = {"2":"abc","3":"def","4":"ghi","5":"jkl",
@@ -6,7 +6,7 @@ def letter_combinations(digits):
     result = []
     path = []
 
-    def backtrack(i):
+    def backtrack(i: int) -> None:
         if i == len(digits):
             result.append("".join(path))  # L1: O(n) join when complete
             return

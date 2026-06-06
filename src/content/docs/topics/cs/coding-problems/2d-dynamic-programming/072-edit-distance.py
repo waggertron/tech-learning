@@ -1,7 +1,7 @@
-def min_distance(word1, word2):
+def min_distance(word1: str, word2: str) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert min_distance('horse', 'ros') == 3
     assert min_distance('intention', 'execution') == 5
     assert min_distance('', '') == 0

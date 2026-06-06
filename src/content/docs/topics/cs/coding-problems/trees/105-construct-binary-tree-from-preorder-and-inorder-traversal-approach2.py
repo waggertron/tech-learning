@@ -1,14 +1,17 @@
+from __future__ import annotations
+
+
 class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
+    def __init__(self, val: int = 0, left: TreeNode | None = None, right: TreeNode | None = None) -> None:
         self.val = val
         self.left = left
         self.right = right
 
-def build_tree(preorder, inorder):
+def build_tree(preorder: list[int], inorder: list[int]) -> TreeNode | None:
     inorder_idx = {v: i for i, v in enumerate(inorder)}  # L1: O(n) build map
     pre_i = [0]
 
-    def rec(in_l, in_r):
+    def rec(in_l: int, in_r: int) -> TreeNode | None:
         if in_l > in_r:
             return None
         root_val = preorder[pre_i[0]]           # L2: O(1) index into preorder
@@ -21,7 +24,7 @@ def build_tree(preorder, inorder):
 
     return rec(0, len(inorder) - 1)
 
-def tree_to_list(root):
+def tree_to_list(root: TreeNode | None) -> list[int | None]:
     if not root: return []
     from collections import deque
     result, q = [], deque([root])

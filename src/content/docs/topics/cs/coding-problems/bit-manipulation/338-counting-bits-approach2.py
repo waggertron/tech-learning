@@ -1,4 +1,4 @@
-def count_bits(n):
+def count_bits(n: int) -> list[int]:
     dp = [0] * (n + 1)                  # L1: O(n)
     for i in range(1, n + 1):           # L2: single pass, n iterations
         dp[i] = dp[i >> 1] + (i & 1)   # L3: O(1) per i

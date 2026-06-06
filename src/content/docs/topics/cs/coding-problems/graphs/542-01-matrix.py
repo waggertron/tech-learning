@@ -1,6 +1,6 @@
 from collections import deque
 
-def update_matrix(mat):
+def update_matrix(mat: list[list[int]]) -> list[list[int]]:
     pass  # TODO: implement
 
 def _run_tests():

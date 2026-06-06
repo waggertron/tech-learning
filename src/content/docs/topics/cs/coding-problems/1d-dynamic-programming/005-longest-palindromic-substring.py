@@ -1,4 +1,4 @@
-def longest_palindrome(s):
+def longest_palindrome(s: str) -> str:
     pass  # TODO: implement
 
 def _run_tests():

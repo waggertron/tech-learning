@@ -1,6 +1,6 @@
 import heapq
 
-def find_kth_largest(nums, k):
+def find_kth_largest(nums: list[int], k: int) -> int:
     heap = []
     for x in nums:                 # L1: iterate n elements
         heapq.heappush(heap, x)    # L2: O(log k) push

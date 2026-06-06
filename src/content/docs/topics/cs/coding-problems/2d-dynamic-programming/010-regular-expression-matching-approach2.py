@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def is_match(s, p):
+def is_match(s: str, p: str) -> bool:
     @lru_cache(maxsize=None)
     def match(i, j):
         if j == len(p):

@@ -1,4 +1,4 @@
-def merge(intervals):
+def merge(intervals: list[list[int]]) -> list[list[int]]:
     if not intervals:
         return []
     max_v = max(e for _, e in intervals)

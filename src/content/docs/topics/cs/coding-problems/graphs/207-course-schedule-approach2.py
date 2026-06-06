@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-def can_finish(num_courses, prerequisites):
+def can_finish(num_courses: int, prerequisites: list[list[int]]) -> bool:
     graph = defaultdict(list)
     for a, b in prerequisites:
         graph[b].append(a)

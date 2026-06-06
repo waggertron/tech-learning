@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-def change(amount, coins):
+def change(amount: int, coins: list[int]) -> int:
     @lru_cache(maxsize=None)
     def f(i, remaining):
         if remaining == 0:

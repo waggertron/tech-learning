@@ -1,7 +1,7 @@
-def num_distinct(s, t):
+def num_distinct(s: str, t: str) -> int:
     pass  # TODO: implement
 
-def _run_tests():
+def _run_tests() -> None:
     assert num_distinct('rabbbit', 'rabbit') == 3
     assert num_distinct('babgbag', 'bag') == 5
     assert num_distinct('abc', '') == 1

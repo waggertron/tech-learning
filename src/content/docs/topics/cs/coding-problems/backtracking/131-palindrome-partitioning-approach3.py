@@ -1,4 +1,4 @@
-def partition(s):
+def partition(s: str) -> list[list[str]]:
     n = len(s)
     # is_pal[i][j] = True iff s[i:j+1] is a palindrome
     is_pal = [[False] * n for _ in range(n)]
@@ -13,7 +13,7 @@ def partition(s):
     result = []
     path = []
 
-    def backtrack(start):
+    def backtrack(start: int) -> None:
         if start == n:
             result.append(path[:])                 # L3: O(n) copy
             return
