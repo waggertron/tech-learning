@@ -28,6 +28,10 @@ Two classic proof structures:
 7. [763. Partition Labels (Medium)](./763-partition-labels/)
 8. [678. Valid Parenthesis String (Medium)](./678-valid-parenthesis-string/)
 
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [334. Increasing Triplet Subsequence (Medium)](./334-increasing-triplet-subsequence/)
+
 ## Key patterns unlocked here
 
 - **Kadane's algorithm**: Maximum Subarray.

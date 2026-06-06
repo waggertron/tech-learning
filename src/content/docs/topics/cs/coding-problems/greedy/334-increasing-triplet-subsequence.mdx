@@ -1,0 +1,321 @@
+---
+title: "334. Increasing Triplet Subsequence (Medium)"
+description: "Greedy two-variable scan that finds a strictly increasing length-3 subsequence in O(n) time and O(1) space."
+parent: greedy
+tags: [leetcode, greedy, medium]
+status: draft
+created: 2026-06-05
+updated: 2026-06-05
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './334-increasing-triplet-subsequence.py?raw';
+import practiceCodeTs from './334-increasing-triplet-subsequence.ts?raw';
+import practiceCodeGo from './334-increasing-triplet-subsequence.go?raw';
+import approach2PyCode from './334-increasing-triplet-subsequence-approach2.py?raw';
+import approach2TsCode from './334-increasing-triplet-subsequence-approach2.ts?raw';
+import approach2GoCode from './334-increasing-triplet-subsequence-approach2.go?raw';
+import approach3PyCode from './334-increasing-triplet-subsequence-approach3.py?raw';
+import approach3TsCode from './334-increasing-triplet-subsequence-approach3.ts?raw';
+import approach3GoCode from './334-increasing-triplet-subsequence-approach3.go?raw';
+
+## Problem
+
+Given an integer array `nums`, return `true` if there exist indices `i < j < k` such that `nums[i] < nums[j] < nums[k]`. Return `false` otherwise.
+
+**Examples**
+- `[1, 2, 3, 4, 5]` → `true` (triplet: 1, 2, 3)
+- `[5, 4, 3, 2, 1]` → `false` (strictly decreasing, no triplet)
+- `[2, 1, 5, 0, 4, 6]` → `true` (triplet: 1, 4, 6)
+
+**Constraints**
+- $1 \leq n \leq 5 \times 10^5$
+- $-2^{31} \leq nums[i] \leq 2^{31} - 1$
+
+LeetCode 334 · [Link](https://leetcode.com/problems/increasing-triplet-subsequence/) · *Medium*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="increasing-triplet-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="increasing-triplet-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="increasing-triplet-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Brute force
+
+Check every (i, j, k) combination with i < j < k.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def increasing_triplet(nums: list[int]) -> bool:
+    n = len(nums)                                       # L1: O(1)
+    for i in range(n - 2):                             # L2: outer loop
+        for j in range(i + 1, n - 1):                 # L3: middle loop
+            for k in range(j + 1, n):                 # L4: inner loop
+                if nums[i] < nums[j] < nums[k]:       # L5: check triplet
+                    return True
+    return False
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function increasingTriplet(nums: number[]): boolean {
+    const n = nums.length;                                           // L1: O(1)
+    for (let i = 0; i < n - 2; i++) {                              // L2: outer loop
+        for (let j = i + 1; j < n - 1; j++) {                     // L3: middle loop
+            for (let k = j + 1; k < n; k++) {                     // L4: inner loop
+                if (nums[i] < nums[j] && nums[j] < nums[k])       // L5: check triplet
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func increasingTriplet(nums []int) bool {
+    n := len(nums)                                                    // L1: O(1)
+    for i := 0; i < n-2; i++ {                                      // L2: outer loop
+        for j := i + 1; j < n-1; j++ {                             // L3: middle loop
+            for k := j + 1; k < n; k++ {                           // L4: inner loop
+                if nums[i] < nums[j] && nums[j] < nums[k] {        // L5: check triplet
+                    return true
+                }
+            }
+        }
+    }
+    return false
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 (outer loop) | $O(1)$ | $n$ | $O(n)$ |
+| L3 (middle loop) | $O(1)$ | up to $n$ per i | $O(n^2)$ |
+| **L4, L5 (inner loop)** | **$O(1)$** | **up to $n$ per j** | **$O(n^3)$** ← dominates |
+
+**Complexity**
+- **Time:** $O(n^3)$, three nested loops.
+- **Space:** $O(1)$, no extra storage.
+
+## Approach 2: Prefix min and suffix max
+
+Build two auxiliary arrays: `min_left[i]` = minimum of `nums[0..i]`, `max_right[i]` = maximum of `nums[i..n-1]`. For any candidate middle index `j`, a valid triplet exists when `min_left[j-1] < nums[j] < max_right[j+1]`.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def increasing_triplet(nums: list[int]) -> bool:
+    n = len(nums)
+    if n < 3:
+        return False
+    min_left = [0] * n                                        # L1: prefix-min array
+    max_right = [0] * n                                       # L2: suffix-max array
+    min_left[0] = nums[0]
+    for i in range(1, n):                                     # L3: build prefix mins
+        min_left[i] = min(min_left[i - 1], nums[i])
+    max_right[n - 1] = nums[n - 1]
+    for i in range(n - 2, -1, -1):                           # L4: build suffix maxes
+        max_right[i] = max(max_right[i + 1], nums[i])
+    for j in range(1, n - 1):                                # L5: scan for valid middle
+        if min_left[j - 1] < nums[j] < max_right[j + 1]:   # L6: triplet found
+            return True
+    return False
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function increasingTriplet(nums: number[]): boolean {
+    const n = nums.length;
+    if (n < 3) return false;
+    const minLeft: number[] = new Array(n);                           // L1: prefix-min array
+    const maxRight: number[] = new Array(n);                          // L2: suffix-max array
+    minLeft[0] = nums[0];
+    for (let i = 1; i < n; i++)                                      // L3: build prefix mins
+        minLeft[i] = Math.min(minLeft[i - 1], nums[i]);
+    maxRight[n - 1] = nums[n - 1];
+    for (let i = n - 2; i >= 0; i--)                                 // L4: build suffix maxes
+        maxRight[i] = Math.max(maxRight[i + 1], nums[i]);
+    for (let j = 1; j < n - 1; j++)                                 // L5: scan for valid middle
+        if (minLeft[j - 1] < nums[j] && nums[j] < maxRight[j + 1]) // L6: triplet found
+            return true;
+    return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func increasingTriplet(nums []int) bool {
+    n := len(nums)
+    if n < 3 { return false }
+    minLeft := make([]int, n)                                          // L1: prefix-min array
+    maxRight := make([]int, n)                                         // L2: suffix-max array
+    minLeft[0] = nums[0]
+    for i := 1; i < n; i++ {                                         // L3: build prefix mins
+        if nums[i] < minLeft[i-1] { minLeft[i] = nums[i] } else { minLeft[i] = minLeft[i-1] }
+    }
+    maxRight[n-1] = nums[n-1]
+    for i := n - 2; i >= 0; i-- {                                    // L4: build suffix maxes
+        if nums[i] > maxRight[i+1] { maxRight[i] = nums[i] } else { maxRight[i] = maxRight[i+1] }
+    }
+    for j := 1; j < n-1; j++ {                                      // L5: scan for valid middle
+        if minLeft[j-1] < nums[j] && nums[j] < maxRight[j+1] {      // L6: triplet found
+            return true
+        }
+    }
+    return false
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1, L2 (init arrays) | $O(1)$ | $n$ | $O(n)$ |
+| **L3 (prefix loop)** | **$O(1)$** | **$n$** | **$O(n)$** |
+| **L4 (suffix loop)** | **$O(1)$** | **$n$** | **$O(n)$** |
+| **L5, L6 (scan loop)** | **$O(1)$** | **$n$** | **$O(n)$** |
+
+Three linear passes; constant factor is 3 with early exit.
+
+**Complexity**
+- **Time:** $O(n)$, three passes over the array.
+- **Space:** $O(n)$, two auxiliary arrays of length $n$.
+
+## Approach 3: Greedy two-variable scan
+
+Track two thresholds: `first` = the smallest value seen so far, `second` = the smallest value that has a smaller value somewhere before it. If any later element exceeds `second`, a valid triplet is guaranteed.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def increasing_triplet(nums: list[int]) -> bool:
+    first = second = float('inf')               # L1: two threshold sentinels
+    for n in nums:                              # L2: single pass
+        if n <= first:                          # L3: new global minimum
+            first = n
+        elif n <= second:                       # L4: new second-place minimum
+            second = n
+        else:                                   # L5: found a third greater than both
+            return True
+    return False
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function increasingTriplet(nums: number[]): boolean {
+    let first = Infinity, second = Infinity;    // L1: two threshold sentinels
+    for (const n of nums) {                    // L2: single pass
+        if (n <= first) first = n;             // L3: new global minimum
+        else if (n <= second) second = n;      // L4: new second-place minimum
+        else return true;                      // L5: found a third greater than both
+    }
+    return false;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "math"
+
+func increasingTriplet(nums []int) bool {
+    first, second := math.MaxInt, math.MaxInt  // L1: two threshold sentinels
+    for _, n := range nums {                   // L2: single pass
+        if n <= first {                        // L3: new global minimum
+            first = n
+        } else if n <= second {               // L4: new second-place minimum
+            second = n
+        } else {                              // L5: found a third greater than both
+            return true
+        }
+    }
+    return false
+}
+```
+</TabItem>
+</Tabs>
+
+**The tricky invariant**
+
+`first` can be updated to an index that comes after `second` was set, which looks wrong. How can `(first, second)` be a valid ordered pair if `first`'s position is later?
+
+The key: when `second` was set, some earlier value smaller than `second` existed at that moment. Even if `first` later drops lower, `second` still carries its guarantee -- there is some value before it that was smaller. So when any later element exceeds `second`, a valid triplet is guaranteed to exist, even if `first` no longer points to the specific element that paired with `second`.
+
+Example walkthrough: `[5, 1, 4, 2, 3]`
+
+| Value | first | second | Action |
+| --- | --- | --- | --- |
+| 5 | 5 | inf | L3: update first |
+| 1 | 1 | inf | L3: update first (smaller) |
+| 4 | 1 | 4 | L4: update second |
+| 2 | 1 | 2 | L4: update second (smaller) |
+| 3 | 1 | 2 | L5: 3 > second=2, return True |
+
+The triplet is (1, 2, 3) at indices (1, 3, 4). `first` was updated after `second` was first set, but the invariant held throughout.
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (init sentinels) | $O(1)$ | 1 | $O(1)$ |
+| **L2-L5 (loop body)** | **$O(1)$** | **$n$** | **$O(n)$** ← dominates |
+
+**Complexity**
+- **Time:** $O(n)$, one pass.
+- **Space:** $O(1)$, two scalar variables.
+
+## How to recognize this pattern
+
+The trigger phrase: **"return true if there exist indices i < j < k such that nums[i] < nums[j] < nums[k]."** Fixed-length strictly increasing subsequence, existence question, no need to reconstruct it.
+
+The wrong first move: track all pairs (i, j) and scan for any k > j where nums[k] > nums[j]. That is O(n²) and misses the O(n) path entirely.
+
+The greedy insight: you only need two thresholds, not all pairs. At every step, only two questions matter: "does a valid first exist?" and "given that first, does a valid second exist?" Each new element either lowers a threshold or, if it exceeds both, closes the case.
+
+This generalizes weakly: for length-2 just track a running minimum. For length-4 and beyond, patience sort (LIS in O(n log n)) is needed. The two-variable trick is specific to length-3.
+
+| Problem | Same shape |
+| --- | --- |
+| [300. Longest Increasing Subsequence](../1d-dynamic-programming/300-longest-increasing-subsequence/) | Existence + reconstruction, arbitrary length, patience sort |
+| [53. Maximum Subarray](./053-maximum-subarray/) | Greedy running state, one pass |
+| [55. Jump Game](./055-jump-game/) | Greedy running max, one pass |
+
+## Key takeaways
+
+- `first` and `second` are thresholds, not index trackers. Once set, they mean "there exists some value this small with a valid prefix."
+- Updating `first` after `second` is already set does not invalidate `second`'s guarantee.
+- The two-variable trick works only for length exactly 3. Use patience sort for arbitrary LIS length.
+- Edge cases: `n < 3` is always false; all-equal arrays are false because the problem requires strict inequality.
+
+## Related topics
+
+- [Greedy](./index/)
+- [55. Jump Game](./055-jump-game/)
+- [53. Maximum Subarray](./053-maximum-subarray/)
+- [300. Longest Increasing Subsequence](../1d-dynamic-programming/300-longest-increasing-subsequence/)
+- [678. Valid Parenthesis String](./678-valid-parenthesis-string/)
