@@ -26,6 +26,10 @@ Three pointer movements cover almost all problems:
 4. [11. Container With Most Water (Medium)](./011-container-with-most-water/)
 5. [42. Trapping Rain Water (Hard)](./042-trapping-rain-water/)
 
+## Bonus problems
+
+- [443. String Compression (Medium)](./443-string-compression/)
+
 ## Key patterns unlocked here
 
 - **Symmetric check with converging pointers**: Valid Palindrome.

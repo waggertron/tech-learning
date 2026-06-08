@@ -1,0 +1,264 @@
+---
+title: "443. String Compression (Medium)"
+description: "Two read/write pointers compress consecutive character groups in-place in O(n) time and O(1) space."
+parent: two-pointers
+tags: [leetcode, two-pointers, medium]
+status: draft
+created: 2026-06-08
+updated: 2026-06-08
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './443-string-compression.py?raw';
+import practiceCodeTs from './443-string-compression.ts?raw';
+import practiceCodeGo from './443-string-compression.go?raw';
+import approach2PyCode from './443-string-compression-approach2.py?raw';
+import approach2TsCode from './443-string-compression-approach2.ts?raw';
+import approach2GoCode from './443-string-compression-approach2.go?raw';
+
+## Problem
+
+Given an array of characters `chars`, compress it in place. For each group of consecutive repeating characters:
+- If the group length is 1, write just the character.
+- If the group length is greater than 1, write the character followed by each digit of the count.
+
+Return the new length of the array after compression. The modified `chars` must hold the result; no extra array allowed.
+
+**Examples**
+- `['a','a','b','b','c','c','c']` → `['a','2','b','2','c','3']`, return `6`
+- `['a']` → `['a']`, return `1`
+- `['a','b','b','b','b','b','b','b','b','b','b','b','b']` → `['a','b','1','2']`, return `4`
+
+**Constraints**
+- $1 \leq n \leq 2000$
+- `chars[i]` is a lowercase letter, digit, or space.
+- Must use $O(1)$ extra space.
+
+LeetCode 443 · [Link](https://leetcode.com/problems/string-compression/) · *Medium*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="string-compression-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="string-compression-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="string-compression-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Extra buffer
+
+Build the compressed output in a separate list, then copy it back into `chars`.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def compress(chars: list[str]) -> int:
+    result = []                                              # L1: extra buffer
+    i = 0
+    while i < len(chars):                                   # L2: scan groups
+        char = chars[i]
+        count = 0
+        while i < len(chars) and chars[i] == char:         # L3: count group
+            count += 1
+            i += 1
+        result.append(char)                                 # L4: write char
+        if count > 1:                                       # L5: write count digits
+            result.extend(list(str(count)))
+    for i, c in enumerate(result):                         # L6: copy back
+        chars[i] = c
+    return len(result)
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function compress(chars: string[]): number {
+    const result: string[] = [];                             // L1: extra buffer
+    let i = 0;
+    while (i < chars.length) {                              // L2: scan groups
+        const char = chars[i];
+        let count = 0;
+        while (i < chars.length && chars[i] === char) {    // L3: count group
+            count++;
+            i++;
+        }
+        result.push(char);                                   // L4: write char
+        if (count > 1)                                      // L5: write count digits
+            result.push(...String(count).split(''));
+    }
+    for (let j = 0; j < result.length; j++)                // L6: copy back
+        chars[j] = result[j];
+    return result.length;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "strconv"
+
+func compress(chars []byte) int {
+    result := []byte{}                                       // L1: extra buffer
+    i := 0
+    for i < len(chars) {                                    // L2: scan groups
+        char := chars[i]
+        count := 0
+        for i < len(chars) && chars[i] == char {           // L3: count group
+            count++
+            i++
+        }
+        result = append(result, char)                       // L4: write char
+        if count > 1 {                                      // L5: write count digits
+            for _, d := range strconv.Itoa(count) {
+                result = append(result, byte(d))
+            }
+        }
+    }
+    copy(chars, result)                                     // L6: copy back
+    return len(result)
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(chars).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 outer loop | $O(1)$ | $n$ total across all groups | $O(n)$ |
+| L3 inner loop | $O(1)$ | $n$ total across all groups | $O(n)$ |
+| **L6 copy back** | **$O(1)$** | **up to $n$** | **$O(n)$** |
+
+**Complexity**
+- **Time:** $O(n)$, two passes.
+- **Space:** $O(n)$, the extra buffer.
+
+## Approach 2: Two-pointer in-place
+
+Track a `write` pointer and a read pointer `i`. After consuming each group, write the character and count digits back at `write`. Because compressed output is always shorter than or equal to its source group, `write` never catches up to `i` and no data is overwritten before it is read.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def compress(chars: list[str]) -> int:
+    write = 0                                               # L1: write pointer
+    i = 0                                                  # L2: read pointer
+    while i < len(chars):                                  # L3: scan groups
+        char = chars[i]
+        count = 0
+        while i < len(chars) and chars[i] == char:        # L4: count group
+            count += 1
+            i += 1
+        chars[write] = char                                # L5: write char
+        write += 1
+        if count > 1:                                      # L6: write count digits
+            for digit in str(count):
+                chars[write] = digit
+                write += 1
+    return write
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function compress(chars: string[]): number {
+    let write = 0;                                          // L1: write pointer
+    let i = 0;                                             // L2: read pointer
+    while (i < chars.length) {                            // L3: scan groups
+        const char = chars[i];
+        let count = 0;
+        while (i < chars.length && chars[i] === char) {  // L4: count group
+            count++;
+            i++;
+        }
+        chars[write++] = char;                             // L5: write char
+        if (count > 1)                                    // L6: write count digits
+            for (const digit of String(count))
+                chars[write++] = digit;
+    }
+    return write;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "strconv"
+
+func compress(chars []byte) int {
+    write := 0                                             // L1: write pointer
+    i := 0                                                // L2: read pointer
+    for i < len(chars) {                                 // L3: scan groups
+        char := chars[i]
+        count := 0
+        for i < len(chars) && chars[i] == char {        // L4: count group
+            count++
+            i++
+        }
+        chars[write] = char                              // L5: write char
+        write++
+        if count > 1 {                                  // L6: write count digits
+            for _, digit := range strconv.Itoa(count) {
+                chars[write] = byte(digit)
+                write++
+            }
+        }
+    }
+    return write
+}
+```
+</TabItem>
+</Tabs>
+
+**Why write never overtakes read**
+
+A group of $k$ identical characters compresses to $1 + \lfloor\log_{10}k\rfloor + 1$ bytes at most. For any $k \geq 1$ that is always $\leq k$, so `write` advances no faster than `i` finishes each group.
+
+**Where the time goes, line by line**
+
+*Variables: n = len(chars).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1, L2 init | $O(1)$ | 1 | $O(1)$ |
+| L3 outer while | $O(1)$ | groups visited | $O(n)$ |
+| **L4 inner while** | **$O(1)$** | **$n$ total** | **$O(n)$** |
+| L5, L6 writes | $O(1)$ | at most $n$ | $O(n)$ |
+
+**Complexity**
+- **Time:** $O(n)$, one pass.
+- **Space:** $O(1)$, two scalar pointers.
+
+## How to recognize this pattern
+
+The signal: **"modify the array in place"** plus **"return the new length."** That pair points directly to a read/write pointer setup. The write pointer marks the next output slot; the read pointer advances freely without restriction.
+
+The wrong first move: allocate a new list to collect results, then copy back. Correct output, but O(n) space and an extra pass.
+
+Why it is safe: compressed output is never longer than its source group, so `write` can never reach `i`. The in-place write is always trailing, never colliding.
+
+| Problem | Same shape |
+| --- | --- |
+| 26. Remove Duplicates from Sorted Array | Write pointer, in-place, return new length |
+| 27. Remove Element | Write pointer skips unwanted values |
+| [125. Valid Palindrome](./125-valid-palindrome/) | Two pointers, one pass over a string |
+
+## Key takeaways
+
+- `write` always trails `i` because compressed output fits inside the space the source group occupied.
+- Multi-digit counts like `12` write as individual characters `'1'`, `'2'`, not as an integer.
+- Single-character groups write only the character, no count digit.
+- Edge case: `n = 1` always returns `1` with no count written.
+
+## Related topics
+
+- [Two Pointers](./index/)
+- [125. Valid Palindrome](./125-valid-palindrome/)
+- [167. Two Sum II](./167-two-sum-ii/)
+- [11. Container With Most Water](./011-container-with-most-water/)
