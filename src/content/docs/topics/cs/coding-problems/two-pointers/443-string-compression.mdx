@@ -237,11 +237,25 @@ A group of $k$ identical characters compresses to $1 + \lfloor\log_{10}k\rfloor 
 
 ## How to recognize this pattern
 
-The signal: **"modify the array in place"** plus **"return the new length."** That pair points directly to a read/write pointer setup. The write pointer marks the next output slot; the read pointer advances freely without restriction.
+**The two-word trigger: "in place."** Any problem that says modify the array in place and return a new length is telling you that a scratch buffer is off-limits. That constraint removes the obvious approach (build a result list and copy back) and forces you toward in-place mutation. The question becomes: how do you write output into the same array you are reading from without corrupting unread data?
 
-The wrong first move: allocate a new list to collect results, then copy back. Correct output, but O(n) space and an extra pass.
+The answer is almost always a read/write pointer split.
 
-Why it is safe: compressed output is never longer than its source group, so `write` can never reach `i`. The in-place write is always trailing, never colliding.
+**The mental model.** Imagine two cursors on a tape. The read cursor (`i`) moves forward freely, consuming input. The write cursor (`write`) moves forward only when it has something valid to emit. At any moment, everything to the left of `write` is already-committed output; everything between `write` and `i` is consumed but irrelevant; everything at `i` and beyond is unread input. The key insight: the write cursor can only reach the read cursor if output is ever longer than input. If you can prove it cannot be, in-place mutation is safe.
+
+For compression, a group of $k$ identical characters always compresses to fewer than $k$ characters (1 char plus at most a few digits). So `write` is guaranteed to trail `i`. For remove-duplicates problems, each output element was already read, so write trails by definition. Recognizing this trailing guarantee is what unlocks the pattern.
+
+**When to reach for it.** Ask yourself three questions:
+
+1. Is the problem asking you to filter, compress, or transform an array with a fixed output length constraint?
+2. Does the output at any position depend only on already-consumed input, never on future input?
+3. Can you prove the output never grows longer than the input consumed to produce it?
+
+Three yes answers: read/write pointers. One no answer: think harder, or accept O(n) space.
+
+**Why not just use extra space?** You can, and Approach 1 is correct. But in-place is worth understanding for three reasons. First, it cuts space from O(n) to O(1), which matters at scale (2000 characters is small, but the same logic applies to streaming 10 GB logs). Second, it eliminates a second pass to copy results back. Third, it is the canonical form the interviewer expects when the problem says "O(1) extra space." Producing Approach 1 under in-place constraints signals you missed the constraint.
+
+**The wrong first move.** Most people instinctively write Approach 1. There is nothing wrong with recognizing that and then asking: can I make write trail read safely? If yes, collapse the two steps into one pointer pair. If the safety proof fails (output could be longer than input), stick with the buffer.
 
 | Problem | Same shape |
 | --- | --- |
