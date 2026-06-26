@@ -30,6 +30,7 @@ Two classic proof structures:
 
 **Bonus problems (same pattern, outside NeetCode 150):**
 
+- [122. Best Time to Buy and Sell Stock II (Medium)](./122-best-time-to-buy-and-sell-stock-ii/)
 - [334. Increasing Triplet Subsequence (Medium)](./334-increasing-triplet-subsequence/)
 
 ## Key patterns unlocked here

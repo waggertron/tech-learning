@@ -1,0 +1,289 @@
+---
+title: "122. Best Time to Buy and Sell Stock II (Medium)"
+description: "Sum every positive day-to-day climb to capture the maximum profit from unlimited stock transactions in O(n) time."
+parent: greedy
+tags: [leetcode, greedy, medium]
+status: draft
+created: 2026-06-25
+updated: 2026-06-25
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './122-best-time-to-buy-and-sell-stock-ii.py?raw';
+import practiceCodeTs from './122-best-time-to-buy-and-sell-stock-ii.ts?raw';
+import practiceCodeGo from './122-best-time-to-buy-and-sell-stock-ii.go?raw';
+import approach2PyCode from './122-best-time-to-buy-and-sell-stock-ii-approach2.py?raw';
+import approach2TsCode from './122-best-time-to-buy-and-sell-stock-ii-approach2.ts?raw';
+import approach2GoCode from './122-best-time-to-buy-and-sell-stock-ii-approach2.go?raw';
+import approach3PyCode from './122-best-time-to-buy-and-sell-stock-ii-approach3.py?raw';
+import approach3TsCode from './122-best-time-to-buy-and-sell-stock-ii-approach3.ts?raw';
+import approach3GoCode from './122-best-time-to-buy-and-sell-stock-ii-approach3.go?raw';
+
+## Problem
+
+You are given an integer array `prices` where `prices[i]` is the price of a stock on day `i`. Each day you may buy and/or sell, but you can hold **at most one share** at any time. You may complete as many transactions as you like. Return the maximum profit.
+
+Unlike [121. Best Time to Buy and Sell Stock](../../sliding-window/121-best-time-to-buy-and-sell-stock/), which allows only a single buy-sell pair, this version allows **unlimited** transactions. That one change flips the problem from "find the single best window" to "collect every gain you can."
+
+**Examples**
+- `[7,1,5,3,6,4]` → `7`: buy at 1 sell at 5 (+4), buy at 3 sell at 6 (+3).
+- `[1,2,3,4,5]` → `4`: buy at 1, sell at 5. One climb, no dips.
+- `[7,6,4,3,1]` → `0`: prices only fall, so never buy.
+
+**Constraints**
+- $1 \leq \text{prices.length} \leq 3 \times 10^4$
+- $0 \leq \text{prices}[i] \leq 10^4$
+
+LeetCode 122 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/) · *Medium*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="buy-sell-ii-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="buy-sell-ii-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="buy-sell-ii-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Peak and valley
+
+The intuitive picture: profit comes from buying at a **valley** (local minimum) and selling at the next **peak** (local maximum). Walk the array, slide down to each valley, slide up to the following peak, and bank `peak − valley`. Repeat to the end.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def maxProfit(prices: list[int]) -> int:
+    n = len(prices)
+    i = 0
+    profit = 0
+    while i < n - 1:                                         # L1: scan the array
+        while i < n - 1 and prices[i + 1] <= prices[i]:     # L2: descend to a valley
+            i += 1
+        valley = prices[i]
+        while i < n - 1 and prices[i + 1] >= prices[i]:     # L3: climb to a peak
+            i += 1
+        profit += prices[i] - valley                        # L4: bank the rise
+    return profit
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    const n = prices.length;
+    let i = 0;
+    let profit = 0;
+    while (i < n - 1) {                                      // L1: scan the array
+        while (i < n - 1 && prices[i + 1] <= prices[i]) i++; // L2: descend to a valley
+        const valley = prices[i];
+        while (i < n - 1 && prices[i + 1] >= prices[i]) i++; // L3: climb to a peak
+        profit += prices[i] - valley;                        // L4: bank the rise
+    }
+    return profit;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+    n := len(prices)
+    i := 0
+    profit := 0
+    for i < n-1 {                                           // L1: scan the array
+        for i < n-1 && prices[i+1] <= prices[i] {           // L2: descend to a valley
+            i++
+        }
+        valley := prices[i]
+        for i < n-1 && prices[i+1] >= prices[i] {           // L3: climb to a peak
+            i++
+        }
+        profit += prices[i] - valley                        // L4: bank the rise
+    }
+    return profit
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(prices).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 descend | $O(1)$ | $n$ total across all valleys | $O(n)$ |
+| **L3 climb** | **$O(1)$** | **$n$ total across all peaks** | **$O(n)$** |
+| L4 bank | $O(1)$ | peaks visited | $O(n)$ |
+
+**Complexity**
+- **Time:** $O(n)$, each index advanced once.
+- **Space:** $O(1)$.
+
+## Approach 2: Greedy, sum every climb
+
+Peak-and-valley is correct but fiddly. Here is the collapse: a rise from valley to peak equals the **sum of every up-step in between**. So you do not need to find peaks and valleys at all. Just add up every positive day-to-day difference.
+
+```
+prices = [1, 5, 3, 6]
+
+valley-to-peak view:  (5-1) + (6-3) = 4 + 3 = 7
+day-to-day view:      (5-1) + (6-3) = 4 + 3 = 7   ← skip the 5→3 drop
+```
+
+If the price rises today, pretend you bought yesterday and sell today. Down-days contribute nothing because you simply hold no share.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def maxProfit(prices: list[int]) -> int:
+    profit = 0
+    for i in range(1, len(prices)):                         # L1: scan adjacent pairs
+        if prices[i] > prices[i - 1]:                       # L2: only count up-days
+            profit += prices[i] - prices[i - 1]             # L3: bank the daily gain
+    return profit
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    let profit = 0;
+    for (let i = 1; i < prices.length; i++) {               // L1: scan adjacent pairs
+        if (prices[i] > prices[i - 1])                      // L2: only count up-days
+            profit += prices[i] - prices[i - 1];            // L3: bank the daily gain
+    }
+    return profit;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+    profit := 0
+    for i := 1; i < len(prices); i++ {                      // L1: scan adjacent pairs
+        if prices[i] > prices[i-1] {                        // L2: only count up-days
+            profit += prices[i] - prices[i-1]               // L3: bank the daily gain
+        }
+    }
+    return profit
+}
+```
+</TabItem>
+</Tabs>
+
+**Why summing up-steps is optimal**
+
+A telescoping argument. Any profitable holding period from day `b` to day `s` has value `prices[s] − prices[b]`, which equals the sum of the consecutive differences `(prices[b+1] − prices[b]) + ... + (prices[s] − prices[s-1])`. The negative differences inside that span only shrink the total, so dropping them (by not holding on down-days) can never lose money, and capturing every positive difference can never be beaten. Because you may transact freely, you are allowed to take exactly the positive steps and skip the rest.
+
+**Where the time goes, line by line**
+
+*Variables: n = len(prices).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 loop | $O(1)$ | $n - 1$ | $O(n)$ |
+| **L3 bank gain** | **$O(1)$** | **up to $n - 1$** | **$O(n)$** |
+
+**Complexity**
+- **Time:** $O(n)$, one pass.
+- **Space:** $O(1)$.
+
+## Approach 3: State machine (hold vs cash)
+
+The most general framing, the one that scales to the harder variants (cooldown, fees, capped transaction count). Track two running bests:
+
+- `cash`: most profit you can have **holding no share** right now.
+- `hold`: most profit you can have **holding one share** right now (a negative number early on, since buying costs money).
+
+Each day, either act or do nothing, and keep the better of the two.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def maxProfit(prices: list[int]) -> int:
+    cash = 0                                                # L1: no share held
+    hold = float('-inf')                                    # L2: one share held
+    for p in prices:                                        # L3: each day
+        cash = max(cash, hold + p)                          # L4: sell or stay flat
+        hold = max(hold, cash - p)                          # L5: buy or keep holding
+    return cash
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[]): number {
+    let cash = 0;                                           // L1: no share held
+    let hold = -Infinity;                                   // L2: one share held
+    for (const p of prices) {                               // L3: each day
+        cash = Math.max(cash, hold + p);                    // L4: sell or stay flat
+        hold = Math.max(hold, cash - p);                    // L5: buy or keep holding
+    }
+    return cash;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int) int {
+    cash := 0                                               // L1: no share held
+    hold := math.MinInt32                                   // L2: one share held
+    for _, p := range prices {                              // L3: each day
+        cash = max(cash, hold+p)                            // L4: sell or stay flat
+        hold = max(hold, cash-p)                            // L5: buy or keep holding
+    }
+    return cash
+}
+```
+</TabItem>
+</Tabs>
+
+This is identical in result to Approach 2 but expresses the decision explicitly, which is why it generalizes. Returning `cash` (not `hold`) is correct because you never want to finish the day still holding a share, an unsold share is unrealized profit worth nothing at the close.
+
+**Complexity**
+- **Time:** $O(n)$, one pass.
+- **Space:** $O(1)$, two scalars.
+
+## How to recognize this pattern
+
+**The signal: "as many transactions as you like" plus "at most one share."** That pairing is the tell. Unlimited transactions with no cooldown and no fee means there is nothing stopping you from capturing every single up-day. The moment a constraint removes friction like that, ask whether the answer is just "sum all the gains."
+
+**The contrast that defines it.** Compare the three stock problems:
+
+| Problem | Constraint | Optimal idea |
+| --- | --- | --- |
+| 121. Buy and Sell Stock | **one** transaction | Track min price so far, max single window |
+| 122. Buy and Sell Stock II | **unlimited** transactions | Sum every positive day-to-day difference |
+| 309. With Cooldown | unlimited, but **1-day rest** after selling | State machine, the friction breaks the greedy sum |
+
+The single-transaction version (121) is a sliding-window/running-minimum problem. Add unlimited transactions and it collapses to the trivial greedy sum (122). Add a cooldown or a fee and the greedy sum breaks, friction forces you back to the state machine (Approach 3). Recognizing *which* friction is present tells you which tool to reach for.
+
+**The wrong first move: overthinking it as DP.** Many people see "maximize profit over a sequence of decisions" and immediately reach for a 2D DP table over (day, holding-state). That works, but for this specific problem it is a sledgehammer. The greedy one-liner is correct and provably optimal because there is no friction. Save the DP for when a constraint actually couples your decisions across days.
+
+**The mental model.** With no transaction limit, every up-day is independent free money. You are not choosing *when* to be in the market, you are choosing to ride every uphill and sit out every downhill. There is no opportunity cost to selling and re-buying because both can happen the same day.
+
+| Problem | Same shape |
+| --- | --- |
+| [53. Maximum Subarray](./053-maximum-subarray/) | Accumulate local gains, drop what hurts the running total |
+| 1710. Maximum Units on a Truck | Greedily take the best available unit each step |
+| 605. Can Place Flowers | Take every locally-valid opportunity, no lookahead needed |
+
+## Key takeaways
+
+- Unlimited transactions with no friction means: **sum every positive `prices[i] − prices[i-1]`**. That is the whole solution.
+- A valley-to-peak rise equals the sum of the up-steps inside it, so peak-finding is unnecessary, the daily-difference sum captures the same profit.
+- Down-days contribute nothing because you simply hold no share through them.
+- The hold/cash state machine gives the same answer and is the version to remember, it survives when cooldowns or fees break the greedy sum.
+- Contrast with 121 (single transaction, running-min window): the constraint, not the surface, picks the technique.
+
+## Related topics
+
+- [Greedy](./index/)
+- [53. Maximum Subarray](./053-maximum-subarray/)
+- [121. Best Time to Buy and Sell Stock](../../sliding-window/121-best-time-to-buy-and-sell-stock/)
+- [309. Best Time to Buy and Sell Stock with Cooldown](../../2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
