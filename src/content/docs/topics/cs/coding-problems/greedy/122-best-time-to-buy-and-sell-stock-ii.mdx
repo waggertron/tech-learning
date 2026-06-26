@@ -273,12 +273,41 @@ The single-transaction version (121) is a sliding-window/running-minimum problem
 | 1710. Maximum Units on a Truck | Greedily take the best available unit each step |
 | 605. Can Place Flowers | Take every locally-valid opportunity, no lookahead needed |
 
+## What a transaction fee breaks (and why)
+
+The greedy sum works because, with no friction, splitting one climb into daily steps is **free**. Buy-and-sell every up-day, or buy once and hold through the whole climb, both capture the same total. Add a per-sale fee and that equivalence collapses, because every split now costs another fee.
+
+Watch it break on a tiny case. Prices `[1, 2, 3]` with a `$1` fee per sale:
+
+```
+day-to-day steps:  +1, +1
+
+decompose into daily trades (the greedy view):
+  buy 1 / sell 2  →  +1 gross − $1 fee = 0
+  buy 2 / sell 3  →  +1 gross − $1 fee = 0
+  total: $0        ← two trades, two fees, both wiped out
+
+merge into one hold:
+  buy 1 / sell 3  →  +2 gross − $1 fee = $1
+  total: $1        ← one trade, one fee
+```
+
+Same `$2` gross climb, but the daily-step view pays the toll **twice** and nets nothing, while one long hold pays it **once** and nets a dollar. Summing positive daily steps and subtracting a fee per step gives the wrong answer here: it returns `0` when the real maximum is `1`.
+
+The lesson cuts both ways:
+
+- **No friction → every up-day is independent → sum the positive steps.** Splitting is free, so it never hurts.
+- **Any friction (a fee, a cooldown) → days are coupled → you can no longer decompose into daily steps.** Now you want the opposite move: merge consecutive up-days into one hold and pay the fee once. Whether to act today depends on whether you are already holding, which is exactly the state the day-to-day trick throws away.
+
+That coupling is why the friction variants need the hold/cash **state machine** (Approach 3), not the greedy sum. The state machine carries "am I holding a share right now?" across days, so it can decide to ride through a dip rather than sell into it. [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) subtracts the fee inside the `cash = max(cash, hold + p - fee)` step; [309. Best Time to Buy and Sell Stock with Cooldown](../../2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/) adds a third "resting" state. Same skeleton, one extra rule each.
+
 ## Key takeaways
 
 - Unlimited transactions with no friction means: **sum every positive `prices[i] − prices[i-1]`**. That is the whole solution.
 - A valley-to-peak rise equals the sum of the up-steps inside it, so peak-finding is unnecessary, the daily-difference sum captures the same profit.
 - Down-days contribute nothing because you simply hold no share through them.
 - The hold/cash state machine gives the same answer and is the version to remember, it survives when cooldowns or fees break the greedy sum.
+- A per-sale fee couples your days: splitting one climb into daily trades now pays the fee on every step, so you merge consecutive up-days into a single hold and pay once. Summing daily steps minus a per-step fee is wrong (it returns 0 on `[1,2,3]` with a $1 fee when the answer is 1).
 - Contrast with 121 (single transaction, running-min window): the constraint, not the surface, picks the technique.
 
 ## Related topics
@@ -287,3 +316,4 @@ The single-transaction version (121) is a sliding-window/running-minimum problem
 - [53. Maximum Subarray](./053-maximum-subarray/)
 - [121. Best Time to Buy and Sell Stock](../../sliding-window/121-best-time-to-buy-and-sell-stock/)
 - [309. Best Time to Buy and Sell Stock with Cooldown](../../2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
+- [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) (external, the fee variant)
