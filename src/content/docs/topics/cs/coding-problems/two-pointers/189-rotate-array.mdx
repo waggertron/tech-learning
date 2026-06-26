@@ -1,0 +1,316 @@
+---
+title: "189. Rotate Array (Medium)"
+description: "Rotate an array right by k using the three-reversal trick for O(n) time and O(1) space."
+parent: two-pointers
+tags: [leetcode, two-pointers, medium]
+status: draft
+created: 2026-06-25
+updated: 2026-06-25
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './189-rotate-array.py?raw';
+import practiceCodeTs from './189-rotate-array.ts?raw';
+import practiceCodeGo from './189-rotate-array.go?raw';
+import approach2PyCode from './189-rotate-array-approach2.py?raw';
+import approach2TsCode from './189-rotate-array-approach2.ts?raw';
+import approach2GoCode from './189-rotate-array-approach2.go?raw';
+import approach3PyCode from './189-rotate-array-approach3.py?raw';
+import approach3TsCode from './189-rotate-array-approach3.ts?raw';
+import approach3GoCode from './189-rotate-array-approach3.go?raw';
+
+## Problem
+
+Given an integer array `nums`, rotate the array to the right by `k` steps, where `k` is non-negative. The rotation must happen in place if you want the optimal solution.
+
+**Examples**
+- `nums = [1,2,3,4,5,6,7]`, `k = 3` → `[5,6,7,1,2,3,4]`
+- `nums = [-1,-100,3,99]`, `k = 2` → `[3,99,-1,-100]`
+
+Rotating right by one step moves the last element to the front: `[1,2,3]` becomes `[3,1,2]`. Rotating by `k` repeats that `k` times, so the last `k` elements wrap around to the front in their original order.
+
+**Constraints**
+- $1 \leq n \leq 10^5$
+- $-2^{31} \leq \text{nums}[i] \leq 2^{31} - 1$
+- $0 \leq k \leq 10^5$
+
+Note that `k` can exceed `n`. Rotating an array of length `n` by `n` steps returns it unchanged, so only `k % n` matters. Reduce `k` first or every approach breaks on out-of-range indices.
+
+LeetCode 189 · [Link](https://leetcode.com/problems/rotate-array/) · *Medium*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="rotate-array-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="rotate-array-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="rotate-array-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Extra array
+
+Allocate a fresh array. Element `i` lands at position `(i + k) % n` after rotation, so copy each value to its destination, then write the result back into `nums`.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def rotate(nums: list[int], k: int) -> None:
+    n = len(nums)
+    k %= n                                                   # L1: reduce k
+    rotated = [0] * n                                        # L2: scratch array
+    for i in range(n):                                       # L3: place each element
+        rotated[(i + k) % n] = nums[i]
+    nums[:] = rotated                                        # L4: copy back
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rotate(nums: number[], k: number): void {
+    const n = nums.length;
+    k %= n;                                                  // L1: reduce k
+    const rotated = new Array(n);                            // L2: scratch array
+    for (let i = 0; i < n; i++)                              // L3: place each element
+        rotated[(i + k) % n] = nums[i];
+    for (let i = 0; i < n; i++)                              // L4: copy back
+        nums[i] = rotated[i];
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func rotate(nums []int, k int) {
+    n := len(nums)
+    k %= n                                                   // L1: reduce k
+    rotated := make([]int, n)                                // L2: scratch array
+    for i := 0; i < n; i++ {                                 // L3: place each element
+        rotated[(i+k)%n] = nums[i]
+    }
+    copy(nums, rotated)                                      // L4: copy back
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 reduce k | $O(1)$ | 1 | $O(1)$ |
+| **L3 place loop** | **$O(1)$** | **$n$** | **$O(n)$** |
+| L4 copy back | $O(1)$ | $n$ | $O(n)$ |
+
+**Complexity**
+- **Time:** $O(n)$, two passes.
+- **Space:** $O(n)$, the scratch array.
+
+## Approach 2: Three reversals
+
+This is the answer the interviewer wants. Reverse the whole array, then reverse the first `k` elements, then reverse the rest. The double reversal restores each block's internal order while leaving the two blocks swapped.
+
+```
+nums = [1,2,3,4,5,6,7], k = 3
+
+reverse all      → [7,6,5,4,3,2,1]
+reverse [0, k-1] → [5,6,7,4,3,2,1]
+reverse [k, n-1] → [5,6,7,1,2,3,4]   ✓
+```
+
+<Tabs>
+<TabItem label="Python">
+```python
+def rotate(nums: list[int], k: int) -> None:
+    n = len(nums)
+    k %= n                                                   # L1: reduce k
+
+    def reverse(lo: int, hi: int) -> None:                  # L2: two-pointer reverse
+        while lo < hi:
+            nums[lo], nums[hi] = nums[hi], nums[lo]
+            lo += 1
+            hi -= 1
+
+    reverse(0, n - 1)                                        # L3: whole array
+    reverse(0, k - 1)                                        # L4: first k
+    reverse(k, n - 1)                                        # L5: the rest
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rotate(nums: number[], k: number): void {
+    const n = nums.length;
+    k %= n;                                                  // L1: reduce k
+    const reverse = (lo: number, hi: number): void => {     // L2: two-pointer reverse
+        while (lo < hi) {
+            [nums[lo], nums[hi]] = [nums[hi], nums[lo]];
+            lo++;
+            hi--;
+        }
+    };
+    reverse(0, n - 1);                                       // L3: whole array
+    reverse(0, k - 1);                                       // L4: first k
+    reverse(k, n - 1);                                       // L5: the rest
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func reverse(nums []int, lo, hi int) {                      // L2: two-pointer reverse
+    for lo < hi {
+        nums[lo], nums[hi] = nums[hi], nums[lo]
+        lo++
+        hi--
+    }
+}
+
+func rotate(nums []int, k int) {
+    n := len(nums)
+    k %= n                                                   // L1: reduce k
+    reverse(nums, 0, n-1)                                    // L3: whole array
+    reverse(nums, 0, k-1)                                    // L4: first k
+    reverse(nums, k, n-1)                                    // L5: the rest
+}
+```
+</TabItem>
+</Tabs>
+
+**Why three reversals work**
+
+Reversing the whole array puts the last `k` elements at the front, but each block is now backwards. The original tail `[5,6,7]` lands as `[7,6,5]`; the original head `[1,2,3,4]` lands as `[4,3,2,1]`. Reversing each block in place undoes that local flip, giving the head and tail their forward order while keeping them swapped. Every element is touched exactly twice, so the work stays linear.
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), k = reduced shift.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3 reverse all | $O(n)$ | 1 | $O(n)$ |
+| L4 reverse first k | $O(k)$ | 1 | $O(k)$ |
+| L5 reverse rest | $O(n - k)$ | 1 | $O(n)$ |
+
+**Complexity**
+- **Time:** $O(n)$, each element swapped twice.
+- **Space:** $O(1)$, swaps happen in place.
+
+## Approach 3: Cyclic replacements
+
+Move each element directly to its final slot in a single pass, carrying the displaced value forward. Start at index `0`, push its value to `(0 + k) % n`, hold whatever was there, push that to its destination, and continue. When the chain returns to its start you have closed one cycle; if fewer than `n` elements have moved, advance the start by one and walk the next cycle.
+
+The number of independent cycles equals $\gcd(n, k)$, which is why a single start index is not always enough.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def rotate(nums: list[int], k: int) -> None:
+    n = len(nums)
+    k %= n
+    count = 0                                                # L1: elements placed
+    start = 0
+    while count < n:                                         # L2: walk each cycle
+        current = start
+        prev = nums[start]
+        while True:
+            nxt = (current + k) % n                          # L3: destination
+            nums[nxt], prev = prev, nums[nxt]                # L4: drop and carry
+            current = nxt
+            count += 1
+            if start == current:                             # L5: cycle closed
+                break
+        start += 1
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function rotate(nums: number[], k: number): void {
+    const n = nums.length;
+    k %= n;
+    let count = 0;                                           // L1: elements placed
+    for (let start = 0; count < n; start++) {               // L2: walk each cycle
+        let current = start;
+        let prev = nums[start];
+        do {
+            const next = (current + k) % n;                 // L3: destination
+            [nums[next], prev] = [prev, nums[next]];        // L4: drop and carry
+            current = next;
+            count++;
+        } while (start !== current);                        // L5: cycle closed
+    }
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func rotate(nums []int, k int) {
+    n := len(nums)
+    k %= n
+    count := 0                                               // L1: elements placed
+    for start := 0; count < n; start++ {                     // L2: walk each cycle
+        current := start
+        prev := nums[start]
+        for {
+            next := (current + k) % n                         // L3: destination
+            nums[next], prev = prev, nums[next]              // L4: drop and carry
+            current = next
+            count++
+            if start == current {                            // L5: cycle closed
+                break
+            }
+        }
+    }
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L2 outer loop | $O(1)$ | $\gcd(n, k)$ starts | $O(n)$ |
+| **L4 drop and carry** | **$O(1)$** | **$n$ total** | **$O(n)$** |
+
+Every element is written exactly once across all cycles, so `count` reaches `n` after `n` placements no matter how the cycles split.
+
+**Complexity**
+- **Time:** $O(n)$, one placement per element.
+- **Space:** $O(1)$, a single carried value.
+
+## How to recognize this pattern
+
+**The signal: "rotate" plus an in-place or O(1)-space constraint.** Rotation by `k` is the canonical home for the three-reversal trick. The moment you see a problem asking to shift every element by a fixed offset and wrap around, ask whether reversal can express it. Cyclic shift and reversal are two sides of the same coin: a right rotation by `k` is exactly *reverse all, reverse the two pieces*.
+
+**The first wrong move: rotating one step at a time.** The naive solution rotates by one `k` times, popping the last element and unshifting it to the front. Each single rotation is $O(n)$, so `k` rotations cost $O(n \cdot k)$. With `n` and `k` both up to $10^5$ that is $10^{10}$ operations, a guaranteed timeout. The constraint that `k` can be as large as `n` is the tell that per-step rotation will not survive.
+
+**The second wrong move: forgetting `k %= n`.** When `k >= n`, indices like `(i + k) % n` still work, but a hand-rolled loop that shifts `k` times does `n` times more work than needed, and any approach that slices `nums[-k:]` silently breaks when `k == n` (Python's `nums[-n:]` is the whole array, but `nums[:-n]` is empty in a way that surprises people). Always reduce first.
+
+**The mental model.** A rotation splits the array into a head and a tail and swaps them. Reversal is the cheapest in-place way to swap two adjacent blocks without scratch space: flip the whole thing, then flip each block back. Cyclic replacement is the alternative when you want each element written exactly once instead of twice, at the cost of trickier bookkeeping ($\gcd$ cycles).
+
+| Problem | Same shape |
+| --- | --- |
+| 151. Reverse Words in a String | Reverse all, then reverse each word |
+| 61. Rotate List | Rotate a linked list right by k |
+| [344. Reverse String](https://leetcode.com/problems/reverse-string/) | Two-pointer in-place reversal, the building block |
+
+## Key takeaways
+
+- Reduce `k` with `k %= n` before doing anything; `k` can exceed `n`.
+- The three-reversal trick is $O(n)$ time, $O(1)$ space, and the expected interview answer: reverse all, reverse first `k`, reverse the rest.
+- Cyclic replacement also hits $O(1)$ space but needs $\gcd(n, k)$ cycle starts, so it carries more bookkeeping for no asymptotic gain.
+- The naive "rotate one step `k` times" is $O(n \cdot k)$ and times out at the constraint limits.
+
+## Related topics
+
+- [Two Pointers](./index/)
+- [443. String Compression](./443-string-compression/)
+- [125. Valid Palindrome](./125-valid-palindrome/)
+- [167. Two Sum II](./167-two-sum-ii/)

@@ -28,6 +28,7 @@ Three pointer movements cover almost all problems:
 
 ## Bonus problems
 
+- [189. Rotate Array (Medium)](./189-rotate-array/)
 - [443. String Compression (Medium)](./443-string-compression/)
 
 ## Key patterns unlocked here
