@@ -30,6 +30,10 @@ When the state needs two indices, usually "position in A × position in B" or "r
 10. [312. Burst Balloons (Hard)](./312-burst-balloons/)
 11. [10. Regular Expression Matching (Hard)](./010-regular-expression-matching/)
 
+**Bonus problems (same pattern, outside NeetCode 150):**
+
+- [714. Best Time to Buy and Sell Stock with Transaction Fee (Medium)](./714-best-time-to-buy-and-sell-stock-with-transaction-fee/)
+
 ## Key patterns unlocked here
 
 - **Grid path DP**: Unique Paths.

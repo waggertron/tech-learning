@@ -299,7 +299,7 @@ The lesson cuts both ways:
 - **No friction → every up-day is independent → sum the positive steps.** Splitting is free, so it never hurts.
 - **Any friction (a fee, a cooldown) → days are coupled → you can no longer decompose into daily steps.** Now you want the opposite move: merge consecutive up-days into one hold and pay the fee once. Whether to act today depends on whether you are already holding, which is exactly the state the day-to-day trick throws away.
 
-That coupling is why the friction variants need the hold/cash **state machine** (Approach 3), not the greedy sum. The state machine carries "am I holding a share right now?" across days, so it can decide to ride through a dip rather than sell into it. [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) subtracts the fee inside the `cash = max(cash, hold + p - fee)` step; [309. Best Time to Buy and Sell Stock with Cooldown](../../2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/) adds a third "resting" state. Same skeleton, one extra rule each.
+That coupling is why the friction variants need the hold/cash **state machine** (Approach 3), not the greedy sum. The state machine carries "am I holding a share right now?" across days, so it can decide to ride through a dip rather than sell into it. [714. Best Time to Buy and Sell Stock with Transaction Fee](../../2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee/) subtracts the fee inside the `cash = max(cash, hold + p - fee)` step; [309. Best Time to Buy and Sell Stock with Cooldown](../../2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/) adds a third "resting" state. Same skeleton, one extra rule each.
 
 ## Key takeaways
 
@@ -316,4 +316,4 @@ That coupling is why the friction variants need the hold/cash **state machine** 
 - [53. Maximum Subarray](./053-maximum-subarray/)
 - [121. Best Time to Buy and Sell Stock](../../sliding-window/121-best-time-to-buy-and-sell-stock/)
 - [309. Best Time to Buy and Sell Stock with Cooldown](../../2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
-- [714. Best Time to Buy and Sell Stock with Transaction Fee](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) (external, the fee variant)
+- [714. Best Time to Buy and Sell Stock with Transaction Fee](../../2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee/)

@@ -1,0 +1,246 @@
+---
+title: "714. Best Time to Buy and Sell Stock with Transaction Fee (Medium)"
+description: "Maximize profit from unlimited stock transactions when each sale charges a fee, using a hold/cash state machine or a fee-aware greedy."
+parent: 2d-dynamic-programming
+tags: [leetcode, dp, state-machine, greedy, medium]
+status: draft
+created: 2026-06-26
+updated: 2026-06-26
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee.py?raw';
+import practiceCodeTs from './714-best-time-to-buy-and-sell-stock-with-transaction-fee.ts?raw';
+import practiceCodeGo from './714-best-time-to-buy-and-sell-stock-with-transaction-fee.go?raw';
+import approach2PyCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.py?raw';
+import approach2TsCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.ts?raw';
+import approach2GoCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.go?raw';
+import approach3PyCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach3.py?raw';
+import approach3TsCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach3.ts?raw';
+import approach3GoCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach3.go?raw';
+
+## Problem
+
+You are given an integer array `prices` where `prices[i]` is the price of a stock on day `i`, and an integer `fee`. You may complete as many transactions as you like, holding at most one share at a time, but **each time you sell you pay `fee`**. Return the maximum profit.
+
+This is [122. Best Time to Buy and Sell Stock II](../../greedy/122-best-time-to-buy-and-sell-stock-ii/) with one change: a toll on every sale. That single addition of friction is exactly what breaks the "sum every positive daily climb" trick that solves 122.
+
+**Examples**
+- `prices = [1,3,2,8,4,9]`, `fee = 2` → `8`: buy at 1 sell at 8 (`8 − 1 − 2 = 5`), buy at 4 sell at 9 (`9 − 4 − 2 = 3`).
+- `prices = [1,3,7,5,10,3]`, `fee = 3` → `6`: buy at 1, hold through the dip, sell at 10 (`10 − 1 − 3 = 6`). One transaction, one fee.
+
+**Constraints**
+- $1 \leq \text{prices.length} \leq 5 \times 10^4$
+- $1 \leq \text{prices}[i] < 5 \times 10^4$
+- $0 \leq \text{fee} < 5 \times 10^4$
+
+LeetCode 714 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) · *Medium*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="buy-sell-fee-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="buy-sell-fee-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="buy-sell-fee-go" />
+  </TabItem>
+</Tabs>
+
+## Why the greedy daily-step sum fails here
+
+In 122, with no fee, a long climb and the sum of its individual up-steps earn the same money, so you can pretend every up-day is its own buy-sell. The fee destroys that. Each split now pays another toll:
+
+```
+prices = [1, 2, 3],  fee = 1
+
+decompose into daily trades (the 122 view):
+  buy 1 / sell 2  →  +1 − 1 fee = 0
+  buy 2 / sell 3  →  +1 − 1 fee = 0
+  total: $0        ← two trades, two fees
+
+merge into one hold:
+  buy 1 / sell 3  →  +2 − 1 fee = $1
+  total: $1        ← one trade, one fee
+```
+
+The fee **couples** your days: whether to sell today depends on whether re-entering later will cost you another fee. That coupling is the signal to track an explicit "am I holding a share?" state across days, which is what both approaches below do.
+
+## Approach 1: State machine (hold vs cash)
+
+Carry two running bests as you walk the prices:
+
+- `cash`: most profit you can have **holding no share** today.
+- `hold`: most profit you can have **holding one share** today.
+
+Each day you either act or sit still, and keep the better number. Charge the `fee` at exactly one point, the sell, so a hold that spans many days is taxed only once.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def maxProfit(prices: list[int], fee: int) -> int:
+    cash = 0                                                # L1: no share held
+    hold = -prices[0]                                       # L2: bought share 0
+    for p in prices[1:]:                                    # L3: each later day
+        cash = max(cash, hold + p - fee)                    # L4: sell, pay fee once
+        hold = max(hold, cash - p)                          # L5: buy or keep holding
+    return cash
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[], fee: number): number {
+    let cash = 0;                                           // L1: no share held
+    let hold = -prices[0];                                  // L2: bought share 0
+    for (let i = 1; i < prices.length; i++) {              // L3: each later day
+        const p = prices[i];
+        cash = Math.max(cash, hold + p - fee);              // L4: sell, pay fee once
+        hold = Math.max(hold, cash - p);                    // L5: buy or keep holding
+    }
+    return cash;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int, fee int) int {
+    cash := 0                                               // L1: no share held
+    hold := -prices[0]                                      // L2: bought share 0
+    for _, p := range prices[1:] {                          // L3: each later day
+        cash = max(cash, hold+p-fee)                        // L4: sell, pay fee once
+        hold = max(hold, cash-p)                            // L5: buy or keep holding
+    }
+    return cash
+}
+```
+</TabItem>
+</Tabs>
+
+**Why charge the fee on the sell, not the buy**
+
+It does not matter mathematically, every completed transaction is one buy and one sell, so the fee lands once either way. Charging on the sell keeps `hold` interpretable as "value if I bought at the best moment," and makes the unsold-share case clean: you return `cash`, never `hold`, because a share still held at the end is unrealized and its fee was never paid. Subtracting the fee inside the `cash` update guarantees you only pay it when you actually realize the gain.
+
+**Where the time goes, line by line**
+
+*Variables: n = len(prices).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L3 loop | $O(1)$ | $n - 1$ | $O(n)$ |
+| L4 sell update | $O(1)$ | $n - 1$ | $O(n)$ |
+| **L5 buy update** | **$O(1)$** | **$n - 1$** | **$O(n)$** |
+
+**Complexity**
+- **Time:** $O(n)$, one pass.
+- **Space:** $O(1)$, two scalars.
+
+## Approach 2: Fee-aware greedy
+
+The same answer falls out of a greedy that tracks an **effective cost basis**: the price you paid plus the fee you will owe. Start with `buy = prices[0] + fee`. Then for each later price `p`:
+
+- If `p + fee < buy`, you found a cheaper entry, reset the basis to `p + fee`.
+- If `p > buy`, selling here is profitable, bank `p − buy`, then roll the basis to `p` (not `p + fee`), because the fee is already paid. Rolling forward lets a continued rise extend the same transaction instead of being charged a second fee.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def maxProfit(prices: list[int], fee: int) -> int:
+    profit = 0                                              # L1
+    buy = prices[0] + fee                                   # L2: cost basis incl. fee
+    for p in prices[1:]:                                    # L3
+        if p + fee < buy:                                   # L4: cheaper entry
+            buy = p + fee
+        elif p > buy:                                       # L5: profitable sell
+            profit += p - buy
+            buy = p                                          # L6: fee already paid
+    return profit
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function maxProfit(prices: number[], fee: number): number {
+    let profit = 0;                                         // L1
+    let buy = prices[0] + fee;                              // L2: cost basis incl. fee
+    for (let i = 1; i < prices.length; i++) {              // L3
+        const p = prices[i];
+        if (p + fee < buy) {                               // L4: cheaper entry
+            buy = p + fee;
+        } else if (p > buy) {                              // L5: profitable sell
+            profit += p - buy;
+            buy = p;                                        // L6: fee already paid
+        }
+    }
+    return profit;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func maxProfit(prices []int, fee int) int {
+    profit := 0                                             // L1
+    buy := prices[0] + fee                                  // L2: cost basis incl. fee
+    for _, p := range prices[1:] {                          // L3
+        if p+fee < buy {                                   // L4: cheaper entry
+            buy = p + fee
+        } else if p > buy {                                // L5: profitable sell
+            profit += p - buy
+            buy = p                                         // L6: fee already paid
+        }
+    }
+    return profit
+}
+```
+</TabItem>
+</Tabs>
+
+**The one subtle line: `buy = p` after a sell**
+
+This is the whole trick. When you sell at `p`, you have realized `p − buy` and paid the fee. If the price keeps rising to `p'`, you do not want to "re-buy" at `p' + fee` and pay a second fee, you want to treat it as if you never sold. Setting the new basis to `p` (no added fee) means a further rise to `p'` adds exactly `p' − p` more, which is the same as having held one long position and paid a single fee. So the greedy collapses a run of rising days into one fee automatically.
+
+**Complexity**
+- **Time:** $O(n)$, one pass.
+- **Space:** $O(1)$.
+
+## How to recognize this pattern
+
+**The signal: friction added to an unlimited-transaction problem.** A per-sale fee (here) or a cooldown ([309](./309-best-time-to-buy-and-sell-stock-with-cooldown/)) takes the friction-free 122 and couples decisions across days. The tell that the greedy daily-step sum no longer applies: you can construct a case where splitting one climb into two trades loses money to the extra fee. The moment that is possible, decomposition fails and you need state.
+
+**The progression to memorize.**
+
+| Problem | Constraint | Tool |
+| --- | --- | --- |
+| [121](../../sliding-window/121-best-time-to-buy-and-sell-stock/) | one transaction | running-min window |
+| [122](../../greedy/122-best-time-to-buy-and-sell-stock-ii/) | unlimited, no friction | sum positive daily steps |
+| **714** | **unlimited, fee per sale** | **hold/cash state machine** |
+| [309](./309-best-time-to-buy-and-sell-stock-with-cooldown/) | unlimited, 1-day cooldown | state machine + a rest state |
+
+714 and 309 are the same skeleton as 122's Approach 3 state machine, each adds one rule. 714 subtracts `fee` on the sell; 309 inserts a third state so you cannot buy the day after selling. Recognizing that they share a skeleton is what turns "three separate problems" into "one machine, three rule sets."
+
+**The wrong first move.** Reaching for the 122 greedy and patching it with "require each step to exceed the fee" returns the wrong answer (it pays the fee per up-day instead of per climb). Either commit to the state machine, or use the fee-aware greedy whose `buy = p` roll is specifically built to avoid double-charging.
+
+| Problem | Same shape |
+| --- | --- |
+| [309. Stock with Cooldown](./309-best-time-to-buy-and-sell-stock-with-cooldown/) | Same machine, a rest state instead of a fee |
+| [122. Stock II](../../greedy/122-best-time-to-buy-and-sell-stock-ii/) | The frictionless base case (`fee = 0`) |
+| 188. Best Time to Buy and Sell Stock IV | Same machine, capped at `k` transactions |
+
+## Key takeaways
+
+- A per-sale fee couples days, so the 122 daily-step sum fails. Track an explicit holding state instead.
+- **State machine:** `cash = max(cash, hold + p - fee)`, `hold = max(hold, cash - p)`. Charge the fee once, on the sell. Return `cash`.
+- **Fee-aware greedy:** carry a cost basis `buy = price + fee`; after a profitable sell, roll the basis to `p` (fee already paid) so a continued rise extends the same transaction.
+- Both run in $O(n)$ time and $O(1)$ space and give identical answers.
+- 714 (fee) and 309 (cooldown) are the same state machine as 122's Approach 3, each with one extra rule.
+
+## Related topics
+
+- [2-D Dynamic Programming](./index/)
+- [309. Best Time to Buy and Sell Stock with Cooldown](./309-best-time-to-buy-and-sell-stock-with-cooldown/)
+- [122. Best Time to Buy and Sell Stock II](../../greedy/122-best-time-to-buy-and-sell-stock-ii/)
+- [121. Best Time to Buy and Sell Stock](../../sliding-window/121-best-time-to-buy-and-sell-stock/)
