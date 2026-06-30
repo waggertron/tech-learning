@@ -4,18 +4,25 @@ function assert(condition: boolean, msg: string = ''): void {
 
 function canJump(nums: number[]): boolean {
     const n = nums.length;
-    const dp: boolean[] = new Array(n).fill(false);
-    dp[n - 1] = true;
-    for (let i = n - 2; i >= 0; i--) {
+    const memo: Array<boolean | undefined> = new Array(n);
+    memo[n - 1] = true;
+
+    function good(i: number): boolean {
+        if (i >= n - 1) return true;
+        if (memo[i] !== undefined) return memo[i];
+
         const furthest = Math.min(i + nums[i], n - 1);
-        for (let j = i + 1; j <= furthest; j++) {
-            if (dp[j]) {
-                dp[i] = true;
-                break;
+        for (let j = furthest; j > i; j--) {
+            if (good(j)) {
+                memo[i] = true;
+                return true;
             }
         }
+        memo[i] = false;
+        return false;
     }
-    return dp[0];
+
+    return good(0);
 }
 
 assert(canJump([2, 3, 1, 1, 4]) === true);

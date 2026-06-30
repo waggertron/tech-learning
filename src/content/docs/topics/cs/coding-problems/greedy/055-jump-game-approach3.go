@@ -3,19 +3,24 @@ package main
 import "fmt"
 
 func canJump(nums []int) bool {
-	maxReach := 0
-	for i, x := range nums {
-		if i > maxReach {
-			return false
+	n := len(nums)
+	good := make([]bool, n)
+	good[n-1] = true
+
+	for i := n - 2; i >= 0; i-- {
+		furthest := i + nums[i]
+		if furthest > n-1 {
+			furthest = n - 1
 		}
-		if i+x > maxReach {
-			maxReach = i + x
-		}
-		if maxReach >= len(nums)-1 {
-			return true
+		for j := i + 1; j <= furthest; j++ {
+			if good[j] {
+				good[i] = true
+				break
+			}
 		}
 	}
-	return true
+
+	return good[0]
 }
 
 func main() {

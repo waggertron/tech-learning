@@ -2,7 +2,7 @@
 
 How to add content to this repo without re-learning the hard-won conventions. Written after a long session that produced ~260 pages; every rule below is one I paid to discover.
 
-See also the companion [skill](./..//.claude/skills/authoring/SKILL.md), which is the trigger-driven version of this document.
+See also the companion [skill](../.agents/skills/authoring/SKILL.md), which is the trigger-driven version of this document.
 
 ---
 
@@ -126,6 +126,57 @@ Most topics follow this rough arc:
 
 The best pages on this site carry the reader from "I've heard of this" to "I could explain this to a teammate" in about 15 minutes of reading.
 
+### Expanding bare-bones entries
+
+The catalog has broad coverage, and some entries are intentionally thin. When improving one, treat the work as a depth upgrade rather than a replacement. Preserve the existing slug, frontmatter, links, and working interactive imports unless they are wrong.
+
+Thin entries usually need one or more of these layers:
+
+- **Motivation**: the problem this concept solves and why the reader should care.
+- **Mechanics**: a step-by-step explanation, trace, diagram, or walkthrough.
+- **Tradeoffs**: what the approach buys, what it costs, and when it fails.
+- **Recognition clues**: phrases, constraints, and problem shapes that point to this tool.
+- **Implementation variants**: different approaches, languages, optimizations, or follow-up constraints.
+- **Complexity detail**: not just final Big-O, but what line or operation dominates.
+- **Related links**: nearby concepts and problems that make the entry part of the graph.
+
+Add depth where it changes understanding. Do not pad a page with generic background just to make it longer.
+
+### Multiple implementations
+
+There is no hard cap at three implementations. Three approaches is a useful baseline for many coding problems (brute force, better, optimal), but it is not a ceiling. Add more when each implementation teaches a distinct idea: brute force, sorting, hash-based lookup, two-pointer, stack, heap, DP table, space-optimized DP, recursion, iteration, state machine, or a follow-up-constrained variant.
+
+For coding problem pages, keep each approach in its own `## Approach N: Name` section. Within an approach, Python, TypeScript, and Go tabs are language variants of the same approach. They do not count as separate approach slots. Additional approach files can use the existing naming pattern, e.g. `<slug>-approach4.py`, `<slug>-approach4.ts`, and `<slug>-approach4.go`.
+
+For concept pages, use implementation subsections when the comparison is conceptual and tabs when the implementations are the same idea in different languages. Skip filler variants that only rename variables or restate the same algorithm.
+
+### Minimal standard and optional explanation
+
+For implementation-heavy entries, separate the required core from the nice-to-have teaching layer.
+
+The minimum standard is:
+
+- Working code or a runnable REPL stub where the reader can implement it.
+- Tested solution files for each published approach where practical.
+- The core idea in plain language.
+- Time and space complexity, including what operation dominates.
+
+Optional deeper explanation is encouraged when it adds understanding: invariants, recurrence derivations, proof sketches, edge-case traces, interview framing, or why a tempting alternative fails. These sections can use full Markdown, including lists, tables, fenced code blocks, and KaTeX math such as `$O(n^2)$` or:
+
+```markdown
+$$
+T(i) = \sum_{j=i+1}^{n-1} T(j)
+$$
+```
+
+Use headings like `### Further explanation` so quick readers can skip the deeper material.
+
+### Using source material
+
+When a user provides an editorial, article, answer, or pasted explanation, treat it as research input. Do not copy the prose. Extract the ideas, preserve the facts and algorithms, then write original explanations in this site's voice.
+
+If the source provides a good example, recurrence, proof shape, or terminology, it is fine to use the idea with fresh wording. Add an external reference link when the source is available. Avoid long quotations unless the point of the page is to analyze the quoted text.
+
 ### Length
 
 - **Landing page / category overview**: 80–150 lines.
@@ -232,7 +283,7 @@ Snapshot as of commit `e34c730` (April 2026). Full index lives in `src/content/d
 ### CS
 
 - data-structures (10 structures: arrays, strings, hash-tables, linked-lists, stacks, queues, heaps, binary-trees, graphs, tries)
-- leetcode-150 (all 150 problems across 18 categories, 3 solutions each)
+- coding-problems (NeetCode 150 plus bonus LeetCode problems across 18 categories)
 - haversine-distance
 - vehicle-routing (capacitated, time-windows, pickup-and-delivery, solution-approaches)
 - functional-core-imperative-shell

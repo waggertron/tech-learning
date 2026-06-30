@@ -1,10 +1,7 @@
 ---
-name: tech-learning-writing-style
-description: Use when writing ANY prose, markdown, code comments, commit messages, or frontmatter descriptions for this repo (or any repo the author owns). Enforces the em-dash ban, sparing hyphen use, and the Here-Be-Dragons voice.
+name: writing-style
+description: "Use when writing ANY prose, markdown, code comments, commit messages, or frontmatter descriptions for this repo (or any repo the author owns). Enforces the em-dash ban, sparing hyphen use, and the Here-Be-Dragons voice."
 ---
-
-> [!WARNING]
-> Deprecated: this Claude skill has moved to `.agents/skills/writing-style/SKILL.md`. Keep this file only as a compatibility pointer and make future edits in the Codex skill.
 
 # Writing style for the Here Be Dragons tech-learning site
 
@@ -112,16 +109,16 @@ If you discover an em dash you wrote, fix it immediately. If you see one in exis
 
 ## Verification
 
-Before committing any content you wrote or touched, check for the em-dash codepoint. In bash this is the `—` escape; use `printf` to emit the character and `grep -F` to search for it literally:
+Before committing any content you wrote or touched, check for the em-dash codepoint without embedding it directly:
 
 ```bash
-grep -rFn "$(printf '—')" src/ docs/ .claude/ CLAUDE.md README.md
+grep -rFn "$(python3 -c 'print(chr(0x2014))')" src/ docs/ .agents/ AGENTS.md README.md
 ```
 
 The count should be **zero** in any author-controlled text. This skill file is deliberately em-dash-free, so the grep should stay clean even when this file is in scope.
 
 ## Related
 
-- [`.claude/skills/authoring/SKILL.md`](../authoring/SKILL.md). The how-to-add-content skill. This one is about how to *write*.
+- [`.agents/skills/authoring/SKILL.md`](../authoring/SKILL.md). The how-to-add-content skill. This one is about how to *write*.
 - [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). The comprehensive reference.
-- [`CLAUDE.md`](../../../CLAUDE.md). The always-loaded rules.
+- [`AGENTS.md`](../../../AGENTS.md). The always-loaded rules.

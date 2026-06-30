@@ -1,3 +1,8 @@
+---
+name: deep-learn
+description: "Use when the user asks to learn, deeply understand, review, or be quizzed on a concept with spaced retrieval, calibrated difficulty, misconception checks, and local progress tracking in .agents/memory/deep-learn-log.md."
+---
+
 # Deep Learn
 
 A teaching skill grounded in learning science research. Implements spaced retrieval, interleaving, curiosity hooks, calibrated difficulty, and misconception confrontation to produce deep, durable understanding -- not surface familiarity.

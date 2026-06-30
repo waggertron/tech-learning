@@ -3,34 +3,21 @@ package main
 import "fmt"
 
 func canJump(nums []int) bool {
-	n := len(nums)
-	memo := make([]int, n) // 0 unknown, 1 good, -1 bad
-	memo[n-1] = 1
+	maxReach := 0
 
-	var good func(i int) bool
-	good = func(i int) bool {
-		if i >= n-1 {
+	for i, x := range nums {
+		if i > maxReach {
+			return false
+		}
+		if i+x > maxReach {
+			maxReach = i + x
+		}
+		if maxReach >= len(nums)-1 {
 			return true
 		}
-		if memo[i] != 0 {
-			return memo[i] == 1
-		}
-
-		furthest := i + nums[i]
-		if furthest >= n-1 {
-			furthest = n - 1
-		}
-		for j := furthest; j > i; j-- {
-			if good(j) {
-				memo[i] = 1
-				return true
-			}
-		}
-		memo[i] = -1
-		return false
 	}
 
-	return good(0)
+	return true
 }
 
 func main() {

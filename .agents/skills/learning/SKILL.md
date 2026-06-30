@@ -1,10 +1,7 @@
 ---
 name: learning
-description: Use when a teaching moment from quizzing or live discussion produces pattern-recognition insight worth pinning to a data-structure or topic page. Adds five standardized sections to the page so the next person learning the same material gets the recognition framework, not just the raw API. Triggered by phrases like "add this to the X page", "save this learning", "pin this insight", or naturally after a quiz where the user gained recognition skill.
+description: "Use when a teaching moment from quizzing or live discussion produces pattern-recognition insight worth pinning to a data-structure or topic page. Adds five standardized sections to the page so the next person learning the same material gets the recognition framework, not just the raw API. Triggered by phrases like \"add this to the X page\", \"save this learning\", \"pin this insight\", or naturally after a quiz where the user gained recognition skill."
 ---
-
-> [!WARNING]
-> Deprecated: this Claude skill has moved to `.agents/skills/learning/SKILL.md`. Keep this file only as a compatibility pointer and make future edits in the Codex skill.
 
 # Learning capture protocol
 
@@ -23,7 +20,7 @@ Use these section headings, in this order, on every data-structure / pattern pag
 
 ### `## What clues you in`
 
-The single mental gut-check that fires the recognition reflex. One paragraph. The shape: "while doing X, do I sometimes need to do Y? If yes → reach for [structure]." Concrete and testable, not abstract.
+The single mental gut-check that fires the recognition reflex. One paragraph. The shape: "while doing X, do I sometimes need to do Y? If yes -> reach for [structure]." Concrete and testable, not abstract.
 
 ### `## Signal and what it sounds like`
 
@@ -39,7 +36,7 @@ The disambiguation section. List the closest-neighbor structures and what makes 
 
 ### `## Related problems`
 
-Curated kin (5-10 entries) where the recognition skill above is actually exercised. NOT a comprehensive index — that lives in the existing "LeetCode problems" section. This is a teaching list: each entry is one twist on the basic pattern, ordered from canonical to subtle.
+Curated kin (5-10 entries) where the recognition skill above is actually exercised. NOT a comprehensive index -- that lives in the existing "LeetCode problems" section. This is a teaching list: each entry is one twist on the basic pattern, ordered from canonical to subtle.
 
 ## Where to insert
 
@@ -61,7 +58,7 @@ The user requested these exact headings: `What clues you in`, `Signal and what i
 - NO em dashes. Substitute commas, periods, colons, semicolons, parens. Single ASCII hyphens are fine for structure.
 - Voice: direct, declarative, written so a reader can pick up the page cold. The sections should be useful to someone who has never seen the structure before, not just the user who triggered the capture.
 - Keep prose tight. Bias toward concrete examples over theoretical framing.
-- Cross-link to specific problem pages with relative paths (`../../leetcode-150/stack/020-valid-parentheses/` style).
+- Cross-link to specific problem pages with relative paths (`../../coding-problems/stack/020-valid-parentheses/` style).
 - Code in fenced blocks with language tag.
 
 ## Verify and commit
@@ -69,7 +66,7 @@ The user requested these exact headings: `What clues you in`, `Signal and what i
 After editing:
 
 1. Run `npm run build` to verify the YAML and links still parse.
-2. If the user asks to push, follow the standard commit protocol from `CLAUDE.md` (short imperative subject, bulleted body, co-author tag).
+2. If the user asks to push, follow the standard commit protocol from `AGENTS.md` (short imperative subject, bulleted body, co-author tag).
 
 If the page already has some of these sections (partial capture from a previous learning event), update them in place rather than duplicating. Do NOT remove existing sections that don't match the template; the template adds, it doesn't replace.
 
@@ -77,4 +74,4 @@ If the page already has some of these sections (partial capture from a previous 
 
 - For one-off code fixes or content corrections that don't produce reusable recognition skill.
 - When the insight is too narrow ("this specific edge case in problem X") to apply to a general structure or pattern.
-- When the relevant page doesn't exist yet — first the page needs to exist (use the `authoring` skill), then the learning capture extends it.
+- When the relevant page doesn't exist yet -- first the page needs to exist (use the `authoring` skill), then the learning capture extends it.

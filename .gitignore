@@ -25,10 +25,13 @@ pnpm-debug.log*
 # local tooling / session state
 .omc/
 
-# local AI workspace (not versioned, not published)
+# local Codex memory (not versioned, not published)
+.agents/memory/
+
+# local Claude workspace (not versioned, not published)
 CLAUDE.md
 .claude/*
-# exceptions: publish reusable skills (not personal data)
+# exceptions: keep legacy Claude skill pointers tracked for compatibility
 !.claude/skills/
 .claude/skills/*
 !.claude/skills/quiz/

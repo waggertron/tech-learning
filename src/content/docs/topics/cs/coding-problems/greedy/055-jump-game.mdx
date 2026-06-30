@@ -1,11 +1,11 @@
 ---
 title: "55. Jump Game (Medium)"
-description: Determine if you can reach the last index from the first, where each nums[i] gives the max jump length.
+description: "Backtracking, memoization, bottom-up DP, and two greedy views for deciding whether index 0 can reach the end of the array."
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-06-30
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,16 +21,29 @@ import approach2GoCode from './055-jump-game-approach2.go?raw';
 import approach3PyCode from './055-jump-game-approach3.py?raw';
 import approach3TsCode from './055-jump-game-approach3.ts?raw';
 import approach3GoCode from './055-jump-game-approach3.go?raw';
+import approach4PyCode from './055-jump-game-approach4.py?raw';
+import approach4TsCode from './055-jump-game-approach4.ts?raw';
+import approach4GoCode from './055-jump-game-approach4.go?raw';
+import approach5PyCode from './055-jump-game-approach5.py?raw';
+import approach5TsCode from './055-jump-game-approach5.ts?raw';
+import approach5GoCode from './055-jump-game-approach5.go?raw';
 
 ## Problem
 
-Given an integer array `nums`, you start at index 0 and can jump up to `nums[i]` steps from index `i`. Return `true` if you can reach the last index.
+You are given an integer array `nums`. You start at index `0`. At index `i`, `nums[i]` is the maximum number of positions you may jump forward. Return `true` if some sequence of jumps can reach the last index, otherwise return `false`.
 
-**Example**
-- `nums = [2, 3, 1, 1, 4]` → `true`
-- `nums = [3, 2, 1, 0, 4]` → `false`
+The useful vocabulary is **good index**: an index is good if it can eventually reach the last index. The last index is good by definition because it is already at the target. The whole question becomes: is index `0` good?
 
-LeetCode 55 · [Link](https://leetcode.com/problems/jump-game/) · *Medium*
+**Examples**
+- `nums = [2, 3, 1, 1, 4]` -> `true`: jump from `0` to `1`, then from `1` to `4`.
+- `nums = [3, 2, 1, 0, 4]` -> `false`: every path gets trapped at index `3`, where the jump length is `0`.
+- `nums = [0]` -> `true`: a single-element array is already at the last index.
+
+**Constraints**
+- $1 \leq \text{nums.length} \leq 10^4$
+- $0 \leq \text{nums}[i] \leq 10^5$
+
+LeetCode 55 - [Link](https://leetcode.com/problems/jump-game/) - *Medium*
 
 ## Try it yourself
 
@@ -46,48 +59,61 @@ LeetCode 55 · [Link](https://leetcode.com/problems/jump-game/) · *Medium*
   </TabItem>
 </Tabs>
 
-## Approach 1: Recursive, try every jump
+## Approach 1: Backtracking, try every jump
+
+The direct recursive idea is to stand at position `i`, try every legal next position, and return `true` if any recursive branch reaches the end. This is the easiest version to invent, but it repeats the same subproblems many times, so it times out on large inputs.
 
 <Tabs>
 <TabItem label="Python">
 ```python
-def can_jump(nums):
-    def f(i):                                   # L1: called exponential times naively
-        if i >= len(nums) - 1:
-            return True                         # L2: base case O(1)
-        for step in range(1, nums[i] + 1):      # L3: try each step
-            if f(i + step):                     # L4: recursive call
+def can_jump(nums: list[int]) -> bool:
+    n = len(nums)
+
+    def good(i: int) -> bool:                         # L1: recursive state
+        if i >= n - 1:                                # L2: reached target
+            return True
+        furthest = min(i + nums[i], n - 1)            # L3: legal jump range
+        for j in range(furthest, i, -1):              # L4: try longer jumps first
+            if good(j):                               # L5: recurse
                 return True
         return False
-    return f(0)
+
+    return good(0)
 ```
 </TabItem>
 <TabItem label="TypeScript">
 ```typescript
 function canJump(nums: number[]): boolean {
-    function f(i: number): boolean {                    // L1: called exponential times naively
-        if (i >= nums.length - 1) return true;         // L2: base case O(1)
-        for (let step = 1; step <= nums[i]; step++) {  // L3: try each step
-            if (f(i + step)) return true;              // L4: recursive call
+    const n = nums.length;
+
+    function good(i: number): boolean {               // L1: recursive state
+        if (i >= n - 1) return true;                  // L2: reached target
+        const furthest = Math.min(i + nums[i], n - 1);// L3: legal jump range
+        for (let j = furthest; j > i; j--) {          // L4: try longer jumps first
+            if (good(j)) return true;                 // L5: recurse
         }
         return false;
     }
-    return f(0);
+
+    return good(0);
 }
 ```
 </TabItem>
 <TabItem label="Go">
 ```go
 func canJump(nums []int) bool {
-    var f func(i int) bool
-    f = func(i int) bool {                              // L1: called exponential times naively
-        if i >= len(nums)-1 { return true }             // L2: base case O(1)
-        for step := 1; step <= nums[i]; step++ {        // L3: try each step
-            if f(i + step) { return true }              // L4: recursive call
+    n := len(nums)
+    var good func(i int) bool
+    good = func(i int) bool {                         // L1: recursive state
+        if i >= n-1 { return true }                   // L2: reached target
+        furthest := i + nums[i]                       // L3: legal jump range
+        if furthest > n-1 { furthest = n - 1 }
+        for j := furthest; j > i; j-- {               // L4: try longer jumps first
+            if good(j) { return true }                // L5: recurse
         }
         return false
     }
-    return f(0)
+    return good(0)
 }
 ```
 </TabItem>
@@ -99,68 +125,92 @@ func canJump(nums []int) bool {
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (base check) | $O(1)$ | once per call | $O(calls)$ |
-| **L3, L4 (recursive fan-out)** | **$O(calls)$** | **exponential** | **$O(n^n)$** ← dominates |
-
-Without memoization, the same subproblem `f(i)` is called many times; worst case is exponential.
+| L2 target check | $O(1)$ | once per recursive call | $O(\text{calls})$ |
+| L4, L5 branch loop | up to $O(n)$ | repeated across many states | exponential |
+| **Repeated states** | **same index solved many times** | **unbounded without cache** | **$O(2^n)$ upper-bound shape** |
 
 **Complexity**
-- **Time:** Exponential, driven by L3/L4 (unbounded recursive fan-out).
+- **Time:** Exponential. A loose but useful bound is $O(2^n)$ possible jump subsets.
 - **Space:** $O(n)$ recursion depth.
 
-## Approach 2: Top-down or bottom-up DP
+### Further explanation
 
-`dp[i]` = reachable from `i`? `dp[n - 1] = True`; walk backward, `dp[i] = any(dp[i + k] for k in 1..nums[i])`.
+Trying jumps from right to left often finds success faster on friendly inputs because it tests the biggest jump first. That does not change the worst case. An input such as `[5, 4, 3, 2, 1, 0, 0]` still forces the recursion to explore many paths before proving the last index is unreachable.
+
+The recurrence behind the blow-up is:
+
+$$
+T(i) \leq \sum_{j=i+1}^{n-1} T(j)
+$$
+
+Without remembering results, the same suffix questions are asked again and again.
+
+## Approach 2: Top-down DP with memoization
+
+Memoization keeps the recursive shape but records what each index means after we solve it once. Each index is unknown at first, then becomes good or bad. If a later branch asks about the same index, we return the cached answer immediately.
 
 <Tabs>
 <TabItem label="Python">
 ```python
-def can_jump(nums):
-    n = len(nums)                               # L1: O(1)
-    dp = [False] * n                            # L2: O(n)
-    dp[n - 1] = True                            # L3: O(1)
-    for i in range(n - 1, 0, -1):              # L4: outer loop, n-1 iterations
-        furthest = min(i + nums[i], n - 1)
-        for j in range(i + 1, furthest + 1):    # L5: inner loop, up to n per i
-            if dp[j]:
-                dp[i] = True
-                break
-    return dp[0]
+from functools import lru_cache
+
+def can_jump(nums: list[int]) -> bool:
+    n = len(nums)
+
+    @lru_cache(maxsize=None)
+    def good(i: int) -> bool:                         # L1: cached state
+        if i >= n - 1:                                # L2: target is good
+            return True
+        furthest = min(i + nums[i], n - 1)            # L3: legal jump range
+        for j in range(furthest, i, -1):              # L4: scan reachable indices
+            if good(j):                               # L5: cached recursive lookup
+                return True
+        return False
+
+    return good(0)
 ```
 </TabItem>
 <TabItem label="TypeScript">
 ```typescript
 function canJump(nums: number[]): boolean {
-    const n = nums.length;                                 // L1: O(1)
-    const dp: boolean[] = new Array(n).fill(false);        // L2: O(n)
-    dp[n - 1] = true;                                     // L3: O(1)
-    for (let i = n - 2; i >= 0; i--) {                    // L4: outer loop, n-1 iterations
+    const n = nums.length;
+    const memo: Array<boolean | undefined> = new Array(n);
+    memo[n - 1] = true;
+
+    function good(i: number): boolean {               // L1: cached state
+        if (i >= n - 1) return true;                  // L2: target is good
+        if (memo[i] !== undefined) return memo[i];    // L3: cache hit
         const furthest = Math.min(i + nums[i], n - 1);
-        for (let j = i + 1; j <= furthest; j++) {         // L5: inner loop, up to n per i
-            if (dp[j]) {
-                dp[i] = true;
-                break;
-            }
+        for (let j = furthest; j > i; j--) {          // L4: scan reachable indices
+            if (good(j)) return memo[i] = true;       // L5: cached recursive lookup
         }
+        return memo[i] = false;
     }
-    return dp[0];
+
+    return good(0);
 }
 ```
 </TabItem>
 <TabItem label="Go">
 ```go
 func canJump(nums []int) bool {
-    n := len(nums)                                         // L1: O(1)
-    dp := make([]bool, n)                                  // L2: O(n)
-    dp[n-1] = true                                         // L3: O(1)
-    for i := n - 2; i >= 0; i-- {                         // L4: outer loop, n-1 iterations
+    n := len(nums)
+    memo := make([]int, n) // 0 unknown, 1 good, -1 bad
+    memo[n-1] = 1
+
+    var good func(i int) bool
+    good = func(i int) bool {                         // L1: cached state
+        if i >= n-1 { return true }                   // L2: target is good
+        if memo[i] != 0 { return memo[i] == 1 }       // L3: cache hit
         furthest := i + nums[i]
         if furthest > n-1 { furthest = n - 1 }
-        for j := i + 1; j <= furthest; j++ {              // L5: inner loop, up to n per i
-            if dp[j] { dp[i] = true; break }
+        for j := furthest; j > i; j-- {               // L4: scan reachable indices
+            if good(j) { memo[i] = 1; return true }   // L5: cached recursive lookup
         }
+        memo[i] = -1
+        return false
     }
-    return dp[0]
+    return good(0)
 }
 ```
 </TabItem>
@@ -168,19 +218,27 @@ func canJump(nums []int) bool {
 
 **Where the time goes, line by line**
 
-*Variables: n = len(nums).*
-
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L2 (init dp) | $O(1)$ | n | $O(n)$ |
-| L4 (outer loop) | $O(1)$ | n-1 | $O(n)$ |
-| **L5 (inner loop)** | **$O(1)$** | **up to n per i** | **$O(n²)$** ← dominates |
-
-The inner scan at each `i` can range over the entire remaining array in the worst case.
+| L1 state | $O(1)$ | at most $n$ cache misses | $O(n)$ |
+| L3 cache hit | $O(1)$ | many repeated calls | $O(1)$ each |
+| **L4 scan** | **up to $O(n)$** | **for each index** | **$O(n^2)$** |
 
 **Complexity**
-- **Time:** $O(n²)$, driven by L5 (inner scan for reachable positions).
-- **Space:** $O(n)$ for the dp array.
+- **Time:** $O(n^2)$, each index may scan a suffix to find a good landing spot.
+- **Space:** $O(n)$ for memoization plus $O(n)$ recursion depth.
+
+### Further explanation
+
+Top-down DP is still asking "is this index good?", but it asks each index only once. That is the conceptual jump from backtracking to dynamic programming: cache the answer to the subproblem, not just the final answer.
+
+The state is binary:
+
+| State | Meaning |
+| --- | --- |
+| unknown | We have not solved this index yet. |
+| good | This index can reach the end. |
+| bad | This index cannot reach the end. |
 
 **Try this approach:**
 
@@ -196,47 +254,62 @@ The inner scan at each `i` can range over the entire remaining array in the wors
   </TabItem>
 </Tabs>
 
-## Approach 3: Greedy running max-reach (optimal)
+## Approach 3: Bottom-up DP
 
-Walk left to right; track the furthest index reachable. If the current index exceeds it, we're stuck.
+Bottom-up DP removes recursion. Start from the right side because every jump goes to the right. By the time we decide whether index `i` is good, every possible landing spot `j > i` already has a known `good[j]` value.
 
 <Tabs>
 <TabItem label="Python">
 ```python
-def can_jump(nums):
-    max_reach = 0                               # L1: O(1)
-    for i, x in enumerate(nums):               # L2: single pass, n iterations
-        if i > max_reach:                       # L3: O(1)
-            return False
-        max_reach = max(max_reach, i + x)       # L4: O(1), update reach
-        if max_reach >= len(nums) - 1:          # L5: O(1), early exit
-            return True
-    return True
+def can_jump(nums: list[int]) -> bool:
+    n = len(nums)
+    good = [False] * n                               # L1: DP table
+    good[n - 1] = True                               # L2: target is good
+    for i in range(n - 2, -1, -1):                   # L3: right to left
+        furthest = min(i + nums[i], n - 1)
+        for j in range(i + 1, furthest + 1):         # L4: possible landings
+            if good[j]:                              # L5: known result
+                good[i] = True
+                break
+    return good[0]
 ```
 </TabItem>
 <TabItem label="TypeScript">
 ```typescript
 function canJump(nums: number[]): boolean {
-    let maxReach = 0;                                      // L1: O(1)
-    for (let i = 0; i < nums.length; i++) {               // L2: single pass, n iterations
-        if (i > maxReach) return false;                    // L3: O(1)
-        maxReach = Math.max(maxReach, i + nums[i]);        // L4: O(1), update reach
-        if (maxReach >= nums.length - 1) return true;      // L5: O(1), early exit
+    const n = nums.length;
+    const good: boolean[] = new Array(n).fill(false);// L1: DP table
+    good[n - 1] = true;                              // L2: target is good
+    for (let i = n - 2; i >= 0; i--) {               // L3: right to left
+        const furthest = Math.min(i + nums[i], n - 1);
+        for (let j = i + 1; j <= furthest; j++) {    // L4: possible landings
+            if (good[j]) {                           // L5: known result
+                good[i] = true;
+                break;
+            }
+        }
     }
-    return true;
+    return good[0];
 }
 ```
 </TabItem>
 <TabItem label="Go">
 ```go
 func canJump(nums []int) bool {
-    maxReach := 0                                          // L1: O(1)
-    for i, x := range nums {                              // L2: single pass, n iterations
-        if i > maxReach { return false }                   // L3: O(1)
-        if i+x > maxReach { maxReach = i + x }            // L4: O(1), update reach
-        if maxReach >= len(nums)-1 { return true }         // L5: O(1), early exit
+    n := len(nums)
+    good := make([]bool, n)                          // L1: DP table
+    good[n-1] = true                                 // L2: target is good
+    for i := n - 2; i >= 0; i-- {                    // L3: right to left
+        furthest := i + nums[i]
+        if furthest > n-1 { furthest = n - 1 }
+        for j := i + 1; j <= furthest; j++ {         // L4: possible landings
+            if good[j] {                             // L5: known result
+                good[i] = true
+                break
+            }
+        }
     }
-    return true
+    return good[0]
 }
 ```
 </TabItem>
@@ -244,23 +317,33 @@ func canJump(nums []int) bool {
 
 **Where the time goes, line by line**
 
-*Variables: n = len(nums).*
-
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (init) | $O(1)$ | 1 | $O(1)$ |
-| **L2-L5 (loop)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
-| L3 (stuck check) | $O(1)$ | n | $O(n)$ |
-| L4 (update reach) | $O(1)$ | n | $O(n)$ |
-
-A single linear scan; each element is visited once.
+| L1 initialize table | $O(1)$ | $n$ | $O(n)$ |
+| L3 outer loop | $O(1)$ | $n - 1$ | $O(n)$ |
+| **L4, L5 landing scan** | **$O(1)$** | **up to $n$ per index** | **$O(n^2)$** |
 
 **Complexity**
-- **Time:** $O(n)$, driven by L2/L3/L4 (single linear scan).
-- **Space:** $O(1)$.
+- **Time:** $O(n^2)$, driven by scanning candidate landings for each index.
+- **Space:** $O(n)$ for the DP table.
 
-### Why greedy works
-If the furthest reachable index is `R`, every position `i ≤ R` is reachable. So we only need to update `R = max(R, i + nums[i])` as we walk. No DP table needed.
+### Further explanation
+
+This version is the bridge between the recursive view and the greedy view. It makes the hidden direction of the problem explicit:
+
+```text
+index:  0  1  2  3  4
+nums:   2  3  1  1  4
+good:   ?  ?  ?  ?  T
+
+Work from right to left so every jump target is already known.
+```
+
+The bottom-up recurrence is:
+
+$$
+\text{good}[i] = \exists j \in (i, \min(i + \text{nums}[i], n - 1)] \text{ such that } \text{good}[j]
+$$
 
 **Try this approach:**
 
@@ -276,15 +359,189 @@ If the furthest reachable index is `R`, every position `i ≤ R` is reachable. S
   </TabItem>
 </Tabs>
 
+## Approach 4: Greedy from the right
+
+Bottom-up DP only needs one piece of information from the table: the leftmost known-good landing spot. If index `i` can reach that spot, then `i` becomes the new leftmost good index. The whole DP table collapses into one integer.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def can_jump(nums: list[int]) -> bool:
+    leftmost_good = len(nums) - 1                    # L1: target starts good
+    for i in range(len(nums) - 2, -1, -1):           # L2: scan right to left
+        if i + nums[i] >= leftmost_good:             # L3: can reach a good index
+            leftmost_good = i                        # L4: move boundary left
+    return leftmost_good == 0                        # L5: start is good
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canJump(nums: number[]): boolean {
+    let leftmostGood = nums.length - 1;              // L1: target starts good
+    for (let i = nums.length - 2; i >= 0; i--) {     // L2: scan right to left
+        if (i + nums[i] >= leftmostGood) {           // L3: can reach a good index
+            leftmostGood = i;                        // L4: move boundary left
+        }
+    }
+    return leftmostGood === 0;                       // L5: start is good
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func canJump(nums []int) bool {
+    leftmostGood := len(nums) - 1                    // L1: target starts good
+    for i := len(nums) - 2; i >= 0; i-- {            // L2: scan right to left
+        if i+nums[i] >= leftmostGood {               // L3: can reach a good index
+            leftmostGood = i                         // L4: move boundary left
+        }
+    }
+    return leftmostGood == 0                         // L5: start is good
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 initialize | $O(1)$ | 1 | $O(1)$ |
+| **L2, L3 scan** | **$O(1)$** | **$n - 1$** | **$O(n)$** |
+| L4 update | $O(1)$ | at most $n - 1$ | $O(n)$ |
+
+**Complexity**
+- **Time:** $O(n)$, one right-to-left scan.
+- **Space:** $O(1)$.
+
+### Further explanation
+
+The invariant is: every index at or to the right of `leftmost_good` is not automatically good, but `leftmost_good` itself is the earliest good landing spot discovered so far. When a new index can jump to it, the good boundary moves left.
+
+This is exactly the DP recurrence with the search removed. Instead of scanning for any good `j`, we keep the best possible `j` as a variable.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach4PyCode} id="jump-game-approach4-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach4TsCode} id="jump-game-approach4-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach4GoCode} id="jump-game-approach4-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 5: Greedy from the left
+
+The other greedy view scans forward. Track the furthest reachable index so far. If the scan ever reaches an index beyond that boundary, the path is blocked. Otherwise, each visited index may extend the boundary.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def can_jump(nums: list[int]) -> bool:
+    max_reach = 0                                   # L1: reachable frontier
+    for i, x in enumerate(nums):                    # L2: scan left to right
+        if i > max_reach:                           # L3: gap before this index
+            return False
+        max_reach = max(max_reach, i + x)           # L4: extend frontier
+        if max_reach >= len(nums) - 1:              # L5: reached target
+            return True
+    return True
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function canJump(nums: number[]): boolean {
+    let maxReach = 0;                               // L1: reachable frontier
+    for (let i = 0; i < nums.length; i++) {         // L2: scan left to right
+        if (i > maxReach) return false;             // L3: gap before this index
+        maxReach = Math.max(maxReach, i + nums[i]); // L4: extend frontier
+        if (maxReach >= nums.length - 1) return true;// L5: reached target
+    }
+    return true;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+func canJump(nums []int) bool {
+    maxReach := 0                                  // L1: reachable frontier
+    for i, x := range nums {                       // L2: scan left to right
+        if i > maxReach { return false }           // L3: gap before this index
+        if i+x > maxReach { maxReach = i + x }     // L4: extend frontier
+        if maxReach >= len(nums)-1 { return true } // L5: reached target
+    }
+    return true
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 initialize | $O(1)$ | 1 | $O(1)$ |
+| **L2, L3, L4 scan** | **$O(1)$** | **up to $n$** | **$O(n)$** |
+| L5 early exit | $O(1)$ | up to $n$ | $O(n)$ |
+
+**Complexity**
+- **Time:** $O(n)$, one left-to-right scan.
+- **Space:** $O(1)$.
+
+### Further explanation
+
+If `max_reach = R`, then every index up to `R` has some valid path from index `0`. The scan is allowed to stand only on reachable indices. Once `i > R`, there is a gap that no previous jump crosses, so the answer is `false`.
+
+This is the version most people write in interviews because it answers the problem in the same direction as the story: start at index `0`, keep expanding where you can go.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach5PyCode} id="jump-game-approach5-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach5TsCode} id="jump-game-approach5-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach5GoCode} id="jump-game-approach5-go" />
+  </TabItem>
+</Tabs>
+
+## How to recognize this pattern
+
+The signal is a reachability boundary over an array: from each index you can move only to the right, and you only need to know whether the end is reachable, not the path itself.
+
+| Signal | What it sounds like |
+| --- | --- |
+| One-way movement | "From index `i`, jump forward at most `nums[i]` steps." |
+| Reachability question | "Can you reach the last index?" |
+| No need to output path | Return `true` or `false`, not the jumps. |
+| Local choice affects frontier | Each position can extend how far the reachable region goes. |
+
+The tempting wrong move is to search all paths. That works on tiny arrays but repeats the same suffixes. The better move is to track what has already been proven reachable or good.
+
 ## Summary
 
-| Approach | Time | Space |
-| --- | --- | --- |
-| Naive recursion | exponential | $O(n)$ |
-| DP | $O(n²)$ | $O(n)$ |
-| **Greedy max-reach** | **$O(n)$** | **$O(1)$** |
+| Approach | Time | Space | Use it for |
+| --- | --- | --- | --- |
+| Backtracking | $O(2^n)$ upper-bound shape | $O(n)$ | Explaining the raw search tree |
+| Top-down memoization | $O(n^2)$ | $O(n)$ | Showing the DP transition from recursion |
+| Bottom-up DP | $O(n^2)$ | $O(n)$ | Removing recursion and making the order explicit |
+| Greedy from the right | $O(n)$ | $O(1)$ | Collapsing the DP table to one good boundary |
+| Greedy from the left | $O(n)$ | $O(1)$ | Interview-ready max-reach solution |
 
-Monotone-invariant greedy, `max_reach` is non-decreasing; the algorithm fails fast the moment it's exceeded.
+## Key takeaways
+
+- Backtracking asks the right question but repeats too much work.
+- Memoization turns "try every path" into "solve every index once."
+- Bottom-up DP works because all jumps go right, so the suffix can be solved first.
+- Greedy works because the DP table only needs a boundary: either the leftmost good index or the furthest reachable index.
+- The left-to-right max-reach version is the shortest production answer, but understanding the DP path makes the greedy invariant easier to trust.
 
 ## Test cases
 
@@ -305,9 +562,9 @@ func canJump(nums []int) bool {
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_055.py and run.
-# Uses the canonical implementation (Approach 3: greedy max-reach).
+# Uses the canonical implementation (Approach 5: greedy max-reach).
 
-def can_jump(nums):
+def can_jump(nums: list[int]) -> bool:
     max_reach = 0
     for i, x in enumerate(nums):
         if i > max_reach:
@@ -317,13 +574,13 @@ def can_jump(nums):
             return True
     return True
 
-def _run_tests():
+def _run_tests() -> None:
     assert can_jump([2, 3, 1, 1, 4]) == True
     assert can_jump([3, 2, 1, 0, 4]) == False
-    assert can_jump([0]) == True           # single element, already at end
-    assert can_jump([1, 0]) == True        # one jump gets to end
-    assert can_jump([0, 1]) == False       # stuck at index 0 immediately
-    assert can_jump([2, 0, 0]) == True     # jump over zeros
+    assert can_jump([0]) == True
+    assert can_jump([1, 0]) == True
+    assert can_jump([0, 1]) == False
+    assert can_jump([2, 0, 0]) == True
     print("all tests pass")
 
 if __name__ == "__main__":
@@ -344,15 +601,18 @@ function canJump(nums: number[]): boolean {
 
 console.assert(canJump([2, 3, 1, 1, 4]) === true);
 console.assert(canJump([3, 2, 1, 0, 4]) === false);
-console.assert(canJump([0]) === true);           // single element, already at end
-console.assert(canJump([1, 0]) === true);        // one jump gets to end
-console.assert(canJump([0, 1]) === false);       // stuck at index 0 immediately
-console.assert(canJump([2, 0, 0]) === true);     // jump over zeros
+console.assert(canJump([0]) === true);
+console.assert(canJump([1, 0]) === true);
+console.assert(canJump([0, 1]) === false);
+console.assert(canJump([2, 0, 0]) === true);
 console.log("all tests pass");
 ```
 </TabItem>
 </Tabs>
 
-## Related data structures
+## Related topics
 
-- [Arrays](../../../data-structures/arrays/), running max-reach
+- [Jump Game II](./045-jump-game-ii/)
+- [Greedy algorithms](./)
+- [Arrays](../../../data-structures/arrays/)
+- [1D Dynamic Programming](../1d-dynamic-programming/)

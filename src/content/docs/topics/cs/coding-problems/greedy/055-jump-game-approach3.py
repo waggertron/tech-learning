@@ -1,12 +1,16 @@
 def can_jump(nums: list[int]) -> bool:
-    max_reach = 0
-    for i, x in enumerate(nums):
-        if i > max_reach:
-            return False
-        max_reach = max(max_reach, i + x)
-        if max_reach >= len(nums) - 1:
-            return True
-    return True
+    n = len(nums)
+    good = [False] * n
+    good[n - 1] = True
+
+    for i in range(n - 2, -1, -1):
+        furthest = min(i + nums[i], n - 1)
+        for j in range(i + 1, furthest + 1):
+            if good[j]:
+                good[i] = True
+                break
+
+    return good[0]
 
 assert can_jump([2, 3, 1, 1, 4]) == True
 assert can_jump([3, 2, 1, 0, 4]) == False

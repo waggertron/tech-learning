@@ -3,34 +3,15 @@ package main
 import "fmt"
 
 func canJump(nums []int) bool {
-	n := len(nums)
-	memo := make([]int, n) // 0 unknown, 1 good, -1 bad
-	memo[n-1] = 1
+	leftmostGood := len(nums) - 1
 
-	var good func(i int) bool
-	good = func(i int) bool {
-		if i >= n-1 {
-			return true
+	for i := len(nums) - 2; i >= 0; i-- {
+		if i+nums[i] >= leftmostGood {
+			leftmostGood = i
 		}
-		if memo[i] != 0 {
-			return memo[i] == 1
-		}
-
-		furthest := i + nums[i]
-		if furthest >= n-1 {
-			furthest = n - 1
-		}
-		for j := furthest; j > i; j-- {
-			if good(j) {
-				memo[i] = 1
-				return true
-			}
-		}
-		memo[i] = -1
-		return false
 	}
 
-	return good(0)
+	return leftmostGood == 0
 }
 
 func main() {

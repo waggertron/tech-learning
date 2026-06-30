@@ -1,3 +1,6 @@
+> [!WARNING]
+> Deprecated: this Claude skill has moved to `.agents/skills/deep-learn/SKILL.md`. Keep this file only as a compatibility pointer and make future edits in the Codex skill.
+
 # Deep Learn
 
 A teaching skill grounded in learning science research. Implements spaced retrieval, interleaving, curiosity hooks, calibrated difficulty, and misconception confrontation to produce deep, durable understanding — not surface familiarity.

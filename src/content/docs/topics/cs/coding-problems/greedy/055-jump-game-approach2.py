@@ -1,14 +1,21 @@
+from functools import lru_cache
+
+
 def can_jump(nums: list[int]) -> bool:
     n = len(nums)
-    dp = [False] * n
-    dp[n - 1] = True
-    for i in range(n - 1, 0, -1):
+
+    @lru_cache(maxsize=None)
+    def good(i: int) -> bool:
+        if i >= n - 1:
+            return True
+
         furthest = min(i + nums[i], n - 1)
-        for j in range(i + 1, furthest + 1):
-            if dp[j]:
-                dp[i] = True
-                break
-    return dp[0]
+        for j in range(furthest, i, -1):
+            if good(j):
+                return True
+        return False
+
+    return good(0)
 
 assert can_jump([2, 3, 1, 1, 4]) == True
 assert can_jump([3, 2, 1, 0, 4]) == False

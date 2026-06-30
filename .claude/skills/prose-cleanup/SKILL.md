@@ -1,3 +1,6 @@
+> [!WARNING]
+> Deprecated: this Claude skill has moved to `.agents/skills/prose-cleanup/SKILL.md`. Keep this file only as a compatibility pointer and make future edits in the Codex skill.
+
 # Prose cleanup for the Here Be Dragons site
 
 Use this skill when doing a cleanup pass on existing content, or when reviewing new content before it ships. It enforces the site's anti-AI-slop prose standards.

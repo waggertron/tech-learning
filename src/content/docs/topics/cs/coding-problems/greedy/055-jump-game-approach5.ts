@@ -3,21 +3,15 @@ function assert(condition: boolean, msg: string = ''): void {
 }
 
 function canJump(nums: number[]): boolean {
-    const n = nums.length;
-    const good: boolean[] = new Array(n).fill(false);
-    good[n - 1] = true;
+    let maxReach = 0;
 
-    for (let i = n - 2; i >= 0; i--) {
-        const furthest = Math.min(i + nums[i], n - 1);
-        for (let j = i + 1; j <= furthest; j++) {
-            if (good[j]) {
-                good[i] = true;
-                break;
-            }
-        }
+    for (let i = 0; i < nums.length; i++) {
+        if (i > maxReach) return false;
+        maxReach = Math.max(maxReach, i + nums[i]);
+        if (maxReach >= nums.length - 1) return true;
     }
 
-    return good[0];
+    return true;
 }
 
 assert(canJump([2, 3, 1, 1, 4]) === true);
