@@ -5,49 +5,77 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 ## Tactic
 
-Sorting as preprocessing changes the problem from arbitrary order to a structured order. After that, duplicates group together, intervals align, and pointer moves become meaningful.
+Sorting as preprocessing pays an ordering cost to expose structure. After sorting, equal values become adjacent, intervals line up by boundary, and pointer movement gains a monotonic reason.
+
+The invariant after sorting is that moving forward never hides a smaller key behind you. That lets a scan merge intervals, skip duplicates, stop early, or move two pointers based on a comparison.
+
+The key question is whether original order matters. If the problem asks about subsequences, original indices, or stable positions, sorting may destroy the answer. If the problem asks about sets, pairs, ranges, or relative value order, sorting often clarifies it.
 
 ## Value
 
-The value is exposing hidden structure. A sort often trades $O(n^2)$ uncertainty for a clean $O(n log n)$ scan.
+The value is reducing a hard unordered search into a simple ordered pass. The sort costs $O(n \log n)$, but it can remove an $O(n^2)$ or backtracking step.
+
+### Direct complexity example
+
+- **Brute force:** Compare every interval or every pair in arbitrary order: $O(n^2)$ time and $O(1)$ to $O(n)$ space.
+- **With this tactic:** Sort once, then scan or use two pointers: $O(n \log n)$ time plus a linear pass.
+- **Space:** Space is whatever the language sort uses. In-place sorts can be $O(1)$ auxiliary space, while stable or boxed sorts may use $O(n)$ space.
 
 ## Challenges this solves
 
-- deduplication
-- n-sum search
+- duplicate control
 - interval merging
-- greedy scheduling
-- frequency consumption in order
+- meeting rooms and schedules
+- n-sum
+- greedy selection by earliest finish or smallest cost
 
 ## When to use it
 
-Use it when original order is irrelevant or when the answer depends on relative ordering rather than positions.
+Use this tactic when these conditions are true:
+
+- relative order is irrelevant to the answer
+- adjacent equal or overlapping items become easy after ordering
+- a monotonic scan or two-pointer proof appears after sorting
+- the target complexity can afford $O(n \log n)$
 
 ## When not to use it
 
-Do not sort when the original index order is part of the answer, or when the prompt requires stable original positions.
+Reach for a different tactic when these warning signs appear:
+
+- the prompt depends on original index order
+- a linear hash or scan solution exists and sorting is slower
+- the values are streaming and cannot be reordered
+- the input is already in the only meaningful order
 
 ## Terminology clues
 
-- return any order
-- pairs or triples
-- merge
-- minimum removals
-- schedule
+These prompt words often point toward this concept:
+
 - sort first
-- can reorder
+- ordered
+- ascending
+- lexicographic
+- overlap
+- duplicates
+- closest
+- smallest first
 
 ## Problems that use it
 
 - [15. 3Sum](../coding-problems/two-pointers/015-3sum/)
+- [49. Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/)
 - [56. Merge Intervals](../coding-problems/intervals/056-merge-intervals/)
-- [846. Hand of Straights](../coding-problems/greedy/846-hand-of-straights/)
+- [242. Valid Anagram](../coding-problems/arrays-and-hashing/242-valid-anagram/)
+- [349. Intersection of Two Arrays](../coding-problems/arrays-and-hashing/349-intersection-of-two-arrays/)
 - [435. Non-overlapping Intervals](../coding-problems/intervals/435-non-overlapping-intervals/)
+- [846. Hand of Straights](../coding-problems/greedy/846-hand-of-straights/)
+- [853. Car Fleet](../coding-problems/stack/853-car-fleet/)
+- [1489. Find Critical and Pseudo-Critical Edges in MST](../coding-problems/advanced-graphs/1489-critical-and-pseudo-critical-edges/)
 
 ## Related concepts
 

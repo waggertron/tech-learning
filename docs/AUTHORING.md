@@ -203,16 +203,18 @@ Coding concept pages live under `src/content/docs/topics/cs/coding-concepts/`. T
 
 Use `templates/coding-concept/concept.md` when adding a new concept. Keep the section shape fixed:
 
-1. **Tactic**, the move the learner should make.
-2. **Value**, what the tactic buys in time, space, clarity, or proof.
-3. **Challenges this solves**, the problem families it naturally handles.
+1. **Tactic**, several paragraphs explaining the move, invariant, implementation habit, and mental model the learner should practice.
+2. **Value**, what the tactic buys in time, space, clarity, or proof. Include a `### Direct complexity example` subsection with `**Brute force:**`, `**With this tactic:**`, and `**Space:**` bullets that use concrete `$O(...)$` comparisons.
+3. **Challenges this solves**, the problem families it naturally handles, with enough detail to distinguish similar patterns.
 4. **When to use it**, the conditions that make the tactic fit.
 5. **When not to use it**, the nearby cases where the tactic is tempting but wrong.
 6. **Terminology clues**, prompt words that should put the concept in working memory.
-7. **Problems that use it**, representative links into `../coding-problems/...`.
+7. **Problems that use it**, exhaustive links into `../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
 8. **Related concepts**, neighboring concept links.
 
 Overlap is expected. A problem can link to multiple concept pages when each link explains a different part of the solution.
+
+Concept pages should be researched teaching pages, not glossary stubs. Write original prose, explain how the tactic changes the solution shape, and build the problem list from local backlinks rather than manually chosen examples.
 
 ### Using source material
 

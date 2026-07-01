@@ -98,14 +98,16 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    ```
 
    **Coding concept body structure:**
-   - `## Tactic` -- what move the learner should make.
-   - `## Value` -- what the tactic buys in time, space, clarity, or proof.
-   - `## Challenges this solves` -- common problem shapes.
+   - `## Tactic` -- several paragraphs explaining the move, invariant, implementation habit, and mental model the learner should practice.
+   - `## Value` -- what the tactic buys in time, space, clarity, or proof. Include a `### Direct complexity example` subsection with `**Brute force:**`, `**With this tactic:**`, and `**Space:**` bullets that use concrete `$O(...)$` comparisons.
+   - `## Challenges this solves` -- common problem shapes, with enough detail to distinguish similar patterns.
    - `## When to use it` -- conditions that make the tactic fit.
    - `## When not to use it` -- tempting nearby cases where it fails.
    - `## Terminology clues` -- prompt words and phrases that point to the tactic.
-   - `## Problems that use it` -- representative links into `../coding-problems/...`.
+   - `## Problems that use it` -- exhaustive links into `../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
    - `## Related concepts` -- neighboring concept pages.
+
+   Coding concept pages should not stay as one-sentence placeholders. Write researched, original prose that helps a learner decide when to use the tactic, when to avoid it, and what complexity win to expect. Build the problem list from local backlinks rather than hand-picked highlights.
 
    Coding problem pages also need this import block immediately after the frontmatter:
    ```

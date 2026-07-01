@@ -5,40 +5,64 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 ## Tactic
 
-Merge intervals sorts ranges by start, keeps the current merged range, and either extends it or emits it when a gap appears.
+Merge intervals sorts ranges by start, then keeps the current covered span. Each new interval either extends the current span or starts a separate span.
+
+The invariant is that the output built so far is sorted and non-overlapping. The last output interval is the only interval that can overlap the next sorted input interval.
+
+This removes most of the apparent case explosion. You only compare `next.start` with `current.end`, then either update `current.end` or append a new interval.
 
 ## Value
 
-The value is a simple invariant: after sorting, any future interval that overlaps the current range must appear before the first gap.
+The value is localizing overlap. Without ordering, every interval might conflict with many others. With ordering, overlap collapses into one comparison against the active merged span.
+
+### Direct complexity example
+
+- **Brute force:** Repeatedly compare and merge arbitrary pairs until stable: $O(n^2)$ time and $O(n)$ output space.
+- **With this tactic:** Sort by start and scan once: $O(n \log n)$ time and $O(n)$ output space.
+- **Space:** If the input can be mutated and output can reuse storage, auxiliary space beyond sorting can be $O(1)$, not counting the result.
 
 ## Challenges this solves
 
-- collapsing overlapping ranges
-- inserting a new range
-- calendar union
-- covered length
-- conflict detection
+- merge overlapping ranges
+- insert a new interval
+- coverage union
+- meeting conflict detection
+- range normalization before later work
 
 ## When to use it
 
-Use it when ranges can be processed in start order and overlaps should become one range.
+Use this tactic when these conditions are true:
+
+- the desired answer is a union of ranges
+- intervals can be sorted by start
+- only the latest merged span matters
+- touching endpoints have a clear overlap rule
 
 ## When not to use it
 
-Do not merge when nested or separate intervals carry distinct identities that must remain separate.
+Reach for a different tactic when these warning signs appear:
+
+- the problem asks for maximum number of simultaneous intervals, which points to sweep or heap
+- queries arrive online after preprocessing
+- intervals live in multiple dimensions
+- the original interval identities must all remain separate
 
 ## Terminology clues
 
-- merge all overlapping
+These prompt words often point toward this concept:
+
+- merge
 - insert interval
-- covered by
+- overlap
+- covered range
 - union of intervals
-- combine ranges
+- non-overlapping output
+- start time
 
 ## Problems that use it
 

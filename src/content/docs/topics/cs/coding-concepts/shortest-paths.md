@@ -5,49 +5,74 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 ## Tactic
 
-Shortest-path algorithms model states as nodes and moves as edges. The algorithm depends on edge costs: BFS for equal costs, Dijkstra for non-negative weights, Bellman-Ford when negative edges or stop limits matter.
+Shortest-path tactics model a problem as states connected by moves, then minimize the cost to reach a target. The right algorithm depends on edge costs.
+
+The invariant is best known distance. BFS finalizes distance by layers when all edges cost the same. Dijkstra finalizes the smallest priority distance when weights are non-negative. Bellman-Ford relaxes edges repeatedly when negative edges or stop limits matter.
+
+The modeling step is often harder than the algorithm. Decide what a node represents, what an edge represents, and what the edge cost means. A grid cell, word, city, or bitmask can all be graph states.
 
 ## Value
 
-The value is choosing the right relaxation rule. The wrong path algorithm can be subtly incorrect even when it seems to work on small tests.
+The value is using a proven frontier rule instead of enumerating every route. Once the state graph is right, the algorithm supplies the optimality proof.
+
+### Direct complexity example
+
+- **Brute force:** Enumerate all possible paths to the target: exponential time in graphs with branching and cycles.
+- **With this tactic:** Use the right shortest-path algorithm: $O(V + E)$ for unweighted BFS, $O((V + E) \log V)$ for heap-based Dijkstra, or $O(VE)$ for Bellman-Ford.
+- **Space:** Space is usually $O(V + E)$ for the graph plus $O(V)$ for distances and the frontier.
 
 ## Challenges this solves
 
-- minimum travel time
-- cheapest route
-- fewest transformations
-- grid risk levels
-- probability maximization
+- minimum transformations
+- network delay
+- grid minimum effort
+- cheapest flights with stops
+- maximum probability paths
 
 ## When to use it
 
-Use it when the answer is the cheapest or shortest route through states.
+Use this tactic when these conditions are true:
+
+- the prompt asks for minimum steps, time, effort, cost, or risk
+- states can be connected by legal moves
+- cycles are possible and need distance tracking
+- edge weights determine the algorithm choice
 
 ## When not to use it
 
-Do not use shortest-path machinery when only reachability matters. DFS, BFS, or union find is cheaper.
+Reach for a different tactic when these warning signs appear:
+
+- the graph has no optimization target and plain traversal is enough
+- all paths must be counted rather than minimized
+- negative cycles can reduce cost indefinitely
+- the state space is too large without additional pruning
 
 ## Terminology clues
 
+These prompt words often point toward this concept:
+
 - shortest
+- minimum steps
 - minimum cost
-- cheapest
 - network delay
-- least effort
-- fewest steps
-- path weight
+- route
+- distance
+- edge weight
+- path
 
 ## Problems that use it
 
-- [743. Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/)
-- [787. Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
-- [778. Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/)
 - [127. Word Ladder](../coding-problems/graphs/127-word-ladder/)
+- [743. Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/)
+- [778. Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/)
+- [787. Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
+- [1091. Shortest Path in Binary Matrix](../coding-problems/graphs/1091-shortest-path-in-binary-matrix/)
+- [1514. Path with Maximum Probability](../coding-problems/advanced-graphs/1514-path-with-maximum-probability/)
 
 ## Related concepts
 

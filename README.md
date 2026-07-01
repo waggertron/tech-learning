@@ -60,7 +60,7 @@ Copy `templates/coding-problem/problem.mdx` to `src/content/docs/topics/cs/codin
 
 ### Add a coding concept
 
-Copy `templates/coding-concept/concept.md` to `src/content/docs/topics/cs/coding-concepts/<slug>.md`. Link representative problems from the concept page, then link back from those problem pages under `## Related concepts`.
+Copy `templates/coding-concept/concept.md` to `src/content/docs/topics/cs/coding-concepts/<slug>.md`. Write original, researched guidance, include a direct time and space complexity example, link every relevant local problem from the concept page, then link back from those problem pages under `## Related concepts`.
 
 ### Add a post
 

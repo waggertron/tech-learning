@@ -5,47 +5,71 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 ## Tactic
 
-A difference array stores how the value changes at each boundary instead of storing every updated cell. Add at the start, subtract after the end, then prefix-scan once to materialize the final array.
+Difference arrays mark changes at boundaries instead of touching every value inside a range. Adding `x` to `[l, r]` becomes `diff[l] += x` and `diff[r + 1] -= x`.
+
+The invariant is that a prefix scan over the difference array reconstructs the actual values. Every range update starts an effect at its left boundary and cancels it immediately after its right boundary.
+
+This is the right tool when all updates can be recorded first and materialized later. It is also the simpler version of sweep-line event processing: start events increase active state, end events decrease it.
 
 ## Value
 
-The value is batching. Many range updates become $O(1)$ boundary marks plus one final $O(n)$ pass.
+The value is turning many wide updates into small boundary writes. The wider the ranges, the more dramatic the saving.
+
+### Direct complexity example
+
+- **Brute force:** Apply `m` range updates directly over an array of length `n`: $O(mn)$ worst-case time and $O(1)$ extra space.
+- **With this tactic:** Record two boundary events per update and scan once: $O(n + m)$ time and $O(n)$ space.
+- **Space:** Coordinate compression can reduce the space when the coordinate range is huge but only a small number of boundaries appear.
 
 ## Challenges this solves
 
 - range increment updates
-- booking or capacity timelines
-- interval overlap counts
-- offline update batches
-- sweep-line counters
+- flight bookings and car pooling capacity
+- overlap counts
+- offline interval effects
+- line sweep over start and end events
 
 ## When to use it
 
-Use it when the problem gives many range updates and asks for final values or maximum overlap after all updates.
+Use this tactic when these conditions are true:
+
+- many operations affect every index in a contiguous range
+- the final array or final maximum is needed after all updates
+- updates are offline or can be batched
+- range boundaries carry all the information
 
 ## When not to use it
 
-Do not use it when updates and queries are interleaved online. That calls for a Fenwick tree, segment tree, balanced map, or heap depending on the query.
+Reach for a different tactic when these warning signs appear:
+
+- queries must be answered online between updates
+- updates are not contiguous ranges
+- the operation cannot be undone by an inverse boundary marker
+- the coordinate range is enormous and uncompressed
 
 ## Terminology clues
 
-- increment every index from l to r
-- bookings
+These prompt words often point toward this concept:
+
 - range update
+- increment each
+- bookings
 - capacity over time
-- after all operations
+- start and end
 - difference array
+- sweep
+- after all operations
 
 ## Problems that use it
 
 - [253. Meeting Rooms II](../coding-problems/intervals/253-meeting-rooms-ii/)
+- [303. Range Sum Query - Immutable](../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
 - [1851. Minimum Interval to Include Each Query](../coding-problems/intervals/1851-minimum-interval-to-include-each-query/)
-- [303. Range Sum Query Immutable](../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
 
 ## Related concepts
 

@@ -5,49 +5,72 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 ## Tactic
 
-Prefix sums store the total before each position. A range sum becomes the difference between two checkpoints, and a target subarray becomes a search for a previous checkpoint with the right value.
+Prefix sums store cumulative totals at checkpoints. A range sum becomes the difference between two checkpoints instead of a fresh loop over the range.
+
+The invariant is that `prefix[i]` summarizes every element before index `i`. Once that invariant is true, `sum(l..r)` is `prefix[r + 1] - prefix[l]`. Counting problems use the same idea with earlier prefix values stored in a map.
+
+The trick is choosing the right checkpoint. For exact range queries, store every prefix. For subarray counts, store how many times each previous prefix value occurred. For two-dimensional grids, store row and column checkpoints so rectangles can be recovered by inclusion and exclusion.
 
 ## Value
 
-The value is turning range questions into constant-time arithmetic or hash lookups. This is the common bridge from nested subarray loops to linear time.
+The value is precomputation. Prefix sums pay one linear pass so each later range query or subarray comparison becomes constant time or a hash lookup.
+
+### Direct complexity example
+
+- **Brute force:** Answer `q` range-sum queries by scanning each range: $O(qn)$ worst-case time and $O(1)$ space.
+- **With this tactic:** Build prefix sums once and answer each query by subtraction: $O(n + q)$ time and $O(n)$ space.
+- **Space:** For subarray counts, the frequency map of prefix values can also use $O(n)$ space.
 
 ## Challenges this solves
 
 - range sum queries
-- counting subarrays with a target sum
-- prefix and suffix products
-- modulo remainder pairing
-- balancing counts
+- subarray sum equals target
+- balance between counts
+- 2D rectangle sums
+- turning products or counts into accumulated checkpoints
 
 ## When to use it
 
-Use it when a question asks about the sum, product, parity, or balance of a contiguous range.
+Use this tactic when these conditions are true:
+
+- the problem repeatedly asks about sums over ranges
+- a subarray condition can be expressed as `prefix[j] - prefix[i]`
+- the input is static while queries repeat
+- you need to count earlier checkpoints that would make the current one valid
 
 ## When not to use it
 
-Do not use prefix sums when the range operation is not reversible. Minimum, maximum, and mode need different structures.
+Reach for a different tactic when these warning signs appear:
+
+- updates happen between many queries and need a Fenwick tree or segment tree
+- the operation is not invertible, such as minimum without extra structure
+- overflow or numeric precision would break the accumulated value
 
 ## Terminology clues
 
-- subarray sum
+These prompt words often point toward this concept:
+
 - range sum
-- between i and j
-- prefix
+- subarray sum
 - cumulative
-- modulo
-- divisible by
+- prefix
+- running total
+- queries
+- difference of sums
+- number of subarrays
 
 ## Problems that use it
 
-- [303. Range Sum Query Immutable](../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
-- [560. Subarray Sum Equals K](../coding-problems/sliding-window/560-subarray-sum-equals-k/)
+- [42. Trapping Rain Water](../coding-problems/two-pointers/042-trapping-rain-water/)
 - [238. Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/)
-- [1010. Pairs of Songs Divisible by 60](../coding-problems/arrays-and-hashing/1010-pairs-of-songs-divisible-by-60/)
+- [303. Range Sum Query - Immutable](../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
+- [560. Subarray Sum Equals K](../coding-problems/sliding-window/560-subarray-sum-equals-k/)
+- [1010. Pairs of Songs With Total Durations Divisible by 60](../coding-problems/arrays-and-hashing/1010-pairs-of-songs-divisible-by-60/)
 
 ## Related concepts
 

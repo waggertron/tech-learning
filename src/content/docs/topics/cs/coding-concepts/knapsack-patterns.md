@@ -5,48 +5,71 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 ## Tactic
 
-Knapsack patterns track what can be achieved after considering each item. The transition either uses the item or skips it.
+Knapsack patterns model decisions as choose or skip under a capacity, target, or budget. Each item asks whether it enters the solution, and the state records the remaining or used capacity.
+
+The invariant is that after processing some prefix of items, the DP state records the best value or feasibility for each capacity. For 0/1 knapsack, each item can be used once. For unbounded knapsack, the same item can be reused.
+
+The direction of the capacity loop carries meaning. In 0/1 knapsack, iterate capacity backward so the current item is not reused in the same round. In unbounded knapsack, iterate forward when reuse is allowed.
 
 ## Value
 
-The value is taming combinatorial choice. Instead of enumerating all subsets, states summarize capacities, sums, or counts.
+The value is converting exponential subset choice into a table indexed by item and capacity. This gives a systematic way to solve partition, target sum, and coin-style problems.
+
+### Direct complexity example
+
+- **Brute force:** Enumerate all subsets of `n` items: $O(2^n)$ time and $O(n)$ recursion depth.
+- **With this tactic:** Use DP over items and target capacity: $O(nC)$ time, where `C` is the capacity or target value.
+- **Space:** A full table uses $O(nC)$ space. A one-dimensional capacity array often reduces it to $O(C)$ space.
 
 ## Challenges this solves
 
-- subset sum
-- partition into equal sums
+- partition equal subset sum
+- target sum
+- coin change variants
 - minimum coins
-- count combinations
-- assign signs to hit target
+- bounded and unbounded choices
 
 ## When to use it
 
-Use it when each item can be included, excluded, or used a limited number of times under a capacity-like constraint.
+Use this tactic when these conditions are true:
+
+- each item can be chosen or skipped
+- there is a target sum, capacity, or budget
+- the order of chosen items does not matter unless stated
+- the constraints make pseudo-polynomial time acceptable
 
 ## When not to use it
 
-Do not use knapsack when item order matters in the answer. Sequence DP or backtracking may be the real model.
+Reach for a different tactic when these warning signs appear:
+
+- capacity is too large for $O(nC)$
+- item order matters and the state needs position ordering
+- fractional choices are allowed and greedy sorting may fit
+- there is no reusable target or capacity dimension
 
 ## Terminology clues
 
-- choose items
-- target sum
-- capacity
+These prompt words often point toward this concept:
+
 - subset
 - partition
+- target sum
+- capacity
 - coins
-- can make amount
+- choose or skip
+- 0/1
+- unbounded
 
 ## Problems that use it
 
+- [322. Coin Change](../coding-problems/1d-dynamic-programming/322-coin-change/)
 - [416. Partition Equal Subset Sum](../coding-problems/1d-dynamic-programming/416-partition-equal-subset-sum/)
 - [494. Target Sum](../coding-problems/2d-dynamic-programming/494-target-sum/)
-- [322. Coin Change](../coding-problems/1d-dynamic-programming/322-coin-change/)
 - [518. Coin Change II](../coding-problems/2d-dynamic-programming/518-coin-change-ii/)
 
 ## Related concepts
