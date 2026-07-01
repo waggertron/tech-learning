@@ -21,6 +21,8 @@ Every problem page includes:
 
 Each approach has working Python, line-labeled code, and a per-line complexity table. Many pages also include a **How to recognize this pattern** section covering the signal in the problem statement, a counterexample that breaks the tempting-but-wrong approach, and a table of related problems with the same shape.
 
+For the reusable tactics behind those solutions, use [Coding Concepts](../coding-concepts/). Those pages explain ideas like two pointers, sliding windows, greedy exchange arguments, memoization, graph traversal, heaps, and monotonic structures, then link back to representative problems.
+
 ## Categories
 
 | Category | Problems |
@@ -77,3 +79,4 @@ Complexity sections use standard Big-O notation. `n` is the input size unless ot
 
 - [Data structures](../data-structures/), the longer-form reference for the structures used in every solution.
 - [Named algorithms](../named-algorithms/), the canonical algorithms that show up inside these problems: Dijkstra, Tarjan, KMP, Floyd's, and more.
+- [Coding concepts](../coding-concepts/), the approach vocabulary behind the problem solutions.

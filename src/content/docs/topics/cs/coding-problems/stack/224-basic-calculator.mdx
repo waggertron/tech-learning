@@ -185,8 +185,14 @@ See ): pop -> prev_result=9, prev_sign=+1
 - A leading `'-'` (like `"-(3+5)"`) works automatically: `sign` starts at `+1`, then `'-'` sets `sign = -1` before the `'('`. On `'('`, that `-1` gets saved as `prev_sign`. On `')'`, `result = 0 + (-1)*8 = -8`.
 - No multiplication or division here; if those appear (LC 227), the stack approach needs shunting-yard or operator precedence handling.
 
+
 ## Related topics
 
 - [Evaluate Reverse Polish Notation](./150-evaluate-reverse-polish-notation/), postfix evaluation, simpler operator handling
 - [Decode String](./394-decode-string/), same stack-saves-context pattern for nested brackets
 - [Stacks](../../../data-structures/stacks/), underlying data structure
+
+## Related concepts
+
+- [Stack Parsing](../../coding-concepts/stack-parsing/), the last open, first closed model for nested syntax and reversible operations.
+- [Simulation](../../coding-concepts/simulation/), the explicit state model for executing rules exactly while keeping cases organized.

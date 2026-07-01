@@ -1,12 +1,13 @@
 ---
 title: Computer Science
-description: Computer science fundamentals, data structures, NeetCode 150 walkthroughs, geospatial, routing, and software architecture patterns.
+description: "Computer science fundamentals, data structures, NeetCode 150 walkthroughs, geospatial, routing, and software architecture patterns."
 ---
 
 ## Topics
 
 - [Data Structures](./data-structures/), the top 10 data structures that show up in coding interviews, with time complexity tables, 5 common DSA uses, and Python code for each
 - [Coding Problems](./coding-problems/), walkthroughs of all 150 NeetCode problems across 18 categories, each with brute-force, improved, and optimal approaches in Python
+- [Coding Concepts](./coding-concepts/), approach tactics behind coding problems: two pointers, sliding windows, greedy proofs, DP states, graph traversal, monotonic structures, and more
 - [Haversine Distance](./haversine-distance/), great-circle distance between lat/lon points, with Python/SQL/JavaScript implementations and notes on when to upgrade to Vincenty or Karney
 - [Vehicle Routing Problem](./vehicle-routing/), CVRP, VRPTW, pickup-and-delivery, and what Google OR-Tools actually does
 - [Functional Core, Imperative Shell](./functional-core-imperative-shell/), Gary Bernhardt's architecture pattern: pure logic at the center, I/O at the edges
@@ -20,4 +21,4 @@ description: Computer science fundamentals, data structures, NeetCode 150 walkth
 
 ## How the topics connect
 
-Each LeetCode problem page links back to the relevant data-structure pages under [Related data structures](./data-structures/). Each data-structure page lists the problems that exercise it, grouped by NeetCode category. The geospatial topics (haversine + VRP) share the distance-matrix foundation, VRP solvers typically consume haversine output.
+Each LeetCode problem page links back to neighboring problems and, when useful, to the approach pages under [Coding Concepts](./coding-concepts/). Concept pages link back to representative problems so a learner can drill the tactic directly. The geospatial topics (haversine + VRP) share the distance-matrix foundation, VRP solvers typically consume haversine output.

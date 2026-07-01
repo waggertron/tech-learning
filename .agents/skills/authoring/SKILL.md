@@ -18,6 +18,7 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
 - User asks to expand, deepen, or improve a bare-bones entry.
 - User asks for more implementations, alternate approaches, variants, or language examples.
 - User provides source material and asks to turn it into an entry or add it to an existing entry.
+- User asks to add, update, or link coding-problem concepts such as two pointers, greedy algorithms, memoization, graph traversal, or dynamic programming.
 - Any edit in `src/content/docs/`.
 
 ## Do (in order)
@@ -28,6 +29,7 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    - **Folder subtopic** -> `src/content/docs/topics/<category>/<topic>/<subtopic>/index.md` (only when it needs images or children)
    - **Post** -> `src/content/docs/posts/YYYY-MM-DD-<slug>.md`
    - **Coding problem** -> `src/content/docs/topics/cs/coding-problems/<category>/<NNN>-<slug>.mdx` + sibling `.py` file
+   - **Coding concept** -> `src/content/docs/topics/cs/coding-concepts/<slug>.md`
 
 2. **Write frontmatter with the correct schema:**
 
@@ -82,6 +84,29 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    ---
    ```
 
+   **Coding concept:**
+   ```yaml
+   ---
+   title: Concept Name
+   description: "One sentence explaining the tactic and what it helps the reader recognize."
+   parent: coding-concepts
+   tags: [coding-concepts, algorithms, interviews]
+   status: draft
+   created: YYYY-MM-DD
+   updated: YYYY-MM-DD
+   ---
+   ```
+
+   **Coding concept body structure:**
+   - `## Tactic` -- what move the learner should make.
+   - `## Value` -- what the tactic buys in time, space, clarity, or proof.
+   - `## Challenges this solves` -- common problem shapes.
+   - `## When to use it` -- conditions that make the tactic fit.
+   - `## When not to use it` -- tempting nearby cases where it fails.
+   - `## Terminology clues` -- prompt words and phrases that point to the tactic.
+   - `## Problems that use it` -- representative links into `../coding-problems/...`.
+   - `## Related concepts` -- neighboring concept pages.
+
    Coding problem pages also need this import block immediately after the frontmatter:
    ```
    import PythonRepl from '../../../../../../components/PythonRepl.astro';
@@ -101,7 +126,8 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    - `## Approach N: <Name>` for any additional implementation that teaches a distinct tradeoff, invariant, optimization, language pattern, or follow-up variant. There is no hard cap at three approaches.
    - `## How to recognize this pattern` (optional but encouraged when a problem has a non-obvious signal) -- see below
    - `## Key takeaways` -- 2-4 bullets on what to remember
-   - `## Related topics` -- 2-5 relative links to sibling problems and data-structure pages
+   - `## Related topics` -- 2-5 relative links to sibling problems, category pages, and close neighboring entries
+   - `## Related concepts` -- required bottom section with 2-5 relative links to the underlying ideas, named algorithms, data structures, or patterns that explain why the solution works
 
    **NeetCode 150 vs bonus problems:** both live in `coding-problems/<category>/`. Include `neetcode-150` in tags only for problems from the NeetCode 150 list. Bonus problems omit that tag. The category index should list them separately ("Bonus problems" subsection).
 
@@ -118,6 +144,8 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    **Multiple implementations:** Prefer at least the canonical implementation plus meaningful alternatives when they exist. For coding problems, the current repo commonly uses Python, TypeScript, and Go tabs for each approach. Those language tabs are language variants of the same approach, not the approach limit. Add more than three approaches when the extra versions are pedagogically useful, for example brute force, sorting, hash-based, two-pointer, DP table, space-optimized DP, recursive, iterative, state-machine, heap-based, or follow-up-constrained variants. Do not add filler approaches that only rename variables or repeat the same idea.
 
    **Minimal vs optional explanation:** The minimum standard for an implementation is tested code, the core idea, complexity, and enough explanation to know when to use it. Optional deeper explanation is welcome when it teaches the invariant, proof, recurrence, edge cases, or interview reasoning. Use normal Markdown in those sections, including tables, lists, code fences, and KaTeX math such as `$O(n^2)$` or `$$T(i) = \sum_{j=i+1}^{n-1} T(j)$$`. Keep optional sections clearly labeled with headings such as `### Further explanation` so the page can support both quick review and deep study.
+
+   **Related concepts:** Every coding problem page needs this final section with at least two concept links, usually 2-5 total. Use it for concepts, not just more LeetCode neighbors: named algorithms, data structures, design patterns, complexity tools, proof ideas, or problem-solving patterns. Prefer links to `../../coding-concepts/<slug>/` from coding-problem pages. Keep the entries short and concrete, e.g. "why this concept matters for this problem." If the page already has `## Related topics`, keep both sections: related topics connect nearby pages, related concepts name the transferable ideas.
 
 3. **Quote every description**, default to double quotes around the description value. This prevents the three YAML bugs that have caused every build failure in this repo:
    - Description starts with a backtick.

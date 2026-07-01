@@ -25,6 +25,10 @@ templates/             # scaffolding templates (not part of the built site)
 │   ├── subtopic.md             # flat subtopic template
 │   └── subtopic-folder/
 │       └── index.md            # folder subtopic template
+├── coding-problem/
+│   └── problem.mdx             # CS coding problem template
+├── coding-concept/
+│   └── concept.md              # CS coding concept template
 └── post.md
 ```
 
@@ -49,6 +53,14 @@ Two shapes, pick based on what you need:
 - **Folder** (has images, code samples in files, or children): `cp -r templates/topic/subtopic-folder src/content/docs/topics/<category>/<topic>/<subtopic>`
 
 Update frontmatter, set `parent` to the parent topic's slug so breadcrumbs work.
+
+### Add a coding problem
+
+Copy `templates/coding-problem/problem.mdx` to `src/content/docs/topics/cs/coding-problems/<category>/<NNN>-<slug>.mdx`, then add the sibling solution files. Keep `## Related concepts` and link at least two broader CS idea pages.
+
+### Add a coding concept
+
+Copy `templates/coding-concept/concept.md` to `src/content/docs/topics/cs/coding-concepts/<slug>.md`. Link representative problems from the concept page, then link back from those problem pages under `## Related concepts`.
 
 ### Add a post
 

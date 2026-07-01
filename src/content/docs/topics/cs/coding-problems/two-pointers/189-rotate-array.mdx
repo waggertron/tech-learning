@@ -308,9 +308,15 @@ Every element is written exactly once across all cycles, so `count` reaches `n` 
 - Cyclic replacement also hits $O(1)$ space but needs $\gcd(n, k)$ cycle starts, so it carries more bookkeeping for no asymptotic gain.
 - The naive "rotate one step `k` times" is $O(n \cdot k)$ and times out at the constraint limits.
 
+
 ## Related topics
 
 - [Two Pointers](./index/)
 - [443. String Compression](./443-string-compression/)
 - [125. Valid Palindrome](./125-valid-palindrome/)
 - [167. Two Sum II](./167-two-sum-ii/)
+
+## Related concepts
+
+- [Array Scans](../../coding-concepts/array-scans/), the linear pass habit of carrying just enough state while reading each item once.
+- [Two Pointers](../../coding-concepts/two-pointers/), the two index invariant that shrinks or coordinates positions without nested loops.

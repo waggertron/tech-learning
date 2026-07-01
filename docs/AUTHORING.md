@@ -27,6 +27,7 @@ Display title: **"Here Be Dragons"** (in `astro.config.mjs` and `src/content/doc
 - **Topic** = a folder with `index.md` as the hub.
 - **Flat subtopic** = `<subtopic>.md` inside the topic folder. Use when it's a single page with no assets.
 - **Folder subtopic** = `<subtopic>/index.md` inside the topic folder. Use when it has images, child pages, or code-sample files.
+- **Coding concept** = `topics/cs/coding-concepts/<slug>.md`, a learner-facing tactic page that coding problems can link to from `## Related concepts`.
 
 Current categories: `ai/`, `cs/`, `web/`, `testing/`, `ops/`. Adding a new category is fine, just add `topics/<new>/index.md` as a landing page.
 
@@ -171,6 +172,48 @@ $$
 
 Use headings like `### Further explanation` so quick readers can skip the deeper material.
 
+### Coding problem related concepts
+
+Every coding problem page ends with a **Related concepts** section. Use at least two links, usually 2-5 total, so the page points back to the transferable tactics behind the solution rather than only another entry in the same LeetCode category.
+
+This section is for transferable ideas:
+
+- named algorithms, such as BFS, DFS, Dijkstra, Kadane, KMP, or quickselect
+- data structures, such as heaps, graphs, tries, queues, stacks, and hash maps
+- design or proof ideas, such as invariants, monotonicity, recurrence relations, or amortized analysis
+- problem-solving patterns, such as sliding windows, two pointers, top-K streaming, or state compression
+
+Keep `## Related topics` for nearby pages and sibling problems. Put `## Related concepts` after it so the final section names the ideas the reader should carry into other problems.
+
+```markdown
+## Related topics
+
+- [Jump Game II](./045-jump-game-ii/)
+- [Gas Station](./134-gas-station/)
+
+## Related concepts
+
+- [Greedy algorithms](../../coding-concepts/greedy-algorithms/), the local-choice invariant behind the reachability scan
+- [Dynamic programming](../../coding-concepts/dynamic-programming/), the fuller state-space model that greedy can collapse when the invariant holds
+```
+
+### Coding concept pages
+
+Coding concept pages live under `src/content/docs/topics/cs/coding-concepts/`. They are the approach vocabulary that lets a problem page say "this is sliding window plus monotonic queue" without re-explaining both ideas inline.
+
+Use `templates/coding-concept/concept.md` when adding a new concept. Keep the section shape fixed:
+
+1. **Tactic**, the move the learner should make.
+2. **Value**, what the tactic buys in time, space, clarity, or proof.
+3. **Challenges this solves**, the problem families it naturally handles.
+4. **When to use it**, the conditions that make the tactic fit.
+5. **When not to use it**, the nearby cases where the tactic is tempting but wrong.
+6. **Terminology clues**, prompt words that should put the concept in working memory.
+7. **Problems that use it**, representative links into `../coding-problems/...`.
+8. **Related concepts**, neighboring concept links.
+
+Overlap is expected. A problem can link to multiple concept pages when each link explains a different part of the solution.
+
 ### Using source material
 
 When a user provides an editorial, article, answer, or pasted explanation, treat it as research input. Do not copy the prose. Extract the ideas, preserve the facts and algorithms, then write original explanations in this site's voice.
@@ -260,7 +303,7 @@ No Conventional Commits prefix required; the git log is readable without one.
 
 ## When to use `scripts/new-topic.sh` or `new-post.sh`
 
-The `npm run new:topic -- <category> <slug>` and `npm run new:post -- <slug>` scripts copy a template and stamp today's date. Good for empty starts.
+The `npm run new:topic -- <category> <slug>` and `npm run new:post -- <slug>` scripts copy a template and stamp today's date. Good for empty starts. Coding problem entries start from `templates/coding-problem/problem.mdx` and then add sibling solution files. Coding concept entries start from `templates/coding-concept/concept.md`.
 
 In practice, most of this session bypassed the scripts, we pasted content directly into `Write` tool calls with the right frontmatter. Either works.
 
@@ -284,6 +327,7 @@ Snapshot as of commit `e34c730` (April 2026). Full index lives in `src/content/d
 
 - data-structures (10 structures: arrays, strings, hash-tables, linked-lists, stacks, queues, heaps, binary-trees, graphs, tries)
 - coding-problems (NeetCode 150 plus bonus LeetCode problems across 18 categories)
+- coding-concepts (approach tactics such as two pointers, sliding window, greedy, DP, graph traversal, and monotonic structures)
 - haversine-distance
 - vehicle-routing (capacitated, time-windows, pickup-and-delivery, solution-approaches)
 - functional-core-imperative-shell
@@ -328,7 +372,7 @@ Condensed observations that should survive.
 ### About the workflow
 
 - **Plan in advance for series.** An 8-part series takes an hour+ of focused writing; scope up front.
-- **Reuse templates.** The topic/posts in `templates/` are a real time-saver; use them for new content.
+- **Reuse templates.** The topic, post, coding-problem, and coding-concept scaffolds in `templates/` are a real time-saver. Use them for new content.
 - **Commit checkpoints for long sessions.** A session that writes 30 files should commit 3–5 times, not once at the end.
 - **The README has scaffolding scripts** (`npm run new:topic`, `npm run new:post`). Use them when starting from scratch.
 

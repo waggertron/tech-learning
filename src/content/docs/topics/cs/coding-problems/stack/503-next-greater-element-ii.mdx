@@ -190,8 +190,14 @@ Final: [2, -1, 2]
 - Only push during the first pass (`i < n`). The second pass only processes existing stack entries, not adds new ones. This keeps the total push count at n.
 - Elements left on the stack after both passes have no greater element anywhere in the circle: their default `-1` stands.
 
+
 ## Related topics
 
 - [Next Greater Element I](./496-next-greater-element-i/), non-circular version, hash-map lookup
 - [Daily Temperatures](./739-daily-temperatures/), same monotonic stack pattern
 - [Stacks](../../../data-structures/stacks/), underlying data structure
+
+## Related concepts
+
+- [Monotonic Stack](../../coding-concepts/monotonic-stack/), the ordered stack pattern for nearest greater, nearest smaller, and spans.
+- [Array Scans](../../coding-concepts/array-scans/), the linear pass habit of carrying just enough state while reading each item once.

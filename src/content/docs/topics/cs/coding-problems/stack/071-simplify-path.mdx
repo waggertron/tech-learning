@@ -161,8 +161,14 @@ k is at most n (each char could be its own component), so both $O(k)$ terms coll
 - The `'..'` rule only pops if the stack is non-empty: attempting to go above root is silently ignored, matching Unix behavior.
 - Joining with `'/'` and prepending a single `'/'` handles the root case (`stack == []` gives `"/" + "" == "/"`).
 
+
 ## Related topics
 
 - [Valid Parentheses](./020-valid-parentheses/), another stack-as-pending-context problem
 - [Decode String](./394-decode-string/), nested structure resolved with a stack
 - [Stacks](../../../data-structures/stacks/), underlying data structure
+
+## Related concepts
+
+- [Stack Parsing](../../coding-concepts/stack-parsing/), the last open, first closed model for nested syntax and reversible operations.
+- [Simulation](../../coding-concepts/simulation/), the explicit state model for executing rules exactly while keeping cases organized.

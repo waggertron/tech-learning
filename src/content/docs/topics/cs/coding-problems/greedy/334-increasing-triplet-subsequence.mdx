@@ -312,6 +312,7 @@ This generalizes weakly: for length-2 just track a running minimum. For length-4
 - The two-variable trick works only for length exactly 3. Use patience sort for arbitrary LIS length.
 - Edge cases: `n < 3` is always false; all-equal arrays are false because the problem requires strict inequality.
 
+
 ## Related topics
 
 - [Greedy](./index/)
@@ -319,3 +320,8 @@ This generalizes weakly: for length-2 just track a running minimum. For length-4
 - [53. Maximum Subarray](./053-maximum-subarray/)
 - [300. Longest Increasing Subsequence](../1d-dynamic-programming/300-longest-increasing-subsequence/)
 - [678. Valid Parenthesis String](./678-valid-parenthesis-string/)
+
+## Related concepts
+
+- [Greedy Algorithms](../../coding-concepts/greedy-algorithms/), the local choice pattern protected by an invariant about the best reachable future.
+- [Array Scans](../../coding-concepts/array-scans/), the linear pass habit of carrying just enough state while reading each item once.
