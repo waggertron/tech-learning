@@ -1,11 +1,11 @@
 ---
 title: "45. Jump Game II (Medium)"
-description: Minimum jumps to reach the last index.
+description: "Minimum jumps to reach the last index."
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, bfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-01
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -45,6 +45,41 @@ LeetCode 45 · [Link](https://leetcode.com/problems/jump-game-ii/) · *Medium*
     <GoRepl code={practiceCodeGo} id="jump-game-ii-go" />
   </TabItem>
 </Tabs>
+
+## Naive starting point: try every jump
+
+The most direct version is recursive: from index `i`, try every legal next jump and keep the path that uses the fewest jumps.
+
+```python
+def jump(nums):
+    n = len(nums)
+
+    def dfs(i):
+        if i >= n - 1:
+            return 0
+
+        best = float("inf")
+        for step in range(1, nums[i] + 1):
+            best = min(best, 1 + dfs(i + step))
+
+        return best
+
+    return dfs(0)
+```
+
+For `nums = [2, 3, 1, 1, 4]`, index `0` can jump to index `1` or index `2`.
+
+```text
+dfs(0) = 1 + min(dfs(1), dfs(2))
+```
+
+From index `1`, one more jump can reach index `4`, so `dfs(1) = 1`. From index `2`, the path is `2 -> 3 -> 4`, so `dfs(2) = 2`.
+
+```text
+dfs(0) = 1 + min(1, 2) = 2
+```
+
+This captures the problem correctly, but it repeats work. The same index can be reached through many previous choices, so the recursion tree grows fast. Memoization turns it into a DP. The optimal greedy solution goes one step further: it notices that all indices reachable with the same jump count form a range.
 
 ## Approach 1: DP, min jumps to reach each index
 
@@ -252,7 +287,7 @@ def jump(nums):
     jumps = 0                                   # L1: O(1)
     current_end = 0                             # L2: O(1)
     farthest = 0                                # L3: O(1)
-    for i in range(1, len(nums)):               # L4: single pass, n-1 iterations
+    for i in range(len(nums) - 1):              # L4: scan every index except the destination
         farthest = max(farthest, i + nums[i])   # L5: O(1) per step
         if i == current_end:                    # L6: O(1) per step
             jumps += 1
@@ -266,7 +301,7 @@ function jump(nums: number[]): number {
     let jumps = 0;                                          // L1: O(1)
     let currentEnd = 0;                                    // L2: O(1)
     let farthest = 0;                                      // L3: O(1)
-    for (let i = 1; i < nums.length; i++) {                // L4: single pass, n-1 iterations
+    for (let i = 0; i < nums.length - 1; i++) {            // L4: scan every index except the destination
         farthest = Math.max(farthest, i + nums[i]);        // L5: O(1) per step
         if (i === currentEnd) {                            // L6: O(1) per step
             jumps++;
@@ -283,7 +318,7 @@ func jump(nums []int) int {
     jumps := 0                                              // L1: O(1)
     currentEnd := 0                                        // L2: O(1)
     farthest := 0                                          // L3: O(1)
-    for i := 1; i < len(nums); i++ {                       // L4: single pass, n-1 iterations
+    for i := 0; i < len(nums)-1; i++ {                     // L4: scan every index except the destination
         if i+nums[i] > farthest { farthest = i + nums[i] } // L5: O(1) per step
         if i == currentEnd {                               // L6: O(1) per step
             jumps++
@@ -307,7 +342,7 @@ func jump(nums []int) int {
 | L5 (update farthest) | $O(1)$ | n-1 | $O(n)$ |
 | L6 (commit jump) | $O(1)$ | at most n-1 | $O(n)$ |
 
-Every line executes exactly once per index. The whole algorithm is a single linear scan with $O(1)$ work per step.
+The scan includes index `0`, because the first jump range comes from `nums[0]`. It stops before the destination, because reaching the last index already ends the trip. Every line executes once per scanned index, with $O(1)$ work per step.
 
 **Complexity**
 - **Time:** $O(n)$, driven by L4 (single linear scan).
@@ -315,6 +350,55 @@ Every line executes exactly once per index. The whole algorithm is a single line
 
 ### Intuition
 This is BFS collapsed into a linear scan: the "frontier" of a BFS level is implicit in the window `[prev_end, current_end]`. Each time the walking index reaches `current_end`, we "commit" to another jump and extend to `farthest`.
+
+### Walkthrough
+
+Use `nums = [2, 3, 1, 1, 4]`.
+
+```text
+index:  0  1  2  3  4
+nums:   2  3  1  1  4
+```
+
+At index `0`, `nums[0] = 2`, so one jump can reach indices `1` and `2`.
+
+```text
+0 jumps: [0]
+1 jump:  [1, 2]
+```
+
+The question becomes: from anywhere in `[1, 2]`, how far can the next jump reach?
+
+```text
+from index 1: 1 + nums[1] = 4
+from index 2: 2 + nums[2] = 3
+```
+
+The best next boundary is `4`, so two jumps can reach the destination.
+
+```text
+0 jumps: [0]
+1 jump:  [1, 2]
+2 jumps: [3, 4]
+```
+
+The algorithm tracks only the right edge of those ranges:
+
+- `current_end`: the farthest index reachable with the current number of committed jumps.
+- `farthest`: the farthest index reachable with one more jump from anything scanned in the current range.
+- `jumps`: the number of completed range expansions.
+
+When `i == current_end`, the current range is fully scanned. Spend one jump and move `current_end` to `farthest`.
+
+## How to recognize this pattern
+
+- **Minimum number of jumps**: Minimum moves with equal cost points to BFS.
+- **Forward jump**: Edges only move right, so a left-to-right scan can replace a queue.
+- **Maximum length from each index**: Each index opens a range of next positions, not one fixed next state.
+- **Guaranteed reachable**: The solution can focus on the minimum count, not failure cases.
+- **`n <= 10^4`**: Exponential recursion is out. A quadratic DP is understandable, but the array shape hints that a range-based scan exists.
+
+The recognition leap is that the BFS frontier is contiguous. All positions reachable in one jump form a range. All positions reachable in two jumps form the next range. The greedy scan keeps the best next right edge while walking the current range.
 
 **Try this approach:**
 
@@ -349,7 +433,7 @@ func jump(nums []int) int {
     jumps := 0
     currentEnd := 0
     farthest := 0
-    for i := 1; i < len(nums); i++ {
+    for i := 0; i < len(nums)-1; i++ {
         if i+nums[i] > farthest { farthest = i + nums[i] }
         if i == currentEnd {
             jumps++
@@ -369,7 +453,7 @@ def jump(nums):
     jumps = 0
     current_end = 0
     farthest = 0
-    for i in range(1, len(nums)):
+    for i in range(len(nums) - 1):
         farthest = max(farthest, i + nums[i])
         if i == current_end:
             jumps += 1
@@ -394,7 +478,7 @@ function jump(nums: number[]): number {
     let jumps = 0;
     let currentEnd = 0;
     let farthest = 0;
-    for (let i = 1; i < nums.length; i++) {
+    for (let i = 0; i < nums.length - 1; i++) {
         farthest = Math.max(farthest, i + nums[i]);
         if (i === currentEnd) {
             jumps++;
