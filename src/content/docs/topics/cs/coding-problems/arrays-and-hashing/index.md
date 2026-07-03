@@ -26,9 +26,10 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 
 **Bonus problems (same pattern, outside NeetCode 150):**
 
+- [205. Isomorphic Strings (Easy)](./205-isomorphic-strings/)
 - [303. Range Sum Query - Immutable (Easy)](./303-range-sum-query-immutable/)
 - [349. Intersection of Two Arrays (Easy)](./349-intersection-of-two-arrays/)
-- [387. First Unique Character in a String (Easy)](./387-first-unique-character-in-a-string/)
+- [387. First Unique Character in a String (Easy)](./387-first-unique-character/)
 - [454. 4Sum II (Medium)](./454-4sum-ii/)
 - [459. Repeated Substring Pattern (Easy)](./459-repeated-substring-pattern/)
 - [1010. Pairs of Songs With Total Durations Divisible by 60 (Medium)](./1010-pairs-of-songs-divisible-by-60/)

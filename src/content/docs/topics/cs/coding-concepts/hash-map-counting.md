@@ -74,6 +74,7 @@ These prompt words often point toward this concept:
 - [128. Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/)
 - [138. Copy List with Random Pointer](../coding-problems/linked-list/138-copy-list-with-random-pointer/)
 - [146. LRU Cache](../coding-problems/linked-list/146-lru-cache/)
+- [205. Isomorphic Strings](../coding-problems/arrays-and-hashing/205-isomorphic-strings/)
 - [217. Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/)
 - [242. Valid Anagram](../coding-problems/arrays-and-hashing/242-valid-anagram/)
 - [347. Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/)

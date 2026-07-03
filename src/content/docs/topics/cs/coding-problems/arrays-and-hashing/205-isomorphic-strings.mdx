@@ -1,0 +1,175 @@
+---
+title: "205. Isomorphic Strings (Easy)"
+description: "Check whether two strings have the same character pattern by enforcing a one-to-one mapping in both directions."
+parent: arrays-and-hashing
+tags: [leetcode, strings, hash-tables, easy]
+status: draft
+created: 2026-07-03
+updated: 2026-07-03
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './205-isomorphic-strings.py?raw';
+
+## Problem
+
+Given two strings `s` and `t`, determine whether they are isomorphic.
+
+Two strings are isomorphic when every character in `s` can be replaced to form `t`, while preserving order. All copies of the same character must use the same replacement. No two different characters in `s` may map to the same character in `t`, but a character may map to itself.
+
+**Examples**
+
+- `s = "egg"`, `t = "add"` -> `true`, because `e -> a` and `g -> d`.
+- `s = "f11"`, `t = "b23"` -> `false`, because `1` would need to map to both `2` and `3`.
+- `s = "paper"`, `t = "title"` -> `true`.
+
+**Constraints**
+
+- `1 <= s.length <= 5 * 10^4`
+- `t.length == s.length`
+- `s` and `t` contain valid ASCII characters.
+
+LeetCode 205 - [Link](https://leetcode.com/problems/isomorphic-strings/) - *Easy*
+
+## Try it yourself
+
+<PythonRepl code={practiceCode} id="isomorphic-strings" />
+
+## Approach 1: Brute force, compare prior positions
+
+The direct check is to ask this question for every pair of positions: if `s[i]` and `s[j]` are the same, then `t[i]` and `t[j]` must also be the same. The reverse must also hold, because two different characters in `s` cannot collapse into one character in `t`.
+
+```python
+def is_isomorphic(s: str, t: str) -> bool:
+    for i in range(len(s)):                         # L1: n choices for i
+        for j in range(i + 1, len(s)):              # L2: up to n later positions
+            same_s = s[i] == s[j]                  # L3: O(1)
+            same_t = t[i] == t[j]                  # L4: O(1)
+            if same_s != same_t:                   # L5: pattern mismatch
+                return False
+    return True
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s) = len(t).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L2-L5 (pair checks)** | **$O(1)$** | **up to n(n - 1) / 2** | **$O(n^2)$** |
+
+This is correct, but it does not fit the constraint of up to 50,000 characters.
+
+**Complexity**
+
+- **Time:** $O(n^2)$, driven by comparing pairs of positions.
+- **Space:** $O(1)$.
+
+## Approach 2: Two maps for a bijection
+
+Track the mapping in both directions:
+
+- `s_to_t[ch_s] = ch_t` says every occurrence of `ch_s` must become the same `ch_t`.
+- `t_to_s[ch_t] = ch_s` says `ch_t` cannot be reused by a different source character.
+
+The second map is what catches cases like `s = "ab"`, `t = "aa"`. A one-way map from `a -> a` and `b -> a` would look locally consistent for each source character, but it violates the "no two characters may map to the same character" rule.
+
+```python
+def is_isomorphic(s: str, t: str) -> bool:
+    s_to_t: dict[str, str] = {}              # L1: source -> target claims
+    t_to_s: dict[str, str] = {}              # L2: target -> source claims
+
+    for ch_s, ch_t in zip(s, t):             # L3: n paired characters
+        if ch_s in s_to_t:                   # L4: has source been mapped?
+            if s_to_t[ch_s] != ch_t:         # L5: same source, new target
+                return False
+        elif ch_t in t_to_s:                 # L6: target already claimed
+            return False
+        else:
+            s_to_t[ch_s] = ch_t              # L7: record both directions
+            t_to_s[ch_t] = ch_s              # L8: enforce one-to-one mapping
+
+    return True
+```
+
+**Where the time goes, line by line**
+
+*Variables: n = len(s) = len(t), k = number of distinct characters.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (maps) | $O(1)$ | 1 | $O(1)$ |
+| **L3 (paired scan)** | **$O(1)$ body** | **n** | **$O(n)$** |
+| L4-L8 (hash lookups and writes) | $O(1)$ average | up to n | $O(n)$ |
+
+Each character pair is processed once. Hash map lookups and writes are constant time on average.
+
+**Complexity**
+
+- **Time:** $O(n)$, driven by the single paired scan.
+- **Space:** $O(k)$, where `k` is the number of distinct characters stored in the maps. With ASCII input, this is bounded by a fixed alphabet size.
+
+## Approach 3: Pattern signatures
+
+Another way to see the problem is that isomorphic strings have the same first-occurrence pattern.
+
+For `"paper"`, the pattern is `[0, 1, 0, 3, 4]`.
+For `"title"`, the pattern is `[0, 1, 0, 3, 4]`.
+
+Both strings introduce their first character at index 0, their second new character at index 1, repeat the first character at index 2, then introduce new characters at indexes 3 and 4.
+
+```python
+def signature(word: str) -> list[int]:
+    first_seen: dict[str, int] = {}          # L1: char -> first index
+    pattern: list[int] = []                  # L2: output signature
+
+    for i, ch in enumerate(word):            # L3: n characters
+        if ch not in first_seen:             # L4: first time seeing ch
+            first_seen[ch] = i               # L5: remember first index
+        pattern.append(first_seen[ch])       # L6: append canonical id
+
+    return pattern
+
+
+def is_isomorphic(s: str, t: str) -> bool:
+    return signature(s) == signature(t)      # L7: build both and compare
+```
+
+**Complexity**
+
+- **Time:** $O(n)$, one scan per string plus one signature comparison.
+- **Space:** $O(n)$ for the two signature arrays.
+
+This version is compact and easy to reason about, but the two-map bijection uses less extra memory because it does not store a full pattern array.
+
+## How to recognize this pattern
+
+- **The signal:** The prompt says "all occurrences" of a character must be replaced consistently, and "no two characters may map to the same character."
+- **The tempting wrong approach:** Track only `s -> t`.
+- **The counterexample:** `s = "ab"`, `t = "aa"`.
+- **Why it fails:** Both source characters can individually map to `a`, but the target character has been claimed twice.
+- **The mental model:** This is not just a mapping. It is a one-to-one mapping, so check both directions.
+
+| Problem | Invariant to preserve |
+| --- | --- |
+| [Valid Anagram](./242-valid-anagram/) | Characters have equal final frequencies |
+| [Group Anagrams](./049-group-anagrams/) | Strings with the same frequency signature share a group |
+| [First Unique Character in a String](./387-first-unique-character/) | A character's count determines whether its position can answer |
+
+## Key takeaways
+
+- A one-way map checks consistency for each source character, but it does not prevent target reuse.
+- The target-to-source map enforces the one-to-one part of the replacement rule.
+- Pattern signatures are a useful alternate framing when two sequences must have the same equality structure.
+
+## Related topics
+
+- [Valid Anagram](./242-valid-anagram/), compare two strings by character counts.
+- [Group Anagrams](./049-group-anagrams/), build a canonical key for strings with the same character multiset.
+- [First Unique Character in a String](./387-first-unique-character/), use a character table to answer a string-position question.
+
+## Related concepts
+
+- [Hash Map Counting](../../coding-concepts/hash-map-counting/), the lookup table pattern for frequencies, seen items, and character state.
+- [Array Scans](../../coding-concepts/array-scans/), the linear pass habit of carrying just enough state while reading each item once.
