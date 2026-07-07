@@ -9,54 +9,87 @@ series:
   order: 25
 ---
 
-This is part 25 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What changes when React targets native screens instead of the browser DOM?
+This is part 25 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. React stays, but the platform primitives change.
+React Native applies the React component model to native apps. Expo provides the project tooling, SDK modules, development workflow, and deployment services that make that native React path practical.
 
-## Problem
+## Concept
 
-Expo and React Native is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+React Native renders native platform views instead of browser DOM elements. Expo is a React framework and toolchain for building Android, iOS, and web apps from one JavaScript or TypeScript project.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **React Native**: The React renderer for native mobile interfaces.
+- **Expo**: A framework and platform around React Native for development, native APIs, builds, updates, and deployment.
+- **SDK**: Software development kit, a packaged set of APIs and tools for a platform.
+- **Native view**: A platform UI element such as a text label, image, scroll view, or touch target.
+- **DOM**: Document Object Model, the browser's object representation of a web page.
+
+## Mental model
+
+Think of React Native as React speaking a different host language. Components still describe UI, props still pass data, and state still drives rendering, but the output is native views instead of DOM nodes.
+
+## How it is used
+
+Use Expo for mobile and universal apps that need native screens, device APIs, app store builds, over-the-air updates, push notifications, camera, location, or mobile navigation patterns.
+
+## How to use it
+
+1. Create the project with Expo tooling.
+2. Use React Native primitives such as `View`, `Text`, `Pressable`, `Image`, and `ScrollView`.
+3. Use Expo SDK modules for device APIs instead of browser APIs.
+4. Keep shared React logic in Hooks when it is not tied to DOM or native-only APIs.
+5. Test on real device classes because layout, gestures, permissions, and performance differ from the browser.
+
+## Example: Native screen component
 
 ```tsx
-import { Link } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, View } from "react-native";
 
-export default function HomeScreen() {
+export function HomeScreen({ onStart }: { onStart: () => void }) {
   return (
     <View>
-      <Text>Projects</Text>
-      <Link href="/projects/new" asChild>
-        <Pressable>
-          <Text>Create project</Text>
-        </Pressable>
-      </Link>
+      <Text>Daily checklist</Text>
+      <Pressable onPress={onStart}>
+        <Text>Start</Text>
+      </Pressable>
     </View>
   );
 }
 ```
 
-## What to practice
+`View`, `Text`, and `Pressable` are native primitives. The React data flow still looks familiar.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Shared Hook, platform UI
 
-## Wrong first move
+```tsx
+import { useState } from "react";
+import { Pressable, Text } from "react-native";
 
-Expecting DOM elements, CSS, and browser APIs to exist in native screens.
+function useToggle(initialValue = false) {
+  const [on, setOn] = useState(initialValue);
+  return { on, toggle: () => setOn((value) => !value) };
+}
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+export function FavoriteButton() {
+  const favorite = useToggle();
 
-## Testing or debugging note
+  return (
+    <Pressable onPress={favorite.toggle}>
+      <Text>{favorite.on ? "Saved" : "Save"}</Text>
+    </Pressable>
+  );
+}
+```
 
-Separate shared state and business logic from platform-specific components.
+The Hook is regular React logic. The rendered controls are React Native primitives.
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+## Details to watch
+
+- **No DOM**: Browser APIs such as `document.querySelector` do not exist in native views.
+- **Styling**: React Native styling uses JavaScript objects and platform layout rules rather than browser CSS.
+- **Permissions**: Device APIs often need permission flows and platform-specific behavior.
+- **Web support**: Expo can target web, but mobile-first UI still needs browser review when shipped to web.
 
 ## Series navigation
 
@@ -66,11 +99,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [docs.expo.dev](https://docs.expo.dev/)
-- [reactnative.dev](https://reactnative.dev/docs/getting-started)
+- [Expo documentation](https://docs.expo.dev/)
+- [React Native](https://reactnative.dev/)
+- [Creating a React App](https://react.dev/learn/creating-a-react-app)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

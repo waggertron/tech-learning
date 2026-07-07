@@ -9,54 +9,93 @@ series:
   order: 22
 ---
 
-This is part 22 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What does Next.js add on top of React, and when is that trade worth it?
+This is part 22 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Next.js adds conventions around routes, layouts, Server Components, caching, and deployment.
+Next.js App Router is a React framework model built around file-system routes, layouts, Server Components, Suspense, Server Functions, and deployment conventions. It supplies answers that a bare React app would otherwise have to design.
 
-## Problem
+## Concept
 
-Next.js App Router is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+The App Router maps files and folders under `app` to routes, layouts, loading states, error boundaries, metadata, and server or client component boundaries. It uses modern React architecture features as part of the routing model.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **App Router**: Next.js's file-system router for the `app` directory.
+- **Layout**: A shared UI wrapper that persists across child routes.
+- **Page**: The route segment component that renders for a URL.
+- **Route segment**: One folder level in the route tree.
+- **Server Component**: A component rendered by the server-side React environment before browser interactivity.
+
+## Mental model
+
+Think of the `app` directory as the route tree made of files. A folder defines a segment, `layout` defines the frame around that segment, and `page` defines the content at the URL.
+
+## How it is used
+
+Use App Router for apps that benefit from nested layouts, server-rendered pages, Server Components, route-level loading UI, metadata, cache and revalidation tools, and server-side mutation boundaries.
+
+## How to use it
+
+1. Create route folders for URL segments.
+2. Use `layout` files for shared shells and `page` files for route content.
+3. Keep components as Server Components by default when they only render data and markup.
+4. Add `"use client"` at interactive component entry points.
+5. Use framework conventions for loading, error, not-found, metadata, data fetching, and mutations.
+
+## Example: Route page with server data
 
 ```tsx
-// app/projects/[id]/page.tsx
-import { notFound } from 'next/navigation';
+// app/products/[id]/page.tsx
+import { AddToCartButton } from "./AddToCartButton";
 
-export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
-  const project = await getProject(id);
-  if (!project) notFound();
+  const product = await getProduct(id);
 
   return (
     <main>
-      <h1>{project.name}</h1>
-      <p>{project.description}</p>
+      <h1>{product.name}</h1>
+      <p>$ {product.price}</p>
+      <AddToCartButton productId={product.id} />
     </main>
   );
 }
 ```
 
-## What to practice
+The route can fetch server data before passing a small ID to a client-side button.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Nested layout
 
-## Wrong first move
+```tsx
+// app/account/layout.tsx
+export default function AccountLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <nav aria-label="Account">
+        <a href="/account/profile">Profile</a>
+        <a href="/account/billing">Billing</a>
+      </nav>
+      {children}
+    </section>
+  );
+}
+```
 
-Treating App Router as Pages Router with different folder names.
+The layout wraps all child account routes, so shared navigation does not need to be repeated in every page.
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+## Details to watch
 
-## Testing or debugging note
-
-Check whether code runs on the server or client before reaching for browser APIs.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Server by default**: In App Router, components are server-rendered by default unless a client boundary is introduced.
+- **File conventions**: Special files such as `layout`, `page`, `loading`, and `error` have route behavior.
+- **Params shape**: Next.js version details can change around params and async conventions. Check current docs during implementation.
+- **Boundary placement**: Moving `"use client"` high in the tree can pull more route code into the browser bundle.
 
 ## Series navigation
 
@@ -66,11 +105,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [nextjs.org](https://nextjs.org/docs/app)
-- [nextjs.org](https://nextjs.org/docs/app/getting-started/layouts-and-pages)
+- [Next.js App Router docs](https://nextjs.org/docs/app)
+- [Next.js Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)
+- [Next.js Fetching Data](https://nextjs.org/docs/app/getting-started/fetching-data)
+- [Server Components](https://react.dev/reference/rsc/server-components)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

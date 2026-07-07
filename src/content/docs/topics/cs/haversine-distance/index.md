@@ -23,7 +23,7 @@ Given two points with latitudes φ₁, φ₂ and longitudes λ₁, λ₂ (all in
 Δλ = λ₂ − λ₁
 
 a = sin²(Δφ/2) + cos(φ₁)·cos(φ₂)·sin²(Δλ/2)
-c = 2 · atan2(√a, √(1−a))
+c = 2 · atan2(sqrt(a), sqrt(1−a))
 d = R · c
 ```
 
@@ -31,7 +31,7 @@ d = R · c
 
 ### Why `atan2`, not `asin`
 
-A mathematically equivalent form is `c = 2·asin(√a)`. Don't use it. When two points are nearly antipodal (opposite sides of Earth), `a` approaches 1, and floating-point rounding can push it a hair above 1. `asin` of anything greater than 1 is undefined, NaN or an exception depending on language. The `atan2(√a, √(1−a))` form is well-conditioned across the entire range; it doesn't need a `min(1, √a)` clamp.
+A mathematically equivalent form is `c = 2·asin(sqrt(a))`. Don't use it. When two points are nearly antipodal (opposite sides of Earth), `a` approaches 1, and floating-point rounding can push it a hair above 1. `asin` of anything greater than 1 is undefined, NaN or an exception depending on language. The `atan2(sqrt(a), sqrt(1−a))` form is well-conditioned across the entire range; it doesn't need a `min(1, sqrt(a))` clamp.
 
 One edge case remains: for exactly antipodal points, `atan2` gets `(0, 0)` and may return NaN. Handle it: if distance would be NaN, set `d = π · R`.
 

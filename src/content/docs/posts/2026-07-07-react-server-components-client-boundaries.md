@@ -9,52 +9,105 @@ series:
   order: 16
 ---
 
-This is part 16 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Which components need the browser, and which can stay on the server?
+This is part 16 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Keep data-heavy, non-interactive rendering on the server. Move only interactive leaves to the client.
+React Server Components split a React tree across environments. Some components render on the server and never ship their implementation to the browser. Client Components mark the parts that need browser interactivity.
 
-## Problem
+## Concept
 
-Server Components and client boundaries is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A Server Component renders in a server environment before the client bundle runs. A Client Component is a component included in the browser bundle because it uses state, Effects, event handlers, browser APIs, or other client-only behavior.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **RSC**: React Server Components, the React architecture for rendering some components in a server environment.
+- **Server Component**: A component rendered by the server-side React environment.
+- **Client Component**: A component included in the browser bundle, usually marked by a framework with `"use client"`.
+- **Client boundary**: The import boundary where a framework starts bundling code for the browser.
+
+## Mental model
+
+Think of the server tree as the kitchen and the client tree as the dining table. The kitchen can prepare data-heavy UI without sending its tools to the table. The table needs the interactive pieces the user touches.
+
+## How it is used
+
+Use Server Components for data reading, server-only dependencies, content rendering, and static shells. Use Client Components for inputs, event handlers, local state, browser APIs, subscriptions, and interactive widgets.
+
+## How to use it
+
+1. Start components on the server when using a framework that supports RSC.
+2. Add `"use client"` only at files that need browser interactivity.
+3. Pass serializable props from Server Components to Client Components.
+4. Keep secrets, database clients, and private environment values on the server side.
+5. Compose Client Components inside Server Components instead of making a whole route client-only.
+
+## Example: Server page with a client filter
 
 ```tsx
-// ProductPage.tsx, Server Component in a framework that supports RSC
-import { AddToCartButton } from './AddToCartButton';
+// ReportsPage.tsx, Server Component
+import { DateRangeSelector } from "./DateRangeSelector";
 
-export async function ProductPage({ id }: { id: string }) {
-  const product = await getProduct(id);
+export async function ReportsPage() {
+  const report = await getRevenueReport();
+
   return (
-    <>
-      <h1>{product.name}</h1>
-      <p>{product.description}</p>
-      <AddToCartButton productId={product.id} />
-    </>
+    <main>
+      <h1>Revenue report</h1>
+      <p>Total revenue: $ {report.totalRevenue}</p>
+      <DateRangeSelector initialRange={report.defaultRange} />
+    </main>
   );
 }
 ```
 
-## What to practice
+The page can read server data and render the stable report shell. The range selector can be a Client Component because it responds to browser interaction.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Client boundary for interactivity
 
-## Wrong first move
+```tsx
+"use client";
 
-Adding a client directive at the top of a page because one button needs a click handler.
+import { useState } from "react";
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+type ReportRange = "7d" | "30d" | "90d";
 
-## Testing or debugging note
+export function DateRangeSelector({
+  initialRange,
+}: {
+  initialRange: ReportRange;
+}) {
+  const [range, setRange] = useState<ReportRange>(initialRange);
+  const options: { label: string; value: ReportRange }[] = [
+    { label: "7 days", value: "7d" },
+    { label: "30 days", value: "30d" },
+    { label: "90 days", value: "90d" },
+  ];
 
-Find the first browser-only API. That line usually marks the client boundary.
+  return (
+    <fieldset>
+      <legend>Date range</legend>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          aria-pressed={range === option.value}
+          onClick={() => setRange(option.value)}
+        >
+          {option.label}
+        </button>
+      ))}
+    </fieldset>
+  );
+}
+```
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+The directive belongs at the client entry file. Components imported by this file become part of that client bundle path.
+
+## Details to watch
+
+- **No server directive**: Server Components are not marked with `"use server"`. That directive marks Server Functions.
+- **Serializable props**: Values crossing to Client Components need to be serializable by the framework.
+- **Bundle size**: Moving a boundary high in the tree can pull more code into the browser bundle.
+- **Framework support**: RSC requires framework or bundler integration. It is not a standalone client-only React feature.
 
 ## Series navigation
 
@@ -64,11 +117,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/rsc/server-components)
-- [react.dev](https://react.dev/reference/rsc/use-client)
+- [Server Components](https://react.dev/reference/rsc/server-components)
+- [use client](https://react.dev/reference/rsc/use-client)
+- [Server Functions](https://react.dev/reference/rsc/server-functions)
+- [Creating a React App](https://react.dev/learn/creating-a-react-app)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

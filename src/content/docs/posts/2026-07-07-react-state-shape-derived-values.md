@@ -9,57 +9,92 @@ series:
   order: 5
 ---
 
-This is part 5 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you avoid storing the same fact twice?
+This is part 5 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Keep the source fact in state. Recompute cheap derived values during render.
+State shape is the difference between a component that naturally stays consistent and a component that spends every render reconciling copies of the same fact. React works best when state stores the smallest set of changing facts and render calculates the rest.
 
-## Problem
+## Concept
 
-State shape and derived values is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A derived value is a value that can be calculated from props, state, or constants during render. It usually does not belong in state because React can recalculate it every time the component renders.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **State shape**: The set of state variables and objects a component uses to remember changing data.
+- **Derived value**: A value calculated from existing props or state.
+- **Source of truth**: The one place a fact is stored before other values are calculated from it.
+- **Normalization**: Storing related data by ID or stable keys so updates can target one fact.
+
+## Mental model
+
+Think of state as the ingredients, not the plated meal. Store the ingredients that can change. Build the plate during render from those ingredients.
+
+## How it is used
+
+Use this model for filtered lists, totals, selection state, form summaries, active tabs, and permission displays. If a value can be computed from current inputs, calculate it during render and let React rerun that calculation when inputs change.
+
+## How to use it
+
+1. List every value the UI displays or uses for decisions.
+2. Mark values that change over time and cannot be calculated from existing inputs.
+3. Store only those changing facts in state.
+4. Calculate counts, filtered arrays, labels, booleans, and display summaries during render.
+5. Memoize expensive calculations only after measuring or when the cost is clear.
+
+## Example: Filter without duplicated state
 
 ```tsx
-import { useState } from 'react';
+import { useState } from "react";
 
-const filters = ['all', 'open', 'done'] as const;
-type Filter = (typeof filters)[number];
+type Task = { id: string; title: string; done: boolean };
+type Filter = "all" | "open" | "done";
 
-export function TaskSummary({ tasks }: { tasks: { done: boolean }[] }) {
-  const [filter, setFilter] = useState<Filter>('all');
-  const openCount = tasks.filter((task) => !task.done).length;
+export function TaskBoard({ tasks }: { tasks: Task[] }) {
+  const [filter, setFilter] = useState<Filter>("all");
+
+  const visibleTasks = tasks.filter((task) => {
+    if (filter === "open") return !task.done;
+    if (filter === "done") return task.done;
+    return true;
+  });
 
   return (
     <>
-      <p>{openCount} open tasks</p>
-      <select value={filter} onChange={(event) => setFilter(event.target.value as Filter)}>
-        {filters.map((value) => <option key={value}>{value}</option>)}
-      </select>
+      <FilterTabs value={filter} onChange={setFilter} />
+      <p>{visibleTasks.length} visible tasks</p>
+      <TaskList tasks={visibleTasks} />
     </>
   );
 }
 ```
 
-## What to practice
+`visibleTasks` and the count are derived. The only local state is the selected filter.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Store IDs instead of objects
 
-## Wrong first move
+```tsx
+type User = { id: string; name: string };
 
-Storing both `tasks` and `openCount`. The two values drift unless every update path remembers both.
+export function AssigneeSummary({
+  users,
+  selectedUserId,
+}: {
+  users: User[];
+  selectedUserId: string | null;
+}) {
+  const selectedUser = users.find((user) => user.id === selectedUserId) ?? null;
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  return <p>{selectedUser ? selectedUser.name : "No assignee"}</p>;
+}
+```
 
-## Testing or debugging note
+An ID is stable across refreshes of the `users` array. The selected object is derived from the current list.
 
-Temporarily compute the derived value inline and compare it to stored state. A mismatch proves duplicated state.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Duplicated facts**: Two state values that represent the same fact can drift apart.
+- **Object identity**: When data refreshes from a server, object references may change. IDs usually remain stable.
+- **Expensive derivation**: Use `useMemo` for expensive pure calculations after the cost matters.
+- **Effects**: Do not use an Effect just to copy props or state into another state variable for display.
 
 ## Series navigation
 
@@ -69,11 +104,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/choosing-the-state-structure)
-- [react.dev](https://react.dev/learn/you-might-not-need-an-effect)
+- [Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure)
+- [Thinking in React](https://react.dev/learn/thinking-in-react)
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+- [useMemo](https://react.dev/reference/react/useMemo)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

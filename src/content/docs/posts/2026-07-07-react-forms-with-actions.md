@@ -9,59 +9,108 @@ series:
   order: 14
 ---
 
-This is part 14 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do React 19 form Actions simplify pending and error state?
+This is part 14 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Actions let the form carry the mutation boundary instead of wiring every submit by hand.
+React 19 treats forms as first-class mutation surfaces. A form can call an Action, expose pending state, return result state, and support progressive enhancement when the framework integrates server features.
 
-## Problem
+## Concept
 
-Forms with Actions is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+An Action is a function invoked by a form or a Transition. `useActionState` connects an Action to returned state and pending state. `useFormStatus` lets a nested submit component read the pending state of its parent form.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Action**: A function React treats as an ordered unit of work from a form or Transition.
+- **FormData**: The browser object that carries submitted form field values.
+- **Pending state**: Whether a form or Action submission is still running.
+- **Progressive enhancement**: A path where a form can still submit before the client JavaScript is fully ready, when the framework supports it.
+
+## Mental model
+
+Think of the form as a conveyor belt. The browser gathers fields into `FormData`, the Action processes them, and React brings back a result plus pending status for the UI.
+
+## How it is used
+
+Use form Actions for profile edits, settings forms, contact forms, checkout steps, and server-backed mutations where the submit event is the natural boundary for collecting input and returning validation or success state.
+
+## How to use it
+
+1. Write an Action that accepts previous state and `FormData` when using `useActionState`.
+2. Return a serializable state object with success, field errors, or a message.
+3. Pass the returned form action to the form's `action` prop.
+4. Render pending feedback with the third value from `useActionState` or `useFormStatus` in a child component.
+5. Keep field names stable because `FormData` reads by name.
+
+## Example: Profile form state
 
 ```tsx
-import { useActionState } from 'react';
+import { useActionState } from "react";
 
-async function saveProfile(_state: string | null, formData: FormData) {
-  const name = String(formData.get('name') ?? '').trim();
-  if (!name) return 'Name is required';
-  await fetch('/api/profile', { method: 'POST', body: JSON.stringify({ name }) });
-  return null;
+type ProfileState = {
+  message: string;
+};
+
+async function saveProfile(
+  previousState: ProfileState,
+  formData: FormData,
+): Promise<ProfileState> {
+  const displayName = String(formData.get("displayName") ?? "").trim();
+
+  if (displayName.length < 2) {
+    return { message: "Display name needs at least two characters." };
+  }
+
+  await updateProfile({ displayName });
+  return { message: "Profile saved." };
 }
 
 export function ProfileForm() {
-  const [error, action, pending] = useActionState(saveProfile, null);
+  const [state, formAction, isPending] = useActionState(saveProfile, {
+    message: "",
+  });
 
   return (
-    <form action={action}>
-      <input name="name" />
-      <button disabled={pending}>Save</button>
-      {error && <p role="alert">{error}</p>}
+    <form action={formAction}>
+      <label>
+        Display name
+        <input name="displayName" />
+      </label>
+      <button disabled={isPending}>Save</button>
+      <p>{state.message}</p>
     </form>
   );
 }
 ```
 
-## What to practice
+The Action receives form data, returns display state, and lets the button reflect pending status.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Nested submit button with useFormStatus
 
-## Wrong first move
+```tsx
+import { useFormStatus } from "react-dom";
 
-Duplicating pending, error, and success state in several event handlers.
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return <button disabled={pending}>{pending ? "Saving..." : "Save"}</button>;
+}
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+export function SettingsForm({ action }: { action: (data: FormData) => void }) {
+  return (
+    <form action={action}>
+      <input name="timezone" />
+      <SubmitButton />
+    </form>
+  );
+}
+```
 
-## Testing or debugging note
+`useFormStatus` reads the parent form, so the submit button can stay reusable without receiving pending props.
 
-Test empty input and double submit. The action should reject invalid data and keep pending state honest.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Form names**: Every submitted field needs a `name` for `FormData` to include it.
+- **Hook placement**: `useFormStatus` reads a parent form, not a form returned by the same component.
+- **Serializability**: Server-backed Actions need serializable input and output values.
+- **Side effects**: `useActionState` reducer actions may be async and perform side effects, unlike `useReducer` reducers.
 
 ## Series navigation
 
@@ -71,11 +120,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react/useActionState)
-- [react.dev](https://react.dev/reference/react-dom/components/form)
+- [useActionState](https://react.dev/reference/react/useActionState)
+- [form](https://react.dev/reference/react-dom/components/form)
+- [useFormStatus](https://react.dev/reference/react-dom/hooks/useFormStatus)
+- [Server Functions](https://react.dev/reference/rsc/server-functions)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

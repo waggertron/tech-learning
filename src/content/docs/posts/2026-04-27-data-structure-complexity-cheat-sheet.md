@@ -216,7 +216,7 @@ Modern hardware does roughly 10⁸ simple operations per second. Use this table 
 | n ≤ 100 | $O(n^4)$ |
 | n ≤ 1,000 | $O(n^3)$ |
 | n ≤ 10,000 | $O(n^2)$ |
-| n ≤ 100,000 | $O(n log n)$ or $O(n √n)$ |
+| n ≤ 100,000 | $O(n log n)$ or $O(n \sqrt{n})$ |
 | n ≤ 1,000,000 | $O(n)$ or $O(n log n)$ |
 | n ≤ 10⁹ | $O(log n)$ or $O(1)$ |
 

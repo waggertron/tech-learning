@@ -9,63 +9,87 @@ series:
   order: 20
 ---
 
-This is part 20 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What should you measure before adding memoization or splitting a tree?
+This is part 20 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Follow React rules first, measure second, and memoize only where the measurement points.
+React performance work starts with clarity: pure components, stable data flow, and measurements from the real interaction. React Compiler changes the memoization conversation by automating many optimizations when the app follows React's rules.
 
-## Problem
+## Concept
 
-Performance and React Compiler is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+React performance tuning is the practice of reducing unnecessary work, expensive renders, large bundles, and slow data paths. React Compiler is a build-time optimizer that can automatically memoize components and values in supported code.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Memoization**: Reusing a previous calculation or rendered result when inputs have not changed.
+- **Profiler**: A tool for measuring render cost and interaction timing.
+- **React Compiler**: A build-time optimizer that can handle many memoization cases automatically.
+- **Purity**: The property that a component or Hook returns output without changing outside values during render.
+
+## Mental model
+
+Treat performance like a budget review. Measure where time is going, remove unnecessary work, then add memoization where repeated work still costs enough to matter.
+
+## How it is used
+
+Use performance tools on slow interactions, large tables, dashboards, charts, route transitions, and forms that feel delayed. Use the Compiler where the framework and build setup support it, and keep manual memoization for measured cases or library boundaries.
+
+## How to use it
+
+1. Keep render pure and state minimal so React can reason about updates.
+2. Measure the slow interaction with Profiler or browser tools.
+3. Check bundle size, list rendering, data fetching, and expensive calculations before adding memoization.
+4. Use `memo`, `useMemo`, or `useCallback` only when they protect real work or stable component contracts.
+5. Adopt React Compiler incrementally when the project tooling supports it.
+
+## Example: Memoized expensive calculation
 
 ```tsx
-import { memo } from 'react';
+import { useMemo, useState } from "react";
 
-type RowProps = { label: string; selected: boolean };
+export function FilteredReport({ rows }: { rows: Row[] }) {
+  const [query, setQuery] = useState("");
 
-const Row = memo(function Row({ label, selected }: RowProps) {
-  return <li aria-selected={selected}>{label}</li>;
-});
+  const visibleRows = useMemo(() => {
+    return runExpensiveFilter(rows, query);
+  }, [rows, query]);
 
-export function ResultList({ results, selectedId }: {
-  results: { id: string; label: string }[];
-  selectedId: string;
-}) {
   return (
-    <ul>
-      {results.map((result) => (
-        <Row
-          key={result.id}
-          label={result.label}
-          selected={result.id === selectedId}
-        />
-      ))}
-    </ul>
+    <>
+      <input value={query} onChange={(event) => setQuery(event.target.value)} />
+      <ReportTable rows={visibleRows} />
+    </>
   );
 }
 ```
 
-## What to practice
+`useMemo` protects a pure calculation. It does not make the first render faster, but it can skip work on later renders.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Profiler around a slow region
 
-## Wrong first move
+```tsx
+import { Profiler } from "react";
 
-Adding `memo`, `useMemo`, and `useCallback` everywhere as a style rule.
+export function InstrumentedDashboard() {
+  return (
+    <Profiler
+      id="dashboard"
+      onRender={(id, phase, actualDuration) => {
+        reportRenderTiming({ id, phase, actualDuration });
+      }}
+    >
+      <Dashboard />
+    </Profiler>
+  );
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+Profiler data gives performance work a target instead of turning every component into a memoization exercise.
 
-## Testing or debugging note
+## Details to watch
 
-Use the React Profiler to find a slow commit before changing code.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Compiler first principles**: Compiler benefits depend on React rules and build support. Pure components are the foundation.
+- **Manual memoization**: Memo APIs add their own comparison and dependency costs. Use them where they save meaningful work.
+- **Development timing**: Development builds and Strict Mode are useful for debugging, but production builds give better timing data.
+- **Data loading**: Slow UI is often a network or waterfall issue, not a component render issue.
 
 ## Series navigation
 
@@ -75,11 +99,13 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/react-compiler)
-- [react.dev](https://react.dev/reference/react/memo)
+- [React Compiler](https://react.dev/learn/react-compiler)
+- [memo](https://react.dev/reference/react/memo)
+- [useMemo](https://react.dev/reference/react/useMemo)
+- [Profiler](https://react.dev/reference/react/Profiler)
+- [Components and Hooks must be pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

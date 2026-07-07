@@ -9,22 +9,60 @@ series:
   order: 26
 ---
 
-This is part 26 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: When is a simple client-rendered app the right answer?
+This is part 26 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. A small client app is a good shape when the server is already somewhere else.
+Vite is a fast build tool and development server for modern web projects. In React work, it is a good fit when the app is intentionally client-only or when a framework is not owning routes, rendering, and server data.
 
-## Problem
+## Concept
 
-Vite and client-only apps is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A Vite React app has an HTML entry, a module-based development server, a production build command, and React mounted into a DOM root with `createRoot`. The app owns its routing, data fetching, and deployment choices.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Vite**: A build tool and dev server for modern web projects.
+- **HMR**: Hot Module Replacement, the development feature that updates modules without a full page reload.
+- **ES modules**: The browser and JavaScript module system based on `import` and `export`.
+- **Client-only app**: An app whose UI is rendered in the browser after JavaScript loads.
 
-```ts
-// vite.config.ts
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+## Mental model
+
+Think of Vite as the workshop, not the whole building. It gives React fast tools to develop and bundle code, but the app still chooses its own floor plan.
+
+## How it is used
+
+Use Vite for dashboards, internal tools, prototypes, static apps, embedded widgets, design system sandboxes, and client apps that get data from APIs without needing server rendering or Server Components.
+
+## How to use it
+
+1. Create a React TypeScript project from the Vite template.
+2. Mount the app with `createRoot` in the client entry file.
+3. Add routing, data fetching, testing, linting, and styling tools intentionally.
+4. Use environment variables and production build settings from Vite docs.
+5. Move to a framework when routing, SSR, SSG, or server mutations become product requirements.
+
+## Example: Vite React entry
+
+```tsx
+import { createRoot } from "react-dom/client";
+import { App } from "./App";
+import "./styles.css";
+
+const root = document.getElementById("root");
+
+if (!root) {
+  throw new Error("Missing root element");
+}
+
+createRoot(root).render(<App />);
+```
+
+A client-only Vite app directly owns the DOM root and React entry point.
+
+## Example: Minimal Vite config
+
+```tsx
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
@@ -34,24 +72,14 @@ export default defineConfig({
 });
 ```
 
-## What to practice
+The React plugin handles JSX and React development behavior. Other app concerns are added separately.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Details to watch
 
-## Wrong first move
-
-Adding a full-stack framework just to render a settings panel or dashboard shell.
-
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
-
-## Testing or debugging note
-
-Inspect the first route. If it only mounts one client app and talks to existing APIs, Vite may be enough.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Rendering**: A plain Vite React app is client-rendered unless you build a server rendering setup yourself.
+- **Entry HTML**: Vite treats `index.html` as part of the module graph.
+- **Tool ownership**: Routing, data cache, auth, testing, and deployment are app decisions in a Vite setup.
+- **Browser support**: Vite targets modern development browsers and has production target configuration.
 
 ## Series navigation
 
@@ -61,11 +89,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [vite.dev](https://vite.dev/guide/)
-- [react.dev](https://react.dev/learn/build-a-react-app-from-scratch)
+- [Vite guide](https://vite.dev/guide/)
+- [Build a React App from Scratch](https://react.dev/learn/build-a-react-app-from-scratch)
+- [createRoot](https://react.dev/reference/react-dom/client/createRoot)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

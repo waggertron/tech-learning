@@ -9,59 +9,86 @@ series:
   order: 23
 ---
 
-This is part 23 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: When do route loaders, actions, and nested layouts belong in the router instead of ad hoc components?
+This is part 23 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Move route-specific loading and mutation logic to the route boundary.
+React Router v7 can be used as a routing library or as a framework-style setup with routes, loaders, actions, and server rendering options. Its core model keeps URL state, route data, and UI nesting close together.
 
-## Problem
+## Concept
 
-React Router v7 is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+React Router maps locations to route modules. A route module can define UI, data loading, mutations, and nested child routes, so navigation can fetch the data needed for the next screen before the component renders.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Route module**: A file or route definition that owns a route's component and optional data APIs.
+- **Loader**: A function that loads data for a route before rendering.
+- **Action**: A function that handles route mutations, often from form submissions.
+- **Nested route**: A child route rendered inside a parent route outlet.
+
+## Mental model
+
+Think of each route as a station. The router knows which station the URL points to, what data should be waiting there, and which parent stations stay on screen around it.
+
+## How it is used
+
+Use React Router for applications where routes, nested layouts, forms, and route data are central, especially when the app should be built on web platform primitives and can choose between library and framework modes.
+
+## How to use it
+
+1. Define routes around the URL structure users will understand.
+2. Use nested routes for UI that shares a parent layout.
+3. Load route data in loaders when the router should own the fetch timing.
+4. Use actions for mutations tied to navigation or form submissions.
+5. Keep route params and search params typed or validated at the route boundary.
+
+## Example: Route with loader data
 
 ```tsx
-import { Form, Link, Outlet, useLoaderData } from 'react-router';
-
-export async function loader() {
-  return { projects: await getProjects() };
+export async function loader({ params }: { params: { projectId: string } }) {
+  return getProject(params.projectId);
 }
 
-export function ProjectsRoute() {
-  const { projects } = useLoaderData<typeof loader>();
+export default function ProjectRoute({
+  loaderData,
+}: {
+  loaderData: Awaited<ReturnType<typeof loader>>;
+}) {
   return (
-    <>
-      <Form role="search">
-        <input name="q" aria-label="Search projects" />
-      </Form>
-      {projects.map((project) => (
-        <Link key={project.id} to={project.id}>{project.name}</Link>
-      ))}
-      <Outlet />
-    </>
+    <main>
+      <h1>{loaderData.name}</h1>
+      <p>{loaderData.description}</p>
+    </main>
   );
 }
 ```
 
-## What to practice
+The route owns the data required to render the route screen.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Nested layout with an outlet
 
-## Wrong first move
+```tsx
+import { Outlet } from "react-router";
 
-Fetching in every route component while the router already knows which route is loading.
+export default function AccountLayout() {
+  return (
+    <section>
+      <nav aria-label="Account">
+        <a href="/account/profile">Profile</a>
+        <a href="/account/security">Security</a>
+      </nav>
+      <Outlet />
+    </section>
+  );
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+The parent route renders the shared account shell while child routes fill the outlet.
 
-## Testing or debugging note
+## Details to watch
 
-Navigate between sibling routes and watch which loaders run. The route tree should explain the data flow.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **URL as state**: Route params and search params are shareable state. Treat them as part of the app contract.
+- **Loader timing**: Loader-based data avoids every component inventing its own fetch Effect.
+- **Actions**: Route actions fit mutations that naturally belong to a route or form.
+- **Mode choice**: React Router can be used in different modes. Match the mode to the app's routing and data needs.
 
 ## Series navigation
 
@@ -71,11 +98,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [reactrouter.com](https://reactrouter.com/start/framework/installation)
-- [reactrouter.com](https://reactrouter.com/start/framework/routing)
+- [React Router framework installation](https://reactrouter.com/start/framework/installation)
+- [React Router home](https://reactrouter.com/)
+- [Creating a React App](https://react.dev/learn/creating-a-react-app)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

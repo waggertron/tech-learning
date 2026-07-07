@@ -9,54 +9,108 @@ series:
   order: 6
 ---
 
-This is part 6 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: When should a parent own state for multiple children?
+This is part 6 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Lift state when two or more children need one shared answer.
+State starts local, then moves when more than one component needs the same fact. Lifting state gives one parent ownership of that fact, and controlled inputs make form fields render from state instead of carrying separate browser-only memory.
 
-## Problem
+## Concept
 
-Lifting state and controlled inputs is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Lifting state means moving state to the closest common parent of the components that need it. A controlled input is a form control whose value comes from React state and reports edits through an event handler.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Lifted state**: State owned by a parent so multiple children can read or change it.
+- **Controlled input**: An input whose `value` or `checked` prop is set by React state.
+- **Uncontrolled input**: An input whose current value is kept by the browser until code reads it.
+- **Closest common parent**: The nearest component above all components that need a shared value.
+
+## Mental model
+
+Treat the parent as the notebook and children as pens and readers. The child can report a new value, but the parent keeps the canonical note and passes the current value back down.
+
+## How it is used
+
+Lift state for search fields that filter a sibling list, tabs that choose which panel is visible, forms that enable a submit button, and shared counters. Use controlled inputs when the current value affects rendering while the user types.
+
+## How to use it
+
+1. Find the components that need to read or update the same value.
+2. Move the state to their closest common parent.
+3. Pass the current value down as a prop.
+4. Pass an event callback down so children can request updates.
+5. Use `value` plus `onChange` for text inputs and `checked` plus `onChange` for checkboxes.
+
+## Example: Shared search query
 
 ```tsx
-import { useState } from 'react';
+import { useState } from "react";
 
-export function SearchBox({ onSearch }: { onSearch: (query: string) => void }) {
-  const [query, setQuery] = useState('');
+type Product = { id: string; name: string };
+
+export function ProductSearch({ products }: { products: Product[] }) {
+  const [query, setQuery] = useState("");
+  const visible = products.filter((product) =>
+    product.name.toLowerCase().includes(query.toLowerCase()),
+  );
 
   return (
-    <form onSubmit={(event) => {
-      event.preventDefault();
-      onSearch(query.trim());
-    }}>
-      <input value={query} onChange={(event) => setQuery(event.target.value)} />
-      <button type="submit">Search</button>
-    </form>
+    <>
+      <SearchField value={query} onChange={setQuery} />
+      <ProductList products={visible} />
+    </>
+  );
+}
+
+function SearchField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <input
+      aria-label="Search products"
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+    />
   );
 }
 ```
 
-## What to practice
+The parent owns the query because both the input and the list depend on it.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Controlled checkbox
 
-## Wrong first move
+```tsx
+function InStockOnly({
+  checked,
+  onChange,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+      In stock only
+    </label>
+  );
+}
+```
 
-Letting sibling components keep private copies and trying to synchronize them afterward.
+Checkboxes use `checked`, not `value`, because the rendered state is binary.
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+## Details to watch
 
-## Testing or debugging note
-
-Trace the owner of the value. If two components can update it independently, the ownership line is too low.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Typing responsiveness**: The state update for a text input should stay urgent. Do not wrap the input's own value update in a Transition.
+- **Default values**: Use `defaultValue` or `defaultChecked` for uncontrolled inputs. Use `value` or `checked` for controlled ones.
+- **Ownership**: Do not lift state higher than the components that need it. High state causes extra coupling.
+- **Parsing**: Input values are strings. Convert to numbers, dates, or structured values at the boundary that needs that type.
 
 ## Series navigation
 
@@ -66,11 +120,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/sharing-state-between-components)
-- [react.dev](https://react.dev/reference/react-dom/components/input)
+- [Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)
+- [Reacting to Input with State](https://react.dev/learn/reacting-to-input-with-state)
+- [input](https://react.dev/reference/react-dom/components/input)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

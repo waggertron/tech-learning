@@ -9,46 +9,76 @@ series:
   order: 29
 ---
 
-This is part 29 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Which errors should never reach review?
+This is part 29 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. CI should catch mechanical failures before humans spend attention on the diff.
+React projects stay easier to change when machines enforce the repeatable rules. TypeScript checks contracts, ESLint checks code patterns, formatters remove style debates, and continuous integration runs those checks before code lands.
 
-## Problem
+## Concept
 
-ESLint, TypeScript, formatting, and CI gates is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A tooling gate is an automated check that must pass before code is accepted. In React, the most important gates catch invalid types, broken Hook rules, unsafe Effects, formatting drift, and failing tests.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **ESLint**: A JavaScript and TypeScript linting tool that reports code pattern issues.
+- **CI**: Continuous integration, an automated environment that runs checks for a change.
+- **Formatter**: A tool that rewrites code layout to a consistent style.
+- **Type check**: A TypeScript check that verifies types without producing runtime output.
+
+## Mental model
+
+Think of tooling as guardrails on the road to review. Reviewers can focus on design and behavior because syntax, types, Hook rules, and formatting already had a machine pass.
+
+## How it is used
+
+Use these gates in every React app that more than one person edits. They matter for Hooks, dependency arrays, component APIs, route types, generated code, design system consistency, and deploy confidence.
+
+## How to use it
+
+1. Run TypeScript with a command that fails on type errors.
+2. Enable React and Hook lint rules, including `rules-of-hooks` and `exhaustive-deps`.
+3. Run a formatter in check mode before review.
+4. Run unit, component, and selected browser tests in CI.
+5. Keep scripts named clearly, such as `typecheck`, `lint`, `format:check`, and `test`.
+
+## Example: Package scripts
 
 ```json
 {
   "scripts": {
-    "check": "tsc --noEmit && eslint . && prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "ci": "npm run typecheck && npm run lint && npm run format:check && npm run test"
   }
 }
 ```
 
-## What to practice
+The command names describe what each gate verifies and make CI configuration easy to read.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Effect lint value
 
-## Wrong first move
+```tsx
+import { useEffect } from "react";
 
-Relying on reviewers to notice unused imports, untyped props, and formatting churn.
+export function RoomTitle({ roomId }: { roomId: string }) {
+  useEffect(() => {
+    document.title = "Room " + roomId;
+  }, [roomId]);
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  return <h1>Room {roomId}</h1>;
+}
+```
 
-## Testing or debugging note
+The dependency list names the reactive value used by the Effect, which keeps the browser title synchronized with the current room.
 
-Run the same check command locally and in CI. Different commands create different truth.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Hook rules**: React's lint rules encode constraints that are easy to miss in review.
+- **No silent skips**: CI commands should fail the build when checks fail.
+- **Generated files**: Exclude generated output deliberately so gates check author-owned code.
+- **Local speed**: Fast local scripts make developers run checks before pushing.
 
 ## Series navigation
 
@@ -58,11 +88,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [typescript-eslint.io](https://typescript-eslint.io/getting-started/)
-- [eslint.org](https://eslint.org/docs/latest/use/getting-started)
+- [eslint-plugin-react-hooks lints](https://react.dev/reference/eslint-plugin-react-hooks/lints)
+- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
+- [Using TypeScript](https://react.dev/learn/typescript)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

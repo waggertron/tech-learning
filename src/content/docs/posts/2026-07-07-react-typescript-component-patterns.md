@@ -9,49 +9,91 @@ series:
   order: 18
 ---
 
-This is part 18 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you make component APIs narrow enough to be useful?
+This is part 18 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Types should describe the component contract, not just silence the compiler.
+TypeScript makes React component contracts visible before the component runs. Good types describe the props a component accepts, the events it emits, and the combinations that make sense.
 
-## Problem
+## Concept
 
-TypeScript patterns for React is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+React with TypeScript uses `.tsx` files for JSX and TypeScript types for props, state, refs, events, reducer actions, and children. The goal is not to type every implementation detail. The goal is to make invalid component use harder to write.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **TSX**: A TypeScript file extension for files that contain JSX.
+- **Prop type**: The TypeScript shape of a component's public inputs.
+- **Discriminated union**: A union of object types distinguished by a shared literal field.
+- **Generic component**: A component whose props can be typed over a caller-provided data shape.
+
+## Mental model
+
+Think of component types as a doorframe. The frame does not describe every room inside, but it does control what can pass through the doorway.
+
+## How it is used
+
+Use TypeScript for design system components, forms, route params, API data boundaries, reducer actions, event handlers, refs, and props where certain combinations are required or forbidden.
+
+## How to use it
+
+1. Put JSX in `.tsx` files.
+2. Define named prop types for reusable components.
+3. Use unions when a component has modes with different required props.
+4. Type event handlers at the boundary where you read event fields.
+5. Use `React.ReactNode` for broad children and narrower types only when needed.
+
+## Example: Discriminated button props
 
 ```tsx
 type ButtonProps =
-  | { kind: 'link'; href: string; children: React.ReactNode }
-  | { kind: 'button'; onClick: () => void; children: React.ReactNode };
+  | {
+      kind: "button";
+      onClick: () => void;
+      children: React.ReactNode;
+    }
+  | {
+      kind: "link";
+      href: string;
+      children: React.ReactNode;
+    };
 
-export function Button(props: ButtonProps) {
-  if (props.kind === 'link') {
+export function ActionButton(props: ButtonProps) {
+  if (props.kind === "link") {
     return <a href={props.href}>{props.children}</a>;
   }
+
   return <button onClick={props.onClick}>{props.children}</button>;
 }
 ```
 
-## What to practice
+The `kind` field controls which props are available. A caller cannot pass `href` to the button mode by accident.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Generic list renderer
 
-## Wrong first move
+```tsx
+type ListProps<T> = {
+  items: T[];
+  getKey: (item: T) => string;
+  renderItem: (item: T) => React.ReactNode;
+};
 
-Making every prop optional and handling impossible combinations at runtime.
+export function List<T>({ items, getKey, renderItem }: ListProps<T>) {
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={getKey(item)}>{renderItem(item)}</li>
+      ))}
+    </ul>
+  );
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+The caller gets item-specific type checking while the list component stays reusable.
 
-## Testing or debugging note
+## Details to watch
 
-Write the invalid examples first. The compiler should reject them before a test can run.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Children**: `React.ReactNode` is broad and fits most wrapper components.
+- **Events**: Let editor inference help, then name event types when handlers move out of JSX.
+- **Data boundaries**: Types do not validate runtime data by themselves. Parse external input at API and form boundaries.
+- **Over-general types**: A generic component is useful when it preserves caller information. It is noise when no caller-specific type flows through.
 
 ## Series navigation
 
@@ -61,11 +103,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/typescript)
-- [typescriptlang.org](https://www.typescriptlang.org/docs/)
+- [Using TypeScript](https://react.dev/learn/typescript)
+- [Passing Props to a Component](https://react.dev/learn/passing-props-to-a-component)
+- [TypeScript JSX documentation](https://www.typescriptlang.org/docs/handbook/jsx.html)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

@@ -9,23 +9,70 @@ series:
   order: 24
 ---
 
-This is part 24 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What do type-safe routes and search params buy in a large app?
+This is part 24 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Type-safe routes make URL params and search params part of the application contract.
+TanStack Router focuses on type-safe routing for React. TanStack Start builds on that router to provide a full-stack framework path with server rendering and server functions.
 
-## Problem
+## Concept
 
-TanStack Router and TanStack Start is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+TanStack Router treats routes, params, search params, loaders, and navigation as typed application boundaries. TanStack Start adds framework capabilities around that routing core.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **TanStack Router**: A type-focused routing library for React applications.
+- **TanStack Start**: A full-stack React framework built around TanStack Router.
+- **Search params**: The query string values in a URL, often used for filters and view state.
+- **Route loader**: A route-level data loading function tied to navigation.
+
+## Mental model
+
+Think of the router as a typed map. The URL is not just a string, it is a structured route with known params, known search values, and known loading behavior.
+
+## How it is used
+
+Use TanStack Router when route types, search param validation, loader integration, and route tree control are central to the app. Use TanStack Start when the app also wants framework-level server features around that router.
+
+## How to use it
+
+1. Model route paths and route params as part of the application API.
+2. Validate search params at the route boundary.
+3. Load data at the route level when navigation should own the fetch.
+4. Use typed links so route changes get checked before runtime.
+5. Choose TanStack Start when full-stack framework concerns belong with the router.
+
+## Example: Typed route search
 
 ```tsx
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/projects/$projectId')({
-  loader: ({ params }) => getProject(params.projectId),
+type Search = {
+  query?: string;
+  page?: number;
+};
+
+export const Route = createFileRoute("/products/")({
+  validateSearch: (search: Record<string, unknown>): Search => ({
+    query: typeof search.query === "string" ? search.query : "",
+    page: Number(search.page ?? 1),
+  }),
+  component: ProductsRoute,
+});
+
+function ProductsRoute() {
+  const search = Route.useSearch();
+  return <ProductResults query={search.query ?? ""} page={search.page ?? 1} />;
+}
+```
+
+Search params become a typed boundary instead of loose string reads throughout the page.
+
+## Example: Route loader idea
+
+```tsx
+export const Route = createFileRoute("/projects/$projectId")({
+  loader: async ({ params }) => {
+    return getProject(params.projectId);
+  },
   component: ProjectRoute,
 });
 
@@ -35,24 +82,14 @@ function ProjectRoute() {
 }
 ```
 
-## What to practice
+The route knows which data belongs with the URL and exposes that loaded data to the component.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Details to watch
 
-## Wrong first move
-
-Parsing route params manually in every component.
-
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
-
-## Testing or debugging note
-
-Rename a route param and let TypeScript show every caller that depends on it.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Type boundary**: Typed routes pay off when links, params, and search values change over time.
+- **Search shape**: Query strings are strings at the browser boundary. Parse them before treating them as typed values.
+- **Framework split**: Router and Start are related but not the same tool. Router handles routing. Start adds framework features.
+- **Docs drift**: TanStack APIs move quickly. Check the current docs while implementing a production route tree.
 
 ## Series navigation
 
@@ -62,11 +99,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [tanstack.com](https://tanstack.com/router/latest)
-- [tanstack.com](https://tanstack.com/start/latest)
+- [TanStack Router overview](https://tanstack.com/router/latest/docs/overview)
+- [TanStack Router React docs](https://tanstack.com/router/latest/docs/framework/react/overview)
+- [Creating a React App](https://react.dev/learn/creating-a-react-app)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

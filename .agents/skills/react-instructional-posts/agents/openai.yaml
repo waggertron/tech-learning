@@ -1,0 +1,4 @@
+interface:
+  display_name: "React Instructional Posts"
+  short_description: "Write React posts from official docs"
+  default_prompt: "Use $react-instructional-posts to rewrite a React series post with a mental model, official docs links, and practical examples."

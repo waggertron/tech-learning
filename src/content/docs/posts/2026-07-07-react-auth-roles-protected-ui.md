@@ -9,52 +9,87 @@ series:
   order: 38
 ---
 
-This is part 38 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you hide UI affordances without confusing that for authorization?
+This is part 38 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Protected UI is a usability layer. Authorization belongs on the server.
+Auth-aware UI helps users understand what they can do, but it is not the same as authorization. React can hide, disable, or label controls based on a session snapshot. The server still decides whether the action is allowed.
 
-## Problem
+## Concept
 
-Auth, roles, and protected UI is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Authentication identifies the user. Authorization decides what that user can do. Roles and permissions are inputs to UI rendering, but trusted checks belong at server, route, or API boundaries.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Auth**: Authentication, the process of identifying who the user is.
+- **Authorization**: The decision about whether an identified user can perform an action.
+- **Role**: A named group of permissions such as admin, editor, or viewer.
+- **Protected UI**: Interface that changes based on the user's auth or permission state.
+- **API**: Application programming interface, the boundary where code sends or receives structured data or actions.
+
+## Mental model
+
+Think of protected UI as signage, not the lock. Good signage prevents confusion. The lock still lives on the server-side door.
+
+## How it is used
+
+Use auth-aware React UI for navigation, disabled controls, empty states, admin sections, account menus, upgrade prompts, and warnings before privileged actions. Check permissions again in server functions, route actions, API handlers, and data loaders.
+
+## How to use it
+
+1. Load a minimal session or permission snapshot for rendering.
+2. Pass permissions to components through props, context, or route data.
+3. Render unavailable actions as hidden, disabled, or explanatory based on user experience needs.
+4. Check authorization at every trusted mutation and data read boundary.
+5. Keep permission names domain-specific and test important combinations.
+
+## Example: Permission-aware button
 
 ```tsx
-type Session = { userId: string; roles: string[] } | null;
+type DeleteProjectButtonProps = {
+  canDelete: boolean;
+  onDelete: () => void;
+};
 
-export function DeleteProjectButton({ session }: { session: Session }) {
-  const canDelete = session?.roles.includes('admin') ?? false;
-
-  if (!canDelete) return null;
+export function DeleteProjectButton({
+  canDelete,
+  onDelete,
+}: DeleteProjectButtonProps) {
+  if (!canDelete) {
+    return <p>You need project admin access to delete this project.</p>;
+  }
 
   return (
-    <button type="button" data-danger>
+    <button type="button" onClick={onDelete}>
       Delete project
     </button>
   );
 }
 ```
 
-## What to practice
+The UI explains the missing permission. The server still needs to enforce the same rule.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Server check at mutation boundary
 
-## Wrong first move
+```tsx
+async function deleteProject(projectId: string) {
+  const user = await requireCurrentUser();
+  const allowed = await canDeleteProject(user.id, projectId);
 
-Assuming a missing button prevents an unauthorized request.
+  if (!allowed) {
+    throw new Error("Not allowed");
+  }
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  await db.project.delete({ id: projectId });
+}
+```
 
-## Testing or debugging note
+The trusted write checks authorization where the data changes.
 
-Call the protected endpoint directly with a low-privilege session. The server should reject it.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **UI feedback**: Hide actions when they are irrelevant. Disable or explain actions when the user needs to understand why they cannot proceed.
+- **Server authority**: Never treat hidden UI as authorization.
+- **Session freshness**: Client session snapshots can be stale. Server checks use the current source of truth.
+- **Roles vs permissions**: Roles are convenient labels. Permissions describe exact capabilities.
 
 ## Series navigation
 
@@ -64,11 +99,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [nextjs.org](https://nextjs.org/docs/app/building-your-application/authentication)
-- [react.dev](https://react.dev/learn/conditional-rendering)
+- [Server Functions](https://react.dev/reference/rsc/server-functions)
+- [Server Components](https://react.dev/reference/rsc/server-components)
+- [Next.js Authentication guide](https://nextjs.org/docs/app/guides/authentication)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
-- [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)
+- [System design topics](../../topics/system-design/)
+- [Modern browser security](../2026-04-24-modern-browser-security/)

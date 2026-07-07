@@ -9,53 +9,91 @@ series:
   order: 37
 ---
 
-This is part 37 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Where do you validate user input before it becomes application state?
+This is part 37 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Parse input at the boundary and pass typed data inward.
+Validation belongs at the boundary where untrusted input enters the application. React forms can guide users while they type, but server and API boundaries still need to parse and validate before data becomes trusted.
 
-## Problem
+## Concept
 
-Validation at form and API boundaries is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Validation is the process of checking input against rules before using it. In React applications, validation can happen in form controls, client submit handlers, Actions, route actions, API handlers, and server functions.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Form boundary**: The point where browser fields are collected into input values.
+- **API**: Application programming interface, the boundary where code sends or receives structured data.
+- **Parse**: Convert raw input into a typed value or a validation error.
+- **Field error**: A validation message tied to one input.
+
+## Mental model
+
+Think of validation as customs at every border. Helpful client checks speed up the trip, but the server still checks passports before granting entry.
+
+## How it is used
+
+Use client validation for immediate guidance, form Action validation for submission state, and server or API validation for authority. Use the same schema or parsing rules where the stack makes that practical.
+
+## How to use it
+
+1. Define the shape of accepted input.
+2. Parse raw strings from `FormData`, route params, and JSON bodies before using them.
+3. Return field errors and form-level errors in a serializable shape.
+4. Render errors next to the controls they describe.
+5. Keep authorization checks next to trusted server mutations, not only in the client UI.
+
+## Example: Parse form input
 
 ```tsx
-type ProfileInput = { name: string };
+type ProfileInput =
+  | { ok: true; displayName: string }
+  | { ok: false; error: string };
 
-function parseProfile(formData: FormData): ProfileInput | { error: string } {
-  const name = String(formData.get('name') ?? '').trim();
-  if (name.length < 2) return { error: 'Name must be at least 2 characters' };
-  return { name };
-}
+function parseProfile(formData: FormData): ProfileInput {
+  const displayName = String(formData.get("displayName") ?? "").trim();
 
-export async function saveProfile(formData: FormData) {
-  const parsed = parseProfile(formData);
-  if ('error' in parsed) return parsed;
-  await fetch('/api/profile', { method: 'POST', body: JSON.stringify(parsed) });
-  return { error: '' };
+  if (displayName.length < 2) {
+    return { ok: false, error: "Display name needs at least two characters." };
+  }
+
+  return { ok: true, displayName };
 }
 ```
 
-## What to practice
+The parser turns raw form data into either a trusted value or a clear error.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Action returns validation state
 
-## Wrong first move
+```tsx
+type FormState = {
+  fieldErrors: Record<string, string>;
+  message: string;
+};
 
-Letting raw `FormData` or unchecked JSON leak through the application.
+async function saveProfile(
+  previous: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const parsed = parseProfile(formData);
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  if (!parsed.ok) {
+    return {
+      fieldErrors: { displayName: parsed.error },
+      message: "Check the highlighted fields.",
+    };
+  }
 
-## Testing or debugging note
+  await updateProfile(parsed.displayName);
+  return { fieldErrors: {}, message: "Saved." };
+}
+```
 
-Test invalid values at the UI and API boundary. The server path matters most.
+The Action returns a UI-friendly result while keeping parsing at the submit boundary.
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+## Details to watch
+
+- **String input**: FormData values start as strings or files. Parse numbers, booleans, dates, and enums explicitly.
+- **Client guidance**: Client validation improves feedback but cannot be the only protection for server data.
+- **Error shape**: Use stable error keys so fields can render messages predictably.
+- **Schema reuse**: Shared validation libraries help when the same rules need to run in client and server environments.
 
 ## Series navigation
 
@@ -65,11 +103,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react-dom/components/form)
-- [react.dev](https://react.dev/reference/react/useActionState)
+- [form](https://react.dev/reference/react-dom/components/form)
+- [useActionState](https://react.dev/reference/react/useActionState)
+- [Server Functions](https://react.dev/reference/rsc/server-functions)
+- [input](https://react.dev/reference/react-dom/components/input)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

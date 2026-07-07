@@ -9,50 +9,83 @@ series:
   order: 11
 ---
 
-This is part 11 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you reuse stateful behavior without making one huge component?
+This is part 11 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Extract a hook when behavior repeats, not just because code is long.
+Custom Hooks package reusable stateful behavior behind a function name that starts with `use`. They let components share logic without sharing markup, which keeps behavior reusable across different visual designs.
 
-## Problem
+## Concept
 
-Custom hooks as reuse boundaries is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A custom Hook is a JavaScript function that calls React Hooks and follows the Rules of Hooks. It can use state, refs, context, Effects, reducers, and other custom Hooks, then return the values and functions a component needs.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Custom Hook**: A function named with a `use` prefix that can call React Hooks.
+- **Rules of Hooks**: The constraints that Hooks are called at the top level of components or other Hooks.
+- **Stateful logic**: Behavior that uses React state, Effects, refs, context, reducers, or other Hooks.
+- **Return contract**: The values and functions a custom Hook exposes to its callers.
+
+## Mental model
+
+Think of a custom Hook as a behavior adapter. The Hook owns how the behavior works. The component owns how the returned data is displayed.
+
+## How it is used
+
+Use custom Hooks for reusable browser subscriptions, form field models, local storage state, feature flags, measurements, media queries, async status wrappers, and feature-specific state machines.
+
+## How to use it
+
+1. Extract logic only after two components need the same behavior or one component has become hard to read.
+2. Name the Hook after the behavior it provides.
+3. Keep JSX out of the Hook. Return data and callbacks instead.
+4. Keep the returned shape small and stable.
+5. Document the assumptions, such as browser-only APIs or provider requirements.
+
+## Example: Local storage state
 
 ```tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-export function useLocalStorage(key: string, fallback: string) {
-  const [value, setValue] = useState(() => localStorage.getItem(key) ?? fallback);
+export function useStoredString(key: string, initialValue: string) {
+  const [value, setValue] = useState(() => {
+    return window.localStorage.getItem(key) ?? initialValue;
+  });
 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    window.localStorage.setItem(key, value);
   }, [key, value]);
 
   return [value, setValue] as const;
 }
 ```
 
-## What to practice
+The Hook owns storage synchronization. A component can use it like state without repeating the Effect.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Window size subscription
 
-## Wrong first move
+```tsx
+import { useEffect, useState } from "react";
 
-Making a custom hook return a bag of unrelated values. That recreates a component object under another name.
+export function useWindowWidth() {
+  const [width, setWidth] = useState(() => window.innerWidth);
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  useEffect(() => {
+    const update = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
-## Testing or debugging note
+  return width;
+}
+```
 
-Use the hook in two different components. If the second use needs irrelevant options, split the hook.
+The component using this Hook can focus on display, while the Hook owns the event subscription and cleanup.
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+## Details to watch
+
+- **Naming**: The `use` prefix is part of how React tooling recognizes Hook rules.
+- **No conditional calls**: A custom Hook follows the same call order rules as built-in Hooks.
+- **Browser APIs**: Hooks that touch `window`, `document`, or storage need a framework-aware plan for server rendering.
+- **Return shape**: Return an object for many named values and a tuple for state-like pairs.
 
 ## Series navigation
 
@@ -62,11 +95,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/reusing-logic-with-custom-hooks)
-- [react.dev](https://react.dev/reference/rules/rules-of-hooks)
+- [Reusing Logic with Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
+- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
+- [useDebugValue](https://react.dev/reference/react/useDebugValue)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

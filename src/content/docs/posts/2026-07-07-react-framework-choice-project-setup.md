@@ -9,49 +9,86 @@ series:
   order: 21
 ---
 
-This is part 21 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: When should you start with a full-stack framework, and when is Vite enough?
+This is part 21 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Pick the project shape from routing, data, rendering, and deployment needs.
+A React app needs more than components once it becomes a product. Routing, data loading, code splitting, rendering strategy, forms, mutations, deployment, and error handling all need an owner. A framework bundles answers to many of those choices.
 
-## Problem
+## Concept
 
-Framework choice and project setup is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A React framework is an application layer around React that supplies project structure and production features. A client-only setup uses React with a build tool and adds application pieces separately.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Framework**: A project structure and runtime model that handles common app concerns around React.
+- **CSR**: Client-side rendering, where the browser runs JavaScript to produce the UI.
+- **SSR**: Server-side rendering, where the server produces HTML for a route request.
+- **SSG**: Static site generation, where HTML is produced at build time.
+- **SPA**: Single-page app, a browser app that handles navigation client side after initial load.
+
+## Mental model
+
+Think of framework choice as deciding who owns the roads. React gives you vehicles. A framework supplies routes, loading lanes, signs, and deployment rules.
+
+## How it is used
+
+Choose a framework when the app needs routes, server rendering, data loading conventions, Server Components, form Actions, static generation, or production deployment defaults. Choose a smaller Vite-style setup for embedded widgets, internal tools, demos, and client-only apps with simple needs.
+
+## How to use it
+
+1. List the app's route, data, authentication, rendering, and deployment needs.
+2. Prefer a framework when several of those needs are product requirements.
+3. Use a client-only build tool when the app truly does not need framework-level features.
+4. Pick tooling that supports TypeScript, linting, tests, and production builds from the start.
+5. Document the rendering strategy so future features do not fight the setup.
+
+## Example: Framework decision shape
 
 ```tsx
-// main.tsx, a minimal client-only app entry
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { App } from './App';
+type ProjectNeed = {
+  routes: boolean;
+  serverRendering: boolean;
+  serverMutations: boolean;
+  staticPages: boolean;
+};
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+export function chooseReactStart(need: ProjectNeed) {
+  if (need.routes && (need.serverRendering || need.serverMutations)) {
+    return "Start with a React framework";
+  }
+
+  if (need.staticPages || need.routes) {
+    return "Compare a framework with a Vite app plus router";
+  }
+
+  return "A client-only Vite app is a reasonable starting point";
+}
 ```
 
-## What to practice
+The decision is about ownership of application concerns, not taste in folder names.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Client entry point
 
-## Wrong first move
+```tsx
+import { createRoot } from "react-dom/client";
+import { App } from "./App";
 
-Starting with a full-stack framework or a bare Vite app because that is what the last project used.
+const rootElement = document.getElementById("root");
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+if (!rootElement) {
+  throw new Error("Missing root element");
+}
 
-## Testing or debugging note
+createRoot(rootElement).render(<App />);
+```
 
-List the app requirements: routing, auth, server rendering, mutations, caching, mobile, and deployment target.
+A scratch client app owns its entry point directly. A framework often generates or hides this layer.
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+## Details to watch
+
+- **Framework value**: React docs recommend starting new apps and sites with a framework for production features.
+- **Scratch cost**: A scratch app still needs choices for routing, data fetching, code splitting, styling, and deployment.
+- **Rendering strategy**: CSR, SSR, and SSG affect performance, hosting, data access, and hydration.
+- **Migration pressure**: Starting small is fine, but adding framework-like features later means the app now owns that framework work.
 
 ## Series navigation
 
@@ -61,11 +98,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/creating-a-react-app)
-- [react.dev](https://react.dev/learn/build-a-react-app-from-scratch)
+- [Creating a React App](https://react.dev/learn/creating-a-react-app)
+- [Build a React App from Scratch](https://react.dev/learn/build-a-react-app-from-scratch)
+- [createRoot](https://react.dev/reference/react-dom/client/createRoot)
+- [hydrateRoot](https://react.dev/reference/react-dom/client/hydrateRoot)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

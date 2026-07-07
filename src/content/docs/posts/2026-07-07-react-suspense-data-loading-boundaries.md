@@ -9,53 +9,79 @@ series:
   order: 12
 ---
 
-This is part 12 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Where should loading states live when a tree waits on data?
+This is part 12 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Put the loading fallback around the UI region that is actually waiting.
+Suspense gives loading UI a place in the component tree. Instead of one global spinner or scattered conditional branches, a Suspense boundary says which part of the page can wait and what should appear while it waits.
 
-## Problem
+## Concept
 
-Data loading with Suspense boundaries is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+`<Suspense>` renders a fallback while a child is not ready because code or data suspended during rendering. A Suspense boundary controls reveal order and keeps loading states close to the UI they replace.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Suspense boundary**: A `<Suspense>` component that catches suspended children and shows a fallback.
+- **Fallback**: The temporary React node shown while children are loading.
+- **Suspend**: The act of telling React that rendering cannot finish until a Promise-like value resolves.
+- **Reveal order**: The sequence in which nested loading regions become visible.
+
+## Mental model
+
+Think of Suspense as a curtain around one section of the stage. That section can stay behind a placeholder until its actors and props are ready, while the rest of the page can keep showing.
+
+## How it is used
+
+Suspense is used for lazy-loaded components, framework data loading, streaming server rendering, nested route loading states, and client components that read a Promise with React's `use` API.
+
+## How to use it
+
+1. Wrap the part of the UI that can wait in `<Suspense>`.
+2. Choose a fallback with the same approximate footprint as the final content.
+3. Place boundaries around meaningful sections, not every tiny child.
+4. Use nested boundaries when content can reveal in stages.
+5. Use framework data APIs when the framework owns Suspense data integration.
+
+## Example: Boundary around a data section
 
 ```tsx
-import { Suspense, use } from 'react';
+import { Suspense } from "react";
 
-function Profile({ profilePromise }: { profilePromise: Promise<{ name: string }> }) {
-  const profile = use(profilePromise);
-  return <h2>{profile.name}</h2>;
-}
-
-export function ProfilePage({ profilePromise }: { profilePromise: Promise<{ name: string }> }) {
+export function ArtistPage({ artistId }: { artistId: string }) {
   return (
-    <Suspense fallback={<p>Loading profile...</p>}>
-      <Profile profilePromise={profilePromise} />
+    <main>
+      <ArtistHeader artistId={artistId} />
+      <Suspense fallback={<AlbumsSkeleton />}>
+        <Albums artistId={artistId} />
+      </Suspense>
+    </main>
+  );
+}
+```
+
+The header can render independently while the albums section waits behind its own skeleton.
+
+## Example: Nested reveal
+
+```tsx
+export function Dashboard() {
+  return (
+    <Suspense fallback={<PageShellSkeleton />}>
+      <SummaryCards />
+      <Suspense fallback={<ChartSkeleton />}>
+        <RevenueChart />
+      </Suspense>
     </Suspense>
   );
 }
 ```
 
-## What to practice
+Nested boundaries let the shell and summary reveal separately from heavier chart content.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Details to watch
 
-## Wrong first move
-
-One page-level loading spinner for every async dependency. It hides what is ready and makes the app feel slower.
-
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
-
-## Testing or debugging note
-
-Move the boundary inward until only the waiting panel falls back.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Data source**: Suspense for data depends on framework or library integration. A plain `fetch` in a client component is not enough by itself.
+- **Fallback churn**: Transitions and deferred values can keep already revealed content from being replaced by a fallback during non-urgent updates.
+- **State reset**: Content that suspends before first mount does not preserve state from that abandoned render.
+- **Boundary size**: A boundary should map to a user-meaningful loading region.
 
 ## Series navigation
 
@@ -65,11 +91,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react/Suspense)
-- [react.dev](https://react.dev/reference/react/use)
+- [Suspense](https://react.dev/reference/react/Suspense)
+- [lazy](https://react.dev/reference/react/lazy)
+- [use](https://react.dev/reference/react/use)
+- [useTransition](https://react.dev/reference/react/useTransition)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

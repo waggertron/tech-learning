@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "prebuild": "bash scripts/check-secrets.sh",
-    "build": "astro check && astro build",
+    "build": "node scripts/clear-astro-cache.mjs && astro check && astro build",
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",

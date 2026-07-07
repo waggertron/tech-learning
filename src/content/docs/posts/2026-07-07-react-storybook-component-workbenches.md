@@ -9,52 +9,97 @@ series:
   order: 27
 ---
 
-This is part 27 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you develop component states without clicking through the whole app?
+This is part 27 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Stories document component states as executable examples.
+Storybook gives components a place to be developed and reviewed outside the full application flow. A story is a named example state, which makes rare, loading, empty, and error states easier to see on purpose.
 
-## Problem
+## Concept
 
-Storybook and component workbenches is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A component workbench renders a component with controlled inputs and fixtures. Storybook organizes those workbench examples as stories, then adds tooling for docs, interaction tests, visual review, and design system development.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Story**: A named example of a component with specific props and state.
+- **Args**: Storybook's serializable inputs for controlling component props.
+- **Fixture**: Stable sample data used to render a component state.
+- **Workbench**: A focused environment for exercising a component outside the product path.
+
+## Mental model
+
+Think of Storybook as a component lab bench. The application route is the field test. The story is where you put one component under clear lighting and change its inputs deliberately.
+
+## How it is used
+
+Use Storybook for design system components, dense states that are hard to reach through the app, visual regression review, accessibility checks, and component API discussion with designers and product peers.
+
+## How to use it
+
+1. Write stories for the normal state first.
+2. Add stories for loading, empty, error, disabled, long text, and permission variants.
+3. Use fixtures that resemble real data without exposing production data.
+4. Keep story args aligned with the component's public API.
+5. Add interaction tests for important component flows when Storybook is part of the test path.
+
+## Example: Component stories
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { ActionButton } from './ActionButton';
+import type { Meta, StoryObj } from "@storybook/react";
+import { ProductCard } from "./ProductCard";
 
 const meta = {
-  component: ActionButton,
-  args: { children: 'Save' },
-} satisfies Meta<typeof ActionButton>;
+  component: ProductCard,
+  title: "Catalog/ProductCard",
+} satisfies Meta<typeof ProductCard>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = { args: { tone: 'primary' } };
-export const Danger: Story = { args: { tone: 'danger' } };
+export const InStock: Story = {
+  args: {
+    name: "Trail shoes",
+    priceCents: 12900,
+    inStock: true,
+  },
+};
+
+export const BackSoon: Story = {
+  args: {
+    name: "Rain shell",
+    priceCents: 9900,
+    inStock: false,
+  },
+};
 ```
 
-## What to practice
+Each story names a useful component state and passes props through the public component API.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Interaction story
 
-## Wrong first move
+```tsx
+import { expect, userEvent, within } from "@storybook/test";
 
-Using Storybook as a screenshot gallery with no meaningful state coverage.
+export const OpensMenu: Story = {
+  args: {
+    label: "Account",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+    await userEvent.click(canvas.getByRole("button", { name: /account/i }));
+    await expect(canvas.getByRole("menu")).toBeVisible();
+  },
+};
+```
 
-## Testing or debugging note
+The story can double as a small interaction check for a state that reviewers can also inspect visually.
 
-Add stories for loading, empty, error, disabled, and long-content states.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Public API**: Stories should use the component like a consumer would, not reach into internals.
+- **Fixture privacy**: Use realistic shapes, not real customer data or credentials.
+- **Coverage**: Storybook complements app tests. It does not replace route-level flows or production monitoring.
+- **State inventory**: Stories are most valuable when they include states that the product flow hides.
 
 ## Series navigation
 
@@ -64,11 +109,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [storybook.js.org](https://storybook.js.org/docs)
-- [storybook.js.org](https://storybook.js.org/docs/writing-stories)
+- [Storybook docs](https://storybook.js.org/docs)
+- [React Testing Library introduction](https://testing-library.com/docs/react-testing-library/intro/)
+- [Passing Props to a Component](https://react.dev/learn/passing-props-to-a-component)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

@@ -9,52 +9,82 @@ series:
   order: 30
 ---
 
-This is part 30 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How does URL structure become UI structure?
+This is part 30 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. The route tree should explain which layout owns which screen region.
+Routing connects the URL to the UI. Nested layouts make the route tree visible in the screen structure, so shared shells stay mounted while child route content changes.
 
-## Problem
+## Concept
 
-Routing and nested layouts is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A route maps a URL pattern to UI and often to data. A nested layout is parent route UI that wraps child routes, usually with an outlet or `children` slot where the child route renders.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Route**: A mapping from URL state to UI and route behavior.
+- **Nested layout**: A parent route wrapper shared by child routes.
+- **Outlet**: The placeholder where a matched child route renders.
+- **URL state**: Application state represented in the path or query string.
+
+## Mental model
+
+Think of routing as a file cabinet. The cabinet frame stays put, drawers open for sections, and documents change inside the drawer without rebuilding the whole cabinet.
+
+## How it is used
+
+Use nested layouts for dashboards, account settings, project areas, admin screens, tabbed route sections, documentation, and any place where navigation chrome should persist while content changes.
+
+## How to use it
+
+1. Design URLs around resources and user tasks.
+2. Place shared navigation and shell UI in parent layouts.
+3. Render child route content through an outlet or framework `children` slot.
+4. Keep route params and query values validated at the route boundary.
+5. Use loading and error boundaries at route levels that match user-visible sections.
+
+## Example: Generic account layout
 
 ```tsx
-import { Link, Outlet } from 'react-router';
+type AccountLayoutProps = {
+  children: React.ReactNode;
+};
 
-export function AccountLayout() {
+export function AccountLayout({ children }: AccountLayoutProps) {
   return (
-    <main>
-      <nav aria-label="Account">
-        <Link to="profile">Profile</Link>
-        <Link to="billing">Billing</Link>
+    <section className="account-layout">
+      <nav aria-label="Account settings">
+        <a href="/account/profile">Profile</a>
+        <a href="/account/security">Security</a>
       </nav>
-      <Outlet />
-    </main>
+      <main>{children}</main>
+    </section>
   );
 }
 ```
 
-## What to practice
+Frameworks differ in how they provide child route content, but the layout model is the same.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Route config sketch
 
-## Wrong first move
+```tsx
+const routes = [
+  {
+    path: "/account",
+    element: <AccountLayout />,
+    children: [
+      { path: "profile", element: <ProfilePage /> },
+      { path: "security", element: <SecurityPage /> },
+    ],
+  },
+];
+```
 
-Using conditional rendering inside one page for states that are really different URLs.
+The route shape mirrors the UI shape: account shell first, child page second.
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+## Details to watch
 
-## Testing or debugging note
-
-Refresh on a nested URL. If the same UI cannot be reconstructed, route state is missing.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **URL durability**: A routed state can be refreshed, shared, bookmarked, and opened in a new tab.
+- **Layout state**: State in a parent layout can persist while child routes change.
+- **Params**: Path and search params are strings at the browser boundary. Parse them before using typed assumptions.
+- **Data ownership**: Prefer route data APIs when the data belongs to navigation rather than one small component.
 
 ## Series navigation
 
@@ -64,11 +94,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [reactrouter.com](https://reactrouter.com/start/framework/routing)
-- [react.dev](https://react.dev/learn/preserving-and-resetting-state)
+- [Build a React App from Scratch, routing](https://react.dev/learn/build-a-react-app-from-scratch)
+- [Next.js layouts and pages](https://nextjs.org/docs/app/getting-started/layouts-and-pages)
+- [React Router docs](https://reactrouter.com/)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

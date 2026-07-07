@@ -9,56 +9,88 @@ series:
   order: 10
 ---
 
-This is part 10 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What is an effect for, and what code does not belong in one?
+This is part 10 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. An effect connects rendered React state to something outside React.
+Effects connect React to systems outside the render tree. They are not a general place for all after-render logic. Their job is synchronization: start something external with the current props and state, then stop or update it when those values change.
 
-## Problem
+## Concept
 
-Effects, synchronization, and cleanup is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+`useEffect` runs after React commits UI to the screen. An Effect can subscribe to a browser API, connect to a service, start a timer, or coordinate with a non-React widget. Its cleanup function stops the previous synchronization.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Effect**: A Hook callback used to synchronize with an external system after render commit.
+- **Cleanup**: A function returned from an Effect to stop the previous synchronization.
+- **Dependency array**: The list of reactive values that tell React when the Effect needs to resynchronize.
+- **Reactive value**: A prop, state value, or variable declared inside the component that can differ between renders.
+
+## Mental model
+
+Think of each Effect as a plug. The Effect body plugs the component into an external system. The cleanup unplugs it before React plugs in the next version.
+
+## How it is used
+
+Use Effects for subscriptions, browser events, timers, media APIs, analytics page visibility events, and external widgets. Use render calculations for derived values and event handlers for user-triggered work.
+
+## How to use it
+
+1. Name the external system the Effect synchronizes with.
+2. Read every reactive value the synchronization needs.
+3. Include those reactive values in the dependency array.
+4. Return cleanup when the external system needs to unsubscribe, disconnect, cancel, or clear.
+5. Split unrelated synchronization processes into separate Effects.
+
+## Example: Browser online status
 
 ```tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function OnlineStatus() {
   const [online, setOnline] = useState(navigator.onLine);
 
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
-    window.addEventListener('online', update);
-    window.addEventListener('offline', update);
+
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+
     return () => {
-      window.removeEventListener('online', update);
-      window.removeEventListener('offline', update);
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
     };
   }, []);
 
-  return <p>{online ? 'Online' : 'Offline'}</p>;
+  return <p>{online ? "Online" : "Offline"}</p>;
 }
 ```
 
-## What to practice
+The component subscribes to browser events after commit and removes the listeners on cleanup.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Chat room subscription
 
-## Wrong first move
+```tsx
+import { useEffect } from "react";
 
-Using an effect to calculate data that could be derived during render.
+export function ChatRoom({ roomId }: { roomId: string }) {
+  useEffect(() => {
+    const connection = createChatConnection(roomId);
+    connection.connect();
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+    return () => connection.disconnect();
+  }, [roomId]);
 
-## Testing or debugging note
+  return <h1>Room {roomId}</h1>;
+}
+```
 
-Run in Strict Mode and watch for double setup. If duplicate subscriptions break the page, cleanup is incomplete.
+When `roomId` changes, React cleans up the old connection and starts a new one for the next room.
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+## Details to watch
+
+- **External system**: If there is no external system, the code often belongs in render or an event handler.
+- **Dependencies**: The dependency list describes values used by the synchronization, not values you would prefer to ignore.
+- **Cleanup**: Subscriptions, intervals, sockets, observers, and in-flight manual work usually need cleanup.
+- **Strict Mode**: Development Strict Mode may run setup and cleanup more than once to surface unsafe Effects.
 
 ## Series navigation
 
@@ -68,11 +100,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/synchronizing-with-effects)
-- [react.dev](https://react.dev/learn/you-might-not-need-an-effect)
+- [Synchronizing with Effects](https://react.dev/learn/synchronizing-with-effects)
+- [Lifecycle of Reactive Effects](https://react.dev/learn/lifecycle-of-reactive-effects)
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+- [useEffect](https://react.dev/reference/react/useEffect)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

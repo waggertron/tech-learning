@@ -9,47 +9,80 @@ series:
   order: 19
 ---
 
-This is part 19 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What should a React test assert, and what should it ignore?
+This is part 19 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Query the page like a user or assistive technology would.
+React component tests are most useful when they describe what a user can observe or do. The test should care that a save button disables while saving, not which internal state variable stores the pending flag.
 
-## Problem
+## Concept
 
-Testing components by behavior is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Behavior testing renders a component, interacts with it through the DOM, and asserts visible output or accessible state. React's `act` helper is the underlying model for waiting until updates caused by interactions have been applied.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **DOM**: Document Object Model, the browser-like tree a test can query.
+- **act**: React's test helper for flushing updates before assertions.
+- **Accessible query**: A query based on roles, labels, or text that mirrors how users and assistive tech find controls.
+- **Implementation detail**: Internal state, private functions, or markup structure that can change while behavior stays the same.
+
+## Mental model
+
+Treat a component test like a short user session. Render the screen, perform an action, then check what changed from the user's point of view.
+
+## How it is used
+
+Use behavior tests for forms, buttons, validation messages, loading states, permissions, keyboard flows, and component contracts that should survive refactors.
+
+## How to use it
+
+1. Render the component with realistic props.
+2. Find controls by role, label, or visible text.
+3. Trigger user-like interactions.
+4. Await async UI changes when the interaction schedules updates.
+5. Assert visible text, accessible state, calls to public callbacks, or navigation effects.
+
+## Example: Counter behavior
 
 ```tsx
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Counter } from "./Counter";
 
-test('increments the counter', async () => {
+test("increments when clicked", async () => {
+  const user = userEvent.setup();
   render(<Counter />);
-  await userEvent.click(screen.getByRole('button', { name: /count: 0/i }));
-  expect(screen.getByRole('button', { name: /count: 1/i })).toBeInTheDocument();
+
+  await user.click(screen.getByRole("button", { name: /count: 0/i }));
+
+  expect(screen.getByRole("button", { name: /count: 1/i })).toBeVisible();
 });
 ```
 
-## What to practice
+The test finds the button like a user would and checks the behavior that matters.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Form validation message
 
-## Wrong first move
+```tsx
+test("shows a validation message for a short display name", async () => {
+  const user = userEvent.setup();
+  render(<ProfileForm />);
 
-Testing class names, component state, or hook internals when the behavior is what matters.
+  await user.type(screen.getByLabelText(/display name/i), "A");
+  await user.click(screen.getByRole("button", { name: /save/i }));
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  expect(
+    await screen.findByText(/at least two characters/i),
+  ).toBeVisible();
+});
+```
 
-## Testing or debugging note
+`findByText` waits for async UI to settle before the assertion runs.
 
-Remove a CSS class or refactor state. A behavior test should still pass when the user experience is unchanged.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **React updates**: Testing helpers commonly wrap interactions in `act`, but async UI still needs awaited queries.
+- **Accessible selectors**: Role and label queries double as accessibility pressure.
+- **Mocking**: Mock network or framework boundaries, not React internals.
+- **Brittleness**: Avoid asserting class names or component state unless that is the public contract.
 
 ## Series navigation
 
@@ -59,11 +92,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [testing-library.com](https://testing-library.com/docs/react-testing-library/intro/)
-- [testing-library.com](https://testing-library.com/docs/queries/about/)
+- [act](https://react.dev/reference/react/act)
+- [React Testing Library introduction](https://testing-library.com/docs/react-testing-library/intro/)
+- [Testing Library user-event](https://testing-library.com/docs/user-event/intro/)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

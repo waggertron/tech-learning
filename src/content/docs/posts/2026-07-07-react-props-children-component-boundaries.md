@@ -9,17 +9,37 @@ series:
   order: 2
 ---
 
-This is part 2 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Which data belongs in a reusable component, and which data should stay outside?
+This is part 2 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Put stable display rules inside the component. Keep fetching, routing, and product decisions outside it.
+Props are how a parent gives a component the data and callbacks it needs. `children` is the prop that lets a component wrap other UI, which makes layout shells, panels, modals, and page sections feel natural in React.
 
-## Problem
+## Concept
 
-Props, children, and component boundaries is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A component boundary is the line between what a component decides for itself and what it receives from the outside. Props make that line explicit. A reusable component should own its markup contract and styling variants, while the caller owns business decisions and the content passed into it.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Prop**: A named input passed from a parent component to a child component.
+- **Children**: The nested React nodes placed between an opening and closing component tag.
+- **Component boundary**: The public contract a component exposes through props, children, events, and rendered semantics.
+- **One-way data flow**: The React model where data moves from parent to child through props.
+
+## Mental model
+
+Think of props as labeled sockets on a component. The component decides what sockets exist and how they affect the UI. The caller plugs in data, actions, and children without reaching inside the component.
+
+## How it is used
+
+Props carry labels, IDs, item data, event callbacks, selected values, and display options. `children` carries nested UI when the child component provides the frame but should not know the exact content ahead of time.
+
+## How to use it
+
+1. Start with the smallest props that describe what the component needs to render.
+2. Use `children` when the caller should supply arbitrary nested UI.
+3. Keep app-specific fetching, routing, permission, and mutation logic outside reusable presentational components.
+4. Name callback props by the event or intent they report, such as `onDismiss` or `onSelectPlan`.
+
+## Example: Panel with children
 
 ```tsx
 type PanelProps = {
@@ -29,32 +49,55 @@ type PanelProps = {
 
 export function Panel({ title, children }: PanelProps) {
   return (
-    <section aria-labelledby="panel-title">
+    <section className="panel" aria-labelledby="panel-title">
       <h2 id="panel-title">{title}</h2>
-      {children}
+      <div className="panel-body">{children}</div>
     </section>
+  );
+}
+
+export function BillingPanel() {
+  return (
+    <Panel title="Billing">
+      <p>Your card is current.</p>
+      <button type="button">Update payment method</button>
+    </Panel>
   );
 }
 ```
 
-## What to practice
+The panel owns the section structure. The billing screen owns the actual text and action inside that structure.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Reusable row with explicit props
 
-## Wrong first move
+```tsx
+type SettingsRowProps = {
+  label: string;
+  description: string;
+  action: React.ReactNode;
+};
 
-Passing a giant object because it is convenient. That couples the component to every field the caller happens to have.
+export function SettingsRow({ label, description, action }: SettingsRowProps) {
+  return (
+    <div className="settings-row">
+      <div>
+        <h3>{label}</h3>
+        <p>{description}</p>
+      </div>
+      <div>{action}</div>
+    </div>
+  );
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+The row API names the stable parts of the design. The caller can pass a button, switch, link, or status badge as the action.
 
-## Testing or debugging note
+## Details to watch
 
-Render the component with the smallest possible props in a story or test. Missing props reveal unclear ownership.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Prop size**: A long prop list can be fine when the contract is clear. A vague `config` object often hides the real API.
+- **Children type**: `React.ReactNode` accepts strings, numbers, JSX, fragments, arrays, null, and false. Use a narrower type only when a component truly requires one element.
+- **Callbacks**: Callback props report that something happened. The parent decides what the app does next.
+- **Boundary drift**: A reusable component becomes harder to reuse when it imports route state, auth state, or data fetching directly.
 
 ## Series navigation
 
@@ -64,11 +107,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/passing-props-to-a-component)
-- [react.dev](https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children)
+- [Passing Props to a Component](https://react.dev/learn/passing-props-to-a-component)
+- [Using TypeScript with React](https://react.dev/learn/typescript)
+- [React Children legacy API](https://react.dev/reference/react/Children)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

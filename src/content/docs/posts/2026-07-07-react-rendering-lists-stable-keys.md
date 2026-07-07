@@ -9,20 +9,44 @@ series:
   order: 3
 ---
 
-This is part 3 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Why do keys need to come from identity, not array position?
+This is part 3 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. A key tells React which item is which between renders. Use domain identity whenever possible.
+Most interfaces repeat something: messages, table rows, search results, tabs, menu items, notifications. React renders those repetitions by mapping data to JSX and using keys to preserve each item's identity across renders.
 
-## Problem
+## Concept
 
-Rendering lists and stable keys is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A key is a stable identifier for one item among its siblings. React uses keys when a list changes so it can match old children to new children and preserve the right state, focus, and DOM nodes.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **List rendering**: Turning an array of data into an array of React nodes.
+- **Key**: A string or number that identifies one rendered sibling in a list.
+- **Sibling identity**: The identity React compares among children that share the same parent.
+- **Reorder**: A list change where the same items appear in a different order.
+
+## Mental model
+
+Think of keys as name tags on moving boxes. If boxes move around the room, React can still tell which box is which. If the name tag is only the current position, the label changes every time the order changes.
+
+## How it is used
+
+Keys matter in sortable tables, drag and drop lists, filtered search results, editable rows, accordions, and any repeated component with local state. A good key usually comes from the data source, such as a database ID, slug, or stable domain identifier.
+
+## How to use it
+
+1. Map over data and return one top-level node for each item.
+2. Put `key` on the node returned directly from the map call.
+3. Use an ID from the data whenever the item can be inserted, removed, filtered, or reordered.
+4. Only use an array index when the list is static and will never reorder or keep per-item state.
+
+## Example: Task list with item identity
 
 ```tsx
-type Task = { id: string; title: string; done: boolean };
+type Task = {
+  id: string;
+  title: string;
+  done: boolean;
+};
 
 export function TaskList({ tasks }: { tasks: Task[] }) {
   return (
@@ -40,24 +64,39 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
 }
 ```
 
-## What to practice
+The key comes from `task.id`, so React can keep the checkbox state attached to the same task when the list changes.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Grouped list keys
 
-## Wrong first move
+```tsx
+type Project = {
+  id: string;
+  name: string;
+  tasks: Task[];
+};
 
-Using the array index because it removes the warning. It hides state bugs when items are inserted, removed, or sorted.
+export function ProjectTaskList({ projects }: { projects: Project[] }) {
+  return (
+    <div>
+      {projects.map((project) => (
+        <section key={project.id}>
+          <h2>{project.name}</h2>
+          <TaskList tasks={project.tasks} />
+        </section>
+      ))}
+    </div>
+  );
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+Keys are scoped to siblings. Project sections need keys among project sections, and task rows need keys among task rows.
 
-## Testing or debugging note
+## Details to watch
 
-Add a reorder case to the test data. If checked boxes, focus, or local state move to the wrong row, the key is wrong.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Scope**: Keys only need to be unique among siblings, not globally unique across the whole app.
+- **Placement**: The `key` belongs on the element returned by the map, not inside the child component it calls.
+- **Index keys**: Indexes describe position, not identity. They fit static lists such as three fixed footer links.
+- **State preservation**: Changing a key tells React that this is a different component instance and resets state below it.
 
 ## Series navigation
 
@@ -67,11 +106,10 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/rendering-lists)
-- [react.dev](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key)
+- [Rendering Lists](https://react.dev/learn/rendering-lists)
+- [Preserving and Resetting State](https://react.dev/learn/preserving-and-resetting-state)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

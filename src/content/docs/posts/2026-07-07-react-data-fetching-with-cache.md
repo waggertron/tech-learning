@@ -9,59 +9,83 @@ series:
   order: 31
 ---
 
-This is part 31 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Why is "fetch in an effect" rarely the final production shape?
+This is part 31 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. A cache gives shared loading, error, retry, dedupe, and invalidation behavior.
+Server data is not the same as local UI state. It has loading states, errors, freshness rules, retries, deduplication, and invalidation. A data cache gives those concerns a shared owner.
 
-## Problem
+## Concept
 
-Data fetching with a cache is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A client data cache stores server responses by query keys and coordinates fetching, refetching, pending state, errors, and sharing across components. React docs point apps toward framework data APIs or purpose-built fetching libraries instead of one-off Effects for every request.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Server state**: Data owned by a server or external source, not by one React component.
+- **Query key**: A stable identifier for one cached read.
+- **Cache**: A store that can reuse data and coordinate refresh behavior.
+- **Stale data**: Cached data that can be shown but may need a background refresh.
+
+## Mental model
+
+Think of the cache as a library desk. Components ask for a book by catalog key. The desk either hands over the copy it has, fetches a fresh copy, or tells the component the request failed.
+
+## How it is used
+
+Use a cache for backend data used by multiple components, paginated lists, detail pages, search results, dashboards, and data that needs refetching after mutations or window focus.
+
+## How to use it
+
+1. Name each read with a stable query key.
+2. Put the fetch function at the query boundary, not inside unrelated render code.
+3. Render loading, error, empty, and success states explicitly.
+4. Use router loaders or server fetching when route navigation should own the request.
+5. Invalidate or update affected queries after mutations.
+
+## Example: TanStack Query read
 
 ```tsx
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 type Project = { id: string; name: string };
 
-async function fetchProjects(): Promise<Project[]> {
-  const response = await fetch('/api/projects');
-  if (!response.ok) throw new Error('Could not load projects');
-  return response.json();
-}
-
-export function ProjectList() {
-  const { data = [], isPending, error } = useQuery({
-    queryKey: ['projects'],
-    queryFn: fetchProjects,
+export function ProjectName({ projectId }: { projectId: string }) {
+  const query = useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => fetchProject(projectId),
   });
 
-  if (isPending) return <p>Loading...</p>;
-  if (error) return <p role="alert">Projects unavailable</p>;
-  return <ul>{data.map((project) => <li key={project.id}>{project.name}</li>)}</ul>;
+  if (query.isPending) return <p>Loading project...</p>;
+  if (query.isError) return <p>Project could not load.</p>;
+
+  return <h1>{query.data.name}</h1>;
 }
 ```
 
-## What to practice
+The query key names the cached read. The component renders each state of the request.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Query client provider
 
-## Wrong first move
+```tsx
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-Fetching in `useEffect` for every server read and rebuilding a cache one flag at a time.
+const queryClient = new QueryClient();
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+export function AppProviders({ children }: { children: React.ReactNode }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
+  );
+}
+```
 
-## Testing or debugging note
+A cache provider gives components access to the same query client instead of each component owning isolated fetch logic.
 
-Open two components that need the same data. They should share one request and one cached answer.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Effects**: Manual fetch Effects are useful for some integrations, but they do not provide cache behavior by themselves.
+- **Key design**: Keys should include every input that changes which data is fetched.
+- **Freshness**: A cache can show previous data while fetching new data. That is different from local state ownership.
+- **Framework data**: Framework loaders and Server Components can fetch before client components render, which avoids client waterfalls.
 
 ## Series navigation
 
@@ -71,11 +95,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [tanstack.com](https://tanstack.com/query/latest/docs/framework/react/overview)
-- [react.dev](https://react.dev/learn/you-might-not-need-an-effect)
+- [Build a React App from Scratch, data fetching](https://react.dev/learn/build-a-react-app-from-scratch)
+- [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect)
+- [TanStack Query React overview](https://tanstack.com/query/latest/docs/framework/react/overview)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

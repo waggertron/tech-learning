@@ -9,50 +9,77 @@ series:
   order: 34
 ---
 
-This is part 34 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Which screens deserve to stay out of the first JavaScript bundle?
+This is part 34 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Split code at route, tool, or rarely used feature boundaries.
+A React app does not need to send every component to the browser before the first screen can work. Code splitting lets the app load some code later, and `lazy` connects that delayed code to Suspense.
 
-## Problem
+## Concept
 
-Code splitting and lazy loading is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+`lazy` declares a component whose code is loaded the first time React tries to render it. While the loading Promise is pending, the component suspends and the nearest Suspense boundary shows its fallback.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Code splitting**: Breaking a JavaScript bundle into chunks that can load separately.
+- **Lazy loading**: Loading code or assets only when they are needed.
+- **Dynamic import**: The `import()` syntax that returns a Promise for a module.
+- **Chunk**: A piece of bundled JavaScript emitted by the build tool.
+
+## Mental model
+
+Think of lazy code as a room behind a closed door. The first time the user goes there, React asks the bundler for the room's code and Suspense covers the wait.
+
+## How it is used
+
+Use lazy loading for routes, admin panels, charts, editors, modals with heavy dependencies, rarely used settings, and any component that pulls a large library not needed on initial view.
+
+## How to use it
+
+1. Declare `lazy` components outside rendering functions.
+2. Return a dynamic import that resolves to a default component export.
+3. Wrap the lazy component in a Suspense boundary.
+4. Use route-level code splitting when navigation is the natural boundary.
+5. Preload or prefetch expensive chunks when the user is likely to need them soon.
+
+## Example: Lazy chart
 
 ```tsx
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from "react";
 
-const AdminDashboard = lazy(() => import('./AdminDashboard'));
+const RevenueChart = lazy(() => import("./RevenueChart"));
 
-export function AdminRoute() {
+export function AnalyticsPanel() {
   return (
-    <Suspense fallback={<p>Loading admin tools...</p>}>
-      <AdminDashboard />
+    <Suspense fallback={<p>Loading chart...</p>}>
+      <RevenueChart />
     </Suspense>
   );
 }
 ```
 
-## What to practice
+The chart code is requested when the panel renders, and Suspense owns the loading UI.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Lazy route table
 
-## Wrong first move
+```tsx
+import { lazy } from "react";
 
-Lazy-loading tiny components while the actual heavy dependency still ships on first load.
+const AdminUsersPage = lazy(() => import("./routes/AdminUsersPage"));
+const PublicHomePage = lazy(() => import("./routes/PublicHomePage"));
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+export const routes = [
+  { path: "/", element: <PublicHomePage /> },
+  { path: "/admin/users", element: <AdminUsersPage /> },
+];
+```
 
-## Testing or debugging note
+Route boundaries are natural split points because users only need the code for the route they visit.
 
-Inspect the bundle before and after. The large module should move out of the initial chunk.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Declaration location**: Declare lazy components outside other components so React does not reset them every render.
+- **Default export**: `lazy` expects the dynamic import to resolve to a module with a `default` component.
+- **Fallback quality**: Use a fallback that fits the region's layout to avoid jarring jumps.
+- **Over-splitting**: Too many tiny chunks can add network overhead. Split at meaningful boundaries.
 
 ## Series navigation
 
@@ -62,11 +89,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react/lazy)
-- [react.dev](https://react.dev/reference/react/Suspense)
+- [lazy](https://react.dev/reference/react/lazy)
+- [Suspense](https://react.dev/reference/react/Suspense)
+- [Build a React App from Scratch, code splitting](https://react.dev/learn/build-a-react-app-from-scratch)
+- [Next.js Lazy Loading](https://nextjs.org/docs/app/guides/lazy-loading)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

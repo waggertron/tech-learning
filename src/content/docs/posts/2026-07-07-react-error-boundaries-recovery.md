@@ -9,53 +9,80 @@ series:
   order: 33
 ---
 
-This is part 33 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What happens when render fails, and how does the user recover?
+This is part 33 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. A boundary limits the blast radius of a render failure.
+A React render can fail because a component throws. Error boundaries catch those render-time failures below a chosen point in the tree and replace that region with fallback UI instead of losing the whole app.
 
-## Problem
+## Concept
 
-Error boundaries and recovery is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+An error boundary is a component boundary that catches errors thrown while rendering, in lifecycle methods, or in constructors of class components below it. React's current docs also connect root error callbacks and router or framework error files to production reporting.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Error boundary**: A boundary that catches render-time errors from descendants and renders fallback UI.
+- **Fallback UI**: The replacement UI shown when the boundary catches an error.
+- **Recovery**: The path that lets the user retry, navigate away, or reset the failed region.
+- **Root error callback**: A `createRoot` option for reporting caught, uncaught, or recoverable errors in production.
+
+## Mental model
+
+Think of an error boundary as a circuit breaker for a section of UI. When a child throws, the boundary trips and keeps the rest of the page powered.
+
+## How it is used
+
+Use error boundaries around route regions, dashboards, widgets that rely on external data, embeddable components, and product areas where a local fallback is better than a blank app.
+
+## How to use it
+
+1. Place boundaries around user-meaningful UI regions.
+2. Render fallback UI that explains the failed region and offers a next action.
+3. Add a reset path, such as a retry key, route navigation, or explicit reset button.
+4. Report caught errors with component stack information.
+5. Pair error boundaries with Suspense when the region also has loading behavior.
+
+## Example: Boundary usage
 
 ```tsx
-import { ErrorBoundary } from 'react-error-boundary';
-
-function Fallback({ resetErrorBoundary }: { resetErrorBoundary: () => void }) {
+export function DashboardPage() {
   return (
-    <section role="alert">
-      <p>Something broke in this panel.</p>
-      <button onClick={resetErrorBoundary}>Try again</button>
-    </section>
+    <main>
+      <h1>Dashboard</h1>
+      <ErrorBoundary fallback={<PanelError />}>
+        <RevenuePanel />
+      </ErrorBoundary>
+      <ErrorBoundary fallback={<PanelError />}>
+        <ActivityPanel />
+      </ErrorBoundary>
+    </main>
   );
-}
-
-export function SafePanel({ children }: { children: React.ReactNode }) {
-  return <ErrorBoundary FallbackComponent={Fallback}>{children}</ErrorBoundary>;
 }
 ```
 
-## What to practice
+Separate boundaries let one panel fail without replacing the whole dashboard.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Root production reporting
 
-## Wrong first move
+```tsx
+import { createRoot } from "react-dom/client";
 
-Catching every error at the application root and replacing the whole app with one message.
+createRoot(document.getElementById("root")!, {
+  onCaughtError(error, errorInfo) {
+    reportError({
+      error,
+      componentStack: errorInfo.componentStack,
+    });
+  },
+}).render(<App />);
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+Root callbacks are a production reporting hook. They do not replace user-facing recovery UI.
 
-## Testing or debugging note
+## Details to watch
 
-Throw from a child component in development and confirm only the intended panel falls back.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Error type**: Error boundaries catch render-time errors, not every async error in event handlers or server code.
+- **Boundary size**: A boundary should map to a region the user can understand.
+- **Reset**: Fallback UI without a recovery path can trap the user in an error state.
+- **Framework routes**: Frameworks often provide route-level error files or boundary APIs. Use the local convention.
 
 ## Series navigation
 
@@ -65,11 +92,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary)
-- [github.com](https://github.com/bvaughn/react-error-boundary)
+- [createRoot error logging](https://react.dev/reference/react-dom/client/createRoot)
+- [useTransition error boundary usage](https://react.dev/reference/react/useTransition)
+- [Next.js Error Handling](https://nextjs.org/docs/app/getting-started/error-handling)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

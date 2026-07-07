@@ -9,55 +9,89 @@ series:
   order: 39
 ---
 
-This is part 39 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do dates, numbers, and text stop being hard-coded English strings?
+This is part 39 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Formatting belongs at the edge where data becomes text for a locale.
+Internationalization starts when UI stops assuming one language, date shape, number format, currency, plural rule, and text direction. React renders whatever strings and formatted values you give it, so formatting needs a clear home.
 
-## Problem
+## Concept
 
-Internationalization and formatting is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Internationalization, often shortened to i18n, is the work of making software adaptable to different languages and regions. Localization, often shortened to l10n, is the specific translation and regional formatting for one locale.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **i18n**: Internationalization, a numeronym where 18 stands for the letters between i and n.
+- **l10n**: Localization, adapting text and formats for one locale.
+- **Locale**: A language and regional preference such as `en-US` or `fr-CA`.
+- **Formatter**: A function or object that turns values into locale-aware display text.
+
+## Mental model
+
+Think of locale as a lens over display values. Store facts as data, then format them through the user's lens at the edge where text appears.
+
+## How it is used
+
+Use internationalization for dates, times, currencies, numbers, names, addresses, plural text, translated labels, route metadata, validation messages, and content that will be read by users in different locales.
+
+## How to use it
+
+1. Keep raw facts in stable machine formats, such as ISO date strings, numbers, and currency codes.
+2. Choose a locale source from route, user preference, browser preference, or account settings.
+3. Format values close to display with `Intl` or the project's i18n library.
+4. Keep translated message keys stable and meaningful.
+5. Test long text, missing translations, right-to-left layouts, and plural cases.
+
+## Example: Currency formatter
 
 ```tsx
-export function InvoiceTotal({
+export function Price({
   cents,
-  locale,
   currency,
+  locale,
 }: {
   cents: number;
-  locale: string;
   currency: string;
+  locale: string;
 }) {
-  const total = new Intl.NumberFormat(locale, {
-    style: 'currency',
+  const amount = cents / 100;
+  const formatted = new Intl.NumberFormat(locale, {
+    style: "currency",
     currency,
-  }).format(cents / 100);
+  }).format(amount);
 
-  return <p>Total due: {total}</p>;
+  return <span>{formatted}</span>;
 }
 ```
 
-## What to practice
+The component receives facts and locale context, then formats at the display boundary.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Date formatter
 
-## Wrong first move
+```tsx
+export function AppointmentTime({
+  startsAt,
+  locale,
+}: {
+  startsAt: string;
+  locale: string;
+}) {
+  const date = new Date(startsAt);
+  const formatted = new Intl.DateTimeFormat(locale, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
 
-Concatenating strings and assuming English word order, US dates, and one currency.
+  return <time dateTime={startsAt}>{formatted}</time>;
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+`dateTime` preserves the machine-readable value while the visible text follows the locale.
 
-## Testing or debugging note
+## Details to watch
 
-Render with a different locale and a long currency name. Layout and formatting should still hold.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Raw values**: Do not store already formatted currency or dates as the source of truth.
+- **Text length**: Translated strings can be much longer than English.
+- **Plural rules**: Pluralization is locale-specific. Avoid hand-built English-only suffix logic.
+- **Server and client**: Keep locale selection consistent across server rendering and hydration.
 
 ## Series navigation
 
@@ -67,11 +101,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
-- [formatjs.github.io](https://formatjs.github.io/docs/react-intl/)
+- [Next.js Internationalization guide](https://nextjs.org/docs/app/guides/internationalization)
+- [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)
+- [Intl.DateTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

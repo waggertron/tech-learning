@@ -9,64 +9,101 @@ series:
   order: 40
 ---
 
-This is part 40 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you learn what the React app is doing after it leaves your laptop?
+This is part 40 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Production feedback turns frontend architecture from guesswork into measured behavior.
+A React app changes character in production. Bundles are optimized, users have slower devices, networks fail, errors need reports, and feature rollouts need control. Deployment work gives the app feedback loops after it leaves a developer machine.
 
-## Problem
+## Concept
 
-Deployment, observability, and feature flags is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Deployment ships the built app to users. Observability collects signals about what the app is doing. Feature flags control whether a capability is visible or active for a user, cohort, environment, or rollout stage.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Deployment**: The process of building and publishing an application for users.
+- **Observability**: Telemetry that helps teams understand runtime behavior through logs, metrics, traces, errors, and events.
+- **Feature flag**: A runtime switch that controls a feature without requiring a new build.
+- **Web vitals**: User experience metrics for loading, responsiveness, and visual stability.
+- **CI**: Continuous integration, an automated environment that runs checks for a change.
+- **PII**: Personally identifiable information, data that can identify a specific person.
+
+## Mental model
+
+Think of production as a long-running experiment with instruments. Deployments change the system, observability tells you what changed, and flags let you narrow or reverse exposure.
+
+## How it is used
+
+Use this layer for production error reporting, performance monitoring, release gates, gradual rollouts, A/B tests, kill switches, analytics events, and identifying regressions after a React or framework upgrade.
+
+## How to use it
+
+1. Build the app with the production command used by CI.
+2. Report root errors and route errors to an error service.
+3. Measure key user flows and web vitals.
+4. Read feature flags from a provider or server boundary, then pass simple booleans or variants into UI.
+5. Keep server-side authorization separate from client feature visibility.
+
+## Example: Root error reporting
 
 ```tsx
-import { useEffect } from 'react';
+import { createRoot } from "react-dom/client";
 
-type Flags = { newCheckout: boolean };
+const root = createRoot(document.getElementById("root")!, {
+  onCaughtError(error, errorInfo) {
+    reportError({
+      name: "react-caught-error",
+      message: error.message,
+      componentStack: errorInfo.componentStack,
+    });
+  },
+});
 
-export function CheckoutEntry({ flags }: { flags: Flags }) {
-  useEffect(() => {
-    performance.mark('checkout-entry-rendered');
-  }, []);
+root.render(<App />);
+```
 
-  return flags.newCheckout ? <NewCheckout /> : <LegacyCheckout />;
+React root options provide one place to report production render errors caught by boundaries.
+
+## Example: Feature flag as a prop
+
+```tsx
+type CheckoutPageProps = {
+  flags: {
+    newPaymentSheet: boolean;
+  };
+};
+
+export function CheckoutPage({ flags }: CheckoutPageProps) {
+  return flags.newPaymentSheet ? (
+    <NewPaymentSheet />
+  ) : (
+    <ClassicPaymentForm />
+  );
 }
 ```
 
-## What to practice
+The component receives a simple decision. The flag system can live at the server, provider, or route boundary.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Details to watch
 
-## Wrong first move
-
-Treating deploy as the last line of the tutorial instead of the first place real constraints appear.
-
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
-
-## Testing or debugging note
-
-Track errors, web vitals, bundle size, rollout state, and the version that produced each event.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Build parity**: CI should run the same production build command used for deployment.
+- **Flag cleanup**: Expired flags become permanent complexity. Track owners and removal dates.
+- **Telemetry privacy**: Telemetry should avoid personally identifiable information unless the system is designed and approved for it.
+- **Client visibility**: A feature flag can hide UI, but it is not authorization.
 
 ## Series navigation
 
 - Previous: [Part 39: Internationalization and formatting](../2026-07-07-react-internationalization-formatting/)
-- Next: none. This closes the sequence.
+- Next: none. This is the end of the series.
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References
 
-- [web.dev](https://web.dev/articles/vitals)
-- [react.dev](https://react.dev/reference/react/Profiler)
+- [createRoot error logging](https://react.dev/reference/react-dom/client/createRoot)
+- [Next.js Deploying](https://nextjs.org/docs/app/getting-started/deploying)
+- [Next.js useReportWebVitals](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals)
+- [Profiler](https://react.dev/reference/react/Profiler)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
+- [System design topics](../../topics/system-design/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

@@ -9,60 +9,82 @@ series:
   order: 32
 ---
 
-This is part 32 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: After a write succeeds, which cached reads are now stale?
+This is part 32 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. A successful write tells you which reads may now be stale.
+A mutation changes server-backed data. After the write, every cached read that depends on that data needs a plan: update it directly, invalidate it for refetch, or navigate to a route that reloads it.
 
-## Problem
+## Concept
 
-Mutations and cache invalidation is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Cache invalidation marks cached data as no longer trustworthy after a mutation. A mutation flow owns the submitted input, pending state, error state, optimistic feedback, server write, and cache update or invalidation.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Mutation**: A write operation that changes server data.
+- **Invalidation**: Marking a cached read as stale so it can be fetched again.
+- **Optimistic update**: Temporarily updating UI before the server confirms the mutation.
+- **Rollback**: Restoring previous UI when an optimistic mutation fails.
+
+## Mental model
+
+Think of reads as copies pinned to a wall. A mutation edits the source document. Invalidation is the note that tells every stale copy to refresh before people rely on it again.
+
+## How it is used
+
+Use mutation flows for create, update, delete, reorder, approve, archive, and assign actions. Tie each mutation to the exact query keys, route loaders, or server caches affected by the write.
+
+## How to use it
+
+1. Identify which server resource the mutation changes.
+2. Identify every cached read that includes that resource.
+3. Choose direct cache update for small local changes or invalidation for refetching truth.
+4. Render pending and error states near the action.
+5. Use optimistic UI only when recovery is clear.
+
+## Example: Invalidate after update
 
 ```tsx
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function RenameProjectForm({ id }: { id: string }) {
+export function RenameProjectButton({ projectId }: { projectId: string }) {
   const queryClient = useQueryClient();
-  const rename = useMutation({
-    mutationFn: (name: string) =>
-      fetch(`/api/projects/${id}`, { method: 'PATCH', body: JSON.stringify({ name }) }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] }),
+
+  const mutation = useMutation({
+    mutationFn: (name: string) => renameProject(projectId, name),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["project", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
   });
 
   return (
-    <form onSubmit={(event) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      rename.mutate(String(data.get('name')));
-    }}>
-      <input name="name" />
-      <button disabled={rename.isPending}>Rename</button>
-    </form>
+    <button onClick={() => mutation.mutate("New project name")}>
+      {mutation.isPending ? "Renaming..." : "Rename"}
+    </button>
   );
 }
 ```
 
-## What to practice
+The mutation invalidates both the detail read and the list read because both can contain the changed name.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Small direct cache update
 
-## Wrong first move
+```tsx
+function markProjectArchived(projectId: string) {
+  queryClient.setQueryData<Project>(["project", projectId], (project) => {
+    if (!project) return project;
+    return { ...project, archived: true };
+  });
+}
+```
 
-Updating the visible component and forgetting other screens that read the same entity.
+A direct update is useful when the next cached value is known and small.
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+## Details to watch
 
-## Testing or debugging note
-
-After a mutation, navigate to another list that shows the same data. It should not show stale values.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Read mapping**: Invalidation requires knowing which reads depend on the changed resource.
+- **Server truth**: A direct cache update should match server behavior. Refetch when the server may add computed fields.
+- **Error path**: Pending and error states belong near the action the user took.
+- **Framework caches**: Next.js, React Router, and TanStack tools each have their own cache or revalidation APIs.
 
 ## Series navigation
 
@@ -72,11 +94,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [tanstack.com](https://tanstack.com/query/latest/docs/framework/react/guides/mutations)
-- [tanstack.com](https://tanstack.com/query/latest/docs/framework/react/guides/query-invalidation)
+- [useActionState](https://react.dev/reference/react/useActionState)
+- [useOptimistic](https://react.dev/reference/react/useOptimistic)
+- [TanStack Query mutations](https://tanstack.com/query/latest/docs/framework/react/guides/mutations)
+- [Next.js revalidating](https://nextjs.org/docs/app/getting-started/caching-and-revalidating)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

@@ -9,20 +9,40 @@ series:
   order: 4
 ---
 
-This is part 4 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What does state remember between renders, and what should stay as a local variable?
+This is part 4 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. State stores facts that must survive a render. Local variables store facts for this render only.
+React components become interactive when event handlers record user intent and state remembers the values that affect rendering. The pair is small, but it explains buttons, menus, tabs, toggles, inline editors, and form controls.
 
-## Problem
+## Concept
 
-Events and local state is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+An event handler is a function React calls after an event such as a click, change, submit, key press, or pointer movement. Local state is component memory managed with a Hook such as `useState`, and React renders again when that state changes.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Event handler**: A function passed to a JSX event prop such as `onClick` or `onChange`.
+- **Local state**: State owned by one component instance.
+- **State setter**: The function returned by `useState` that schedules the next state value.
+- **Render**: React calling a component to calculate what the UI should look like for the current inputs.
+
+## Mental model
+
+Treat each render as a snapshot. The JSX sees the state values from that render. Event handlers can request the next snapshot by calling a state setter.
+
+## How it is used
+
+Use local state for details that belong to one component: whether a menu is open, which tab is selected, the current text in an input, or whether help text is visible. Use events to update that state in response to user intent.
+
+## How to use it
+
+1. Declare state at the top level of the component with `useState`.
+2. Pass a function to event props. Do not call the handler while rendering.
+3. Use functional state updates when the next value depends on the previous value.
+4. Move state upward only when another component needs to read or change it.
+
+## Example: Counter with functional updates
 
 ```tsx
-import { useState } from 'react';
+import { useState } from "react";
 
 export function Counter() {
   const [count, setCount] = useState(0);
@@ -35,24 +55,39 @@ export function Counter() {
 }
 ```
 
-## What to practice
+The updater receives the current queued value, which makes it the right shape when several updates can happen close together.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Disclosure state
 
-## Wrong first move
+```tsx
+import { useState } from "react";
 
-Mutating a local variable and expecting the screen to change. React only re-renders when state, props, or context change.
+export function HelpDisclosure() {
+  const [open, setOpen] = useState(false);
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  return (
+    <section>
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        Shipping details
+      </button>
+      {open && <p>Orders ship within two business days.</p>}
+    </section>
+  );
+}
+```
 
-## Testing or debugging note
+The state belongs in the disclosure because no other component needs to own this open or closed memory.
 
-Use React DevTools to watch state updates. If state changes but UI does not, check derived rendering. If state does not change, check the event path.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Passing handlers**: `onClick={handleClick}` passes a function. `onClick={handleClick()}` calls it during render.
+- **Snapshots**: Reading state after calling a setter still reads the value from the current render.
+- **Functional updates**: Use `setValue((current) => next)` when the next value depends on the current one.
+- **State owner**: State should live where the memory is used. Shared memory moves to the closest common parent.
 
 ## Series navigation
 
@@ -62,11 +97,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/responding-to-events)
-- [react.dev](https://react.dev/learn/state-a-components-memory)
+- [Responding to Events](https://react.dev/learn/responding-to-events)
+- [State: A Component's Memory](https://react.dev/learn/state-a-components-memory)
+- [State as a Snapshot](https://react.dev/learn/state-as-a-snapshot)
+- [Queueing a Series of State Updates](https://react.dev/learn/queueing-a-series-of-state-updates)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

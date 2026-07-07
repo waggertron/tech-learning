@@ -9,63 +9,118 @@ series:
   order: 15
 ---
 
-This is part 15 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you show the intended result before the server confirms it?
+This is part 15 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Optimism is a temporary projection. The server response still owns the final state.
+Optimistic UI shows the result the user expects before the server confirms it. React gives this pattern a home with `useOptimistic`, so immediate feedback can stay connected to the Action that will confirm or reject the change.
 
-## Problem
+## Concept
 
-Optimistic UI is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+`useOptimistic` returns an optimistic state value and a function for adding temporary optimistic updates. When the related Action finishes and the real value changes, React returns to the confirmed value.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Optimistic state**: A temporary state that assumes a pending operation will succeed.
+- **Confirmed state**: The source value from props, state, or server data after the operation settles.
+- **Reducer**: The function that combines current optimistic state with an optimistic action.
+- **Rollback**: The visible return from optimistic state to confirmed state when an operation does not complete as expected.
+
+## Mental model
+
+Think of optimistic UI as a sticky note on top of the real record. The user sees the note immediately. When the real record arrives, the note is removed or replaced by confirmed data.
+
+## How it is used
+
+Use optimistic UI for likes, quick comments, checklist toggles, small edits, and add-to-cart actions where the expected result is simple and the recovery path is clear.
+
+## How to use it
+
+1. Start with a confirmed value from props or state.
+2. Create optimistic state with `useOptimistic`.
+3. Call the optimistic setter from an Action or Transition before awaiting the server result.
+4. Render the optimistic state in the same place the confirmed state normally appears.
+5. Show enough pending or error feedback that the user understands what happened if the server rejects the change.
+
+## Example: Optimistic comment list
 
 ```tsx
-import { useOptimistic } from 'react';
+import { useOptimistic } from "react";
 
-type Comment = { id: string; body: string };
+type Comment = { id: string; body: string; pending?: boolean };
 
-export function CommentList({ comments }: { comments: Comment[] }) {
-  const [optimisticComments, addOptimistic] = useOptimistic(
+export function CommentForm({
+  comments,
+  createComment,
+}: {
+  comments: Comment[];
+  createComment: (body: string) => Promise<void>;
+}) {
+  const [optimisticComments, addOptimisticComment] = useOptimistic(
     comments,
-    (current, body: string) => [...current, { id: 'pending', body }]
+    (current, body: string) => [
+      ...current,
+      { id: "pending", body, pending: true },
+    ],
   );
 
-  async function submit(formData: FormData) {
-    const body = String(formData.get('body') ?? '');
-    addOptimistic(body);
-    await fetch('/api/comments', { method: 'POST', body });
+  async function action(formData: FormData) {
+    const body = String(formData.get("body") ?? "");
+    addOptimisticComment(body);
+    await createComment(body);
   }
 
   return (
-    <form action={submit}>
-      <ul>{optimisticComments.map((comment) => <li key={comment.id}>{comment.body}</li>)}</ul>
+    <form action={action}>
+      <ul>
+        {optimisticComments.map((comment) => (
+          <li key={comment.id}>{comment.body}</li>
+        ))}
+      </ul>
       <input name="body" />
-      <button>Add</button>
+      <button>Post</button>
     </form>
   );
 }
 ```
 
-## What to practice
+The pending comment appears immediately, while the Action still owns the server write.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Optimistic like count
 
-## Wrong first move
+```tsx
+import { useOptimistic } from "react";
 
-Appending to local state and forgetting failure or reconciliation paths.
+export function LikeButton({
+  liked,
+  count,
+  saveLike,
+}: {
+  liked: boolean;
+  count: number;
+  saveLike: (liked: boolean) => Promise<void>;
+}) {
+  const [optimistic, setOptimistic] = useOptimistic({ liked, count });
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  async function toggleAction() {
+    const nextLiked = !optimistic.liked;
+    setOptimistic({
+      liked: nextLiked,
+      count: optimistic.count + (nextLiked ? 1 : -1),
+    });
+    await saveLike(nextLiked);
+  }
 
-## Testing or debugging note
+  return <button onClick={toggleAction}>{optimistic.count} likes</button>;
+}
+```
 
-Force the request to fail. The optimistic state should not become permanent truth.
+The UI responds instantly, and the confirmed props can replace the optimistic value after the save finishes.
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+## Details to watch
+
+- **Scope**: Optimistic UI works best for small, reversible changes with a clear confirmed source.
+- **Pending visibility**: Marking temporary items as pending helps explain why a row looks different.
+- **Ordering**: Multiple optimistic updates can overlap. Use reducers when updates need ordered merging.
+- **Error recovery**: The confirmed value is the reset point. Add error messaging when a failed operation needs user attention.
 
 ## Series navigation
 
@@ -75,11 +130,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react/useOptimistic)
-- [react.dev](https://react.dev/blog/2024/12/05/react-19)
+- [useOptimistic](https://react.dev/reference/react/useOptimistic)
+- [useActionState](https://react.dev/reference/react/useActionState)
+- [useTransition](https://react.dev/reference/react/useTransition)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

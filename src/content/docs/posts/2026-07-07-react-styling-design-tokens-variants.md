@@ -9,56 +9,98 @@ series:
   order: 35
 ---
 
-This is part 35 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you keep component styling predictable without hard-coding every case?
+This is part 35 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Treat visual variants as part of the component API.
+React does not require one styling system. It does require clear component contracts. Design tokens and variants help component styling stay predictable while letting callers choose supported visual states.
 
-## Problem
+## Concept
 
-Styling, design tokens, and variants is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A design token is a named value for a design decision, such as color, spacing, radius, or font size. A variant is a supported component mode, such as primary, secondary, danger, small, or full width.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Design token**: A named design value used consistently across components.
+- **Variant**: A named visual or behavioral mode supported by a component.
+- **Class contract**: The class names a component applies to connect markup to CSS.
+- **Inline style**: A JavaScript object passed to the `style` prop for dynamic CSS values.
+
+## Mental model
+
+Think of tokens as the pantry and variants as menu items. Components should cook from named ingredients and offer supported dishes, not ask every caller to season from scratch.
+
+## How it is used
+
+Use tokens for colors, spacing, typography, elevation, borders, and motion. Use variants for buttons, badges, alerts, cards, form fields, and reusable components where callers need controlled styling choices.
+
+## How to use it
+
+1. Define tokens in CSS variables, a theme object, or the project's styling system.
+2. Give components semantic variant props instead of raw style props for common modes.
+3. Map variants to classes or token values inside the component.
+4. Use inline styles for truly dynamic values, such as a measured width or user-selected color.
+5. Keep semantic HTML and accessibility behavior independent of visual variants.
+
+## Example: Button variants
 
 ```tsx
-const buttonClass = {
-  primary: 'btn btn-primary',
-  danger: 'btn btn-danger',
-  ghost: 'btn btn-ghost',
-} as const;
+type ButtonVariant = "primary" | "secondary" | "danger";
 
-type ButtonTone = keyof typeof buttonClass;
-
-export function ActionButton({
-  tone = 'primary',
-  children,
-}: {
-  tone?: ButtonTone;
+type ButtonProps = {
+  variant?: ButtonVariant;
   children: React.ReactNode;
-}) {
-  return <button className={buttonClass[tone]}>{children}</button>;
+  onClick?: () => void;
+};
+
+const variantClass: Record<ButtonVariant, string> = {
+  primary: "button button-primary",
+  secondary: "button button-secondary",
+  danger: "button button-danger",
+};
+
+export function Button({
+  variant = "primary",
+  children,
+  onClick,
+}: ButtonProps) {
+  return (
+    <button className={variantClass[variant]} onClick={onClick}>
+      {children}
+    </button>
+  );
 }
 ```
 
-## What to practice
+The caller chooses a supported mode. The component owns the class mapping.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: CSS tokens
 
-## Wrong first move
+```css
+:root {
+  --color-action: #1463ff;
+  --color-danger: #b42318;
+  --space-2: 0.5rem;
+  --radius-2: 0.375rem;
+}
 
-Accepting arbitrary class names for every internal element and calling it flexible.
+.button {
+  border-radius: var(--radius-2);
+  padding: var(--space-2);
+}
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+.button-primary {
+  background: var(--color-action);
+  color: white;
+}
+```
 
-## Testing or debugging note
+Tokens keep repeated design values named in one place, which makes component classes easier to maintain.
 
-Render every variant in a workbench. Missing states show up faster than they do in product flows.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Variant limits**: A variant prop should describe supported design choices, not expose every CSS property.
+- **Class composition**: Class helpers are useful when multiple boolean and enum variants combine.
+- **Inline styles**: React's `style` prop uses camelCased CSS property names and JavaScript values.
+- **Design drift**: Unbounded styling props can make a design system impossible to keep consistent.
 
 ## Series navigation
 
@@ -68,11 +110,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn#building-components)
-- [storybook.js.org](https://storybook.js.org/docs/writing-stories)
+- [React Quick Start, adding styles](https://react.dev/learn)
+- [Common DOM components](https://react.dev/reference/react-dom/components/common)
+- [Using CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

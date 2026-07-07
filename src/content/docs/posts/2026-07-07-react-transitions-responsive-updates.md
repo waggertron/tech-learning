@@ -9,62 +9,101 @@ series:
   order: 13
 ---
 
-This is part 13 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you keep input responsive while a heavier render catches up?
+This is part 13 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Use a transition when an update may be interrupted without corrupting the input.
+Some updates are urgent because the user is directly manipulating a control. Other updates can happen in the background because they redraw a large part of the screen. Transitions let React treat those categories differently.
 
-## Problem
+## Concept
 
-Transitions for responsive updates is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+`useTransition` marks state updates as non-urgent. React can keep urgent interactions responsive, show pending feedback, and interrupt background rendering work when newer urgent input arrives.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Transition**: A non-urgent update that React can render in the background.
+- **Urgent update**: An update that should reflect direct input immediately, such as typing into a controlled field.
+- **Pending state**: A boolean that tells the component whether a Transition is still in progress.
+- **Action**: React's name for the function passed to `startTransition`.
+
+## Mental model
+
+Think of urgent updates as the steering wheel and Transition updates as the map redraw. The steering wheel responds immediately. The map can catch up without freezing the driver.
+
+## How it is used
+
+Use Transitions for tab switches with heavy content, route navigation, filtering large visualizations after input is stored, and Actions that should expose pending state without blocking the rest of the UI.
+
+## How to use it
+
+1. Keep controlled input state outside the Transition.
+2. Wrap the expensive or non-urgent state update in `startTransition`.
+3. Use `isPending` for subtle feedback while background rendering finishes.
+4. Combine Transitions with Suspense boundaries to avoid jarring fallback replacement.
+5. For async Actions, wrap state updates after `await` in another `startTransition` when React requires it.
+
+## Example: Filter after urgent typing
 
 ```tsx
-import { useState, useTransition } from 'react';
+import { useState, useTransition } from "react";
 
-export function FilteredList({ items }: { items: string[] }) {
-  const [query, setQuery] = useState('');
-  const [deferredQuery, setDeferredQuery] = useState('');
+export function SearchableGrid({ items }: { items: string[] }) {
+  const [query, setQuery] = useState("");
+  const [visibleQuery, setVisibleQuery] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  function handleChange(nextQuery: string) {
+    setQuery(nextQuery);
+    startTransition(() => {
+      setVisibleQuery(nextQuery);
+    });
+  }
+
+  const visible = items.filter((item) => item.includes(visibleQuery));
 
   return (
     <>
-      <input value={query} onChange={(event) => {
-        const next = event.target.value;
-        setQuery(next);
-        startTransition(() => setDeferredQuery(next));
-      }} />
-      {isPending && <p>Updating...</p>}
-      <ul>
-        {items.filter((item) => item.includes(deferredQuery)).map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+      <input value={query} onChange={(event) => handleChange(event.target.value)} />
+      {isPending && <p>Updating results...</p>}
+      <ResultGrid items={visible} />
     </>
   );
 }
 ```
 
-## What to practice
+The input remains urgent. The heavier result update is allowed to lag behind briefly.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Tab switch
 
-## Wrong first move
+```tsx
+import { useState, useTransition } from "react";
 
-Debouncing every slow render. Debounce changes semantics; transitions change rendering priority.
+type Tab = "overview" | "activity" | "settings";
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+export function ProjectTabs() {
+  const [tab, setTab] = useState<Tab>("overview");
+  const [isPending, startTransition] = useTransition();
 
-## Testing or debugging note
+  function selectTab(nextTab: Tab) {
+    startTransition(() => setTab(nextTab));
+  }
 
-Throttle the CPU in browser DevTools and type quickly. The input should stay ahead of the expensive list.
+  return (
+    <>
+      <TabButtons selected={tab} onSelect={selectTab} />
+      {isPending && <span>Loading tab...</span>}
+      <TabPanel tab={tab} />
+    </>
+  );
+}
+```
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+A tab change can be non-urgent when the panel is expensive or can suspend.
+
+## Details to watch
+
+- **Controlled inputs**: Do not transition the update that controls the text the user is typing.
+- **Immediate call**: `startTransition` calls the passed function immediately and marks synchronous updates inside it.
+- **Async gap**: State updates after `await` may need a nested `startTransition` with current React behavior.
+- **Ordering**: Transitions can be interrupted. Design UI so newer intent wins clearly.
 
 ## Series navigation
 
@@ -74,11 +113,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/react/useTransition)
-- [react.dev](https://react.dev/reference/react/startTransition)
+- [useTransition](https://react.dev/reference/react/useTransition)
+- [startTransition](https://react.dev/reference/react/startTransition)
+- [useDeferredValue](https://react.dev/reference/react/useDeferredValue)
+- [Suspense](https://react.dev/reference/react/Suspense)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

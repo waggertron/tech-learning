@@ -9,52 +9,92 @@ series:
   order: 1
 ---
 
-This is part 1 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: What is a React component, and what does JSX really compile into?
+This is part 1 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Treat a component as a pure description of UI for one set of inputs.
+React starts with a small promise: describe the user interface as components, then let React keep the browser output in sync with that description. JSX is the notation most React projects use for that description, so the markup, data reads, and component calls live in one JavaScript expression.
 
-## Problem
+## Concept
 
-Components and JSX is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A React component is a JavaScript function that returns a React node, usually written with JSX. JSX looks like HTML, but it is JavaScript syntax that can call components, pass props, read variables in curly braces, and produce a tree of elements for React to render.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Component**: A capitalized JavaScript function that returns UI.
+- **JSX**: A JavaScript syntax extension for writing React element trees.
+- **React node**: Anything React can render, including JSX elements, strings, numbers, fragments, null, and arrays of nodes.
+- **Fragment**: An empty wrapper written as `<>...</>` when a component needs to return adjacent nodes without adding a DOM element.
+
+## Mental model
+
+Treat a component like a pure recipe card. Given the same props, it writes the same UI recipe. React reads that recipe, compares it with the previous one, and updates the page where the recipe changed.
+
+## How it is used
+
+Components are used for everything from a single button to a whole route. JSX lets a component keep the visible structure next to the JavaScript values that fill it in, such as a product name, an image URL, or a conditional badge.
+
+## How to use it
+
+1. Name components with capital letters so React can distinguish them from built-in HTML tags.
+2. Return one React node from each component. Use a fragment when there is no semantic wrapper.
+3. Read JavaScript values inside JSX with curly braces.
+4. Keep render work focused on describing UI. Put user intent in event handlers and outside systems in Effects or framework data APIs.
+
+## Example: Render data with JSX
 
 ```tsx
 type ProductCardProps = {
   name: string;
   priceCents: number;
+  inStock: boolean;
 };
 
-export function ProductCard({ name, priceCents }: ProductCardProps) {
+export function ProductCard({ name, priceCents, inStock }: ProductCardProps) {
+  const price = (priceCents / 100).toFixed(2);
+
   return (
     <article className="product-card">
       <h2>{name}</h2>
-      <p>${(priceCents / 100).toFixed(2)}</p>
+      <p>$ {price}</p>
+      {inStock ? <span>In stock</span> : <span>Back soon</span>}
     </article>
   );
 }
 ```
 
-## What to practice
+The component reads plain values, calculates display text, and returns JSX. The conditional badge is still normal JavaScript expressed inside the returned tree.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Compose components
 
-## Wrong first move
+```tsx
+type Product = {
+  id: string;
+  name: string;
+  priceCents: number;
+  inStock: boolean;
+};
 
-Starting with DOM mutation habits. React wants render output, then event handlers and effects for the parts that happen later.
+export function ProductGrid({ products }: { products: Product[] }) {
+  return (
+    <section aria-labelledby="featured-products">
+      <h2 id="featured-products">Featured products</h2>
+      <div className="grid">
+        {products.map((product) => (
+          <ProductCard key={product.id} {...product} />
+        ))}
+      </div>
+    </section>
+  );
+}
+```
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+The parent owns the list shape and calls `ProductCard` for each item. Composition keeps the card focused on one product and the grid focused on layout.
 
-## Testing or debugging note
+## Details to watch
 
-Log the props at the top of the component and inspect the rendered DOM. If the props are right and the markup is wrong, the render logic is the bug.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Capitalization**: Lowercase JSX names are treated as built-in tags like `div` and `button`. Capitalized names are treated as React components.
+- **Single return value**: A component returns one React node. A fragment gives adjacent nodes one wrapper without changing the DOM.
+- **Curly braces**: Use braces for JavaScript expressions, not statements. Calculate larger values before the `return`.
+- **Purity**: Render should describe output for current inputs. Code that changes the world belongs elsewhere.
 
 ## Series navigation
 
@@ -64,11 +104,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/your-first-component)
-- [react.dev](https://react.dev/learn/writing-markup-with-jsx)
+- [React Quick Start](https://react.dev/learn)
+- [Your First Component](https://react.dev/learn/your-first-component)
+- [Writing Markup with JSX](https://react.dev/learn/writing-markup-with-jsx)
+- [JavaScript in JSX with Curly Braces](https://react.dev/learn/javascript-in-jsx-with-curly-braces)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

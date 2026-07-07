@@ -9,20 +9,40 @@ series:
   order: 9
 ---
 
-This is part 9 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you reach the DOM without making render state lie?
+This is part 9 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. A ref is for reaching outside React or keeping mutable data that does not affect the UI.
+Refs hold mutable values that React does not use for rendering. They are the right tool for focus, measurement, imperative browser APIs, timers, and values that need to survive renders without causing a new render.
 
-## Problem
+## Concept
 
-Refs and DOM escape hatches is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+`useRef` returns a stable object with a mutable `current` property. Updating `current` does not re-render the component. When attached to JSX with `ref`, React fills `current` with the corresponding DOM node after commit.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Ref**: A stable object whose `current` property can hold a mutable value.
+- **DOM**: Document Object Model, the browser's object representation of the rendered page.
+- **Escape hatch**: A React API for cases where declarative rendering is not the whole job.
+- **Commit**: The phase where React applies rendered changes to the host environment, such as the browser DOM.
+
+## Mental model
+
+Think of a ref as a side pocket. It can hold a DOM handle or mutable note, but React does not look in that pocket to decide what the UI should show.
+
+## How it is used
+
+Use refs to focus inputs, scroll nodes into view, measure element sizes, store timer IDs, remember previous values for Effects, and integrate with imperative browser or third-party APIs.
+
+## How to use it
+
+1. Create a ref with `useRef(initialValue)`.
+2. Attach it to a DOM element with the `ref` prop when you need a DOM handle.
+3. Read or write `ref.current` inside event handlers or Effects.
+4. Use state instead when changing the value should update the screen.
+
+## Example: Focus an input
 
 ```tsx
-import { useRef } from 'react';
+import { useRef } from "react";
 
 export function FocusNameButton() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,30 +50,46 @@ export function FocusNameButton() {
   return (
     <>
       <input ref={inputRef} aria-label="Name" />
-      <button onClick={() => inputRef.current?.focus()}>Focus</button>
+      <button type="button" onClick={() => inputRef.current?.focus()}>
+        Focus name
+      </button>
     </>
   );
 }
 ```
 
-## What to practice
+The click handler uses a DOM method. The current focus target is not render state, so a ref is the right container.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Store a timer ID
 
-## Wrong first move
+```tsx
+import { useRef } from "react";
 
-Using refs as secret state. If the screen depends on the value, it belongs in state.
+export function SaveStatus() {
+  const timeoutRef = useRef<number | null>(null);
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  function scheduleSavedMessage() {
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+    }
 
-## Testing or debugging note
+    timeoutRef.current = window.setTimeout(() => {
+      timeoutRef.current = null;
+    }, 1200);
+  }
 
-Ask whether changing the value should re-render. If yes, use state. If no, a ref may fit.
+  return <button onClick={scheduleSavedMessage}>Save draft</button>;
+}
+```
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+The timer ID must survive renders, but showing the timer ID is not part of the UI.
+
+## Details to watch
+
+- **Render reads**: Do not use refs as hidden render state. If the UI depends on a value, use state.
+- **Timing**: DOM refs are set after React commits the element.
+- **Nullability**: DOM refs can be `null` before mount and after unmount.
+- **Imperative APIs**: Keep imperative calls contained in handlers, Effects, or small adapter components.
 
 ## Series navigation
 
@@ -63,11 +99,11 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/learn/referencing-values-with-refs)
-- [react.dev](https://react.dev/learn/manipulating-the-dom-with-refs)
+- [Referencing Values with Refs](https://react.dev/learn/referencing-values-with-refs)
+- [Manipulating the DOM with Refs](https://react.dev/learn/manipulating-the-dom-with-refs)
+- [useRef](https://react.dev/reference/react/useRef)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

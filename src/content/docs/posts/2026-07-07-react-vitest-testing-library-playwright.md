@@ -9,48 +9,84 @@ series:
   order: 28
 ---
 
-This is part 28 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: Which test catches this failure: unit, component, or browser flow?
+This is part 28 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Use the smallest test that can catch the failure with confidence.
+React testing works best as a stack, not one tool stretched across every kind of feedback. Vitest runs fast unit and component tests, Testing Library gives user-centered DOM helpers, and Playwright checks browser flows end to end.
 
-## Problem
+## Concept
 
-Vitest, Testing Library, and Playwright is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+Each test tool owns a different distance from the code. Vitest is the runner for fast JavaScript tests. Testing Library renders and queries React components through the DOM. Playwright drives a real browser against the built app.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Test runner**: The tool that discovers tests, runs them, and reports results.
+- **Component test**: A test that renders one component or small component group.
+- **E2E**: End-to-end, a test that exercises a user flow through the app in a browser.
+- **Assertion**: A check that expected behavior happened.
+
+## Mental model
+
+Think of tests as camera distances. Vitest is a close-up, Testing Library is a room view, and Playwright is a walkthrough of the building.
+
+## How it is used
+
+Use Vitest for reducers, utilities, Hooks, and component tests. Use Testing Library when assertions should follow visible UI behavior. Use Playwright for login flows, routing, integrations, browser APIs, and confidence that the deployed shape works.
+
+## How to use it
+
+1. Put pure logic tests close to the code and run them with Vitest.
+2. Render React components with Testing Library when the test needs DOM behavior.
+3. Mock network boundaries in component tests so failures stay focused.
+4. Use Playwright for user journeys that require a real browser and full app wiring.
+5. Keep E2E tests fewer and higher value because they cost more to run and debug.
+
+## Example: Vitest reducer test
 
 ```tsx
-import { test, expect } from '@playwright/test';
+import { expect, test } from "vitest";
+import { wizardReducer } from "./wizardReducer";
 
-test('user can create a project', async ({ page }) => {
-  await page.goto('/projects');
-  await page.getByRole('link', { name: /new project/i }).click();
-  await page.getByLabel(/name/i).fill('Apollo');
-  await page.getByRole('button', { name: /create/i }).click();
-  await expect(page.getByRole('heading', { name: 'Apollo' })).toBeVisible();
+test("moves to confirm after profile is saved", () => {
+  const state = {
+    step: "profile",
+    email: "reader@example.test",
+    displayName: "",
+  };
+
+  expect(
+    wizardReducer(state, { type: "profileSaved", displayName: "Weylin" }),
+  ).toEqual({
+    step: "confirm",
+    email: "reader@example.test",
+    displayName: "Weylin",
+  });
 });
 ```
 
-## What to practice
+A reducer is pure JavaScript, so it gets a fast test without rendering React.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Playwright route flow
 
-## Wrong first move
+```tsx
+import { expect, test } from "@playwright/test";
 
-Putting every behavior in browser tests. They are valuable, but slow and harder to isolate.
+test("search filters products", async ({ page }) => {
+  await page.goto("/products");
+  await page.getByLabel("Search products").fill("boots");
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+  await expect(page.getByRole("heading", { name: /boots/i })).toBeVisible();
+  await expect(page.getByText("Trail sandals")).toBeHidden();
+});
+```
 
-## Testing or debugging note
+The browser test checks routing, rendering, and user input together.
 
-Classify the bug: pure function, component behavior, integration boundary, or full browser flow.
+## Details to watch
 
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Speed**: Keep the fastest test that gives the needed confidence.
+- **Queries**: Testing Library and Playwright both reward accessible labels and roles.
+- **Flake**: E2E tests need stable fixtures, predictable auth, and clear waiting rules.
+- **Overlap**: Do not repeat the same assertion at every layer unless the risk justifies it.
 
 ## Series navigation
 
@@ -60,11 +96,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [vitest.dev](https://vitest.dev/guide/)
-- [playwright.dev](https://playwright.dev/docs/intro)
+- [Vitest guide](https://vitest.dev/guide/)
+- [React Testing Library introduction](https://testing-library.com/docs/react-testing-library/intro/)
+- [Playwright installation](https://playwright.dev/docs/intro)
+- [act](https://react.dev/reference/react/act)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)

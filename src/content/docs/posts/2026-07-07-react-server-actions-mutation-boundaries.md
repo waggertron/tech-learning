@@ -9,47 +9,85 @@ series:
   order: 17
 ---
 
-This is part 17 of the [Modern React development series](../series/modern-react-development/). The point of this entry is narrow: How do you keep trusted mutations on the server while calling them from UI?
+This is part 17 of the [Modern React development series](../series/modern-react-development/).
 
-React gets easier when each concept has a job. Put authority on the server. Let the client submit intent, not trusted state.
+Server Functions let client code request trusted work on the server when the framework supports them. When a Server Function is used from a form or Action, it becomes the mutation boundary between UI intent and server-side authority.
 
-## Problem
+## Concept
 
-Server Actions and mutation boundaries is the first place many React codebases pick up accidental complexity. The code still renders, but ownership gets blurry: state moves to the wrong component, side effects run in the wrong phase, or framework conventions get bypassed because a smaller example looked faster.
+A Server Function is an async function executed on the server and referenced by client code through framework support. React docs now use `Server Function` as the broader term, with `Server Action` describing a Server Function used as an Action.
 
-The goal is not to memorize a pattern. The goal is to recognize the pressure behind it. When that pressure appears in a real app, the React API should feel like a name for the thing you were already trying to do.
+## Terms
 
-## Working example
+- **Server Function**: An async function that client components can call through framework integration while it executes on the server.
+- **Server Action**: A Server Function used as an Action, often from a form submission.
+- **Mutation boundary**: The server-side point where input is validated, authorization is checked, and data is changed.
+- **Serializable**: Able to cross the client-server boundary as supported structured data.
+
+## Mental model
+
+Think of a Server Action as a service counter. The client brings a request ticket. The server checks identity, validates the ticket, changes the record, and returns a receipt.
+
+## How it is used
+
+Use Server Actions for form submissions, settings updates, create and delete flows, cart changes, and other writes that must run near private data, permissions, or server-side cache revalidation.
+
+## How to use it
+
+1. Place the server function where the framework recognizes the `"use server"` directive.
+2. Validate input at the server boundary before trusting it.
+3. Check authorization on the server even when the UI hides controls.
+4. Perform the write and trigger any framework cache revalidation required by the route.
+5. Return a small serializable result for UI state.
+
+## Example: Server function for a profile update
 
 ```tsx
-// actions.ts
-'use server';
+"use server";
 
-export async function updateQuantity(formData: FormData) {
-  const itemId = String(formData.get('itemId'));
-  const quantity = Number(formData.get('quantity'));
-  await saveCartQuantity({ itemId, quantity });
+export async function updateDisplayName(formData: FormData) {
+  const displayName = String(formData.get("displayName") ?? "").trim();
+
+  if (displayName.length < 2) {
+    return { ok: false, message: "Display name needs at least two characters." };
+  }
+
+  const user = await requireCurrentUser();
+  await db.user.update({
+    id: user.id,
+    displayName,
+  });
+
+  return { ok: true, message: "Profile updated." };
 }
 ```
 
-## What to practice
+The server function owns validation, identity, and the data write.
 
-- **Name the owner:** Identify which component, route, cache, or server boundary owns the data.
-- **Keep render honest:** Render should describe UI for the current inputs. Work that talks to the outside world belongs in events, actions, loaders, effects, or server code.
-- **Prefer small contracts:** Components and hooks are easier to reuse when their inputs are narrow and explicit.
-- **Test the behavior:** The useful test is the one that fails when the user-visible behavior breaks.
+## Example: Form using a server action
 
-## Wrong first move
+```tsx
+export function DisplayNameForm() {
+  return (
+    <form action={updateDisplayName}>
+      <label>
+        Display name
+        <input name="displayName" />
+      </label>
+      <button>Save</button>
+    </form>
+  );
+}
+```
 
-Treating a hidden input or disabled button as authorization.
+The form is small because the trusted mutation logic lives on the server side of the boundary.
 
-The fix is to step back and ask what kind of fact you are handling: render data, user intent, server truth, browser state, route state, or operational feedback. React has different tools because those facts have different lifetimes.
+## Details to watch
 
-## Testing or debugging note
-
-Call the action with bad data in a test. Server validation should reject it without relying on UI state.
-
-Small React examples can pass while the real app fails because the real app has reorder, retry, loading, failure, permissions, long text, slow devices, or navigation. Add one of those pressures before calling the pattern done.
+- **Terminology**: React docs distinguish Server Functions from Server Actions. The action use is one way to call a Server Function.
+- **Authority**: Client checks shape the interface. Server checks protect the data.
+- **Serialization**: Arguments and return values need to fit the framework's supported serialization rules.
+- **Version care**: Framework support for Server Functions depends on the framework and React integration version.
 
 ## Series navigation
 
@@ -59,11 +97,12 @@ Small React examples can pass while the real app fails because the real app has 
 
 ## References
 
-- [react.dev](https://react.dev/reference/rsc/server-functions)
-- [react.dev](https://react.dev/reference/rsc/use-server)
+- [Server Functions](https://react.dev/reference/rsc/server-functions)
+- [use server](https://react.dev/reference/rsc/use-server)
+- [form](https://react.dev/reference/react-dom/components/form)
+- [useActionState](https://react.dev/reference/react/useActionState)
 
 ## Related topics
 
 - [Web topics](../../topics/web/)
 - [Testing](../../topics/testing/)
-- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/)
