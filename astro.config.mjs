@@ -13,6 +13,9 @@ export default defineConfig({
     rehypePlugins: [[rehypeKatex, { throwOnError: false, output: 'htmlAndMathml' }]],
   },
   vite: {
+    build: {
+      chunkSizeWarningLimit: 700,
+    },
     server: {
       headers: {
         'Cross-Origin-Opener-Policy': 'same-origin',
@@ -31,7 +34,9 @@ export default defineConfig({
       components: {
         Footer: './src/components/Footer.astro',
         Head: './src/components/Head.astro',
+        Search: './src/components/Search.astro',
       },
+      pagefind: false,
       sidebar: [
         {
           label: 'Topics',

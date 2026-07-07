@@ -8,6 +8,7 @@
     "start": "astro dev",
     "prebuild": "bash scripts/check-secrets.sh",
     "build": "astro check && astro build",
+    "postbuild": "pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "new:topic": "bash scripts/new-topic.sh",
@@ -33,5 +34,8 @@
     "sharp": "^0.33.5",
     "typescript": "^5.7.3",
     "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
   }
 }
