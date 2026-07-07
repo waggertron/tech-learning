@@ -1,10 +1,13 @@
 ---
 title: Throttling and rate limiting, algorithms, placement, and the right response codes
-description: Token bucket, leaky bucket, fixed and sliding windows, the four algorithms, when to pick each, where in the stack to enforce them, what to send back to clients, and the pitfalls that make a "working" rate limiter let abuse through.
+description: "Token bucket, leaky bucket, fixed and sliding windows, the four algorithms, when to pick each, where in the stack to enforce them, what to send back to clients, and the pitfalls that make a working rate limiter let abuse through."
 date: 2026-04-24
 tags: [rate-limiting, throttling, security, performance]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-throttling-and-rate-limiting/
+series:
+  slug: auth-and-browser-security
+  order: 4
 ---
 
 ## What you're actually protecting

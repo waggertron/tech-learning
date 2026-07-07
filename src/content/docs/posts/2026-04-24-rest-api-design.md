@@ -132,8 +132,8 @@ Same problems as offset under the hood. Wraps them in a slightly friendlier URL.
 ### Cursor-based
 
 ```
-GET /visits?cursor=eyJsYXN0X2lkIjoxMjM0fQ==&limit=50
-→ { items: [...], next_cursor: "eyJsYXN0X2lkIjoxMjg0fQ==" }
+GET /visits?cursor=<cursor>&limit=50
+→ { items: [...], next_cursor: "<next_cursor>" }
 ```
 
 The server returns an opaque cursor encoding where to continue. Stable across inserts, fast on databases. Clients can't jump to page N, which is usually fine.

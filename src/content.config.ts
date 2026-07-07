@@ -12,6 +12,12 @@ const topicExtension = z.object({
   date: z.coerce.date().optional(),
   crosspost: z.array(z.enum(['devto', 'medium', 'linkedin', 'hashnode'])).optional(),
   canonical: z.string().url().optional(),
+  series: z
+    .object({
+      slug: z.string(),
+      order: z.number().int().positive().optional(),
+    })
+    .optional(),
 });
 
 export const collections = {

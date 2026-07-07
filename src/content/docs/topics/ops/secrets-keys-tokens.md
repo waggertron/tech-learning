@@ -59,7 +59,7 @@ A credential that represents a grant of access, usually time-limited. Tokens com
 **Structured tokens** encode claims directly. A JWT (JSON Web Token) contains a header, payload (claims like `sub`, `exp`, `scope`), and a signature. The server validates the signature without a database lookup, then reads the claims.
 
 ```
-eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEyMyIsImV4cCI6MTc0...
+<jwt_header>.<jwt_payload>.<jwt_signature>
 ```
 
 Tokens are typically:

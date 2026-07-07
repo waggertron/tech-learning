@@ -1,0 +1,962 @@
+---
+title: Modern React development, 40-part post series
+description: "A 40-part React series covering component design, state, effects, forms, data loading, Actions, Server Components, Next.js, React Router, TanStack, Expo, tooling, testing, accessibility, security, and production architecture."
+sidebar:
+  hidden: true
+---
+
+React has become two things at once: a component model for client UI, and a full-stack architecture layer when a framework opts into Server Components, Actions, streaming, and routing conventions. This series teaches both, but in the order a working developer needs them.
+
+The sequence starts with the component mental model, then state, then effects and data boundaries, then React 19-era form and mutation patterns, then the ecosystem pieces a production app needs. Each part now has a full post plus a small code anchor on this planning page.
+
+## Reading order
+
+1. [Components and JSX](../../2026-07-07-react-components-and-jsx/) - React components, JSX, and the render output contract that keeps UI code readable.
+2. [Props, children, and component boundaries](../../2026-07-07-react-props-children-component-boundaries/) - Props, children, and the boundary between reusable components and application-specific decisions.
+3. [Rendering lists and stable keys](../../2026-07-07-react-rendering-lists-stable-keys/) - Stable keys, list identity, and the bugs caused by using array positions as identity.
+4. [Events and local state](../../2026-07-07-react-events-and-local-state/) - Event handlers, local state, and the render cycle behind interactive React components.
+5. [State shape and derived values](../../2026-07-07-react-state-shape-derived-values/) - State shape, derived values, and the habit of storing each fact in exactly one place.
+6. [Lifting state and controlled inputs](../../2026-07-07-react-lifting-state-controlled-inputs/) - Controlled inputs, lifted state, and the point where parent ownership becomes simpler.
+7. [Reducers for multi-step state](../../2026-07-07-react-reducers-multi-step-state/) - Reducers for state transitions that need names, invariants, and testable branches.
+8. [Context without global soup](../../2026-07-07-react-context-without-global-soup/) - Context as dependency injection for React trees, not a dumping ground for every shared value.
+9. [Refs and DOM escape hatches](../../2026-07-07-react-refs-dom-escape-hatches/) - Refs for DOM access, focus, measurements, and mutable handles that should not drive rendering.
+10. [Effects, synchronization, and cleanup](../../2026-07-07-react-effects-synchronization-cleanup/) - Effects as synchronization with external systems, plus the cleanup discipline that prevents leaks.
+11. [Custom hooks as reuse boundaries](../../2026-07-07-react-custom-hooks-reuse-boundaries/) - Custom hooks as reusable stateful behavior with a small public contract.
+12. [Data loading with Suspense boundaries](../../2026-07-07-react-suspense-data-loading-boundaries/) - Suspense boundaries for loading states that belong to a specific part of the tree.
+13. [Transitions for responsive updates](../../2026-07-07-react-transitions-responsive-updates/) - Transitions for keeping urgent input responsive while expensive UI work catches up.
+14. [Forms with Actions](../../2026-07-07-react-forms-with-actions/) - React form Actions, pending state, and server-friendly mutation flows.
+15. [Optimistic UI](../../2026-07-07-react-optimistic-ui/) - Optimistic UI that shows intent early while preserving a path back to truth.
+16. [Server Components and client boundaries](../../2026-07-07-react-server-components-client-boundaries/) - Server Components, client boundaries, and the split between data work and browser interactivity.
+17. [Server Actions and mutation boundaries](../../2026-07-07-react-server-actions-mutation-boundaries/) - Server Actions for trusted mutations that are called from React UI.
+18. [TypeScript patterns for React](../../2026-07-07-react-typescript-component-patterns/) - TypeScript component APIs that make invalid prop combinations harder to express.
+19. [Testing components by behavior](../../2026-07-07-react-testing-components-by-behavior/) - Component tests that assert user-visible behavior instead of implementation details.
+20. [Performance and React Compiler](../../2026-07-07-react-performance-and-compiler/) - React performance work, profiler-first decisions, and how React Compiler changes memoization habits.
+21. [Framework choice and project setup](../../2026-07-07-react-framework-choice-project-setup/) - Choosing between a React framework and a smaller client-only setup.
+22. [Next.js App Router](../../2026-07-07-react-nextjs-app-router/) - Next.js App Router as a React framework for routing, server rendering, data loading, and deployment.
+23. [React Router v7](../../2026-07-07-react-router-v7-framework/) - React Router v7 as routing plus loaders, actions, nested layouts, and framework-style data flow.
+24. [TanStack Router and TanStack Start](../../2026-07-07-react-tanstack-router-start/) - TanStack Router and TanStack Start for type-safe routes, search params, and full-stack React apps.
+25. [Expo and React Native](../../2026-07-07-react-expo-react-native/) - Expo and React Native for applying React patterns to native screens instead of the browser DOM.
+26. [Vite and client-only apps](../../2026-07-07-react-vite-client-only-apps/) - Vite for React apps that do not need framework routing, server rendering, or server mutations.
+27. [Storybook and component workbenches](../../2026-07-07-react-storybook-component-workbenches/) - Storybook as a component workbench for states that are hard to reach through the product flow.
+28. [Vitest, Testing Library, and Playwright](../../2026-07-07-react-vitest-testing-library-playwright/) - Choosing between Vitest, Testing Library, and Playwright for different React failure modes.
+29. [ESLint, TypeScript, formatting, and CI gates](../../2026-07-07-react-eslint-typescript-formatting-ci/) - Tooling gates that keep type, lint, format, and test failures out of review.
+30. [Routing and nested layouts](../../2026-07-07-react-routing-nested-layouts/) - Routing and nested layouts as the structure that makes URL state match UI state.
+31. [Data fetching with a cache](../../2026-07-07-react-data-fetching-with-cache/) - Data fetching with a client cache instead of one-off effects per component.
+32. [Mutations and cache invalidation](../../2026-07-07-react-mutations-cache-invalidation/) - Mutation flows and cache invalidation after writes change server-backed data.
+33. [Error boundaries and recovery](../../2026-07-07-react-error-boundaries-recovery/) - Error boundaries, fallback UI, and recovery paths for render-time failures.
+34. [Code splitting and lazy loading](../../2026-07-07-react-code-splitting-lazy-loading/) - Code splitting with lazy imports and Suspense boundaries for less initial JavaScript.
+35. [Styling, design tokens, and variants](../../2026-07-07-react-styling-design-tokens-variants/) - Styling React components with tokens, variants, and predictable class contracts.
+36. [Accessibility as component API design](../../2026-07-07-react-accessibility-component-api-design/) - Accessibility as component API design, not a cleanup pass after markup exists.
+37. [Validation at form and API boundaries](../../2026-07-07-react-validation-form-api-boundaries/) - Validation at form and API boundaries before user input becomes trusted application state.
+38. [Auth, roles, and protected UI](../../2026-07-07-react-auth-roles-protected-ui/) - Auth-aware React UI that hides unusable controls without pretending that hiding is authorization.
+39. [Internationalization and formatting](../../2026-07-07-react-internationalization-formatting/) - Internationalization and formatting for dates, numbers, currency, and text that cannot stay hard-coded.
+40. [Deployment, observability, and feature flags](../../2026-07-07-react-deployment-observability-feature-flags/) - Deployment, observability, and feature flags for learning how React behaves in production.
+
+## 1. Components and JSX
+
+**Question:** What is a React component, and what does JSX really compile into?
+
+```tsx
+type ProductCardProps = {
+  name: string;
+  priceCents: number;
+};
+
+export function ProductCard({ name, priceCents }: ProductCardProps) {
+  return (
+    <article className="product-card">
+      <h2>{name}</h2>
+      <p>${(priceCents / 100).toFixed(2)}</p>
+    </article>
+  );
+}
+```
+
+## 2. Props, children, and component boundaries
+
+**Question:** Which data belongs in a reusable component, and which data should stay outside?
+
+```tsx
+type PanelProps = {
+  title: string;
+  children: React.ReactNode;
+};
+
+export function Panel({ title, children }: PanelProps) {
+  return (
+    <section aria-labelledby="panel-title">
+      <h2 id="panel-title">{title}</h2>
+      {children}
+    </section>
+  );
+}
+```
+
+## 3. Rendering lists and stable keys
+
+**Question:** Why do keys need to come from identity, not array position?
+
+```tsx
+type Task = { id: string; title: string; done: boolean };
+
+export function TaskList({ tasks }: { tasks: Task[] }) {
+  return (
+    <ul>
+      {tasks.map((task) => (
+        <li key={task.id}>
+          <label>
+            <input type="checkbox" defaultChecked={task.done} />
+            {task.title}
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## 4. Events and local state
+
+**Question:** What does state remember between renders, and what should stay as a local variable?
+
+```tsx
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount((current) => current + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+```
+
+## 5. State shape and derived values
+
+**Question:** How do you avoid storing the same fact twice?
+
+```tsx
+import { useState } from 'react';
+
+const filters = ['all', 'open', 'done'] as const;
+type Filter = (typeof filters)[number];
+
+export function TaskSummary({ tasks }: { tasks: { done: boolean }[] }) {
+  const [filter, setFilter] = useState<Filter>('all');
+  const openCount = tasks.filter((task) => !task.done).length;
+
+  return (
+    <>
+      <p>{openCount} open tasks</p>
+      <select value={filter} onChange={(event) => setFilter(event.target.value as Filter)}>
+        {filters.map((value) => <option key={value}>{value}</option>)}
+      </select>
+    </>
+  );
+}
+```
+
+## 6. Lifting state and controlled inputs
+
+**Question:** When should a parent own state for multiple children?
+
+```tsx
+import { useState } from 'react';
+
+export function SearchBox({ onSearch }: { onSearch: (query: string) => void }) {
+  const [query, setQuery] = useState('');
+
+  return (
+    <form onSubmit={(event) => {
+      event.preventDefault();
+      onSearch(query.trim());
+    }}>
+      <input value={query} onChange={(event) => setQuery(event.target.value)} />
+      <button type="submit">Search</button>
+    </form>
+  );
+}
+```
+
+## 7. Reducers for multi-step state
+
+**Question:** When does `useState` stop being the clearest model?
+
+```tsx
+import { useReducer } from 'react';
+
+type State = { count: number };
+type Action = { type: 'increment' } | { type: 'reset' };
+
+function reducer(state: State, action: Action): State {
+  if (action.type === 'increment') return { count: state.count + 1 };
+  return { count: 0 };
+}
+
+export function ReducerCounter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+  return (
+    <>
+      <p>{state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>Add</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </>
+  );
+}
+```
+
+## 8. Context without global soup
+
+**Question:** When does context help, and when is it just hidden coupling?
+
+```tsx
+import { createContext, use } from 'react';
+
+const ThemeContext = createContext<'light' | 'dark'>('light');
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return <ThemeContext value="dark">{children}</ThemeContext>;
+}
+
+export function ThemeBadge() {
+  const theme = use(ThemeContext);
+  return <span data-theme={theme}>{theme}</span>;
+}
+```
+
+## 9. Refs and DOM escape hatches
+
+**Question:** How do you reach the DOM without making render state lie?
+
+```tsx
+import { useRef } from 'react';
+
+export function FocusNameButton() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <>
+      <input ref={inputRef} aria-label="Name" />
+      <button onClick={() => inputRef.current?.focus()}>Focus</button>
+    </>
+  );
+}
+```
+
+## 10. Effects, synchronization, and cleanup
+
+**Question:** What is an effect for, and what code does not belong in one?
+
+```tsx
+import { useEffect, useState } from 'react';
+
+export function OnlineStatus() {
+  const [online, setOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    window.addEventListener('online', update);
+    window.addEventListener('offline', update);
+    return () => {
+      window.removeEventListener('online', update);
+      window.removeEventListener('offline', update);
+    };
+  }, []);
+
+  return <p>{online ? 'Online' : 'Offline'}</p>;
+}
+```
+
+## 11. Custom hooks as reuse boundaries
+
+**Question:** How do you reuse stateful behavior without making one huge component?
+
+```tsx
+import { useEffect, useState } from 'react';
+
+export function useLocalStorage(key: string, fallback: string) {
+  const [value, setValue] = useState(() => localStorage.getItem(key) ?? fallback);
+
+  useEffect(() => {
+    localStorage.setItem(key, value);
+  }, [key, value]);
+
+  return [value, setValue] as const;
+}
+```
+
+## 12. Data loading with Suspense boundaries
+
+**Question:** Where should loading states live when a tree waits on data?
+
+```tsx
+import { Suspense, use } from 'react';
+
+function Profile({ profilePromise }: { profilePromise: Promise<{ name: string }> }) {
+  const profile = use(profilePromise);
+  return <h2>{profile.name}</h2>;
+}
+
+export function ProfilePage({ profilePromise }: { profilePromise: Promise<{ name: string }> }) {
+  return (
+    <Suspense fallback={<p>Loading profile...</p>}>
+      <Profile profilePromise={profilePromise} />
+    </Suspense>
+  );
+}
+```
+
+## 13. Transitions for responsive updates
+
+**Question:** How do you keep input responsive while a heavier render catches up?
+
+```tsx
+import { useState, useTransition } from 'react';
+
+export function FilteredList({ items }: { items: string[] }) {
+  const [query, setQuery] = useState('');
+  const [deferredQuery, setDeferredQuery] = useState('');
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <>
+      <input value={query} onChange={(event) => {
+        const next = event.target.value;
+        setQuery(next);
+        startTransition(() => setDeferredQuery(next));
+      }} />
+      {isPending && <p>Updating...</p>}
+      <ul>
+        {items.filter((item) => item.includes(deferredQuery)).map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </>
+  );
+}
+```
+
+## 14. Forms with Actions
+
+**Question:** How do React 19 form Actions simplify pending and error state?
+
+```tsx
+import { useActionState } from 'react';
+
+async function saveProfile(_state: string | null, formData: FormData) {
+  const name = String(formData.get('name') ?? '').trim();
+  if (!name) return 'Name is required';
+  await fetch('/api/profile', { method: 'POST', body: JSON.stringify({ name }) });
+  return null;
+}
+
+export function ProfileForm() {
+  const [error, action, pending] = useActionState(saveProfile, null);
+
+  return (
+    <form action={action}>
+      <input name="name" />
+      <button disabled={pending}>Save</button>
+      {error && <p role="alert">{error}</p>}
+    </form>
+  );
+}
+```
+
+## 15. Optimistic UI
+
+**Question:** How do you show the intended result before the server confirms it?
+
+```tsx
+import { useOptimistic } from 'react';
+
+type Comment = { id: string; body: string };
+
+export function CommentList({ comments }: { comments: Comment[] }) {
+  const [optimisticComments, addOptimistic] = useOptimistic(
+    comments,
+    (current, body: string) => [...current, { id: 'pending', body }]
+  );
+
+  async function submit(formData: FormData) {
+    const body = String(formData.get('body') ?? '');
+    addOptimistic(body);
+    await fetch('/api/comments', { method: 'POST', body });
+  }
+
+  return (
+    <form action={submit}>
+      <ul>{optimisticComments.map((comment) => <li key={comment.id}>{comment.body}</li>)}</ul>
+      <input name="body" />
+      <button>Add</button>
+    </form>
+  );
+}
+```
+
+## 16. Server Components and client boundaries
+
+**Question:** Which components need the browser, and which can stay on the server?
+
+```tsx
+// ProductPage.tsx, Server Component in a framework that supports RSC
+import { AddToCartButton } from './AddToCartButton';
+
+export async function ProductPage({ id }: { id: string }) {
+  const product = await getProduct(id);
+  return (
+    <>
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+      <AddToCartButton productId={product.id} />
+    </>
+  );
+}
+```
+
+```tsx
+// AddToCartButton.tsx
+'use client';
+
+export function AddToCartButton({ productId }: { productId: string }) {
+  return <button onClick={() => addToCart(productId)}>Add to cart</button>;
+}
+```
+
+## 17. Server Actions and mutation boundaries
+
+**Question:** How do you keep trusted mutations on the server while calling them from UI?
+
+```tsx
+// actions.ts
+'use server';
+
+export async function updateQuantity(formData: FormData) {
+  const itemId = String(formData.get('itemId'));
+  const quantity = Number(formData.get('quantity'));
+  await saveCartQuantity({ itemId, quantity });
+}
+```
+
+```tsx
+export function QuantityForm({ itemId }: { itemId: string }) {
+  return (
+    <form action={updateQuantity}>
+      <input type="hidden" name="itemId" value={itemId} />
+      <input type="number" name="quantity" min={0} defaultValue={1} />
+      <button>Update</button>
+    </form>
+  );
+}
+```
+
+## 18. TypeScript patterns for React
+
+**Question:** How do you make component APIs narrow enough to be useful?
+
+```tsx
+type ButtonProps =
+  | { kind: 'link'; href: string; children: React.ReactNode }
+  | { kind: 'button'; onClick: () => void; children: React.ReactNode };
+
+export function Button(props: ButtonProps) {
+  if (props.kind === 'link') {
+    return <a href={props.href}>{props.children}</a>;
+  }
+  return <button onClick={props.onClick}>{props.children}</button>;
+}
+```
+
+## 19. Testing components by behavior
+
+**Question:** What should a React test assert, and what should it ignore?
+
+```tsx
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+test('increments the counter', async () => {
+  render(<Counter />);
+  await userEvent.click(screen.getByRole('button', { name: /count: 0/i }));
+  expect(screen.getByRole('button', { name: /count: 1/i })).toBeInTheDocument();
+});
+```
+
+## 20. Performance and React Compiler
+
+**Question:** What should you measure before adding memoization or splitting a tree?
+
+```tsx
+import { memo } from 'react';
+
+type RowProps = { label: string; selected: boolean };
+
+const Row = memo(function Row({ label, selected }: RowProps) {
+  return <li aria-selected={selected}>{label}</li>;
+});
+
+export function ResultList({ results, selectedId }: {
+  results: { id: string; label: string }[];
+  selectedId: string;
+}) {
+  return (
+    <ul>
+      {results.map((result) => (
+        <Row
+          key={result.id}
+          label={result.label}
+          selected={result.id === selectedId}
+        />
+      ))}
+    </ul>
+  );
+}
+```
+
+React Compiler changes the default performance conversation: write components that follow React's rules first, measure where the app is actually slow, and then add manual memoization only where the profiler proves it still matters.
+
+## 21. Framework choice and project setup
+
+**Question:** When should you start with a full-stack framework, and when is Vite enough?
+
+```tsx
+// main.tsx, a minimal client-only app entry
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { App } from './App';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+```
+
+## 22. Next.js App Router
+
+**Question:** What does Next.js add on top of React, and when is that trade worth it?
+
+```tsx
+// app/projects/[id]/page.tsx
+import { notFound } from 'next/navigation';
+
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const project = await getProject(id);
+  if (!project) notFound();
+
+  return (
+    <main>
+      <h1>{project.name}</h1>
+      <p>{project.description}</p>
+    </main>
+  );
+}
+```
+
+## 23. React Router v7
+
+**Question:** When do route loaders, actions, and nested layouts belong in the router instead of ad hoc components?
+
+```tsx
+import { Form, Link, Outlet, useLoaderData } from 'react-router';
+
+export async function loader() {
+  return { projects: await getProjects() };
+}
+
+export function ProjectsRoute() {
+  const { projects } = useLoaderData<typeof loader>();
+  return (
+    <>
+      <Form role="search">
+        <input name="q" aria-label="Search projects" />
+      </Form>
+      {projects.map((project) => (
+        <Link key={project.id} to={project.id}>{project.name}</Link>
+      ))}
+      <Outlet />
+    </>
+  );
+}
+```
+
+## 24. TanStack Router and TanStack Start
+
+**Question:** What do type-safe routes and search params buy in a large app?
+
+```tsx
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/projects/$projectId')({
+  loader: ({ params }) => getProject(params.projectId),
+  component: ProjectRoute,
+});
+
+function ProjectRoute() {
+  const project = Route.useLoaderData();
+  return <h1>{project.name}</h1>;
+}
+```
+
+## 25. Expo and React Native
+
+**Question:** What changes when React targets native screens instead of the browser DOM?
+
+```tsx
+import { Link } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
+
+export default function HomeScreen() {
+  return (
+    <View>
+      <Text>Projects</Text>
+      <Link href="/projects/new" asChild>
+        <Pressable>
+          <Text>Create project</Text>
+        </Pressable>
+      </Link>
+    </View>
+  );
+}
+```
+
+## 26. Vite and client-only apps
+
+**Question:** When is a simple client-rendered app the right answer?
+
+```ts
+// vite.config.ts
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+  },
+});
+```
+
+## 27. Storybook and component workbenches
+
+**Question:** How do you develop component states without clicking through the whole app?
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { ActionButton } from './ActionButton';
+
+const meta = {
+  component: ActionButton,
+  args: { children: 'Save' },
+} satisfies Meta<typeof ActionButton>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Primary: Story = { args: { tone: 'primary' } };
+export const Danger: Story = { args: { tone: 'danger' } };
+```
+
+## 28. Vitest, Testing Library, and Playwright
+
+**Question:** Which test catches this failure: unit, component, or browser flow?
+
+```tsx
+import { test, expect } from '@playwright/test';
+
+test('user can create a project', async ({ page }) => {
+  await page.goto('/projects');
+  await page.getByRole('link', { name: /new project/i }).click();
+  await page.getByLabel(/name/i).fill('Apollo');
+  await page.getByRole('button', { name: /create/i }).click();
+  await expect(page.getByRole('heading', { name: 'Apollo' })).toBeVisible();
+});
+```
+
+## 29. ESLint, TypeScript, formatting, and CI gates
+
+**Question:** Which errors should never reach review?
+
+```json
+{
+  "scripts": {
+    "check": "tsc --noEmit && eslint . && prettier --check .",
+    "test": "vitest run",
+    "e2e": "playwright test"
+  }
+}
+```
+
+## 30. Routing and nested layouts
+
+**Question:** How does URL structure become UI structure?
+
+```tsx
+import { Link, Outlet } from 'react-router';
+
+export function AccountLayout() {
+  return (
+    <main>
+      <nav aria-label="Account">
+        <Link to="profile">Profile</Link>
+        <Link to="billing">Billing</Link>
+      </nav>
+      <Outlet />
+    </main>
+  );
+}
+```
+
+## 31. Data fetching with a cache
+
+**Question:** Why is "fetch in an effect" rarely the final production shape?
+
+```tsx
+import { useQuery } from '@tanstack/react-query';
+
+type Project = { id: string; name: string };
+
+async function fetchProjects(): Promise<Project[]> {
+  const response = await fetch('/api/projects');
+  if (!response.ok) throw new Error('Could not load projects');
+  return response.json();
+}
+
+export function ProjectList() {
+  const { data = [], isPending, error } = useQuery({
+    queryKey: ['projects'],
+    queryFn: fetchProjects,
+  });
+
+  if (isPending) return <p>Loading...</p>;
+  if (error) return <p role="alert">Projects unavailable</p>;
+  return <ul>{data.map((project) => <li key={project.id}>{project.name}</li>)}</ul>;
+}
+```
+
+## 32. Mutations and cache invalidation
+
+**Question:** After a write succeeds, which cached reads are now stale?
+
+```tsx
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+export function RenameProjectForm({ id }: { id: string }) {
+  const queryClient = useQueryClient();
+  const rename = useMutation({
+    mutationFn: (name: string) =>
+      fetch(`/api/projects/${id}`, { method: 'PATCH', body: JSON.stringify({ name }) }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] }),
+  });
+
+  return (
+    <form onSubmit={(event) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      rename.mutate(String(data.get('name')));
+    }}>
+      <input name="name" />
+      <button disabled={rename.isPending}>Rename</button>
+    </form>
+  );
+}
+```
+
+## 33. Error boundaries and recovery
+
+**Question:** What happens when render fails, and how does the user recover?
+
+```tsx
+import { ErrorBoundary } from 'react-error-boundary';
+
+function Fallback({ resetErrorBoundary }: { resetErrorBoundary: () => void }) {
+  return (
+    <section role="alert">
+      <p>Something broke in this panel.</p>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </section>
+  );
+}
+
+export function SafePanel({ children }: { children: React.ReactNode }) {
+  return <ErrorBoundary FallbackComponent={Fallback}>{children}</ErrorBoundary>;
+}
+```
+
+## 34. Code splitting and lazy loading
+
+**Question:** Which screens deserve to stay out of the first JavaScript bundle?
+
+```tsx
+import { lazy, Suspense } from 'react';
+
+const AdminDashboard = lazy(() => import('./AdminDashboard'));
+
+export function AdminRoute() {
+  return (
+    <Suspense fallback={<p>Loading admin tools...</p>}>
+      <AdminDashboard />
+    </Suspense>
+  );
+}
+```
+
+## 35. Styling, design tokens, and variants
+
+**Question:** How do you keep component styling predictable without hard-coding every case?
+
+```tsx
+const buttonClass = {
+  primary: 'btn btn-primary',
+  danger: 'btn btn-danger',
+  ghost: 'btn btn-ghost',
+} as const;
+
+type ButtonTone = keyof typeof buttonClass;
+
+export function ActionButton({
+  tone = 'primary',
+  children,
+}: {
+  tone?: ButtonTone;
+  children: React.ReactNode;
+}) {
+  return <button className={buttonClass[tone]}>{children}</button>;
+}
+```
+
+## 36. Accessibility as component API design
+
+**Question:** How do you make inaccessible states impossible or obvious?
+
+```tsx
+type IconButtonProps = {
+  label: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+};
+
+export function IconButton({ label, icon, onClick }: IconButtonProps) {
+  return (
+    <button aria-label={label} onClick={onClick}>
+      {icon}
+    </button>
+  );
+}
+```
+
+## 37. Validation at form and API boundaries
+
+**Question:** Where do you validate user input before it becomes application state?
+
+```tsx
+type ProfileInput = { name: string };
+
+function parseProfile(formData: FormData): ProfileInput | { error: string } {
+  const name = String(formData.get('name') ?? '').trim();
+  if (name.length < 2) return { error: 'Name must be at least 2 characters' };
+  return { name };
+}
+
+export async function saveProfile(formData: FormData) {
+  const parsed = parseProfile(formData);
+  if ('error' in parsed) return parsed;
+  await fetch('/api/profile', { method: 'POST', body: JSON.stringify(parsed) });
+  return { error: '' };
+}
+```
+
+## 38. Auth, roles, and protected UI
+
+**Question:** How do you hide UI affordances without confusing that for authorization?
+
+```tsx
+type Session = { userId: string; roles: string[] } | null;
+
+export function DeleteProjectButton({ session }: { session: Session }) {
+  const canDelete = session?.roles.includes('admin') ?? false;
+
+  if (!canDelete) return null;
+
+  return (
+    <button type="button" data-danger>
+      Delete project
+    </button>
+  );
+}
+```
+
+The server still enforces the permission. The component only removes a button the user cannot use.
+
+## 39. Internationalization and formatting
+
+**Question:** How do dates, numbers, and text stop being hard-coded English strings?
+
+```tsx
+export function InvoiceTotal({
+  cents,
+  locale,
+  currency,
+}: {
+  cents: number;
+  locale: string;
+  currency: string;
+}) {
+  const total = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+  }).format(cents / 100);
+
+  return <p>Total due: {total}</p>;
+}
+```
+
+## 40. Deployment, observability, and feature flags
+
+**Question:** How do you learn what the React app is doing after it leaves your laptop?
+
+```tsx
+import { useEffect } from 'react';
+
+type Flags = { newCheckout: boolean };
+
+export function CheckoutEntry({ flags }: { flags: Flags }) {
+  useEffect(() => {
+    performance.mark('checkout-entry-rendered');
+  }, []);
+
+  return flags.newCheckout ? <NewCheckout /> : <LegacyCheckout />;
+}
+```
+
+Production React work includes bundle inspection, error reporting, web vitals, rollout flags, and rollback paths. The post should connect UI architecture to operations instead of treating deployment as a final npm command.
+
+## Series output
+
+Each finished post should include:
+
+- A short problem statement, the bug or confusion this part removes.
+- One complete example component or hook.
+- One "wrong first move" section.
+- One testing or debugging note.
+- Links to the next part and the closest official React reference.
+
+## References
+
+- [React Learn](https://react.dev/learn), the official learning path for components, state, effects, and hooks.
+- [React Reference](https://react.dev/reference/react), the official API reference.
+- [React v19 announcement](https://react.dev/blog/2024/12/05/react-19), Actions, `useActionState`, `useOptimistic`, `use`, Server Components, and related changes.
+- [React Compiler](https://react.dev/learn/react-compiler), the current React guidance on compiler-assisted optimization.
+- [Next.js App Router](https://nextjs.org/docs/app), framework docs for file-system routing, Server Components, data fetching, caching, and deployment.
+- [React Router framework installation](https://reactrouter.com/start/framework/installation), routing and full-stack framework setup.
+- [TanStack Router](https://tanstack.com/router/latest), type-safe routing and route loaders.
+- [Expo documentation](https://docs.expo.dev/), React Native app framework and tooling.
+
+## Related topics
+
+- [Web topics](../../../topics/web/)
+- [Testing](../../../topics/testing/)
+- [TypeScript async mutex](../../2026-05-15-typescript-async-mutex-pattern/)

@@ -5,6 +5,9 @@ date: 2026-05-23
 tags: [security, ai, prompt-injection, llm, agentic-ai]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-05-23-grok-morse-code-prompt-injection/
+series:
+  slug: auth-and-browser-security
+  order: 5
 ---
 
 In May 2026, an X user drained roughly $175K in DRB tokens from a wallet connected to xAI's Grok chatbot. The weapon was Morse code. About 80% of the funds were eventually returned after the DRB community identified the attacker, but the incident is a clean illustration of two OWASP LLM vulnerabilities that most AI integrations have not hardened against.

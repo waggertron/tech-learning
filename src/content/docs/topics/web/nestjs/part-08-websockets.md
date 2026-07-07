@@ -249,7 +249,7 @@ Client sends the token in the handshake:
 
 ```javascript
 const socket = io('http://localhost:3000', {
-  auth: { token: 'eyJhb...' },
+  auth: { token: '<token>' },
 });
 ```
 

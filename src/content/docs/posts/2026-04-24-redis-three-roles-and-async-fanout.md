@@ -1,10 +1,13 @@
 ---
 title: Redis three ways, broker, cache, pub/sub, and how the async flow ties it together
-description: One Redis instance, three logical DBs, three jobs. Celery runs the VRP, Django publishes events, a Node WebSocket gateway fans them out. How an "Optimize Day" click becomes an async pipeline that ends with a map pin moving.
+description: "One Redis instance, three logical DBs, three jobs. Celery runs the VRP, Django publishes events, a Node WebSocket gateway fans them out. How an Optimize Day click becomes an async pipeline that ends with a map pin moving."
 date: 2026-04-24
 tags: [redis, celery, websockets, concurrency, queueing]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-redis-three-roles-and-async-fanout/
+series:
+  slug: home-health-routing-system
+  order: 8
 ---
 
 ## One Redis, three jobs

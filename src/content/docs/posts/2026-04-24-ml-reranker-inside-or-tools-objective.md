@@ -1,10 +1,13 @@
 ---
 title: A scikit-learn re-ranker inside an OR-Tools objective
-description: The VRP solver knows about drive time. It doesn't know "this patient prefers Sarah" or "this clinician runs late on Tuesdays." A small gradient-boosted model injected into the objective function does.
+description: "The VRP solver knows about drive time. It does not know patient preference, clinician reliability, or soft assignment quality. A small gradient-boosted model injected into the objective function does."
 date: 2026-04-24
 tags: [or-tools, sklearn, ml, optimization, cs-challenges]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-ml-reranker-inside-or-tools-objective/
+series:
+  slug: home-health-routing-system
+  order: 7
 ---
 
 ## Where optimizers stop being enough

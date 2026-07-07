@@ -1,10 +1,13 @@
 ---
 title: HIPAA for software engineers, Privacy Rule, Security Rule, and the BAA
-description: The 1996 law that shapes every line of code touching US health data. What counts as PHI, what the Security Rule's technical safeguards actually require, what a Business Associate Agreement binds you to, and the cloud services you're allowed to use.
+description: "The 1996 law that shapes every line of code touching US health data. What counts as PHI, what the Security Rule's technical safeguards require, what a Business Associate Agreement binds you to, and which cloud services you can use."
 date: 2026-04-24
 tags: [hipaa, compliance, healthcare, security, phi]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-hipaa-for-software-engineers/
+series:
+  slug: home-health-routing-system
+  order: 2
 ---
 
 ## What HIPAA actually is

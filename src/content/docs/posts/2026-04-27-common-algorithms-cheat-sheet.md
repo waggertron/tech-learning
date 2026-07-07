@@ -5,6 +5,9 @@ description: "Dijkstra's shortest path, Kahn's and DFS topological sort, Kruskal
 tags: [algorithms, graphs, shortest-path, mst, topological-sort, interview-prep, reference]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-27-common-algorithms-cheat-sheet/
+series:
+  slug: cs-reference-sheets
+  order: 2
 ---
 
 ## What's in here

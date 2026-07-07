@@ -1,0 +1,22 @@
+---
+title: Auth and browser security, post series
+description: "A security sequence through browser boundaries, token placement, stateless auth, rate limits, and prompt-injection failures in agentic systems."
+sidebar:
+  hidden: true
+---
+
+This series starts at the browser boundary and moves outward. The practical question is always the same: what can an attacker reach, what does the platform protect by default, and where does the application need an explicit control?
+
+## Reading order
+
+1. [Modern web browser security](../../2026-04-24-modern-browser-security/), same-origin policy, CORS, CSP, headers, and browser-side attack surfaces.
+2. [Sessions, JWTs, and cookies](../../2026-04-24-sessions-jwts-cookies/), where auth credentials live and which attacks reach them.
+3. [Stateless auth](../../2026-04-24-stateless-auth/), what JWTs buy, what they do not, and why revocation pulls state back in.
+4. [Throttling and rate limiting](../../2026-04-24-throttling-and-rate-limiting/), abuse limits, fairness limits, Redis-backed counters, and response semantics.
+5. [Grok, Morse code, and $175K](../../2026-05-23-grok-morse-code-prompt-injection/), prompt injection as a capability-boundary failure.
+
+## Related topics
+
+- [Modern browser security](../../../topics/web/)
+- [Prompt injection defense](../../../topics/ai/prompt-engineering/prompt-injection-defense/)
+- [Secrets, keys, and tokens](../../../topics/ops/secrets-keys-tokens/)

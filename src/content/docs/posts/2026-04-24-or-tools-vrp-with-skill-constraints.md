@@ -1,10 +1,13 @@
 ---
 title: OR-Tools VRP with skill constraints and time windows
-description: The home-health routing problem isn't textbook TSP. Clinicians have credentials. Patients have windows. Some visits need an RN, others need an LVN. Here's what OR-Tools actually needs to model that.
+description: "The home-health routing problem is not textbook TSP. Clinicians have credentials. Patients have windows. Some visits need an RN, others need an LVN. Here is what OR-Tools actually needs to model that."
 date: 2026-04-24
 tags: [or-tools, vrp, optimization, cs-challenges]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-or-tools-vrp-with-skill-constraints/
+series:
+  slug: home-health-routing-system
+  order: 6
 ---
 
 ## What makes real-world VRP hard

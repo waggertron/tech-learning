@@ -5,6 +5,9 @@ date: 2026-04-27
 tags: [data-structures, algorithms, complexity, interview-prep, reference]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-27-data-structure-complexity-cheat-sheet/
+series:
+  slug: cs-reference-sheets
+  order: 1
 ---
 
 ## Why this post exists

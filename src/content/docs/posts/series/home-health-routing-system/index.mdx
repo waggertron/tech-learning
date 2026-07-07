@@ -1,0 +1,25 @@
+---
+title: Home-health routing system, post series
+description: "A project-shaped sequence through home-health data modeling, compliance constraints, tenant isolation, workflow states, route optimization, ML scoring, and async delivery."
+sidebar:
+  hidden: true
+---
+
+This series follows the architecture behind a home-health scheduling and routing system. The through-line is practical: every technical choice is constrained by clinical data, regulated health information, agency tenancy, clinician skills, visit windows, and an operations UI that needs route updates without polling.
+
+## Reading order
+
+1. [OASIS in home-health software](../../2026-04-24-oasis-in-home-health-software/), the assessment data model that shapes the product.
+2. [HIPAA for software engineers](../../2026-04-24-hipaa-for-software-engineers/), the privacy and security rules around the data.
+3. [Multi-tenant Django that fails closed](../../2026-04-24-multi-tenant-django-fails-closed/), row-level tenancy as the default query path.
+4. [The state machine as a DRF action](../../2026-04-24-visit-state-machine-as-drf-action/), visit workflow rules exposed through safe API transitions.
+5. [What I learned from Google's Vehicle Routing Problem docs](../../2026-04-24-vehicle-routing-problem-intro/), the optimization problem behind scheduling routes.
+6. [OR-Tools VRP with skill constraints and time windows](../../2026-04-24-or-tools-vrp-with-skill-constraints/), the solver model for clinicians and visits.
+7. [A scikit-learn re-ranker inside an OR-Tools objective](../../2026-04-24-ml-reranker-inside-or-tools-objective/), soft preference scoring inside a hard routing model.
+8. [Redis three ways](../../2026-04-24-redis-three-roles-and-async-fanout/), background work, cache state, and WebSocket fanout.
+
+## Related topics
+
+- [Vehicle Routing Problem](../../../topics/cs/vehicle-routing/)
+- [Django](../../../topics/web/django/)
+- [Haversine Distance](../../../topics/cs/haversine-distance/)

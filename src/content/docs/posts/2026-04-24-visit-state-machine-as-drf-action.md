@@ -5,6 +5,9 @@ date: 2026-04-24
 tags: [django, drf, state-machines, rest-api, patterns]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-visit-state-machine-as-drf-action/
+series:
+  slug: home-health-routing-system
+  order: 4
 ---
 
 ## The problem REST never solved

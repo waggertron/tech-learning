@@ -1,10 +1,13 @@
 ---
 title: Stateless auth, the idea, the tradeoffs, and what "stateless" actually means in practice
-description: A walk through the stateless-auth idea, what JWTs buy you and don't, why sessions keep coming back, and the hybrid patterns that most modern systems actually run.
+description: "A walk through the stateless-auth idea, what JWTs buy you and do not, why sessions keep coming back, and the hybrid patterns that most modern systems actually run."
 date: 2026-04-24
 tags: [auth, jwt, sessions, security, architecture]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-stateless-auth/
+series:
+  slug: auth-and-browser-security
+  order: 3
 ---
 
 ## The promise of "stateless"
@@ -24,7 +27,7 @@ This is the central sales pitch of JWTs. It's real, and it's also narrower than 
 A JSON Web Token is a compact, signed (sometimes encrypted) token with three dot-separated base64url parts:
 
 ```
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEyMyIsImV4cCI6MTcxNDA2NTYwMH0.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+<jwt_header>.<jwt_payload>.<jwt_signature>
 ```
 
 Three parts:

@@ -1,10 +1,13 @@
 ---
 title: Modern web browser security, the threats, the headers, and what Chrome has been doing about them
-description: Same-origin policy, CORS, CSP, supply-chain attacks, clickjacking, cookie theft, CVE soup. What the browser protects you from by default, what it doesn't, and the headers / features you should ship on every site.
+description: "Same-origin policy, CORS, CSP, supply-chain attacks, clickjacking, cookie theft, and CVE soup. What the browser protects you from by default, what it does not, and the headers and features you should ship on every site."
 date: 2026-04-24
 tags: [browser, security, web, csp, cors]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-modern-browser-security/
+series:
+  slug: auth-and-browser-security
+  order: 1
 ---
 
 ## What browsers protect against by default

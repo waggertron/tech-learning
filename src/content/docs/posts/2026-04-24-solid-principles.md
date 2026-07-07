@@ -1,10 +1,13 @@
 ---
 title: SOLID principles, what each one is actually trying to prevent
-description: Five design principles from Robert Martin's 2000 paper, still quoted, still misquoted. What each one was reacting to, what it actually says, and the misreadings that make SOLID feel like ceremony when it should feel like force multiplication.
+description: "Five design principles from Robert Martin's 2000 paper, still quoted, still misquoted. What each one was reacting to, what it actually says, and the misreadings that make SOLID feel like ceremony when it should feel like force multiplication."
 date: 2026-04-24
 tags: [solid, design, oop, architecture]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-solid-principles/
+series:
+  slug: software-design-principles
+  order: 1
 ---
 
 ## The acronym and its heritage

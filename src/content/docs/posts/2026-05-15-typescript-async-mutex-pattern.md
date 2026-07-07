@@ -5,6 +5,9 @@ date: 2026-05-15
 tags: [typescript, concurrency, async, patterns]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-05-15-typescript-async-mutex-pattern/
+series:
+  slug: software-design-principles
+  order: 3
 ---
 
 ## The problem
@@ -174,7 +177,7 @@ Skip it when state lives in an external system. Put the lock there instead, as c
 
 - [MDN: Using Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
 - [Node.js Event Loop explainer](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
-- [async-mutex on npm](https://github.com/DirtyHairy/async-mutex) — a well-tested library implementation of this same pattern
+- [async-mutex on npm](https://github.com/DirtyHairy/async-mutex), a well-tested library implementation of this same pattern
 
 ## Related topics
 

@@ -51,3 +51,4 @@ src/content/docs/
 - `.agents/skills/learning/SKILL.md`: capture reusable pattern-recognition insights on topic pages.
 - `.agents/skills/problem-audit/SKILL.md`: audit internal coding-problem references.
 - `.agents/skills/markdown-table-pipes/SKILL.md`: avoid broken Markdown tables when math cells contain pipe characters.
+- `.agents/skills/post-series/SKILL.md`: create and maintain post series pages, series frontmatter, reading order, and long-form series plans.

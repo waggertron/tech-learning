@@ -1,10 +1,13 @@
 ---
 title: OASIS in home-health software, the assessment data model you didn't ask for
-description: The CMS-mandated patient assessment behind every US home-health agency, what OASIS-E is, why it's 90+ "M-items," the five encounter types, how it's submitted, and why building software around it is harder than it looks.
+description: "The CMS-mandated patient assessment behind every US home-health agency, what OASIS-E is, why its 90+ M-items matter, the five encounter types, how it is submitted, and why building software around it is harder than it looks."
 date: 2026-04-24
 tags: [oasis, home-health, healthcare, medicare, cms, compliance]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-oasis-in-home-health-software/
+series:
+  slug: home-health-routing-system
+  order: 1
 ---
 
 ## What OASIS is

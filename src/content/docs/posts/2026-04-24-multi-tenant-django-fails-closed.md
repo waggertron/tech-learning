@@ -1,10 +1,13 @@
 ---
 title: Multi-tenant Django that fails closed
-description: Row-level tenancy with a middleware and a TenantScopedManager, every query filtered automatically, every insert blocked if the tenant isn't set. No way to accidentally leak across tenants.
+description: "Row-level tenancy with a middleware and a TenantScopedManager, every query filtered automatically, every insert blocked if the tenant is not set. No way to accidentally leak across tenants."
 date: 2026-04-24
 tags: [django, multi-tenant, security, patterns]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-multi-tenant-django-fails-closed/
+series:
+  slug: home-health-routing-system
+  order: 3
 ---
 
 ## The failure mode

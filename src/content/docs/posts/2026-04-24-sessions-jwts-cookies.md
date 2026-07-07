@@ -1,10 +1,13 @@
 ---
 title: Sessions, JWTs, and cookies, security and tradeoffs
-description: Where you put the auth token decides your threat model. A walk through session cookies, JWTs in headers, JWTs in cookies, the XSS/CSRF tradeoff, SameSite, HttpOnly, Secure, and why the "right answer" depends on the shape of your product.
+description: "Where you put the auth token decides your threat model. A walk through session cookies, JWTs in headers, JWTs in cookies, the XSS and CSRF tradeoff, SameSite, HttpOnly, Secure, and why the right answer depends on the shape of your product."
 date: 2026-04-24
 tags: [auth, cookies, jwt, xss, csrf, security]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-sessions-jwts-cookies/
+series:
+  slug: auth-and-browser-security
+  order: 2
 ---
 
 ## The real question behind "should I use a JWT?"

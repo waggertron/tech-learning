@@ -5,6 +5,9 @@ date: 2026-04-24
 tags: [design, oop, composition, inheritance, architecture]
 crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-04-24-composition-over-inheritance/
+series:
+  slug: software-design-principles
+  order: 2
 ---
 
 ## The one-line version

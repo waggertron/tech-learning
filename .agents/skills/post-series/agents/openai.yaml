@@ -1,0 +1,4 @@
+interface:
+  display_name: "Post series"
+  short_description: "Create and maintain post series for the tech-learning site."
+  default_prompt: "Create or update a post series in the tech-learning repo."
