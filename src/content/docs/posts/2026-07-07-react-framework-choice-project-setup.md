@@ -44,12 +44,7 @@ Choose a framework when the app needs routes, server rendering, data loading con
 ## Example: Framework decision shape
 
 ```tsx
-type ProjectNeed = {
-  routes: boolean;
-  serverRendering: boolean;
-  serverMutations: boolean;
-  staticPages: boolean;
-};
+import type { ProjectNeed } from "./projectNeeds";
 
 export function chooseReactStart(need: ProjectNeed) {
   if (need.routes && (need.serverRendering || need.serverMutations)) {

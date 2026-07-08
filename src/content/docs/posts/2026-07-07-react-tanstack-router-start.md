@@ -69,6 +69,9 @@ Search params become a typed boundary instead of loose string reads throughout t
 ## Example: Route loader idea
 
 ```tsx
+import { createFileRoute } from "@tanstack/react-router";
+import { getProject } from "./projects";
+
 export const Route = createFileRoute("/projects/$projectId")({
   loader: async ({ params }) => {
     return getProject(params.projectId);

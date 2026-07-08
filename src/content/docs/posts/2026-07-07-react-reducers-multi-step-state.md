@@ -75,6 +75,8 @@ The handler reports intent. The reducer owns the transition rule.
 ## Example: Wizard reducer
 
 ```tsx
+import type { Reducer } from "react";
+
 type WizardState = {
   step: "account" | "profile" | "confirm";
   email: string;
@@ -86,7 +88,7 @@ type WizardAction =
   | { type: "profileSaved"; displayName: string }
   | { type: "back" };
 
-function wizardReducer(state: WizardState, action: WizardAction): WizardState {
+const wizardReducer: Reducer<WizardState, WizardAction> = (state, action) => {
   switch (action.type) {
     case "emailChanged":
       return { ...state, email: action.email };
@@ -95,7 +97,7 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
     case "back":
       return { ...state, step: "account" };
   }
-}
+};
 ```
 
 A reducer keeps step movement and data edits in one transition model instead of scattering them across screens.

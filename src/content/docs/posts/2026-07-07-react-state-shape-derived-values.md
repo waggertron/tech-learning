@@ -72,6 +72,8 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
 ## Example: Store IDs instead of objects
 
 ```tsx
+import type { ReactElement } from "react";
+
 type User = { id: string; name: string };
 
 export function AssigneeSummary({
@@ -80,7 +82,7 @@ export function AssigneeSummary({
 }: {
   users: User[];
   selectedUserId: string | null;
-}) {
+}): ReactElement {
   const selectedUser = users.find((user) => user.id === selectedUserId) ?? null;
 
   return <p>{selectedUser ? selectedUser.name : "No assignee"}</p>;

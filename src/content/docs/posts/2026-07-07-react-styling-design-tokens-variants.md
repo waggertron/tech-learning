@@ -43,11 +43,13 @@ Use tokens for colors, spacing, typography, elevation, borders, and motion. Use 
 ## Example: Button variants
 
 ```tsx
+import type { ReactNode } from "react";
+
 type ButtonVariant = "primary" | "secondary" | "danger";
 
 type ButtonProps = {
   variant?: ButtonVariant;
-  children: React.ReactNode;
+  children: ReactNode;
   onClick?: () => void;
 };
 

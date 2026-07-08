@@ -69,7 +69,10 @@ The mutation invalidates both the detail read and the list read because both can
 ## Example: Small direct cache update
 
 ```tsx
-function markProjectArchived(projectId: string) {
+import type { QueryClient } from "@tanstack/react-query";
+import type { Project } from "./types";
+
+function markProjectArchived(queryClient: QueryClient, projectId: string) {
   queryClient.setQueryData<Project>(["project", projectId], (project) => {
     if (!project) return project;
     return { ...project, archived: true };

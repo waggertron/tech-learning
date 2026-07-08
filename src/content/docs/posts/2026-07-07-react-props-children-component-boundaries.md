@@ -42,9 +42,11 @@ Props carry labels, IDs, item data, event callbacks, selected values, and displa
 ## Example: Panel with children
 
 ```tsx
+import type { ReactNode } from "react";
+
 type PanelProps = {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export function Panel({ title, children }: PanelProps) {
@@ -71,10 +73,12 @@ The panel owns the section structure. The billing screen owns the actual text an
 ## Example: Reusable row with explicit props
 
 ```tsx
+import type { ReactNode } from "react";
+
 type SettingsRowProps = {
   label: string;
   description: string;
-  action: React.ReactNode;
+  action: ReactNode;
 };
 
 export function SettingsRow({ label, description, action }: SettingsRowProps) {

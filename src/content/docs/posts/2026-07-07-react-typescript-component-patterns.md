@@ -43,16 +43,18 @@ Use TypeScript for design system components, forms, route params, API data bound
 ## Example: Discriminated button props
 
 ```tsx
+import type { ReactNode } from "react";
+
 type ButtonProps =
   | {
       kind: "button";
       onClick: () => void;
-      children: React.ReactNode;
+      children: ReactNode;
     }
   | {
       kind: "link";
       href: string;
-      children: React.ReactNode;
+      children: ReactNode;
     };
 
 export function ActionButton(props: ButtonProps) {
@@ -69,10 +71,12 @@ The `kind` field controls which props are available. A caller cannot pass `href`
 ## Example: Generic list renderer
 
 ```tsx
+import type { ReactNode } from "react";
+
 type ListProps<T> = {
   items: T[];
   getKey: (item: T) => string;
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T) => ReactNode;
 };
 
 export function List<T>({ items, getKey, renderItem }: ListProps<T>) {

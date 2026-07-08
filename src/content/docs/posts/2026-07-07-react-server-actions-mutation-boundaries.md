@@ -45,6 +45,9 @@ Use Server Actions for form submissions, settings updates, create and delete flo
 ```tsx
 "use server";
 
+import { requireCurrentUser } from "./auth";
+import { db } from "./db";
+
 export async function updateDisplayName(formData: FormData) {
   const displayName = String(formData.get("displayName") ?? "").trim();
 
@@ -67,6 +70,8 @@ The server function owns validation, identity, and the data write.
 ## Example: Form using a server action
 
 ```tsx
+import { updateDisplayName } from "./actions";
+
 export function DisplayNameForm() {
   return (
     <form action={updateDisplayName}>

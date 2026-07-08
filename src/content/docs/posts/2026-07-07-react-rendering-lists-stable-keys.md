@@ -42,13 +42,15 @@ Keys matter in sortable tables, drag and drop lists, filtered search results, ed
 ## Example: Task list with item identity
 
 ```tsx
+import type { ReactElement } from "react";
+
 type Task = {
   id: string;
   title: string;
   done: boolean;
 };
 
-export function TaskList({ tasks }: { tasks: Task[] }) {
+export function TaskList({ tasks }: { tasks: Task[] }): ReactElement {
   return (
     <ul>
       {tasks.map((task) => (
@@ -69,6 +71,8 @@ The key comes from `task.id`, so React can keep the checkbox state attached to t
 ## Example: Grouped list keys
 
 ```tsx
+import { TaskList } from "./TaskList";
+
 type Project = {
   id: string;
   name: string;

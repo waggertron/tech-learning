@@ -42,13 +42,19 @@ Components are used for everything from a single button to a whole route. JSX le
 ## Example: Render data with JSX
 
 ```tsx
+import type { ReactElement } from "react";
+
 type ProductCardProps = {
   name: string;
   priceCents: number;
   inStock: boolean;
 };
 
-export function ProductCard({ name, priceCents, inStock }: ProductCardProps) {
+export function ProductCard({
+  name,
+  priceCents,
+  inStock,
+}: ProductCardProps): ReactElement {
   const price = (priceCents / 100).toFixed(2);
 
   return (
@@ -66,6 +72,8 @@ The component reads plain values, calculates display text, and returns JSX. The 
 ## Example: Compose components
 
 ```tsx
+import { ProductCard } from "./ProductCard";
+
 type Product = {
   id: string;
   name: string;

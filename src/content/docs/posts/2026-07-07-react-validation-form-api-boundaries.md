@@ -43,18 +43,26 @@ Use client validation for immediate guidance, form Action validation for submiss
 ## Example: Parse form input
 
 ```tsx
+import { z } from "zod";
+
 type ProfileInput =
   | { ok: true; displayName: string }
   | { ok: false; error: string };
 
-function parseProfile(formData: FormData): ProfileInput {
-  const displayName = String(formData.get("displayName") ?? "").trim();
+const profileSchema = z.object({
+  displayName: z.string().trim().min(2),
+});
 
-  if (displayName.length < 2) {
+function parseProfile(formData: FormData): ProfileInput {
+  const parsed = profileSchema.safeParse({
+    displayName: formData.get("displayName"),
+  });
+
+  if (!parsed.success) {
     return { ok: false, error: "Display name needs at least two characters." };
   }
 
-  return { ok: true, displayName };
+  return { ok: true, displayName: parsed.data.displayName };
 }
 ```
 
@@ -63,6 +71,9 @@ The parser turns raw form data into either a trusted value or a clear error.
 ## Example: Action returns validation state
 
 ```tsx
+import { parseProfile } from "./parseProfile";
+import { updateProfile } from "./profileApi";
+
 type FormState = {
   fieldErrors: Record<string, string>;
   message: string;

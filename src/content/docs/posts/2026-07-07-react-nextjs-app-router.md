@@ -71,10 +71,12 @@ The route can fetch server data before passing a small ID to a client-side butto
 
 ```tsx
 // app/account/layout.tsx
+import type { ReactNode } from "react";
+
 export default function AccountLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <section>

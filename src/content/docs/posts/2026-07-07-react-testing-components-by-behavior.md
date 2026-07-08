@@ -62,6 +62,11 @@ The test finds the button like a user would and checks the behavior that matters
 ## Example: Form validation message
 
 ```tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { expect, test } from "vitest";
+import { ProfileForm } from "./ProfileForm";
+
 test("shows a validation message for a short display name", async () => {
   const user = userEvent.setup();
   render(<ProfileForm />);

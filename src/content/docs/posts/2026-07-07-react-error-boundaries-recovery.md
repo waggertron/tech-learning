@@ -43,6 +43,11 @@ Use error boundaries around route regions, dashboards, widgets that rely on exte
 ## Example: Boundary usage
 
 ```tsx
+import { ActivityPanel } from "./ActivityPanel";
+import { ErrorBoundary } from "./ErrorBoundary";
+import { PanelError } from "./PanelError";
+import { RevenuePanel } from "./RevenuePanel";
+
 export function DashboardPage() {
   return (
     <main>

@@ -43,8 +43,11 @@ Use React Router for applications where routes, nested layouts, forms, and route
 ## Example: Route with loader data
 
 ```tsx
-export async function loader({ params }: { params: { projectId: string } }) {
-  return getProject(params.projectId);
+import type { LoaderFunctionArgs } from "react-router";
+import { getProject } from "./projects";
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  return getProject(String(params.projectId));
 }
 
 export default function ProjectRoute({

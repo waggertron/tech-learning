@@ -43,8 +43,10 @@ Use nested layouts for dashboards, account settings, project areas, admin screen
 ## Example: Generic account layout
 
 ```tsx
+import type { ReactNode } from "react";
+
 type AccountLayoutProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export function AccountLayout({ children }: AccountLayoutProps) {
@@ -65,6 +67,10 @@ Frameworks differ in how they provide child route content, but the layout model 
 ## Example: Route config sketch
 
 ```tsx
+import { AccountLayout } from "./AccountLayout";
+import { ProfilePage } from "./ProfilePage";
+import { SecurityPage } from "./SecurityPage";
+
 const routes = [
   {
     path: "/account",

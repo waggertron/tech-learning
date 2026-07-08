@@ -43,6 +43,7 @@ Use context when many descendants need the same stable dependency or state owner
 ## Example: Theme provider with a reader hook
 
 ```tsx
+import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
 
 type Theme = "light" | "dark";
@@ -54,7 +55,7 @@ export function ThemeProvider({
   children,
 }: {
   theme: Theme;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return <ThemeContext value={theme}>{children}</ThemeContext>;
 }
@@ -73,6 +74,10 @@ The custom hook turns the nullable context into a clear contract for the rest of
 ## Example: Feature-level provider
 
 ```tsx
+import { createContext } from "react";
+import { ProjectHeader } from "./ProjectHeader";
+import { ProjectTaskList } from "./ProjectTaskList";
+
 type ProjectContextValue = {
   projectId: string;
   canEdit: boolean;

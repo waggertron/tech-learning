@@ -65,6 +65,9 @@ React root options provide one place to report production render errors caught b
 ## Example: Feature flag as a prop
 
 ```tsx
+import { ClassicPaymentForm } from "./ClassicPaymentForm";
+import { NewPaymentSheet } from "./NewPaymentSheet";
+
 type CheckoutPageProps = {
   flags: {
     newPaymentSheet: boolean;

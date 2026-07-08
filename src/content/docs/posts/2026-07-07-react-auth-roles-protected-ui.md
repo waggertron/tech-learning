@@ -44,9 +44,11 @@ Use auth-aware React UI for navigation, disabled controls, empty states, admin s
 ## Example: Permission-aware button
 
 ```tsx
+import type { MouseEventHandler } from "react";
+
 type DeleteProjectButtonProps = {
   canDelete: boolean;
-  onDelete: () => void;
+  onDelete: MouseEventHandler<HTMLButtonElement>;
 };
 
 export function DeleteProjectButton({
@@ -70,6 +72,9 @@ The UI explains the missing permission. The server still needs to enforce the sa
 ## Example: Server check at mutation boundary
 
 ```tsx
+import { canDeleteProject, requireCurrentUser } from "./auth";
+import { db } from "./db";
+
 async function deleteProject(projectId: string) {
   const user = await requireCurrentUser();
   const allowed = await canDeleteProject(user.id, projectId);

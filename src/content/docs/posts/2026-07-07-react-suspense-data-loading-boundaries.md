@@ -62,6 +62,12 @@ The header can render independently while the albums section waits behind its ow
 ## Example: Nested reveal
 
 ```tsx
+import { Suspense } from "react";
+import { ChartSkeleton } from "./ChartSkeleton";
+import { PageShellSkeleton } from "./PageShellSkeleton";
+import { RevenueChart } from "./RevenueChart";
+import { SummaryCards } from "./SummaryCards";
+
 export function Dashboard() {
   return (
     <Suspense fallback={<PageShellSkeleton />}>

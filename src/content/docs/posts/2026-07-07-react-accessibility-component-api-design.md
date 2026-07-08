@@ -43,9 +43,11 @@ Use this model for buttons, icon buttons, forms, dialogs, menus, tabs, alerts, n
 ## Example: Icon button requires a label
 
 ```tsx
+import type { ReactNode } from "react";
+
 type IconButtonProps = {
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   onClick: () => void;
 };
 

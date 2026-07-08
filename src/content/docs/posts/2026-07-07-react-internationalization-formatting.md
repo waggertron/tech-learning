@@ -43,6 +43,8 @@ Use internationalization for dates, times, currencies, numbers, names, addresses
 ## Example: Currency formatter
 
 ```tsx
+import type { ReactElement } from "react";
+
 export function Price({
   cents,
   currency,
@@ -51,7 +53,7 @@ export function Price({
   cents: number;
   currency: string;
   locale: string;
-}) {
+}): ReactElement {
   const amount = cents / 100;
   const formatted = new Intl.NumberFormat(locale, {
     style: "currency",
@@ -67,13 +69,15 @@ The component receives facts and locale context, then formats at the display bou
 ## Example: Date formatter
 
 ```tsx
+import type { ReactElement } from "react";
+
 export function AppointmentTime({
   startsAt,
   locale,
 }: {
   startsAt: string;
   locale: string;
-}) {
+}): ReactElement {
   const date = new Date(startsAt);
   const formatted = new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
