@@ -71,7 +71,7 @@ export function BillingPanel() {
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-1-panel-with-children" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-props-children-component-boundaries-1-panel-with-children.tsx" role="region" aria-label="Output view: Panel with children">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <div class="react-example-output__rendered"><section class="panel" aria-labelledby="panel-title"><h2 id="panel-title">Billing</h2><div class="panel-body"><p>Your card is current.</p></div></section></div>
+    <div class="react-example-output__rendered"><section class="panel" aria-labelledby="panel-title"><h2 id="panel-title">Billing</h2><div class="panel-body"><p>Your card is current.</p><button type="button">Update payment method</button></div></section></div>
   </div>
 </div>
 

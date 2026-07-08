@@ -29,6 +29,7 @@ export const reactExampleRegistry = [
       "icon": {
         "$type": "element",
         "tag": "span",
+        "key": null,
         "props": {
           "aria-hidden": true,
           "children": "Menu"
@@ -166,6 +167,7 @@ export const reactExampleRegistry = [
       "children": {
         "$type": "element",
         "tag": "p",
+        "key": null,
         "props": {
           "children": "Theme-aware content"
         }
@@ -210,6 +212,7 @@ export const reactExampleRegistry = [
       "children": {
         "$type": "element",
         "tag": "p",
+        "key": null,
         "props": {
           "children": "Cached data area"
         }
@@ -542,6 +545,7 @@ export const reactExampleRegistry = [
       "children": {
         "$type": "element",
         "tag": "p",
+        "key": null,
         "props": {
           "children": "Billing settings"
         }
@@ -657,6 +661,7 @@ export const reactExampleRegistry = [
       "action": {
         "$type": "element",
         "tag": "button",
+        "key": null,
         "props": {
           "children": "Edit"
         }
@@ -675,13 +680,25 @@ export const reactExampleRegistry = [
     "summary": "Panel with children. This example mounts a live React component in the browser.",
     "props": {
       "title": "Billing",
-      "children": {
-        "$type": "element",
-        "tag": "p",
-        "props": {
-          "children": "Your card is current."
+      "children": [
+        {
+          "$type": "element",
+          "tag": "p",
+          "key": "copy",
+          "props": {
+            "children": "Your card is current."
+          }
+        },
+        {
+          "$type": "element",
+          "tag": "button",
+          "key": "action",
+          "props": {
+            "type": "button",
+            "children": "Update payment method"
+          }
         }
-      }
+      ]
     }
   },
   {
@@ -813,6 +830,7 @@ export const reactExampleRegistry = [
       "children": {
         "$type": "element",
         "tag": "p",
+        "key": null,
         "props": {
           "children": "Profile settings"
         }
@@ -863,6 +881,7 @@ export const reactExampleRegistry = [
       "children": {
         "$type": "element",
         "tag": "p",
+        "key": null,
         "props": {
           "children": "Profile settings"
         }

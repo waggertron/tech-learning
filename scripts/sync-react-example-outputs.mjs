@@ -147,6 +147,7 @@ function serializeFixtureValue(value) {
     return {
       $type: "element",
       tag: typeof value.type === "string" ? value.type : "div",
+      key: value.key ?? null,
       props: serializeFixtureValue(value.props ?? {}),
     };
   }
@@ -320,7 +321,13 @@ function fixtureProps({ title, componentName }) {
       renderItem: (item) => item.name,
     },
     OnlineStatus: {},
-    Panel: { title: "Billing", children: reactChild("Your card is current.") },
+    Panel: {
+      title: "Billing",
+      children: [
+        React.createElement("p", { key: "copy" }, "Your card is current."),
+        React.createElement("button", { key: "action", type: "button" }, "Update payment method"),
+      ],
+    },
     Price: { cents: 12900, currency: "USD", locale: "en-US" },
     ProductCard: { name: "Trail shoes", priceCents: 12900, inStock: true },
     ProductGrid: { products },

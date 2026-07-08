@@ -43,6 +43,9 @@ function deserializeFixtureValue(value: unknown): unknown {
     if (marker.$type === "element") {
       const tag = String(marker.tag ?? "div");
       const props = deserializeFixtureValue(marker.props) as Record<string, unknown>;
+      if (marker.key !== null && marker.key !== undefined) {
+        props.key = String(marker.key);
+      }
       return React.createElement(tag, props);
     }
   }

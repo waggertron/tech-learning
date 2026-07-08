@@ -188,9 +188,14 @@ function deserializeFixtureValue(value) {
   }
 
   if (value.$type === "element") {
+    const props = deserializeFixtureValue(value.props ?? {});
+    if (value.key !== null && value.key !== undefined) {
+      props.key = String(value.key);
+    }
+
     return React.createElement(
       String(value.tag ?? "div"),
-      deserializeFixtureValue(value.props ?? {}),
+      props,
     );
   }
 
@@ -223,6 +228,72 @@ function renderedFallbackHtml(example) {
   return /<div class="react-example-output__rendered">([\s\S]*?)<\/div>/.exec(
     example.afterFence,
   )?.[1];
+}
+
+function visibleOutputText(example) {
+  const outputBlock = /<div class="react-example-output\b[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/.exec(
+    example.afterFence,
+  )?.[0] ?? "";
+  const attributeText = [
+    ...outputBlock.matchAll(/\b(?:aria-label|title|placeholder)=["']([^"']+)["']/g),
+  ]
+    .map((match) => match[1])
+    .join(" ");
+
+  return `${outputBlock} ${attributeText}`
+    .replace(/<script\b[\s\S]*?<\/script>/g, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function uiTextLiterals(code) {
+  const ignored = new Set([
+    "aria-label",
+    "button",
+    "checkbox",
+    "form",
+    "label",
+    "link",
+    "main",
+    "region",
+    "section",
+    "span",
+    "text",
+    "type",
+  ]);
+
+  return [
+    ...code.matchAll(/>([^<>{}\n][^<>{}]*)</g),
+    ...code.matchAll(/\b(?:aria-label|title|label|description)=["']([^"']+)["']/g),
+  ]
+    .map((match) => match[1].replace(/\s+/g, " ").trim())
+    .filter((text) => text.length >= 3)
+    .filter((text) => !text.startsWith(";"))
+    .filter((text) => !/\b(if|return|const|let|function|export)\b/.test(text))
+    .filter((text) => !/^[A-Z][A-Za-z0-9]*$/.test(text))
+    .filter((text) => !/^[./\w-]+$/.test(text) || text.includes(" "))
+    .filter((text) => !ignored.has(text.toLowerCase()));
+}
+
+function isDeferredUiLiteral(example, text) {
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return (
+    new RegExp(`\\{[^}]*&&\\s*<[^>]+>${escaped}<`).test(example.code) ||
+    new RegExp(`if\\s*\\([^)]*\\)\\s*\\{[\\s\\S]{0,800}${escaped}[\\s\\S]{0,500}\\}\\s*return`).test(
+      example.code,
+    ) ||
+    new RegExp(`if\\s*\\([^)]*\\)\\s*return\\s*<[^>]+>${escaped}<`).test(example.code) ||
+    new RegExp(`\\?\\s*<[^>]+>[\\s\\S]{0,300}${escaped}[\\s\\S]{0,300}:`).test(
+      example.code,
+    ) ||
+    new RegExp(`:\\s*<[^>]+>[\\s\\S]{0,300}${escaped}[\\s\\S]{0,300}\\}`).test(
+      example.code,
+    )
+  );
 }
 
 test("Modern React examples have the expected coverage count", () => {
@@ -435,6 +506,45 @@ test("the first JSX example renders the ProductCard with fixture props", () => {
   assert.match(outputStart, /\$\s*129\.00/);
   assert.match(outputStart, /In stock/);
   assert.doesNotMatch(outputStart, /ProductCard renders/);
+});
+
+test("children examples preserve multiple child nodes", () => {
+  const example = examples.find(
+    (item) =>
+      item.fileName === "2026-07-07-react-props-children-component-boundaries.md" &&
+      item.title === "Panel with children",
+  );
+
+  assert.ok(example, "props and children post should keep the Panel with children example");
+
+  const outputStart = example.afterFence.slice(0, 2200);
+  assert.match(outputStart, /Your card is current\./);
+  assert.match(
+    outputStart,
+    /Update payment method/,
+    "The rendered panel should include every child passed in the example, including the button",
+  );
+});
+
+test("rendered outputs include visible UI literals from component examples", () => {
+  for (const example of examples) {
+    const outputStart = example.afterFence.slice(0, 2400);
+    const interactionMode = /data-interaction-mode="([^"]+)"/.exec(outputStart)?.[1];
+    const renderMode = /data-render-mode="([^"]+)"/.exec(outputStart)?.[1];
+
+    if (interactionMode !== "live-component" || renderMode !== "react-server") continue;
+
+    const outputText = visibleOutputText(example);
+    for (const literal of uiTextLiterals(example.code)) {
+      if (isDeferredUiLiteral(example, literal)) continue;
+
+      assert.match(
+        outputText,
+        new RegExp(literal.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+        `${example.fileName} example "${example.title}" should render visible UI text "${literal}"`,
+      );
+    }
+  }
 });
 
 test("live React output entries render non-empty generated module markup", () => {
