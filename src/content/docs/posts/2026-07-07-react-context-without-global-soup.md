@@ -69,6 +69,13 @@ export function useTheme() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-context-without-global-soup-1-theme-provider-with-a-reader-hook" role="region" aria-label="Output view: Theme provider with a reader hook">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Theme provider with a reader hook.</strong> <code>ThemeProvider</code> renders <code>ThemeContext</code> components. It composes <code>ThemeContext</code>.</p>
+  </div>
+</div>
+
 The custom hook turns the nullable context into a clear contract for the rest of the app.
 
 ## Example: Feature-level provider
@@ -96,6 +103,13 @@ export function ProjectPage({ projectId }: { projectId: string }) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-context-without-global-soup-2-feature-level-provider" role="region" aria-label="Output view: Feature-level provider">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Feature-level provider.</strong> <code>ProjectPage</code> renders <code>ProjectContext</code>, <code>ProjectHeader</code>, and <code>ProjectTaskList</code> components. It composes <code>ProjectContext</code>, <code>ProjectHeader</code>, and <code>ProjectTaskList</code>.</p>
+  </div>
+</div>
 
 This provider is scoped to a project page, so it does not become a whole-app storage bucket.
 

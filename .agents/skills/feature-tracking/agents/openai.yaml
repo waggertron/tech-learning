@@ -1,0 +1,8 @@
+interface:
+  display_name: "Feature Tracking"
+  short_description: "Keep repo feature records current"
+  brand_color: "#2563EB"
+  default_prompt: "Use $feature-tracking to document this feature in the tracker, docs, AGENTS rules, and local memory."
+
+policy:
+  allow_implicit_invocation: true

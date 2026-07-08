@@ -60,6 +60,13 @@ const root = createRoot(document.getElementById("root")!, {
 root.render(<App />);
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting" role="region" aria-label="Output view: Root error reporting">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Root error reporting.</strong> <code>root</code> renders <code>App</code> components. It composes <code>App</code>.</p>
+  </div>
+</div>
+
 React root options provide one place to report production render errors caught by boundaries.
 
 ## Example: Feature flag as a prop
@@ -82,6 +89,13 @@ export function CheckoutPage({ flags }: CheckoutPageProps) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop" role="region" aria-label="Output view: Feature flag as a prop">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Feature flag as a prop.</strong> <code>CheckoutPage</code> renders <code>NewPaymentSheet</code> and <code>ClassicPaymentForm</code> components. It composes <code>NewPaymentSheet</code> and <code>ClassicPaymentForm</code>.</p>
+  </div>
+</div>
 
 The component receives a simple decision. The flag system can live at the server, provider, or route boundary.
 

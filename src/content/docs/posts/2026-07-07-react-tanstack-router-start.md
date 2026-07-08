@@ -64,6 +64,13 @@ function ProductsRoute() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-1-typed-route-search" role="region" aria-label="Output view: Typed route search">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Typed route search.</strong> <code>ProductsRoute</code> renders <code>ProductResults</code> components. It composes <code>ProductResults</code>.</p>
+  </div>
+</div>
+
 Search params become a typed boundary instead of loose string reads throughout the page.
 
 ## Example: Route loader idea
@@ -84,6 +91,13 @@ function ProjectRoute() {
   return <h1>{project.name}</h1>;
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-2-route-loader-idea" role="region" aria-label="Output view: Route loader idea">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Route loader idea.</strong> <code>ProjectRoute</code> renders <code>&lt;h1&gt;</code> markup.</p>
+  </div>
+</div>
 
 The route knows which data belongs with the URL and exposes that loaded data to the component.
 

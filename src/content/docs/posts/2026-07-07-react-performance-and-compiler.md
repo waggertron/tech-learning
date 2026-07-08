@@ -61,6 +61,13 @@ export function FilteredReport({ rows }: { rows: Row[] }) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation" role="region" aria-label="Output view: Memoized expensive calculation">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Memoized expensive calculation.</strong> <code>FilteredReport</code> renders <code>&lt;input&gt;</code> markup. It composes <code>ReportTable</code>.</p>
+  </div>
+</div>
+
 `useMemo` protects a pure calculation. It does not make the first render faster, but it can skip work on later renders.
 
 ## Example: Profiler around a slow region
@@ -81,6 +88,13 @@ export function InstrumentedDashboard() {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region" role="region" aria-label="Output view: Profiler around a slow region">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Profiler around a slow region.</strong> <code>InstrumentedDashboard</code> renders <code>Profiler</code> and <code>Dashboard</code> components. It composes <code>Profiler</code> and <code>Dashboard</code>.</p>
+  </div>
+</div>
 
 Profiler data gives performance work a target instead of turning every component into a memoization exercise.
 

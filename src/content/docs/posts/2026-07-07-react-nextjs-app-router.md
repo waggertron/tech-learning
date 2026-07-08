@@ -65,6 +65,13 @@ export default async function ProductPage({
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-1-route-page-with-server-data" role="region" aria-label="Output view: Route page with server data">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Route page with server data.</strong> <code>ProductPage</code> renders <code>&lt;main&gt;</code>, <code>&lt;h1&gt;</code>, and <code>&lt;p&gt;</code> markup. It composes <code>AddToCartButton</code>.</p>
+  </div>
+</div>
+
 The route can fetch server data before passing a small ID to a client-side button.
 
 ## Example: Nested layout
@@ -89,6 +96,13 @@ export default function AccountLayout({
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-2-nested-layout" role="region" aria-label="Output view: Nested layout">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Nested layout.</strong> <code>AccountLayout</code> renders <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, and <code>&lt;a&gt;</code> markup. Visible text can include <code>Profile</code> and <code>Billing</code>.</p>
+  </div>
+</div>
 
 The layout wraps all child account routes, so shared navigation does not need to be repeated in every page.
 

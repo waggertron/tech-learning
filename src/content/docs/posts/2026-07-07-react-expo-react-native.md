@@ -58,6 +58,13 @@ export function HomeScreen({ onStart }: { onStart: () => void }) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-1-native-screen-component" role="region" aria-label="Output view: Native screen component">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Native screen component.</strong> <code>HomeScreen</code> renders <code>View</code>, <code>Text</code>, and <code>Pressable</code> components. It composes <code>View</code>, <code>Text</code>, and <code>Pressable</code>. Visible text can include <code>Daily checklist</code> and <code>Start</code>.</p>
+  </div>
+</div>
+
 `View`, `Text`, and `Pressable` are native primitives. The React data flow still looks familiar.
 
 ## Example: Shared Hook, platform UI
@@ -81,6 +88,13 @@ export function FavoriteButton() {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-2-shared-hook-platform-ui" role="region" aria-label="Output view: Shared Hook, platform UI">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Shared Hook, platform UI.</strong> <code>FavoriteButton</code> renders <code>Pressable</code> and <code>Text</code> components. It composes <code>Pressable</code> and <code>Text</code>.</p>
+  </div>
+</div>
 
 The Hook is regular React logic. The rendered controls are React Native primitives.
 

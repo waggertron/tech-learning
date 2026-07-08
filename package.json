@@ -11,6 +11,9 @@
     "postbuild": "pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
+    "test:react-outputs": "node --test tests/react-example-output-views.test.mjs",
+    "sync:react-outputs": "node scripts/sync-react-example-outputs.mjs",
+    "check:react-outputs": "node scripts/sync-react-example-outputs.mjs --check",
     "new:topic": "bash scripts/new-topic.sh",
     "new:post": "bash scripts/new-post.sh"
   },

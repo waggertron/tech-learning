@@ -59,6 +59,13 @@ export function chooseReactStart(need: ProjectNeed) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape" role="region" aria-label="Output view: Framework decision shape">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Framework decision shape.</strong> <code>chooseReactStart</code> runs <code>chooseReactStart</code> to produce its result.</p>
+  </div>
+</div>
+
 The decision is about ownership of application concerns, not taste in folder names.
 
 ## Example: Client entry point
@@ -75,6 +82,13 @@ if (!rootElement) {
 
 createRoot(rootElement).render(<App />);
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-framework-choice-project-setup-2-client-entry-point" role="region" aria-label="Output view: Client entry point">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Client entry point.</strong> <code>rootElement</code> renders <code>App</code> components. It composes <code>App</code>.</p>
+  </div>
+</div>
 
 A scratch client app owns its entry point directly. A framework often generates or hides this layer.
 

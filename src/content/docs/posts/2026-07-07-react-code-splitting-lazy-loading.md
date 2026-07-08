@@ -56,6 +56,13 @@ export function AnalyticsPanel() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-1-lazy-chart" role="region" aria-label="Output view: Lazy chart">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Lazy chart.</strong> <code>AnalyticsPanel</code> renders <code>&lt;p&gt;</code> markup. It composes <code>Suspense</code> and <code>RevenueChart</code>. Visible text can include <code>Loading chart...</code>.</p>
+  </div>
+</div>
+
 The chart code is requested when the panel renders, and Suspense owns the loading UI.
 
 ## Example: Lazy route table
@@ -71,6 +78,13 @@ export const routes = [
   { path: "/admin/users", element: <AdminUsersPage /> },
 ];
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" role="region" aria-label="Output view: Lazy route table">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Lazy route table.</strong> <code>routes</code> renders <code>PublicHomePage</code> and <code>AdminUsersPage</code> components. It composes <code>PublicHomePage</code> and <code>AdminUsersPage</code>.</p>
+  </div>
+</div>
 
 Route boundaries are natural split points because users only need the code for the route they visit.
 

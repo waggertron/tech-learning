@@ -56,6 +56,13 @@ if (!root) {
 createRoot(root).render(<App />);
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-1-vite-react-entry" role="region" aria-label="Output view: Vite React entry">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Vite React entry.</strong> <code>root</code> renders <code>App</code> components. It composes <code>App</code>.</p>
+  </div>
+</div>
+
 A client-only Vite app directly owns the DOM root and React entry point.
 
 ## Example: Minimal Vite config
@@ -71,6 +78,13 @@ export default defineConfig({
   },
 });
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config" role="region" aria-label="Output view: Minimal Vite config">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Minimal Vite config.</strong> The example produces a build configuration object for the selected tool.</p>
+  </div>
+</div>
 
 The React plugin handles JSX and React development behavior. Other app concerns are added separately.
 

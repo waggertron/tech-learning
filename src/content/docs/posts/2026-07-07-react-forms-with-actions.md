@@ -81,6 +81,13 @@ export function ProfileForm() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-forms-with-actions-1-profile-form-state" role="region" aria-label="Output view: Profile form state">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Profile form state.</strong> <code>ProfileForm</code> renders <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;button&gt;</code>, and <code>&lt;p&gt;</code> markup. Visible text can include <code>Save</code>.</p>
+  </div>
+</div>
+
 The Action receives form data, returns display state, and lets the button reflect pending status.
 
 ## Example: Nested submit button with useFormStatus
@@ -102,6 +109,13 @@ export function SettingsForm({ action }: { action: (data: FormData) => void }) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-forms-with-actions-2-nested-submit-button-with-useformstatus" role="region" aria-label="Output view: Nested submit button with useFormStatus">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Nested submit button with useFormStatus.</strong> <code>SettingsForm</code> renders <code>&lt;button&gt;</code>, <code>&lt;form&gt;</code>, and <code>&lt;input&gt;</code> markup. It composes <code>SubmitButton</code>.</p>
+  </div>
+</div>
 
 `useFormStatus` reads the parent form, so the submit button can stay reusable without receiving pending props.
 

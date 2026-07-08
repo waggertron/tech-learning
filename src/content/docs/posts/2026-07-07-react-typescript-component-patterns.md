@@ -66,6 +66,13 @@ export function ActionButton(props: ButtonProps) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-typescript-component-patterns-1-discriminated-button-props" role="region" aria-label="Output view: Discriminated button props">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Discriminated button props.</strong> <code>ActionButton</code> renders <code>&lt;a&gt;</code> and <code>&lt;button&gt;</code> markup.</p>
+  </div>
+</div>
+
 The `kind` field controls which props are available. A caller cannot pass `href` to the button mode by accident.
 
 ## Example: Generic list renderer
@@ -89,6 +96,13 @@ export function List<T>({ items, getKey, renderItem }: ListProps<T>) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-typescript-component-patterns-2-generic-list-renderer" role="region" aria-label="Output view: Generic list renderer">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Generic list renderer.</strong> <code>List</code> renders <code>&lt;ul&gt;</code> and <code>&lt;li&gt;</code> markup.</p>
+  </div>
+</div>
 
 The caller gets item-specific type checking while the list component stays reusable.
 

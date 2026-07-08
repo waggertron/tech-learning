@@ -69,6 +69,13 @@ export function SearchableGrid({ items }: { items: string[] }) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-1-filter-after-urgent-typing" role="region" aria-label="Output view: Filter after urgent typing">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Filter after urgent typing.</strong> <code>SearchableGrid</code> renders <code>&lt;input&gt;</code> and <code>&lt;p&gt;</code> markup. It composes <code>ResultGrid</code>. Visible text can include <code>Updating results...</code>.</p>
+  </div>
+</div>
+
 The input remains urgent. The heavier result update is allowed to lag behind briefly.
 
 ## Example: Tab switch
@@ -95,6 +102,13 @@ export function ProjectTabs() {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-2-tab-switch" role="region" aria-label="Output view: Tab switch">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Tab switch.</strong> <code>ProjectTabs</code> renders <code>&lt;span&gt;</code> markup. It composes <code>TabButtons</code> and <code>TabPanel</code>. Visible text can include <code>Loading tab...</code>.</p>
+  </div>
+</div>
 
 A tab change can be non-urgent when the panel is expensive or can suspend.
 

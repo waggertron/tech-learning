@@ -64,6 +64,13 @@ export function Price({
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-1-currency-formatter" role="region" aria-label="Output view: Currency formatter">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Currency formatter.</strong> <code>Price</code> renders <code>&lt;span&gt;</code> markup.</p>
+  </div>
+</div>
+
 The component receives facts and locale context, then formats at the display boundary.
 
 ## Example: Date formatter
@@ -87,6 +94,13 @@ export function AppointmentTime({
   return <time dateTime={startsAt}>{formatted}</time>;
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-2-date-formatter" role="region" aria-label="Output view: Date formatter">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Date formatter.</strong> <code>AppointmentTime</code> renders <code>&lt;time&gt;</code> markup.</p>
+  </div>
+</div>
 
 `dateTime` preserves the machine-readable value while the visible text follows the locale.
 

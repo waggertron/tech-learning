@@ -63,6 +63,13 @@ test("moves to confirm after profile is saved", () => {
 });
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test" role="region" aria-label="Output view: Vitest reducer test">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Vitest reducer test.</strong> <code>state</code> reports a passing test when the rendered behavior matches the assertions.</p>
+  </div>
+</div>
+
 A reducer is pure JavaScript, so it gets a fast test without rendering React.
 
 ## Example: Playwright route flow
@@ -78,6 +85,13 @@ test("search filters products", async ({ page }) => {
   await expect(page.getByText("Trail sandals")).toBeHidden();
 });
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow" role="region" aria-label="Output view: Playwright route flow">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Playwright route flow.</strong> The example reports a passing test when the rendered behavior matches the assertions.</p>
+  </div>
+</div>
 
 The browser test checks routing, rendering, and user input together.
 

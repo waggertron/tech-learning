@@ -57,6 +57,13 @@ test("increments when clicked", async () => {
 });
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-1-counter-behavior" role="region" aria-label="Output view: Counter behavior">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Counter behavior.</strong> <code>user</code> renders <code>Counter</code> components. It composes <code>Counter</code>.</p>
+  </div>
+</div>
+
 The test finds the button like a user would and checks the behavior that matters.
 
 ## Example: Form validation message
@@ -79,6 +86,13 @@ test("shows a validation message for a short display name", async () => {
   ).toBeVisible();
 });
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-2-form-validation-message" role="region" aria-label="Output view: Form validation message">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Form validation message.</strong> <code>user</code> renders <code>ProfileForm</code> components. It composes <code>ProfileForm</code>.</p>
+  </div>
+</div>
 
 `findByText` waits for async UI to settle before the assertion runs.
 

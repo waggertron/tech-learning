@@ -1,0 +1,8 @@
+interface:
+  display_name: "React Example Outputs"
+  short_description: "Maintain React example output panels"
+  brand_color: "#0EA5E9"
+  default_prompt: "Use $react-example-output-views to add or update output panels for Modern React examples."
+
+policy:
+  allow_implicit_invocation: true

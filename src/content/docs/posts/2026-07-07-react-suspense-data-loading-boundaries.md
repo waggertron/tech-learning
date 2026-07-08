@@ -57,6 +57,13 @@ export function ArtistPage({ artistId }: { artistId: string }) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-suspense-data-loading-boundaries-1-boundary-around-a-data-section" role="region" aria-label="Output view: Boundary around a data section">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Boundary around a data section.</strong> <code>ArtistPage</code> renders <code>&lt;main&gt;</code> markup. It composes <code>ArtistHeader</code>, <code>Suspense</code>, <code>AlbumsSkeleton</code>, and <code>Albums</code>.</p>
+  </div>
+</div>
+
 The header can render independently while the albums section waits behind its own skeleton.
 
 ## Example: Nested reveal
@@ -79,6 +86,13 @@ export function Dashboard() {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-suspense-data-loading-boundaries-2-nested-reveal" role="region" aria-label="Output view: Nested reveal">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Nested reveal.</strong> <code>Dashboard</code> renders <code>Suspense</code>, <code>PageShellSkeleton</code>, <code>SummaryCards</code>, and <code>ChartSkeleton</code> components. It composes <code>Suspense</code>, <code>PageShellSkeleton</code>, <code>SummaryCards</code>, and <code>ChartSkeleton</code>.</p>
+  </div>
+</div>
 
 Nested boundaries let the shell and summary reveal separately from heavier chart content.
 

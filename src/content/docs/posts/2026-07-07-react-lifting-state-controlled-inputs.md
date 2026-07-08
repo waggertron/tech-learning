@@ -78,6 +78,13 @@ function SearchField({
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query" role="region" aria-label="Output view: Shared search query">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Shared search query.</strong> <code>ProductSearch</code> renders <code>&lt;input&gt;</code> markup. It composes <code>SearchField</code> and <code>ProductList</code>.</p>
+  </div>
+</div>
+
 The parent owns the query because both the input and the list depend on it.
 
 ## Example: Controlled checkbox
@@ -108,6 +115,13 @@ function InStockOnly({
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox" role="region" aria-label="Output view: Controlled checkbox">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Controlled checkbox.</strong> <code>InStockOnly</code> renders <code>&lt;label&gt;</code> and <code>&lt;input&gt;</code> markup.</p>
+  </div>
+</div>
 
 Checkboxes use `checked`, not `value`, because the rendered state is binary.
 

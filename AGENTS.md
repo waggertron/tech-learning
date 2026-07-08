@@ -20,6 +20,8 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 7. **ASCII diagrams only.** Mermaid is not wired up in this build.
 
+8. **Track feature additions.** When a change adds a user-visible capability, content model, generator, reusable skill, validation rule, or authoring workflow, update `docs/feature_tracker.md` and any focused docs needed to maintain it.
+
 ## Repo structure
 
 ```
@@ -52,3 +54,10 @@ src/content/docs/
 - `.agents/skills/problem-audit/SKILL.md`: audit internal coding-problem references.
 - `.agents/skills/markdown-table-pipes/SKILL.md`: avoid broken Markdown tables when math cells contain pipe characters.
 - `.agents/skills/post-series/SKILL.md`: create and maintain post series pages, series frontmatter, reading order, and long-form series plans.
+- `.agents/skills/react-instructional-posts/SKILL.md`: write and review Modern React instructional posts.
+- `.agents/skills/react-example-output-views/SKILL.md`: maintain generated output views after Modern React examples.
+- `.agents/skills/feature-tracking/SKILL.md`: keep feature history, docs records, AGENTS rules, and local memory current when capabilities are added.
+
+## Feature tracking
+
+Use `docs/feature_tracker.md` as the durable feature history. For future feature work, update the tracker in the same batch as the implementation, add focused docs for workflows or generators, and add a local note in `.agents/memory/feature_tracker.md` when there is in-progress context that should help future sessions. `.agents/memory/` is ignored, so important historical records belong in docs.

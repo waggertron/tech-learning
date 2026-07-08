@@ -58,6 +58,13 @@ export function useStoredString(key: string, initialValue: string) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-custom-hooks-reuse-boundaries-1-local-storage-state" role="region" aria-label="Output view: Local storage state">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Local storage state.</strong> <code>useStoredString</code> runs <code>useStoredString</code>, <code>useState</code>, <code>getItem</code>, and <code>useEffect</code> to produce its result.</p>
+  </div>
+</div>
+
 The Hook owns storage synchronization. A component can use it like state without repeating the Effect.
 
 ## Example: Window size subscription
@@ -77,6 +84,13 @@ export function useWindowWidth() {
   return width;
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-custom-hooks-reuse-boundaries-2-window-size-subscription" role="region" aria-label="Output view: Window size subscription">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Window size subscription.</strong> <code>useWindowWidth</code> runs <code>useWindowWidth</code>, <code>useState</code>, <code>useEffect</code>, and <code>setWidth</code> to produce its result.</p>
+  </div>
+</div>
 
 The component using this Hook can focus on display, while the Hook owns the event subscription and cleanup.
 

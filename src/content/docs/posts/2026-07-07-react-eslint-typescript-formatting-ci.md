@@ -71,6 +71,13 @@ export function RoomTitle({ roomId }: { roomId: string }) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value" role="region" aria-label="Output view: Effect lint value">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Effect lint value.</strong> <code>RoomTitle</code> renders <code>&lt;h1&gt;</code> markup.</p>
+  </div>
+</div>
+
 The dependency list names the reactive value used by the Effect, which keeps the browser title synchronized with the current room.
 
 ## Details to watch

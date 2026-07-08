@@ -67,6 +67,13 @@ export function ProductCard({
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-1-render-data-with-jsx" role="region" aria-label="Output view: Render data with JSX">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Render data with JSX.</strong> <code>ProductCard</code> renders <code>&lt;article&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;span&gt;</code> markup. Visible text can include <code>In stock</code> and <code>Back soon</code>.</p>
+  </div>
+</div>
+
 The component reads plain values, calculates display text, and returns JSX. The conditional badge is still normal JavaScript expressed inside the returned tree.
 
 ## Example: Compose components
@@ -94,6 +101,13 @@ export function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-2-compose-components" role="region" aria-label="Output view: Compose components">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Compose components.</strong> <code>ProductGrid</code> renders <code>&lt;section&gt;</code>, <code>&lt;h2&gt;</code>, and <code>&lt;div&gt;</code> markup. It composes <code>ProductCard</code>. Visible text can include <code>Featured products</code>.</p>
+  </div>
+</div>
 
 The parent owns the list shape and calls `ProductCard` for each item. Composition keeps the card focused on one product and the grid focused on layout.
 

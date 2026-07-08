@@ -82,6 +82,13 @@ export function CommentForm({
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-1-optimistic-comment-list" role="region" aria-label="Output view: Optimistic comment list">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Optimistic comment list.</strong> <code>CommentForm</code> renders <code>&lt;form&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;button&gt;</code> markup. Visible text can include <code>Promise</code> and <code>Post</code>.</p>
+  </div>
+</div>
+
 The pending comment appears immediately, while the Action still owns the server write.
 
 ## Example: Optimistic like count
@@ -112,6 +119,13 @@ export function LikeButton({
   return <button onClick={toggleAction}>{optimistic.count} likes</button>;
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-2-optimistic-like-count" role="region" aria-label="Output view: Optimistic like count">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Optimistic like count.</strong> <code>LikeButton</code> renders <code>&lt;button&gt;</code> markup. Visible text can include <code>Promise</code>.</p>
+  </div>
+</div>
 
 The UI responds instantly, and the confirmed props can replace the optimistic value after the save finishes.
 

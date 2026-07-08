@@ -70,6 +70,13 @@ export function ReducerCounter() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-1-counter-reducer" role="region" aria-label="Output view: Counter reducer">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Counter reducer.</strong> <code>ReducerCounter</code> renders <code>&lt;p&gt;</code> and <code>&lt;button&gt;</code> markup. Visible text can include <code>Add</code> and <code>Reset</code>.</p>
+  </div>
+</div>
+
 The handler reports intent. The reducer owns the transition rule.
 
 ## Example: Wizard reducer
@@ -99,6 +106,13 @@ const wizardReducer: Reducer<WizardState, WizardAction> = (state, action) => {
   }
 };
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer" role="region" aria-label="Output view: Wizard reducer">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Wizard reducer.</strong> <code>wizardReducer</code> returns the next state for each action branch.</p>
+  </div>
+</div>
 
 A reducer keeps step movement and data edits in one transition model instead of scattering them across screens.
 

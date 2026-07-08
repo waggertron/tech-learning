@@ -58,6 +58,13 @@ export function FocusNameButton() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-1-focus-an-input" role="region" aria-label="Output view: Focus an input">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Focus an input.</strong> <code>FocusNameButton</code> renders <code>&lt;input&gt;</code> and <code>&lt;button&gt;</code> markup.</p>
+  </div>
+</div>
+
 The click handler uses a DOM method. The current focus target is not render state, so a ref is the right container.
 
 ## Example: Store a timer ID
@@ -81,6 +88,13 @@ export function SaveStatus() {
   return <button onClick={scheduleSavedMessage}>Save draft</button>;
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-2-store-a-timer-id" role="region" aria-label="Output view: Store a timer ID">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Store a timer ID.</strong> <code>SaveStatus</code> renders <code>&lt;button&gt;</code> markup. Visible text can include <code>Save draft</code>.</p>
+  </div>
+</div>
 
 The timer ID must survive renders, but showing the timer ID is not part of the UI.
 

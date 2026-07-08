@@ -62,6 +62,13 @@ export function AccountLayout({ children }: AccountLayoutProps) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-1-generic-account-layout" role="region" aria-label="Output view: Generic account layout">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Generic account layout.</strong> <code>AccountLayout</code> renders <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;a&gt;</code>, and <code>&lt;main&gt;</code> markup. Visible text can include <code>Profile</code> and <code>Security</code>.</p>
+  </div>
+</div>
+
 Frameworks differ in how they provide child route content, but the layout model is the same.
 
 ## Example: Route config sketch
@@ -82,6 +89,13 @@ const routes = [
   },
 ];
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-2-route-config-sketch" role="region" aria-label="Output view: Route config sketch">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Route config sketch.</strong> <code>routes</code> renders <code>AccountLayout</code>, <code>ProfilePage</code>, and <code>SecurityPage</code> components. It composes <code>AccountLayout</code>, <code>ProfilePage</code>, and <code>SecurityPage</code>.</p>
+  </div>
+</div>
 
 The route shape mirrors the UI shape: account shell first, child page second.
 

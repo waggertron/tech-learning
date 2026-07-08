@@ -60,6 +60,13 @@ export function ProjectName({ projectId }: { projectId: string }) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-1-tanstack-query-read" role="region" aria-label="Output view: TanStack Query read">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>TanStack Query read.</strong> <code>ProjectName</code> renders <code>&lt;p&gt;</code> and <code>&lt;h1&gt;</code> markup. Visible text can include <code>Loading project...</code> and <code>Project could not load.</code>.</p>
+  </div>
+</div>
+
 The query key names the cached read. The component renders each state of the request.
 
 ## Example: Query client provider
@@ -78,6 +85,13 @@ export function AppProviders({ children }: { children: ReactNode }) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-2-query-client-provider" role="region" aria-label="Output view: Query client provider">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Query client provider.</strong> <code>AppProviders</code> renders <code>QueryClientProvider</code> components. It composes <code>QueryClientProvider</code>.</p>
+  </div>
+</div>
 
 A cache provider gives components access to the same query client instead of each component owning isolated fetch logic.
 

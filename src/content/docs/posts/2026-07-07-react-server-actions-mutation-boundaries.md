@@ -65,6 +65,13 @@ export async function updateDisplayName(formData: FormData) {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-actions-mutation-boundaries-1-server-function-for-a-profile-update" role="region" aria-label="Output view: Server function for a profile update">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Server function for a profile update.</strong> <code>updateDisplayName</code> returns server-side mutation state for the caller to render.</p>
+  </div>
+</div>
+
 The server function owns validation, identity, and the data write.
 
 ## Example: Form using a server action
@@ -84,6 +91,13 @@ export function DisplayNameForm() {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-actions-mutation-boundaries-2-form-using-a-server-action" role="region" aria-label="Output view: Form using a server action">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Form using a server action.</strong> <code>DisplayNameForm</code> renders <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;button&gt;</code> markup. Visible text can include <code>Save</code>.</p>
+  </div>
+</div>
 
 The form is small because the trusted mutation logic lives on the server side of the boundary.
 

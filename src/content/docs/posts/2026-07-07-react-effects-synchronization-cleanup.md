@@ -64,6 +64,13 @@ export function OnlineStatus() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-1-browser-online-status" role="region" aria-label="Output view: Browser online status">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Browser online status.</strong> <code>OnlineStatus</code> renders <code>&lt;p&gt;</code> markup.</p>
+  </div>
+</div>
+
 The component subscribes to browser events after commit and removes the listeners on cleanup.
 
 ## Example: Chat room subscription
@@ -82,6 +89,13 @@ export function ChatRoom({ roomId }: { roomId: string }) {
   return <h1>Room {roomId}</h1>;
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription" role="region" aria-label="Output view: Chat room subscription">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Chat room subscription.</strong> <code>ChatRoom</code> renders <code>&lt;h1&gt;</code> markup.</p>
+  </div>
+</div>
 
 When `roomId` changes, React cleans up the old connection and starts a new one for the next room.
 

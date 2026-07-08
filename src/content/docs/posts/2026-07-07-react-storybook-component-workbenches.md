@@ -72,6 +72,13 @@ export const BackSoon: Story = {
 };
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-1-component-stories" role="region" aria-label="Output view: Component stories">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Component stories.</strong> <code>InStock</code> displays the component with the listed Storybook args.</p>
+  </div>
+</div>
+
 Each story names a useful component state and passes props through the public component API.
 
 ## Example: Interaction story
@@ -91,6 +98,13 @@ export const OpensMenu: Story = {
   },
 };
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-2-interaction-story" role="region" aria-label="Output view: Interaction story">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Interaction story.</strong> <code>OpensMenu</code> runs <code>within</code>, <code>click</code>, <code>getByRole</code>, and <code>expect</code> to produce its result.</p>
+  </div>
+</div>
 
 The story can double as a small interaction check for a state that reviewers can also inspect visually.
 

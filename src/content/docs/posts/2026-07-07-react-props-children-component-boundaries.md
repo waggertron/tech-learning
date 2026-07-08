@@ -68,6 +68,13 @@ export function BillingPanel() {
 }
 ```
 
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-1-panel-with-children" role="region" aria-label="Output view: Panel with children">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Panel with children.</strong> <code>Panel</code> renders <code>&lt;section&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;button&gt;</code> markup. Visible text can include <code>Your card is current.</code> and <code>Update payment method</code>.</p>
+  </div>
+</div>
+
 The panel owns the section structure. The billing screen owns the actual text and action inside that structure.
 
 ## Example: Reusable row with explicit props
@@ -93,6 +100,13 @@ export function SettingsRow({ label, description, action }: SettingsRowProps) {
   );
 }
 ```
+
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-2-reusable-row-with-explicit-props" role="region" aria-label="Output view: Reusable row with explicit props">
+  <div class="react-example-output__header">Output view</div>
+  <div class="react-example-output__body">
+    <p><strong>Reusable row with explicit props.</strong> <code>SettingsRow</code> renders <code>&lt;div&gt;</code>, <code>&lt;h3&gt;</code>, and <code>&lt;p&gt;</code> markup.</p>
+  </div>
+</div>
 
 The row API names the stable parts of the design. The caller can pass a button, switch, link, or status badge as the action.
 

@@ -279,6 +279,12 @@ When you add a topic, update at least:
 
 ## Build, verify, ship
 
+### Feature tracking
+
+When a change adds a feature, content model, generator, reusable skill, validation rule, or authoring workflow, update [feature_tracker.md](feature_tracker.md) in the same batch.
+
+Use the entry to name what shipped, why it matters, and the evidence paths a future maintainer should inspect. If the feature has a workflow or generator, add a focused docs record too, then link it from the tracker. Local reminders can go in `.agents/memory/feature_tracker.md`, but that directory is ignored and should not be the only record.
+
 ### Local
 
 ```bash
