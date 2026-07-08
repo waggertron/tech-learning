@@ -52,6 +52,7 @@ The visible panel is the result of the example code, not a prose explanation of 
 Evaluate each panel by the example's runtime contract:
 
 - A pure display component should show the fixture props.
+- A `children` example should preserve every visible child node, not only the first child or the parent container.
 - A stateful component should respond to clicks, input, toggles, or tabs.
 - A cached data component should show loading, error, or resolved data according to the fixture and client cache state.
 - A framework-only example should stay in runner mode unless the page supplies the framework runtime it needs.
@@ -70,7 +71,7 @@ Evaluate each panel by the example's runtime contract:
 
 For new behavior, add or update the content test before changing the generator. The expected red state should identify the missing or malformed output panel. After implementation, `npm run test:react-outputs` must pass before the full build.
 
-Use the test to enforce structure, render mode, interaction mode, runtime loading, and registry wiring. Browser behavior still needs a smoke test because static markup can look correct while the handler is not attached.
+Use the test to enforce structure, render mode, interaction mode, runtime loading, registry wiring, fixture fidelity, and visible UI text parity. Browser behavior still needs a smoke test because static markup can look correct while the handler is not attached.
 
 ## Generator Rules
 
@@ -101,6 +102,8 @@ Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new
 - **Hydration mismatch noise**: Output panels are documentation islands. Use `createRoot` to mount them as client previews instead of `hydrateRoot`, because many examples render equivalent but not byte-identical server and client trees.
 - **Server component mismatch**: Async Server Components, route modules, and framework-only examples should stay out of `live-component` mode unless there is a true browser runtime for them.
 - **False success**: Seeing the correct output HTML is not enough. Click a stateful example, such as the counter in the Events and local state post, before shipping runtime changes.
+- **Partial children render**: If a component receives multiple children, compare the output against every visible child in the code fence. A missing button beside a rendered paragraph means the fixture or serializer dropped part of the React tree.
+- **Visible text drift**: Generated tests should compare unconditional visible JSX text with the rendered output region. Include accessible attribute text such as `aria-label`, `title`, and `placeholder`; exclude conditional loading, error, and interaction-only text.
 - **Locator ambiguity**: Browser tests should scope assertions to the output region. Code blocks often contain the same visible text as the rendered output.
 - **Dev server cache state**: Running the full build while `npm run dev` is active can leave the dev server with stale content or dependency optimization state. If routes suddenly return missing content or `504 Outdated Optimize Dep`, restart the dev server before debugging app code.
 

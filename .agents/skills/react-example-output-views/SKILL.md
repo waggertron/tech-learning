@@ -97,6 +97,10 @@ When writing browser checks, scope text and click locators to the output region.
 
 If the dev server starts returning 404 pages, empty Starlight content, or `504 Outdated Optimize Dep` after `npm run build`, restart `npm run dev`. The build clears Astro cache while the dev server is watching, so stale dev state is not proof of a content bug.
 
+Treat `children` examples as fixture fidelity tests. If the code passes a paragraph and a button as children, the rendered output must contain both. Serializers should preserve arrays of child nodes and React element keys so browser mounting sees the same tree as server rendering.
+
+When a rendered panel looks too small, compare unconditional visible JSX text from the code fence with the output region. Include accessible text from `aria-label`, `title`, and `placeholder`; skip literals that only appear behind conditional branches, loading states, errors, or user interactions.
+
 ## Generator Guidance
 
 Prefer deterministic generation over manual panel edits. Expand the renderer and live registry when new example shapes appear:
