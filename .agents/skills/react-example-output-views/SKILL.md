@@ -55,6 +55,8 @@ Use tests for structural guarantees and representative interactions. Use human r
 
 Server-rendered output can look correct while the example is still inert. Treat a visible button as only the fallback state until a browser click confirms the handler is attached.
 
+Read live output as the result of the running example. A data-fetching example may show fallback HTML first, then settle to fixture data after the browser mounts the component. For TanStack Query style examples, a resolved title such as `Launch plan` can be the expected live output.
+
 Keep the runtime script Astro-processed:
 
 ```astro
@@ -90,6 +92,10 @@ When live examples do not respond to clicks, check these in order:
 3. The generated module exports the selected component.
 4. The component is mounted into `.react-example-output__rendered`.
 5. A local browser smoke test proves the handler changes visible UI.
+
+When writing browser checks, scope text and click locators to the output region. The same text usually appears in the code fence and the rendered output, which can make global text locators ambiguous.
+
+If the dev server starts returning 404 pages, empty Starlight content, or `504 Outdated Optimize Dep` after `npm run build`, restart `npm run dev`. The build clears Astro cache while the dev server is watching, so stale dev state is not proof of a content bug.
 
 ## Generator Guidance
 

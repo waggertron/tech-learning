@@ -45,6 +45,17 @@ The `data-react-example-output` value is stable and unique. Use it as the regist
 - `runner`: Browser JavaScript wires a deterministic run control or result for examples that do not have a standalone visual component.
 - `static`: Reserved for explicit exceptions. Do not use it as a silent fallback.
 
+## Reading Live Output
+
+The visible panel is the result of the example code, not a prose explanation of the code. A data-fetching example can legitimately move from fallback HTML to a resolved client state after the browser runtime mounts. For example, a TanStack Query example may start from `Loading project...` and settle on `Launch plan` once the local fixture fetch resolves.
+
+Evaluate each panel by the example's runtime contract:
+
+- A pure display component should show the fixture props.
+- A stateful component should respond to clicks, input, toggles, or tabs.
+- A cached data component should show loading, error, or resolved data according to the fixture and client cache state.
+- A framework-only example should stay in runner mode unless the page supplies the framework runtime it needs.
+
 ## Authoring Workflow
 
 1. Add or edit the React example code. Keep imports visible near the top of each TSX or TypeScript fence.
@@ -90,10 +101,13 @@ Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new
 - **Hydration mismatch noise**: Output panels are documentation islands. Use `createRoot` to mount them as client previews instead of `hydrateRoot`, because many examples render equivalent but not byte-identical server and client trees.
 - **Server component mismatch**: Async Server Components, route modules, and framework-only examples should stay out of `live-component` mode unless there is a true browser runtime for them.
 - **False success**: Seeing the correct output HTML is not enough. Click a stateful example, such as the counter in the Events and local state post, before shipping runtime changes.
+- **Locator ambiguity**: Browser tests should scope assertions to the output region. Code blocks often contain the same visible text as the rendered output.
+- **Dev server cache state**: Running the full build while `npm run dev` is active can leave the dev server with stale content or dependency optimization state. If routes suddenly return missing content or `504 Outdated Optimize Dep`, restart the dev server before debugging app code.
 
 ## Future Expansion
 
 - Keep the server-rendered HTML as the no-JavaScript fallback.
 - Add browser smoke coverage for representative live examples when runtime behavior changes.
+- Include at least one async data example and one stateful click example in runtime smoke checks.
 - Start new runtime features with isolated examples that have local fixtures and no framework runtime requirement.
 - Keep server, test, and configuration examples in runner mode unless there is a clear interactive value.
