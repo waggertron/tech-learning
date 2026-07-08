@@ -63,10 +63,15 @@ test("moves to confirm after profile is saved", () => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test" data-render-mode="result" role="region" aria-label="Output view: Vitest reducer test">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test" role="region" aria-label="Output view: Vitest reducer test">
   <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Vitest reducer test.</strong> The test runner executes the assertions for this example.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -86,10 +91,15 @@ test("search filters products", async ({ page }) => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow" data-render-mode="result" role="region" aria-label="Output view: Playwright route flow">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow" role="region" aria-label="Output view: Playwright route flow">
   <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Playwright route flow.</strong> The test runner executes the assertions for this example.</p>
+  </div>
+</div>
   </div>
 </div>
 

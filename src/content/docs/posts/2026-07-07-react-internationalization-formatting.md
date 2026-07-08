@@ -64,7 +64,7 @@ export function Price({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-1-currency-formatter" data-render-mode="react-server" role="region" aria-label="Output view: Currency formatter">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-1-currency-formatter" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-internationalization-formatting-1-currency-formatter.tsx" role="region" aria-label="Output view: Currency formatter">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><span>$129.00</span></div>
@@ -95,7 +95,7 @@ export function AppointmentTime({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-2-date-formatter" data-render-mode="react-server" role="region" aria-label="Output view: Date formatter">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-2-date-formatter" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-internationalization-formatting-2-date-formatter.tsx" role="region" aria-label="Output view: Date formatter">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><time dateTime="2026-07-08T17:00:00.000Z">Jul 8, 2026, 10:00 AM</time></div>

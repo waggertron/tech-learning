@@ -123,6 +123,29 @@
   color: var(--sl-color-text);
 }
 
+.react-example-output[data-interaction-mode="live-component"] .react-example-output__rendered {
+  position: relative;
+}
+
+.react-example-output__runner {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.react-example-output__run-button {
+  justify-self: start;
+}
+
+.react-example-output__runner-output {
+  min-height: 2.5rem;
+}
+
+.react-example-output__runner-pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font: inherit;
+}
+
 .react-example-output__rendered :where(h1, h2, h3, p, ul, ol, figure, form, fieldset) {
   margin-block: 0 0.75rem;
 }

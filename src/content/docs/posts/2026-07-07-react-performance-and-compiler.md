@@ -63,7 +63,7 @@ export function FilteredReport({ rows }: { rows: Row[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation" data-render-mode="react-server" role="region" aria-label="Output view: Memoized expensive calculation">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation.tsx" role="region" aria-label="Output view: Memoized expensive calculation">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><input value=""/><table><tbody><tr><td>Revenue</td></tr><tr><td>Retention</td></tr></tbody></table></div>
@@ -93,7 +93,7 @@ export function InstrumentedDashboard() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region" data-render-mode="react-server" role="region" aria-label="Output view: Profiler around a slow region">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region.tsx" role="region" aria-label="Output view: Profiler around a slow region">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><section><h2>Dashboard</h2><p>Rendering measured</p></section></div>

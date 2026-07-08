@@ -67,7 +67,7 @@ export function ProductCard({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-1-render-data-with-jsx" data-render-mode="react-server" role="region" aria-label="Output view: Render data with JSX">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-1-render-data-with-jsx" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-components-and-jsx-1-render-data-with-jsx.tsx" role="region" aria-label="Output view: Render data with JSX">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><article class="product-card"><h2>Trail shoes</h2><p>$ 129.00</p><span>In stock</span></article></div>
@@ -102,7 +102,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-2-compose-components" data-render-mode="react-server" role="region" aria-label="Output view: Compose components">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-2-compose-components" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-components-and-jsx-2-compose-components.tsx" role="region" aria-label="Output view: Compose components">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><section aria-labelledby="featured-products"><h2 id="featured-products">Featured products</h2><div class="grid"><article class="product-card"><h2>Trail shoes</h2><p>$ 129.00</p><span>In stock</span></article><article class="product-card"><h2>Rain shell</h2><p>$ 99.00</p><span>Back soon</span></article></div></section></div>

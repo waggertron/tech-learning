@@ -69,7 +69,7 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-1-filter-without-duplicated-state" data-render-mode="react-server" role="region" aria-label="Output view: Filter without duplicated state">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-1-filter-without-duplicated-state" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-state-shape-derived-values-1-filter-without-duplicated-state.tsx" role="region" aria-label="Output view: Filter without duplicated state">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><div role="tablist"><button aria-pressed="true">All</button><button aria-pressed="false">Open</button><button aria-pressed="false">Done</button></div><p>2 visible tasks</p><ul><li>Draft release notes</li><li>Verify analytics</li></ul></div>
@@ -98,7 +98,7 @@ export function AssigneeSummary({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-2-store-ids-instead-of-objects" data-render-mode="react-server" role="region" aria-label="Output view: Store IDs instead of objects">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-2-store-ids-instead-of-objects" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-state-shape-derived-values-2-store-ids-instead-of-objects.tsx" role="region" aria-label="Output view: Store IDs instead of objects">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><p>Grace Hopper</p></div>

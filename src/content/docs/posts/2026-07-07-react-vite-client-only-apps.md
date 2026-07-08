@@ -56,10 +56,15 @@ if (!root) {
 createRoot(root).render(<App />);
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-1-vite-react-entry" data-render-mode="result" role="region" aria-label="Output view: Vite React entry">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-1-vite-react-entry" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-vite-client-only-apps-1-vite-react-entry" role="region" aria-label="Output view: Vite React entry">
   <div class="react-example-output__header">Browser result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vite-client-only-apps-1-vite-react-entry">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Vite React entry.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -79,10 +84,15 @@ export default defineConfig({
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config" data-render-mode="result" role="region" aria-label="Output view: Minimal Vite config">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config" role="region" aria-label="Output view: Minimal Vite config">
   <div class="react-example-output__header">Config result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Minimal Vite config.</strong> The code exports configuration consumed by the build tool.</p>
+  </div>
+</div>
   </div>
 </div>
 

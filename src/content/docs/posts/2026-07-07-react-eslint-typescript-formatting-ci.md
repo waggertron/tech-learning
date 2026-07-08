@@ -71,7 +71,7 @@ export function RoomTitle({ roomId }: { roomId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value" data-render-mode="react-server" role="region" aria-label="Output view: Effect lint value">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value.tsx" role="region" aria-label="Output view: Effect lint value">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><h1>Room general</h1></div>

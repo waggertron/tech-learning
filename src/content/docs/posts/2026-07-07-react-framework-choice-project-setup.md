@@ -59,10 +59,15 @@ export function chooseReactStart(need: ProjectNeed) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape" data-render-mode="result" role="region" aria-label="Output view: Framework decision shape">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape" role="region" aria-label="Output view: Framework decision shape">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Framework decision shape.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -83,10 +88,15 @@ if (!rootElement) {
 createRoot(rootElement).render(<App />);
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-framework-choice-project-setup-2-client-entry-point" data-render-mode="result" role="region" aria-label="Output view: Client entry point">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-framework-choice-project-setup-2-client-entry-point" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-framework-choice-project-setup-2-client-entry-point" role="region" aria-label="Output view: Client entry point">
   <div class="react-example-output__header">Browser result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-framework-choice-project-setup-2-client-entry-point">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Client entry point.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+  </div>
+</div>
   </div>
 </div>
 

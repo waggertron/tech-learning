@@ -56,7 +56,7 @@ export function AnalyticsPanel() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-1-lazy-chart" data-render-mode="react-server" role="region" aria-label="Output view: Lazy chart">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-1-lazy-chart" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-code-splitting-lazy-loading-1-lazy-chart.tsx" role="region" aria-label="Output view: Lazy chart">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><p>Loading chart...</p></div>
@@ -79,7 +79,7 @@ export const routes = [
 ];
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" data-render-mode="result" role="region" aria-label="Output view: Lazy route table">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" role="region" aria-label="Output view: Lazy route table">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
     <p><strong>Lazy route table.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>

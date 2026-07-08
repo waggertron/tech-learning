@@ -65,7 +65,7 @@ function ProductsRoute() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-1-typed-route-search" data-render-mode="result" role="region" aria-label="Output view: Typed route search">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-1-typed-route-search" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-tanstack-router-start-1-typed-route-search" role="region" aria-label="Output view: Typed route search">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
     <p><strong>Typed route search.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
@@ -93,7 +93,7 @@ function ProjectRoute() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-2-route-loader-idea" data-render-mode="result" role="region" aria-label="Output view: Route loader idea">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-2-route-loader-idea" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-tanstack-router-start-2-route-loader-idea" role="region" aria-label="Output view: Route loader idea">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
     <p><strong>Route loader idea.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>

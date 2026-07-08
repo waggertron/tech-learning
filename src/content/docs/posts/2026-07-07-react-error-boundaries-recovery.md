@@ -63,7 +63,7 @@ export function DashboardPage() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-1-boundary-usage" data-render-mode="react-server" role="region" aria-label="Output view: Boundary usage">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-1-boundary-usage" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-error-boundaries-recovery-1-boundary-usage.tsx" role="region" aria-label="Output view: Boundary usage">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><main><h1>Dashboard</h1><section><h2>Revenue</h2><p>$53,000 this week</p></section><section><h2>Activity</h2><p>12 updates today</p></section></main></div>
@@ -87,10 +87,15 @@ createRoot(document.getElementById("root")!, {
 }).render(<App />);
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting" data-render-mode="result" role="region" aria-label="Output view: Root production reporting">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting" role="region" aria-label="Output view: Root production reporting">
   <div class="react-example-output__header">Browser result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Root production reporting.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+  </div>
+</div>
   </div>
 </div>
 

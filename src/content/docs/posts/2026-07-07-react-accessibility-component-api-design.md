@@ -60,7 +60,7 @@ export function IconButton({ label, icon, onClick }: IconButtonProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-1-icon-button-requires-a-label" data-render-mode="react-server" role="region" aria-label="Output view: Icon button requires a label">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-1-icon-button-requires-a-label" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-accessibility-component-api-design-1-icon-button-requires-a-label.tsx" role="region" aria-label="Output view: Icon button requires a label">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button type="button" aria-label="Open menu"><span aria-hidden="true">Menu</span></button></div>
@@ -97,7 +97,7 @@ export function TextField({ label, error }: TextFieldProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-2-field-component-wires-label-and-error" data-render-mode="react-server" role="region" aria-label="Output view: Field component wires label and error">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-2-field-component-wires-label-and-error" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-accessibility-component-api-design-2-field-component-wires-label-and-error.tsx" role="region" aria-label="Output view: Field component wires label and error">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><div><label for="_R_0_">Email</label><input id="_R_0_" aria-invalid="true" aria-describedby="_R_0H1_"/><p id="_R_0H1_">Enter a valid email address.</p></div></div>

@@ -55,7 +55,7 @@ export function Counter() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-events-and-local-state-1-counter-with-functional-updates" data-render-mode="react-server" role="region" aria-label="Output view: Counter with functional updates">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-events-and-local-state-1-counter-with-functional-updates" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-events-and-local-state-1-counter-with-functional-updates.tsx" role="region" aria-label="Output view: Counter with functional updates">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button>Count: 0</button></div>
@@ -87,7 +87,7 @@ export function HelpDisclosure() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-events-and-local-state-2-disclosure-state" data-render-mode="react-server" role="region" aria-label="Output view: Disclosure state">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-events-and-local-state-2-disclosure-state" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-events-and-local-state-2-disclosure-state.tsx" role="region" aria-label="Output view: Disclosure state">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><section><button type="button" aria-expanded="false">Shipping details</button></section></div>

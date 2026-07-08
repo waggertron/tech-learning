@@ -58,7 +58,7 @@ export function FocusNameButton() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-1-focus-an-input" data-render-mode="react-server" role="region" aria-label="Output view: Focus an input">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-1-focus-an-input" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-refs-dom-escape-hatches-1-focus-an-input.tsx" role="region" aria-label="Output view: Focus an input">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><input aria-label="Name"/><button type="button">Focus name</button></div>
@@ -89,7 +89,7 @@ export function SaveStatus() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-2-store-a-timer-id" data-render-mode="react-server" role="region" aria-label="Output view: Store a timer ID">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-2-store-a-timer-id" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-refs-dom-escape-hatches-2-store-a-timer-id.tsx" role="region" aria-label="Output view: Store a timer ID">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button>Save draft</button></div>

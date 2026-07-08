@@ -72,7 +72,7 @@ export const BackSoon: Story = {
 };
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-1-component-stories" data-render-mode="react-server" role="region" aria-label="Output view: Component stories">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-1-component-stories" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-storybook-component-workbenches-1-component-stories.tsx" role="region" aria-label="Output view: Component stories">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><article class="product-card"><h2>Trail shoes</h2><p>$ 129.00</p><span>In stock</span></article></div>
@@ -99,10 +99,15 @@ export const OpensMenu: Story = {
 };
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-2-interaction-story" data-render-mode="result" role="region" aria-label="Output view: Interaction story">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-2-interaction-story" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-storybook-component-workbenches-2-interaction-story" role="region" aria-label="Output view: Interaction story">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-storybook-component-workbenches-2-interaction-story">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Interaction story.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 

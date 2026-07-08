@@ -70,7 +70,7 @@ export function SearchableGrid({ items }: { items: string[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-1-filter-after-urgent-typing" data-render-mode="react-server" role="region" aria-label="Output view: Filter after urgent typing">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-1-filter-after-urgent-typing" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-transitions-responsive-updates-1-filter-after-urgent-typing.tsx" role="region" aria-label="Output view: Filter after urgent typing">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><input value=""/><ul><li>Trail shoes</li><li>Rain shell</li><li>Camp mug</li></ul></div>
@@ -105,7 +105,7 @@ export function ProjectTabs() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-2-tab-switch" data-render-mode="react-server" role="region" aria-label="Output view: Tab switch">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-2-tab-switch" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-transitions-responsive-updates-2-tab-switch.tsx" role="region" aria-label="Output view: Tab switch">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><nav aria-label="Project tabs"><button aria-pressed="true">overview</button><button aria-pressed="false">activity</button><button aria-pressed="false">settings</button></nav><section>Current tab: overview</section></div>

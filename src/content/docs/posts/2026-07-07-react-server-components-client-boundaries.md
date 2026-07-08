@@ -60,7 +60,7 @@ export async function ReportsPage() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-1-server-page-with-a-client-filter" data-render-mode="react-server" role="region" aria-label="Output view: Server page with a client filter">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-1-server-page-with-a-client-filter" data-render-mode="react-server" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-server-components-client-boundaries-1-server-page-with-a-client-filter" role="region" aria-label="Output view: Server page with a client filter">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><main><h1>Revenue report</h1><p>Total revenue: $ 53,000</p><fieldset><legend>Date range</legend><button type="button" aria-pressed="false">7 days</button><button type="button" aria-pressed="true">30 days</button><button type="button" aria-pressed="false">90 days</button></fieldset></main></div>
@@ -108,7 +108,7 @@ export function DateRangeSelector({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-2-client-boundary-for-interactivity" data-render-mode="react-server" role="region" aria-label="Output view: Client boundary for interactivity">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-2-client-boundary-for-interactivity" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-server-components-client-boundaries-2-client-boundary-for-interactivity.tsx" role="region" aria-label="Output view: Client boundary for interactivity">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><fieldset><legend>Date range</legend><button type="button" aria-pressed="false">7 days</button><button type="button" aria-pressed="true">30 days</button><button type="button" aria-pressed="false">90 days</button></fieldset></div>

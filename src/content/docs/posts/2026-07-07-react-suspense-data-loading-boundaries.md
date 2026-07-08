@@ -58,7 +58,7 @@ export function ArtistPage({ artistId }: { artistId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-suspense-data-loading-boundaries-1-boundary-around-a-data-section" data-render-mode="react-server" role="region" aria-label="Output view: Boundary around a data section">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-suspense-data-loading-boundaries-1-boundary-around-a-data-section" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-suspense-data-loading-boundaries-1-boundary-around-a-data-section.tsx" role="region" aria-label="Output view: Boundary around a data section">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><main><h1>Artist maya</h1><ul><li>Live set for maya</li><li>Studio sessions</li></ul></main></div>
@@ -88,7 +88,7 @@ export function Dashboard() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-suspense-data-loading-boundaries-2-nested-reveal" data-render-mode="react-server" role="region" aria-label="Output view: Nested reveal">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-suspense-data-loading-boundaries-2-nested-reveal" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-suspense-data-loading-boundaries-2-nested-reveal.tsx" role="region" aria-label="Output view: Nested reveal">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><section><h2>Summary</h2><p>4 active projects</p></section><figure class="revenue-chart"><figcaption>Revenue by week</figcaption><div aria-label="Revenue chart">$42k, $48k, $53k</div></figure></div>

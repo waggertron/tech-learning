@@ -66,10 +66,15 @@ function parseProfile(formData: FormData): ProfileInput {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-1-parse-form-input" data-render-mode="result" role="region" aria-label="Output view: Parse form input">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-1-parse-form-input" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-validation-form-api-boundaries-1-parse-form-input" role="region" aria-label="Output view: Parse form input">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-validation-form-api-boundaries-1-parse-form-input">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Parse form input.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -104,7 +109,7 @@ async function saveProfile(
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-2-action-returns-validation-state" data-render-mode="result" role="region" aria-label="Output view: Action returns validation state">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-2-action-returns-validation-state" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-validation-form-api-boundaries-2-action-returns-validation-state" role="region" aria-label="Output view: Action returns validation state">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
     <p><strong>Action returns validation state.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>

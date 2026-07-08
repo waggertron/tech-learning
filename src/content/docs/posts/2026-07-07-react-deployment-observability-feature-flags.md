@@ -60,10 +60,15 @@ const root = createRoot(document.getElementById("root")!, {
 root.render(<App />);
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting" data-render-mode="result" role="region" aria-label="Output view: Root error reporting">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting" role="region" aria-label="Output view: Root error reporting">
   <div class="react-example-output__header">Browser result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Root error reporting.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -90,7 +95,7 @@ export function CheckoutPage({ flags }: CheckoutPageProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop" data-render-mode="react-server" role="region" aria-label="Output view: Feature flag as a prop">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop.tsx" role="region" aria-label="Output view: Feature flag as a prop">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><form><h2>New payment sheet</h2><button>Confirm payment</button></form></div>

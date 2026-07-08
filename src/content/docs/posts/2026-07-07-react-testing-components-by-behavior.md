@@ -57,10 +57,15 @@ test("increments when clicked", async () => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-1-counter-behavior" data-render-mode="result" role="region" aria-label="Output view: Counter behavior">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-1-counter-behavior" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-testing-components-by-behavior-1-counter-behavior" role="region" aria-label="Output view: Counter behavior">
   <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-testing-components-by-behavior-1-counter-behavior">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Counter behavior.</strong> The test runner executes the assertions for this example.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -87,10 +92,15 @@ test("shows a validation message for a short display name", async () => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-2-form-validation-message" data-render-mode="result" role="region" aria-label="Output view: Form validation message">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-2-form-validation-message" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-testing-components-by-behavior-2-form-validation-message" role="region" aria-label="Output view: Form validation message">
   <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-testing-components-by-behavior-2-form-validation-message">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Form validation message.</strong> The test runner executes the assertions for this example.</p>
+  </div>
+</div>
   </div>
 </div>
 

@@ -58,10 +58,15 @@ export function useStoredString(key: string, initialValue: string) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-custom-hooks-reuse-boundaries-1-local-storage-state" data-render-mode="result" role="region" aria-label="Output view: Local storage state">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-custom-hooks-reuse-boundaries-1-local-storage-state" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-custom-hooks-reuse-boundaries-1-local-storage-state" role="region" aria-label="Output view: Local storage state">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-custom-hooks-reuse-boundaries-1-local-storage-state">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Local storage state.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -85,10 +90,15 @@ export function useWindowWidth() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-custom-hooks-reuse-boundaries-2-window-size-subscription" data-render-mode="result" role="region" aria-label="Output view: Window size subscription">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-custom-hooks-reuse-boundaries-2-window-size-subscription" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-custom-hooks-reuse-boundaries-2-window-size-subscription" role="region" aria-label="Output view: Window size subscription">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-custom-hooks-reuse-boundaries-2-window-size-subscription">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Window size subscription.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 

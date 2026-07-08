@@ -65,10 +65,15 @@ export async function updateDisplayName(formData: FormData) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-actions-mutation-boundaries-1-server-function-for-a-profile-update" data-render-mode="result" role="region" aria-label="Output view: Server function for a profile update">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-actions-mutation-boundaries-1-server-function-for-a-profile-update" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-server-actions-mutation-boundaries-1-server-function-for-a-profile-update" role="region" aria-label="Output view: Server function for a profile update">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-server-actions-mutation-boundaries-1-server-function-for-a-profile-update">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Server function for a profile update.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 
@@ -92,7 +97,7 @@ export function DisplayNameForm() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-actions-mutation-boundaries-2-form-using-a-server-action" data-render-mode="react-server" role="region" aria-label="Output view: Form using a server action">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-actions-mutation-boundaries-2-form-using-a-server-action" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-server-actions-mutation-boundaries-2-form-using-a-server-action.tsx" role="region" aria-label="Output view: Form using a server action">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)"><label>Display name<input name="displayName"/></label><button>Save</button></form><script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script></div>

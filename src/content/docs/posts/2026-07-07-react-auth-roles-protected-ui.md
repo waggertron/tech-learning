@@ -67,7 +67,7 @@ export function DeleteProjectButton({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-1-permission-aware-button" data-render-mode="react-server" role="region" aria-label="Output view: Permission-aware button">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-1-permission-aware-button" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-auth-roles-protected-ui-1-permission-aware-button.tsx" role="region" aria-label="Output view: Permission-aware button">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button type="button">Delete project</button></div>
@@ -94,10 +94,15 @@ async function deleteProject(projectId: string) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary" data-render-mode="result" role="region" aria-label="Output view: Server check at mutation boundary">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary" role="region" aria-label="Output view: Server check at mutation boundary">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
     <p><strong>Server check at mutation boundary.</strong> The code exports a value or function used by the surrounding example.</p>
+  </div>
+</div>
   </div>
 </div>
 

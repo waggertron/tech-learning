@@ -64,7 +64,7 @@ export function OnlineStatus() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-1-browser-online-status" data-render-mode="react-server" role="region" aria-label="Output view: Browser online status">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-1-browser-online-status" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-effects-synchronization-cleanup-1-browser-online-status.tsx" role="region" aria-label="Output view: Browser online status">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><p>Online</p></div>
@@ -91,7 +91,7 @@ export function ChatRoom({ roomId }: { roomId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription" data-render-mode="react-server" role="region" aria-label="Output view: Chat room subscription">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription.tsx" role="region" aria-label="Output view: Chat room subscription">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><h1>Room general</h1></div>

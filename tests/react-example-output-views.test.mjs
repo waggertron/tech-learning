@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const postsDir = path.join(repoRoot, "src/content/docs/posts");
+const generatedRegistryPath = path.join(repoRoot, "src/generated/react-example-registry.tsx");
 const reactPostFilePattern = /^2026-07-07-react-.+\.md$/;
 const codeFencePattern = /```(tsx|typescript)\n([\s\S]*?)\n```/g;
 const exampleHeadingPattern = /^## Example: (.+)$/gm;
@@ -64,6 +65,16 @@ function exportsRenderableComponent(code) {
     /export const\s+[A-Z]\w*\s*(?::[^=]+)?=/.test(code) ||
     (!/\bexport\s+/.test(code) && /function\s+[A-Z]/.test(code))
   );
+}
+
+function isBrowserLiveRenderable(code) {
+  if (!/<[A-Za-z][A-Za-z0-9.]*[\s>/]/.test(code)) return false;
+  if (/createFileRoute\(/.test(code)) return false;
+  if (/\b(describe|it|test)\(/.test(code)) return false;
+  if (/\bcreateRoot\(/.test(code)) return false;
+  if (/export\s+async\s+function\s+[A-Z]/.test(code)) return false;
+
+  return true;
 }
 
 const examples = collectExamples();
@@ -129,6 +140,11 @@ test("every Modern React example has an accessible output view", () => {
       /data-render-mode="(react-server|result)"/,
       `${example.fileName} example "${example.title}" should declare how the output was produced`,
     );
+    assert.match(
+      afterFence,
+      /data-interaction-mode="(live-component|runner|static)"/,
+      `${example.fileName} example "${example.title}" should declare how the output can be used`,
+    );
     assert.doesNotMatch(
       afterFence.slice(0, 1200),
       /\b(TODO|placeholder|lorem ipsum)\b/i,
@@ -137,6 +153,62 @@ test("every Modern React example has an accessible output view", () => {
   }
 
   assert.equal(outputIds.size, examples.length);
+});
+
+test("rendered React examples are live and result examples are runnable", () => {
+  for (const example of examples) {
+    const outputStart = example.afterFence.slice(0, 1800);
+    const renderMode = /data-render-mode="([^"]+)"/.exec(outputStart)?.[1];
+    const interactionMode = /data-interaction-mode="([^"]+)"/.exec(outputStart)?.[1];
+
+    if (renderMode === "react-server") {
+      if (isBrowserLiveRenderable(example.code)) {
+        assert.equal(
+          interactionMode,
+          "live-component",
+          `${example.fileName} example "${example.title}" should mount a live React component`,
+        );
+        assert.match(
+          outputStart,
+          /data-live-entry="[^"]+"/,
+          `${example.fileName} example "${example.title}" should point at a live registry entry`,
+        );
+      } else {
+        assert.equal(
+          interactionMode,
+          "runner",
+          `${example.fileName} example "${example.title}" should fall back to runner mode when it cannot hydrate in a browser`,
+        );
+        assert.match(
+          outputStart,
+          /data-runner-entry="[^"]+"/,
+          `${example.fileName} example "${example.title}" should point at a runner registry entry`,
+        );
+      }
+    }
+
+    if (renderMode === "result") {
+      assert.equal(
+        interactionMode,
+        "runner",
+        `${example.fileName} example "${example.title}" should expose a runner mode`,
+      );
+      assert.match(
+        outputStart,
+        /data-runner-entry="[^"]+"/,
+        `${example.fileName} example "${example.title}" should point at a runner registry entry`,
+      );
+    }
+  }
+});
+
+test("the generated browser registry exposes live examples and runners", () => {
+  assert.ok(existsSync(generatedRegistryPath), "React example browser registry should exist");
+
+  const registry = readFileSync(generatedRegistryPath, "utf8");
+  assert.match(registry, /export const reactExampleRegistry/);
+  assert.match(registry, /2026-07-07-react-components-and-jsx-1-render-data-with-jsx/);
+  assert.match(registry, /2026-07-07-react-vite-client-only-apps-2-minimal-vite-config/);
 });
 
 test("JSX examples show React-rendered output instead of tag summaries", () => {

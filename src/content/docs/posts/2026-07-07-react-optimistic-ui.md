@@ -82,7 +82,7 @@ export function CommentForm({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-1-optimistic-comment-list" data-render-mode="react-server" role="region" aria-label="Output view: Optimistic comment list">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-1-optimistic-comment-list" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-optimistic-ui-1-optimistic-comment-list.tsx" role="region" aria-label="Output view: Optimistic comment list">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)"><ul><li>Looks ready.</li><li>Ship it.</li></ul><input name="body"/><button>Post</button></form><script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script></div>
@@ -120,7 +120,7 @@ export function LikeButton({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-2-optimistic-like-count" data-render-mode="react-server" role="region" aria-label="Output view: Optimistic like count">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-2-optimistic-like-count" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-optimistic-ui-2-optimistic-like-count.tsx" role="region" aria-label="Output view: Optimistic like count">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button>41 likes</button></div>

@@ -79,7 +79,7 @@ function SearchField({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query" data-render-mode="react-server" role="region" aria-label="Output view: Shared search query">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query.tsx" role="region" aria-label="Output view: Shared search query">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><input aria-label="Search products" value=""/><ul><li>Trail shoes</li><li>Rain shell</li></ul></div>
@@ -117,7 +117,7 @@ function InStockOnly({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox" data-render-mode="react-server" role="region" aria-label="Output view: Controlled checkbox">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox.tsx" role="region" aria-label="Output view: Controlled checkbox">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><label><input type="checkbox" checked=""/>In stock only</label></div>

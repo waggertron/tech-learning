@@ -66,7 +66,7 @@ export function ActionButton(props: ButtonProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-typescript-component-patterns-1-discriminated-button-props" data-render-mode="react-server" role="region" aria-label="Output view: Discriminated button props">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-typescript-component-patterns-1-discriminated-button-props" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-typescript-component-patterns-1-discriminated-button-props.tsx" role="region" aria-label="Output view: Discriminated button props">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><a href="/account/billing">Manage billing</a></div>
@@ -97,7 +97,7 @@ export function List<T>({ items, getKey, renderItem }: ListProps<T>) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-typescript-component-patterns-2-generic-list-renderer" data-render-mode="react-server" role="region" aria-label="Output view: Generic list renderer">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-typescript-component-patterns-2-generic-list-renderer" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-typescript-component-patterns-2-generic-list-renderer.tsx" role="region" aria-label="Output view: Generic list renderer">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><ul><li>Trail shoes</li><li>Rain shell</li></ul></div>
