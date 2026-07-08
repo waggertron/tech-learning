@@ -107,7 +107,10 @@ function mountRunnerExample(panel: HTMLElement) {
     if (runnerRoot.dataset.loaded === "true") return;
     runnerRoot.dataset.loaded = "true";
 
-    output.innerHTML = `<pre class="react-example-output__runner-pre">${entry.summary}</pre>`;
+    const pre = document.createElement("pre");
+    pre.className = "react-example-output__runner-pre";
+    pre.textContent = entry.summary ?? "";
+    output.replaceChildren(pre);
   });
 }
 

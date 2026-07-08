@@ -93,7 +93,14 @@ createRoot(document.getElementById("root")!, {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Root production reporting.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+    <pre class="react-example-output__runner-pre">createRoot(document.getElementById(&quot;root&quot;)!, {
+  onCaughtError(error, errorInfo) {
+    reportError({
+      error,
+      componentStack: errorInfo.componentStack,
+    });
+  },
+}).render(&lt;App /&gt;);</pre>
   </div>
 </div>
   </div>

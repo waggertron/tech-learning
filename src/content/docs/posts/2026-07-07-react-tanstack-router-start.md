@@ -68,7 +68,25 @@ function ProductsRoute() {
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-1-typed-route-search" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-tanstack-router-start-1-typed-route-search" role="region" aria-label="Output view: Typed route search">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Typed route search.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-tanstack-router-start-1-typed-route-search">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
+    <pre class="react-example-output__runner-pre">type Search = {
+  query?: string;
+  page?: number;
+};
+export const Route = createFileRoute(&quot;/products/&quot;)({
+  validateSearch: (search: Record&lt;string, unknown&gt;): Search =&gt; ({
+    query: typeof search.query === &quot;string&quot; ? search.query : &quot;&quot;,
+    page: Number(search.page ?? 1),
+  }),
+  component: ProductsRoute,
+});
+function ProductsRoute() {
+  const search = Route.useSearch();
+  return &lt;ProductResults query={search.query ?? &quot;&quot;} page={search.page ?? 1} /&gt;;</pre>
+  </div>
+</div>
   </div>
 </div>
 
@@ -96,7 +114,21 @@ function ProjectRoute() {
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-tanstack-router-start-2-route-loader-idea" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-tanstack-router-start-2-route-loader-idea" role="region" aria-label="Output view: Route loader idea">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Route loader idea.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-tanstack-router-start-2-route-loader-idea">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
+    <pre class="react-example-output__runner-pre">export const Route = createFileRoute(&quot;/projects/$projectId&quot;)({
+  loader: async ({ params }) =&gt; {
+    return getProject(params.projectId);
+  },
+  component: ProjectRoute,
+});
+function ProjectRoute() {
+  const project = Route.useLoaderData();
+  return &lt;h1&gt;{project.name}&lt;/h1&gt;;
+}</pre>
+  </div>
+</div>
   </div>
 </div>
 

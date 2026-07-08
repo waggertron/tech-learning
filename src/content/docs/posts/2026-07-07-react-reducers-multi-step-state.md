@@ -82,7 +82,7 @@ The handler reports intent. The reducer owns the transition rule.
 ## Example: Wizard reducer
 
 ```tsx
-import type { Reducer } from "react";
+import { useReducer, type Reducer } from "react";
 
 type WizardState = {
   step: "account" | "profile" | "confirm";
@@ -105,17 +105,49 @@ const wizardReducer: Reducer<WizardState, WizardAction> = (state, action) => {
       return { ...state, step: "account" };
   }
 };
+
+const initialWizardState: WizardState = {
+  step: "account",
+  email: "",
+  displayName: "",
+};
+
+export function WizardDemo() {
+  const [state, dispatch] = useReducer(wizardReducer, initialWizardState);
+
+  return (
+    <section aria-label="Signup wizard">
+      <p>Step: {state.step}</p>
+      <p>Email: {state.email || "Not set"}</p>
+      <p>Name: {state.displayName || "Not set"}</p>
+      <button
+        type="button"
+        onClick={() =>
+          dispatch({ type: "emailChanged", email: "reader@example.com" })
+        }
+      >
+        Use saved email
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          dispatch({ type: "profileSaved", displayName: "Reader" })
+        }
+      >
+        Save profile
+      </button>
+      <button type="button" onClick={() => dispatch({ type: "back" })}>
+        Back
+      </button>
+    </section>
+  );
+}
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer" role="region" aria-label="Output view: Wizard reducer">
-  <div class="react-example-output__header">Runtime result</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-reducers-multi-step-state-2-wizard-reducer.tsx" role="region" aria-label="Output view: Wizard reducer">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer">
-  <button type="button" class="react-example-output__run-button">Run example</button>
-  <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Wizard reducer.</strong> The code exports a value or function used by the surrounding example.</p>
-  </div>
-</div>
+    <div class="react-example-output__rendered"><section aria-label="Signup wizard"><p>Step: account</p><p>Email: Not set</p><p>Name: Not set</p><button type="button">Use saved email</button><button type="button">Save profile</button><button type="button">Back</button></section></div>
   </div>
 </div>
 

@@ -62,7 +62,11 @@ createRoot(root).render(<App />);
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vite-client-only-apps-1-vite-react-entry">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Vite React entry.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+    <pre class="react-example-output__runner-pre">const root = document.getElementById(&quot;root&quot;);
+if (!root) {
+  throw new Error(&quot;Missing root element&quot;);
+}
+createRoot(root).render(&lt;App /&gt;);</pre>
   </div>
 </div>
   </div>
@@ -90,7 +94,12 @@ export default defineConfig({
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Minimal Vite config.</strong> The code exports configuration consumed by the build tool.</p>
+    <pre class="react-example-output__runner-pre">export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+  },
+});</pre>
   </div>
 </div>
   </div>

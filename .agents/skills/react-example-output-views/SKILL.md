@@ -101,6 +101,8 @@ Treat `children` examples as fixture fidelity tests. If the code passes a paragr
 
 When a rendered panel looks too small, compare unconditional visible JSX text from the code fence with the output region. Include accessible text from `aria-label`, `title`, and `placeholder`; skip literals that only appear behind conditional branches, loading states, errors, or user interactions.
 
+Runner panels must not invent explanatory result text. If an example cannot render as a live component, the panel may show source-derived text from the code fence or a real deterministic run result, but it must not display prose such as "The code exports..." or "This example requires..." as if it were output.
+
 ## Generator Guidance
 
 Prefer deterministic generation over manual panel edits. Expand the renderer and live registry when new example shapes appear:
@@ -112,7 +114,7 @@ Prefer deterministic generation over manual panel edits. Expand the renderer and
 - Test examples should use runner mode unless a full test runner is added.
 - Server, async Server Component, route, and tool configuration examples should use runner mode unless their framework runtime is added.
 
-Do not replace failed renders with prose that pretends to be UI output. Either make the example render with working behavior, add a runner, or mark it as a documented static exception.
+Do not replace failed renders with prose that pretends to be UI output. Either make the example render with working behavior, show source-derived runner content, add a real runner, or mark it as a documented static exception.
 
 ## Reference
 

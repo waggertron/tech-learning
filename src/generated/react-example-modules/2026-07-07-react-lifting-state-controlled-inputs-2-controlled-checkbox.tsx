@@ -1,5 +1,16 @@
 // @ts-nocheck
-import type { ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
+
+function InventoryFilter() {
+  const [inStockOnly, setInStockOnly] = useState(true);
+
+  return (
+    <InStockOnly
+      checked={inStockOnly}
+      onChange={setInStockOnly}
+    />
+  );
+}
 
 function InStockOnly({
   checked,
@@ -24,4 +35,4 @@ function InStockOnly({
   );
 }
 
-export { InStockOnly };
+export { InventoryFilter };

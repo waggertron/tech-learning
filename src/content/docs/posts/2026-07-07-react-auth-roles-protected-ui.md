@@ -100,7 +100,14 @@ async function deleteProject(projectId: string) {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Server check at mutation boundary.</strong> The code exports a value or function used by the surrounding example.</p>
+    <pre class="react-example-output__runner-pre">async function deleteProject(projectId: string) {
+  const user = await requireCurrentUser();
+  const allowed = await canDeleteProject(user.id, projectId);
+  if (!allowed) {
+    throw new Error(&quot;Not allowed&quot;);
+  }
+  await db.project.delete({ id: projectId });
+}</pre>
   </div>
 </div>
   </div>

@@ -65,7 +65,15 @@ export function chooseReactStart(need: ProjectNeed) {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Framework decision shape.</strong> The code exports a value or function used by the surrounding example.</p>
+    <pre class="react-example-output__runner-pre">export function chooseReactStart(need: ProjectNeed) {
+  if (need.routes &amp;&amp; (need.serverRendering || need.serverMutations)) {
+    return &quot;Start with a React framework&quot;;
+  }
+  if (need.staticPages || need.routes) {
+    return &quot;Compare a framework with a Vite app plus router&quot;;
+  }
+  return &quot;A client-only Vite app is a reasonable starting point&quot;;
+}</pre>
   </div>
 </div>
   </div>
@@ -94,7 +102,11 @@ createRoot(rootElement).render(<App />);
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-framework-choice-project-setup-2-client-entry-point">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Client entry point.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+    <pre class="react-example-output__runner-pre">const rootElement = document.getElementById(&quot;root&quot;);
+if (!rootElement) {
+  throw new Error(&quot;Missing root element&quot;);
+}
+createRoot(rootElement).render(&lt;App /&gt;);</pre>
   </div>
 </div>
   </div>

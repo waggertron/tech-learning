@@ -105,7 +105,16 @@ export const OpensMenu: Story = {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-storybook-component-workbenches-2-interaction-story">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Interaction story.</strong> The code exports a value or function used by the surrounding example.</p>
+    <pre class="react-example-output__runner-pre">export const OpensMenu: Story = {
+  args: {
+    label: &quot;Account&quot;,
+  },
+  play: async ({ canvasElement }) =&gt; {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole(&quot;button&quot;, { name: /account/i }));
+    await expect(canvas.getByRole(&quot;menu&quot;)).toBeVisible();
+  },
+};</pre>
   </div>
 </div>
   </div>

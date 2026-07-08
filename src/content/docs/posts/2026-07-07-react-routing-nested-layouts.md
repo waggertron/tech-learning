@@ -93,7 +93,21 @@ const routes = [
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-2-route-config-sketch" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-routing-nested-layouts-2-route-config-sketch" role="region" aria-label="Output view: Route config sketch">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Route config sketch.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-routing-nested-layouts-2-route-config-sketch">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
+    <pre class="react-example-output__runner-pre">const routes = [
+  {
+    path: &quot;/account&quot;,
+    element: &lt;AccountLayout /&gt;,
+    children: [
+      { path: &quot;profile&quot;, element: &lt;ProfilePage /&gt; },
+      { path: &quot;security&quot;, element: &lt;SecurityPage /&gt; },
+    ],
+  },
+];</pre>
+  </div>
+</div>
   </div>
 </div>
 

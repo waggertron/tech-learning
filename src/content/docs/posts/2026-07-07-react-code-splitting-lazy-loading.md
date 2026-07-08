@@ -82,7 +82,17 @@ export const routes = [
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" role="region" aria-label="Output view: Lazy route table">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Lazy route table.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
+    <pre class="react-example-output__runner-pre">const AdminUsersPage = lazy(() =&gt; import(&quot;./routes/AdminUsersPage&quot;));
+const PublicHomePage = lazy(() =&gt; import(&quot;./routes/PublicHomePage&quot;));
+export const routes = [
+  { path: &quot;/&quot;, element: &lt;PublicHomePage /&gt; },
+  { path: &quot;/admin/users&quot;, element: &lt;AdminUsersPage /&gt; },
+];</pre>
+  </div>
+</div>
   </div>
 </div>
 

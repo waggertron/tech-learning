@@ -50,7 +50,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Server check at mutation boundary. This example uses a runner so the runtime can execute the code path.",
+    "summary": "async function deleteProject(projectId: string) {\n  const user = await requireCurrentUser();\n  const allowed = await canDeleteProject(user.id, projectId);\n  if (!allowed) {\n    throw new Error(\"Not allowed\");\n  }\n  await db.project.delete({ id: projectId });\n}",
     "props": null
   },
   {
@@ -80,7 +80,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": "AdminUsersPage",
     "needsQueryClientProvider": false,
-    "summary": "Lazy route table. This example uses a runner so the runtime can execute the code path.",
+    "summary": "const AdminUsersPage = lazy(() => import(\"./routes/AdminUsersPage\"));\nconst PublicHomePage = lazy(() => import(\"./routes/PublicHomePage\"));\nexport const routes = [\n  { path: \"/\", element: <PublicHomePage /> },\n  { path: \"/admin/users\", element: <AdminUsersPage /> },\n];",
     "props": null
   },
   {
@@ -183,7 +183,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Window size subscription. This example uses a runner so the runtime can execute the code path.",
+    "summary": "export function useWindowWidth() {\n  const [width, setWidth] = useState(() => window.innerWidth);\n  useEffect(() => {\n    const update = () => setWidth(window.innerWidth);\n    window.addEventListener(\"resize\", update);\n    return () => window.removeEventListener(\"resize\", update);\n  }, []);\n  return width;\n}",
     "props": null
   },
   {
@@ -195,7 +195,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Local storage state. This example uses a runner so the runtime can execute the code path.",
+    "summary": "export function useStoredString(key: string, initialValue: string) {\n  const [value, setValue] = useState(() => {\n    return window.localStorage.getItem(key) ?? initialValue;\n  });\n  useEffect(() => {\n    window.localStorage.setItem(key, value);\n  }, [key, value]);\n  return [value, setValue] as const;\n}",
     "props": null
   },
   {
@@ -256,7 +256,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Root error reporting. This example uses a runner so the runtime can execute the code path.",
+    "summary": "const root = createRoot(document.getElementById(\"root\")!, {\n  onCaughtError(error, errorInfo) {\n    reportError({\n      name: \"react-caught-error\",\n      message: error.message,\n      componentStack: errorInfo.componentStack,\n    });\n  },\n});\nroot.render(<App />);",
     "props": null
   },
   {
@@ -294,7 +294,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Root production reporting. This example uses a runner so the runtime can execute the code path.",
+    "summary": "createRoot(document.getElementById(\"root\")!, {\n  onCaughtError(error, errorInfo) {\n    reportError({\n      error,\n      componentStack: errorInfo.componentStack,\n    });\n  },\n}).render(<App />);",
     "props": null
   },
   {
@@ -414,7 +414,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Client entry point. This example uses a runner so the runtime can execute the code path.",
+    "summary": "const rootElement = document.getElementById(\"root\");\nif (!rootElement) {\n  throw new Error(\"Missing root element\");\n}\ncreateRoot(rootElement).render(<App />);",
     "props": null
   },
   {
@@ -426,7 +426,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Framework decision shape. This example uses a runner so the runtime can execute the code path.",
+    "summary": "export function chooseReactStart(need: ProjectNeed) {\n  if (need.routes && (need.serverRendering || need.serverMutations)) {\n    return \"Start with a React framework\";\n  }\n  if (need.staticPages || need.routes) {\n    return \"Compare a framework with a Vite app plus router\";\n  }\n  return \"A client-only Vite app is a reasonable starting point\";\n}",
     "props": null
   },
   {
@@ -467,16 +467,10 @@ export const reactExampleRegistry = [
     "modulePath": "./react-example-modules/2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox.tsx",
     "mode": "react-server",
     "interactionMode": "live-component",
-    "componentName": "InStockOnly",
+    "componentName": "InventoryFilter",
     "needsQueryClientProvider": false,
     "summary": "Controlled checkbox. This example mounts a live React component in the browser.",
-    "props": {
-      "checked": true,
-      "onChange": {
-        "$type": "fn",
-        "name": "noop"
-      }
-    }
+    "props": {}
   },
   {
     "id": "2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query",
@@ -514,7 +508,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": true,
-    "summary": "Small direct cache update. This example uses a runner so the runtime can execute the code path.",
+    "summary": "function markProjectArchived(queryClient: QueryClient, projectId: string) {\n  queryClient.setQueryData<Project>([\"project\", projectId], (project) => {\n    if (!project) return project;\n    return { ...project, archived: true };\n  });\n}",
     "props": null
   },
   {
@@ -705,13 +699,13 @@ export const reactExampleRegistry = [
     "id": "2026-07-07-react-reducers-multi-step-state-2-wizard-reducer",
     "title": "Wizard reducer",
     "fileName": "2026-07-07-react-reducers-multi-step-state.md",
-    "modulePath": null,
-    "mode": "result",
-    "interactionMode": "runner",
-    "componentName": null,
+    "modulePath": "./react-example-modules/2026-07-07-react-reducers-multi-step-state-2-wizard-reducer.tsx",
+    "mode": "react-server",
+    "interactionMode": "live-component",
+    "componentName": "WizardDemo",
     "needsQueryClientProvider": false,
-    "summary": "Wizard reducer. This example uses a runner so the runtime can execute the code path.",
-    "props": null
+    "summary": "Wizard reducer. This example mounts a live React component in the browser.",
+    "props": {}
   },
   {
     "id": "2026-07-07-react-reducers-multi-step-state-1-counter-reducer",
@@ -864,7 +858,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Route config sketch. This example uses a runner so the runtime can execute the code path.",
+    "summary": "const routes = [\n  {\n    path: \"/account\",\n    element: <AccountLayout />,\n    children: [\n      { path: \"profile\", element: <ProfilePage /> },\n      { path: \"security\", element: <SecurityPage /> },\n    ],\n  },\n];",
     "props": null
   },
   {
@@ -909,7 +903,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Server function for a profile update. This example uses a runner so the runtime can execute the code path.",
+    "summary": "\"use server\";\nexport async function updateDisplayName(formData: FormData) {\n  const displayName = String(formData.get(\"displayName\") ?? \"\").trim();\n  if (displayName.length < 2) {\n    return { ok: false, message: \"Display name needs at least two characters.\" };\n  }\n  const user = await requireCurrentUser();\n  await db.user.update({\n    id: user.id,\n    displayName,\n  });\n  return { ok: true, message: \"Profile updated.\" };\n}",
     "props": null
   },
   {
@@ -996,7 +990,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": "OpensMenu",
     "needsQueryClientProvider": false,
-    "summary": "Interaction story. This example uses a runner so the runtime can execute the code path.",
+    "summary": "export const OpensMenu: Story = {\n  args: {\n    label: \"Account\",\n  },\n  play: async ({ canvasElement }) => {\n    const canvas = within(canvasElement);\n    await userEvent.click(canvas.getByRole(\"button\", { name: /account/i }));\n    await expect(canvas.getByRole(\"menu\")).toBeVisible();\n  },\n};",
     "props": null
   },
   {
@@ -1065,7 +1059,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": "Route",
     "needsQueryClientProvider": false,
-    "summary": "Route loader idea. This example uses a runner so the runtime can execute the code path.",
+    "summary": "export const Route = createFileRoute(\"/projects/$projectId\")({\n  loader: async ({ params }) => {\n    return getProject(params.projectId);\n  },\n  component: ProjectRoute,\n});\nfunction ProjectRoute() {\n  const project = Route.useLoaderData();\n  return <h1>{project.name}</h1>;\n}",
     "props": null
   },
   {
@@ -1077,7 +1071,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": "Route",
     "needsQueryClientProvider": false,
-    "summary": "Typed route search. This example uses a runner so the runtime can execute the code path.",
+    "summary": "type Search = {\n  query?: string;\n  page?: number;\n};\nexport const Route = createFileRoute(\"/products/\")({\n  validateSearch: (search: Record<string, unknown>): Search => ({\n    query: typeof search.query === \"string\" ? search.query : \"\",\n    page: Number(search.page ?? 1),\n  }),\n  component: ProductsRoute,\n});\nfunction ProductsRoute() {\n  const search = Route.useSearch();\n  return <ProductResults query={search.query ?? \"\"} page={search.page ?? 1} />;",
     "props": null
   },
   {
@@ -1089,7 +1083,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Form validation message. This example uses a runner so the runtime can execute the code path.",
+    "summary": "test(\"shows a validation message for a short display name\", async () => {\n  const user = userEvent.setup();\n  render(<ProfileForm />);\n  await user.type(screen.getByLabelText(/display name/i), \"A\");\n  await user.click(screen.getByRole(\"button\", { name: /save/i }));\n  expect(\n    await screen.findByText(/at least two characters/i),\n  ).toBeVisible();\n});",
     "props": null
   },
   {
@@ -1101,7 +1095,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Counter behavior. This example uses a runner so the runtime can execute the code path.",
+    "summary": "test(\"increments when clicked\", async () => {\n  const user = userEvent.setup();\n  render(<Counter />);\n  await user.click(screen.getByRole(\"button\", { name: /count: 0/i }));\n  expect(screen.getByRole(\"button\", { name: /count: 1/i })).toBeVisible();\n});",
     "props": null
   },
   {
@@ -1194,7 +1188,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Action returns validation state. This example uses a runner so the runtime can execute the code path.",
+    "summary": "type FormState = {\n  fieldErrors: Record<string, string>;\n  message: string;\n};\nasync function saveProfile(\n  previous: FormState,\n  formData: FormData,\n): Promise<FormState> {\n  const parsed = parseProfile(formData);\n  if (!parsed.ok) {\n    return {\n      fieldErrors: { displayName: parsed.error },\n      message: \"Check the highlighted fields.\",\n    };",
     "props": null
   },
   {
@@ -1206,7 +1200,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Parse form input. This example uses a runner so the runtime can execute the code path.",
+    "summary": "type ProfileInput =\n  | { ok: true; displayName: string }\n  | { ok: false; error: string };\nconst profileSchema = z.object({\n  displayName: z.string().trim().min(2),\n});\nfunction parseProfile(formData: FormData): ProfileInput {\n  const parsed = profileSchema.safeParse({\n    displayName: formData.get(\"displayName\"),\n  });\n  if (!parsed.success) {\n    return { ok: false, error: \"Display name needs at least two characters.\" };\n  }\n  return { ok: true, displayName: parsed.data.displayName };",
     "props": null
   },
   {
@@ -1218,7 +1212,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Minimal Vite config. This example uses a runner so the runtime can execute the code path.",
+    "summary": "export default defineConfig({\n  plugins: [react()],\n  server: {\n    port: 5173,\n  },\n});",
     "props": null
   },
   {
@@ -1230,7 +1224,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Vite React entry. This example uses a runner so the runtime can execute the code path.",
+    "summary": "const root = document.getElementById(\"root\");\nif (!root) {\n  throw new Error(\"Missing root element\");\n}\ncreateRoot(root).render(<App />);",
     "props": null
   },
   {
@@ -1242,7 +1236,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Playwright route flow. This example uses a runner so the runtime can execute the code path.",
+    "summary": "test(\"search filters products\", async ({ page }) => {\n  await page.goto(\"/products\");\n  await page.getByLabel(\"Search products\").fill(\"boots\");\n  await expect(page.getByRole(\"heading\", { name: /boots/i })).toBeVisible();\n  await expect(page.getByText(\"Trail sandals\")).toBeHidden();\n});",
     "props": null
   },
   {
@@ -1254,7 +1248,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "Vitest reducer test. This example uses a runner so the runtime can execute the code path.",
+    "summary": "test(\"moves to confirm after profile is saved\", () => {\n  const state = {\n    step: \"profile\",\n    email: \"reader@example.test\",\n    displayName: \"\",\n  };\n  expect(\n    wizardReducer(state, { type: \"profileSaved\", displayName: \"Weylin\" }),\n  ).toEqual({\n    step: \"confirm\",\n    email: \"reader@example.test\",\n    displayName: \"Weylin\",\n  });\n});",
     "props": null
   }
 ] as const;

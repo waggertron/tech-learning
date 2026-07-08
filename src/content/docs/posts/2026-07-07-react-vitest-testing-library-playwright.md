@@ -69,7 +69,20 @@ test("moves to confirm after profile is saved", () => {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Vitest reducer test.</strong> The test runner executes the assertions for this example.</p>
+    <pre class="react-example-output__runner-pre">test(&quot;moves to confirm after profile is saved&quot;, () =&gt; {
+  const state = {
+    step: &quot;profile&quot;,
+    email: &quot;reader@example.test&quot;,
+    displayName: &quot;&quot;,
+  };
+  expect(
+    wizardReducer(state, { type: &quot;profileSaved&quot;, displayName: &quot;Weylin&quot; }),
+  ).toEqual({
+    step: &quot;confirm&quot;,
+    email: &quot;reader@example.test&quot;,
+    displayName: &quot;Weylin&quot;,
+  });
+});</pre>
   </div>
 </div>
   </div>
@@ -97,7 +110,12 @@ test("search filters products", async ({ page }) => {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Playwright route flow.</strong> The test runner executes the assertions for this example.</p>
+    <pre class="react-example-output__runner-pre">test(&quot;search filters products&quot;, async ({ page }) =&gt; {
+  await page.goto(&quot;/products&quot;);
+  await page.getByLabel(&quot;Search products&quot;).fill(&quot;boots&quot;);
+  await expect(page.getByRole(&quot;heading&quot;, { name: /boots/i })).toBeVisible();
+  await expect(page.getByText(&quot;Trail sandals&quot;)).toBeHidden();
+});</pre>
   </div>
 </div>
   </div>

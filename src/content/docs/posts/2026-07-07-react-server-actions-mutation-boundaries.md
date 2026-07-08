@@ -71,7 +71,19 @@ export async function updateDisplayName(formData: FormData) {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-server-actions-mutation-boundaries-1-server-function-for-a-profile-update">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Server function for a profile update.</strong> The code exports a value or function used by the surrounding example.</p>
+    <pre class="react-example-output__runner-pre">&quot;use server&quot;;
+export async function updateDisplayName(formData: FormData) {
+  const displayName = String(formData.get(&quot;displayName&quot;) ?? &quot;&quot;).trim();
+  if (displayName.length &lt; 2) {
+    return { ok: false, message: &quot;Display name needs at least two characters.&quot; };
+  }
+  const user = await requireCurrentUser();
+  await db.user.update({
+    id: user.id,
+    displayName,
+  });
+  return { ok: true, message: &quot;Profile updated.&quot; };
+}</pre>
   </div>
 </div>
   </div>

@@ -92,7 +92,7 @@ const examples = collectExamples();
 
 function parseRegistry() {
   const source = readFileSync(generatedRegistryPath, "utf8");
-  const json = /export const reactExampleRegistry = ([\s\S]*?) as const;/.exec(source)?.[1];
+  const json = /export const reactExampleRegistry = ([\s\S]*?) as const;\s*$/.exec(source)?.[1];
   assert.ok(json, "React example registry should be parseable");
   return JSON.parse(json);
 }
@@ -524,6 +524,57 @@ test("children examples preserve multiple child nodes", () => {
     /Update payment method/,
     "The rendered panel should include every child passed in the example, including the button",
   );
+});
+
+test("controlled input examples render a state-owning component", () => {
+  const example = examples.find(
+    (item) =>
+      item.fileName === "2026-07-07-react-lifting-state-controlled-inputs.md" &&
+      item.title === "Controlled checkbox",
+  );
+  assert.ok(example, "lifting state post should keep the controlled checkbox example");
+
+  const outputStart = example.afterFence.slice(0, 2200);
+  const registry = parseRegistry();
+  const entry = registry.find(
+    (item) => item.id === "2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox",
+  );
+
+  assert.match(example.code, /\buseState\b/);
+  assert.match(outputStart, /data-interaction-mode="live-component"/);
+  assert.equal(entry?.componentName, "InventoryFilter");
+  assert.deepEqual(entry?.props, {});
+});
+
+test("runner panels do not include generated explanatory copy", () => {
+  const registry = parseRegistry();
+  const generatedPhrases = [
+    "The code exports a value or function used by the surrounding example.",
+    "The code exports configuration consumed by the build tool.",
+    "The browser entrypoint mounts the React tree into the root DOM node.",
+    "The test runner executes the assertions for this example.",
+    "This example requires its framework runtime to render on the page:",
+  ];
+
+  for (const example of examples) {
+    for (const phrase of generatedPhrases) {
+      assert.doesNotMatch(
+        example.afterFence,
+        new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+        `${example.fileName} example "${example.title}" should not display generated runner explanation copy`,
+      );
+    }
+  }
+
+  for (const entry of registry) {
+    for (const phrase of generatedPhrases) {
+      assert.doesNotMatch(
+        entry.summary ?? "",
+        new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+        `${entry.id} should not store generated runner explanation copy`,
+      );
+    }
+  }
 });
 
 test("rendered outputs include visible UI literals from component examples", () => {

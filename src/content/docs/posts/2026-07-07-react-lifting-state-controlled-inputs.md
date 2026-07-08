@@ -91,7 +91,18 @@ The parent owns the query because both the input and the list depend on it.
 ## Example: Controlled checkbox
 
 ```tsx
-import type { ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
+
+function InventoryFilter() {
+  const [inStockOnly, setInStockOnly] = useState(true);
+
+  return (
+    <InStockOnly
+      checked={inStockOnly}
+      onChange={setInStockOnly}
+    />
+  );
+}
 
 function InStockOnly({
   checked,
@@ -124,7 +135,7 @@ function InStockOnly({
   </div>
 </div>
 
-Checkboxes use `checked`, not `value`, because the rendered state is binary.
+The parent owns the boolean. The child renders the checkbox from `checked` and reports the next boolean through `onChange`. Checkboxes use `checked`, not `value`, because the rendered state is binary.
 
 ## Details to watch
 

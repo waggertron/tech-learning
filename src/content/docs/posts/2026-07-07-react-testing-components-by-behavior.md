@@ -63,7 +63,12 @@ test("increments when clicked", async () => {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-testing-components-by-behavior-1-counter-behavior">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Counter behavior.</strong> The test runner executes the assertions for this example.</p>
+    <pre class="react-example-output__runner-pre">test(&quot;increments when clicked&quot;, async () =&gt; {
+  const user = userEvent.setup();
+  render(&lt;Counter /&gt;);
+  await user.click(screen.getByRole(&quot;button&quot;, { name: /count: 0/i }));
+  expect(screen.getByRole(&quot;button&quot;, { name: /count: 1/i })).toBeVisible();
+});</pre>
   </div>
 </div>
   </div>
@@ -98,7 +103,15 @@ test("shows a validation message for a short display name", async () => {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-testing-components-by-behavior-2-form-validation-message">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Form validation message.</strong> The test runner executes the assertions for this example.</p>
+    <pre class="react-example-output__runner-pre">test(&quot;shows a validation message for a short display name&quot;, async () =&gt; {
+  const user = userEvent.setup();
+  render(&lt;ProfileForm /&gt;);
+  await user.type(screen.getByLabelText(/display name/i), &quot;A&quot;);
+  await user.click(screen.getByRole(&quot;button&quot;, { name: /save/i }));
+  expect(
+    await screen.findByText(/at least two characters/i),
+  ).toBeVisible();
+});</pre>
   </div>
 </div>
   </div>

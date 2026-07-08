@@ -34,10 +34,6 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function sentence(value) {
-  return String(value).replace(/\s+/g, " ").trim().replace(/\u2014/g, ",");
-}
-
 function containsJsx(code) {
   return /<[A-Za-z][A-Za-z0-9.]*[\s>/]/.test(code);
 }
@@ -438,15 +434,21 @@ async function renderReactExample({ code, title, id }) {
   return renderToStaticMarkup(wrapped);
 }
 
-function resultOutput(title, reason) {
-  return `<p><strong>${htmlEscape(title)}.</strong> ${htmlEscape(reason)}</p>`;
+function sourceResultPreview(code) {
+  const meaningfulLines = code
+    .split(/\r?\n/)
+    .map((line) => line.trimEnd())
+    .filter((line) => line.trim().length > 0)
+    .filter((line) => !line.trimStart().startsWith("import "));
+
+  return meaningfulLines.slice(0, 14).join("\n");
 }
 
-function runnerOutput(title, reason, id) {
+function runnerOutput(id, preview) {
   return `<div class="react-example-output__runner" data-react-example-runner="${htmlEscape(id)}">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    ${resultOutput(title, reason)}
+    <pre class="react-example-output__runner-pre">${htmlEscape(preview)}</pre>
   </div>
 </div>`;
 }
@@ -459,7 +461,8 @@ async function outputBody({ title, code, id }) {
       mode: "result",
       interactionMode: "runner",
       label: "Test result",
-      body: runnerOutput(title, "The test runner executes the assertions for this example.", id),
+      body: runnerOutput(id, sourceResultPreview(code)),
+      summary: sourceResultPreview(code),
     };
   }
 
@@ -468,7 +471,8 @@ async function outputBody({ title, code, id }) {
       mode: "result",
       interactionMode: "runner",
       label: "Browser result",
-      body: runnerOutput(title, "The browser entrypoint mounts the React tree into the root DOM node.", id),
+      body: runnerOutput(id, sourceResultPreview(code)),
+      summary: sourceResultPreview(code),
     };
   }
 
@@ -482,14 +486,13 @@ async function outputBody({ title, code, id }) {
         body: `<div class="react-example-output__rendered">${rendered}</div>`,
       };
     } catch (error) {
+      const preview = sourceResultPreview(code);
       return {
         mode: "result",
         interactionMode: "runner",
         label: "Runtime result",
-        body: resultOutput(
-          title,
-          `This example requires its framework runtime to render on the page: ${sentence(error.message)}.`,
-        ),
+        body: runnerOutput(id, preview),
+        summary: preview,
       };
     }
   }
@@ -499,15 +502,18 @@ async function outputBody({ title, code, id }) {
       mode: "result",
       interactionMode: "runner",
       label: "Config result",
-      body: runnerOutput(title, "The code exports configuration consumed by the build tool.", id),
+      body: runnerOutput(id, sourceResultPreview(code)),
+      summary: sourceResultPreview(code),
     };
   }
 
+  const preview = sourceResultPreview(code);
   return {
     mode: "result",
     interactionMode: "runner",
     label: "Runtime result",
-    body: runnerOutput(title, "The code exports a value or function used by the surrounding example.", id),
+    body: runnerOutput(id, preview),
+    summary: preview,
   };
 }
 
@@ -556,7 +562,7 @@ async function syncFile(fileName, generatedEntries, generatedModules) {
       componentName,
       needsQueryClientProvider: /@tanstack\/react-query/.test(fence[2]),
       summary: output.mode === "result"
-        ? `${title}. This example uses a runner so the runtime can execute the code path.`
+        ? output.summary
         : `${title}. This example mounts a live React component in the browser.`,
       props: output.interactionMode === "live-component"
         ? serializeFixtureProps(fixtureProps({ title, componentName: componentName ?? "" }))

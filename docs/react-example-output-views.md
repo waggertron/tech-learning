@@ -56,6 +56,7 @@ Evaluate each panel by the example's runtime contract:
 - A stateful component should respond to clicks, input, toggles, or tabs.
 - A cached data component should show loading, error, or resolved data according to the fixture and client cache state.
 - A framework-only example should stay in runner mode unless the page supplies the framework runtime it needs.
+- A runner panel should show source-derived text or a real deterministic result. It should not show generated explanation copy as the result.
 
 ## Authoring Workflow
 
@@ -71,7 +72,7 @@ Evaluate each panel by the example's runtime contract:
 
 For new behavior, add or update the content test before changing the generator. The expected red state should identify the missing or malformed output panel. After implementation, `npm run test:react-outputs` must pass before the full build.
 
-Use the test to enforce structure, render mode, interaction mode, runtime loading, registry wiring, fixture fidelity, and visible UI text parity. Browser behavior still needs a smoke test because static markup can look correct while the handler is not attached.
+Use the test to enforce structure, render mode, interaction mode, runtime loading, registry wiring, fixture fidelity, visible UI text parity, and the ban on generated runner explanation copy. Browser behavior still needs a smoke test because static markup can look correct while the handler is not attached.
 
 ## Generator Rules
 
@@ -88,7 +89,7 @@ For component examples, the generator:
 - Emits a generated browser module when the example can safely run in the page.
 - Emits a registry entry with fixture props and `data-interaction-mode="live-component"`.
 
-For non-component examples, the generator emits `data-render-mode="result"` with a runner panel. Use result mode for tests, browser `createRoot` entrypoints, config files, route registration objects, reducers, server functions, and other examples whose real output belongs to a runner or framework runtime.
+For non-component examples, the generator emits `data-render-mode="result"` with a runner panel. Use result mode for tests, browser `createRoot` entrypoints, config files, route registration objects, server functions, and other examples whose real output belongs to a runner or framework runtime. Runner content comes from the code fence or from a deterministic runner. Do not fill it with prose invented by the generator.
 
 Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new component shape appears. Avoid manual edits to generated panels.
 
@@ -104,6 +105,7 @@ Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new
 - **False success**: Seeing the correct output HTML is not enough. Click a stateful example, such as the counter in the Events and local state post, before shipping runtime changes.
 - **Partial children render**: If a component receives multiple children, compare the output against every visible child in the code fence. A missing button beside a rendered paragraph means the fixture or serializer dropped part of the React tree.
 - **Visible text drift**: Generated tests should compare unconditional visible JSX text with the rendered output region. Include accessible attribute text such as `aria-label`, `title`, and `placeholder`; exclude conditional loading, error, and interaction-only text.
+- **Invented runner copy**: Runner output is not a place for helper prose such as "The code exports..." or "This example requires...". Convert the example to a live component when it can produce UI. Otherwise show source-derived content or a real runner result.
 - **Locator ambiguity**: Browser tests should scope assertions to the output region. Code blocks often contain the same visible text as the rendered output.
 - **Dev server cache state**: Running the full build while `npm run dev` is active can leave the dev server with stale content or dependency optimization state. If routes suddenly return missing content or `504 Outdated Optimize Dep`, restart the dev server before debugging app code.
 

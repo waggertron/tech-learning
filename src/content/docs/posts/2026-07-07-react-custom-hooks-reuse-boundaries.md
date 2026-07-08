@@ -64,7 +64,15 @@ export function useStoredString(key: string, initialValue: string) {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-custom-hooks-reuse-boundaries-1-local-storage-state">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Local storage state.</strong> The code exports a value or function used by the surrounding example.</p>
+    <pre class="react-example-output__runner-pre">export function useStoredString(key: string, initialValue: string) {
+  const [value, setValue] = useState(() =&gt; {
+    return window.localStorage.getItem(key) ?? initialValue;
+  });
+  useEffect(() =&gt; {
+    window.localStorage.setItem(key, value);
+  }, [key, value]);
+  return [value, setValue] as const;
+}</pre>
   </div>
 </div>
   </div>
@@ -96,7 +104,15 @@ export function useWindowWidth() {
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-custom-hooks-reuse-boundaries-2-window-size-subscription">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Window size subscription.</strong> The code exports a value or function used by the surrounding example.</p>
+    <pre class="react-example-output__runner-pre">export function useWindowWidth() {
+  const [width, setWidth] = useState(() =&gt; window.innerWidth);
+  useEffect(() =&gt; {
+    const update = () =&gt; setWidth(window.innerWidth);
+    window.addEventListener(&quot;resize&quot;, update);
+    return () =&gt; window.removeEventListener(&quot;resize&quot;, update);
+  }, []);
+  return width;
+}</pre>
   </div>
 </div>
   </div>

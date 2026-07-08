@@ -66,7 +66,16 @@ root.render(<App />);
     <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting">
   <button type="button" class="react-example-output__run-button">Run example</button>
   <div class="react-example-output__runner-output" aria-live="polite">
-    <p><strong>Root error reporting.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
+    <pre class="react-example-output__runner-pre">const root = createRoot(document.getElementById(&quot;root&quot;)!, {
+  onCaughtError(error, errorInfo) {
+    reportError({
+      name: &quot;react-caught-error&quot;,
+      message: error.message,
+      componentStack: errorInfo.componentStack,
+    });
+  },
+});
+root.render(&lt;App /&gt;);</pre>
   </div>
 </div>
   </div>

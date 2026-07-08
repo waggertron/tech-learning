@@ -91,7 +91,17 @@ function markProjectArchived(queryClient: QueryClient, projectId: string) {
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-2-small-direct-cache-update" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-mutations-cache-invalidation-2-small-direct-cache-update" role="region" aria-label="Output view: Small direct cache update">
   <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Small direct cache update.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
+    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-mutations-cache-invalidation-2-small-direct-cache-update">
+  <button type="button" class="react-example-output__run-button">Run example</button>
+  <div class="react-example-output__runner-output" aria-live="polite">
+    <pre class="react-example-output__runner-pre">function markProjectArchived(queryClient: QueryClient, projectId: string) {
+  queryClient.setQueryData&lt;Project&gt;([&quot;project&quot;, projectId], (project) =&gt; {
+    if (!project) return project;
+    return { ...project, archived: true };
+  });
+}</pre>
+  </div>
+</div>
   </div>
 </div>
 
