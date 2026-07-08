@@ -1,16 +1,20 @@
 # React Example Output Views
 
-The Modern React series shows an output view after each TSX or TypeScript example. Component examples are transpiled and rendered with React server rendering so readers see actual output from the snippet. Non-component examples show a result panel for the runner, browser entrypoint, configuration, or framework runtime they target.
+The Modern React series shows an output view after each TSX or TypeScript example. Component examples are transpiled and rendered with React server rendering so readers see actual output from the snippet, then browser JavaScript mounts the same generated module so event handlers and local state work. Non-component examples show a runner panel for the browser entrypoint, configuration, test, or framework runtime they target.
 
-These panels are generated at authoring time. They do not hydrate in the browser. That choice keeps the posts simple Markdown, keeps the build deterministic, and leaves room for a future live preview layer to target the same output IDs.
+These panels are generated at authoring time and progressively enhanced in the browser. The server-rendered HTML is the no-JavaScript fallback. The browser runtime is responsible for loading the generated registry, resolving the generated module, and mounting the real React component into the output container with `createRoot`.
 
 ## Files
 
 - `scripts/sync-react-example-outputs.mjs`: Transpiles examples, resolves local example modules, renders component examples with React server rendering, and updates output panels.
+- `src/generated/react-example-registry.tsx`: Generated registry of output IDs, module paths, fixture props, render modes, and interaction modes.
+- `src/generated/react-example-modules/`: Generated browser modules compiled from live component examples.
+- `src/scripts/react-example-runtime.tsx`: Browser runtime that mounts live component examples and wires runner examples.
 - `tests/react-example-output-views.test.mjs`: Verifies coverage, import visibility, stable IDs, and accessible panel markup.
 - `src/styles/custom.css`: Styles the output panels.
 - `src/content/docs/posts/2026-07-07-react-*.md`: Receives generated output panels after each TSX or TypeScript fence.
 - `src/content/docs/posts/_react-example-modules/`: Companion modules used when snippets import local helpers such as `./ProductCard`.
+- `astro.config.mjs`: Enables Vite esbuild automatic JSX for generated TSX modules.
 
 ## Panel Contract
 
@@ -25,7 +29,7 @@ export function Example() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="stable-id" data-render-mode="react-server" role="region" aria-label="Output view: Example title">
+<div class="react-example-output not-content" data-react-example-output="stable-id" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/stable-id.tsx" role="region" aria-label="Output view: Example title">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button>Save</button></div>
@@ -33,7 +37,13 @@ export function Example() {
 </div>
 ````
 
-The `data-react-example-output` value is stable and unique. Use it as the anchor if a future client-side enhancement wants to mount richer previews.
+The `data-react-example-output` value is stable and unique. Use it as the registry key for browser behavior.
+
+`data-interaction-mode` defines how the panel behaves:
+
+- `live-component`: Browser JavaScript loads the generated module and mounts the real React component. Clicks, inputs, toggles, tabs, and local state should work.
+- `runner`: Browser JavaScript wires a deterministic run control or result for examples that do not have a standalone visual component.
+- `static`: Reserved for explicit exceptions. Do not use it as a silent fallback.
 
 ## Authoring Workflow
 
@@ -42,13 +52,14 @@ The `data-react-example-output` value is stable and unique. Use it as the anchor
 3. Inspect any generated output that changed. If a component cannot render because it imports a missing local helper, add the helper under `_react-example-modules/` rather than hand-writing a one-off panel.
 4. Run `npm run check:react-outputs`.
 5. Run `npm run test:react-outputs`.
-6. Run `npm run build`.
+6. Run a local browser smoke test on changed live examples. At minimum, click a stateful example on `npm run dev`.
+7. Run `npm run build`.
 
 ## TDD Workflow
 
 For new behavior, add or update the content test before changing the generator. The expected red state should identify the missing or malformed output panel. After implementation, `npm run test:react-outputs` must pass before the full build.
 
-Use the test to enforce structure and render mode. Visual quality still needs a human review pass because real HTML can be technically correct but poorly framed.
+Use the test to enforce structure, render mode, interaction mode, runtime loading, and registry wiring. Browser behavior still needs a smoke test because static markup can look correct while the handler is not attached.
 
 ## Generator Rules
 
@@ -62,16 +73,27 @@ For component examples, the generator:
 - Evaluates the module in a deterministic sandbox.
 - Renders the selected exported component with `react-dom/server`.
 - Wraps the resulting HTML in `data-render-mode="react-server"`.
+- Emits a generated browser module when the example can safely run in the page.
+- Emits a registry entry with fixture props and `data-interaction-mode="live-component"`.
 
-For non-component examples, the generator emits `data-render-mode="result"` with a short result panel. Use result mode for tests, browser `createRoot` entrypoints, config files, route registration objects, reducers, server functions, and other examples whose real output belongs to a runner or framework runtime.
+For non-component examples, the generator emits `data-render-mode="result"` with a runner panel. Use result mode for tests, browser `createRoot` entrypoints, config files, route registration objects, reducers, server functions, and other examples whose real output belongs to a runner or framework runtime.
 
 Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new component shape appears. Avoid manual edits to generated panels.
 
+## Runtime Failure Patterns
+
+- **Bundling failure**: Do not load `src/scripts/react-example-runtime.tsx` with `is:inline` or an inline `type="module"` script. Astro will not process package imports there, and the browser will try to resolve the source path directly.
+- **JSX runtime failure**: Generated `.tsx` modules and local helper modules need Vite esbuild automatic JSX in `astro.config.mjs`. Without it, the browser can throw `React is not defined` after clearing the fallback output.
+- **Fast Refresh preamble failure**: Do not add the React Vite plugin here unless the preamble is handled. In dev, the plugin can throw `@vitejs/plugin-react can't detect preamble` in this Astro docs shell.
+- **Timing failure**: The runtime must activate immediately when `document.readyState` is no longer `loading`, because bundled scripts can run after `DOMContentLoaded`.
+- **Registry mismatch**: The registry module path and `import.meta.glob` keys must resolve to the same generated module. If they do not, the page shows server-rendered HTML but event handlers stay inert.
+- **Hydration mismatch noise**: Output panels are documentation islands. Use `createRoot` to mount them as client previews instead of `hydrateRoot`, because many examples render equivalent but not byte-identical server and client trees.
+- **Server component mismatch**: Async Server Components, route modules, and framework-only examples should stay out of `live-component` mode unless there is a true browser runtime for them.
+- **False success**: Seeing the correct output HTML is not enough. Click a stateful example, such as the counter in the Events and local state post, before shipping runtime changes.
+
 ## Future Expansion
 
-A live output view can build on the current markup instead of replacing it:
-
 - Keep the server-rendered HTML as the no-JavaScript fallback.
-- Use `data-react-example-output` to map a code fence to a preview mount point.
-- Start with isolated examples that have local fixtures and no framework runtime requirement.
-- Keep server, test, and configuration examples as static result summaries unless there is a clear interactive value.
+- Add browser smoke coverage for representative live examples when runtime behavior changes.
+- Start new runtime features with isolated examples that have local fixtures and no framework runtime requirement.
+- Keep server, test, and configuration examples in runner mode unless there is a clear interactive value.

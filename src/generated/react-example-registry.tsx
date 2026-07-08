@@ -206,7 +206,15 @@ export const reactExampleRegistry = [
     "componentName": "AppProviders",
     "needsQueryClientProvider": true,
     "summary": "Query client provider. This example mounts a live React component in the browser.",
-    "props": {}
+    "props": {
+      "children": {
+        "$type": "element",
+        "tag": "p",
+        "props": {
+          "children": "Cached data area"
+        }
+      }
+    }
   },
   {
     "id": "2026-07-07-react-data-fetching-with-cache-1-tanstack-query-read",
@@ -544,15 +552,13 @@ export const reactExampleRegistry = [
     "id": "2026-07-07-react-nextjs-app-router-1-route-page-with-server-data",
     "title": "Route page with server data",
     "fileName": "2026-07-07-react-nextjs-app-router.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-nextjs-app-router-1-route-page-with-server-data.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "ProductPage",
     "needsQueryClientProvider": false,
     "summary": "Route page with server data. This example mounts a live React component in the browser.",
-    "props": {
-      "params": {}
-    }
+    "props": null
   },
   {
     "id": "2026-07-07-react-optimistic-ui-2-optimistic-like-count",

@@ -1,5 +1,5 @@
 import React from "react";
-import { hydrateRoot } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { reactExampleRegistry } from "../generated/react-example-registry";
 
@@ -12,6 +12,14 @@ const moduleLoaders = import.meta.glob("../generated/react-example-modules/*.tsx
 const registryById = new Map<string, ReactExampleRegistryEntry>(
   reactExampleRegistry.map((entry) => [entry.id, entry]),
 );
+
+function resolveModuleLoader(modulePath: string) {
+  return (
+    moduleLoaders[modulePath] ??
+    moduleLoaders[`../generated/${modulePath.replace(/^\.\//, "")}`] ??
+    moduleLoaders[`./${modulePath.replace(/^\.\.\//, "")}`]
+  );
+}
 
 function deserializeFixtureValue(value: unknown): unknown {
   if (Array.isArray(value)) {
@@ -55,7 +63,7 @@ async function mountLiveExample(panel: HTMLElement) {
   const entry = registryById.get(id);
   if (!entry || entry.interactionMode !== "live-component" || !entry.modulePath) return;
 
-  const loader = moduleLoaders[entry.modulePath];
+  const loader = resolveModuleLoader(entry.modulePath);
   if (!loader) return;
 
   const rendered = getRenderedContainer(panel);
@@ -76,7 +84,7 @@ async function mountLiveExample(panel: HTMLElement) {
     ? React.createElement(QueryClientProvider, { client: new QueryClient() }, element)
     : element;
 
-  hydrateRoot(rendered, wrapped);
+  createRoot(rendered).render(wrapped);
 }
 
 function mountRunnerExample(panel: HTMLElement) {
@@ -114,4 +122,8 @@ function activatePanels() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", activatePanels);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", activatePanels, { once: true });
+} else {
+  activatePanels();
+}

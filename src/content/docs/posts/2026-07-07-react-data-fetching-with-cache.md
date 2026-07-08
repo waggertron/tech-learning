@@ -90,7 +90,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
 <div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-2-query-client-provider" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-data-fetching-with-cache-2-query-client-provider.tsx" role="region" aria-label="Output view: Query client provider">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <div class="react-example-output__rendered"></div>
+    <div class="react-example-output__rendered"><p>Cached data area</p></div>
   </div>
 </div>
 

@@ -13,6 +13,10 @@ export default defineConfig({
     rehypePlugins: [[rehypeKatex, { throwOnError: false, output: 'htmlAndMathml' }]],
   },
   vite: {
+    esbuild: {
+      jsx: 'automatic',
+      jsxImportSource: 'react',
+    },
     build: {
       chunkSizeWarningLimit: 700,
     },

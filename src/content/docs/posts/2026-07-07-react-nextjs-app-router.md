@@ -66,7 +66,7 @@ export default async function ProductPage({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-1-route-page-with-server-data" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-nextjs-app-router-1-route-page-with-server-data.tsx" role="region" aria-label="Output view: Route page with server data">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-1-route-page-with-server-data" data-render-mode="react-server" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-nextjs-app-router-1-route-page-with-server-data" role="region" aria-label="Output view: Route page with server data">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><main><h1>Trail shoes</h1><p>$ 129.00</p><button data-product-id="shoe">Add to cart</button></main></div>

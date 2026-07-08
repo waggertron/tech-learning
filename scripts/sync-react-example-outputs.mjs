@@ -127,6 +127,7 @@ function isBrowserLiveRenderable(code) {
   if (/\b(describe|it|test)\(/.test(code)) return false;
   if (/\bcreateRoot\(/.test(code)) return false;
   if (/\bcreateFileRoute\(/.test(code)) return false;
+  if (/export\s+default\s+async\s+function\s+[A-Z]/.test(code)) return false;
   if (/export\s+async\s+function\s+[A-Z]/.test(code)) return false;
   return true;
 }
@@ -270,6 +271,7 @@ function fixtureProps({ title, componentName }) {
     ActionButton: { kind: "link", href: "/account/billing", children: "Manage billing" },
     AccountLayout: { children: reactChild("Profile settings") },
     AnalyticsPanel: {},
+    AppProviders: { children: reactChild("Cached data area") },
     AppointmentTime: { startsAt: "2026-07-08T17:00:00.000Z", locale: "en-US" },
     ArtistPage: { artistId: "maya" },
     AssigneeSummary: {
