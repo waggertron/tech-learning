@@ -44,6 +44,7 @@ Use form Actions for profile edits, settings forms, contact forms, checkout step
 
 ```tsx
 import { useActionState } from "react";
+import { updateProfile } from "./profileApi";
 
 type ProfileState = {
   message: string;
@@ -81,10 +82,10 @@ export function ProfileForm() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-forms-with-actions-1-profile-form-state" role="region" aria-label="Output view: Profile form state">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-forms-with-actions-1-profile-form-state" data-render-mode="react-server" role="region" aria-label="Output view: Profile form state">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Profile form state.</strong> <code>ProfileForm</code> renders <code>&lt;form&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;button&gt;</code>, and <code>&lt;p&gt;</code> markup. Visible text can include <code>Save</code>.</p>
+    <div class="react-example-output__rendered"><form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)"><label>Display name<input name="displayName"/></label><button>Save</button><p></p></form><script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script></div>
   </div>
 </div>
 
@@ -110,10 +111,10 @@ export function SettingsForm({ action }: { action: (data: FormData) => void }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-forms-with-actions-2-nested-submit-button-with-useformstatus" role="region" aria-label="Output view: Nested submit button with useFormStatus">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-forms-with-actions-2-nested-submit-button-with-useformstatus" data-render-mode="react-server" role="region" aria-label="Output view: Nested submit button with useFormStatus">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Nested submit button with useFormStatus.</strong> <code>SettingsForm</code> renders <code>&lt;button&gt;</code>, <code>&lt;form&gt;</code>, and <code>&lt;input&gt;</code> markup. It composes <code>SubmitButton</code>.</p>
+    <div class="react-example-output__rendered"><form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)"><input name="timezone"/><button>Save</button></form><script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script></div>
   </div>
 </div>
 

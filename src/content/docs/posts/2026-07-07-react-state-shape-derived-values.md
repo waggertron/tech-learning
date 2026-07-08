@@ -44,6 +44,8 @@ Use this model for filtered lists, totals, selection state, form summaries, acti
 
 ```tsx
 import { useState } from "react";
+import { FilterTabs } from "./FilterTabs";
+import { TaskList } from "./TaskSummaryList";
 
 type Task = { id: string; title: string; done: boolean };
 type Filter = "all" | "open" | "done";
@@ -67,10 +69,10 @@ export function TaskBoard({ tasks }: { tasks: Task[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-1-filter-without-duplicated-state" role="region" aria-label="Output view: Filter without duplicated state">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-1-filter-without-duplicated-state" data-render-mode="react-server" role="region" aria-label="Output view: Filter without duplicated state">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Filter without duplicated state.</strong> <code>TaskBoard</code> renders <code>&lt;p&gt;</code> markup. It composes <code>FilterTabs</code> and <code>TaskList</code>.</p>
+    <div class="react-example-output__rendered"><div role="tablist"><button aria-pressed="true">All</button><button aria-pressed="false">Open</button><button aria-pressed="false">Done</button></div><p>2 visible tasks</p><ul><li>Draft release notes</li><li>Verify analytics</li></ul></div>
   </div>
 </div>
 
@@ -96,10 +98,10 @@ export function AssigneeSummary({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-2-store-ids-instead-of-objects" role="region" aria-label="Output view: Store IDs instead of objects">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-state-shape-derived-values-2-store-ids-instead-of-objects" data-render-mode="react-server" role="region" aria-label="Output view: Store IDs instead of objects">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Store IDs instead of objects.</strong> <code>AssigneeSummary</code> renders <code>&lt;p&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><p>Grace Hopper</p></div>
   </div>
 </div>
 

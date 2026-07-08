@@ -66,10 +66,10 @@ function parseProfile(formData: FormData): ProfileInput {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-1-parse-form-input" role="region" aria-label="Output view: Parse form input">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-1-parse-form-input" data-render-mode="result" role="region" aria-label="Output view: Parse form input">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Parse form input.</strong> <code>parseProfile</code> runs <code>object</code>, <code>string</code>, <code>trim</code>, and <code>min</code> to produce its result.</p>
+    <p><strong>Parse form input.</strong> The code exports a value or function used by the surrounding example.</p>
   </div>
 </div>
 
@@ -104,10 +104,10 @@ async function saveProfile(
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-2-action-returns-validation-state" role="region" aria-label="Output view: Action returns validation state">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-validation-form-api-boundaries-2-action-returns-validation-state" data-render-mode="result" role="region" aria-label="Output view: Action returns validation state">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Action returns validation state.</strong> <code>saveProfile</code> runs <code>saveProfile</code>, <code>parseProfile</code>, and <code>updateProfile</code> to produce its result.</p>
+    <p><strong>Action returns validation state.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
   </div>
 </div>
 

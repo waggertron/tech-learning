@@ -63,10 +63,10 @@ export function DashboardPage() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-1-boundary-usage" role="region" aria-label="Output view: Boundary usage">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-1-boundary-usage" data-render-mode="react-server" role="region" aria-label="Output view: Boundary usage">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Boundary usage.</strong> <code>DashboardPage</code> renders <code>&lt;main&gt;</code> and <code>&lt;h1&gt;</code> markup. It composes <code>ErrorBoundary</code>, <code>PanelError</code>, <code>RevenuePanel</code>, and <code>ActivityPanel</code>. Visible text can include <code>Dashboard</code>.</p>
+    <div class="react-example-output__rendered"><main><h1>Dashboard</h1><section><h2>Revenue</h2><p>$53,000 this week</p></section><section><h2>Activity</h2><p>12 updates today</p></section></main></div>
   </div>
 </div>
 
@@ -87,10 +87,10 @@ createRoot(document.getElementById("root")!, {
 }).render(<App />);
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting" role="region" aria-label="Output view: Root production reporting">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-error-boundaries-recovery-2-root-production-reporting" data-render-mode="result" role="region" aria-label="Output view: Root production reporting">
+  <div class="react-example-output__header">Browser result</div>
   <div class="react-example-output__body">
-    <p><strong>Root production reporting.</strong> The example renders <code>App</code> components. It composes <code>App</code>.</p>
+    <p><strong>Root production reporting.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
   </div>
 </div>
 

@@ -70,10 +70,10 @@ export function ReducerCounter() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-1-counter-reducer" role="region" aria-label="Output view: Counter reducer">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-1-counter-reducer" data-render-mode="react-server" role="region" aria-label="Output view: Counter reducer">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Counter reducer.</strong> <code>ReducerCounter</code> renders <code>&lt;p&gt;</code> and <code>&lt;button&gt;</code> markup. Visible text can include <code>Add</code> and <code>Reset</code>.</p>
+    <div class="react-example-output__rendered"><p>0</p><button>Add</button><button>Reset</button></div>
   </div>
 </div>
 
@@ -107,10 +107,10 @@ const wizardReducer: Reducer<WizardState, WizardAction> = (state, action) => {
 };
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer" role="region" aria-label="Output view: Wizard reducer">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-reducers-multi-step-state-2-wizard-reducer" data-render-mode="result" role="region" aria-label="Output view: Wizard reducer">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Wizard reducer.</strong> <code>wizardReducer</code> returns the next state for each action branch.</p>
+    <p><strong>Wizard reducer.</strong> The code exports a value or function used by the surrounding example.</p>
   </div>
 </div>
 

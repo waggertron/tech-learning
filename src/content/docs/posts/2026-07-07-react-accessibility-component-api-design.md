@@ -60,10 +60,10 @@ export function IconButton({ label, icon, onClick }: IconButtonProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-1-icon-button-requires-a-label" role="region" aria-label="Output view: Icon button requires a label">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-1-icon-button-requires-a-label" data-render-mode="react-server" role="region" aria-label="Output view: Icon button requires a label">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Icon button requires a label.</strong> <code>IconButton</code> renders <code>&lt;button&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><button type="button" aria-label="Open menu"><span aria-hidden="true">Menu</span></button></div>
   </div>
 </div>
 
@@ -97,10 +97,10 @@ export function TextField({ label, error }: TextFieldProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-2-field-component-wires-label-and-error" role="region" aria-label="Output view: Field component wires label and error">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-accessibility-component-api-design-2-field-component-wires-label-and-error" data-render-mode="react-server" role="region" aria-label="Output view: Field component wires label and error">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Field component wires label and error.</strong> <code>TextField</code> renders <code>&lt;div&gt;</code>, <code>&lt;label&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;p&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><div><label for="_R_0_">Email</label><input id="_R_0_" aria-invalid="true" aria-describedby="_R_0H1_"/><p id="_R_0H1_">Enter a valid email address.</p></div></div>
   </div>
 </div>
 

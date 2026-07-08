@@ -46,6 +46,7 @@ Use App Router for apps that benefit from nested layouts, server-rendered pages,
 ```tsx
 // app/products/[id]/page.tsx
 import { AddToCartButton } from "./AddToCartButton";
+import { getProduct } from "./products";
 
 export default async function ProductPage({
   params,
@@ -65,10 +66,10 @@ export default async function ProductPage({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-1-route-page-with-server-data" role="region" aria-label="Output view: Route page with server data">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-1-route-page-with-server-data" data-render-mode="react-server" role="region" aria-label="Output view: Route page with server data">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Route page with server data.</strong> <code>ProductPage</code> renders <code>&lt;main&gt;</code>, <code>&lt;h1&gt;</code>, and <code>&lt;p&gt;</code> markup. It composes <code>AddToCartButton</code>.</p>
+    <div class="react-example-output__rendered"><main><h1>Trail shoes</h1><p>$ 129.00</p><button data-product-id="shoe">Add to cart</button></main></div>
   </div>
 </div>
 
@@ -97,10 +98,10 @@ export default function AccountLayout({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-2-nested-layout" role="region" aria-label="Output view: Nested layout">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-nextjs-app-router-2-nested-layout" data-render-mode="react-server" role="region" aria-label="Output view: Nested layout">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Nested layout.</strong> <code>AccountLayout</code> renders <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, and <code>&lt;a&gt;</code> markup. Visible text can include <code>Profile</code> and <code>Billing</code>.</p>
+    <div class="react-example-output__rendered"><section><nav aria-label="Account"><a href="/account/profile">Profile</a><a href="/account/billing">Billing</a></nav><p>Billing settings</p></section></div>
   </div>
 </div>
 

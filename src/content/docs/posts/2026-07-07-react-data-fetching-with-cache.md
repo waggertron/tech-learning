@@ -44,6 +44,7 @@ Use a cache for backend data used by multiple components, paginated lists, detai
 
 ```tsx
 import { useQuery } from "@tanstack/react-query";
+import { fetchProject } from "./projects";
 
 type Project = { id: string; name: string };
 
@@ -60,10 +61,10 @@ export function ProjectName({ projectId }: { projectId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-1-tanstack-query-read" role="region" aria-label="Output view: TanStack Query read">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-1-tanstack-query-read" data-render-mode="react-server" role="region" aria-label="Output view: TanStack Query read">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>TanStack Query read.</strong> <code>ProjectName</code> renders <code>&lt;p&gt;</code> and <code>&lt;h1&gt;</code> markup. Visible text can include <code>Loading project...</code> and <code>Project could not load.</code>.</p>
+    <div class="react-example-output__rendered"><p>Loading project...</p></div>
   </div>
 </div>
 
@@ -86,10 +87,10 @@ export function AppProviders({ children }: { children: ReactNode }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-2-query-client-provider" role="region" aria-label="Output view: Query client provider">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-data-fetching-with-cache-2-query-client-provider" data-render-mode="react-server" role="region" aria-label="Output view: Query client provider">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Query client provider.</strong> <code>AppProviders</code> renders <code>QueryClientProvider</code> components. It composes <code>QueryClientProvider</code>.</p>
+    <div class="react-example-output__rendered"></div>
   </div>
 </div>
 

@@ -58,10 +58,10 @@ export function FocusNameButton() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-1-focus-an-input" role="region" aria-label="Output view: Focus an input">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-1-focus-an-input" data-render-mode="react-server" role="region" aria-label="Output view: Focus an input">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Focus an input.</strong> <code>FocusNameButton</code> renders <code>&lt;input&gt;</code> and <code>&lt;button&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><input aria-label="Name"/><button type="button">Focus name</button></div>
   </div>
 </div>
 
@@ -89,10 +89,10 @@ export function SaveStatus() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-2-store-a-timer-id" role="region" aria-label="Output view: Store a timer ID">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-refs-dom-escape-hatches-2-store-a-timer-id" data-render-mode="react-server" role="region" aria-label="Output view: Store a timer ID">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Store a timer ID.</strong> <code>SaveStatus</code> renders <code>&lt;button&gt;</code> markup. Visible text can include <code>Save draft</code>.</p>
+    <div class="react-example-output__rendered"><button>Save draft</button></div>
   </div>
 </div>
 

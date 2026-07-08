@@ -71,10 +71,10 @@ export function RoomTitle({ roomId }: { roomId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value" role="region" aria-label="Output view: Effect lint value">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value" data-render-mode="react-server" role="region" aria-label="Output view: Effect lint value">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Effect lint value.</strong> <code>RoomTitle</code> renders <code>&lt;h1&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><h1>Room general</h1></div>
   </div>
 </div>
 

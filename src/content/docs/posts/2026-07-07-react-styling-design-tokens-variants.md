@@ -72,10 +72,10 @@ export function Button({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-styling-design-tokens-variants-1-button-variants" role="region" aria-label="Output view: Button variants">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-styling-design-tokens-variants-1-button-variants" data-render-mode="react-server" role="region" aria-label="Output view: Button variants">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Button variants.</strong> <code>Button</code> renders <code>&lt;button&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><button class="button button-danger">Delete project</button></div>
   </div>
 </div>
 

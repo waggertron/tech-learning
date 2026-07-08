@@ -64,10 +64,10 @@ export function Price({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-1-currency-formatter" role="region" aria-label="Output view: Currency formatter">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-1-currency-formatter" data-render-mode="react-server" role="region" aria-label="Output view: Currency formatter">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Currency formatter.</strong> <code>Price</code> renders <code>&lt;span&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><span>$129.00</span></div>
   </div>
 </div>
 
@@ -95,10 +95,10 @@ export function AppointmentTime({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-2-date-formatter" role="region" aria-label="Output view: Date formatter">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-internationalization-formatting-2-date-formatter" data-render-mode="react-server" role="region" aria-label="Output view: Date formatter">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Date formatter.</strong> <code>AppointmentTime</code> renders <code>&lt;time&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><time dateTime="2026-07-08T17:00:00.000Z">Jul 8, 2026, 10:00 AM</time></div>
   </div>
 </div>
 

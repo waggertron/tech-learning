@@ -57,10 +57,10 @@ test("increments when clicked", async () => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-1-counter-behavior" role="region" aria-label="Output view: Counter behavior">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-1-counter-behavior" data-render-mode="result" role="region" aria-label="Output view: Counter behavior">
+  <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
-    <p><strong>Counter behavior.</strong> <code>user</code> renders <code>Counter</code> components. It composes <code>Counter</code>.</p>
+    <p><strong>Counter behavior.</strong> The test runner executes the assertions for this example.</p>
   </div>
 </div>
 
@@ -87,10 +87,10 @@ test("shows a validation message for a short display name", async () => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-2-form-validation-message" role="region" aria-label="Output view: Form validation message">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-testing-components-by-behavior-2-form-validation-message" data-render-mode="result" role="region" aria-label="Output view: Form validation message">
+  <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
-    <p><strong>Form validation message.</strong> <code>user</code> renders <code>ProfileForm</code> components. It composes <code>ProfileForm</code>.</p>
+    <p><strong>Form validation message.</strong> The test runner executes the assertions for this example.</p>
   </div>
 </div>
 

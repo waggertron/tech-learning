@@ -44,6 +44,8 @@ Use performance tools on slow interactions, large tables, dashboards, charts, ro
 
 ```tsx
 import { useMemo, useState } from "react";
+import { runExpensiveFilter } from "./performance";
+import { ReportTable } from "./ReportTable";
 
 export function FilteredReport({ rows }: { rows: Row[] }) {
   const [query, setQuery] = useState("");
@@ -61,10 +63,10 @@ export function FilteredReport({ rows }: { rows: Row[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation" role="region" aria-label="Output view: Memoized expensive calculation">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation" data-render-mode="react-server" role="region" aria-label="Output view: Memoized expensive calculation">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Memoized expensive calculation.</strong> <code>FilteredReport</code> renders <code>&lt;input&gt;</code> markup. It composes <code>ReportTable</code>.</p>
+    <div class="react-example-output__rendered"><input value=""/><table><tbody><tr><td>Revenue</td></tr><tr><td>Retention</td></tr></tbody></table></div>
   </div>
 </div>
 
@@ -74,6 +76,8 @@ export function FilteredReport({ rows }: { rows: Row[] }) {
 
 ```tsx
 import { Profiler } from "react";
+import { Dashboard } from "./Dashboard";
+import { reportRenderTiming } from "./performance";
 
 export function InstrumentedDashboard() {
   return (
@@ -89,10 +93,10 @@ export function InstrumentedDashboard() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region" role="region" aria-label="Output view: Profiler around a slow region">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region" data-render-mode="react-server" role="region" aria-label="Output view: Profiler around a slow region">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Profiler around a slow region.</strong> <code>InstrumentedDashboard</code> renders <code>Profiler</code> and <code>Dashboard</code> components. It composes <code>Profiler</code> and <code>Dashboard</code>.</p>
+    <div class="react-example-output__rendered"><section><h2>Dashboard</h2><p>Rendering measured</p></section></div>
   </div>
 </div>
 

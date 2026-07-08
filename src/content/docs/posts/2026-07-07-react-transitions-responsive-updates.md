@@ -44,6 +44,7 @@ Use Transitions for tab switches with heavy content, route navigation, filtering
 
 ```tsx
 import { useState, useTransition } from "react";
+import { ResultGrid } from "./ResultGrid";
 
 export function SearchableGrid({ items }: { items: string[] }) {
   const [query, setQuery] = useState("");
@@ -69,10 +70,10 @@ export function SearchableGrid({ items }: { items: string[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-1-filter-after-urgent-typing" role="region" aria-label="Output view: Filter after urgent typing">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-1-filter-after-urgent-typing" data-render-mode="react-server" role="region" aria-label="Output view: Filter after urgent typing">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Filter after urgent typing.</strong> <code>SearchableGrid</code> renders <code>&lt;input&gt;</code> and <code>&lt;p&gt;</code> markup. It composes <code>ResultGrid</code>. Visible text can include <code>Updating results...</code>.</p>
+    <div class="react-example-output__rendered"><input value=""/><ul><li>Trail shoes</li><li>Rain shell</li><li>Camp mug</li></ul></div>
   </div>
 </div>
 
@@ -82,6 +83,7 @@ The input remains urgent. The heavier result update is allowed to lag behind bri
 
 ```tsx
 import { useState, useTransition } from "react";
+import { TabButtons, TabPanel } from "./ProjectTabs";
 
 type Tab = "overview" | "activity" | "settings";
 
@@ -103,10 +105,10 @@ export function ProjectTabs() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-2-tab-switch" role="region" aria-label="Output view: Tab switch">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-transitions-responsive-updates-2-tab-switch" data-render-mode="react-server" role="region" aria-label="Output view: Tab switch">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Tab switch.</strong> <code>ProjectTabs</code> renders <code>&lt;span&gt;</code> markup. It composes <code>TabButtons</code> and <code>TabPanel</code>. Visible text can include <code>Loading tab...</code>.</p>
+    <div class="react-example-output__rendered"><nav aria-label="Project tabs"><button aria-pressed="true">overview</button><button aria-pressed="false">activity</button><button aria-pressed="false">settings</button></nav><section>Current tab: overview</section></div>
   </div>
 </div>
 

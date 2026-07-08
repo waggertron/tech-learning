@@ -56,10 +56,10 @@ if (!root) {
 createRoot(root).render(<App />);
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-1-vite-react-entry" role="region" aria-label="Output view: Vite React entry">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-1-vite-react-entry" data-render-mode="result" role="region" aria-label="Output view: Vite React entry">
+  <div class="react-example-output__header">Browser result</div>
   <div class="react-example-output__body">
-    <p><strong>Vite React entry.</strong> <code>root</code> renders <code>App</code> components. It composes <code>App</code>.</p>
+    <p><strong>Vite React entry.</strong> The browser entrypoint mounts the React tree into the root DOM node.</p>
   </div>
 </div>
 
@@ -79,10 +79,10 @@ export default defineConfig({
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config" role="region" aria-label="Output view: Minimal Vite config">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vite-client-only-apps-2-minimal-vite-config" data-render-mode="result" role="region" aria-label="Output view: Minimal Vite config">
+  <div class="react-example-output__header">Config result</div>
   <div class="react-example-output__body">
-    <p><strong>Minimal Vite config.</strong> The example produces a build configuration object for the selected tool.</p>
+    <p><strong>Minimal Vite config.</strong> The code exports configuration consumed by the build tool.</p>
   </div>
 </div>
 

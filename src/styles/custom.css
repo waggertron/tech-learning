@@ -1,4 +1,4 @@
-/* Custom theme tweaks. Starlight's defaults are good — add overrides here as needed. */
+/* Custom theme tweaks. Starlight's defaults are good, add overrides here as needed. */
 
 /* KaTeX dark-mode color correction */
 [data-theme='dark'] .katex { color: var(--sl-color-text); }
@@ -113,4 +113,87 @@
 
 .react-example-output__body code {
   font-size: 0.86em;
+}
+
+.react-example-output__rendered {
+  padding: 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 6px;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-text);
+}
+
+.react-example-output__rendered :where(h1, h2, h3, p, ul, ol, figure, form, fieldset) {
+  margin-block: 0 0.75rem;
+}
+
+.react-example-output__rendered :where(h1, h2, h3) {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.react-example-output__rendered :where(article, section, main, form, fieldset, figure, .settings-row) {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 34rem;
+}
+
+.react-example-output__rendered .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+}
+
+.react-example-output__rendered .product-card,
+.react-example-output__rendered .panel,
+.react-example-output__rendered .settings-row,
+.react-example-output__rendered .account-layout {
+  padding: 0.85rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--sl-color-gray-6) 45%, transparent);
+}
+
+.react-example-output__rendered :where(button, input, a) {
+  font: inherit;
+}
+
+.react-example-output__rendered button,
+.react-example-output__rendered a[href] {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 4px;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-text);
+  text-decoration: none;
+}
+
+.react-example-output__rendered input {
+  min-height: 2rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--sl-color-gray-4);
+  border-radius: 4px;
+  background: var(--sl-color-bg);
+  color: var(--sl-color-text);
+}
+
+.react-example-output__rendered :where(nav, [role='tablist']) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.react-example-output__rendered table {
+  width: fit-content;
+  border-collapse: collapse;
+}
+
+.react-example-output__rendered td {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--sl-color-gray-5);
 }

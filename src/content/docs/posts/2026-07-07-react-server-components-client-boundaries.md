@@ -45,6 +45,7 @@ Use Server Components for data reading, server-only dependencies, content render
 ```tsx
 // ReportsPage.tsx, Server Component
 import { DateRangeSelector } from "./DateRangeSelector";
+import { getRevenueReport } from "./reports";
 
 export async function ReportsPage() {
   const report = await getRevenueReport();
@@ -59,10 +60,10 @@ export async function ReportsPage() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-1-server-page-with-a-client-filter" role="region" aria-label="Output view: Server page with a client filter">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-1-server-page-with-a-client-filter" data-render-mode="react-server" role="region" aria-label="Output view: Server page with a client filter">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Server page with a client filter.</strong> <code>ReportsPage</code> renders <code>&lt;main&gt;</code>, <code>&lt;h1&gt;</code>, and <code>&lt;p&gt;</code> markup. It composes <code>DateRangeSelector</code>. Visible text can include <code>Revenue report</code>.</p>
+    <div class="react-example-output__rendered"><main><h1>Revenue report</h1><p>Total revenue: $ 53,000</p><fieldset><legend>Date range</legend><button type="button" aria-pressed="false">7 days</button><button type="button" aria-pressed="true">30 days</button><button type="button" aria-pressed="false">90 days</button></fieldset></main></div>
   </div>
 </div>
 
@@ -107,10 +108,10 @@ export function DateRangeSelector({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-2-client-boundary-for-interactivity" role="region" aria-label="Output view: Client boundary for interactivity">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-server-components-client-boundaries-2-client-boundary-for-interactivity" data-render-mode="react-server" role="region" aria-label="Output view: Client boundary for interactivity">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Client boundary for interactivity.</strong> <code>DateRangeSelector</code> renders <code>&lt;fieldset&gt;</code>, <code>&lt;legend&gt;</code>, and <code>&lt;button&gt;</code> markup. Visible text can include <code>Date range</code>.</p>
+    <div class="react-example-output__rendered"><fieldset><legend>Date range</legend><button type="button" aria-pressed="false">7 days</button><button type="button" aria-pressed="true">30 days</button><button type="button" aria-pressed="false">90 days</button></fieldset></div>
   </div>
 </div>
 

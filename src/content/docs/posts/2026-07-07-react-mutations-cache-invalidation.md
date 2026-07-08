@@ -44,6 +44,7 @@ Use mutation flows for create, update, delete, reorder, approve, archive, and as
 
 ```tsx
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { renameProject } from "./projects";
 
 export function RenameProjectButton({ projectId }: { projectId: string }) {
   const queryClient = useQueryClient();
@@ -64,10 +65,10 @@ export function RenameProjectButton({ projectId }: { projectId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update" role="region" aria-label="Output view: Invalidate after update">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update" data-render-mode="react-server" role="region" aria-label="Output view: Invalidate after update">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Invalidate after update.</strong> <code>RenameProjectButton</code> renders <code>&lt;button&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><button>Rename</button></div>
   </div>
 </div>
 
@@ -87,10 +88,10 @@ function markProjectArchived(queryClient: QueryClient, projectId: string) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-2-small-direct-cache-update" role="region" aria-label="Output view: Small direct cache update">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-2-small-direct-cache-update" data-render-mode="result" role="region" aria-label="Output view: Small direct cache update">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Small direct cache update.</strong> <code>markProjectArchived</code> runs <code>markProjectArchived</code> to produce its result.</p>
+    <p><strong>Small direct cache update.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
   </div>
 </div>
 

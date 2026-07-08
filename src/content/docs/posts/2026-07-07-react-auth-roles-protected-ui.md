@@ -67,10 +67,10 @@ export function DeleteProjectButton({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-1-permission-aware-button" role="region" aria-label="Output view: Permission-aware button">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-1-permission-aware-button" data-render-mode="react-server" role="region" aria-label="Output view: Permission-aware button">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Permission-aware button.</strong> <code>DeleteProjectButton</code> renders <code>&lt;p&gt;</code> and <code>&lt;button&gt;</code> markup. Visible text can include <code>You need project admin access to delete this project.</code>.</p>
+    <div class="react-example-output__rendered"><button type="button">Delete project</button></div>
   </div>
 </div>
 
@@ -94,10 +94,10 @@ async function deleteProject(projectId: string) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary" role="region" aria-label="Output view: Server check at mutation boundary">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-auth-roles-protected-ui-2-server-check-at-mutation-boundary" data-render-mode="result" role="region" aria-label="Output view: Server check at mutation boundary">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Server check at mutation boundary.</strong> <code>deleteProject</code> runs <code>deleteProject</code>, <code>requireCurrentUser</code>, <code>canDeleteProject</code>, and <code>delete</code> to produce its result.</p>
+    <p><strong>Server check at mutation boundary.</strong> The code exports a value or function used by the surrounding example.</p>
   </div>
 </div>
 

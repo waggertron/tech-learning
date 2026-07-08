@@ -68,10 +68,10 @@ export function BillingPanel() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-1-panel-with-children" role="region" aria-label="Output view: Panel with children">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-1-panel-with-children" data-render-mode="react-server" role="region" aria-label="Output view: Panel with children">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Panel with children.</strong> <code>Panel</code> renders <code>&lt;section&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;button&gt;</code> markup. Visible text can include <code>Your card is current.</code> and <code>Update payment method</code>.</p>
+    <div class="react-example-output__rendered"><section class="panel" aria-labelledby="panel-title"><h2 id="panel-title">Billing</h2><div class="panel-body"><p>Your card is current.</p></div></section></div>
   </div>
 </div>
 
@@ -101,10 +101,10 @@ export function SettingsRow({ label, description, action }: SettingsRowProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-2-reusable-row-with-explicit-props" role="region" aria-label="Output view: Reusable row with explicit props">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-props-children-component-boundaries-2-reusable-row-with-explicit-props" data-render-mode="react-server" role="region" aria-label="Output view: Reusable row with explicit props">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Reusable row with explicit props.</strong> <code>SettingsRow</code> renders <code>&lt;div&gt;</code>, <code>&lt;h3&gt;</code>, and <code>&lt;p&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><div class="settings-row"><div><h3>Email updates</h3><p>Receive release notes and billing notices.</p></div><div><button>Edit</button></div></div></div>
   </div>
 </div>
 

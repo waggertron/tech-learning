@@ -82,10 +82,10 @@ export function CommentForm({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-1-optimistic-comment-list" role="region" aria-label="Output view: Optimistic comment list">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-1-optimistic-comment-list" data-render-mode="react-server" role="region" aria-label="Output view: Optimistic comment list">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Optimistic comment list.</strong> <code>CommentForm</code> renders <code>&lt;form&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;input&gt;</code>, and <code>&lt;button&gt;</code> markup. Visible text can include <code>Promise</code> and <code>Post</code>.</p>
+    <div class="react-example-output__rendered"><form action="javascript:throw new Error(&#x27;React form unexpectedly submitted.&#x27;)"><ul><li>Looks ready.</li><li>Ship it.</li></ul><input name="body"/><button>Post</button></form><script>addEventListener("submit",function(a){if(!a.defaultPrevented){var c=a.target,d=a.submitter,e=c.action,b=d;if(d){var f=d.getAttribute("formAction");null!=f&&(e=f,b=null)}"javascript:throw new Error('React form unexpectedly submitted.')"===e&&(a.preventDefault(),b?(a=document.createElement("input"),a.name=b.name,a.value=b.value,b.parentNode.insertBefore(a,b),b=new FormData(c),a.parentNode.removeChild(a)):b=new FormData(c),a=c.ownerDocument||c,(a.$$reactFormReplay=a.$$reactFormReplay||[]).push(c,d,b))}});</script></div>
   </div>
 </div>
 
@@ -120,10 +120,10 @@ export function LikeButton({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-2-optimistic-like-count" role="region" aria-label="Output view: Optimistic like count">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-optimistic-ui-2-optimistic-like-count" data-render-mode="react-server" role="region" aria-label="Output view: Optimistic like count">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Optimistic like count.</strong> <code>LikeButton</code> renders <code>&lt;button&gt;</code> markup. Visible text can include <code>Promise</code>.</p>
+    <div class="react-example-output__rendered"><button>41 likes</button></div>
   </div>
 </div>
 

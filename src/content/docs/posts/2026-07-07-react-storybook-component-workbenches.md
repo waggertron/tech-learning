@@ -72,10 +72,10 @@ export const BackSoon: Story = {
 };
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-1-component-stories" role="region" aria-label="Output view: Component stories">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-1-component-stories" data-render-mode="react-server" role="region" aria-label="Output view: Component stories">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Component stories.</strong> <code>InStock</code> displays the component with the listed Storybook args.</p>
+    <div class="react-example-output__rendered"><article class="product-card"><h2>Trail shoes</h2><p>$ 129.00</p><span>In stock</span></article></div>
   </div>
 </div>
 
@@ -99,10 +99,10 @@ export const OpensMenu: Story = {
 };
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-2-interaction-story" role="region" aria-label="Output view: Interaction story">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-storybook-component-workbenches-2-interaction-story" data-render-mode="result" role="region" aria-label="Output view: Interaction story">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Interaction story.</strong> <code>OpensMenu</code> runs <code>within</code>, <code>click</code>, <code>getByRole</code>, and <code>expect</code> to produce its result.</p>
+    <p><strong>Interaction story.</strong> The code exports a value or function used by the surrounding example.</p>
   </div>
 </div>
 

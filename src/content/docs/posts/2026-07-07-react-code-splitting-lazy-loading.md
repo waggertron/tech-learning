@@ -56,10 +56,10 @@ export function AnalyticsPanel() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-1-lazy-chart" role="region" aria-label="Output view: Lazy chart">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-1-lazy-chart" data-render-mode="react-server" role="region" aria-label="Output view: Lazy chart">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Lazy chart.</strong> <code>AnalyticsPanel</code> renders <code>&lt;p&gt;</code> markup. It composes <code>Suspense</code> and <code>RevenueChart</code>. Visible text can include <code>Loading chart...</code>.</p>
+    <div class="react-example-output__rendered"><p>Loading chart...</p></div>
   </div>
 </div>
 
@@ -79,10 +79,10 @@ export const routes = [
 ];
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" role="region" aria-label="Output view: Lazy route table">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-code-splitting-lazy-loading-2-lazy-route-table" data-render-mode="result" role="region" aria-label="Output view: Lazy route table">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Lazy route table.</strong> <code>routes</code> renders <code>PublicHomePage</code> and <code>AdminUsersPage</code> components. It composes <code>PublicHomePage</code> and <code>AdminUsersPage</code>.</p>
+    <p><strong>Lazy route table.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
   </div>
 </div>
 

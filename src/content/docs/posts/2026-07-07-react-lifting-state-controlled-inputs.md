@@ -44,6 +44,7 @@ Lift state for search fields that filter a sibling list, tabs that choose which 
 
 ```tsx
 import { useState } from "react";
+import { ProductList } from "./ProductList";
 
 type Product = { id: string; name: string };
 
@@ -78,10 +79,10 @@ function SearchField({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query" role="region" aria-label="Output view: Shared search query">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-1-shared-search-query" data-render-mode="react-server" role="region" aria-label="Output view: Shared search query">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Shared search query.</strong> <code>ProductSearch</code> renders <code>&lt;input&gt;</code> markup. It composes <code>SearchField</code> and <code>ProductList</code>.</p>
+    <div class="react-example-output__rendered"><input aria-label="Search products" value=""/><ul><li>Trail shoes</li><li>Rain shell</li></ul></div>
   </div>
 </div>
 
@@ -116,10 +117,10 @@ function InStockOnly({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox" role="region" aria-label="Output view: Controlled checkbox">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-lifting-state-controlled-inputs-2-controlled-checkbox" data-render-mode="react-server" role="region" aria-label="Output view: Controlled checkbox">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Controlled checkbox.</strong> <code>InStockOnly</code> renders <code>&lt;label&gt;</code> and <code>&lt;input&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><label><input type="checkbox" checked=""/>In stock only</label></div>
   </div>
 </div>
 

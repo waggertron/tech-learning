@@ -63,10 +63,10 @@ test("moves to confirm after profile is saved", () => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test" role="region" aria-label="Output view: Vitest reducer test">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-1-vitest-reducer-test" data-render-mode="result" role="region" aria-label="Output view: Vitest reducer test">
+  <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
-    <p><strong>Vitest reducer test.</strong> <code>state</code> reports a passing test when the rendered behavior matches the assertions.</p>
+    <p><strong>Vitest reducer test.</strong> The test runner executes the assertions for this example.</p>
   </div>
 </div>
 
@@ -86,10 +86,10 @@ test("search filters products", async ({ page }) => {
 });
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow" role="region" aria-label="Output view: Playwright route flow">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-vitest-testing-library-playwright-2-playwright-route-flow" data-render-mode="result" role="region" aria-label="Output view: Playwright route flow">
+  <div class="react-example-output__header">Test result</div>
   <div class="react-example-output__body">
-    <p><strong>Playwright route flow.</strong> The example reports a passing test when the rendered behavior matches the assertions.</p>
+    <p><strong>Playwright route flow.</strong> The test runner executes the assertions for this example.</p>
   </div>
 </div>
 

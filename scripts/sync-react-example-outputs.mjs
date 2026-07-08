@@ -1,19 +1,25 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { createRequire } from "node:module";
+import vm from "node:vm";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import ts from "typescript";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const postsDir = path.join(repoRoot, "src/content/docs/posts");
+const moduleDir = path.join(postsDir, "_react-example-modules");
 const reactPostFilePattern = /^2026-07-07-react-.+\.md$/;
 const codeFencePattern = /```(tsx|typescript)\n([\s\S]*?)\n```/g;
 const exampleHeadingPattern = /^## Example: (.+)$/gm;
 const existingOutputPattern =
   /^\n*<div class="react-example-output\b[\s\S]*?\n  <\/div>\n<\/div>\n*/;
-
 const checkOnly = process.argv.includes("--check");
+const baseRequire = createRequire(import.meta.url);
 
 function htmlEscape(value) {
-  return value
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -27,146 +33,367 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-function unique(values) {
-  return [...new Set(values)].filter(Boolean);
-}
-
 function sentence(value) {
-  return value.replace(/\s+/g, " ").trim().replace(/\u2014/g, ",");
+  return String(value).replace(/\s+/g, " ").trim().replace(/\u2014/g, ",");
 }
 
-function humanList(values) {
-  if (values.length === 0) return "";
-  if (values.length === 1) return values[0];
-  if (values.length === 2) return `${values[0]} and ${values[1]}`;
-  return `${values.slice(0, -1).join(", ")}, and ${values.at(-1)}`;
+function containsJsx(code) {
+  return /<[A-Za-z][A-Za-z0-9.]*[\s>/]/.test(code);
 }
 
-function collectFunctionNames(code) {
-  const patterns = [
-    /export default function\s+([A-Z_a-z]\w*)/g,
-    /export function\s+([A-Z_a-z]\w*)/g,
-    /function\s+([A-Z_a-z]\w*)/g,
-    /export const\s+([A-Z_a-z]\w*)/g,
-    /const\s+([A-Z_a-z]\w*)\s*(?::[^=]+)?=/g,
-  ];
+function exportedNames(code) {
+  return [
+    ...code.matchAll(/export default function\s+([A-Z_a-z]\w*)/g),
+    ...code.matchAll(/export function\s+([A-Z_a-z]\w*)/g),
+    ...code.matchAll(/export const\s+([A-Z_a-z]\w*)/g),
+  ].map((match) => match[1]);
+}
 
-  return unique(
-    patterns.flatMap((pattern) => [...code.matchAll(pattern)].map((match) => match[1])),
+function firstComponentName(code) {
+  const exported = exportedNames(code).find((name) => /^[A-Z]/.test(name));
+  if (exported) return exported;
+
+  return (
+    /function\s+([A-Z]\w*)/.exec(code)?.[1] ??
+    /const\s+([A-Z]\w*)\s*(?::[^=]+)?=/.exec(code)?.[1] ??
+    null
   );
 }
 
-function collectJsxTags(code) {
-  const tagMatches = [...code.matchAll(/(?<![\w.])<\/?([A-Za-z][A-Za-z0-9.]*)\b/g)];
-  const tagNames = tagMatches.map((match) => match[1]).filter((tag) => tag !== "T");
-  return unique(tagNames);
-}
+function prepareCode(code) {
+  const componentName = firstComponentName(code);
+  const hasExports = /\bexport\s+/.test(code);
 
-function collectVisibleText(code) {
-  return unique(
-    [...code.matchAll(/>([^<>{}\n]+)</g)]
-      .map((match) => sentence(match[1]))
-      .filter((text) => /[A-Za-z0-9]/.test(text))
-      .filter((text) => text.length > 1)
-      .slice(0, 4),
-  );
-}
-
-function collectCalls(code) {
-  const ignored = new Set([
-    "Array",
-    "Date",
-    "Promise",
-    "String",
-    "Number",
-    "Boolean",
-    "return",
-    "if",
-    "for",
-    "while",
-    "switch",
-    "catch",
-    "function",
-    "map",
-    "filter",
-    "reduce",
-    "then",
-    "catch",
-  ]);
-
-  return unique(
-    [...code.matchAll(/\b([A-Za-z_]\w*)\(/g)]
-      .map((match) => match[1])
-      .filter((name) => !ignored.has(name))
-      .filter((name) => !/^[A-Z]/.test(name))
-      .slice(0, 4),
-  );
-}
-
-function codeList(values) {
-  return values.map((value) => `<code>${htmlEscape(value)}</code>`);
-}
-
-function tagList(values) {
-  return values.map((value) => `<code>&lt;${htmlEscape(value)}&gt;</code>`);
-}
-
-function summarizeOutput(title, code) {
-  const functionNames = collectFunctionNames(code);
-  const jsxTags = collectJsxTags(code);
-  const builtInTags = jsxTags.filter((tag) => /^[a-z]/.test(tag)).slice(0, 5);
-  const customTags = jsxTags
-    .filter((tag) => /^[A-Z]/.test(tag))
-    .filter((tag) => tag !== functionNames[0])
-    .slice(0, 4);
-  const visibleText = collectVisibleText(code);
-  const calls = collectCalls(code);
-  const primaryName = functionNames[0];
-  const subject = primaryName ? `<code>${htmlEscape(primaryName)}</code>` : "The example";
-  const details = [];
-
-  if (builtInTags.length > 0 || customTags.length > 0) {
-    if (builtInTags.length > 0) {
-      details.push(`${subject} renders ${humanList(tagList(builtInTags))} markup.`);
-    } else {
-      details.push(`${subject} renders ${humanList(codeList(customTags))} components.`);
-    }
-
-    if (customTags.length > 0) {
-      details.push(`It composes ${humanList(codeList(customTags))}.`);
-    }
-
-    if (visibleText.length > 0) {
-      details.push(`Visible text can include ${humanList(codeList(visibleText))}.`);
-    }
-  } else if (/\b(describe|it|test)\(/.test(code) && /\bexpect\(/.test(code)) {
-    details.push(
-      `${subject} reports a passing test when the rendered behavior matches the assertions.`,
-    );
-  } else if (/\bsatisfies Meta\b/.test(code) || /\bStoryObj\b/.test(code)) {
-    details.push(`${subject} displays the component with the listed Storybook args.`);
-  } else if (/\bswitch\s*\(\s*action\.type\s*\)/.test(code)) {
-    details.push(`${subject} returns the next state for each action branch.`);
-  } else if (/\bdefineConfig\(/.test(code)) {
-    details.push(`${subject} produces a build configuration object for the selected tool.`);
-  } else if (/["']use server["']/.test(code)) {
-    details.push(`${subject} returns server-side mutation state for the caller to render.`);
-  } else if (/\b(loader|createFileRoute|createRoute|Route)\b/.test(code)) {
-    details.push(`${subject} returns route data and UI for the active navigation state.`);
-  } else if (calls.length > 0) {
-    details.push(`${subject} runs ${humanList(codeList(calls))} to produce its result.`);
-  } else {
-    details.push(`${subject} produces the runtime value shown by the example.`);
+  if (componentName && !hasExports) {
+    return `${code}\n\nexport { ${componentName} };\n`;
   }
 
-  return sentence(`<p><strong>${htmlEscape(title)}.</strong> ${details.join(" ")}</p>`);
+  return code;
 }
 
-function buildOutputBlock({ id, title, code }) {
-  return `<div class="react-example-output not-content" data-react-example-output="${htmlEscape(id)}" role="region" aria-label="Output view: ${htmlEscape(title)}">
-  <div class="react-example-output__header">Output view</div>
+function transpile(code, moduleId) {
+  const result = ts.transpileModule(prepareCode(code), {
+    fileName: moduleId,
+    compilerOptions: {
+      esModuleInterop: true,
+      jsx: ts.JsxEmit.ReactJSX,
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+    },
+  });
+
+  return result.outputText;
+}
+
+function modulePathForRequest(request) {
+  const baseName = request.replace(/^\.\//, "");
+  const candidates = [
+    path.join(moduleDir, `${baseName}.tsx`),
+    path.join(moduleDir, `${baseName}.ts`),
+  ];
+
+  return candidates.find((candidate) => {
+    try {
+      readFileSync(candidate, "utf8");
+      return true;
+    } catch {
+      return false;
+    }
+  });
+}
+
+function createExampleEnvironment() {
+  return {
+    AbortController,
+    FormData,
+    Intl,
+    console,
+    document: { title: "" },
+    navigator: { onLine: true },
+    window: {
+      addEventListener() {},
+      removeEventListener() {},
+      clearTimeout() {},
+      setTimeout() {
+        return 1;
+      },
+    },
+  };
+}
+
+function evaluateModule(code, moduleId, moduleCache, environment) {
+  if (moduleCache.has(moduleId)) return moduleCache.get(moduleId).exports;
+
+  const module = { exports: {} };
+  moduleCache.set(moduleId, module);
+
+  const localRequire = (request) => {
+    if (request === "react-native") {
+      return baseRequire("react-native-web");
+    }
+
+    if (request.startsWith(".")) {
+      const localPath = modulePathForRequest(request);
+      if (!localPath) {
+        throw new Error(`Missing local example module for ${request}`);
+      }
+      const localSource = readFileSync(localPath, "utf8");
+      return evaluateModule(localSource, localPath, moduleCache, environment);
+    }
+
+    return baseRequire(request);
+  };
+
+  const script = new vm.Script(transpile(code, moduleId), { filename: moduleId });
+  const context = vm.createContext({
+    ...environment,
+    exports: module.exports,
+    module,
+    require: localRequire,
+  });
+  script.runInContext(context, { timeout: 1000 });
+  return module.exports;
+}
+
+function fixtureProps({ title, componentName }) {
+  const reactChild = (text) => React.createElement("p", null, text);
+  const noop = () => {};
+  const asyncNoop = async () => {};
+  const tasks = [
+    { id: "task-1", title: "Draft release notes", done: true },
+    { id: "task-2", title: "Verify analytics", done: false },
+  ];
+  const products = [
+    { id: "shoe", name: "Trail shoes", priceCents: 12900, inStock: true },
+    { id: "shell", name: "Rain shell", priceCents: 9900, inStock: false },
+  ];
+
+  const byComponent = {
+    ActionButton: { kind: "link", href: "/account/billing", children: "Manage billing" },
+    AccountLayout: { children: reactChild("Profile settings") },
+    AnalyticsPanel: {},
+    AppointmentTime: { startsAt: "2026-07-08T17:00:00.000Z", locale: "en-US" },
+    ArtistPage: { artistId: "maya" },
+    AssigneeSummary: {
+      users: [
+        { id: "u1", name: "Ada Lovelace" },
+        { id: "u2", name: "Grace Hopper" },
+      ],
+      selectedUserId: "u2",
+    },
+    Button: { variant: "danger", children: "Delete project", onClick: noop },
+    ChatRoom: { roomId: "general" },
+    CheckoutPage: { flags: { newPaymentSheet: true } },
+    CommentForm: {
+      comments: [
+        { id: "comment-1", body: "Looks ready." },
+        { id: "comment-2", body: "Ship it." },
+      ],
+      createComment: asyncNoop,
+    },
+    Dashboard: {},
+    DashboardPage: {},
+    DateRangeSelector: { initialRange: "30d" },
+    DeleteProjectButton: { canDelete: true, onDelete: noop },
+    DisplayNameForm: {},
+    FavoriteButton: {},
+    FilteredReport: {
+      rows: [
+        { id: "row-1", name: "Revenue" },
+        { id: "row-2", name: "Retention" },
+      ],
+    },
+    FocusNameButton: {},
+    HelpDisclosure: {},
+    HomeScreen: { onStart: noop },
+    IconButton: {
+      label: "Open menu",
+      icon: React.createElement("span", { "aria-hidden": true }, "Menu"),
+      onClick: noop,
+    },
+    InStockOnly: { checked: true, onChange: noop },
+    InstrumentedDashboard: {},
+    LikeButton: { liked: false, count: 41, saveLike: asyncNoop },
+    List: {
+      items: products,
+      getKey: (item) => item.id,
+      renderItem: (item) => item.name,
+    },
+    OnlineStatus: {},
+    Panel: { title: "Billing", children: reactChild("Your card is current.") },
+    Price: { cents: 12900, currency: "USD", locale: "en-US" },
+    ProductCard: { name: "Trail shoes", priceCents: 12900, inStock: true },
+    ProductGrid: { products },
+    ProductPage: { params: Promise.resolve({ id: "shoe" }) },
+    ProductSearch: { products },
+    ProjectPage: { projectId: "project-1" },
+    ProjectRoute: {
+      loaderData: {
+        id: "project-1",
+        name: "Launch plan",
+        description: "Coordinate release tasks before the public launch.",
+      },
+    },
+    ProjectTabs: {},
+    ProjectTaskList: {
+      projects: [
+        { id: "project-1", name: "Launch", tasks },
+        { id: "project-2", name: "Retrospective", tasks: tasks.slice(0, 1) },
+      ],
+    },
+    ReducerCounter: {},
+    ReportsPage: {},
+    RenameProjectButton: { projectId: "project-1" },
+    RoomTitle: { roomId: "general" },
+    SaveStatus: {},
+    SearchableGrid: { items: ["Trail shoes", "Rain shell", "Camp mug"] },
+    SettingsForm: { action: noop },
+    SettingsRow: {
+      label: "Email updates",
+      description: "Receive release notes and billing notices.",
+      action: React.createElement("button", null, "Edit"),
+    },
+    TaskBoard: { tasks },
+    TaskList: { tasks },
+    TextField: { label: "Email", error: "Enter a valid email address." },
+    ThemeProvider: { theme: "dark", children: reactChild("Theme-aware content") },
+  };
+
+  if (title === "Nested layout") return { children: reactChild("Billing settings") };
+  if (title === "Generic account layout") return { children: reactChild("Profile settings") };
+  return byComponent[componentName] ?? {};
+}
+
+function selectRenderTarget(exports, code) {
+  if (typeof exports.default === "function") {
+    return { component: exports.default, name: exports.default.name || "DefaultComponent" };
+  }
+
+  if (exports.default?.component) {
+    const story = Object.values(exports).find(
+      (value) => value && typeof value === "object" && "args" in value,
+    );
+
+    if (story?.args) {
+      return {
+        component: exports.default.component,
+        name: exports.default.component.name || "StoryComponent",
+        props: story.args,
+      };
+    }
+  }
+
+  const preferredName = firstComponentName(code);
+  if (preferredName && typeof exports[preferredName] === "function") {
+    return { component: exports[preferredName], name: preferredName };
+  }
+
+  const namedComponent = Object.entries(exports).find(
+    ([name, value]) => /^[A-Z]/.test(name) && typeof value === "function",
+  );
+
+  if (!namedComponent) return null;
+  return { component: namedComponent[1], name: namedComponent[0] };
+}
+
+function wrapElementForPackages(element, code) {
+  if (!/@tanstack\/react-query/.test(code)) return element;
+
+  const { QueryClient, QueryClientProvider } = baseRequire("@tanstack/react-query");
+  return React.createElement(
+    QueryClientProvider,
+    { client: new QueryClient() },
+    element,
+  );
+}
+
+async function renderReactExample({ code, title, id }) {
+  const moduleCache = new Map();
+  const environment = createExampleEnvironment();
+  const exports = evaluateModule(code, `${id}.tsx`, moduleCache, environment);
+  const target = selectRenderTarget(exports, code);
+
+  if (!target) {
+    throw new Error("No exported React component found.");
+  }
+
+  const props = fixtureProps({ title, componentName: target.name });
+  const resolvedProps = target.props ?? props;
+  let element;
+
+  if (target.component.constructor.name === "AsyncFunction") {
+    element = await target.component(resolvedProps);
+  } else {
+    element = React.createElement(target.component, resolvedProps);
+  }
+
+  const wrapped = wrapElementForPackages(element, code);
+  return renderToStaticMarkup(wrapped);
+}
+
+function resultOutput(title, reason) {
+  return `<p><strong>${htmlEscape(title)}.</strong> ${htmlEscape(reason)}</p>`;
+}
+
+async function outputBody({ title, code, id }) {
+  if (/\b(describe|it|test)\(/.test(code) && /\bexpect\(/.test(code)) {
+    return {
+      mode: "result",
+      label: "Test result",
+      body: resultOutput(title, "The test runner executes the assertions for this example."),
+    };
+  }
+
+  if (/\bcreateRoot\(/.test(code)) {
+    return {
+      mode: "result",
+      label: "Browser result",
+      body: resultOutput(title, "The browser entrypoint mounts the React tree into the root DOM node."),
+    };
+  }
+
+  if (containsJsx(code)) {
+    try {
+      const rendered = await renderReactExample({ code, title, id });
+      return {
+        mode: "react-server",
+        label: "React output",
+        body: `<div class="react-example-output__rendered">${rendered}</div>`,
+      };
+    } catch (error) {
+      return {
+        mode: "result",
+        label: "Runtime result",
+        body: resultOutput(
+          title,
+          `This example requires its framework runtime to render on the page: ${sentence(error.message)}.`,
+        ),
+      };
+    }
+  }
+
+  if (/\bdefineConfig\(/.test(code)) {
+    return {
+      mode: "result",
+      label: "Config result",
+      body: resultOutput(title, "The code exports configuration consumed by the build tool."),
+    };
+  }
+
+  return {
+    mode: "result",
+    label: "Runtime result",
+    body: resultOutput(title, "The code exports a value or function used by the surrounding example."),
+  };
+}
+
+async function buildOutputBlock({ id, title, code }) {
+  const output = await outputBody({ title, code, id });
+
+  return `<div class="react-example-output not-content" data-react-example-output="${htmlEscape(id)}" data-render-mode="${output.mode}" role="region" aria-label="Output view: ${htmlEscape(title)}">
+  <div class="react-example-output__header">${output.label}</div>
   <div class="react-example-output__body">
-    ${summarizeOutput(title, code)}
+    ${output.body}
   </div>
 </div>`;
 }
@@ -176,7 +403,7 @@ function titleForFence(headings, fenceIndex, fallbackTitle) {
   return heading?.[1]?.trim() ?? fallbackTitle;
 }
 
-function syncFile(fileName) {
+async function syncFile(fileName) {
   const filePath = path.join(postsDir, fileName);
   const original = readFileSync(filePath, "utf8");
   const headings = [...original.matchAll(exampleHeadingPattern)];
@@ -187,7 +414,7 @@ function syncFile(fileName) {
     const fence = fences[index];
     const title = titleForFence(headings, fence.index, `Code example ${index + 1}`);
     const outputId = `${path.basename(fileName, ".md")}-${index + 1}-${slugify(title)}`;
-    const outputBlock = `\n\n${buildOutputBlock({
+    const outputBlock = `\n\n${await buildOutputBlock({
       id: outputId,
       title,
       code: fence[2],
@@ -214,10 +441,12 @@ function syncFile(fileName) {
   };
 }
 
-const results = readdirSync(postsDir)
-  .filter((fileName) => reactPostFilePattern.test(fileName))
-  .sort()
-  .map(syncFile);
+const results = [];
+for (const fileName of readdirSync(postsDir)
+  .filter((entry) => reactPostFilePattern.test(entry))
+  .sort()) {
+  results.push(await syncFile(fileName));
+}
 
 const changed = results.filter((result) => result.changed);
 const exampleCount = results.reduce((total, result) => total + result.examples, 0);

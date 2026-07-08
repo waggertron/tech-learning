@@ -67,10 +67,10 @@ export function ProductCard({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-1-render-data-with-jsx" role="region" aria-label="Output view: Render data with JSX">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-1-render-data-with-jsx" data-render-mode="react-server" role="region" aria-label="Output view: Render data with JSX">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Render data with JSX.</strong> <code>ProductCard</code> renders <code>&lt;article&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;span&gt;</code> markup. Visible text can include <code>In stock</code> and <code>Back soon</code>.</p>
+    <div class="react-example-output__rendered"><article class="product-card"><h2>Trail shoes</h2><p>$ 129.00</p><span>In stock</span></article></div>
   </div>
 </div>
 
@@ -102,10 +102,10 @@ export function ProductGrid({ products }: { products: Product[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-2-compose-components" role="region" aria-label="Output view: Compose components">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-components-and-jsx-2-compose-components" data-render-mode="react-server" role="region" aria-label="Output view: Compose components">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Compose components.</strong> <code>ProductGrid</code> renders <code>&lt;section&gt;</code>, <code>&lt;h2&gt;</code>, and <code>&lt;div&gt;</code> markup. It composes <code>ProductCard</code>. Visible text can include <code>Featured products</code>.</p>
+    <div class="react-example-output__rendered"><section aria-labelledby="featured-products"><h2 id="featured-products">Featured products</h2><div class="grid"><article class="product-card"><h2>Trail shoes</h2><p>$ 129.00</p><span>In stock</span></article><article class="product-card"><h2>Rain shell</h2><p>$ 99.00</p><span>Back soon</span></article></div></section></div>
   </div>
 </div>
 

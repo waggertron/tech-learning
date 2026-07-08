@@ -66,10 +66,10 @@ export function TaskList({ tasks }: { tasks: Task[] }): ReactElement {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-rendering-lists-stable-keys-1-task-list-with-item-identity" role="region" aria-label="Output view: Task list with item identity">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-rendering-lists-stable-keys-1-task-list-with-item-identity" data-render-mode="react-server" role="region" aria-label="Output view: Task list with item identity">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Task list with item identity.</strong> <code>TaskList</code> renders <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;label&gt;</code>, and <code>&lt;input&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><ul><li><label><input type="checkbox" checked=""/>Draft release notes</label></li><li><label><input type="checkbox"/>Verify analytics</label></li></ul></div>
   </div>
 </div>
 
@@ -100,10 +100,10 @@ export function ProjectTaskList({ projects }: { projects: Project[] }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-rendering-lists-stable-keys-2-grouped-list-keys" role="region" aria-label="Output view: Grouped list keys">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-rendering-lists-stable-keys-2-grouped-list-keys" data-render-mode="react-server" role="region" aria-label="Output view: Grouped list keys">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Grouped list keys.</strong> <code>ProjectTaskList</code> renders <code>&lt;div&gt;</code>, <code>&lt;section&gt;</code>, and <code>&lt;h2&gt;</code> markup. It composes <code>TaskList</code>.</p>
+    <div class="react-example-output__rendered"><div><section><h2>Launch</h2><ul><li><label><input type="checkbox" checked=""/>Draft release notes</label></li><li><label><input type="checkbox"/>Verify analytics</label></li></ul></section><section><h2>Retrospective</h2><ul><li><label><input type="checkbox" checked=""/>Draft release notes</label></li></ul></section></div></div>
   </div>
 </div>
 

@@ -64,10 +64,10 @@ export function OnlineStatus() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-1-browser-online-status" role="region" aria-label="Output view: Browser online status">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-1-browser-online-status" data-render-mode="react-server" role="region" aria-label="Output view: Browser online status">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Browser online status.</strong> <code>OnlineStatus</code> renders <code>&lt;p&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><p>Online</p></div>
   </div>
 </div>
 
@@ -77,6 +77,7 @@ The component subscribes to browser events after commit and removes the listener
 
 ```tsx
 import { useEffect } from "react";
+import { createChatConnection } from "./chat";
 
 export function ChatRoom({ roomId }: { roomId: string }) {
   useEffect(() => {
@@ -90,10 +91,10 @@ export function ChatRoom({ roomId }: { roomId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription" role="region" aria-label="Output view: Chat room subscription">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription" data-render-mode="react-server" role="region" aria-label="Output view: Chat room subscription">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Chat room subscription.</strong> <code>ChatRoom</code> renders <code>&lt;h1&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><h1>Room general</h1></div>
   </div>
 </div>
 

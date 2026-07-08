@@ -69,10 +69,10 @@ export function useTheme() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-context-without-global-soup-1-theme-provider-with-a-reader-hook" role="region" aria-label="Output view: Theme provider with a reader hook">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-context-without-global-soup-1-theme-provider-with-a-reader-hook" data-render-mode="react-server" role="region" aria-label="Output view: Theme provider with a reader hook">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Theme provider with a reader hook.</strong> <code>ThemeProvider</code> renders <code>ThemeContext</code> components. It composes <code>ThemeContext</code>.</p>
+    <div class="react-example-output__rendered"><p>Theme-aware content</p></div>
   </div>
 </div>
 
@@ -104,10 +104,10 @@ export function ProjectPage({ projectId }: { projectId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-context-without-global-soup-2-feature-level-provider" role="region" aria-label="Output view: Feature-level provider">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-context-without-global-soup-2-feature-level-provider" data-render-mode="react-server" role="region" aria-label="Output view: Feature-level provider">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Feature-level provider.</strong> <code>ProjectPage</code> renders <code>ProjectContext</code>, <code>ProjectHeader</code>, and <code>ProjectTaskList</code> components. It composes <code>ProjectContext</code>, <code>ProjectHeader</code>, and <code>ProjectTaskList</code>.</p>
+    <div class="react-example-output__rendered"><header><h2>Launch checklist</h2><p>Editors can update tasks.</p></header><ul><li>Confirm launch copy</li><li>Review analytics events</li></ul></div>
   </div>
 </div>
 

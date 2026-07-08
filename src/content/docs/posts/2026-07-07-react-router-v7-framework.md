@@ -64,10 +64,10 @@ export default function ProjectRoute({
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-router-v7-framework-1-route-with-loader-data" role="region" aria-label="Output view: Route with loader data">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-router-v7-framework-1-route-with-loader-data" data-render-mode="react-server" role="region" aria-label="Output view: Route with loader data">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Route with loader data.</strong> <code>ProjectRoute</code> renders <code>&lt;main&gt;</code>, <code>&lt;h1&gt;</code>, and <code>&lt;p&gt;</code> markup.</p>
+    <div class="react-example-output__rendered"><main><h1>Launch plan</h1><p>Coordinate release tasks before the public launch.</p></main></div>
   </div>
 </div>
 
@@ -91,10 +91,10 @@ export default function AccountLayout() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-router-v7-framework-2-nested-layout-with-an-outlet" role="region" aria-label="Output view: Nested layout with an outlet">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-router-v7-framework-2-nested-layout-with-an-outlet" data-render-mode="react-server" role="region" aria-label="Output view: Nested layout with an outlet">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Nested layout with an outlet.</strong> <code>AccountLayout</code> renders <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, and <code>&lt;a&gt;</code> markup. It composes <code>Outlet</code>. Visible text can include <code>Profile</code> and <code>Security</code>.</p>
+    <div class="react-example-output__rendered"><section><nav aria-label="Account"><a href="/account/profile">Profile</a><a href="/account/security">Security</a></nav></section></div>
   </div>
 </div>
 

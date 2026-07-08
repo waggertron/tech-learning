@@ -49,6 +49,23 @@ function meaningfulCodeLines(code) {
     .filter((line) => line.length > 0 && !line.startsWith("//"));
 }
 
+function returnsJsx(code) {
+  return /return\s*\(?\s*</.test(code) || /=>\s*\(?\s*</.test(code);
+}
+
+function exportsRenderableComponent(code) {
+  if (/createFileRoute\(/.test(code)) return false;
+  if (/\b(describe|it|test)\(/.test(code)) return false;
+  if (/\bcreateRoot\(/.test(code)) return false;
+
+  return (
+    /export default function\s+[A-Z]/.test(code) ||
+    /export function\s+[A-Z]/.test(code) ||
+    /export const\s+[A-Z]\w*\s*(?::[^=]+)?=/.test(code) ||
+    (!/\bexport\s+/.test(code) && /function\s+[A-Z]/.test(code))
+  );
+}
+
 const examples = collectExamples();
 
 test("Modern React examples have the expected coverage count", () => {
@@ -109,8 +126,8 @@ test("every Modern React example has an accessible output view", () => {
     );
     assert.match(
       afterFence,
-      /<strong>[^<]+<\/strong>/,
-      `${example.fileName} example "${example.title}" should summarize the output in visible text`,
+      /data-render-mode="(react-server|result)"/,
+      `${example.fileName} example "${example.title}" should declare how the output was produced`,
     );
     assert.doesNotMatch(
       afterFence.slice(0, 1200),
@@ -120,4 +137,47 @@ test("every Modern React example has an accessible output view", () => {
   }
 
   assert.equal(outputIds.size, examples.length);
+});
+
+test("JSX examples show React-rendered output instead of tag summaries", () => {
+  for (const example of examples) {
+    const outputStart = example.afterFence.slice(0, 1800);
+
+    assert.doesNotMatch(
+      outputStart,
+      /renders <code>&lt;|Visible text can include| markup\./,
+      `${example.fileName} example "${example.title}" should not describe tags as the output`,
+    );
+
+    if (returnsJsx(example.code) && exportsRenderableComponent(example.code)) {
+      assert.match(
+        outputStart,
+        /data-render-mode="react-server"/,
+        `${example.fileName} example "${example.title}" should be rendered by React server rendering`,
+      );
+      assert.match(
+        outputStart,
+        /class="react-example-output__rendered"/,
+        `${example.fileName} example "${example.title}" should include the rendered HTML container`,
+      );
+    }
+  }
+});
+
+test("the first JSX example renders the ProductCard with fixture props", () => {
+  const example = examples.find(
+    (item) =>
+      item.fileName === "2026-07-07-react-components-and-jsx.md" &&
+      item.title === "Render data with JSX",
+  );
+
+  assert.ok(example, "first React post should keep the Render data with JSX example");
+
+  const outputStart = example.afterFence.slice(0, 1800);
+  assert.match(outputStart, /data-render-mode="react-server"/);
+  assert.match(outputStart, /class="product-card"/);
+  assert.match(outputStart, /Trail shoes/);
+  assert.match(outputStart, /\$\s*129\.00/);
+  assert.match(outputStart, /In stock/);
+  assert.doesNotMatch(outputStart, /ProductCard renders/);
 });

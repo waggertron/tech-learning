@@ -58,10 +58,10 @@ export function HomeScreen({ onStart }: { onStart: () => void }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-1-native-screen-component" role="region" aria-label="Output view: Native screen component">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-1-native-screen-component" data-render-mode="react-server" role="region" aria-label="Output view: Native screen component">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Native screen component.</strong> <code>HomeScreen</code> renders <code>View</code>, <code>Text</code>, and <code>Pressable</code> components. It composes <code>View</code>, <code>Text</code>, and <code>Pressable</code>. Visible text can include <code>Daily checklist</code> and <code>Start</code>.</p>
+    <div class="react-example-output__rendered"><div class="css-view-g5y9jx"><div dir="auto" class="css-text-146c3p1">Daily checklist</div><div tabindex="0" class="css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73"><div dir="auto" class="css-text-146c3p1">Start</div></div></div></div>
   </div>
 </div>
 
@@ -89,10 +89,10 @@ export function FavoriteButton() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-2-shared-hook-platform-ui" role="region" aria-label="Output view: Shared Hook, platform UI">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-2-shared-hook-platform-ui" data-render-mode="react-server" role="region" aria-label="Output view: Shared Hook, platform UI">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Shared Hook, platform UI.</strong> <code>FavoriteButton</code> renders <code>Pressable</code> and <code>Text</code> components. It composes <code>Pressable</code> and <code>Text</code>.</p>
+    <div class="react-example-output__rendered"><div tabindex="0" class="css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73"><div dir="auto" class="css-text-146c3p1">Save</div></div></div>
   </div>
 </div>
 

@@ -62,10 +62,10 @@ export function AccountLayout({ children }: AccountLayoutProps) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-1-generic-account-layout" role="region" aria-label="Output view: Generic account layout">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-1-generic-account-layout" data-render-mode="react-server" role="region" aria-label="Output view: Generic account layout">
+  <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <p><strong>Generic account layout.</strong> <code>AccountLayout</code> renders <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;a&gt;</code>, and <code>&lt;main&gt;</code> markup. Visible text can include <code>Profile</code> and <code>Security</code>.</p>
+    <div class="react-example-output__rendered"><section class="account-layout"><nav aria-label="Account settings"><a href="/account/profile">Profile</a><a href="/account/security">Security</a></nav><main><p>Profile settings</p></main></section></div>
   </div>
 </div>
 
@@ -90,10 +90,10 @@ const routes = [
 ];
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-2-route-config-sketch" role="region" aria-label="Output view: Route config sketch">
-  <div class="react-example-output__header">Output view</div>
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-routing-nested-layouts-2-route-config-sketch" data-render-mode="result" role="region" aria-label="Output view: Route config sketch">
+  <div class="react-example-output__header">Runtime result</div>
   <div class="react-example-output__body">
-    <p><strong>Route config sketch.</strong> <code>routes</code> renders <code>AccountLayout</code>, <code>ProfilePage</code>, and <code>SecurityPage</code> components. It composes <code>AccountLayout</code>, <code>ProfilePage</code>, and <code>SecurityPage</code>.</p>
+    <p><strong>Route config sketch.</strong> This example requires its framework runtime to render on the page: No exported React component found..</p>
   </div>
 </div>
 
