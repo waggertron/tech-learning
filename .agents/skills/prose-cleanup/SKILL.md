@@ -17,6 +17,28 @@ Use this skill when doing a cleanup pass on existing content, or when reviewing 
 
 `src/content/docs/topics/ai/ai-text-markers/index.md` -- this page documents every pattern to fix, with explanations. Use it as the source of truth.
 
+That page intentionally contains bad examples. Preserve those examples unless the task is to improve the marker catalog itself.
+
+## Scan-driven cleanup
+
+The 2026-07-12 cleanup pass proved that "already clean" assumptions age badly. Run scans, interpret the result, then edit. Do not rely on memory that a pattern was already removed.
+
+Use these low-cost checks before and after a broad cleanup pass:
+
+```bash
+rg -n $'\u2014' src docs .agents AGENTS.md README.md
+rg -n "^\s*(?:[-*]|[0-9]+\.) \*\*[^*]+\*\*," src/content/docs docs README.md
+rg -n "In conclusio[n]|To summariz[e]|Ultimatel[y]|At the end of the da[y]|\butiliz[e]\b|\b[Ll]everag[e]\b|\bdelv[e]\b|dive int[o]|\brobus[t]\b|\bcomprehensiv[e]\b|seamlessl[y]|effortlessl[y]|\bstreamlin[e]\b|unlock the powe[r]|harness the powe[r]|It's worth notin[g]|On the other han[d]" src/content/docs docs README.md
+```
+
+Interpretation rules:
+
+- U+2014 should be zero across author-controlled text.
+- Bold-label comma bullets should be zero.
+- The vocabulary scan is a review queue. Read the sentence before changing it.
+- Preserve code fences, inline code, table cells that contain code, and the intentional examples in `ai-text-markers`.
+- Technical terms can be valid even when they resemble a marker. Do not rewrite domain terms mechanically.
+
 ## What to fix
 
 ### Punctuation
@@ -47,10 +69,6 @@ Use this skill when doing a cleanup pass on existing content, or when reviewing 
 5. **Frontmatter YAML** -- governed by separate rules (see authoring skill)
 6. **Table cells containing code** -- skip semicolons/commas in those cells
 
-## Already clean -- do not hunt for
-
-Em-dashes, "Furthermore/Moreover/Additionally," "In conclusion/To summarize," "utilize," "It's worth noting." These were suppressed in the writing-style skill and are not present in the existing content.
-
 ## Phase plan (site-wide cleanup order)
 
 Work through sections in this order, one phase at a time. Build-verify after each phase.
@@ -74,6 +92,12 @@ npm run build
 ```
 
 Build must stay green. Page count should stay stable (no pages removed or added). Spot-check 2-3 pages: prose should feel direct and human, not AI-systematic.
+
+If the cleanup touches interactive post components, React output panels, generated examples, or client-side behavior, run the relevant targeted test too. For React output panels, run:
+
+```bash
+npm run test:react-outputs
+```
 
 ## Related
 

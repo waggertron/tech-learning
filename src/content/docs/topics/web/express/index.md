@@ -50,7 +50,7 @@ The approach that works well for most engineers ramping on Node backends:
 
 ## References that apply to every part
 
-- [Express documentation](https://expressjs.com/en/4x/api.html), the 4.x API reference is comprehensive; 5.x docs are at expressjs.com/en/5x/api.html
+- [Express documentation](https://expressjs.com/en/4x/api.html), the 4.x API reference is broad; 5.x docs are at expressjs.com/en/5x/api.html
 - [Node.js documentation](https://nodejs.org/en/docs/), required background for understanding the runtime Express runs on
 - [Express source on GitHub](https://github.com/expressjs/express), small and readable; worth browsing when middleware behavior surprises you
 - [npm registry](https://www.npmjs.com/), for any package mentioned in this series

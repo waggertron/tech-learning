@@ -120,7 +120,7 @@ Use snapshots rarely, for stable components (icons, fully-static content). Every
 Components that fetch have async state. Two approaches:
 
 1. **Inject the fetch function** so tests can pass a stub.
-2. **[Mock Service Worker (MSW)](https://mswjs.io/)**, intercepts real `fetch` / `XMLHttpRequest` calls at the network layer.
+2. **[Mock Service Worker (MSW)](https://mswjs.io/)**: intercepts real `fetch` / `XMLHttpRequest` calls at the network layer.
 
 MSW is the modern default. It lets the component make real network calls. MSW serves scripted responses:
 

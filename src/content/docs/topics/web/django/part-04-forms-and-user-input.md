@@ -154,7 +154,7 @@ def author_edit(request, pk):
     return render(request, "blog/author_edit.html", {"formset": formset})
 ```
 
-Formsets are powerful but their template rendering is verbose. If you find yourself fighting them, consider a JavaScript-driven UI posting JSON (covered in Part 6).
+Formsets handle a lot, but their template rendering is verbose. If you find yourself fighting them, consider a JavaScript-driven UI posting JSON (covered in Part 6).
 
 ## Third-party helpers
 

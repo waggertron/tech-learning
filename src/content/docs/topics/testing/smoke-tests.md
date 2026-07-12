@@ -1,6 +1,6 @@
 ---
 title: Smoke tests
-description: The minimum-viable "is the system alive?" checks. Run after every deploy, run during an incident, run as a canary between full test suites. Small surface, huge leverage.
+description: "The minimum-viable 'is the system alive?' checks. Run after every deploy, during an incident, and as a canary between full test suites."
 parent: testing
 tags: [smoke-tests, testing, deployment, incidents]
 status: draft

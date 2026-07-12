@@ -89,6 +89,17 @@ Each planned part should include:
 
 Do not create 10+ empty posts unless the user explicitly asks for individual drafts. A single plan page keeps the site useful and avoids placeholder clutter.
 
+Research-first plan pages can also carry the working material that will become the series:
+
+- Strict definitions and boundaries.
+- Business use cases and concrete examples.
+- Drawbacks, detriment scenarios, and adoption criteria.
+- Tooling landscape with source links.
+- A scoring model or decision checklist.
+- One-off interactive helper components, imported from `src/components/`, when the post benefits from user input.
+
+When a series plan adds a user-visible helper, update `docs/feature_tracker.md`, keep the series page linked from both post indexes, and run `npm run build`.
+
 ## Existing Series
 
 Current series slugs:
@@ -98,6 +109,7 @@ Current series slugs:
 - `software-design-principles`
 - `cs-reference-sheets`
 - `modern-react-development`
+- `domain-specific-languages`
 
 ## Validation Checklist
 

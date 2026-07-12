@@ -18,7 +18,7 @@ The choice is not "old vs new" or "better vs worse." It is a trade-off between s
 
 - Data lives in tables with a fixed schema. Relationships enforced by foreign keys.
 - ACID transactions: atomicity, consistency, isolation, durability. Multiple rows or tables can be updated in a single all-or-nothing operation.
-- Powerful querying: JOINs, aggregations, window functions, subqueries.
+- Expressive querying: JOINs, aggregations, window functions, subqueries.
 - Vertical scaling is straightforward. Horizontal scaling (sharding) is possible but adds significant complexity.
 
 **Best for**: financial systems, e-commerce orders, anything requiring multi-row transactions or complex queries across related data.

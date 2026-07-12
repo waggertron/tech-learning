@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The science of learning has produced a set of findings that are simultaneously robust and counterintuitive. The conditions that feel like effective learning — fluent re-reading, blocked practice, immediate feedback, and high-confidence recognition — are systematically inferior to conditions that feel harder: retrieval practice, spaced repetition, interleaved problems, and delayed correction. This gap between learner preference and learning effectiveness is the central practical problem that any effective teaching system must solve.
+The science of learning has produced a set of findings that are durable and counterintuitive. The conditions that feel like effective learning, fluent re-reading, blocked practice, immediate feedback, and high-confidence recognition, are systematically inferior to conditions that feel harder: retrieval practice, spaced repetition, interleaved problems, and delayed correction. This gap between learner preference and learning effectiveness is the central practical problem that any effective teaching system must solve.
 
 This document synthesizes findings from cognitive neuroscience, educational psychology, instructional design, and learning science to produce two outputs: a research foundation and a pattern library. The research covers memory architecture, evidence-based techniques, motivation, quizzing science, and expertise development. The patterns translate the research into actionable teaching interventions organized by the problem each pattern solves.
 
@@ -26,30 +26,30 @@ This document synthesizes findings from cognitive neuroscience, educational psyc
 
 Memory is not a recording device. It is a reconstruction system. Every time you retrieve a memory, you are partially rebuilding it from stored traces plus contextual inference. This has direct consequences for how learning works.
 
-The multi-store model (Atkinson & Shiffrin 1968) describes three stages: sensory registers (250ms-4 seconds), working memory (seconds to minutes), and long-term memory (potentially permanent). What determines whether information passes through this pipeline is the depth of processing applied to it (Craik & Lockhart 1972). Shallow processing — noticing surface features, sounding out a word — produces ~15-20% recall. Semantic processing — asking what something means, how it connects to other knowledge — produces ~65-70% recall. Processing designed to extract meaning is not just pedagogically better; it is neurochemically different at the encoding stage.
+The multi-store model (Atkinson & Shiffrin 1968) describes three stages: sensory registers (250ms-4 seconds), working memory (seconds to minutes), and long-term memory (potentially permanent). What determines whether information passes through this pipeline is the depth of processing applied to it (Craik & Lockhart 1972). Shallow processing, noticing surface features or sounding out a word, produces ~15-20% recall. Semantic processing, asking what something means and how it connects to other knowledge, produces ~65-70% recall. Processing designed to extract meaning is not just pedagogically better. It is neurochemically different at the encoding stage.
 
-**Working memory** is the bottleneck. Its true capacity, controlling for rehearsal and chunking, is **4 ± 1 items** (Cowan 2001; Luck & Vogel 1997) — not the often-cited 7 ± 2, which Miller himself noted was specific to single-dimension stimuli. The practical constraint: any instruction that requires holding more than 4-5 novel interacting elements simultaneously will exceed working memory and fail to encode. This is not a motivational failure. It is an architectural limit.
+**Working memory** is the bottleneck. Its true capacity, controlling for rehearsal and chunking, is **4 ± 1 items** (Cowan 2001; Luck & Vogel 1997), not the often-cited 7 ± 2, which Miller himself noted was specific to single-dimension stimuli. The practical constraint: any instruction that requires holding more than 4-5 novel interacting elements simultaneously will exceed working memory and fail to encode. This is not a motivational failure. It is an architectural limit.
 
 Experts bypass this limit through *chunking*: experienced learners hold more information in fewer working memory slots by compressing multiple elements into single, practiced patterns. Chess grandmasters recall ~22 pieces from a 5-second exposure to a real mid-game position; beginners recall 4-5. On random positions, both groups recall 4-5. The master's advantage is entirely explained by ~50,000 learned pattern-chunks in long-term memory (Simon & Chase 1973). This is why deliberate practice feels like building a library, not strengthening a muscle: you are encoding new chunks, not enlarging a capacity.
 
 ### How Memory Consolidates
 
-Encoding is not storage. A memory trace is fragile at the moment of encoding and strengthens over hours, days, and weeks through consolidation — an active process that does not require conscious attention.
+Encoding is not storage. A memory trace is fragile at the moment of encoding and strengthens over hours, days, and weeks through consolidation, an active process that does not require conscious attention.
 
-*Synaptic consolidation* (hours): AMPA receptor insertion and protein synthesis stabilize the synaptic weight changes that represent the memory. This window can be disrupted by protein synthesis inhibitors, explaining why sleep deprivation within 24 hours of learning causes ~20-40% recall loss (Walker 2007). Memories are also briefly labile again when reactivated (*reconsolidation*, Nader et al. 2000) — opening a ~6-hour window during which corrections can overwrite errors.
+*Synaptic consolidation* (hours): AMPA receptor insertion and protein synthesis stabilize the synaptic weight changes that represent the memory. This window can be disrupted by protein synthesis inhibitors, explaining why sleep deprivation within 24 hours of learning causes ~20-40% recall loss (Walker 2007). Memories are also briefly labile again when reactivated (*reconsolidation*, Nader et al. 2000), opening a ~6-hour window during which corrections can overwrite errors.
 
 *Systems consolidation* (weeks to years): repeated reactivation transfers memories from hippocampal storage to distributed neocortical networks. The hippocampus eventually disengages from semantic memories but retains long-term involvement with episodic memories (Nadel & Moscovitch 1997).
 
-Sleep is not passive. Slow-wave sleep spindles replay recently encoded sequences and transfer them to neocortical storage. Spindle density during post-learning NREM sleep correlates r = 0.72 with next-day declarative recall (Gais et al. 2002). A single night of sleep deprivation reduces hippocampal encoding capacity by approximately 40% (van der Helm et al. 2012). Motor sequence learning improves 20.5% overnight — but only if sleep occurs (Walker et al. 2002). Material studied close to sleep benefits from a second consolidation cycle. Cramming the night before an exam is correct for short-term performance. It is nearly useless for retention beyond 48 hours.
+Sleep is not passive. Slow-wave sleep spindles replay recently encoded sequences and transfer them to neocortical storage. Spindle density during post-learning NREM sleep correlates r = 0.72 with next-day declarative recall (Gais et al. 2002). A single night of sleep deprivation reduces hippocampal encoding capacity by approximately 40% (van der Helm et al. 2012). Motor sequence learning improves 20.5% overnight, but only if sleep occurs (Walker et al. 2002). Material studied close to sleep benefits from a second consolidation cycle. Cramming the night before an exam is correct for short-term performance. It is nearly useless for retention beyond 48 hours.
 
 ### Forgetting Is Functional
 
 Robert Bjork's New Theory of Disuse (1992) resolves a longstanding confusion. Memory has two separable properties:
 
 - **Storage strength (SS):** how thoroughly something is encoded. Never decreases. Increases with practice, especially retrieval practice.
-- **Retrieval strength (RS):** how accessible a memory is right now. Decreases with disuse — this is what "forgetting" means behaviorally.
+- **Retrieval strength (RS):** how accessible a memory is right now. Decreases with disuse. This is what "forgetting" means behaviorally.
 
-The critical insight: **the lower the current RS, the greater the SS gain from a successful retrieval event.** Difficult retrieval — struggling to recall something you have partially forgotten — produces larger storage strength gains than easy retrieval of well-remembered material. This is why spaced practice, interleaving, and retrieval practice all work: they deliberately allow RS to drop, then demand retrieval, maximizing the SS gain. That feeling of effort is the signal that real consolidation is occurring.
+The critical insight: **the lower the current RS, the greater the SS gain from a successful retrieval event.** Difficult retrieval, struggling to recall something you have partially forgotten, produces larger storage strength gains than easy retrieval of well-remembered material. This is why spaced practice, interleaving, and retrieval practice all work: they deliberately allow RS to drop, then demand retrieval, maximizing the SS gain. That feeling of effort is the signal that real consolidation is occurring.
 
 Forgetting also serves an adaptive function: it prevents interference from obsolete information and ensures that only frequently used information remains readily accessible. The forgetting curve is not a defect to be patched; it is the operating system through which memory prioritizes what matters.
 
@@ -73,13 +73,13 @@ Dunlosky et al. (2013) systematically rated 10 learning techniques across five d
 | Self-Explanation | High | d = 0.55 | Bisra et al. 2018 (64 studies) |
 | Highlighting / Rereading | **Low** | ~0 at delays | Dunlosky et al. 2013 |
 
-Highlighting and rereading — the dominant student strategies — receive the lowest utility rating. Karpicke et al. (2009) surveyed 177 college students: **84% listed rereading as their primary study strategy. Only 11% mentioned self-testing.** The mismatch between evidence and practice is not subtle.
+Highlighting and rereading, the dominant student strategies, receive the lowest utility rating. Karpicke et al. (2009) surveyed 177 college students: **84% listed rereading as their primary study strategy. Only 11% mentioned self-testing.** The mismatch between evidence and practice is not subtle.
 
 ### Retrieval Practice
 
 Testing yourself produces better long-term retention than re-reading the same material. This is not because testing reveals what you know: retrieval *strengthens* memory in ways that passive re-exposure does not.
 
-Roediger & Karpicke (2006, n=120): study once + test three times vs. study four times. At a one-week delay, the testing group recalled **80%; the study group recalled 40%** — with equal study time. The testing effect grows at longer delays. Free recall produces the largest effect (d ≈ 0.62 vs. restudy); multiple choice, especially without corrective feedback, produces the smallest and can cause harm through lure intrusion.
+Roediger & Karpicke (2006, n=120): study once + test three times vs. study four times. At a one-week delay, the testing group recalled **80%; the study group recalled 40%** with equal study time. The testing effect grows at longer delays. Free recall produces the largest effect (d ≈ 0.62 vs. restudy). Multiple choice, especially without corrective feedback, produces the smallest and can cause harm through lure intrusion.
 
 **Three consecutive correct retrievals** is the empirically supported mastery criterion (Rawson & Dunlosky 2011): the efficiency-retention tradeoff optimizes at 3 in a row, producing 80% retention at one week vs. 55% for a single-correct criterion.
 
@@ -91,9 +91,9 @@ Ebbinghaus (1885) established that distributed practice required one-third fewer
 
 The optimal gap between study sessions scales with the desired retention interval: **approximately 10-20% of the retention goal.** For a one-week retention goal, restudy after 1-2 days. For one-month retention, restudy after 5-10 days. For one-year retention, restudy after 4-8 weeks.
 
-The SM-2 algorithm (Wozniak 1987) implements this computationally: each item tracks an ease factor (starting at 2.5) and an interval that multiplies by that factor after each correct recall. Items recalled poorly reset to short intervals; items recalled easily extend to long ones. This is the engine behind Anki, which consistent users leverage to maintain ~90% retention on studied material at approximately 20-30 minutes of daily review.
+The SM-2 algorithm (Wozniak 1987) implements this computationally: each item tracks an ease factor (starting at 2.5) and an interval that multiplies by that factor after each correct recall. Items recalled poorly reset to short intervals; items recalled easily extend to long ones. This is the engine behind Anki, which consistent users use to maintain ~90% retention on studied material at approximately 20-30 minutes of daily review.
 
-Why massed practice feels better: cramming produces fluency during the study session. Fluency is mistaken for learning. The spacing effect is invisible during practice and only reveals itself at delayed tests — which is why learners and instructors consistently underestimate it.
+Why massed practice feels better: cramming produces fluency during the study session. Fluency is mistaken for learning. The spacing effect is invisible during practice and only reveals itself at delayed tests, which is why learners and instructors consistently underestimate it.
 
 ### Interleaving
 
@@ -101,7 +101,7 @@ Blocked practice (all of topic A, then all of B, then all of C) produces faster 
 
 Kornell & Bjork (2008): blocked study produced 50% accuracy on a subsequent attribution test; interleaved study produced 78%. At a one-week delay for mathematics, interleaved practice produced **63% vs. 20%** correct (Rohrer & Taylor 2007). In Kornell & Bjork's study, **85% of participants rated blocked practice as more effective** despite performing better with interleaving.
 
-The mechanism is *discriminative contrast*: interleaving forces you to decide which category or type each problem belongs to before applying a strategy. Blocked practice never requires this discrimination — you know you are in the "category A block." Interleaved practice builds the category boundary recognition essential for applying knowledge in the real world, where you never know in advance which problem type you are facing.
+The mechanism is *discriminative contrast*: interleaving forces you to decide which category or type each problem belongs to before applying a strategy. Blocked practice never requires this discrimination because you know you are in the "category A block." Interleaved practice builds the category boundary recognition essential for applying knowledge in the real world, where you never know in advance which problem type you are facing.
 
 ### Desirable Difficulties
 
@@ -124,11 +124,11 @@ The unifying explanation is the Bjork SS/RS theory: conditions that keep retriev
 
 Curiosity is not a pleasant background state. It is an aversive drive generated by an *information gap* (Loewenstein 1994): the recognition that something is missing, combined with the desire to fill the gap. This makes curiosity pedagogically actionable: questions before answers, mysteries before solutions, and partial reveals exploit this mechanism directly.
 
-The neural basis: Gruber, Gelman & Ranganath (2014) showed that high-curiosity states activate the ventral tegmental area and nucleus accumbens — the dopamine reward pathway — *before* any reward arrives. The anticipation is the reward. This dopamine release then modulates hippocampal plasticity, lowering the threshold for long-term potentiation and making subsequent encoding substantially more effective.
+The neural basis: Gruber, Gelman & Ranganath (2014) showed that high-curiosity states activate the ventral tegmental area and nucleus accumbens, the dopamine reward pathway, *before* any reward arrives. The anticipation is the reward. This dopamine release then modulates hippocampal plasticity, lowering the threshold for long-term potentiation and making subsequent encoding substantially more effective.
 
 High-curiosity states produce **30% better recall of target information at 24 hours** and also enhance incidental memory for unrelated material shown during the curiosity period (r = 0.52 between hippocampal activation and subsequent memory, Gruber et al. 2014). The curiosity state creates a learning window that benefits everything encoded during it.
 
-The optimal curiosity zone: Kang et al. (2009) found the effect is largest at *intermediate uncertainty* — when you think you might know but aren't sure. Zero uncertainty (you already know) and total uncertainty (completely lost) both reduce curiosity. The pedagogical sweet spot is the knowledge frontier: probe where the learner has partial knowledge and can sense the gap.
+The optimal curiosity zone: Kang et al. (2009) found the effect is largest at *intermediate uncertainty*, when you think you might know but aren't sure. Zero uncertainty (you already know) and total uncertainty (completely lost) both reduce curiosity. The pedagogical sweet spot is the knowledge frontier: probe where the learner has partial knowledge and can sense the gap.
 
 ### Flow States
 
@@ -136,25 +136,25 @@ Csikszentmihalyi's flow (1990) has a specific neural profile: transient suppress
 
 Flow requires three simultaneous conditions: clear proximal goals, immediate feedback, and a challenge level approximately 4% beyond current skill (Kotler 2014). Remove any one and flow breaks. Too easy: boredom, mind-wandering. Too hard: anxiety, working memory overwhelm.
 
-Flow predicts academic performance independently of IQ and prior knowledge (beta = 0.31, p < 0.01; Engeser & Rheinberg 2008). Instruction that dynamically calibrates challenge to the learner's demonstrated competence is not just more engaging — it produces materially better learning outcomes.
+Flow predicts academic performance independently of IQ and prior knowledge (beta = 0.31, p < 0.01; Engeser & Rheinberg 2008). Instruction that dynamically calibrates challenge to the learner's demonstrated competence is not just more engaging. It produces materially better learning outcomes.
 
 ### Emotional Memory
 
 The amygdala does not store memories. It *modulates* them. When emotionally aroused, the amygdala releases norepinephrine that acts on hippocampal neurons, strengthening consolidation. Emotionally salient content is recalled **approximately 2x better** at a two-week delay compared to matched neutral content, and this advantage is completely abolished by propranolol (a beta-blocker), confirming the norepinephrine mechanism (Cahill et al. 1994, n=52).
 
-The Yerkes-Dodson law applies: the optimal arousal level for *complex learning* (reasoning, problem-solving, transfer) is substantially lower than for simple memory tasks. High-stakes anxiety actively impairs complex learning by consuming up to 15% of working memory capacity (Ashcraft & Kirk 2001). The target is *engagement arousal* — genuine interest, mild surprise, narrative stakes — not threat arousal.
+The Yerkes-Dodson law applies: the optimal arousal level for *complex learning* (reasoning, problem-solving, transfer) is substantially lower than for simple memory tasks. High-stakes anxiety actively impairs complex learning by consuming up to 15% of working memory capacity (Ashcraft & Kirk 2001). The target is *engagement arousal*: genuine interest, mild surprise, narrative stakes, not threat arousal.
 
-Chronic stress causes structural damage: sustained cortisol causes hippocampal dendritic retraction (Lupien et al. 2007), structurally impairing the memory system. Psychological safety is not a soft preference — it is a hard prerequisite for the hippocampal function that learning requires.
+Chronic stress causes structural damage: sustained cortisol causes hippocampal dendritic retraction (Lupien et al. 2007), structurally impairing the memory system. Psychological safety is not a soft preference. It is a hard prerequisite for the hippocampal function that learning requires.
 
 ### Productive Failure and Error-Driven Learning
 
-The brain is a prediction machine. Prediction errors — surprises — are the primary learning signal. When an expected outcome doesn't materialize, dopaminergic neurons fire to signal the discrepancy, driving synaptic updating. The stronger the surprise, the stronger the learning update. Errors are not the opposite of learning; they are the input.
+The brain is a prediction machine. Prediction errors, surprises, are the primary learning signal. When an expected outcome doesn't materialize, dopaminergic neurons fire to signal the discrepancy, driving synaptic updating. The stronger the surprise, the stronger the learning update. Errors are not the opposite of learning. They are the input.
 
 The *hypercorrection effect* (Butterfield & Metcalfe 2001, d = 0.55-0.78): **high-confidence errors are corrected at 90%+ on retest, while low-confidence errors are corrected only 60% of the time.** The violation of expectation when a confident wrong answer is corrected maximizes the norepinephrine prediction-error signal.
 
 *Productive failure* (Kapur 2016): students who attempted problems and failed before receiving instruction showed **d = 0.59 better transfer** than direct-instruction-first groups, despite near-zero success during the failure phase. The mechanism: failure activates prior knowledge, surfaces misconceptions, and creates a felt need for understanding that orients subsequent instruction. The instruction lands on prepared soil.
 
-Growth mindset's neural signature (Moser et al. 2011): EEG showed that growth mindset participants produced significantly larger Post-Error Positivity (Pe) brain signals — indicating conscious engagement with errors rather than deflection. This mediated **25% greater post-error accuracy improvement** compared to fixed-mindset participants.
+Growth mindset's neural signature (Moser et al. 2011): EEG showed that growth mindset participants produced significantly larger Post-Error Positivity (Pe) brain signals, indicating conscious engagement with errors rather than deflection. This mediated **25% greater post-error accuracy improvement** compared to fixed-mindset participants.
 
 ---
 
@@ -164,7 +164,7 @@ Growth mindset's neural signature (Moser et al. 2011): EEG showed that growth mi
 
 Free recall > cued recall > multiple choice > recognition. The hierarchy tracks the *generation demand* of the question format.
 
-Free recall produces d = 0.62 vs. restudy (Adesope et al. 2017, 118 studies). Multiple choice produces d = 0.27 — less than half the effect. Free recall forces complete retrieval of the target concept; recognition allows selection without meaningful retrieval.
+Free recall produces d = 0.62 vs. restudy (Adesope et al. 2017, 118 studies). Multiple choice produces d = 0.27, less than half the effect. Free recall forces complete retrieval of the target concept. Recognition allows selection without meaningful retrieval.
 
 *Multiple choice without feedback is actively harmful.* Roediger & Marsh (2005): MC exposure without correction caused **21% lure intrusion** on a subsequent free-recall test (vs. 3% baseline). Plausible wrong answers get encoded as potential answers when no correction arrives. If you use MC, provide corrective feedback.
 
@@ -182,7 +182,7 @@ This is a dynamic target. As the learner improves, the difficulty must increase 
 
 ### Pre-Testing and the Forward Effect
 
-Testing students *before* they have seen material — guaranteed near-zero accuracy — still improves subsequent learning from that material. Richland et al. (2009): pre-tested students scored **12% higher on final tests** than study-only students, despite a 92% pre-test error rate. Grimaldi & Karpicke (2012): pre-test + study + post-test produced 67% vs. 52% for study + post-test vs. 34% for study alone.
+Testing students *before* they have seen material, with guaranteed near-zero accuracy, still improves subsequent learning from that material. Richland et al. (2009): pre-tested students scored **12% higher on final tests** than study-only students, despite a 92% pre-test error rate. Grimaldi & Karpicke (2012): pre-test + study + post-test produced 67% vs. 52% for study + post-test vs. 34% for study alone.
 
 The mechanisms: failed retrieval activates semantic networks related to the answer, primes attention toward relevant information in the upcoming material, creates an epistemic gap (curiosity), and establishes transfer-appropriate processing conditions.
 
@@ -200,7 +200,7 @@ Three consecutive correct retrievals before moving on: **80% retention at one we
 
 Sweller's Cognitive Load Theory (1988, 2011) provides a framework for designing instruction that respects working memory's 4-item limit.
 
-*Intrinsic load* is inherent to the content — how many elements must be held simultaneously to understand it. It cannot be reduced without changing the learning goal. But it can be managed by sequencing: teach sub-components before teaching their interaction.
+*Intrinsic load* is inherent to the content: how many elements must be held simultaneously to understand it. It cannot be reduced without changing the learning goal. But it can be managed by sequencing: teach sub-components before teaching their interaction.
 
 *Extraneous load* is the enemy. It comes from poor design: split attention (diagram with caption placed far from it), redundancy (reading text aloud while displaying the same text on screen), decorative elements with no informational value. The split-attention effect: geometry students given integrated labels *on* the figure performed 2x better than students with labels beside it (d = 0.9, Sweller et al. 1990).
 
@@ -212,7 +212,7 @@ The most important finding for adaptive instruction: the optimal instructional f
 
 Kalyuga et al. (2001): electrical engineering apprentices studied with worked examples and problem-solving at three points over a semester. At time 1, worked examples were significantly better. At time 2, no difference. At time 3, **problem-solving outperformed worked examples** for the same students (interaction effect eta² = 0.18). The mechanism: experts' existing schemas make worked-example guidance redundant. Processing that redundancy consumes working memory without benefit.
 
-The practical protocol — *completion problems with backward fading* (Renkl et al. 2002):
+The practical protocol is *completion problems with backward fading* (Renkl et al. 2002):
 
 1. Full worked example (novice phase)
 2. Last step requires student completion
@@ -222,23 +222,23 @@ The practical protocol — *completion problems with backward fading* (Renkl et 
 
 Backward fading produces d = 0.76 advantage over other fading orders, because the last step is typically the highest-level synthesis, maximizing schema formation at each fade point.
 
-**A 5-item, 3-minute rapid diagnostic test** reliably predicts which instruction format a given learner needs at a given moment (Kalyuga 2007). Diagnosis before instruction is not overhead — it is the highest-leverage action available.
+**A 5-item, 3-minute rapid diagnostic test** reliably predicts which instruction format a given learner needs at a given moment (Kalyuga 2007). Diagnosis before instruction is not overhead. It is the highest-value action available.
 
 ### Transfer of Learning
 
-Near transfer (same format, similar surface features) is reliably produced. Far transfer (different domain, different surface features, different context) is not — without deliberate design.
+Near transfer (same format, similar surface features) is reliably produced. Far transfer (different domain, different surface features, different context) is not, without deliberate design.
 
 Gick & Holyoak (1983): given an analogous solved problem, only **20% of subjects spontaneously applied it** to a structurally identical new problem. With an explicit hint to seek the analogy: **90%** applied it. Structural knowledge is not automatically accessed from new contexts. The analogy must be made explicit.
 
 What actually promotes transfer:
-1. Variability of practice — train on multiple surface forms of the same deep structure
-2. Explicit labeling of abstract principles alongside examples — name the principle, not just the solution
-3. Metacognitive prompts to seek analogies — "where else have you seen this pattern?"
-4. Comparison of multiple examples — contrasting two examples produces better abstraction than studying one example plus an abstract rule
+1. Variability of practice: train on multiple surface forms of the same deep structure.
+2. Explicit labeling of abstract principles alongside examples: name the principle, not just the solution.
+3. Metacognitive prompts to seek analogies: "where else have you seen this pattern?"
+4. Comparison of multiple examples: contrasting two examples produces better abstraction than studying one example plus an abstract rule.
 
 ### Prior Knowledge Is the Starting Point
 
-Prior knowledge accounts for 40-60% of variance in learning outcomes (Dochy, Segers & Buehl 1999, k = 183 studies). This is a stronger predictor than any instructional method. The most important thing a teacher can do before any instruction is assess what the learner already knows — not to test them, but to determine where their schema has gaps, misconceptions, or correct foundations to build on.
+Prior knowledge accounts for 40-60% of variance in learning outcomes (Dochy, Segers & Buehl 1999, k = 183 studies). This is a stronger predictor than any instructional method. The most important thing a teacher can do before any instruction is assess what the learner already knows, not to test them, but to determine where their schema has gaps, misconceptions, or correct foundations to build on.
 
 The Matthew effect: high-prior-knowledge learners extract more from the same instruction because they have more hooks for new information, require less working memory for basic encoding, and generate richer elaborative connections.
 
@@ -257,7 +257,7 @@ These patterns are organized like software design patterns: each names a problem
 **Context:** Any learning session where the goal is retention beyond 48 hours.
 
 **Solution:**
-1. Before reviewing material, attempt to recall it from memory first — blank page, no hints.
+1. Before reviewing material, attempt to recall it from memory first: blank page, no hints.
 2. Review the material to correct gaps and errors.
 3. Repeat until three consecutive correct recalls per item.
 4. Space subsequent retrieval sessions at 10-20% of the retention goal.
@@ -283,8 +283,8 @@ These patterns are organized like software design patterns: each names a problem
 
 | Retention Goal | First Review | Second Review | Third Review |
 |---|---|---|---|
-| 1 week | 1 day | 3 days | — |
-| 1 month | 5 days | 2 weeks | — |
+| 1 week | 1 day | 3 days | n/a |
+| 1 month | 5 days | 2 weeks | n/a |
 | 6 months | 2 weeks | 6 weeks | 3 months |
 | 1 year | 3 weeks | 2 months | 5 months |
 
@@ -310,7 +310,7 @@ These patterns are organized like software design patterns: each names a problem
 
 **Evidence:** 78% vs. 50% on attribution test (Kornell & Bjork 2008); 63% vs. 20% on math at one week (Rohrer & Taylor 2007, d ≈ 0.53).
 
-**Consequences:** Builds the category recognition required for real-world application. Automatically provides spacing. Significantly harder during practice — learners rate it less effective despite performing better.
+**Consequences:** Builds the category recognition required for real-world application. Automatically provides spacing. Significantly harder during practice, so learners rate it less effective despite performing better.
 
 **Signals it's needed:** Learner solves problems correctly when they know the type but fails when type is unknown; strong in blocked homework but poor on mixed exams.
 
@@ -326,7 +326,7 @@ These patterns are organized like software design patterns: each names a problem
 1. Before explaining anything, ask a question about the concept the learner cannot currently answer correctly.
 2. Allow a genuine attempt (30-60 seconds).
 3. Provide the explanation or correct answer immediately after.
-4. Do not frame the pre-question as a test — frame it as preparation.
+4. Do not frame the pre-question as a test. Frame it as preparation.
 
 *Example:* Before explaining Dijkstra's algorithm, ask: "If you had to find the shortest path in a weighted graph, what approach would you try first?"
 
@@ -349,7 +349,7 @@ These patterns are organized like software design patterns: each names a problem
 Assess first (5 items, 3 minutes): determine current expertise level. Then:
 
 - **Novice:** Full worked examples. Every step shown, reasoned, annotated.
-- **Early intermediate:** Completion problems — backward fading. Show full solution except the last step.
+- **Early intermediate:** Completion problems with backward fading. Show full solution except the last step.
 - **Intermediate:** Show only the setup and first move.
 - **Advanced:** Full independent problem-solving. Worked examples actively harm performance at this stage.
 
@@ -372,13 +372,13 @@ Add self-explanation prompts at every stage: "Why does this step work? What prin
 **Solution:**
 1. Present the problem or challenge before any instruction.
 2. Allow genuine attempts (2-5 minutes) with no hints.
-3. Do not intervene during the failure phase — the failure is the mechanism.
+3. Do not intervene during the failure phase. The failure is the mechanism.
 4. Provide clear, structured instruction immediately after the attempt.
 5. Explicitly connect the instruction to the specific points where the attempt failed.
 
 **Evidence:** Productive failure d = 0.59 for transfer vs. direct instruction first (Kapur 2016, 21 studies). Failed retrieval + correct answer outperforms reading answer directly by ~10% (Kornell et al. 2009).
 
-**Consequences:** Activates prior knowledge, surfaces misconceptions, creates felt need for understanding. Requires sufficient prior knowledge for meaningful exploration — pure novices cannot benefit. Requires high psychological safety.
+**Consequences:** Activates prior knowledge, surfaces misconceptions, creates felt need for understanding. Requires sufficient prior knowledge for meaningful exploration. Pure novices cannot benefit. Requires high psychological safety.
 
 **Signals it's needed:** New concept with related prior knowledge; learner treats instruction as abstract; passive reception of explanations without engagement.
 
@@ -476,7 +476,7 @@ The goal is to make the learner *feel* the gap before filling it. The discomfort
 **Context:** Any conceptual learning where understanding matters more than recall.
 
 **Solution:**
-1. After the learner studies or is taught a concept, ask them to explain it in their own words — as if teaching someone who knows nothing about it.
+1. After the learner studies or is taught a concept, ask them to explain it in their own words, as if teaching someone who knows nothing about it.
 2. Do not allow technical jargon as a substitute for understanding.
 3. When the explanation breaks down (circular definitions, inability to answer follow-up questions, vague gestures at complexity), that breakdown location is the learning target.
 4. Send the learner back to study *specifically* the gap revealed, not the whole concept.
@@ -500,9 +500,9 @@ The goal is to make the learner *feel* the gap before filling it. The discomfort
 1. Target a success rate of approximately **85%** (15% errors).
 2. After 3-5 consecutive correct answers, increase difficulty by one level.
 3. After 2 consecutive errors on the same concept, drop difficulty one level.
-4. Never stay at the same difficulty for more than 5-7 items — the zone shifts as the learner improves.
+4. Never stay at the same difficulty for more than 5-7 items. The zone shifts as the learner improves.
 
-**Evidence:** Wilson et al. (2019, n=192) — learning rate peaks at 85% success, falls sharply above 35% error rate. Flow research (Engeser & Rheinberg 2008) — challenge-skill match predicts academic performance beta = 0.31.
+**Evidence:** Wilson et al. (2019, n=192) found that learning rate peaks at 85% success and falls sharply above 35% error rate. Flow research (Engeser & Rheinberg 2008) found that challenge-skill match predicts academic performance beta = 0.31.
 
 **Consequences:** Maintains the challenge-skill balance required for flow and maximizes learning rate per unit time. Learner preference for easier material will pull toward below-optimal difficulty if self-directed.
 
@@ -524,7 +524,7 @@ The goal is to make the learner *feel* the gap before filling it. The discomfort
 
 **Evidence:** Narrative material recalled 3-4x better than same content presented abstractly (Willingham 2009). Inter-subject neural coupling (r = 0.45-0.72) during story comprehension predicts comprehension accuracy (Hasson et al. 2008).
 
-**Consequences:** Exploits the brain's evolved narrative processing architecture. Activates motor, sensory, emotional, and cognitive circuits simultaneously — multiple encoding pathways. Irrelevant narrative details harm learning by competing for cognitive resources (Harp & Mayer 1998).
+**Consequences:** Exploits the brain's evolved narrative processing architecture. Activates motor, sensory, emotional, and cognitive circuits simultaneously through multiple encoding pathways. Irrelevant narrative details harm learning by competing for cognitive resources (Harp & Mayer 1998).
 
 **Signals it's needed:** Learner memorizes definitions but cannot apply concepts; abstract material seems disconnected from practice; motivation low because relevance is unclear.
 
@@ -538,7 +538,7 @@ The goal is to make the learner *feel* the gap before filling it. The discomfort
 
 **Solution:**
 1. Schedule the most important new learning close to sleep (within 2-3 hours before sleep).
-2. Do a brief retrieval practice session immediately before sleep — this primes the hippocampal replay mechanisms active during slow-wave sleep.
+2. Do a brief retrieval practice session immediately before sleep. This primes the hippocampal replay mechanisms active during slow-wave sleep.
 3. For motor or procedural skills, a 90-minute nap containing both SWS and REM equals a full night of sleep for offline performance gain (Mednick et al. 2003).
 4. Do not sacrifice sleep duration for cramming time: one night of sleep deprivation reduces hippocampal encoding capacity by ~40% (van der Helm et al. 2012).
 
@@ -558,14 +558,14 @@ The goal is to make the learner *feel* the gap before filling it. The discomfort
 
 **Solution:**
 1. **Expose the misconception first.** Ask the learner to make a prediction or explain a phenomenon. This makes the misconception active and explicit.
-2. **Create dissatisfaction.** Demonstrate a result that the learner's misconception cannot explain. Do not immediately explain why — let the anomaly register.
+2. **Create dissatisfaction.** Show a result that the learner's misconception cannot explain. Do not immediately explain why. Let the anomaly register.
 3. **Provide the correct model.** Explain the correct concept, explicitly connecting it to the failed prediction.
 4. **Bridge the intuition.** Find an analogous case where the correct concept is intuitively obvious, then bridge from that anchor to the original case.
 5. **Re-test.** Have the learner explain the original anomaly in their own words.
 
 **Evidence:** Refutational text (state misconception, then refute) d = 0.72 vs. expository text (Tippett 2010, k=34). Conceptual change requires dissatisfaction, intelligibility, plausibility, and fruitfulness (Posner et al. 1982).
 
-**Consequences:** The only reliable method for correcting entrenched misconceptions. Standard explanation of the correct answer in the presence of an entrenched wrong belief typically fails — the wrong belief assimilates the new information without actually changing.
+**Consequences:** The only reliable method for correcting entrenched misconceptions. Standard explanation of the correct answer in the presence of an entrenched wrong belief typically fails. The wrong belief assimilates the new information without actually changing.
 
 **Signals it's needed:** Learner expresses a "natural" wrong intuition; learner reverts to wrong answer after correct answer has been given; learner can state the correct answer but makes errors that reveal the old wrong model is still operating.
 
@@ -575,9 +575,9 @@ The goal is to make the learner *feel* the gap before filling it. The discomfort
 
 The research converges on a principle that is specifically actionable for AI tutoring: **the most effective learning interventions are also the ones least likely to be chosen voluntarily by learners.** Learners prefer re-reading; testing is better. Learners prefer blocked practice; interleaving is better. Learners prefer easy questions; 85%-difficulty is optimal. Learners prefer immediate explanations; questions-before-answers produces better encoding.
 
-An AI tutor that defers to learner preference will systematically provide inferior learning. An effective AI tutor must sometimes override comfort in service of retention — while maintaining the psychological safety and autonomy that motivation research shows is essential for long-term engagement.
+An AI tutor that defers to learner preference will systematically provide inferior learning. An effective AI tutor must sometimes override comfort in service of retention while maintaining the psychological safety and autonomy that motivation research shows is essential for long-term engagement.
 
-**High-leverage design principles for AI-assisted learning:**
+**High-value design principles for AI-assisted learning:**
 
 1. **Always test before teaching.** A pre-question costing 30 seconds improves subsequent encoding by d ≈ 0.43. Never explain without first asking.
 
@@ -626,4 +626,4 @@ An AI tutor that defers to learner preference will systematically provide inferi
 
 ---
 
-*All effect sizes are from peer-reviewed sources. Where meta-analyses exist, meta-analytic values are preferred over individual studies. Effect sizes should be treated as approximate — individual studies show significant variance, and real-world deployments typically show smaller effects than laboratory conditions.*
+*All effect sizes are from peer-reviewed sources. Where meta-analyses exist, meta-analytic values are preferred over individual studies. Effect sizes should be treated as approximate. Individual studies show significant variance, and real-world deployments typically show smaller effects than laboratory conditions.*

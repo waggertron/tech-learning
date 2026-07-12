@@ -63,7 +63,7 @@ Answer: (C). Elevated TSH + low free T4 is primary hypothyroidism. Levothyroxine
 
 **Saturation.** Saturated. GPT-4 hit 86% in 2023; every frontier model since passes it. Still quoted for historical comparisons and as a cheap smoke test.
 
-**Contamination and gaming.** Training data almost certainly contains MMLU questions, either directly from the paper's appendix or from the thousands of blog posts that reproduce specific questions. A model can memorize the right letter for a given question without understanding the subject at all. Reported scores have been inflated by this contamination; the ~90% frontier numbers are plausible but should be read with some skepticism. Additionally, models sometimes score higher than human experts not because they are smarter but because they are better at eliminating obviously wrong choices under ambiguous wording, a test-taking skill, not a knowledge signal.
+**Contamination and gaming.** Training data almost certainly contains MMLU questions, either directly from the paper's appendix or from the thousands of blog posts that reproduce specific questions. A model can memorize the right letter for a given question without understanding the subject at all. Reported scores have been inflated by this contamination; the ~90% frontier numbers are plausible but should be read with some skepticism. Models can also score higher than human experts because they are better at eliminating obviously wrong choices under ambiguous wording, a test-taking skill, not a knowledge signal.
 
 ## MMLU-Pro
 

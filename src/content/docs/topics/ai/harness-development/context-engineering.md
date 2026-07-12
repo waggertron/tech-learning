@@ -16,7 +16,7 @@ Context engineering is distinct from [prompt engineering](../prompt-engineering/
 
 - **Budget, don't fill**: Treat the window as a scarce attention budget. The goal is the smallest context that preserves capability, not the largest context that fits.
 - **Stable prefix → cache-friendly**: System prompt, tool definitions, persistent skills go first and don't change. This maximizes prompt-cache hit rate and keeps per-turn cost down.
-- **Compaction strategy**: When to summarize, what to preserve (decisions, open questions, task state), what to drop (verbose intermediate tool outputs). Claude Code triggers compaction at ~92–95% capacity.
+- **Compaction strategy**: When to compact, what to preserve (decisions, open questions, task state), what to drop (verbose intermediate tool outputs). Claude Code triggers compaction at ~92–95% capacity.
 - **Tool result shaping**: Truncate, structure, and label tool outputs *before* they enter context. A raw 50KB HTML dump is almost always worse than the 2KB of it that matters.
 - **Isolation via sub-agents**: Push scoped work into child agents with their own context window so intermediate state doesn't pollute the parent.
 

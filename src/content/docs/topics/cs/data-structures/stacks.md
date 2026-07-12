@@ -16,7 +16,7 @@ A stack is a **LIFO** (last-in, first-out) collection. You push elements onto th
 
 Implementation is straightforward: a dynamic array (Python `list`, Java `ArrayDeque`, C++ `std::stack` over `std::deque`) or a linked list with a head pointer. Both give $O(1)$ push/pop/peek with different memory tradeoffs.
 
-The most powerful and interview-relevant pattern is the **monotonic stack**, a stack that maintains its elements in sorted (monotonic) order by popping elements that violate the order on each push. This turns many "find the next greater/smaller element" problems from $O(n²)$ into $O(n)$, because each element is pushed and popped at most once. Classic applications: Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water (one of several approaches).
+The most interview-relevant pattern is the **monotonic stack**, a stack that maintains its elements in sorted (monotonic) order by popping elements that violate the order on each push. This turns many "find the next greater/smaller element" problems from $O(n²)$ into $O(n)$, because each element is pushed and popped at most once. Classic applications: Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water (one of several approaches).
 
 Other frequent stack patterns:
 
@@ -71,12 +71,12 @@ When two or three of these signals appear together, the answer is almost always 
 
 Train your eye to spot these phrases. Each one fires the stack reflex:
 
-1. **"Matching"** — pairs, opens/closes, brackets/tags. Inherently nested.
-2. **"Most recent"** — "next greater," "previous smaller," "the most recent X that hasn't been Y." Closest-prior-unresolved → monotonic stack.
-3. **"Until"** — "pop until the top is X," "process previous Y until something Z." That `while top satisfies condition: pop` shape is the giveaway (Daily Temperatures, Largest Rectangle in Histogram).
-4. **Reverse-order traversal you can't actually do** — "process the input in reverse but you only get it forward," postfix → infix conversion, RPN. Push everything, then unwind.
-5. **Undo / cancel / backtrack** — anything that needs to remember the *last* state to roll back to. Min Stack, browser-history-back, text-editor undo. Equal-and-opposite pushes/pops.
-6. **Nested anything** — function calls, scopes, regions, balanced expressions, indentation levels, tag trees. Nested = LIFO almost by definition.
+1. **"Matching"**: pairs, opens/closes, brackets/tags. Inherently nested.
+2. **"Most recent"**: "next greater," "previous smaller," "the most recent X that hasn't been Y." Closest-prior-unresolved → monotonic stack.
+3. **"Until"**: "pop until the top is X," "process previous Y until something Z." That `while top satisfies condition: pop` shape is the giveaway (Daily Temperatures, Largest Rectangle in Histogram).
+4. **Reverse-order traversal you can't actually do**: "process the input in reverse but you only get it forward," postfix → infix conversion, RPN. Push everything, then unwind.
+5. **Undo / cancel / backtrack**: anything that needs to remember the *last* state to roll back to. Min Stack, browser-history-back, text-editor undo. Equal-and-opposite pushes/pops.
+6. **Nested anything**: function calls, scopes, regions, balanced expressions, indentation levels, tag trees. Nested = LIFO almost by definition.
 
 ## Counter clues
 
@@ -84,7 +84,7 @@ Distinguishing stack from its closest neighbors:
 
 - **vs. queue (BFS / FIFO)**: when you finish processing one item, do you go to the *most recent* unfinished thing (stack) or the *oldest* unfinished thing (queue)? "Shortest path in unweighted graph," "level-order traversal," "process in arrival order" → queue.
 - **vs. two-pointer**: two-pointer needs a relationship between two ends with a monotonic shrink (sorted-array two-sum, palindrome check, container with most water). Brackets fundamentally can't use two-pointer because `"([)]"` looks symmetric to two-pointer but is invalid; a stack catches the LIFO violation immediately.
-- **vs. heap / priority queue**: if the next thing to process is the *largest / smallest / most-extreme*, that's a heap (k-closest, top-k, scheduler with priorities). Stack only ever cares about the top — the most recently pushed.
+- **vs. heap / priority queue**: if the next thing to process is the *largest / smallest / most-extreme*, that's a heap (k-closest, top-k, scheduler with priorities). Stack only ever cares about the top, the most recently pushed.
 - **vs. hash map / set**: if the question is "have I seen X before?" with no order requirement, that's a set. Stack imposes order, set doesn't.
 - **vs. deque / monotonic deque**: when you need to drop from *both* ends (sliding-window maximum), a monotonic deque is the upgrade from a monotonic stack.
 
@@ -94,14 +94,14 @@ When two structures both seem to fit, ask: *do I ever need to access anything ot
 
 Curated kin where the recognition skill above is exercised. Each adds one twist on the basic pattern:
 
-- **[20. Valid Parentheses](../coding-problems/stack/020-valid-parentheses/)** — the canonical LIFO match. Push openers, pop on closers.
-- **[150. Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/)** — push numbers, on operator pop two and combine.
-- **155. Min Stack** — stack of `(value, running_min)` to keep `min()` at $O(1)$.
-- **[739. Daily Temperatures](../coding-problems/stack/739-daily-temperatures/)** — monotonic decreasing stack of indices; pop while top is colder than current.
-- **[84. Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/)** — monotonic increasing stack; on each pop, current bar is the right boundary, the new top is the left boundary.
-- **22. Generate Parentheses** — recursion = implicit stack of partial strings; the call-stack *is* the data structure.
-- **224 / 227 / 772. Basic Calculator** — operator/operand stacks with precedence, the parser-by-hand variant.
-- **42. Trapping Rain Water** — monotonic stack alternative to two-pointer; for each popped bar, water is bounded by current and new top.
+- **[20. Valid Parentheses](../coding-problems/stack/020-valid-parentheses/)**: the canonical LIFO match. Push openers, pop on closers.
+- **[150. Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/)**: push numbers, on operator pop two and combine.
+- **155. Min Stack**: stack of `(value, running_min)` to keep `min()` at $O(1)$.
+- **[739. Daily Temperatures](../coding-problems/stack/739-daily-temperatures/)**: monotonic decreasing stack of indices. Pop while top is colder than current.
+- **[84. Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/)**: monotonic increasing stack. On each pop, current bar is the right boundary, the new top is the left boundary.
+- **22. Generate Parentheses**: recursion = implicit stack of partial strings. The call-stack *is* the data structure.
+- **224 / 227 / 772. Basic Calculator**: operator/operand stacks with precedence, the parser-by-hand variant.
+- **42. Trapping Rain Water**: monotonic stack alternative to two-pointer. For each popped bar, water is bounded by current and new top.
 
 ## Python example
 

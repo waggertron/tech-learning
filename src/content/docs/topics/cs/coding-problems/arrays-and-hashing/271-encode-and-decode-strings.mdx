@@ -177,7 +177,7 @@ JSON serialization and deserialization are linear in the total character count.
 - **Time:** $O(N)$.
 - **Space:** $O(N)$.
 
-Correct and robust. Not typically accepted on LeetCode because the problem wants you to design the scheme, but worth knowing for real-world code, the right answer unless there's a reason to roll your own.
+Correct and safe. Not typically accepted on LeetCode because the problem wants you to design the scheme, but worth knowing for real-world code. It is the right answer unless there's a reason to roll your own.
 
 **Try this approach:**
 
@@ -305,7 +305,7 @@ This works for any character content, including the `#` delimiter, because the l
 | --- | --- | --- | --- |
 | Delimiter + escape | $O(N)$ | $O(N)$ | Fragile; easy to corrupt |
 | JSON | $O(N)$ | $O(N)$ | Production-correct; not always accepted |
-| **Length prefix** | **$O(N)$** | **$O(N)$** | Robust and self-delimiting |
+| **Length prefix** | **$O(N)$** | **$O(N)$** | Safe and self-delimiting |
 
 Length-prefix encoding is the pattern behind many real-world formats, Pascal strings, netstrings, Protocol Buffers' length-delimited format, HTTP chunked encoding.
 

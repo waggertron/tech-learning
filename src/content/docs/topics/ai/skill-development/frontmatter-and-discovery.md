@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Overview
 
-A skill's frontmatter is its entire discovery surface. At session start Claude loads only the `name` and `description` of every skill. The full `SKILL.md` body is loaded on demand, triggered by a description match. Getting frontmatter right is the single highest-leverage authoring skill.
+A skill's frontmatter is its entire discovery surface. At session start Claude loads only the `name` and `description` of every skill. The full `SKILL.md` body is loaded on demand, triggered by a description match. Getting frontmatter right is the single highest-value authoring skill.
 
 ## Key ideas
 

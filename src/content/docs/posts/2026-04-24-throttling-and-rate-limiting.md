@@ -220,7 +220,7 @@ Clients can back off intelligently. Support can debug.
 
 The key you count against is a design decision:
 
-- **By IP**: robust but imperfect (NAT, shared networks, CGNAT). Still the only option for unauthenticated endpoints.
+- **By IP**: useful but imperfect (NAT, shared networks, CGNAT). Still the only option for unauthenticated endpoints.
 - **By API key**: clean for B2B APIs.
 - **By user ID**: the correct unit for authenticated user-facing APIs.
 - **By session / cookie**: roughly equivalent to user ID.

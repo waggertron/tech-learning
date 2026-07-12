@@ -2,9 +2,9 @@
 
 A shareable, postable knowledge base of tech topics I research and educate myself on. One repo, three outputs:
 
-1. **Browsable on GitHub**, every topic has a `README`-style markdown file that reads cleanly on github.com
-2. **Static site**, Astro + Starlight build, deployed to GitHub Pages at [waggertron.github.io/tech-learning](https://waggertron.github.io/tech-learning/)
-3. **Portable to social**, plain markdown, easy to paste into dev.to / Medium / LinkedIn
+1. **Browsable on GitHub**: every topic has a `README`-style markdown file that reads cleanly on github.com
+2. **Static site**: Astro + Starlight build, deployed to GitHub Pages at [waggertron.github.io/tech-learning](https://waggertron.github.io/tech-learning/)
+3. **Portable to social**: plain markdown, easy to paste into dev.to / Medium / LinkedIn
 
 ## Structure
 

@@ -60,7 +60,7 @@ The key relationship: `History` holds a reference to `Snapshot` but never calls 
 
 ## Implementation
 
-In TypeScript, `Snapshot` is a private nested class inside `Editor`: code outside `Editor` holds a reference but cannot construct one or read its fields directly. Python uses a `dataclass` with single-underscore-prefixed fields as a convention signal; the Caretaker treats the snapshot as opaque by practice rather than compiler enforcement. In Go, the snapshot struct uses unexported fields, so only code in the same package can construct or read one — external Caretaker code can store and return the pointer but cannot inspect the state inside.
+In TypeScript, `Snapshot` is a private nested class inside `Editor`: code outside `Editor` holds a reference but cannot construct one or read its fields directly. Python uses a `dataclass` with single-underscore-prefixed fields as a convention signal. The Caretaker treats the snapshot as opaque by practice rather than compiler enforcement. In Go, the snapshot struct uses unexported fields, so only code in the same package can construct or read one. External Caretaker code can store and return the pointer but cannot inspect the state inside.
 
 <Tabs>
 <TabItem label="TypeScript">

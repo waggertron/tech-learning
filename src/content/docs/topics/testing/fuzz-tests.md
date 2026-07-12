@@ -234,7 +234,7 @@ A good property complements them. A test suite with only PBT has no specific-exa
 - [QuickCheck, Koen Claessen, John Hughes, 2000](https://www.cs.tufts.edu/~nr/cs257/archive/john-hughes/quick.pdf), the paper
 - [OSS-Fuzz](https://github.com/google/oss-fuzz), Google's continuous fuzzing for OSS
 - [Go Fuzzing tutorial](https://go.dev/doc/tutorial/fuzz)
-- [Fuzzing Book, Zeller, Gopinath, et al.](https://www.fuzzingbook.org/), comprehensive free online book
+- [Fuzzing Book, Zeller, Gopinath, et al.](https://www.fuzzingbook.org/), broad free online book
 - [David MacIver, *How to specify it!*](https://www.youtube.com/watch?v=G0NUOst-53U), John Hughes talk on property design
 
 ## Related topics

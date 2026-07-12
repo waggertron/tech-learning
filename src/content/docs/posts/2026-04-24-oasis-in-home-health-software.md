@@ -255,7 +255,7 @@ Newer entrants building around dispatch, routing, patient engagement, and AI (li
 If you're actually building OASIS capture:
 
 1. **Download the OASIS-E1 spec** (data dictionary, XSD, manual) from CMS. Read the manual cover to cover once.
-2. **Model the items as data**, not code. JSON / YAML schema that can be regenerated year over year.
+2. **Model the items as data**: not code. JSON / YAML schema that can be regenerated year over year.
 3. **Pick a forms engine** that supports skip logic natively, or build one.
 4. **Implement XML submission to the iQIES spec.** Test with the CMS-provided test environments.
 5. **Pick an ICD-10 source.** The CMS free download is fine for a portfolio project. Production systems use IMO Health or similar for clinical concept mapping.

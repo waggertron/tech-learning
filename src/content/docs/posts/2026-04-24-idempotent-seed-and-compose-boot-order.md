@@ -102,7 +102,7 @@ The Makefile is a thin wrapper over compose, but it's the dev UX. One-letter com
 
 ## Why it's satisfying to get right
 
-A reviewer clones the repo, runs `docker compose up`, waits ~90 seconds, and lands on a login page with demo credentials printed right on it. That first-boot experience is the single highest-leverage UX decision in a portfolio project. Everything else, code quality, test coverage, architecture, is downstream of "did it run."
+A reviewer clones the repo, runs `docker compose up`, waits ~90 seconds, and lands on a login page with demo credentials printed right on it. That first-boot experience is the single highest-value UX decision in a portfolio project. Everything else, code quality, test coverage, architecture, is downstream of "did it run."
 
 Repo: [`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton), pattern lives in `docker-compose.yml` + `apps/api/seed/management/commands/seed_demo.py`.
 

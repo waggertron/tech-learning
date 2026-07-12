@@ -315,7 +315,7 @@ The model must read compiler output, trace it back to a specific line in `setup.
 
 ## How model architectures advanced on coding
 
-**Codex (2021): code-specialized pretraining.** The Codex models were GPT-3 variants fine-tuned on a large corpus of publicly available code from GitHub. This was the first demonstration that a general-purpose architecture could be specialized for code by training data. HumanEval pass@1 of 28% was remarkable for 2021 but would be considered weak today.
+**Codex (2021): code-specialized pretraining.** The Codex models were GPT-3 variants fine-tuned on a large corpus of publicly available code from GitHub. This was the first demonstration that a general-purpose architecture could be specialized for code by training data. HumanEval pass@1 of 28% was notable for 2021 but would be considered weak today.
 
 **Larger code corpora and instruction tuning (2022-2023).** GPT-4 and similar models were trained on vastly larger code corpora and instruction-tuned to follow coding requests reliably. Pass@1 on HumanEval jumped to 67-87%. The key advance was not architectural but data: more high-quality code in pretraining and more coding instruction-following examples in fine-tuning.
 

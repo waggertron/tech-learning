@@ -64,7 +64,7 @@ Released by Sierra in 2024. Evaluates agents in simulated real-world enterprise 
 
 **Why it matters.** The closest benchmark to deployed enterprise agents: real API calls, policy constraints, multi-turn user interaction with a simulated persona that can give ambiguous or contradictory instructions.
 
-**TAU2 (2025).** Expanded with telecom scenarios and more nuanced policy hierarchies (policies that conflict depending on customer tier).
+**TAU2 (2025).** Expanded with telecom scenarios and more specific policy hierarchies (policies that conflict depending on customer tier).
 
 **Score table:**
 
@@ -96,7 +96,7 @@ Released by University of Hong Kong / Salesforce, 2024. 369 cross-application ta
 - "Take the attached PDF invoice, extract the line items, and enter them into the open web form."
 - "In VS Code, refactor all uses of `getUserById` to `fetchUserById` across the project, run the test suite, and confirm it passes."
 
-**Why it matters.** The most comprehensive computer-use benchmark. Measures real GUI manipulation (not just CLI), including vision, planning, and low-level mouse/keyboard control.
+**Why it matters.** The broadest computer-use benchmark. Measures real GUI manipulation (not just CLI), including vision, planning, and low-level mouse/keyboard control.
 
 **Score table (April 2026):**
 

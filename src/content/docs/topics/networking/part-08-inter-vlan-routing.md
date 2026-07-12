@@ -163,7 +163,7 @@ A routed port behaves like a router interface: it has an IP address, participate
 
 ```mermaid
 flowchart TD
-    subgraph roas ["ROAS — traffic hairpins through trunk"]
+    subgraph roas ["ROAS, traffic hairpins through trunk"]
         R1[Router\nsub-interfaces]
         RSW[Layer 2 Switch]
         RV10[VLAN 10 PCs] --> RSW
@@ -172,7 +172,7 @@ flowchart TD
         RSW <-->|trunk| R1
     end
 
-    subgraph l3 ["L3 Switch — routes internally"]
+    subgraph l3 ["L3 Switch, routes internally"]
         L3SW[Layer 3 Switch\nSVIs]
         WAN[WAN Router]
         LV10[VLAN 10 PCs] --> L3SW

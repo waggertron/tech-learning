@@ -203,7 +203,7 @@ Standard interview answer. The "restore on backtrack" is the essential pattern.
 
 ## Approach 3: Start-cell pruning with character counts
 
-Before doing any DFS, count characters on the board. If the board lacks any character of `word` (or not enough of each), return `false` immediately. Additionally, if the last character of `word` is rarer on the board than the first, reverse `word` before searching, DFS from rare characters prunes faster.
+Before doing any DFS, count characters on the board. If the board lacks any character of `word` (or not enough of each), return `false` immediately. If the last character of `word` is rarer on the board than the first, reverse `word` before searching. DFS from rare characters prunes faster.
 
 ```python
 from collections import Counter

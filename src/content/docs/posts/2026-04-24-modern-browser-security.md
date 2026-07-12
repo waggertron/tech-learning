@@ -231,7 +231,7 @@ npm, PyPI, and similar ecosystems have all seen malicious package takeovers, typ
 - **`window.open` and `target="_blank"`.** Without `rel="noopener noreferrer"`, the opened window can manipulate your page via `window.opener`. Always set the rel.
 - **Password managers.** Disabling autocomplete (`autocomplete="off"`) on login forms *harms* security, users pick weaker passwords. Don't do it.
 - **`localStorage` for sensitive data.** Readable by any JS running in your origin. XSS = exfiltration.
-- **Service Workers.** Powerful but can be hijacked if you don't scope them correctly. Always scoped to the path they're registered at.
+- **Service Workers.** Useful, but they can be hijacked if you don't scope them correctly. Always scoped to the path they're registered at.
 - **PostMessage to iframes.** Always validate `event.origin`. Never blindly trust messages.
 
 ## Observability

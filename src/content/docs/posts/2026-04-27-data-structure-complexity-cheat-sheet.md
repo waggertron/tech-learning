@@ -237,7 +237,7 @@ If your back-of-envelope op count goes past 10⁸, your algorithm needs work, no
 
 ## Memorize the shapes, not the numbers
 
-The high-leverage move is to recognize the **shape** of an algorithm and quote the standard complexity for that shape:
+The high-value move is to recognize the **shape** of an algorithm and quote the standard complexity for that shape:
 
 | Shape | Time | Space |
 |---|---|---|

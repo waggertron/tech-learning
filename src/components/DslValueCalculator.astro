@@ -1,0 +1,447 @@
+---
+const factors = [
+  {
+    id: 'ruleVolatility',
+    label: 'Rule volatility',
+    help: 'How often the domain rules change.',
+    group: 'positive',
+  },
+  {
+    id: 'sharedSystems',
+    label: 'Shared logic',
+    help: 'How many systems need the same decision logic.',
+    group: 'positive',
+  },
+  {
+    id: 'mistakeCost',
+    label: 'Cost of mistakes',
+    help: 'How expensive a wrong decision would be.',
+    group: 'positive',
+  },
+  {
+    id: 'businessReview',
+    label: 'Business review need',
+    help: 'How much non-engineering review matters.',
+    group: 'positive',
+  },
+  {
+    id: 'auditPressure',
+    label: 'Audit pressure',
+    help: 'How much decision provenance matters.',
+    group: 'positive',
+  },
+  {
+    id: 'boundedDomain',
+    label: 'Bounded domain',
+    help: 'How stable and constrained the vocabulary is.',
+    group: 'positive',
+  },
+  {
+    id: 'implementationComplexity',
+    label: 'Implementation complexity',
+    help: 'Parser, AST, evaluator, validation, and integration effort.',
+    group: 'negative',
+  },
+  {
+    id: 'toolingMaintenance',
+    label: 'Tooling maintenance',
+    help: 'Docs, tests, editor support, migrations, and examples.',
+    group: 'negative',
+  },
+  {
+    id: 'migrationCost',
+    label: 'Migration cost',
+    help: 'Cost of changing stored rules as the language evolves.',
+    group: 'negative',
+  },
+  {
+    id: 'generalLanguageRisk',
+    label: 'General-purpose drift',
+    help: 'Risk that the DSL grows loops, mutation, libraries, and app behavior.',
+    group: 'negative',
+  },
+  {
+    id: 'runtimeRisk',
+    label: 'Runtime risk',
+    help: 'Risk from I/O, secrets, network access, unbounded loops, or host object access.',
+    group: 'negative',
+  },
+  {
+    id: 'existingFit',
+    label: 'Existing tool fit',
+    help: 'How well CEL, Rego, Cedar, JsonLogic, SQL, JSONata, or a workflow engine already fits.',
+    group: 'alternative',
+  },
+];
+
+const options = [
+  { value: 1, label: '1, low' },
+  { value: 2, label: '2' },
+  { value: 3, label: '3, medium' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5, high' },
+];
+---
+
+<section class="dsl-calc not-content" data-dsl-calculator>
+  <div class="dsl-calc__intro">
+    <h3>DSL implementation value calculator</h3>
+    <p>
+      Score each factor from 1 to 5. The result is a directional recommendation:
+      keep normal code, adopt an existing DSL or rule tool, or build a custom DSL.
+    </p>
+  </div>
+
+  <div class="dsl-calc__layout">
+    <form class="dsl-calc__form">
+      <fieldset>
+        <legend>Positive value signals</legend>
+        {factors.filter((factor) => factor.group === 'positive').map((factor) => (
+          <label class="dsl-calc__field">
+            <span>
+              <strong>{factor.label}</strong>
+              <small>{factor.help}</small>
+            </span>
+            <select name={factor.id}>
+              {options.map((option) => (
+                <option value={option.value} selected={option.value === 3}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+      </fieldset>
+
+      <fieldset>
+        <legend>Cost and risk signals</legend>
+        {factors.filter((factor) => factor.group === 'negative').map((factor) => (
+          <label class="dsl-calc__field">
+            <span>
+              <strong>{factor.label}</strong>
+              <small>{factor.help}</small>
+            </span>
+            <select name={factor.id}>
+              {options.map((option) => (
+                <option value={option.value} selected={option.value === 3}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+      </fieldset>
+
+      <fieldset>
+        <legend>Adoption signal</legend>
+        {factors.filter((factor) => factor.group === 'alternative').map((factor) => (
+          <label class="dsl-calc__field">
+            <span>
+              <strong>{factor.label}</strong>
+              <small>{factor.help}</small>
+            </span>
+            <select name={factor.id}>
+              {options.map((option) => (
+                <option value={option.value} selected={option.value === 3}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
+      </fieldset>
+    </form>
+
+    <aside class="dsl-calc__result" aria-live="polite">
+      <p class="dsl-calc__eyebrow">Recommendation</p>
+      <h4 data-recommendation>Keep normal code or typed configuration</h4>
+      <p data-summary>
+        The value signals do not clearly beat the maintenance cost. Use ordinary
+        code, a schema, or a small config object.
+      </p>
+      <dl class="dsl-calc__scores">
+        <div>
+          <dt>Positive score</dt>
+          <dd data-positive-score>18</dd>
+        </div>
+        <div>
+          <dt>Cost score</dt>
+          <dd data-negative-score>15</dd>
+        </div>
+        <div>
+          <dt>Net score</dt>
+          <dd data-net-score>3</dd>
+        </div>
+      </dl>
+      <div class="dsl-calc__reasons">
+        <strong>What drove the result</strong>
+        <ul data-reasons>
+          <li>No single high-scoring factor dominates the decision.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  const calculators = document.querySelectorAll<HTMLElement>('[data-dsl-calculator]');
+
+  const positiveIds = [
+    'ruleVolatility',
+    'sharedSystems',
+    'mistakeCost',
+    'businessReview',
+    'auditPressure',
+    'boundedDomain',
+  ];
+  const negativeIds = [
+    'implementationComplexity',
+    'toolingMaintenance',
+    'migrationCost',
+    'generalLanguageRisk',
+    'runtimeRisk',
+  ];
+
+  const labels: Record<string, string> = {
+    ruleVolatility: 'rule changes are frequent',
+    sharedSystems: 'logic is reused across systems',
+    mistakeCost: 'wrong decisions are expensive',
+    businessReview: 'domain review matters',
+    auditPressure: 'audit pressure is high',
+    boundedDomain: 'the domain is bounded',
+    implementationComplexity: 'implementation complexity is high',
+    toolingMaintenance: 'tooling maintenance is high',
+    migrationCost: 'migration cost is high',
+    generalLanguageRisk: 'general-purpose drift risk is high',
+    runtimeRisk: 'runtime risk is high',
+    existingFit: 'an existing language or tool fits well',
+  };
+
+  function value(form: HTMLFormElement, name: string): number {
+    const field = form.elements.namedItem(name) as HTMLSelectElement | null;
+    return Number(field?.value ?? 0);
+  }
+
+  function topReasons(form: HTMLFormElement): string[] {
+    const allIds = [...positiveIds, ...negativeIds, 'existingFit'];
+    return allIds
+      .map((id) => ({ id, score: value(form, id) }))
+      .filter((item) => item.score >= 4)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+      .map((item) => labels[item.id]);
+  }
+
+  function updateCalculator(root: HTMLElement) {
+    const form = root.querySelector<HTMLFormElement>('form');
+    if (!form) return;
+
+    const positive = positiveIds.reduce((sum, id) => sum + value(form, id), 0);
+    const negative = negativeIds.reduce((sum, id) => sum + value(form, id), 0);
+    const existingFit = value(form, 'existingFit');
+    const boundedDomain = value(form, 'boundedDomain');
+    const net = positive - negative;
+
+    let recommendation = 'Keep normal code or typed configuration';
+    let summary = 'The value signals do not clearly beat the maintenance cost. Use ordinary code, a schema, or a small config object.';
+
+    if (positive >= 21 && net >= 8 && existingFit <= 3 && boundedDomain >= 4) {
+      recommendation = 'Build a custom DSL candidate';
+      summary = 'The domain looks bounded, valuable, and underserved by existing tools. Prototype the semantic model first, then add syntax only if it helps.';
+    } else if (positive >= 18 && existingFit >= 4) {
+      recommendation = 'Adopt an existing DSL or rule tool';
+      summary = 'The domain has enough value to formalize, but an existing option appears to fit. Trial CEL, JsonLogic, Rego, Cedar, SQL, JSONata, or a workflow engine before custom syntax.';
+    } else if (positive >= 18 && net >= 4) {
+      recommendation = 'Prototype an internal DSL first';
+      summary = 'The value signals are real, but the custom-language case is not decisive. Start with a typed fluent API or declarative model before building a parser.';
+    } else if (negative >= 20 || net <= 0) {
+      recommendation = 'Avoid a DSL for now';
+      summary = 'The cost and risk signals dominate. Strengthen the domain model and tests in normal code before introducing a language.';
+    }
+
+    root.querySelector('[data-recommendation]')!.textContent = recommendation;
+    root.querySelector('[data-summary]')!.textContent = summary;
+    root.querySelector('[data-positive-score]')!.textContent = String(positive);
+    root.querySelector('[data-negative-score]')!.textContent = String(negative);
+    root.querySelector('[data-net-score]')!.textContent = String(net);
+
+    const reasons = topReasons(form);
+    const list = root.querySelector<HTMLUListElement>('[data-reasons]');
+    if (!list) return;
+    list.replaceChildren(
+      ...(reasons.length > 0
+        ? reasons
+        : ['no single high-scoring factor dominates the decision']
+      ).map((reason) => {
+        const item = document.createElement('li');
+        item.textContent = reason;
+        return item;
+      }),
+    );
+  }
+
+  calculators.forEach((root) => {
+    updateCalculator(root);
+    root.addEventListener('input', () => updateCalculator(root));
+  });
+</script>
+
+<style>
+  .dsl-calc {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--sl-color-gray-6) 55%, transparent);
+  }
+
+  .dsl-calc__intro {
+    display: grid;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .dsl-calc__intro h3,
+  .dsl-calc__intro p,
+  .dsl-calc__result h4,
+  .dsl-calc__result p,
+  .dsl-calc__reasons ul {
+    margin: 0;
+  }
+
+  .dsl-calc__intro h3 {
+    font-size: 1.15rem;
+  }
+
+  .dsl-calc__intro p,
+  .dsl-calc__field small,
+  .dsl-calc__result p,
+  .dsl-calc__reasons {
+    color: var(--sl-color-gray-2);
+  }
+
+  .dsl-calc__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 0.65fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .dsl-calc__form {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .dsl-calc fieldset {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0.85rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.6rem;
+  }
+
+  .dsl-calc legend {
+    padding: 0 0.35rem;
+    font-weight: 700;
+  }
+
+  .dsl-calc__field {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .dsl-calc__field span {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .dsl-calc__field select {
+    width: 100%;
+    min-height: 2.2rem;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.4rem;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    font: inherit;
+  }
+
+  .dsl-calc__result {
+    position: sticky;
+    top: 1rem;
+    display: grid;
+    gap: 0.8rem;
+    padding: 1rem;
+    border: 1px solid var(--sl-color-accent);
+    border-radius: 0.7rem;
+    background: color-mix(in srgb, var(--sl-color-accent-low) 42%, var(--sl-color-bg));
+  }
+
+  .dsl-calc__eyebrow {
+    color: var(--sl-color-accent-high);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .dsl-calc__result h4 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .dsl-calc__scores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .dsl-calc__scores div {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.55rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-bg);
+  }
+
+  .dsl-calc__scores dt {
+    color: var(--sl-color-gray-2);
+    font-size: 0.72rem;
+  }
+
+  .dsl-calc__scores dd {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+
+  .dsl-calc__reasons {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .dsl-calc__reasons ul {
+    padding-left: 1.1rem;
+  }
+
+  @media (max-width: 800px) {
+    .dsl-calc__layout {
+      grid-template-columns: 1fr;
+    }
+
+    .dsl-calc__result {
+      position: static;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .dsl-calc__field {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

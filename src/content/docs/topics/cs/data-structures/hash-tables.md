@@ -1,6 +1,6 @@
 ---
 title: Hash Tables
-description: Key-value storage with average O(1) access, the single highest-leverage data structure for interview problem-solving. Most O(n²) → O(n) improvements pass through a hash table.
+description: "Key-value storage with average O(1) access, the main data structure behind most O(n²) to O(n) interview improvements."
 parent: data-structures
 tags: [data-structures, hash-tables, interviews]
 status: draft

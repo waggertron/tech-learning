@@ -62,6 +62,7 @@ As of this audit, the repo contains:
 
 ### Authoring, Quality, and Safety
 
+- **2026-07-12: Reproducible prose cleanup and local QA workflow**: Captured reusable cleanup scans, planned-series page guidance, interactive post helper guidance, and Codex sandbox preview notes in the central docs and skills. Evidence: `docs/AUTHORING.md`, `.agents/skills/prose-cleanup/SKILL.md`, `.agents/skills/post-series/SKILL.md`, `.agents/memory/feature_tracker.md`.
 - **2026-04-24: Authoring docs and skill conversion**: Added `docs/AUTHORING.md`, local authoring skills, and durable content rules. Evidence: `docs/AUTHORING.md`, `.agents/skills/authoring/SKILL.md`.
 - **2026-04-27: Quiz and learning skills**: Added quiz and learning workflows with local ignored memory for personalized study. Evidence: `.agents/skills/quiz/SKILL.md`, `.agents/skills/learning/SKILL.md`, `.agents/memory/`.
 - **2026-05-10: Secret scanning before build**: Added a prebuild scanner that blocks realistic-looking credential patterns before site output is built. Evidence: `scripts/check-secrets.sh`, `package.json`.
@@ -72,6 +73,7 @@ As of this audit, the repo contains:
 
 ### Post Series
 
+- **2026-07-12: Domain-Specific Languages series plan and value calculator**: Added a research-backed DSL series plan with tooling landscape, tradeoff criteria, implementation value scoring, and an interactive calculator that recommends normal code, existing DSL/tool adoption, an internal DSL prototype, or a custom DSL candidate from user inputs. Evidence: `src/content/docs/posts/series/domain-specific-languages/index.mdx`, `src/components/DslValueCalculator.astro`, `src/content/docs/posts/index.mdx`, `src/content/docs/posts/series/index.mdx`.
 - **2026-07-07: Post series content model**: Added series frontmatter support, series landing pages, and post index discovery for grouped post sequences. Evidence: `src/content.config.ts`, `src/content/docs/posts/series/`, `src/content/docs/posts/index.mdx`.
 - **2026-07-07: Modern React development series**: Added a 40-part Modern React post series covering React fundamentals, state, effects, forms, routing, frameworks, tooling, testing, deployment, and related ecosystem choices. Evidence: `src/content/docs/posts/2026-07-07-react-*.md`, `src/content/docs/posts/series/modern-react-development/index.mdx`.
 - **2026-07-07 to 2026-07-08: React instructional rewrite**: Reworked the Modern React series into instructional concept guides with terms, mental models, multiple examples, pitfalls, references, and visible imports. Evidence: `.agents/skills/react-instructional-posts/SKILL.md`, React post files.

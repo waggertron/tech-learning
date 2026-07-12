@@ -1,6 +1,6 @@
 ---
 title: Reranking
-description: A second-pass cross-encoder that scores query-chunk pairs directly, expensive, but the single highest-leverage quality lever in most RAG pipelines.
+description: "A second-pass cross-encoder that scores query-chunk pairs directly, expensive, but often the highest-value quality lever in RAG pipelines."
 parent: rag
 tags: [rag, reranking, cross-encoder]
 status: draft

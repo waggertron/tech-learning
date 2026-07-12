@@ -42,7 +42,7 @@ class RoutingTable:
         elif len(bucket) < K:
             bucket.append(node_id)
         # If bucket full, production Kademlia pings the head (LRU) node.
-        # Here we silently drop — uptime-biased replacement is the key rule.
+        # Here we silently drop. Uptime-biased replacement is the key rule.
 
     def closest(self, target: int, n: int = K) -> list[int]:
         """Return the n known nodes closest to target by XOR distance."""

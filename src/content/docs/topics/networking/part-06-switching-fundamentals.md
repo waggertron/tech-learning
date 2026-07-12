@@ -111,14 +111,14 @@ This distinction is heavily tested on CCNA:
 
 ```mermaid
 flowchart TD
-    subgraph hub ["Hub — 1 collision domain, 1 broadcast domain"]
+    subgraph hub ["Hub, 1 collision domain, 1 broadcast domain"]
         H[Hub]
         PC1[PC1] --- H
         PC2[PC2] --- H
         PC3[PC3] --- H
     end
 
-    subgraph sw ["Switch — 3 collision domains, 1 broadcast domain"]
+    subgraph sw ["Switch, 3 collision domains, 1 broadcast domain"]
         SW1[SW1]
         SPC1[PC1] --- SW1
         SPC2[PC2] --- SW1

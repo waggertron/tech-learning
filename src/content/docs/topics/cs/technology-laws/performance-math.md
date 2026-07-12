@@ -71,7 +71,7 @@ Where:
 - λ (lambda) = average arrival rate (throughput, requests per second)
 - W = average time an item spends in the system (latency)
 
-The remarkable thing about this law: it holds for any stable queuing system, regardless of arrival distribution, service time distribution, or number of servers. It is not an approximation. It is a proof.
+The useful thing about this law: it holds for any stable queuing system, regardless of arrival distribution, service time distribution, or number of servers. It is not an approximation. It is a proof.
 
 ### In-depth examples
 

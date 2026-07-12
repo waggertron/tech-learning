@@ -16,7 +16,7 @@ This series is a map of the benchmark landscape in 2026. What each one measures,
 
 ## The series
 
-1. **[Overview](./)**, this page.
+1. **[Overview](./)**: this page.
 2. **[Knowledge and reasoning](./knowledge-and-reasoning/)**: MMLU, MMLU-Pro, GPQA Diamond, Humanity's Last Exam, ARC-AGI / ARC-AGI-2, HellaSwag, TruthfulQA.
 3. **[Math benchmarks](./math-benchmarks/)**: GSM8K, MATH, AIME, FrontierMath, OlympiadBench.
 4. **[Coding benchmarks](./coding-benchmarks/)**: HumanEval, MBPP, LiveCodeBench, APPS, CodeContests, SWE-bench and SWE-bench Verified / Pro.
@@ -79,7 +79,7 @@ The benchmark landscape moves fast. What's frontier in April 2026 will be histor
 - [Chatbot Arena, the de facto human-preference leaderboard](https://lmarena.ai/)
 - [Artificial Analysis, aggregated benchmark leaderboards](https://artificialanalysis.ai/)
 - [HELM (Stanford CRFM), holistic evaluation framework](https://crfm.stanford.edu/helm/)
-- [OpenCompass](https://opencompass.org.cn/), comprehensive LLM benchmarking
+- [OpenCompass](https://opencompass.org.cn/), broad LLM benchmarking
 - [Epoch AI benchmarks](https://epoch.ai/benchmarks), frontier-model tracking
 - [lmsys, Chatbot Arena paper](https://arxiv.org/abs/2403.04132)
 - [Scale AI, SEAL leaderboards](https://scale.com/leaderboard), private, contamination-resistant

@@ -14,7 +14,7 @@ description: "Computer science fundamentals, data structures, NeetCode 150 walkt
 - [Flight Itinerary with Transfers](./flight-itinerary/), find a valid trip through a flight graph with departure and arrival times: DFS, BFS for fewest layovers, Dijkstra for earliest arrival, plus the time-expanded graph framework that subsumes all three
 - [Named Algorithms](./named-algorithms/), the canon worth knowing by sight: Kadane's, Floyd's, Dijkstra's, KMP, and the rest
 - [Technology Laws](./technology-laws/), named laws and principles every software engineer will encounter: Conway, Brooks, Amdahl, Little, Goodhart, Hyrum, Gall, Schneier, and more
-- [Graph Theory](./graph-theory/), deep dive into terminology, graph types, components, SCCs, DAGs, bipartite [graphs](data-structures/graphs/), weighted-graph problem modeling
+- [Graph Theory](./graph-theory/), terminology, graph types, components, SCCs, DAGs, bipartite [graphs](data-structures/graphs/), weighted-graph problem modeling
 - [Sentinel Values](./sentinel-values/), the "impossible" placeholder pattern across DP, shortest-path, search, and linked-list problems
 - [Design Patterns](./design-patterns/), the 23 Gang of Four patterns grouped by intent: creational, structural, and behavioral, with TypeScript, Python, and Go implementations
 - [Kademlia DHT](./kademlia-dht/), XOR metric, k-buckets, iterative lookup, and the four RPCs behind BitTorrent mainline DHT, IPFS, and Ethereum devp2p, with Python, TypeScript, and Go implementations

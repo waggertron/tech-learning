@@ -26,10 +26,10 @@ Client and server exchange four messages to complete address assignment:
 sequenceDiagram
     participant C as Client
     participant S as DHCP Server
-    C->>S: Discover (broadcast) — "Anyone have an address for me?"
-    S->>C: Offer (broadcast) — "I can give you 192.168.1.50"
-    C->>S: Request (broadcast) — "I'd like 192.168.1.50 from you"
-    S->>C: Acknowledge (unicast) — "It's yours, lease = 7 days"
+    C->>S: Discover (broadcast): "Anyone have an address for me?"
+    S->>C: Offer (broadcast): "I can give you 192.168.1.50"
+    C->>S: Request (broadcast): "I'd like 192.168.1.50 from you"
+    S->>C: Acknowledge (unicast): "It's yours, lease = 7 days"
 ```
 
 Key details:

@@ -10,9 +10,9 @@ See also the companion [skill](../.agents/skills/authoring/SKILL.md), which is t
 
 A shareable, postable knowledge base. One markdown source renders three ways:
 
-1. **On GitHub**, each file reads cleanly as a README.
-2. **As a site**, Astro + Starlight, deployed to GitHub Pages at `https://waggertron.github.io/tech-learning/`.
-3. **Portable to social**, same markdown pastes into dev.to, Medium, LinkedIn with minimal edits.
+1. **On GitHub**: each file reads cleanly as a README.
+2. **As a site**: Astro + Starlight, deployed to GitHub Pages at `https://waggertron.github.io/tech-learning/`.
+3. **Portable to social**: same markdown pastes into dev.to, Medium, LinkedIn with minimal edits.
 
 Display title: **"Here Be Dragons"** (in `astro.config.mjs` and `src/content/docs/index.mdx`). Repo slug stays `tech-learning`, it's the URL path.
 
@@ -104,7 +104,7 @@ The collected notes of one engineer. First-person plural occasionally, but mostl
 
 ### Title format
 
-`Topic name, concrete framing` is a common shape. The em-dash-subtitle works in both the sidebar and the hero area. Keep under ~70 characters so it doesn't wrap on mobile.
+`Topic name, concrete framing` is a common shape. Use a comma or colon when a title needs a second clause. Keep under ~70 characters so it doesn't wrap on mobile.
 
 ### Description format
 
@@ -117,13 +117,13 @@ One sentence. Says what's *inside*, not what it's *about*. Concrete. Examples fr
 
 Most topics follow this rough arc:
 
-1. **Hook paragraph**, one short paragraph that states what the thing is in plain language.
-2. **Why it matters**, two to five paragraphs, the problem the thing solves.
-3. **The core of it**, concrete details, code, diagrams.
-4. **Tradeoffs / what it doesn't cover**, every topic should have this.
-5. **Common gotchas**, a bulleted list.
-6. **References**, external authoritative links.
-7. **Related topics**, internal links, cross-linking pattern.
+1. **Hook paragraph**: one short paragraph that states what the thing is in plain language.
+2. **Why it matters**: two to five paragraphs, the problem the thing solves.
+3. **The core of it**: concrete details, code, diagrams.
+4. **Tradeoffs / what it doesn't cover**: every topic should have this.
+5. **Common gotchas**: a bulleted list.
+6. **References**: external authoritative links.
+7. **Related topics**: internal links, cross-linking pattern.
 
 The best pages on this site carry the reader from "I've heard of this" to "I could explain this to a teammate" in about 15 minutes of reading.
 
@@ -203,14 +203,14 @@ Coding concept pages live under `src/content/docs/topics/cs/coding-concepts/`. T
 
 Use `templates/coding-concept/concept.md` when adding a new concept. Keep the section shape fixed:
 
-1. **Tactic**, several paragraphs explaining the move, invariant, implementation habit, and mental model the learner should practice.
-2. **Value**, what the tactic buys in time, space, clarity, or proof. Include a `### Direct complexity example` subsection with `**Brute force:**`, `**With this tactic:**`, and `**Space:**` bullets that use concrete `$O(...)$` comparisons.
-3. **Challenges this solves**, the problem families it naturally handles, with enough detail to distinguish similar patterns.
-4. **When to use it**, the conditions that make the tactic fit.
-5. **When not to use it**, the nearby cases where the tactic is tempting but wrong.
-6. **Terminology clues**, prompt words that should put the concept in working memory.
-7. **Problems that use it**, exhaustive links into `../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
-8. **Related concepts**, neighboring concept links.
+1. **Tactic**: several paragraphs explaining the move, invariant, implementation habit, and mental model the learner should practice.
+2. **Value**: what the tactic buys in time, space, clarity, or proof. Include a `### Direct complexity example` subsection with `**Brute force:**`, `**With this tactic:**`, and `**Space:**` bullets that use concrete `$O(...)$` comparisons.
+3. **Challenges this solves**: the problem families it naturally handles, with enough detail to distinguish similar patterns.
+4. **When to use it**: the conditions that make the tactic fit.
+5. **When not to use it**: the nearby cases where the tactic is tempting but wrong.
+6. **Terminology clues**: prompt words that should put the concept in working memory.
+7. **Problems that use it**: exhaustive links into `../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
+8. **Related concepts**: neighboring concept links.
 
 Overlap is expected. A problem can link to multiple concept pages when each link explains a different part of the solution.
 
@@ -244,6 +244,12 @@ Lines 550+ usually mean the topic should split.
 - Mermaid works in Starlight when the plugin is enabled (it isn't here yet). Stick to ASCII.
 - See `topics/cs/data-structures/` for solid ASCII examples.
 
+### Planned series pages and one-off helpers
+
+For an unwritten long-form series, create one hidden series plan page under `posts/series/<slug>/index.mdx` rather than empty post stubs. The page can hold research notes, the reading order, tradeoff criteria, source links, and the intended code anchors.
+
+If a post needs a one-off calculator or similar interactive aid, put the component in `src/components/`, import it from MDX, keep the page useful without the widget, and update `docs/feature_tracker.md`. Run `npm run build` after the content change. If client-side behavior matters, spot-check the rendered route under local preview.
+
 ### Cross-linking pattern
 
 Every topic ends with a **Related topics** section that links 2–5 neighboring topics using relative paths:
@@ -263,11 +269,11 @@ Posts end with a **Related topics and posts** section with the same shape. Links
 
 The site currently has dense cross-links. Patterns worth preserving:
 
-- **Series**, each part of a series links back to the hub and forward to the next part.
-- **Bi-directional topic links**, e.g. every LeetCode 150 problem links to its data-structure topic; every data-structure topic lists every problem that exercises it.
-- **Topic → Post → Topic**, posts cite the reference topics they're grounded in; those topics don't usually link back to the post (posts age out).
-- **Category index**, every category `index.md` lists all its topics.
-- **Root `topics/index.mdx`**, lists every topic and named subtopic.
+- **Series**: each part of a series links back to the hub and forward to the next part.
+- **Bi-directional topic links**: e.g. every LeetCode 150 problem links to its data-structure topic; every data-structure topic lists every problem that exercises it.
+- **Topic → Post → Topic**: posts cite the reference topics they're grounded in; those topics don't usually link back to the post (posts age out).
+- **Category index**: every category `index.md` lists all its topics.
+- **Root `topics/index.mdx`**: lists every topic and named subtopic.
 
 When you add a topic, update at least:
 
@@ -291,7 +297,28 @@ Use the entry to name what shipped, why it matters, and the evidence paths a fut
 npm run build
 ```
 
-Produces `dist/`, ~265–300 pages, 5–10 seconds. A YAML frontmatter error is the most common failure; it prints the offending file and line.
+Produces `dist/`. As of July 2026 the site builds a little over 600 pages in roughly 15 seconds. A YAML frontmatter error is the most common failure; it prints the offending file and line.
+
+### Prose cleanup scans
+
+Before and after a site-wide cleanup, run the cheap scans and then read context before editing. These scans find classes of issues, not final truth.
+
+```bash
+rg -n $'\u2014' src docs .agents AGENTS.md README.md
+rg -n "^\s*(?:[-*]|[0-9]+\.) \*\*[^*]+\*\*," src/content/docs docs README.md
+rg -n "In conclusio[n]|To summariz[e]|Ultimatel[y]|At the end of the da[y]|\butiliz[e]\b|\b[Ll]everag[e]\b|\bdelv[e]\b|dive int[o]|\brobus[t]\b|\bcomprehensiv[e]\b|seamlessl[y]|effortlessl[y]|\bstreamlin[e]\b|unlock the powe[r]|harness the powe[r]|It's worth notin[g]|On the other han[d]" src/content/docs docs README.md
+```
+
+Expected interpretation:
+
+- The U+2014 scan should return zero hits in author-controlled text.
+- The bold-label comma scan should return zero hits.
+- The vocabulary scan is a review queue. `src/content/docs/topics/ai/ai-text-markers/index.md` intentionally contains bad examples, and technical terms can create false positives. Fix prose after reading the sentence, not from the grep line alone.
+- For React output panels or live example behavior, also run `npm run test:react-outputs`.
+
+### Local preview in Codex
+
+`npm run preview` or `astro preview` can fail inside the managed Codex sandbox with `listen EPERM` when it tries to bind `127.0.0.1:<port>`. Treat that as a sandbox permission failure first, not an application bug. If a task requires real browser spot checks, rerun the preview command with escalated permission and then use curl or browser checks. Do not patch application code only to work around a sandbox-only port bind failure.
 
 ### CI
 

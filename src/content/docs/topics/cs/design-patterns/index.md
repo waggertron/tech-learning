@@ -136,7 +136,7 @@ Read each pattern for the problem it solves.
 
 - [Design Patterns, GoF, Addison-Wesley 1994](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610), the source text
 - [Refactoring Guru: Design Patterns](https://refactoring.guru/design-patterns), modern catalog with examples in multiple languages
-- [SourceMaking: Design Patterns](https://sourcemaking.com/design_patterns), another comprehensive catalog
+- [SourceMaking: Design Patterns](https://sourcemaking.com/design_patterns), another broad catalog
 - [Head First Design Patterns (Freeman et al.)](https://www.oreilly.com/library/view/head-first-design/0596007124/), accessible visual introduction
 
 ## Related topics

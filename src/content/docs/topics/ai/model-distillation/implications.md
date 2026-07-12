@@ -101,7 +101,7 @@ Distillation has limits that matter for assessing how much moats are actually er
 
 ## The open model question
 
-Distillation is why the "open vs. closed AI" debate is more nuanced than it appears. When Meta releases Llama 3 weights openly, thousands of researchers can fine-tune and experiment with them. Knowledge about what works propagates rapidly. Distillation flows back to Meta: other labs discover what fine-tuning approaches work, publish them, and Meta can study those results.
+Distillation is why the "open vs. closed AI" debate is less binary than it appears. When Meta releases Llama 3 weights openly, thousands of researchers can fine-tune and experiment with them. Knowledge about what works propagates rapidly. Distillation flows back to Meta: other labs discover what fine-tuning approaches work, publish them, and Meta can study those results.
 
 The dynamic is not "open = weak moat." It's "open = different moat." Meta's moat is not the weights -- it's the ecosystem, the infrastructure, the trust from developers who built on Llama, and the relationship with enterprises that want self-hosted models. The capability has been released; the moat is around everything else.
 

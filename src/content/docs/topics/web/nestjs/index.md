@@ -48,7 +48,7 @@ NestJS 11 introduced standalone application improvements and tighter ESM support
 
 ## References that apply to every part
 
-- [NestJS documentation](https://docs.nestjs.com/) - comprehensive and well-maintained; the single best reference
+- [NestJS documentation](https://docs.nestjs.com/) - broad and well-maintained; the single best reference
 - [NestJS GitHub](https://github.com/nestjs/nest) - source is readable; decorator internals are worth a look
 - [Awesome NestJS](https://github.com/nestjs/awesome-nestjs) - curated packages and community resources
 - [TypeScript documentation](https://www.typescriptlang.org/docs/) - NestJS leans heavily on decorators and generics; knowing both helps

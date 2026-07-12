@@ -8,7 +8,7 @@ created: 2026-05-06
 updated: 2026-05-06
 ---
 
-Microservices are frequently proposed as the solution to monolith problems. The reality is more nuanced: microservices solve specific organizational and scaling problems while introducing substantial distributed systems complexity. The decision to split -- and when, and along what lines -- is one of the most consequential architectural choices a team makes.
+Microservices are frequently proposed as the solution to monolith problems. The real tradeoff is sharper: microservices solve specific organizational and scaling problems while introducing substantial distributed systems complexity. The decision to split -- and when, and along what lines -- is one of the most consequential architectural choices a team makes.
 
 ## What a monolith is
 

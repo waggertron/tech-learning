@@ -45,13 +45,13 @@ Vision-language models have their own benchmark ecosystem. The major ones in 202
 
 **Saturation.** Top models in the 70-80% range (April 2026). MMMU itself is largely saturated for leading models.
 
-**MMMU-Pro.** 2024 successor. More robust filtering, vision-only variants (no text cues), harder overall. Frontier models in the 60-70% range. Still differentiates.
+**MMMU-Pro.** 2024 successor. Stricter filtering, vision-only variants (no text cues), harder overall. Frontier models in the 60-70% range. Still differentiates.
 
 ### MMMU example questions
 
 **Example 1 (Art History):**
 
-![Monet, Impression soleil levant (1872). Broken brushstrokes, visible texture, and light over form — the defining visual markers of Impressionism. Public domain.](/tech-learning/img/benchmarks/monet-impression-sunrise.jpg)
+![Monet, Impression soleil levant (1872). Broken brushstrokes, visible texture, and light over form, the defining visual markers of Impressionism. Public domain.](/tech-learning/img/benchmarks/monet-impression-sunrise.jpg)
 
 > Based on the visual evidence in the image, this work is most consistent with which art movement?
 > (A) Neoclassicism &nbsp; (B) Impressionism &nbsp; (C) Abstract Expressionism &nbsp; (D) Photorealism
@@ -166,7 +166,7 @@ Answer: 28%. This is the easy end of ChartQA, direct label reading. Frontier mod
 **Example 2 (comparison requiring visual estimation):**
 
 ```
-Quarterly Revenue ($M)  — Company A vs Company B
+Quarterly Revenue ($M): Company A vs Company B
 ──────────────────────────────────────────────────────────────────
 $22 ┤                              A
 $20 ┤                          A       A
@@ -245,14 +245,14 @@ The model must locate and read the correct date field. The difficulty here is th
 ```
 NOTES TO CONSOLIDATED FINANCIAL STATEMENTS
 
-Note 1 — Basis of Presentation ........ 14
-Note 2 — Summary of Significant
+Note 1 - Basis of Presentation ........ 14
+Note 2 - Summary of Significant
           Accounting Policies ......... 15
-Note 3 — Revenue Recognition .......... 17    <-- locate this
-Note 4 — Leases ........................ 19
+Note 3 - Revenue Recognition .......... 17    <-- locate this
+Note 4 - Leases ........................ 19
 ...
 
-NOTE 3 — REVENUE RECOGNITION
+NOTE 3 - REVENUE RECOGNITION
 
 The Company recognizes revenue in accordance with
 Accounting Standards Codification Topic 606,
@@ -274,11 +274,11 @@ Specifically tests OCR capability in isolation: transcription of text from image
 
 ## MMVet, MMBench
 
-Broader vision-language evaluation frameworks aggregating multiple capabilities (recognition, OCR, knowledge, math, spatial reasoning). Used for comprehensive model cards rather than single-number comparisons.
+Broader vision-language evaluation frameworks aggregating multiple capabilities (recognition, OCR, knowledge, math, spatial reasoning). Used for broad model cards rather than single-number comparisons.
 
 ## Video benchmarks
 
-- **Video-MME**: comprehensive video understanding (short to long clips).
+- **Video-MME**: broad video understanding (short to long clips).
 - **MVBench**: 20 video tasks spanning action, scene, object, and attribute understanding.
 - **LongVideoBench**: long-form video question answering (hour-plus videos).
 

@@ -236,14 +236,14 @@ Vendor tooling: [Anthropic Prompt Generator](https://docs.anthropic.com/en/docs/
 ## Version notes (2026-04-24)
 
 - On frontier models (GPT-4o, Claude 3.5+/4.x, Gemini 1.5+), zero-shot CoT ("think step by step") often matches few-shot CoT, you may not need the examples.
-- Structured output is increasingly delivered at the **API level** via JSON mode or tool-use, which is more robust than prompt-only schema enforcement.
+- Structured output is increasingly delivered at the **API level** via JSON mode or tool-use, which is safer than prompt-only schema enforcement.
 - ReAct's classical prompt format is rarely used verbatim anymore; agent frameworks (LangChain, LlamaIndex, Claude Agent SDK) wrap the pattern behind a tool registry and a loop.
 - Tree-of-Thoughts is computationally expensive; use it only when the task has no clean linear solution. Skeleton-of-Thought is far more practical for content generation.
 
 ## References
 
 - [Prompt Engineering Guide, DAIR.AI (promptingguide.ai)](https://www.promptingguide.ai/), community-maintained, runnable examples for every technique
-- [Prompt Engineering, Lil'Log (Lilian Weng)](https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/), comprehensive survey
+- [Prompt Engineering, Lil'Log (Lilian Weng)](https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/), broad survey
 - [Anthropic Prompt Library](https://docs.anthropic.com/en/resources/prompt-library/library), production-quality templates organized by use case
 - [Anthropic Prompt Generator](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-generator), meta-prompting tool
 - [OpenAI Prompt Examples](https://platform.openai.com/docs/examples), official curated library

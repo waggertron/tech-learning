@@ -41,7 +41,7 @@ Pitfalls:
 
 - Answer format matters. "42" vs "42.0" vs "the answer is 42", some graders count those as different.
 - Whitespace, punctuation, trailing text all affect exact-match graders.
-- Robust benchmarks use regex / answer extractors; brittle ones just compare strings.
+- Strong benchmarks use regex / answer extractors; brittle ones just compare strings.
 
 ### Pass@k
 
@@ -116,7 +116,7 @@ Show human raters two outputs from two models. They pick the better one. Aggrega
 - **Arena-Hard**: harder prompts curated from LMArena, evaluated by LLM-as-judge instead of humans.
 - **MT-Bench**: 80 multi-turn questions, scored by GPT-4-as-judge.
 
-Pairwise comparisons are robust to scale differences ("is this a 7 or an 8?"). They're noisier per sample but aggregate well.
+Pairwise comparisons are less sensitive to scale differences ("is this a 7 or an 8?"). They're noisier per sample but aggregate well.
 
 ### LLM-as-judge
 
@@ -126,7 +126,7 @@ Three patterns:
 
 - **Single-output scoring, no reference**: "rate this on 1–10." Noisy.
 - **Single-output scoring, with reference**: "compare to this reference, score 1–10." Less noisy.
-- **Pairwise comparison**: "which is better, A or B?" Most robust.
+- **Pairwise comparison**: "which is better, A or B?" Least sensitive to score-scale drift.
 
 Well-known biases of LLM judges:
 
@@ -251,11 +251,11 @@ Examples:
 
 For deploying a specific model:
 
-1. **Build a golden set**, 50–500 examples representative of your traffic, hand-labeled for correctness.
-2. **Automate where you can**, exact match, regex matching, [unit tests](../../testing/unit-tests/) for code outputs.
-3. **LLM-as-judge for the rest**, with multiple seeds, pair-wise, and a judge you trust.
-4. **Log preferences**, thumbs up / down in production. Aggregate.
-5. **A/B test live**, small-percentage rollouts comparing models on real traffic.
+1. **Build a golden set**: 50–500 examples representative of your traffic, hand-labeled for correctness.
+2. **Automate where you can**: exact match, regex matching, [unit tests](../../testing/unit-tests/) for code outputs.
+3. **LLM-as-judge for the rest**: multiple seeds, pair-wise comparison, and a judge you trust.
+4. **Log preferences**: thumbs up / down in production. Aggregate.
+5. **A/B test live**: small-percentage rollouts comparing models on real traffic.
 
 Your internal eval will correlate imperfectly with public benchmarks. That's expected, your traffic isn't the benchmark. Trust your internal data over the public scores.
 

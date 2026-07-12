@@ -99,7 +99,7 @@ Models scoring near 100% on vanilla NIAH often score **far below 70%** on multi-
 
 ## HELMET
 
-Princeton, 2024/2025. "How to Evaluate Long-context Language Models Effectively and Thoroughly." The most comprehensive long-context benchmark to date: 59 models evaluated across 7 task categories, covering both synthetic and real downstream tasks.
+Princeton, 2024/2025. "How to Evaluate Long-context Language Models Effectively and Thoroughly." The broadest long-context benchmark to date: 59 models evaluated across 7 task categories, covering both synthetic and real downstream tasks.
 
 The central motivation: RULER exposed that NIAH was too easy, but RULER is still entirely synthetic. HELMET asks whether synthetic scores predict real task performance. The answer, from the 59-model study, is largely no.
 

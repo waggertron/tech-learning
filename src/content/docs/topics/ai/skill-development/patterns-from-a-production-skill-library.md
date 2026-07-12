@@ -31,11 +31,11 @@ The model reads every skill's `description` on every turn. If the description ma
 
 Five categories cover almost every skill in the library:
 
-1. **Workflow**, the choreography of getting work done (branching, PRs, plans, insights).
-2. **Quality gate**, what to run before committing, merging, or shipping.
-3. **Infra-awareness**, rules for a specific piece of infrastructure ([Helm](../../ops/helm/), [Terraform](../../ops/terraform/), Argo, Redis…).
-4. **Language-awareness**, project-specific conventions for Python, TypeScript, and framework usage.
-5. **Utility**, single-purpose tools (convert, diagram, format).
+1. **Workflow**: the choreography of getting work done (branching, PRs, plans, insights).
+2. **Quality gate**: what to run before committing, merging, or shipping.
+3. **Infra-awareness**: rules for a specific piece of infrastructure ([Helm](../../ops/helm/), [Terraform](../../ops/terraform/), Argo, Redis…).
+4. **Language-awareness**: project-specific conventions for Python, TypeScript, and framework usage.
+5. **Utility**: single-purpose tools (convert, diagram, format).
 
 Each archetype has its own DNA.
 
@@ -134,7 +134,7 @@ The Python skill encodes `uv` over `pip`, `Ruff` over `black` + `flake8`, `Pyref
 
 ## Archetype 5, Utility skills
 
-The smallest category, but high-leverage:
+The smallest category, but high-value:
 
 | Skill | What it does |
 | --- | --- |
@@ -208,10 +208,10 @@ Treat skills as code. Review them in PRs. Grep for stale references. Delete the 
 
 If you're building a repo's first skill library, start with these five archetypes as concrete skills and grow from there:
 
-1. **`fast-checks`**, one skill that runs every fast quality gate in the repo. Name it, document what it covers, wire it into pre-commit.
-2. **`pre-commit-quality-gates`**, the "are we ready to commit?" checklist. Different from `fast-checks`, this one is the narrative flow, not the commands.
-3. **`feature-branch-workflow`**, how to start a task and prep a PR. Low controversy, high leverage.
-4. **`adversarial-pr-review`**, attack your own PR before anyone else does. Cheaper to find problems here than in review.
+1. **`fast-checks`**: one skill that runs every fast quality gate in the repo. Name it, document what it covers, wire it into pre-commit.
+2. **`pre-commit-quality-gates`**: the "are we ready to commit?" checklist. Different from `fast-checks`, this one is the narrative flow, not the commands.
+3. **`feature-branch-workflow`**: how to start a task and prep a PR. Low controversy, high value.
+4. **`adversarial-pr-review`**: attack your own PR before anyone else does. Cheaper to find problems here than in review.
 5. **One infra-awareness skill** for the single piece of infra in your stack with the most footguns (Helm, Argo, Terraform, [Kubernetes](../../ops/kubernetes/), whatever). Start with one; add more as the pain teaches you which.
 
 That's five skills. They fit in a single session's context, they cover 80% of where an AI coding agent's defaults go wrong, and they leave plenty of room to grow a library that looks like the one above.

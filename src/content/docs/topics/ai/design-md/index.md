@@ -61,8 +61,8 @@ The palette is rooted in high-contrast neutrals and a single accent color.
 
 Two layers, deliberately:
 
-1. **YAML front matter**, normative tokens. Exact values, machine-parseable, validatable.
-2. **Markdown body**, rationale. Tells the agent *how* and *when* to apply each token, and *why* the value exists at all.
+1. **YAML front matter**: normative tokens. Exact values, machine-parseable, validatable.
+2. **Markdown body**: rationale. Tells the agent *how* and *when* to apply each token, and *why* the value exists at all.
 
 An agent that reads this file produces headlines in Public Sans over a warm limestone background with "Boston Clay" call-to-action buttons, not default blue.
 
