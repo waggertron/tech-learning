@@ -48,7 +48,7 @@ Image storage (assume 50% of posts, 3 MB compressed):
   15M/day * 3 MB = 45 TB/day = 16.4 PB/year
 ```
 
-**Conclusion**: 208:1 read/write ratio means caching and pre-computation are the primary architectural levers. The system must serve 208K feed reads per second. The 1K post writes per second is not a scaling concern. Design for reads, not writes.
+**Capacity driver**: 208:1 read/write ratio means caching and pre-computation are the primary architectural levers. The system must serve 208K feed reads per second. The 1K post writes per second is not a scaling concern. Design for reads, not writes.
 
 ## High-level design
 

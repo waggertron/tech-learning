@@ -72,7 +72,7 @@ Block store:
   At 32 bytes per block record: ~280 MB/day block index growth
 ```
 
-**Conclusion**: block storage (64 PB) requires S3 or equivalent object storage -- no on-premises solution is cost-competitive. Metadata (36 TB) fits in a sharded relational database. The two systems scale independently.
+**Storage split**: block storage (64 PB) requires S3 or equivalent object storage -- no on-premises solution is cost-competitive. Metadata (36 TB) fits in a sharded relational database. The two systems scale independently.
 
 ## High-level design
 

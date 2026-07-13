@@ -50,7 +50,7 @@ Storage:
   Trip records: 1M rides/hour * 500 bytes = 500 MB/hour = 4.4 TB/year
 ```
 
-**Conclusion**: the 750K location writes/sec is the defining constraint. A relational DB will saturate. Redis (in-memory, single-threaded atomic operations, ~1M ops/sec per node) with a Cluster of 2+ nodes handles this. The architectural decisions flow from this number.
+**Capacity driver**: the 750K location writes/sec is the defining constraint. A relational DB will saturate. Redis (in-memory, single-threaded atomic operations, ~1M ops/sec per node) with a Cluster of 2+ nodes handles this. The architectural decisions flow from this number.
 
 ## High-level design
 

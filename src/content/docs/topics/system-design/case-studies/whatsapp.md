@@ -81,7 +81,7 @@ Connection routing table:
   Fits comfortably in a single Redis Cluster
 ```
 
-**Conclusion**: 463K write QPS for message delivery is the primary scaling constraint. The connection routing table (24 GB Redis) is small and fast. Media storage (1.1 PB/day) requires S3 and a CDN; text message retention (240 TB/30 days) is the buffer sizing concern.
+**Capacity driver**: 463K write QPS for message delivery is the primary scaling constraint. The connection routing table (24 GB Redis) is small and fast. Media storage (1.1 PB/day) requires S3 and a CDN; text message retention (240 TB/30 days) is the buffer sizing concern.
 
 ## High-level design
 

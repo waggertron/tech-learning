@@ -70,7 +70,7 @@ Cache sizing:
   10 GB Redis holds ~50M mappings -- covers the hottest URLs with high hit rate
 ```
 
-**Conclusion**: storage (38 TB) is the constraint, not CPU or bandwidth. A single-node database cannot hold 38 TB efficiently; this system needs sharding or a distributed KV store.
+**Design consequence**: storage (38 TB) is the constraint, not CPU or bandwidth. A single-node database cannot hold 38 TB efficiently; this system needs sharding or a distributed KV store.
 
 ## High-level design
 

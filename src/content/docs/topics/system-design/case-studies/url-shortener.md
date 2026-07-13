@@ -49,7 +49,7 @@ Bandwidth:
   Write: 3,500 * 210 bytes = 0.7 MB/s (trivial)
 ```
 
-**Conclusion**: storage (38 TB) is the constraint, not CPU or bandwidth. A single database node cannot hold 38 TB efficiently -- this system needs sharding or a distributed KV store.
+**Design consequence**: storage (38 TB) is the constraint, not CPU or bandwidth. A single database node cannot hold 38 TB efficiently -- this system needs sharding or a distributed KV store.
 
 ## High-level design
 

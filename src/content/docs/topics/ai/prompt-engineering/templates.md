@@ -1,6 +1,6 @@
 ---
 title: Prompt Templates
-description: Canonical reusable prompt patterns, zero-shot, few-shot, chain-of-thought, role priming, ReAct, structured output, step-back, tree-of-thoughts, with concrete examples.
+description: "Canonical reusable prompt patterns, zero-shot, few-shot, chain-of-thought, role priming, ReAct, structured output, step-back, and tree-of-thoughts, with concrete examples."
 parent: prompt-engineering
 tags: [llm, prompting, templates, cot, few-shot, react]
 status: draft
@@ -8,7 +8,7 @@ created: 2026-04-24
 updated: 2026-04-24
 ---
 
-## Overview
+## Choosing a prompt pattern
 
 [Prompt engineering](./) isn't a fresh invention per task, practitioners re-use a small catalog of named patterns. This page is a reference for those patterns with a runnable example under each. Pick the one that matches your problem shape rather than inventing from scratch.
 

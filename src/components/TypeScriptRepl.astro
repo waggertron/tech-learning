@@ -6,6 +6,7 @@ interface Props {
 }
 const { code, id = 'tsrepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+const isStarterCode = code.includes('TODO: implement') || code.includes('pass  # TODO');
 
 // Pre-compute test runner at build time for use by the code block runner.
 const testsFn = code.match(/function _runTests[\s\S]*/)?.[0]?.trim() ?? '';
@@ -20,6 +21,11 @@ const testsFn = code.match(/function _runTests[\s\S]*/)?.[0]?.trim() ?? '';
     </div>
     <span class="tsrepl__status" data-status>idle</span>
   </div>
+  {isStarterCode && (
+    <p class="tsrepl__note">
+      Starter code: this editor begins with intentional TODOs. Fill the function, run the embedded tests, then compare your solution with the worked approaches below.
+    </p>
+  )}
   <div class="tsrepl__editor-host" data-editor></div>
   <pre class="tsrepl__output" data-output>Click <strong>Run TS</strong> to execute. First run downloads Babel (~400 KB, cached after that).</pre>
   <div class="tsrepl__timing" data-timing></div>
@@ -349,6 +355,15 @@ const testsFn = code.match(/function _runTests[\s\S]*/)?.[0]?.trim() ?? '';
     color: var(--sl-color-gray-3);
     font-size: 0.85rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .tsrepl__note {
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+    color: var(--sl-color-text);
+    background: color-mix(in srgb, #3178c6 12%, transparent);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
   .tsrepl__editor-host {
     min-height: 280px;

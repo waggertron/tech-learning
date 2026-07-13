@@ -54,7 +54,7 @@ CDN cache hit rate:
   Only 5% of views reach your origin -- CDN absorbs 157 Tbps
 ```
 
-**Conclusion**: playback is a CDN problem. Upload is a bandwidth and transcoding throughput problem. Design them separately.
+**Pipeline split**: playback is a CDN problem. Upload is a bandwidth and transcoding throughput problem. Design them separately.
 
 ## High-level design
 

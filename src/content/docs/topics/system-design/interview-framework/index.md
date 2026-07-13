@@ -150,7 +150,7 @@ Bandwidth:
   Write: 3600 QPS * 500 bytes = 1.8 MB/s (trivial)
 ```
 
-Conclusion: storage (91 TB) is the constraint, not bandwidth or CPU. This drives the decision to shard the database.
+Design consequence: storage (91 TB) is the constraint, not bandwidth or CPU. This drives the decision to shard the database.
 
 ### What to say during estimation
 

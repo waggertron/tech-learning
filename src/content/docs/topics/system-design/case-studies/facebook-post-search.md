@@ -80,7 +80,7 @@ Latency budget (100ms p99):
   Buffer:                      3ms
 ```
 
-**Conclusion**: the index fan-out at 462K shard queries/sec is the capacity driver. Each shard (Elasticsearch node) handles ~23K queries/sec, which requires a large Elasticsearch cluster. The privacy filter adds 15ms to the p99 path and must be implemented with pre-fetched permission data, not synchronous friend-graph queries.
+**Capacity driver**: the index fan-out at 462K shard queries/sec is the capacity driver. Each shard (Elasticsearch node) handles ~23K queries/sec, which requires a large Elasticsearch cluster. The privacy filter adds 15ms to the p99 path and must be implemented with pre-fetched permission data, not synchronous friend-graph queries.
 
 ## High-level design
 

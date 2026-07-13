@@ -68,7 +68,7 @@ Location event stream:
   Retained 24 hours for replay = ~3.2 TB/day
 ```
 
-**Conclusion**: 750K location writes/sec is the constraint. Redis handles ~1M ops/sec per node. Partition by city (one Redis cluster per major city or region) to distribute the load and keep key spaces manageable.
+**Capacity driver**: 750K location writes/sec is the constraint. Redis handles ~1M ops/sec per node. Partition by city (one Redis cluster per major city or region) to distribute the load and keep key spaces manageable.
 
 ## High-level design
 

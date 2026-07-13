@@ -72,7 +72,7 @@ Storage:
   Aggregated counts in ClickHouse: much smaller (summary rows)
 ```
 
-**Conclusion**: the write amplification (289K aggregation writes/sec) is the primary scaling concern, not raw click ingestion. The deduplication layer must be fast (Redis) and bounded (TTL on dedup keys to prevent unbounded growth).
+**Capacity driver**: the write amplification (289K aggregation writes/sec) is the primary scaling concern, not raw click ingestion. The deduplication layer must be fast (Redis) and bounded (TTL on dedup keys to prevent unbounded growth).
 
 ## High-level design
 

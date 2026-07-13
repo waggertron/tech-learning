@@ -6,6 +6,7 @@ interface Props {
 }
 const { code, id = 'pyrepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+const isStarterCode = code.includes('TODO: implement') || code.includes('pass  # TODO');
 ---
 
 <div class="pyrepl not-content" data-repl-id={replId} data-original={code}>
@@ -16,6 +17,11 @@ const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
     </div>
     <span class="pyrepl__status" data-status>idle</span>
   </div>
+  {isStarterCode && (
+    <p class="pyrepl__note">
+      Starter code: this editor begins with intentional TODOs. Fill the function, run the embedded tests, then compare your solution with the worked approaches below.
+    </p>
+  )}
   <div class="pyrepl__editor-host" data-editor></div>
   <pre class="pyrepl__output" data-output>Click <strong>Run Python</strong> to execute. First run downloads Python (~10 MB, cached after that).</pre>
   <div class="pyrepl__timing" data-timing></div>
@@ -361,6 +367,15 @@ finally:
     color: var(--sl-color-gray-3);
     font-size: 0.85rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .pyrepl__note {
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+    color: var(--sl-color-text);
+    background: color-mix(in srgb, var(--sl-color-accent, #6750a4) 12%, transparent);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
   .pyrepl__editor-host {
     /* CodeMirror styles itself; this just sizes the host. */

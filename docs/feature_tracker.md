@@ -59,6 +59,7 @@ As of this audit, the repo contains:
 - **2026-05-13: Go support for coding problems**: Added a Go REPL, fixed Go Playground integration, improved import detection, and added Go tabs to all coding problem pages. Evidence: `src/components/GoRepl.astro`, `.go` files under `coding-problems/`.
 - **2026-05-15 to 2026-05-17: REPL hardening**: Wired missing approach tabs, fixed output hangs and stack overflows, and added missing imports. Evidence: `src/components/*Repl.astro`, `src/content/docs/topics/cs/coding-problems/`.
 - **2026-06-05 to 2026-07-03: New coding problem entries and deeper explanations**: Added Increasing Triplet Subsequence, String Compression, Rotate Array, stock variants, Isomorphic Strings, and improved pointer and greedy reasoning. Evidence: matching files under `src/content/docs/topics/cs/coding-problems/`.
+- **2026-07-13: Starter-code labeling for runnable coding problem REPLs**: Python, TypeScript, and Go REPLs now detect intentional TODO starter code and show a reader-facing note explaining that the editor begins as an exercise scaffold. Evidence: `src/components/PythonRepl.astro`, `src/components/TypeScriptRepl.astro`, `src/components/GoRepl.astro`.
 
 ### Authoring, Quality, and Safety
 

@@ -50,7 +50,7 @@ Storage (notification history, 30-day retention):
   1B/day * 200 bytes/record * 30 days = 6 TB
 ```
 
-**Conclusion**: push is high volume but cheap. SMS is low volume but expensive -- confirm with the interviewer that the 50M/day volume is correct before designing for it. Email throughput (2,900/sec) requires multiple ESP accounts to stay within rate limits.
+**Channel constraint**: push is high volume but cheap. SMS is low volume but expensive -- confirm with the interviewer that the 50M/day volume is correct before designing for it. Email throughput (2,900/sec) requires multiple ESP accounts to stay within rate limits.
 
 ## High-level design
 

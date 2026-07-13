@@ -71,7 +71,7 @@ Storage:
   Images: avg 8 images/listing * 100M listings * 200 KB = 160 TB (S3)
 ```
 
-**Conclusion**: bid QPS (3,472 steady, burst to 100/sec per auction) is manageable with a relational DB at the per-auction level, but not with a single global lock. The key is per-auction locking -- each auction's bids are independent, so 10M auctions provide 10M independent lock namespaces.
+**Concurrency boundary**: bid QPS (3,472 steady, burst to 100/sec per auction) is manageable with a relational DB at the per-auction level, but not with a single global lock. The key is per-auction locking -- each auction's bids are independent, so 10M auctions provide 10M independent lock namespaces.
 
 ## High-level design
 

@@ -5,6 +5,7 @@ interface Props {
 }
 const { code, id = 'gorepl' } = Astro.props;
 const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+const isStarterCode = code.includes('TODO: implement') || code.includes('pass  # TODO');
 
 // Pre-compute scaffold components at build time so the code block runner
 // doesn't have to scrape and regex-parse data-original at runtime.
@@ -23,6 +24,11 @@ const testsFn  = code.match(/func runTests\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
     </div>
     <span class="gorepl__status" data-status>idle</span>
   </div>
+  {isStarterCode && (
+    <p class="gorepl__note">
+      Starter code: this editor begins with intentional TODOs. Fill the function, run the embedded tests, then compare your solution with the worked approaches below.
+    </p>
+  )}
   <div class="gorepl__editor-host" data-editor></div>
   <pre class="gorepl__output" data-output>Click <strong>Run Go</strong> to execute. Runs via the Go Playground API.</pre>
   <div class="gorepl__timing" data-timing></div>
@@ -331,6 +337,15 @@ const testsFn  = code.match(/func runTests\b[\s\S]*?\n}/)?.[0]?.trim() ?? '';
     color: var(--sl-color-gray-3);
     font-size: 0.85rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .gorepl__note {
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+    color: var(--sl-color-text);
+    background: color-mix(in srgb, #00ADD8 12%, transparent);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
   .gorepl__editor-host {
     min-height: 280px;

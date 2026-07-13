@@ -79,7 +79,7 @@ Post content DB:
   5 years: ~182 TB
 ```
 
-**Conclusion**: 115K read QPS dwarfs 1,157 write QPS. The system exists to serve reads. 29 TB of Redis requires a large cluster (Redis Cluster with 10+ shards). Feed storage is expensive; trimming feeds to 1,000 entries per user keeps memory bounded.
+**Capacity driver**: 115K read QPS dwarfs 1,157 write QPS. The system exists to serve reads. 29 TB of Redis requires a large cluster (Redis Cluster with 10+ shards). Feed storage is expensive; trimming feeds to 1,000 entries per user keeps memory bounded.
 
 ## High-level design
 

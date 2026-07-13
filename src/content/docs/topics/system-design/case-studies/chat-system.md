@@ -51,7 +51,7 @@ Connections:
   At 1M connections per server: 2,000 chat servers needed
 ```
 
-**Conclusion**: 926K writes/sec is far beyond a single relational DB node. Cassandra (write-optimized, horizontally scalable) is the standard choice. 2B WebSocket connections requires a large fleet of stateful connection servers -- the most unusual infrastructure requirement.
+**Capacity driver**: 926K writes/sec is far beyond a single relational DB node. Cassandra (write-optimized, horizontally scalable) is the standard choice. 2B WebSocket connections requires a large fleet of stateful connection servers -- the most unusual infrastructure requirement.
 
 ## High-level design
 

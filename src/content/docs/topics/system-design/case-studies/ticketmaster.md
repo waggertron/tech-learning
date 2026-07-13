@@ -70,7 +70,7 @@ Storage:
   Total: ~182 TB (need sharding and archival)
 ```
 
-**Conclusion**: the peak write QPS (83K/sec) during flash sale opens is the dominant design constraint. The system must absorb this spike without overselling inventory or degrading response time below 5 seconds.
+**Capacity driver**: the peak write QPS (83K/sec) during flash sale opens is the dominant design constraint. The system must absorb this spike without overselling inventory or degrading response time below 5 seconds.
 
 ## High-level design
 

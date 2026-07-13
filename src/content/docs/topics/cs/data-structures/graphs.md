@@ -175,7 +175,15 @@ Graphs appear in 18 NeetCode 150 problems across 2 categories (13 Graphs + 5 Adv
 - [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/), bidirectional BFS
 - [269. Alien Dictionary](../../coding-problems/graphs/269-alien-dictionary/), topological sort from word-pair constraints
 
-*More coming soon, Advanced Graphs (Dijkstra, MST, Bellman-Ford).*
+**Advanced Graphs:**
+- [743. Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/), Dijkstra's algorithm over weighted directed edges
+- [787. Cheapest Flights Within K Stops](../../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/), constrained shortest path with stop count as part of the state
+- [1514. Path with Maximum Probability](../../coding-problems/advanced-graphs/1514-path-with-maximum-probability/), maximum-probability path using a priority queue
+- [1584. Min Cost to Connect All Points](../../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/), minimum spanning tree with Manhattan distances
+- [1489. Critical and Pseudo-Critical Edges in MST](../../coding-problems/advanced-graphs/1489-critical-and-pseudo-critical-edges/), MST sensitivity analysis
+- [1192. Critical Connections in a Network](../../coding-problems/advanced-graphs/1192-critical-connections/), bridge detection with DFS low-link values
+- [332. Reconstruct Itinerary](../../coding-problems/advanced-graphs/332-reconstruct-itinerary/), Eulerian path construction with lexical tie-breaking
+- [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/), path search over a rising threshold
 
 ## Related topics
 

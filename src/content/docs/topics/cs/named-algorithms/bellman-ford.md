@@ -75,7 +75,7 @@ The argument is a clean induction on path length.
 
 **Inductive step:** Suppose after pass `k`, every vertex reachable by a k-edge path has its correct shortest k-edge distance. In pass `k+1`, for every edge `(u, v, w)`, we try `dist[u] + w`. Since `dist[u]` already reflects the best k-edge path to `u`, this computes the best `(k+1)`-edge path to `v` that routes through `u`. Over all edges, the minimum across all such candidates is the best `(k+1)`-edge path to `v`. So after pass `k+1`, every vertex with a `(k+1)`-edge shortest path has the correct distance.
 
-**Conclusion:** in a V-vertex graph with no negative cycles, every simple path has at most `V-1` edges (because a simple path visits each vertex at most once). After `V-1` passes, every vertex has the shortest-simple-path distance. Done.
+**Why `V-1` passes are enough:** in a V-vertex graph with no negative cycles, every simple path has at most `V-1` edges (because a simple path visits each vertex at most once). After `V-1` passes, every vertex has the shortest-simple-path distance. Done.
 
 The assumption "no negative cycles" is load-bearing. If a negative cycle exists, there is no finite shortest path: you can always go around the cycle one more time and improve the distance. In that case the algorithm's distances are meaningless, but the V-th pass detects the situation.
 

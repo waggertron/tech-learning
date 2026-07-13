@@ -68,7 +68,7 @@ WebSocket connections:
   Gateway fleet: 100 nodes * 10K connections/node
 ```
 
-**Conclusion**: the container pool size is the primary scaling knob. Storage and network are not the bottleneck. Plan to pre-scale container pools 30 minutes before any scheduled contest.
+**Scaling knob**: the container pool size is the primary scaling knob. Storage and network are not the bottleneck. Plan to pre-scale container pools 30 minutes before any scheduled contest.
 
 ## High-level design
 

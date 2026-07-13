@@ -74,7 +74,7 @@ Worker count:
   With headroom: 600-800 worker threads across 20-30 machines
 ```
 
-**Conclusion**: bandwidth (7 TB/day) and storage (150 TB total) are the dominant costs. The Bloom filter at 12 GB is surprisingly cheap compared to the alternative (storing 10B full URLs in a hash set requires 1-10 TB depending on encoding).
+**Cost driver**: bandwidth (7 TB/day) and storage (150 TB total) are the dominant costs. The Bloom filter at 12 GB is surprisingly cheap compared to the alternative (storing 10B full URLs in a hash set requires 1-10 TB depending on encoding).
 
 ## High-level design
 
