@@ -9,6 +9,8 @@ The Zero to iOS Hero program uses one reusable skill and a versioned reference s
 - Focused references: `.agents/skills/ios-swift-development/references/`
 - Stable matrix: `.agents/skills/ios-swift-development/references/supported-matrix.md`
 - Validation commands: `.agents/skills/ios-swift-development/references/validation.md`
+- Browser runner baseline: `docs/swift-browser-runner.md`
+- Browser execution ADR: `docs/adr/2026-07-13-swift-browser-execution.md`
 
 The plan owns scope and completion gates. The skill owns the repeatable authoring and review process. The references own details that change by framework, toolchain, or platform.
 

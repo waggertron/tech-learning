@@ -1,6 +1,6 @@
 # Swift Browser Runner
 
-This document records the browser runner contract that Swift support must preserve or deliberately replace. It is the R1.1 baseline for the runner architecture decision record. It does not select a Swift execution strategy.
+This document records the browser runner contract that Swift support must preserve or deliberately replace. It is the R1.1 baseline for the [Swift browser execution ADR](adr/2026-07-13-swift-browser-execution.md).
 
 ## Current Surfaces
 
