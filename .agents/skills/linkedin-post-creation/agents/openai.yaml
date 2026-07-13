@@ -1,0 +1,4 @@
+interface:
+  display_name: "LinkedIn Post Creation"
+  short_description: "Turn source material into a LinkedIn-ready post"
+  default_prompt: "Use $linkedin-post-creation to turn this published page into a concise LinkedIn post with a working source link."
