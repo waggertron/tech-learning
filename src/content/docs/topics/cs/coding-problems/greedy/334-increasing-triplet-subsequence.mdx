@@ -293,7 +293,7 @@ The triplet is (1, 2, 3) at indices (1, 3, 4). `first` was updated after `second
 
 The trigger phrase: **"return true if there exist indices i < j < k such that nums[i] < nums[j] < nums[k]."** Fixed-length strictly increasing subsequence, existence question, no need to reconstruct it.
 
-The wrong first move: track all pairs (i, j) and scan for any k > j where nums[k] > nums[j]. That is O(n²) and misses the O(n) path entirely.
+The tempting but incorrect approach: track all pairs (i, j) and scan for any k > j where nums[k] > nums[j]. That is O(n²) and misses the O(n) path entirely.
 
 The greedy insight: you only need two thresholds, not all pairs. At every step, only two questions matter: "does a valid first exist?" and "given that first, does a valid second exist?" Each new element either lowers a threshold or, if it exceeds both, closes the case.
 
