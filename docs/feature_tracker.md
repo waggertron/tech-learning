@@ -1,6 +1,6 @@
 # Feature Tracker
 
-Last audited: 2026-07-12
+Last audited: 2026-07-13
 
 This document tracks major features added to the tech-learning repo over time. It is a historical record, a current capability map, and a checklist for future feature work.
 
@@ -24,7 +24,7 @@ As of this audit, the repo contains:
 - **188 coding problem pages** under `src/content/docs/topics/cs/coding-problems/`.
 - **541 topic pages** under `src/content/docs/topics/`.
 - **1,516 sibling code files** for examples, stubs, and coding problem approaches.
-- **15 local Codex skills** under `.agents/skills/` after adding LinkedIn post creation.
+- **16 local Codex skills** under `.agents/skills/` after adding iOS and Swift development.
 
 ## Feature Register
 
@@ -63,6 +63,7 @@ As of this audit, the repo contains:
 
 ### Authoring, Quality, and Safety
 
+- **2026-07-13: iOS and Swift development authoring system**: Added a reusable workflow for planning, researching, writing, compiling, testing, and reviewing Swift and Apple platform content. The system records a stable Xcode and Swift matrix, framework-specific guidance, availability and capability safeguards, evidence labels, and package, simulator, and device validation boundaries. Evidence: `.agents/skills/ios-swift-development/`, `docs/ios-swift-development.md`, `docs/plans/2026-07-13-zero-to-ios-hero-series-plan.md`, `AGENTS.md`.
 - **2026-07-13: LinkedIn post creation workflow**: Added a reusable source-grounded workflow for turning published pages, drafts, notes, and URLs into LinkedIn posts with working source links, current sharing guidance, restrained hashtags, and explicit-request clipboard support. Evidence: `.agents/skills/linkedin-post-creation/SKILL.md`, `.agents/skills/linkedin-post-creation/agents/openai.yaml`, `docs/linkedin-post-creation.md`, `AGENTS.md`.
 - **2026-07-13: Published-content review guard**: Added a validation script, reusable skill, AGENTS rules, authoring guidance, and pre-push integration to keep internal planning residue out of rendered pages and consolidate repeated same-author source bullets into higher-value synthesis. Evidence: `scripts/validate-published-content.mjs`, `package.json`, `scripts/validate-pre-push.mjs`, `AGENTS.md`, `docs/AUTHORING.md`, `docs/pre-push-validation.md`, `.agents/skills/published-content-review/SKILL.md`, `.agents/skills/writing-style/SKILL.md`, `.agents/skills/prose-cleanup/SKILL.md`, `.agents/skills/authoring/SKILL.md`, `.agents/skills/post-series/SKILL.md`, `.agents/skills/pre-push-validation/SKILL.md`.
 - **2026-07-12: Pre-push validation workflow**: Added an outcome-based validation workflow for rendered pages, internal links, code examples, generated React outputs, and custom page behavior before pushes. Repaired route-relative internal links across the existing content graph and documented the rendered-URL link rule, sandbox preview handling, hidden-tab smoke checks, and code-region link-checking boundary. Evidence: `docs/pre-push-validation.md`, `.agents/skills/pre-push-validation/SKILL.md`, `scripts/validate-*.mjs`, `package.json`, `AGENTS.md`, `docs/AUTHORING.md`.

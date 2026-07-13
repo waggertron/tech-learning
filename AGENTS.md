@@ -66,6 +66,7 @@ src/content/docs/
 - `.agents/skills/pre-push-validation/SKILL.md`: run the outcome-based pre-push gate for rendered pages, links, examples, custom behavior, and push readiness.
 - `.agents/skills/published-content-review/SKILL.md`: remove internal planning residue, consolidate repeated source attribution, and run the published-content review gate before shipping content.
 - `.agents/skills/linkedin-post-creation/SKILL.md`: turn published pages and drafts into source-grounded LinkedIn posts, sharing steps, and clipboard-ready copy.
+- `.agents/skills/ios-swift-development/SKILL.md`: plan, research, write, compile, test, and review Swift and Apple platform learning content against a stable toolchain matrix.
 
 ## Feature tracking
 

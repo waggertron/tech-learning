@@ -9,6 +9,20 @@ Build Apple platform learning material from current primary sources and executab
 
 Use this skill with `writing-style` for every repo change. Add `authoring` and `published-content-review` for reader-facing content, `post-series` for series structure, and `feature-tracking` when the work adds a reusable capability or workflow.
 
+## Reference Routing
+
+Read only the references needed for the task:
+
+- **Swift language or packages**: Read `references/swift.md`.
+- **SwiftUI implementation or review**: Read `references/swiftui.md`.
+- **UIKit implementation or review**: Read `references/uikit.md`.
+- **Test design or test review**: Read `references/testing.md`.
+- **Domain boundaries or app structure**: Read `references/architecture.md`.
+- **Permissions, entitlements, sensors, services, or ecosystem frameworks**: Read `references/platform-capabilities.md`.
+- **Deployment targets and API guards**: Read `references/availability.md`.
+- **Current Apple claims and citations**: Read `references/apple-source-research.md`.
+- **Compile, build, simulator, or device evidence**: Read `references/validation.md` and `references/supported-matrix.md`.
+
 ## Core Workflow
 
 1. Read the target file, neighboring content, relevant plan, and existing examples before designing the change.

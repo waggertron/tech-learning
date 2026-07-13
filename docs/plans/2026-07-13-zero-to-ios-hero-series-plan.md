@@ -16,14 +16,14 @@ Planning and implementation are tracked separately. The skill remains the first 
 
 ### Gate 0: Build the authoring system before writing posts
 
-- [ ] **F0.1, create the `ios-swift-development` skill**: Initialize `.agents/skills/ios-swift-development/` with the skill-creator workflow. Make it trigger for planning, writing, reviewing, compiling, testing, and updating Swift and Apple-platform content.
-- [ ] **F0.2, add focused skill references**: Add concise references for Swift, SwiftUI, UIKit, testing, architecture, platform capabilities, availability, and Apple-source research. Keep the main `SKILL.md` procedural and under 500 lines.
-- [ ] **F0.3, define validation commands**: Record how to compile Swift packages, build Xcode schemes, run Swift Testing and XCTest suites, run simulator destinations, and distinguish simulator evidence from device evidence.
-- [ ] **F0.4, encode content safeguards**: Require stable-toolchain baselines, explicit deployment targets, concurrency checking, availability notes, permission and entitlement notes, accessibility checks, primary sources, and working code rather than pseudocode.
-- [ ] **F0.5, validate the skill package**: Run `quick_validate.py`, regenerate `agents/openai.yaml`, and remove all template placeholders.
-- [ ] **F0.6, challenge the skill with realistic tasks**: Use it to draft one Swift-language outline, review one SwiftUI example, review one UIKit example, and design one test plan. Revise any instruction that produces stale, unsafe, untestable, or framework-biased output.
-- [ ] **F0.7, record the reusable capability**: Add the skill to `AGENTS.md`, update `docs/feature_tracker.md`, and add focused authoring documentation needed by later sessions.
-- [ ] **F0.8, freeze the first supported matrix**: Record the stable Xcode and Swift versions, Swift language mode, deployment targets, simulator destinations, physical-device requirements, and beta-only exclusions.
+- [x] **F0.1, create the `ios-swift-development` skill**: Initialize `.agents/skills/ios-swift-development/` with the skill-creator workflow. Make it trigger for planning, writing, reviewing, compiling, testing, and updating Swift and Apple-platform content.
+- [x] **F0.2, add focused skill references**: Add concise references for Swift, SwiftUI, UIKit, testing, architecture, platform capabilities, availability, and Apple-source research. Keep the main `SKILL.md` procedural and under 500 lines.
+- [x] **F0.3, define validation commands**: Record how to compile Swift packages, build Xcode schemes, run Swift Testing and XCTest suites, run simulator destinations, and distinguish simulator evidence from device evidence.
+- [x] **F0.4, encode content safeguards**: Require stable-toolchain baselines, explicit deployment targets, concurrency checking, availability notes, permission and entitlement notes, accessibility checks, primary sources, and working code rather than pseudocode.
+- [x] **F0.5, validate the skill package**: Run `quick_validate.py`, regenerate `agents/openai.yaml`, and remove all template placeholders.
+- [x] **F0.6, challenge the skill with realistic tasks**: Use it to draft one Swift-language outline, review one SwiftUI example, review one UIKit example, and design one test plan. Revise any instruction that produces stale, unsafe, untestable, or framework-biased output.
+- [x] **F0.7, record the reusable capability**: Add the skill to `AGENTS.md`, update `docs/feature_tracker.md`, and add focused authoring documentation needed by later sessions.
+- [x] **F0.8, freeze the first supported matrix**: Record the stable Xcode and Swift versions, Swift language mode, deployment targets, simulator destinations, physical-device requirements, and beta-only exclusions.
 
 No curriculum post moves to in progress until F0.1 through F0.8 are complete.
 
