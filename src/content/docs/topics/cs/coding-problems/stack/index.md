@@ -1,6 +1,6 @@
 ---
 title: Stack
-description: 7 problems covering classic stack patterns, matched delimiters, expression evaluation, backtracking, and the monotonic stack (which unlocks several O(n) solutions that look like they need O(n²)).
+description: "7 problems covering classic stack patterns, matched delimiters, expression evaluation, backtracking, and the monotonic stack (which unlocks several O(n) solutions that look like they need O(n²))."
 parent: coding-problems
 tags: [leetcode, neetcode-150, stacks]
 status: draft

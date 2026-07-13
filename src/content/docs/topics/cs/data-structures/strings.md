@@ -1,6 +1,6 @@
 ---
 title: Strings
-description: Sequences of characters, often "array problems in disguise," but with concerns around immutability, character sets, and specialized matching algorithms.
+description: "Sequences of characters, often \"array problems in disguise,\" but with concerns around immutability, character sets, and specialized matching algorithms."
 parent: data-structures
 tags: [data-structures, strings, interviews]
 status: draft

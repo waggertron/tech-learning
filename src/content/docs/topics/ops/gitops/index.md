@@ -1,6 +1,6 @@
 ---
 title: GitOps
-description: Git as the single source of truth for infrastructure, with a controller that continuously reconciles the live cluster against what the repo says. A set of four principles that change how infrastructure changes happen.
+description: "Git as the single source of truth for infrastructure, with a controller that continuously reconciles the live cluster against what the repo says. A set of four principles that change how infrastructure changes happen."
 category: ops
 tags: [gitops, kubernetes, deployment, infrastructure, reconciliation]
 status: draft

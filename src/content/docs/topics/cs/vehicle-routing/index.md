@@ -1,6 +1,6 @@
 ---
 title: Vehicle Routing Problem (VRP)
-description: The Vehicle Routing Problem and its common variants (CVRP, VRPTW, Pickup-and-Delivery), concepts, solution approaches, and how Google's OR-Tools frames them.
+description: "The Vehicle Routing Problem and its common variants (CVRP, VRPTW, Pickup-and-Delivery), concepts, solution approaches, and how Google's OR-Tools frames them."
 category: cs
 tags: [vrp, optimization, or-tools, routing, combinatorial-optimization]
 status: draft

@@ -1,6 +1,6 @@
 ---
 title: Greedy
-description: 8 problems where making the locally-optimal choice at each step yields the globally-optimal answer, and how to prove it does.
+description: "8 problems where making the locally-optimal choice at each step yields the globally-optimal answer, and how to prove it does."
 parent: coding-problems
 tags: [leetcode, neetcode-150, greedy]
 status: draft

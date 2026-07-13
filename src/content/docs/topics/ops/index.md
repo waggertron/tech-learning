@@ -1,6 +1,6 @@
 ---
 title: Operations
-description: The disciplines that turn working code into running systems, Kubernetes, Helm, Terraform, GitOps, ArgoCD, MLOps, and branching workflows like Gitflow.
+description: "The disciplines that turn working code into running systems, Kubernetes, Helm, Terraform, GitOps, ArgoCD, MLOps, and branching workflows like Gitflow."
 ---
 
 ## Topics

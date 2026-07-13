@@ -1,6 +1,6 @@
 ---
 title: Binary Trees & BSTs
-description: Hierarchical structures where each node has up to two children. BSTs add the left < node < right invariant, enabling O(log n) operations when balanced.
+description: "Hierarchical structures where each node has up to two children. BSTs add the left < node < right invariant, enabling O(log n) operations when balanced."
 parent: data-structures
 tags: [data-structures, trees, bst, interviews]
 status: draft

@@ -1,6 +1,6 @@
 ---
 title: Haversine Distance
-description: The haversine formula, great-circle distance between two lat/lon points on a sphere. When it's accurate enough, when to upgrade to Vincenty or Karney, and ready-to-use implementations in Python, SQL, and JavaScript.
+description: "The haversine formula, great-circle distance between two lat/lon points on a sphere. When it's accurate enough, when to upgrade to Vincenty or Karney, and ready-to-use implementations in Python, SQL, and JavaScript."
 category: cs
 tags: [geospatial, distance, haversine, great-circle, vrp]
 status: draft

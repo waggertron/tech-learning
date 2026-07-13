@@ -1,6 +1,6 @@
 ---
 title: End-to-end tests (E2E)
-description: Real browser, real backend, real user journey. The tier of last resort, slow, flaky, expensive to maintain, but the only tests that catch bugs spanning the whole system. What they're for, how to keep them sane, and why they stay at the top of the pyramid.
+description: "Real browser, real backend, real user journey. The tier of last resort, slow, flaky, expensive to maintain, but the only tests that catch bugs spanning the whole system. What they're for, how to keep them sane, and why they stay at the top of the pyramid."
 parent: testing
 tags: [e2e-tests, playwright, cypress, testing]
 status: draft

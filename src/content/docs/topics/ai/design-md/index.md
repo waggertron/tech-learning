@@ -1,6 +1,6 @@
 ---
 title: DESIGN.md, a design system for coding agents
-description: Google Labs' open-source file format for giving AI coding agents a persistent, structured understanding of your brand, so they stop shipping generic Tailwind blue.
+description: "Google Labs' open-source file format for giving AI coding agents a persistent, structured understanding of your brand, so they stop shipping generic Tailwind blue."
 category: ai
 tags: [ai, design-systems, tooling, agents, stitch, google-labs]
 status: draft

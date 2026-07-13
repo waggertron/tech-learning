@@ -1,6 +1,6 @@
 ---
 title: Multimodal benchmarks
-description: MMMU, MathVista, ChartQA, DocVQA, and the image/video/audio benchmark family. How multimodal models are evaluated, what's saturated, and the chart-and-diagram blind spots benchmarks keep revealing.
+description: "MMMU, MathVista, ChartQA, DocVQA, and the image/video/audio benchmark family. How multimodal models are evaluated, what's saturated, and the chart-and-diagram blind spots benchmarks keep revealing."
 parent: benchmarks
 tags: [multimodal, mmmu, mathvista, chartqa, docvqa, benchmarks]
 status: draft

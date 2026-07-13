@@ -1,6 +1,6 @@
 ---
 title: 2-D Dynamic Programming
-description: 11 problems covering DP on pairs of indices, grid paths, LCS, knapsack variants, and edit-distance-family recurrences.
+description: "11 problems covering DP on pairs of indices, grid paths, LCS, knapsack variants, and edit-distance-family recurrences."
 parent: coding-problems
 tags: [leetcode, neetcode-150, dp, dynamic-programming]
 status: draft

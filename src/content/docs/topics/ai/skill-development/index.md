@@ -1,6 +1,6 @@
 ---
 title: AI Skill Development
-description: Writing packaged, invocable capabilities (SKILL.md + scripts + assets) that extend an agent on demand, Claude Code / Agent SDK and the cross-platform Agent Skills standard.
+description: "Writing packaged, invocable capabilities (SKILL.md + scripts + assets) that extend an agent on demand, Claude Code / Agent SDK and the cross-platform Agent Skills standard."
 category: ai
 tags: [skills, claude-code, agent-sdk, context-engineering]
 status: draft

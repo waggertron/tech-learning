@@ -1,6 +1,6 @@
 ---
 title: Pickup and Delivery (PDP)
-description: VRP where nodes come in matched pickup-delivery pairs; pickup must precede delivery and both stops use the same vehicle.
+description: "VRP where nodes come in matched pickup-delivery pairs; pickup must precede delivery and both stops use the same vehicle."
 parent: vehicle-routing
 tags: [vrp, pdp, pickup-delivery, or-tools]
 status: draft

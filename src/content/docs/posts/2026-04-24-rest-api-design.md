@@ -1,6 +1,6 @@
 ---
 title: REST API design, resources, verbs, and the decisions that actually matter
-description: Roy Fielding's 2000 thesis, adjusted for how people actually ship APIs in 2026. Resource modeling, the right verbs, status codes, pagination, versioning, error shapes, and the small number of choices that make or break an API's usability.
+description: "Roy Fielding's 2000 thesis, adjusted for how people actually ship APIs in 2026. Resource modeling, the right verbs, status codes, pagination, versioning, error shapes, and the small number of choices that make or break an API's usability."
 date: 2026-04-24
 tags: [rest, api-design, http, architecture]
 crosspost: [devto, linkedin]

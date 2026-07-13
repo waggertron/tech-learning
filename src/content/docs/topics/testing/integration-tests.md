@@ -1,6 +1,6 @@
 ---
 title: Integration tests
-description: Tests that exercise a real slice of the system, real database, real message broker, real HTTP, to verify components work together. Slower and fewer than unit tests, and the tier where your architecture either holds up or falls apart.
+description: "Tests that exercise a real slice of the system, real database, real message broker, real HTTP, to verify components work together. Slower and fewer than unit tests, and the tier where your architecture either holds up or falls apart."
 parent: testing
 tags: [integration-tests, testing, databases, docker]
 status: draft

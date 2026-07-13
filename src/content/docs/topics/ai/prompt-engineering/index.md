@@ -1,6 +1,6 @@
 ---
 title: Prompt Engineering
-description: Crafting LLM inputs to reliably elicit a target output, the substitute for fine-tuning when the program lives in the context window.
+description: "Crafting LLM inputs to reliably elicit a target output, the substitute for fine-tuning when the program lives in the context window."
 category: ai
 tags: [llm, prompting, context-engineering]
 status: draft

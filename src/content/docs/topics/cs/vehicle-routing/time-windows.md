@@ -1,6 +1,6 @@
 ---
 title: VRP with Time Windows (VRPTW)
-description: VRP where each customer must be served within a specified time interval, a hard constraint on when a vehicle can arrive.
+description: "VRP where each customer must be served within a specified time interval, a hard constraint on when a vehicle can arrive."
 parent: vehicle-routing
 tags: [vrp, vrptw, time-windows, or-tools]
 status: draft

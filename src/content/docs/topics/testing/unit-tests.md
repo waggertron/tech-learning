@@ -1,6 +1,6 @@
 ---
 title: Unit tests
-description: Small, fast tests that exercise a single unit of behavior with its collaborators stubbed or real. What "unit" actually means, the over-mocking trap, how to name them, how to keep the suite fast, and where unit tests stop being enough.
+description: "Small, fast tests that exercise a single unit of behavior with its collaborators stubbed or real. What \"unit\" actually means, the over-mocking trap, how to name them, how to keep the suite fast, and where unit tests stop being enough."
 parent: testing
 tags: [unit-tests, testing, pytest, jest]
 status: draft

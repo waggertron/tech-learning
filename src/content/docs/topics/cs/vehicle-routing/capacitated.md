@@ -1,6 +1,6 @@
 ---
 title: Capacitated VRP (CVRP)
-description: VRP where each vehicle has a max load and each customer has demand, the most common real-world VRP variant.
+description: "VRP where each vehicle has a max load and each customer has demand, the most common real-world VRP variant."
 parent: vehicle-routing
 tags: [vrp, cvrp, capacity, or-tools]
 status: draft

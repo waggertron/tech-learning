@@ -1,6 +1,6 @@
 ---
 title: Linked Lists
-description: Sequences of nodes connected by pointers, O(1) insert/delete at known positions, O(n) access by index. Interview staple for pointer-manipulation exercises.
+description: "Sequences of nodes connected by pointers, O(1) insert/delete at known positions, O(n) access by index. Interview staple for pointer-manipulation exercises."
 parent: data-structures
 tags: [data-structures, linked-lists, interviews]
 status: draft

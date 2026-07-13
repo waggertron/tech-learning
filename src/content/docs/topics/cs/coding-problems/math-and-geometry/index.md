@@ -1,6 +1,6 @@
 ---
 title: Math & Geometry
-description: 8 problems covering matrix manipulation, cycle detection on numeric sequences, fast exponentiation, and big-integer tricks.
+description: "8 problems covering matrix manipulation, cycle detection on numeric sequences, fast exponentiation, and big-integer tricks."
 parent: coding-problems
 tags: [leetcode, neetcode-150, math, geometry]
 status: draft

@@ -1,6 +1,6 @@
 ---
 title: Queues
-description: FIFO (first-in, first-out) structure, the engine of BFS and level-order traversal. Variants include deques, priority queues, and circular buffers.
+description: "FIFO (first-in, first-out) structure, the engine of BFS and level-order traversal. Variants include deques, priority queues, and circular buffers."
 parent: data-structures
 tags: [data-structures, queues, bfs, interviews]
 status: draft

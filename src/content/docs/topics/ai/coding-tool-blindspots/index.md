@@ -1,6 +1,6 @@
 ---
 title: AI Coding Tool Blindspots
-description: A field guide to the predictable, documented ways modern AI coding assistants fail or mislead, even when the output looks clean.
+description: "A field guide to the predictable, documented ways modern AI coding assistants fail or mislead, even when the output looks clean."
 category: ai
 tags: [ai-coding, claude-code, cursor, copilot, reliability, evaluation]
 status: draft

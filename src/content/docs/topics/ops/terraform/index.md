@@ -1,6 +1,6 @@
 ---
 title: Terraform
-description: Infrastructure as code. Providers, resources, state, modules, workspaces, and the operational patterns, remote state with locking, per-environment isolation, module composition, drift detection, that make Terraform survive contact with a real team.
+description: "Infrastructure as code. Providers, resources, state, modules, workspaces, and the operational patterns, remote state with locking, per-environment isolation, module composition, drift detection, that make Terraform survive contact with a real team."
 category: ops
 tags: [terraform, iac, infrastructure, opentofu, cloud]
 status: draft

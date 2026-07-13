@@ -1,6 +1,6 @@
 ---
 title: Django, a 10-part series
-description: A progression from absolute beginner (project setup, MVT) through expert (production deployment, observability, zero-downtime migrations). Ten focused parts, each with runnable code and the gotchas you hit in real projects.
+description: "A progression from absolute beginner (project setup, MVT) through expert (production deployment, observability, zero-downtime migrations). Ten focused parts, each with runnable code and the gotchas you hit in real projects."
 category: web
 tags: [django, python, web, backend]
 status: draft

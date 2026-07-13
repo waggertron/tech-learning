@@ -1,6 +1,6 @@
 ---
 title: Heap / Priority Queue
-description: 7 problems where a heap makes the difference between O(n log n) and O(n log k), or between infeasible and trivial streaming solutions.
+description: "7 problems where a heap makes the difference between O(n log n) and O(n log k), or between infeasible and trivial streaming solutions."
 parent: coding-problems
 tags: [leetcode, neetcode-150, heaps, priority-queue]
 status: draft

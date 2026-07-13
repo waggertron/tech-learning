@@ -1,6 +1,6 @@
 ---
 title: Gitflow
-description: Vincent Driessen's 2010 branching model. Five branch types, prescriptive merge rules, versioned releases. What it gets right, why most modern teams don't use it, and the alternatives that replaced it.
+description: "Vincent Driessen's 2010 branching model. Five branch types, prescriptive merge rules, versioned releases. What it gets right, why most modern teams don't use it, and the alternatives that replaced it."
 category: ops
 tags: [git, gitflow, branching, workflows, versioning]
 status: draft

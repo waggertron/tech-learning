@@ -1,6 +1,6 @@
 ---
 title: SOC 2 for software engineers, what the audit actually checks
-description: Five Trust Service Criteria, Type 1 vs Type 2, Common Criteria, and the gap between what an auditor needs to see and what security actually looks like. A walkthrough for engineers at a company going through the motions.
+description: "Five Trust Service Criteria, Type 1 vs Type 2, Common Criteria, and the gap between what an auditor needs to see and what security actually looks like. A walkthrough for engineers at a company going through the motions."
 date: 2026-04-24
 tags: [soc2, compliance, security, audits, b2b-saas]
 crosspost: [devto, linkedin]

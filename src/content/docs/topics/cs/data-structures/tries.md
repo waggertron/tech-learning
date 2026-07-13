@@ -1,6 +1,6 @@
 ---
 title: Tries
-description: Prefix trees, rooted trees where edges are characters and paths spell words. Optimized for prefix queries, autocomplete, and string-set operations.
+description: "Prefix trees, rooted trees where edges are characters and paths spell words. Optimized for prefix queries, autocomplete, and string-set operations."
 parent: data-structures
 tags: [data-structures, trie, prefix-tree, interviews]
 status: draft

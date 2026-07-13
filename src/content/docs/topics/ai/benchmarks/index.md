@@ -1,6 +1,6 @@
 ---
 title: LLM reasoning benchmarks and metrics
-description: A map of the benchmarks people point at when they say "this model is better", what each one measures, how it's been gamed, what's saturated, what's still hard. Eight parts covering knowledge, math, code, agents, long context, multimodal, and evaluation methodology.
+description: "A map of the benchmarks people point at when they say \"this model is better\", what each one measures, how it's been gamed, what's saturated, what's still hard. Eight parts covering knowledge, math, code, agents, long context, multimodal, and evaluation methodology."
 category: ai
 tags: [benchmarks, evaluation, llm, reasoning, metrics]
 status: draft

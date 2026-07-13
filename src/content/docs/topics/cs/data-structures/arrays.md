@@ -1,6 +1,6 @@
 ---
 title: Arrays
-description: Contiguous, index-addressable memory. The most fundamental and widely used data structure in interviews, many other structures are built on top of it.
+description: "Contiguous, index-addressable memory. The most fundamental and widely used data structure in interviews, many other structures are built on top of it."
 parent: data-structures
 tags: [data-structures, arrays, interviews]
 status: draft

@@ -1,6 +1,6 @@
 ---
 title: The state machine as a DRF action (and why wrong transitions return 409)
-description: Seven states, four verbs, and a services layer that refuses illegal transitions with HTTP 409 Conflict. A clean way to model workflow in a REST API without inventing a new framework.
+description: "Seven states, four verbs, and a services layer that refuses illegal transitions with HTTP 409 Conflict. A clean way to model workflow in a REST API without inventing a new framework."
 date: 2026-04-24
 tags: [django, drf, state-machines, rest-api, patterns]
 crosspost: [devto, linkedin]

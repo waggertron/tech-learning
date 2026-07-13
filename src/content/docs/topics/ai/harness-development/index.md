@@ -1,6 +1,6 @@
 ---
 title: AI Harness Development
-description: The engineering discipline of building the scaffolding around an LLM, tool-use loops, context management, permissions, hooks, sub-agents, that turns a stateless text predictor into something that finishes real tasks.
+description: "The engineering discipline of building the scaffolding around an LLM, tool-use loops, context management, permissions, hooks, sub-agents, that turns a stateless text predictor into something that finishes real tasks."
 category: ai
 tags: [agents, claude-code, agent-sdk, context-engineering]
 status: draft

@@ -1,6 +1,6 @@
 ---
 title: Functional Core, Imperative Shell
-description: Gary Bernhardt's architecture pattern from Destroy All Software, push pure logic into a functional core, isolate side effects in a thin imperative shell, and watch the tests get fast and the state diagrams get simple.
+description: "Gary Bernhardt's architecture pattern from Destroy All Software, push pure logic into a functional core, isolate side effects in a thin imperative shell, and watch the tests get fast and the state diagrams get simple."
 category: cs
 tags: [architecture, functional-programming, testing, design-patterns]
 status: draft

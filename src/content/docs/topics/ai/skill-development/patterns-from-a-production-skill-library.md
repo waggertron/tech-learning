@@ -1,6 +1,6 @@
 ---
 title: Patterns from a production skill library
-description: Forty-plus Claude Code skills from a real monorepo, grouped into archetypes, workflow, quality gate, infra-awareness, language-awareness, and utility. What made each one earn its place, and the patterns worth stealing.
+description: "Forty-plus Claude Code skills from a real monorepo, grouped into archetypes, workflow, quality gate, infra-awareness, language-awareness, and utility. What made each one earn its place, and the patterns worth stealing."
 parent: skill-development
 tags: [skills, claude-code, patterns, case-study]
 status: draft

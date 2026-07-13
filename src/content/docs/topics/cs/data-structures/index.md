@@ -1,6 +1,6 @@
 ---
 title: Data Structures
-description: The top ten data structures that show up in coding interviews, intro, representation, time complexity, and five common uses for each.
+description: "The top ten data structures that show up in coding interviews, intro, representation, time complexity, and five common uses for each."
 category: cs
 tags: [data-structures, algorithms, interviews, cs-fundamentals]
 status: draft

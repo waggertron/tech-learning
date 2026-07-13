@@ -1,6 +1,6 @@
 ---
 title: Evaluation methodology and metrics
-description: LMArena, LLM-as-judge, pass@k, pass^k, exact match, BLEU, ROUGE, contamination detection, golden sets. The scaffolding around every benchmark, what the numbers actually mean and how to tell good evaluation from performance theater.
+description: "LMArena, LLM-as-judge, pass@k, pass^k, exact match, BLEU, ROUGE, contamination detection, golden sets. The scaffolding around every benchmark, what the numbers actually mean and how to tell good evaluation from performance theater."
 parent: benchmarks
 tags: [evaluation, metrics, lmarena, llm-as-judge, benchmarks]
 status: draft

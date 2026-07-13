@@ -1,6 +1,6 @@
 ---
 title: Graphs
-description: Nodes connected by edges, directed or undirected, weighted or unweighted. The most general structure in interviews; many real-world modeling problems reduce to a graph.
+description: "Nodes connected by edges, directed or undirected, weighted or unweighted. The most general structure in interviews; many real-world modeling problems reduce to a graph."
 parent: data-structures
 tags: [data-structures, graphs, bfs, dfs, interviews]
 status: draft

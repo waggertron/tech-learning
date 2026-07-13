@@ -1,6 +1,6 @@
 ---
 title: AI
-description: Topics in artificial intelligence, prompt engineering, harness development, RAG, skill development, coding-tool blindspots, context development lifecycle, and the DESIGN.md spec for agents.
+description: "Topics in artificial intelligence, prompt engineering, harness development, RAG, skill development, coding-tool blindspots, context development lifecycle, and the DESIGN.md spec for agents."
 ---
 
 ## Topics

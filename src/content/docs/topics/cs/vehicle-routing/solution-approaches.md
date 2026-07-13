@@ -1,6 +1,6 @@
 ---
 title: Solution approaches
-description: Exact vs. metaheuristic methods for VRP, Clarke-Wright savings, 2-opt, Or-opt, Guided Local Search, and the OR-Tools RoutingModel API.
+description: "Exact vs. metaheuristic methods for VRP, Clarke-Wright savings, 2-opt, Or-opt, Guided Local Search, and the OR-Tools RoutingModel API."
 parent: vehicle-routing
 tags: [vrp, optimization, heuristics, local-search, or-tools]
 status: draft

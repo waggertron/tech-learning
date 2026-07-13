@@ -1,6 +1,6 @@
 ---
 title: Fuzz tests
-description: Automatic input generation to find edge cases, crashes, and vulnerabilities your example-based tests missed. Property-based testing, coverage-guided fuzzing, and modern LLM-assisted corpora.
+description: "Automatic input generation to find edge cases, crashes, and vulnerabilities your example-based tests missed. Property-based testing, coverage-guided fuzzing, and modern LLM-assisted corpora."
 parent: testing
 tags: [fuzz-testing, property-based-testing, hypothesis, security]
 status: draft

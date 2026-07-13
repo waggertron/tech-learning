@@ -1,6 +1,6 @@
 ---
 title: Kubernetes
-description: The container orchestrator that turned "run my app on a server" into "declare what I want and the system will make it so." Architecture, the object model, workloads, networking, storage, RBAC, autoscaling, and the footguns that fill every production postmortem.
+description: "The container orchestrator that turned \"run my app on a server\" into \"declare what I want and the system will make it so.\" Architecture, the object model, workloads, networking, storage, RBAC, autoscaling, and the footguns that fill every production postmortem."
 category: ops
 tags: [kubernetes, k8s, containers, orchestration, cloud-native]
 status: draft

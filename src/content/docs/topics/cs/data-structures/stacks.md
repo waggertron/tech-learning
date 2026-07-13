@@ -1,6 +1,6 @@
 ---
 title: Stacks
-description: LIFO (last-in, first-out) structure. Push and pop from the same end, all O(1). The natural fit for nesting, backtracking, and reverse-order problems.
+description: "LIFO (last-in, first-out) structure. Push and pop from the same end, all O(1). The natural fit for nesting, backtracking, and reverse-order problems."
 parent: data-structures
 tags: [data-structures, stacks, interviews]
 status: draft

@@ -1,6 +1,6 @@
 ---
 title: MLOps
-description: The engineering discipline around getting ML models into production and keeping them useful. Experiment tracking, feature stores, model registries, serving, monitoring drift, and retraining, what each layer does and when you actually need it.
+description: "The engineering discipline around getting ML models into production and keeping them useful. Experiment tracking, feature stores, model registries, serving, monitoring drift, and retraining, what each layer does and when you actually need it."
 category: ops
 tags: [mlops, machine-learning, mlflow, feature-stores, monitoring]
 status: draft

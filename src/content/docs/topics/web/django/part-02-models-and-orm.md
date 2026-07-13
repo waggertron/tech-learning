@@ -1,6 +1,6 @@
 ---
 title: "Part 2: Models, migrations, and the ORM"
-description: Define models as Python classes, let Django generate migrations, and query the database through the ORM. Relationships, Meta options, and the signals that will bite you later.
+description: "Define models as Python classes, let Django generate migrations, and query the database through the ORM. Relationships, Meta options, and the signals that will bite you later."
 parent: django
 tags: [django, orm, models, migrations, beginner]
 status: draft

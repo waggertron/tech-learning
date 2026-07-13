@@ -1,6 +1,6 @@
 ---
 title: Backtracking
-description: 9 problems where the answer is built one choice at a time, with an undo step that lets you try a different branch when the current one fails.
+description: "9 problems where the answer is built one choice at a time, with an undo step that lets you try a different branch when the current one fails."
 parent: coding-problems
 tags: [leetcode, neetcode-150, backtracking, recursion]
 status: draft

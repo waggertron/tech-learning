@@ -1,6 +1,6 @@
 ---
 title: Idempotent seed + compose boot-order choreography
-description: A one-shot db-init container that runs migrations and a deterministic seed before the API comes up. `docker compose up` gives you the same demo every time, from a cold machine.
+description: "A one-shot db-init container that runs migrations and a deterministic seed before the API comes up. `docker compose up` gives you the same demo every time, from a cold machine."
 date: 2026-04-24
 tags: [docker, compose, seeding, demos, patterns]
 crosspost: [devto, linkedin]

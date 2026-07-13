@@ -1,6 +1,6 @@
 ---
 title: Heaps / Priority Queues
-description: Tree-backed structures satisfying the heap property, O(1) find-min/max, O(log n) push/pop. The go-to for top-K, k-way merge, and Dijkstra.
+description: "Tree-backed structures satisfying the heap property, O(1) find-min/max, O(log n) push/pop. The go-to for top-K, k-way merge, and Dijkstra."
 parent: data-structures
 tags: [data-structures, heaps, priority-queue, interviews]
 status: draft

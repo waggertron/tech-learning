@@ -1,6 +1,6 @@
 ---
 title: "Part 6: Django REST Framework basics"
-description: Expose Django models as a JSON API. Serializers, ViewSets, routers, authentication, permissions, and pagination, the 80% that powers most REST backends.
+description: "Expose Django models as a JSON API. Serializers, ViewSets, routers, authentication, permissions, and pagination, the 80% that powers most REST backends."
 parent: django
 tags: [django, drf, api, rest, intermediate]
 status: draft

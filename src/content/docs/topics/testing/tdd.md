@@ -1,6 +1,6 @@
 ---
 title: Test-Driven Development (TDD)
-description: Red → green → refactor. Kent Beck's 1999 discipline, the three rules of TDD, when it works, when it doesn't, and why the argument "but I don't have time" misreads what TDD actually costs.
+description: "Red → green → refactor. Kent Beck's 1999 discipline, the three rules of TDD, when it works, when it doesn't, and why the argument \"but I don't have time\" misreads what TDD actually costs."
 parent: testing
 tags: [tdd, testing, discipline, practices]
 status: draft

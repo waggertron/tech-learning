@@ -1,6 +1,6 @@
 ---
 title: Component tests
-description: The middle tier, tests that exercise a UI component (or a small slice of server logic) with its immediate collaborators, usually rendering real DOM or hitting an in-memory DB. Between unit tests and E2E tests, and the tier that grows fastest.
+description: "The middle tier, tests that exercise a UI component (or a small slice of server logic) with its immediate collaborators, usually rendering real DOM or hitting an in-memory DB. Between unit tests and E2E tests, and the tier that grows fastest."
 parent: testing
 tags: [component-tests, testing, react, vitest, testing-library]
 status: draft

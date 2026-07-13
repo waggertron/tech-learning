@@ -1,6 +1,6 @@
 ---
 title: RAG (Retrieval-Augmented Generation)
-description: Grounding LLM responses in external knowledge by retrieving relevant documents at query time and injecting them into the prompt alongside the user's question.
+description: "Grounding LLM responses in external knowledge by retrieving relevant documents at query time and injecting them into the prompt alongside the user's question."
 category: ai
 tags: [llm, rag, retrieval, embeddings]
 status: draft

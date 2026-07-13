@@ -1,6 +1,6 @@
 ---
 title: 1-D Dynamic Programming
-description: 12 problems covering one-dimensional DP, defining a state, writing a recurrence, memoization vs. bottom-up, and space optimization.
+description: "12 problems covering one-dimensional DP, defining a state, writing a recurrence, memoization vs. bottom-up, and space optimization."
 parent: coding-problems
 tags: [leetcode, neetcode-150, dp, dynamic-programming]
 status: draft

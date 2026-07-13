@@ -1,6 +1,6 @@
 ---
 title: ArgoCD
-description: The reference GitOps controller for Kubernetes. Application CRDs, sync waves, the App-of-Apps pattern, ApplicationSets, sync policies, ignoreDifferences, and the footguns every team hits in its first month.
+description: "The reference GitOps controller for Kubernetes. Application CRDs, sync waves, the App-of-Apps pattern, ApplicationSets, sync policies, ignoreDifferences, and the footguns every team hits in its first month."
 category: ops
 tags: [argocd, gitops, kubernetes, deployment, cncf]
 status: draft

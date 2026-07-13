@@ -1,6 +1,6 @@
 ---
 title: Helm
-description: The package manager for Kubernetes. Charts, values, templates, releases, repositories, and the patterns (values layering, library charts, the ConfigMap-hash trick) that keep a Helm-driven deployment sane across 10 environments and 4 charts.
+description: "The package manager for Kubernetes. Charts, values, templates, releases, repositories, and the patterns (values layering, library charts, the ConfigMap-hash trick) that keep a Helm-driven deployment sane across 10 environments and 4 charts."
 category: ops
 tags: [helm, kubernetes, templating, packaging, deployment]
 status: draft
