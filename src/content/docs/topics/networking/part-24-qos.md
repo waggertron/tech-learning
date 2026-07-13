@@ -224,6 +224,6 @@ R1# show policy-map
 
 ## Related topics
 
-- [Part 3: TCP/IP Model](./part-03-tcpip-model) -- the IP header fields (ToS/DSCP) that QoS marking lives in
-- [Part 17: DHCP and DNS](./part-17-dhcp-and-dns) -- infrastructure services that share the same links QoS manages
-- [Part 20: WAN Technologies and Network Automation](./part-20-wan-technologies-and-network-automation) -- WAN links are the most common congestion point where QoS policies are applied
+- [Part 3: TCP/IP Model](../part-03-tcpip-model/) -- the IP header fields (ToS/DSCP) that QoS marking lives in
+- [Part 17: DHCP and DNS](../part-17-dhcp-and-dns/) -- infrastructure services that share the same links QoS manages
+- [Part 20: WAN Technologies and Network Automation](../part-20-wan-technologies-and-network-automation/) -- WAN links are the most common congestion point where QoS policies are applied

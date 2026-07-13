@@ -12,7 +12,7 @@ Networks exist because isolated devices are useless at scale. The moment two dev
 
 ## Why it matters
 
-Every organization runs on data. Email, video calls, cloud storage, point-of-sale systems, industrial sensors: all of it depends on a network that someone designed and someone maintains. Understanding the vocabulary, the component types, and the [design patterns](../cs/design-patterns/) is the foundation for every configuration, troubleshooting step, and design decision that follows in this series.
+Every organization runs on data. Email, video calls, cloud storage, point-of-sale systems, industrial sensors: all of it depends on a network that someone designed and someone maintains. Understanding the vocabulary, the component types, and the [design patterns](../../cs/design-patterns/) is the foundation for every configuration, troubleshooting step, and design decision that follows in this series.
 
 ## What a network is
 
@@ -168,6 +168,6 @@ Open standards let devices from different vendors interoperate. A Cisco switch a
 
 ## Related topics
 
-- [Part 2: The OSI Model](./part-02-osi-model)
-- [Part 3: The TCP/IP Model](./part-03-tcpip-model)
-- [Part 5: Ethernet and the Data Link Layer](./part-05-ethernet-and-data-link-layer)
+- [Part 2: The OSI Model](../part-02-osi-model/)
+- [Part 3: The TCP/IP Model](../part-03-tcpip-model/)
+- [Part 5: Data Link Layer and Ethernet](../part-05-data-link-and-ethernet/)

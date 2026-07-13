@@ -101,7 +101,7 @@ Whichever of the three you can't directly measure, derive it from the other two.
 
 Amdahl's Law sets the ceiling for how much faster you can make a computation by adding hardware. Little's Law tells you how many concurrent requests or workers you need to sustain a given throughput at a given latency.
 
-Together they scope the two fundamental [system design](../../system-design/) questions: how much will more machines help, and how many concurrent workers do I need?
+Together they scope the two fundamental [system design](../../../system-design/) questions: how much will more machines help, and how many concurrent workers do I need?
 
 ---
 
@@ -117,4 +117,4 @@ Together they scope the two fundamental [system design](../../system-design/) qu
 - [Scalability](../../../system-design/scalability/), horizontal vs vertical scaling, the scale cube
 - [Estimation](../../../system-design/estimation/), back-of-envelope with latency numbers
 - [Databases](../../../system-design/databases/), database bottlenecks and the serial write fraction
-- [Hardware and Software](./hardware-software/), Moore's Law and why hardware stopped saving you
+- [Hardware and Software](../hardware-software/), Moore's Law and why hardware stopped saving you

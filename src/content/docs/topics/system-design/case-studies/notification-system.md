@@ -280,8 +280,8 @@ Stale tokens accumulate silently otherwise. A notification system that never cle
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
 - [Message Queues](../../message-queues/), Kafka as the backbone of the notification pipeline
 - [Rate Limiting](../../rate-limiting/), per-user rate limiting patterns
 - [Caching](../../caching/), Redis for preference caching and deduplication
-- [Chat System](./chat-system/), the push notification path used for offline message delivery
+- [Chat System](../chat-system/), the push notification path used for offline message delivery

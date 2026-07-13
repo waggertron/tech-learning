@@ -66,12 +66,12 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [76. Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/)
-- [239. Sliding Window Maximum](../coding-problems/sliding-window/239-sliding-window-maximum/)
-- [424. Longest Repeating Character Replacement](../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
+- [76. Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/)
+- [239. Sliding Window Maximum](../../coding-problems/sliding-window/239-sliding-window-maximum/)
+- [424. Longest Repeating Character Replacement](../../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
 
 ## Related concepts
 
-- [Sliding window](./sliding-window/)
-- [Monotonic stack](./monotonic-stack/)
-- [Heap and priority queue](./heap-and-priority-queue/)
+- [Sliding window](../sliding-window/)
+- [Monotonic stack](../monotonic-stack/)
+- [Heap and priority queue](../heap-and-priority-queue/)

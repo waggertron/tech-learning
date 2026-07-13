@@ -67,15 +67,15 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [141. Linked List Cycle](../coding-problems/linked-list/141-linked-list-cycle/)
-- [202. Happy Number](../coding-problems/math-and-geometry/202-happy-number/)
-- [207. Course Schedule](../coding-problems/graphs/207-course-schedule/)
-- [287. Find the Duplicate Number](../coding-problems/linked-list/287-find-the-duplicate-number/)
-- [684. Redundant Connection](../coding-problems/graphs/684-redundant-connection/)
+- [141. Linked List Cycle](../../coding-problems/linked-list/141-linked-list-cycle/)
+- [202. Happy Number](../../coding-problems/math-and-geometry/202-happy-number/)
+- [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/)
+- [287. Find the Duplicate Number](../../coding-problems/linked-list/287-find-the-duplicate-number/)
+- [684. Redundant Connection](../../coding-problems/graphs/684-redundant-connection/)
 
 ## Related concepts
 
-- [Fast and slow pointers](./fast-and-slow-pointers/)
-- [Topological sort](./topological-sort/)
-- [Union find](./union-find/)
-- [DFS](./dfs/)
+- [Fast and slow pointers](../fast-and-slow-pointers/)
+- [Topological sort](../topological-sort/)
+- [Union find](../union-find/)
+- [DFS](../dfs/)

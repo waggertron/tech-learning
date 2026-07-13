@@ -133,5 +133,5 @@ This is different from Python 2, where `x` would have been overwritten.
 ## Related topics
 
 - [Python, category overview](../)
-- [The Ellipsis (`...`)](./ellipsis/), another compact Python expression with a specific role
-- [Async in Python](./async/), generator-based intuition helps with understanding coroutines
+- [The Ellipsis (`...`)](../ellipsis/), another compact Python expression with a specific role
+- [Async in Python](../async/), generator-based intuition helps with understanding coroutines

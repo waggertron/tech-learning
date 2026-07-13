@@ -125,7 +125,7 @@ Ethereum L2s have canonical bridges maintained by the L2 team, with optimistic w
 
 ## Related topics
 
-- [Ethereum](./ethereum/), the primary destination chain for most wrapped assets
-- [Bitcoin](./bitcoin/), the origin chain for WBTC
-- [Tether and Stablecoins](./tether/), stablecoins run on the same bridge infrastructure
-- [Consensus Mechanisms](../consensus-mechanisms/), bridge security often depends on the consensus of both connected chains
+- [Ethereum](../ethereum/), the primary destination chain for most wrapped assets
+- [Bitcoin](../bitcoin/), the origin chain for WBTC
+- [Tether and Stablecoins](../tether/), stablecoins run on the same bridge infrastructure
+- [Consensus Mechanisms](../../consensus-mechanisms/), bridge security often depends on the consensus of both connected chains

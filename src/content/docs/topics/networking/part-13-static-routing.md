@@ -228,6 +228,6 @@ The AD you assign must be higher than the dynamic protocol's AD. OSPF is 110, EI
 
 ## Related topics
 
-- [Part 12: IP Routing Fundamentals](./part-12-ip-routing-fundamentals)
-- [Part 14: OSPF](./part-14-ospf)
-- [Part 15: EIGRP](./part-15-eigrp)
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/)
+- [Part 14: OSPF](../part-14-ospf/)
+- [Part 15: EIGRP](../part-15-eigrp/)

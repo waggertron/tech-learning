@@ -10,9 +10,9 @@ updated: 2026-05-04
 
 ## What it does
 
-Depth-First Search explores a graph by plunging as deep as possible down one branch before backing up and trying the next. It commits to a neighbor, then commits to *that* node's neighbors, recursing until it hits a dead end, then unwinds and [tries](../data-structures/tries/) alternatives. The result is that DFS visits every node reachable from a given start, but it explores the shape of the graph in depth order rather than distance order.
+Depth-First Search explores a graph by plunging as deep as possible down one branch before backing up and trying the next. It commits to a neighbor, then commits to *that* node's neighbors, recursing until it hits a dead end, then unwinds and [tries](../../data-structures/tries/) alternatives. The result is that DFS visits every node reachable from a given start, but it explores the shape of the graph in depth order rather than distance order.
 
-That commitment-first behavior makes DFS the natural fit for problems that require exhaustive exploration of one path at a time: cycle detection, topological ordering, connected components, and backtracking search. It is also the intuitive shape of recursive tree traversal, which most programmers encounter before they encounter [graphs](../data-structures/graphs/).
+That commitment-first behavior makes DFS the natural fit for problems that require exhaustive exploration of one path at a time: cycle detection, topological ordering, connected components, and backtracking search. It is also the intuitive shape of recursive tree traversal, which most programmers encounter before they encounter [graphs](../../data-structures/graphs/).
 
 ## The core idea, in one sentence
 
@@ -243,7 +243,7 @@ reversed:            [0, 2, 1, 3]  <- topological order
 
 Check: 0 before 1 (edge 0->1), 0 before 2 (edge 0->2), 1 before 3 (edge 1->3), 2 before 3 (edge 2->3). All edges respected.
 
-Note: [Kahn's algorithm](kahns/) (BFS-based, using in-degree counts) produces the same result via a different mechanism. The DFS post-order approach and Kahn's are equally valid; DFS post-order tends to show up more naturally when you are already doing cycle detection.
+Note: [Kahn's algorithm](../kahns/) (BFS-based, using in-degree counts) produces the same result via a different mechanism. The DFS post-order approach and Kahn's are equally valid; DFS post-order tends to show up more naturally when you are already doing cycle detection.
 
 ## Application 3: Connected components
 
@@ -345,11 +345,11 @@ Memory limited, deep graph?   -> DFS
 
 | Problem | What to practice |
 | --- | --- |
-| [200. Number of Islands](../coding-problems/graphs/200-number-of-islands/) | Grid DFS, flood fill, in-place marking |
-| [130. Surrounded Regions](../coding-problems/graphs/130-surrounded-regions/) | Border-anchored flood fill, inverse marking |
-| [207. Course Schedule](../coding-problems/graphs/207-course-schedule/) | Cycle detection in directed graph, gray-node coloring |
-| [210. Course Schedule II](../coding-problems/graphs/210-course-schedule-ii/) | Topological sort via DFS post-order |
-| [79. Word Search](../coding-problems/backtracking/079-word-search/) | Grid DFS with backtracking, path state restoration |
+| [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/) | Grid DFS, flood fill, in-place marking |
+| [130. Surrounded Regions](../../coding-problems/graphs/130-surrounded-regions/) | Border-anchored flood fill, inverse marking |
+| [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/) | Cycle detection in directed graph, gray-node coloring |
+| [210. Course Schedule II](../../coding-problems/graphs/210-course-schedule-ii/) | Topological sort via DFS post-order |
+| [79. Word Search](../../coding-problems/backtracking/079-word-search/) | Grid DFS with backtracking, path state restoration |
 
 ## Multiple uses
 
@@ -641,8 +641,8 @@ if __name__ == '__main__':
 
 ## Related topics
 
-- [Breadth-First Search](./bfs/), the level-order counterpart: use BFS when shortest path or level distance matters
-- [Dijkstra's algorithm](./dijkstra/), DFS/BFS generalization with weighted edges and a priority queue
-- [LeetCode 150: Graphs](../coding-problems/graphs/), the canonical graph problems including islands, course schedule, and surrounded regions
-- [LeetCode 150: Backtracking](../coding-problems/backtracking/), DFS with state restoration: word search, N-queens, permutations
-- [Data Structures](../data-structures/), stacks (what the iterative version uses explicitly), sets (visited tracking), and adjacency lists (graph representation)
+- [Breadth-First Search](../bfs/), the level-order counterpart: use BFS when shortest path or level distance matters
+- [Dijkstra's algorithm](../dijkstra/), DFS/BFS generalization with weighted edges and a priority queue
+- [LeetCode 150: Graphs](../../coding-problems/graphs/), the canonical graph problems including islands, course schedule, and surrounded regions
+- [LeetCode 150: Backtracking](../../coding-problems/backtracking/), DFS with state restoration: word search, N-queens, permutations
+- [Data Structures](../../data-structures/), stacks (what the iterative version uses explicitly), sets (visited tracking), and adjacency lists (graph representation)

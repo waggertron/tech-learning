@@ -16,11 +16,13 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 5. **No em dashes (U+2014).** Use commas, colons, semicolons, or parens instead.
 
-6. **Relative links only.** Never absolute paths. The `base: '/tech-learning'` config handles the prefix.
+6. **Relative links only, resolved from rendered routes.** Never absolute paths. A leaf page renders as a directory, so calculate Markdown links from the built URL, not the source file path. The `base: '/tech-learning'` config handles the prefix.
 
 7. **ASCII diagrams only.** Mermaid is not wired up in this build.
 
 8. **Track feature additions.** When a change adds a user-visible capability, content model, generator, reusable skill, validation rule, or authoring workflow, update `docs/feature_tracker.md` and any focused docs needed to maintain it.
+
+9. **Run pre-push validation before pushing.** Use `npm run validate:pre-push` or the documented narrower tier from `docs/pre-push-validation.md`. Pages should render intended content, internal links should resolve, code examples should pass their contracts, and custom page behavior should be spot-tested when affected.
 
 ## Repo structure
 
@@ -39,7 +41,7 @@ src/content/docs/
 
 ## Build and deploy
 
-- Local build: `npm run build` (runs in ~15s, ~387 pages)
+- Local build: `npm run build` (runs in roughly 40s, 616 pages as of July 2026)
 - Deployed to GitHub Pages on push to `main`
 - Site URL: `https://waggertron.github.io/tech-learning/`
 
@@ -57,6 +59,7 @@ src/content/docs/
 - `.agents/skills/react-instructional-posts/SKILL.md`: write and review Modern React instructional posts.
 - `.agents/skills/react-example-output-views/SKILL.md`: maintain generated output views after Modern React examples.
 - `.agents/skills/feature-tracking/SKILL.md`: keep feature history, docs records, AGENTS rules, and local memory current when capabilities are added.
+- `.agents/skills/pre-push-validation/SKILL.md`: run the outcome-based pre-push gate for rendered pages, links, examples, custom behavior, and push readiness.
 
 ## Feature tracking
 

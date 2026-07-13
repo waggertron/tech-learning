@@ -65,7 +65,7 @@ export function RenameProjectButton({ projectId }: { projectId: string }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update.tsx" role="region" aria-label="Output view: Invalidate after update">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update" data-render-mode="react-server" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update" role="region" aria-label="Output view: Invalidate after update">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><button>Rename</button></div>

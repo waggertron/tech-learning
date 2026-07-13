@@ -321,7 +321,7 @@ app.post('/upload/avatar', upload.single('avatar'), async (req, res, next) => {
 
 ## What's next
 
-Part 9 covers testing with Jest and Supertest: [integration tests](../../testing/integration-tests/) for every route, mocking database calls, and setting up a test database.
+Part 9 covers testing with Jest and Supertest: [integration tests](../../../testing/integration-tests/) for every route, mocking database calls, and setting up a test database.
 
 ## References
 
@@ -331,6 +331,6 @@ Part 9 covers testing with Jest and Supertest: [integration tests](../../testing
 
 ## Related topics
 
-- [Part 7, Validation and error handling](./part-07-validation-and-errors/)
-- [Part 9, Testing](./part-09-testing/)
-- [Part 10, Production](./part-10-production/)
+- [Part 7, Validation and error handling](../part-07-validation-and-errors/)
+- [Part 9, Testing](../part-09-testing/)
+- [Part 10, Production](../part-10-production/)

@@ -121,7 +121,7 @@ Several major exchanges (Coinbase, Kraken in some jurisdictions, Bittrex) have d
 
 ## Related topics
 
-- [Bitcoin](./bitcoin/), the UTXO chain Monero's model extends
-- [Zero-Knowledge Proofs](../../cryptographic-systems/distributed-cryptography/zero-knowledge-proofs/), the cryptographic framework for Bulletproofs
-- [Consensus Mechanisms: Proof-of-Work](../consensus-mechanisms/proof-of-work/), mining algorithms including RandomX
-- [Secret Sharing](../../cryptographic-systems/distributed-cryptography/secret-sharing/), threshold custody for XMR wallets
+- [Bitcoin](../bitcoin/), the UTXO chain Monero's model extends
+- [Zero-Knowledge Proofs](../../../cryptographic-systems/distributed-cryptography/zero-knowledge-proofs/), the cryptographic framework for Bulletproofs
+- [Consensus Mechanisms: Proof-of-Work](../../consensus-mechanisms/proof-of-work/), mining algorithms including RandomX
+- [Secret Sharing](../../../cryptographic-systems/distributed-cryptography/secret-sharing/), threshold custody for XMR wallets

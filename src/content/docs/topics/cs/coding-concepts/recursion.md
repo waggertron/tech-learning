@@ -68,17 +68,17 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [24. Swap Nodes in Pairs](../coding-problems/linked-list/024-swap-nodes-in-pairs/)
-- [78. Subsets](../coding-problems/backtracking/078-subsets/)
-- [100. Same Tree](../coding-problems/trees/100-same-tree/)
-- [104. Maximum Depth of Binary Tree](../coding-problems/trees/104-maximum-depth-of-binary-tree/)
-- [206. Reverse Linked List](../coding-problems/linked-list/206-reverse-linked-list/)
-- [226. Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/)
-- [394. Decode String](../coding-problems/stack/394-decode-string/)
+- [24. Swap Nodes in Pairs](../../coding-problems/linked-list/024-swap-nodes-in-pairs/)
+- [78. Subsets](../../coding-problems/backtracking/078-subsets/)
+- [100. Same Tree](../../coding-problems/trees/100-same-tree/)
+- [104. Maximum Depth of Binary Tree](../../coding-problems/trees/104-maximum-depth-of-binary-tree/)
+- [206. Reverse Linked List](../../coding-problems/linked-list/206-reverse-linked-list/)
+- [226. Invert Binary Tree](../../coding-problems/trees/226-invert-binary-tree/)
+- [394. Decode String](../../coding-problems/stack/394-decode-string/)
 
 ## Related concepts
 
-- [Tree traversal](./tree-traversal/)
-- [DFS](./dfs/)
-- [Backtracking](./backtracking/)
-- [Divide and conquer](./divide-and-conquer/)
+- [Tree traversal](../tree-traversal/)
+- [DFS](../dfs/)
+- [Backtracking](../backtracking/)
+- [Divide and conquer](../divide-and-conquer/)

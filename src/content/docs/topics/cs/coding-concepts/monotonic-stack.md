@@ -67,15 +67,15 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [84. Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/)
-- [496. Next Greater Element I](../coding-problems/stack/496-next-greater-element-i/)
-- [503. Next Greater Element II](../coding-problems/stack/503-next-greater-element-ii/)
-- [739. Daily Temperatures](../coding-problems/stack/739-daily-temperatures/)
-- [853. Car Fleet](../coding-problems/stack/853-car-fleet/)
-- [907. Sum of Subarray Minimums](../coding-problems/stack/907-sum-of-subarray-minimums/)
+- [84. Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/)
+- [496. Next Greater Element I](../../coding-problems/stack/496-next-greater-element-i/)
+- [503. Next Greater Element II](../../coding-problems/stack/503-next-greater-element-ii/)
+- [739. Daily Temperatures](../../coding-problems/stack/739-daily-temperatures/)
+- [853. Car Fleet](../../coding-problems/stack/853-car-fleet/)
+- [907. Sum of Subarray Minimums](../../coding-problems/stack/907-sum-of-subarray-minimums/)
 
 ## Related concepts
 
-- [Monotonic queue](./monotonic-queue/)
-- [Stack parsing](./stack-parsing/)
-- [Array scans](./array-scans/)
+- [Monotonic queue](../monotonic-queue/)
+- [Stack parsing](../stack-parsing/)
+- [Array scans](../array-scans/)

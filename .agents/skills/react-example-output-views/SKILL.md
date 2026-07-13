@@ -113,6 +113,8 @@ Prefer deterministic generation over manual panel edits. Expand the renderer and
 - Storybook stories can render the story component with the exported story args.
 - Test examples should use runner mode unless a full test runner is added.
 - Server, async Server Component, route, and tool configuration examples should use runner mode unless their framework runtime is added.
+- Examples that import framework packages with module-level React directives, such as TanStack Query, React Router, and React Native, should stay out of live browser modules unless the docs shell owns the matching runtime. Keep the rendered fallback, but use runner mode so Vite does not bundle directive-bearing packages just to make a teaching preview interactive.
+- Generated browser modules should strip top-level `"use client"` and `"use server"` directives. Keep those directives in the article code fence when they are the teaching point.
 
 Do not replace failed renders with prose that pretends to be UI output. Either make the example render with working behavior, show source-derived runner content, add a real runner, or mark it as a documented static exception.
 

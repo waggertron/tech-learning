@@ -31,8 +31,8 @@ The Graphs category taught BFS/DFS/Union-Find/topo sort. This category adds the 
 **Bonus problems (same pattern, outside NeetCode 150):**
 
 - [1192. Critical Connections in a Network (Hard)](./1192-critical-connections/) -- Tarjan's bridge algorithm using low values and discovery times.
-- [1489. Critical and Pseudo-Critical Edges in MST (Hard)](./1489-critical-and-pseudo-critical-edges-in-mst/) -- Kruskal skip/force pattern to classify MST edges.
-- [1514. Path with Maximum Probability (Medium)](./1514-path-with-max-probability/) -- Dijkstra with a max-heap and negated (or inverted) probabilities.
+- [1489. Critical and Pseudo-Critical Edges in MST (Hard)](./1489-critical-and-pseudo-critical-edges/) -- Kruskal skip/force pattern to classify MST edges.
+- [1514. Path with Maximum Probability (Medium)](./1514-path-with-maximum-probability/) -- Dijkstra with a max-heap and negated (or inverted) probabilities.
 
 ## Key patterns unlocked here
 

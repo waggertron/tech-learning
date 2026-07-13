@@ -76,7 +76,7 @@ Negligible. Validators sign blocks with a hash and a signature. No hash puzzle, 
 
 ## Related topics
 
-- [Delegated Proof-of-Stake](./delegated-proof-of-stake/), elected validators instead of a whitelist
-- [Byzantine Fault Tolerance](./byzantine-fault-tolerance/), explicit multi-round voting for finality with a known set
-- [Proof-of-Stake](./proof-of-stake/), permissionless alternative with economic security
-- [Ethereum](../cryptocurrency/ethereum/), whose testnets historically used PoA
+- [Delegated Proof-of-Stake](../delegated-proof-of-stake/), elected validators instead of a whitelist
+- [Byzantine Fault Tolerance](../byzantine-fault-tolerance/), explicit multi-round voting for finality with a known set
+- [Proof-of-Stake](../proof-of-stake/), permissionless alternative with economic security
+- [Ethereum](../../cryptocurrency/ethereum/), whose testnets historically used PoA

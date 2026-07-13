@@ -295,6 +295,6 @@ Traffic from SW2 to SW3 now flows: SW2 -> SW1 -> SW3. The direct link is standin
 
 ## Related topics
 
-- [Part 7: VLANs and Trunking](./part-07-vlans-and-trunking)
-- [Part 6: Ethernet and Switching](./part-06-ethernet-and-switching)
-- [Part 10: IPv4 Addressing and Subnetting](./part-10-ipv4-addressing-and-subnetting)
+- [Part 7: VLANs](../part-07-vlans/)
+- [Part 6: Switching Fundamentals](../part-06-switching-fundamentals/)
+- [Part 10: IPv4 Addressing and Subnetting](../part-10-ipv4-addressing-and-subnetting/)

@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [207. Course Schedule](../coding-problems/graphs/207-course-schedule/)
-- [210. Course Schedule II](../coding-problems/graphs/210-course-schedule-ii/)
-- [269. Alien Dictionary](../coding-problems/graphs/269-alien-dictionary/)
+- [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/)
+- [210. Course Schedule II](../../coding-problems/graphs/210-course-schedule-ii/)
+- [269. Alien Dictionary](../../coding-problems/graphs/269-alien-dictionary/)
 
 ## Related concepts
 
-- [Graph traversal](./graph-traversal/)
-- [DFS](./dfs/)
-- [BFS](./bfs/)
-- [Cycle detection](./cycle-detection/)
+- [Graph traversal](../graph-traversal/)
+- [DFS](../dfs/)
+- [BFS](../bfs/)
+- [Cycle detection](../cycle-detection/)

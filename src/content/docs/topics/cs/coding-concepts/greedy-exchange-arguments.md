@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [11. Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/)
-- [134. Gas Station](../coding-problems/greedy/134-gas-station/)
-- [435. Non-overlapping Intervals](../coding-problems/intervals/435-non-overlapping-intervals/)
-- [846. Hand of Straights](../coding-problems/greedy/846-hand-of-straights/)
+- [11. Container With Most Water](../../coding-problems/two-pointers/011-container-with-most-water/)
+- [134. Gas Station](../../coding-problems/greedy/134-gas-station/)
+- [435. Non-overlapping Intervals](../../coding-problems/intervals/435-non-overlapping-intervals/)
+- [846. Hand of Straights](../../coding-problems/greedy/846-hand-of-straights/)
 
 ## Related concepts
 
-- [Greedy algorithms](./greedy-algorithms/)
-- [Intervals](./intervals/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
+- [Greedy algorithms](../greedy-algorithms/)
+- [Intervals](../intervals/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)

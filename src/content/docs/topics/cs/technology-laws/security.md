@@ -64,6 +64,6 @@ The only reliable defense against Schneier's Law is structured adversarial revie
 
 ## Related topics
 
-- [API design laws](./api-design/): Postel's Law and the security vs. robustness tradeoff
+- [API design laws](../api-design/): Postel's Law and the security vs. robustness tradeoff
 - [Secrets, keys, and tokens](../../../ops/secrets-keys-tokens/): credential management and where security controls belong
 - [API design](../../../system-design/api-design/): API authentication and authorization design

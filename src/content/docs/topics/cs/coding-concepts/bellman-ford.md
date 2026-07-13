@@ -66,11 +66,11 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [743. Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/)
-- [787. Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
+- [743. Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/)
+- [787. Cheapest Flights Within K Stops](../../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
 
 ## Related concepts
 
-- [Shortest paths](./shortest-paths/)
-- [Dijkstra](./dijkstra/)
-- [Dynamic programming](./dynamic-programming/)
+- [Shortest paths](../shortest-paths/)
+- [Dijkstra](../dijkstra/)
+- [Dynamic programming](../dynamic-programming/)

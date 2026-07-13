@@ -66,13 +66,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [56. Merge Intervals](../coding-problems/intervals/056-merge-intervals/)
-- [57. Insert Interval](../coding-problems/intervals/057-insert-interval/)
-- [252. Meeting Rooms](../coding-problems/intervals/252-meeting-rooms/)
-- [435. Non-overlapping Intervals](../coding-problems/intervals/435-non-overlapping-intervals/)
+- [56. Merge Intervals](../../coding-problems/intervals/056-merge-intervals/)
+- [57. Insert Interval](../../coding-problems/intervals/057-insert-interval/)
+- [252. Meeting Rooms](../../coding-problems/intervals/252-meeting-rooms/)
+- [435. Non-overlapping Intervals](../../coding-problems/intervals/435-non-overlapping-intervals/)
 
 ## Related concepts
 
-- [Intervals](./intervals/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
-- [Greedy exchange arguments](./greedy-exchange-arguments/)
+- [Intervals](../intervals/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)
+- [Greedy exchange arguments](../greedy-exchange-arguments/)

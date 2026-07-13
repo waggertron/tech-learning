@@ -212,6 +212,6 @@ Three categories of 802.11 frames:
 
 ## Related topics
 
-- [Part 4: Physical Layer and Cabling](./part-04-physical-layer-and-cabling)
-- [Part 19: Network Security Fundamentals](./part-19-network-security-fundamentals)
-- [Part 23: Network Automation and Programmability](./part-23-network-automation-and-programmability)
+- [Part 4: Physical Layer and Cabling](../part-04-physical-layer-and-cabling/)
+- [Part 19: Network Security Fundamentals](../part-19-network-security-fundamentals/)
+- [Part 20: WAN Technologies and Network Automation](../part-20-wan-technologies-and-network-automation/)

@@ -104,7 +104,7 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    - `## When to use it` -- conditions that make the tactic fit.
    - `## When not to use it` -- tempting nearby cases where it fails.
    - `## Terminology clues` -- prompt words and phrases that point to the tactic.
-   - `## Problems that use it` -- exhaustive links into `../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
+   - `## Problems that use it` -- exhaustive links into `../../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
    - `## Related concepts` -- neighboring concept pages.
 
    Coding concept pages should not stay as one-sentence placeholders. Write researched, original prose that helps a learner decide when to use the tactic, when to avoid it, and what complexity win to expect. Build the problem list from local backlinks rather than hand-picked highlights.
@@ -209,7 +209,7 @@ When the user provides an article, editorial, answer, transcript, or pasted refe
 
 - **Don't invent new frontmatter fields.** The schema is fixed; new fields silently drop or trip the parser.
 - **Don't write unquoted descriptions with punctuation.** `:` `"` `` ` `` all break YAML when unquoted.
-- **Don't paste absolute paths in links.** Use `./subtopic/` or `../sibling/`; the `base: '/tech-learning'` handles the rest.
+- **Don't paste absolute paths in links.** Use route-relative links from the rendered URL. A leaf page renders as a directory, so sibling links usually start with `../sibling/`, not `./sibling/`. The `base: '/tech-learning'` handles the deploy prefix.
 - **Don't rename the repo slug** (`base: '/tech-learning'` in `astro.config.mjs`). It's the GitHub Pages path. Display name is separately "Here Be Dragons."
 - **Don't create a new top-level directory** for content. All content lives in `src/content/docs/{topics,posts}/`.
 - **Don't leave new content orphaned.** If it isn't in the category index, it's hard to find.
@@ -266,9 +266,9 @@ The colon after "limiting" makes YAML parse this as a mapping. And "overview" is
 ```markdown
 ## Related topics
 
-- [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [Stateless auth](./2026-04-24-stateless-auth/)
-- [Django Part 5, Authentication](../topics/web/django/part-05-authentication/)
+- [Throttling and rate limiting](../2026-04-24-throttling-and-rate-limiting/)
+- [Stateless auth](../2026-04-24-stateless-auth/)
+- [Django Part 5, Authentication](../../topics/web/django/part-05-authentication/)
 ```
 
 Each link is a relative path; each target exists; each is a real neighbor worth reading.
@@ -280,7 +280,7 @@ Each link is a relative path; each target exists; each is a real neighbor worth 
 | `YAMLException` during build | Unquoted description with `:`, `"`, or backtick | Quote the description |
 | "language not recognized" warning | `django` or other unknown tag in fence | Use `html` or drop the tag |
 | Page exists but not in sidebar | Missing or broken frontmatter | Read the frontmatter carefully |
-| Link 404 in built site | Absolute instead of relative path | Use `./` or `../` |
+| Link 404 in built site | Relative link calculated from the source file path instead of the rendered route | Recalculate from the built URL and run `npm run validate:links` |
 | Deploy fails on GitHub Actions | Build passed locally but remote check skipped | Look at Actions tab; usually a YAML issue that local build caught last time |
 | Mermaid diagram renders as code | Mermaid plugin not enabled | Convert to ASCII art |
 

@@ -45,11 +45,11 @@ Vanilla BSTs degrade to $O(n)$ on sorted input (they become a linked list). **Se
 
 1. **Hierarchical data modeling**: file systems, DOM, ASTs, expression trees.
 2. **Ordered map / sorted set operations**: `TreeMap`, `std::map`, `SortedList` for "give me the next-largest key" and range queries.
-3. **Recursive subtree problems**: [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), [Diameter](../coding-problems/trees/543-diameter-of-binary-tree/), Symmetric Tree, Path Sum.
-4. **Lowest Common Ancestor**: LCA of a Binary Tree, [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/).
-5. **Tree DP and serialization**: House Robber III, Binary Tree Cameras, [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/).
+3. **Recursive subtree problems**: [Maximum Depth](../../coding-problems/trees/104-maximum-depth-of-binary-tree/), [Invert Binary Tree](../../coding-problems/trees/226-invert-binary-tree/), [Diameter](../../coding-problems/trees/543-diameter-of-binary-tree/), Symmetric Tree, Path Sum.
+4. **Lowest Common Ancestor**: LCA of a Binary Tree, [LCA of a BST](../../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/).
+5. **Tree DP and serialization**: House Robber III, Binary Tree Cameras, [Serialize and Deserialize Binary Tree](../../coding-problems/trees/297-serialize-and-deserialize-binary-tree/).
 
-**Canonical LeetCode problems:** #98 [Validate BST](../coding-problems/trees/098-validate-binary-search-tree/), #104 [Maximum Depth](../coding-problems/trees/104-maximum-depth-of-binary-tree/), #226 [Invert Binary Tree](../coding-problems/trees/226-invert-binary-tree/), #235 [LCA of a BST](../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/), #297 [Serialize and Deserialize Binary Tree](../coding-problems/trees/297-serialize-and-deserialize-binary-tree/), #543 [Diameter of Binary Tree](../coding-problems/trees/543-diameter-of-binary-tree/), #572 [Subtree of Another Tree](../coding-problems/trees/572-subtree-of-another-tree/).
+**Canonical LeetCode problems:** #98 [Validate BST](../../coding-problems/trees/098-validate-binary-search-tree/), #104 [Maximum Depth](../../coding-problems/trees/104-maximum-depth-of-binary-tree/), #226 [Invert Binary Tree](../../coding-problems/trees/226-invert-binary-tree/), #235 [LCA of a BST](../../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/), #297 [Serialize and Deserialize Binary Tree](../../coding-problems/trees/297-serialize-and-deserialize-binary-tree/), #543 [Diameter of Binary Tree](../../coding-problems/trees/543-diameter-of-binary-tree/), #572 [Subtree of Another Tree](../../coding-problems/trees/572-subtree-of-another-tree/).
 
 ## Python example
 

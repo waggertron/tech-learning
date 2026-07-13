@@ -235,7 +235,7 @@ Coin Change is **unbounded**, each coin can be used infinitely. The outer loop o
 
 `INF = amount + 1` works because you can never need more than `amount` coins of denomination 1. Any reachable amount costs at most `amount` coins, so `amount + 1` is guaranteed larger than any valid answer. The `min()` recurrence will always prefer a real path over the sentinel, and the final check `dp[amount] != INF` cleanly separates reachable from unreachable.
 
-`float('inf')` works too, but `amount + 1` stays an integer and gives a tighter bound. See [Sentinel Values](../../sentinel-values/) for the general pattern across DP, shortest-path, and search problems.
+`float('inf')` works too, but `amount + 1` stays an integer and gives a tighter bound. See [Sentinel Values](../../../sentinel-values/) for the general pattern across DP, shortest-path, and search problems.
 
 **Try this approach:**
 
@@ -321,11 +321,11 @@ console.log('all tests pass');
 
 ## Related topics
 
-- [Arrays](../../data-structures/arrays/), DP table indexed by amount
-- [Sentinel Values](../../sentinel-values/), the general pattern for "impossible" placeholders in algorithms
+- [Arrays](../../../data-structures/arrays/), DP table indexed by amount
+- [Sentinel Values](../../../sentinel-values/), the general pattern for "impossible" placeholders in algorithms
 
 ## Related concepts
 
-- [Dynamic Programming](../../coding-concepts/dynamic-programming/), state-and-transition tactics for solving overlapping subproblems with cached answers.
-- [Knapsack Patterns](../../coding-concepts/knapsack-patterns/), choose-or-skip DP tactics for capacity, subset, and target-sum problems.
-- [Tabulation](../../coding-concepts/tabulation/), bottom-up DP tactics for filling states in dependency order without recursion.
+- [Dynamic Programming](../../../coding-concepts/dynamic-programming/), state-and-transition tactics for solving overlapping subproblems with cached answers.
+- [Knapsack Patterns](../../../coding-concepts/knapsack-patterns/), choose-or-skip DP tactics for capacity, subset, and target-sum problems.
+- [Tabulation](../../../coding-concepts/tabulation/), bottom-up DP tactics for filling states in dependency order without recursion.

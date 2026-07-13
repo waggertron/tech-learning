@@ -94,7 +94,7 @@ Every stablecoin has a failure mode:
 
 ## Related topics
 
-- [Ethereum](./ethereum/), the primary chain where stablecoins circulate
-- [Wrapped Currencies](./wrapped-currencies/), tokenized cross-chain asset movement
-- [Staking](./staking/), DeFi yield via protocol participation
-- [Bitcoin](./bitcoin/), the non-pegged base-layer alternative
+- [Ethereum](../ethereum/), the primary chain where stablecoins circulate
+- [Wrapped Currencies](../wrapped-currencies/), tokenized cross-chain asset movement
+- [Staking](../staking/), DeFi yield via protocol participation
+- [Bitcoin](../bitcoin/), the non-pegged base-layer alternative

@@ -219,6 +219,6 @@ dig -x 93.184.216.34
 
 ## Related topics
 
-- [Part 16: IPv6 Addressing and Routing](./part-16-ipv6-addressing-and-routing)
-- [Part 18: Access Control Lists](./part-18-access-control-lists)
-- [Part 19: Network Security Fundamentals](./part-19-network-security-fundamentals)
+- [Part 11: IPv6 Addressing](../part-11-ipv6-addressing/)
+- [Part 18: Access Control Lists](../part-18-access-control-lists/)
+- [Part 19: Network Security Fundamentals](../part-19-network-security-fundamentals/)

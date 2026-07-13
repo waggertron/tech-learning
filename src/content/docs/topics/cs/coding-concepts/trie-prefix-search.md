@@ -67,12 +67,12 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [208. Implement Trie (Prefix Tree)](../coding-problems/tries/208-implement-trie/)
-- [211. Design Add and Search Words Data Structure](../coding-problems/tries/211-design-add-and-search-words-data-structure/)
-- [212. Word Search II](../coding-problems/tries/212-word-search-ii/)
+- [208. Implement Trie (Prefix Tree)](../../coding-problems/tries/208-implement-trie/)
+- [211. Design Add and Search Words Data Structure](../../coding-problems/tries/211-design-add-and-search-words-data-structure/)
+- [212. Word Search II](../../coding-problems/tries/212-word-search-ii/)
 
 ## Related concepts
 
-- [Backtracking](./backtracking/)
-- [DFS](./dfs/)
-- [Hash map counting](./hash-map-counting/)
+- [Backtracking](../backtracking/)
+- [DFS](../dfs/)
+- [Hash map counting](../hash-map-counting/)

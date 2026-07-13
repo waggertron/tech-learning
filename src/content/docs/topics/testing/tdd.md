@@ -132,7 +132,7 @@ It makes you tightly covered on the paths you exercised. It doesn't guarantee br
 
 ### "TDD replaces other tests"
 
-TDD is mostly a unit-test discipline. You still need integration, E2E, and [smoke tests](smoke-tests/). TDD just gives you strong unit coverage as a byproduct.
+TDD is mostly a unit-test discipline. You still need integration, E2E, and [smoke tests](../smoke-tests/). TDD just gives you strong unit coverage as a byproduct.
 
 ### "TDD means writing tests first, always"
 

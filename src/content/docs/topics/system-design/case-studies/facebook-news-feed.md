@@ -10,7 +10,7 @@ updated: 2026-05-21
 
 The Facebook News Feed is a read amplification problem. One post from a user with 5,000 friends must appear in 5,000 feeds within seconds. At 3 billion users and 100 million posts per day, the read-to-write ratio approaches 100:1. The architecture is driven entirely by this ratio: every design decision optimizes for read throughput, not write throughput. The most important interview question here is not "how do you store posts?" but "how do you fanout a post to follower feeds efficiently?" -- and the answer requires knowing when to push (fan-out on write) and when to pull (fan-out on read).
 
-An existing [Social Feed case study](./social-feed/) covers this problem in depth from first principles. This entry focuses on the Facebook-specific angle (EdgeRank, the privacy graph, reactions) and on the fanout pattern that carries forward into WhatsApp and Ticketmaster.
+An existing [Social Feed case study](../social-feed/) covers this problem in depth from first principles. This entry focuses on the Facebook-specific angle (EdgeRank, the privacy graph, reactions) and on the fanout pattern that carries forward into WhatsApp and Ticketmaster.
 
 ## Series concepts
 
@@ -24,9 +24,9 @@ An existing [Social Feed case study](./social-feed/) covers this problem in dept
 
 ### Carried forward from prior entries
 
-- **Kafka ([Bitly](./bitly/)):** post creation events publish to Kafka; fanout workers consume and write to follower feeds.
-- **Redis ([Bitly](./bitly/)):** feed storage uses Redis sorted sets, same cluster introduced for URL caching.
-- **Distributed locking ([Ticketmaster](./ticketmaster/)):** feed mutation consistency uses locking to prevent concurrent fanout workers from corrupting the same user's feed.
+- **Kafka ([Bitly](../bitly/)):** post creation events publish to Kafka; fanout workers consume and write to follower feeds.
+- **Redis ([Bitly](../bitly/)):** feed storage uses Redis sorted sets, same cluster introduced for URL caching.
+- **Distributed locking ([Ticketmaster](../ticketmaster/)):** feed mutation consistency uses locking to prevent concurrent fanout workers from corrupting the same user's feed.
 
 ## Clarifying questions
 
@@ -737,10 +737,10 @@ The ML model in production is far more complex (hundreds of features, deep learn
 
 ## Related topics
 
-- [Social Feed case study](./social-feed/), foundational walkthrough of the same problem
-- [Ticketmaster case study](./ticketmaster/), distributed locking carried forward here
-- [WhatsApp case study](./whatsapp/), carries forward Redis connection routing and Kafka
-- [Caching](../caching/), Redis sorted set patterns and cluster sizing
-- [Message Queues](../message-queues/), Kafka fanout worker design
-- [Scalability](../scalability/), handling 115K read QPS with Redis Cluster
-- [Databases](../databases/), read replicas for post content hydration
+- [Social Feed case study](../social-feed/), foundational walkthrough of the same problem
+- [Ticketmaster case study](../ticketmaster/), distributed locking carried forward here
+- [WhatsApp case study](../whatsapp/), carries forward Redis connection routing and Kafka
+- [Caching](../../caching/), Redis sorted set patterns and cluster sizing
+- [Message Queues](../../message-queues/), Kafka fanout worker design
+- [Scalability](../../scalability/), handling 115K read QPS with Redis Cluster
+- [Databases](../../databases/), read replicas for post content hydration

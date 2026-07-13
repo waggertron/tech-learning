@@ -67,17 +67,17 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [102. Binary Tree Level Order Traversal](../coding-problems/trees/102-binary-tree-level-order-traversal/)
-- [127. Word Ladder](../coding-problems/graphs/127-word-ladder/)
-- [199. Binary Tree Right Side View](../coding-problems/trees/199-binary-tree-right-side-view/)
-- [542. 01 Matrix](../coding-problems/graphs/542-01-matrix/)
-- [785. Is Graph Bipartite?](../coding-problems/graphs/785-is-graph-bipartite/)
-- [886. Possible Bipartition](../coding-problems/graphs/886-possible-bipartition/)
-- [994. Rotting Oranges](../coding-problems/graphs/994-rotting-oranges/)
-- [1091. Shortest Path in Binary Matrix](../coding-problems/graphs/1091-shortest-path-in-binary-matrix/)
+- [102. Binary Tree Level Order Traversal](../../coding-problems/trees/102-binary-tree-level-order-traversal/)
+- [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/)
+- [199. Binary Tree Right Side View](../../coding-problems/trees/199-binary-tree-right-side-view/)
+- [542. 01 Matrix](../../coding-problems/graphs/542-01-matrix/)
+- [785. Is Graph Bipartite?](../../coding-problems/graphs/785-is-graph-bipartite/)
+- [886. Possible Bipartition](../../coding-problems/graphs/886-possible-bipartition/)
+- [994. Rotting Oranges](../../coding-problems/graphs/994-rotting-oranges/)
+- [1091. Shortest Path in Binary Matrix](../../coding-problems/graphs/1091-shortest-path-in-binary-matrix/)
 
 ## Related concepts
 
-- [Graph traversal](./graph-traversal/)
-- [DFS](./dfs/)
-- [Shortest paths](./shortest-paths/)
+- [Graph traversal](../graph-traversal/)
+- [DFS](../dfs/)
+- [Shortest paths](../shortest-paths/)

@@ -67,18 +67,18 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [15. 3Sum](../coding-problems/two-pointers/015-3sum/)
-- [49. Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/)
-- [56. Merge Intervals](../coding-problems/intervals/056-merge-intervals/)
-- [242. Valid Anagram](../coding-problems/arrays-and-hashing/242-valid-anagram/)
-- [349. Intersection of Two Arrays](../coding-problems/arrays-and-hashing/349-intersection-of-two-arrays/)
-- [435. Non-overlapping Intervals](../coding-problems/intervals/435-non-overlapping-intervals/)
-- [846. Hand of Straights](../coding-problems/greedy/846-hand-of-straights/)
-- [853. Car Fleet](../coding-problems/stack/853-car-fleet/)
-- [1489. Find Critical and Pseudo-Critical Edges in MST](../coding-problems/advanced-graphs/1489-critical-and-pseudo-critical-edges/)
+- [15. 3Sum](../../coding-problems/two-pointers/015-3sum/)
+- [49. Group Anagrams](../../coding-problems/arrays-and-hashing/049-group-anagrams/)
+- [56. Merge Intervals](../../coding-problems/intervals/056-merge-intervals/)
+- [242. Valid Anagram](../../coding-problems/arrays-and-hashing/242-valid-anagram/)
+- [349. Intersection of Two Arrays](../../coding-problems/arrays-and-hashing/349-intersection-of-two-arrays/)
+- [435. Non-overlapping Intervals](../../coding-problems/intervals/435-non-overlapping-intervals/)
+- [846. Hand of Straights](../../coding-problems/greedy/846-hand-of-straights/)
+- [853. Car Fleet](../../coding-problems/stack/853-car-fleet/)
+- [1489. Find Critical and Pseudo-Critical Edges in MST](../../coding-problems/advanced-graphs/1489-critical-and-pseudo-critical-edges/)
 
 ## Related concepts
 
-- [Two pointers](./two-pointers/)
-- [Intervals](./intervals/)
-- [Greedy algorithms](./greedy-algorithms/)
+- [Two pointers](../two-pointers/)
+- [Intervals](../intervals/)
+- [Greedy algorithms](../greedy-algorithms/)

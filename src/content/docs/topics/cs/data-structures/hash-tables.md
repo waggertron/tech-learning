@@ -39,13 +39,13 @@ A **hash set** is a hash table that stores only keys. Use it for "have I seen th
 
 ## Common uses in DSA
 
-1. **$O(1)$ membership / frequency lookup**: [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), First Unique Character, Intersection of Two Arrays.
+1. **$O(1)$ membership / frequency lookup**: [Two Sum](../../coding-problems/arrays-and-hashing/001-two-sum/), [Contains Duplicate](../../coding-problems/arrays-and-hashing/217-contains-duplicate/), First Unique Character, Intersection of Two Arrays.
 2. **Complement / pair-finding**: Two Sum variants, 4Sum II (two-sum on pair sums), Pairs of Songs With Total Durations Divisible by 60.
-3. **Frequency counting**: [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/) (with a heap), Valid Anagram, Ransom Note, Majority Element.
+3. **Frequency counting**: [Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/) (with a heap), Valid Anagram, Ransom Note, Majority Element.
 4. **Prefix sum with hash**: Subarray Sum Equals K, Continuous Subarray Sum, Contiguous Array (count of 0s = 1s).
-5. **Deduplication and grouping**: [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/) (key by sorted string or char-count tuple), [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), Longest Substring Without Repeating Characters.
+5. **Deduplication and grouping**: [Group Anagrams](../../coding-problems/arrays-and-hashing/049-group-anagrams/) (key by sorted string or char-count tuple), [Longest Consecutive Sequence](../../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), Longest Substring Without Repeating Characters.
 
-**Canonical LeetCode problems:** #1 [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), #49 [Group Anagrams](../coding-problems/arrays-and-hashing/049-group-anagrams/), #128 [Longest Consecutive Sequence](../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), #146 LRU Cache, #217 [Contains Duplicate](../coding-problems/arrays-and-hashing/217-contains-duplicate/), #347 [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), #560 Subarray Sum Equals K.
+**Canonical LeetCode problems:** #1 [Two Sum](../../coding-problems/arrays-and-hashing/001-two-sum/), #49 [Group Anagrams](../../coding-problems/arrays-and-hashing/049-group-anagrams/), #128 [Longest Consecutive Sequence](../../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/), #146 LRU Cache, #217 [Contains Duplicate](../../coding-problems/arrays-and-hashing/217-contains-duplicate/), #347 [Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), #560 Subarray Sum Equals K.
 
 ## Python example
 
@@ -148,7 +148,7 @@ Hash tables appear in 34 NeetCode 150 problems across 14 categories.
 - [79. Word Search](../../coding-problems/backtracking/079-word-search/), Counter pruning
 - [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
 
-**[Graphs](graphs/):**
+**[Graphs](../graphs/):**
 - [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/), pattern-bucket adjacency
 - [133. Clone Graph](../../coding-problems/graphs/133-clone-graph/)
 - [207. Course Schedule](../../coding-problems/graphs/207-course-schedule/), adjacency list

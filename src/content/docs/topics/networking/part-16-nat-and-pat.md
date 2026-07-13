@@ -219,6 +219,6 @@ If you configure the NAT rule but forget to apply `ip nat inside` or `ip nat out
 
 ## Related topics
 
-- [Part 10: IPv4 Addressing and Subnetting](./part-10-ipv4-addressing-and-subnetting)
-- [Part 15: EIGRP](./part-15-eigrp)
-- [Part 17: Access Control Lists](./part-17-access-control-lists)
+- [Part 10: IPv4 Addressing and Subnetting](../part-10-ipv4-addressing-and-subnetting/)
+- [Part 15: EIGRP](../part-15-eigrp/)
+- [Part 18: Access Control Lists](../part-18-access-control-lists/)

@@ -68,14 +68,14 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [136. Single Number](../coding-problems/bit-manipulation/136-single-number/)
-- [190. Reverse Bits](../coding-problems/bit-manipulation/190-reverse-bits/)
-- [191. Number of 1 Bits](../coding-problems/bit-manipulation/191-number-of-1-bits/)
-- [268. Missing Number](../coding-problems/bit-manipulation/268-missing-number/)
-- [371. Sum of Two Integers](../coding-problems/bit-manipulation/371-sum-of-two-integers/)
+- [136. Single Number](../../coding-problems/bit-manipulation/136-single-number/)
+- [190. Reverse Bits](../../coding-problems/bit-manipulation/190-reverse-bits/)
+- [191. Number of 1 Bits](../../coding-problems/bit-manipulation/191-number-of-1-bits/)
+- [268. Missing Number](../../coding-problems/bit-manipulation/268-missing-number/)
+- [371. Sum of Two Integers](../../coding-problems/bit-manipulation/371-sum-of-two-integers/)
 
 ## Related concepts
 
-- [Bitmask state](./bitmask-state/)
-- [Math and number theory](./math-and-number-theory/)
-- [Subsets and combinations](./subsets-and-combinations/)
+- [Bitmask state](../bitmask-state/)
+- [Math and number theory](../math-and-number-theory/)
+- [Subsets and combinations](../subsets-and-combinations/)

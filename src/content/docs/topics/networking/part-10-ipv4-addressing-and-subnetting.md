@@ -229,7 +229,7 @@ R1# show ip interface GigabitEthernet0/0
 
 ## Related topics
 
-- [Part 9: Spanning Tree Protocol](./part-09-spanning-tree-protocol)
-- [Part 11: IPv6 Addressing](./part-11-ipv6-addressing)
-- [Part 12: Routing Fundamentals](./part-12-routing-fundamentals)
-- [Part 16: Network Address Translation](./part-16-network-address-translation)
+- [Part 9: Spanning Tree Protocol](../part-09-spanning-tree-protocol/)
+- [Part 11: IPv6 Addressing](../part-11-ipv6-addressing/)
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/)
+- [Part 16: NAT and PAT](../part-16-nat-and-pat/)

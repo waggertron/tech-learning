@@ -66,12 +66,12 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [23. Merge k Sorted Lists](../coding-problems/linked-list/023-merge-k-sorted-lists/)
-- [295. Find Median from Data Stream](../coding-problems/heap-priority-queue/295-find-median-from-data-stream/)
-- [355. Design Twitter](../coding-problems/heap-priority-queue/355-design-twitter/)
+- [23. Merge k Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/)
+- [295. Find Median from Data Stream](../../coding-problems/heap-priority-queue/295-find-median-from-data-stream/)
+- [355. Design Twitter](../../coding-problems/heap-priority-queue/355-design-twitter/)
 
 ## Related concepts
 
-- [Heap and priority queue](./heap-and-priority-queue/)
-- [Top K](./top-k/)
-- [Linked list pointer rewiring](./linked-list-pointer-rewiring/)
+- [Heap and priority queue](../heap-and-priority-queue/)
+- [Top K](../top-k/)
+- [Linked list pointer rewiring](../linked-list-pointer-rewiring/)

@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Breadth-First Search explores a graph or grid by visiting every node at distance 1 before any node at distance 2, every node at distance 2 before any node at distance 3, and so on. It radiates outward from the starting node in concentric shells, like ripples on water.
 
-Because of this layer-by-layer property, BFS is the canonical algorithm for shortest paths in unweighted [graphs](../data-structures/graphs/). When you first reach a node, you have taken the shortest possible route to it. There is no need for a priority queue, no relaxation step, no Dijkstra machinery. The FIFO queue does all the work.
+Because of this layer-by-layer property, BFS is the canonical algorithm for shortest paths in unweighted [graphs](../../data-structures/graphs/). When you first reach a node, you have taken the shortest possible route to it. There is no need for a priority queue, no relaxation step, no Dijkstra machinery. The FIFO queue does all the work.
 
 BFS shows up everywhere: finding the nearest exit in a maze, determining if two nodes are connected, computing the minimum number of word-transformation steps, detecting whether a graph is bipartite, and the "rotting oranges" multi-source spread problems on LeetCode.
 
@@ -181,7 +181,7 @@ def multi_source_bfs(graph, sources):
     return dist
 ```
 
-**Pattern:** [Rotting Oranges](../coding-problems/graphs/994-rotting-oranges/) ([LeetCode 994](../coding-problems/graphs/994-rotting-oranges/)). Every rotten orange is a source. Push them all at minute 0. The BFS then spreads rot simultaneously from all of them, so `dist[cell]` tells you the first minute the orange at that cell goes rotten. If any fresh orange remains unreachable, return -1.
+**Pattern:** [Rotting Oranges](../../coding-problems/graphs/994-rotting-oranges/) ([LeetCode 994](../../coding-problems/graphs/994-rotting-oranges/)). Every rotten orange is a source. Push them all at minute 0. The BFS then spreads rot simultaneously from all of them, so `dist[cell]` tells you the first minute the orange at that cell goes rotten. If any fresh orange remains unreachable, return -1.
 
 ```python
 from collections import deque
@@ -275,9 +275,9 @@ Use BFS when the problem structure rewards level-by-level processing:
 
 **Shortest path in an unweighted graph or grid.** DFS finds *a* path, not necessarily the shortest one. BFS guarantees the first time you reach the target, you've taken the fewest steps. This is the single biggest reason to reach for BFS.
 
-**Minimum number of operations.** "Minimum word transformations" ([Word Ladder](../coding-problems/graphs/127-word-ladder/), [LeetCode 127](../coding-problems/graphs/127-word-ladder/)), "minimum number of mutations," "minimum moves to solve a puzzle": any time the question asks for a minimum count of discrete steps, model the state space as a graph and run BFS.
+**Minimum number of operations.** "Minimum word transformations" ([Word Ladder](../../coding-problems/graphs/127-word-ladder/), [LeetCode 127](../../coding-problems/graphs/127-word-ladder/)), "minimum number of mutations," "minimum moves to solve a puzzle": any time the question asks for a minimum count of discrete steps, model the state space as a graph and run BFS.
 
-**Level-by-level output.** Binary tree level order traversal ([LeetCode 102](../coding-problems/trees/102-binary-tree-level-order-traversal/)) needs BFS because you process an entire level, emit it, then move to the next. DFS would require tracking depth explicitly.
+**Level-by-level output.** Binary tree level order traversal ([LeetCode 102](../../coding-problems/trees/102-binary-tree-level-order-traversal/)) needs BFS because you process an entire level, emit it, then move to the next. DFS would require tracking depth explicitly.
 
 **Detecting if a graph is bipartite.** BFS naturally assigns layers; if any edge connects two nodes in the same layer, the graph has an odd cycle and is not bipartite. DFS works too, but BFS makes the coloring intuitive.
 
@@ -291,7 +291,7 @@ BFS is not always the right call. Know when to reach for DFS instead:
 
 **Cycle detection.** DFS with a recursion stack (or an explicit "in-progress" set) detects back edges naturally. BFS can detect cycles too, but the DFS approach maps more cleanly to the standard interview implementations (coloring: white / gray / black).
 
-**Topological sort.** [Kahn's algorithm](kahns/) uses BFS (process nodes with in-degree 0), but the classic recursive DFS post-order approach is the more common interview answer and integrates naturally with cycle detection.
+**Topological sort.** [Kahn's algorithm](../kahns/) uses BFS (process nodes with in-degree 0), but the classic recursive DFS post-order approach is the more common interview answer and integrates naturally with cycle detection.
 
 **Finding any path (not shortest).** If you just need to know whether a path exists and don't care about length, DFS uses less memory and often exits sooner via backtracking.
 
@@ -305,10 +305,10 @@ Quick decision rule: if the problem says "shortest," reach for BFS. If it says "
 
 | Problem | Pattern | Link |
 | ------- | ------- | ---- |
-| 200. [Number of Islands](../coding-problems/graphs/200-number-of-islands/) | BFS flood fill, connected components | [200 Number of Islands](../coding-problems/graphs/200-number-of-islands/) |
-| 994. Rotting Oranges | Multi-source BFS, simultaneous spread | [994 Rotting Oranges](../coding-problems/graphs/994-rotting-oranges/) |
-| 127. Word Ladder | BFS on implicit state graph, shortest transformation | [127 Word Ladder](../coding-problems/graphs/127-word-ladder/) |
-| 207. [Course Schedule](../coding-problems/graphs/207-course-schedule/) | Kahn's algorithm (BFS topological sort) | [207 Course Schedule](../coding-problems/graphs/207-course-schedule/) |
+| 200. [Number of Islands](../../coding-problems/graphs/200-number-of-islands/) | BFS flood fill, connected components | [200 Number of Islands](../../coding-problems/graphs/200-number-of-islands/) |
+| 994. Rotting Oranges | Multi-source BFS, simultaneous spread | [994 Rotting Oranges](../../coding-problems/graphs/994-rotting-oranges/) |
+| 127. Word Ladder | BFS on implicit state graph, shortest transformation | [127 Word Ladder](../../coding-problems/graphs/127-word-ladder/) |
+| 207. [Course Schedule](../../coding-problems/graphs/207-course-schedule/) | Kahn's algorithm (BFS topological sort) | [207 Course Schedule](../../coding-problems/graphs/207-course-schedule/) |
 
 ## Multiple uses
 
@@ -560,7 +560,7 @@ if __name__ == '__main__':
 
 ## Related topics
 
-- [Depth-First Search](./dfs/), the stack-based alternative and when to use it over BFS
-- [Dijkstra's Algorithm](./dijkstra/), BFS extended to weighted graphs with a priority queue
-- [Graphs (LeetCode 150)](../coding-problems/graphs/), the problem set where BFS appears most often
-- [Data Structures](../data-structures/), queues, sets, and adjacency representations that BFS depends on
+- [Depth-First Search](../dfs/), the stack-based alternative and when to use it over BFS
+- [Dijkstra's Algorithm](../dijkstra/), BFS extended to weighted graphs with a priority queue
+- [Graphs (LeetCode 150)](../../coding-problems/graphs/), the problem set where BFS appears most often
+- [Data Structures](../../data-structures/), queues, sets, and adjacency representations that BFS depends on

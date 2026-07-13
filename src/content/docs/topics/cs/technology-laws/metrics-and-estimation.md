@@ -111,6 +111,6 @@ Parkinson was writing about British civil service bureaucracy, but the observati
 
 ## Related topics
 
-- [`./team-dynamics/`](./team-dynamics/) -- Brooks's Law (deadline pressure and team size)
-- [`./performance-math/`](./performance-math/) -- quantitative tools for reasoning about system behavior
+- [`./team-dynamics/`](../team-dynamics/) -- Brooks's Law (deadline pressure and team size)
+- [`./performance-math/`](../performance-math/) -- quantitative tools for reasoning about system behavior
 - [`../../../testing/tdd/`](../../../testing/tdd/) -- test-driven development as a forcing function against over-engineering

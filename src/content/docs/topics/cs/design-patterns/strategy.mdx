@@ -18,7 +18,7 @@ import goCode from './strategy.go?raw';
 
 ## The problem
 
-A class needs to perform some operation, but the exact algorithm depends on context: a payment system needs to support credit cards, PayPal, and crypto; a sorter might need to switch between [merge sort](../named-algorithms/merge-sort/) and radix sort based on input size; a compressor might switch between gzip and brotli based on content type. The straightforward solution is a long `if/else` or `switch` inside the class. That conditional grows with every new algorithm, every branch gets harder to test in isolation, and the class violates the open/closed principle every time you add a variant.
+A class needs to perform some operation, but the exact algorithm depends on context: a payment system needs to support credit cards, PayPal, and crypto; a sorter might need to switch between [merge sort](../../named-algorithms/merge-sort/) and radix sort based on input size; a compressor might switch between gzip and brotli based on content type. The straightforward solution is a long `if/else` or `switch` inside the class. That conditional grows with every new algorithm, every branch gets harder to test in isolation, and the class violates the open/closed principle every time you add a variant.
 
 Strategy moves each algorithm into its own class behind a shared interface. The context class holds a reference to that interface, not a concrete implementation. Swapping the algorithm at runtime is a single assignment. Adding a new algorithm requires writing a new class, not modifying the context. Each algorithm is independently testable.
 

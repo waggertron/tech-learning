@@ -197,6 +197,6 @@ This removes entry sequence 10 without touching the rest of the list.
 
 ## Related topics
 
-- [Part 10: Routing Fundamentals](./part-10-routing-fundamentals)
-- [Part 17: DHCP and DNS](./part-17-dhcp-and-dns)
-- [Part 19: Network Security Fundamentals](./part-19-network-security-fundamentals)
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/)
+- [Part 17: DHCP and DNS](../part-17-dhcp-and-dns/)
+- [Part 19: Network Security Fundamentals](../part-19-network-security-fundamentals/)

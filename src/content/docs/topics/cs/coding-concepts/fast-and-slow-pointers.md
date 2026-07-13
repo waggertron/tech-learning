@@ -67,15 +67,15 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [19. Remove Nth Node From End of List](../coding-problems/linked-list/019-remove-nth-node-from-end-of-list/)
-- [141. Linked List Cycle](../coding-problems/linked-list/141-linked-list-cycle/)
-- [143. Reorder List](../coding-problems/linked-list/143-reorder-list/)
-- [202. Happy Number](../coding-problems/math-and-geometry/202-happy-number/)
-- [287. Find the Duplicate Number](../coding-problems/linked-list/287-find-the-duplicate-number/)
-- [876. Middle of the Linked List](../coding-problems/linked-list/876-middle-of-linked-list/)
+- [19. Remove Nth Node From End of List](../../coding-problems/linked-list/019-remove-nth-node-from-end-of-list/)
+- [141. Linked List Cycle](../../coding-problems/linked-list/141-linked-list-cycle/)
+- [143. Reorder List](../../coding-problems/linked-list/143-reorder-list/)
+- [202. Happy Number](../../coding-problems/math-and-geometry/202-happy-number/)
+- [287. Find the Duplicate Number](../../coding-problems/linked-list/287-find-the-duplicate-number/)
+- [876. Middle of the Linked List](../../coding-problems/linked-list/876-middle-of-linked-list/)
 
 ## Related concepts
 
-- [Cycle detection](./cycle-detection/)
-- [Linked list pointer rewiring](./linked-list-pointer-rewiring/)
-- [Graph traversal](./graph-traversal/)
+- [Cycle detection](../cycle-detection/)
+- [Linked list pointer rewiring](../linked-list-pointer-rewiring/)
+- [Graph traversal](../graph-traversal/)

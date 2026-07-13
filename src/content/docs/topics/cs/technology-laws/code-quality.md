@@ -200,6 +200,6 @@ Kernighan's Law says: don't be clever about individual expressions. Demeter says
 
 ## Related topics
 
-- [Systems thinking laws](./systems-thinking/): Leaky Abstractions and Chesterton's Fence
-- [API design laws](./api-design/): Hyrum's Law, Postel's Law, and POLA
-- [Team dynamics](./team-dynamics/): Conway's Law, org structure shapes code structure
+- [Systems thinking laws](../systems-thinking/): Leaky Abstractions and Chesterton's Fence
+- [API design laws](../api-design/): Hyrum's Law, Postel's Law, and POLA
+- [Team dynamics](../team-dynamics/): Conway's Law, org structure shapes code structure

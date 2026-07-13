@@ -82,10 +82,15 @@ function isBrowserLiveRenderable(code) {
   if (/createFileRoute\(/.test(code)) return false;
   if (/\b(describe|it|test)\(/.test(code)) return false;
   if (/\bcreateRoot\(/.test(code)) return false;
+  if (importsDirectiveBearingBrowserPackage(code)) return false;
   if (/export\s+async\s+function\s+[A-Z]/.test(code)) return false;
   if (/export\s+default\s+async\s+function\s+[A-Z]/.test(code)) return false;
 
   return true;
+}
+
+function importsDirectiveBearingBrowserPackage(code) {
+  return /import\s+(?!type\b)[\s\S]*?\bfrom\s+["'](?:@tanstack\/react-query|react-router|react-native)["']/.test(code);
 }
 
 const examples = collectExamples();
@@ -180,6 +185,14 @@ function deserializeFixtureValue(value) {
   }
 
   if (value.$type === "fn") {
+    if (value.name === "getKey") {
+      return (item) => String(item?.id ?? "");
+    }
+
+    if (value.name === "renderItem") {
+      return (item) => item?.name ?? null;
+    }
+
     return () => undefined;
   }
 
@@ -445,9 +458,35 @@ test("the React example runtime mounts previews as client islands", () => {
   assert.match(runtime, /import\s+\{\s*createRoot\s*\}\s+from ['"]react-dom\/client['"]/);
   assert.doesNotMatch(
     runtime,
+    /@tanstack\/react-query/,
+    "Framework data-cache packages should not be imported by the global output runtime",
+  );
+  assert.doesNotMatch(
+    runtime,
     /\bhydrateRoot\b/,
     "Output previews should mount as client islands to avoid hydration mismatch failures in documentation examples",
   );
+});
+
+test("generated live modules stay free of framework-only directives and browser package warnings", () => {
+  const forbiddenRuntimeImports =
+    /import\s+(?!type\b)[\s\S]*?\bfrom\s+["'](?:@tanstack\/react-query|react-router|react-native-web)["']/;
+
+  for (const fileName of readdirSync(generatedModuleDir)) {
+    if (!fileName.endsWith(".tsx")) continue;
+
+    const source = readFileSync(path.join(generatedModuleDir, fileName), "utf8");
+    assert.doesNotMatch(
+      source,
+      /^\s*["']use (?:client|server)["'];?/m,
+      `${fileName} should not emit React environment directives into the Vite browser bundle`,
+    );
+    assert.doesNotMatch(
+      source,
+      forbiddenRuntimeImports,
+      `${fileName} should not import framework packages that emit module-level directive warnings in Vite`,
+    );
+  }
 });
 
 test("Astro compiles live TSX examples with the automatic React JSX runtime", () => {

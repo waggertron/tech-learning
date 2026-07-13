@@ -313,7 +313,7 @@ Emerging category. Frontier models struggle; benchmark-gaming is less of a conce
 
 ## How vision-language models advanced
 
-**Dual-encoder models (2021): CLIP.** CLIP trained an image encoder and a text encoder jointly so that matching image-text pairs had similar [embeddings](../rag/embeddings/). This enabled zero-shot image classification and visual search. But CLIP could not reason: it could tell you "this image is similar to the text 'a red car'" but could not answer "what color is the car in this image?" CLIP was a retrieval model, not a reasoning model.
+**Dual-encoder models (2021): CLIP.** CLIP trained an image encoder and a text encoder jointly so that matching image-text pairs had similar [embeddings](../../rag/embeddings/). This enabled zero-shot image classification and visual search. But CLIP could not reason: it could tell you "this image is similar to the text 'a red car'" but could not answer "what color is the car in this image?" CLIP was a retrieval model, not a reasoning model.
 
 **Cross-attention vision-language models (2022): Flamingo.** Flamingo (DeepMind, 2022) used cross-attention layers to inject visual features into a pretrained language model. A frozen language model saw the image features as additional context. This enabled few-shot visual QA: show the model three examples of (image, question, answer) and it generalizes to new images. MMMU-class questions were too hard for Flamingo but the architecture was the right direction.
 
@@ -323,7 +323,7 @@ Emerging category. Frontier models struggle; benchmark-gaming is less of a conce
 
 **High-resolution and fine-grained vision (2024-2025).** Diagrams, charts, and technical documents require fine-grained visual parsing: reading small numbers in a chart, distinguishing similar symbols in a circuit diagram, reading handwritten text. Models trained on higher-resolution image crops and fine-tuned on document-specific data improved ChartQA and DocVQA substantially. Resolution is a practical bottleneck: most vision models downsample images to 224x224 pixels, which loses legibility for small text.
 
-**Reasoning mode applied to vision (2025).** The same RL-trained reasoning that improved [math benchmarks](math-benchmarks/) improved visual reasoning on MathVista and MMMU-Pro. The model can now reason: "the graph appears to cross zero at x~2.5; let me verify by extrapolating from the nearby labeled points." This added ~10-20 points on hard multimodal benchmarks. ChartQA and DocVQA (which are closer to retrieval than reasoning) benefited less.
+**Reasoning mode applied to vision (2025).** The same RL-trained reasoning that improved [math benchmarks](../math-benchmarks/) improved visual reasoning on MathVista and MMMU-Pro. The model can now reason: "the graph appears to cross zero at x~2.5; let me verify by extrapolating from the nearby labeled points." This added ~10-20 points on hard multimodal benchmarks. ChartQA and DocVQA (which are closer to retrieval than reasoning) benefited less.
 
 ## What multimodal benchmarks don't measure
 

@@ -74,7 +74,7 @@ Lisk, Ark, and BitShares are earlier DPoS chains. BitShares was DPoS's original 
 
 ## Related topics
 
-- [Proof-of-Stake](./proof-of-stake/), the more decentralized PoS alternative
-- [Byzantine Fault Tolerance](./byzantine-fault-tolerance/), BFT with a known validator set; similar throughput without the election layer
-- [Proof-of-Authority](./proof-of-authority/), a further simplification where validators are whitelisted rather than elected
-- [Ethereum](../cryptocurrency/ethereum/), the largest full PoS chain
+- [Proof-of-Stake](../proof-of-stake/), the more decentralized PoS alternative
+- [Byzantine Fault Tolerance](../byzantine-fault-tolerance/), BFT with a known validator set; similar throughput without the election layer
+- [Proof-of-Authority](../proof-of-authority/), a further simplification where validators are whitelisted rather than elected
+- [Ethereum](../../cryptocurrency/ethereum/), the largest full PoS chain

@@ -141,7 +141,7 @@ In all PoS variants, larger stakes earn more rewards and have more influence ove
 
 ## Related topics
 
-- [Ethereum](../cryptocurrency/ethereum/), the largest PoS chain
-- [Staking](../cryptocurrency/staking/), the economics and mechanics of participating as an Ethereum validator
-- [Proof-of-Work](./proof-of-work/), the energy-intensive alternative
-- [Other Consensus Mechanisms](./other-consensus/), DPoS, PoA, PoH, and PoSpace
+- [Ethereum](../../cryptocurrency/ethereum/), the largest PoS chain
+- [Staking](../../cryptocurrency/staking/), the economics and mechanics of participating as an Ethereum validator
+- [Proof-of-Work](../proof-of-work/), the energy-intensive alternative
+- [Other Consensus Mechanisms](../other-consensus/), DPoS, PoA, PoH, and PoSpace

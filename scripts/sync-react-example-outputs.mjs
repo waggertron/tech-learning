@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import vm from "node:vm";
@@ -123,9 +123,14 @@ function isBrowserLiveRenderable(code) {
   if (/\b(describe|it|test)\(/.test(code)) return false;
   if (/\bcreateRoot\(/.test(code)) return false;
   if (/\bcreateFileRoute\(/.test(code)) return false;
+  if (importsDirectiveBearingBrowserPackage(code)) return false;
   if (/export\s+default\s+async\s+function\s+[A-Z]/.test(code)) return false;
   if (/export\s+async\s+function\s+[A-Z]/.test(code)) return false;
   return true;
+}
+
+function importsDirectiveBearingBrowserPackage(code) {
+  return /import\s+(?!type\b)[\s\S]*?\bfrom\s+["'](?:@tanstack\/react-query|react-router|react-native)["']/.test(code);
 }
 
 function serializeFixtureValue(value) {
@@ -178,9 +183,13 @@ function rewriteModuleImports(code) {
     .replaceAll(/from\s+["']react-native["']/g, 'from "react-native-web"');
 }
 
+function stripReactEnvironmentDirectives(code) {
+  return code.replace(/^\s*["']use (?:client|server)["'];?\s*/g, "");
+}
+
 function buildGeneratedModuleSource(code) {
   return `// @ts-nocheck
-${rewriteModuleImports(prepareCode(code)).trim()}
+${stripReactEnvironmentDirectives(rewriteModuleImports(prepareCode(code))).trim()}
 `;
 }
 
@@ -563,7 +572,9 @@ async function syncFile(fileName, generatedEntries, generatedModules) {
       needsQueryClientProvider: /@tanstack\/react-query/.test(fence[2]),
       summary: output.mode === "result"
         ? output.summary
-        : `${title}. This example mounts a live React component in the browser.`,
+        : output.interactionMode === "live-component"
+          ? `${title}. This example mounts a live React component in the browser.`
+          : `${title}. This example is server-rendered in the docs preview.`,
       props: output.interactionMode === "live-component"
         ? serializeFixtureProps(fixtureProps({ title, componentName: componentName ?? "" }))
         : null,
@@ -602,6 +613,18 @@ async function syncFile(fileName, generatedEntries, generatedModules) {
 function writeGeneratedFiles(generatedEntries, generatedModules) {
   mkdirSync(generatedDir, { recursive: true });
   mkdirSync(generatedModuleDir, { recursive: true });
+
+  const expectedModuleFiles = new Set(
+    [...generatedModules.keys()].map((modulePath) =>
+      modulePath.replace("./react-example-modules/", ""),
+    ),
+  );
+
+  for (const fileName of readdirSync(generatedModuleDir)) {
+    if (fileName.endsWith(".tsx") && !expectedModuleFiles.has(fileName)) {
+      unlinkSync(path.join(generatedModuleDir, fileName));
+    }
+  }
 
   for (const [modulePath, source] of generatedModules.entries()) {
     const fileName = modulePath.replace("./react-example-modules/", "");

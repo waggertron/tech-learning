@@ -50,13 +50,13 @@ Standard library specifics:
 
 ## Common uses in DSA
 
-1. **Top-K / Kth largest**: Kth Largest Element in an Array, [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), K Closest Points to Origin.
-2. **K-way merge**: [Merge K Sorted Lists](../coding-problems/linked-list/023-merge-k-sorted-lists/), Find K Pairs with Smallest Sums, Kth Smallest Element in a Sorted Matrix.
+1. **Top-K / Kth largest**: Kth Largest Element in an Array, [Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), K Closest Points to Origin.
+2. **K-way merge**: [Merge K Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/), Find K Pairs with Smallest Sums, Kth Smallest Element in a Sorted Matrix.
 3. **Dijkstra's shortest path**: priority queue of `(distance, node)`; always expand the closest unvisited node.
-4. **Interval / scheduling problems**: Meeting Rooms II (min-heap of end times), Reorganize String, [Task Scheduler](../coding-problems/heap-priority-queue/621-task-scheduler/).
+4. **Interval / scheduling problems**: Meeting Rooms II (min-heap of end times), Reorganize String, [Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/).
 5. **Running median on a stream**: two heaps: max-heap over the lower half, min-heap over the upper half. The median is at the top of one (or the average of both tops).
 
-**Canonical LeetCode problems:** #23 [Merge K Sorted Lists](../coding-problems/linked-list/023-merge-k-sorted-lists/), #295 [Find Median from Data Stream](../coding-problems/heap-priority-queue/295-find-median-from-data-stream/), #347 [Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), #355 [Design Twitter](../coding-problems/heap-priority-queue/355-design-twitter/), #621 [Task Scheduler](../coding-problems/heap-priority-queue/621-task-scheduler/), #703 [Kth Largest Element in a Stream](../coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/), #973 K Closest Points to Origin.
+**Canonical LeetCode problems:** #23 [Merge K Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/), #295 [Find Median from Data Stream](../../coding-problems/heap-priority-queue/295-find-median-from-data-stream/), #347 [Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/), #355 [Design Twitter](../../coding-problems/heap-priority-queue/355-design-twitter/), #621 [Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/), #703 [Kth Largest Element in a Stream](../../coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/), #973 K Closest Points to Origin.
 
 ## Python example
 
@@ -127,7 +127,7 @@ Heaps / priority queues appear in 17 NeetCode 150 problems across 7 categories.
 - [23. Merge k Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/), min-heap of k heads
 
 **Heap / Priority Queue:**
-- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/), heap vs. [quickselect](../named-algorithms/quickselect/)
+- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/), heap vs. [quickselect](../../named-algorithms/quickselect/)
 - [295. Find Median from Data Stream](../../coding-problems/heap-priority-queue/295-find-median-from-data-stream/), two-heap balancing
 - [355. Design Twitter](../../coding-problems/heap-priority-queue/355-design-twitter/), k-way merge across feeds
 - [621. Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/), max-heap + cooldown queue
@@ -135,7 +135,7 @@ Heaps / priority queues appear in 17 NeetCode 150 problems across 7 categories.
 - [973. K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
 - [1046. Last Stone Weight](../../coding-problems/heap-priority-queue/1046-last-stone-weight/), max-heap via negation
 
-**Advanced [Graphs](graphs/):**
+**Advanced [Graphs](../graphs/):**
 - [332. Reconstruct Itinerary](../../coding-problems/advanced-graphs/332-reconstruct-itinerary/), lexicographic neighbor heap
 - [743. Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/), Dijkstra
 - [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/), modified Dijkstra

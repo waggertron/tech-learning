@@ -224,6 +224,6 @@ GigabitEthernet0/24 (99), with SW2 GigabitEthernet0/24 (1).
 
 ## Related topics
 
-- [Part 6: Switching Fundamentals](./part-06-switching-fundamentals)
-- [Part 8: Inter-VLAN Routing](./part-08-inter-vlan-routing)
-- [Part 9: EtherChannel and Link Aggregation](./part-09-etherchannel-and-link-aggregation)
+- [Part 6: Switching Fundamentals](../part-06-switching-fundamentals/)
+- [Part 8: Inter-VLAN Routing](../part-08-inter-vlan-routing/)
+- [Part 21: EtherChannel](../part-21-etherchannel/)

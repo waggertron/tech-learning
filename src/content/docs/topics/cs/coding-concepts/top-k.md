@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [215. Kth Largest Element in an Array](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
-- [347. Top K Frequent Elements](../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/)
-- [703. Kth Largest Element in a Stream](../coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/)
-- [973. K Closest Points to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
+- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
+- [347. Top K Frequent Elements](../../coding-problems/arrays-and-hashing/347-top-k-frequent-elements/)
+- [703. Kth Largest Element in a Stream](../../coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/)
+- [973. K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
 
 ## Related concepts
 
-- [Heap and priority queue](./heap-and-priority-queue/)
-- [Hash map counting](./hash-map-counting/)
-- [Divide and conquer](./divide-and-conquer/)
+- [Heap and priority queue](../heap-and-priority-queue/)
+- [Hash map counting](../hash-map-counting/)
+- [Divide and conquer](../divide-and-conquer/)

@@ -316,8 +316,8 @@ Each transition is a DB update + event publication. The trip state is stored in 
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
 - [Consistent Hashing](../../consistent-hashing/), sharding the driver location store across Redis nodes
 - [Message Queues](../../message-queues/), Kafka for surge pricing stream processing
 - [CAP Theorem](../../cap-theorem/), why location storage accepts brief staleness (AP design)
-- [Notification System](./notification-system/), delivering match offers and trip updates to drivers and riders
+- [Notification System](../notification-system/), delivering match offers and trip updates to drivers and riders

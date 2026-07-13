@@ -67,17 +67,17 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [33. Search in Rotated Sorted Array](../coding-problems/binary-search/033-search-in-rotated-sorted-array/)
-- [74. Search a 2D Matrix](../coding-problems/binary-search/074-search-a-2d-matrix/)
-- [153. Find Minimum in Rotated Sorted Array](../coding-problems/binary-search/153-find-minimum-in-rotated-sorted-array/)
-- [162. Find Peak Element](../coding-problems/binary-search/162-find-peak-element/)
-- [167. Two Sum II, Input Array Is Sorted](../coding-problems/two-pointers/167-two-sum-ii/)
-- [704. Binary Search](../coding-problems/binary-search/704-binary-search/)
-- [875. Koko Eating Bananas](../coding-problems/binary-search/875-koko-eating-bananas/)
-- [981. Time Based Key-Value Store](../coding-problems/binary-search/981-time-based-key-value-store/)
+- [33. Search in Rotated Sorted Array](../../coding-problems/binary-search/033-search-in-rotated-sorted-array/)
+- [74. Search a 2D Matrix](../../coding-problems/binary-search/074-search-a-2d-matrix/)
+- [153. Find Minimum in Rotated Sorted Array](../../coding-problems/binary-search/153-find-minimum-in-rotated-sorted-array/)
+- [162. Find Peak Element](../../coding-problems/binary-search/162-find-peak-element/)
+- [167. Two Sum II, Input Array Is Sorted](../../coding-problems/two-pointers/167-two-sum-ii/)
+- [704. Binary Search](../../coding-problems/binary-search/704-binary-search/)
+- [875. Koko Eating Bananas](../../coding-problems/binary-search/875-koko-eating-bananas/)
+- [981. Time Based Key-Value Store](../../coding-problems/binary-search/981-time-based-key-value-store/)
 
 ## Related concepts
 
-- [Binary search on answer](./binary-search-on-answer/)
-- [Modified binary search](./modified-binary-search/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
+- [Binary search on answer](../binary-search-on-answer/)
+- [Modified binary search](../modified-binary-search/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)

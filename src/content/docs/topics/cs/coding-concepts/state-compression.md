@@ -66,15 +66,15 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [62. Unique Paths](../coding-problems/2d-dynamic-programming/062-unique-paths/)
-- [198. House Robber](../coding-problems/1d-dynamic-programming/198-house-robber/)
-- [213. House Robber II](../coding-problems/1d-dynamic-programming/213-house-robber-ii/)
-- [309. Best Time to Buy and Sell Stock with Cooldown](../coding-problems/2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
-- [714. Best Time to Buy and Sell Stock with Transaction Fee](../coding-problems/2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee/)
-- [746. Min Cost Climbing Stairs](../coding-problems/1d-dynamic-programming/746-min-cost-climbing-stairs/)
+- [62. Unique Paths](../../coding-problems/2d-dynamic-programming/062-unique-paths/)
+- [198. House Robber](../../coding-problems/1d-dynamic-programming/198-house-robber/)
+- [213. House Robber II](../../coding-problems/1d-dynamic-programming/213-house-robber-ii/)
+- [309. Best Time to Buy and Sell Stock with Cooldown](../../coding-problems/2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown/)
+- [714. Best Time to Buy and Sell Stock with Transaction Fee](../../coding-problems/2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee/)
+- [746. Min Cost Climbing Stairs](../../coding-problems/1d-dynamic-programming/746-min-cost-climbing-stairs/)
 
 ## Related concepts
 
-- [Dynamic programming](./dynamic-programming/)
-- [Tabulation](./tabulation/)
-- [Bitmask state](./bitmask-state/)
+- [Dynamic programming](../dynamic-programming/)
+- [Tabulation](../tabulation/)
+- [Bitmask state](../bitmask-state/)

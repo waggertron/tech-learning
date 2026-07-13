@@ -12,7 +12,7 @@ updated: 2026-05-04
 
 Given an unsorted array and a target rank `k`, Quickselect returns the `k`th smallest element in **expected $O(n)$ time** without fully sorting the array.
 
-It's the canonical answer to "find the kth largest" interview questions and is the engine behind [LeetCode 215](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/) and 973. Named after Tony Hoare (also the inventor of Quicksort), who published it in 1961.
+It's the canonical answer to "find the kth largest" interview questions and is the engine behind [LeetCode 215](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/) and 973. Named after Tony Hoare (also the inventor of Quicksort), who published it in 1961.
 
 The key insight: you do not need a sorted array to know where one element ranks. A single partition operation places the pivot in its final sorted position and tells you instantly whether the target rank is to the left, to the right, or right here.
 
@@ -210,7 +210,7 @@ For learning and interviews, Lomuto is the one to know cold. In production libra
 
 The Dutch National Flag variant (three-way partition) handles duplicates efficiently: it partitions into `[< pivot | == pivot | > pivot]`. If your array has many repeated elements and the target rank falls in the equal segment, you are done immediately.
 
-## Application: [LeetCode 215](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/), [[Kth Largest Element in an Array](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/) in an Array](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
+## Application: [LeetCode 215](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/), [[Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/) in an Array](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
 
 "Find the kth largest element in an unsorted array."
 
@@ -250,9 +250,9 @@ def find_kth_largest(nums, k):
 
 Example: `nums = [3, 2, 1, 5, 6, 4]`, `k = 2`. The 2nd largest is `5`. Target index = `6 - 2 = 4`. Quickselect finds `nums[4] = 5` after at most a few partitions.
 
-Detailed walkthrough: [LeetCode 215, Kth Largest Element in an Array](../coding-problems/heap-priority-queue/215-kth-larget-element-in-an-array/).
+Detailed walkthrough: [LeetCode 215, Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/).
 
-## Application: [LeetCode 973](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/), [[K Closest Points to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/) to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
+## Application: [LeetCode 973](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/), [[K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/) to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
 
 "Given a list of points, return the k closest to the origin."
 
@@ -296,7 +296,7 @@ def k_closest(points, k):
 
 After the loop, `points[0..k-1]` contains the k closest points (not necessarily sorted among themselves). The partition ensures every point in `points[:k]` is closer than every point in `points[k:]`.
 
-Detailed walkthrough: [LeetCode 973, K Closest Points to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/).
+Detailed walkthrough: [LeetCode 973, K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/).
 
 ## When a heap beats Quickselect
 
@@ -325,8 +325,8 @@ If the problem asks for the top-k elements (not just one), Quickselect still app
 
 ## LeetCode exercises
 
-- [215, Kth Largest Element in an Array](../coding-problems/heap-priority-queue/215-kth-larget-element-in-an-array/)
-- [973, K Closest Points to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
+- [215, Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
+- [973, K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
 
 ## Multiple uses
 
@@ -523,6 +523,6 @@ The fuzz loop at the end runs 200 random trials against a sorted reference. If a
 
 ## Related topics
 
-- [Kadane's algorithm](./kadane/), another named linear-time algorithm
-- [LeetCode 215 and 973 (Heap / Priority Queue)](../coding-problems/heap-priority-queue/), the two canonical Quickselect problems
-- [Data Structures](../data-structures/), arrays and heaps underlying these algorithms
+- [Kadane's algorithm](../kadane/), another named linear-time algorithm
+- [LeetCode 215 and 973 (Heap / Priority Queue)](../../coding-problems/heap-priority-queue/), the two canonical Quickselect problems
+- [Data Structures](../../data-structures/), arrays and heaps underlying these algorithms

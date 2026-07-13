@@ -21,7 +21,7 @@ The most interview-relevant pattern is the **monotonic stack**, a stack that mai
 Other frequent stack patterns:
 
 - **Parentheses / delimiter matching**: push on open, pop and compare on close.
-- **Iterative DFS**: replace the system recursion stack with an explicit stack to avoid stack-overflow on deep trees/[graphs](graphs/).
+- **Iterative DFS**: replace the system recursion stack with an explicit stack to avoid stack-overflow on deep trees/[graphs](../graphs/).
 - **Expression evaluation**: Reverse Polish Notation, Shunting-yard, Basic Calculator, stacks handle the operand/operator precedence.
 - **Undo history and backtracking**: push decisions, pop to revert.
 
@@ -39,13 +39,13 @@ A stack is also the memory model for function calls (the call stack): every recu
 
 ## Common uses in DSA
 
-1. **Balanced brackets / parsing**: [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), Decode String, Remove All Adjacent Duplicates In String, Simplify Path.
-2. **Monotonic stack**: Next Greater Element I/II, [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), Trapping Rain Water, Sum of Subarray Minimums.
+1. **Balanced brackets / parsing**: [Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/), Decode String, Remove All Adjacent Duplicates In String, Simplify Path.
+2. **Monotonic stack**: Next Greater Element I/II, [Daily Temperatures](../../coding-problems/stack/739-daily-temperatures/), [Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/), Trapping Rain Water, Sum of Subarray Minimums.
 3. **Iterative DFS / traversal without recursion**: Binary Tree Inorder/Preorder/Postorder Traversal (iterative), DFS on graph with an explicit stack.
-4. **Expression evaluation and calculators**: [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), Basic Calculator I/II/III, Min Stack.
+4. **Expression evaluation and calculators**: [Evaluate Reverse Polish Notation](../../coding-problems/stack/150-evaluate-reverse-polish-notation/), Basic Calculator I/II/III, Min Stack.
 5. **Undo history / backtracking state**: classical undo buffers, browser history, game-state rewind, maze solvers.
 
-**Canonical LeetCode problems:** #20 [Valid Parentheses](../coding-problems/stack/020-valid-parentheses/), #84 [Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/), #150 [Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/), #224 Basic Calculator, #739 [Daily Temperatures](../coding-problems/stack/739-daily-temperatures/), #853 [Car Fleet](../coding-problems/stack/853-car-fleet/), #1249 Minimum Remove to Make Valid Parentheses.
+**Canonical LeetCode problems:** #20 [Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/), #84 [Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/), #150 [Evaluate Reverse Polish Notation](../../coding-problems/stack/150-evaluate-reverse-polish-notation/), #224 Basic Calculator, #739 [Daily Temperatures](../../coding-problems/stack/739-daily-temperatures/), #853 [Car Fleet](../../coding-problems/stack/853-car-fleet/), #1249 Minimum Remove to Make Valid Parentheses.
 
 ## What clues you in
 
@@ -94,11 +94,11 @@ When two structures both seem to fit, ask: *do I ever need to access anything ot
 
 Curated kin where the recognition skill above is exercised. Each adds one twist on the basic pattern:
 
-- **[20. Valid Parentheses](../coding-problems/stack/020-valid-parentheses/)**: the canonical LIFO match. Push openers, pop on closers.
-- **[150. Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/)**: push numbers, on operator pop two and combine.
+- **[20. Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/)**: the canonical LIFO match. Push openers, pop on closers.
+- **[150. Evaluate Reverse Polish Notation](../../coding-problems/stack/150-evaluate-reverse-polish-notation/)**: push numbers, on operator pop two and combine.
 - **155. Min Stack**: stack of `(value, running_min)` to keep `min()` at $O(1)$.
-- **[739. Daily Temperatures](../coding-problems/stack/739-daily-temperatures/)**: monotonic decreasing stack of indices. Pop while top is colder than current.
-- **[84. Largest Rectangle in Histogram](../coding-problems/stack/084-largest-rectangle-in-histogram/)**: monotonic increasing stack. On each pop, current bar is the right boundary, the new top is the left boundary.
+- **[739. Daily Temperatures](../../coding-problems/stack/739-daily-temperatures/)**: monotonic decreasing stack of indices. Pop while top is colder than current.
+- **[84. Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/)**: monotonic increasing stack. On each pop, current bar is the right boundary, the new top is the left boundary.
 - **22. Generate Parentheses**: recursion = implicit stack of partial strings. The call-stack *is* the data structure.
 - **224 / 227 / 772. Basic Calculator**: operator/operand stacks with precedence, the parser-by-hand variant.
 - **42. Trapping Rain Water**: monotonic stack alternative to two-pointer. For each popped bar, water is bounded by current and new top.

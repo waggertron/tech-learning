@@ -126,7 +126,7 @@ The risk: a validator could be slashed by EigenLayer's contracts even if they ar
 
 ## Related topics
 
-- [Ethereum](./ethereum/), the primary staking platform
-- [Consensus Mechanisms: Proof-of-Stake](../consensus-mechanisms/proof-of-stake/), the full PoS mechanism
-- [Wrapped Currencies](./wrapped-currencies/), stETH and rETH trade as ERC-20 tokens on secondary markets
-- [Distributed Key Generation](../../cryptographic-systems/distributed-cryptography/distributed-key-generation/), used in DVT to distribute validator keys
+- [Ethereum](../ethereum/), the primary staking platform
+- [Consensus Mechanisms: Proof-of-Stake](../../consensus-mechanisms/proof-of-stake/), the full PoS mechanism
+- [Wrapped Currencies](../wrapped-currencies/), stETH and rETH trade as ERC-20 tokens on secondary markets
+- [Distributed Key Generation](../../../cryptographic-systems/distributed-cryptography/distributed-key-generation/), used in DVT to distribute validator keys

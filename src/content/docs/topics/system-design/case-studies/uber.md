@@ -10,7 +10,7 @@ updated: 2026-05-21
 
 The defining number for a ride-sharing platform is not the ride volume: it is the GPS update rate. Three million active drivers each sending a location update every four seconds produces 750,000 writes per second. That single calculation rules out every relational database as a primary location store and points immediately to Redis. State this number in the first two minutes of the interview and the rest of the design falls into place around it.
 
-Note: the [Ride Sharing case study](./ride-sharing/) in this series covers the full design end-to-end. This entry focuses specifically on the geospatial layer and how the WebSocket routing pattern from [WhatsApp](./whatsapp/) is reused for real-time driver tracking, then cross-links to the full walkthrough for trip lifecycle, payment, and driver matching depth.
+Note: the [Ride Sharing case study](../ride-sharing/) in this series covers the full design end-to-end. This entry focuses specifically on the geospatial layer and how the WebSocket routing pattern from [WhatsApp](../whatsapp/) is reused for real-time driver tracking, then cross-links to the full walkthrough for trip lifecycle, payment, and driver matching depth.
 
 ## Series concepts
 
@@ -23,9 +23,9 @@ Note: the [Ride Sharing case study](./ride-sharing/) in this series covers the f
 
 ### Carried forward from prior entries
 
-- **WebSocket connection routing**: same `conn:{user_id} -> gateway_node` Redis hash used in [WhatsApp](./whatsapp/). When a driver sends a location update, the location service looks up the rider's gateway node and publishes the event there.
-- **Kafka event stream**: location updates, trip events, and surge pricing inputs flow through Kafka topics. Same async pipeline from [URL Shortener](./url-shortener/).
-- **Redis as primary read store**: the driver location store is Redis-first, same as the URL redirect cache in [URL Shortener](./url-shortener/). The difference is that location data is write-heavy, not read-heavy.
+- **WebSocket connection routing**: same `conn:{user_id} -> gateway_node` Redis hash used in [WhatsApp](../whatsapp/). When a driver sends a location update, the location service looks up the rider's gateway node and publishes the event there.
+- **Kafka event stream**: location updates, trip events, and surge pricing inputs flow through Kafka topics. Same async pipeline from [URL Shortener](../url-shortener/).
+- **Redis as primary read store**: the driver location store is Redis-first, same as the URL redirect cache in [URL Shortener](../url-shortener/). The difference is that location data is write-heavy, not read-heavy.
 - **Snowflake ID generation**: trip IDs use the same distributed ID service pattern.
 
 ## Clarifying questions
@@ -782,9 +782,9 @@ The surge multiplier is applied at ride request time: the fare estimate shown to
 
 ## Related topics
 
-- [Case Study: Ride Sharing](./ride-sharing/), full trip lifecycle design including payment and driver onboarding
-- [Case Study: WhatsApp](./whatsapp/), WebSocket gateway routing pattern reused here
-- [Caching](../caching/), Redis GEO as a geospatial index
-- [Message Queues](../message-queues/), Kafka for location event stream and surge pricing pipeline
-- [Consistent Hashing](../consistent-hashing/), partitioning the driver location store by city
-- [Scalability](../scalability/), horizontal scaling of the location service
+- [Case Study: Ride Sharing](../ride-sharing/), full trip lifecycle design including payment and driver onboarding
+- [Case Study: WhatsApp](../whatsapp/), WebSocket gateway routing pattern reused here
+- [Caching](../../caching/), Redis GEO as a geospatial index
+- [Message Queues](../../message-queues/), Kafka for location event stream and surge pricing pipeline
+- [Consistent Hashing](../../consistent-hashing/), partitioning the driver location store by city
+- [Scalability](../../scalability/), horizontal scaling of the location service

@@ -68,20 +68,20 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [2. Add Two Numbers](../coding-problems/linked-list/002-add-two-numbers/)
-- [19. Remove Nth Node From End of List](../coding-problems/linked-list/019-remove-nth-node-from-end-of-list/)
-- [21. Merge Two Sorted Lists](../coding-problems/linked-list/021-merge-two-sorted-lists/)
-- [24. Swap Nodes in Pairs](../coding-problems/linked-list/024-swap-nodes-in-pairs/)
-- [25. Reverse Nodes in k-Group](../coding-problems/linked-list/025-reverse-nodes-in-k-group/)
-- [138. Copy List with Random Pointer](../coding-problems/linked-list/138-copy-list-with-random-pointer/)
-- [143. Reorder List](../coding-problems/linked-list/143-reorder-list/)
-- [146. LRU Cache](../coding-problems/linked-list/146-lru-cache/)
-- [160. Intersection of Two Linked Lists](../coding-problems/linked-list/160-intersection-of-two-linked-lists/)
-- [206. Reverse Linked List](../coding-problems/linked-list/206-reverse-linked-list/)
-- [876. Middle of the Linked List](../coding-problems/linked-list/876-middle-of-linked-list/)
+- [2. Add Two Numbers](../../coding-problems/linked-list/002-add-two-numbers/)
+- [19. Remove Nth Node From End of List](../../coding-problems/linked-list/019-remove-nth-node-from-end-of-list/)
+- [21. Merge Two Sorted Lists](../../coding-problems/linked-list/021-merge-two-sorted-lists/)
+- [24. Swap Nodes in Pairs](../../coding-problems/linked-list/024-swap-nodes-in-pairs/)
+- [25. Reverse Nodes in k-Group](../../coding-problems/linked-list/025-reverse-nodes-in-k-group/)
+- [138. Copy List with Random Pointer](../../coding-problems/linked-list/138-copy-list-with-random-pointer/)
+- [143. Reorder List](../../coding-problems/linked-list/143-reorder-list/)
+- [146. LRU Cache](../../coding-problems/linked-list/146-lru-cache/)
+- [160. Intersection of Two Linked Lists](../../coding-problems/linked-list/160-intersection-of-two-linked-lists/)
+- [206. Reverse Linked List](../../coding-problems/linked-list/206-reverse-linked-list/)
+- [876. Middle of the Linked List](../../coding-problems/linked-list/876-middle-of-linked-list/)
 
 ## Related concepts
 
-- [Fast and slow pointers](./fast-and-slow-pointers/)
-- [Cycle detection](./cycle-detection/)
-- [Recursion](./recursion/)
+- [Fast and slow pointers](../fast-and-slow-pointers/)
+- [Cycle detection](../cycle-detection/)
+- [Recursion](../recursion/)

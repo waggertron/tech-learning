@@ -198,6 +198,6 @@ Every packet in the Internet layer contains a source IP address and a destinatio
 
 ## Related topics
 
-- [Part 1: Introduction to Networking](./part-01-intro-to-networking)
-- [Part 2: The OSI Model](./part-02-osi-model)
-- [Part 10: IPv4 Addressing and Subnetting](./part-10-ipv4-addressing-and-subnetting)
+- [Part 1: Introduction to Networking](../part-01-intro-to-networking/)
+- [Part 2: The OSI Model](../part-02-osi-model/)
+- [Part 10: IPv4 Addressing and Subnetting](../part-10-ipv4-addressing-and-subnetting/)

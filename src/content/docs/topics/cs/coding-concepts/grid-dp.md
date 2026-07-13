@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [62. Unique Paths](../coding-problems/2d-dynamic-programming/062-unique-paths/)
-- [329. Longest Increasing Path in a Matrix](../coding-problems/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/)
-- [417. Pacific Atlantic Water Flow](../coding-problems/graphs/417-pacific-atlantic-water-flow/)
-- [542. 01 Matrix](../coding-problems/graphs/542-01-matrix/)
+- [62. Unique Paths](../../coding-problems/2d-dynamic-programming/062-unique-paths/)
+- [329. Longest Increasing Path in a Matrix](../../coding-problems/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix/)
+- [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/)
+- [542. 01 Matrix](../../coding-problems/graphs/542-01-matrix/)
 
 ## Related concepts
 
-- [Dynamic programming](./dynamic-programming/)
-- [Flood fill](./flood-fill/)
-- [BFS](./bfs/)
+- [Dynamic programming](../dynamic-programming/)
+- [Flood fill](../flood-fill/)
+- [BFS](../bfs/)

@@ -67,11 +67,11 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [778. Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/)
-- [875. Koko Eating Bananas](../coding-problems/binary-search/875-koko-eating-bananas/)
+- [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/)
+- [875. Koko Eating Bananas](../../coding-problems/binary-search/875-koko-eating-bananas/)
 
 ## Related concepts
 
-- [Binary search](./binary-search/)
-- [Greedy algorithms](./greedy-algorithms/)
-- [Shortest paths](./shortest-paths/)
+- [Binary search](../binary-search/)
+- [Greedy algorithms](../greedy-algorithms/)
+- [Shortest paths](../shortest-paths/)

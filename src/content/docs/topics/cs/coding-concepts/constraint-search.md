@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [10. Regular Expression Matching](../coding-problems/2d-dynamic-programming/010-regular-expression-matching/)
-- [36. Valid Sudoku](../coding-problems/arrays-and-hashing/036-valid-sudoku/)
-- [51. N-Queens](../coding-problems/backtracking/051-n-queens/)
-- [79. Word Search](../coding-problems/backtracking/079-word-search/)
+- [10. Regular Expression Matching](../../coding-problems/2d-dynamic-programming/010-regular-expression-matching/)
+- [36. Valid Sudoku](../../coding-problems/arrays-and-hashing/036-valid-sudoku/)
+- [51. N-Queens](../../coding-problems/backtracking/051-n-queens/)
+- [79. Word Search](../../coding-problems/backtracking/079-word-search/)
 
 ## Related concepts
 
-- [Backtracking](./backtracking/)
-- [Memoization](./memoization/)
-- [Flood fill](./flood-fill/)
+- [Backtracking](../backtracking/)
+- [Memoization](../memoization/)
+- [Flood fill](../flood-fill/)

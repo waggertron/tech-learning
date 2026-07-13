@@ -522,6 +522,6 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Merge sort](./merge-sort/), the canonical divide-and-conquer example with the same $O(n log n)$ recurrence structure
-- [Quickselect](./quickselect/), another divide-and-conquer algorithm where the analysis depends critically on the branching factor
-- [Data structures](../data-structures/), background on how integers are represented in memory at the level these algorithms operate on
+- [Merge sort](../merge-sort/), the canonical divide-and-conquer example with the same $O(n log n)$ recurrence structure
+- [Quickselect](../quickselect/), another divide-and-conquer algorithm where the analysis depends critically on the branching factor
+- [Data structures](../../data-structures/), background on how integers are represented in memory at the level these algorithms operate on

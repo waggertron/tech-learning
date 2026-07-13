@@ -38,13 +38,13 @@ Multi-dimensional arrays are rows-of-rows (C-style), or use strides for $O(1)$ s
 
 ## Common uses in DSA
 
-1. **Two-pointer problems**: Two Sum II (sorted), Valid Palindrome, [3Sum](../coding-problems/two-pointers/015-3sum/), [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/).
+1. **Two-pointer problems**: Two Sum II (sorted), Valid Palindrome, [3Sum](../../coding-problems/two-pointers/015-3sum/), [Container With Most Water](../../coding-problems/two-pointers/011-container-with-most-water/).
 2. **Sliding window**: Longest Substring Without Repeating Characters, Maximum Sum Subarray of Size K, Minimum Size Subarray Sum.
 3. **Binary search on an array or on the answer**: Search in Rotated Sorted Array, Find Peak Element, Koko Eating Bananas, Median of Two Sorted Arrays.
-4. **Prefix sums / difference arrays**: Range Sum Query, Subarray Sum Equals K, [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
+4. **Prefix sums / difference arrays**: Range Sum Query, Subarray Sum Equals K, [Product of Array Except Self](../../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
 5. **In-place rearrangement and sorting**: Dutch National Flag (Sort Colors), Move Zeroes, Rotate Array, Next Permutation.
 
-**Canonical LeetCode problems:** #1 [Two Sum](../coding-problems/arrays-and-hashing/001-two-sum/), #11 [Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/), #15 [3Sum](../coding-problems/two-pointers/015-3sum/), #42 [Trapping Rain Water](../coding-problems/two-pointers/042-trapping-rain-water/), #53 [Maximum Subarray](../coding-problems/greedy/053-maximum-subarray/), #56 [Merge Intervals](../coding-problems/intervals/056-merge-intervals/), #238 [Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
+**Canonical LeetCode problems:** #1 [Two Sum](../../coding-problems/arrays-and-hashing/001-two-sum/), #11 [Container With Most Water](../../coding-problems/two-pointers/011-container-with-most-water/), #15 [3Sum](../../coding-problems/two-pointers/015-3sum/), #42 [Trapping Rain Water](../../coding-problems/two-pointers/042-trapping-rain-water/), #53 [Maximum Subarray](../../coding-problems/greedy/053-maximum-subarray/), #56 [Merge Intervals](../../coding-problems/intervals/056-merge-intervals/), #238 [Product of Array Except Self](../../coding-problems/arrays-and-hashing/238-product-of-array-except-self/).
 
 ## Python example
 
@@ -160,10 +160,10 @@ Arrays are the most referenced data structure in the NeetCode 150, 74 problems a
 - [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
 - [131. Palindrome Partitioning](../../coding-problems/backtracking/131-palindrome-partitioning/), 2-D palindrome DP table
 
-**[Tries](tries/):**
+**[Tries](../tries/):**
 - [212. Word Search II](../../coding-problems/tries/212-word-search-ii/), grid with in-place visited marker
 
-**[Graphs](graphs/):**
+**[Graphs](../graphs/):**
 - [130. Surrounded Regions](../../coding-problems/graphs/130-surrounded-regions/)
 - [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/)
 - [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/)

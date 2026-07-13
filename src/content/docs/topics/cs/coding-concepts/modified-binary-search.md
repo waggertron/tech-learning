@@ -67,14 +67,14 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [4. Median of Two Sorted Arrays](../coding-problems/binary-search/004-median-of-two-sorted-arrays/)
-- [33. Search in Rotated Sorted Array](../coding-problems/binary-search/033-search-in-rotated-sorted-array/)
-- [153. Find Minimum in Rotated Sorted Array](../coding-problems/binary-search/153-find-minimum-in-rotated-sorted-array/)
-- [162. Find Peak Element](../coding-problems/binary-search/162-find-peak-element/)
-- [981. Time Based Key-Value Store](../coding-problems/binary-search/981-time-based-key-value-store/)
+- [4. Median of Two Sorted Arrays](../../coding-problems/binary-search/004-median-of-two-sorted-arrays/)
+- [33. Search in Rotated Sorted Array](../../coding-problems/binary-search/033-search-in-rotated-sorted-array/)
+- [153. Find Minimum in Rotated Sorted Array](../../coding-problems/binary-search/153-find-minimum-in-rotated-sorted-array/)
+- [162. Find Peak Element](../../coding-problems/binary-search/162-find-peak-element/)
+- [981. Time Based Key-Value Store](../../coding-problems/binary-search/981-time-based-key-value-store/)
 
 ## Related concepts
 
-- [Binary search](./binary-search/)
-- [Binary search on answer](./binary-search-on-answer/)
-- [Divide and conquer](./divide-and-conquer/)
+- [Binary search](../binary-search/)
+- [Binary search on answer](../binary-search-on-answer/)
+- [Divide and conquer](../divide-and-conquer/)

@@ -67,16 +67,16 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [261. Graph Valid Tree](../coding-problems/graphs/261-graph-valid-tree/)
-- [323. Number of Connected Components in an Undirected Graph](../coding-problems/graphs/323-number-of-connected-components-in-an-undirected-graph/)
-- [547. Number of Provinces](../coding-problems/graphs/547-number-of-provinces/)
-- [684. Redundant Connection](../coding-problems/graphs/684-redundant-connection/)
-- [721. Accounts Merge](../coding-problems/graphs/721-accounts-merge/)
-- [1489. Find Critical and Pseudo-Critical Edges in MST](../coding-problems/advanced-graphs/1489-critical-and-pseudo-critical-edges/)
-- [1584. Min Cost to Connect All Points](../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/)
+- [261. Graph Valid Tree](../../coding-problems/graphs/261-graph-valid-tree/)
+- [323. Number of Connected Components in an Undirected Graph](../../coding-problems/graphs/323-number-of-connected-components-in-an-undirected-graph/)
+- [547. Number of Provinces](../../coding-problems/graphs/547-number-of-provinces/)
+- [684. Redundant Connection](../../coding-problems/graphs/684-redundant-connection/)
+- [721. Accounts Merge](../../coding-problems/graphs/721-accounts-merge/)
+- [1489. Find Critical and Pseudo-Critical Edges in MST](../../coding-problems/advanced-graphs/1489-critical-and-pseudo-critical-edges/)
+- [1584. Min Cost to Connect All Points](../../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/)
 
 ## Related concepts
 
-- [Graph traversal](./graph-traversal/)
-- [Cycle detection](./cycle-detection/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
+- [Graph traversal](../graph-traversal/)
+- [Cycle detection](../cycle-detection/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)

@@ -67,12 +67,12 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [253. Meeting Rooms II](../coding-problems/intervals/253-meeting-rooms-ii/)
-- [303. Range Sum Query - Immutable](../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
-- [1851. Minimum Interval to Include Each Query](../coding-problems/intervals/1851-minimum-interval-to-include-each-query/)
+- [253. Meeting Rooms II](../../coding-problems/intervals/253-meeting-rooms-ii/)
+- [303. Range Sum Query - Immutable](../../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
+- [1851. Minimum Interval to Include Each Query](../../coding-problems/intervals/1851-minimum-interval-to-include-each-query/)
 
 ## Related concepts
 
-- [Prefix sums](./prefix-sums/)
-- [Intervals](./intervals/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
+- [Prefix sums](../prefix-sums/)
+- [Intervals](../intervals/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)

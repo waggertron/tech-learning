@@ -67,21 +67,21 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [45. Jump Game II](../coding-problems/greedy/045-jump-game-ii/)
-- [53. Maximum Subarray](../coding-problems/greedy/053-maximum-subarray/)
-- [55. Jump Game](../coding-problems/greedy/055-jump-game/)
-- [121. Best Time to Buy and Sell Stock](../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/)
-- [122. Best Time to Buy and Sell Stock II](../coding-problems/greedy/122-best-time-to-buy-and-sell-stock-ii/)
-- [134. Gas Station](../coding-problems/greedy/134-gas-station/)
-- [334. Increasing Triplet Subsequence](../coding-problems/greedy/334-increasing-triplet-subsequence/)
-- [621. Task Scheduler](../coding-problems/heap-priority-queue/621-task-scheduler/)
-- [678. Valid Parenthesis String](../coding-problems/greedy/678-valid-parenthesis-string/)
-- [763. Partition Labels](../coding-problems/greedy/763-partition-labels/)
-- [1584. Min Cost to Connect All Points](../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/)
-- [1899. Merge Triplets to Form Target Triplet](../coding-problems/greedy/1899-merge-triplets-to-form-target-triplet/)
+- [45. Jump Game II](../../coding-problems/greedy/045-jump-game-ii/)
+- [53. Maximum Subarray](../../coding-problems/greedy/053-maximum-subarray/)
+- [55. Jump Game](../../coding-problems/greedy/055-jump-game/)
+- [121. Best Time to Buy and Sell Stock](../../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/)
+- [122. Best Time to Buy and Sell Stock II](../../coding-problems/greedy/122-best-time-to-buy-and-sell-stock-ii/)
+- [134. Gas Station](../../coding-problems/greedy/134-gas-station/)
+- [334. Increasing Triplet Subsequence](../../coding-problems/greedy/334-increasing-triplet-subsequence/)
+- [621. Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/)
+- [678. Valid Parenthesis String](../../coding-problems/greedy/678-valid-parenthesis-string/)
+- [763. Partition Labels](../../coding-problems/greedy/763-partition-labels/)
+- [1584. Min Cost to Connect All Points](../../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/)
+- [1899. Merge Triplets to Form Target Triplet](../../coding-problems/greedy/1899-merge-triplets-to-form-target-triplet/)
 
 ## Related concepts
 
-- [Greedy exchange arguments](./greedy-exchange-arguments/)
-- [Dynamic programming](./dynamic-programming/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
+- [Greedy exchange arguments](../greedy-exchange-arguments/)
+- [Dynamic programming](../dynamic-programming/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)

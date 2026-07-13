@@ -22,9 +22,9 @@ The web crawler is one of those problems where the obvious design works for a hu
 
 ### Carried forward from prior entries
 
-- **Kafka as the URL queue**: same async pipeline from [URL Shortener](./url-shortener/). The frontier publishes discovered URLs; workers consume them. Kafka provides persistence, replay, and backpressure.
-- **Consistent hashing for worker partitioning**: workers are assigned domain ranges by a consistent hash ring, same sharding concept from [URL Shortener](./url-shortener/) DB sharding. Adding or removing workers redistributes domain ownership gracefully.
-- **Redis for URL seen-cache**: same read cache pattern from [URL Shortener](./url-shortener/), now used to check whether a URL has been seen recently. The Bloom filter is the primary dedup store; Redis handles the hot recent-URL cache.
+- **Kafka as the URL queue**: same async pipeline from [URL Shortener](../url-shortener/). The frontier publishes discovered URLs; workers consume them. Kafka provides persistence, replay, and backpressure.
+- **Consistent hashing for worker partitioning**: workers are assigned domain ranges by a consistent hash ring, same sharding concept from [URL Shortener](../url-shortener/) DB sharding. Adding or removing workers redistributes domain ownership gracefully.
+- **Redis for URL seen-cache**: same read cache pattern from [URL Shortener](../url-shortener/), now used to check whether a URL has been seen recently. The Bloom filter is the primary dedup store; Redis handles the hot recent-URL cache.
 
 ## Clarifying questions
 
@@ -822,9 +822,9 @@ SimHash fingerprints are stored in a lookup table (e.g., Cassandra or a sorted f
 
 ## Related topics
 
-- [Case Study: URL Shortener](./url-shortener/), Kafka pipeline and consistent hashing patterns reused here
-- [Message Queues](../message-queues/), Kafka as the URL frontier persistent queue
-- [Consistent Hashing](../consistent-hashing/), partitioning workers by domain hash
-- [Caching](../caching/), Redis for robots.txt cache and DNS cache
-- [Databases](../databases/), storage architecture for crawled content
-- [Scalability](../scalability/), horizontal scaling of the fetcher worker fleet
+- [Case Study: URL Shortener](../url-shortener/), Kafka pipeline and consistent hashing patterns reused here
+- [Message Queues](../../message-queues/), Kafka as the URL frontier persistent queue
+- [Consistent Hashing](../../consistent-hashing/), partitioning workers by domain hash
+- [Caching](../../caching/), Redis for robots.txt cache and DNS cache
+- [Databases](../../databases/), storage architecture for crawled content
+- [Scalability](../../scalability/), horizontal scaling of the fetcher worker fleet

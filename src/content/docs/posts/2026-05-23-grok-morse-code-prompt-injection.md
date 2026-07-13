@@ -111,8 +111,8 @@ That is not a security property you can depend on.
 
 ## Related topics
 
-- [Prompt Engineering](../topics/ai/prompt-engineering/)
-- [AI Harness Development](../topics/ai/harness-development/)
-- [LLMs vs. agentic AI vs. AI agents](../topics/ai/llm-vs-agentic-ai/)
-- [Modern web browser security](./2026-04-24-modern-browser-security/)
-- [Sessions, JWTs, and cookies](./2026-04-24-sessions-jwts-cookies/)
+- [Prompt Engineering](../../topics/ai/prompt-engineering/)
+- [AI Harness Development](../../topics/ai/harness-development/)
+- [LLMs vs. agentic AI vs. AI agents](../../topics/ai/llm-vs-agentic-ai/)
+- [Modern web browser security](../2026-04-24-modern-browser-security/)
+- [Sessions, JWTs, and cookies](../2026-04-24-sessions-jwts-cookies/)

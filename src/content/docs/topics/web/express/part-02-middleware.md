@@ -315,6 +315,6 @@ Part 3 digs into `req` and `res` in detail: every property you'll actually use, 
 
 ## Related topics
 
-- [Part 1, Setup and routing](./part-01-setup-and-routing/)
-- [Part 3, Request and response](./part-03-request-response/)
-- [Part 7, Validation and error handling](./part-07-validation-and-errors/)
+- [Part 1, Setup and routing](../part-01-setup-and-routing/)
+- [Part 3, Request and response](../part-03-request-response/)
+- [Part 7, Validation and error handling](../part-07-validation-and-errors/)

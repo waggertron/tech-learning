@@ -236,6 +236,6 @@ System serial number            : FDO2101A0BC
 
 ## Related topics
 
-- [Part 5: Data Link Layer and Ethernet](./part-05-data-link-and-ethernet)
-- [Part 7: VLANs](./part-07-vlans)
-- [Part 9: EtherChannel and Link Aggregation](./part-09-etherchannel-and-link-aggregation)
+- [Part 5: Data Link Layer and Ethernet](../part-05-data-link-and-ethernet/)
+- [Part 7: VLANs](../part-07-vlans/)
+- [Part 21: EtherChannel](../part-21-etherchannel/)

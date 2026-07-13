@@ -26,7 +26,7 @@ Core interview techniques:
 - **Floyd's cycle detection** (tortoise and hare): two pointers at different speeds detect cycles in $O(n)$ with $O(1)$ space; also finds cycle start and array-as-linked-list duplicates.
 - **Two-pointer (slow/fast)**: find the middle in one pass, find the n-th from end, etc.
 - **Dummy head nodes**: prepend a sentinel to simplify edge cases around the head.
-- **Merge**: classic two-pointer merge of sorted lists; basis of [merge sort](../named-algorithms/merge-sort/) on lists.
+- **Merge**: classic two-pointer merge of sorted lists; basis of [merge sort](../../named-algorithms/merge-sort/) on lists.
 
 ## Time complexity
 
@@ -131,7 +131,7 @@ Linked lists appear in 13 NeetCode 150 problems across 3 categories.
 - [23. Merge k Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/), min-heap of heads
 - [25. Reverse Nodes in k-Group](../../coding-problems/linked-list/025-reverse-nodes-in-k-group/)
 - [138. Copy List with Random Pointer](../../coding-problems/linked-list/138-copy-list-with-random-pointer/)
-- [141. Linked List Cycle](../../coding-problems/linked-list/141-linked-list-cycle/), [Floyd's tortoise and hare](../named-algorithms/floyds/)
+- [141. Linked List Cycle](../../coding-problems/linked-list/141-linked-list-cycle/), [Floyd's tortoise and hare](../../named-algorithms/floyds/)
 - [143. Reorder List](../../coding-problems/linked-list/143-reorder-list/), mid + reverse + weave
 - [146. LRU Cache](../../coding-problems/linked-list/146-lru-cache/), doubly linked list + hash map
 - [206. Reverse Linked List](../../coding-problems/linked-list/206-reverse-linked-list/)

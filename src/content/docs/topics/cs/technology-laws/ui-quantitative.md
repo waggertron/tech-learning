@@ -96,5 +96,5 @@ Every UI decision sits somewhere on both axes. A toolbar with 20 small, evenly s
 
 ## Related topics
 
-- [API design laws](./api-design/): POLA, the Principle of Least Astonishment (behavioral counterpart)
-- [Team dynamics](./team-dynamics/): Conway's Law and Brooks's Law
+- [API design laws](../api-design/): POLA, the Principle of Least Astonishment (behavioral counterpart)
+- [Team dynamics](../team-dynamics/): Conway's Law and Brooks's Law

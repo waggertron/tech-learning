@@ -204,6 +204,6 @@ print(tree.starts_with("b"))    # True
 
 ## Related topics
 
-- [Tries](./tries/), the uncompressed parent structure that radix trees optimize
-- [Named Algorithms](../named-algorithms/), algorithms like KMP that also operate on string structure
-- [Design Patterns](../design-patterns/), [Flyweight pattern](../design-patterns/flyweight/) addresses a similar memory-sharing problem at the object level
+- [Tries](../tries/), the uncompressed parent structure that radix trees optimize
+- [Named Algorithms](../../named-algorithms/), algorithms like KMP that also operate on string structure
+- [Design Patterns](../../design-patterns/), [Flyweight pattern](../../design-patterns/flyweight/) addresses a similar memory-sharing problem at the object level

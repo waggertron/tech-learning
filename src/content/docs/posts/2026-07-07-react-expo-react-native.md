@@ -58,7 +58,7 @@ export function HomeScreen({ onStart }: { onStart: () => void }) {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-1-native-screen-component" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-expo-react-native-1-native-screen-component.tsx" role="region" aria-label="Output view: Native screen component">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-1-native-screen-component" data-render-mode="react-server" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-expo-react-native-1-native-screen-component" role="region" aria-label="Output view: Native screen component">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><div class="css-view-g5y9jx"><div dir="auto" class="css-text-146c3p1">Daily checklist</div><div tabindex="0" class="css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73"><div dir="auto" class="css-text-146c3p1">Start</div></div></div></div>
@@ -89,7 +89,7 @@ export function FavoriteButton() {
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-2-shared-hook-platform-ui" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-expo-react-native-2-shared-hook-platform-ui.tsx" role="region" aria-label="Output view: Shared Hook, platform UI">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-expo-react-native-2-shared-hook-platform-ui" data-render-mode="react-server" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-expo-react-native-2-shared-hook-platform-ui" role="region" aria-label="Output view: Shared Hook, platform UI">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
     <div class="react-example-output__rendered"><div tabindex="0" class="css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73"><div dir="auto" class="css-text-146c3p1">Save</div></div></div>

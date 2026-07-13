@@ -209,7 +209,7 @@ Use `templates/coding-concept/concept.md` when adding a new concept. Keep the se
 4. **When to use it**: the conditions that make the tactic fit.
 5. **When not to use it**: the nearby cases where the tactic is tempting but wrong.
 6. **Terminology clues**: prompt words that should put the concept in working memory.
-7. **Problems that use it**: exhaustive links into `../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
+7. **Problems that use it**: exhaustive links into `../../coding-problems/...` for every local coding-problem page whose `## Related concepts` section links back to this concept.
 8. **Related concepts**: neighboring concept links.
 
 Overlap is expected. A problem can link to multiple concept pages when each link explains a different part of the solution.
@@ -261,7 +261,18 @@ Every topic ends with a **Related topics** section that links 2–5 neighboring 
 - [Post B](../../posts/2026-04-24-slug/)
 ```
 
-Posts end with a **Related topics and posts** section with the same shape. Links go up (`../`) to the category and across to siblings.
+Links resolve from the rendered route, not from the source file path. A non-index file like `topics/cs/coding-concepts/array-scans.md` renders at `/topics/cs/coding-concepts/array-scans/`, so a coding-problem link needs `../../coding-problems/...`, not `../coding-problems/...`.
+
+Use these common cases:
+
+- Category index to child page: `./child-page/`.
+- Leaf topic to sibling topic: `../sibling-topic/`.
+- Coding concept leaf to coding problem: `../../coding-problems/<category>/<problem>/`.
+- Coding problem leaf to coding concept: `../../coding-concepts/<concept>/`.
+- Post to another post: `../2026-04-24-slug/`.
+- Post to topic: `../../topics/<category>/<topic>/`.
+
+Posts end with a **Related topics and posts** section with the same shape.
 
 ---
 
@@ -291,13 +302,21 @@ When a change adds a feature, content model, generator, reusable skill, validati
 
 Use the entry to name what shipped, why it matters, and the evidence paths a future maintainer should inspect. If the feature has a workflow or generator, add a focused docs record too, then link it from the tracker. Local reminders can go in `.agents/memory/feature_tracker.md`, but that directory is ignored and should not be the only record.
 
+### Pre-push validation
+
+Use [pre-push-validation.md](pre-push-validation.md) before pushing. The validation goal is not just a green build. The site should render intended content, internal links should resolve, code examples should parse or pass their test contract, and custom page behavior should work under local preview.
+
+```bash
+npm run validate:pre-push
+```
+
 ### Local
 
 ```bash
 npm run build
 ```
 
-Produces `dist/`. As of July 2026 the site builds a little over 600 pages in roughly 15 seconds. A YAML frontmatter error is the most common failure; it prints the offending file and line.
+Produces `dist/`. As of July 2026 the site builds 616 pages in roughly 40 seconds. A YAML frontmatter error is the most common failure; it prints the offending file and line.
 
 ### Prose cleanup scans
 
@@ -427,7 +446,7 @@ Condensed observations that should survive.
 | "language not recognized" warning | Unknown language tag in a code fence; switch to `text` or a known language |
 | Deploy fails on GitHub Actions | Pages settings; `base` in `astro.config.mjs`; build succeeded locally first |
 | Page exists but isn't in sidebar | Missing frontmatter, wrong directory, or forgot to save |
-| Link in content is 404 | Relative path, astro wants `./subtopic/` or `../sibling/`, not absolute |
+| Link in content is 404 | Relative path resolved from the source file path instead of the rendered route | Recalculate from the built URL, then run `npm run validate:links` |
 | Mermaid diagram rendered as text | Mermaid plugin isn't enabled; use ASCII art |
 
 ---

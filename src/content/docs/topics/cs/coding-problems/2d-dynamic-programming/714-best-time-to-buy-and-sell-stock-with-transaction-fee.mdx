@@ -209,7 +209,7 @@ This is the whole trick. When you sell at `p`, you have realized `p − buy` and
 
 ## How to recognize this pattern
 
-**The signal: friction added to an unlimited-transaction problem.** A per-sale fee (here) or a cooldown ([309](./309-best-time-to-buy-and-sell-stock-with-cooldown/)) takes the friction-free 122 and couples decisions across days. The tell that the greedy daily-step sum no longer applies: you can construct a case where splitting one climb into two trades loses money to the extra fee. The moment that is possible, decomposition fails and you need state.
+**The signal: friction added to an unlimited-transaction problem.** A per-sale fee (here) or a cooldown ([309](../309-best-time-to-buy-and-sell-stock-with-cooldown/)) takes the friction-free 122 and couples decisions across days. The tell that the greedy daily-step sum no longer applies: you can construct a case where splitting one climb into two trades loses money to the extra fee. The moment that is possible, decomposition fails and you need state.
 
 **The progression to memorize.**
 
@@ -218,7 +218,7 @@ This is the whole trick. When you sell at `p`, you have realized `p − buy` and
 | [121](../../sliding-window/121-best-time-to-buy-and-sell-stock/) | one transaction | running-min window |
 | [122](../../greedy/122-best-time-to-buy-and-sell-stock-ii/) | unlimited, no friction | sum positive daily steps |
 | **714** | **unlimited, fee per sale** | **hold/cash state machine** |
-| [309](./309-best-time-to-buy-and-sell-stock-with-cooldown/) | unlimited, 1-day cooldown | state machine + a rest state |
+| [309](../309-best-time-to-buy-and-sell-stock-with-cooldown/) | unlimited, 1-day cooldown | state machine + a rest state |
 
 714 and 309 are the same skeleton as 122's Approach 3 state machine, each adds one rule. 714 subtracts `fee` on the sell; 309 inserts a third state so you cannot buy the day after selling. Recognizing that they share a skeleton is what turns "three separate problems" into "one machine, three rule sets."
 
@@ -226,7 +226,7 @@ This is the whole trick. When you sell at `p`, you have realized `p − buy` and
 
 | Problem | Same shape |
 | --- | --- |
-| [309. Stock with Cooldown](./309-best-time-to-buy-and-sell-stock-with-cooldown/) | Same machine, a rest state instead of a fee |
+| [309. Stock with Cooldown](../309-best-time-to-buy-and-sell-stock-with-cooldown/) | Same machine, a rest state instead of a fee |
 | [122. Stock II](../../greedy/122-best-time-to-buy-and-sell-stock-ii/) | The frictionless base case (`fee = 0`) |
 | 188. Best Time to Buy and Sell Stock IV | Same machine, capped at `k` transactions |
 
@@ -241,12 +241,12 @@ This is the whole trick. When you sell at `p`, you have realized `p − buy` and
 
 ## Related topics
 
-- [2-D Dynamic Programming](./index/)
-- [309. Best Time to Buy and Sell Stock with Cooldown](./309-best-time-to-buy-and-sell-stock-with-cooldown/)
+- [2-D Dynamic Programming](../)
+- [309. Best Time to Buy and Sell Stock with Cooldown](../309-best-time-to-buy-and-sell-stock-with-cooldown/)
 - [122. Best Time to Buy and Sell Stock II](../../greedy/122-best-time-to-buy-and-sell-stock-ii/)
 - [121. Best Time to Buy and Sell Stock](../../sliding-window/121-best-time-to-buy-and-sell-stock/)
 
 ## Related concepts
 
-- [State Compression](../../coding-concepts/state-compression/), the memory reduction tactic for keeping only states the next transition needs.
-- [Dynamic Programming](../../coding-concepts/dynamic-programming/), the state and transition model for reusing answers to overlapping subproblems.
+- [State Compression](../../../coding-concepts/state-compression/), the memory reduction tactic for keeping only states the next transition needs.
+- [Dynamic Programming](../../../coding-concepts/dynamic-programming/), the state and transition model for reusing answers to overlapping subproblems.

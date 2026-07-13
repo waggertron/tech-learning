@@ -170,6 +170,6 @@ On a Windows or Linux host, `arp -a` shows the same table.
 
 ## Related topics
 
-- [Part 4: Network Layer and IP](./part-04-network-layer-and-ip)
-- [Part 6: Switching Fundamentals](./part-06-switching-fundamentals)
-- [Part 10: Spanning Tree Protocol](./part-10-spanning-tree-protocol)
+- [Part 10: IPv4 Addressing and Subnetting](../part-10-ipv4-addressing-and-subnetting/)
+- [Part 6: Switching Fundamentals](../part-06-switching-fundamentals/)
+- [Part 9: Spanning Tree Protocol](../part-09-spanning-tree-protocol/)

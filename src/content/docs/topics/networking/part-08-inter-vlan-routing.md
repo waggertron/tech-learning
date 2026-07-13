@@ -186,7 +186,7 @@ flowchart TD
 
 | Criterion | Legacy (per-interface) | Router-on-a-stick | Layer 3 switch (SVIs) |
 |---|---|---|---|
-| [Scalability](../system-design/scalability/) | Poor (1 interface per VLAN) | Moderate (1 link, many sub-ifs) | Excellent (hundreds of VLANs) |
+| [Scalability](../../system-design/scalability/) | Poor (1 interface per VLAN) | Moderate (1 link, many sub-ifs) | Excellent (hundreds of VLANs) |
 | Cost | High (router ports are expensive) | Low (one router port) | Moderate (L3 switch costs more than L2) |
 | Performance | Good (dedicated links) | Poor at scale (trunk bottleneck) | Excellent (hardware ASIC routing) |
 | Complexity | Low | Low | Moderate (ip routing, SVI up conditions) |
@@ -239,6 +239,6 @@ If `show interfaces vlan 10` shows `Vlan10 is up, line protocol is down`, no por
 
 ## Related topics
 
-- [Part 7: VLANs](./part-07-vlans)
-- [Part 12: Static Routing](./part-12-static-routing)
-- [Part 13: Dynamic Routing and OSPF](./part-13-dynamic-routing-and-ospf)
+- [Part 7: VLANs](../part-07-vlans/)
+- [Part 13: Static Routing](../part-13-static-routing/)
+- [Part 14: OSPF](../part-14-ospf/)

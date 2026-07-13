@@ -21,10 +21,10 @@ The online judge is one of the more unusual system design problems because the c
 
 ### Carried forward from prior entries
 
-- **Kafka job queue**: same async pipeline introduced in [URL Shortener](./url-shortener/) for analytics. Here it buffers code submissions between the API and the judge workers.
-- **Redis sorted sets for leaderboard**: same data structure used in [Facebook News Feed](./facebook-news-feed/) for feed cache. Different semantics (score encodes penalty time rather than recency), same O(log N) insert and O(log N + K) range query.
-- **WebSocket push**: same gateway routing pattern from [WhatsApp](./whatsapp/). When a submission result is ready, the result event flows back to the client over an open WebSocket connection.
-- **Snowflake ID generation**: submission IDs use the same distributed ID service as [URL Shortener](./url-shortener/).
+- **Kafka job queue**: same async pipeline introduced in [URL Shortener](../url-shortener/) for analytics. Here it buffers code submissions between the API and the judge workers.
+- **Redis sorted sets for leaderboard**: same data structure used in [Facebook News Feed](../facebook-news-feed/) for feed cache. Different semantics (score encodes penalty time rather than recency), same O(log N) insert and O(log N + K) range query.
+- **WebSocket push**: same gateway routing pattern from [WhatsApp](../whatsapp/). When a submission result is ready, the result event flows back to the client over an open WebSocket connection.
+- **Snowflake ID generation**: submission IDs use the same distributed ID service as [URL Shortener](../url-shortener/).
 
 ## Clarifying questions
 
@@ -753,9 +753,9 @@ The sorted set is checkpointed to PostgreSQL every 60 seconds by a background jo
 
 ## Related topics
 
-- [Message Queues](../message-queues/), how Kafka decouples submission ingestion from execution
-- [Caching](../caching/), warm container pools and test case locality
-- [Rate Limiting](../rate-limiting/), preventing submission floods from a single user
-- [Distributed Locking](../distributed-locking/), atomic contest-start operations
-- [Case Study: Facebook News Feed](./facebook-news-feed/), Redis sorted set leaderboard pattern
-- [Case Study: WhatsApp](./whatsapp/), WebSocket gateway routing reused here
+- [Message Queues](../../message-queues/), how Kafka decouples submission ingestion from execution
+- [Caching](../../caching/), warm container pools and test case locality
+- [Rate Limiting](../../rate-limiting/), preventing submission floods from a single user
+- [Distributed Locking](../../distributed-locking/), atomic contest-start operations
+- [Case Study: Facebook News Feed](../facebook-news-feed/), Redis sorted set leaderboard pattern
+- [Case Study: WhatsApp](../whatsapp/), WebSocket gateway routing reused here

@@ -249,7 +249,7 @@ Tests run against a long-lived environment. Simple, but tests contend for shared
 
 ### Per-PR ephemeral environment
 
-A PR-bot spins up a full stack per PR (via [ArgoCD](../ops/argocd/)'s `ApplicationSet` PullRequest generator, Vercel-like preview deploys, or just a [Kubernetes](../ops/kubernetes/) namespace). Tests run against the PR's own copy.
+A PR-bot spins up a full stack per PR (via [ArgoCD](../../ops/argocd/)'s `ApplicationSet` PullRequest generator, Vercel-like preview deploys, or just a [Kubernetes](../../ops/kubernetes/) namespace). Tests run against the PR's own copy.
 
 Ephemeral is the gold standard; staging is the pragmatic default. Most teams evolve from shared staging → ephemeral over a year.
 

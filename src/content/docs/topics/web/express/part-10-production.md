@@ -94,7 +94,7 @@ pm2 logs        # tail logs
 pm2 monit       # process monitor
 ```
 
-## [Rate limiting](../../system-design/rate-limiting/)
+## [Rate limiting](../../../system-design/rate-limiting/)
 
 Protect your API from brute force, credential stuffing, and runaway clients:
 
@@ -224,7 +224,7 @@ app.get('/health/ready', async (req, res) => {
 });
 ```
 
-[Kubernetes](../../ops/kubernetes/) uses liveness probes to restart stuck pods and readiness probes to stop routing traffic to pods that are not yet ready (or are draining).
+[Kubernetes](../../../ops/kubernetes/) uses liveness probes to restart stuck pods and readiness probes to stop routing traffic to pods that are not yet ready (or are draining).
 
 ## Graceful shutdown
 
@@ -277,7 +277,7 @@ process.on('unhandledRejection', (reason) => {
 });
 ```
 
-## [Docker](../../ops/docker/)
+## [Docker](../../../ops/docker/)
 
 **`Dockerfile`**
 
@@ -427,7 +427,7 @@ After completing this series you have a production-grade Express API with:
 - PostgreSQL via Prisma with type-safe queries
 - Zod validation and centralized error handling
 - File upload support with type checking
-- [Integration tests](../../testing/integration-tests/) with Jest and Supertest
+- [Integration tests](../../../testing/integration-tests/) with Jest and Supertest
 - Multi-core utilization, rate limiting, and graceful shutdown in production
 
 ## References
@@ -440,6 +440,6 @@ After completing this series you have a production-grade Express API with:
 
 ## Related topics
 
-- [Part 5, Authentication](./part-05-authentication/)
-- [Part 6, Database integration](./part-06-database/)
-- [Part 9, Testing](./part-09-testing/)
+- [Part 5, Authentication](../part-05-authentication/)
+- [Part 6, Database integration](../part-06-database/)
+- [Part 9, Testing](../part-09-testing/)

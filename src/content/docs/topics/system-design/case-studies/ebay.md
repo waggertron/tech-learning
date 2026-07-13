@@ -21,12 +21,12 @@ eBay combines two genuinely hard problems in one product: a marketplace (catalog
 
 ### Carried forward from prior entries
 
-- **Distributed locking** ([Ticketmaster](./ticketmaster/)): bid placement requires an atomic check-and-update. The same Redis `SET NX PX` lock that reserves a seat now ensures only one bid wins a race condition. Two users bidding at the same millisecond cannot both win.
-- **Redis sorted sets** ([News Feed](./facebook-news-feed/), [LeetCode](./leetcode/)): active auctions sorted by end_time. `ZADD auctions:ending {end_timestamp} {auction_id}` enables efficient queries for "which auctions end in the next 10 minutes" -- the hot set that needs real-time bid traffic.
-- **WebSocket connection routing** ([WhatsApp](./whatsapp/), [Uber](./uber/)): watchers of an active auction receive real-time bid updates. The same `conn:{user_id} -> gateway_server_id` Redis routing table pushes new bids to all connected watchers.
+- **Distributed locking** ([Ticketmaster](../ticketmaster/)): bid placement requires an atomic check-and-update. The same Redis `SET NX PX` lock that reserves a seat now ensures only one bid wins a race condition. Two users bidding at the same millisecond cannot both win.
+- **Redis sorted sets** ([News Feed](../facebook-news-feed/), [LeetCode](../leetcode/)): active auctions sorted by end_time. `ZADD auctions:ending {end_timestamp} {auction_id}` enables efficient queries for "which auctions end in the next 10 minutes" -- the hot set that needs real-time bid traffic.
+- **WebSocket connection routing** ([WhatsApp](../whatsapp/), [Uber](../uber/)): watchers of an active auction receive real-time bid updates. The same `conn:{user_id} -> gateway_server_id` Redis routing table pushes new bids to all connected watchers.
 - **Kafka event pipeline** (all prior entries): every bid placed is published to a Kafka topic for downstream consumers -- analytics, fraud detection, notification service, and bid history storage.
-- **ID generation** ([Bitly](./bitly/)): auction IDs, listing IDs, and bid IDs are all Snowflake-style 64-bit integers. Monotonically increasing IDs provide implicit ordering without a separate timestamp sort.
-- **Idempotent writes** ([Ad Click Aggregator](./ad-click-aggregator/)): bids carry a client-generated idempotency key. A retry from a dropped network connection cannot create a duplicate bid.
+- **ID generation** ([Bitly](../bitly/)): auction IDs, listing IDs, and bid IDs are all Snowflake-style 64-bit integers. Monotonically increasing IDs provide implicit ordering without a separate timestamp sort.
+- **Idempotent writes** ([Ad Click Aggregator](../ad-click-aggregator/)): bids carry a client-generated idempotency key. A retry from a dropped network connection cannot create a duplicate bid.
 
 ## Clarifying questions
 
@@ -485,7 +485,7 @@ A critical invariant: the displayed current price is always less than or equal t
 
 ## Deep dive: real-time bid updates
 
-Watchers of an active auction receive live bid updates via WebSocket. The connection routing table from [WhatsApp](./whatsapp/) and [Uber](./uber/) is reused directly:
+Watchers of an active auction receive live bid updates via WebSocket. The connection routing table from [WhatsApp](../whatsapp/) and [Uber](../uber/) is reused directly:
 
 ```python
 def publish_bid_event(auction_id: str, bid_id: str, new_price: float):
@@ -828,10 +828,10 @@ The escrow payment is idempotent: `create_escrow` uses `auction_id` as an idempo
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
 - [Distributed Locking](../../distributed-locking/), the Redis lock primitives used for bid placement
 - [Message Queues](../../message-queues/), Kafka bid event pipeline
-- [Ticketmaster](./ticketmaster/), the same distributed lock pattern for seat reservation
-- [WhatsApp](./whatsapp/), the same WebSocket routing table for real-time bid delivery
-- [Ad Click Aggregator](./ad-click-aggregator/), idempotent event recording
+- [Ticketmaster](../ticketmaster/), the same distributed lock pattern for seat reservation
+- [WhatsApp](../whatsapp/), the same WebSocket routing table for real-time bid delivery
+- [Ad Click Aggregator](../ad-click-aggregator/), idempotent event recording
 - [Saga Pattern](../../saga-pattern/), the payment escrow close flow

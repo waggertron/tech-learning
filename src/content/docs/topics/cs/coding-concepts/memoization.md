@@ -68,15 +68,15 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [10. Regular Expression Matching](../coding-problems/2d-dynamic-programming/010-regular-expression-matching/)
-- [72. Edit Distance](../coding-problems/2d-dynamic-programming/072-edit-distance/)
-- [91. Decode Ways](../coding-problems/1d-dynamic-programming/091-decode-ways/)
-- [97. Interleaving String](../coding-problems/2d-dynamic-programming/097-interleaving-string/)
-- [139. Word Break](../coding-problems/1d-dynamic-programming/139-word-break/)
-- [494. Target Sum](../coding-problems/2d-dynamic-programming/494-target-sum/)
+- [10. Regular Expression Matching](../../coding-problems/2d-dynamic-programming/010-regular-expression-matching/)
+- [72. Edit Distance](../../coding-problems/2d-dynamic-programming/072-edit-distance/)
+- [91. Decode Ways](../../coding-problems/1d-dynamic-programming/091-decode-ways/)
+- [97. Interleaving String](../../coding-problems/2d-dynamic-programming/097-interleaving-string/)
+- [139. Word Break](../../coding-problems/1d-dynamic-programming/139-word-break/)
+- [494. Target Sum](../../coding-problems/2d-dynamic-programming/494-target-sum/)
 
 ## Related concepts
 
-- [Dynamic programming](./dynamic-programming/)
-- [Tabulation](./tabulation/)
-- [Backtracking](./backtracking/)
+- [Dynamic programming](../dynamic-programming/)
+- [Tabulation](../tabulation/)
+- [Backtracking](../backtracking/)

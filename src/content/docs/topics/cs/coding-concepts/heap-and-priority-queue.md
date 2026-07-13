@@ -67,17 +67,17 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [23. Merge k Sorted Lists](../coding-problems/linked-list/023-merge-k-sorted-lists/)
-- [215. Kth Largest Element in an Array](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
-- [295. Find Median from Data Stream](../coding-problems/heap-priority-queue/295-find-median-from-data-stream/)
-- [355. Design Twitter](../coding-problems/heap-priority-queue/355-design-twitter/)
-- [621. Task Scheduler](../coding-problems/heap-priority-queue/621-task-scheduler/)
-- [703. Kth Largest Element in a Stream](../coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/)
-- [973. K Closest Points to Origin](../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
-- [1046. Last Stone Weight](../coding-problems/heap-priority-queue/1046-last-stone-weight/)
+- [23. Merge k Sorted Lists](../../coding-problems/linked-list/023-merge-k-sorted-lists/)
+- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
+- [295. Find Median from Data Stream](../../coding-problems/heap-priority-queue/295-find-median-from-data-stream/)
+- [355. Design Twitter](../../coding-problems/heap-priority-queue/355-design-twitter/)
+- [621. Task Scheduler](../../coding-problems/heap-priority-queue/621-task-scheduler/)
+- [703. Kth Largest Element in a Stream](../../coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/)
+- [973. K Closest Points to Origin](../../coding-problems/heap-priority-queue/973-k-closest-points-to-origin/)
+- [1046. Last Stone Weight](../../coding-problems/heap-priority-queue/1046-last-stone-weight/)
 
 ## Related concepts
 
-- [Top K](./top-k/)
-- [K-way merge](./k-way-merge/)
-- [Dijkstra](./dijkstra/)
+- [Top K](../top-k/)
+- [K-way merge](../k-way-merge/)
+- [Dijkstra](../dijkstra/)

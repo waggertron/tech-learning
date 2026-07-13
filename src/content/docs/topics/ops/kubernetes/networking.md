@@ -54,7 +54,7 @@ Downside: iptables rules are processed linearly. At 10,000+ services, rule trave
 
 ### IPVS mode
 
-kube-proxy programs IPVS (IP Virtual Server) in the kernel instead. IPVS uses [hash tables](../../cs/data-structures/hash-tables/), so lookup is $O(1)$ regardless of service count. Enable with `--proxy-mode=ipvs` on the kube-proxy DaemonSet. Choose this for large clusters.
+kube-proxy programs IPVS (IP Virtual Server) in the kernel instead. IPVS uses [hash tables](../../../cs/data-structures/hash-tables/), so lookup is $O(1)$ regardless of service count. Enable with `--proxy-mode=ipvs` on the kube-proxy DaemonSet. Choose this for large clusters.
 
 ### eBPF mode (Cilium)
 
@@ -250,6 +250,6 @@ Most clusters need Ingress plus NetworkPolicy and nothing else in the networking
 ## Related topics
 
 - [Kubernetes](./), the parent topic
-- [Kubernetes Security Hardening](./security/), NetworkPolicy as a security boundary
-- [Kubernetes Troubleshooting](./troubleshooting/), diagnosing DNS and connectivity failures
-- [ArgoCD](../argocd/), deploying network configurations via [GitOps](../gitops/)
+- [Kubernetes Security Hardening](../security/), NetworkPolicy as a security boundary
+- [Kubernetes Troubleshooting](../troubleshooting/), diagnosing DNS and connectivity failures
+- [ArgoCD](../../argocd/), deploying network configurations via [GitOps](../../gitops/)

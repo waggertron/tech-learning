@@ -8,7 +8,7 @@ created: 2026-05-21
 updated: 2026-05-21
 ---
 
-Search is the query interface to a knowledge base, and social search adds two complications that make it harder than web search: the corpus changes in real time (100M posts per day), and every result must pass a privacy filter (only show posts the querying user is allowed to see). The inverted index is the foundational data structure. The hard problems are keeping it fresh (Kafka-driven index updates), ranking it well (BM25 plus social affinity signals), and filtering it correctly (privacy). The indexing pipeline looks structurally identical to the [URL Shortener](./url-shortener/) analytics pipeline: event published to Kafka, consumer updates a store. Understanding that structural reuse is the central insight.
+Search is the query interface to a knowledge base, and social search adds two complications that make it harder than web search: the corpus changes in real time (100M posts per day), and every result must pass a privacy filter (only show posts the querying user is allowed to see). The inverted index is the foundational data structure. The hard problems are keeping it fresh (Kafka-driven index updates), ranking it well (BM25 plus social affinity signals), and filtering it correctly (privacy). The indexing pipeline looks structurally identical to the [URL Shortener](../url-shortener/) analytics pipeline: event published to Kafka, consumer updates a store. Understanding that structural reuse is the central insight.
 
 ## Series concepts
 
@@ -22,9 +22,9 @@ Search is the query interface to a knowledge base, and social search adds two co
 
 ### Carried forward from prior entries
 
-- **Kafka indexing pipeline**: same async event pipeline from [URL Shortener](./url-shortener/), now driving search index updates instead of click analytics. A post-created event flows through Kafka to an index worker that updates posting lists in Elasticsearch.
-- **Consistent hashing for index sharding**: index shards are assigned to nodes using the same consistent hash ring concept from [URL Shortener](./url-shortener/) and [Web Crawler](./web-crawler/). Adding index nodes redistributes only the shards on the affected ring segment.
-- **Redis result cache**: same cache pattern from [URL Shortener](./url-shortener/) and [Ticketmaster](./ticketmaster/). Popular queries are cached in Redis to absorb repeated identical searches.
+- **Kafka indexing pipeline**: same async event pipeline from [URL Shortener](../url-shortener/), now driving search index updates instead of click analytics. A post-created event flows through Kafka to an index worker that updates posting lists in Elasticsearch.
+- **Consistent hashing for index sharding**: index shards are assigned to nodes using the same consistent hash ring concept from [URL Shortener](../url-shortener/) and [Web Crawler](../web-crawler/). Adding index nodes redistributes only the shards on the affected ring segment.
+- **Redis result cache**: same cache pattern from [URL Shortener](../url-shortener/) and [Ticketmaster](../ticketmaster/). Popular queries are cached in Redis to absorb repeated identical searches.
 - **Snowflake ID generation**: document IDs for indexing use the same distributed ID service, providing monotonically increasing IDs that make posting list delta encoding efficient (IDs are already sorted by creation time within each shard).
 
 ## Clarifying questions
@@ -831,10 +831,10 @@ func proactiveTypeaheadRefresh(ctx context.Context) error {
 
 ## Related topics
 
-- [Case Study: URL Shortener](./url-shortener/), Kafka indexing pipeline pattern
-- [Case Study: Ad Click Aggregator](./ad-click-aggregator/), Kafka fan-out pipeline at billing scale
-- [Case Study: Facebook News Feed](./facebook-news-feed/), social affinity signals and Redis sorted sets
-- [Databases](../databases/), Elasticsearch as a document store and inverted index engine
-- [Caching](../caching/), Redis for query result cache and typeahead prefix cache
-- [Consistent Hashing](../consistent-hashing/), Elasticsearch shard routing
-- [Message Queues](../message-queues/), Kafka for the post-created event stream
+- [Case Study: URL Shortener](../url-shortener/), Kafka indexing pipeline pattern
+- [Case Study: Ad Click Aggregator](../ad-click-aggregator/), Kafka fan-out pipeline at billing scale
+- [Case Study: Facebook News Feed](../facebook-news-feed/), social affinity signals and Redis sorted sets
+- [Databases](../../databases/), Elasticsearch as a document store and inverted index engine
+- [Caching](../../caching/), Redis for query result cache and typeahead prefix cache
+- [Consistent Hashing](../../consistent-hashing/), Elasticsearch shard routing
+- [Message Queues](../../message-queues/), Kafka for the post-created event stream

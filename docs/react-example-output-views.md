@@ -89,6 +89,10 @@ For component examples, the generator:
 - Emits a generated browser module when the example can safely run in the page.
 - Emits a registry entry with fixture props and `data-interaction-mode="live-component"`.
 
+Some examples are useful as rendered teaching examples but noisy or incorrect as browser bundles. Keep examples that import framework packages with module-level React directives, such as TanStack Query, React Router, and React Native, out of `live-component` mode unless the docs shell owns the matching runtime. They can still render fallback HTML from the server-side generator.
+
+Generated browser modules strip top-level `"use client"` and `"use server"` directives. The article code fence keeps the directive for teaching, but the generated docs island does not pass framework-only directives into Vite's browser bundle.
+
 For non-component examples, the generator emits `data-render-mode="result"` with a runner panel. Use result mode for tests, browser `createRoot` entrypoints, config files, route registration objects, server functions, and other examples whose real output belongs to a runner or framework runtime. Runner content comes from the code fence or from a deterministic runner. Do not fill it with prose invented by the generator.
 
 Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new component shape appears. Avoid manual edits to generated panels.
@@ -102,6 +106,7 @@ Prefer expanding the renderer, fixtures, or `_react-example-modules/` when a new
 - **Registry mismatch**: The registry module path and `import.meta.glob` keys must resolve to the same generated module. If they do not, the page shows server-rendered HTML but event handlers stay inert.
 - **Hydration mismatch noise**: Output panels are documentation islands. Use `createRoot` to mount them as client previews instead of `hydrateRoot`, because many examples render equivalent but not byte-identical server and client trees.
 - **Server component mismatch**: Async Server Components, route modules, and framework-only examples should stay out of `live-component` mode unless there is a true browser runtime for them.
+- **Module directive warnings**: Do not silence Vite warnings globally for `"use client"`. Keep the directive in the article, strip it from generated browser modules, and keep directive-bearing framework packages out of live modules.
 - **False success**: Seeing the correct output HTML is not enough. Click a stateful example, such as the counter in the Events and local state post, before shipping runtime changes.
 - **Partial children render**: If a component receives multiple children, compare the output against every visible child in the code fence. A missing button beside a rendered paragraph means the fixture or serializer dropped part of the React tree.
 - **Visible text drift**: Generated tests should compare unconditional visible JSX text with the rendered output region. Include accessible attribute text such as `aria-label`, `title`, and `placeholder`; exclude conditional loading, error, and interaction-only text.

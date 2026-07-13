@@ -156,6 +156,6 @@ result = await greet("world")  # correct
 ## Related topics
 
 - [Python, category overview](../)
-- [List Comprehensions](./list-comprehensions/), coroutine intuition builds on the same generator mental model
+- [List Comprehensions](../list-comprehensions/), coroutine intuition builds on the same generator mental model
 - [Testing](../../testing/), async code needs async-aware test runners like pytest-asyncio
 - [Message Queues](../../system-design/message-queues/), a common destination for async producers and consumers

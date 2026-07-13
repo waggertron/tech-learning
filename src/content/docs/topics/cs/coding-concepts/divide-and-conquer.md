@@ -68,16 +68,16 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [4. Median of Two Sorted Arrays](../coding-problems/binary-search/004-median-of-two-sorted-arrays/)
-- [50. Pow(x, n)](../coding-problems/math-and-geometry/050-pow-x-n/)
-- [105. Construct Binary Tree from Preorder and Inorder Traversal](../coding-problems/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
-- [215. Kth Largest Element in an Array](../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
-- [312. Burst Balloons](../coding-problems/2d-dynamic-programming/312-burst-balloons/)
-- [454. 4Sum II](../coding-problems/arrays-and-hashing/454-4sum-ii/)
+- [4. Median of Two Sorted Arrays](../../coding-problems/binary-search/004-median-of-two-sorted-arrays/)
+- [50. Pow(x, n)](../../coding-problems/math-and-geometry/050-pow-x-n/)
+- [105. Construct Binary Tree from Preorder and Inorder Traversal](../../coding-problems/trees/105-construct-binary-tree-from-preorder-and-inorder-traversal/)
+- [215. Kth Largest Element in an Array](../../coding-problems/heap-priority-queue/215-kth-largest-element-in-an-array/)
+- [312. Burst Balloons](../../coding-problems/2d-dynamic-programming/312-burst-balloons/)
+- [454. 4Sum II](../../coding-problems/arrays-and-hashing/454-4sum-ii/)
 
 ## Related concepts
 
-- [Binary search](./binary-search/)
-- [Recursion](./recursion/)
-- [Dynamic programming](./dynamic-programming/)
-- [Top K](./top-k/)
+- [Binary search](../binary-search/)
+- [Recursion](../recursion/)
+- [Dynamic programming](../dynamic-programming/)
+- [Top K](../top-k/)

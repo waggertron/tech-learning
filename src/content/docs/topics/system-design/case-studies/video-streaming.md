@@ -274,8 +274,8 @@ Segments are truly immutable once created. Cache them for a year. Manifests can 
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
 - [Caching](../../caching/), CDN as a specialized cache layer
 - [Message Queues](../../message-queues/), Kafka for transcoding job coordination
 - [Scalability](../../scalability/), why the upload and playback paths scale independently
-- [Social Feed](./social-feed/), when posts include video
+- [Social Feed](../social-feed/), when posts include video

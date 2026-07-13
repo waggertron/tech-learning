@@ -106,7 +106,7 @@ Common causes:
 - Typo in the image name or a tag that doesn't exist.
 - Private registry without credentials: create a `docker-registry` Secret and add `imagePullSecrets`.
 - Network issue: can the node reach the registry? Check node-level DNS and firewall rules.
-- [Rate limiting](../../system-design/rate-limiting/): Docker Hub rate-limits unauthenticated pulls. Use an authenticated pull Secret.
+- [Rate limiting](../../../system-design/rate-limiting/): Docker Hub rate-limits unauthenticated pulls. Use an authenticated pull Secret.
 
 ```bash
 kubectl create secret docker-registry regcred \
@@ -163,7 +163,7 @@ kubectl delete networkpolicy --all -n <ns>
 
 If that fixes it, add policies back one at a time. Use Cilium's Hubble or Calico's flow logs to see exactly which rule is dropping a specific flow.
 
-See [Kubernetes Networking](./networking/) for the common NetworkPolicy mistakes.
+See [Kubernetes Networking](../networking/) for the common NetworkPolicy mistakes.
 
 ## Storage issues
 
@@ -348,6 +348,6 @@ kubectl uncordon <node>
 ## Related topics
 
 - [Kubernetes](./), the parent topic
-- [Kubernetes Networking](./networking/), DNS and NetworkPolicy failure modes
-- [Kubernetes Security Hardening](./security/), RBAC and admission debugging
-- [Kubernetes Workloads Reference](./workloads/), rollout strategy and probe configuration
+- [Kubernetes Networking](../networking/), DNS and NetworkPolicy failure modes
+- [Kubernetes Security Hardening](../security/), RBAC and admission debugging
+- [Kubernetes Workloads Reference](../workloads/), rollout strategy and probe configuration

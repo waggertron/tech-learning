@@ -269,6 +269,6 @@ Part 2 covers middleware: the mechanism that runs code before your route handler
 
 ## Related topics
 
-- [Part 2, Middleware](./part-02-middleware/)
-- [Part 3, Request and response](./part-03-request-response/)
-- [Part 4, REST API design](./part-04-rest-api-design/)
+- [Part 2, Middleware](../part-02-middleware/)
+- [Part 3, Request and response](../part-03-request-response/)
+- [Part 4, REST API design](../part-04-rest-api-design/)

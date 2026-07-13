@@ -117,6 +117,6 @@ For companies that release weights with restrictions (gated research access, com
 
 ## Related topics
 
-- [Case studies](./case-studies/): the specific distillation projects whose implications this page analyzes
-- [Benchmarks](../benchmarks/): how distilled models are measured against the teachers they learned from
-- [Coding tool blindspots](../coding-tool-blindspots/): capability gaps that persist even in well-distilled models
+- [Case studies](../case-studies/): the specific distillation projects whose implications this page analyzes
+- [Benchmarks](../../benchmarks/): how distilled models are measured against the teachers they learned from
+- [Coding tool blindspots](../../coding-tool-blindspots/): capability gaps that persist even in well-distilled models

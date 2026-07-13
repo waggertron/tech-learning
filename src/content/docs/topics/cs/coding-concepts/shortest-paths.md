@@ -67,16 +67,16 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [127. Word Ladder](../coding-problems/graphs/127-word-ladder/)
-- [743. Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/)
-- [778. Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/)
-- [787. Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
-- [1091. Shortest Path in Binary Matrix](../coding-problems/graphs/1091-shortest-path-in-binary-matrix/)
-- [1514. Path with Maximum Probability](../coding-problems/advanced-graphs/1514-path-with-maximum-probability/)
+- [127. Word Ladder](../../coding-problems/graphs/127-word-ladder/)
+- [743. Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/)
+- [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/)
+- [787. Cheapest Flights Within K Stops](../../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/)
+- [1091. Shortest Path in Binary Matrix](../../coding-problems/graphs/1091-shortest-path-in-binary-matrix/)
+- [1514. Path with Maximum Probability](../../coding-problems/advanced-graphs/1514-path-with-maximum-probability/)
 
 ## Related concepts
 
-- [BFS](./bfs/)
-- [Dijkstra](./dijkstra/)
-- [Bellman-Ford](./bellman-ford/)
-- [Graph traversal](./graph-traversal/)
+- [BFS](../bfs/)
+- [Dijkstra](../dijkstra/)
+- [Bellman-Ford](../bellman-ford/)
+- [Graph traversal](../graph-traversal/)

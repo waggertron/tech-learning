@@ -223,6 +223,6 @@ The trajectory: each generation got more capability for less money by improving 
 
 ## Related topics
 
-- [Theory](./theory/): the theoretical basis for why these methods work
-- [LLM methods](./llm-methods/): the training methods these case studies applied
-- [Distillation prompts](./distillation-prompts/): the prompts used in Alpaca, Orca, and Phi
+- [Theory](../theory/): the theoretical basis for why these methods work
+- [LLM methods](../llm-methods/): the training methods these case studies applied
+- [Distillation prompts](../distillation-prompts/): the prompts used in Alpaca, Orca, and Phi

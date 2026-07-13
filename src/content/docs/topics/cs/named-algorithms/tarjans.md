@@ -25,7 +25,7 @@ In this graph, `{A, B, C, D}` form one SCC: you can get from any of them to any 
 
 SCCs matter because they reveal the cyclic structure of a directed graph. Compressing each SCC to a single node produces a DAG (directed acyclic graph), which is a much simpler object. From there you can topologically sort, run shortest paths, or answer reachability questions efficiently.
 
-Named after Robert Tarjan, who published the algorithm in 1972. It's one of the more elegant results in [graph theory](../graph-theory/): a single DFS, one stack, and two arrays of integers are all you need.
+Named after Robert Tarjan, who published the algorithm in 1972. It's one of the more elegant results in [graph theory](../../graph-theory/): a single DFS, one stack, and two arrays of integers are all you need.
 
 ## Core idea, in one sentence
 
@@ -192,7 +192,7 @@ The single DFS pass is what makes $O(V + E)$ achievable. No graph is traversed t
 
 ## Application: bridges and articulation points
 
-Tarjan also published a related algorithm (sometimes called Tarjan's bridge-finding algorithm) for **undirected** [graphs](../data-structures/graphs/). It uses the same `disc`/`low` machinery but asks a different question: which edges (bridges) or vertices (articulation points) would disconnect the graph if removed?
+Tarjan also published a related algorithm (sometimes called Tarjan's bridge-finding algorithm) for **undirected** [graphs](../../data-structures/graphs/). It uses the same `disc`/`low` machinery but asks a different question: which edges (bridges) or vertices (articulation points) would disconnect the graph if removed?
 
 For undirected graphs, the low-link check becomes:
 
@@ -272,9 +272,9 @@ Look for these patterns in the problem statement:
 
 ## LeetCode: where this shows up
 
-### [Course Schedule](../coding-problems/graphs/207-course-schedule/) (207 / 210)
+### [Course Schedule](../../coding-problems/graphs/207-course-schedule/) (207 / 210)
 
-[LeetCode 207](../coding-problems/graphs/207-course-schedule/) asks whether you can finish all courses given prerequisites (cycle detection). [LeetCode 210](../coding-problems/graphs/210-course-schedule-ii/) asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
+[LeetCode 207](../../coding-problems/graphs/207-course-schedule/) asks whether you can finish all courses given prerequisites (cycle detection). [LeetCode 210](../../coding-problems/graphs/210-course-schedule-ii/) asks for a valid course order (topological sort). Both are purely cycle detection plus topological sort on a DAG.
 
 Tarjan technically answers these: if any SCC has size > 1, a cycle exists (207 returns false; 210 returns empty). But Tarjan is overkill here. The problems don't require knowing *which* vertices form cycles, only *whether* any exist. A plain DFS with `VISITING/VISITED` coloring, or Kahn's algorithm for topological sort, is simpler and equally fast.
 
@@ -600,7 +600,7 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Depth-first search](./dfs/), the traversal that Tarjan's algorithm is built on top of
-- [Kahn's algorithm](./kahns/), for topological sort of the condensation DAG you get after SCC decomposition
-- [Graphs (LeetCode 150)](../coding-problems/graphs/), cycle detection and directed graph traversal exercises
-- [Advanced Graphs (LeetCode 150)](../coding-problems/advanced-graphs/), where full SCC problems appear at Hard difficulty
+- [Depth-first search](../dfs/), the traversal that Tarjan's algorithm is built on top of
+- [Kahn's algorithm](../kahns/), for topological sort of the condensation DAG you get after SCC decomposition
+- [Graphs (LeetCode 150)](../../coding-problems/graphs/), cycle detection and directed graph traversal exercises
+- [Advanced Graphs (LeetCode 150)](../../coding-problems/advanced-graphs/), where full SCC problems appear at Hard difficulty

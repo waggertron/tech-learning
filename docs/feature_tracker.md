@@ -1,6 +1,6 @@
 # Feature Tracker
 
-Last audited: 2026-07-08
+Last audited: 2026-07-12
 
 This document tracks major features added to the tech-learning repo over time. It is a historical record, a current capability map, and a checklist for future feature work.
 
@@ -8,9 +8,9 @@ This document tracks major features added to the tech-learning repo over time. I
 
 This tracker was built from:
 
-- The complete git history from `747355b` through `edce85c`.
+- The complete git history from `747355b` through `edce85c`, with later feature entries maintained as changes landed.
 - Current source files under `src/`, `docs/`, `scripts/`, `.agents/skills/`, `templates/`, and `.github/`.
-- Current repo counts gathered from the filesystem on 2026-07-08.
+- Current repo counts gathered from the filesystem on 2026-07-12.
 
 The tracker groups related commits into shipped features. It does not list every typo fix, revert, or one-off cleanup unless it changed the repo's capabilities.
 
@@ -18,13 +18,13 @@ The tracker groups related commits into shipped features. It does not list every
 
 As of this audit, the repo contains:
 
-- **614 Markdown or MDX content pages** under `src/content/docs/`.
-- **68 posts** under `src/content/docs/posts/`.
-- **6 post series pages** under `src/content/docs/posts/series/`.
+- **615 Markdown or MDX content pages** under `src/content/docs/`.
+- **61 standalone posts** under `src/content/docs/posts/`.
+- **7 post series pages** under `src/content/docs/posts/series/`.
 - **188 coding problem pages** under `src/content/docs/topics/cs/coding-problems/`.
 - **541 topic pages** under `src/content/docs/topics/`.
-- **1,474 sibling code files** for examples, stubs, and coding problem approaches.
-- **12 local Codex skills** under `.agents/skills/` after adding feature tracking and React output views.
+- **1,516 sibling code files** for examples, stubs, and coding problem approaches.
+- **13 local Codex skills** under `.agents/skills/` after adding pre-push validation.
 
 ## Feature Register
 
@@ -62,6 +62,7 @@ As of this audit, the repo contains:
 
 ### Authoring, Quality, and Safety
 
+- **2026-07-12: Pre-push validation workflow**: Added an outcome-based validation workflow for rendered pages, internal links, code examples, generated React outputs, and custom page behavior before pushes. Repaired route-relative internal links across the existing content graph and documented the rendered-URL link rule, sandbox preview handling, hidden-tab smoke checks, and code-region link-checking boundary. Evidence: `docs/pre-push-validation.md`, `.agents/skills/pre-push-validation/SKILL.md`, `scripts/validate-*.mjs`, `package.json`, `AGENTS.md`, `docs/AUTHORING.md`.
 - **2026-07-12: Reproducible prose cleanup and local QA workflow**: Captured reusable cleanup scans, planned-series page guidance, interactive post helper guidance, and Codex sandbox preview notes in the central docs and skills. Evidence: `docs/AUTHORING.md`, `.agents/skills/prose-cleanup/SKILL.md`, `.agents/skills/post-series/SKILL.md`, `.agents/memory/feature_tracker.md`.
 - **2026-04-24: Authoring docs and skill conversion**: Added `docs/AUTHORING.md`, local authoring skills, and durable content rules. Evidence: `docs/AUTHORING.md`, `.agents/skills/authoring/SKILL.md`.
 - **2026-04-27: Quiz and learning skills**: Added quiz and learning workflows with local ignored memory for personalized study. Evidence: `.agents/skills/quiz/SKILL.md`, `.agents/skills/learning/SKILL.md`, `.agents/memory/`.
@@ -77,7 +78,7 @@ As of this audit, the repo contains:
 - **2026-07-07: Post series content model**: Added series frontmatter support, series landing pages, and post index discovery for grouped post sequences. Evidence: `src/content.config.ts`, `src/content/docs/posts/series/`, `src/content/docs/posts/index.mdx`.
 - **2026-07-07: Modern React development series**: Added a 40-part Modern React post series covering React fundamentals, state, effects, forms, routing, frameworks, tooling, testing, deployment, and related ecosystem choices. Evidence: `src/content/docs/posts/2026-07-07-react-*.md`, `src/content/docs/posts/series/modern-react-development/index.mdx`.
 - **2026-07-07 to 2026-07-08: React instructional rewrite**: Reworked the Modern React series into instructional concept guides with terms, mental models, multiple examples, pitfalls, references, and visible imports. Evidence: `.agents/skills/react-instructional-posts/SKILL.md`, React post files.
-- **2026-07-08: React example output views**: Added generated output panels after every Modern React TSX or TypeScript example. Component examples are transpiled, rendered with React server rendering for the fallback, and mounted by a browser runtime for live interaction. The workflow now includes generated registry and module files, runner panels, runtime loading tests, visible UI parity checks, source-derived runner output, local browser smoke guidance, and docs for known failure modes such as partial children renders, invented runner copy, inert server-rendered buttons, async data output, and stale dev-server cache state. Evidence: `scripts/sync-react-example-outputs.mjs`, `src/scripts/react-example-runtime.tsx`, `src/generated/react-example-registry.tsx`, `src/generated/react-example-modules/`, `tests/react-example-output-views.test.mjs`, `docs/react-example-output-views.md`, `.agents/skills/react-example-output-views/SKILL.md`, `src/styles/custom.css`, React post files.
+- **2026-07-08: React example output views**: Added generated output panels after every Modern React TSX or TypeScript example. Component examples are transpiled, rendered with React server rendering for the fallback, and mounted by a browser runtime for live interaction. The workflow now includes generated registry and module files, runner panels, runtime loading tests, visible UI parity checks, source-derived runner output, local browser smoke guidance, and docs for known failure modes such as partial children renders, invented runner copy, inert server-rendered buttons, async data output, stale dev-server cache state, and framework package module-directive warnings. Evidence: `scripts/sync-react-example-outputs.mjs`, `src/scripts/react-example-runtime.tsx`, `src/generated/react-example-registry.tsx`, `src/generated/react-example-modules/`, `tests/react-example-output-views.test.mjs`, `docs/react-example-output-views.md`, `.agents/skills/react-example-output-views/SKILL.md`, `src/styles/custom.css`, React post files.
 
 ## Tracking Protocol For Future Features
 

@@ -14,6 +14,13 @@
     "test:react-outputs": "node --test tests/react-example-output-views.test.mjs",
     "sync:react-outputs": "node scripts/sync-react-example-outputs.mjs",
     "check:react-outputs": "node scripts/sync-react-example-outputs.mjs --check",
+    "validate:style": "node scripts/validate-style.mjs",
+    "validate:pages": "node scripts/validate-pages.mjs",
+    "validate:links": "node scripts/validate-links.mjs",
+    "validate:external-links": "node scripts/validate-external-links.mjs",
+    "validate:code-examples": "node scripts/validate-code-examples.mjs",
+    "validate:custom-pages": "node scripts/validate-custom-pages.mjs",
+    "validate:pre-push": "node scripts/validate-pre-push.mjs",
     "new:topic": "bash scripts/new-topic.sh",
     "new:post": "bash scripts/new-post.sh"
   },

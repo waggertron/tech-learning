@@ -1,14 +1,7 @@
 class Editor {
   private content: string = '';
   private cursorPos: number = 0;
-
-  // Snapshot is private to Editor: outsiders hold a reference but cannot read fields.
-  private static Snapshot = class {
-    constructor(
-      readonly content: string,
-      readonly cursorPos: number
-    ) {}
-  };
+  private static snapshots = new WeakMap<object, { content: string; cursorPos: number }>();
 
   type(text: string): void {
     this.content =
@@ -22,13 +15,23 @@ class Editor {
     this.cursorPos = Math.max(0, Math.min(pos, this.content.length));
   }
 
-  save(): InstanceType<typeof Editor.Snapshot> {
-    return new Editor.Snapshot(this.content, this.cursorPos);
+  save(): object {
+    const snapshot = {};
+    Editor.snapshots.set(snapshot, {
+      content: this.content,
+      cursorPos: this.cursorPos,
+    });
+    return snapshot;
   }
 
-  restore(snapshot: InstanceType<typeof Editor.Snapshot>): void {
-    this.content = snapshot.content;
-    this.cursorPos = snapshot.cursorPos;
+  restore(snapshot: object): void {
+    const state = Editor.snapshots.get(snapshot);
+    if (!state) {
+      throw new Error('Unknown editor snapshot');
+    }
+
+    this.content = state.content;
+    this.cursorPos = state.cursorPos;
   }
 
   toString(): string {
@@ -37,10 +40,10 @@ class Editor {
 }
 
 class History {
-  private stack: InstanceType<typeof (Editor as any)['Snapshot']>[] = [];
+  private stack: object[] = [];
 
   push(snapshot: object): void {
-    this.stack.push(snapshot as any);
+    this.stack.push(snapshot);
   }
 
   pop(): object | undefined {
@@ -58,9 +61,9 @@ editor.type(', world');
 console.log(editor.toString()); // "Hello, world" (cursor: 12)
 
 const prev = history.pop();
-if (prev) editor.restore(prev as any);
+if (prev) editor.restore(prev);
 console.log(editor.toString()); // "Hello" (cursor: 5)
 
 const initial = history.pop();
-if (initial) editor.restore(initial as any);
+if (initial) editor.restore(initial);
 console.log(editor.toString()); // "" (cursor: 0)

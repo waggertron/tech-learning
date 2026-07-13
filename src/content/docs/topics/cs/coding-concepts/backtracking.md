@@ -68,20 +68,20 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [17. Letter Combinations of a Phone Number](../coding-problems/backtracking/017-letter-combinations-of-a-phone-number/)
-- [22. Generate Parentheses](../coding-problems/stack/022-generate-parentheses/)
-- [39. Combination Sum](../coding-problems/backtracking/039-combination-sum/)
-- [40. Combination Sum II](../coding-problems/backtracking/040-combination-sum-ii/)
-- [46. Permutations](../coding-problems/backtracking/046-permutations/)
-- [51. N-Queens](../coding-problems/backtracking/051-n-queens/)
-- [79. Word Search](../coding-problems/backtracking/079-word-search/)
-- [90. Subsets II](../coding-problems/backtracking/090-subsets-ii/)
-- [131. Palindrome Partitioning](../coding-problems/backtracking/131-palindrome-partitioning/)
-- [212. Word Search II](../coding-problems/tries/212-word-search-ii/)
+- [17. Letter Combinations of a Phone Number](../../coding-problems/backtracking/017-letter-combinations-of-a-phone-number/)
+- [22. Generate Parentheses](../../coding-problems/stack/022-generate-parentheses/)
+- [39. Combination Sum](../../coding-problems/backtracking/039-combination-sum/)
+- [40. Combination Sum II](../../coding-problems/backtracking/040-combination-sum-ii/)
+- [46. Permutations](../../coding-problems/backtracking/046-permutations/)
+- [51. N-Queens](../../coding-problems/backtracking/051-n-queens/)
+- [79. Word Search](../../coding-problems/backtracking/079-word-search/)
+- [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
+- [131. Palindrome Partitioning](../../coding-problems/backtracking/131-palindrome-partitioning/)
+- [212. Word Search II](../../coding-problems/tries/212-word-search-ii/)
 
 ## Related concepts
 
-- [Subsets and combinations](./subsets-and-combinations/)
-- [Permutations](./permutations/)
-- [Constraint search](./constraint-search/)
-- [Memoization](./memoization/)
+- [Subsets and combinations](../subsets-and-combinations/)
+- [Permutations](../permutations/)
+- [Constraint search](../constraint-search/)
+- [Memoization](../memoization/)

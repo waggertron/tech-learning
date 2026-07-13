@@ -355,7 +355,7 @@ The API Gateway handles public-facing HTTP and translates to internal message pa
 
 ## What's next
 
-Part 10 covers testing and production: unit testing with Jest and `createTestingModule`, e2e tests with Supertest, mocking providers, generating Swagger/OpenAPI docs, [Docker](../../ops/docker/) containerization, and health checks.
+Part 10 covers testing and production: unit testing with Jest and `createTestingModule`, e2e tests with Supertest, mocking providers, generating Swagger/OpenAPI docs, [Docker](../../../ops/docker/) containerization, and health checks.
 
 ## References
 

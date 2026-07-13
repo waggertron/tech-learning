@@ -228,8 +228,8 @@ For groups larger than 256 (Discord-style), fan-out does not scale. Use a pub/su
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
 - [Message Queues](../../message-queues/), Kafka for large group fan-out
 - [Databases at Scale](../../databases/), Cassandra's write-optimized LSM-tree storage
 - [CAP Theorem](../../cap-theorem/), why messaging systems choose AP over CP
-- [Notification System](./notification-system/), the push notification path for offline delivery
+- [Notification System](../notification-system/), the push notification path for offline delivery

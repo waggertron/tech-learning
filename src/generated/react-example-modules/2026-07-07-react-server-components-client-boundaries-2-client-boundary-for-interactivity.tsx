@@ -1,6 +1,4 @@
 // @ts-nocheck
-"use client";
-
 import { useState } from "react";
 
 type ReportRange = "7d" | "30d" | "90d";

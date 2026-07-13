@@ -384,6 +384,6 @@ Part 8 covers file uploads with Multer: handling multipart form data, validating
 
 ## Related topics
 
-- [Part 4, REST API design](./part-04-rest-api-design/)
-- [Part 6, Database integration](./part-06-database/)
-- [Part 9, Testing](./part-09-testing/)
+- [Part 4, REST API design](../part-04-rest-api-design/)
+- [Part 6, Database integration](../part-06-database/)
+- [Part 9, Testing](../part-09-testing/)

@@ -41,7 +41,7 @@ With an FHRP, `192.168.1.1` is a virtual IP owned by neither router alone. R1 is
 |---------------------|----------------------------|-----------------------------|-------------------------------|
 | Standard            | Cisco proprietary          | IEEE 802.112 (open)         | Cisco proprietary             |
 | Active routers      | 1 active, 1 standby        | 1 master, 1+ backup         | 1 AVG + multiple AVFs         |
-| [Load balancing](../system-design/load-balancing/)      | No                         | No                          | Yes                           |
+| [Load balancing](../../system-design/load-balancing/)      | No                         | No                          | Yes                           |
 | Virtual MAC (v2)    | 0000.0C9F.Fxxx             | 0000.5E00.01xx              | 0007.B400.xxyy (per AVF)      |
 | Virtual MAC (v1)    | 0000.0C07.ACxx             | N/A                         | N/A                           |
 | Max groups          | 4096 (v2)                  | 255                         | 1024                          |
@@ -175,6 +175,6 @@ Gi0/0         1  110 P Active   local           192.168.1.3     192.168.1.1
 
 ## Related topics
 
-- [Part 8: Inter-VLAN Routing](./part-08-inter-vlan-routing) -- routers-on-a-stick and SVIs; FHRP sits at the same Layer 3 boundary
-- [Part 12: Routing Fundamentals](./part-12-routing-fundamentals) -- how routers decide where to forward packets
-- [Part 13: Static Routing](./part-13-static-routing) -- the simpler routing baseline FHRP builds on top of
+- [Part 8: Inter-VLAN Routing](../part-08-inter-vlan-routing/) -- routers-on-a-stick and SVIs; FHRP sits at the same Layer 3 boundary
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/) -- how routers decide where to forward packets
+- [Part 13: Static Routing](../part-13-static-routing/) -- the simpler routing baseline FHRP builds on top of

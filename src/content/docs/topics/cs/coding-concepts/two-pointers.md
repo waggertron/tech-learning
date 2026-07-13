@@ -66,22 +66,22 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [5. Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/)
-- [11. Container With Most Water](../coding-problems/two-pointers/011-container-with-most-water/)
-- [15. 3Sum](../coding-problems/two-pointers/015-3sum/)
-- [21. Merge Two Sorted Lists](../coding-problems/linked-list/021-merge-two-sorted-lists/)
-- [25. Reverse Nodes in k-Group](../coding-problems/linked-list/025-reverse-nodes-in-k-group/)
-- [28. Find the Index of the First Occurrence in a String](../coding-problems/sliding-window/028-find-the-index-of-the-first-occurrence/)
-- [42. Trapping Rain Water](../coding-problems/two-pointers/042-trapping-rain-water/)
-- [125. Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/)
-- [160. Intersection of Two Linked Lists](../coding-problems/linked-list/160-intersection-of-two-linked-lists/)
-- [167. Two Sum II, Input Array Is Sorted](../coding-problems/two-pointers/167-two-sum-ii/)
-- [189. Rotate Array](../coding-problems/two-pointers/189-rotate-array/)
-- [443. String Compression](../coding-problems/two-pointers/443-string-compression/)
-- [647. Palindromic Substrings](../coding-problems/1d-dynamic-programming/647-palindromic-substrings/)
+- [5. Longest Palindromic Substring](../../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/)
+- [11. Container With Most Water](../../coding-problems/two-pointers/011-container-with-most-water/)
+- [15. 3Sum](../../coding-problems/two-pointers/015-3sum/)
+- [21. Merge Two Sorted Lists](../../coding-problems/linked-list/021-merge-two-sorted-lists/)
+- [25. Reverse Nodes in k-Group](../../coding-problems/linked-list/025-reverse-nodes-in-k-group/)
+- [28. Find the Index of the First Occurrence in a String](../../coding-problems/sliding-window/028-find-the-index-of-the-first-occurrence/)
+- [42. Trapping Rain Water](../../coding-problems/two-pointers/042-trapping-rain-water/)
+- [125. Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/)
+- [160. Intersection of Two Linked Lists](../../coding-problems/linked-list/160-intersection-of-two-linked-lists/)
+- [167. Two Sum II, Input Array Is Sorted](../../coding-problems/two-pointers/167-two-sum-ii/)
+- [189. Rotate Array](../../coding-problems/two-pointers/189-rotate-array/)
+- [443. String Compression](../../coding-problems/two-pointers/443-string-compression/)
+- [647. Palindromic Substrings](../../coding-problems/1d-dynamic-programming/647-palindromic-substrings/)
 
 ## Related concepts
 
-- [Fast and slow pointers](./fast-and-slow-pointers/)
-- [Sliding window](./sliding-window/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
+- [Fast and slow pointers](../fast-and-slow-pointers/)
+- [Sliding window](../sliding-window/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)

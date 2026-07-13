@@ -45,7 +45,7 @@ LeetCode 1010 · [Link](https://leetcode.com/problems/pairs-of-songs-with-total-
 
 ## The key insight: Two Sum mod 60
 
-This problem is structurally identical to [Two Sum](./001-two-sum/). Instead of looking for `a + b == target`, we look for `(a + b) % 60 == 0`. That means we need `b % 60 == (60 - a % 60) % 60`.
+This problem is structurally identical to [Two Sum](../001-two-sum/). Instead of looking for `a + b == target`, we look for `(a + b) % 60 == 0`. That means we need `b % 60 == (60 - a % 60) % 60`.
 
 The `% 60` wrapper around `(60 - a % 60)` handles the edge case where `a % 60 == 0`: `60 - 0 = 60`, which we wrap back to `0` (since a multiple of 60 pairs with another multiple of 60).
 
@@ -205,9 +205,9 @@ console.log("all tests pass");
 
 ## Related topics
 
-- [Two Sum](./001-two-sum/), the same "store what you've seen, look up the complement" pattern applied to modular arithmetic
+- [Two Sum](../001-two-sum/), the same "store what you've seen, look up the complement" pattern applied to modular arithmetic
 
 ## Related concepts
 
-- [Prefix Sums](../../coding-concepts/prefix-sums/), the running total model for turning range work into differences between checkpoints.
-- [Hash Map Counting](../../coding-concepts/hash-map-counting/), the lookup table pattern for complements, frequencies, and seen items.
+- [Prefix Sums](../../../coding-concepts/prefix-sums/), the running total model for turning range work into differences between checkpoints.
+- [Hash Map Counting](../../../coding-concepts/hash-map-counting/), the lookup table pattern for complements, frequencies, and seen items.

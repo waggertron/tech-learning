@@ -42,12 +42,12 @@ A string is a sequence of characters, usually stored as an array of bytes (C), a
 ## Common uses in DSA
 
 1. **Anagrams and character frequency**: Valid Anagram, Group Anagrams, Find All Anagrams in a String.
-2. **Palindrome detection**: [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/) (expand around center or Manacher's), Palindromic Substrings.
+2. **Palindrome detection**: [Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/), [Longest Palindromic Substring](../../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/) (expand around center or Manacher's), Palindromic Substrings.
 3. **Pattern matching**: Implement strStr() (needle in haystack), Repeated Substring Pattern, Find the Index of the First Occurrence.
-4. **Sliding window on strings**: [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), Longest Repeating Character Replacement.
+4. **Sliding window on strings**: [Longest Substring Without Repeating Characters](../../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), [Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/), Longest Repeating Character Replacement.
 5. **Edit distance and string DP**: Edit Distance, Longest Common Subsequence, Regular Expression Matching, Wildcard Matching.
 
-**Canonical LeetCode problems:** #3 [Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), #5 [Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/), #20 Valid Parentheses, #49 Group Anagrams, #76 [Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/), #125 [Valid Palindrome](../coding-problems/two-pointers/125-valid-palindrome/), #242 Valid Anagram.
+**Canonical LeetCode problems:** #3 [Longest Substring Without Repeating Characters](../../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/), #5 [Longest Palindromic Substring](../../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/), #20 Valid Parentheses, #49 Group Anagrams, #76 [Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/), #125 [Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/), #242 Valid Anagram.
 
 ## Python example
 

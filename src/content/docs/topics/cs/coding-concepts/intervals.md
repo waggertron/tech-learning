@@ -67,15 +67,15 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [56. Merge Intervals](../coding-problems/intervals/056-merge-intervals/)
-- [57. Insert Interval](../coding-problems/intervals/057-insert-interval/)
-- [252. Meeting Rooms](../coding-problems/intervals/252-meeting-rooms/)
-- [253. Meeting Rooms II](../coding-problems/intervals/253-meeting-rooms-ii/)
-- [435. Non-overlapping Intervals](../coding-problems/intervals/435-non-overlapping-intervals/)
-- [1851. Minimum Interval to Include Each Query](../coding-problems/intervals/1851-minimum-interval-to-include-each-query/)
+- [56. Merge Intervals](../../coding-problems/intervals/056-merge-intervals/)
+- [57. Insert Interval](../../coding-problems/intervals/057-insert-interval/)
+- [252. Meeting Rooms](../../coding-problems/intervals/252-meeting-rooms/)
+- [253. Meeting Rooms II](../../coding-problems/intervals/253-meeting-rooms-ii/)
+- [435. Non-overlapping Intervals](../../coding-problems/intervals/435-non-overlapping-intervals/)
+- [1851. Minimum Interval to Include Each Query](../../coding-problems/intervals/1851-minimum-interval-to-include-each-query/)
 
 ## Related concepts
 
-- [Merge intervals](./merge-intervals/)
-- [Sorting as preprocessing](./sorting-as-preprocessing/)
-- [Difference arrays](./difference-arrays/)
+- [Merge intervals](../merge-intervals/)
+- [Sorting as preprocessing](../sorting-as-preprocessing/)
+- [Difference arrays](../difference-arrays/)

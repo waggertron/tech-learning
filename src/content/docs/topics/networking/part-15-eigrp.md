@@ -12,7 +12,7 @@ EIGRP converges faster than OSPF in most topologies because it does not need to 
 
 ## Why it matters
 
-OSPF computes shortest paths by building a complete topology map and running [Dijkstra's algorithm](../cs/named-algorithms/dijkstra/). Every link-state change triggers a new SPF run. EIGRP takes a different approach: it stores precomputed backup paths in a topology table and checks them mathematically before a failure ever occurs. When the primary path fails, if a validated backup exists, it activates immediately. No neighbor queries, no SPF run, no waiting.
+OSPF computes shortest paths by building a complete topology map and running [Dijkstra's algorithm](../../cs/named-algorithms/dijkstra/). Every link-state change triggers a new SPF run. EIGRP takes a different approach: it stores precomputed backup paths in a topology table and checks them mathematically before a failure ever occurs. When the primary path fails, if a validated backup exists, it activates immediately. No neighbor queries, no SPF run, no waiting.
 
 EIGRP was Cisco-proprietary for decades. In 2013 Cisco published it as an open standard (RFC 7868), though full interoperability with non-Cisco implementations remains limited in practice.
 
@@ -159,7 +159,7 @@ D EX 10.1.0.0/24 [170/3072] via 10.0.0.2, GigabitEthernet0/0
 | Metric | Bandwidth + delay (composite) | Cost (reference BW / interface BW) |
 | Convergence | Instant if FS exists; slow if active state | SPF recalculation on every topology change |
 | CPU and memory | Lower (no full topology map) | Higher (LSDB + SPF per area) |
-| [Scalability](../system-design/scalability/) | Good with summarization; queries can flood | Better with proper area design |
+| [Scalability](../../system-design/scalability/) | Good with summarization; queries can flood | Better with proper area design |
 | Admin distance | 90 (internal), 170 (external) | 110 |
 | Multivendor | Limited | Full |
 | Auto-summary | Off by default (IOS 15+) | N/A |
@@ -205,6 +205,6 @@ This is the most common EIGRP configuration error. Routers log "neighbor not on 
 
 ## Related topics
 
-- [Part 12: IP Routing Fundamentals](./part-12-ip-routing-fundamentals)
-- [Part 14: OSPF](./part-14-ospf)
-- [Part 16: NAT and PAT](./part-16-nat-and-pat)
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/)
+- [Part 14: OSPF](../part-14-ospf/)
+- [Part 16: NAT and PAT](../part-16-nat-and-pat/)

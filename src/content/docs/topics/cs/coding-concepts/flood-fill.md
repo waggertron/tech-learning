@@ -67,14 +67,14 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [130. Surrounded Regions](../coding-problems/graphs/130-surrounded-regions/)
-- [200. Number of Islands](../coding-problems/graphs/200-number-of-islands/)
-- [417. Pacific Atlantic Water Flow](../coding-problems/graphs/417-pacific-atlantic-water-flow/)
-- [695. Max Area of Island](../coding-problems/graphs/695-max-area-of-island/)
+- [130. Surrounded Regions](../../coding-problems/graphs/130-surrounded-regions/)
+- [200. Number of Islands](../../coding-problems/graphs/200-number-of-islands/)
+- [417. Pacific Atlantic Water Flow](../../coding-problems/graphs/417-pacific-atlantic-water-flow/)
+- [695. Max Area of Island](../../coding-problems/graphs/695-max-area-of-island/)
 
 ## Related concepts
 
-- [Graph traversal](./graph-traversal/)
-- [DFS](./dfs/)
-- [BFS](./bfs/)
-- [Grid DP](./grid-dp/)
+- [Graph traversal](../graph-traversal/)
+- [DFS](../dfs/)
+- [BFS](../bfs/)
+- [Grid DP](../grid-dp/)

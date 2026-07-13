@@ -96,6 +96,6 @@ Hardware gains (Moore's Law) hit Amdahl's ceiling for serial code anyway, so sof
 
 ## Related topics
 
-- [Performance math](./performance-math/): Amdahl's Law (ceiling on hardware speedup) and Little's Law
-- [Network effects](./network-effects/): Metcalfe's Law (network value scaling vs. hardware scaling)
+- [Performance math](../performance-math/): Amdahl's Law (ceiling on hardware speedup) and Little's Law
+- [Network effects](../network-effects/): Metcalfe's Law (network value scaling vs. hardware scaling)
 - [Scalability](../../../system-design/scalability/): what to do when hardware gains don't save you

@@ -339,7 +339,7 @@ export class AppModule implements NestModule {
 
 | Layer | When to use |
 | --- | --- |
-| Middleware | Raw HTTP manipulation before Nest runs (CORS, request ID, [rate limiting](../../system-design/rate-limiting/) via express middleware) |
+| Middleware | Raw HTTP manipulation before Nest runs (CORS, request ID, [rate limiting](../../../system-design/rate-limiting/) via express middleware) |
 | Guard | Yes/no access decisions (auth, roles) |
 | Interceptor | Wrap handler execution: logging, response shape, caching, timeout |
 | Pipe | Input transformation and validation |

@@ -68,16 +68,16 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [5. Longest Palindromic Substring](../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/)
-- [115. Distinct Subsequences](../coding-problems/2d-dynamic-programming/115-distinct-subsequences/)
-- [131. Palindrome Partitioning](../coding-problems/backtracking/131-palindrome-partitioning/)
-- [139. Word Break](../coding-problems/1d-dynamic-programming/139-word-break/)
-- [300. Longest Increasing Subsequence](../coding-problems/1d-dynamic-programming/300-longest-increasing-subsequence/)
-- [647. Palindromic Substrings](../coding-problems/1d-dynamic-programming/647-palindromic-substrings/)
-- [1143. Longest Common Subsequence](../coding-problems/2d-dynamic-programming/1143-longest-common-subsequence/)
+- [5. Longest Palindromic Substring](../../coding-problems/1d-dynamic-programming/005-longest-palindromic-substring/)
+- [115. Distinct Subsequences](../../coding-problems/2d-dynamic-programming/115-distinct-subsequences/)
+- [131. Palindrome Partitioning](../../coding-problems/backtracking/131-palindrome-partitioning/)
+- [139. Word Break](../../coding-problems/1d-dynamic-programming/139-word-break/)
+- [300. Longest Increasing Subsequence](../../coding-problems/1d-dynamic-programming/300-longest-increasing-subsequence/)
+- [647. Palindromic Substrings](../../coding-problems/1d-dynamic-programming/647-palindromic-substrings/)
+- [1143. Longest Common Subsequence](../../coding-problems/2d-dynamic-programming/1143-longest-common-subsequence/)
 
 ## Related concepts
 
-- [Dynamic programming](./dynamic-programming/)
-- [Memoization](./memoization/)
-- [Binary search](./binary-search/)
+- [Dynamic programming](../dynamic-programming/)
+- [Memoization](../memoization/)
+- [Binary search](../binary-search/)

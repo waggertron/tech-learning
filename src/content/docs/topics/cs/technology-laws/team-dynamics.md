@@ -101,5 +101,5 @@ Adding people late is expensive (Brooks). And if you add them in ways that cut a
 ## Related topics
 
 - [Microservices vs Monolith](../../../system-design/microservices/), Conway's Law applied to service boundaries
-- [Metrics and Estimation](./metrics-and-estimation/), Goodhart's Law and estimation failures
-- [Systems Thinking](./systems-thinking/), Gall's Law and system complexity
+- [Metrics and Estimation](../metrics-and-estimation/), Goodhart's Law and estimation failures
+- [Systems Thinking](../systems-thinking/), Gall's Law and system complexity

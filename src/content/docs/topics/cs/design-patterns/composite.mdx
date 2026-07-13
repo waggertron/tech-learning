@@ -80,7 +80,7 @@ classDiagram
 | Clients treat leaves and composites identically, no type checks needed | Hard to restrict which component types can be children of a composite |
 | Adding new leaf or composite types requires no changes to existing code | Deep trees can make stack overflows a real concern for very large hierarchies |
 | Recursive operations (size, render, serialize) write once and work at every level | Shared mutable state in leaf nodes causes subtle bugs when the same leaf appears under two parents |
-| Natural fit for any domain with inherent tree structure: UI widgets, org charts, file systems, scene [graphs](../data-structures/graphs/) | Operations that only make sense on leaves (like `getContent()`) pollute the shared interface or require casting |
+| Natural fit for any domain with inherent tree structure: UI widgets, org charts, file systems, scene [graphs](../../data-structures/graphs/) | Operations that only make sense on leaves (like `getContent()`) pollute the shared interface or require casting |
 
 ## Gotchas
 

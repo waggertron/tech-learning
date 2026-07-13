@@ -348,6 +348,6 @@ R1# no debug all
 
 ## Related topics
 
-- [Part 1: Introduction to Networking](./part-01-intro-to-networking)
-- [Part 19: Network Security Fundamentals](./part-19-network-security-fundamentals)
-- [Part 20: WAN Technologies and Network Automation](./part-20-wan-technologies-and-network-automation)
+- [Part 1: Introduction to Networking](../part-01-intro-to-networking/)
+- [Part 19: Network Security Fundamentals](../part-19-network-security-fundamentals/)
+- [Part 20: WAN Technologies and Network Automation](../part-20-wan-technologies-and-network-automation/)

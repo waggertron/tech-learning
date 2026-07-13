@@ -342,6 +342,6 @@ Part 6 adds PostgreSQL and Prisma. The auth routes from this part get real datab
 
 ## Related topics
 
-- [Part 4, REST API design](./part-04-rest-api-design/)
-- [Part 6, Database integration](./part-06-database/)
-- [Part 7, Validation and error handling](./part-07-validation-and-errors/)
+- [Part 4, REST API design](../part-04-rest-api-design/)
+- [Part 6, Database integration](../part-06-database/)
+- [Part 7, Validation and error handling](../part-07-validation-and-errors/)

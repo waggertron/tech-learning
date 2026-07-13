@@ -1,9 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { reactExampleRegistry } from "../generated/react-example-registry";
 
 type ReactExampleRegistryEntry = (typeof reactExampleRegistry)[number];
+type SerializedFunctionMarker = { $type: "fn"; name?: string };
 
 const moduleLoaders = import.meta.glob("../generated/react-example-modules/*.tsx") as Record<
   string,
@@ -21,6 +21,26 @@ function resolveModuleLoader(modulePath: string) {
   );
 }
 
+function deserializeFixtureFunction(marker: SerializedFunctionMarker) {
+  if (marker.name === "getKey") {
+    return (item: unknown) =>
+      String(
+        item && typeof item === "object" && "id" in item
+          ? (item as { id: unknown }).id
+          : "",
+      );
+  }
+
+  if (marker.name === "renderItem") {
+    return (item: unknown) =>
+      item && typeof item === "object" && "name" in item
+        ? String((item as { name: unknown }).name)
+        : null;
+  }
+
+  return () => undefined;
+}
+
 function deserializeFixtureValue(value: unknown): unknown {
   if (Array.isArray(value)) {
     return value.map((item) => deserializeFixtureValue(item));
@@ -33,7 +53,7 @@ function deserializeFixtureValue(value: unknown): unknown {
   if ("$type" in value) {
     const marker = value as { $type: string; [key: string]: unknown };
     if (marker.$type === "fn") {
-      return () => undefined;
+      return deserializeFixtureFunction(marker as SerializedFunctionMarker);
     }
 
     if (marker.$type === "date") {
@@ -83,11 +103,7 @@ async function mountLiveExample(panel: HTMLElement) {
 
   const props = deserializeFixtureValue(entry.props ?? {}) as Record<string, unknown>;
   const element = React.createElement(Component as React.ComponentType, props);
-  const wrapped = entry.needsQueryClientProvider
-    ? React.createElement(QueryClientProvider, { client: new QueryClient() }, element)
-    : element;
-
-  createRoot(rendered).render(wrapped);
+  createRoot(rendered).render(element);
 }
 
 function mountRunnerExample(panel: HTMLElement) {

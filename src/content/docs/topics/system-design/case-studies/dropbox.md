@@ -20,7 +20,7 @@ Dropbox looks like a file storage problem but is really a deduplication problem.
 
 ### Carried forward from prior entries
 
-- **ID generation ([Bitly](./bitly/)):** block IDs are SHA-256 hashes (content-derived, not Snowflake), but file IDs and version IDs use Snowflake-style generation.
+- **ID generation ([Bitly](../bitly/)):** block IDs are SHA-256 hashes (content-derived, not Snowflake), but file IDs and version IDs use Snowflake-style generation.
 - **Kafka:** upload completion events publish to Kafka; consumers notify connected devices of new versions to sync.
 - **Redis:** upload session state (which blocks have been confirmed uploaded for an in-progress session) is tracked in Redis.
 
@@ -941,9 +941,9 @@ The user sees both the current file and their conflicted copy in the folder. The
 
 ## Related topics
 
-- [Bitly case study](./bitly/), introduces ID generation and Kafka patterns used here
-- [Ticketmaster case study](./ticketmaster/), carries forward Redis and Kafka
-- [Databases](../databases/), PostgreSQL sharding strategies for the metadata service
-- [Message Queues](../message-queues/), Kafka for sync event delivery
-- [Caching](../caching/), Redis for upload session state
-- [Scalability](../scalability/), sharding and replication for 64 PB at scale
+- [Bitly case study](../bitly/), introduces ID generation and Kafka patterns used here
+- [Ticketmaster case study](../ticketmaster/), carries forward Redis and Kafka
+- [Databases](../../databases/), PostgreSQL sharding strategies for the metadata service
+- [Message Queues](../../message-queues/), Kafka for sync event delivery
+- [Caching](../../caching/), Redis for upload session state
+- [Scalability](../../scalability/), sharding and replication for 64 PB at scale

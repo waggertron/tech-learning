@@ -133,6 +133,6 @@ This layered approach narrows fault domains quickly. "Ping works but the web app
 
 ## Related topics
 
-- [Part 1: Introduction to Networking](./part-01-intro-to-networking)
-- [Part 3: The TCP/IP Model](./part-03-tcpip-model)
-- [Part 5: Ethernet and the Data Link Layer](./part-05-ethernet-and-data-link-layer)
+- [Part 1: Introduction to Networking](../part-01-intro-to-networking/)
+- [Part 3: The TCP/IP Model](../part-03-tcpip-model/)
+- [Part 5: Data Link Layer and Ethernet](../part-05-data-link-and-ethernet/)

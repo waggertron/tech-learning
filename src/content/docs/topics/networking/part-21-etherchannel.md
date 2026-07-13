@@ -122,7 +122,7 @@ SW1(config-if)# ip address 10.0.0.1 255.255.255.252
 
 Layer 3 EtherChannel is common between distribution and core switches where inter-VLAN routing happens at Layer 3.
 
-## [Load balancing](../system-design/load-balancing/)
+## [Load balancing](../../system-design/load-balancing/)
 
 Traffic across member links is distributed by a hash of header fields. The default varies by platform. Common options:
 
@@ -214,6 +214,6 @@ If EtherChannel fails to form because of a misconfiguration, STP falls back to i
 
 ## Related topics
 
-- [Part 6: Switching Fundamentals](./part-06-switching-fundamentals)
-- [Part 7: VLANs](./part-07-vlans)
-- [Part 9: Spanning Tree Protocol](./part-09-spanning-tree-protocol)
+- [Part 6: Switching Fundamentals](../part-06-switching-fundamentals/)
+- [Part 7: VLANs](../part-07-vlans/)
+- [Part 9: Spanning Tree Protocol](../part-09-spanning-tree-protocol/)

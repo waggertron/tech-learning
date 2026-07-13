@@ -10,7 +10,7 @@ updated: 2026-05-21
 
 Bitly is the canonical URL shortener problem, and it is the opening entry in this case study series for a reason: it introduces three foundational patterns that appear in every system after it. The key insight is that storage (38 TB over five years) is the architectural constraint, not compute. The ID generation choice (base62 vs UUID vs Snowflake) is the real interview question hiding inside what looks like a simple key-value lookup.
 
-An older [URL Shortener case study](./url-shortener/) covers the same fundamentals at a high level. This entry is the series anchor and focuses on the three patterns it passes forward to Dropbox, Ticketmaster, News Feed, and WhatsApp.
+An older [URL Shortener case study](../url-shortener/) covers the same fundamentals at a high level. This entry is the series anchor and focuses on the three patterns it passes forward to Dropbox, Ticketmaster, News Feed, and WhatsApp.
 
 ## Series concepts
 
@@ -664,10 +664,10 @@ The redirect path stays at under 10ms. The analytics pipeline has seconds of lat
 
 ## Related topics
 
-- [URL Shortener case study](./url-shortener/), the foundational walkthrough this entry extends
-- [Dropbox case study](./dropbox/), carries forward Snowflake ID generation and Kafka
-- [WhatsApp case study](./whatsapp/), carries forward Kafka and Redis connection routing
-- [Caching](../caching/), full treatment of Redis cache patterns
-- [Consistent Hashing](../consistent-hashing/), approach to sharding the URL store
-- [Rate Limiting](../rate-limiting/), needed to prevent abuse of the shorten endpoint
-- [Databases](../databases/), sharding strategies for 38 TB URL storage
+- [URL Shortener case study](../url-shortener/), the foundational walkthrough this entry extends
+- [Dropbox case study](../dropbox/), carries forward Snowflake ID generation and Kafka
+- [WhatsApp case study](../whatsapp/), carries forward Kafka and Redis connection routing
+- [Caching](../../caching/), full treatment of Redis cache patterns
+- [Consistent Hashing](../../consistent-hashing/), approach to sharding the URL store
+- [Rate Limiting](../../rate-limiting/), needed to prevent abuse of the shorten endpoint
+- [Databases](../../databases/), sharding strategies for 38 TB URL storage

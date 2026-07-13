@@ -233,7 +233,7 @@ You get an interactive Swagger UI at `/api/docs/` generated from your serializer
 - **`ModelSerializer.create()` does not write M2M relations** if you pass `commit=False` through it, use `perform_create` to handle.
 - **Nested writes are intentionally painful.** DRF doesn't want you mutating multiple tables through one endpoint. Either use split read/write fields (above) or write `create()`/`update()` methods explicitly.
 - **Browsable API in production**: DRF's default HTML-rendered browsable API is a dev luxury; disable in production by removing `BrowsableAPIRenderer` from `DEFAULT_RENDERER_CLASSES`.
-- **Throttling**: DRF has `AnonRateThrottle` and `UserRateThrottle` but they're opt-in. For serious protection, use nginx/Cloudflare [rate limiting](../../system-design/rate-limiting/) in addition.
+- **Throttling**: DRF has `AnonRateThrottle` and `UserRateThrottle` but they're opt-in. For serious protection, use nginx/Cloudflare [rate limiting](../../../system-design/rate-limiting/) in addition.
 - **Versioning**: decide your scheme (URL path, header, query param) *before* shipping. Changing later is painful for clients.
 
 ## What's next

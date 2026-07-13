@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [743. Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/)
-- [778. Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/)
-- [1514. Path with Maximum Probability](../coding-problems/advanced-graphs/1514-path-with-maximum-probability/)
+- [743. Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/)
+- [778. Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/)
+- [1514. Path with Maximum Probability](../../coding-problems/advanced-graphs/1514-path-with-maximum-probability/)
 
 ## Related concepts
 
-- [Shortest paths](./shortest-paths/)
-- [Heap and priority queue](./heap-and-priority-queue/)
-- [BFS](./bfs/)
-- [Bellman-Ford](./bellman-ford/)
+- [Shortest paths](../shortest-paths/)
+- [Heap and priority queue](../heap-and-priority-queue/)
+- [BFS](../bfs/)
+- [Bellman-Ford](../bellman-ford/)

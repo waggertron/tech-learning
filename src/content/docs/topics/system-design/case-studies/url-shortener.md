@@ -247,7 +247,7 @@ The redirect path stays at <10ms. The analytics pipeline has seconds of latency 
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
-- [Back-of-Envelope Estimation](../estimation/), how to derive the numbers in the estimation section
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
+- [Back-of-Envelope Estimation](../../estimation/), how to derive the numbers in the estimation section
 - [Caching](../../caching/), redirect caching strategy
 - [Consistent Hashing](../../consistent-hashing/), one approach to sharding the URL store

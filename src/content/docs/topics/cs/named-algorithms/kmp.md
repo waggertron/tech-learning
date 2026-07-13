@@ -530,6 +530,6 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Data Structures](../data-structures/), for the string and array primitives KMP operates on
-- [BFS](./bfs/), another graph/tree algorithm where understanding the pointer invariant is the key insight
+- [Data Structures](../../data-structures/), for the string and array primitives KMP operates on
+- [BFS](../bfs/), another graph/tree algorithm where understanding the pointer invariant is the key insight
 - Z-algorithm: a close sibling to KMP with arguably simpler derivation. It builds a Z-array (longest match with the prefix starting at each position) rather than an LPS array. Both solve substring search in $O(n + m)$; KMP is more common in interviews, Z-algorithm is worth knowing as a mental cross-check.

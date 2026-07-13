@@ -10,7 +10,7 @@ updated: 2026-04-23
 
 ## Intro
 
-A queue is a **FIFO** (first-in, first-out) collection. You enqueue at one end and dequeue from the other. The standard queue API is `enqueue`, `dequeue`, `peek`, all $O(1)$. Queues power BFS (and therefore shortest-path-on-unweighted-[graphs](graphs/)), level-order traversals, task scheduling, and many streaming-window problems.
+A queue is a **FIFO** (first-in, first-out) collection. You enqueue at one end and dequeue from the other. The standard queue API is `enqueue`, `dequeue`, `peek`, all $O(1)$. Queues power BFS (and therefore shortest-path-on-unweighted-[graphs](../graphs/)), level-order traversals, task scheduling, and many streaming-window problems.
 
 ## In-depth description
 
@@ -46,7 +46,7 @@ Queues are the engine of **BFS**, which in turn solves:
 4. **Task scheduling and interval problems**: Task Scheduler, Design Hit Counter, Moving Average from Data Stream.
 5. **Producer-consumer / streaming buffers**: circular buffers for rate limiters, ring buffers in systems code, bounded channels.
 
-**Canonical LeetCode problems:** #200 [Number of Islands](../coding-problems/graphs/200-number-of-islands/), #239 [Sliding Window Maximum](../coding-problems/sliding-window/239-sliding-window-maximum/), #542 01 Matrix, #621 Task Scheduler, #994 Rotting Oranges.
+**Canonical LeetCode problems:** #200 [Number of Islands](../../coding-problems/graphs/200-number-of-islands/), #239 [Sliding Window Maximum](../../coding-problems/sliding-window/239-sliding-window-maximum/), #542 01 Matrix, #621 Task Scheduler, #994 Rotting Oranges.
 
 ## Python example
 

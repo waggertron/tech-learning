@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [322. Coin Change](../coding-problems/1d-dynamic-programming/322-coin-change/)
-- [416. Partition Equal Subset Sum](../coding-problems/1d-dynamic-programming/416-partition-equal-subset-sum/)
-- [494. Target Sum](../coding-problems/2d-dynamic-programming/494-target-sum/)
-- [518. Coin Change II](../coding-problems/2d-dynamic-programming/518-coin-change-ii/)
+- [322. Coin Change](../../coding-problems/1d-dynamic-programming/322-coin-change/)
+- [416. Partition Equal Subset Sum](../../coding-problems/1d-dynamic-programming/416-partition-equal-subset-sum/)
+- [494. Target Sum](../../coding-problems/2d-dynamic-programming/494-target-sum/)
+- [518. Coin Change II](../../coding-problems/2d-dynamic-programming/518-coin-change-ii/)
 
 ## Related concepts
 
-- [Dynamic programming](./dynamic-programming/)
-- [Tabulation](./tabulation/)
-- [State compression](./state-compression/)
+- [Dynamic programming](../dynamic-programming/)
+- [Tabulation](../tabulation/)
+- [State compression](../state-compression/)

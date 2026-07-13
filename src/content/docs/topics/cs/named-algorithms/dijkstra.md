@@ -151,7 +151,7 @@ Key moment: step 2 improved the distance to vertex 1 from 4 (via direct edge 0->
 
 The Fibonacci heap is theoretically optimal but never used in practice due to high constant factors and implementation complexity. The binary heap version is the standard.
 
-For **dense [graphs](../data-structures/graphs/)** (E close to V²), a simple array-based priority queue runs in $O(V²)$, which is better than $O(E log V)$ = $O(V² log V)$. When V <= 1000 and the graph is dense, the $O(V²)$ version can outperform the heap version.
+For **dense [graphs](../../data-structures/graphs/)** (E close to V²), a simple array-based priority queue runs in $O(V²)$, which is better than $O(E log V)$ = $O(V² log V)$. When V <= 1000 and the graph is dense, the $O(V²)$ version can outperform the heap version.
 
 ## Reconstructing the actual path
 
@@ -214,7 +214,7 @@ def dijkstra_multi_source(n, adj, sources):
     return dist
 ```
 
-This runs in the same $O((V + E)$ log V) as single-source. [LeetCode 994 (Rotting Oranges)](../coding-problems/graphs/994-rotting-oranges/) is essentially a multi-source BFS, which is the unweighted version of this.
+This runs in the same $O((V + E)$ log V) as single-source. [LeetCode 994 (Rotting Oranges)](../../coding-problems/graphs/994-rotting-oranges/) is essentially a multi-source BFS, which is the unweighted version of this.
 
 ## Variant: maximum probability / minimum bottleneck path
 
@@ -290,10 +290,10 @@ On grids specifically, edges are implicit (four or eight neighbors), edge weight
 
 | Problem | What makes it Dijkstra | Key detail |
 | ------- | ---------------------- | ---------- |
-| [743 Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/) | Directed weighted graph, single source to all vertices | Answer is `max(dist)`, or -1 if any vertex unreachable |
-| [787 Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) | Shortest path with a stop-count constraint | State is `(cost, node, stops_remaining)`; modified Dijkstra or Bellman-Ford |
-| [778 Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/) | Grid, edge weight = max of two cell values | Minimum bottleneck path; Dijkstra on implicit grid graph |
-| [1584 Min Cost to Connect All Points](../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/) | Minimum spanning tree (Prim's), not shortest path | Same heap structure as Dijkstra but picks cheapest new edge, not shortest path |
+| [743 Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/) | Directed weighted graph, single source to all vertices | Answer is `max(dist)`, or -1 if any vertex unreachable |
+| [787 Cheapest Flights Within K Stops](../../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/) | Shortest path with a stop-count constraint | State is `(cost, node, stops_remaining)`; modified Dijkstra or Bellman-Ford |
+| [778 Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/) | Grid, edge weight = max of two cell values | Minimum bottleneck path; Dijkstra on implicit grid graph |
+| [1584 Min Cost to Connect All Points](../../coding-problems/advanced-graphs/1584-min-cost-to-connect-all-points/) | Minimum spanning tree (Prim's), not shortest path | Same heap structure as Dijkstra but picks cheapest new edge, not shortest path |
 
 ## Multiple uses
 
@@ -479,9 +479,9 @@ if __name__ == '__main__':
 
 ## Related topics
 
-- [Kadane's algorithm](./kadane/), another named greedy algorithm worth knowing by shape
-- [LeetCode 743, Network Delay Time](../coding-problems/advanced-graphs/743-network-delay-time/), the direct Dijkstra exercise
-- [LeetCode 778, Swim in Rising Water](../coding-problems/advanced-graphs/778-swim-in-rising-water/), Dijkstra on an implicit grid
-- [LeetCode 787, Cheapest Flights Within K Stops](../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/), Dijkstra with a state constraint
-- [Advanced Graphs](../coding-problems/advanced-graphs/), the problem category where Dijkstra shows up most
-- [Common algorithms cheat sheet](../../../posts/2026-04-27-common-algorithms-cheat-sheet/), quick reference card
+- [Kadane's algorithm](../kadane/), another named greedy algorithm worth knowing by shape
+- [LeetCode 743, Network Delay Time](../../coding-problems/advanced-graphs/743-network-delay-time/), the direct Dijkstra exercise
+- [LeetCode 778, Swim in Rising Water](../../coding-problems/advanced-graphs/778-swim-in-rising-water/), Dijkstra on an implicit grid
+- [LeetCode 787, Cheapest Flights Within K Stops](../../coding-problems/advanced-graphs/787-cheapest-flights-within-k-stops/), Dijkstra with a state constraint
+- [Advanced Graphs](../../coding-problems/advanced-graphs/), the problem category where Dijkstra shows up most
+- [Common algorithms cheat sheet](../../../../posts/2026-04-27-common-algorithms-cheat-sheet/), quick reference card

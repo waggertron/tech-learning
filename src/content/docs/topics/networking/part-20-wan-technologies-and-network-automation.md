@@ -305,6 +305,6 @@ Without this, attempts to connect via NETCONF will fail silently or with a crypt
 
 ## Related topics
 
-- [Part 14: OSPF](./part-14-ospf)
-- [Part 15: BGP and Internet Routing](./part-15-bgp-and-internet-routing)
-- [Part 19: Network Security Fundamentals](./part-19-network-security-fundamentals)
+- [Part 14: OSPF](../part-14-ospf/)
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/)
+- [Part 19: Network Security Fundamentals](../part-19-network-security-fundamentals/)

@@ -372,7 +372,7 @@ module.exports = router;
 
 - **Connection pool exhaustion.** If every query opens a new `pg.Client` without releasing it, you run out of connections. Always use `Pool` and call `client.release()` in `finally`.
 - **SQL injection.** Parameterized queries ($1, $2) are the defense. String interpolation into SQL is always wrong.
-- **Prisma client singleton.** Instantiate `PrismaClient` once. In Next.js or hot-reloading environments, use a module-level [singleton pattern](../../cs/design-patterns/singleton/) to avoid creating a new client on every hot reload.
+- **Prisma client singleton.** Instantiate `PrismaClient` once. In Next.js or hot-reloading environments, use a module-level [singleton pattern](../../../cs/design-patterns/singleton/) to avoid creating a new client on every hot reload.
 - **Prisma `select` to exclude passwords.** Without `select`, Prisma returns all fields including `passwordHash`. Always exclude sensitive fields at the query level.
 - **`BigInt` in Prisma.** By default, Prisma serializes `BigInt` as a string in JSON. If your IDs or counts are `BigInt`, you need a custom JSON serializer or use `Int` where possible.
 
@@ -388,6 +388,6 @@ Part 7 covers input validation with Zod and centralized error handling, so datab
 
 ## Related topics
 
-- [Part 5, Authentication](./part-05-authentication/)
-- [Part 7, Validation and error handling](./part-07-validation-and-errors/)
-- [Part 10, Production](./part-10-production/)
+- [Part 5, Authentication](../part-05-authentication/)
+- [Part 7, Validation and error handling](../part-07-validation-and-errors/)
+- [Part 10, Production](../part-10-production/)

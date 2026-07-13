@@ -68,21 +68,21 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [7. Reverse Integer](../coding-problems/bit-manipulation/007-reverse-integer/)
-- [43. Multiply Strings](../coding-problems/math-and-geometry/043-multiply-strings/)
-- [50. Pow(x, n)](../coding-problems/math-and-geometry/050-pow-x-n/)
-- [66. Plus One](../coding-problems/math-and-geometry/066-plus-one/)
-- [190. Reverse Bits](../coding-problems/bit-manipulation/190-reverse-bits/)
-- [191. Number of 1 Bits](../coding-problems/bit-manipulation/191-number-of-1-bits/)
-- [202. Happy Number](../coding-problems/math-and-geometry/202-happy-number/)
-- [268. Missing Number](../coding-problems/bit-manipulation/268-missing-number/)
-- [371. Sum of Two Integers](../coding-problems/bit-manipulation/371-sum-of-two-integers/)
-- [459. Repeated Substring Pattern](../coding-problems/arrays-and-hashing/459-repeated-substring-pattern/)
-- [1071. Greatest Common Divisor of Strings](../coding-problems/arrays-and-hashing/1071-greatest-common-divisor-of-strings/)
-- [2013. Detect Squares](../coding-problems/math-and-geometry/2013-detect-squares/)
+- [7. Reverse Integer](../../coding-problems/bit-manipulation/007-reverse-integer/)
+- [43. Multiply Strings](../../coding-problems/math-and-geometry/043-multiply-strings/)
+- [50. Pow(x, n)](../../coding-problems/math-and-geometry/050-pow-x-n/)
+- [66. Plus One](../../coding-problems/math-and-geometry/066-plus-one/)
+- [190. Reverse Bits](../../coding-problems/bit-manipulation/190-reverse-bits/)
+- [191. Number of 1 Bits](../../coding-problems/bit-manipulation/191-number-of-1-bits/)
+- [202. Happy Number](../../coding-problems/math-and-geometry/202-happy-number/)
+- [268. Missing Number](../../coding-problems/bit-manipulation/268-missing-number/)
+- [371. Sum of Two Integers](../../coding-problems/bit-manipulation/371-sum-of-two-integers/)
+- [459. Repeated Substring Pattern](../../coding-problems/arrays-and-hashing/459-repeated-substring-pattern/)
+- [1071. Greatest Common Divisor of Strings](../../coding-problems/arrays-and-hashing/1071-greatest-common-divisor-of-strings/)
+- [2013. Detect Squares](../../coding-problems/math-and-geometry/2013-detect-squares/)
 
 ## Related concepts
 
-- [Bit manipulation](./bit-manipulation/)
-- [Simulation](./simulation/)
-- [Cycle detection](./cycle-detection/)
+- [Bit manipulation](../bit-manipulation/)
+- [Simulation](../simulation/)
+- [Cycle detection](../cycle-detection/)

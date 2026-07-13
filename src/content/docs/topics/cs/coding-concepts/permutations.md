@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [17. Letter Combinations of a Phone Number](../coding-problems/backtracking/017-letter-combinations-of-a-phone-number/)
-- [46. Permutations](../coding-problems/backtracking/046-permutations/)
-- [51. N-Queens](../coding-problems/backtracking/051-n-queens/)
-- [332. Reconstruct Itinerary](../coding-problems/advanced-graphs/332-reconstruct-itinerary/)
+- [17. Letter Combinations of a Phone Number](../../coding-problems/backtracking/017-letter-combinations-of-a-phone-number/)
+- [46. Permutations](../../coding-problems/backtracking/046-permutations/)
+- [51. N-Queens](../../coding-problems/backtracking/051-n-queens/)
+- [332. Reconstruct Itinerary](../../coding-problems/advanced-graphs/332-reconstruct-itinerary/)
 
 ## Related concepts
 
-- [Backtracking](./backtracking/)
-- [Subsets and combinations](./subsets-and-combinations/)
-- [Constraint search](./constraint-search/)
+- [Backtracking](../backtracking/)
+- [Subsets and combinations](../subsets-and-combinations/)
+- [Constraint search](../constraint-search/)

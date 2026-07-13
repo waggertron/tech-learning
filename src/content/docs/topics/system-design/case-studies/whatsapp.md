@@ -10,7 +10,7 @@ updated: 2026-05-21
 
 WhatsApp is a real-time delivery problem at a scale that makes the infrastructure choices non-obvious. The defining constraint is 2 billion concurrent WebSocket connections distributed across a fleet of gateway servers. Any message delivery requires knowing which gateway server the recipient is connected to at this instant: that lookup is the architectural linchpin. The key insight is that a single Redis hash table, `user_id -> gateway_server_id`, solves the routing problem for all 2 billion connections. This same pattern reappears in Uber (driver_id -> gateway_server_id for real-time location delivery to riders).
 
-An existing [Chat System case study](./chat-system/) covers this design in full detail from first principles. This entry focuses on WhatsApp-specific features (multi-device sync, end-to-end encryption, status and stories) and on the WebSocket routing pattern that carries forward to other entries in this series.
+An existing [Chat System case study](../chat-system/) covers this design in full detail from first principles. This entry focuses on WhatsApp-specific features (multi-device sync, end-to-end encryption, status and stories) and on the WebSocket routing pattern that carries forward to other entries in this series.
 
 ## Series concepts
 
@@ -23,9 +23,9 @@ An existing [Chat System case study](./chat-system/) covers this design in full 
 
 ### Carried forward from prior entries
 
-- **Kafka ([Bitly](./bitly/)):** messages that cannot be delivered immediately (recipient offline) are queued in Kafka for later delivery.
-- **Redis ([Bitly](./bitly/)):** connection routing table uses the same Redis cluster pattern introduced for URL caching.
-- **ID generation ([Bitly](./bitly/)):** message IDs use Snowflake-style generation; per-conversation sequence numbers use a Redis counter.
+- **Kafka ([Bitly](../bitly/)):** messages that cannot be delivered immediately (recipient offline) are queued in Kafka for later delivery.
+- **Redis ([Bitly](../bitly/)):** connection routing table uses the same Redis cluster pattern introduced for URL caching.
+- **ID generation ([Bitly](../bitly/)):** message IDs use Snowflake-style generation; per-conversation sequence numbers use a Redis counter.
 
 ## Clarifying questions
 
@@ -729,10 +729,10 @@ func encryptForGroup(plaintext []byte, groupSessionKey []byte) ([]byte, error) {
 
 ## Related topics
 
-- [Chat System case study](./chat-system/), foundational walkthrough of the same design
-- [Facebook News Feed case study](./facebook-news-feed/), carries forward Redis and Kafka fanout
-- [Bitly case study](./bitly/), introduces Redis and Kafka patterns used here
-- [Caching](../caching/), Redis connection routing table design
-- [Message Queues](../message-queues/), Kafka offline message queuing
-- [Databases](../databases/), Cassandra for high-throughput message storage
-- [Scalability](../scalability/), handling 463K write QPS at 2B user scale
+- [Chat System case study](../chat-system/), foundational walkthrough of the same design
+- [Facebook News Feed case study](../facebook-news-feed/), carries forward Redis and Kafka fanout
+- [Bitly case study](../bitly/), introduces Redis and Kafka patterns used here
+- [Caching](../../caching/), Redis connection routing table design
+- [Message Queues](../../message-queues/), Kafka offline message queuing
+- [Databases](../../databases/), Cassandra for high-throughput message storage
+- [Scalability](../../scalability/), handling 463K write QPS at 2B user scale

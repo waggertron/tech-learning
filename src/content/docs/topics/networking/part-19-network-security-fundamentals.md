@@ -295,6 +295,6 @@ SW1(config)# errdisable recovery interval 300
 
 ## Related topics
 
-- [Part 7: VLANs and Trunking](./part-07-vlans-and-trunking)
-- [Part 17: DHCP and DNS](./part-17-dhcp-and-dns)
-- [Part 18: Access Control Lists](./part-18-access-control-lists)
+- [Part 7: VLANs](../part-07-vlans/)
+- [Part 17: DHCP and DNS](../part-17-dhcp-and-dns/)
+- [Part 18: Access Control Lists](../part-18-access-control-lists/)

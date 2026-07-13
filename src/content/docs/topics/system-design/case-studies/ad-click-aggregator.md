@@ -22,8 +22,8 @@ The ad click aggregator looks like a simple counter at first glance: a click arr
 
 ### Carried forward from prior entries
 
-- **Kafka click event stream**: same async pipeline from [URL Shortener](./url-shortener/). The Bitly analytics pipeline publishes one event per redirect; here each click is a higher-stakes event that must be counted exactly once across multiple dimensions.
-- **Consistent hashing for partitioning**: Kafka partitions clicks by `ad_id` so all events for a given ad flow to the same consumer partition. Same sharding concept from [URL Shortener](./url-shortener/) and [Web Crawler](./web-crawler/).
+- **Kafka click event stream**: same async pipeline from [URL Shortener](../url-shortener/). The Bitly analytics pipeline publishes one event per redirect; here each click is a higher-stakes event that must be counted exactly once across multiple dimensions.
+- **Consistent hashing for partitioning**: Kafka partitions clicks by `ad_id` so all events for a given ad flow to the same consumer partition. Same sharding concept from [URL Shortener](../url-shortener/) and [Web Crawler](../web-crawler/).
 - **Redis for real-time counts**: same write cache pattern, now used for accumulation rather than simple key-value lookup. Redis INCR is atomic and O(1).
 - **Snowflake ID generation**: click event IDs use the same distributed ID service for deduplication keys.
 
@@ -692,9 +692,9 @@ The merge is simple because the two data sources cover non-overlapping time rang
 
 ## Related topics
 
-- [Case Study: URL Shortener](./url-shortener/), the analytics pipeline this builds on
-- [Case Study: Web Crawler](./web-crawler/), consistent hashing and Kafka partitioning patterns
-- [Message Queues](../message-queues/), Kafka at-least-once delivery and consumer groups
-- [Databases](../databases/), ClickHouse columnar storage for aggregation queries
-- [Caching](../caching/), Redis for real-time accumulation and dedup sets
-- [Consistent Hashing](../consistent-hashing/), partitioning aggregation workers by ad_id
+- [Case Study: URL Shortener](../url-shortener/), the analytics pipeline this builds on
+- [Case Study: Web Crawler](../web-crawler/), consistent hashing and Kafka partitioning patterns
+- [Message Queues](../../message-queues/), Kafka at-least-once delivery and consumer groups
+- [Databases](../../databases/), ClickHouse columnar storage for aggregation queries
+- [Caching](../../caching/), Redis for real-time accumulation and dedup sets
+- [Consistent Hashing](../../consistent-hashing/), partitioning aggregation workers by ad_id

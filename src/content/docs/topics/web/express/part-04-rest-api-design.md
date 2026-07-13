@@ -363,6 +363,6 @@ Part 5 adds authentication: JWT tokens, password hashing with bcrypt, protected 
 
 ## Related topics
 
-- [Part 3, Request and response](./part-03-request-response/)
-- [Part 5, Authentication](./part-05-authentication/)
-- [Part 7, Validation and error handling](./part-07-validation-and-errors/)
+- [Part 3, Request and response](../part-03-request-response/)
+- [Part 5, Authentication](../part-05-authentication/)
+- [Part 7, Validation and error handling](../part-07-validation-and-errors/)

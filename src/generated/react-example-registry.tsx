@@ -202,34 +202,25 @@ export const reactExampleRegistry = [
     "id": "2026-07-07-react-data-fetching-with-cache-2-query-client-provider",
     "title": "Query client provider",
     "fileName": "2026-07-07-react-data-fetching-with-cache.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-data-fetching-with-cache-2-query-client-provider.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "AppProviders",
     "needsQueryClientProvider": true,
-    "summary": "Query client provider. This example mounts a live React component in the browser.",
-    "props": {
-      "children": {
-        "$type": "element",
-        "tag": "p",
-        "key": null,
-        "props": {
-          "children": "Cached data area"
-        }
-      }
-    }
+    "summary": "Query client provider. This example is server-rendered in the docs preview.",
+    "props": null
   },
   {
     "id": "2026-07-07-react-data-fetching-with-cache-1-tanstack-query-read",
     "title": "TanStack Query read",
     "fileName": "2026-07-07-react-data-fetching-with-cache.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-data-fetching-with-cache-1-tanstack-query-read.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "ProjectName",
     "needsQueryClientProvider": true,
-    "summary": "TanStack Query read. This example mounts a live React component in the browser.",
-    "props": {}
+    "summary": "TanStack Query read. This example is server-rendered in the docs preview.",
+    "props": null
   },
   {
     "id": "2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop",
@@ -351,30 +342,25 @@ export const reactExampleRegistry = [
     "id": "2026-07-07-react-expo-react-native-2-shared-hook-platform-ui",
     "title": "Shared Hook, platform UI",
     "fileName": "2026-07-07-react-expo-react-native.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-expo-react-native-2-shared-hook-platform-ui.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "FavoriteButton",
     "needsQueryClientProvider": false,
-    "summary": "Shared Hook, platform UI. This example mounts a live React component in the browser.",
-    "props": {}
+    "summary": "Shared Hook, platform UI. This example is server-rendered in the docs preview.",
+    "props": null
   },
   {
     "id": "2026-07-07-react-expo-react-native-1-native-screen-component",
     "title": "Native screen component",
     "fileName": "2026-07-07-react-expo-react-native.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-expo-react-native-1-native-screen-component.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "HomeScreen",
     "needsQueryClientProvider": false,
-    "summary": "Native screen component. This example mounts a live React component in the browser.",
-    "props": {
-      "onStart": {
-        "$type": "fn",
-        "name": "noop"
-      }
-    }
+    "summary": "Native screen component. This example is server-rendered in the docs preview.",
+    "props": null
   },
   {
     "id": "2026-07-07-react-forms-with-actions-2-nested-submit-button-with-useformstatus",
@@ -515,15 +501,13 @@ export const reactExampleRegistry = [
     "id": "2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update",
     "title": "Invalidate after update",
     "fileName": "2026-07-07-react-mutations-cache-invalidation.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-mutations-cache-invalidation-1-invalidate-after-update.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "RenameProjectButton",
     "needsQueryClientProvider": true,
-    "summary": "Invalidate after update. This example mounts a live React component in the browser.",
-    "props": {
-      "projectId": "project-1"
-    }
+    "summary": "Invalidate after update. This example is server-rendered in the docs preview.",
+    "props": null
   },
   {
     "id": "2026-07-07-react-nextjs-app-router-2-nested-layout",
@@ -555,7 +539,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": "ProductPage",
     "needsQueryClientProvider": false,
-    "summary": "Route page with server data. This example mounts a live React component in the browser.",
+    "summary": "Route page with server data. This example is server-rendered in the docs preview.",
     "props": null
   },
   {
@@ -814,22 +798,13 @@ export const reactExampleRegistry = [
     "id": "2026-07-07-react-router-v7-framework-2-nested-layout-with-an-outlet",
     "title": "Nested layout with an outlet",
     "fileName": "2026-07-07-react-router-v7-framework.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-router-v7-framework-2-nested-layout-with-an-outlet.tsx",
+    "modulePath": null,
     "mode": "react-server",
-    "interactionMode": "live-component",
+    "interactionMode": "runner",
     "componentName": "AccountLayout",
     "needsQueryClientProvider": false,
-    "summary": "Nested layout with an outlet. This example mounts a live React component in the browser.",
-    "props": {
-      "children": {
-        "$type": "element",
-        "tag": "p",
-        "key": null,
-        "props": {
-          "children": "Profile settings"
-        }
-      }
-    }
+    "summary": "Nested layout with an outlet. This example is server-rendered in the docs preview.",
+    "props": null
   },
   {
     "id": "2026-07-07-react-router-v7-framework-1-route-with-loader-data",
@@ -929,7 +904,7 @@ export const reactExampleRegistry = [
     "interactionMode": "runner",
     "componentName": "ReportsPage",
     "needsQueryClientProvider": false,
-    "summary": "Server page with a client filter. This example mounts a live React component in the browser.",
+    "summary": "Server page with a client filter. This example is server-rendered in the docs preview.",
     "props": null
   },
   {

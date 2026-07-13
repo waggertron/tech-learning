@@ -77,7 +77,7 @@ The research foundation is at `docs/learning-science.md`: 629 lines covering the
 
 ## References
 
-- [docs/learning-science.md](../../../../../../../docs/learning-science.md), the full research synthesis
+- [docs/learning-science.md](https://github.com/waggertron/tech-learning/blob/main/docs/learning-science.md), the full research synthesis
 - Roediger & Karpicke (2006), *Psychological Science*, testing effect (80% vs 40%)
 - Cepeda et al. (2006), *Psychological Bulletin*, spacing meta-analysis (254 studies)
 - Kornell & Bjork (2008), *Psychological Science*, interleaving (78% vs 50%)

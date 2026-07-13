@@ -99,7 +99,7 @@ Ethereum handles its massive validator set by splitting validators into committe
 
 ## Related topics
 
-- [Proof-of-Stake](./proof-of-stake/), Ethereum uses a BFT finality gadget (Casper FFG) on top of its PoS fork choice
-- [Delegated Proof-of-Stake](./delegated-proof-of-stake/), a simpler elected-validator approach with weaker safety guarantees
-- [Proof-of-Authority](./proof-of-authority/), BFT with a whitelisted (non-staked) validator set
-- [Distributed Key Generation](../../cryptographic-systems/distributed-cryptography/distributed-key-generation/), BLS threshold signatures used in HotStuff-style aggregation
+- [Proof-of-Stake](../proof-of-stake/), Ethereum uses a BFT finality gadget (Casper FFG) on top of its PoS fork choice
+- [Delegated Proof-of-Stake](../delegated-proof-of-stake/), a simpler elected-validator approach with weaker safety guarantees
+- [Proof-of-Authority](../proof-of-authority/), BFT with a whitelisted (non-staked) validator set
+- [Distributed Key Generation](../../../cryptographic-systems/distributed-cryptography/distributed-key-generation/), BLS threshold signatures used in HotStuff-style aggregation

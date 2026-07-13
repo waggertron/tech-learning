@@ -218,7 +218,7 @@ This is what Instagram, TikTok, and Twitter's "For You" feed do. The feed become
 
 **Fanout worker falls behind**: a viral post triggers a flood of writes. Kafka buffers the fanout jobs and workers process them sequentially. Users see a delay of seconds to minutes before the post appears in all feeds. This is acceptable for most social feeds.
 
-**Redis node failure**: [consistent hashing](../consistent-hashing/) redistributes keys to adjacent nodes. Affected users see a cold feed (falls back to pull model) until their feed is rebuilt. Redis Cluster handles this automatically.
+**Redis node failure**: [consistent hashing](../../consistent-hashing/) redistributes keys to adjacent nodes. Affected users see a cold feed (falls back to pull model) until their feed is rebuilt. Redis Cluster handles this automatically.
 
 **Post DB overload during cold start**: a user who has not logged in for 60 days logs back in. Their Redis feed is empty, so the pull-model cold start queries all their followees' recent posts. If 10,000 users simultaneously do this, the DB is flooded. Mitigate with a queue-based cold-start rebuild (fanout worker priority queue for active but cache-evicted users).
 
@@ -244,8 +244,8 @@ This is what Instagram, TikTok, and Twitter's "For You" feed do. The feed become
 
 ## Related topics
 
-- [Interview Framework](../interview-framework/), the 4-step approach used in this walkthrough
+- [Interview Framework](../../interview-framework/), the 4-step approach used in this walkthrough
 - [Caching](../../caching/), Redis sorted sets for feed storage
 - [Message Queues](../../message-queues/), Kafka fanout pipeline
 - [Databases at Scale](../../databases/), read replicas for post hydration
-- [Video Streaming](./video-streaming/), when posts include video
+- [Video Streaming](../video-streaming/), when posts include video

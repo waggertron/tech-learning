@@ -67,13 +67,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [39. Combination Sum](../coding-problems/backtracking/039-combination-sum/)
-- [40. Combination Sum II](../coding-problems/backtracking/040-combination-sum-ii/)
-- [78. Subsets](../coding-problems/backtracking/078-subsets/)
-- [90. Subsets II](../coding-problems/backtracking/090-subsets-ii/)
+- [39. Combination Sum](../../coding-problems/backtracking/039-combination-sum/)
+- [40. Combination Sum II](../../coding-problems/backtracking/040-combination-sum-ii/)
+- [78. Subsets](../../coding-problems/backtracking/078-subsets/)
+- [90. Subsets II](../../coding-problems/backtracking/090-subsets-ii/)
 
 ## Related concepts
 
-- [Backtracking](./backtracking/)
-- [Permutations](./permutations/)
-- [Bitmask state](./bitmask-state/)
+- [Backtracking](../backtracking/)
+- [Permutations](../permutations/)
+- [Bitmask state](../bitmask-state/)

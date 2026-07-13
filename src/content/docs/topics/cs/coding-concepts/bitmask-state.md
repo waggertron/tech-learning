@@ -68,13 +68,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [51. N-Queens](../coding-problems/backtracking/051-n-queens/)
-- [78. Subsets](../coding-problems/backtracking/078-subsets/)
-- [338. Counting Bits](../coding-problems/bit-manipulation/338-counting-bits/)
-- [494. Target Sum](../coding-problems/2d-dynamic-programming/494-target-sum/)
+- [51. N-Queens](../../coding-problems/backtracking/051-n-queens/)
+- [78. Subsets](../../coding-problems/backtracking/078-subsets/)
+- [338. Counting Bits](../../coding-problems/bit-manipulation/338-counting-bits/)
+- [494. Target Sum](../../coding-problems/2d-dynamic-programming/494-target-sum/)
 
 ## Related concepts
 
-- [Bit manipulation](./bit-manipulation/)
-- [State compression](./state-compression/)
-- [Subsets and combinations](./subsets-and-combinations/)
+- [Bit manipulation](../bit-manipulation/)
+- [State compression](../state-compression/)
+- [Subsets and combinations](../subsets-and-combinations/)

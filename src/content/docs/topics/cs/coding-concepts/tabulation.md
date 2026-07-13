@@ -68,13 +68,13 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [62. Unique Paths](../coding-problems/2d-dynamic-programming/062-unique-paths/)
-- [70. Climbing Stairs](../coding-problems/1d-dynamic-programming/070-climbing-stairs/)
-- [322. Coin Change](../coding-problems/1d-dynamic-programming/322-coin-change/)
-- [1143. Longest Common Subsequence](../coding-problems/2d-dynamic-programming/1143-longest-common-subsequence/)
+- [62. Unique Paths](../../coding-problems/2d-dynamic-programming/062-unique-paths/)
+- [70. Climbing Stairs](../../coding-problems/1d-dynamic-programming/070-climbing-stairs/)
+- [322. Coin Change](../../coding-problems/1d-dynamic-programming/322-coin-change/)
+- [1143. Longest Common Subsequence](../../coding-problems/2d-dynamic-programming/1143-longest-common-subsequence/)
 
 ## Related concepts
 
-- [Dynamic programming](./dynamic-programming/)
-- [Memoization](./memoization/)
-- [State compression](./state-compression/)
+- [Dynamic programming](../dynamic-programming/)
+- [Memoization](../memoization/)
+- [State compression](../state-compression/)

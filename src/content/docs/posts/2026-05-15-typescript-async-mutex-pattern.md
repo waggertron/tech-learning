@@ -181,5 +181,5 @@ Skip it when state lives in an external system. Put the lock there instead, as c
 
 ## Related topics
 
-- [Throttling and rate limiting](./2026-04-24-throttling-and-rate-limiting/)
-- [SOLID principles](./2026-04-24-solid-principles/)
+- [Throttling and rate limiting](../2026-04-24-throttling-and-rate-limiting/)
+- [SOLID principles](../2026-04-24-solid-principles/)

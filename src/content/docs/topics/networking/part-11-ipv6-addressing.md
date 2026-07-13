@@ -311,6 +311,6 @@ IPv6 address space (128 bits, shown as /3 regions)
 
 ## Related topics
 
-- [Part 10: IPv4 Addressing and Subnetting](./part-10-ipv4-addressing-and-subnetting)
-- [Part 12: Routing Fundamentals](./part-12-routing-fundamentals)
-- [Part 16: Network Address Translation](./part-16-network-address-translation)
+- [Part 10: IPv4 Addressing and Subnetting](../part-10-ipv4-addressing-and-subnetting/)
+- [Part 12: Routing Fundamentals](../part-12-routing-fundamentals/)
+- [Part 16: NAT and PAT](../part-16-nat-and-pat/)

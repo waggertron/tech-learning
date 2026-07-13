@@ -273,6 +273,6 @@ mA: milliamperes, dBm: decibels (milliwatts), NA or N/A: not applicable.
 
 ## Related topics
 
-- [Part 1: Introduction to Networking](./part-01-intro-to-networking)
-- [Part 2: The OSI Model](./part-02-osi-model)
-- [Part 5: Ethernet and the Data Link Layer](./part-05-ethernet-and-data-link-layer)
+- [Part 1: Introduction to Networking](../part-01-intro-to-networking/)
+- [Part 2: The OSI Model](../part-02-osi-model/)
+- [Part 5: Data Link Layer and Ethernet](../part-05-data-link-and-ethernet/)

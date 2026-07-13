@@ -66,14 +66,14 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [42. Trapping Rain Water](../coding-problems/two-pointers/042-trapping-rain-water/)
-- [238. Product of Array Except Self](../coding-problems/arrays-and-hashing/238-product-of-array-except-self/)
-- [303. Range Sum Query - Immutable](../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
-- [560. Subarray Sum Equals K](../coding-problems/sliding-window/560-subarray-sum-equals-k/)
-- [1010. Pairs of Songs With Total Durations Divisible by 60](../coding-problems/arrays-and-hashing/1010-pairs-of-songs-divisible-by-60/)
+- [42. Trapping Rain Water](../../coding-problems/two-pointers/042-trapping-rain-water/)
+- [238. Product of Array Except Self](../../coding-problems/arrays-and-hashing/238-product-of-array-except-self/)
+- [303. Range Sum Query - Immutable](../../coding-problems/arrays-and-hashing/303-range-sum-query-immutable/)
+- [560. Subarray Sum Equals K](../../coding-problems/sliding-window/560-subarray-sum-equals-k/)
+- [1010. Pairs of Songs With Total Durations Divisible by 60](../../coding-problems/arrays-and-hashing/1010-pairs-of-songs-divisible-by-60/)
 
 ## Related concepts
 
-- [Array scans](./array-scans/)
-- [Hash map counting](./hash-map-counting/)
-- [Difference arrays](./difference-arrays/)
+- [Array scans](../array-scans/)
+- [Hash map counting](../hash-map-counting/)
+- [Difference arrays](../difference-arrays/)

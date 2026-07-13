@@ -109,6 +109,6 @@ Chia's energy estimate: approximately 0.16 TWh/year (2022), compared to Bitcoin'
 
 ## Related topics
 
-- [Proof-of-Work](./proof-of-work/), the energy-intensive alternative; same probabilistic finality
-- [Proof-of-Stake](./proof-of-stake/), capital-based participation
-- [Other Consensus Mechanisms](./other-consensus/), broader comparison including DPoS, PoA, and PoH
+- [Proof-of-Work](../proof-of-work/), the energy-intensive alternative; same probabilistic finality
+- [Proof-of-Stake](../proof-of-stake/), capital-based participation
+- [Other Consensus Mechanisms](../other-consensus/), broader comparison including DPoS, PoA, and PoH

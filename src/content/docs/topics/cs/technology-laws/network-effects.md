@@ -86,6 +86,6 @@ The practical question when designing a networked product: does your core intera
 
 ## Related topics
 
-- [Hardware and software laws](./hardware-software/): Moore's Law as a different kind of exponential growth curve
-- [Team dynamics](./team-dynamics/): Conway's Law, org structure and communication networks
-- [API design laws](./api-design/): Hyrum's Law, how API surface area grows with users
+- [Hardware and software laws](../hardware-software/): Moore's Law as a different kind of exponential growth curve
+- [Team dynamics](../team-dynamics/): Conway's Law, org structure and communication networks
+- [API design laws](../api-design/): Hyrum's Law, how API surface area grows with users

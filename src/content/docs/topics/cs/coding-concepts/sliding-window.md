@@ -67,14 +67,14 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [3. Longest Substring Without Repeating Characters](../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/)
-- [76. Minimum Window Substring](../coding-problems/sliding-window/076-minimum-window-substring/)
-- [239. Sliding Window Maximum](../coding-problems/sliding-window/239-sliding-window-maximum/)
-- [424. Longest Repeating Character Replacement](../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
-- [567. Permutation in String](../coding-problems/sliding-window/567-permutation-in-string/)
+- [3. Longest Substring Without Repeating Characters](../../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/)
+- [76. Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/)
+- [239. Sliding Window Maximum](../../coding-problems/sliding-window/239-sliding-window-maximum/)
+- [424. Longest Repeating Character Replacement](../../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
+- [567. Permutation in String](../../coding-problems/sliding-window/567-permutation-in-string/)
 
 ## Related concepts
 
-- [Two pointers](./two-pointers/)
-- [Prefix sums](./prefix-sums/)
-- [Monotonic queue](./monotonic-queue/)
+- [Two pointers](../two-pointers/)
+- [Prefix sums](../prefix-sums/)
+- [Monotonic queue](../monotonic-queue/)

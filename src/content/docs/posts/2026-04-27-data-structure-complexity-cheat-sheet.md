@@ -42,7 +42,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 **Gotchas**:
 
 - Dynamic arrays are $O(1)$ **at the end** and $O(n)$ **in the middle**. `list.pop()` is fast. `list.pop(0)` shifts every other element. Use `collections.deque` if you need $O(1)$ at both ends.
-- [Linked lists](../topics/cs/data-structures/linked-lists/) are $O(1)$ to insert *given a node reference*. Finding that node is $O(n)$. LeetCode problems usually hand you the node, hiding the search cost.
+- [Linked lists](../../topics/cs/data-structures/linked-lists/) are $O(1)$ to insert *given a node reference*. Finding that node is $O(n)$. LeetCode problems usually hand you the node, hiding the search cost.
 - Stack and queue costs assume an underlying structure that supports $O(1)$ at the relevant end. A queue built on `list.pop(0)` is secretly $O(n)$ per dequeue.
 
 ---
@@ -79,7 +79,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 **Gotchas**:
 
 - "Binary search tree" by itself usually means *unbalanced*. The $O(log n)$ bound only applies to **balanced** BSTs (AVL, red-black, treap, ...). On adversarial sorted input, an unbalanced BST is $O(n)$.
-- [Tries](../topics/cs/data-structures/tries/) trade space for time. A trie of all English words wastes a lot of nodes. A compressed trie ([radix tree](../topics/cs/data-structures/radix-tree/)) saves space.
+- [Tries](../../topics/cs/data-structures/tries/) trade space for time. A trie of all English words wastes a lot of nodes. A compressed trie ([radix tree](../../topics/cs/data-structures/radix-tree/)) saves space.
 - Heaps are $O(1)$ to peek but $O(n)$ to **search by value**. They're fast at the extremes (top), slow in the middle. Don't reach for a heap to find an arbitrary element.
 - Building a heap from a list is $O(n)$ using `heapify`, not $O(n log n)$. The reverse-level-order sift-down does the trick. Push-by-push is $O(n log n)$.
 
@@ -89,7 +89,7 @@ For the algorithm side (sorts, searches, graph algos, DP), see [Big-O for algori
 
 | Representation | Space | Edge lookup `(u, v)` | Iterate neighbors of `u` | Notes |
 |---|---|---|---|---|
-| Adjacency list | $O(V + E)$ | $O(degree(u)$) | $O(degree(u)$) | Best for sparse [graphs](../topics/cs/data-structures/graphs/) |
+| Adjacency list | $O(V + E)$ | $O(degree(u)$) | $O(degree(u)$) | Best for sparse [graphs](../../topics/cs/data-structures/graphs/) |
 | Adjacency matrix | $O(V²)$ | $O(1)$ | $O(V)$ | Best for dense graphs or frequent edge queries |
 | Edge list | $O(E)$ | $O(E)$ | $O(E)$ | Used by Kruskal's MST (sorts edges) |
 
@@ -160,7 +160,7 @@ For completeness, the algorithm side of the table.
 | Algorithm | Best | Average | Worst | Space | Stable? | Notes |
 |---|---|---|---|---|---|---|
 | Insertion sort | $O(n)$ | $O(n²)$ | $O(n²)$ | $O(1)$ | yes | Good for tiny inputs |
-| [Merge sort](../topics/cs/named-algorithms/merge-sort/) | $O(n log n)$ | $O(n log n)$ | $O(n log n)$ | $O(n)$ | yes | Predictable; external sort friendly |
+| [Merge sort](../../topics/cs/named-algorithms/merge-sort/) | $O(n log n)$ | $O(n log n)$ | $O(n log n)$ | $O(n)$ | yes | Predictable; external sort friendly |
 | Quicksort | $O(n log n)$ | $O(n log n)$ | $O(n²)$ | $O(log n)$ | no | Fast in practice; pick random pivot |
 | Heapsort | $O(n log n)$ | $O(n log n)$ | $O(n log n)$ | $O(1)$ | no | In-place, no pathological worst case |
 | Timsort (Python `sort`) | $O(n)$ | $O(n log n)$ | $O(n log n)$ | $O(n)$ | yes | Hybrid; runs detected for nearly-sorted data |
@@ -181,7 +181,7 @@ For completeness, the algorithm side of the table.
 | Topological sort (Kahn / DFS) | $O(V + E)$ | $O(V)$ | DAG only |
 | Kruskal MST | $O(E log E)$ | $O(V)$ | Sort edges + Union-Find |
 | Prim MST | $O((V+E)$ log V) | $O(V)$ | Heap-based |
-| [Quickselect](../topics/cs/named-algorithms/quickselect/) (kth element) | $O(n)$ avg, $O(n²)$ worst | $O(1)$ | Random pivot makes worst case unlikely |
+| [Quickselect](../../topics/cs/named-algorithms/quickselect/) (kth element) | $O(n)$ avg, $O(n²)$ worst | $O(1)$ | Random pivot makes worst case unlikely |
 
 ### Dynamic programming
 
@@ -199,8 +199,8 @@ For completeness, the algorithm side of the table.
 
 | Output type | Time | Space | Example |
 |---|---|---|---|
-| All subsets (2^n) | $O(2^n · n)$ | $O(n)$ recursion | [LeetCode 78](../topics/cs/coding-problems/backtracking/078-subsets/) |
-| All permutations (n!) | $O(n! · n)$ | $O(n)$ recursion | [LeetCode 46](../topics/cs/coding-problems/backtracking/046-permutations/) |
+| All subsets (2^n) | $O(2^n · n)$ | $O(n)$ recursion | [LeetCode 78](../../topics/cs/coding-problems/backtracking/078-subsets/) |
+| All permutations (n!) | $O(n! · n)$ | $O(n)$ recursion | [LeetCode 46](../../topics/cs/coding-problems/backtracking/046-permutations/) |
 | All k-combinations | $O(C(n,k)$ · k) | $O(k)$ | [LeetCode 77](https://leetcode.com/problems/combinations/) |
 
 ---

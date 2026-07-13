@@ -131,6 +131,6 @@ Tradeoff: forward KL preserves calibration (the student covers all possibilities
 
 ## Related topics
 
-- [LLM methods](./llm-methods/): how these principles apply to LLM-specific training methods
-- [Case studies](./case-studies/): DistilBERT and the LLM case studies in practice
-- [Benchmarks](../benchmarks/): how distilled models are measured
+- [LLM methods](../llm-methods/): how these principles apply to LLM-specific training methods
+- [Case studies](../case-studies/): DistilBERT and the LLM case studies in practice
+- [Benchmarks](../../benchmarks/): how distilled models are measured

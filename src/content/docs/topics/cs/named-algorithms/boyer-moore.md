@@ -230,7 +230,7 @@ If the problem says "find all elements with count > X" for arbitrary or unknown 
 
 [LeetCode 169 (Majority Element)](https://leetcode.com/problems/majority-element/) is the canonical exercise. The problem guarantees a majority exists, so no verification pass is needed and the single-pass version is accepted.
 
-It is not in the Blind 75 / LeetCode 150 core list, but it appears frequently in interviews and is a natural companion to the arrays-and-hashing problems in the [Arrays and Hashing](../coding-problems/arrays-and-hashing/) section.
+It is not in the Blind 75 / LeetCode 150 core list, but it appears frequently in interviews and is a natural companion to the arrays-and-hashing problems in the [Arrays and Hashing](../../coding-problems/arrays-and-hashing/) section.
 
 [LeetCode 229 (Majority Element II)](https://leetcode.com/problems/majority-element-ii/) is the n/3 variant, covered in the section above.
 
@@ -392,6 +392,6 @@ if __name__ == "__main__":
 
 ## Related topics
 
-- [Kadane's algorithm](./kadane/), another single-pass array algorithm with a similarly surprising $O(n)$ result
-- [Quickselect](./quickselect/), finds the k-th smallest element in $O(n)$ average; complementary to majority vote for "find the dominant element" problems
-- [Data structures](../data-structures/), the array properties (random access, contiguous memory) that make single-pass algorithms like this possible
+- [Kadane's algorithm](../kadane/), another single-pass array algorithm with a similarly surprising $O(n)$ result
+- [Quickselect](../quickselect/), finds the k-th smallest element in $O(n)$ average; complementary to majority vote for "find the dominant element" problems
+- [Data structures](../../data-structures/), the array properties (random access, contiguous memory) that make single-pass algorithms like this possible

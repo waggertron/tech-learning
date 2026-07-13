@@ -182,7 +182,7 @@ Kubernetes Secrets are base64-encoded by default, not encrypted. Anyone who can 
 
 **Layer 4: Sealed Secrets (Bitnami).** Encrypts secrets for storage in Git. The in-cluster controller holds the private key and decrypts at apply time. Fits a GitOps workflow where you want secrets in the repo.
 
-See [Tokens, Keys, Secrets, and Environment Variables](../secrets-keys-tokens/) for the broader context on credential types.
+See [Tokens, Keys, Secrets, and Environment Variables](../../secrets-keys-tokens/) for the broader context on credential types.
 
 ## Image supply chain
 
@@ -217,7 +217,7 @@ spec:
   policyTypes: [Ingress, Egress]
 ```
 
-Per-workload allow policies go on top of this baseline. See [Kubernetes Networking](./networking/) for the full NetworkPolicy syntax and CNI enforcement details.
+Per-workload allow policies go on top of this baseline. See [Kubernetes Networking](../networking/) for the full NetworkPolicy syntax and CNI enforcement details.
 
 ## Audit logging
 
@@ -276,6 +276,6 @@ It checks etcd encryption, API server flags, kubelet configuration, RBAC, and mo
 ## Related topics
 
 - [Kubernetes](./), the parent topic
-- [Kubernetes Networking](./networking/), NetworkPolicy as a security boundary
-- [Tokens, Keys, Secrets, and Environment Variables](../secrets-keys-tokens/), credential types and where they belong
-- [GitOps](../gitops/), keeping security configurations in version control
+- [Kubernetes Networking](../networking/), NetworkPolicy as a security boundary
+- [Tokens, Keys, Secrets, and Environment Variables](../../secrets-keys-tokens/), credential types and where they belong
+- [GitOps](../../gitops/), keeping security configurations in version control

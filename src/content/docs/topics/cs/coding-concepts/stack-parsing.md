@@ -68,20 +68,20 @@ These prompt words often point toward this concept:
 
 ## Problems that use it
 
-- [20. Valid Parentheses](../coding-problems/stack/020-valid-parentheses/)
-- [22. Generate Parentheses](../coding-problems/stack/022-generate-parentheses/)
-- [71. Simplify Path](../coding-problems/stack/071-simplify-path/)
-- [150. Evaluate Reverse Polish Notation](../coding-problems/stack/150-evaluate-reverse-polish-notation/)
-- [155. Min Stack](../coding-problems/stack/155-min-stack/)
-- [224. Basic Calculator](../coding-problems/stack/224-basic-calculator/)
-- [394. Decode String](../coding-problems/stack/394-decode-string/)
-- [678. Valid Parenthesis String](../coding-problems/greedy/678-valid-parenthesis-string/)
-- [735. Asteroid Collision](../coding-problems/stack/735-asteroid-collision/)
-- [1047. Remove All Adjacent Duplicates In String](../coding-problems/stack/1047-remove-all-adjacent-duplicates/)
-- [1249. Minimum Remove to Make Valid Parentheses](../coding-problems/stack/1249-minimum-remove-valid-parens/)
+- [20. Valid Parentheses](../../coding-problems/stack/020-valid-parentheses/)
+- [22. Generate Parentheses](../../coding-problems/stack/022-generate-parentheses/)
+- [71. Simplify Path](../../coding-problems/stack/071-simplify-path/)
+- [150. Evaluate Reverse Polish Notation](../../coding-problems/stack/150-evaluate-reverse-polish-notation/)
+- [155. Min Stack](../../coding-problems/stack/155-min-stack/)
+- [224. Basic Calculator](../../coding-problems/stack/224-basic-calculator/)
+- [394. Decode String](../../coding-problems/stack/394-decode-string/)
+- [678. Valid Parenthesis String](../../coding-problems/greedy/678-valid-parenthesis-string/)
+- [735. Asteroid Collision](../../coding-problems/stack/735-asteroid-collision/)
+- [1047. Remove All Adjacent Duplicates In String](../../coding-problems/stack/1047-remove-all-adjacent-duplicates/)
+- [1249. Minimum Remove to Make Valid Parentheses](../../coding-problems/stack/1249-minimum-remove-valid-parens/)
 
 ## Related concepts
 
-- [Monotonic stack](./monotonic-stack/)
-- [Recursion](./recursion/)
-- [Simulation](./simulation/)
+- [Monotonic stack](../monotonic-stack/)
+- [Recursion](../recursion/)
+- [Simulation](../simulation/)
