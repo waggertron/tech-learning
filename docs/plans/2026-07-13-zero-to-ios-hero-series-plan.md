@@ -29,7 +29,7 @@ No curriculum post moves to in progress until F0.1 through F0.8 are complete.
 
 ### Gate 1: Add runnable Swift support in the browser
 
-- [ ] **R1.1, inventory the existing runner contract**: Record editor, reset, output, timing, starter-code, tab-measurement, approach-block, timeout, accessibility, and failure behavior from the Python, TypeScript, and Go runners.
+- [x] **R1.1, inventory the existing runner contract**: Record editor, reset, output, timing, starter-code, tab-measurement, approach-block, timeout, accessibility, and failure behavior from the Python, TypeScript, and Go runners in the [runner contract baseline](../swift-browser-runner.md).
 - [ ] **R1.2, write the runner ADR**: Evaluate syntax-only support, precompiled Swift WebAssembly, a compiler in the browser, a sandboxed first-party compile service, and a third-party runner. Include GitHub Pages, bundle size, latency, offline behavior, privacy, abuse, maintenance, and toolchain-version tradeoffs.
 - [ ] **R1.3, prove the risky path before choosing it**: Build the smallest spike that compiles or executes editable Swift with captured standard output, compiler diagnostics, a timeout, and cancellation. Reject any option that only runs code fixed at site-build time while presenting itself as an editable REPL.
 - [ ] **R1.4, preserve a local path**: If execution crosses HTTP, provide a local runner or contract-shaped mock that requires no cloud credentials and supports compile success, compile failure, runtime failure, timeout, and cancellation.
