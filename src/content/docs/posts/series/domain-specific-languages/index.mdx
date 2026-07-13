@@ -1,6 +1,6 @@
 ---
-title: Domain-Specific Languages in Practice, post series plan
-description: "A planned series that defines DSLs, compares build and adopt choices, maps tooling, and uses business examples to decide when a domain language pays for itself."
+title: Domain-Specific Languages in Practice, series guide
+description: "A practical guide to DSL definitions, build and adopt choices, tooling, business examples, value scoring, and production operation."
 sidebar:
   hidden: true
 ---
@@ -11,7 +11,15 @@ Most teams do not need a new language. They need a clearer domain model, better 
 
 A domain-specific language becomes worth discussing when the same business decisions change often, multiple systems need the same logic, incorrect decisions are expensive, and people outside engineering need to inspect how the software reached an answer. The hard part is not inventing pretty syntax. The hard part is naming the domain concepts, defining valid combinations, executing decisions safely, and keeping the language owned after launch.
 
-This page is the working plan and research base for a long-form series on DSLs. It covers the definition, business cases, creation process, concrete examples, gotchas, tool choices, adoption criteria, and operating model.
+The decision is practical: should this domain stay in normal application code, move into an existing expression or policy tool, become a structured rule model, or justify a custom DSL? The calculator gives a first-pass answer before the longer guide explains the tradeoffs.
+
+## Interactive DSL value calculator
+
+The calculator below turns the scoring model into a quick decision aid. It is intentionally conservative. A high score means "prototype and review the model," not "start designing syntax." A low score usually means the domain needs better names, better tests, or an existing tool before it needs a language.
+
+<DslValueCalculator />
+
+This guide covers the definition, business cases, design process, concrete examples, gotchas, tool choices, adoption criteria, and operating model for domain-specific languages.
 
 ## Core takeaways
 
@@ -29,27 +37,23 @@ The language can be small. It can live inside another programming language. It c
 
 A useful DSL has five parts:
 
-- **Vocabulary**: The nouns and verbs come from the domain, not from generic implementation detail. `discount`, `coverage`, `segment`, `approval_limit`, and `escalation_window` mean something to the business.
-- **Structure**: Valid programs have a recognizable shape. A pricing rule might require a name, condition, action, effective date, owner, and test cases.
-- **Semantic model**: The language maps text, JSON, or API calls to domain objects and decisions. Syntax is only notation for that model.
-- **Validation**: Invalid combinations can be rejected before production. The language can say that a discount cannot be negative, that a condition references an unknown field, or that a rule lacks an owner.
-- **Execution**: The language runs through an interpreter, compiler, rule engine, code generator, or host-language API with clear behavior.
+- **Vocabulary**: The nouns and verbs come from the domain, not from generic implementation detail. `discount`, `coverage`, `segment`, `approval_limit`, and `escalation_window` mean something to the business, so the language can talk in terms the organization already uses.
+- **Structure**: Valid programs have a recognizable shape. A pricing rule might require a name, condition, action, effective date, owner, and test cases, which gives reviewers a consistent checklist instead of a free-form blob.
+- **Semantic model**: The language maps text, JSON, or API calls to domain objects and decisions. Syntax is only notation for that model. If the model is vague, cleaner syntax only hides the ambiguity.
+- **Validation**: Invalid combinations can be rejected before production. The language can say that a discount cannot be negative, that a condition references an unknown field, or that a rule lacks an owner before a customer ever hits the path.
+- **Execution**: The language runs through an interpreter, compiler, rule engine, code generator, or host-language API with clear behavior. A DSL is not only a document format. It has to mean the same thing every time it runs.
 
 That definition cuts out a lot of impostors. A configuration file with two flags is not automatically a DSL. A fluent helper library is not automatically a DSL. A YAML file becomes DSL-like only when it carries domain vocabulary, constraints, and execution rules that are meaningful outside the code that parses it.
 
 ## What respected sources agree on
 
-The research behind this plan converges on a few practical points:
+Reliable DSL writing converges on a few practical points:
 
-- Martin Fowler's [DSL Guide](https://martinfowler.com/dsl.html) separates internal DSLs, external DSLs, interpretation, and code generation. That distinction matters because each option changes cost, tooling, runtime behavior, and who can author the rules.
-- Fowler's [DSL Boundary](https://martinfowler.com/bliki/DslBoundary.html) argues that good DSLs are limited in scope and capability. That is the key test. If the language keeps adding general-purpose features, the design is losing its domain boundary.
-- Fowler's [Business Readable DSL](https://martinfowler.com/bliki/BusinessReadableDSL.html) is the most important organizational warning. The sweet spot is often business-readable, not business-writable. Domain experts should understand and review the logic. Engineers still need to harden it, test it, debug it, and operate it.
-- Fowler's [Syntactic Noise](https://martinfowler.com/bliki/SyntacticNoise.html) reframes syntax design around domain text versus punctuation. Removing punctuation is not the goal. The goal is notation that leaves the domain decision easy to read.
-- Fowler's [Refactoring to an Adaptive Model](https://martinfowler.com/articles/refactoring-adaptive-model.html) shows the bridge between ordinary code and a DSL: move duplicated decision logic into a data model first, then decide whether a DSL is needed to populate that model.
-- Strumenta's [external DSL guide](https://tomassetti.me/domain-specific-languages/) emphasizes collaboration with domain experts, faster feedback, and tool support. The insight to keep is that a DSL is not only parser work. It needs editing, validation, examples, and user education.
-- [Langium](https://langium.org/) and [JetBrains MPS](https://www.jetbrains.com/mps/) show what serious language tooling includes: typed ASTs, language servers, validation, completion, quick fixes, projectional editing, and code generation.
-- [ANTLR](https://www.antlr.org/) and [Chevrotain](https://chevrotain.io/docs/tutorial/step1_lexing.html) show the parser-generator path. The parser gets you structured text. It does not give you semantic validation, governance, or a production runtime by itself.
-- The paper [Design Guidelines for Domain Specific Languages](https://arxiv.org/abs/1409.2378) is a useful corrective: language design is error-prone and time-consuming even when tools make the mechanics easier.
+- **Martin Fowler's DSL writing**: Fowler's [DSL Guide](https://martinfowler.com/dsl.html), [DSL Boundary](https://martinfowler.com/bliki/DslBoundary.html), [Business Readable DSL](https://martinfowler.com/bliki/BusinessReadableDSL.html), [Syntactic Noise](https://martinfowler.com/bliki/SyntacticNoise.html), and [Refactoring to an Adaptive Model](https://martinfowler.com/articles/refactoring-adaptive-model.html) are best read together. The combined argument is that a DSL has to stay bounded, choose internal or external form deliberately, separate notation from execution strategy, and aim for business-readable review before promising business-writable authoring. The adaptive-model path is especially practical: move repeated decisions into a model first, then decide whether a language is needed to edit, validate, or execute that model.
+- **Strumenta's external DSL guidance**: Strumenta's [external DSL guide](https://tomassetti.me/domain-specific-languages/) emphasizes collaboration with domain experts, faster feedback, and tool support. The useful point is that a DSL is not only parser work. It needs editing, validation, examples, and user education.
+- **Language workbench examples**: [Langium](https://langium.org/) and [JetBrains MPS](https://www.jetbrains.com/mps/) show what serious language tooling includes: typed ASTs, language servers, validation, completion, quick fixes, projectional editing, and code generation.
+- **Parser tool examples**: [ANTLR](https://www.antlr.org/) and [Chevrotain](https://chevrotain.io/docs/tutorial/step1_lexing.html) show the parser-generator path. The parser gets you structured text. It does not give you semantic validation, governance, or a production runtime by itself.
+- **Academic DSL design research**: [Design Guidelines for Domain Specific Languages](https://arxiv.org/abs/1409.2378), [When and how to develop domain-specific languages](https://doi.org/10.1145/1118890.1118892), and [Notable design patterns for domain-specific languages](https://doi.org/10.1016/S0164-1212%2800%2900089-3) all push against the same shortcut: language design is costly even when parsing tools are good. The domain has to be stable enough, the notation has to fit the users, and the implementation has to follow recognizable patterns instead of inventing every concern from scratch.
 
 The practical synthesis: start with repeated decisions, define the semantic model, prove the model with examples, then pick notation and tooling.
 
@@ -84,14 +88,14 @@ The useful test is this: could a reader learn the vocabulary and predict what a 
 
 The strongest DSL candidates have a bounded domain, frequent rule changes, and a real need for readable decisions.
 
-- **Pricing and discounts**: Promotions, loyalty tiers, eligibility windows, stacking rules, and regional exceptions. The business value comes from changing offers without redeploying every service that calculates prices.
-- **Loan and insurance eligibility**: Underwriting rules, risk bands, coverage limits, approval thresholds, and audit requirements. The value comes from versioned decisions and traceable explanations.
-- **Authorization and policy-as-code**: Access rules separated from application code. The value comes from central policy ownership and consistent enforcement across services.
-- **Workflow routing**: Support-ticket queues, approval chains, escalation rules, SLA routing, and exception handling. The value comes from making operational policy visible.
-- **Infrastructure guardrails**: Deployment policies, compliance checks, resource limits, region restrictions, and security rules. The value comes from rejecting unsafe changes before they ship.
-- **Data mapping and transformation**: Event normalization, partner integrations, JSON transformations, and field-mapping rules. The value comes from reducing bespoke adapter code.
-- **Test scenario descriptions**: Business-readable acceptance cases, state-machine test paths, and fixture generation. The value comes from keeping tests close to the behavior they describe.
-- **Code and config generation**: Repetitive domain models that produce API schemas, database mappings, validation rules, or client SDK fragments. The value comes from one source of truth.
+- **Pricing and discounts**: Promotions, loyalty tiers, eligibility windows, stacking rules, and regional exceptions. The business value comes from changing offers without redeploying every service that calculates prices, while still making the final discount explainable.
+- **Loan and insurance eligibility**: Underwriting rules, risk bands, coverage limits, approval thresholds, and audit requirements. The value comes from versioned decisions and traceable explanations, because a rejected application or denied coverage decision needs a defensible reason.
+- **Authorization and policy-as-code**: Access rules separated from application code. The value comes from central policy ownership, consistent enforcement across services, and audit-friendly answers to "why was this allowed?"
+- **Workflow routing**: Support-ticket queues, approval chains, escalation rules, SLA routing, and exception handling. The value comes from making operational policy visible instead of burying it in conditionals across job workers and admin screens.
+- **Infrastructure guardrails**: Deployment policies, compliance checks, resource limits, region restrictions, and security rules. The value comes from rejecting unsafe changes before they ship, with errors that point to the violated policy.
+- **Data mapping and transformation**: Event normalization, partner integrations, JSON transformations, and field-mapping rules. The value comes from reducing bespoke adapter code and making each mapping reviewable.
+- **Test scenario descriptions**: Business-readable acceptance cases, state-machine test paths, and fixture generation. The value comes from keeping tests close to the behavior they describe, so product rules and regression coverage drift less often.
+- **Code and config generation**: Repetitive domain models that produce API schemas, database mappings, validation rules, or client SDK fragments. The value comes from one source of truth, as long as generated output stays reviewable and easy to regenerate.
 
 The bad version is also common. A team invents a syntax because it feels elegant, then discovers that the real work is permissions, versioning, migrations, test fixtures, editor support, and support tickets from confused users.
 
@@ -123,11 +127,11 @@ This is the right answer when the rule changes rarely and one team owns it. It i
 
 Pressure appears when the rule set grows:
 
-- Marketing changes thresholds twice a week.
-- Legal requires an audit trail for every discount decision.
-- Support needs to explain why a customer did or did not qualify.
-- Mobile, checkout, billing, and analytics all need the same logic.
-- Some rules are active only in certain countries, channels, or date ranges.
+- Marketing changes thresholds twice a week, so a normal deployment cycle becomes the bottleneck.
+- Legal requires an audit trail for every discount decision, so a bare `if` statement is not enough evidence.
+- Support needs to explain why a customer did or did not qualify, so the runtime needs reason codes and traces.
+- Mobile, checkout, billing, and analytics all need the same logic, so duplicated conditionals become a consistency risk.
+- Some rules are active only in certain countries, channels, or date ranges, so the rule set needs explicit scope and timing.
 
 At that point, a data model may be enough:
 
@@ -156,7 +160,7 @@ rule gold_loyalty_discount:
 
 The DSL earns its keep only if it provides more than pretty text. It needs to reject invalid fields, show type errors, explain which clauses matched, version stored rules, run safely without arbitrary I/O, and give users a review path before changes go live.
 
-## Creation example 1: internal TypeScript DSL
+## Example 1: internal TypeScript DSL
 
 An internal DSL stays inside the host language. This is usually the cheapest custom route because normal tooling still works.
 
@@ -236,7 +240,7 @@ This is a DSL in the lightest sense. It introduces domain words such as `priceRu
 
 The gotcha is that method chaining is not the same as a semantic model. If the builder only hides ordinary conditionals, it may be style theater. The internal DSL should produce a structured object that can be validated, tested, inspected, and traced.
 
-## Creation example 2: JSON rule model
+## Example 2: JSON rule model
 
 A data-backed DSL is often a better midpoint than custom syntax. It is not as readable as the text example, but it is easier to validate, store, migrate, diff, and generate from a UI.
 
@@ -272,15 +276,15 @@ A data-backed DSL is often a better midpoint than custom syntax. It is not as re
 
 This model gives the organization useful control points:
 
-- Unknown fields can fail validation before deploy.
-- `effectiveFrom` can be checked against rollout policy.
-- `owner` can be required.
-- Examples can become golden tests.
-- The rule can be rendered in a business UI without asking users to edit raw JSON.
+- **Unknown fields fail before deploy**: A typo such as `customer.segement` becomes a validation error instead of a silent production miss.
+- **Effective dates become policy**: `effectiveFrom` can be checked against rollout windows, blackout dates, and approval rules.
+- **Ownership becomes mandatory**: `owner` gives support, compliance, and engineering a team to ask when behavior is surprising.
+- **Examples become golden tests**: Each rule can carry concrete inputs and expected decisions, so future edits prove they did not change behavior by accident.
+- **The same model can power a UI**: A business-facing editor can render fields, operators, and actions without asking users to edit raw JSON.
 
 The gotcha is hidden expressiveness. JSON starts simple, then teams add nested `all`, `any`, `not`, dynamic functions, references, imports, templates, and string interpolation. At that point the data model is already a language. It needs the same discipline as a text DSL.
 
-## Creation example 3: external text DSL
+## Example 3: external text DSL
 
 An external DSL has custom syntax. It is the most visible option and usually the most expensive one.
 
@@ -342,15 +346,15 @@ This is where many DSL projects go wrong. They stop after parsing. Parsing prove
 
 The semantic validator needs domain knowledge:
 
-- Field paths must exist in the declared input schema.
-- Operators must match field types.
-- Literals must match allowed values.
-- Actions must obey business limits.
-- Rule priority or conflict behavior must be explicit.
-- Date windows must not create accidental gaps or overlaps.
-- Every rule needs examples that exercise the expected path.
+- **Field paths must exist in the declared input schema**: `cart.total_cents` cannot be guessed at runtime. The validator needs to know whether that field is real, numeric, nullable, deprecated, or renamed.
+- **Operators must match field types**: A string field can support equality and membership checks. A numeric field can support comparisons. Mixing those rules produces bugs that a grammar will not catch.
+- **Literals must match allowed values**: `"enterprise"` is invalid if the customer segment enum contains only `standard`, `silver`, and `gold`.
+- **Actions must obey business limits**: A discount action may need a maximum percentage, an allowed currency list, a stacking policy, and a reason code.
+- **Rule priority or conflict behavior must be explicit**: If two active rules match, the runtime needs a declared answer: first match wins, highest priority wins, all actions apply, or the rule set is invalid.
+- **Date windows must not create accidental gaps or overlaps**: A campaign ending at midnight in one timezone and starting in another can create missing coverage or double application.
+- **Every rule needs examples that exercise the expected path**: Examples make review concrete and give the runtime a regression suite.
 
-## Creation example 4: policy DSL adoption
+## Example 4: policy DSL adoption
 
 Custom syntax is not the only path. Access control and compliance logic often fit an existing policy language.
 
@@ -379,7 +383,7 @@ This can stay in code if the policy is stable and owned by engineers. If policy 
 
 The adoption question is not "Can we write this rule in our own syntax?" It is "Can an existing policy tool give us evaluation, tests, traces, review workflows, and safety faster than we can build them?"
 
-## How a DSL gets created
+## How to design a DSL
 
 A good DSL project starts as domain modeling, not parser work.
 
@@ -508,13 +512,13 @@ A DSL without authors, reviewers, and production consumers is infrastructure inv
 
 DSLs move complexity. They do not remove it.
 
-- **Language design surface**: Every keyword, operator, precedence rule, and edge case becomes a compatibility decision.
-- **Tooling burden**: Parsers, validators, syntax highlighting, formatters, docs, fixtures, migrations, and error messages need clear ownership.
-- **Debugging cost**: A custom interpreter creates a new runtime model. Logs must explain domain decisions, not parser internals.
-- **Versioning pressure**: Stored rules outlive deployments. The language needs compatibility rules, migration paths, and deprecation policy.
-- **Security risk**: A DSL that can touch I/O, secrets, network calls, host objects, mutation, or unbounded loops can become arbitrary code execution in disguise.
-- **Shadow-platform risk**: Teams may start building application behavior inside the DSL because the normal release process is slower.
-- **False readability**: Business-readable syntax is useful. Business-writable logic without tests, previews, ownership, and rollback creates fragile production behavior.
+- **Language design surface**: Every keyword, operator, precedence rule, and edge case becomes a compatibility decision. Once rules are stored, changing syntax means migration, compatibility support, and user education.
+- **Tooling burden**: Parsers, validators, syntax highlighting, formatters, docs, fixtures, migrations, and error messages need clear ownership. Without that ownership, the language becomes harder to use than the code it replaced.
+- **Debugging cost**: A custom interpreter creates a new runtime model. Logs must explain domain decisions, matched clauses, skipped clauses, and bad inputs, not parser internals.
+- **Versioning pressure**: Stored rules outlive deployments. The language needs compatibility rules, migration paths, and deprecation policy because old rules may stay active for years.
+- **Security risk**: A DSL that can touch I/O, secrets, network calls, host objects, mutation, or unbounded loops can become arbitrary code execution in disguise. Safe DSLs default to pure evaluation over declared input data.
+- **Shadow-platform risk**: Teams may start building application behavior inside the DSL because the normal release process is slower. That trades visible engineering controls for a hidden platform with weaker tests and weaker review.
+- **False readability**: Business-readable syntax is useful. Business-writable logic without tests, previews, ownership, and rollback turns production behavior fragile.
 - **Tool mismatch**: A parser generator will not solve policy governance. A policy engine will not solve user-friendly authoring. A language workbench will not fix an unstable domain model.
 
 The most reliable warning sign is scope creep. If the backlog starts asking for loops, imports, custom functions, mutation, package management, and network calls, the DSL is drifting toward a general-purpose programming language without the ecosystem that makes real programming languages usable.
@@ -558,12 +562,6 @@ DSL value =
 The score is not a verdict. It is a way to force the tradeoffs into the open.
 
 If the positive side is not clearly higher, do not build a custom DSL. Use normal application code, a typed config schema, a mature expression language, a rule engine, a workflow engine, or a library that already fits the domain.
-
-## Interactive DSL value calculator
-
-The calculator below turns the scoring model into a quick decision aid. It is intentionally conservative. A high score means "prototype and review the model," not "start designing syntax." A low score usually means the domain needs better names, better tests, or an existing tool before it needs a language.
-
-<DslValueCalculator />
 
 ## Tooling map
 
@@ -664,173 +662,29 @@ This section keeps the page explicit. If a term or tool appears in the series, i
 
 Tool choice follows from the authoring and runtime model.
 
-- **Use normal code** when engineers own the logic, changes are rare, and one service owns the decision.
-- **Use typed configuration** when the domain is declarative, the shape is simple, and validation matters more than custom notation.
-- **Use CEL or JsonLogic** when you need bounded expressions over declared data and want to avoid host-language execution.
-- **Use Rego or Cedar** when the domain is authorization, compliance, or policy evaluation and an existing policy model fits.
-- **Use JSONata or JMESPath** when the domain is JSON selection, mapping, or integration transformation.
-- **Use an internal DSL** when engineers author rules but the code needs domain-level readability and structured outputs.
-- **Use a parser generator** when custom text syntax is justified and the team can own semantic validation.
-- **Use a language workbench** when editor experience, code generation, cross-language integration, and long-lived language evolution justify the platform cost.
+- **Use normal code** when engineers own the logic, changes are rare, and one service owns the decision. This keeps debugging, type checking, code review, and deployment inside the normal engineering workflow.
+- **Use typed configuration** when the domain is declarative, the shape is simple, and validation matters more than custom notation. A schema plus an admin UI is often enough for rules that look like records rather than expressions.
+- **Use CEL or JsonLogic** when you need bounded expressions over declared data and want to avoid host-language execution. They fit conditions, targeting, validation guards, and small decision predicates.
+- **Use Rego or Cedar** when the domain is authorization, compliance, or policy evaluation and an existing policy model fits. Adopting their model is cheaper than recreating policy evaluation, test tooling, and audit behavior.
+- **Use JSONata or JMESPath** when the domain is JSON selection, mapping, or integration transformation. These tools are strongest when the problem is data shape, not broad business process.
+- **Use an internal DSL** when engineers author rules but the code needs domain-level readability and structured outputs. This keeps host-language tooling while forcing the team to name the domain model.
+- **Use a parser generator** when custom text syntax is justified and the team can own semantic validation. The parser is only the front door. The validator, runtime, tests, migrations, and docs are still your responsibility.
+- **Use a language workbench** when editor experience, code generation, cross-language integration, and long-lived language evolution justify the platform cost. This is a platform choice, not a shortcut.
 
 ## Production checklist
 
 A production DSL is not done when it parses.
 
-- **Schema and type model**: Every readable input field has a declared type, owner, null behavior, and compatibility policy.
-- **Semantic validation**: Rules fail before deploy when they reference unknown fields, invalid operators, unsupported actions, bad dates, conflicting priorities, or unsafe behavior.
-- **Golden tests**: Each rule has concrete examples with expected decisions and reason traces.
-- **Versioning**: Stored rules carry language version, rule version, owner, effective dates, and migration status.
-- **Preview and dry run**: Authors can test a rule against sample, historical, or staged data before publish.
-- **Review workflow**: Changes carry ticket, approver, rollback plan, and release notes when the domain requires it.
-- **Runtime isolation**: Evaluation is deterministic, bounded, and separated from arbitrary host access.
-- **Observability**: Decisions emit rule IDs, versions, matched clauses, output actions, latency, and failure reasons.
-- **Migration tools**: Language changes can upgrade old rules or keep old versions running safely.
-- **Documentation**: The language has examples, counterexamples, glossary, operator reference, and troubleshooting guidance.
-
-## How the series fits together
-
-The series should move from definition to operation. Each post should depend on the previous one and remove one major source of ambiguity.
-
-```text
-definition
-  -> value criteria
-  -> tradeoffs and failure modes
-  -> existing tools
-  -> internal DSLs
-  -> external DSLs
-  -> tooling choice
-  -> concrete build
-  -> production operation
-```
-
-That order matters. If the series starts with parser code, it teaches the wrong reflex. The first reflex should be domain modeling.
-
-## Planned reading order
-
-### 1. DSLs, strict definition and boundaries
-
-**Question**: What is a DSL, and what is not a DSL?
-
-**Code anchor**: Compare SQL, regular expressions, GraphQL query syntax, YAML config, a fluent API, and a normal helper library.
-
-**Wrong first move**: Calling every config file or fluent API a DSL.
-
-**Follow-up path**: Establishes the criteria used by every later post: vocabulary, grammar, semantic model, validation, and execution.
-
-### 2. When a DSL is worth building
-
-**Question**: What business pain justifies a new language?
-
-**Code anchor**: Pricing rules implemented as hardcoded conditionals, JSON rules, an embedded expression language, and a readable custom DSL.
-
-**Wrong first move**: Building a DSL because the syntax feels elegant.
-
-**Follow-up path**: Leads into the tradeoff post before any implementation details.
-
-### 3. DSL tradeoffs: when a domain language helps or hurts
-
-**Question**: When does a DSL create value, and when does it become another platform to maintain?
-
-**Code anchor**: A rule bundle with version, owner, tests, rollout metadata, and audit trace output.
-
-**Wrong first move**: Assuming readability is enough without validation, testability, and production ownership.
-
-**Follow-up path**: Decides whether to adopt an existing DSL before building custom syntax.
-
-### 4. Existing DSLs you can embed before building your own
-
-**Question**: Can an existing expression, policy, query, or rules language solve the problem?
-
-**Code anchor**: The same eligibility rule written in CEL, JsonLogic, Rego, Cedar, and JSONata.
-
-**Wrong first move**: Inventing a grammar before evaluating mature bounded languages.
-
-**Follow-up path**: Narrows the build-vs-adopt decision.
-
-### 5. Internal DSLs: fluent APIs as language design
-
-**Question**: How far can a DSL go while staying inside TypeScript, Python, Ruby, or Kotlin?
-
-**Code anchor**:
-
-```ts
-priceRule('loyalty-discount')
-  .when(customer.segment('gold'))
-  .and(cart.total.greaterThan(100))
-  .apply(discount.percent(10));
-```
-
-**Wrong first move**: Method chaining without a semantic model.
-
-**Follow-up path**: Shows the lower-cost route before introducing a custom parser.
-
-### 6. External DSLs: grammar, parser, AST, evaluator
-
-**Question**: What changes when the language has its own syntax?
-
-**Code anchor**:
-
-```text
-rule loyalty_discount:
-  when customer.segment == "gold" and cart.total > 100
-  then discount percent 10
-```
-
-**Wrong first move**: Parsing with string splits after the grammar starts to grow.
-
-**Follow-up path**: Prepares the reader to choose parser tooling.
-
-### 7. Choosing DSL tooling: parsers, expression engines, and language workbenches
-
-**Question**: Which tool category matches the domain, team, and runtime?
-
-**Code anchor**: One small grammar implemented with Lark, Chevrotain, and ANTLR, plus a Tree-sitter or Lezer sketch for editor support.
-
-**Wrong first move**: Picking the heaviest language workbench when a bounded expression language is enough.
-
-**Follow-up path**: Selects the implementation stack for the concrete build.
-
-### 8. Concrete build: discount and eligibility rules
-
-**Question**: How do we build a small but real DSL end to end?
-
-**Code anchor**: TypeScript plus Chevrotain as the main path, with Python plus Lark as a simpler appendix path.
-
-**Wrong first move**: Mixing parsing, semantic validation, and execution in one blob.
-
-**Follow-up path**: Moves from local implementation to production operation.
-
-### 9. Operating a DSL in production
-
-**Question**: What makes a DSL survivable after launch?
-
-**Code anchor**: Versioned rule bundles with schema validation, golden tests, dry runs, approvals, rollout metadata, and decision traces.
-
-**Wrong first move**: Treating DSL text as harmless content.
-
-**Follow-up path**: Closes with maintenance, governance, and migration practices.
-
-## Evergreen topic page plan
-
-After the series plan is reviewed, add a compact reference page at:
-
-```text
-src/content/docs/topics/cs/domain-specific-languages/index.md
-```
-
-That page should include:
-
-- Strict definition
-- Examples and non-examples
-- Internal vs external DSLs
-- Semantic model
-- Parser vs interpreter vs code generator
-- When to build
-- When not to build
-- Tooling map
-- Production checklist
-- Links back to this series
+- **Schema and type model**: Every readable input field has a declared type, owner, null behavior, and compatibility policy. This is what lets validation catch broken rules before runtime.
+- **Semantic validation**: Rules fail before deploy when they reference unknown fields, invalid operators, unsupported actions, bad dates, conflicting priorities, or unsafe behavior. Grammar validity is not enough.
+- **Golden tests**: Each rule has concrete examples with expected decisions and reason traces. Tests turn rule review into evidence instead of opinion.
+- **Versioning**: Stored rules carry language version, rule version, owner, effective dates, and migration status. This lets old rules keep running while the language evolves.
+- **Preview and dry run**: Authors can test a rule against sample, historical, or staged data before publish. Dry runs expose surprising matches before customers see them.
+- **Review workflow**: Changes carry ticket, approver, rollback plan, and release notes when the domain requires it. The workflow should match the risk of the decision.
+- **Runtime isolation**: Evaluation is deterministic, bounded, and separated from arbitrary host access. A safe DSL does not get file access, network access, secrets, mutation, or unbounded loops by default.
+- **Observability**: Decisions emit rule IDs, versions, matched clauses, output actions, latency, and failure reasons. Without traces, support and compliance cannot explain behavior.
+- **Migration tools**: Language changes can upgrade old rules or keep old versions running safely. Migration is part of the product once rules are stored outside application code.
+- **Documentation**: The language has examples, counterexamples, glossary, operator reference, and troubleshooting guidance. Users need to know not only what is valid, but what nearby invalid rules look like.
 
 ## References
 

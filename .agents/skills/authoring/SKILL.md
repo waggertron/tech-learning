@@ -165,6 +165,10 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    - `## References`, external authoritative links.
    - `## Related topics`, 2-5 internal links using relative paths (`../sibling/`, `../../posts/...`).
 
+   Keep rendered content reader-facing. Do not leave internal planning notes, future file paths, agent instructions, or "add this later" sections in the page body. Move those notes to `docs/`, `.agents/memory/`, or a focused planning document.
+
+   In research sections, synthesize repeated sources. If several bullets cite the same author, publication, or source family for one argument, combine them into one stronger attribution and explain the shared insight.
+
 5. **Link to neighbors.** Every new topic/post should:
    - End with a `## Related topics` (or `## Related topics and posts`) section.
    - Link to 2-5 neighboring topics.
@@ -215,6 +219,8 @@ When the user provides an article, editorial, answer, transcript, or pasted refe
 - **Don't leave new content orphaned.** If it isn't in the category index, it's hard to find.
 - **Don't skip the build step.** YAML failures compound across files and become annoying to untangle.
 - **Don't copy production data or secrets** into content. This is a public repo.
+- **Don't publish internal planning scaffolding.** Future file paths, TODO checklists, and agent instructions belong outside rendered pages.
+- **Don't list same-author source bullets mechanically.** Group them when they support one argument.
 
 ## Voice and length
 
@@ -240,9 +246,11 @@ Before calling a new page done:
 - [ ] Listed in parent category index.
 - [ ] Listed in `src/content/docs/topics/index.mdx` (for topics).
 - [ ] `npm run build` green.
+- [ ] `npm run validate:published-content` green when the page came from notes, research, or a series plan.
 - [ ] Page count in the build output went up (confirms the page was included).
 - [ ] No `**Term**, Description` comma patterns in bullet lists (use colon: `**Term**: Description`).
 - [ ] No prose semicolons joining independent clauses (split into two sentences instead).
+- [ ] No internal plan headings, future-file TODOs, or repeated same-author source piles are rendered in the page body.
 - [ ] See [prose-cleanup skill](../prose-cleanup/SKILL.md) for the full AI-marker checklist.
 
 ## Examples

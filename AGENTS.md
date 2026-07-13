@@ -20,9 +20,13 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 7. **ASCII diagrams only.** Mermaid is not wired up in this build.
 
-8. **Track feature additions.** When a change adds a user-visible capability, content model, generator, reusable skill, validation rule, or authoring workflow, update `docs/feature_tracker.md` and any focused docs needed to maintain it.
+8. **Rendered content must be reader-facing.** Do not publish internal planning scaffolding, future-file TODOs, implementation checklists, agent instructions, or hidden "add this later" notes in `src/content/docs`. Move that material to `docs/`, `.agents/memory/`, or a private planning note.
 
-9. **Run pre-push validation before pushing.** Use `npm run validate:pre-push` or the documented narrower tier from `docs/pre-push-validation.md`. Pages should render intended content, internal links should resolve, code examples should pass their contracts, and custom page behavior should be spot-tested when affected.
+9. **Synthesize repeated source attribution.** If several bullets cite the same author, publication, or source family for one argument, combine them into one stronger explanation. Mechanical source piles read noisy and low-value.
+
+10. **Track feature additions.** When a change adds a user-visible capability, content model, generator, reusable skill, validation rule, or authoring workflow, update `docs/feature_tracker.md` and any focused docs needed to maintain it.
+
+11. **Run pre-push validation before pushing.** Use `npm run validate:pre-push` or the documented narrower tier from `docs/pre-push-validation.md`. Pages should render intended content, internal links should resolve, code examples should pass their contracts, and custom page behavior should be spot-tested when affected.
 
 ## Repo structure
 
@@ -60,6 +64,7 @@ src/content/docs/
 - `.agents/skills/react-example-output-views/SKILL.md`: maintain generated output views after Modern React examples.
 - `.agents/skills/feature-tracking/SKILL.md`: keep feature history, docs records, AGENTS rules, and local memory current when capabilities are added.
 - `.agents/skills/pre-push-validation/SKILL.md`: run the outcome-based pre-push gate for rendered pages, links, examples, custom behavior, and push readiness.
+- `.agents/skills/published-content-review/SKILL.md`: remove internal planning residue, consolidate repeated source attribution, and run the published-content review gate before shipping content.
 
 ## Feature tracking
 

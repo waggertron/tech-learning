@@ -19,6 +19,7 @@
     "validate:links": "node scripts/validate-links.mjs",
     "validate:external-links": "node scripts/validate-external-links.mjs",
     "validate:code-examples": "node scripts/validate-code-examples.mjs",
+    "validate:published-content": "node scripts/validate-published-content.mjs",
     "validate:custom-pages": "node scripts/validate-custom-pages.mjs",
     "validate:pre-push": "node scripts/validate-pre-push.mjs",
     "new:topic": "bash scripts/new-topic.sh",

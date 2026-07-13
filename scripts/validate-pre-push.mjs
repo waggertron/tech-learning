@@ -6,6 +6,7 @@ const includeExternal = process.argv.includes("--external-links");
 const steps = [
   ["Secret scan", "bash", ["scripts/check-secrets.sh"]],
   ["Style validation", "npm", ["run", "validate:style"]],
+  ["Published content review", "npm", ["run", "validate:published-content"]],
   ["React output sync", "npm", ["run", "check:react-outputs"]],
   ["React output tests", "npm", ["run", "test:react-outputs"]],
   ["Code example validation", "npm", ["run", "validate:code-examples"]],

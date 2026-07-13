@@ -1,0 +1,4 @@
+interface:
+  display_name: "Published Content Review"
+  short_description: "Remove planning residue and mechanical source piles before publishing"
+  default_prompt: "Review this page as public content. Remove internal planning residue, consolidate repeated same-author source bullets, and run the published-content validator."

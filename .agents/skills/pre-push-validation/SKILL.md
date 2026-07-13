@@ -39,7 +39,7 @@ Use this skill before pushing changes. The standard is outcome-based: pages rend
 
 ## Validation tiers
 
-- **Style and safety**: `npm run validate:style` plus `scripts/check-secrets.sh`.
+- **Style and safety**: `npm run validate:style`, `npm run validate:published-content`, and `scripts/check-secrets.sh`.
 - **Rendered pages**: `npm run build`, then `npm run validate:pages`. Keep failure matching structural, because lesson text can mention error phrases without the page being broken.
 - **Links**: `npm run validate:links` for built internal links, asset references, and hash targets. Fix Markdown links from the rendered URL, not the source file path. The checker ignores code blocks and React output regions because example literals are not site navigation. Use `npm run validate:external-links` when online and external references changed.
 - **Code examples**: `npm run validate:code-examples`, `npm run check:react-outputs`, and `npm run test:react-outputs`.
@@ -48,6 +48,7 @@ Use this skill before pushing changes. The standard is outcome-based: pages rend
 ## Change-based additions
 
 - **Content-only edits**: Full pre-push validation is still preferred because frontmatter, links, and generated routes break cheaply.
+- **Research or notes turned into pages**: Run `npm run validate:published-content` and manually check for planning residue, future-file TODOs, and repeated same-author source bullets.
 - **Post series or indexes**: Inspect the rendered index route and the series detail route.
 - **React posts or generated examples**: Run the React output sync check and tests before the full build.
 - **Components or page scripts**: Run custom page validation.

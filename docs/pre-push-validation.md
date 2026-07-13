@@ -8,7 +8,7 @@ This repo uses an outcome-based validation workflow. A push is ready when the si
 2. **Links connect**: Built internal links resolve under `/tech-learning`, generated assets exist, and hash links point to real anchors.
 3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, generated React output views are in sync, and React output behavior tests pass.
 4. **Custom functionality behaves as intended**: Browser smoke tests cover the DSL calculator, generated React output interaction, and representative REPL markup.
-5. **The repo is safe to push**: No realistic credential strings, no banned prose patterns, clean worktree, and no local preview process left behind.
+5. **The repo is safe to push**: No realistic credential strings, no banned prose patterns, no rendered planning residue, clean worktree, and no local preview process left behind.
 
 ## Commands
 
@@ -23,6 +23,7 @@ The command runs:
 ```bash
 bash scripts/check-secrets.sh
 npm run validate:style
+npm run validate:published-content
 npm run check:react-outputs
 npm run test:react-outputs
 npm run validate:code-examples
@@ -55,6 +56,16 @@ npm run validate:pages
 This checks the generated `dist/` HTML. It verifies expected routes, titles, headings, content regions, body size, and common failure markers.
 
 Failure matching should stay structural. A teaching page may mention an error phrase such as `Internal Server Error` as lesson content, so add narrow failure signatures instead of broad text bans.
+
+### Published content review
+
+```bash
+npm run validate:published-content
+```
+
+This catches public-content leaks such as internal series plans, future-file TODO sections, planning field labels, and repeated same-author source bullets in source sections. It protects the reader-facing boundary: page bodies should read like finished explanations, not agent work notes.
+
+The check is intentionally narrow. It does not replace manual review for weak bullets, mechanical attribution, or source piles that use new wording.
 
 ### Links
 
@@ -128,5 +139,6 @@ Add or update validation when a bug reaches any of these surfaces:
 - A code example is stale, invalid, or misleading.
 - A custom component renders fallback HTML but does not respond to user input.
 - A generated artifact can drift from source content.
+- Internal planning notes or mechanical source piles reach rendered pages.
 
 Record new reusable validation rules in `docs/feature_tracker.md` and update `.agents/skills/pre-push-validation/SKILL.md` when future Codex sessions need the behavior.

@@ -58,6 +58,8 @@ Interpretation rules:
 - Rigid parallel bullet lists that were clearly generated just to look structured -> convert to prose paragraph
 - Rule: if 3+ bullets are each a single sentence that would flow naturally together, fold to prose
 - Rule: keep lists when they aid scanning (steps, options, comparisons, reference tables)
+- Repeated same-author source bullets -> combine into one stronger attribution that explains the shared insight
+- Internal planning residue in rendered pages -> move to `docs/`, `.agents/memory/`, or a planning document
 - Uniform sentence length -> vary: short punchy sentences mixed with longer complex ones
 
 ## What NOT to touch
@@ -92,6 +94,14 @@ npm run build
 ```
 
 Build must stay green. Page count should stay stable (no pages removed or added). Spot-check 2-3 pages: prose should feel direct and human, not AI-systematic.
+
+For content that came from notes or research, also run:
+
+```bash
+npm run validate:published-content
+```
+
+This catches known planning-leak phrases and repeated same-author source bullets in source sections.
 
 If the cleanup touches interactive post components, React output panels, generated examples, or client-side behavior, run the relevant targeted test too. For React output panels, run:
 

@@ -98,6 +98,10 @@ Research-first plan pages can also carry the working material that will become t
 - A scoring model or decision checklist.
 - One-off interactive helper components, imported from `src/components/`, when the post benefits from user input.
 
+Keep the rendered page reader-facing. Do not publish internal implementation TODOs, future file paths, "add this later" notes, or scaffolding fields such as `Code anchor`, `Wrong first move`, and `Follow-up path`. Move those to `docs/`, `.agents/memory/`, or a focused planning document.
+
+When a source section cites the same author or publication several times for one argument, consolidate those bullets into one stronger synthesis. A source pile reads mechanical and low-value.
+
 When a series plan adds a user-visible helper, update `docs/feature_tracker.md`, keep the series page linked from both post indexes, and run `npm run build`.
 
 ## Existing Series
@@ -118,6 +122,7 @@ Run these before final response:
 ```bash
 rg -n "eyJ|ghp_|AKIA|xoxb-" src docs .agents AGENTS.md README.md
 rg -n $'\u2014' src docs .agents AGENTS.md README.md
+npm run validate:published-content
 npm run build
 ```
 

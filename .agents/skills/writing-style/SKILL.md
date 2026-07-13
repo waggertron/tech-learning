@@ -75,6 +75,24 @@ This was one of the most pervasive patterns in the original site content and was
 
 Semicolons joining two independent clauses ("X is Y; the Z does W") almost always read better as two sentences. Split them. Keep semicolons for legitimate uses: lists where items have internal commas, and places where the tight coupling between two clauses genuinely matters.
 
+## Source attribution synthesis
+
+Research sections should synthesize sources. They should not look like a generated checklist of every source opened.
+
+When several bullets cite the same author, publication, or source family for one argument, combine them into one stronger attribution. Explain the shared insight, then link the relevant pieces together.
+
+Bad shape:
+
+- `Fowler's DSL Guide says...`
+- `Fowler's DSL Boundary says...`
+- `Fowler's Business Readable DSL says...`
+
+Better shape:
+
+- `Martin Fowler's DSL writing is best read as one argument: keep the language bounded, choose internal or external form deliberately, and aim for business-readable review before promising business-writable authoring.`
+
+The bad shape reads systematic, noisy, shallow, and low-value. Use separate bullets only when the sources make clearly different claims.
+
 ## Forbidden words and phrases
 
 These read as AI filler. Avoid them in this repo:

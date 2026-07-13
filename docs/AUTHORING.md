@@ -248,7 +248,15 @@ Lines 550+ usually mean the topic should split.
 
 For an unwritten long-form series, create one hidden series plan page under `posts/series/<slug>/index.mdx` rather than empty post stubs. The page can hold research notes, the reading order, tradeoff criteria, source links, and the intended code anchors.
 
+The rendered page still has to read as public content. Do not leave internal implementation notes, future file paths, "add this later" sections, agent instructions, or maintenance checklists in the page body. Move those notes to `docs/`, `.agents/memory/`, or a focused planning document.
+
 If a post needs a one-off calculator or similar interactive aid, put the component in `src/components/`, import it from MDX, keep the page useful without the widget, and update `docs/feature_tracker.md`. Run `npm run build` after the content change. If client-side behavior matters, spot-check the rendered route under local preview.
+
+### Source attribution synthesis
+
+Research sections should explain what the sources taught, not list every source as a separate checklist item. When several bullets cite the same author, publication, or source family for one argument, combine them into one stronger attribution and explain the shared insight. Five separate bullets for one author reads systematic, noisy, shallow, and low-value.
+
+Keep separate bullets when the sources make genuinely different claims. Otherwise, group them by author, publication, tool family, or research thread.
 
 ### Cross-linking pattern
 
@@ -310,6 +318,14 @@ Use [pre-push-validation.md](pre-push-validation.md) before pushing. The validat
 npm run validate:pre-push
 ```
 
+For content edits that came from notes or research, also pay attention to the published-content stage:
+
+```bash
+npm run validate:published-content
+```
+
+That check catches known planning-leak phrases and repeated same-author bullets in source sections. It is not a substitute for reading the page.
+
 ### Local
 
 ```bash
@@ -326,6 +342,7 @@ Before and after a site-wide cleanup, run the cheap scans and then read context 
 rg -n $'\u2014' src docs .agents AGENTS.md README.md
 rg -n "^\s*(?:[-*]|[0-9]+\.) \*\*[^*]+\*\*," src/content/docs docs README.md
 rg -n "In conclusio[n]|To summariz[e]|Ultimatel[y]|At the end of the da[y]|\butiliz[e]\b|\b[Ll]everag[e]\b|\bdelv[e]\b|dive int[o]|\brobus[t]\b|\bcomprehensiv[e]\b|seamlessl[y]|effortlessl[y]|\bstreamlin[e]\b|unlock the powe[r]|harness the powe[r]|It's worth notin[g]|On the other han[d]" src/content/docs docs README.md
+npm run validate:published-content
 ```
 
 Expected interpretation:
