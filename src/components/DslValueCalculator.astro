@@ -3,55 +3,55 @@ const factors = [
   {
     id: 'ruleVolatility',
     label: 'Rule volatility',
-    help: 'How often the domain rules change.',
+    help: 'How often the business rules change after release.',
     group: 'positive',
   },
   {
     id: 'sharedSystems',
     label: 'Shared logic',
-    help: 'How many systems need the same decision logic.',
+    help: 'How many services, apps, or workflows need the same decision.',
     group: 'positive',
   },
   {
     id: 'mistakeCost',
     label: 'Cost of mistakes',
-    help: 'How expensive a wrong decision would be.',
+    help: 'How much damage a wrong decision creates.',
     group: 'positive',
   },
   {
     id: 'businessReview',
     label: 'Business review need',
-    help: 'How much non-engineering review matters.',
+    help: 'How much domain, legal, compliance, or operations review matters.',
     group: 'positive',
   },
   {
     id: 'auditPressure',
     label: 'Audit pressure',
-    help: 'How much decision provenance matters.',
+    help: 'How often the firm must explain why a decision happened.',
     group: 'positive',
   },
   {
     id: 'boundedDomain',
     label: 'Bounded domain',
-    help: 'How stable and constrained the vocabulary is.',
+    help: 'How stable the vocabulary, inputs, and allowed actions are.',
     group: 'positive',
   },
   {
     id: 'implementationComplexity',
     label: 'Implementation complexity',
-    help: 'Parser, AST, evaluator, validation, and integration effort.',
+    help: 'Parser, AST, evaluator, validator, integration, and release effort.',
     group: 'negative',
   },
   {
     id: 'toolingMaintenance',
     label: 'Tooling maintenance',
-    help: 'Docs, tests, editor support, migrations, and examples.',
+    help: 'Docs, tests, examples, editor support, migrations, and support load.',
     group: 'negative',
   },
   {
     id: 'migrationCost',
     label: 'Migration cost',
-    help: 'Cost of changing stored rules as the language evolves.',
+    help: 'Cost of keeping old stored rules valid as the language changes.',
     group: 'negative',
   },
   {
@@ -63,13 +63,13 @@ const factors = [
   {
     id: 'runtimeRisk',
     label: 'Runtime risk',
-    help: 'Risk from I/O, secrets, network access, unbounded loops, or host object access.',
+    help: 'Risk from I/O, secrets, network access, loops, mutation, or host objects.',
     group: 'negative',
   },
   {
     id: 'existingFit',
     label: 'Existing tool fit',
-    help: 'How well CEL, Rego, Cedar, JsonLogic, SQL, JSONata, or a workflow engine already fits.',
+    help: 'How well CEL, Rego, Cedar, JsonLogic, SQL, JSONata, or a workflow engine fits.',
     group: 'alternative',
   },
 ];
@@ -87,8 +87,9 @@ const options = [
   <div class="dsl-calc__intro">
     <h3>DSL implementation value calculator</h3>
     <p>
-      Score each factor from 1 to 5. The result is a directional recommendation:
-      keep normal code, adopt an existing DSL or rule tool, or build a custom DSL.
+      Score each factor from 1 to 5. The result points to the next decision:
+      keep normal code, adopt an existing tool, prototype an internal DSL, or
+      investigate custom syntax.
     </p>
   </div>
 
@@ -156,8 +157,8 @@ const options = [
       <p class="dsl-calc__eyebrow">Recommendation</p>
       <h4 data-recommendation>Keep normal code or typed configuration</h4>
       <p data-summary>
-        The value signals do not clearly beat the maintenance cost. Use ordinary
-        code, a schema, or a small config object.
+        The value signals do not clearly beat the maintenance cost. Keep the
+        logic in normal code, typed configuration, or schema-validated data.
       </p>
       <dl class="dsl-calc__scores">
         <div>
@@ -243,20 +244,20 @@ const options = [
     const net = positive - negative;
 
     let recommendation = 'Keep normal code or typed configuration';
-    let summary = 'The value signals do not clearly beat the maintenance cost. Use ordinary code, a schema, or a small config object.';
+    let summary = 'The value signals do not clearly beat the maintenance cost. Keep the logic in normal code, typed configuration, or schema-validated data.';
 
     if (positive >= 21 && net >= 8 && existingFit <= 3 && boundedDomain >= 4) {
       recommendation = 'Build a custom DSL candidate';
-      summary = 'The domain looks bounded, valuable, and underserved by existing tools. Prototype the semantic model first, then add syntax only if it helps.';
+      summary = 'The domain looks bounded, valuable, and underserved by existing tools. Prototype the semantic model, validator, examples, and traces before designing syntax.';
     } else if (positive >= 18 && existingFit >= 4) {
       recommendation = 'Adopt an existing DSL or rule tool';
       summary = 'The domain has enough value to formalize, but an existing option appears to fit. Trial CEL, JsonLogic, Rego, Cedar, SQL, JSONata, or a workflow engine before custom syntax.';
     } else if (positive >= 18 && net >= 4) {
       recommendation = 'Prototype an internal DSL first';
-      summary = 'The value signals are real, but the custom-language case is not decisive. Start with a typed fluent API or declarative model before building a parser.';
+      summary = 'The value signals are real, but the custom-language case is not decisive. Start with a typed fluent API, JSON model, or decision table before building a parser.';
     } else if (negative >= 20 || net <= 0) {
       recommendation = 'Avoid a DSL for now';
-      summary = 'The cost and risk signals dominate. Strengthen the domain model and tests in normal code before introducing a language.';
+      summary = 'The cost and risk signals dominate. Strengthen the domain model, tests, and ownership in normal code before introducing a language.';
     }
 
     root.querySelector('[data-recommendation]')!.textContent = recommendation;
