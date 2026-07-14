@@ -80,6 +80,7 @@ These prompt words often point toward this concept:
 - [122. Best Time to Buy and Sell Stock II](../../coding-problems/greedy/122-best-time-to-buy-and-sell-stock-ii/)
 - [125. Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/)
 - [128. Longest Consecutive Sequence](../../coding-problems/arrays-and-hashing/128-longest-consecutive-sequence/)
+- [134. Gas Station](../../coding-problems/greedy/134-gas-station/)
 - [136. Single Number](../../coding-problems/bit-manipulation/136-single-number/)
 - [152. Maximum Product Subarray](../../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/)
 - [189. Rotate Array](../../coding-problems/two-pointers/189-rotate-array/)

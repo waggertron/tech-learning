@@ -1,11 +1,11 @@
 ---
 title: "134. Gas Station (Medium)"
-description: "Find the starting gas station from which you can complete a circular trip, or return -1."
+description: "Use total feasibility and failed-prefix elimination to find the unique starting station in one pass."
 parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-13
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,15 +21,23 @@ import approach2GoCode from './134-gas-station-approach2.go?raw';
 
 ## Problem
 
-You have `n` gas stations arranged in a circle. `gas[i]` is how much gas station `i` provides; `cost[i]` is the gas needed to travel from station `i` to station `i + 1` (circular). You start with an empty tank. Return the starting index if you can make a complete loop, or `-1`.
+You have `n` gas stations arranged in a circle. Station `i` provides `gas[i]` units. Traveling from station `i` to the next station consumes `cost[i]` units. You start with an empty tank at one station.
 
-The answer is unique if it exists.
+Return the starting index that lets you complete one clockwise circuit. Return `-1` when no start works. If a solution exists, the input guarantees that it is unique.
 
-**Example**
-- `gas = [1,2,3,4,5]`, `cost = [3,4,5,1,2]` → `3`
-- `gas = [2,3,4]`, `cost = [3,4,3]` → `-1`
+**Examples**
 
-LeetCode 134 · [Link](https://leetcode.com/problems/gas-station/) · *Medium*
+- `gas = [1,2,3,4,5]`, `cost = [3,4,5,1,2]` returns `3`. Starting at station 3 produces running tank values `3, 6, 4, 2, 0` after each drive.
+- `gas = [2,3,4]`, `cost = [3,4,3]` returns `-1`. The route provides 9 units but requires 10.
+
+**Constraints**
+
+- $n = \text{gas.length} = \text{cost.length}$
+- $1 \leq n \leq 10^5$
+- $0 \leq \text{gas}[i], \text{cost}[i] \leq 10^4$
+- A valid starting index is unique when it exists.
+
+LeetCode 134, [Gas Station in Top Interview 150](https://leetcode.com/problems/gas-station/description/?envType=study-plan-v2&envId=top-interview-150), Medium.
 
 ## Try it yourself
 
@@ -47,7 +55,7 @@ LeetCode 134 · [Link](https://leetcode.com/problems/gas-station/) · *Medium*
 
 ## Approach 1: Brute force, try every start
 
-For each starting index, simulate the loop.
+For each starting index, simulate at most `n` drives. Stop as soon as the tank becomes negative. This follows the definition directly, but much of the same route can be scanned again for later candidates.
 
 <Tabs>
 <TabItem label="Python">
@@ -111,20 +119,25 @@ func canCompleteCircuit(gas []int, cost []int) int {
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L2 (outer loop) | $O(1)$ | n | $O(n)$ |
-| **L3-L5 (inner simulation)** | **$O(1)$** | **up to n per start** | **$O(n²)$** ← dominates |
+| **L3-L5 (inner simulation)** | **$O(1)$** | **up to n per start** | **$O(n^2)$, dominant** |
 
-For each candidate start, we simulate up to `n` steps; worst case all `n` starts are tried fully.
+For each candidate start, we simulate up to `n` steps. In the worst case, nearly every candidate travels nearly the entire route before failing.
 
 **Complexity**
-- **Time:** $O(n²)$, driven by L3/L4/L5 (full simulation per candidate start).
+
+- **Time:** $O(n^2)$, driven by a full simulation for each candidate start.
 - **Space:** $O(1)$.
 
 ## Approach 2: Greedy single pass (canonical)
 
-Two facts:
+Replace each station with its net contribution:
 
-1. If `sum(gas) < sum(cost)`, no start works.
-2. Otherwise, walking from the earliest index where cumulative `gas - cost` stays non-negative succeeds.
+$$\text{net}[i] = \text{gas}[i] - \text{cost}[i]$$
+
+The solution follows from two facts:
+
+1. If the sum of all net contributions is negative, no start can create missing gas.
+2. If a candidate start reaches station `i` with a negative tank, every station from that candidate through `i` is also impossible. The next candidate can jump directly to `i + 1`.
 
 <Tabs>
 <TabItem label="Python">
@@ -190,16 +203,24 @@ func canCompleteCircuit(gas []int, cost []int) int {
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
 | L1 (sum check) | $O(n)$ | 1 | $O(n)$ |
-| **L4-L6 (single pass)** | **$O(1)$** | **n** | **$O(n)$** ← dominates |
+| **L4-L6 (single pass)** | **$O(1)$** | **n** | **$O(n)$, dominant** |
 
-Two $O(n)$ passes (one for the sum check, one for the greedy scan); both are $O(n)$ total.
+The sum check and greedy scan are each linear. Their costs add to $O(n)$.
 
 **Complexity**
-- **Time:** $O(n)$, driven by L4/L5/L6 (the single greedy scan, plus the $O(n)$ sum check at L1).
+
+- **Time:** $O(n)$.
 - **Space:** $O(1)$.
 
-### Why this works
-If you run out of gas between stations `start` and `j`, then no station in `[start, j]` can be a valid start, your cumulative deficit proves each of them fails before reaching `j`. So you can safely jump to `j + 1`. One linear pass suffices.
+### Why failed candidates can be skipped
+
+Suppose a candidate `start` reaches station `i` with a negative tank. The candidate survived every earlier drive, so the balance from `start` to any intermediate station `k - 1` was non-negative. Removing that non-negative prefix from the negative balance through `i` leaves a negative balance from `k` through `i`.
+
+That means every `k` in `[start, i]` also fails by station `i`. None of those positions needs its own simulation. Reset the tank and continue with `i + 1`.
+
+### Why the final candidate completes the circle
+
+The local tank answers whether the current candidate has failed. The total balance answers whether the route is feasible at all. If total gas covers total cost, all discarded prefixes can be paid for by the surplus accumulated from the final candidate through the end of the array. The final candidate therefore survives the wraparound portion too.
 
 **Try this approach:**
 
@@ -215,97 +236,44 @@ If you run out of gas between stations `start` and `j`, then no station in `[sta
   </TabItem>
 </Tabs>
 
-## Summary
+## How to recognize this pattern
+
+**The signal:** The problem asks for a starting point on a circular sequence, and each position has a local gain and local cost. Converting those two arrays into `gas[i] - cost[i]` exposes a running-balance problem.
+
+**The tempting wrong move:** Starting at the station with the most gas ignores the cost of leaving that station and the deficits ahead. In the first example, station 4 has the most gas, but station 3 is the answer.
+
+**The elimination clue:** A failed running balance often proves that a whole prefix of candidates is impossible. When one failure rules out a contiguous range, look for a greedy jump instead of restarting a simulation from each position.
+
+**The mental model:** Global balance proves that some solution exists. Local balance finds where that solution begins.
+
+## Approach comparison
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Try every start | $O(n²)$ | $O(1)$ |
+| Try every start | $O(n^2)$ | $O(1)$ |
 | **Greedy single pass** | **$O(n)$** | **$O(1)$** |
 
-Classic "skip impossible prefixes" greedy.
+## Key takeaways
 
-## Test cases
+- Convert each station into one net value, `gas[i] - cost[i]`.
+- Keep global feasibility separate from the local candidate balance.
+- A negative local balance eliminates every candidate since the last reset.
+- The circle does not require a second simulation once total balance is non-negative.
 
-<Tabs>
-<TabItem label="Go">
-```go
-func canCompleteCircuit(gas []int, cost []int) int {
-    totalGas, totalCost := 0, 0
-    for _, g := range gas { totalGas += g }
-    for _, c := range cost { totalCost += c }
-    if totalGas < totalCost { return -1 }
-    tank := 0
-    start := 0
-    for i := range gas {
-        tank += gas[i] - cost[i]
-        if tank < 0 { start = i + 1; tank = 0 }
-    }
-    return start
-}
-```
-</TabItem>
-<TabItem label="Python">
-```python
-# Quick smoke tests, paste into a REPL or save as test_134.py and run.
-# Uses the canonical implementation (Approach 2: greedy single pass).
+## References
 
-def can_complete_circuit(gas, cost):
-    if sum(gas) < sum(cost):
-        return -1
-    tank = 0
-    start = 0
-    for i in range(len(gas)):
-        tank += gas[i] - cost[i]
-        if tank < 0:
-            start = i + 1
-            tank = 0
-    return start
+- [LeetCode 134: Gas Station](https://leetcode.com/problems/gas-station/description/?envType=study-plan-v2&envId=top-interview-150)
+- [LeetCode Gas Station editorial](https://leetcode.com/problems/gas-station/editorial/)
 
-def _run_tests():
-    assert can_complete_circuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) == 3
-    assert can_complete_circuit([2, 3, 4], [3, 4, 3]) == -1
-    assert can_complete_circuit([1], [1]) == 0     # single station, exact balance
-    assert can_complete_circuit([5], [4]) == 0     # single station with surplus
-    assert can_complete_circuit([2, 0, 1], [0, 1, 2]) == 0  # start at 0
-    print("all tests pass")
+## Related topics
 
-if __name__ == "__main__":
-    _run_tests()
-```
-</TabItem>
-<TabItem label="TypeScript">
-```typescript
-function canCompleteCircuit(gas: number[], cost: number[]): number {
-    const totalGas = gas.reduce((a, b) => a + b, 0);
-    const totalCost = cost.reduce((a, b) => a + b, 0);
-    if (totalGas < totalCost) return -1;
-    let tank = 0;
-    let start = 0;
-    for (let i = 0; i < gas.length; i++) {
-        tank += gas[i] - cost[i];
-        if (tank < 0) {
-            start = i + 1;
-            tank = 0;
-        }
-    }
-    return start;
-}
-
-console.assert(canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]) === 3);
-console.assert(canCompleteCircuit([2, 3, 4], [3, 4, 3]) === -1);
-console.assert(canCompleteCircuit([1], [1]) === 0);     // single station, exact balance
-console.assert(canCompleteCircuit([5], [4]) === 0);     // single station with surplus
-console.assert(canCompleteCircuit([2, 0, 1], [0, 1, 2]) === 0);  // start at 0
-console.log("all tests pass");
-```
-</TabItem>
-</Tabs>
-
-## Related data structures
-
-- [Arrays](../../../data-structures/arrays/), running tank balance
+- [Greedy problems](../)
+- [55. Jump Game](../055-jump-game/)
+- [45. Jump Game II](../045-jump-game-ii/)
+- [Arrays](../../../data-structures/arrays/)
 
 ## Related concepts
 
-- [Greedy Algorithms](../../../coding-concepts/greedy-algorithms/), local-choice tactics for solving optimization and reachability problems when a provable invariant protects the future.
-- [Greedy Exchange Arguments](../../../coding-concepts/greedy-exchange-arguments/), proof tactics for showing that a greedy choice can be swapped into an optimal solution without making it worse.
+- [Greedy algorithms](../../../coding-concepts/greedy-algorithms/), failed prefixes can be discarded without revisiting them.
+- [Greedy exchange arguments](../../../coding-concepts/greedy-exchange-arguments/), the elimination proof explains why the next candidate loses nothing.
+- [Array scans](../../../coding-concepts/array-scans/), one pass maintains both total and local balances.
