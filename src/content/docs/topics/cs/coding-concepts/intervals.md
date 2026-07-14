@@ -5,7 +5,7 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-07-01
+updated: 2026-07-13
 ---
 
 ## Tactic
@@ -69,6 +69,7 @@ These prompt words often point toward this concept:
 
 - [56. Merge Intervals](../../coding-problems/intervals/056-merge-intervals/)
 - [57. Insert Interval](../../coding-problems/intervals/057-insert-interval/)
+- [228. Summary Ranges](../../coding-problems/arrays-and-hashing/228-summary-ranges/)
 - [252. Meeting Rooms](../../coding-problems/intervals/252-meeting-rooms/)
 - [253. Meeting Rooms II](../../coding-problems/intervals/253-meeting-rooms-ii/)
 - [435. Non-overlapping Intervals](../../coding-problems/intervals/435-non-overlapping-intervals/)

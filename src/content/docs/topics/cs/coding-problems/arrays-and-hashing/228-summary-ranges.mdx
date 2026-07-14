@@ -1,0 +1,336 @@
+---
+title: "228. Summary Ranges (Easy)"
+description: "Scan a sorted unique array once, opening a range at each run and closing it when the next value is not consecutive."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, intervals, easy]
+status: draft
+created: 2026-07-13
+updated: 2026-07-13
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './228-summary-ranges.py?raw';
+import practiceCodeTs from './228-summary-ranges.ts?raw';
+import practiceCodeGo from './228-summary-ranges.go?raw';
+import approach2PyCode from './228-summary-ranges-approach2.py?raw';
+import approach2TsCode from './228-summary-ranges-approach2.ts?raw';
+import approach2GoCode from './228-summary-ranges-approach2.go?raw';
+
+## Problem
+
+Given a sorted array of unique integers, return the smallest sorted list of ranges that covers every input value exactly once and includes no value that was absent from the input.
+
+Format a range from `a` to `b` as:
+
+- `"a->b"` when `a != b`.
+- `"a"` when `a == b`.
+
+**Example 1**
+
+```text
+Input:  nums = [0,1,2,4,5,7]
+Output: ["0->2","4->5","7"]
+```
+
+The consecutive runs are `[0,1,2]`, `[4,5]`, and `[7]`.
+
+**Example 2**
+
+```text
+Input:  nums = [0,2,3,4,6,8,9]
+Output: ["0","2->4","6","8->9"]
+```
+
+**Constraints**
+
+- $0 \leq \text{nums.length} \leq 20$
+- $-2^{31} \leq \text{nums}[i] \leq 2^{31} - 1$
+- Every value is unique.
+- `nums` is sorted in ascending order.
+
+LeetCode 228 · [Top Interview 150 link](https://leetcode.com/problems/summary-ranges/description/?envType=study-plan-v2&envId=top-interview-150) · *Easy*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="summary-ranges-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="summary-ranges-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="summary-ranges-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Expand runs with a hash set
+
+Put every value in a set. A value begins a range when its predecessor is absent. From each range start, keep incrementing the end while the next integer exists in the set.
+
+This approach works, but it ignores the most useful input guarantee: the array is already sorted. The set spends extra memory to recover adjacency that the input order gives us for free.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def summary_ranges(nums: list[int]) -> list[str]:
+    present = set(nums)                              # L1: store all values
+    ranges: list[str] = []
+
+    for value in nums:                              # L2: inspect each value
+        if value - 1 in present:                    # L3: not a range start
+            continue
+
+        end = value
+        while end + 1 in present:                   # L4: expand this run
+            end += 1
+
+        ranges.append(str(value) if value == end    # L5: format the run
+                      else f"{value}->{end}")
+
+    return ranges
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function summaryRanges(nums: number[]): string[] {
+    const present = new Set(nums);                  // L1: store all values
+    const ranges: string[] = [];
+
+    for (const value of nums) {                     // L2: inspect each value
+        if (present.has(value - 1)) continue;       // L3: not a range start
+
+        let end = value;
+        while (present.has(end + 1)) end++;         // L4: expand this run
+
+        ranges.push(value === end                   // L5: format the run
+            ? `${value}`
+            : `${value}->${end}`);
+    }
+
+    return ranges;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "strconv"
+
+func summaryRanges(nums []int) []string {
+	present := make(map[int]struct{}, len(nums))
+	for _, value := range nums {                       // L1: store all values
+		present[value] = struct{}{}
+	}
+
+	ranges := make([]string, 0)
+	for _, value := range nums {                       // L2: inspect each value
+		if _, found := present[value-1]; found {         // L3: not a range start
+			continue
+		}
+
+		end := value
+		for {
+			if _, found := present[end+1]; !found {       // L4: expand this run
+				break
+			}
+			end++
+		}
+
+		if value == end {                               // L5: format the run
+			ranges = append(ranges, strconv.Itoa(value))
+		} else {
+			ranges = append(ranges, strconv.Itoa(value)+"->"+strconv.Itoa(end))
+		}
+	}
+
+	return ranges
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), r = number of output ranges.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 build set | $O(n)$ | 1 | $O(n)$ |
+| L2-L3 outer scan | $O(1)$ average | $n$ | $O(n)$ |
+| **L4 expand runs** | **$O(1)$ average** | **at most $n$ total** | **$O(n)$** |
+| L5 format ranges | $O(1)$ under 32-bit bounds | $r$ | $O(r)$ |
+
+Each value is visited by the outer loop. Across all range starts, the expansion loops advance over at most `n` values in total.
+
+**Complexity**
+
+- **Time:** $O(n)$ average.
+- **Space:** $O(n)$ for the set, excluding the output.
+
+## Approach 2: Close a range at each gap
+
+The sorted order makes every decision local. Keep the start of the current run. At index `i`, the run ends when either `i` has reached the end of the array or `nums[i]` is not one greater than `nums[i - 1]`.
+
+The loop deliberately runs through `i == nums.length`. That final boundary closes the last open range without a separate block after the loop.
+
+<Tabs>
+<TabItem label="Python">
+```python
+def summary_ranges(nums: list[int]) -> list[str]:
+    if not nums:                                    # L1: empty input
+        return []
+
+    ranges: list[str] = []
+    start = nums[0]                                 # L2: open first range
+
+    for i in range(1, len(nums) + 1):               # L3: include end boundary
+        if i < len(nums) and nums[i] == nums[i - 1] + 1:
+            continue                                # L4: current run continues
+
+        end = nums[i - 1]
+        ranges.append(str(start) if start == end    # L5: close current range
+                      else f"{start}->{end}")
+
+        if i < len(nums):
+            start = nums[i]                         # L6: open next range
+
+    return ranges
+```
+</TabItem>
+<TabItem label="TypeScript">
+```typescript
+function summaryRanges(nums: number[]): string[] {
+    if (nums.length === 0) return [];               // L1: empty input
+
+    const ranges: string[] = [];
+    let start = nums[0];                            // L2: open first range
+
+    for (let i = 1; i <= nums.length; i++) {        // L3: include end boundary
+        if (i < nums.length && nums[i] === nums[i - 1] + 1) {
+            continue;                               // L4: current run continues
+        }
+
+        const end = nums[i - 1];
+        ranges.push(start === end                   // L5: close current range
+            ? `${start}`
+            : `${start}->${end}`);
+
+        if (i < nums.length) start = nums[i];       // L6: open next range
+    }
+
+    return ranges;
+}
+```
+</TabItem>
+<TabItem label="Go">
+```go
+import "strconv"
+
+func summaryRanges(nums []int) []string {
+	if len(nums) == 0 {                                // L1: empty input
+		return []string{}
+	}
+
+	ranges := make([]string, 0)
+	start := nums[0]                                   // L2: open first range
+
+	for i := 1; i <= len(nums); i++ {                  // L3: include end boundary
+		if i < len(nums) && nums[i] == nums[i-1]+1 {
+			continue                                      // L4: current run continues
+		}
+
+		end := nums[i-1]
+		if start == end {                               // L5: close current range
+			ranges = append(ranges, strconv.Itoa(start))
+		} else {
+			ranges = append(ranges, strconv.Itoa(start)+"->"+strconv.Itoa(end))
+		}
+
+		if i < len(nums) {
+			start = nums[i]                               // L6: open next range
+		}
+	}
+
+	return ranges
+}
+```
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums), r = number of output ranges.*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 initialize | $O(1)$ | 1 | $O(1)$ |
+| **L3-L4 scan adjacent values** | **$O(1)$** | **$n$** | **$O(n)$** |
+| L5 format a closed range | $O(1)$ under 32-bit bounds | $r$ | $O(r)$ |
+| L6 open the next range | $O(1)$ | at most $r - 1$ | $O(r)$ |
+
+**Complexity**
+
+- **Time:** $O(n)$, one pass over the input.
+- **Auxiliary space:** $O(1)$, excluding the required output list.
+- **Output space:** $O(r)$.
+
+**Try the optimal approach**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="summary-ranges-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="summary-ranges-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="summary-ranges-approach2-go" />
+  </TabItem>
+</Tabs>
+
+## Why the scan is correct
+
+At the start of each loop iteration, `start` is the first value in the current unreported consecutive run. If the next value is exactly one greater than the previous value, the run remains valid and no output is ready yet.
+
+When a gap appears, `nums[i - 1]` is the final value in the run. Formatting `[start, nums[i - 1]]` covers every value in that run and nothing across the gap. Setting `start = nums[i]` opens the next run. The synthetic boundary at `i == nums.length` closes the last run, so every input value appears in exactly one output range.
+
+## How to recognize this pattern
+
+- **The signal:** The input is sorted and unique, and the output groups adjacent values into maximal consecutive runs.
+- **The tempting wrong approach:** Iterate through every integer from the minimum input value to the maximum.
+- **The counterexample:** `[-2147483648, 2147483647]` contains only two values but spans more than four billion integers.
+- **Why it fails:** Runtime would depend on the numeric gap instead of the input length.
+- **The mental model:** Open a range at the first value. Close it immediately before each gap.
+
+| Problem | Boundary being detected |
+| --- | --- |
+| [128. Longest Consecutive Sequence](../128-longest-consecutive-sequence/) | Start of a consecutive run in an unsorted set |
+| [56. Merge Intervals](../../intervals/056-merge-intervals/) | Gap or overlap between sorted intervals |
+| [303. Range Sum Query - Immutable](../303-range-sum-query-immutable/) | Query boundaries in a preprocessed array |
+
+## Key takeaways
+
+- Sorted unique input turns range construction into a one-pass boundary scan.
+- A range closes when the next value is absent or the scan reaches the end.
+- The empty array needs an early return because there is no first range to open.
+- Iterate over input values, not every integer between the minimum and maximum.
+
+## References
+
+- [LeetCode 228, Summary Ranges](https://leetcode.com/problems/summary-ranges/description/?envType=study-plan-v2&envId=top-interview-150)
+- [Python set types](https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset)
+- [Go `strconv.Itoa`](https://pkg.go.dev/strconv#Itoa)
+
+## Related topics
+
+- [128. Longest Consecutive Sequence](../128-longest-consecutive-sequence/), finds consecutive runs when the input is not sorted.
+- [303. Range Sum Query - Immutable](../303-range-sum-query-immutable/), uses range boundaries for constant-time queries.
+- [56. Merge Intervals](../../intervals/056-merge-intervals/), merges overlapping ranges after sorting by start.
+
+## Related concepts
+
+- [Array Scans](../../../coding-concepts/array-scans/), the one-pass habit of carrying only the current range start.
+- [Intervals](../../../coding-concepts/intervals/), the boundary model used to represent each consecutive run compactly.

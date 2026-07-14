@@ -5,7 +5,7 @@ category: cs
 tags: [leetcode, interviews, neetcode-150, algorithms]
 status: draft
 created: 2026-04-23
-updated: 2026-05-07
+updated: 2026-07-13
 ---
 
 ## Overview
@@ -27,7 +27,7 @@ For the reusable tactics behind those solutions, use [Coding Concepts](../coding
 
 | Category | Problems |
 | --- | --- |
-| [Arrays & Hashing](./arrays-and-hashing/) | 15 |
+| [Arrays & Hashing](./arrays-and-hashing/) | 18 |
 | [Two Pointers](./two-pointers/) | 5 |
 | [Sliding Window](./sliding-window/) | 8 |
 | [Stack](./stack/) | 16 |
