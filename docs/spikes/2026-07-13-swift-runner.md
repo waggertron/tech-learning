@@ -4,6 +4,8 @@
 **Status:** R1.3 passed
 **ADR:** `docs/adr/2026-07-13-swift-browser-execution.md`
 
+The R1.6 hardening pass promoted this code into the maintained executor paths below. This document preserves the original spike evidence.
+
 ## Question
 
 Can a project-owned runner compile source edited after site deployment with the exact stable Swift toolchain, return structured compiler and runtime evidence, enforce timeout and output bounds, cancel underlying work, isolate concurrent jobs, and clean every local artifact?
@@ -16,10 +18,10 @@ The spike is not the browser component or public service. R1.4 still needs the c
 
 ## Files
 
-- Executor: `tools/swift-runner-spike/runner.mjs`
-- Contract tests: `tests/swift-runner-spike/runner.test.mjs`
-- Valid and deliberate invalid fixtures: `tests/swift-runner-spike/fixtures/`
-- Command: `npm run test:swift-runner-spike`
+- Executor: `tools/swift-runner/runner.mjs`
+- Contract tests: `tests/swift-runner-executor/runner.test.mjs`
+- Valid and deliberate invalid fixtures: `tests/swift-runner-executor/fixtures/`
+- Command: `npm run test:swift-runner-executor`
 
 ## Toolchain
 
@@ -85,8 +87,8 @@ Piston was not required for the smallest proof. It remains an executor candidate
 
 ## Remaining Work
 
-1. R1.4: Define the versioned client contract, deterministic local mock, and local API adapter.
-2. R1.5: Build the Swift editor and approach-block surface against the mock by default.
-3. R1.6: Harden and validate the production isolation and abuse boundary.
-4. R1.7: Run browser, accessibility, cancellation, failure, cache, and mobile checks.
-5. R1.8: Promote stable commands and authoring rules from spike evidence into maintained documentation.
+1. R1.4 completed the versioned client contract, deterministic local mock, and HTTP adapter.
+2. R1.5 completed the Swift editor and approach-block surface.
+3. R1.6 promoted and hardened the maintained local isolation boundary. Public service abuse controls still precede deployment.
+4. R1.7 must run browser, accessibility, cancellation, failure, cache, and mobile checks.
+5. R1.8 must finish stable authoring rules and capability documentation.

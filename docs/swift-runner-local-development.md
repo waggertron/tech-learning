@@ -13,8 +13,9 @@ R1.4 provides a credential-free browser contract, deterministic mock, and local 
 - Editable browser component: `src/components/SwiftRepl.astro`
 - Contract tests: `tests/swift-runner-contract/contract.test.ts`
 - Component tests: `tests/swift-repl/component.test.ts`
-- Local executor: `tools/swift-runner-spike/runner.mjs`
-- Executor tests: `tests/swift-runner-spike/runner.test.mjs`
+- Local executor: `tools/swift-runner/runner.mjs`
+- Executor tests: `tests/swift-runner-executor/runner.test.mjs`
+- Isolation contract: `docs/swift-runner-isolation.md`
 
 ## Commands
 
@@ -28,10 +29,10 @@ npm run test:swift-repl
 Run the exact Swift 6.3.3 executor integration tests when Docker and the pinned image are available:
 
 ```bash
-npm run test:swift-runner-spike
+npm run test:swift-runner-executor
 ```
 
-The integration command creates ephemeral containers and removes them after success, failure, timeout, cancellation, or output limit. It does not start a persistent service or bind a host port.
+The integration command creates ephemeral containers and removes them after success, failure, timeout, cancellation, or output limit. It does not start a persistent service or bind a host port. The compiler and program share one bounded output budget.
 
 ## Client Port
 
@@ -97,7 +98,7 @@ Neither path is iOS evidence. SwiftUI, UIKit, Apple SDK frameworks, simulator be
 
 The mock creates only in-memory jobs. Each mock client instance owns its own monotonically numbered job ids and loses all state when the test ends.
 
-The real executor creates a unique container and two tmpfs workspaces per job. Its `finally` path removes the container, and the executor suite fails if any spike-labeled container remains. Repeated test runs should leave no job containers, ports, volumes, source files, or compiled artifacts.
+The real executor creates a unique container and two tmpfs workspaces per job. Its `finally` path removes the container, and the executor suite fails if any runner-labeled container remains. Repeated test runs should leave no job containers, ports, volumes, source files, or compiled artifacts.
 
 ## Next Integration
 

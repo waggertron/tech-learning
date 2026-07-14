@@ -14,7 +14,7 @@
     "test:react-outputs": "node --test tests/react-example-output-views.test.mjs",
     "test:swift-runner-contract": "vitest run tests/swift-runner-contract/contract.test.ts",
     "test:swift-repl": "vitest run tests/swift-repl/component.test.ts",
-    "test:swift-runner-spike": "node --test tests/swift-runner-spike/runner.test.mjs",
+    "test:swift-runner-executor": "node --test tests/swift-runner-executor/runner.test.mjs",
     "sync:react-outputs": "node scripts/sync-react-example-outputs.mjs",
     "check:react-outputs": "node scripts/sync-react-example-outputs.mjs --check",
     "validate:style": "node scripts/validate-style.mjs",

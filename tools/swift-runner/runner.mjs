@@ -4,7 +4,7 @@ import { performance } from "node:perf_hooks";
 
 export const DEFAULT_IMAGE =
   "swift:6.3.3-noble@sha256:66520bcba471018a34fd54ba09be97ba4abebd950a96ff5cb8c2bf50a2d33259";
-export const CONTAINER_PREFIX = "tech-learning-swift-spike-";
+export const CONTAINER_PREFIX = "tech-learning-swift-runner-";
 export const EXPECTED_TOOLCHAIN = "Swift version 6.3.3";
 
 const DEFAULT_LIMITS = Object.freeze({
@@ -179,8 +179,10 @@ export async function runSwiftJob(options) {
         "--name",
         containerName,
         "--label",
-        "tech-learning.swift-runner-spike=true",
+        "tech-learning.swift-runner=true",
         "--network",
+        "none",
+        "--ipc",
         "none",
         "--read-only",
         "--cap-drop",
@@ -196,13 +198,17 @@ export async function runSwiftJob(options) {
         "--cpus",
         "1",
         "--ulimit",
+        "core=0:0",
+        "--ulimit",
         "nofile=64:64",
         "--tmpfs",
-        "/work:rw,exec,size=256m,mode=1777",
+        "/work:rw,exec,nosuid,nodev,size=256m,mode=1777",
         "--tmpfs",
-        "/tmp:rw,exec,size=256m,mode=1777",
+        "/tmp:rw,noexec,nosuid,nodev,size=256m,mode=1777",
         "--user",
         "65534:65534",
+        "--workdir",
+        "/work",
         "--env",
         "HOME=/tmp",
         "--env",
@@ -301,8 +307,12 @@ export async function runSwiftJob(options) {
     }
 
     onStage?.("running", stageContext);
+    const remainingOutputBytes = Math.max(
+      0,
+      limits.maxOutputBytes - Math.min(compiled.observedBytes, limits.maxOutputBytes),
+    );
     const executed = await runProcess("docker", ["exec", containerName, "/work/main"], {
-      maxOutputBytes: limits.maxOutputBytes,
+      maxOutputBytes: remainingOutputBytes,
       onTerminate: cleanup,
       signal,
       timeoutMs: limits.runTimeoutMs,
@@ -311,6 +321,7 @@ export async function runSwiftJob(options) {
     if (executed.reason === "cancelled") {
       return terminalResult("cancelled", "running", executed, {
         compileDurationMs: compiled.durationMs,
+        diagnostics: compiled.stderr,
         runDurationMs: executed.durationMs,
         toolchain,
       });
@@ -318,6 +329,7 @@ export async function runSwiftJob(options) {
     if (executed.reason === "timed_out") {
       return terminalResult("timed_out", "running", executed, {
         compileDurationMs: compiled.durationMs,
+        diagnostics: compiled.stderr,
         runDurationMs: executed.durationMs,
         toolchain,
       });
@@ -325,6 +337,7 @@ export async function runSwiftJob(options) {
     if (executed.reason === "output_limited") {
       return terminalResult("output_limited", "running", executed, {
         compileDurationMs: compiled.durationMs,
+        diagnostics: compiled.stderr,
         runDurationMs: executed.durationMs,
         toolchain,
       });
@@ -332,6 +345,7 @@ export async function runSwiftJob(options) {
     if (executed.code !== 0) {
       return terminalResult("runtime_failed", "running", executed, {
         compileDurationMs: compiled.durationMs,
+        diagnostics: compiled.stderr,
         runDurationMs: executed.durationMs,
         toolchain,
       });
@@ -339,6 +353,7 @@ export async function runSwiftJob(options) {
 
     return terminalResult("succeeded", "running", executed, {
       compileDurationMs: compiled.durationMs,
+      diagnostics: compiled.stderr,
       runDurationMs: executed.durationMs,
       toolchain,
     });
