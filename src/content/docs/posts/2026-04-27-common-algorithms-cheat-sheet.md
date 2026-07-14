@@ -635,7 +635,7 @@ If you can name the shape, you can quote the bound. Half the interview battle is
 - Cormen, Leiserson, Rivest, Stein. *Introduction to Algorithms* (CLRS), 4th ed. The reference for every algorithm here.
 - [Competitive Programmer's Handbook (PDF)](https://cses.fi/book/book.pdf), Antti Laaksonen, free. Concise treatments of all the graph algorithms.
 - [USACO Guide](https://usaco.guide/), categorized by topic with code examples.
-- [Tushar Roy's algorithms playlist](https://www.youtube.com/c/tusharroy2525), good visual walkthroughs of Tarjan, KMP, and others.
+- [Tushar Roy's algorithms channel](https://www.youtube.com/@tusharroy2525), good visual walkthroughs of Tarjan, KMP, and others.
 
 ## Related topics
 

@@ -209,7 +209,6 @@ If EtherChannel fails to form because of a misconfiguration, STP falls back to i
 
 ## References
 
-- [Cisco EtherChannel Configuration Guide (IOS XE)](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/lanswitch/configuration/xe-17/lanswitch-xe-17-book/lsw-etherchannel.html)
 - [IEEE 802.3ad Link Aggregation standard overview](https://standards.ieee.org/ieee/802.3ad/1051/)
 
 ## Related topics

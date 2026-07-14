@@ -224,7 +224,7 @@ For groups larger than 256 (Discord-style), fan-out does not scale. Use a pub/su
 - [WhatsApp engineering at scale](https://blog.whatsapp.com/1-million-is-so-2011)
 - [Signal Protocol specification](https://signal.org/docs/)
 - [Designing Data-Intensive Applications, Kleppmann, Chapter 11](https://dataintensive.net/)
-- [Apache Cassandra data modeling for messaging](https://cassandra.apache.org/doc/latest/cassandra/data_modeling/index.html)
+- [Apache Cassandra data modeling](https://cassandra.apache.org/doc/stable/cassandra/developing/data-modeling/)
 
 ## Related topics
 

@@ -70,7 +70,7 @@ Lisk, Ark, and BitShares are earlier DPoS chains. BitShares was DPoS's original 
 ## References
 
 - [EOS Technical Whitepaper (2017)](https://github.com/EOSIO/Documentation/blob/master/TechnicalWhitePaper.md), the original DPoS design for EOS
-- [BitShares Delegated Proof-of-Stake Consensus, Larimer (2014)](https://how.bitshares.works/en/master/technology/dpos.html), the first DPoS specification
+- [BitShares Delegated Proof-of-Stake Consensus, Larimer (2014)](https://docs.bitshares.eu/en/master/technology/dpos.html), the first DPoS specification
 
 ## Related topics
 

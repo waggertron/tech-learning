@@ -312,7 +312,7 @@ Each transition is a DB update + event publication. The trip state is stored in 
 - [Uber engineering: how Uber manages 1M writes/sec on location data](https://www.uber.com/blog/engineering/)
 - [Uber H3 geospatial indexing library](https://h3geo.org/)
 - [Lyft engineering: matching at scale](https://eng.lyft.com/)
-- [Redis GEO commands documentation](https://redis.io/docs/data-types/geo/)
+- [Redis geospatial documentation](https://redis.io/docs/latest/develop/data-types/geospatial/)
 
 ## Related topics
 

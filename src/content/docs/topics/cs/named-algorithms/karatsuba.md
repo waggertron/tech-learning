@@ -518,7 +518,7 @@ if __name__ == "__main__":
 - Karatsuba, A., and Ofman, Yu. (1962). "Multiplication of Many-Digital Numbers by Automatic Computers." *Doklady Akademii Nauk SSSR*, 145(2): 293-294. The original paper.
 - Knuth, D. E. (1997). *The Art of Computer Programming*, Vol. 2: Seminumerical Algorithms, 3rd ed. Section 4.3.3 covers Karatsuba and Toom-Cook in detail.
 - Cormen, T. H., Leiserson, C. E., Rivest, R. L., and Stein, C. (2022). *Introduction to Algorithms*, 4th ed. Chapter on divide-and-conquer includes the recurrence analysis.
-- Granlund, T., and the GMP development team. *GNU Multiple Precision Arithmetic Library* (GMP). [https://gmplib.org/](https://gmplib.org/). Source code shows the practical thresholds and layered algorithm selection.
+- Granlund, T., and the GMP development team. *GNU Multiple Precision Arithmetic Library* (GMP). Its source code shows the practical thresholds and layered algorithm selection.
 
 ## Related topics
 

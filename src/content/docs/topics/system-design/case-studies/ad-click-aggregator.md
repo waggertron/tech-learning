@@ -684,7 +684,7 @@ The merge is simple because the two data sources cover non-overlapping time rang
 
 ## References
 
-- [Real-time Data Infrastructure at Uber](https://eng.uber.com/real-time-exactly-once-ad-event-processing/)
+- [Real-time exactly-once ad event processing at Uber](https://www.uber.com/en-AE/blog/real-time-exactly-once-ad-event-processing/)
 - [Lambda Architecture (Nathan Marz)](http://nathanmarz.com/blog/how-to-beat-the-cap-theorem.html)
 - [ClickHouse for Analytical Workloads](https://clickhouse.com/docs/en/intro)
 - [Count-Min Sketch (Cormode & Muthukrishnan)](https://dimacs.rutgers.edu/~graham/pubs/papers/cmencyc.pdf)

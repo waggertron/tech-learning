@@ -555,7 +555,7 @@ if __name__ == '__main__':
 ## References
 
 - Cormen, T. H., Leiserson, C. E., Rivest, R. L., and Stein, C. (2022). *Introduction to Algorithms*, 4th ed. MIT Press. Chapter 22: Elementary Graph Algorithms.
-- [CP-Algorithms: Breadth-First Search](https://cp-algorithms.com/graph/bfs.html), a concise reference with proof and applications.
+- [CP-Algorithms: Breadth-First Search](https://cp-algorithms.com/graph/breadth-first-search.html), a concise reference with proof and applications.
 - [LeetCode Explore: Graph](https://leetcode.com/explore/learn/card/graph/), interactive BFS and DFS exercises with editorial hints.
 
 ## Related topics

@@ -197,7 +197,7 @@ Avoid it when:
 
 - [SpacetimeDB documentation](https://spacetimedb.com/docs)
 - [SpacetimeDB GitHub repository](https://github.com/clockworklabs/SpacetimeDB)
-- [BitCraft Online engineering](https://clockworklabs.io/blog)
+- [SpacetimeDB documentation](https://spacetimedb.com/docs/)
 
 ## Related topics
 

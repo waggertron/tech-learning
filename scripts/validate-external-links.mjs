@@ -1,15 +1,19 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const contentDir = path.join(repoRoot, "src/content/docs");
+const distDir = path.join(repoRoot, "dist");
 const timeoutMs = Number(process.env.EXTERNAL_LINK_TIMEOUT_MS ?? 10000);
 const concurrency = Number(process.env.EXTERNAL_LINK_CONCURRENCY ?? 6);
 
-function listMarkdownFiles() {
-  return execFileSync("find", [contentDir, "-name", "*.md", "-o", "-name", "*.mdx"], {
+function listHtmlFiles() {
+  if (!existsSync(distDir)) {
+    throw new Error("dist/ does not exist. Run npm run build first.");
+  }
+
+  return execFileSync("find", [distDir, "-name", "*.html", "-type", "f"], {
     encoding: "utf8",
   })
     .trim()
@@ -18,16 +22,32 @@ function listMarkdownFiles() {
     .sort();
 }
 
+function decodeHtml(value) {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function stripIgnoredRegions(html) {
+  return html
+    .replace(/<!--[^]*?-->/g, "")
+    .replace(/<pre\b[^]*?<\/pre>/gi, "")
+    .replace(/<code\b[^]*?<\/code>/gi, "");
+}
+
 function collectExternalLinks() {
   const links = new Map();
 
-  for (const filePath of listMarkdownFiles()) {
-    const content = readFileSync(filePath, "utf8");
-    const relativePath = path.relative(repoRoot, filePath);
-    for (const match of content.matchAll(/https?:\/\/[^\s)<>"']+/g)) {
-      const url = match[0].replace(/[.,;:!?]+$/, "");
+  for (const filePath of listHtmlFiles()) {
+    const html = stripIgnoredRegions(readFileSync(filePath, "utf8"));
+    const relativePath = path.relative(distDir, filePath);
+    for (const match of html.matchAll(/<a\b[^>]*\bhref=["'](https?:\/\/[^"']+)["'][^>]*>/gi)) {
+      const url = decodeHtml(match[1]);
       if (!links.has(url)) links.set(url, []);
-      links.get(url).push(relativePath);
+      if (!links.get(url).includes(relativePath)) links.get(url).push(relativePath);
     }
   }
 
@@ -52,13 +72,20 @@ async function fetchWithTimeout(url, method) {
 }
 
 function acceptableStatus(status) {
-  return (status >= 200 && status < 400) || status === 401 || status === 403 || status === 405;
+  return (
+    (status >= 200 && status < 400) ||
+    status === 401 ||
+    status === 403 ||
+    status === 405 ||
+    status === 406 ||
+    status === 429
+  );
 }
 
 async function checkLink(entry) {
   try {
     let response = await fetchWithTimeout(entry.url, "HEAD");
-    if (response.status === 405 || response.status === 403) {
+    if (!acceptableStatus(response.status)) {
       response = await fetchWithTimeout(entry.url, "GET");
     }
 
@@ -104,7 +131,7 @@ if (failures.length > 0) {
   console.error("External link validation failed:");
   for (const failure of failures.slice(0, 80)) {
     console.error(`- ${failure.url}: ${failure.reason}`);
-    console.error(`  Seen in: ${failure.files.slice(0, 5).join(", ")}`);
+    console.error(`  Rendered in: ${failure.files.slice(0, 5).join(", ")}`);
   }
   if (failures.length > 80) {
     console.error(`...and ${failures.length - 80} more`);

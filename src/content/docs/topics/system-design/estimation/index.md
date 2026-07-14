@@ -272,7 +272,6 @@ If each message is delivered to 1.5 recipients on average:
 
 ## References
 
-- [Numbers Every Programmer Should Know, Jeff Dean](https://static.googleusercontent.com/media/sre.google/en//static/pdf/performance.pdf)
 - [System Design Interview, Alex Xu, Chapter 2: Back-of-the-Envelope Estimation](https://bytebytego.com/)
 - [Latency Numbers Every Programmer Should Know, interactive](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
 - [AWS Calculator for reference](https://calculator.aws/pricing/2/home)

@@ -192,8 +192,8 @@ Every packet in the Internet layer contains a source IP address and a destinatio
 
 ## References
 
-- [RFC 793: Transmission Control Protocol (IETF)](https://www.rfc-editor.org/rfc/rfc793)
-- [RFC 768: User Datagram Protocol (IETF)](https://www.rfc-editor.org/rfc/rfc768)
+- [RFC 793: Transmission Control Protocol (IETF)](https://www.rfc-editor.org/rfc/rfc793.html)
+- [RFC 768: User Datagram Protocol (IETF)](https://www.rfc-editor.org/rfc/rfc768.html)
 - [IANA Service Name and Transport Protocol Port Number Registry](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)
 
 ## Related topics

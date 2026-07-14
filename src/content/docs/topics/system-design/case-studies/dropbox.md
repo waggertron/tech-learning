@@ -935,7 +935,7 @@ The user sees both the current file and their conflicted copy in the folder. The
 ## References
 
 - [Dropbox Tech Blog: Scaling to exabytes](https://dropbox.tech/infrastructure/magic-pocket-infrastructure)
-- [Dropbox Tech Blog: How we optimized Magic Pocket for cold storage](https://dropbox.tech/infrastructure/optimizing-magic-pocket-cold-storage)
+- [Dropbox Tech Blog: How we optimized Magic Pocket for cold storage](https://dropbox.tech/infrastructure/how-we-optimized-magic-pocket-for-cold-storage)
 - [System Design Interview Vol 2, Alex Xu, Chapter 9](https://bytebytego.com/)
 - [AWS S3: content-addressable storage patterns](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html)
 

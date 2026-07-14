@@ -260,7 +260,7 @@ If you can match a problem to one of these shapes, you can quote the complexity 
 - Sedgewick & Wayne, *Algorithms*, 4th ed.
 - [Python time complexity wiki](https://wiki.python.org/moin/TimeComplexity), the canonical reference for `list`, `dict`, `set`, `deque` operations.
 - [Big-O cheat sheet](https://www.bigocheatsheet.com/), the visual reference most people pull up during interviews.
-- [USACO Guide complexity reference](https://usaco.guide/general/time-comp), competitive-programming flavored.
+- [USACO Guide complexity reference](https://usaco.guide/bronze/time-comp), competitive-programming flavored.
 
 ## Related topics
 

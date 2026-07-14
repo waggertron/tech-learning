@@ -275,7 +275,6 @@ Stale tokens accumulate silently otherwise. A notification system that never cle
 
 - [Apple Push Notification service (APNs) documentation](https://developer.apple.com/documentation/usernotifications)
 - [Firebase Cloud Messaging documentation](https://firebase.google.com/docs/cloud-messaging)
-- [SendGrid rate limits and best practices](https://docs.sendgrid.com/for-developers/sending-email/rate-limits)
 - [Uber notification system architecture](https://www.uber.com/blog/unified-notifications-platform/)
 
 ## Related topics

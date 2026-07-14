@@ -239,7 +239,6 @@ This is what Instagram, TikTok, and Twitter's "For You" feed do. The feed become
 ## References
 
 - [How Twitter's timeline works (2013)](https://blog.twitter.com/engineering/en_us/a/2013/new-tweets-per-second-record-and-how)
-- [Instagram feed architecture at scale](https://instagram-engineering.com/feed-architecture-at-scale-11c1ded14c25)
 - [Designing Data-Intensive Applications, Kleppmann, Chapter 11 (stream processing)](https://dataintensive.net/)
 
 ## Related topics

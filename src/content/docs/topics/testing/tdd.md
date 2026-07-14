@@ -218,7 +218,6 @@ The tests drove the design. The real implementation emerged from the pressure of
 ## References
 
 - [Kent Beck, *Test-Driven Development: By Example*](https://www.oreilly.com/library/view/test-driven-development/0321146530/), the original
-- [Robert Martin, *The Three Rules of TDD*](https://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd)
 - [Steve Freeman, Nat Pryce, *Growing Object-Oriented Software, Guided by Tests*](https://www.oreilly.com/library/view/growing-object-oriented-software/9780321574442/), the London school
 - [Michael Feathers, *Working Effectively with Legacy Code*](https://www.oreilly.com/library/view/working-effectively-with/0131177052/), how to introduce tests where none exist
 - [Kent Beck, *Test Desiderata*](https://kentbeck.github.io/TestDesiderata/), short essay on what makes a test good

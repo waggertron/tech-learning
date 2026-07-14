@@ -95,7 +95,7 @@ The dependency list names the reactive value used by the Effect, which keeps the
 
 ## References
 
-- [eslint-plugin-react-hooks lints](https://react.dev/reference/eslint-plugin-react-hooks/lints)
+- [eslint-plugin-react-hooks](https://react.dev/reference/eslint-plugin-react-hooks)
 - [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
 - [Using TypeScript](https://react.dev/learn/typescript)
 

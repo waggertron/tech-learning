@@ -659,7 +659,6 @@ The redirect path stays at under 10ms. The analytics pipeline has seconds of lat
 
 - [System Design Interview Vol 1, Alex Xu, Chapter 8](https://bytebytego.com/)
 - [Twitter Snowflake: announcing Snowflake](https://blog.twitter.com/engineering/en_us/a/2010/announcing-snowflake)
-- [Bitly engineering: building a shorter URL](https://word.bitly.com/post/28969443108/ten-billion-clicks)
 - [ClickHouse for analytics workloads](https://clickhouse.com/docs/en/intro)
 
 ## Related topics

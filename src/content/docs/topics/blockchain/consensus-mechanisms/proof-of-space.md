@@ -103,7 +103,7 @@ Chia's energy estimate: approximately 0.16 TWh/year (2022), compared to Bitcoin'
 
 ## References
 
-- [Chia Network Green Paper, Cohen and Pietrzak (2019)](https://www.chia.net/assets/ChiaGreenPaper.pdf), the PoSpace+PoTime design
+- [Chia Network Green Paper, Cohen and Pietrzak](https://docs.chia.net/files/ChiaGreenPaper_20241008.pdf), the PoSpace+PoTime design
 - [Proofs of Space, Dziembowski et al. (2015)](https://eprint.iacr.org/2013/796.pdf), the theoretical foundation
 - [Chia blockchain source and specification](https://github.com/Chia-Network/chia-blockchain), the production implementation
 

@@ -300,7 +300,7 @@ Without this, attempts to connect via NETCONF will fail silently or with a crypt
 - [RFC 6241: Network Configuration Protocol (NETCONF)](https://datatracker.ietf.org/doc/html/rfc6241)
 - [RFC 8040: RESTCONF Protocol](https://datatracker.ietf.org/doc/html/rfc8040)
 - [Netmiko Documentation](https://ktbyers.github.io/netmiko/)
-- [Ansible Network Automation Guide](https://docs.ansible.com/ansible/latest/network/index.html)
+- [Ansible Network Getting Started](https://docs.ansible.com/projects/ansible/latest/network/getting_started/)
 - [Cisco DNA Center REST API Guide](https://developer.cisco.com/docs/dna-center/)
 
 ## Related topics

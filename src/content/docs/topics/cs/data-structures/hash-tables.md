@@ -170,6 +170,6 @@ Hash tables appear in 34 NeetCode 150 problems across 14 categories.
 ## References
 
 - [Hash table, Wikipedia](https://en.wikipedia.org/wiki/Hash_table)
-- [Java HashMap internals (Java 8+ tree buckets)](https://dev.java/learn/api/collections-framework/implementations/hashmap/)
+- [Java collections framework maps](https://dev.java/learn/api/collections-framework/maps/)
 - [Python dict implementation notes](https://github.com/python/cpython/blob/main/Objects/dictobject.c)
 - [Hash flooding DoS, crosby & wallach 2003](https://www.usenix.org/legacy/events/sec03/tech/full_papers/crosby/crosby.pdf)

@@ -31,7 +31,7 @@ Any software that touches home-health operations, EHRs, clinical documentation, 
 
 Versions matter. An EHR that's still emitting OASIS-D1 XML is submitting invalid assessments. The CMS submission portal will reject them.
 
-CMS publishes the current version's **OASIS-E1 Guidance Manual**, data specifications, and XML schema on its [Home Health Quality Reporting](https://www.cms.gov/medicare/quality/home-health/quality-reporting-and-coding) pages. The schema alone is ~350 pages of PDF, worth downloading once so you can grep it.
+CMS publishes the current version's **OASIS-E1 Guidance Manual**, data specifications, and XML schema on its [Home Health Quality Reporting](https://www.cms.gov/medicare/quality/home-health) pages. The schema alone is ~350 pages of PDF, worth downloading once so you can grep it.
 
 ## The five encounter types (Reason for Assessment)
 
@@ -276,13 +276,13 @@ Most operational tooling in home health (dispatch, routing, patient engagement) 
 
 ## References
 
-- [CMS, Home Health Quality Reporting Program](https://www.cms.gov/medicare/quality/home-health/quality-reporting-and-coding), authoritative source for the OASIS spec
-- [OASIS-E1 Guidance Manual (CMS)](https://www.cms.gov/medicare/quality/home-health/hhqrp-oasis-user-manuals), the ~350-page clinician reference
+- [CMS, Home Health Quality Reporting Program](https://www.cms.gov/medicare/quality/home-health), authoritative source for the OASIS spec
+- [OASIS-E1 Guidance Manual (CMS)](https://www.cms.gov/medicare/quality/home-health/oasis-user-manuals), the ~350-page clinician reference
 - [iQIES](https://iqies.cms.gov/), submission portal
 - [Home Health Compare](https://www.medicare.gov/care-compare/), where quality measures surface publicly
-- [HHVBP overview (CMS)](https://www.cms.gov/medicare/quality/home-health/hhvbp-model), how the quality data affects payment
+- [Expanded HHVBP Model (CMS)](https://www.cms.gov/priorities/innovation/innovation-models/expanded-home-health-value-based-purchasing-model), how the quality data affects payment
 - [PDGM overview (CMS)](https://www.cms.gov/medicare/medicare-fee-for-service-payment/homehealthpps/hh-pdgm), the payment model
-- [OASIS-E to OASIS-E1 differences (CMS memo)](https://www.cms.gov/files/document/oasis-e1-change-table.pdf)
+- [OASIS data sets and change documents (CMS)](https://www.cms.gov/medicare/quality/home-health/oasis-data-sets)
 
 ## Related topics and posts
 

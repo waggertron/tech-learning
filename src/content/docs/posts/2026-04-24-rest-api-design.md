@@ -342,7 +342,7 @@ Four decisions. Every other design question (casing, verbs, status codes) has a 
 - [GitHub REST API](https://docs.github.com/en/rest), second canonical reference
 - [JSON:API spec](https://jsonapi.org/), for teams that want stronger conventions
 - [RFC 7807, Problem Details](https://datatracker.ietf.org/doc/html/rfc7807), standard error shape
-- [RFC 9110, HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110), authoritative modern HTTP reference
+- [RFC 9110, HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110.html), authoritative modern HTTP reference
 
 ## Related topics and posts
 

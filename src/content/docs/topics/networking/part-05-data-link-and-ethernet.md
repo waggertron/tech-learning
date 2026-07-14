@@ -166,7 +166,7 @@ On a Windows or Linux host, `arp -a` shows the same table.
 
 - [IEEE 802.3 Ethernet Standard Overview](https://standards.ieee.org/ieee/802.3/7071/)
 - [Cisco IOS ARP Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_arp/configuration/xe-16/arp-xe-16-book.html)
-- [RFC 826 - An Ethernet Address Resolution Protocol](https://www.rfc-editor.org/rfc/rfc826)
+- [RFC 826 - An Ethernet Address Resolution Protocol](https://www.rfc-editor.org/rfc/rfc826.html)
 
 ## Related topics
 

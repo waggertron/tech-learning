@@ -246,7 +246,7 @@ Vendor tooling: [Anthropic Prompt Generator](https://docs.anthropic.com/en/docs/
 - [Prompt Engineering, Lil'Log (Lilian Weng)](https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/), broad survey
 - [Anthropic Prompt Library](https://docs.anthropic.com/en/resources/prompt-library/library), production-quality templates organized by use case
 - [Anthropic Prompt Generator](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-generator), meta-prompting tool
-- [OpenAI Prompt Examples](https://platform.openai.com/docs/examples), official curated library
+- [OpenAI prompting fundamentals](https://openai.com/academy/prompting/), practical prompt patterns and examples
 - [LangChain Hub](https://smith.langchain.com/hub), community prompt registry, filterable by task
 - [LearnPrompting.org](https://learnprompting.org), structured course covering zero-shot through agents
 - Wei et al. 2022, [Chain-of-Thought](https://arxiv.org/abs/2201.11903)

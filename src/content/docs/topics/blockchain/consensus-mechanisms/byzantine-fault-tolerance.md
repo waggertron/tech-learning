@@ -93,7 +93,7 @@ Ethereum handles its massive validator set by splitting validators into committe
 
 ## References
 
-- [Practical Byzantine Fault Tolerance, Castro and Liskov (1999)](https://pmg.csail.mit.edu/papers/osdi99.pdf), the foundational PBFT paper
+- [Practical Byzantine Fault Tolerance, Castro and Liskov (1999)](https://www.microsoft.com/en-us/research/publication/correctness-proof-practical-byzantine-fault-tolerant-replication-algorithm/), the foundational PBFT work
 - [Tendermint: Byzantine Fault Tolerance in the Age of Blockchains, Buchman (2016)](https://atrium.lib.uoguelph.ca/items/5459099b-c5f6-43dd-b9a5-3cd5e2aa3d9e), Tendermint design
 - [HotStuff: BFT Consensus in the Lens of Blockchain, Yin et al. (2018)](https://arxiv.org/abs/1803.05069), linear message complexity BFT
 

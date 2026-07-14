@@ -892,7 +892,7 @@ For the LeetCode problems themselves:
 - [Graph theory, Wikipedia](https://en.wikipedia.org/wiki/Graph_theory): broad survey of definitions, theorems, and history.
 - Cormen, Leiserson, Rivest, Stein. *Introduction to Algorithms* (CLRS), Part VI (Chapters 22-26): BFS, DFS, topological sort, SCCs, MST, shortest paths. The definitive textbook treatment.
 - Sedgewick and Wayne. *Algorithms* (4th ed.), Chapters 4.1-4.4: undirected graphs, directed graphs, MST, shortest paths. Java-based but the explanations are excellent.
-- [CP-Algorithms: Graph algorithms](https://cp-algorithms.com/graph/): practical implementations with complexity analysis for DFS, BFS, Dijkstra, Bellman-Ford, Floyd-Warshall, topological sort, SCCs, bridges, articulation points.
+- [CP-Algorithms](https://cp-algorithms.com/): practical implementations with complexity analysis for DFS, BFS, Dijkstra, Bellman-Ford, Floyd-Warshall, topological sort, SCCs, bridges, articulation points.
 - [NeetCode graph roadmap](https://neetcode.io/roadmap): curated problem list organized by pattern; useful for knowing which problems to solve in which order.
 
 ---

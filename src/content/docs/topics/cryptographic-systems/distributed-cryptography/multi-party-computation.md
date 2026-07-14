@@ -109,7 +109,7 @@ In practice:
 - [Protocols for Secure Computations, Yao (1982)](https://dl.acm.org/doi/10.1109/SFCS.1982.38), the original garbled circuits paper
 - [SPDZ: Multiparty Computation from Somewhat Homomorphic Encryption, Damgaard et al. (2012)](https://eprint.iacr.org/2011/535.pdf), the SPDZ protocol
 - [MP-SPDZ: A Versatile Framework for Multi-Party Computation (2020)](https://eprint.iacr.org/2020/521.pdf), broad open-source framework
-- [Secure Multiparty Computation and Secret Sharing, Cramer et al. (2015)](https://www.cambridge.org/core/books/secure-multiparty-computation-and-secret-sharing/), the standard textbook
+- [Secure Multiparty Computation and Secret Sharing, Cramer et al. (2015)](https://www.cambridge.org/core/books/secure-multiparty-computation-and-secret-sharing/4C2480B202905CE5370B2609F0C2A67A), the standard textbook
 
 ## Related topics
 

@@ -215,7 +215,6 @@ dig -x 93.184.216.34
 - [Cisco IOS DHCP Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html)
 - [RFC 2131: Dynamic Host Configuration Protocol](https://datatracker.ietf.org/doc/html/rfc2131)
 - [RFC 1034: Domain Names -- Concepts and Facilities](https://datatracker.ietf.org/doc/html/rfc1034)
-- [Cisco DNS Configuration Reference](https://www.cisco.com/c/en/us/support/docs/ip/domain-name-system-dns/12188-net-config.html)
 
 ## Related topics
 

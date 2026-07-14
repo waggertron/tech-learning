@@ -237,8 +237,7 @@ Teams that adopt GitOps notice:
 - [OpenGitOps principles](https://opengitops.dev/), the canonical four-principle definition
 - [ArgoCD docs](https://argo-cd.readthedocs.io/)
 - [Flux docs](https://fluxcd.io/flux/)
-- [Kelsey Hightower, "GitOps"](https://www.cncf.io/blog/2022/06/22/gitops-101-a-primer/), CNCF primer
-- [Weaveworks, "Guide to GitOps"](https://www.weave.works/technologies/gitops/), the team that coined the term
+- [OpenGitOps principles](https://opengitops.dev/), the vendor-neutral definition maintained by the CNCF GitOps Working Group
 
 ## Related topics
 

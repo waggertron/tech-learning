@@ -116,7 +116,7 @@ A deployed system that runs on a schedule, polls a GitHub repository for new iss
 ## References
 
 - [Lilian Weng, "LLM Powered Autonomous Agents" (Lil'Log, 2023)](https://lilianweng.github.io/posts/2023-06-23-agent/), the clearest early taxonomy of agent components: planning, memory, and tools
-- [Anthropic, "Building effective agents" (Anthropic Docs)](https://docs.anthropic.com/en/docs/build-with-claude/agents), Anthropic's definition of agents vs. workflows vs. augmented LLM calls
+- [Anthropic, "Building effective agents"](https://www.anthropic.com/engineering/building-effective-agents), Anthropic's definition of agents vs. workflows vs. augmented LLM calls
 - [Andrew Ng on agentic AI (DeepLearning.AI, 2024)](https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/), the loop and tool-use framing from the short-course series
 - [Chase, "What is an agent?" (LangChain Blog)](https://blog.langchain.com/what-is-an-agent/), practical framing from the tooling side
 - [Shinn et al., "Reflexion: Language Agents with Verbal Reinforcement Learning" (arXiv 2303.11366)](https://arxiv.org/abs/2303.11366), how agents improve through self-reflection loops

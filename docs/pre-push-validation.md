@@ -91,7 +91,7 @@ For external references, run this when network access is available:
 npm run validate:external-links
 ```
 
-External checks are separate because public sites rate-limit, block bots, or fail transiently. Use them for research-heavy posts, release batches, and changed external references.
+External checks are separate because public sites rate-limit, block bots, or fail transiently. Run the build first. The checker reads external anchors from rendered HTML and excludes code regions, so example URLs, canonical metadata, and literal endpoint strings are not mistaken for reader-facing references. Use it for research-heavy posts, release batches, and changed external references.
 
 ### Code examples
 

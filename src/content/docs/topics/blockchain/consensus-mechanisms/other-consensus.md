@@ -141,7 +141,7 @@ HotStuff or variants appear in Diem (Facebook's canceled stablecoin project), Ap
 
 - [EOS Technical Whitepaper (2017)](https://github.com/EOSIO/Documentation/blob/master/TechnicalWhitePaper.md), the DPoS design
 - [HotStuff: BFT Consensus in the Lens of Blockchain, Yin et al. (2018)](https://arxiv.org/abs/1803.05069), the HotStuff protocol
-- [Chia Network Green Paper (2019)](https://www.chia.net/assets/ChiaGreenPaper.pdf), Proof-of-Space-and-Time
+- [Chia Network Green Paper](https://docs.chia.net/files/ChiaGreenPaper_20241008.pdf), Proof-of-Space-and-Time
 - [Proof of History: A Clock for Blockchain, Yakovenko (2017)](https://solana.com/news/proof-of-history), Solana's PoH
 
 ## Related topics

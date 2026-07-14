@@ -267,7 +267,6 @@ mA: milliamperes, dBm: decibels (milliwatts), NA or N/A: not applicable.
 
 ## References
 
-- [Cisco: Understanding and Configuring Cisco's Auto-MDIX Feature](https://www.cisco.com/c/en/us/support/docs/interfaces-modules/gigabit-ethernet/12321-24.html)
 - [TIA-568 Cabling Standards Overview (BICSI)](https://www.bicsi.org/standards/available-standards-store/single-document/ansi-tia-568-2-d)
 - [IEEE 802.3 Ethernet Working Group](https://www.ieee802.org/3/)
 

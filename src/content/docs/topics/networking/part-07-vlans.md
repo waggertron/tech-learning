@@ -220,7 +220,6 @@ GigabitEthernet0/24 (99), with SW2 GigabitEthernet0/24 (1).
 
 - [Cisco IOS VLAN Configuration Guide](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-9/configuration_guide/vlan/b_179_vlan_9300_cg.html)
 - [IEEE 802.1Q-2018 Standard for Bridges and Bridged Networks](https://standards.ieee.org/ieee/802.1Q/10323/)
-- [Cisco VTP FAQ](https://www.cisco.com/c/en/us/support/docs/lan-switching/vtp/98154-cause-of-vtp-wiping-vlan.html)
 
 ## Related topics
 

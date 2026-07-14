@@ -375,7 +375,7 @@ KRaft became the default in Kafka 3.3. ZooKeeper mode is deprecated and removed 
 
 - [Kafka documentation](https://kafka.apache.org/documentation/)
 - [Kafka: The Definitive Guide (Shapira, Palino, Sivaram, Petty)](https://www.oreilly.com/library/view/kafka-the-definitive/9781492043072/)
-- [The Log: What every software engineer should know about real-time data's unifying abstraction (Jay Kreps, LinkedIn Engineering)](https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying)
+- [The Log: What every software engineer should know about real-time data's unifying abstraction (Jay Kreps, LinkedIn Engineering)](https://www.linkedin.com/blog/engineering/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying)
 
 ## Related topics
 

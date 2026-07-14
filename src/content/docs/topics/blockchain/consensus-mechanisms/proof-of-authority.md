@@ -71,8 +71,8 @@ Negligible. Validators sign blocks with a hash and a signature. No hash puzzle, 
 ## References
 
 - [EIP-225: Clique PoA Consensus Protocol, Gerber (2017)](https://eips.ethereum.org/EIPS/eip-225), the Clique specification
-- [Hyperledger Besu PoA Documentation](https://besu.hyperledger.org/private-networks/how-to/configure/consensus/clique), Clique and IBFT2 configuration
-- [Quorum (now ConsenSys Quorum)](https://docs.goquorum.consensys.io/concepts/consensus), enterprise PoA/BFT options
+- [Besu source and release history](https://github.com/hyperledger/besu), enterprise Ethereum consensus implementations
+- [GoQuorum source](https://github.com/Consensys/quorum), enterprise PoA and BFT options
 
 ## Related topics
 

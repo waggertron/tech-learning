@@ -103,5 +103,4 @@ OR-Tools automatically enforces the capacity constraint at **every node** along 
 ## References
 
 - [Pickup and Delivery, OR-Tools](https://developers.google.com/optimization/routing/pickup_delivery)
-- [Dial-a-Ride problem (related)](https://en.wikipedia.org/wiki/Dial-a-ride_problem)
 - Savelsbergh & Sol (1995). "The General Pickup and Delivery Problem." *Transportation Science* 29(1):17–29.

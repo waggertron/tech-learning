@@ -162,7 +162,6 @@ Open standards let devices from different vendors interoperate. A Cisco switch a
 
 ## References
 
-- [Cisco Networking Basics - Cisco Learning Network](https://learningnetwork.cisco.com/s/article/networking-basics)
 - [IEEE 802 LAN/MAN Standards Committee](https://www.ieee802.org/)
 - [IETF Overview and Datatracker](https://www.ietf.org/)
 

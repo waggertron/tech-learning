@@ -215,7 +215,6 @@ If you configure the NAT rule but forget to apply `ip nat inside` or `ip nat out
 ## References
 
 - [RFC 3022: Traditional IP Network Address Translator (Traditional NAT)](https://datatracker.ietf.org/doc/html/rfc3022)
-- [Cisco NAT Configuration Guide, IOS XE](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book/iad-nat-i-to-o.html)
 
 ## Related topics
 

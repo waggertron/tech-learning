@@ -307,7 +307,6 @@ IPv6 address space (128 bits, shown as /3 regions)
 - [RFC 4291 - IP Version 6 Addressing Architecture](https://datatracker.ietf.org/doc/html/rfc4291)
 - [RFC 4861 - Neighbor Discovery for IP version 6](https://datatracker.ietf.org/doc/html/rfc4861)
 - [RFC 4862 - IPv6 Stateless Address Autoconfiguration](https://datatracker.ietf.org/doc/html/rfc4862)
-- [Cisco IPv6 Addressing and Basic Connectivity Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-add-basic-conn.html)
 
 ## Related topics
 

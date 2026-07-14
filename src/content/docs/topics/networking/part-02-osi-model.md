@@ -129,7 +129,7 @@ This layered approach narrows fault domains quickly. "Ping works but the web app
 
 - [ISO/IEC 7498-1: The OSI Reference Model (ISO)](https://www.iso.org/standard/20269.html)
 - [Cisco: OSI Model Reference - Cisco Learning Network](https://learningnetwork.cisco.com/s/article/osi-model-reference-chart)
-- [RFC 1122: Requirements for Internet Hosts (IETF)](https://www.rfc-editor.org/rfc/rfc1122)
+- [RFC 1122: Requirements for Internet Hosts (IETF)](https://www.rfc-editor.org/rfc/rfc1122.html)
 
 ## Related topics
 

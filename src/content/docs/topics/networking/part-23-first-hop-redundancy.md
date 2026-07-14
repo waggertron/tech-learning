@@ -169,7 +169,6 @@ Gi0/0         1  110 P Active   local           192.168.1.3     192.168.1.1
 
 ## References
 
-- [Cisco HSRP Configuration Guide (IOS XE)](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipapp_fhrp/configuration/xe-16/fhp-xe-16-book/fhp-hsrp-xe.html)
 - [RFC 5798 - Virtual Router Redundancy Protocol (VRRPv3)](https://datatracker.ietf.org/doc/html/rfc5798)
 - [Cisco GLBP Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipapp_fhrp/configuration/xe-16/fhp-xe-16-book/fhp-glbp.html)
 

@@ -233,9 +233,6 @@ If `show interfaces vlan 10` shows `Vlan10 is up, line protocol is down`, no por
 
 ## References
 
-- [Cisco Inter-VLAN Routing Configuration Guide](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-9/configuration_guide/layer3/b_179_l3_9300_cg/configuring_layer_3_interfaces.html)
-- [Router-on-a-Stick Inter-VLAN Routing - Cisco](https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/41860-intervlanrouting.html)
-- [Configuring SVIs on Catalyst Switches - Cisco](https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6500-series-switches/71079-svi-config.html)
 
 ## Related topics
 

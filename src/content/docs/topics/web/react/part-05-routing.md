@@ -355,5 +355,5 @@ Part 6 covers data fetching: the fetch + useEffect pattern, TanStack Query (Reac
 ## References
 
 - [React Router, tutorial](https://reactrouter.com/tutorials/address-book)
-- [React Router, route loaders](https://reactrouter.com/start/library/data-loading)
-- [React Router, createBrowserRouter](https://reactrouter.com/api/createBrowserRouter)
+- [React Router, route loaders](https://reactrouter.com/start/data/data-loading)
+- [React Router, createBrowserRouter](https://api.reactrouter.com/v7/functions/react-router.createBrowserRouter.html)

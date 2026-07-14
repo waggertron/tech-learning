@@ -176,7 +176,7 @@ Skip it when state lives in an external system. Put the lock there instead, as c
 ## References
 
 - [MDN: Using Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
-- [Node.js Event Loop explainer](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick)
+- [Node.js Event Loop explainer](https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick)
 - [async-mutex on npm](https://github.com/DirtyHairy/async-mutex), a well-tested library implementation of this same pattern
 
 ## Related topics

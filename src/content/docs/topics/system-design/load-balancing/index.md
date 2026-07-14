@@ -201,7 +201,7 @@ for i in range(6):
 
 - [NGINX Load Balancing docs](https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/)
 - [AWS Elastic Load Balancing product comparison](https://aws.amazon.com/elasticloadbalancing/features/)
-- [HAProxy documentation](https://www.haproxy.org/download/2.8/doc/architecture.txt)
+- [HAProxy architecture introduction](https://www.haproxy.com/documentation/haproxy-configuration-manual/new/latest/intro/)
 - [The Power of Two Random Choices, Mitzenmacher](https://www.eecs.harvard.edu/~michaelm/postscripts/handbook2001.pdf)
 
 ## Related topics

@@ -230,7 +230,6 @@ System serial number            : FDO2101A0BC
 
 ## References
 
-- [Cisco Catalyst 2960-X Switch Getting Started Guide](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst2960x/hardware/installation/guide/b_2960x_hig.html)
 - [Understanding and Configuring Spanning Tree Protocol - Cisco](https://www.cisco.com/c/en/us/support/docs/lan-switching/spanning-tree-protocol/5234-5.html)
 - [IEEE 802.3 Ethernet Working Group](https://www.ieee802.org/3/)
 

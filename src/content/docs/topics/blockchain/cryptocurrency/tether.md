@@ -88,7 +88,7 @@ Every stablecoin has a failure mode:
 ## References
 
 - [Tether CFTC Settlement Order (2021)](https://www.cftc.gov/PressRoom/PressReleases/8450-21), the regulatory action
-- [The Collapse of Terra, Do Kwon, and the Limits of Algorithmic Stablecoins, Chainalysis (2022)](https://www.chainalysis.com/blog/terra-collapse/), post-mortem
+- [How TerraUSD collapsed, Chainalysis (2022)](https://www.chainalysis.com/blog/how-terrausd-collapsed/), failure analysis
 - [MakerDAO CDP Technical Documentation](https://docs.makerdao.com/), the DAI system specification
 - [Circle Reserve Reports](https://www.circle.com/en/usdc#transparency), monthly USDC attestations
 

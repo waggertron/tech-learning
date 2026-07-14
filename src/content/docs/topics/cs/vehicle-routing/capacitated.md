@@ -112,5 +112,5 @@ The pattern, **register a callback, add a dimension, constrain the dimension**, 
 ## References
 
 - [Capacity Constraints, OR-Tools](https://developers.google.com/optimization/routing/cvrp)
-- [RoutingModel reference, OR-Tools](https://developers.google.com/optimization/reference/constraint_solver/routing)
+- [Vehicle routing guide, OR-Tools](https://developers.google.com/optimization/routing)
 - [CVRPLIB benchmark sets](https://vrp.atd-lab.inf.puc-rio.br/), X-class is the current standard

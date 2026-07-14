@@ -238,7 +238,7 @@ Options:
 2. **Sticky routing by key**: route all requests from a user to one pod. Works but loses the redundancy benefits of multiple pods.
 3. **Probabilistic approaches**: each pod approximates the limit locally. Sample-broadcast to sync. Used at hyperscale.
 
-Centralized Redis handles most teams' needs up to six-figure RPS. Beyond that, consider specialized services like [Envoy's global rate limit service](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/ratelimit) or [Stripe's custom approach](https://stripe.com/blog/rate-limiters).
+Centralized Redis handles most teams' needs up to six-figure RPS. Beyond that, consider specialized services like [Envoy's global rate limit filter](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/rate_limit_filter) or [Stripe's custom approach](https://stripe.com/blog/rate-limiters).
 
 ## Common mistakes
 

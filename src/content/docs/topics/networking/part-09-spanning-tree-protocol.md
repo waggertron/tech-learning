@@ -291,7 +291,6 @@ Traffic from SW2 to SW3 now flows: SW2 -> SW1 -> SW3. The direct link is standin
 
 - [IEEE 802.1D Spanning Tree Protocol - Cisco Documentation](https://www.cisco.com/c/en/us/tech/lan-switching/spanning-tree-protocol/index.html)
 - [Understanding Rapid Spanning Tree Protocol (802.1w) - Cisco](https://www.cisco.com/c/en/us/support/docs/lan-switching/spanning-tree-protocol/24062-146.html)
-- [Configuring Spanning Tree Protocol - Cisco IOS](https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9300_cg/configuring_stp.html)
 
 ## Related topics
 

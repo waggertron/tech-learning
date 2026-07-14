@@ -223,7 +223,6 @@ The AD you assign must be higher than the dynamic protocol's AD. OSPF is 110, EI
 
 ## References
 
-- [Cisco IOS IP Routing: Static Route Configuration Guide](https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-static-routes.html)
 - [RFC 1812: Requirements for IP Version 4 Routers](https://datatracker.ietf.org/doc/html/rfc1812)
 
 ## Related topics

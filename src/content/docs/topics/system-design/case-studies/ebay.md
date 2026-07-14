@@ -821,10 +821,9 @@ The escrow payment is idempotent: `create_escrow` uses `auction_id` as an idempo
 
 ## References
 
-- [eBay architecture overview (InfoQ)](https://www.infoq.com/presentations/ebay-architecture/)
 - [Designing Data-Intensive Applications, Kleppmann, Chapter 9 (consistency and consensus)](https://dataintensive.net/)
 - [Redis distributed locking (Redlock)](https://redis.io/docs/manual/patterns/distributed-locks/)
-- [Martin Fowler: Saga pattern](https://martinfowler.com/articles/patterns-of-distributed-systems/saga.html)
+- [Saga pattern, microservices.io](https://microservices.io/patterns/data/saga.html)
 
 ## Related topics
 

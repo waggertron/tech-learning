@@ -449,7 +449,6 @@ That's the baseline. Everything beyond (service mesh, multi-cluster federation, 
 
 - [Kubernetes documentation](https://kubernetes.io/docs/)
 - [Kubernetes API reference](https://kubernetes.io/docs/reference/kubernetes-api/)
-- [The Kubernetes Book, Nigel Poulton](https://www.amazon.com/Kubernetes-Book-Nigel-Poulton/dp/B0BG2TFVHW), approachable depth
 - [CNCF landscape](https://landscape.cncf.io/), the ecosystem of tools
 - [Kubernetes patterns, Roland Huß, Bilgin Ibryam](https://www.oreilly.com/library/view/kubernetes-patterns-2nd/9781098131678/)
 - [kubectl cheat sheet](https://kubernetes.io/docs/reference/kubectl/quick-reference/)

@@ -731,7 +731,7 @@ The ML model in production is far more complex (hundreds of features, deep learn
 ## References
 
 - [Meta Engineering: How the news feed works](https://engineering.fb.com/2021/01/26/ml-applications/news-feed-ranking/)
-- [Meta Engineering: Scaling the Facebook news feed](https://engineering.fb.com/2012/03/22/core-infra/introduction-to-facebook-s-data-infrastructure/)
+- [Meta Engineering: Inside Facebook's video delivery system](https://engineering.fb.com/2024/12/10/video-engineering/inside-facebooks-video-delivery-system/)
 - [System Design Interview Vol 2, Alex Xu, Chapter 11](https://bytebytego.com/)
 - [Redis sorted sets documentation](https://redis.io/docs/data-types/sorted-sets/)
 

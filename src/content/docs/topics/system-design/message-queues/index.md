@@ -225,7 +225,7 @@ print(f"DLQ size: {dlq.qsize()}")
 - [Designing Data-Intensive Applications, Kleppmann, Chapter 11](https://dataintensive.net/)
 - [Kafka documentation](https://kafka.apache.org/documentation/)
 - [RabbitMQ tutorials](https://www.rabbitmq.com/tutorials)
-- [AWS SQS vs SNS vs EventBridge](https://docs.aws.amazon.com/whitepapers/latest/aws-messaging-overview/aws-messaging-services.html)
+- [AWS SQS vs. SNS vs. EventBridge decision guide](https://docs.aws.amazon.com/decision-guides/latest/sns-or-sqs-or-eventbridge/sns-or-sqs-or-eventbridge.html)
 
 ## Related topics
 
