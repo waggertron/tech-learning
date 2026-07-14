@@ -1,7 +1,7 @@
 # ADR: Swift Browser Execution Boundary
 
 **Date:** 2026-07-13
-**Status:** Proposed, selected for R1.3 spike
+**Status:** Proposed, R1.3 executor proof passed
 **Decision owner:** Zero to iOS Hero program
 
 ## Problem Statement
@@ -90,7 +90,7 @@ Keep the editor on GitHub Pages and send source to a separately deployed service
 
 Piston is a candidate sandbox engine for the spike because its documented API separates compile and run results, supports Swift, exposes time and memory controls, caps output, disables outgoing network access by default, isolates jobs with Linux namespaces and cgroups, and has a WebSocket signal path. Its public hosted API is not an acceptable production dependency: as of 2026-02-15 it requires authorization, limits eligible uses, and cannot place its token in public JavaScript. See the [Piston project and API documentation](https://github.com/engineer-man/piston).
 
-Self-hosting Piston would make it an internal engine behind the first-party contract. It is not automatically approved. The spike must prove that it can install the exact supported Swift release and that its isolation works in the intended host environment. A different executor may replace it without changing the browser component.
+Self-hosting Piston would make it an internal engine behind the first-party contract. It is not automatically approved. R1.3 used direct orchestration of the official Swift container as the smaller proof and left Piston as a later executor candidate. A different executor may replace it without changing the browser component.
 
 **Disposition:** Selected for the R1.3 spike and as the provisional production architecture.
 
@@ -145,7 +145,7 @@ The browser component will remain a hexagonal adapter. It knows how to create, o
 
 The service runtime is Swift 6.3.3 on Linux in Swift 6 language mode. The UI and response metadata must name that platform. Standard-library exercises can be validated there; Apple framework examples cannot. The service denies network access and does not resolve arbitrary package dependencies.
 
-This status remains Proposed until the R1.3 spike passes. If exact Swift versioning, cancellation, isolation, or usable latency cannot be proved, reject this decision and reopen the option comparison with the new evidence. Do not weaken the runner into syntax-only behavior while keeping execution labels.
+The R1.3 executor proof passed exact Swift versioning, cancellation, local container controls, output limits, and warm latency. This ADR remains Proposed until R1.4 proves that the real executor and deterministic mock can share the owned client contract. If that boundary fails, reopen the option comparison with the new evidence. Do not weaken the runner into syntax-only behavior while keeping execution labels.
 
 ## Implementation Details
 

@@ -1,0 +1,1 @@
+fatalError("deliberate runtime failure")

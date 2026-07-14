@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test:react-outputs": "node --test tests/react-example-output-views.test.mjs",
+    "test:swift-runner-spike": "node --test tests/swift-runner-spike/runner.test.mjs",
     "sync:react-outputs": "node scripts/sync-react-example-outputs.mjs",
     "check:react-outputs": "node scripts/sync-react-example-outputs.mjs --check",
     "validate:style": "node scripts/validate-style.mjs",
