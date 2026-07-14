@@ -28,6 +28,8 @@ npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
 npm run test:swift-repl
+npm run test:swift-catalog-coverage
+npm run check:swift-catalog-coverage
 npm run validate:code-examples
 npm run build
 npm run validate:pages
@@ -99,9 +101,13 @@ npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
 npm run test:swift-repl
+npm run test:swift-catalog-coverage
+npm run check:swift-catalog-coverage
 ```
 
-The code validator checks fenced code language tags and syntax for source examples. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift commands verify the versioned browser-client contract, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
+The code validator checks fenced code language tags and syntax for source examples. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
+
+The Swift catalog commands test the coverage scanner and confirm that `docs/data/swift-coding-problem-coverage.json` matches the current problem pages, approaches, source files, harnesses, tabs, REPLs, and helper needs. Run `npm run sync:swift-catalog-coverage` after catalog changes. `npm run validate:swift-catalog-coverage` intentionally remains outside default pre-push validation until every page and approach has Swift parity.
 
 Not every Markdown fence is executable. Explanatory snippets still need review, but source files and generated examples get deterministic checks.
 
@@ -155,6 +161,7 @@ Add or update validation when a bug reaches any of these surfaces:
 - A code example is stale, invalid, or misleading.
 - A custom component renders fallback HTML but does not respond to user input.
 - The Swift browser contract, REPL component, runner fixture, or executor boundary changes.
+- A coding-problem page, approach, source file, harness, language tab, REPL, or shared helper need changes.
 - A generated artifact can drift from source content.
 - Internal planning notes or mechanical source piles reach rendered pages.
 

@@ -40,14 +40,14 @@ No curriculum post moves to in progress until F0.1 through F0.8 are complete.
 
 ### Workstream 2: Add Swift to every coding problem
 
-The baseline on 2026-07-13 is 188 coding-problem pages, 0 pages with Swift, 468 Python source files, 467 TypeScript source files, and 467 Go source files across starter and approach implementations.
+The generated baseline on 2026-07-13 is 189 coding-problem pages, 504 documented approaches, 0 pages with Swift, 470 Python source files, 469 TypeScript source files, and 469 Go source files across starter and approach implementations. The durable inventory lives in [Swift Coding Problem Coverage](../swift-coding-problem-coverage.md).
 
 S2.1 through S2.3, the browser runner, and one representative category form the pilot gate. After that gate passes, the remaining categories can advance in checked batches alongside curriculum authoring. The complete catalog remains a required program deliverable, but it does not block post 1.
 
-- [ ] **S2.1, generate a coverage manifest**: Inventory every problem page, starter file, documented approach, helper type, test harness, and language tab. Fail validation when a page or approach lacks Swift.
+- [x] **S2.1, generate a coverage manifest**: Inventory every problem page, starter file, documented approach, helper type, test harness, and language tab. Fail validation when a page or approach lacks Swift.
 - [ ] **S2.2, define the Swift solution contract**: Standardize `.swift` filenames, starter TODOs, assertion output, `runTests`, LeetCode-compatible signatures, and shared `ListNode`, `TreeNode`, graph-node, heap, and interval helpers.
 - [ ] **S2.3, create shared cross-language test vectors**: Reuse the same valid, boundary, and deliberate invalid cases in Python, TypeScript, Go, and Swift without silently normalizing contract violations.
-- [ ] **S2.4, add Swift starter code to all 188 pages**: Every Try it yourself section gets a Swift tab backed by an editable `.swift` file and embedded tests.
+- [ ] **S2.4, add Swift starter code to all 189 pages**: Every Try it yourself section gets a Swift tab backed by an editable `.swift` file and embedded tests.
 - [ ] **S2.5, add Swift for every documented approach**: Match each approach section with compiling Swift code. Do not stop at one canonical solution when the page teaches brute-force, recursive, iterative, optimized, or follow-up variants.
 - [ ] **S2.6, teach Swift-specific tradeoffs**: Explain value and reference semantics, `String.Index`, `Character`, Unicode, integer width and overflow, recursion depth, copy-on-write collections, optional handling, missing standard-library heap types, and mutation costs where they change an approach.
 - [ ] **S2.7, compile the entire catalog**: Run every standalone Swift source and its tests under the supported stable Swift toolchain. Add time and output limits and report file-specific diagnostics.
@@ -59,7 +59,7 @@ Category rollout checklist:
 - [ ] **S2.C01**: 1D dynamic programming, 12 pages.
 - [ ] **S2.C02**: 2D dynamic programming, 12 pages.
 - [ ] **S2.C03**: Advanced graphs, 8 pages.
-- [ ] **S2.C04**: Arrays and hashing, 17 pages.
+- [ ] **S2.C04**: Arrays and hashing, 18 pages.
 - [ ] **S2.C05**: Backtracking, 9 pages.
 - [ ] **S2.C06**: Binary search, 8 pages.
 - [ ] **S2.C07**: Bit manipulation, 7 pages.
@@ -87,7 +87,7 @@ Category rollout checklist:
 - [ ] **B1, Swift foundations complete**: Posts 1-23 are published with compiling examples and language tests. The browser runner and one Swift coding-problem category prove the end-to-end authoring path.
 - [ ] **B2, design and SwiftUI complete**: Posts 24-44 and the SwiftUI Field Notes acceptance suite are complete.
 - [ ] **B3, UIKit complete**: Posts 45-58 pass the same product acceptance criteria through UIKit.
-- [ ] **B4, architecture and testing complete**: Posts 59-78 prove boundaries and testing strategy with executable evidence. All 188 coding problems and every documented approach have compiled Swift parity.
+- [ ] **B4, architecture and testing complete**: Posts 59-78 prove boundaries and testing strategy with executable evidence. All 189 coding problems and every documented approach have compiled Swift parity.
 - [ ] **B5, production and shipping complete**: Posts 79-86 produce a beta-ready build and release record.
 - [ ] **B6, ecosystem atlas complete**: Posts 87-110 record simulator, device, entitlement, and account limits per capability.
 - [ ] **B7, case studies complete**: Posts 111-140 finish five tested release reviews.
@@ -494,12 +494,12 @@ The initial review challenged the plan as if implementation time, platform restr
 | The program is large enough to stall. | A 140-post promise could become a catalog of half-finished drafts. | Added publishable batch gates and prohibited empty post stubs. | Finish and validate one batch before opening the next broad batch. |
 | A new authoring skill could become an Apple encyclopedia. | Loading it would consume context and still become stale. | Planned a concise procedural skill with focused references and current-source checks. | Keep `SKILL.md` under 500 lines and move framework detail into shallow references. |
 | “Any dreamed-of app” can become an impossible completeness claim. | Specialized vendor, backend, regulatory, and entitlement requirements vary without limit. | Kept a clear scope promise, capability atlas, and five distinct product proofs. | Each post names its boundary and links to the next primary source or specialist domain. |
-| Migrating all 188 problems before post 1 would create a long critical path. | The series could stall behind catalog work even after the runner and teaching pattern were proven. | Split the catalog into a pilot gate and 18 category batches that can advance alongside curriculum authoring. | S2.1-S2.3 and one category prove the pipeline. The full catalog remains tracked to completion. |
+| Migrating all 189 problems before post 1 would create a long critical path. | The series could stall behind catalog work even after the runner and teaching pattern were proven. | Split the catalog into a pilot gate and 18 category batches that can advance alongside curriculum authoring. | S2.1-S2.3 and one category prove the pipeline. The full catalog remains tracked to completion. |
 | Test fixtures can violate production contracts. | Passing tests could depend on impossible dates, IDs, enum cases, auth states, or health values. | Added fixture-contract rules and deliberate invalid-fixture paths. | Valid fixture generators get their own boundary tests and fixed seeds. |
 | SwiftData-only teaching would not prepare readers for established apps. | Readers could not reason about Core Data stores, migrations, or legacy UIKit systems. | Added Core Data coexistence and migration coverage in posts 76 and 80. | The skill requires legacy-context notes when a modern API does not replace installed code. |
 | Client architecture can ignore backend constraints. | Auth, authorization, idempotency, pagination, sync, and real-time behavior could be reduced to UI examples. | Strengthened posts 68, 76, and 79 plus the NeighborLink case study. | Local mocks and contracts remain runnable without turning this into a backend implementation series. |
 | A static GitHub Pages site cannot assume it can compile arbitrary edited Swift. | A precompiled WebAssembly demo could be mislabeled as a REPL, or a remote compiler could introduce abuse and privacy risk. | Added an ADR, proof-of-concept gate, sandbox requirements, local execution path, and honest unavailable state. | Gate R1.3 proves edit, compile, execute, timeout, and cancellation before implementation commits to a runner. |
-| Adding Swift once per problem would leave the teaching catalog incomplete. | Approach sections and runnable exercises could disagree across languages. | Set the target at all 188 starters plus every documented approach, using shared test vectors and a coverage manifest. | The catalog validator fails on missing Swift parity. |
+| Adding Swift once per problem would leave the teaching catalog incomplete. | Approach sections and runnable exercises could disagree across languages. | Set the target at all 189 starters plus every documented approach, using shared test vectors and a coverage manifest. | The catalog validator fails on missing Swift parity. |
 
 Run this review again after the skill is forward-tested, after each batch, and whenever a stable Xcode release changes the supported matrix.
 
@@ -548,7 +548,7 @@ Test data follows the production contract:
 | Commerce and subscriptions | Posts 107-108 | ScreenRoom, NeighborLink |
 | App Store delivery and operation | Posts 81-86 | Every release review |
 | Browser Swift practice | Gates R1.1-R1.8 and posts 4-23 | Field Notes core and all coding problems |
-| Swift algorithm practice | Gates S2.1-S2.9 and category tasks S2.C01-S2.C18 | All 188 coding-problem pages |
+| Swift algorithm practice | Gates S2.1-S2.9 and category tasks S2.C01-S2.C18 | All 189 coding-problem pages |
 
 ## Exercises and assessment
 

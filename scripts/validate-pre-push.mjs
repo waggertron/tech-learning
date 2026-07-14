@@ -11,6 +11,8 @@ const steps = [
   ["React output tests", "npm", ["run", "test:react-outputs"]],
   ["Swift runner contract tests", "npm", ["run", "test:swift-runner-contract"]],
   ["Swift REPL component tests", "npm", ["run", "test:swift-repl"]],
+  ["Swift catalog coverage tests", "npm", ["run", "test:swift-catalog-coverage"]],
+  ["Swift catalog manifest", "npm", ["run", "check:swift-catalog-coverage"]],
   ["Code example validation", "npm", ["run", "validate:code-examples"]],
   ["Build", "npm", ["run", "build"]],
   ["Page validation", "npm", ["run", "validate:pages"]],
