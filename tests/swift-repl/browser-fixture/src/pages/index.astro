@@ -1,0 +1,134 @@
+---
+import SwiftRepl from '../../../../../src/components/SwiftRepl.astro';
+
+const successSource = 'print("ready")';
+const changedSource = 'print("changed")';
+const timeoutSource = 'while true {} // timeout fixture';
+const cancellationSource = 'while true {} // cancellation fixture';
+const compileFailureSource = 'let count: Int = "wrong"';
+const unavailableSource = 'print("service check")';
+const approachSource = `func search(_ nums: [Int], _ target: Int) -> Int {
+  var left = 0
+  var right = nums.count - 1
+
+  while left <= right {
+    let middle = left + (right - left) / 2
+    if nums[middle] == target { return middle }
+    if nums[middle] < target {
+      left = middle + 1
+    } else {
+      right = middle - 1
+    }
+  }
+  return -1
+}`;
+const approachTemplate = `{{APPROACH}}
+
+let result = search([-1, 0, 3, 5, 9, 12], 9)
+print("index=\\(result)")`;
+
+const fixtures = [
+  { outcome: 'succeeded', source: successSource, stdout: 'ready\n' },
+  { outcome: 'succeeded', source: changedSource, stdout: 'changed\n' },
+  { outcome: 'timed_out', source: timeoutSource },
+  { outcome: 'succeeded', source: cancellationSource },
+  {
+    diagnostics: 'cannot convert value of type String to specified type Int',
+    outcome: 'compile_failed',
+    source: compileFailureSource,
+  },
+  { outcome: 'unavailable', source: unavailableSource },
+  {
+    outcome: 'succeeded',
+    source: approachTemplate.replace('{{APPROACH}}', approachSource),
+    stdout: 'index=4\n',
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Swift REPL browser fixture</title>
+  </head>
+  <body>
+    <main>
+      <h1>Swift REPL browser fixture</h1>
+
+      <section data-test-section="success">
+        <h2>Success and repeated execution</h2>
+        <SwiftRepl
+          approachTemplate={approachTemplate}
+          code={successSource}
+          id="success"
+        />
+      </section>
+
+      <button data-show-hidden type="button">Show hidden Swift editor</button>
+      <section data-hidden-panel hidden role="tabpanel">
+        <h2>Hidden timeout editor</h2>
+        <SwiftRepl code={timeoutSource} id="timeout" />
+      </section>
+
+      <section data-test-section="cancellation">
+        <h2>Cancellation</h2>
+        <SwiftRepl code={cancellationSource} id="cancellation" />
+      </section>
+
+      <section data-test-section="compile-failure">
+        <h2>Compiler failure</h2>
+        <SwiftRepl code={compileFailureSource} id="compile-failure" />
+      </section>
+
+      <section data-test-section="unavailable">
+        <h2>Unavailable runner</h2>
+        <SwiftRepl code={unavailableSource} id="unavailable" />
+      </section>
+
+      <section data-test-section="approach">
+        <h2>Binary search approach</h2>
+        <figure class="frame">
+          <pre data-language="swift">{approachSource}</pre>
+        </figure>
+      </section>
+    </main>
+
+    <script is:inline id="swift-fixtures" type="application/json" set:html={JSON.stringify(fixtures)}></script>
+    <script>
+      import { createMockSwiftRunnerClient, type SwiftMockFixture } from '../../../../../src/lib/swift-runner/mock';
+
+      const fixtureElement = document.querySelector<HTMLScriptElement>('#swift-fixtures')!;
+      const fixtures = JSON.parse(fixtureElement.textContent ?? '[]') as SwiftMockFixture[];
+      window.__SWIFT_RUNNER_CLIENT_FACTORY__ = () => createMockSwiftRunnerClient(fixtures);
+
+      document.querySelector<HTMLButtonElement>('[data-show-hidden]')!.addEventListener('click', () => {
+        document.querySelector<HTMLElement>('[data-hidden-panel]')!.hidden = false;
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --sl-color-accent: #a8b2ff;
+    --sl-color-bg: #15171c;
+    --sl-color-black: #0d0d0d;
+    --sl-color-gray-2: #c4c8d4;
+    --sl-color-gray-3: #9ba1b2;
+    --sl-color-gray-4: #5d6475;
+    --sl-color-gray-5: #363b48;
+    --sl-color-gray-6: #252934;
+    --sl-color-text: #f4f5f8;
+    color: var(--sl-color-text);
+    font-family: system-ui, sans-serif;
+  }
+  body { background: var(--sl-color-bg); margin: 0; }
+  main { margin: 0 auto; max-width: 58rem; padding: 1rem; }
+  button { font: inherit; }
+  figure { margin: 0; }
+  figure pre { overflow: auto; padding: 1rem; }
+  .code-run-toolbar { align-items: center; display: flex; gap: 0.5rem; }
+  .code-run-btn { cursor: pointer; padding: 0.35rem 0.8rem; }
+</style>

@@ -24,6 +24,7 @@
     "validate:code-examples": "node scripts/validate-code-examples.mjs",
     "validate:published-content": "node scripts/validate-published-content.mjs",
     "validate:custom-pages": "node scripts/validate-custom-pages.mjs",
+    "validate:swift-repl-browser": "node scripts/validate-swift-repl.mjs",
     "validate:pre-push": "node scripts/validate-pre-push.mjs",
     "new:topic": "bash scripts/new-topic.sh",
     "new:post": "bash scripts/new-post.sh"

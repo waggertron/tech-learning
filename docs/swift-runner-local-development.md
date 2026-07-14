@@ -34,6 +34,14 @@ npm run test:swift-runner-executor
 
 The integration command creates ephemeral containers and removes them after success, failure, timeout, cancellation, or output limit. It does not start a persistent service or bind a host port. The compiler and program share one bounded output budget.
 
+Run the isolated Astro and Playwright fixture without Docker, network services, accounts, or credentials:
+
+```bash
+npm run validate:swift-repl-browser
+```
+
+The browser validator serves only `tests/swift-repl/browser-fixture/`. It checks HTTP status, rendered markers, and the emitted component runtime before launching Chromium. The browser layer covers five independent REPLs, keyboard execution, reset, changed-source reruns, hidden-panel measurement, timeout, cancellation, compiler diagnostics, unavailable service, accessible names and status roles, a binary-search approach harness, mobile width, and console or page errors. Its deterministic client comes from `window.__SWIFT_RUNNER_CLIENT_FACTORY__`.
+
 ## Client Port
 
 `SwiftRunnerClient` exposes four operations:
