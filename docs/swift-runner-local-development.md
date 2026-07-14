@@ -8,7 +8,11 @@ R1.4 provides a credential-free browser contract, deterministic mock, and local 
 - HTTP adapter: `src/lib/swift-runner/http-client.ts`
 - Polling and cancellation coordinator: `src/lib/swift-runner/execute.ts`
 - Deterministic mock: `src/lib/swift-runner/mock.ts`
+- Browser client selection: `src/lib/swift-runner/browser-client.ts`
+- Result presentation: `src/lib/swift-runner/presentation.ts`
+- Editable browser component: `src/components/SwiftRepl.astro`
 - Contract tests: `tests/swift-runner-contract/contract.test.ts`
+- Component tests: `tests/swift-repl/component.test.ts`
 - Local executor: `tools/swift-runner-spike/runner.mjs`
 - Executor tests: `tests/swift-runner-spike/runner.test.mjs`
 
@@ -18,6 +22,7 @@ Run the contract and mock tests without Docker, network, accounts, or credential
 
 ```bash
 npm run test:swift-runner-contract
+npm run test:swift-repl
 ```
 
 Run the exact Swift 6.3.3 executor integration tests when Docker and the pinned image are available:
@@ -40,6 +45,16 @@ The integration command creates ephemeral containers and removes them after succ
 The polling coordinator calls the same port for the HTTP adapter and deterministic mock. An abort signal calls `cancelJob`; it does not merely abandon the browser request.
 
 The HTTP adapter validates every service response with Zod before the response reaches UI state. It sends no authorization header or embedded credential. A future public endpoint must be safe for unauthenticated traffic and enforce its own quotas and trust boundary as required by the ADR.
+
+## Browser Configuration
+
+`SwiftRepl.astro` reads the public runner endpoint from its `runnerURL` prop or `PUBLIC_SWIFT_RUNNER_URL`. When neither value exists, Run Swift reports `runner unavailable` and leaves the source in the editor.
+
+Local browser tests can install `window.__SWIFT_RUNNER_CLIENT_FACTORY__` before the component script attaches. The factory receives the public endpoint and REPL identifier, then returns any `SwiftRunnerClient`. It takes precedence over HTTP so tests can inject `createMockSwiftRunnerClient(...)` without opening a port or using credentials.
+
+The component accepts an optional `approachTemplate`. Put `{{APPROACH}}` where a Swift approach block should be inserted into a complete test harness. Without that marker, an approach block runs as its own source file.
+
+The rendered surface keeps compiler diagnostics, standard output, and standard error separate. It reports compile time, run time, exact toolchain, Linux target, and harness identifier. The boundary note states that this evidence does not cover the Apple SDK, iOS Simulator, or a physical device.
 
 ## Result States
 
@@ -86,4 +101,4 @@ The real executor creates a unique container and two tmpfs workspaces per job. I
 
 ## Next Integration
 
-`SwiftRepl.astro` should receive a `SwiftRunnerClient` rather than choosing an executor internally. Local browser tests should inject the deterministic mock. A deployed page should construct the HTTP adapter from public runtime configuration and show `unavailable` when no endpoint is configured.
+R1.6 should harden the service boundary around the proved executor. R1.7 should exercise multiple components, hidden tabs, keyboard and screen-reader semantics, mobile layout, cancellation, timeout, output limiting, unavailable service, and one representative approach harness in a real browser.

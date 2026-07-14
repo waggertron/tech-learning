@@ -1,0 +1,510 @@
+---
+interface Props {
+  approachTemplate?: string;
+  code: string;
+  harnessID?: string;
+  id?: string;
+  runnerURL?: string;
+}
+
+const {
+  approachTemplate = '',
+  code,
+  harnessID = 'swift-standard-v1',
+  id = 'swiftrepl',
+  runnerURL = import.meta.env.PUBLIC_SWIFT_RUNNER_URL ?? '',
+} = Astro.props;
+const replId = `${id}-${Math.random().toString(36).slice(2, 8)}`;
+const isStarterCode = /TODO:\s*implement|fatalError\(["'](?:TODO|Not implemented)|<#[^#]+#>/i.test(code);
+---
+
+<div
+  class="swiftrepl not-content"
+  data-approach-template={approachTemplate}
+  data-harness-id={harnessID}
+  data-original={code}
+  data-repl-id={replId}
+  data-runner-url={runnerURL}
+  data-state="idle"
+>
+  <div class="swiftrepl__header">
+    <div class="swiftrepl__btn-group">
+      <button
+        aria-describedby={`${replId}-status`}
+        class="swiftrepl__run"
+        type="button"
+      >▶ Run Swift</button>
+      <button class="swiftrepl__cancel" disabled type="button">■ Cancel</button>
+      <button class="swiftrepl__reset" type="button" title="Reset to original">↻ Reset</button>
+    </div>
+    <span
+      aria-live="polite"
+      class="swiftrepl__status"
+      data-status
+      id={`${replId}-status`}
+      role="status"
+    >idle</span>
+  </div>
+  {isStarterCode && (
+    <p class="swiftrepl__note">
+      Starter code: this editor begins with an intentional placeholder. Complete it, run the embedded tests, then compare your solution with the worked approaches below.
+    </p>
+  )}
+  <p class="swiftrepl__boundary" id={`${replId}-boundary`}>
+    Execution sends this source to the project runner. It uses Swift 6.3.3 on Linux for standard-library code, not the Apple SDK, an iOS simulator, or a device.
+  </p>
+  <div
+    aria-describedby={`${replId}-boundary`}
+    aria-label="Editable Swift source"
+    class="swiftrepl__editor-host"
+    data-editor
+  ></div>
+  <div aria-live="polite" class="swiftrepl__result" data-result>
+    <p class="swiftrepl__message" data-message>
+      Edit the source, then choose Run Swift. If no runner is configured, the source stays in this editor.
+    </p>
+    <section aria-labelledby={`${replId}-diagnostics-label`} class="swiftrepl__channel">
+      <h3 id={`${replId}-diagnostics-label`}>Compiler diagnostics</h3>
+      <pre data-diagnostics>(none)</pre>
+    </section>
+    <section aria-labelledby={`${replId}-stdout-label`} class="swiftrepl__channel">
+      <h3 id={`${replId}-stdout-label`}>Standard output</h3>
+      <pre data-stdout>(no stdout)</pre>
+    </section>
+    <section aria-labelledby={`${replId}-stderr-label`} class="swiftrepl__channel">
+      <h3 id={`${replId}-stderr-label`}>Standard error</h3>
+      <pre data-stderr>(no stderr)</pre>
+    </section>
+  </div>
+  <div class="swiftrepl__timing" data-timing></div>
+</div>
+
+<script>
+  import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete';
+  import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
+  import {
+    bracketMatching,
+    defaultHighlightStyle,
+    indentOnInput,
+    indentUnit,
+    StreamLanguage,
+    syntaxHighlighting,
+  } from '@codemirror/language';
+  import { EditorState } from '@codemirror/state';
+  import { oneDark } from '@codemirror/theme-one-dark';
+  import { EditorView, highlightActiveLine, keymap, lineNumbers } from '@codemirror/view';
+  import { swift } from '@codemirror/legacy-modes/mode/swift';
+  import { resolveSwiftRunnerClient } from '../lib/swift-runner/browser-client';
+  import type { SwiftJobSnapshot } from '../lib/swift-runner/contract';
+  import { executeSwift } from '../lib/swift-runner/execute';
+  import { formatSwiftTiming, swiftResultMessage, swiftStatusLabel } from '../lib/swift-runner/presentation';
+
+  const tightLines = EditorView.theme({
+    '&': { fontSize: '0.85rem' },
+    '.cm-content': {
+      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+      lineHeight: '1.4',
+      padding: '4px 0',
+    },
+    '.cm-gutterElement': { lineHeight: '1.4', margin: '0', padding: '0 8px 0 4px' },
+    '.cm-gutters': { borderRight: 'none' },
+    '.cm-line': { lineHeight: '1.4', margin: '0', padding: '0 4px' },
+    '.cm-scroller': { lineHeight: '1.4' },
+  });
+
+  function makeEditor(host: HTMLElement, initialCode: string): EditorView {
+    return new EditorView({
+      doc: initialCode,
+      extensions: [
+        lineNumbers(),
+        highlightActiveLine(),
+        history(),
+        indentOnInput(),
+        bracketMatching(),
+        closeBrackets(),
+        indentUnit.of('    '),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        StreamLanguage.define(swift),
+        autocompletion({ activateOnTyping: true }),
+        oneDark,
+        EditorView.editorAttributes.of({ 'aria-label': 'Editable Swift source' }),
+        tightLines,
+        keymap.of([
+          indentWithTab,
+          ...closeBracketsKeymap,
+          ...completionKeymap,
+          ...defaultKeymap,
+          ...historyKeymap,
+        ]),
+        EditorState.tabSize.of(4),
+      ],
+      parent: host,
+    });
+  }
+
+  async function runSwiftSource(
+    configRoot: HTMLElement,
+    source: string,
+    signal: AbortSignal,
+    onUpdate: (job: SwiftJobSnapshot) => void,
+    requestSuffix: string,
+  ): Promise<SwiftJobSnapshot> {
+    const endpoint = configRoot.dataset.runnerUrl ?? '';
+    const replID = `${configRoot.dataset.replId ?? 'swiftrepl'}-${requestSuffix}`;
+    const client = resolveSwiftRunnerClient({ endpoint, replID });
+    if (!client) {
+      throw new Error('No Swift runner endpoint is configured.');
+    }
+
+    const capabilities = await client.getCapabilities();
+    if (!capabilities.available) throw new Error('The Swift runner reported that it is unavailable.');
+
+    const harnessID = configRoot.dataset.harnessId ?? 'swift-standard-v1';
+    if (!capabilities.harnessVersions.includes(harnessID)) {
+      throw new Error(`The Swift runner does not support harness ${harnessID}.`);
+    }
+
+    return executeSwift(
+      client,
+      {
+        harnessID,
+        requestID: globalThis.crypto?.randomUUID?.() ?? `${replID}-${Date.now()}`,
+        source,
+        toolchain: capabilities.toolchain,
+      },
+      { onUpdate, signal },
+    );
+  }
+
+  function setText(element: HTMLElement, value: string, fallback: string): void {
+    element.textContent = value || fallback;
+  }
+
+  function renderSnapshot(root: HTMLElement, job: SwiftJobSnapshot): void {
+    root.dataset.state = job.status;
+    root.querySelector<HTMLElement>('[data-status]')!.textContent = swiftStatusLabel(job.status);
+    root.querySelector<HTMLElement>('[data-message]')!.textContent = swiftResultMessage(job);
+    setText(root.querySelector<HTMLElement>('[data-diagnostics]')!, job.diagnostics, '(none)');
+    setText(root.querySelector<HTMLElement>('[data-stdout]')!, job.stdout, '(no stdout)');
+    setText(root.querySelector<HTMLElement>('[data-stderr]')!, job.stderr, '(no stderr)');
+    root.querySelector<HTMLElement>('[data-timing]')!.textContent = formatSwiftTiming(job);
+  }
+
+  function renderUnavailable(root: HTMLElement, message: string): void {
+    root.dataset.state = 'unavailable';
+    root.querySelector<HTMLElement>('[data-status]')!.textContent = 'runner unavailable';
+    root.querySelector<HTMLElement>('[data-message]')!.textContent =
+      'The Swift runner is unavailable. Your source remains in the editor.';
+    setText(root.querySelector<HTMLElement>('[data-diagnostics]')!, message, '(none)');
+    setText(root.querySelector<HTMLElement>('[data-stdout]')!, '', '(no stdout)');
+    setText(root.querySelector<HTMLElement>('[data-stderr]')!, '', '(no stderr)');
+    root.querySelector<HTMLElement>('[data-timing]')!.textContent = '';
+  }
+
+  function attachRepl(root: HTMLElement): void {
+    if (root.dataset.swiftAttached === 'true') return;
+    root.dataset.swiftAttached = 'true';
+
+    const cancelButton = root.querySelector<HTMLButtonElement>('.swiftrepl__cancel')!;
+    const resetButton = root.querySelector<HTMLButtonElement>('.swiftrepl__reset')!;
+    const runButton = root.querySelector<HTMLButtonElement>('.swiftrepl__run')!;
+    const status = root.querySelector<HTMLElement>('[data-status]')!;
+    const host = root.querySelector<HTMLElement>('[data-editor]')!;
+    const original = root.dataset.original ?? '';
+    const view = makeEditor(host, original);
+    let controller: AbortController | null = null;
+
+    const panel = host.closest('[role="tabpanel"]');
+    if (panel) {
+      new MutationObserver(() => {
+        if (!(panel as HTMLElement).hasAttribute('hidden')) view.requestMeasure();
+      }).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+    }
+
+    cancelButton.addEventListener('click', () => {
+      status.textContent = 'cancelling...';
+      cancelButton.disabled = true;
+      controller?.abort();
+    });
+
+    resetButton.addEventListener('click', () => {
+      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: original } });
+      root.dataset.state = 'idle';
+      status.textContent = 'idle';
+      root.querySelector<HTMLElement>('[data-message]')!.textContent = 'Editor reset to the original Swift source.';
+      setText(root.querySelector<HTMLElement>('[data-diagnostics]')!, '', '(none)');
+      setText(root.querySelector<HTMLElement>('[data-stdout]')!, '', '(no stdout)');
+      setText(root.querySelector<HTMLElement>('[data-stderr]')!, '', '(no stderr)');
+      root.querySelector<HTMLElement>('[data-timing]')!.textContent = '';
+    });
+
+    runButton.addEventListener('click', async () => {
+      controller = new AbortController();
+      runButton.disabled = true;
+      resetButton.disabled = true;
+      cancelButton.disabled = false;
+      root.dataset.state = 'queued';
+      status.textContent = 'checking runner...';
+      root.querySelector<HTMLElement>('[data-message]')!.textContent = 'Source submitted for isolated compilation and execution.';
+      setText(root.querySelector<HTMLElement>('[data-diagnostics]')!, '', '(none)');
+      setText(root.querySelector<HTMLElement>('[data-stdout]')!, '', '(no stdout)');
+      setText(root.querySelector<HTMLElement>('[data-stderr]')!, '', '(no stderr)');
+      root.querySelector<HTMLElement>('[data-timing]')!.textContent = '';
+
+      try {
+        const job = await runSwiftSource(
+          root,
+          view.state.doc.toString(),
+          controller.signal,
+          (update) => {
+            root.dataset.state = update.status;
+            status.textContent = swiftStatusLabel(update.status);
+          },
+          'editor',
+        );
+        renderSnapshot(root, job);
+      } catch (error) {
+        renderUnavailable(root, error instanceof Error ? error.message : String(error));
+      } finally {
+        controller = null;
+        runButton.disabled = false;
+        resetButton.disabled = false;
+        cancelButton.disabled = true;
+      }
+    });
+  }
+
+  function buildApproachSource(configRoot: HTMLElement, approach: string): string {
+    const template = configRoot.dataset.approachTemplate ?? '';
+    return template.includes('{{APPROACH}}') ? template.replace('{{APPROACH}}', approach) : approach;
+  }
+
+  function attachApproachRunner(figure: HTMLElement, index: number): void {
+    if (figure.dataset.swiftRunnerAttached === 'true') return;
+    const pre = figure.querySelector<HTMLElement>('pre[data-language="swift"]');
+    const configRoot = document.querySelector<HTMLElement>('.swiftrepl');
+    if (!pre || !configRoot) return;
+    figure.dataset.swiftRunnerAttached = 'true';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-run-toolbar swift-code-run-toolbar';
+    const runButton = document.createElement('button');
+    runButton.className = 'code-run-btn';
+    runButton.type = 'button';
+    runButton.textContent = '▶ Run Swift approach';
+    const cancelButton = document.createElement('button');
+    cancelButton.className = 'code-run-btn';
+    cancelButton.disabled = true;
+    cancelButton.type = 'button';
+    cancelButton.textContent = '■ Cancel';
+    const status = document.createElement('span');
+    status.className = 'code-run-status';
+    status.setAttribute('aria-live', 'polite');
+    status.setAttribute('role', 'status');
+    toolbar.append(runButton, cancelButton, status);
+
+    const output = document.createElement('div');
+    output.className = 'swift-code-run-output';
+    output.hidden = true;
+    output.setAttribute('aria-live', 'polite');
+    const message = document.createElement('p');
+    const diagnostics = document.createElement('pre');
+    const stdout = document.createElement('pre');
+    const stderr = document.createElement('pre');
+    const timing = document.createElement('div');
+    output.append(message, diagnostics, stdout, stderr, timing);
+
+    const expressiveCode = figure.closest('.expressive-code') ?? figure;
+    expressiveCode.before(toolbar);
+    expressiveCode.after(output);
+    let controller: AbortController | null = null;
+
+    cancelButton.addEventListener('click', () => {
+      status.textContent = 'cancelling...';
+      cancelButton.disabled = true;
+      controller?.abort();
+    });
+
+    runButton.addEventListener('click', async () => {
+      controller = new AbortController();
+      runButton.disabled = true;
+      cancelButton.disabled = false;
+      status.textContent = 'checking runner...';
+      output.hidden = false;
+      message.textContent = 'Source submitted for isolated compilation and execution.';
+      diagnostics.textContent = 'Compiler diagnostics: (none)';
+      stdout.textContent = 'Standard output: (no stdout)';
+      stderr.textContent = 'Standard error: (no stderr)';
+      timing.textContent = '';
+
+      try {
+        const job = await runSwiftSource(
+          configRoot,
+          buildApproachSource(configRoot, pre.innerText.trim()),
+          controller.signal,
+          (update) => { status.textContent = swiftStatusLabel(update.status); },
+          `approach-${index}`,
+        );
+        status.textContent = swiftStatusLabel(job.status);
+        message.textContent = swiftResultMessage(job);
+        diagnostics.textContent = `Compiler diagnostics: ${job.diagnostics || '(none)'}`;
+        stdout.textContent = `Standard output: ${job.stdout || '(no stdout)'}`;
+        stderr.textContent = `Standard error: ${job.stderr || '(no stderr)'}`;
+        timing.textContent = formatSwiftTiming(job);
+      } catch (error) {
+        status.textContent = 'runner unavailable';
+        message.textContent = 'The Swift runner is unavailable. The code block was not executed.';
+        diagnostics.textContent = error instanceof Error ? error.message : String(error);
+      } finally {
+        controller = null;
+        runButton.disabled = false;
+        cancelButton.disabled = true;
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('.swiftrepl').forEach(attachRepl);
+  document.querySelectorAll<HTMLElement>('figure.frame').forEach(attachApproachRunner);
+</script>
+
+<style>
+  .swiftrepl {
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    margin: 1.25rem 0;
+    overflow: hidden;
+  }
+  .swiftrepl__header {
+    align-items: center;
+    background: var(--sl-color-gray-6);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+  }
+  .swiftrepl__btn-group {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .swiftrepl__run,
+  .swiftrepl__cancel,
+  .swiftrepl__reset {
+    align-items: center;
+    background: var(--sl-color-gray-5);
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 4px;
+    color: var(--sl-color-text);
+    cursor: pointer;
+    display: flex;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0.35rem 0.8rem;
+    white-space: nowrap;
+  }
+  .swiftrepl__run {
+    background: #f05138;
+    border-color: transparent;
+    color: white;
+  }
+  .swiftrepl__cancel { border-color: color-mix(in srgb, #f05138 55%, var(--sl-color-gray-4)); }
+  .swiftrepl button:disabled { cursor: not-allowed; opacity: 0.55; }
+  .swiftrepl__status {
+    color: var(--sl-color-gray-3);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+  }
+  .swiftrepl__note,
+  .swiftrepl__boundary {
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+  }
+  .swiftrepl__note { background: color-mix(in srgb, #f05138 12%, transparent); }
+  .swiftrepl__boundary { color: var(--sl-color-gray-2); }
+  .swiftrepl__editor-host { min-height: 280px; }
+  .swiftrepl__editor-host :global(.cm-editor) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    height: auto;
+    line-height: 1.4;
+  }
+  .swiftrepl__editor-host :global(.cm-editor.cm-focused) { outline: 2px solid var(--sl-color-accent); outline-offset: -2px; }
+  .swiftrepl__editor-host :global(.cm-scroller) { line-height: 1.4; overflow: visible !important; }
+  .swiftrepl__editor-host :global(.cm-content),
+  .swiftrepl__editor-host :global(.cm-content > *),
+  .swiftrepl__editor-host :global(.cm-line),
+  .swiftrepl__editor-host :global(.cm-gutter),
+  .swiftrepl__editor-host :global(.cm-gutterElement) {
+    margin: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+  }
+  .swiftrepl__editor-host :global(.cm-line) { padding: 0 4px; }
+  .swiftrepl__editor-host :global(.cm-gutterElement) { line-height: 1.4; }
+  .swiftrepl__result { background: var(--sl-color-black, #0d0d0d); border-top: 1px solid var(--sl-color-gray-5); }
+  .swiftrepl__message {
+    border-bottom: 1px solid var(--sl-color-gray-6);
+    font-size: 0.85rem;
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+  }
+  .swiftrepl__channel { border-bottom: 1px solid var(--sl-color-gray-6); }
+  .swiftrepl__channel h3 {
+    color: var(--sl-color-gray-3);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    margin: 0;
+    padding: 0.45rem 0.75rem 0;
+    text-transform: uppercase;
+  }
+  .swiftrepl__channel pre {
+    background: transparent;
+    color: var(--sl-color-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin: 0;
+    max-height: 180px;
+    overflow: auto;
+    padding: 0.35rem 0.75rem 0.65rem;
+    white-space: pre-wrap;
+  }
+  .swiftrepl__timing {
+    background: var(--sl-color-black, #0d0d0d);
+    color: var(--sl-color-gray-3);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+  }
+  .swiftrepl__timing:empty { display: none; }
+  .swiftrepl[data-state='compile_failed'] .swiftrepl__message,
+  .swiftrepl[data-state='runtime_failed'] .swiftrepl__message,
+  .swiftrepl[data-state='timed_out'] .swiftrepl__message,
+  .swiftrepl[data-state='unavailable'] .swiftrepl__message { color: #ffb4a8; }
+  :global(.swift-code-run-toolbar) { flex-wrap: wrap; }
+  :global(.swift-code-run-output) {
+    background: var(--sl-color-black, #0d0d0d);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0 0 6px 6px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+  }
+  :global(.swift-code-run-output p),
+  :global(.swift-code-run-output pre),
+  :global(.swift-code-run-output div) { margin: 0 0 0.5rem; white-space: pre-wrap; }
+  @media (max-width: 36rem) {
+    .swiftrepl__header { align-items: flex-start; flex-direction: column; }
+    .swiftrepl__btn-group { width: 100%; }
+    .swiftrepl__run,
+    .swiftrepl__cancel,
+    .swiftrepl__reset { justify-content: center; }
+  }
+</style>

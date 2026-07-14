@@ -26,6 +26,7 @@ export interface SwiftMockFixture {
 interface MockJob {
   cancelled: boolean;
   fixture: SwiftMockFixture;
+  harnessID: string;
   jobID: string;
   polls: number;
 }
@@ -44,13 +45,15 @@ const capabilities: SwiftRunnerCapabilities = {
   toolchain: "6.3.3",
 };
 
-function blankSnapshot(jobID: string): SwiftJobSnapshot {
+function blankSnapshot(jobID: string, harnessID: string): SwiftJobSnapshot {
   return {
     compileDurationMs: null,
     diagnostics: "",
     exitCode: null,
+    harnessID,
     jobID,
     outputLimited: false,
+    platform: capabilities.platform,
     runDurationMs: null,
     stage: "queued",
     status: "queued",
@@ -72,7 +75,7 @@ function terminalSnapshot(job: MockJob): SwiftJobSnapshot {
         : null;
 
   return {
-    ...blankSnapshot(job.jobID),
+    ...blankSnapshot(job.jobID, job.harnessID),
     compileDurationMs: didNotCompile ? null : (fixture.compileDurationMs ?? 12),
     diagnostics: fixture.diagnostics ?? "",
     exitCode: fixture.exitCode ?? defaultExitCode,
@@ -105,7 +108,7 @@ export function createMockSwiftRunnerClient(fixtures: SwiftMockFixture[]): Swift
     const job = requireJob(jobID);
     job.cancelled = true;
     return {
-      ...blankSnapshot(jobID),
+      ...blankSnapshot(jobID, job.harnessID),
       compileDurationMs: 1,
       exitCode: null,
       stage: "complete",
@@ -126,7 +129,13 @@ export function createMockSwiftRunnerClient(fixtures: SwiftMockFixture[]): Swift
         source: validRequest.source,
       };
       const jobID = `swift-mock-${nextJob++}`;
-      jobs.set(jobID, { cancelled: false, fixture, jobID, polls: 0 });
+      jobs.set(jobID, {
+        cancelled: false,
+        fixture,
+        harnessID: validRequest.harnessID,
+        jobID,
+        polls: 0,
+      });
       return { jobID };
     },
 
@@ -144,11 +153,20 @@ export function createMockSwiftRunnerClient(fixtures: SwiftMockFixture[]): Swift
 
       job.polls += 1;
       if (job.polls === 1) {
-        return { ...blankSnapshot(jobID), stage: "compiling", status: "compiling" };
+        return {
+          ...blankSnapshot(jobID, job.harnessID),
+          stage: "compiling",
+          status: "compiling",
+        };
       }
 
       if (job.fixture.outcome !== "compile_failed" && job.polls === 2) {
-        return { ...blankSnapshot(jobID), compileDurationMs: 12, stage: "running", status: "running" };
+        return {
+          ...blankSnapshot(jobID, job.harnessID),
+          compileDurationMs: 12,
+          stage: "running",
+          status: "running",
+        };
       }
 
       return terminalSnapshot(job);
