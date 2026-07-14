@@ -64,6 +64,8 @@ A documented approach is Swift-ready only when all of these are true:
 
 S2.2 owns the final solution and harness contract. If that gate changes the filename or harness convention, update the scanner, its synthetic fixtures, this document, and the generated manifest in the same batch.
 
+S2.2 is now defined in [Swift Coding Problem Contract](swift-coding-problem-contract.md). A Swift file is ready only when it follows that filename, source, signature, canonical-helper, test, and output contract. The manifest stores contract errors beside each existing Swift starter and approach so a malformed file cannot count as coverage.
+
 ## Baseline, 2026-07-13
 
 The first generated inventory found:

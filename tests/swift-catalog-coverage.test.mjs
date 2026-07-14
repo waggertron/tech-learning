@@ -10,6 +10,7 @@ import {
   serializeManifest,
   swiftCoverageErrors,
 } from "../scripts/swift-catalog-coverage.mjs";
+import { canonicalTestSupport } from "../scripts/swift-coding-problem-contract.mjs";
 
 const fixtureRoot = path.join(tmpdir(), `swift-catalog-coverage-${process.pid}`);
 const catalogDir = path.join(fixtureRoot, "arrays-and-hashing");
@@ -57,12 +58,35 @@ description: "Synthetic missing coverage fixture."
 <TabItem label="Python">\n\`\`\`python\nprint('ok')\n\`\`\`\n</TabItem>
 `;
 
-function writeHarness(filePath, language) {
+function validSwiftSource(role) {
+  const implementation = role === "starter"
+    ? `        // TODO: Implement\n        fatalError("TODO: Implement")`
+    : "        return value";
+  return `// LEETCODE_TYPE: Solution
+
+${canonicalTestSupport}
+
+final class Solution {
+    func identity(_ value: Int) -> Int {
+${implementation}
+    }
+}
+
+func runTests() {
+    expectEqual(Solution().identity(1), 1)
+    reportSuccess()
+}
+
+runTests()
+`;
+}
+
+function writeHarness(filePath, language, role) {
   const harnesses = {
     python: "def _run_tests():\n    assert True\n",
     typescript: "function runTests() { if (!true) throw new Error('fail'); }\n",
     go: "package main\nfunc runTests() {}\nfunc main() { runTests() }\n",
-    swift: "func runTests() { precondition(true) }\nrunTests()\n",
+    swift: validSwiftSource(role),
   };
   writeFileSync(filePath, harnesses[language]);
 }
@@ -78,11 +102,19 @@ before(() => {
     go: "go",
     swift: "swift",
   })) {
-    writeHarness(path.join(catalogDir, `001-complete.${extension}`), language);
-    writeHarness(path.join(catalogDir, `001-complete-approach1.${extension}`), language);
+    writeHarness(path.join(catalogDir, `001-complete.${extension}`), language, "starter");
+    writeHarness(
+      path.join(catalogDir, `001-complete-approach1.${extension}`),
+      language,
+      "approach",
+    );
     if (language === "python") {
-      writeHarness(path.join(catalogDir, `002-missing-swift.${extension}`), language);
-      writeHarness(path.join(catalogDir, `002-missing-swift-approach1.${extension}`), language);
+      writeHarness(path.join(catalogDir, `002-missing-swift.${extension}`), language, "starter");
+      writeHarness(
+        path.join(catalogDir, `002-missing-swift-approach1.${extension}`),
+        language,
+        "approach",
+      );
     }
   }
 });

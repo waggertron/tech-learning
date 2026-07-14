@@ -28,6 +28,7 @@ npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
 npm run test:swift-repl
+npm run test:swift-catalog-contract
 npm run test:swift-catalog-coverage
 npm run check:swift-catalog-coverage
 npm run validate:code-examples
@@ -101,13 +102,14 @@ npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
 npm run test:swift-repl
+npm run test:swift-catalog-contract
 npm run test:swift-catalog-coverage
 npm run check:swift-catalog-coverage
 ```
 
 The code validator checks fenced code language tags and syntax for source examples. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
 
-The Swift catalog commands test the coverage scanner and confirm that `docs/data/swift-coding-problem-coverage.json` matches the current problem pages, approaches, source files, harnesses, tabs, REPLs, and helper needs. Run `npm run sync:swift-catalog-coverage` after catalog changes. `npm run validate:swift-catalog-coverage` intentionally remains outside default pre-push validation until every page and approach has Swift parity.
+The Swift catalog commands test the source contract and coverage scanner, then confirm that `docs/data/swift-coding-problem-coverage.json` matches the current problem pages, approaches, source files, harnesses, tabs, REPLs, helper needs, and contract errors. Run `npm run test:swift-catalog-compile` when canonical Swift helpers, fixtures, or source rules change and a Swift compiler is available. Run `npm run sync:swift-catalog-coverage` after catalog changes. `npm run validate:swift-catalog-coverage` intentionally remains outside default pre-push validation until every page and approach has Swift parity.
 
 Not every Markdown fence is executable. Explanatory snippets still need review, but source files and generated examples get deterministic checks.
 

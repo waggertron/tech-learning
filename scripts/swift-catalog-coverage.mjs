@@ -7,6 +7,7 @@ import {
 } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { swiftSourceContractErrors } from "./swift-coding-problem-contract.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const defaultCatalogDir = path.join(
@@ -50,7 +51,8 @@ const helperPatterns = [
   ["tree-node", /\bTreeNode\b/],
   ["trie-node", /\bTrieNode\b/],
   ["graph-node", /\bGraphNode\b/],
-  ["heap", /\bheapq\b|container\/heap|\bPriorityQueue\b|\bMinHeap\b|\bMaxHeap\b/],
+  ["heap", /\bheapq\b|container\/heap|\bPriorityQueue\b|\bBinaryHeap\b|\bMinHeap\b|\bMaxHeap\b/],
+  ["interval", /SWIFT_CATALOG_HELPER:\s*Interval/],
 ];
 
 function posixRelative(from, to) {
@@ -120,6 +122,8 @@ function sourceRecord({
   filePath,
   language,
   rawImports,
+  requiredHelpers,
+  role,
   section,
 }) {
   const exists = existsSync(filePath);
@@ -129,6 +133,14 @@ function sourceRecord({
   const usedInSection = importName
     ? new RegExp(`code=\\{${escapeRegExp(importName)}\\}`).test(section)
     : false;
+  const contractErrors = exists && language === "swift"
+    ? swiftSourceContractErrors({
+      fileName,
+      source,
+      role,
+      requiredHelpers,
+    })
+    : [];
 
   return {
     path: posixRelative(catalogDir, filePath),
@@ -136,6 +148,7 @@ function sourceRecord({
     imported: importName !== null,
     usedInSection,
     testHarness: exists && hasTestHarness(language, source),
+    contractErrors,
   };
 }
 
@@ -156,12 +169,11 @@ export function collectApproachSections(content) {
   });
 }
 
-function collectHelperTypes(category, slug, combinedSource) {
+function collectHelperTypes(slug, combinedSource) {
   const helpers = helperPatterns
     .filter(([, pattern]) => pattern.test(combinedSource))
     .map(([name]) => name);
 
-  if (category === "intervals") helpers.push("interval");
   if (slug.includes("clone-graph")) helpers.push("graph-node");
   if (slug.includes("copy-list-with-random-pointer")) helpers.push("random-list-node");
 
@@ -182,6 +194,8 @@ function parseProblem({ catalogDir, category, pagePath }) {
   const problemDir = path.dirname(pagePath);
   const slug = path.basename(pagePath, ".mdx");
   const rawImports = collectRawImports(content);
+  const combinedSource = `${content}\n${relatedSource(problemDir, slug)}`;
+  const helperTypes = collectHelperTypes(slug, combinedSource);
   const practiceSection = sectionAfter(content, /^## Try it yourself\s*$/m);
   const practice = Object.fromEntries(
     Object.keys(languages).map((language) => [language, sectionEvidence(practiceSection, language)]),
@@ -194,6 +208,8 @@ function parseProblem({ catalogDir, category, pagePath }) {
         filePath: path.join(problemDir, `${slug}.${config.extension}`),
         language,
         rawImports,
+        requiredHelpers: helperTypes,
+        role: "starter",
         section: practiceSection,
       }),
     ]),
@@ -216,6 +232,8 @@ function parseProblem({ catalogDir, category, pagePath }) {
           ),
           language,
           rawImports,
+          requiredHelpers: helperTypes,
+          role: "approach",
           section: approach.section,
         }),
       ]),
@@ -240,14 +258,15 @@ function parseProblem({ catalogDir, category, pagePath }) {
       sourceHarnesses: Object.keys(languages).filter(
         (language) => sourceFiles[language].testHarness,
       ),
+      swiftContractErrors: swiftSource.contractErrors,
       swiftReady:
         swift.tab &&
         (swift.codeFence || swift.repl) &&
         swiftSource.exists &&
-        swiftSource.testHarness,
+        swiftSource.testHarness &&
+        swiftSource.contractErrors.length === 0,
     };
   });
-  const combinedSource = `${content}\n${relatedSource(problemDir, slug)}`;
   const swiftPractice = practice.swift;
   const swiftStarter = starterFiles.swift;
 
@@ -256,7 +275,7 @@ function parseProblem({ catalogDir, category, pagePath }) {
     slug,
     title: extractTitle(content, slug),
     page: posixRelative(catalogDir, pagePath),
-    helperTypes: collectHelperTypes(category, slug, combinedSource),
+    helperTypes,
     practiceTabs: Object.keys(languages).filter((language) => practice[language].tab),
     practiceRepls: Object.keys(languages).filter((language) => practice[language].repl),
     starterFiles: Object.fromEntries(
@@ -271,13 +290,15 @@ function parseProblem({ catalogDir, category, pagePath }) {
     starterImports: Object.keys(languages).filter(
       (language) => starterFiles[language].imported && starterFiles[language].usedInSection,
     ),
+    swiftContractErrors: swiftStarter.contractErrors,
     swiftReady:
       swiftPractice.tab &&
       swiftPractice.repl &&
       swiftStarter.exists &&
       swiftStarter.imported &&
       swiftStarter.usedInSection &&
-      swiftStarter.testHarness,
+      swiftStarter.testHarness &&
+      swiftStarter.contractErrors.length === 0,
     approaches,
   };
 }
@@ -345,7 +366,7 @@ export function buildCoverageManifest({ catalogDir = defaultCatalogDir } = {}) {
   });
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     catalogRoot: "src/content/docs/topics/cs/coding-problems",
     summary: {
       pages: problems.length,
@@ -375,6 +396,9 @@ export function swiftCoverageErrors(manifest) {
       if (!problem.starterImports.includes("swift")) missing.push("starter import");
       if (!problem.practiceTabs.includes("swift")) missing.push("practice tab");
       if (!problem.practiceRepls.includes("swift")) missing.push("practice REPL");
+      for (const contractError of problem.swiftContractErrors) {
+        missing.push(`contract: ${contractError}`);
+      }
       errors.push(`${problem.page}: missing Swift ${missing.join(", ")}`);
     }
 
@@ -386,6 +410,9 @@ export function swiftCoverageErrors(manifest) {
       if (!approach.languageTabs.includes("swift")) missing.push("tab");
       if (!approach.codeFences.includes("swift") && !approach.repls.includes("swift")) {
         missing.push("code or REPL");
+      }
+      for (const contractError of approach.swiftContractErrors) {
+        missing.push(`contract: ${contractError}`);
       }
       errors.push(
         `${problem.page} approach ${approach.number}: missing Swift ${missing.join(", ")}`,

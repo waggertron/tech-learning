@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "catalogRoot": "src/content/docs/topics/cs/coding-problems",
   "summary": {
     "pages": 189,
@@ -213,6 +213,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -236,6 +237,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -267,6 +269,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -298,6 +301,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -334,6 +338,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -357,6 +362,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -388,6 +394,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -419,6 +426,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -450,6 +458,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -486,6 +495,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -509,6 +519,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -540,6 +551,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -571,6 +583,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -607,6 +620,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -630,6 +644,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -661,6 +676,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -692,6 +708,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -728,6 +745,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -751,6 +769,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -774,6 +793,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -805,6 +825,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -841,6 +862,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -862,6 +884,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -892,6 +915,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -922,6 +946,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -952,6 +977,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -985,6 +1011,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1006,6 +1033,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1036,6 +1064,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1066,6 +1095,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1099,6 +1129,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1116,6 +1147,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1146,6 +1178,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1176,6 +1209,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1209,6 +1243,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1230,6 +1265,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1260,6 +1296,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1290,6 +1327,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1323,6 +1361,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1344,6 +1383,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1374,6 +1414,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1404,6 +1445,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1437,6 +1479,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1458,6 +1501,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1488,6 +1532,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1518,6 +1563,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1551,6 +1597,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1572,6 +1619,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1602,6 +1650,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1632,6 +1681,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1662,6 +1712,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1695,6 +1746,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1716,6 +1768,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1746,6 +1799,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1776,6 +1830,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1812,6 +1867,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1835,6 +1891,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1866,6 +1923,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1897,6 +1955,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -1933,6 +1992,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -1956,6 +2016,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -1986,6 +2047,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2017,6 +2079,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2053,6 +2116,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2076,6 +2140,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2106,6 +2171,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2137,6 +2203,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2173,6 +2240,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2196,6 +2264,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2227,6 +2296,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2258,6 +2328,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2294,6 +2365,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2317,6 +2389,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2347,6 +2420,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2378,6 +2452,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2414,6 +2489,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2437,6 +2513,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2467,6 +2544,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2498,6 +2576,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2534,6 +2613,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2551,6 +2631,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2568,6 +2649,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2599,6 +2681,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2632,6 +2715,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2653,6 +2737,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2683,6 +2768,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2713,6 +2799,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2746,6 +2833,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2767,6 +2855,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2797,6 +2886,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2827,6 +2917,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2860,6 +2951,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2881,6 +2973,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2911,6 +3004,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -2941,6 +3035,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -2975,6 +3070,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -2998,6 +3094,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3023,6 +3120,7 @@
           "sourceHarnesses": [
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3059,6 +3157,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3086,6 +3185,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3122,6 +3222,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3149,6 +3250,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3187,6 +3289,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3210,6 +3313,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3241,6 +3345,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3279,6 +3384,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3302,6 +3408,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3333,6 +3440,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3364,6 +3472,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3402,6 +3511,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3425,6 +3535,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3456,6 +3567,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3487,6 +3599,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3525,6 +3638,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3548,6 +3662,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3579,6 +3694,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3610,6 +3726,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3648,6 +3765,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3671,6 +3789,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3702,6 +3821,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3733,6 +3853,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3771,6 +3892,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3794,6 +3916,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3825,6 +3948,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3856,6 +3980,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -3892,6 +4017,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -3915,6 +4041,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3946,6 +4073,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -3977,6 +4105,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4013,6 +4142,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4036,6 +4166,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4067,6 +4198,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4098,6 +4230,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4134,6 +4267,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4157,6 +4291,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4188,6 +4323,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4219,6 +4355,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4252,6 +4389,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4273,6 +4411,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4306,6 +4445,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4327,6 +4467,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4357,6 +4498,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4393,6 +4535,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4416,6 +4559,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4447,6 +4591,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4478,6 +4623,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4504,6 +4650,7 @@
       "starterImports": [
         "python"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4521,6 +4668,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4538,6 +4686,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4555,6 +4704,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4591,6 +4741,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4614,6 +4765,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4645,6 +4797,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4676,6 +4829,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4712,6 +4866,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4735,6 +4890,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4766,6 +4922,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4802,6 +4959,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4825,6 +4983,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4856,6 +5015,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4887,6 +5047,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -4923,6 +5084,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -4946,6 +5108,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -4977,6 +5140,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5008,6 +5172,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5044,6 +5209,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5067,6 +5233,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5098,6 +5265,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5129,6 +5297,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5165,6 +5334,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5188,6 +5358,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5219,6 +5390,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5257,6 +5429,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5280,6 +5453,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5311,6 +5485,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5342,6 +5517,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5378,6 +5554,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5404,6 +5581,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5437,6 +5615,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5463,6 +5642,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5496,6 +5676,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5517,6 +5698,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5547,6 +5729,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5580,6 +5763,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5601,6 +5785,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5631,6 +5816,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5667,6 +5853,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5694,6 +5881,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5725,6 +5913,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5746,6 +5935,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5782,6 +5972,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5799,6 +5990,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5830,6 +6022,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5861,6 +6054,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5897,6 +6091,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -5914,6 +6109,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5931,6 +6127,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -5962,6 +6159,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -5998,6 +6196,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6015,6 +6214,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6046,6 +6246,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6077,6 +6278,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6113,6 +6315,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6130,6 +6333,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6147,6 +6351,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6178,6 +6383,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6214,6 +6420,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6231,6 +6438,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6248,6 +6456,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6279,6 +6488,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6315,6 +6525,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6332,6 +6543,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6363,6 +6575,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6380,6 +6593,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6416,6 +6630,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6433,6 +6648,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6464,6 +6680,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6481,6 +6698,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6517,6 +6735,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6534,6 +6753,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6565,6 +6785,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6596,6 +6817,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6632,6 +6854,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6653,6 +6876,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6683,6 +6907,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6713,6 +6938,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6749,6 +6975,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6772,6 +6999,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6803,6 +7031,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6834,6 +7063,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6870,6 +7100,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -6893,6 +7124,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6924,6 +7156,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -6955,6 +7188,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -6991,6 +7225,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7014,6 +7249,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7037,6 +7273,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7068,6 +7305,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7104,6 +7342,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7127,6 +7366,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7158,6 +7398,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7194,6 +7435,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7217,6 +7459,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7248,6 +7491,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7279,6 +7523,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7315,6 +7560,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7338,6 +7584,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7361,6 +7608,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7392,6 +7640,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7428,6 +7677,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7451,6 +7701,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7482,6 +7733,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7513,6 +7765,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7549,6 +7802,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7572,6 +7826,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7603,6 +7858,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7620,6 +7876,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7656,6 +7913,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7679,6 +7937,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7710,6 +7969,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7741,6 +8001,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7777,6 +8038,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7800,6 +8062,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7831,6 +8094,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7862,6 +8126,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -7898,6 +8163,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -7921,6 +8187,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7952,6 +8219,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -7969,6 +8237,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8005,6 +8274,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8028,6 +8298,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8059,6 +8330,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8090,6 +8362,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8126,6 +8399,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8149,6 +8423,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8180,6 +8455,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8211,6 +8487,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8247,6 +8524,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8270,6 +8548,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8301,6 +8580,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8318,6 +8598,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8354,6 +8635,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8380,6 +8662,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8416,6 +8699,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8437,6 +8721,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8467,6 +8752,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8488,6 +8774,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8524,6 +8811,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8539,6 +8827,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8564,6 +8853,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8590,6 +8880,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8628,6 +8919,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8651,6 +8943,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8682,6 +8975,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8718,6 +9012,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8741,6 +9036,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8772,6 +9068,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8808,6 +9105,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8831,6 +9129,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8862,6 +9161,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -8898,6 +9198,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -8913,6 +9214,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8940,6 +9242,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -8967,6 +9270,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9003,6 +9307,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9026,6 +9331,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9057,6 +9363,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9093,6 +9400,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9114,6 +9422,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9144,6 +9453,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9180,6 +9490,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9203,6 +9514,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9234,6 +9546,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9270,6 +9583,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9285,6 +9599,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9310,6 +9625,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9336,6 +9652,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9372,6 +9689,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9398,6 +9716,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9434,6 +9753,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9455,6 +9775,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9485,6 +9806,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9521,6 +9843,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9536,6 +9859,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9555,6 +9879,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9581,6 +9906,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9617,6 +9943,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9638,6 +9965,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9668,6 +9996,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9704,6 +10033,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9730,6 +10060,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9766,6 +10097,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9792,6 +10124,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9828,6 +10161,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9854,6 +10188,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9890,6 +10225,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -9905,6 +10241,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9930,6 +10267,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -9956,6 +10294,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -9992,6 +10331,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10015,6 +10355,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10046,6 +10387,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10073,6 +10415,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10109,6 +10452,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10132,6 +10476,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10163,6 +10508,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10194,6 +10540,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10230,6 +10577,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10253,6 +10601,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10284,6 +10633,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10315,6 +10665,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10346,6 +10697,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10377,6 +10729,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10411,6 +10764,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10434,6 +10788,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10459,6 +10814,7 @@
           "sourceHarnesses": [
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10484,6 +10840,7 @@
           "sourceHarnesses": [
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10520,6 +10877,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10543,6 +10901,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10574,6 +10933,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10610,6 +10970,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10633,6 +10994,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10664,6 +11026,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10695,6 +11058,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10731,6 +11095,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10754,6 +11119,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10781,6 +11147,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10808,6 +11175,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10844,6 +11212,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10867,6 +11236,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10898,6 +11268,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -10929,6 +11300,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -10965,6 +11337,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -10988,6 +11361,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11019,6 +11393,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11050,6 +11425,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11088,6 +11464,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11111,6 +11488,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11142,6 +11520,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11173,6 +11552,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11211,6 +11591,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11234,6 +11615,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11265,6 +11647,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11295,6 +11678,7 @@
       },
       "starterHarnesses": [],
       "starterImports": [],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11318,6 +11702,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11349,6 +11734,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11380,6 +11766,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11410,6 +11797,7 @@
       },
       "starterHarnesses": [],
       "starterImports": [],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11433,6 +11821,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11456,6 +11845,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11482,6 +11872,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11520,6 +11911,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11543,6 +11935,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11574,6 +11967,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11589,6 +11983,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11627,6 +12022,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11650,6 +12046,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11681,6 +12078,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11712,6 +12110,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11742,6 +12141,7 @@
       },
       "starterHarnesses": [],
       "starterImports": [],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11763,6 +12163,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11784,6 +12185,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11810,6 +12212,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11848,6 +12251,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11871,6 +12275,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11902,6 +12307,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -11933,6 +12339,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -11942,9 +12349,7 @@
       "slug": "056-merge-intervals",
       "title": "56. Merge Intervals (Medium)",
       "page": "intervals/056-merge-intervals.mdx",
-      "helperTypes": [
-        "interval"
-      ],
+      "helperTypes": [],
       "practiceTabs": [
         "python",
         "typescript",
@@ -11971,6 +12376,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -11994,6 +12400,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12025,6 +12432,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12056,6 +12464,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12065,9 +12474,7 @@
       "slug": "057-insert-interval",
       "title": "57. Insert Interval (Medium)",
       "page": "intervals/057-insert-interval.mdx",
-      "helperTypes": [
-        "interval"
-      ],
+      "helperTypes": [],
       "practiceTabs": [
         "python",
         "typescript",
@@ -12094,6 +12501,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12117,6 +12525,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12148,6 +12557,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12179,6 +12589,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12189,8 +12600,7 @@
       "title": "1851. Minimum Interval to Include Each Query (Hard)",
       "page": "intervals/1851-minimum-interval-to-include-each-query.mdx",
       "helperTypes": [
-        "heap",
-        "interval"
+        "heap"
       ],
       "practiceTabs": [
         "python",
@@ -12218,6 +12628,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12241,6 +12652,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12272,6 +12684,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12289,6 +12702,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12298,9 +12712,7 @@
       "slug": "252-meeting-rooms",
       "title": "252. Meeting Rooms (Easy)",
       "page": "intervals/252-meeting-rooms.mdx",
-      "helperTypes": [
-        "interval"
-      ],
+      "helperTypes": [],
       "practiceTabs": [
         "python",
         "typescript",
@@ -12327,6 +12739,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12350,6 +12763,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12381,6 +12795,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12412,6 +12827,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12422,8 +12838,7 @@
       "title": "253. Meeting Rooms II (Medium)",
       "page": "intervals/253-meeting-rooms-ii.mdx",
       "helperTypes": [
-        "heap",
-        "interval"
+        "heap"
       ],
       "practiceTabs": [
         "python",
@@ -12451,6 +12866,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12474,6 +12890,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12505,6 +12922,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12536,6 +12954,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12545,9 +12964,7 @@
       "slug": "435-non-overlapping-intervals",
       "title": "435. Non-overlapping Intervals (Medium)",
       "page": "intervals/435-non-overlapping-intervals.mdx",
-      "helperTypes": [
-        "interval"
-      ],
+      "helperTypes": [],
       "practiceTabs": [
         "python",
         "typescript",
@@ -12574,6 +12991,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12597,6 +13015,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12628,6 +13047,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12659,6 +13079,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12697,6 +13118,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12720,6 +13142,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12751,6 +13174,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12774,6 +13198,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12812,6 +13237,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12835,6 +13261,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12858,6 +13285,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12889,6 +13317,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -12927,6 +13356,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -12950,6 +13380,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -12981,6 +13412,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13012,6 +13444,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13051,6 +13484,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13074,6 +13508,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13097,6 +13532,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13135,6 +13571,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13158,6 +13595,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13189,6 +13627,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13227,6 +13666,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13250,6 +13690,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13281,6 +13722,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13302,6 +13744,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13340,6 +13783,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13361,6 +13805,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13391,6 +13836,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13412,6 +13858,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13450,6 +13897,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13471,6 +13919,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13492,6 +13941,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13522,6 +13972,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13560,6 +14011,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13581,6 +14033,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13602,6 +14055,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13632,6 +14086,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13668,6 +14123,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13689,6 +14145,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13710,6 +14167,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13740,6 +14198,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13778,6 +14237,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13799,6 +14259,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13829,6 +14290,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13867,6 +14329,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -13890,6 +14353,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13921,6 +14385,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -13952,6 +14417,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -13988,6 +14454,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14009,6 +14476,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14030,6 +14498,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14060,6 +14529,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14098,6 +14568,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14119,6 +14590,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14149,6 +14621,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14185,6 +14658,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14208,6 +14682,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14239,6 +14714,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14256,6 +14732,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14292,6 +14769,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14315,6 +14793,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14346,6 +14825,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14377,6 +14857,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14413,6 +14894,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14436,6 +14918,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14467,6 +14950,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14498,6 +14982,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14534,6 +15019,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14557,6 +15043,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14588,6 +15075,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14605,6 +15093,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14641,6 +15130,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14664,6 +15154,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14695,6 +15186,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14731,6 +15223,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14748,6 +15241,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14779,6 +15273,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14810,6 +15305,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14846,6 +15342,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14863,6 +15360,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14894,6 +15392,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -14911,6 +15410,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -14947,6 +15447,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -14970,6 +15471,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15001,6 +15503,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15018,6 +15521,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15054,6 +15558,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15077,6 +15582,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15100,6 +15606,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15131,6 +15638,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15167,6 +15675,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15190,6 +15699,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15221,6 +15731,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15257,6 +15768,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15280,6 +15792,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15303,6 +15816,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15334,6 +15848,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15370,6 +15885,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15393,6 +15909,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15416,6 +15933,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15447,6 +15965,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15485,6 +16004,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15508,6 +16028,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15539,6 +16060,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15570,6 +16092,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15606,6 +16129,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15629,6 +16153,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15652,6 +16177,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15683,6 +16209,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15719,6 +16246,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15742,6 +16270,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15773,6 +16302,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15809,6 +16339,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15832,6 +16363,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15855,6 +16387,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15886,6 +16419,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -15922,6 +16456,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -15945,6 +16480,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -15976,6 +16512,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16007,6 +16544,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16043,6 +16581,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16066,6 +16605,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16097,6 +16637,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16128,6 +16669,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16164,6 +16706,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16191,6 +16734,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16227,6 +16771,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16250,6 +16795,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16281,6 +16827,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16312,6 +16859,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16348,6 +16896,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16371,6 +16920,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16402,6 +16952,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16438,6 +16989,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16465,6 +17017,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16501,6 +17054,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16524,6 +17078,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16555,6 +17110,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16591,6 +17147,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16614,6 +17171,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16645,6 +17203,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16676,6 +17235,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16712,6 +17272,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16738,6 +17299,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16773,6 +17335,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16799,6 +17362,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16835,6 +17399,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16856,6 +17421,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16886,6 +17452,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -16922,6 +17489,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -16943,6 +17511,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -16973,6 +17542,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17008,6 +17578,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17034,6 +17605,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17070,6 +17642,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17091,6 +17664,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17121,6 +17695,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17151,6 +17726,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17187,6 +17763,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17208,6 +17785,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17238,6 +17816,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17268,6 +17847,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17304,6 +17884,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17325,6 +17906,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17355,6 +17937,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17393,6 +17976,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17416,6 +18000,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17447,6 +18032,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17478,6 +18064,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17516,6 +18103,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17539,6 +18127,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17570,6 +18159,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17587,6 +18177,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17625,6 +18216,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17648,6 +18240,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17679,6 +18272,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17696,6 +18290,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17734,6 +18329,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17757,6 +18353,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17788,6 +18385,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17805,6 +18403,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17840,6 +18439,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17861,6 +18461,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17891,6 +18492,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -17908,6 +18510,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -17946,6 +18549,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -17969,6 +18573,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18000,6 +18605,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18035,6 +18641,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18056,6 +18663,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18086,6 +18694,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18124,6 +18733,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18141,6 +18751,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18172,6 +18783,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18189,6 +18801,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18227,6 +18840,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18250,6 +18864,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18271,6 +18886,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18298,6 +18914,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18336,6 +18953,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18359,6 +18977,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18390,6 +19009,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18407,6 +19027,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18445,6 +19066,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18462,6 +19084,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18492,6 +19115,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18513,6 +19137,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18548,6 +19173,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18569,6 +19195,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18599,6 +19226,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18620,6 +19248,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18655,6 +19284,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18676,6 +19306,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18706,6 +19337,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18723,6 +19355,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18758,6 +19391,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18779,6 +19413,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18809,6 +19444,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18847,6 +19483,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18870,6 +19507,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18901,6 +19539,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -18939,6 +19578,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -18962,6 +19602,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -18993,6 +19634,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19010,6 +19652,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19045,6 +19688,7 @@
         "python",
         "typescript"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19071,6 +19715,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19109,6 +19754,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19132,6 +19778,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19163,6 +19810,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19194,6 +19842,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19229,6 +19878,7 @@
         "python",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19252,6 +19902,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19283,6 +19934,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19314,6 +19966,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19349,6 +20002,7 @@
         "python",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19372,6 +20026,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19403,6 +20058,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19434,6 +20090,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19470,6 +20127,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19493,6 +20151,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19524,6 +20183,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19560,6 +20220,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19583,6 +20244,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19614,6 +20276,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19645,6 +20308,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19681,6 +20345,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19704,6 +20369,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19735,6 +20401,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19766,6 +20433,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19802,6 +20470,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19825,6 +20494,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19856,6 +20526,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19887,6 +20558,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -19923,6 +20595,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -19946,6 +20619,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -19977,6 +20651,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -20008,6 +20683,7 @@
             "typescript",
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -20042,6 +20718,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -20065,6 +20742,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -20090,6 +20768,7 @@
           "sourceHarnesses": [
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -20115,6 +20794,7 @@
           "sourceHarnesses": [
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]
@@ -20149,6 +20829,7 @@
         "typescript",
         "go"
       ],
+      "swiftContractErrors": [],
       "swiftReady": false,
       "approaches": [
         {
@@ -20172,6 +20853,7 @@
             "swift": null
           },
           "sourceHarnesses": [],
+          "swiftContractErrors": [],
           "swiftReady": false
         },
         {
@@ -20197,6 +20879,7 @@
           "sourceHarnesses": [
             "go"
           ],
+          "swiftContractErrors": [],
           "swiftReady": false
         }
       ]

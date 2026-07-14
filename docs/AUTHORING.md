@@ -327,11 +327,15 @@ Use the focused checks that match the change:
 ```bash
 npm run test:swift-runner-contract
 npm run test:swift-repl
+npm run test:swift-catalog-contract
+npm run test:swift-catalog-compile
 npm run validate:swift-repl-browser
 npm run test:swift-runner-executor
 ```
 
 The contract and component tests are deterministic and credential-free. The browser validator uses an isolated local fixture under `tests/` and does not publish that fixture with the site. Run the Docker-backed executor suite when changing the pinned image, isolation controls, limits, source transfer, or cleanup. Finish every content or site batch with `npm run build`.
+
+Swift coding-problem files follow [the Swift coding-problem contract](swift-coding-problem-contract.md). Keep every starter and approach standalone, preserve the LeetCode type and method signature, copy the canonical test and data-structure blocks exactly, and keep deliberately invalid inputs separate from valid fixtures. The static contract test runs in the default pre-push gate. The focused compile command uses the selected local Swift compiler and records language evidence only.
 
 For content edits that came from notes or research, also pay attention to the published-content stage:
 
