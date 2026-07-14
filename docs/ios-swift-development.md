@@ -12,6 +12,7 @@ The Zero to iOS Hero program uses one reusable skill and a versioned reference s
 - Browser runner baseline: `docs/swift-browser-runner.md`
 - Browser execution ADR: `docs/adr/2026-07-13-swift-browser-execution.md`
 - Browser executor spike: `docs/spikes/2026-07-13-swift-runner.md`
+- Browser runner local development: `docs/swift-runner-local-development.md`
 
 The plan owns scope and completion gates. The skill owns the repeatable authoring and review process. The references own details that change by framework, toolchain, or platform.
 

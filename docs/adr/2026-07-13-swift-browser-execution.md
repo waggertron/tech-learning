@@ -1,7 +1,7 @@
 # ADR: Swift Browser Execution Boundary
 
 **Date:** 2026-07-13
-**Status:** Proposed, R1.3 executor proof passed
+**Status:** Accepted after R1.3 executor and R1.4 contract proofs
 **Decision owner:** Zero to iOS Hero program
 
 ## Problem Statement
@@ -145,7 +145,7 @@ The browser component will remain a hexagonal adapter. It knows how to create, o
 
 The service runtime is Swift 6.3.3 on Linux in Swift 6 language mode. The UI and response metadata must name that platform. Standard-library exercises can be validated there; Apple framework examples cannot. The service denies network access and does not resolve arbitrary package dependencies.
 
-The R1.3 executor proof passed exact Swift versioning, cancellation, local container controls, output limits, and warm latency. This ADR remains Proposed until R1.4 proves that the real executor and deterministic mock can share the owned client contract. If that boundary fails, reopen the option comparison with the new evidence. Do not weaken the runner into syntax-only behavior while keeping execution labels.
+The R1.3 executor proof passed exact Swift versioning, cancellation, local container controls, output limits, and warm latency. R1.4 then proved the owned client port against a deterministic mock and a runtime-validating HTTP adapter with the same result states. This decision is accepted. A later executor can still be rejected or replaced without changing the browser contract. Do not weaken the runner into syntax-only behavior while keeping execution labels.
 
 ## Implementation Details
 
