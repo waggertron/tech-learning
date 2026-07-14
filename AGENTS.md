@@ -28,6 +28,8 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 11. **Run pre-push validation before pushing.** Use `npm run validate:pre-push` or the documented narrower tier from `docs/pre-push-validation.md`. Pages should render intended content, internal links should resolve, code examples should pass their contracts, and custom page behavior should be spot-tested when affected.
 
+12. **Keep Swift runner evidence honest.** Browser Swift executes against the pinned Swift 6.3.3 Linux standard-library boundary. It does not prove Apple SDK, SwiftUI, UIKit, simulator, signing, entitlement, or device behavior. Run the focused contract, component, browser, or Docker executor checks that match any runner change.
+
 ## Repo structure
 
 ```

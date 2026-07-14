@@ -22,6 +22,7 @@ Read only the references needed for the task:
 - **Deployment targets and API guards**: Read `references/availability.md`.
 - **Current Apple claims and citations**: Read `references/apple-source-research.md`.
 - **Compile, build, simulator, or device evidence**: Read `references/validation.md` and `references/supported-matrix.md`.
+- **Browser Swift runner, REPL, or coding-problem harness**: Read `references/validation.md`, `docs/swift-runner-local-development.md`, and `docs/swift-runner-isolation.md`.
 
 ## Core Workflow
 
@@ -78,6 +79,14 @@ Read only the references needed for the task:
 - Use deterministic fixtures that obey the same domain constraints as production inputs.
 - Do not claim device behavior from a simulator run. Camera, sensors, background execution, performance, thermal behavior, push delivery, universal links, and some entitlement flows need separate evidence.
 - Capture the exact command, destination, toolchain version, and result for repeatable validation.
+
+## Browser Runner Boundary
+
+- Treat the browser runner as Swift 6.3.3 Linux standard-library evidence. Never use it as Apple SDK, SwiftUI, UIKit, simulator, signing, entitlement, or device evidence.
+- Use the deterministic local mock for component and authoring tests. It must not require credentials, a public service, or Docker.
+- Run `npm run test:swift-runner-contract` and `npm run test:swift-repl` for contract or component changes. Run `npm run validate:swift-repl-browser` when interaction, layout, accessibility, failure states, or approach execution changes.
+- Run `npm run test:swift-runner-executor` when the pinned image, container controls, timeouts, output limits, source transfer, host isolation, or cleanup changes. This suite requires Docker and stays outside the default pre-push path.
+- Give every coding-problem approach a named harness that maps the editable solution contract to deterministic inputs and output. Do not hide required Apple frameworks behind the standard-library runner.
 
 ## Content Safeguards
 

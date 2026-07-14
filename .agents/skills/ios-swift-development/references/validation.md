@@ -45,6 +45,21 @@ swift test --parallel
 
 Add `-Xswiftc -warnings-as-errors` for teaching examples when warnings would indicate stale or unsafe code. Keep package tools and language versions aligned with `supported-matrix.md`.
 
+## Browser Swift Runner
+
+Use the narrowest stable check that matches the change:
+
+```bash
+npm run test:swift-runner-contract
+npm run test:swift-repl
+npm run validate:swift-repl-browser
+npm run test:swift-runner-executor
+```
+
+The contract and component tests are deterministic, credential-free, and do not require Docker. The browser validator starts an isolated local Astro fixture, checks its HTTP and script surfaces before Chromium, exercises the REPL contract with deterministic responses, and cleans its generated fixture caches.
+
+The executor suite requires a working local Docker daemon. Run it when changing the pinned Swift image, container arguments, resource limits, timeouts, output accounting, source transfer, host isolation, or cleanup. Record this evidence as **Linux runner tested**. It proves the pinned Swift 6.3.3 Linux standard-library boundary, not Apple SDK, simulator, signing, entitlement, or device behavior.
+
 ## Xcode Projects and Workspaces
 
 ```bash
@@ -93,6 +108,7 @@ Do not place device identifiers, team IDs, signing certificates, tokens, or prov
 
 - **Compiled**: Compiler completed successfully for the named target.
 - **Package tested**: Swift package tests passed.
+- **Linux runner tested**: The browser runner or executor contract passed against the pinned Swift 6.3.3 Linux boundary.
 - **Simulator tested**: Named flow passed on the recorded simulator runtime.
 - **Device tested**: Named flow passed on recorded physical hardware.
 - **Account tested**: Service integration passed with the named sandbox or development service.

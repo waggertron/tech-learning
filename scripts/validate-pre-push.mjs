@@ -9,6 +9,8 @@ const steps = [
   ["Published content review", "npm", ["run", "validate:published-content"]],
   ["React output sync", "npm", ["run", "check:react-outputs"]],
   ["React output tests", "npm", ["run", "test:react-outputs"]],
+  ["Swift runner contract tests", "npm", ["run", "test:swift-runner-contract"]],
+  ["Swift REPL component tests", "npm", ["run", "test:swift-repl"]],
   ["Code example validation", "npm", ["run", "validate:code-examples"]],
   ["Build", "npm", ["run", "build"]],
   ["Page validation", "npm", ["run", "validate:pages"]],
@@ -21,6 +23,7 @@ if (includeExternal) {
 
 if (!skipCustom) {
   steps.push(["Custom page validation", "npm", ["run", "validate:custom-pages"]]);
+  steps.push(["Swift REPL browser validation", "npm", ["run", "validate:swift-repl-browser"]]);
 }
 
 function runStep([label, command, args]) {
