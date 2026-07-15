@@ -38,6 +38,23 @@ No curriculum post moves to in progress until F0.1 through F0.8 are complete.
 - [x] **R1.7, test the browser surface**: Cover multiple REPLs on one page, hidden tab measurement, keyboard use, screen-reader labels, mobile layout, timeout, cancellation, cache behavior, service failure, and one representative coding-problem harness. The isolated test route and validation command are documented in [Swift Runner Local Development](../swift-runner-local-development.md).
 - [x] **R1.8, document and track the capability**: Add the ADR, focused runner documentation, validation commands, authoring rules, `AGENTS.md` guidance if universal, and the shipped entry in `docs/feature_tracker.md`.
 
+### Gate 1B: Run Swift from the live site
+
+The GitHub Pages deployment remains static. Live execution uses the same project-owned job contract as local development, but the API and isolated executor run on separate infrastructure. Completing the local browser path does not complete this gate.
+
+- [ ] **R2.1, complete the loopback service**: Implement the versioned HTTP job API around the pinned Swift 6.3.3 Docker executor. Bind to loopback by default, support real cancellation, expire terminal jobs, retain no source after expiration, and provide one command that starts Astro with the local runner URL configured.
+- [ ] **R2.2, choose the production deployment boundary**: Add an ADR that compares a dedicated runner host, an orchestrated sandbox, and a managed execution service. Record the Docker control-plane boundary, patch ownership, expected load, cost ceiling, failure recovery, regional placement, and why the selected host is suitable for untrusted public code.
+- [ ] **R2.3, harden the public API**: Enforce strict request schemas, body limits, known harness identifiers, exact toolchain selection, opaque nonenumerable job identifiers, allowed origins, bounded polling, per-client quotas, global concurrency limits, a bounded queue, duplicate-request handling, and rejection before sandbox allocation.
+- [ ] **R2.4, preserve executor isolation in production**: Keep job networking and IPC disabled, filesystems ephemeral, privileges dropped, host files and credentials absent, resources capped, and cleanup mandatory for every terminal path. Do not expose the Docker daemon or executor control plane to the public network.
+- [ ] **R2.5, define privacy and retention behavior**: Keep the source-transfer notice in the REPL, avoid logging source or full output, redact operational events, document terminal-result retention, and verify that source, binaries, containers, and workspaces disappear after expiration.
+- [ ] **R2.6, deploy a staging runner**: Serve the runner over HTTPS, pin the executor image digest, restrict CORS to the staging and local site origins, expose health and capability checks, and prove success, compiler failure, runtime failure, timeout, cancellation, output limiting, and service-unavailable behavior.
+- [ ] **R2.7, add operational controls**: Add structured metrics without source content, queue and latency alerts, error and saturation alerts, spending limits, rate-limit visibility, dependency and image patching, rollback instructions, and an emergency kill switch that leaves the editor usable.
+- [ ] **R2.8, connect GitHub Pages**: Configure `PUBLIC_SWIFT_RUNNER_URL` in the production site build, allow only the published site origin, keep credentials out of browser assets, and preserve the honest unavailable state when the service is disabled or unreachable.
+- [ ] **R2.9, prove the live path end to end**: From the published GitHub Pages origin, run an edited Swift solution and a completed approach, verify the exact Swift 6.3.3 Linux evidence, exercise cancellation and failure states, inspect browser console and network errors, and repeat the focused accessibility and mobile checks.
+- [ ] **R2.10, document and release the service**: Record deployment, configuration, incident response, retention, local reproduction, validation commands, ownership, and known Linux-only limits. Update the feature tracker only after the live execution path passes its gate.
+
+Do not mark the live runner available or describe GitHub Pages as executing Swift until R2.1 through R2.10 pass. A public endpoint that lacks quotas, cleanup, observability, or an emergency shutdown remains a staging service.
+
 ### Workstream 2: Add Swift to every coding problem
 
 The generated baseline on 2026-07-13 is 189 coding-problem pages, 504 documented approaches, 0 pages with Swift, 470 Python source files, 469 TypeScript source files, and 469 Go source files across starter and approach implementations. The durable inventory lives in [Swift Coding Problem Coverage](../swift-coding-problem-coverage.md).
@@ -498,7 +515,7 @@ The initial review challenged the plan as if implementation time, platform restr
 | Test fixtures can violate production contracts. | Passing tests could depend on impossible dates, IDs, enum cases, auth states, or health values. | Added fixture-contract rules and deliberate invalid-fixture paths. | Valid fixture generators get their own boundary tests and fixed seeds. |
 | SwiftData-only teaching would not prepare readers for established apps. | Readers could not reason about Core Data stores, migrations, or legacy UIKit systems. | Added Core Data coexistence and migration coverage in posts 76 and 80. | The skill requires legacy-context notes when a modern API does not replace installed code. |
 | Client architecture can ignore backend constraints. | Auth, authorization, idempotency, pagination, sync, and real-time behavior could be reduced to UI examples. | Strengthened posts 68, 76, and 79 plus the NeighborLink case study. | Local mocks and contracts remain runnable without turning this into a backend implementation series. |
-| A static GitHub Pages site cannot assume it can compile arbitrary edited Swift. | A precompiled WebAssembly demo could be mislabeled as a REPL, or a remote compiler could introduce abuse and privacy risk. | Added an ADR, proof-of-concept gate, sandbox requirements, local execution path, and honest unavailable state. | Gate R1.3 proves edit, compile, execute, timeout, and cancellation before implementation commits to a runner. |
+| A static GitHub Pages site cannot assume it can compile arbitrary edited Swift. | A precompiled WebAssembly demo could be mislabeled as a REPL, or a remote compiler could introduce abuse and privacy risk. | Added an ADR, proof-of-concept gate, sandbox requirements, local execution path, honest unavailable state, and a separate live deployment gate. | R1 proves the local contract and executor. R2 requires public-service hardening, deployment, operations, and published-origin evidence before live execution is claimed. |
 | Adding Swift once per problem would leave the teaching catalog incomplete. | Approach sections and runnable exercises could disagree across languages. | Set the target at all 189 starters plus every documented approach, using shared test vectors and a coverage manifest. | The catalog validator fails on missing Swift parity. |
 
 Run this review again after the skill is forward-tested, after each batch, and whenever a stable Xcode release changes the supported matrix.
@@ -547,7 +564,7 @@ Test data follows the production contract:
 | Apple device capabilities | Posts 87-110 | PulseTrail, ScreenRoom, SpacePlanner |
 | Commerce and subscriptions | Posts 107-108 | ScreenRoom, NeighborLink |
 | App Store delivery and operation | Posts 81-86 | Every release review |
-| Browser Swift practice | Gates R1.1-R1.8 and posts 4-23 | Field Notes core and all coding problems |
+| Browser Swift practice | Gates R1.1-R1.8, R2.1-R2.10, and posts 4-23 | Field Notes core and all coding problems |
 | Swift algorithm practice | Gates S2.1-S2.9 and category tasks S2.C01-S2.C18 | All 189 coding-problem pages |
 
 ## Exercises and assessment
@@ -571,7 +588,7 @@ The program has seven portfolio checkpoints:
 ## Companion code strategy
 
 - Keep one workspace for the Field Notes core path and one workspace per case study.
-- Keep a versioned Swift runner contract and a catalog manifest that maps every coding-problem approach to its `.swift` file and tests.
+- Keep a versioned Swift runner contract and a catalog manifest that maps every coding-problem approach to its `.swift` file and tests. Local and live runner adapters use the same browser contract.
 - Tag the repository at every post checkpoint.
 - Keep production and in-memory adapters beside shared contract tests.
 - Provide deterministic fixtures for dates, IDs, network responses, media metadata, locations, health samples, and StoreKit configuration.
@@ -586,7 +603,7 @@ Do not create 140 empty post files. Publish in complete arcs and add each post t
 Recommended release order:
 
 1. Gate 0, the iOS and Swift authoring skill.
-2. Gate 1, the browser Swift runner, then Gate 3, the series workspace.
+2. Gate 1, the local browser Swift runner, then Gate 1B, the live runner service. Gate 3 can advance while the live deployment is hardened, but public exercises cannot claim live execution before Gate 1B passes.
 3. S2.1-S2.3 and one pilot coding-problem category.
 4. Posts 1-23, Swift and development foundations, while checked Swift categories continue.
 5. Posts 24-44, product design and SwiftUI Field Notes.
