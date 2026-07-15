@@ -5,16 +5,21 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './371-sum-of-two-integers.py?raw';
 import practiceCodeTs from './371-sum-of-two-integers.ts?raw';
 import practiceCodeGo from './371-sum-of-two-integers.go?raw';
+import practiceCodeSwift from './371-sum-of-two-integers.swift?raw';
+import approach1SwiftCode from './371-sum-of-two-integers-approach1.swift?raw';
+import approach2SwiftCode from './371-sum-of-two-integers-approach2.swift?raw';
+import approach3SwiftCode from './371-sum-of-two-integers-approach3.swift?raw';
 import approach2PyCode from './371-sum-of-two-integers-approach2.py?raw';
 import approach2TsCode from './371-sum-of-two-integers-approach2.ts?raw';
 import approach2GoCode from './371-sum-of-two-integers-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 371 · [Link](https://leetcode.com/problems/sum-of-two-integers/) · *M
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="sum-of-two-integers-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="371-sum-of-two-integers-swift" />
   </TabItem>
 </Tabs>
 
@@ -93,6 +101,9 @@ func getSum(a int, b int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="371-sum-of-two-integers-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -160,6 +171,9 @@ func getSum(a int, b int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="371-sum-of-two-integers-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -201,6 +215,19 @@ def get_sum(a, b):
 ```
 
 Doesn't satisfy the problem, but shown for completeness.
+
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="371-sum-of-two-integers-approach3-swift" />
+  </TabItem>
+</Tabs>
+
+### Swift notes
+
+Swift traps on ordinary signed overflow, so the bitwise approaches convert the bounded inputs to `Int32` bit patterns stored in `UInt32`. Carry propagation then wraps within exactly 32 bits before the result is reinterpreted as signed. The built-in `+` version is runnable for comparison, but it violates the problem's operator constraint.
 
 ## Summary
 

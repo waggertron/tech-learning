@@ -19,16 +19,9 @@ function binarySearchVector() {
   return loadProblemVector({ category: "binary-search", slug: "704-binary-search" }).document;
 }
 
-function timeMapVector() {
-  return loadProblemVector({
-    category: "binary-search",
-    slug: "981-time-based-key-value-store",
-  }).document;
-}
-
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 8);
+  assert.equal(records.length, 15);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -123,7 +116,11 @@ test("renders operation-sequence contracts without flattening state", () => {
 });
 
 test("committed proof fixtures match all four generated sources", () => {
-  for (const document of [binarySearchVector(), timeMapVector()]) {
+  const documents = loadVectorDocuments()
+    .map((record) => record.document)
+    .filter((document) => document.proofFixture);
+  assert.equal(documents.length, 3);
+  for (const document of documents) {
     const records = proofFixtureRecords(document);
     assert.equal(records.length, 4);
     for (const record of records) {
@@ -132,7 +129,7 @@ test("committed proof fixtures match all four generated sources", () => {
   }
 });
 
-test("refuses an array proof until every language has structural comparison support", () => {
+test("renders ordered array equality in every language", () => {
   const document = binarySearchVector();
   const arrayResult = clone(document);
   arrayResult.contract.result = { codec: "int-array", comparison: "equal" };
@@ -140,5 +137,8 @@ test("refuses an array proof until every language has structural comparison supp
     ? { ...testCase, expected: { kind: "value", value: [testCase.expected.value] } }
     : testCase);
   assert.deepEqual(vectorDocumentErrors(arrayResult), []);
-  assert.throws(() => renderVectorBlock(arrayResult, "typescript"), /scalar result codec/);
+  assert.match(renderVectorBlock(arrayResult, "python"), /search\(\[-1, 0, 3, 5, 9, 12\], 9\) == \[4\]/);
+  assert.match(renderVectorBlock(arrayResult, "typescript"), /JSON\.stringify\(search\(/);
+  assert.match(renderVectorBlock(arrayResult, "go"), /func\(actual, expected \[\]int\) bool/);
+  assert.match(renderVectorBlock(arrayResult, "swift"), /expectEqual\(Solution\(\)\.search\(/);
 });

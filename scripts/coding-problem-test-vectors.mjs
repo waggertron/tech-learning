@@ -559,14 +559,51 @@ function commentPrefix(language) {
   return language === "python" ? "#" : "//";
 }
 
+function renderGoCollectionEquality(codec, call, expected) {
+  const elementType = {
+    "int-array": "int",
+    "string-array": "string",
+    "int-matrix": "[]int",
+    "string-matrix": "[]string",
+  }[codec];
+  if (!elementType) throw new Error(`Go equality renderer does not support codec ${codec}`);
+
+  const comparison = codec.endsWith("-matrix")
+    ? "if len(actual[i]) != len(expected[i]) { return false }; for j := range actual[i] { if actual[i][j] != expected[i][j] { return false } }"
+    : "if actual[i] != expected[i] { return false }";
+  return `func(actual, expected []${elementType}) bool { if len(actual) != len(expected) { return false }; for i := range actual { ${comparison} }; return true }(${call}, ${expected})`;
+}
+
+function renderEqualAssertion(document, language, call, expected, caseId, indent) {
+  const codec = document.contract.result.codec;
+  const isCollection = ["int-array", "int-matrix", "string-array", "string-matrix"].includes(codec);
+  if (language === "python") {
+    return `${indent}assert ${call} == ${expected}, ${quoteString(caseId)}`;
+  }
+  if (language === "typescript") {
+    const comparison = isCollection
+      ? `JSON.stringify(${call}) === JSON.stringify(${expected})`
+      : `${call} === ${expected}`;
+    return `${indent}assert(${comparison}, ${quoteString(caseId)});`;
+  }
+  if (language === "go") {
+    const comparison = isCollection
+      ? renderGoCollectionEquality(codec, call, expected)
+      : `${call} == ${expected}`;
+    return `${indent}assert(${comparison}, ${quoteString(caseId)})`;
+  }
+  return `${indent}expectEqual(${call}, ${expected}, ${quoteString(caseId)})`;
+}
+
 export function renderVectorBlock(document, language) {
   if (!vectorLanguages.includes(language)) throw new Error(`Unknown vector language ${language}`);
   if (document.execution.kind === "function" && document.contract.result.comparison !== "equal") {
     throw new Error("Proof rendering currently requires equal result comparison");
   }
   if (document.execution.kind === "function" &&
-      !["boolean", "float", "int", "string"].includes(document.contract.result.codec)) {
-    throw new Error("Proof rendering currently requires a scalar result codec");
+      !["boolean", "float", "int", "string", "int-array", "int-matrix", "string-array", "string-matrix"]
+        .includes(document.contract.result.codec)) {
+    throw new Error("Proof rendering does not support this result codec");
   }
 
   const indent = language === "go" ? "\t" : "    ";
@@ -593,15 +630,14 @@ export function renderVectorBlock(document, language) {
 
     const call = renderCall(document, language, testCase.arguments);
     const expected = renderLiteral(document.contract.result.codec, testCase.expected.value, language);
-    if (language === "python") {
-      lines.push(`${indent}assert ${call} == ${expected}, ${quoteString(testCase.id)}`);
-    } else if (language === "typescript") {
-      lines.push(`${indent}assert(${call} === ${expected}, ${quoteString(testCase.id)});`);
-    } else if (language === "go") {
-      lines.push(`${indent}assert(${call} == ${expected}, ${quoteString(testCase.id)})`);
-    } else {
-      lines.push(`${indent}expectEqual(${call}, ${expected}, ${quoteString(testCase.id)})`);
-    }
+    lines.push(renderEqualAssertion(
+      document,
+      language,
+      call,
+      expected,
+      testCase.id,
+      indent,
+    ));
   }
 
   lines.push(`${indent}${comment} TEST_VECTORS_END`);

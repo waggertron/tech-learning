@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "bit-manipulation",
+    "slug": "136-single-number"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [
+      "nums"
+    ],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "single_number"
+      },
+      "typescript": {
+        "function": "singleNumber"
+      },
+      "go": {
+        "function": "singleNumber"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "singleNumber"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "single-at-end",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          2,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-among-pairs",
+      "classification": "valid",
+      "arguments": [
+        [
+          4,
+          1,
+          2,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "negative-pair",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          -1,
+          42
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 42
+      }
+    },
+    {
+      "id": "zero-pair",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0,
+          99
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 99
+      }
+    },
+    {
+      "id": "one-element",
+      "classification": "boundary",
+      "arguments": [
+        [
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 7
+      }
+    },
+    {
+      "id": "signed-extremes",
+      "classification": "boundary",
+      "arguments": [
+        [
+          -2147483648,
+          5,
+          5,
+          2147483647,
+          2147483647
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -2147483648
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contract requires at least one element."
+      }
+    },
+    {
+      "id": "two-single-values",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Exactly one value must appear once and every other value must appear twice."
+      }
+    }
+  ]
+}

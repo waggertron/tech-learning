@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "bit-manipulation",
+    "slug": "268-missing-number"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "missing_number"
+      },
+      "typescript": {
+        "function": "missingNumber"
+      },
+      "go": {
+        "function": "missingNumber"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "missingNumber"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "missing-middle",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          0,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "missing-last",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "larger-unordered-input",
+      "classification": "valid",
+      "arguments": [
+        [
+          9,
+          6,
+          4,
+          2,
+          3,
+          5,
+          7,
+          0,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 8
+      }
+    },
+    {
+      "id": "missing-zero",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "missing-one",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "ordered-input",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contract requires at least one array element."
+      }
+    },
+    {
+      "id": "duplicate-value",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every supplied value must be unique."
+      }
+    },
+    {
+      "id": "value-outside-range",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          1,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "For an array of length n, every value must be in the inclusive range from 0 through n."
+      }
+    }
+  ]
+}

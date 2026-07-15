@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "bit-manipulation",
+    "slug": "338-counting-bits"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "count_bits"
+      },
+      "typescript": {
+        "function": "countBits"
+      },
+      "go": {
+        "function": "countBits"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "countBits"
+      }
+    }
+  },
+  "proofFixture": true,
+  "cases": [
+    {
+      "id": "through-two",
+      "classification": "valid",
+      "arguments": [
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "through-five",
+      "classification": "valid",
+      "arguments": [
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1,
+          1,
+          2,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "through-eight",
+      "classification": "valid",
+      "arguments": [
+        8
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1,
+          1,
+          2,
+          1,
+          2,
+          2,
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "zero",
+      "classification": "boundary",
+      "arguments": [
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "one",
+      "classification": "boundary",
+      "arguments": [
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "negative-input",
+      "classification": "invalid",
+      "arguments": [
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contract requires n to be nonnegative."
+      }
+    },
+    {
+      "id": "above-constraint",
+      "classification": "invalid",
+      "arguments": [
+        100001
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published problem constraint limits n to 100000."
+      }
+    }
+  ]
+}

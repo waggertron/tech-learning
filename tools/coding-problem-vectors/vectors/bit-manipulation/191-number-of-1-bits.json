@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "bit-manipulation",
+    "slug": "191-number-of-1-bits"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "hamming_weight"
+      },
+      "typescript": {
+        "function": "hammingWeight"
+      },
+      "go": {
+        "function": "hammingWeight"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "hammingWeight"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "three-set-bits",
+      "classification": "valid",
+      "arguments": [
+        11
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "single-high-bit",
+      "classification": "valid",
+      "arguments": [
+        128
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "mixed-six-bits",
+      "classification": "valid",
+      "arguments": [
+        183
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "alternating-bits",
+      "classification": "valid",
+      "arguments": [
+        2863311530
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 16
+      }
+    },
+    {
+      "id": "zero",
+      "classification": "boundary",
+      "arguments": [
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "all-bits-set",
+      "classification": "boundary",
+      "arguments": [
+        4294967295
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 32
+      }
+    },
+    {
+      "id": "negative-input",
+      "classification": "invalid",
+      "arguments": [
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input is an unsigned 32-bit integer."
+      }
+    },
+    {
+      "id": "above-unsigned-32-bit-range",
+      "classification": "invalid",
+      "arguments": [
+        4294967296
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input is an unsigned 32-bit integer."
+      }
+    }
+  ]
+}

@@ -5,16 +5,21 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, math, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './268-missing-number.py?raw';
 import practiceCodeTs from './268-missing-number.ts?raw';
 import practiceCodeGo from './268-missing-number.go?raw';
+import practiceCodeSwift from './268-missing-number.swift?raw';
+import approach1SwiftCode from './268-missing-number-approach1.swift?raw';
+import approach2SwiftCode from './268-missing-number-approach2.swift?raw';
+import approach3SwiftCode from './268-missing-number-approach3.swift?raw';
 import approach2PyCode from './268-missing-number-approach2.py?raw';
 import approach2TsCode from './268-missing-number-approach2.ts?raw';
 import approach2GoCode from './268-missing-number-approach2.go?raw';
@@ -44,6 +49,9 @@ LeetCode 268 · [Link](https://leetcode.com/problems/missing-number/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="missing-number-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="268-missing-number-swift" />
   </TabItem>
 </Tabs>
 
@@ -89,6 +97,9 @@ func missingNumber(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="268-missing-number-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -137,6 +148,9 @@ func missingNumber(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="268-missing-number-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -204,6 +218,9 @@ func missingNumber(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="268-missing-number-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -237,6 +254,10 @@ Result starts at `n`. We XOR in every index 0..n-1 and every value from `nums`. 
     <GoRepl code={approach3GoCode} id="missing-number-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+The `Set` approach allocates candidates from `0...n`. The sum and XOR approaches keep constant auxiliary state. Swift arrays use value semantics, so these implementations do not mutate the caller's array. The published limit keeps the arithmetic-series total safely inside `Int` on the supported runner.
 
 ## Summary
 

@@ -5,16 +5,21 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, xor, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './136-single-number.py?raw';
 import practiceCodeTs from './136-single-number.ts?raw';
 import practiceCodeGo from './136-single-number.go?raw';
+import practiceCodeSwift from './136-single-number.swift?raw';
+import approach1SwiftCode from './136-single-number-approach1.swift?raw';
+import approach2SwiftCode from './136-single-number-approach2.swift?raw';
+import approach3SwiftCode from './136-single-number-approach3.swift?raw';
 import approach2PyCode from './136-single-number-approach2.py?raw';
 import approach2TsCode from './136-single-number-approach2.ts?raw';
 import approach2GoCode from './136-single-number-approach2.go?raw';
@@ -44,6 +49,9 @@ LeetCode 136 · [Link](https://leetcode.com/problems/single-number/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="single-number-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="136-single-number-swift" />
   </TabItem>
 </Tabs>
 
@@ -94,6 +102,9 @@ func singleNumber(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="136-single-number-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -152,6 +163,9 @@ func singleNumber(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="136-single-number-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -222,6 +236,9 @@ func singleNumber(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="136-single-number-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -252,6 +269,10 @@ A single pass; each element is XORed in once.
     <GoRepl code={approach3GoCode} id="single-number-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+Swift arrays have value semantics with copy-on-write storage. Calling `sorted()` creates a sorted value and leaves the caller's array unchanged, but it still needs $O(n)$ extra storage in this implementation. `Set` also allocates proportional storage. XOR keeps one `Int` accumulator and preserves negative bit patterns.
 
 ## Summary
 

@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "bit-manipulation",
+    "slug": "371-sum-of-two-integers"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "a",
+        "codec": "int"
+      },
+      {
+        "name": "b",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "get_sum"
+      },
+      "typescript": {
+        "function": "getSum"
+      },
+      "go": {
+        "function": "getSum"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "getSum"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "two-positive-values",
+      "classification": "valid",
+      "arguments": [
+        1,
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "mixed-sign-values",
+      "classification": "valid",
+      "arguments": [
+        -5,
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -2
+      }
+    },
+    {
+      "id": "opposites-cancel",
+      "classification": "valid",
+      "arguments": [
+        -1,
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "two-negative-values",
+      "classification": "valid",
+      "arguments": [
+        -7,
+        -8
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -15
+      }
+    },
+    {
+      "id": "two-zeroes",
+      "classification": "boundary",
+      "arguments": [
+        0,
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "minimum-inputs",
+      "classification": "boundary",
+      "arguments": [
+        -1000,
+        -1000
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -2000
+      }
+    },
+    {
+      "id": "maximum-inputs",
+      "classification": "boundary",
+      "arguments": [
+        1000,
+        1000
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2000
+      }
+    },
+    {
+      "id": "first-input-above-constraint",
+      "classification": "invalid",
+      "arguments": [
+        1001,
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each input must remain in the inclusive range from -1000 through 1000."
+      }
+    },
+    {
+      "id": "second-input-below-constraint",
+      "classification": "invalid",
+      "arguments": [
+        0,
+        -1001
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each input must remain in the inclusive range from -1000 through 1000."
+      }
+    }
+  ]
+}

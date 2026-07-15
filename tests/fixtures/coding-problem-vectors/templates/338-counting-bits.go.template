@@ -1,0 +1,24 @@
+package main
+
+import "fmt"
+
+func assert(condition bool, message string) {
+	if !condition {
+		panic(message)
+	}
+}
+
+func countBits(n int) []int {
+	counts := make([]int, n+1)
+	for value := 1; value <= n; value++ {
+		counts[value] = counts[value>>1] + (value & 1)
+	}
+	return counts
+}
+
+func runTests() {
+{{TEST_VECTORS}}
+	fmt.Println("All shared test vectors passed")
+}
+
+func main() { runTests() }

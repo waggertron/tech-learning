@@ -5,16 +5,21 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './191-number-of-1-bits.py?raw';
 import practiceCodeTs from './191-number-of-1-bits.ts?raw';
 import practiceCodeGo from './191-number-of-1-bits.go?raw';
+import practiceCodeSwift from './191-number-of-1-bits.swift?raw';
+import approach1SwiftCode from './191-number-of-1-bits-approach1.swift?raw';
+import approach2SwiftCode from './191-number-of-1-bits-approach2.swift?raw';
+import approach3SwiftCode from './191-number-of-1-bits-approach3.swift?raw';
 import approach2PyCode from './191-number-of-1-bits-approach2.py?raw';
 import approach2TsCode from './191-number-of-1-bits-approach2.ts?raw';
 import approach2GoCode from './191-number-of-1-bits-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 191 · [Link](https://leetcode.com/problems/number-of-1-bits/) · *Easy
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="number-of-1-bits-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="191-number-of-1-bits-swift" />
   </TabItem>
 </Tabs>
 
@@ -80,6 +88,9 @@ func hammingWeight(n uint32) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="191-number-of-1-bits-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -137,6 +148,9 @@ func hammingWeight(n uint32) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="191-number-of-1-bits-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -192,6 +206,19 @@ On CPUs with a POPCNT instruction this compiles to a single instruction.
 **Complexity**
 - **Time:** $O(1)$ on most modern hardware, $O(B)$ worst.
 - **Space:** $O(1)$.
+
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="191-number-of-1-bits-approach3-swift" />
+  </TabItem>
+</Tabs>
+
+### Swift notes
+
+`UInt32` prevents sign extension during right shifts. The direct scan always checks 32 positions. Kernighan's loop runs once per set bit. Swift's `nonzeroBitCount` expresses the built-in approach directly, but it hides the bit-clearing invariant an interviewer may want to see.
 
 ## Summary
 

@@ -5,16 +5,21 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, bit-manipulation, dp, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './338-counting-bits.py?raw';
 import practiceCodeTs from './338-counting-bits.ts?raw';
 import practiceCodeGo from './338-counting-bits.go?raw';
+import practiceCodeSwift from './338-counting-bits.swift?raw';
+import approach1SwiftCode from './338-counting-bits-approach1.swift?raw';
+import approach2SwiftCode from './338-counting-bits-approach2.swift?raw';
+import approach3SwiftCode from './338-counting-bits-approach3.swift?raw';
 import approach2PyCode from './338-counting-bits-approach2.py?raw';
 import approach2TsCode from './338-counting-bits-approach2.ts?raw';
 import approach2GoCode from './338-counting-bits-approach2.go?raw';
@@ -45,6 +50,9 @@ LeetCode 338 · [Link](https://leetcode.com/problems/counting-bits/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="counting-bits-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="338-counting-bits-swift" />
   </TabItem>
 </Tabs>
 
@@ -99,6 +107,9 @@ func countBits(n int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="338-counting-bits-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -152,6 +163,9 @@ func countBits(n int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="338-counting-bits-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -222,6 +236,9 @@ func countBits(n int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="338-counting-bits-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -252,6 +269,10 @@ Same complexity as Approach 2; `i & (i - 1)` clears the lowest set bit, giving a
     <GoRepl code={approach3GoCode} id="counting-bits-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+The returned array already costs $O(n)$ space. Swift's mutable `Array` gives constant-time indexed updates after allocating `n + 1` slots. The explicit `guard n > 0` avoids forming the descending closed range `1...0` when the boundary input is zero.
 
 ## Summary
 

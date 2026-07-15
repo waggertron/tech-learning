@@ -5,16 +5,21 @@ parent: bit-manipulation
 tags: [leetcode, neetcode-150, math, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './007-reverse-integer.py?raw';
 import practiceCodeTs from './007-reverse-integer.ts?raw';
 import practiceCodeGo from './007-reverse-integer.go?raw';
+import practiceCodeSwift from './007-reverse-integer.swift?raw';
+import approach1SwiftCode from './007-reverse-integer-approach1.swift?raw';
+import approach2SwiftCode from './007-reverse-integer-approach2.swift?raw';
+import approach3SwiftCode from './007-reverse-integer-approach3.swift?raw';
 import approach2PyCode from './007-reverse-integer-approach2.py?raw';
 import approach2TsCode from './007-reverse-integer-approach2.ts?raw';
 import approach2GoCode from './007-reverse-integer-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 7 · [Link](https://leetcode.com/problems/reverse-integer/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reverse-integer-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="007-reverse-integer-swift" />
   </TabItem>
 </Tabs>
 
@@ -95,6 +103,9 @@ func reverse(x int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="007-reverse-integer-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -188,6 +199,9 @@ func reverse(x int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="007-reverse-integer-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -237,6 +251,19 @@ def reverse(x):
         return 0
     return rev
 ```
+
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="007-reverse-integer-approach3-swift" />
+  </TabItem>
+</Tabs>
+
+### Swift notes
+
+Swift's `Int` is 64-bit on the catalog runner, but the problem contract is signed 32-bit. The canonical approach checks the `Int32` bounds before appending each digit, so its correctness does not depend on a wider intermediate. String reversal allocates storage for the digits and is useful only as the simpler baseline.
 
 ## Summary
 
