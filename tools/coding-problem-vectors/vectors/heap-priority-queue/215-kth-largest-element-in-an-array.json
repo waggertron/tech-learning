@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "heap-priority-queue",
+    "slug": "215-kth-largest-element-in-an-array"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_kth_largest"
+      },
+      "typescript": {
+        "function": "findKthLargest"
+      },
+      "go": {
+        "function": "findKthLargest"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findKthLargest"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "distinct-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          2,
+          1,
+          5,
+          6,
+          4
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "duplicates-count-toward-rank",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          2,
+          3,
+          1,
+          2,
+          4,
+          5,
+          5,
+          6
+        ],
+        4
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "single-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "all-equal",
+      "classification": "boundary",
+      "arguments": [
+        [
+          2,
+          2,
+          2
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "zero-rank",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires k to be between 1 and the array length."
+      }
+    }
+  ]
+}

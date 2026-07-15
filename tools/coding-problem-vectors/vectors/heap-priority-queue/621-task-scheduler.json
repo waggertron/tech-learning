@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "heap-priority-queue",
+    "slug": "621-task-scheduler"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "tasks",
+        "codec": "string-array"
+      },
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "least_interval"
+      },
+      "typescript": {
+        "function": "leastInterval"
+      },
+      "go": {
+        "function": "leastInterval"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "leastInterval"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "cooldown-requires-idles",
+      "classification": "valid",
+      "arguments": [
+        [
+          "A",
+          "A",
+          "A",
+          "B",
+          "B",
+          "B"
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 8
+      }
+    },
+    {
+      "id": "zero-cooldown",
+      "classification": "valid",
+      "arguments": [
+        [
+          "A",
+          "A",
+          "A",
+          "B",
+          "B",
+          "B"
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "uneven-frequencies",
+      "classification": "valid",
+      "arguments": [
+        [
+          "A",
+          "A",
+          "A",
+          "B",
+          "B",
+          "C"
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 7
+      }
+    },
+    {
+      "id": "single-task-large-cooldown",
+      "classification": "boundary",
+      "arguments": [
+        [
+          "A"
+        ],
+        100
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-task-list",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        2
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires at least one task."
+      }
+    }
+  ]
+}

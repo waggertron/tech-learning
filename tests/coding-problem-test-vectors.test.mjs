@@ -21,7 +21,7 @@ function binarySearchVector() {
 
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 44);
+  assert.equal(records.length, 51);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -113,6 +113,58 @@ test("renders operation-sequence contracts without flattening state", () => {
   const go = renderVectorBlock(operations, "go");
   assert.match(go, /subject1 := NewMinStack\(\)/);
   assert.match(go, /subject1\.Push\(2\)/);
+});
+
+test("renders stateful constructors and collection operation results", () => {
+  const operations = binarySearchVector();
+  operations.problem = { category: "heap-priority-queue", slug: "703-kth-largest-element-in-a-stream" };
+  operations.contract.parameters = [{ name: "operations", codec: "operation-sequence" }];
+  operations.contract.result = { codec: "operation-results", comparison: "operation-results" };
+  operations.execution = {
+    kind: "operation-sequence",
+    entrypoints: Object.fromEntries(vectorLanguages.map((language) => [language, { type: "KthLargest" }])),
+  };
+  operations.cases = [
+    {
+      id: "seeded-stream",
+      classification: "valid",
+      arguments: [[
+        { operation: "init", arguments: [3, [4, 5, 8, 2]] },
+        { operation: "snapshot", arguments: [] },
+      ]],
+      expected: { kind: "value", value: [null, [4, 5, 8]] },
+    },
+    {
+      id: "empty-seed",
+      classification: "boundary",
+      arguments: [[
+        { operation: "init", arguments: [1, []] },
+        { operation: "snapshot", arguments: [] },
+      ]],
+      expected: { kind: "value", value: [null, []] },
+    },
+    {
+      id: "missing-init",
+      classification: "invalid",
+      arguments: [[{ operation: "snapshot", arguments: [] }]],
+      expected: { kind: "excluded", reason: "Executable sequences require construction first." },
+    },
+  ];
+  delete operations.proofFixture;
+
+  assert.deepEqual(vectorDocumentErrors(operations), []);
+  assert.match(
+    renderVectorBlock(operations, "swift"),
+    /let subject1 = KthLargest\(3, \[4, 5, 8, 2\]\)/,
+  );
+  assert.match(
+    renderVectorBlock(operations, "typescript"),
+    /JSON\.stringify\(subject1\.snapshot\(\)\) === JSON\.stringify\(\[4, 5, 8\]\)/,
+  );
+  assert.match(
+    renderVectorBlock(operations, "go"),
+    /subject1 := NewKthLargest\(3, \[\]int\{4, 5, 8, 2\}\)/,
+  );
 });
 
 test("committed proof fixtures match all four generated sources", () => {

@@ -325,8 +325,8 @@ export function vectorDocumentErrors(document, { expectedCategory, expectedSlug 
         if (testCase.expected.value.length !== operations.length) {
           errors.push(`${location}.expected.value must align with every operation`);
         }
-        if (operations[0]?.operation !== "init" || operations[0]?.arguments?.length !== 0) {
-          errors.push(`${location} executable operation sequences must start with init and no arguments`);
+        if (operations[0]?.operation !== "init") {
+          errors.push(`${location} executable operation sequences must start with init`);
         }
         if (testCase.expected.value[0] !== null) {
           errors.push(`${location}.expected.value[0] must be null for init`);
@@ -490,13 +490,27 @@ function renderLiteral(codec, value, language) {
   return `[${items.join(", ")}]`;
 }
 
-function renderRawScalar(value, language) {
+function rawArrayCodec(value) {
+  if (value.every(Number.isSafeInteger)) return "int-array";
+  if (value.every((item) => typeof item === "string")) return "string-array";
+  throw new Error(`Operation renderer cannot infer the array type for ${JSON.stringify(value)}`);
+}
+
+function renderRawValue(value, language) {
   if (typeof value === "string") return quoteString(value);
   if (typeof value === "boolean") {
     if (language === "python") return value ? "True" : "False";
     return value ? "true" : "false";
   }
   if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (Array.isArray(value)) {
+    const items = value.map((item) => renderRawValue(item, language));
+    if (language === "go") {
+      const elementType = rawArrayCodec(value) === "int-array" ? "int" : "string";
+      return `[]${elementType}{${items.join(", ")}}`;
+    }
+    return `[${items.join(", ")}]`;
+  }
   throw new Error(`Operation renderer does not support raw value ${JSON.stringify(value)}`);
 }
 
@@ -510,18 +524,22 @@ function renderOperationSequenceCase(document, language, testCase, caseIndex, in
   const entrypoint = document.execution.entrypoints[language];
   const subject = operationSubjectName(caseIndex);
   const lines = [];
+  const constructorArguments = operations[0].arguments.map(
+    (value) => renderRawValue(value, language),
+  );
+  const constructorCall = constructorArguments.join(", ");
 
-  if (language === "python") lines.push(`${indent}${subject} = ${entrypoint.type}()`);
-  if (language === "typescript") lines.push(`${indent}const ${subject} = new ${entrypoint.type}();`);
-  if (language === "go") lines.push(`${indent}${subject} := New${entrypoint.type}()`);
-  if (language === "swift") lines.push(`${indent}let ${subject} = ${entrypoint.type}()`);
+  if (language === "python") lines.push(`${indent}${subject} = ${entrypoint.type}(${constructorCall})`);
+  if (language === "typescript") lines.push(`${indent}const ${subject} = new ${entrypoint.type}(${constructorCall});`);
+  if (language === "go") lines.push(`${indent}${subject} := New${entrypoint.type}(${constructorCall})`);
+  if (language === "swift") lines.push(`${indent}let ${subject} = ${entrypoint.type}(${constructorCall})`);
 
   for (let index = 1; index < operations.length; index += 1) {
     const operation = operations[index];
     const method = language === "go"
       ? `${operation.operation[0].toUpperCase()}${operation.operation.slice(1)}`
       : operation.operation;
-    const arguments_ = operation.arguments.map((value) => renderRawScalar(value, language));
+    const arguments_ = operation.arguments.map((value) => renderRawValue(value, language));
     const call = `${subject}.${method}(${arguments_.join(", ")})`;
     const caseId = `${testCase.id}[${index}]`;
     if (expected[index] === null) {
@@ -529,13 +547,20 @@ function renderOperationSequenceCase(document, language, testCase, caseIndex, in
       continue;
     }
 
-    const expectedValue = renderRawScalar(expected[index], language);
+    const expectedValue = renderRawValue(expected[index], language);
+    const isCollection = Array.isArray(expected[index]);
     if (language === "python") {
       lines.push(`${indent}assert ${call} == ${expectedValue}, ${quoteString(caseId)}`);
     } else if (language === "typescript") {
-      lines.push(`${indent}assert(${call} === ${expectedValue}, ${quoteString(caseId)});`);
+      const comparison = isCollection
+        ? `JSON.stringify(${call}) === JSON.stringify(${expectedValue})`
+        : `${call} === ${expectedValue}`;
+      lines.push(`${indent}assert(${comparison}, ${quoteString(caseId)});`);
     } else if (language === "go") {
-      lines.push(`${indent}assert(${call} == ${expectedValue}, ${quoteString(caseId)})`);
+      const comparison = isCollection
+        ? renderGoCollectionEquality(rawArrayCodec(expected[index]), call, expectedValue)
+        : `${call} == ${expectedValue}`;
+      lines.push(`${indent}assert(${comparison}, ${quoteString(caseId)})`);
     } else {
       lines.push(`${indent}expectEqual(${call}, ${expectedValue}, ${quoteString(caseId)})`);
     }

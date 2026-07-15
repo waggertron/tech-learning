@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "heap-priority-queue",
+    "slug": "355-design-twitter"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "Twitter"
+      },
+      "typescript": {
+        "type": "Twitter"
+      },
+      "go": {
+        "type": "Twitter"
+      },
+      "swift": {
+        "type": "Twitter"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "follow-and-unfollow",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "postTweet",
+            "arguments": [
+              1,
+              5
+            ]
+          },
+          {
+            "operation": "getNewsFeed",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "follow",
+            "arguments": [
+              1,
+              2
+            ]
+          },
+          {
+            "operation": "postTweet",
+            "arguments": [
+              2,
+              6
+            ]
+          },
+          {
+            "operation": "getNewsFeed",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "unfollow",
+            "arguments": [
+              1,
+              2
+            ]
+          },
+          {
+            "operation": "getNewsFeed",
+            "arguments": [
+              1
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          [
+            5
+          ],
+          null,
+          null,
+          [
+            6,
+            5
+          ],
+          null,
+          [
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "newest-first-across-users",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "follow",
+            "arguments": [
+              1,
+              2
+            ]
+          },
+          {
+            "operation": "postTweet",
+            "arguments": [
+              2,
+              20
+            ]
+          },
+          {
+            "operation": "postTweet",
+            "arguments": [
+              1,
+              10
+            ]
+          },
+          {
+            "operation": "postTweet",
+            "arguments": [
+              2,
+              21
+            ]
+          },
+          {
+            "operation": "getNewsFeed",
+            "arguments": [
+              1
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          [
+            21,
+            10,
+            20
+          ]
+        ]
+      }
+    },
+    {
+      "id": "empty-feed",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "getNewsFeed",
+            "arguments": [
+              1
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          []
+        ]
+      }
+    },
+    {
+      "id": "nonpositive-user-id",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "getNewsFeed",
+            "arguments": [
+              0
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract uses positive user identifiers."
+      }
+    }
+  ]
+}

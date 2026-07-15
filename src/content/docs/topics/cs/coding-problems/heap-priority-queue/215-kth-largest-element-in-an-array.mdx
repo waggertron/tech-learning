@@ -5,22 +5,27 @@ parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, quickselect, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import practiceCode from './215-kth-larget-element-in-an-array.py?raw';
-import practiceCodeTs from './215-kth-larget-element-in-an-array.ts?raw';
-import practiceCodeGo from './215-kth-larget-element-in-an-array.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCode from './215-kth-largest-element-in-an-array.py?raw';
+import practiceCodeTs from './215-kth-largest-element-in-an-array.ts?raw';
+import practiceCodeGo from './215-kth-largest-element-in-an-array.go?raw';
+import practiceCodeSwift from './215-kth-largest-element-in-an-array.swift?raw';
 import approach2PyCode from './215-kth-largest-element-in-an-array-approach2.py?raw';
 import approach2TsCode from './215-kth-largest-element-in-an-array-approach2.ts?raw';
 import approach2GoCode from './215-kth-largest-element-in-an-array-approach2.go?raw';
 import approach3PyCode from './215-kth-largest-element-in-an-array-approach3.py?raw';
 import approach3TsCode from './215-kth-largest-element-in-an-array-approach3.ts?raw';
 import approach3GoCode from './215-kth-largest-element-in-an-array-approach3.go?raw';
+import approach1SwiftCode from './215-kth-largest-element-in-an-array-approach1.swift?raw';
+import approach2SwiftCode from './215-kth-largest-element-in-an-array-approach2.swift?raw';
+import approach3SwiftCode from './215-kth-largest-element-in-an-array-approach3.swift?raw';
 
 ## Problem
 
@@ -45,6 +50,9 @@ LeetCode 215 · [Link](https://leetcode.com/problems/kth-largest-element-in-an-a
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="kth-largest-element-in-an-array-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="215-kth-largest-element-in-an-array-swift" />
   </TabItem>
 </Tabs>
 
@@ -77,6 +85,9 @@ func findKthLargest(nums []int, k int) int {
     return arr[len(arr)-k] // L2: O(1) index
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="215-kth-largest-element-in-an-array-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -208,6 +219,9 @@ func runTests() {
 
 func main() { runTests() }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="215-kth-largest-element-in-an-array-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -365,6 +379,9 @@ func runTests() {
 
 func main() { runTests() }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="215-kth-largest-element-in-an-array-approach3-swift" />
 </TabItem>
 </Tabs>
 

@@ -5,19 +5,23 @@ parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, simulation, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './1046-last-stone-weight.py?raw';
 import practiceCodeTs from './1046-last-stone-weight.ts?raw';
 import practiceCodeGo from './1046-last-stone-weight.go?raw';
+import practiceCodeSwift from './1046-last-stone-weight.swift?raw';
 import approach2PyCode from './1046-last-stone-weight-approach2.py?raw';
 import approach2TsCode from './1046-last-stone-weight-approach2.ts?raw';
 import approach2GoCode from './1046-last-stone-weight-approach2.go?raw';
+import approach1SwiftCode from './1046-last-stone-weight-approach1.swift?raw';
+import approach2SwiftCode from './1046-last-stone-weight-approach2.swift?raw';
 
 ## Problem
 
@@ -96,6 +100,9 @@ Returns `0`. Notice how the two pushed `1`s collide in the next round, an emerge
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="last-stone-weight-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1046-last-stone-weight-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, sort each round
@@ -150,6 +157,9 @@ func lastStoneWeight(stones []int) int {
     return 0
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="1046-last-stone-weight-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -286,6 +296,9 @@ func runTests() {
 
 func main() { runTests() }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="1046-last-stone-weight-approach2-swift" />
 </TabItem>
 </Tabs>
 

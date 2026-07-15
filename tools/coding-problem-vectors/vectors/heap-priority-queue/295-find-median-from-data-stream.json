@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "heap-priority-queue",
+    "slug": "295-find-median-from-data-stream"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "MedianFinder"
+      },
+      "typescript": {
+        "type": "MedianFinder"
+      },
+      "go": {
+        "type": "MedianFinder"
+      },
+      "swift": {
+        "type": "MedianFinder"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "odd-and-even-counts",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "addNum",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "addNum",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "findMedian",
+            "arguments": []
+          },
+          {
+            "operation": "addNum",
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operation": "findMedian",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          1.5,
+          null,
+          2
+        ]
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "addNum",
+            "arguments": [
+              -1
+            ]
+          },
+          {
+            "operation": "addNum",
+            "arguments": [
+              -2
+            ]
+          },
+          {
+            "operation": "findMedian",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          -1.5
+        ]
+      }
+    },
+    {
+      "id": "one-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "addNum",
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operation": "findMedian",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          5
+        ]
+      }
+    },
+    {
+      "id": "median-before-add",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "findMedian",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract calls findMedian only after at least one value is present."
+      }
+    }
+  ]
+}

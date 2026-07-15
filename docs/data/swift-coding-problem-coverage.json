@@ -9,49 +9,49 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 158
+      "swift": 185
     },
     "languageCoverage": {
       "python": {
-        "starterFiles": 186,
-        "starterHarnesses": 180,
+        "starterFiles": 189,
+        "starterHarnesses": 183,
         "practiceTabs": 188,
         "practiceRepls": 189,
         "approachTabs": 456,
-        "approachSources": 260,
-        "approachHarnesses": 254
+        "approachSources": 262,
+        "approachHarnesses": 256
       },
       "typescript": {
-        "starterFiles": 185,
-        "starterHarnesses": 181,
+        "starterFiles": 188,
+        "starterHarnesses": 184,
         "practiceTabs": 186,
         "practiceRepls": 186,
         "approachTabs": 456,
-        "approachSources": 260,
-        "approachHarnesses": 254
+        "approachSources": 262,
+        "approachHarnesses": 256
       },
       "go": {
-        "starterFiles": 185,
-        "starterHarnesses": 185,
+        "starterFiles": 188,
+        "starterHarnesses": 188,
         "practiceTabs": 167,
         "practiceRepls": 167,
         "approachTabs": 406,
-        "approachSources": 260,
-        "approachHarnesses": 260
+        "approachSources": 262,
+        "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 44,
-        "starterHarnesses": 44,
-        "practiceTabs": 44,
-        "practiceRepls": 44,
-        "approachTabs": 114,
-        "approachSources": 114,
-        "approachHarnesses": 114
+        "starterFiles": 51,
+        "starterHarnesses": 51,
+        "practiceTabs": 51,
+        "practiceRepls": 51,
+        "approachTabs": 134,
+        "approachSources": 134,
+        "approachHarnesses": 134
       }
     },
-    "swiftReadyPages": 44,
-    "swiftReadyApproaches": 114,
-    "vectorReadyPages": 44
+    "swiftReadyPages": 51,
+    "swiftReadyApproaches": 134,
+    "vectorReadyPages": 51
   },
   "categories": [
     {
@@ -130,9 +130,9 @@
       "category": "heap-priority-queue",
       "pages": 7,
       "documentedApproaches": 20,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 7,
+      "swiftReadyApproaches": 20,
+      "vectorReadyPages": 7
     },
     {
       "category": "intervals",
@@ -13370,45 +13370,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/1046-last-stone-weight.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "heap-priority-queue/1046-last-stone-weight.py",
         "typescript": "heap-priority-queue/1046-last-stone-weight.ts",
         "go": "heap-priority-queue/1046-last-stone-weight.go",
-        "swift": null
+        "swift": "heap-priority-queue/1046-last-stone-weight.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13416,23 +13418,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/1046-last-stone-weight-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13440,7 +13447,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13450,21 +13458,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/1046-last-stone-weight-approach2.py",
             "typescript": "heap-priority-queue/1046-last-stone-weight-approach2.ts",
             "go": "heap-priority-queue/1046-last-stone-weight-approach2.go",
-            "swift": null
+            "swift": "heap-priority-queue/1046-last-stone-weight-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -13477,37 +13487,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/215-kth-largest-element-in-an-array.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
-        "python": null,
-        "typescript": null,
-        "go": null,
-        "swift": null
+        "python": "heap-priority-queue/215-kth-largest-element-in-an-array.py",
+        "typescript": "heap-priority-queue/215-kth-largest-element-in-an-array.ts",
+        "go": "heap-priority-queue/215-kth-largest-element-in-an-array.go",
+        "swift": "heap-priority-queue/215-kth-largest-element-in-an-array.swift"
       },
-      "starterHarnesses": [],
-      "starterImports": [],
+      "starterHarnesses": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
+      "starterImports": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13515,23 +13535,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/215-kth-largest-element-in-an-array-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13539,7 +13564,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13549,21 +13575,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/215-kth-largest-element-in-an-array-approach2.py",
             "typescript": "heap-priority-queue/215-kth-largest-element-in-an-array-approach2.ts",
             "go": "heap-priority-queue/215-kth-largest-element-in-an-array-approach2.go",
-            "swift": null
+            "swift": "heap-priority-queue/215-kth-largest-element-in-an-array-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -13571,7 +13599,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13581,21 +13610,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/215-kth-largest-element-in-an-array-approach3.py",
             "typescript": "heap-priority-queue/215-kth-largest-element-in-an-array-approach3.ts",
             "go": "heap-priority-queue/215-kth-largest-element-in-an-array-approach3.go",
-            "swift": null
+            "swift": "heap-priority-queue/215-kth-largest-element-in-an-array-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -13608,37 +13639,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/295-find-median-from-data-stream.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
-        "python": null,
-        "typescript": null,
-        "go": null,
-        "swift": null
+        "python": "heap-priority-queue/295-find-median-from-data-stream.py",
+        "typescript": "heap-priority-queue/295-find-median-from-data-stream.ts",
+        "go": "heap-priority-queue/295-find-median-from-data-stream.go",
+        "swift": "heap-priority-queue/295-find-median-from-data-stream.swift"
       },
-      "starterHarnesses": [],
-      "starterImports": [],
+      "starterHarnesses": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
+      "starterImports": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13646,23 +13687,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/295-find-median-from-data-stream-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13670,23 +13716,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/295-find-median-from-data-stream-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -13694,7 +13745,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13703,17 +13755,23 @@
           ],
           "repls": [
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
-            "python": null,
-            "typescript": null,
-            "go": null,
-            "swift": null
+            "python": "heap-priority-queue/295-find-median-from-data-stream-approach3.py",
+            "typescript": "heap-priority-queue/295-find-median-from-data-stream-approach3.ts",
+            "go": "heap-priority-queue/295-find-median-from-data-stream-approach3.go",
+            "swift": "heap-priority-queue/295-find-median-from-data-stream-approach3.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "python",
+            "typescript",
+            "go",
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -13726,45 +13784,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/355-design-twitter.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "heap-priority-queue/355-design-twitter.py",
         "typescript": "heap-priority-queue/355-design-twitter.ts",
         "go": "heap-priority-queue/355-design-twitter.go",
-        "swift": null
+        "swift": "heap-priority-queue/355-design-twitter.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13772,23 +13832,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/355-design-twitter-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13796,7 +13861,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13806,37 +13872,45 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/355-design-twitter-approach2.py",
             "typescript": "heap-priority-queue/355-design-twitter-approach2.ts",
             "go": "heap-priority-queue/355-design-twitter-approach2.go",
-            "swift": null
+            "swift": "heap-priority-queue/355-design-twitter-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
           "title": "Cap per-user feed; global merge",
-          "languageTabs": [],
+          "languageTabs": [
+            "swift"
+          ],
           "codeFences": [],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/355-design-twitter-approach3.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -13849,45 +13923,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/621-task-scheduler.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "heap-priority-queue/621-task-scheduler.py",
         "typescript": "heap-priority-queue/621-task-scheduler.ts",
         "go": "heap-priority-queue/621-task-scheduler.go",
-        "swift": null
+        "swift": "heap-priority-queue/621-task-scheduler.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13895,23 +13971,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/621-task-scheduler-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13919,7 +14000,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13929,21 +14011,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/621-task-scheduler-approach2.py",
             "typescript": "heap-priority-queue/621-task-scheduler-approach2.ts",
             "go": "heap-priority-queue/621-task-scheduler-approach2.go",
-            "swift": null
+            "swift": "heap-priority-queue/621-task-scheduler-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -13951,7 +14035,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13961,21 +14046,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/621-task-scheduler-approach3.py",
             "typescript": "heap-priority-queue/621-task-scheduler-approach3.ts",
             "go": "heap-priority-queue/621-task-scheduler-approach3.go",
-            "swift": null
+            "swift": "heap-priority-queue/621-task-scheduler-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -13988,81 +14075,101 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/703-kth-largest-element-in-a-stream.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
-        "python": null,
-        "typescript": null,
-        "go": null,
-        "swift": null
+        "python": "heap-priority-queue/703-kth-largest-element-in-a-stream.py",
+        "typescript": "heap-priority-queue/703-kth-largest-element-in-a-stream.ts",
+        "go": "heap-priority-queue/703-kth-largest-element-in-a-stream.go",
+        "swift": "heap-priority-queue/703-kth-largest-element-in-a-stream.swift"
       },
-      "starterHarnesses": [],
-      "starterImports": [],
+      "starterHarnesses": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
+      "starterImports": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, sort on every add",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/703-kth-largest-element-in-a-stream-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
           "title": "Keep a full heap",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/703-kth-largest-element-in-a-stream-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -14070,7 +14177,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -14079,17 +14187,23 @@
           ],
           "repls": [
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
-            "python": null,
-            "typescript": null,
-            "go": null,
-            "swift": null
+            "python": "heap-priority-queue/703-kth-largest-element-in-a-stream-approach3.py",
+            "typescript": "heap-priority-queue/703-kth-largest-element-in-a-stream-approach3.ts",
+            "go": "heap-priority-queue/703-kth-largest-element-in-a-stream-approach3.go",
+            "swift": "heap-priority-queue/703-kth-largest-element-in-a-stream-approach3.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "python",
+            "typescript",
+            "go",
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -14102,45 +14216,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/heap-priority-queue/973-k-closest-points-to-origin.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "heap-priority-queue/973-k-closest-points-to-origin.py",
         "typescript": "heap-priority-queue/973-k-closest-points-to-origin.ts",
         "go": "heap-priority-queue/973-k-closest-points-to-origin.go",
-        "swift": null
+        "swift": "heap-priority-queue/973-k-closest-points-to-origin.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -14148,23 +14264,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "heap-priority-queue/973-k-closest-points-to-origin-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -14172,7 +14293,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -14182,21 +14304,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/973-k-closest-points-to-origin-approach2.py",
             "typescript": "heap-priority-queue/973-k-closest-points-to-origin-approach2.ts",
             "go": "heap-priority-queue/973-k-closest-points-to-origin-approach2.go",
-            "swift": null
+            "swift": "heap-priority-queue/973-k-closest-points-to-origin-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -14204,7 +14328,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -14214,21 +14339,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "heap-priority-queue/973-k-closest-points-to-origin-approach3.py",
             "typescript": "heap-priority-queue/973-k-closest-points-to-origin-approach3.ts",
             "go": "heap-priority-queue/973-k-closest-points-to-origin-approach3.go",
-            "swift": null
+            "swift": "heap-priority-queue/973-k-closest-points-to-origin-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

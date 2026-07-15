@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "heap-priority-queue",
+    "slug": "703-kth-largest-element-in-a-stream"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "KthLargest"
+      },
+      "typescript": {
+        "type": "KthLargest"
+      },
+      "go": {
+        "type": "KthLargest"
+      },
+      "swift": {
+        "type": "KthLargest"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "canonical-stream",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              3,
+              [
+                4,
+                5,
+                8,
+                2
+              ]
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              5
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              10
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              9
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              4
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          4,
+          5,
+          5,
+          8,
+          8
+        ]
+      }
+    },
+    {
+      "id": "negative-and-positive-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              2,
+              [
+                0
+              ]
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              -1
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              1
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          -1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "empty-seed-k-one",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              1,
+              []
+            ]
+          },
+          {
+            "operation": "add",
+            "arguments": [
+              -3
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          -3
+        ]
+      }
+    },
+    {
+      "id": "zero-rank",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              0,
+              []
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires k to be positive."
+      }
+    }
+  ]
+}

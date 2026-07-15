@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "heap-priority-queue",
+    "slug": "1046-last-stone-weight"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "stones",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "last_stone_weight"
+      },
+      "typescript": {
+        "function": "lastStoneWeight"
+      },
+      "go": {
+        "function": "lastStoneWeight"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "lastStoneWeight"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "repeated-smashes",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          7,
+          4,
+          1,
+          8,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "equal-heaviest-stones",
+      "classification": "valid",
+      "arguments": [
+        [
+          10,
+          4,
+          2,
+          10
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single-stone",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "two-equal-stones",
+      "classification": "boundary",
+      "arguments": [
+        [
+          2,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-pile",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires at least one stone."
+      }
+    }
+  ]
+}

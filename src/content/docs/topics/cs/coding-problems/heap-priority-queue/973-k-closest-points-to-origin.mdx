@@ -5,22 +5,27 @@ parent: heap-priority-queue
 tags: [leetcode, neetcode-150, heaps, quickselect, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './973-k-closest-points-to-origin.py?raw';
 import practiceCodeTs from './973-k-closest-points-to-origin.ts?raw';
 import practiceCodeGo from './973-k-closest-points-to-origin.go?raw';
+import practiceCodeSwift from './973-k-closest-points-to-origin.swift?raw';
 import approach2PyCode from './973-k-closest-points-to-origin-approach2.py?raw';
 import approach2TsCode from './973-k-closest-points-to-origin-approach2.ts?raw';
 import approach2GoCode from './973-k-closest-points-to-origin-approach2.go?raw';
 import approach3PyCode from './973-k-closest-points-to-origin-approach3.py?raw';
 import approach3TsCode from './973-k-closest-points-to-origin-approach3.ts?raw';
 import approach3GoCode from './973-k-closest-points-to-origin-approach3.go?raw';
+import approach1SwiftCode from './973-k-closest-points-to-origin-approach1.swift?raw';
+import approach2SwiftCode from './973-k-closest-points-to-origin-approach2.swift?raw';
+import approach3SwiftCode from './973-k-closest-points-to-origin-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 973 · [Link](https://leetcode.com/problems/k-closest-points-to-origin/
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="k-closest-points-to-origin-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="973-k-closest-points-to-origin-swift" />
   </TabItem>
 </Tabs>
 
@@ -79,6 +87,9 @@ func kClosest(points [][]int, k int) [][]int {
     return points[:k]
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="973-k-closest-points-to-origin-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -223,6 +234,9 @@ func runTests() {
 
 func main() { runTests() }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="973-k-closest-points-to-origin-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -375,6 +389,9 @@ func runTests() {
 
 func main() { runTests() }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="973-k-closest-points-to-origin-approach3-swift" />
 </TabItem>
 </Tabs>
 
