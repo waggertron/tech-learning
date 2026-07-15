@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 117
+      "swift": 158
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 260
       },
       "swift": {
-        "starterFiles": 34,
-        "starterHarnesses": 34,
-        "practiceTabs": 34,
-        "practiceRepls": 34,
-        "approachTabs": 83,
-        "approachSources": 83,
-        "approachHarnesses": 83
+        "starterFiles": 44,
+        "starterHarnesses": 44,
+        "practiceTabs": 44,
+        "practiceRepls": 44,
+        "approachTabs": 114,
+        "approachSources": 114,
+        "approachHarnesses": 114
       }
     },
-    "swiftReadyPages": 34,
-    "swiftReadyApproaches": 83,
-    "vectorReadyPages": 34
+    "swiftReadyPages": 44,
+    "swiftReadyApproaches": 114,
+    "vectorReadyPages": 44
   },
   "categories": [
     {
@@ -122,9 +122,9 @@
       "category": "greedy",
       "pages": 10,
       "documentedApproaches": 31,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 10,
+      "swiftReadyApproaches": 31,
+      "vectorReadyPages": 10
     },
     {
       "category": "heap-priority-queue",
@@ -11852,45 +11852,47 @@
       "page": "greedy/045-jump-game-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/045-jump-game-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/045-jump-game-ii.py",
         "typescript": "greedy/045-jump-game-ii.ts",
         "go": "greedy/045-jump-game-ii.go",
-        "swift": null
+        "swift": "greedy/045-jump-game-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -11898,23 +11900,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/045-jump-game-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -11922,7 +11929,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -11932,21 +11940,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/045-jump-game-ii-approach2.py",
             "typescript": "greedy/045-jump-game-ii-approach2.ts",
             "go": "greedy/045-jump-game-ii-approach2.go",
-            "swift": null
+            "swift": "greedy/045-jump-game-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -11954,27 +11964,31 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "greedy/045-jump-game-ii-approach3.py",
             "typescript": "greedy/045-jump-game-ii-approach3.ts",
             "go": "greedy/045-jump-game-ii-approach3.go",
-            "swift": null
+            "swift": "greedy/045-jump-game-ii-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -11985,45 +11999,47 @@
       "page": "greedy/053-maximum-subarray.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/053-maximum-subarray.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/053-maximum-subarray.py",
         "typescript": "greedy/053-maximum-subarray.ts",
         "go": "greedy/053-maximum-subarray.go",
-        "swift": null
+        "swift": "greedy/053-maximum-subarray.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12031,23 +12047,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/053-maximum-subarray-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12055,7 +12076,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12065,21 +12087,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/053-maximum-subarray-approach2.py",
             "typescript": "greedy/053-maximum-subarray-approach2.ts",
             "go": "greedy/053-maximum-subarray-approach2.go",
-            "swift": null
+            "swift": "greedy/053-maximum-subarray-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -12087,7 +12111,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12097,21 +12122,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/053-maximum-subarray-approach3.py",
             "typescript": "greedy/053-maximum-subarray-approach3.ts",
             "go": "greedy/053-maximum-subarray-approach3.go",
-            "swift": null
+            "swift": "greedy/053-maximum-subarray-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12122,45 +12149,47 @@
       "page": "greedy/055-jump-game.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/055-jump-game.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/055-jump-game.py",
         "typescript": "greedy/055-jump-game.ts",
         "go": "greedy/055-jump-game.go",
-        "swift": null
+        "swift": "greedy/055-jump-game.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12168,23 +12197,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/055-jump-game-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12192,7 +12226,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12202,21 +12237,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/055-jump-game-approach2.py",
             "typescript": "greedy/055-jump-game-approach2.ts",
             "go": "greedy/055-jump-game-approach2.go",
-            "swift": null
+            "swift": "greedy/055-jump-game-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -12224,7 +12261,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12234,21 +12272,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/055-jump-game-approach3.py",
             "typescript": "greedy/055-jump-game-approach3.ts",
             "go": "greedy/055-jump-game-approach3.go",
-            "swift": null
+            "swift": "greedy/055-jump-game-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 4,
@@ -12256,7 +12296,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12266,21 +12307,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/055-jump-game-approach4.py",
             "typescript": "greedy/055-jump-game-approach4.ts",
             "go": "greedy/055-jump-game-approach4.go",
-            "swift": null
+            "swift": "greedy/055-jump-game-approach4.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 5,
@@ -12288,7 +12331,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12298,21 +12342,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/055-jump-game-approach5.py",
             "typescript": "greedy/055-jump-game-approach5.ts",
             "go": "greedy/055-jump-game-approach5.go",
-            "swift": null
+            "swift": "greedy/055-jump-game-approach5.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12323,43 +12369,45 @@
       "page": "greedy/122-best-time-to-buy-and-sell-stock-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/122-best-time-to-buy-and-sell-stock-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/122-best-time-to-buy-and-sell-stock-ii.py",
         "typescript": "greedy/122-best-time-to-buy-and-sell-stock-ii.ts",
         "go": "greedy/122-best-time-to-buy-and-sell-stock-ii.go",
-        "swift": null
+        "swift": "greedy/122-best-time-to-buy-and-sell-stock-ii.swift"
       },
       "starterHarnesses": [
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12367,23 +12415,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12391,25 +12444,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach2.py",
             "typescript": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach2.ts",
             "go": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach2.go",
-            "swift": null
+            "swift": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach2.swift"
           },
           "sourceHarnesses": [
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -12417,25 +12474,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach3.py",
             "typescript": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach3.ts",
             "go": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach3.go",
-            "swift": null
+            "swift": "greedy/122-best-time-to-buy-and-sell-stock-ii-approach3.swift"
           },
           "sourceHarnesses": [
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12446,45 +12507,47 @@
       "page": "greedy/134-gas-station.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/134-gas-station.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/134-gas-station.py",
         "typescript": "greedy/134-gas-station.ts",
         "go": "greedy/134-gas-station.go",
-        "swift": null
+        "swift": "greedy/134-gas-station.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12492,23 +12555,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/134-gas-station-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12516,7 +12584,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12526,21 +12595,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/134-gas-station-approach2.py",
             "typescript": "greedy/134-gas-station-approach2.ts",
             "go": "greedy/134-gas-station-approach2.go",
-            "swift": null
+            "swift": "greedy/134-gas-station-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12551,45 +12622,47 @@
       "page": "greedy/1899-merge-triplets-to-form-target-triplet.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/1899-merge-triplets-to-form-target-triplet.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/1899-merge-triplets-to-form-target-triplet.py",
         "typescript": "greedy/1899-merge-triplets-to-form-target-triplet.ts",
         "go": "greedy/1899-merge-triplets-to-form-target-triplet.go",
-        "swift": null
+        "swift": "greedy/1899-merge-triplets-to-form-target-triplet.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12597,23 +12670,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/1899-merge-triplets-to-form-target-triplet-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12621,7 +12699,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12631,21 +12710,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/1899-merge-triplets-to-form-target-triplet-approach2.py",
             "typescript": "greedy/1899-merge-triplets-to-form-target-triplet-approach2.ts",
             "go": "greedy/1899-merge-triplets-to-form-target-triplet-approach2.go",
-            "swift": null
+            "swift": "greedy/1899-merge-triplets-to-form-target-triplet-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -12653,7 +12734,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12663,21 +12745,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/1899-merge-triplets-to-form-target-triplet-approach3.py",
             "typescript": "greedy/1899-merge-triplets-to-form-target-triplet-approach3.ts",
             "go": "greedy/1899-merge-triplets-to-form-target-triplet-approach3.go",
-            "swift": null
+            "swift": "greedy/1899-merge-triplets-to-form-target-triplet-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12688,45 +12772,47 @@
       "page": "greedy/334-increasing-triplet-subsequence.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/334-increasing-triplet-subsequence.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/334-increasing-triplet-subsequence.py",
         "typescript": "greedy/334-increasing-triplet-subsequence.ts",
         "go": "greedy/334-increasing-triplet-subsequence.go",
-        "swift": null
+        "swift": "greedy/334-increasing-triplet-subsequence.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12734,23 +12820,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/334-increasing-triplet-subsequence-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12758,27 +12849,31 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "greedy/334-increasing-triplet-subsequence-approach2.py",
             "typescript": "greedy/334-increasing-triplet-subsequence-approach2.ts",
             "go": "greedy/334-increasing-triplet-subsequence-approach2.go",
-            "swift": null
+            "swift": "greedy/334-increasing-triplet-subsequence-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -12786,27 +12881,31 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "greedy/334-increasing-triplet-subsequence-approach3.py",
             "typescript": "greedy/334-increasing-triplet-subsequence-approach3.ts",
             "go": "greedy/334-increasing-triplet-subsequence-approach3.go",
-            "swift": null
+            "swift": "greedy/334-increasing-triplet-subsequence-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12817,45 +12916,47 @@
       "page": "greedy/678-valid-parenthesis-string.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/678-valid-parenthesis-string.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/678-valid-parenthesis-string.py",
         "typescript": "greedy/678-valid-parenthesis-string.ts",
         "go": "greedy/678-valid-parenthesis-string.go",
-        "swift": null
+        "swift": "greedy/678-valid-parenthesis-string.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -12863,23 +12964,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/678-valid-parenthesis-string-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -12887,7 +12993,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12897,21 +13004,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/678-valid-parenthesis-string-approach2.py",
             "typescript": "greedy/678-valid-parenthesis-string-approach2.ts",
             "go": "greedy/678-valid-parenthesis-string-approach2.go",
-            "swift": null
+            "swift": "greedy/678-valid-parenthesis-string-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -12919,7 +13028,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -12929,21 +13039,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/678-valid-parenthesis-string-approach3.py",
             "typescript": "greedy/678-valid-parenthesis-string-approach3.ts",
             "go": "greedy/678-valid-parenthesis-string-approach3.go",
-            "swift": null
+            "swift": "greedy/678-valid-parenthesis-string-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -12954,45 +13066,47 @@
       "page": "greedy/763-partition-labels.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/763-partition-labels.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/763-partition-labels.py",
         "typescript": "greedy/763-partition-labels.ts",
         "go": "greedy/763-partition-labels.go",
-        "swift": null
+        "swift": "greedy/763-partition-labels.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13000,23 +13114,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/763-partition-labels-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13024,7 +13143,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13034,21 +13154,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/763-partition-labels-approach2.py",
             "typescript": "greedy/763-partition-labels-approach2.ts",
             "go": "greedy/763-partition-labels-approach2.go",
-            "swift": null
+            "swift": "greedy/763-partition-labels-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -13056,7 +13178,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13066,21 +13189,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/763-partition-labels-approach3.py",
             "typescript": "greedy/763-partition-labels-approach3.ts",
             "go": "greedy/763-partition-labels-approach3.go",
-            "swift": null
+            "swift": "greedy/763-partition-labels-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -13093,45 +13218,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/greedy/846-hand-of-straights.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "greedy/846-hand-of-straights.py",
         "typescript": "greedy/846-hand-of-straights.ts",
         "go": "greedy/846-hand-of-straights.go",
-        "swift": null
+        "swift": "greedy/846-hand-of-straights.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -13139,23 +13266,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "greedy/846-hand-of-straights-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -13163,7 +13295,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13173,21 +13306,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/846-hand-of-straights-approach2.py",
             "typescript": "greedy/846-hand-of-straights-approach2.ts",
             "go": "greedy/846-hand-of-straights-approach2.go",
-            "swift": null
+            "swift": "greedy/846-hand-of-straights-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -13195,7 +13330,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -13205,21 +13341,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "greedy/846-hand-of-straights-approach3.py",
             "typescript": "greedy/846-hand-of-straights-approach3.ts",
             "go": "greedy/846-hand-of-straights-approach3.go",
-            "swift": null
+            "swift": "greedy/846-hand-of-straights-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

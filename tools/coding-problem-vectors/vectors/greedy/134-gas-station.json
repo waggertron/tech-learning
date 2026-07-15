@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "134-gas-station"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "gas",
+        "codec": "int-array"
+      },
+      {
+        "name": "cost",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "can_complete_circuit"
+      },
+      "typescript": {
+        "function": "canCompleteCircuit"
+      },
+      "go": {
+        "function": "canCompleteCircuit"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "canCompleteCircuit"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "starts-at-three",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          3,
+          4,
+          5,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "no-valid-start",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          3,
+          4
+        ],
+        [
+          3,
+          4,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "single-station",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ],
+        [
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "mismatched-lengths",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Gas and cost arrays must have the same nonzero length."
+      }
+    }
+  ]
+}

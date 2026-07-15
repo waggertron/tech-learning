@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "055-jump-game"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "can_jump"
+      },
+      "typescript": {
+        "function": "canJump"
+      },
+      "go": {
+        "function": "canJump"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "canJump"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "reachable-end",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          3,
+          1,
+          1,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "blocked-by-zero",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          2,
+          1,
+          0,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-zero",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "negative-jump",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          -1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Jump lengths must be nonnegative."
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "678-valid-parenthesis-string"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "check_valid_string"
+      },
+      "typescript": {
+        "function": "checkValidString"
+      },
+      "go": {
+        "function": "checkValidString"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "checkValidString"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "star-balances-close",
+      "classification": "valid",
+      "arguments": [
+        "(*)"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "invalid-prefix",
+      "classification": "valid",
+      "arguments": [
+        ")*("
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-star",
+      "classification": "boundary",
+      "arguments": [
+        "*"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "unsupported-character",
+      "classification": "invalid",
+      "arguments": [
+        "(a)"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input alphabet contains only open parentheses, close parentheses, and stars."
+      }
+    }
+  ]
+}

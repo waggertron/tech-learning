@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "122-best-time-to-buy-and-sell-stock-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "prices",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "maxProfit"
+      },
+      "typescript": {
+        "function": "maxProfit"
+      },
+      "go": {
+        "function": "maxProfit"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxProfit"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "multiple-climbs",
+      "classification": "valid",
+      "arguments": [
+        [
+          7,
+          1,
+          5,
+          3,
+          6,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 7
+      }
+    },
+    {
+      "id": "falling-market",
+      "classification": "valid",
+      "arguments": [
+        [
+          7,
+          6,
+          4,
+          3,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-price",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "negative-price",
+      "classification": "invalid",
+      "arguments": [
+        [
+          3,
+          -1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Stock prices must be nonnegative."
+      }
+    }
+  ]
+}

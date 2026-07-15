@@ -134,6 +134,6 @@ The default pre-push gate runs the deterministic schema, drift, coverage, and so
 
 ## Current evidence
 
-The LeetCode 704 scalar function proof, LeetCode 981 stateful proof, and LeetCode 338 array-result proof pass with Python 3.14.6, TypeScript 5.9.3, Go 1.26.4, and Apple Swift 6.3.2 in Swift 6 language mode. Swift compilation treats warnings as errors. The registry contains 197 cases across 34 Binary Search, Bit Manipulation, and Graphs problems. TimeMap proves ordered stateful operations. Counting Bits proves deterministic array-result equality in all four generated programs. The Graphs vectors exercise scalar, array, matrix, inout mutation, and graph structure results in the Swift catalog.
+The LeetCode 704 scalar function proof, LeetCode 981 stateful proof, and LeetCode 338 array-result proof pass with Python 3.14.6, TypeScript 5.9.3, Go 1.26.4, and Apple Swift 6.3.2 in Swift 6 language mode. Swift compilation treats warnings as errors. The registry contains 237 cases across 44 Binary Search, Bit Manipulation, Graphs, and Greedy problems. TimeMap proves ordered stateful operations. Counting Bits proves deterministic array-result equality in all four generated programs. The Graphs vectors exercise scalar, array, matrix, inout mutation, and graph structure results in the Swift catalog. Greedy adds scalar and ordered partition-result cases across all 10 category pages.
 
 This is language and standard-library evidence. It does not exercise the pinned Swift 6.3.3 Linux browser executor or any Apple SDK surface.

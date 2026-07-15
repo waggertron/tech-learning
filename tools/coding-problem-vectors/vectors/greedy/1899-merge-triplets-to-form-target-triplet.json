@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "1899-merge-triplets-to-form-target-triplet"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "triplets",
+        "codec": "int-matrix"
+      },
+      {
+        "name": "target",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "merge_triplets"
+      },
+      "typescript": {
+        "function": "mergeTriplets"
+      },
+      "go": {
+        "function": "mergeTriplets"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "mergeTriplets"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "merge-reaches-target",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            2,
+            5,
+            3
+          ],
+          [
+            1,
+            8,
+            4
+          ],
+          [
+            1,
+            7,
+            5
+          ]
+        ],
+        [
+          2,
+          7,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "oversized-required-channel",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            3,
+            4,
+            5
+          ],
+          [
+            4,
+            5,
+            6
+          ]
+        ],
+        [
+          3,
+          2,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-exact-triplet",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            1,
+            1,
+            1
+          ]
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "malformed-triplet",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every triplet and the target must contain exactly three values."
+      }
+    }
+  ]
+}

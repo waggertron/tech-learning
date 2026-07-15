@@ -5,16 +5,21 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, dp, stacks, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './678-valid-parenthesis-string.py?raw';
 import practiceCodeTs from './678-valid-parenthesis-string.ts?raw';
 import practiceCodeGo from './678-valid-parenthesis-string.go?raw';
+import practiceCodeSwift from './678-valid-parenthesis-string.swift?raw';
+import approach1SwiftCode from './678-valid-parenthesis-string-approach1.swift?raw';
+import approach2SwiftCode from './678-valid-parenthesis-string-approach2.swift?raw';
+import approach3SwiftCode from './678-valid-parenthesis-string-approach3.swift?raw';
 import approach2PyCode from './678-valid-parenthesis-string-approach2.py?raw';
 import approach2TsCode from './678-valid-parenthesis-string-approach2.ts?raw';
 import approach2GoCode from './678-valid-parenthesis-string-approach2.go?raw';
@@ -45,6 +50,9 @@ LeetCode 678 · [Link](https://leetcode.com/problems/valid-parenthesis-string/) 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="valid-parenthesis-string-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="678-valid-parenthesis-string-swift" />
   </TabItem>
 </Tabs>
 
@@ -139,6 +147,9 @@ func checkValidString(s string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="678-valid-parenthesis-string-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 For each of the 3^k assignments to k stars, run a linear validation. Total $O(3^k · n)$. The DP and two-pointer approaches below are dramatically better.
@@ -227,6 +238,9 @@ func checkValidString(s string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="678-valid-parenthesis-string-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -332,6 +346,9 @@ func checkValidString(s string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="678-valid-parenthesis-string-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

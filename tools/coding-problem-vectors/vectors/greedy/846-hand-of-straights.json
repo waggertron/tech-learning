@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "846-hand-of-straights"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "hand",
+        "codec": "int-array"
+      },
+      {
+        "name": "groupSize",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_n_straight_hand"
+      },
+      "typescript": {
+        "function": "isNStraightHand"
+      },
+      "go": {
+        "function": "isNStraightHand"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isNStraightHand"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "two-straights",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          6,
+          2,
+          3,
+          4,
+          7,
+          8
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "cannot-form-fours",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        4
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-card-group",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "zero-group-size",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Group size must be positive."
+      }
+    }
+  ]
+}

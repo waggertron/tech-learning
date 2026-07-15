@@ -5,16 +5,21 @@ parent: greedy
 tags: [leetcode, greedy, medium]
 status: draft
 created: 2026-06-05
-updated: 2026-06-05
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './334-increasing-triplet-subsequence.py?raw';
 import practiceCodeTs from './334-increasing-triplet-subsequence.ts?raw';
 import practiceCodeGo from './334-increasing-triplet-subsequence.go?raw';
+import practiceCodeSwift from './334-increasing-triplet-subsequence.swift?raw';
+import approach1SwiftCode from './334-increasing-triplet-subsequence-approach1.swift?raw';
+import approach2SwiftCode from './334-increasing-triplet-subsequence-approach2.swift?raw';
+import approach3SwiftCode from './334-increasing-triplet-subsequence-approach3.swift?raw';
 import approach2PyCode from './334-increasing-triplet-subsequence-approach2.py?raw';
 import approach2TsCode from './334-increasing-triplet-subsequence-approach2.ts?raw';
 import approach2GoCode from './334-increasing-triplet-subsequence-approach2.go?raw';
@@ -48,6 +53,9 @@ LeetCode 334 · [Link](https://leetcode.com/problems/increasing-triplet-subseque
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="increasing-triplet-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="334-increasing-triplet-subsequence-swift" />
   </TabItem>
 </Tabs>
 
@@ -101,6 +109,9 @@ func increasingTriplet(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="334-increasing-triplet-subsequence-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -186,6 +197,9 @@ func increasingTriplet(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="334-increasing-triplet-subsequence-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -256,6 +270,9 @@ func increasingTriplet(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="334-increasing-triplet-subsequence-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **The tricky invariant**

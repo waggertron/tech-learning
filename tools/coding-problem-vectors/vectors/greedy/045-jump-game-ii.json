@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "045-jump-game-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "jump"
+      },
+      "typescript": {
+        "function": "jump"
+      },
+      "go": {
+        "function": "jump"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "jump"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "two-jumps",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          3,
+          1,
+          1,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "zero-inside-path",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          3,
+          0,
+          1,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "already-at-end",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "unreachable-end",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract guarantees that the final index is reachable."
+      }
+    }
+  ]
+}

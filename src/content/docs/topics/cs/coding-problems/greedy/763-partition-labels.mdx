@@ -5,16 +5,21 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, hash-tables, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './763-partition-labels.py?raw';
 import practiceCodeTs from './763-partition-labels.ts?raw';
 import practiceCodeGo from './763-partition-labels.go?raw';
+import practiceCodeSwift from './763-partition-labels.swift?raw';
+import approach1SwiftCode from './763-partition-labels-approach1.swift?raw';
+import approach2SwiftCode from './763-partition-labels-approach2.swift?raw';
+import approach3SwiftCode from './763-partition-labels-approach3.swift?raw';
 import approach2PyCode from './763-partition-labels-approach2.py?raw';
 import approach2TsCode from './763-partition-labels-approach2.ts?raw';
 import approach2GoCode from './763-partition-labels-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 763 · [Link](https://leetcode.com/problems/partition-labels/) · *Medi
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="partition-labels-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="763-partition-labels-swift" />
   </TabItem>
 </Tabs>
 
@@ -104,6 +112,9 @@ func partitionLabels(s string) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="763-partition-labels-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 Building both sets is $O(n)$ per candidate cut, and we try up to n cuts → $O(n²)$ total.
@@ -168,6 +179,9 @@ func partitionLabels(s string) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="763-partition-labels-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -281,6 +295,9 @@ func partitionLabels(s string) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="763-partition-labels-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 Same answer, derived as the canonical "sort + sweep" merge-intervals template applied to per-character ranges. With a fixed alphabet (e.g., 26 letters), the sort is constant.

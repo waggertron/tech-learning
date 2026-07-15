@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "greedy",
+    "slug": "763-partition-labels"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "partition_labels"
+      },
+      "typescript": {
+        "function": "partitionLabels"
+      },
+      "go": {
+        "function": "partitionLabels"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "partitionLabels"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "classic-partitions",
+      "classification": "valid",
+      "arguments": [
+        "ababcbacadefegdehijhklij"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          9,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "id": "unique-characters",
+      "classification": "valid",
+      "arguments": [
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "uppercase-character",
+      "classification": "invalid",
+      "arguments": [
+        "aA"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract accepts lowercase English letters only."
+      }
+    }
+  ]
+}

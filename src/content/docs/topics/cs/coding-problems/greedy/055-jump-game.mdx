@@ -5,16 +5,23 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-06-30
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './055-jump-game.py?raw';
 import practiceCodeTs from './055-jump-game.ts?raw';
 import practiceCodeGo from './055-jump-game.go?raw';
+import practiceCodeSwift from './055-jump-game.swift?raw';
+import approach1SwiftCode from './055-jump-game-approach1.swift?raw';
+import approach2SwiftCode from './055-jump-game-approach2.swift?raw';
+import approach3SwiftCode from './055-jump-game-approach3.swift?raw';
+import approach4SwiftCode from './055-jump-game-approach4.swift?raw';
+import approach5SwiftCode from './055-jump-game-approach5.swift?raw';
 import approach2PyCode from './055-jump-game-approach2.py?raw';
 import approach2TsCode from './055-jump-game-approach2.ts?raw';
 import approach2GoCode from './055-jump-game-approach2.go?raw';
@@ -56,6 +63,9 @@ LeetCode 55 - [Link](https://leetcode.com/problems/jump-game/) - *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="jump-game-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="055-jump-game-swift" />
   </TabItem>
 </Tabs>
 
@@ -117,6 +127,9 @@ func canJump(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="055-jump-game-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -214,6 +227,9 @@ func canJump(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="055-jump-game-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -313,6 +329,9 @@ func canJump(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="055-jump-game-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -400,6 +419,9 @@ func canJump(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach4SwiftCode} id="055-jump-game-approach4-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -478,6 +500,9 @@ func canJump(nums []int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach5SwiftCode} id="055-jump-game-approach5-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
