@@ -84,6 +84,17 @@ test("requires exact canonical helper code only when the problem needs it", () =
   );
 });
 
+test("rejects Swift source whose shared vector block drifted", () => {
+  const source = fixture("704-binary-search-approach1.swift");
+  const errors = swiftSourceContractErrors({
+    expectedVectorBlock: "    // TEST_VECTORS_BEGIN sha256:expected\n    // TEST_VECTORS_END",
+    fileName: "704-binary-search-approach1.swift",
+    source,
+    role: "approach",
+  });
+  assert.ok(errors.some((error) => error.includes("shared test-vector block")));
+});
+
 test("defines every helper named by the catalog manifest", () => {
   for (const helperType of [
     "graph-node",

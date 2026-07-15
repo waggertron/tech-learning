@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "binary-search",
+    "slug": "704-binary-search"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      },
+      {
+        "name": "target",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "search"
+      },
+      "typescript": {
+        "function": "search"
+      },
+      "go": {
+        "function": "search"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "search"
+      }
+    }
+  },
+  "proofFixture": true,
+  "cases": [
+    {
+      "id": "target-present-middle",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        9
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "target-absent",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "single-element-found",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ],
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-element-missing",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "first-element",
+      "classification": "boundary",
+      "arguments": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        -1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "last-element",
+      "classification": "boundary",
+      "arguments": [
+        [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        12
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        4
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The LeetCode contract requires at least one array element."
+      }
+    },
+    {
+      "id": "unsorted-array",
+      "classification": "invalid",
+      "arguments": [
+        [
+          3,
+          1,
+          2
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Binary search requires the input array to be sorted in ascending order."
+      }
+    },
+    {
+      "id": "duplicate-values",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          1,
+          2
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "LeetCode 704 states that every array value is unique."
+      }
+    }
+  ]
+}

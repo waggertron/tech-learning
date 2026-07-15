@@ -11,9 +11,14 @@ import {
   swiftCoverageErrors,
 } from "../scripts/swift-catalog-coverage.mjs";
 import { canonicalTestSupport } from "../scripts/swift-coding-problem-contract.mjs";
+import {
+  renderVectorBlock,
+  serializeVectorDocument,
+} from "../scripts/coding-problem-test-vectors.mjs";
 
 const fixtureRoot = path.join(tmpdir(), `swift-catalog-coverage-${process.pid}`);
 const catalogDir = path.join(fixtureRoot, "arrays-and-hashing");
+const vectorRoot = path.join(tmpdir(), `swift-catalog-vectors-${process.pid}`);
 
 const completePage = `---
 title: "1. Complete Example"
@@ -58,7 +63,39 @@ description: "Synthetic missing coverage fixture."
 <TabItem label="Python">\n\`\`\`python\nprint('ok')\n\`\`\`\n</TabItem>
 `;
 
-function validSwiftSource(role) {
+function completeVectorDocument() {
+  return {
+    schemaVersion: 1,
+    problem: { category: "arrays-and-hashing", slug: "001-complete" },
+    contract: {
+      parameters: [{ name: "value", codec: "int" }],
+      result: { codec: "int", comparison: "equal" },
+      mutatedParameters: [],
+      invalidInputPolicy: "excluded",
+    },
+    execution: {
+      kind: "function",
+      entrypoints: {
+        python: { function: "identity" },
+        typescript: { function: "identity" },
+        go: { function: "identity" },
+        swift: { type: "Solution", method: "identity" },
+      },
+    },
+    cases: [
+      { id: "positive", classification: "valid", arguments: [1], expected: { kind: "value", value: 1 } },
+      { id: "zero", classification: "boundary", arguments: [0], expected: { kind: "value", value: 0 } },
+      {
+        id: "negative",
+        classification: "invalid",
+        arguments: [-1],
+        expected: { kind: "excluded", reason: "The synthetic contract accepts nonnegative values." },
+      },
+    ],
+  };
+}
+
+function validSwiftSource(role, vectorDocument) {
   const implementation = role === "starter"
     ? `        // TODO: Implement\n        fatalError("TODO: Implement")`
     : "        return value";
@@ -73,7 +110,7 @@ ${implementation}
 }
 
 func runTests() {
-    expectEqual(Solution().identity(1), 1)
+${renderVectorBlock(vectorDocument, "swift")}
     reportSuccess()
 }
 
@@ -81,18 +118,25 @@ runTests()
 `;
 }
 
-function writeHarness(filePath, language, role) {
+function writeHarness(filePath, language, role, vectorDocument) {
   const harnesses = {
     python: "def _run_tests():\n    assert True\n",
     typescript: "function runTests() { if (!true) throw new Error('fail'); }\n",
     go: "package main\nfunc runTests() {}\nfunc main() { runTests() }\n",
-    swift: validSwiftSource(role),
+    swift: validSwiftSource(role, vectorDocument),
   };
   writeFileSync(filePath, harnesses[language]);
 }
 
 before(() => {
   mkdirSync(catalogDir, { recursive: true });
+  const vectorDocument = completeVectorDocument();
+  const vectorDir = path.join(vectorRoot, "arrays-and-hashing");
+  mkdirSync(vectorDir, { recursive: true });
+  writeFileSync(
+    path.join(vectorDir, "001-complete.json"),
+    serializeVectorDocument(vectorDocument),
+  );
   writeFileSync(path.join(catalogDir, "001-complete.mdx"), completePage);
   writeFileSync(path.join(catalogDir, "002-missing-swift.mdx"), incompletePage);
 
@@ -102,18 +146,30 @@ before(() => {
     go: "go",
     swift: "swift",
   })) {
-    writeHarness(path.join(catalogDir, `001-complete.${extension}`), language, "starter");
+    writeHarness(
+      path.join(catalogDir, `001-complete.${extension}`),
+      language,
+      "starter",
+      vectorDocument,
+    );
     writeHarness(
       path.join(catalogDir, `001-complete-approach1.${extension}`),
       language,
       "approach",
+      vectorDocument,
     );
     if (language === "python") {
-      writeHarness(path.join(catalogDir, `002-missing-swift.${extension}`), language, "starter");
+      writeHarness(
+        path.join(catalogDir, `002-missing-swift.${extension}`),
+        language,
+        "starter",
+        vectorDocument,
+      );
       writeHarness(
         path.join(catalogDir, `002-missing-swift-approach1.${extension}`),
         language,
         "approach",
+        vectorDocument,
       );
     }
   }
@@ -121,6 +177,7 @@ before(() => {
 
 after(() => {
   rmSync(fixtureRoot, { recursive: true, force: true });
+  rmSync(vectorRoot, { recursive: true, force: true });
 });
 
 test("recognizes language-specific harness evidence", () => {
@@ -146,11 +203,12 @@ test("parses numbered and unnumbered documented approaches", () => {
 });
 
 test("inventories complete and missing Swift coverage", () => {
-  const manifest = buildCoverageManifest({ catalogDir: fixtureRoot });
+  const manifest = buildCoverageManifest({ catalogDir: fixtureRoot, vectorRoot });
   assert.equal(manifest.summary.pages, 2);
   assert.equal(manifest.summary.documentedApproaches, 2);
   assert.equal(manifest.summary.swiftReadyPages, 1);
   assert.equal(manifest.summary.swiftReadyApproaches, 1);
+  assert.equal(manifest.summary.vectorReadyPages, 1);
   assert.equal(manifest.problems[0].swiftReady, true);
   assert.deepEqual(manifest.problems[0].helperTypes, []);
   assert.equal(manifest.problems[1].approaches[0].number, 1);
@@ -158,7 +216,7 @@ test("inventories complete and missing Swift coverage", () => {
 });
 
 test("serializes deterministically", () => {
-  const first = serializeManifest(buildCoverageManifest({ catalogDir: fixtureRoot }));
-  const second = serializeManifest(buildCoverageManifest({ catalogDir: fixtureRoot }));
+  const first = serializeManifest(buildCoverageManifest({ catalogDir: fixtureRoot, vectorRoot }));
+  const second = serializeManifest(buildCoverageManifest({ catalogDir: fixtureRoot, vectorRoot }));
   assert.equal(first, second);
 });

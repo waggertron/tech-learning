@@ -7,6 +7,11 @@ import {
 } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  defaultVectorRoot,
+  loadProblemVector,
+  renderVectorBlock,
+} from "./coding-problem-test-vectors.mjs";
 import { swiftSourceContractErrors } from "./swift-coding-problem-contract.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -119,6 +124,7 @@ export function hasTestHarness(language, source) {
 
 function sourceRecord({
   catalogDir,
+  expectedVectorBlock,
   filePath,
   language,
   rawImports,
@@ -135,6 +141,7 @@ function sourceRecord({
     : false;
   const contractErrors = exists && language === "swift"
     ? swiftSourceContractErrors({
+      expectedVectorBlock,
       fileName,
       source,
       role,
@@ -189,13 +196,18 @@ function relatedSource(problemDir, slug) {
     .join("\n");
 }
 
-function parseProblem({ catalogDir, category, pagePath }) {
+function parseProblem({ catalogDir, category, pagePath, vectorRoot }) {
   const content = readFileSync(pagePath, "utf8");
   const problemDir = path.dirname(pagePath);
   const slug = path.basename(pagePath, ".mdx");
   const rawImports = collectRawImports(content);
   const combinedSource = `${content}\n${relatedSource(problemDir, slug)}`;
   const helperTypes = collectHelperTypes(slug, combinedSource);
+  const vectorRecord = loadProblemVector({ category, slug, vectorRoot });
+  const vectorsReady = vectorRecord.exists && vectorRecord.errors.length === 0;
+  const expectedVectorBlock = vectorsReady
+    ? renderVectorBlock(vectorRecord.document, "swift")
+    : null;
   const practiceSection = sectionAfter(content, /^## Try it yourself\s*$/m);
   const practice = Object.fromEntries(
     Object.keys(languages).map((language) => [language, sectionEvidence(practiceSection, language)]),
@@ -205,6 +217,7 @@ function parseProblem({ catalogDir, category, pagePath }) {
       language,
       sourceRecord({
         catalogDir,
+        expectedVectorBlock,
         filePath: path.join(problemDir, `${slug}.${config.extension}`),
         language,
         rawImports,
@@ -226,6 +239,7 @@ function parseProblem({ catalogDir, category, pagePath }) {
         language,
         sourceRecord({
           catalogDir,
+          expectedVectorBlock,
           filePath: path.join(
             problemDir,
             `${slug}-approach${approach.number}.${config.extension}`,
@@ -264,7 +278,8 @@ function parseProblem({ catalogDir, category, pagePath }) {
         (swift.codeFence || swift.repl) &&
         swiftSource.exists &&
         swiftSource.testHarness &&
-        swiftSource.contractErrors.length === 0,
+        swiftSource.contractErrors.length === 0 &&
+        vectorsReady,
     };
   });
   const swiftPractice = practice.swift;
@@ -276,6 +291,14 @@ function parseProblem({ catalogDir, category, pagePath }) {
     title: extractTitle(content, slug),
     page: posixRelative(catalogDir, pagePath),
     helperTypes,
+    sharedTestVectors: {
+      file: vectorRecord.exists
+        ? posixRelative(repoRoot, vectorRecord.filePath)
+        : null,
+      caseCounts: vectorRecord.caseCounts,
+      errors: vectorRecord.errors,
+      ready: vectorsReady,
+    },
     practiceTabs: Object.keys(languages).filter((language) => practice[language].tab),
     practiceRepls: Object.keys(languages).filter((language) => practice[language].repl),
     starterFiles: Object.fromEntries(
@@ -298,7 +321,8 @@ function parseProblem({ catalogDir, category, pagePath }) {
       swiftStarter.imported &&
       swiftStarter.usedInSection &&
       swiftStarter.testHarness &&
-      swiftStarter.contractErrors.length === 0,
+      swiftStarter.contractErrors.length === 0 &&
+      vectorsReady,
     approaches,
   };
 }
@@ -334,7 +358,10 @@ function summarizeLanguage(problems, language) {
   };
 }
 
-export function buildCoverageManifest({ catalogDir = defaultCatalogDir } = {}) {
+export function buildCoverageManifest({
+  catalogDir = defaultCatalogDir,
+  vectorRoot = defaultVectorRoot,
+} = {}) {
   const problems = readdirSync(catalogDir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .sort((left, right) => left.name.localeCompare(right.name))
@@ -347,6 +374,7 @@ export function buildCoverageManifest({ catalogDir = defaultCatalogDir } = {}) {
           catalogDir,
           category: categoryEntry.name,
           pagePath: path.join(categoryDir, fileName),
+          vectorRoot,
         }));
     });
   const documentedApproaches = problems.reduce(
@@ -362,11 +390,12 @@ export function buildCoverageManifest({ catalogDir = defaultCatalogDir } = {}) {
       documentedApproaches: categoryApproaches.length,
       swiftReadyPages: categoryProblems.filter((problem) => problem.swiftReady).length,
       swiftReadyApproaches: categoryApproaches.filter((approach) => approach.swiftReady).length,
+      vectorReadyPages: categoryProblems.filter((problem) => problem.sharedTestVectors.ready).length,
     };
   });
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     catalogRoot: "src/content/docs/topics/cs/coding-problems",
     summary: {
       pages: problems.length,
@@ -379,6 +408,7 @@ export function buildCoverageManifest({ catalogDir = defaultCatalogDir } = {}) {
       swiftReadyPages: problems.filter((problem) => problem.swiftReady).length,
       swiftReadyApproaches: problems.flatMap((problem) => problem.approaches)
         .filter((approach) => approach.swiftReady).length,
+      vectorReadyPages: problems.filter((problem) => problem.sharedTestVectors.ready).length,
     },
     categories,
     problems,
@@ -399,6 +429,9 @@ export function swiftCoverageErrors(manifest) {
       for (const contractError of problem.swiftContractErrors) {
         missing.push(`contract: ${contractError}`);
       }
+      for (const vectorError of problem.sharedTestVectors.errors) {
+        missing.push(`test vectors: ${vectorError}`);
+      }
       errors.push(`${problem.page}: missing Swift ${missing.join(", ")}`);
     }
 
@@ -413,6 +446,9 @@ export function swiftCoverageErrors(manifest) {
       }
       for (const contractError of approach.swiftContractErrors) {
         missing.push(`contract: ${contractError}`);
+      }
+      for (const vectorError of problem.sharedTestVectors.errors) {
+        missing.push(`test vectors: ${vectorError}`);
       }
       errors.push(
         `${problem.page} approach ${approach.number}: missing Swift ${missing.join(", ")}`,
@@ -431,7 +467,8 @@ function printSummary(manifest) {
   const { summary } = manifest;
   console.log(
     `Swift catalog coverage: ${summary.swiftReadyPages}/${summary.pages} pages and ` +
-    `${summary.swiftReadyApproaches}/${summary.documentedApproaches} approaches ready.`,
+    `${summary.swiftReadyApproaches}/${summary.documentedApproaches} approaches ready; ` +
+    `${summary.vectorReadyPages}/${summary.pages} pages have shared vectors.`,
   );
 }
 

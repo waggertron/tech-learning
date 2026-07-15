@@ -327,6 +327,9 @@ Use the focused checks that match the change:
 ```bash
 npm run test:swift-runner-contract
 npm run test:swift-repl
+npm run test:coding-problem-vectors
+npm run check:coding-problem-vectors
+npm run test:coding-problem-vector-fixtures
 npm run test:swift-catalog-contract
 npm run test:swift-catalog-compile
 npm run validate:swift-repl-browser
@@ -336,6 +339,8 @@ npm run test:swift-runner-executor
 The contract and component tests are deterministic and credential-free. The browser validator uses an isolated local fixture under `tests/` and does not publish that fixture with the site. Run the Docker-backed executor suite when changing the pinned image, isolation controls, limits, source transfer, or cleanup. Finish every content or site batch with `npm run build`.
 
 Swift coding-problem files follow [the Swift coding-problem contract](swift-coding-problem-contract.md). Keep every starter and approach standalone, preserve the LeetCode type and method signature, copy the canonical test and data-structure blocks exactly, and keep deliberately invalid inputs separate from valid fixtures. The static contract test runs in the default pre-push gate. The focused compile command uses the selected local Swift compiler and records language evidence only.
+
+Python, TypeScript, Go, and Swift harnesses share [one canonical vector document per problem](coding-problem-test-vectors.md). Record valid, boundary, and deliberate invalid inputs without repairing them in an adapter. Run the vector sync command before the coverage sync command. The four-language fixture command is focused evidence for changes to the schema or renderers.
 
 For content edits that came from notes or research, also pay attention to the published-content stage:
 

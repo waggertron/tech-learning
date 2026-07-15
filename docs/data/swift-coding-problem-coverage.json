@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "catalogRoot": "src/content/docs/topics/cs/coding-problems",
   "summary": {
     "pages": 189,
@@ -50,7 +50,8 @@
       }
     },
     "swiftReadyPages": 0,
-    "swiftReadyApproaches": 0
+    "swiftReadyApproaches": 0,
+    "vectorReadyPages": 1
   },
   "categories": [
     {
@@ -58,126 +59,144 @@
       "pages": 12,
       "documentedApproaches": 39,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "2d-dynamic-programming",
       "pages": 12,
       "documentedApproaches": 35,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "advanced-graphs",
       "pages": 8,
       "documentedApproaches": 19,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "arrays-and-hashing",
       "pages": 18,
       "documentedApproaches": 43,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "backtracking",
       "pages": 9,
       "documentedApproaches": 27,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "binary-search",
       "pages": 8,
       "documentedApproaches": 23,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 1
     },
     {
       "category": "bit-manipulation",
       "pages": 7,
       "documentedApproaches": 21,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "graphs",
       "pages": 19,
       "documentedApproaches": 39,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "greedy",
       "pages": 10,
       "documentedApproaches": 31,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "heap-priority-queue",
       "pages": 7,
       "documentedApproaches": 20,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "intervals",
       "pages": 6,
       "documentedApproaches": 18,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "linked-list",
       "pages": 14,
       "documentedApproaches": 38,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "math-and-geometry",
       "pages": 8,
       "documentedApproaches": 23,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "sliding-window",
       "pages": 8,
       "documentedApproaches": 22,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "stack",
       "pages": 16,
       "documentedApproaches": 33,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "trees",
       "pages": 17,
       "documentedApproaches": 45,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "tries",
       "pages": 3,
       "documentedApproaches": 9,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     },
     {
       "category": "two-pointers",
       "pages": 7,
       "documentedApproaches": 19,
       "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0
+      "swiftReadyApproaches": 0,
+      "vectorReadyPages": 0
     }
   ],
   "problems": [
@@ -187,6 +206,18 @@
       "title": "5. Longest Palindromic Substring (Medium)",
       "page": "1d-dynamic-programming/005-longest-palindromic-substring.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -312,6 +343,18 @@
       "title": "70. Climbing Stairs (Easy)",
       "page": "1d-dynamic-programming/070-climbing-stairs.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -469,6 +512,18 @@
       "title": "91. Decode Ways (Medium)",
       "page": "1d-dynamic-programming/091-decode-ways.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -594,6 +649,18 @@
       "title": "139. Word Break (Medium)",
       "page": "1d-dynamic-programming/139-word-break.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -719,6 +786,18 @@
       "title": "152. Maximum Product Subarray (Medium)",
       "page": "1d-dynamic-programming/152-maximum-product-subarray.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -836,6 +915,18 @@
       "title": "198. House Robber (Medium)",
       "page": "1d-dynamic-programming/198-house-robber.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -988,6 +1079,18 @@
       "title": "213. House Robber II (Medium)",
       "page": "1d-dynamic-programming/213-house-robber-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1106,6 +1209,18 @@
       "title": "300. Longest Increasing Subsequence (Medium)",
       "page": "1d-dynamic-programming/300-longest-increasing-subsequence.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1220,6 +1335,18 @@
       "title": "322. Coin Change (Medium)",
       "page": "1d-dynamic-programming/322-coin-change.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1338,6 +1465,18 @@
       "title": "416. Partition Equal Subset Sum (Medium)",
       "page": "1d-dynamic-programming/416-partition-equal-subset-sum.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1456,6 +1595,18 @@
       "title": "647. Palindromic Substrings (Medium)",
       "page": "1d-dynamic-programming/647-palindromic-substrings.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1574,6 +1725,18 @@
       "title": "746. Min Cost Climbing Stairs (Easy)",
       "page": "1d-dynamic-programming/746-min-cost-climbing-stairs.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1723,6 +1886,18 @@
       "title": "10. Regular Expression Matching (Hard)",
       "page": "2d-dynamic-programming/010-regular-expression-matching.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -1841,6 +2016,18 @@
       "title": "62. Unique Paths (Medium)",
       "page": "2d-dynamic-programming/062-unique-paths.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -1966,6 +2153,18 @@
       "title": "72. Edit Distance (Hard)",
       "page": "2d-dynamic-programming/072-edit-distance.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -2090,6 +2289,18 @@
       "title": "97. Interleaving String (Medium)",
       "page": "2d-dynamic-programming/097-interleaving-string.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -2214,6 +2425,18 @@
       "title": "1143. Longest Common Subsequence (Medium)",
       "page": "2d-dynamic-programming/1143-longest-common-subsequence.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -2339,6 +2562,18 @@
       "title": "115. Distinct Subsequences (Hard)",
       "page": "2d-dynamic-programming/115-distinct-subsequences.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -2463,6 +2698,18 @@
       "title": "309. Best Time to Buy and Sell Stock with Cooldown (Medium)",
       "page": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -2587,6 +2834,18 @@
       "title": "312. Burst Balloons (Hard)",
       "page": "2d-dynamic-programming/312-burst-balloons.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -2692,6 +2951,18 @@
       "title": "329. Longest Increasing Path in a Matrix (Hard)",
       "page": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -2810,6 +3081,18 @@
       "title": "494. Target Sum (Medium)",
       "page": "2d-dynamic-programming/494-target-sum.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -2928,6 +3211,18 @@
       "title": "518. Coin Change II (Medium)",
       "page": "2d-dynamic-programming/518-coin-change-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -3046,6 +3341,18 @@
       "title": "714. Best Time to Buy and Sell Stock with Transaction Fee (Medium)",
       "page": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3131,6 +3438,18 @@
       "title": "1192. Critical Connections in a Network (Hard)",
       "page": "advanced-graphs/1192-critical-connections.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3196,6 +3515,18 @@
       "title": "1489. Find Critical and Pseudo-Critical Edges in MST (Hard)",
       "page": "advanced-graphs/1489-critical-and-pseudo-critical-edges.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3263,6 +3594,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3358,6 +3701,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3485,6 +3840,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3612,6 +3979,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3739,6 +4118,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3866,6 +4257,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -3991,6 +4394,18 @@
       "title": "1. Two Sum (Easy)",
       "page": "arrays-and-hashing/001-two-sum.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -4116,6 +4531,18 @@
       "title": "36. Valid Sudoku (Medium)",
       "page": "arrays-and-hashing/036-valid-sudoku.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -4241,6 +4668,18 @@
       "title": "49. Group Anagrams (Medium)",
       "page": "arrays-and-hashing/049-group-anagrams.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -4366,6 +4805,18 @@
       "title": "1010. Pairs of Songs With Total Durations Divisible by 60 (Medium)",
       "page": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -4422,6 +4873,18 @@
       "title": "1071. Greatest Common Divisor of Strings (Easy)",
       "page": "arrays-and-hashing/1071-greatest-common-divisor-of-strings.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -4509,6 +4972,18 @@
       "title": "128. Longest Consecutive Sequence (Medium)",
       "page": "arrays-and-hashing/128-longest-consecutive-sequence.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -4634,6 +5109,18 @@
       "title": "205. Isomorphic Strings (Easy)",
       "page": "arrays-and-hashing/205-isomorphic-strings.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [],
       "practiceRepls": [
         "python"
@@ -4715,6 +5202,18 @@
       "title": "217. Contains Duplicate (Easy)",
       "page": "arrays-and-hashing/217-contains-duplicate.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -4840,6 +5339,18 @@
       "title": "228. Summary Ranges (Easy)",
       "page": "arrays-and-hashing/228-summary-ranges.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -4933,6 +5444,18 @@
       "title": "238. Product of Array Except Self (Medium)",
       "page": "arrays-and-hashing/238-product-of-array-except-self.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5058,6 +5581,18 @@
       "title": "242. Valid Anagram (Easy)",
       "page": "arrays-and-hashing/242-valid-anagram.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5183,6 +5718,18 @@
       "title": "271. Encode and Decode Strings (Medium)",
       "page": "arrays-and-hashing/271-encode-and-decode-strings.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5308,6 +5855,18 @@
       "title": "303. Range Sum Query - Immutable (Easy)",
       "page": "arrays-and-hashing/303-range-sum-query-immutable.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5403,6 +5962,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5528,6 +6099,18 @@
       "title": "349. Intersection of Two Arrays (Easy)",
       "page": "arrays-and-hashing/349-intersection-of-two-arrays.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5592,6 +6175,18 @@
       "title": "387. First Unique Character in a String (Easy)",
       "page": "arrays-and-hashing/387-first-unique-character.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -5653,6 +6248,18 @@
       "title": "454. 4Sum II (Medium)",
       "page": "arrays-and-hashing/454-4sum-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -5740,6 +6347,18 @@
       "title": "459. Repeated Substring Pattern (Easy)",
       "page": "arrays-and-hashing/459-repeated-substring-pattern.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -5827,6 +6446,18 @@
       "title": "17. Letter Combinations of a Phone Number (Medium)",
       "page": "backtracking/017-letter-combinations-of-a-phone-number.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -5946,6 +6577,18 @@
       "title": "39. Combination Sum (Medium)",
       "page": "backtracking/039-combination-sum.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6065,6 +6708,18 @@
       "title": "40. Combination Sum II (Medium)",
       "page": "backtracking/040-combination-sum-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6170,6 +6825,18 @@
       "title": "46. Permutations (Medium)",
       "page": "backtracking/046-permutations.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6289,6 +6956,18 @@
       "title": "51. N-Queens (Hard)",
       "page": "backtracking/051-n-queens.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6394,6 +7073,18 @@
       "title": "78. Subsets (Medium)",
       "page": "backtracking/078-subsets.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6499,6 +7190,18 @@
       "title": "79. Word Search (Medium)",
       "page": "backtracking/079-word-search.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6604,6 +7307,18 @@
       "title": "90. Subsets II (Medium)",
       "page": "backtracking/090-subsets-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6709,6 +7424,18 @@
       "title": "131. Palindrome Partitioning (Medium)",
       "page": "backtracking/131-palindrome-partitioning.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6828,6 +7555,18 @@
       "title": "4. Median of Two Sorted Arrays (Hard)",
       "page": "binary-search/004-median-of-two-sorted-arrays.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -6949,6 +7688,18 @@
       "title": "33. Search in Rotated Sorted Array (Medium)",
       "page": "binary-search/033-search-in-rotated-sorted-array.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7074,6 +7825,18 @@
       "title": "74. Search a 2D Matrix (Medium)",
       "page": "binary-search/074-search-a-2d-matrix.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7199,6 +7962,18 @@
       "title": "153. Find Minimum in Rotated Sorted Array (Medium)",
       "page": "binary-search/153-find-minimum-in-rotated-sorted-array.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7316,6 +8091,18 @@
       "title": "162. Find Peak Element (Medium)",
       "page": "binary-search/162-find-peak-element.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7409,6 +8196,16 @@
       "title": "704. Binary Search (Easy)",
       "page": "binary-search/704-binary-search.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": "tools/coding-problem-vectors/vectors/binary-search/704-binary-search.json",
+        "caseCounts": {
+          "valid": 2,
+          "boundary": 4,
+          "invalid": 3
+        },
+        "errors": [],
+        "ready": true
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7534,6 +8331,18 @@
       "title": "875. Koko Eating Bananas (Medium)",
       "page": "binary-search/875-koko-eating-bananas.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7651,6 +8460,18 @@
       "title": "981. Time Based Key-Value Store (Medium)",
       "page": "binary-search/981-time-based-key-value-store.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7776,6 +8597,18 @@
       "title": "7. Reverse Integer (Medium)",
       "page": "bit-manipulation/007-reverse-integer.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -7887,6 +8720,18 @@
       "title": "136. Single Number (Easy)",
       "page": "bit-manipulation/136-single-number.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8012,6 +8857,18 @@
       "title": "190. Reverse Bits (Easy)",
       "page": "bit-manipulation/190-reverse-bits.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8137,6 +8994,18 @@
       "title": "191. Number of 1 Bits (Easy)",
       "page": "bit-manipulation/191-number-of-1-bits.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8248,6 +9117,18 @@
       "title": "268. Missing Number (Easy)",
       "page": "bit-manipulation/268-missing-number.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8373,6 +9254,18 @@
       "title": "338. Counting Bits (Easy)",
       "page": "bit-manipulation/338-counting-bits.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8498,6 +9391,18 @@
       "title": "371. Sum of Two Integers (Medium)",
       "page": "bit-manipulation/371-sum-of-two-integers.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8609,6 +9514,18 @@
       "title": "1091. Shortest Path in Binary Matrix (Medium)",
       "page": "graphs/1091-shortest-path-in-binary-matrix.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8673,6 +9590,18 @@
       "title": "127. Word Ladder (Hard)",
       "page": "graphs/127-word-ladder.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8785,6 +9714,18 @@
       "title": "130. Surrounded Regions (Medium)",
       "page": "graphs/130-surrounded-regions.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8893,6 +9834,18 @@
       "helperTypes": [
         "graph-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -8986,6 +9939,18 @@
       "title": "200. Number of Islands (Medium)",
       "page": "graphs/200-number-of-islands.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9079,6 +10044,18 @@
       "title": "207. Course Schedule (Medium)",
       "page": "graphs/207-course-schedule.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9172,6 +10149,18 @@
       "title": "210. Course Schedule II (Medium)",
       "page": "graphs/210-course-schedule-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9281,6 +10270,18 @@
       "title": "261. Graph Valid Tree (Medium)",
       "page": "graphs/261-graph-valid-tree.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9374,6 +10375,18 @@
       "title": "269. Alien Dictionary (Hard)",
       "page": "graphs/269-alien-dictionary.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9464,6 +10477,18 @@
       "title": "323. Number of Connected Components in an Undirected Graph (Medium)",
       "page": "graphs/323-number-of-connected-components-in-an-undirected-graph.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9557,6 +10582,18 @@
       "title": "417. Pacific Atlantic Water Flow (Medium)",
       "page": "graphs/417-pacific-atlantic-water-flow.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9663,6 +10700,18 @@
       "title": "542. 01 Matrix (Medium)",
       "page": "graphs/542-01-matrix.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9727,6 +10776,18 @@
       "title": "547. Number of Provinces (Medium)",
       "page": "graphs/547-number-of-provinces.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9817,6 +10878,18 @@
       "title": "684. Redundant Connection (Medium)",
       "page": "graphs/684-redundant-connection.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -9917,6 +10990,18 @@
       "title": "695. Max Area of Island (Medium)",
       "page": "graphs/695-max-area-of-island.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10007,6 +11092,18 @@
       "title": "721. Accounts Merge (Medium)",
       "page": "graphs/721-accounts-merge.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10071,6 +11168,18 @@
       "title": "785. Is Graph Bipartite? (Medium)",
       "page": "graphs/785-is-graph-bipartite.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10135,6 +11244,18 @@
       "title": "886. Possible Bipartition (Medium)",
       "page": "graphs/886-possible-bipartition.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10199,6 +11320,18 @@
       "title": "994. Rotting Oranges (Medium)",
       "page": "graphs/994-rotting-oranges.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10305,6 +11438,18 @@
       "title": "45. Jump Game II (Medium)",
       "page": "greedy/045-jump-game-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10426,6 +11571,18 @@
       "title": "53. Maximum Subarray (Medium)",
       "page": "greedy/053-maximum-subarray.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10551,6 +11708,18 @@
       "title": "55. Jump Game (Medium)",
       "page": "greedy/055-jump-game.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10740,6 +11909,18 @@
       "title": "122. Best Time to Buy and Sell Stock II (Medium)",
       "page": "greedy/122-best-time-to-buy-and-sell-stock-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10851,6 +12032,18 @@
       "title": "134. Gas Station (Medium)",
       "page": "greedy/134-gas-station.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -10944,6 +12137,18 @@
       "title": "1899. Merge Triplets to Form Target Triplet (Medium)",
       "page": "greedy/1899-merge-triplets-to-form-target-triplet.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11069,6 +12274,18 @@
       "title": "334. Increasing Triplet Subsequence (Medium)",
       "page": "greedy/334-increasing-triplet-subsequence.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11186,6 +12403,18 @@
       "title": "678. Valid Parenthesis String (Medium)",
       "page": "greedy/678-valid-parenthesis-string.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11311,6 +12540,18 @@
       "title": "763. Partition Labels (Medium)",
       "page": "greedy/763-partition-labels.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11438,6 +12679,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11565,6 +12818,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11660,6 +12925,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11779,6 +13056,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11885,6 +13174,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -11996,6 +13297,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12123,6 +13436,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12225,6 +13550,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12350,6 +13687,18 @@
       "title": "56. Merge Intervals (Medium)",
       "page": "intervals/056-merge-intervals.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12475,6 +13824,18 @@
       "title": "57. Insert Interval (Medium)",
       "page": "intervals/057-insert-interval.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12602,6 +13963,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12713,6 +14086,18 @@
       "title": "252. Meeting Rooms (Easy)",
       "page": "intervals/252-meeting-rooms.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12840,6 +14225,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -12965,6 +14362,18 @@
       "title": "435. Non-overlapping Intervals (Medium)",
       "page": "intervals/435-non-overlapping-intervals.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13092,6 +14501,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13211,6 +14632,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13330,6 +14763,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13458,6 +14903,18 @@
         "heap",
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13545,6 +15002,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13640,6 +15109,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13757,6 +15238,18 @@
       "helperTypes": [
         "random-list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13871,6 +15364,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -13985,6 +15490,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14097,6 +15614,18 @@
       "title": "146. LRU Cache (Medium)",
       "page": "linked-list/146-lru-cache.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14211,6 +15740,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14303,6 +15844,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14428,6 +15981,18 @@
       "title": "287. Find the Duplicate Number (Medium)",
       "page": "linked-list/287-find-the-duplicate-number.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14542,6 +16107,18 @@
       "helperTypes": [
         "list-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14632,6 +16209,18 @@
       "title": "43. Multiply Strings (Medium)",
       "page": "math-and-geometry/043-multiply-strings.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14743,6 +16332,18 @@
       "title": "48. Rotate Image (Medium)",
       "page": "math-and-geometry/048-rotate-image.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14868,6 +16469,18 @@
       "title": "50. Pow(x, n) (Medium)",
       "page": "math-and-geometry/050-pow-x-n.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -14993,6 +16606,18 @@
       "title": "54. Spiral Matrix (Medium)",
       "page": "math-and-geometry/054-spiral-matrix.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15104,6 +16729,18 @@
       "title": "66. Plus One (Easy)",
       "page": "math-and-geometry/066-plus-one.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15197,6 +16834,18 @@
       "title": "73. Set Matrix Zeroes (Medium)",
       "page": "math-and-geometry/073-set-matrix-zeroes.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15316,6 +16965,18 @@
       "title": "2013. Detect Squares (Medium)",
       "page": "math-and-geometry/2013-detect-squares.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15421,6 +17082,18 @@
       "title": "202. Happy Number (Easy)",
       "page": "math-and-geometry/202-happy-number.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15532,6 +17205,18 @@
       "title": "3. Longest Substring Without Repeating Characters (Medium)",
       "page": "sliding-window/003-longest-substring-without-repeating-characters.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15649,6 +17334,18 @@
       "title": "28. Find the Index of the First Occurrence in a String (Easy)",
       "page": "sliding-window/028-find-the-index-of-the-first-occurrence.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15742,6 +17439,18 @@
       "title": "76. Minimum Window Substring (Hard)",
       "page": "sliding-window/076-minimum-window-substring.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15859,6 +17568,18 @@
       "title": "121. Best Time to Buy and Sell Stock (Easy)",
       "page": "sliding-window/121-best-time-to-buy-and-sell-stock.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -15978,6 +17699,18 @@
       "helperTypes": [
         "heap"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16103,6 +17836,18 @@
       "title": "424. Longest Repeating Character Replacement (Medium)",
       "page": "sliding-window/424-longest-repeating-character-replacement.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16220,6 +17965,18 @@
       "title": "560. Subarray Sum Equals K (Medium)",
       "page": "sliding-window/560-subarray-sum-equals-k.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16313,6 +18070,18 @@
       "title": "567. Permutation in String (Medium)",
       "page": "sliding-window/567-permutation-in-string.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16430,6 +18199,18 @@
       "title": "20. Valid Parentheses (Easy)",
       "page": "stack/020-valid-parentheses.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16555,6 +18336,18 @@
       "title": "22. Generate Parentheses (Medium)",
       "page": "stack/022-generate-parentheses.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16680,6 +18473,18 @@
       "title": "71. Simplify Path (Medium)",
       "page": "stack/071-simplify-path.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16745,6 +18550,18 @@
       "title": "84. Largest Rectangle in Histogram (Hard)",
       "page": "stack/084-largest-rectangle-in-histogram.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16870,6 +18687,18 @@
       "title": "1047. Remove All Adjacent Duplicates In String (Easy)",
       "page": "stack/1047-remove-all-adjacent-duplicates.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -16963,6 +18792,18 @@
       "title": "1249. Minimum Remove to Make Valid Parentheses (Medium)",
       "page": "stack/1249-minimum-remove-valid-parens.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17028,6 +18869,18 @@
       "title": "150. Evaluate Reverse Polish Notation (Medium)",
       "page": "stack/150-evaluate-reverse-polish-notation.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17121,6 +18974,18 @@
       "title": "155. Min Stack (Medium)",
       "page": "stack/155-min-stack.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17246,6 +19111,18 @@
       "title": "224. Basic Calculator (Hard)",
       "page": "stack/224-basic-calculator.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17310,6 +19187,18 @@
       "title": "394. Decode String (Medium)",
       "page": "stack/394-decode-string.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17373,6 +19262,18 @@
       "title": "496. Next Greater Element I (Easy)",
       "page": "stack/496-next-greater-element-i.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17463,6 +19364,18 @@
       "title": "503. Next Greater Element II (Medium)",
       "page": "stack/503-next-greater-element-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17553,6 +19466,18 @@
       "title": "735. Asteroid Collision (Medium)",
       "page": "stack/735-asteroid-collision.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17616,6 +19541,18 @@
       "title": "739. Daily Temperatures (Medium)",
       "page": "stack/739-daily-temperatures.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17737,6 +19674,18 @@
       "title": "853. Car Fleet (Medium)",
       "page": "stack/853-car-fleet.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17858,6 +19807,18 @@
       "title": "907. Sum of Subarray Minimums (Medium)",
       "page": "stack/907-sum-of-subarray-minimums.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -17950,6 +19911,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18077,6 +20050,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18190,6 +20175,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18303,6 +20300,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18416,6 +20425,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -18523,6 +20544,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18618,6 +20651,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -18707,6 +20752,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18814,6 +20871,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -18927,6 +20996,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -19040,6 +21121,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -19150,6 +21243,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -19261,6 +21366,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -19368,6 +21485,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -19457,6 +21586,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -19552,6 +21693,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -19665,6 +21818,18 @@
       "helperTypes": [
         "tree-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript"
@@ -19728,6 +21893,18 @@
       "helperTypes": [
         "trie-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -19855,6 +22032,18 @@
       "helperTypes": [
         "trie-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "go"
@@ -19979,6 +22168,18 @@
       "helperTypes": [
         "trie-node"
       ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "go"
@@ -20101,6 +22302,18 @@
       "title": "11. Container With Most Water (Medium)",
       "page": "two-pointers/011-container-with-most-water.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -20194,6 +22407,18 @@
       "title": "15. 3Sum (Medium)",
       "page": "two-pointers/015-3sum.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -20319,6 +22544,18 @@
       "title": "42. Trapping Rain Water (Hard)",
       "page": "two-pointers/042-trapping-rain-water.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -20444,6 +22681,18 @@
       "title": "125. Valid Palindrome (Easy)",
       "page": "two-pointers/125-valid-palindrome.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -20569,6 +22818,18 @@
       "title": "167. Two Sum II, Input Array Is Sorted (Medium)",
       "page": "two-pointers/167-two-sum-ii.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -20694,6 +22955,18 @@
       "title": "189. Rotate Array (Medium)",
       "page": "two-pointers/189-rotate-array.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",
@@ -20805,6 +23078,18 @@
       "title": "443. String Compression (Medium)",
       "page": "two-pointers/443-string-compression.mdx",
       "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
       "practiceTabs": [
         "python",
         "typescript",

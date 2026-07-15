@@ -55,6 +55,7 @@ export function swiftFileNameErrors(fileName, role) {
 }
 
 export function swiftSourceContractErrors({
+  expectedVectorBlock,
   fileName,
   source,
   role,
@@ -68,6 +69,9 @@ export function swiftSourceContractErrors({
   }
   if (!normalizedSource.includes(canonicalTestSupport)) {
     errors.push("source must include the canonical TestSupport.swift block");
+  }
+  if (expectedVectorBlock && !normalizedSource.includes(normalized(expectedVectorBlock))) {
+    errors.push("source must include the exact canonical shared test-vector block");
   }
   if (!/^func runTests\(\)\s*\{/m.test(source)) {
     errors.push("source must declare func runTests()");

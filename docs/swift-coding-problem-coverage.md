@@ -43,6 +43,7 @@ Each problem entry includes:
 - Every numbered or unnumbered `## Approach` section.
 - Approach tabs, code fences, REPLs, source paths, and harness evidence by language.
 - Page-level and approach-level Swift readiness.
+- Shared vector path, valid, boundary, and invalid case counts, schema errors, and readiness.
 
 The source scanner recognizes `.py`, `.ts`, `.go`, and `.swift` files. It treats an unnumbered `## Approach: Name` heading as approach 1. `## Approach comparison` is a comparison section, not an implementation.
 
@@ -65,6 +66,8 @@ A documented approach is Swift-ready only when all of these are true:
 S2.2 owns the final solution and harness contract. If that gate changes the filename or harness convention, update the scanner, its synthetic fixtures, this document, and the generated manifest in the same batch.
 
 S2.2 is now defined in [Swift Coding Problem Contract](swift-coding-problem-contract.md). A Swift file is ready only when it follows that filename, source, signature, canonical-helper, test, and output contract. The manifest stores contract errors beside each existing Swift starter and approach so a malformed file cannot count as coverage.
+
+S2.3 is defined in [Coding Problem Test Vectors](coding-problem-test-vectors.md). Swift readiness also requires a valid problem vector file and the exact generated Swift case block. Vector files are populated with each category rollout. The manifest can therefore distinguish missing Swift source from missing or stale shared cases.
 
 ## Baseline, 2026-07-13
 

@@ -59,7 +59,7 @@ Every file copies the exact block from `tools/swift-catalog/helpers/TestSupport.
 
 `runTests()` contains at least one canonical expectation and calls `reportSuccess()` only after every expectation passes. Failed expectations terminate with the source location, an optional case description, the expected value, and the actual value where equality applies.
 
-Valid, boundary, and deliberately invalid fixtures remain separate. Test code does not clamp, sort, wrap, normalize, or repair an input unless the problem contract says the solution owns that transformation. S2.3 will define the shared cross-language vectors on top of this rule.
+Valid, boundary, and deliberately invalid fixtures remain separate. Test code does not clamp, sort, wrap, normalize, or repair an input unless the problem contract says the solution owns that transformation. [Coding Problem Test Vectors](coding-problem-test-vectors.md) defines the shared cross-language registry and invalid-input policy.
 
 ## Canonical helpers
 
@@ -88,6 +88,7 @@ The coverage scanner records contract errors for every Swift starter and approac
 - A declared LeetCode type.
 - `runTests()`, deterministic expectations, and the success marker.
 - The correct starter or completed-approach state.
+- The exact generated Swift block from the problem's canonical cross-language vectors.
 
 Missing source files remain expected while the migration is open. A source that exists but violates the contract is reported as incomplete rather than counted as ready.
 
