@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "323-number-of-connected-components-in-an-undirected-graph"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      },
+      {
+        "name": "edges",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "count_components"
+      },
+      "typescript": {
+        "function": "countComponents"
+      },
+      "go": {
+        "function": "countComponents"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "countComponents"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "two-components",
+      "classification": "valid",
+      "arguments": [
+        5,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "all-connected",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        1,
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "vertex-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        2,
+        [
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every endpoint must be in the range zero through n minus one."
+      }
+    }
+  ]
+}

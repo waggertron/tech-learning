@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "269-alien-dictionary"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "words",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "alien_order"
+      },
+      "typescript": {
+        "function": "alienOrder"
+      },
+      "go": {
+        "function": "alienOrder"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "alienOrder"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "canonical-order",
+      "classification": "valid",
+      "arguments": [
+        [
+          "wrt",
+          "wrf",
+          "er",
+          "ett",
+          "rftt"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "wertf"
+      }
+    },
+    {
+      "id": "cycle-has-no-order",
+      "classification": "valid",
+      "arguments": [
+        [
+          "z",
+          "x",
+          "z"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": ""
+      }
+    },
+    {
+      "id": "single-word",
+      "classification": "boundary",
+      "arguments": [
+        [
+          "a"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "a"
+      }
+    },
+    {
+      "id": "empty-dictionary",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires at least one word."
+      }
+    }
+  ]
+}

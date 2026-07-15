@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "261-graph-valid-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      },
+      {
+        "name": "edges",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "valid_tree"
+      },
+      "typescript": {
+        "function": "validTree"
+      },
+      "go": {
+        "function": "validTree"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "validTree"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "connected-tree",
+      "classification": "valid",
+      "arguments": [
+        5,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "contains-cycle",
+      "classification": "valid",
+      "arguments": [
+        5,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        1,
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "vertex-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        2,
+        [
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every endpoint must be in the range zero through n minus one."
+      }
+    }
+  ]
+}

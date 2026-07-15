@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "210-course-schedule-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "numCourses",
+        "codec": "int"
+      },
+      {
+        "name": "prerequisites",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_order"
+      },
+      "typescript": {
+        "function": "findOrder"
+      },
+      "go": {
+        "function": "findOrder"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findOrder"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "unique-chain",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "cycle-has-no-order",
+      "classification": "valid",
+      "arguments": [
+        2,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "one-course",
+      "classification": "boundary",
+      "arguments": [
+        1,
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "course-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        2,
+        [
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every course identifier must be smaller than numCourses."
+      }
+    }
+  ]
+}

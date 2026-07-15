@@ -5,16 +5,19 @@ parent: graphs
 tags: [leetcode, graphs, bfs, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './785-is-graph-bipartite.py?raw';
 import practiceCodeTs from './785-is-graph-bipartite.ts?raw';
 import practiceCodeGo from './785-is-graph-bipartite.go?raw';
+import practiceCodeSwift from './785-is-graph-bipartite.swift?raw';
+import approach1SwiftCode from './785-is-graph-bipartite-approach1.swift?raw';
 import approach2PyCode from './785-is-graph-bipartite-approach2.py?raw';
 import approach2TsCode from './785-is-graph-bipartite-approach2.ts?raw';
 import approach2GoCode from './785-is-graph-bipartite-approach2.go?raw';
@@ -40,6 +43,9 @@ LeetCode 785 · [Link](https://leetcode.com/problems/is-graph-bipartite/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="is-graph-bipartite-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="785-is-graph-bipartite-swift" />
   </TabItem>
 </Tabs>
 
@@ -102,6 +108,9 @@ function isBipartite(graph: number[][]): boolean {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="785-is-graph-bipartite-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

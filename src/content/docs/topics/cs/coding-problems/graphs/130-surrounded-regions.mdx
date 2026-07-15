@@ -5,16 +5,21 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, grid, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './130-surrounded-regions.py?raw';
 import practiceCodeTs from './130-surrounded-regions.ts?raw';
 import practiceCodeGo from './130-surrounded-regions.go?raw';
+import practiceCodeSwift from './130-surrounded-regions.swift?raw';
+import approach1SwiftCode from './130-surrounded-regions-approach1.swift?raw';
+import approach2SwiftCode from './130-surrounded-regions-approach2.swift?raw';
+import approach3SwiftCode from './130-surrounded-regions-approach3.swift?raw';
 import approach2PyCode from './130-surrounded-regions-approach2.py?raw';
 import approach2TsCode from './130-surrounded-regions-approach2.ts?raw';
 import approach2GoCode from './130-surrounded-regions-approach2.go?raw';
@@ -55,9 +60,18 @@ LeetCode 130 · [Link](https://leetcode.com/problems/surrounded-regions/) · *Me
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="surrounded-regions-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="130-surrounded-regions-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, DFS from each O to check if surrounded
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="130-surrounded-regions-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 For each `O`, DFS to see if the component touches the border. If not, flip them all to `X`.
 
@@ -126,6 +140,9 @@ function solve(board: string[][]): void {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="130-surrounded-regions-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -217,6 +234,9 @@ function solve(board: string[][]): void {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="130-surrounded-regions-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**

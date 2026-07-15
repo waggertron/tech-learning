@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "721-accounts-merge"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "accounts",
+        "codec": "string-matrix"
+      }
+    ],
+    "result": {
+      "codec": "string-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "accounts_merge"
+      },
+      "typescript": {
+        "function": "accountsMerge"
+      },
+      "go": {
+        "function": "accountsMerge"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "accountsMerge"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "merges-shared-email",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "John",
+            "a@mail.com",
+            "b@mail.com"
+          ],
+          [
+            "John",
+            "b@mail.com",
+            "c@mail.com"
+          ],
+          [
+            "Mary",
+            "m@mail.com"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "John",
+            "a@mail.com",
+            "b@mail.com",
+            "c@mail.com"
+          ],
+          [
+            "Mary",
+            "m@mail.com"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "separate-accounts",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "A",
+            "a@mail.com"
+          ],
+          [
+            "B",
+            "b@mail.com"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "A",
+            "a@mail.com"
+          ],
+          [
+            "B",
+            "b@mail.com"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "single-account",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            "Solo",
+            "one@mail.com"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "Solo",
+            "one@mail.com"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "missing-email",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            "Nobody"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every account must contain a name and at least one email."
+      }
+    }
+  ]
+}

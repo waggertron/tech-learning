@@ -5,16 +5,20 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, dfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './261-graph-valid-tree.py?raw';
 import practiceCodeTs from './261-graph-valid-tree.ts?raw';
 import practiceCodeGo from './261-graph-valid-tree.go?raw';
+import practiceCodeSwift from './261-graph-valid-tree.swift?raw';
+import approach1SwiftCode from './261-graph-valid-tree-approach1.swift?raw';
+import approach2SwiftCode from './261-graph-valid-tree-approach2.swift?raw';
 import approach2PyCode from './261-graph-valid-tree-approach2.py?raw';
 import approach2TsCode from './261-graph-valid-tree-approach2.ts?raw';
 import approach2GoCode from './261-graph-valid-tree-approach2.go?raw';
@@ -46,6 +50,9 @@ LeetCode 261 (premium, equivalent in 323 context) · [Link](https://leetcode.com
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="graph-valid-tree-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="261-graph-valid-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -130,6 +137,9 @@ func validTree(n int, edges [][]int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="261-graph-valid-tree-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -224,6 +234,9 @@ func validTree(n int, edges [][]int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="261-graph-valid-tree-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

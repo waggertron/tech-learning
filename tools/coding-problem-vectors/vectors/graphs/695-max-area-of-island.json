@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "695-max-area-of-island"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "grid",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "max_area_of_island"
+      },
+      "typescript": {
+        "function": "maxAreaOfIsland"
+      },
+      "go": {
+        "function": "maxAreaOfIsland"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxAreaOfIsland"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "five-cell-island",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "separate-islands",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single-water-cell",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            0
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "ragged-grid",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            1,
+            0
+          ],
+          [
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires a rectangular grid."
+      }
+    }
+  ]
+}

@@ -63,7 +63,7 @@ Category rollout checklist:
 - [ ] **S2.C05**: Backtracking, 9 pages.
 - [x] **S2.C06**: Binary search, 8 pages. All 8 starters and 23 documented approaches are wired to Swift REPL tabs, share 64 reviewed vectors, compile under Swift 6 mode, and satisfy the coverage contract.
 - [x] **S2.C07**: Bit manipulation, 7 pages. All 7 starters and 21 documented approaches are wired to Swift REPL tabs, share 57 reviewed vectors, compile under Swift 6 mode, and extend exact cross-language vector equality to array results.
-- [ ] **S2.C08**: Graphs, 19 pages.
+- [x] **S2.C08**: Graphs, 19 pages. All 19 starters and 39 documented approaches are wired to Swift REPL tabs, share 76 reviewed vectors, compile under Swift 6 mode, and add inout mutation plus graph structure and identity observations to the vector renderer.
 - [ ] **S2.C09**: Greedy, 10 pages.
 - [ ] **S2.C10**: Heap and priority queue, 7 pages.
 - [ ] **S2.C11**: Intervals, 6 pages.

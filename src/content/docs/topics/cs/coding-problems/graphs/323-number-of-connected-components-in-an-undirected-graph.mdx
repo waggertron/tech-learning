@@ -5,16 +5,20 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, dfs, bfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './323-number-of-connected-components-in-an-undirected-graph.py?raw';
 import practiceCodeTs from './323-number-of-connected-components-in-an-undirected-graph.ts?raw';
 import practiceCodeGo from './323-number-of-connected-components-in-an-undirected-graph.go?raw';
+import practiceCodeSwift from './323-number-of-connected-components-in-an-undirected-graph.swift?raw';
+import approach1SwiftCode from './323-number-of-connected-components-in-an-undirected-graph-approach1.swift?raw';
+import approach2SwiftCode from './323-number-of-connected-components-in-an-undirected-graph-approach2.swift?raw';
 import approach2PyCode from './323-number-of-connected-components-in-an-undirected-graph-approach2.py?raw';
 import approach2TsCode from './323-number-of-connected-components-in-an-undirected-graph-approach2.ts?raw';
 import approach2GoCode from './323-number-of-connected-components-in-an-undirected-graph-approach2.go?raw';
@@ -40,6 +44,9 @@ LeetCode 323 (premium) · [Link](https://leetcode.com/problems/number-of-connect
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="number-of-connected-components-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="323-number-of-connected-components-in-an-undirected-graph-swift" />
   </TabItem>
 </Tabs>
 
@@ -141,6 +148,9 @@ func countComponents(n int, edges [][]int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="323-number-of-connected-components-in-an-undirected-graph-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -236,6 +246,9 @@ func countComponents(n int, edges [][]int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="323-number-of-connected-components-in-an-undirected-graph-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

@@ -5,16 +5,20 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './133-clone-graph.py?raw';
 import practiceCodeTs from './133-clone-graph.ts?raw';
 import practiceCodeGo from './133-clone-graph.go?raw';
+import practiceCodeSwift from './133-clone-graph.swift?raw';
+import approach1SwiftCode from './133-clone-graph-approach1.swift?raw';
+import approach2SwiftCode from './133-clone-graph-approach2.swift?raw';
 import approach2PyCode from './133-clone-graph-approach2.py?raw';
 import approach2TsCode from './133-clone-graph-approach2.ts?raw';
 import approach2GoCode from './133-clone-graph-approach2.go?raw';
@@ -36,6 +40,9 @@ LeetCode 133 · [Link](https://leetcode.com/problems/clone-graph/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="clone-graph-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="133-clone-graph-swift" />
   </TabItem>
 </Tabs>
 
@@ -122,6 +129,9 @@ func cloneGraph(node *Node) *Node {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="133-clone-graph-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -211,6 +221,9 @@ func cloneGraph(node *Node) *Node {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="133-clone-graph-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

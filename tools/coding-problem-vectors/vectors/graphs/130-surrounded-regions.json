@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "130-surrounded-regions"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "board",
+        "codec": "string-matrix"
+      }
+    ],
+    "result": {
+      "codec": "string-matrix",
+      "comparison": "mutated-arguments"
+    },
+    "mutatedParameters": [
+      "board"
+    ],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "solve"
+      },
+      "typescript": {
+        "function": "solve"
+      },
+      "go": {
+        "function": "solve"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "solve"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "captures-enclosed-region",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "X",
+            "X",
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "O",
+            "O",
+            "X"
+          ],
+          [
+            "X",
+            "X",
+            "O",
+            "X"
+          ],
+          [
+            "X",
+            "O",
+            "X",
+            "X"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "X",
+            "X",
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "X",
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "X",
+            "X",
+            "X"
+          ],
+          [
+            "X",
+            "O",
+            "X",
+            "X"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "preserves-border-region",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "O",
+            "O"
+          ],
+          [
+            "O",
+            "O"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "O",
+            "O"
+          ],
+          [
+            "O",
+            "O"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "single-open-cell",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            "O"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "O"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "ragged-board",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            "X",
+            "O"
+          ],
+          [
+            "X"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires a rectangular board."
+      }
+    }
+  ]
+}

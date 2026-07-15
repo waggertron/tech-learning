@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "200-number-of-islands"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "grid",
+        "codec": "string-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "num_islands"
+      },
+      "typescript": {
+        "function": "numIslands"
+      },
+      "go": {
+        "function": "numIslands"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "numIslands"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "three-islands",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "1",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          [
+            "1",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0",
+            "1",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0",
+            "0",
+            "1",
+            "1"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "connected-land",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "1",
+            "1"
+          ],
+          [
+            "1",
+            "1"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-water-cell",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            "0"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "ragged-grid",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            "1",
+            "0"
+          ],
+          [
+            "1"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires a rectangular grid."
+      }
+    }
+  ]
+}

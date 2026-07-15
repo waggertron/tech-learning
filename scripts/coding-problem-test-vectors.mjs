@@ -468,6 +468,7 @@ function renderLiteral(codec, value, language) {
   if (codec === "string") return quoteString(value);
 
   const elementCodec = {
+    "graph-adjacency": "int-array",
     "int-array": "int",
     "int-matrix": "int-array",
     "string-array": "string",
@@ -478,6 +479,7 @@ function renderLiteral(codec, value, language) {
   const items = value.map((item) => renderLiteral(elementCodec, item, language));
   if (language === "go") {
     const goType = {
+      "graph-adjacency": "[][]int",
       "int-array": "[]int",
       "int-matrix": "[][]int",
       "string-array": "[]string",
@@ -555,6 +557,80 @@ function renderCall(document, language, arguments_) {
   return `${entrypoint.function}(${renderedArguments.join(", ")})`;
 }
 
+function renderMutatedArgumentsCase(document, language, testCase, caseIndex, indent) {
+  const mutated = document.contract.mutatedParameters;
+  if (mutated.length !== 1) {
+    throw new Error("Mutated-arguments rendering requires exactly one mutated parameter");
+  }
+  const parameterIndex = document.contract.parameters.findIndex(
+    (parameter) => parameter.name === mutated[0],
+  );
+  const parameter = document.contract.parameters[parameterIndex];
+  if (parameter.codec !== document.contract.result.codec) {
+    throw new Error("Mutated-arguments rendering requires the observed parameter and result codecs to match");
+  }
+
+  const variable = `argument${caseIndex + 1}`;
+  const renderedArguments = testCase.arguments.map((value, index) => renderLiteral(
+    document.contract.parameters[index].codec,
+    value,
+    language,
+  ));
+  const expected = renderLiteral(
+    document.contract.result.codec,
+    testCase.expected.value,
+    language,
+  );
+  const entrypoint = document.execution.entrypoints[language];
+  const declaration = {
+    python: `${variable} = ${renderedArguments[parameterIndex]}`,
+    typescript: `const ${variable} = ${renderedArguments[parameterIndex]};`,
+    go: `${variable} := ${renderedArguments[parameterIndex]}`,
+    swift: parameter.codec === "string-matrix"
+      ? `var ${variable}: [[Character]] = ${renderedArguments[parameterIndex]}`
+      : `var ${variable} = ${renderedArguments[parameterIndex]}`,
+  }[language];
+  renderedArguments[parameterIndex] = language === "swift" ? `&${variable}` : variable;
+  const call = language === "swift"
+    ? `${entrypoint.type}().${entrypoint.method}(${renderedArguments.join(", ")})`
+    : `${entrypoint.function}(${renderedArguments.join(", ")})`;
+
+  return [
+    `${indent}${declaration}`,
+    `${indent}${call}${language === "typescript" ? ";" : ""}`,
+    renderEqualAssertion(document, language, variable, expected, testCase.id, indent),
+  ];
+}
+
+function renderGraphStructureCase(document, language, testCase, caseIndex, indent) {
+  if (document.contract.parameters.length !== 1 ||
+      document.contract.parameters[0].codec !== "graph-adjacency" ||
+      document.contract.result.codec !== "graph-adjacency") {
+    throw new Error("Graph structure rendering requires one graph-adjacency parameter and result");
+  }
+
+  const adjacency = renderLiteral("graph-adjacency", testCase.arguments[0], language);
+  const expected = renderLiteral("graph-adjacency", testCase.expected.value, language);
+  const original = `original${caseIndex + 1}`;
+  const entrypoint = document.execution.entrypoints[language];
+  const call = language === "swift"
+    ? `${entrypoint.type}().${entrypoint.method}(${original})`
+    : `${entrypoint.function}(${original})`;
+  const declaration = {
+    python: `${original} = make_graph(${adjacency})`,
+    typescript: `const ${original} = makeGraph(${adjacency});`,
+    go: `${original} := makeGraph(${adjacency})`,
+    swift: `let ${original} = makeGraph(${adjacency})`,
+  }[language];
+  const assertion = {
+    python: `assert is_valid_clone(${original}, ${call}, ${expected}), ${quoteString(testCase.id)}`,
+    typescript: `assert(isValidClone(${original}, ${call}, ${expected}), ${quoteString(testCase.id)});`,
+    go: `assert(isValidClone(${original}, ${call}, ${expected}), ${quoteString(testCase.id)})`,
+    swift: `expectTrue(isValidClone(${original}, ${call}, ${expected}), ${quoteString(testCase.id)})`,
+  }[language];
+  return [`${indent}${declaration}`, `${indent}${assertion}`];
+}
+
 function commentPrefix(language) {
   return language === "python" ? "#" : "//";
 }
@@ -597,11 +673,13 @@ function renderEqualAssertion(document, language, call, expected, caseId, indent
 
 export function renderVectorBlock(document, language) {
   if (!vectorLanguages.includes(language)) throw new Error(`Unknown vector language ${language}`);
-  if (document.execution.kind === "function" && document.contract.result.comparison !== "equal") {
-    throw new Error("Proof rendering currently requires equal result comparison");
+  const supportedFunctionComparisons = ["equal", "mutated-arguments", "structure"];
+  if (document.execution.kind === "function" &&
+      !supportedFunctionComparisons.includes(document.contract.result.comparison)) {
+    throw new Error("Proof rendering does not support this result comparison");
   }
   if (document.execution.kind === "function" &&
-      !["boolean", "float", "int", "string", "int-array", "int-matrix", "string-array", "string-matrix"]
+      !["boolean", "float", "graph-adjacency", "int", "string", "int-array", "int-matrix", "string-array", "string-matrix"]
         .includes(document.contract.result.codec)) {
     throw new Error("Proof rendering does not support this result codec");
   }
@@ -625,6 +703,28 @@ export function renderVectorBlock(document, language) {
 
     if (document.execution.kind === "operation-sequence") {
       lines.push(...renderOperationSequenceCase(document, language, testCase, caseIndex, indent));
+      continue;
+    }
+
+    if (document.contract.result.comparison === "mutated-arguments") {
+      lines.push(...renderMutatedArgumentsCase(
+        document,
+        language,
+        testCase,
+        caseIndex,
+        indent,
+      ));
+      continue;
+    }
+
+    if (document.contract.result.comparison === "structure") {
+      lines.push(...renderGraphStructureCase(
+        document,
+        language,
+        testCase,
+        caseIndex,
+        indent,
+      ));
       continue;
     }
 

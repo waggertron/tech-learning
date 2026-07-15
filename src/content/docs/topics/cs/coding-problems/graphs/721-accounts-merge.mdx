@@ -5,16 +5,19 @@ parent: graphs
 tags: [leetcode, graphs, union-find, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './721-accounts-merge.py?raw';
 import practiceCodeTs from './721-accounts-merge.ts?raw';
 import practiceCodeGo from './721-accounts-merge.go?raw';
+import practiceCodeSwift from './721-accounts-merge.swift?raw';
+import approach1SwiftCode from './721-accounts-merge-approach1.swift?raw';
 import approach2PyCode from './721-accounts-merge-approach2.py?raw';
 import approach2TsCode from './721-accounts-merge-approach2.ts?raw';
 import approach2GoCode from './721-accounts-merge-approach2.go?raw';
@@ -57,6 +60,9 @@ LeetCode 721 · [Link](https://leetcode.com/problems/accounts-merge/) · *Medium
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="accounts-merge-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="721-accounts-merge-swift" />
   </TabItem>
 </Tabs>
 
@@ -139,6 +145,9 @@ function accountsMerge(accounts: string[][]): string[][] {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="721-accounts-merge-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

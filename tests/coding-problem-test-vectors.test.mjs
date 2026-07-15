@@ -21,7 +21,7 @@ function binarySearchVector() {
 
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 15);
+  assert.equal(records.length, 34);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -141,4 +141,73 @@ test("renders ordered array equality in every language", () => {
   assert.match(renderVectorBlock(arrayResult, "typescript"), /JSON\.stringify\(search\(/);
   assert.match(renderVectorBlock(arrayResult, "go"), /func\(actual, expected \[\]int\) bool/);
   assert.match(renderVectorBlock(arrayResult, "swift"), /expectEqual\(Solution\(\)\.search\(/);
+});
+
+test("renders Swift inout mutation observations", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "board", codec: "string-matrix" }];
+  document.contract.result = { codec: "string-matrix", comparison: "mutated-arguments" };
+  document.contract.mutatedParameters = ["board"];
+  document.contract.invalidInputPolicy = "solution-handled";
+  document.execution.entrypoints.swift = { type: "Solution", method: "solve" };
+  document.cases = [
+    {
+      id: "captures-region",
+      classification: "valid",
+      arguments: [[["X", "X"], ["X", "O"]]],
+      expected: { kind: "value", value: [["X", "X"], ["X", "O"]] },
+    },
+    {
+      id: "single-cell",
+      classification: "boundary",
+      arguments: [[["O"]]],
+      expected: { kind: "value", value: [["O"]] },
+    },
+    {
+      id: "empty-board",
+      classification: "invalid",
+      arguments: [[]],
+      expected: { kind: "value", value: [] },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /var argument1: \[\[Character\]\] = \[\["X", "X"\], \["X", "O"\]\]/);
+  assert.match(block, /Solution\(\)\.solve\(&argument1\)/);
+  assert.match(block, /expectEqual\(argument1, \[\["X", "X"\], \["X", "O"\]\], "captures-region"\)/);
+});
+
+test("renders Swift graph structure and identity observations", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "node", codec: "graph-adjacency" }];
+  document.contract.result = { codec: "graph-adjacency", comparison: "structure" };
+  document.contract.mutatedParameters = [];
+  document.contract.invalidInputPolicy = "excluded";
+  document.execution.entrypoints.swift = { type: "Solution", method: "cloneGraph" };
+  document.cases = [
+    {
+      id: "two-node-cycle",
+      classification: "valid",
+      arguments: [[[2], [1]]],
+      expected: { kind: "value", value: [[2], [1]] },
+    },
+    {
+      id: "empty-graph",
+      classification: "boundary",
+      arguments: [[]],
+      expected: { kind: "value", value: [] },
+    },
+    {
+      id: "invalid-neighbor",
+      classification: "invalid",
+      arguments: [[[2]]],
+      expected: { kind: "excluded", reason: "Neighbor labels must name existing nodes." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let original1 = makeGraph\(\[\[2\], \[1\]\]\)/);
+  assert.match(block, /expectTrue\(isValidClone\(original1, Solution\(\)\.cloneGraph\(original1\), \[\[2\], \[1\]\]\), "two-node-cycle"\)/);
 });

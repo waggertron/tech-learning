@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "207-course-schedule"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "numCourses",
+        "codec": "int"
+      },
+      {
+        "name": "prerequisites",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "can_finish"
+      },
+      "typescript": {
+        "function": "canFinish"
+      },
+      "go": {
+        "function": "canFinish"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "canFinish"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "simple-chain",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "two-course-cycle",
+      "classification": "valid",
+      "arguments": [
+        2,
+        [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "one-course",
+      "classification": "boundary",
+      "arguments": [
+        1,
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "course-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        2,
+        [
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every course identifier must be smaller than numCourses."
+      }
+    }
+  ]
+}

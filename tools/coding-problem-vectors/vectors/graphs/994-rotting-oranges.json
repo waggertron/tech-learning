@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "994-rotting-oranges"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "grid",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "oranges_rotting"
+      },
+      "typescript": {
+        "function": "orangesRotting"
+      },
+      "go": {
+        "function": "orangesRotting"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "orangesRotting"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "four-minutes",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "unreachable-fresh-orange",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "no-fresh-oranges",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            0,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "ragged-grid",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            2,
+            1
+          ],
+          [
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires a rectangular grid."
+      }
+    }
+  ]
+}

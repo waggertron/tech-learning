@@ -5,16 +5,21 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, bfs, multi-source, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './994-rotting-oranges.py?raw';
 import practiceCodeTs from './994-rotting-oranges.ts?raw';
 import practiceCodeGo from './994-rotting-oranges.go?raw';
+import practiceCodeSwift from './994-rotting-oranges.swift?raw';
+import approach1SwiftCode from './994-rotting-oranges-approach1.swift?raw';
+import approach2SwiftCode from './994-rotting-oranges-approach2.swift?raw';
+import approach3SwiftCode from './994-rotting-oranges-approach3.swift?raw';
 import approach2PyCode from './994-rotting-oranges-approach2.py?raw';
 import approach2TsCode from './994-rotting-oranges-approach2.ts?raw';
 import approach2GoCode from './994-rotting-oranges-approach2.go?raw';
@@ -48,9 +53,18 @@ LeetCode 994 · [Link](https://leetcode.com/problems/rotting-oranges/) · *Mediu
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="rotting-oranges-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="994-rotting-oranges-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, simulate minute-by-minute
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="994-rotting-oranges-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 On each tick, scan the grid and mark any fresh orange adjacent to a rotten one. Keep ticking until no more changes.
 
@@ -125,6 +139,9 @@ function orangesRotting(grid: number[][]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="994-rotting-oranges-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -219,6 +236,9 @@ function orangesRotting(grid: number[][]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="994-rotting-oranges-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**

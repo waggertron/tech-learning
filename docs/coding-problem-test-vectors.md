@@ -56,7 +56,7 @@ Schema version 1 names representations rather than inferring them from JSON:
 - Structures: linked list, level-order tree, graph adjacency list, random-pointer list, and interval list.
 - Stateful designs: operation sequences and operation results.
 
-Result comparisons distinguish exact equality from unordered, multiset, approximate, identity, structural, mutated-argument, and operation-result checks. Exact equality supports scalar, array, and matrix results. Python and Swift use native collection equality. TypeScript compares deterministic JSON structure. Go renders a typed element-by-element comparison closure. A language renderer has to implement the selected codec and comparison before it can generate that problem's harness. It cannot fall back to a lossy generic conversion.
+Result comparisons distinguish exact equality from unordered, multiset, approximate, identity, structural, mutated-argument, and operation-result checks. Exact equality supports scalar, array, and matrix results. Python and Swift use native collection equality. TypeScript compares deterministic JSON structure. Go renders a typed element-by-element comparison closure. Surrounded Regions observes its mutated board through the original inout API. Clone Graph builds a graph from its adjacency codec, verifies the cloned structure, and rejects shared node identity. A language renderer has to implement the selected codec and comparison before it can generate that problem's harness. It cannot fall back to a lossy generic conversion.
 
 Function problems name the top-level function in Python, TypeScript, and Go, plus the Swift type and method. Stateful design problems name the submitted type in each language and use an operation sequence. The registry validates and renders both execution shapes. Operation sequences start with `init`, keep one subject per case, preserve call order, and compare each non-void result at its original operation index. Go rendering maps the canonical constructor and method names to `NewType` and exported methods.
 
@@ -72,7 +72,7 @@ It ends with `TEST_VECTORS_END`. The generated assertions and explicit exclusion
 
 Swift catalog readiness compares the complete generated Swift block, not only the digest comment. Editing an assertion, omitting a case, changing an invalid input, or using stale vectors leaves the page incomplete until the source is regenerated.
 
-The coverage manifest records the vector path, valid, boundary, and invalid counts, validation errors, and readiness for every problem. Vector population advances with category rollout. LeetCode 704 remains the four-toolchain proof document. Binary Search adds the stateful TimeMap contract. Bit Manipulation adds the first exact array-result contract through Counting Bits.
+The coverage manifest records the vector path, valid, boundary, and invalid counts, validation errors, and readiness for every problem. Vector population advances with category rollout. LeetCode 704 remains the four-toolchain proof document. Binary Search adds the stateful TimeMap contract. Bit Manipulation adds the first exact array-result contract through Counting Bits. Graphs adds inout mutation observations and graph structure plus identity validation.
 
 ## Proof fixtures
 
@@ -134,6 +134,6 @@ The default pre-push gate runs the deterministic schema, drift, coverage, and so
 
 ## Current evidence
 
-The LeetCode 704 scalar function proof, LeetCode 981 stateful proof, and LeetCode 338 array-result proof pass with Python 3.14.6, TypeScript 5.9.3, Go 1.26.4, and Apple Swift 6.3.2 in Swift 6 language mode. Swift compilation treats warnings as errors. The registry contains 121 cases across 15 Binary Search and Bit Manipulation problems. TimeMap proves ordered stateful operations. Counting Bits proves deterministic array-result equality in all four generated programs.
+The LeetCode 704 scalar function proof, LeetCode 981 stateful proof, and LeetCode 338 array-result proof pass with Python 3.14.6, TypeScript 5.9.3, Go 1.26.4, and Apple Swift 6.3.2 in Swift 6 language mode. Swift compilation treats warnings as errors. The registry contains 197 cases across 34 Binary Search, Bit Manipulation, and Graphs problems. TimeMap proves ordered stateful operations. Counting Bits proves deterministic array-result equality in all four generated programs. The Graphs vectors exercise scalar, array, matrix, inout mutation, and graph structure results in the Swift catalog.
 
 This is language and standard-library evidence. It does not exercise the pinned Swift 6.3.3 Linux browser executor or any Apple SDK surface.

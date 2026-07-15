@@ -5,16 +5,21 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, union-find, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './684-redundant-connection.py?raw';
 import practiceCodeTs from './684-redundant-connection.ts?raw';
 import practiceCodeGo from './684-redundant-connection.go?raw';
+import practiceCodeSwift from './684-redundant-connection.swift?raw';
+import approach1SwiftCode from './684-redundant-connection-approach1.swift?raw';
+import approach2SwiftCode from './684-redundant-connection-approach2.swift?raw';
+import approach3SwiftCode from './684-redundant-connection-approach3.swift?raw';
 import approach2PyCode from './684-redundant-connection-approach2.py?raw';
 import approach2TsCode from './684-redundant-connection-approach2.ts?raw';
 import approach2GoCode from './684-redundant-connection-approach2.go?raw';
@@ -41,9 +46,18 @@ LeetCode 684 · [Link](https://leetcode.com/problems/redundant-connection/) · *
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="redundant-connection-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="684-redundant-connection-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, for each edge, test if removing it makes the graph a tree
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="684-redundant-connection-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 Remove each edge in turn; run a DFS/BFS on the rest; test for connectivity and acyclicity.
 
@@ -52,6 +66,12 @@ Remove each edge in turn; run a DFS/BFS on the rest; test for connectivity and a
 - **Space:** $O(V)$ for the adjacency list and DFS stack.
 
 ## Approach 2: DFS to find the cycle, pick the last edge on it
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="684-redundant-connection-approach2-swift" />
+  </TabItem>
+</Tabs>
 
 Build the full graph; run a DFS that finds a back edge, walk the parent chain to collect all edges on the cycle, then iterate the input edges in reverse and return the first one whose index is in the cycle.
 
@@ -117,6 +137,9 @@ function findRedundantConnection(edges: number[][]): number[] {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="684-redundant-connection-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

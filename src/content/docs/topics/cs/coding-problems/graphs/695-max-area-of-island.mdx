@@ -5,16 +5,20 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './695-max-area-of-island.py?raw';
 import practiceCodeTs from './695-max-area-of-island.ts?raw';
 import practiceCodeGo from './695-max-area-of-island.go?raw';
+import practiceCodeSwift from './695-max-area-of-island.swift?raw';
+import approach1SwiftCode from './695-max-area-of-island-approach1.swift?raw';
+import approach2SwiftCode from './695-max-area-of-island-approach2.swift?raw';
 import approach2PyCode from './695-max-area-of-island-approach2.py?raw';
 import approach2TsCode from './695-max-area-of-island-approach2.ts?raw';
 import approach2GoCode from './695-max-area-of-island-approach2.go?raw';
@@ -40,6 +44,9 @@ LeetCode 695 · [Link](https://leetcode.com/problems/max-area-of-island/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="max-area-of-island-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="695-max-area-of-island-swift" />
   </TabItem>
 </Tabs>
 
@@ -91,6 +98,9 @@ function maxAreaOfIsland(grid: number[][]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="695-max-area-of-island-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -177,6 +187,9 @@ function maxAreaOfIsland(grid: number[][]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="695-max-area-of-island-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**

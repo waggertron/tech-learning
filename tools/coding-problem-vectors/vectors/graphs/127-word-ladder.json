@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "graphs",
+    "slug": "127-word-ladder"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "beginWord",
+        "codec": "string"
+      },
+      {
+        "name": "endWord",
+        "codec": "string"
+      },
+      {
+        "name": "wordList",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "ladder_length"
+      },
+      "typescript": {
+        "function": "ladderLength"
+      },
+      "go": {
+        "function": "ladderLength"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "ladderLength"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "classic-ladder",
+      "classification": "valid",
+      "arguments": [
+        "hit",
+        "cog",
+        [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log",
+          "cog"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "missing-end-word",
+      "classification": "valid",
+      "arguments": [
+        "hit",
+        "cog",
+        [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "one-change",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        "c",
+        [
+          "a",
+          "b",
+          "c"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "same-endpoints",
+      "classification": "invalid",
+      "arguments": [
+        "hit",
+        "hit",
+        [
+          "hit"
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires distinct begin and end words."
+      }
+    }
+  ]
+}

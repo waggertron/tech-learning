@@ -5,16 +5,21 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, dfs, bfs, grid, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './417-pacific-atlantic-water-flow.py?raw';
 import practiceCodeTs from './417-pacific-atlantic-water-flow.ts?raw';
 import practiceCodeGo from './417-pacific-atlantic-water-flow.go?raw';
+import practiceCodeSwift from './417-pacific-atlantic-water-flow.swift?raw';
+import approach1SwiftCode from './417-pacific-atlantic-water-flow-approach1.swift?raw';
+import approach2SwiftCode from './417-pacific-atlantic-water-flow-approach2.swift?raw';
+import approach3SwiftCode from './417-pacific-atlantic-water-flow-approach3.swift?raw';
 import approach2PyCode from './417-pacific-atlantic-water-flow-approach2.py?raw';
 import approach2TsCode from './417-pacific-atlantic-water-flow-approach2.ts?raw';
 import approach2GoCode from './417-pacific-atlantic-water-flow-approach2.go?raw';
@@ -41,9 +46,18 @@ LeetCode 417 · [Link](https://leetcode.com/problems/pacific-atlantic-water-flow
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="pacific-atlantic-water-flow-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="417-pacific-atlantic-water-flow-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, DFS from every cell, test reachability
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="417-pacific-atlantic-water-flow-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 For each cell, run two DFSes ("can I reach Pacific?", "can I reach Atlantic?"). Keep cells that answer yes to both.
 
@@ -124,6 +138,9 @@ function pacificAtlantic(heights: number[][]): number[][] {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="417-pacific-atlantic-water-flow-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -216,6 +233,9 @@ function pacificAtlantic(heights: number[][]): number[][] {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="417-pacific-atlantic-water-flow-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**

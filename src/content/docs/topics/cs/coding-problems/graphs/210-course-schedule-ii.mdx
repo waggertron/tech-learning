@@ -5,16 +5,21 @@ parent: graphs
 tags: [leetcode, neetcode-150, graphs, topological-sort, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './210-course-schedule-ii.py?raw';
 import practiceCodeTs from './210-course-schedule-ii.ts?raw';
 import practiceCodeGo from './210-course-schedule-ii.go?raw';
+import practiceCodeSwift from './210-course-schedule-ii.swift?raw';
+import approach1SwiftCode from './210-course-schedule-ii-approach1.swift?raw';
+import approach2SwiftCode from './210-course-schedule-ii-approach2.swift?raw';
+import approach3SwiftCode from './210-course-schedule-ii-approach3.swift?raw';
 import approach2PyCode from './210-course-schedule-ii-approach2.py?raw';
 import approach2TsCode from './210-course-schedule-ii-approach2.ts?raw';
 import approach2GoCode from './210-course-schedule-ii-approach2.go?raw';
@@ -42,9 +47,18 @@ LeetCode 210 · [Link](https://leetcode.com/problems/course-schedule-ii/) · *Me
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="course-schedule-ii-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="210-course-schedule-ii-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, check feasibility first, then try to order
+
+<Tabs>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="210-course-schedule-ii-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 Use problem 207 to check for cycles. If none, use a second pass to build the order. Two passes, wasted work.
 
@@ -157,6 +171,9 @@ func findOrder(numCourses int, prerequisites [][]int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="210-course-schedule-ii-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -263,6 +280,9 @@ func findOrder(numCourses int, prerequisites [][]int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="210-course-schedule-ii-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
