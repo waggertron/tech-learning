@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "binary-search",
+    "slug": "004-median-of-two-sorted-arrays"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums1",
+        "codec": "int-array"
+      },
+      {
+        "name": "nums2",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "float",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_median_sorted_arrays"
+      },
+      "typescript": {
+        "function": "findMedianSortedArrays"
+      },
+      "go": {
+        "function": "findMedianSortedArrays"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findMedianSortedArrays"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "odd-total-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          3
+        ],
+        [
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "even-total-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2.5
+      }
+    },
+    {
+      "id": "first-array-empty",
+      "classification": "boundary",
+      "arguments": [
+        [],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "second-array-empty",
+      "classification": "boundary",
+      "arguments": [
+        [
+          2
+        ],
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "boundary",
+      "arguments": [
+        [
+          -5,
+          -3
+        ],
+        [
+          -4,
+          -2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -3.5
+      }
+    },
+    {
+      "id": "both-arrays-empty",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The combined input must contain at least one value."
+      }
+    },
+    {
+      "id": "first-array-unsorted",
+      "classification": "invalid",
+      "arguments": [
+        [
+          3,
+          1
+        ],
+        [
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each input array must be sorted in ascending order."
+      }
+    },
+    {
+      "id": "second-array-unsorted",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each input array must be sorted in ascending order."
+      }
+    }
+  ]
+}

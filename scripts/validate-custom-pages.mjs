@@ -170,11 +170,14 @@ async function validateReplMarkup(browser) {
     await page.locator(".tsrepl .tsrepl__run", { hasText: "Run TS" }).first().waitFor();
     await page.getByRole("tab", { name: "Go" }).first().click();
     await page.locator(".gorepl .gorepl__run", { hasText: "Run Go" }).first().waitFor();
+    await page.getByRole("tab", { name: "Swift" }).first().click();
+    await page.locator(".swiftrepl button", { hasText: "Run Swift" }).first().waitFor();
 
     const replCounts = await page.evaluate(() => ({
       python: document.querySelectorAll(".pyrepl").length,
       typescript: document.querySelectorAll(".tsrepl").length,
       go: document.querySelectorAll(".gorepl").length,
+      swift: document.querySelectorAll(".swiftrepl").length,
     }));
 
     for (const [name, count] of Object.entries(replCounts)) {
@@ -194,7 +197,7 @@ try {
   } finally {
     await browser.close();
   }
-  console.log("Custom page validation passed: DSL calculator, React output, and REPL markup checked.");
+  console.log("Custom page validation passed: DSL calculator, React output, and four-language REPL markup checked.");
 } finally {
   await stopPreview();
 }

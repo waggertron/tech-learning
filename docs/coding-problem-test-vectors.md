@@ -58,7 +58,7 @@ Schema version 1 names representations rather than inferring them from JSON:
 
 Result comparisons distinguish exact equality from unordered, multiset, approximate, identity, structural, mutated-argument, and operation-result checks. A language renderer has to implement the selected codec and comparison before it can generate that problem's harness. It cannot fall back to a lossy generic conversion.
 
-Function problems name the top-level function in Python, TypeScript, and Go, plus the Swift type and method. Stateful design problems name the submitted type in each language and use an operation sequence. The registry validates both execution shapes. The first executable proof covers the function shape. Operation-sequence rendering lands with the first stateful category that needs it.
+Function problems name the top-level function in Python, TypeScript, and Go, plus the Swift type and method. Stateful design problems name the submitted type in each language and use an operation sequence. The registry validates and renders both execution shapes. Operation sequences start with `init`, keep one subject per case, preserve call order, and compare each non-void result at its original operation index. Go rendering maps the canonical constructor and method names to `NewType` and exported methods.
 
 ## Generated blocks
 
@@ -72,9 +72,9 @@ It ends with `TEST_VECTORS_END`. The generated assertions and explicit exclusion
 
 Swift catalog readiness compares the complete generated Swift block, not only the digest comment. Editing an assertion, omitting a case, changing an invalid input, or using stale vectors leaves the page incomplete until the source is regenerated.
 
-The coverage manifest records the vector path, valid, boundary, and invalid counts, validation errors, and readiness for every problem. Vector population advances with category rollout. The S2.3 proof document is LeetCode 704. It does not claim that all 189 problem vector files already exist.
+The coverage manifest records the vector path, valid, boundary, and invalid counts, validation errors, and readiness for every problem. Vector population advances with category rollout. LeetCode 704 remains the four-toolchain proof document. The Binary Search pilot adds reviewed vectors for all eight category pages, including the stateful TimeMap contract.
 
-## Proof fixture
+## Proof fixtures
 
 LeetCode 704 supplies the first four-language proof:
 
@@ -83,17 +83,25 @@ LeetCode 704 supplies the first four-language proof:
 - The generated Python, TypeScript, Go, and Swift programs use the same vector digest and case IDs.
 - Each generated program compiles or runs with the local supported toolchain.
 
-The committed proof sources live under `tests/fixtures/coding-problem-vectors/generated/`. Their templates contain one `{{TEST_VECTORS}}` marker. The sync command owns the generated block.
+LeetCode 981 supplies the stateful four-language proof:
+
+- Every executable case constructs a fresh TimeMap.
+- Set and get calls remain in registry order.
+- Void set results keep their operation indexes without fake return values.
+- Missing and prior-timestamp lookups compare exact strings.
+- Invalid operation sequences remain visible and excluded.
+
+The committed proof sources live under `tests/fixtures/coding-problem-vectors/generated/`. Their templates contain one `{{TEST_VECTORS}}` marker. The sync command owns the generated block. The focused proof command compiles and runs every generated fixture independently so language-level names do not collide between problems.
 
 ## Commands
 
-Format registry documents and regenerate proof fixtures:
+Format registry documents, regenerate proof fixtures, and refresh owned vector blocks in catalog sources that already contain the markers:
 
 ```bash
 npm run sync:coding-problem-vectors
 ```
 
-The sync command owns `tests/fixtures/coding-problem-vectors/generated/`. It rewrites stale outputs and removes only orphaned files inside that generated directory. Compiler proofs use self-cleaning system temporary directories for binaries and module caches.
+The sync command owns `tests/fixtures/coding-problem-vectors/generated/`. It rewrites stale outputs and removes only orphaned files inside that generated directory. In catalog sources, it replaces only the text between one complete `TEST_VECTORS_BEGIN` and `TEST_VECTORS_END` marker pair. Compiler proofs use self-cleaning system temporary directories for binaries and module caches.
 
 Check schema validity and generated-file drift:
 
@@ -119,6 +127,6 @@ The default pre-push gate runs the deterministic schema, drift, coverage, and so
 
 ## Current evidence
 
-The LeetCode 704 proof passes with Python 3.14.6, TypeScript 5.9.3, Go 1.26.4, and Apple Swift 6.3.2 in Swift 6 language mode. Swift compilation treats warnings as errors.
+The LeetCode 704 function proof and LeetCode 981 stateful proof pass with Python 3.14.6, TypeScript 5.9.3, Go 1.26.4, and Apple Swift 6.3.2 in Swift 6 language mode. Swift compilation treats warnings as errors. The Binary Search registry contains 64 cases across eight problems. TimeMap proves the operation-sequence renderer with isolated subjects, ordered calls, void operations, exact lookups, and excluded contract violations.
 
 This is language and standard-library evidence. It does not exercise the pinned Swift 6.3.3 Linux browser executor or any Apple SDK surface.

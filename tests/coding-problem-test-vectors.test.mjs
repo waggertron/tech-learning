@@ -19,12 +19,21 @@ function binarySearchVector() {
   return loadProblemVector({ category: "binary-search", slug: "704-binary-search" }).document;
 }
 
+function timeMapVector() {
+  return loadProblemVector({
+    category: "binary-search",
+    slug: "981-time-based-key-value-store",
+  }).document;
+}
+
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 1);
-  assert.deepEqual(records[0].errors, []);
-  const classifications = new Set(records[0].document.cases.map((testCase) => testCase.classification));
-  assert.deepEqual(classifications, new Set(["valid", "boundary", "invalid"]));
+  assert.equal(records.length, 8);
+  for (const record of records) {
+    assert.deepEqual(record.errors, []);
+    const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
+    assert.deepEqual(classifications, new Set(["valid", "boundary", "invalid"]));
+  }
 });
 
 test("rejects unknown normalization fields instead of repairing them", () => {
@@ -62,7 +71,7 @@ test("requires solution-handled invalid inputs to declare behavior", () => {
   assert.ok(errors.some((error) => error.includes("solution-owned behavior")));
 });
 
-test("accepts operation-sequence contracts without rendering them as function calls", () => {
+test("renders operation-sequence contracts without flattening state", () => {
   const document = binarySearchVector();
   const operations = clone(document);
   operations.problem = { category: "stack", slug: "155-min-stack" };
@@ -76,14 +85,22 @@ test("accepts operation-sequence contracts without rendering them as function ca
     {
       id: "push-and-minimum",
       classification: "valid",
-      arguments: [[{ operation: "push", arguments: [2] }, { operation: "getMin", arguments: [] }]],
-      expected: { kind: "value", value: [null, 2] },
+      arguments: [[
+        { operation: "init", arguments: [] },
+        { operation: "push", arguments: [2] },
+        { operation: "getMin", arguments: [] },
+      ]],
+      expected: { kind: "value", value: [null, null, 2] },
     },
     {
       id: "single-value",
       classification: "boundary",
-      arguments: [[{ operation: "push", arguments: [1] }, { operation: "top", arguments: [] }]],
-      expected: { kind: "value", value: [null, 1] },
+      arguments: [[
+        { operation: "init", arguments: [] },
+        { operation: "push", arguments: [1] },
+        { operation: "top", arguments: [] },
+      ]],
+      expected: { kind: "value", value: [null, null, 1] },
     },
     {
       id: "pop-empty-stack",
@@ -95,15 +112,23 @@ test("accepts operation-sequence contracts without rendering them as function ca
   delete operations.proofFixture;
 
   assert.deepEqual(vectorDocumentErrors(operations), []);
-  assert.throws(() => renderVectorBlock(operations, "swift"), /not implemented/);
+  const swift = renderVectorBlock(operations, "swift");
+  assert.match(swift, /let subject1 = MinStack\(\)/);
+  assert.match(swift, /subject1\.push\(2\)/);
+  assert.match(swift, /expectEqual\(subject1\.getMin\(\), 2, "push-and-minimum\[2\]"\)/);
+
+  const go = renderVectorBlock(operations, "go");
+  assert.match(go, /subject1 := NewMinStack\(\)/);
+  assert.match(go, /subject1\.Push\(2\)/);
 });
 
 test("committed proof fixtures match all four generated sources", () => {
-  const document = binarySearchVector();
-  const records = proofFixtureRecords(document);
-  assert.equal(records.length, 4);
-  for (const record of records) {
-    assert.equal(readFileSync(record.outputPath, "utf8"), record.source);
+  for (const document of [binarySearchVector(), timeMapVector()]) {
+    const records = proofFixtureRecords(document);
+    assert.equal(records.length, 4);
+    for (const record of records) {
+      assert.equal(readFileSync(record.outputPath, "utf8"), record.source);
+    }
   }
 });
 

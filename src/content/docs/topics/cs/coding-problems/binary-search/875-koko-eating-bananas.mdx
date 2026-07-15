@@ -5,16 +5,21 @@ parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './875-koko-eating-bananas.py?raw';
 import practiceCodeTs from './875-koko-eating-bananas.ts?raw';
 import practiceCodeGo from './875-koko-eating-bananas.go?raw';
+import practiceCodeSwift from './875-koko-eating-bananas.swift?raw';
+import approach1SwiftCode from './875-koko-eating-bananas-approach1.swift?raw';
+import approach2SwiftCode from './875-koko-eating-bananas-approach2.swift?raw';
+import approach3SwiftCode from './875-koko-eating-bananas-approach3.swift?raw';
 import approach3PyCode from './875-koko-eating-bananas-approach3.py?raw';
 import approach3TsCode from './875-koko-eating-bananas-approach3.ts?raw';
 import approach3GoCode from './875-koko-eating-bananas-approach3.go?raw';
@@ -43,6 +48,9 @@ LeetCode 875 · [Link](https://leetcode.com/problems/koko-eating-bananas/) · *M
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="koko-eating-bananas-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="875-koko-eating-bananas-swift" />
   </TabItem>
 </Tabs>
 
@@ -93,6 +101,9 @@ func minEatingSpeed(piles []int, h int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="875-koko-eating-bananas-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -157,6 +168,9 @@ func minEatingSpeed(piles []int, h int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="875-koko-eating-bananas-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 `max(piles)` always works (h ≥ n is guaranteed by the problem), so we walk down until the first speed that fails. Same $O(n · M)$ profile as Approach 1; just goes the other direction.
@@ -234,6 +248,9 @@ func minEatingSpeed(piles []int, h int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="875-koko-eating-bananas-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -274,6 +291,10 @@ def hours(k: int) -> int:
     <GoRepl code={approach3GoCode} id="koko-eating-bananas-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+The Swift implementations use integer ceiling division, `(pile + speed - 1) / speed`, so feasibility never passes through `Double`. `Int` is 64-bit on the supported runner and Apple platforms, which gives the accumulated hour count room above the individual pile constraint.
 
 ## Summary
 

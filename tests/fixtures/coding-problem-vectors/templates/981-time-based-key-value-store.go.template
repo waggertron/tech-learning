@@ -1,0 +1,51 @@
+package main
+
+import "fmt"
+
+func assert(condition bool, message string) {
+	if !condition {
+		panic(message)
+	}
+}
+
+type entry struct {
+	timestamp int
+	value     string
+}
+
+type TimeMap struct {
+	values map[string][]entry
+}
+
+func NewTimeMap() *TimeMap {
+	return &TimeMap{values: make(map[string][]entry)}
+}
+
+func (timeMap *TimeMap) Set(key string, value string, timestamp int) {
+	timeMap.values[key] = append(timeMap.values[key], entry{timestamp: timestamp, value: value})
+}
+
+func (timeMap *TimeMap) Get(key string, timestamp int) string {
+	entries := timeMap.values[key]
+	left, right := 0, len(entries)-1
+	result := ""
+	for left <= right {
+		middle := left + (right-left)/2
+		if entries[middle].timestamp <= timestamp {
+			result = entries[middle].value
+			left = middle + 1
+		} else {
+			right = middle - 1
+		}
+	}
+	return result
+}
+
+func runTests() {
+{{TEST_VECTORS}}
+	fmt.Println("All shared test vectors passed")
+}
+
+func main() {
+	runTests()
+}

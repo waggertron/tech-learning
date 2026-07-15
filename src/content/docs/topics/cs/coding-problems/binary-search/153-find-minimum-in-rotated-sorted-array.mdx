@@ -5,16 +5,21 @@ parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './153-find-minimum-in-rotated-sorted-array.py?raw';
 import practiceCodeTs from './153-find-minimum-in-rotated-sorted-array.ts?raw';
 import practiceCodeGo from './153-find-minimum-in-rotated-sorted-array.go?raw';
+import practiceCodeSwift from './153-find-minimum-in-rotated-sorted-array.swift?raw';
+import approach1SwiftCode from './153-find-minimum-in-rotated-sorted-array-approach1.swift?raw';
+import approach2SwiftCode from './153-find-minimum-in-rotated-sorted-array-approach2.swift?raw';
+import approach3SwiftCode from './153-find-minimum-in-rotated-sorted-array-approach3.swift?raw';
 import approach3PyCode from './153-find-minimum-in-rotated-sorted-array-approach3.py?raw';
 import approach3TsCode from './153-find-minimum-in-rotated-sorted-array-approach3.ts?raw';
 import approach3GoCode from './153-find-minimum-in-rotated-sorted-array-approach3.go?raw';
@@ -41,6 +46,9 @@ LeetCode 153 · [Link](https://leetcode.com/problems/find-minimum-in-rotated-sor
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="find-minimum-in-rotated-sorted-array-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="153-find-minimum-in-rotated-sorted-array-swift" />
   </TabItem>
 </Tabs>
 
@@ -73,6 +81,9 @@ func findMin(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="153-find-minimum-in-rotated-sorted-array-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -127,6 +138,9 @@ func findMin(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="153-find-minimum-in-rotated-sorted-array-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -197,6 +211,9 @@ func findMin(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="153-find-minimum-in-rotated-sorted-array-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -231,6 +248,10 @@ Comparing `nums[mid]` to `nums[lo]` is subtler because a not-rotated segment `[l
     <GoRepl code={approach3GoCode} id="find-minimum-in-rotated-sorted-array-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+Swift's `min()` returns an optional because an array can be empty at the type level, even though this problem promises a nonempty input. The brute-force approach unwraps that result with an explicit precondition failure. The binary-search approach relies on the stronger problem contract and indexes directly.
 
 ## Summary
 

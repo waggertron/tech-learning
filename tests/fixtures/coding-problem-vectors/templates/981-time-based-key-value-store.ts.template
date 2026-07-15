@@ -1,0 +1,41 @@
+export {};
+
+function assert(condition: boolean, message: string): void {
+    if (!condition) throw new Error(message);
+}
+
+type Entry = { timestamp: number; value: string };
+
+class TimeMap {
+    private readonly values = new Map<string, Entry[]>();
+
+    set(key: string, value: string, timestamp: number): void {
+        const entries = this.values.get(key) ?? [];
+        entries.push({ timestamp, value });
+        this.values.set(key, entries);
+    }
+
+    get(key: string, timestamp: number): string {
+        const entries = this.values.get(key) ?? [];
+        let left = 0;
+        let right = entries.length - 1;
+        let result = "";
+        while (left <= right) {
+            const middle = left + Math.floor((right - left) / 2);
+            if (entries[middle].timestamp <= timestamp) {
+                result = entries[middle].value;
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return result;
+    }
+}
+
+function runTests(): void {
+{{TEST_VECTORS}}
+    console.log("All shared test vectors passed");
+}
+
+runTests();

@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 0
+      "swift": 31
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 260
       },
       "swift": {
-        "starterFiles": 0,
-        "starterHarnesses": 0,
-        "practiceTabs": 0,
-        "practiceRepls": 0,
-        "approachTabs": 0,
-        "approachSources": 0,
-        "approachHarnesses": 0
+        "starterFiles": 8,
+        "starterHarnesses": 8,
+        "practiceTabs": 8,
+        "practiceRepls": 8,
+        "approachTabs": 23,
+        "approachSources": 23,
+        "approachHarnesses": 23
       }
     },
-    "swiftReadyPages": 0,
-    "swiftReadyApproaches": 0,
-    "vectorReadyPages": 1
+    "swiftReadyPages": 8,
+    "swiftReadyApproaches": 23,
+    "vectorReadyPages": 8
   },
   "categories": [
     {
@@ -98,9 +98,9 @@
       "category": "binary-search",
       "pages": 8,
       "documentedApproaches": 23,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 1
+      "swiftReadyPages": 8,
+      "swiftReadyApproaches": 23,
+      "vectorReadyPages": 8
     },
     {
       "category": "bit-manipulation",
@@ -7556,67 +7556,74 @@
       "page": "binary-search/004-median-of-two-sorted-arrays.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/004-median-of-two-sorted-arrays.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 3,
+          "invalid": 3
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/004-median-of-two-sorted-arrays.py",
         "typescript": "binary-search/004-median-of-two-sorted-arrays.ts",
         "go": "binary-search/004-median-of-two-sorted-arrays.go",
-        "swift": null
+        "swift": "binary-search/004-median-of-two-sorted-arrays.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, merge, then index",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/004-median-of-two-sorted-arrays-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7624,7 +7631,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -7633,21 +7641,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/004-median-of-two-sorted-arrays-approach2.py",
             "typescript": "binary-search/004-median-of-two-sorted-arrays-approach2.ts",
             "go": "binary-search/004-median-of-two-sorted-arrays-approach2.go",
-            "swift": null
+            "swift": "binary-search/004-median-of-two-sorted-arrays-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7655,7 +7665,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -7664,21 +7675,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/004-median-of-two-sorted-arrays-approach3.py",
             "typescript": "binary-search/004-median-of-two-sorted-arrays-approach3.ts",
             "go": "binary-search/004-median-of-two-sorted-arrays-approach3.go",
-            "swift": null
+            "swift": "binary-search/004-median-of-two-sorted-arrays-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7689,45 +7702,47 @@
       "page": "binary-search/033-search-in-rotated-sorted-array.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/033-search-in-rotated-sorted-array.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 3,
+          "invalid": 3
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/033-search-in-rotated-sorted-array.py",
         "typescript": "binary-search/033-search-in-rotated-sorted-array.ts",
         "go": "binary-search/033-search-in-rotated-sorted-array.go",
-        "swift": null
+        "swift": "binary-search/033-search-in-rotated-sorted-array.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -7735,23 +7750,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/033-search-in-rotated-sorted-array-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7759,7 +7779,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -7769,21 +7790,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/033-search-in-rotated-sorted-array-approach2.py",
             "typescript": "binary-search/033-search-in-rotated-sorted-array-approach2.ts",
             "go": "binary-search/033-search-in-rotated-sorted-array-approach2.go",
-            "swift": null
+            "swift": "binary-search/033-search-in-rotated-sorted-array-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7791,7 +7814,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -7801,21 +7825,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/033-search-in-rotated-sorted-array-approach3.py",
             "typescript": "binary-search/033-search-in-rotated-sorted-array-approach3.ts",
             "go": "binary-search/033-search-in-rotated-sorted-array-approach3.go",
-            "swift": null
+            "swift": "binary-search/033-search-in-rotated-sorted-array-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7826,45 +7852,47 @@
       "page": "binary-search/074-search-a-2d-matrix.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/074-search-a-2d-matrix.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 3,
+          "invalid": 3
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/074-search-a-2d-matrix.py",
         "typescript": "binary-search/074-search-a-2d-matrix.ts",
         "go": "binary-search/074-search-a-2d-matrix.go",
-        "swift": null
+        "swift": "binary-search/074-search-a-2d-matrix.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -7872,23 +7900,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/074-search-a-2d-matrix-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7896,7 +7929,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -7906,21 +7940,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/074-search-a-2d-matrix-approach2.py",
             "typescript": "binary-search/074-search-a-2d-matrix-approach2.ts",
             "go": "binary-search/074-search-a-2d-matrix-approach2.go",
-            "swift": null
+            "swift": "binary-search/074-search-a-2d-matrix-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7928,7 +7964,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -7938,21 +7975,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/074-search-a-2d-matrix-approach3.py",
             "typescript": "binary-search/074-search-a-2d-matrix-approach3.ts",
             "go": "binary-search/074-search-a-2d-matrix-approach3.go",
-            "swift": null
+            "swift": "binary-search/074-search-a-2d-matrix-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7963,45 +8002,47 @@
       "page": "binary-search/153-find-minimum-in-rotated-sorted-array.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/153-find-minimum-in-rotated-sorted-array.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 3,
+          "invalid": 3
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/153-find-minimum-in-rotated-sorted-array.py",
         "typescript": "binary-search/153-find-minimum-in-rotated-sorted-array.ts",
         "go": "binary-search/153-find-minimum-in-rotated-sorted-array.go",
-        "swift": null
+        "swift": "binary-search/153-find-minimum-in-rotated-sorted-array.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -8009,23 +8050,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/153-find-minimum-in-rotated-sorted-array-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8033,23 +8079,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/153-find-minimum-in-rotated-sorted-array-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -8057,7 +8108,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8067,21 +8119,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/153-find-minimum-in-rotated-sorted-array-approach3.py",
             "typescript": "binary-search/153-find-minimum-in-rotated-sorted-array-approach3.ts",
             "go": "binary-search/153-find-minimum-in-rotated-sorted-array-approach3.go",
-            "swift": null
+            "swift": "binary-search/153-find-minimum-in-rotated-sorted-array-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -8092,45 +8146,47 @@
       "page": "binary-search/162-find-peak-element.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/162-find-peak-element.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 3,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/162-find-peak-element.py",
         "typescript": "binary-search/162-find-peak-element.ts",
         "go": "binary-search/162-find-peak-element.go",
-        "swift": null
+        "swift": "binary-search/162-find-peak-element.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -8138,23 +8194,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/162-find-peak-element-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8162,7 +8223,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8172,21 +8234,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/162-find-peak-element-approach2.py",
             "typescript": "binary-search/162-find-peak-element-approach2.ts",
             "go": "binary-search/162-find-peak-element-approach2.go",
-            "swift": null
+            "swift": "binary-search/162-find-peak-element-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -8209,31 +8273,35 @@
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/704-binary-search.py",
         "typescript": "binary-search/704-binary-search.ts",
         "go": "binary-search/704-binary-search.go",
-        "swift": null
+        "swift": "binary-search/704-binary-search.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -8241,23 +8309,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/704-binary-search-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8265,7 +8338,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8275,21 +8349,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/704-binary-search-approach2.py",
             "typescript": "binary-search/704-binary-search-approach2.ts",
             "go": "binary-search/704-binary-search-approach2.go",
-            "swift": null
+            "swift": "binary-search/704-binary-search-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -8297,7 +8373,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8307,21 +8384,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/704-binary-search-approach3.py",
             "typescript": "binary-search/704-binary-search-approach3.ts",
             "go": "binary-search/704-binary-search-approach3.go",
-            "swift": null
+            "swift": "binary-search/704-binary-search-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -8332,45 +8411,47 @@
       "page": "binary-search/875-koko-eating-bananas.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/875-koko-eating-bananas.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 3
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/875-koko-eating-bananas.py",
         "typescript": "binary-search/875-koko-eating-bananas.ts",
         "go": "binary-search/875-koko-eating-bananas.go",
-        "swift": null
+        "swift": "binary-search/875-koko-eating-bananas.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -8378,23 +8459,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/875-koko-eating-bananas-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8402,23 +8488,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/875-koko-eating-bananas-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -8426,7 +8517,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8436,21 +8528,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/875-koko-eating-bananas-approach3.py",
             "typescript": "binary-search/875-koko-eating-bananas-approach3.ts",
             "go": "binary-search/875-koko-eating-bananas-approach3.go",
-            "swift": null
+            "swift": "binary-search/875-koko-eating-bananas-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -8461,45 +8555,47 @@
       "page": "binary-search/981-time-based-key-value-store.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/binary-search/981-time-based-key-value-store.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 2,
+          "invalid": 3
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "binary-search/981-time-based-key-value-store.py",
         "typescript": "binary-search/981-time-based-key-value-store.ts",
         "go": "binary-search/981-time-based-key-value-store.go",
-        "swift": null
+        "swift": "binary-search/981-time-based-key-value-store.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -8507,23 +8603,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "binary-search/981-time-based-key-value-store-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8531,7 +8632,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8541,21 +8643,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/981-time-based-key-value-store-approach2.py",
             "typescript": "binary-search/981-time-based-key-value-store-approach2.ts",
             "go": "binary-search/981-time-based-key-value-store-approach2.go",
-            "swift": null
+            "swift": "binary-search/981-time-based-key-value-store-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -8563,7 +8667,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -8573,21 +8678,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "binary-search/981-time-based-key-value-store-approach3.py",
             "typescript": "binary-search/981-time-based-key-value-store-approach3.ts",
             "go": "binary-search/981-time-based-key-value-store-approach3.go",
-            "swift": null
+            "swift": "binary-search/981-time-based-key-value-store-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

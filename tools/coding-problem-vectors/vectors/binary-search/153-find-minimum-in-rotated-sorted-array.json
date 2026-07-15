@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "binary-search",
+    "slug": "153-find-minimum-in-rotated-sorted-array"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_min"
+      },
+      "typescript": {
+        "function": "findMin"
+      },
+      "go": {
+        "function": "findMin"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findMin"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "pivot-near-middle",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          4,
+          5,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "pivot-after-middle",
+      "classification": "valid",
+      "arguments": [
+        [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-element",
+      "classification": "boundary",
+      "arguments": [
+        [
+          11
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 11
+      }
+    },
+    {
+      "id": "not-rotated",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "two-elements-rotated",
+      "classification": "boundary",
+      "arguments": [
+        [
+          2,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires at least one array element."
+      }
+    },
+    {
+      "id": "duplicate-values",
+      "classification": "invalid",
+      "arguments": [
+        [
+          2,
+          2,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires distinct values."
+      }
+    },
+    {
+      "id": "multiple-order-breaks",
+      "classification": "invalid",
+      "arguments": [
+        [
+          3,
+          1,
+          4,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The array must be one rotation of a strictly increasing sequence."
+      }
+    }
+  ]
+}

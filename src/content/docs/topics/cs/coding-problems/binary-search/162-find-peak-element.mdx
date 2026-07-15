@@ -5,16 +5,20 @@ parent: binary-search
 tags: [leetcode, binary-search, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './162-find-peak-element.py?raw';
 import practiceCodeTs from './162-find-peak-element.ts?raw';
 import practiceCodeGo from './162-find-peak-element.go?raw';
+import practiceCodeSwift from './162-find-peak-element.swift?raw';
+import approach1SwiftCode from './162-find-peak-element-approach1.swift?raw';
+import approach2SwiftCode from './162-find-peak-element-approach2.swift?raw';
 import approach2PyCode from './162-find-peak-element-approach2.py?raw';
 import approach2TsCode from './162-find-peak-element-approach2.ts?raw';
 import approach2GoCode from './162-find-peak-element-approach2.go?raw';
@@ -44,6 +48,9 @@ LeetCode 162 · [Link](https://leetcode.com/problems/find-peak-element/) · *Med
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="find-peak-element-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="162-find-peak-element-swift" />
   </TabItem>
 </Tabs>
 
@@ -83,6 +90,9 @@ func findPeakElement(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="162-find-peak-element-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -147,6 +157,9 @@ func findPeakElement(nums []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="162-find-peak-element-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -195,6 +208,10 @@ Step 4: lo=5 == hi=5, return 5 (nums[5]=6 is a peak)
     <GoRepl code={approach2GoCode} id="find-peak-element-approach2-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+The linear Swift version iterates over `nums.indices`, which keeps index values tied to the collection instead of inventing a separate range. Both versions handle array boundaries directly. They do not need synthetic infinity values or optional neighbor lookups.
 
 ## Key takeaways
 

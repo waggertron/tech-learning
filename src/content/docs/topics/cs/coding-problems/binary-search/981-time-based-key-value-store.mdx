@@ -5,16 +5,21 @@ parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, hash-tables, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './981-time-based-key-value-store.py?raw';
 import practiceCodeTs from './981-time-based-key-value-store.ts?raw';
 import practiceCodeGo from './981-time-based-key-value-store.go?raw';
+import practiceCodeSwift from './981-time-based-key-value-store.swift?raw';
+import approach1SwiftCode from './981-time-based-key-value-store-approach1.swift?raw';
+import approach2SwiftCode from './981-time-based-key-value-store-approach2.swift?raw';
+import approach3SwiftCode from './981-time-based-key-value-store-approach3.swift?raw';
 import approach2PyCode from './981-time-based-key-value-store-approach2.py?raw';
 import approach2TsCode from './981-time-based-key-value-store-approach2.ts?raw';
 import approach2GoCode from './981-time-based-key-value-store-approach2.go?raw';
@@ -54,6 +59,9 @@ LeetCode 981 · [Link](https://leetcode.com/problems/time-based-key-value-store/
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="time-based-key-value-store-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="981-time-based-key-value-store-swift" />
   </TabItem>
 </Tabs>
 
@@ -132,6 +140,9 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="981-time-based-key-value-store-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -244,6 +255,9 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="981-time-based-key-value-store-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -372,6 +386,9 @@ func (t *TimeMap) Get(key string, timestamp int) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="981-time-based-key-value-store-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -406,6 +423,10 @@ func (t *TimeMap) Get(key string, timestamp int) string {
     <GoRepl code={approach3GoCode} id="time-based-key-value-store-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+The Swift implementation stores small `TimeMapEntry` values inside dictionary-owned arrays. `values[key, default: []].append(...)` mutates the selected array through the dictionary while copy-on-write preserves value semantics. Swift has no standard-library `bisect`, so Approach 3 packages the same upper-bound invariant into a reusable helper.
 
 ## Summary
 

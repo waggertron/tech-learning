@@ -23,6 +23,10 @@ const defaultGeneratedRoot = path.join(
   repoRoot,
   "tests/fixtures/coding-problem-vectors/generated",
 );
+const defaultCatalogRoot = path.join(
+  repoRoot,
+  "src/content/docs/topics/cs/coding-problems",
+);
 
 export const vectorLanguages = ["python", "typescript", "go", "swift"];
 const classifications = ["valid", "boundary", "invalid"];
@@ -133,7 +137,7 @@ function codecValueErrors(codec, value, location) {
   }
   if (codec === "operation-sequence" && !arrayOf((item) => {
     if (!exactObjectShape(item, ["operation", "arguments"])) return false;
-    return typeof item.operation === "string" && Array.isArray(item.arguments);
+    return /^[A-Za-z_][A-Za-z0-9_]*$/.test(item.operation) && Array.isArray(item.arguments);
   })) {
     errors.push(`${location} must be operation entries with raw argument arrays`);
   }
@@ -253,6 +257,17 @@ export function vectorDocumentErrors(document, { expectedCategory, expectedSlug 
     }
   }
 
+  if (document.execution?.kind === "operation-sequence") {
+    const parameters = document.contract?.parameters;
+    if (parameters?.length !== 1 || parameters[0]?.codec !== "operation-sequence") {
+      errors.push("operation-sequence execution requires one operation-sequence parameter");
+    }
+    if (document.contract?.result?.codec !== "operation-results" ||
+        document.contract?.result?.comparison !== "operation-results") {
+      errors.push("operation-sequence execution requires operation-results comparison");
+    }
+  }
+
   if (document.proofFixture !== undefined && typeof document.proofFixture !== "boolean") {
     errors.push("vector.proofFixture must be a boolean when present");
   }
@@ -303,6 +318,25 @@ export function vectorDocumentErrors(document, { expectedCategory, expectedSlug 
         testCase.expected.value,
         `${location}.expected.value`,
       ));
+      if (document.execution?.kind === "operation-sequence" &&
+          Array.isArray(testCase.arguments?.[0]) &&
+          Array.isArray(testCase.expected.value)) {
+        const operations = testCase.arguments[0];
+        if (testCase.expected.value.length !== operations.length) {
+          errors.push(`${location}.expected.value must align with every operation`);
+        }
+        if (operations[0]?.operation !== "init" || operations[0]?.arguments?.length !== 0) {
+          errors.push(`${location} executable operation sequences must start with init and no arguments`);
+        }
+        if (testCase.expected.value[0] !== null) {
+          errors.push(`${location}.expected.value[0] must be null for init`);
+        }
+        for (let operationIndex = 1; operationIndex < operations.length; operationIndex += 1) {
+          if (operations[operationIndex]?.operation === "init") {
+            errors.push(`${location}.arguments[0][${operationIndex}] must not reinitialize the subject`);
+          }
+        }
+      }
     } else if (testCase.expected.kind === "excluded") {
       exactKeys(testCase.expected, ["kind", "reason"], `${location}.expected`, errors);
       requiredString(testCase.expected.reason, `${location}.expected.reason`, errors);
@@ -454,6 +488,60 @@ function renderLiteral(codec, value, language) {
   return `[${items.join(", ")}]`;
 }
 
+function renderRawScalar(value, language) {
+  if (typeof value === "string") return quoteString(value);
+  if (typeof value === "boolean") {
+    if (language === "python") return value ? "True" : "False";
+    return value ? "true" : "false";
+  }
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  throw new Error(`Operation renderer does not support raw value ${JSON.stringify(value)}`);
+}
+
+function operationSubjectName(caseIndex) {
+  return `subject${caseIndex + 1}`;
+}
+
+function renderOperationSequenceCase(document, language, testCase, caseIndex, indent) {
+  const operations = testCase.arguments[0];
+  const expected = testCase.expected.value;
+  const entrypoint = document.execution.entrypoints[language];
+  const subject = operationSubjectName(caseIndex);
+  const lines = [];
+
+  if (language === "python") lines.push(`${indent}${subject} = ${entrypoint.type}()`);
+  if (language === "typescript") lines.push(`${indent}const ${subject} = new ${entrypoint.type}();`);
+  if (language === "go") lines.push(`${indent}${subject} := New${entrypoint.type}()`);
+  if (language === "swift") lines.push(`${indent}let ${subject} = ${entrypoint.type}()`);
+
+  for (let index = 1; index < operations.length; index += 1) {
+    const operation = operations[index];
+    const method = language === "go"
+      ? `${operation.operation[0].toUpperCase()}${operation.operation.slice(1)}`
+      : operation.operation;
+    const arguments_ = operation.arguments.map((value) => renderRawScalar(value, language));
+    const call = `${subject}.${method}(${arguments_.join(", ")})`;
+    const caseId = `${testCase.id}[${index}]`;
+    if (expected[index] === null) {
+      lines.push(`${indent}${call}${language === "typescript" ? ";" : ""}`);
+      continue;
+    }
+
+    const expectedValue = renderRawScalar(expected[index], language);
+    if (language === "python") {
+      lines.push(`${indent}assert ${call} == ${expectedValue}, ${quoteString(caseId)}`);
+    } else if (language === "typescript") {
+      lines.push(`${indent}assert(${call} === ${expectedValue}, ${quoteString(caseId)});`);
+    } else if (language === "go") {
+      lines.push(`${indent}assert(${call} == ${expectedValue}, ${quoteString(caseId)})`);
+    } else {
+      lines.push(`${indent}expectEqual(${call}, ${expectedValue}, ${quoteString(caseId)})`);
+    }
+  }
+
+  return lines;
+}
+
 function renderCall(document, language, arguments_) {
   const renderedArguments = arguments_.map((value, index) => renderLiteral(
     document.contract.parameters[index].codec,
@@ -473,13 +561,11 @@ function commentPrefix(language) {
 
 export function renderVectorBlock(document, language) {
   if (!vectorLanguages.includes(language)) throw new Error(`Unknown vector language ${language}`);
-  if (document.execution.kind !== "function") {
-    throw new Error("Proof rendering for operation-sequence problems is not implemented");
-  }
-  if (document.contract.result.comparison !== "equal") {
+  if (document.execution.kind === "function" && document.contract.result.comparison !== "equal") {
     throw new Error("Proof rendering currently requires equal result comparison");
   }
-  if (!["boolean", "float", "int", "string"].includes(document.contract.result.codec)) {
+  if (document.execution.kind === "function" &&
+      !["boolean", "float", "int", "string"].includes(document.contract.result.codec)) {
     throw new Error("Proof rendering currently requires a scalar result codec");
   }
 
@@ -488,7 +574,7 @@ export function renderVectorBlock(document, language) {
   const digest = vectorDigest(document);
   const lines = [`${indent}${comment} TEST_VECTORS_BEGIN sha256:${digest}`];
 
-  for (const testCase of document.cases) {
+  for (const [caseIndex, testCase] of document.cases.entries()) {
     if (testCase.expected.kind === "excluded") {
       const rawArguments = JSON.stringify(testCase.arguments);
       lines.push(
@@ -498,6 +584,11 @@ export function renderVectorBlock(document, language) {
     }
     if (testCase.expected.kind !== "value") {
       throw new Error(`Proof rendering does not support expectation ${testCase.expected.kind}`);
+    }
+
+    if (document.execution.kind === "operation-sequence") {
+      lines.push(...renderOperationSequenceCase(document, language, testCase, caseIndex, indent));
+      continue;
     }
 
     const call = renderCall(document, language, testCase.arguments);
@@ -515,6 +606,30 @@ export function renderVectorBlock(document, language) {
 
   lines.push(`${indent}${comment} TEST_VECTORS_END`);
   return lines.join("\n");
+}
+
+function catalogVectorFiles(document, language, catalogRoot = defaultCatalogRoot) {
+  const extension = { python: "py", typescript: "ts", go: "go", swift: "swift" }[language];
+  const categoryRoot = path.join(catalogRoot, document.problem.category);
+  if (!existsSync(categoryRoot)) return [];
+  return readdirSync(categoryRoot)
+    .filter((fileName) => fileName.startsWith(document.problem.slug))
+    .filter((fileName) => fileName.endsWith(`.${extension}`))
+    .map((fileName) => path.join(categoryRoot, fileName));
+}
+
+function syncedCatalogSource(source, document, language, filePath) {
+  const beginCount = source.split("TEST_VECTORS_BEGIN").length - 1;
+  const endCount = source.split("TEST_VECTORS_END").length - 1;
+  if (beginCount === 0 && endCount === 0) return null;
+  if (beginCount !== 1 || endCount !== 1) {
+    throw new Error(`${relative(filePath)} must contain exactly one complete test-vector block`);
+  }
+  const pattern = /^[ \t]*(?:#|\/\/) TEST_VECTORS_BEGIN[^\n]*\n[\s\S]*?^[ \t]*(?:#|\/\/) TEST_VECTORS_END$/m;
+  if (!pattern.test(source)) {
+    throw new Error(`${relative(filePath)} has malformed test-vector markers`);
+  }
+  return source.replace(pattern, renderVectorBlock(document, language));
 }
 
 function proofFileName(slug, language, template = false) {
@@ -572,6 +687,22 @@ function runCli() {
       else failures.push(`${relative(record.filePath)} is not canonically formatted`);
     }
     if (record.errors.length > 0) continue;
+
+    for (const language of vectorLanguages) {
+      for (const filePath of catalogVectorFiles(record.document, language)) {
+        const existing = readFileSync(filePath, "utf8");
+        let synced;
+        try {
+          synced = syncedCatalogSource(existing, record.document, language, filePath);
+        } catch (error) {
+          failures.push(error.message);
+          continue;
+        }
+        if (synced === null || synced === existing) continue;
+        if (write) writeFileSync(filePath, synced);
+        else failures.push(`${relative(filePath)} has a stale test-vector block`);
+      }
+    }
 
     for (const fixture of proofFixtureRecords(record.document)) {
       proofCount += 1;

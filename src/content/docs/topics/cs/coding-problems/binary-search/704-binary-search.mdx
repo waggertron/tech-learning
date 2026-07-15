@@ -5,16 +5,21 @@ parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './704-binary-search.py?raw';
 import practiceCodeTs from './704-binary-search.ts?raw';
 import practiceCodeGo from './704-binary-search.go?raw';
+import practiceCodeSwift from './704-binary-search.swift?raw';
+import approach1SwiftCode from './704-binary-search-approach1.swift?raw';
+import approach2SwiftCode from './704-binary-search-approach2.swift?raw';
+import approach3SwiftCode from './704-binary-search-approach3.swift?raw';
 import approach2PyCode from './704-binary-search-approach2.py?raw';
 import approach2TsCode from './704-binary-search-approach2.ts?raw';
 import approach2GoCode from './704-binary-search-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 704 · [Link](https://leetcode.com/problems/binary-search/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="binary-search-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="704-binary-search-swift" />
   </TabItem>
 </Tabs>
 
@@ -82,6 +90,9 @@ func search(nums []int, target int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="704-binary-search-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -155,6 +166,9 @@ func search(nums []int, target int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="704-binary-search-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -239,6 +253,9 @@ func search(nums []int, target int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="704-binary-search-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -273,6 +290,10 @@ In languages where integer overflow is a concern (C, C++, Java `int`), prefer `m
     <GoRepl code={approach3GoCode} id="binary-search-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+The recursive Swift approach adds $O(\log n)$ call-stack space. The iterative version keeps the same invariant in $O(1)$ extra space. Both receive `[Int]` by value, but read-only access shares copy-on-write storage and does not copy the elements.
 
 ## Summary
 

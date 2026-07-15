@@ -115,7 +115,7 @@ The code validator checks fenced code language tags and syntax for source exampl
 
 The coding-problem vector commands validate canonical valid, boundary, and invalid cases, then reject stale generated proof sources. Run `npm run test:coding-problem-vector-fixtures` when vector codecs, renderers, or proof fixtures change and all four language toolchains are available.
 
-The Swift catalog commands test the source contract and coverage scanner, then confirm that `docs/data/swift-coding-problem-coverage.json` matches the current problem pages, approaches, source files, harnesses, tabs, REPLs, helper needs, shared vectors, and contract errors. Run `npm run test:swift-catalog-compile` when canonical Swift helpers, fixtures, or source rules change and a Swift compiler is available. Run both sync commands after vector or catalog changes. `npm run validate:swift-catalog-coverage` intentionally remains outside default pre-push validation until every page and approach has Swift parity.
+The Swift catalog commands test the source contract and coverage scanner, then confirm that `docs/data/swift-coding-problem-coverage.json` matches the current problem pages, approaches, source files, harnesses, tabs, REPLs, helper needs, shared vectors, and contract errors. Run `npm run test:swift-catalog-compile` when Swift catalog sources, canonical helpers, fixtures, or source rules change and a Swift compiler is available. It compiles every migrated Swift source and executes completed approaches under time and output limits. Run both sync commands after vector or catalog changes. `npm run validate:swift-catalog-coverage` intentionally remains outside default pre-push validation until every page and approach has Swift parity.
 
 Not every Markdown fence is executable. Explanatory snippets still need review, but source files and generated examples get deterministic checks.
 
@@ -131,6 +131,7 @@ This starts or reuses local preview, then runs Playwright smoke checks against:
 - The DSL value calculator: default state and changed-input recommendation.
 - A React output panel: live counter interaction.
 - A coding problem page: Python, TypeScript, and Go REPL markup and controls.
+- The representative Binary Search page: visible Python, TypeScript, Go, and Swift practice tabs with their matching REPL controls.
 - The isolated Swift REPL fixture: repeated and changed-source execution, hidden-panel layout, keyboard and accessible controls, timeout, cancellation, compiler failure, unavailable service behavior, one approach harness, and mobile width.
 
 The tests stop any preview or fixture server they start. The Swift validator performs HTTP and served-script checks before launching Chromium, then removes its generated fixture caches.

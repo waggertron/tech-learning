@@ -61,7 +61,7 @@ Category rollout checklist:
 - [ ] **S2.C03**: Advanced graphs, 8 pages.
 - [ ] **S2.C04**: Arrays and hashing, 18 pages.
 - [ ] **S2.C05**: Backtracking, 9 pages.
-- [ ] **S2.C06**: Binary search, 8 pages.
+- [x] **S2.C06**: Binary search, 8 pages. All 8 starters and 23 documented approaches are wired to Swift REPL tabs, share 64 reviewed vectors, compile under Swift 6 mode, and satisfy the coverage contract.
 - [ ] **S2.C07**: Bit manipulation, 7 pages.
 - [ ] **S2.C08**: Graphs, 19 pages.
 - [ ] **S2.C09**: Greedy, 10 pages.

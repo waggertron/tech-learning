@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "binary-search",
+    "slug": "875-koko-eating-bananas"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "piles",
+        "codec": "int-array"
+      },
+      {
+        "name": "h",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_eating_speed"
+      },
+      "typescript": {
+        "function": "minEatingSpeed"
+      },
+      "go": {
+        "function": "minEatingSpeed"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minEatingSpeed"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "sample-eight-hours",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          6,
+          7,
+          11
+        ],
+        8
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "one-hour-per-pile",
+      "classification": "valid",
+      "arguments": [
+        [
+          30,
+          11,
+          23,
+          4,
+          20
+        ],
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 30
+      }
+    },
+    {
+      "id": "one-extra-hour",
+      "classification": "valid",
+      "arguments": [
+        [
+          30,
+          11,
+          23,
+          4,
+          20
+        ],
+        6
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 23
+      }
+    },
+    {
+      "id": "single-banana",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-large-pile",
+      "classification": "boundary",
+      "arguments": [
+        [
+          100
+        ],
+        99
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "empty-piles",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires at least one pile."
+      }
+    },
+    {
+      "id": "zero-sized-pile",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          3
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every pile must contain at least one banana."
+      }
+    },
+    {
+      "id": "fewer-hours-than-piles",
+      "classification": "invalid",
+      "arguments": [
+        [
+          3,
+          6,
+          7
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The available hours must be at least the number of piles."
+      }
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+// LEETCODE_TYPE: TimeMap
+
+func expectEqual<T: Equatable>(
+    _ actual: T,
+    _ expected: T,
+    _ message: String = "",
+    file: StaticString = #fileID,
+    line: UInt = #line
+) {
+    guard actual == expected else {
+        let detail = message.isEmpty ? "values differ" : message
+        fatalError("\(file):\(line): \(detail). Expected \(expected), got \(actual)")
+    }
+}
+
+func expectTrue(
+    _ condition: @autoclosure () -> Bool,
+    _ message: String = "expected true",
+    file: StaticString = #fileID,
+    line: UInt = #line
+) {
+    guard condition() else {
+        fatalError("\(file):\(line): \(message)")
+    }
+}
+
+func reportSuccess() {
+    print("All Swift tests passed")
+}
+
+private struct TimeMapEntry {
+    let timestamp: Int
+    let value: String
+}
+
+final class TimeMap {
+    private var values: [String: [TimeMapEntry]] = [:]
+
+    init() {}
+
+    func set(_ key: String, _ value: String, _ timestamp: Int) {
+        values[key, default: []].append(TimeMapEntry(timestamp: timestamp, value: value))
+    }
+
+    func get(_ key: String, _ timestamp: Int) -> String {
+        guard let entries = values[key] else { return "" }
+        var low = 0
+        var high = entries.count - 1
+        var result = ""
+        while low <= high {
+            let middle = low + (high - low) / 2
+            if entries[middle].timestamp <= timestamp {
+                result = entries[middle].value
+                low = middle + 1
+            } else {
+                high = middle - 1
+            }
+        }
+        return result
+    }
+}
+
+func runTests() {
+{{TEST_VECTORS}}
+    reportSuccess()
+}
+
+runTests()

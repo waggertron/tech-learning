@@ -5,16 +5,21 @@ parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './074-search-a-2d-matrix.py?raw';
 import practiceCodeTs from './074-search-a-2d-matrix.ts?raw';
 import practiceCodeGo from './074-search-a-2d-matrix.go?raw';
+import practiceCodeSwift from './074-search-a-2d-matrix.swift?raw';
+import approach1SwiftCode from './074-search-a-2d-matrix-approach1.swift?raw';
+import approach2SwiftCode from './074-search-a-2d-matrix-approach2.swift?raw';
+import approach3SwiftCode from './074-search-a-2d-matrix-approach3.swift?raw';
 import approach2PyCode from './074-search-a-2d-matrix-approach2.py?raw';
 import approach2TsCode from './074-search-a-2d-matrix-approach2.ts?raw';
 import approach2GoCode from './074-search-a-2d-matrix-approach2.go?raw';
@@ -48,6 +53,9 @@ LeetCode 74 · [Link](https://leetcode.com/problems/search-a-2d-matrix/) · *Med
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="search-a-2d-matrix-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="074-search-a-2d-matrix-swift" />
   </TabItem>
 </Tabs>
 
@@ -89,6 +97,9 @@ func searchMatrix(matrix [][]int, target int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="074-search-a-2d-matrix-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -164,6 +175,9 @@ func searchMatrix(matrix [][]int, target int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="074-search-a-2d-matrix-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -255,6 +269,9 @@ func searchMatrix(matrix [][]int, target int) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="074-search-a-2d-matrix-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -289,6 +306,10 @@ Pick the row first with binary search on the first column ($O(log m)$), then bin
     <GoRepl code={approach3GoCode} id="search-a-2d-matrix-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+`[[Int]]` is an array of row arrays, not one contiguous flat buffer. The optimal Swift approach maps a virtual flat index back to `matrix[index / columns][index % columns]`. It gets the binary-search view without allocating or copying a flattened matrix.
 
 ## Summary
 

@@ -84,3 +84,15 @@ The first generated inventory found:
 - 693 missing Swift coverage items: one page item per problem and one approach item per documented approach.
 
 This supersedes the plan's earlier hand-counted 188-page baseline. Summary Ranges increased Arrays and Hashing to 18 pages before the generated inventory landed.
+
+## Pilot progress, 2026-07-15
+
+Binary Search is the first completed category batch:
+
+- 8 Swift-ready pages.
+- 23 Swift-ready documented approaches.
+- 31 standalone Swift source files, including 8 compile-only starters.
+- 8 reviewed shared-vector documents with 64 total valid, boundary, and excluded invalid cases.
+- 23 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
+
+The other 181 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.

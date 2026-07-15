@@ -1,0 +1,28 @@
+class TimeMap:
+    def __init__(self) -> None:
+        self.values: dict[str, list[tuple[int, str]]] = {}
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        self.values.setdefault(key, []).append((timestamp, value))
+
+    def get(self, key: str, timestamp: int) -> str:
+        entries = self.values.get(key, [])
+        left, right = 0, len(entries) - 1
+        result = ""
+        while left <= right:
+            middle = left + (right - left) // 2
+            if entries[middle][0] <= timestamp:
+                result = entries[middle][1]
+                left = middle + 1
+            else:
+                right = middle - 1
+        return result
+
+
+def run_tests() -> None:
+{{TEST_VECTORS}}
+    print("All shared test vectors passed")
+
+
+if __name__ == "__main__":
+    run_tests()

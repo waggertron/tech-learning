@@ -5,16 +5,21 @@ parent: binary-search
 tags: [leetcode, neetcode-150, binary-search, arrays, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './004-median-of-two-sorted-arrays.py?raw';
 import practiceCodeTs from './004-median-of-two-sorted-arrays.ts?raw';
 import practiceCodeGo from './004-median-of-two-sorted-arrays.go?raw';
+import practiceCodeSwift from './004-median-of-two-sorted-arrays.swift?raw';
+import approach1SwiftCode from './004-median-of-two-sorted-arrays-approach1.swift?raw';
+import approach2SwiftCode from './004-median-of-two-sorted-arrays-approach2.swift?raw';
+import approach3SwiftCode from './004-median-of-two-sorted-arrays-approach3.swift?raw';
 import approach2PyCode from './004-median-of-two-sorted-arrays-approach2.py?raw';
 import approach2TsCode from './004-median-of-two-sorted-arrays-approach2.ts?raw';
 import approach2GoCode from './004-median-of-two-sorted-arrays-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 4 · [Link](https://leetcode.com/problems/median-of-two-sorted-arrays/)
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="median-of-two-sorted-arrays-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="004-median-of-two-sorted-arrays-swift" />
   </TabItem>
 </Tabs>
 
@@ -73,6 +81,9 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="004-median-of-two-sorted-arrays-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -139,6 +150,9 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="004-median-of-two-sorted-arrays-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -242,6 +256,9 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="004-median-of-two-sorted-arrays-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -275,6 +292,10 @@ We're searching for the correct horizontal "cut" that divides the conceptual mer
     <GoRepl code={approach3GoCode} id="median-of-two-sorted-arrays-approach3-go" />
   </TabItem>
 </Tabs>
+
+### Swift notes
+
+Swift arrays use value semantics with copy-on-write storage. Approach 1 creates new storage when it concatenates and sorts the inputs, while the partition approach only reads them. The median calculation converts each middle value to `Double` before addition so the sum cannot overflow `Int` first.
 
 ## Summary
 
