@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "math-and-geometry",
+    "slug": "043-multiply-strings"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "num1",
+        "codec": "string"
+      },
+      {
+        "name": "num2",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "multiply"
+      },
+      "typescript": {
+        "function": "multiply"
+      },
+      "go": {
+        "function": "multiply"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "multiply"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "single-digits",
+      "classification": "valid",
+      "arguments": [
+        "2",
+        "3"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "6"
+      }
+    },
+    {
+      "id": "different-length-operands",
+      "classification": "valid",
+      "arguments": [
+        "123",
+        "456"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "56088"
+      }
+    },
+    {
+      "id": "repeated-carry",
+      "classification": "valid",
+      "arguments": [
+        "999",
+        "999"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "998001"
+      }
+    },
+    {
+      "id": "zero-product",
+      "classification": "boundary",
+      "arguments": [
+        "0",
+        "12345"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "0"
+      }
+    },
+    {
+      "id": "identity-product",
+      "classification": "boundary",
+      "arguments": [
+        "1",
+        "9"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "9"
+      }
+    },
+    {
+      "id": "leading-zero",
+      "classification": "invalid",
+      "arguments": [
+        "00",
+        "2"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Operands use canonical decimal strings without leading zeroes."
+      }
+    },
+    {
+      "id": "non-digit-character",
+      "classification": "invalid",
+      "arguments": [
+        "12a",
+        "3"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Operands contain decimal digits only."
+      }
+    }
+  ],
+  "proofFixture": false
+}

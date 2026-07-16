@@ -5,16 +5,21 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './048-rotate-image.py?raw';
 import practiceCodeTs from './048-rotate-image.ts?raw';
 import practiceCodeGo from './048-rotate-image.go?raw';
+import practiceCodeSwift from './048-rotate-image.swift?raw';
+import approach1SwiftCode from './048-rotate-image-approach1.swift?raw';
+import approach2SwiftCode from './048-rotate-image-approach2.swift?raw';
+import approach3SwiftCode from './048-rotate-image-approach3.swift?raw';
 import approach2PyCode from './048-rotate-image-approach2.py?raw';
 import approach2TsCode from './048-rotate-image-approach2.ts?raw';
 import approach2GoCode from './048-rotate-image-approach2.go?raw';
@@ -42,6 +47,9 @@ LeetCode 48 · [Link](https://leetcode.com/problems/rotate-image/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="rotate-image-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="048-rotate-image-swift" />
   </TabItem>
 </Tabs>
 
@@ -91,6 +99,9 @@ func rotate(matrix [][]int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="048-rotate-image-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -161,6 +172,9 @@ func rotate(matrix [][]int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="048-rotate-image-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -246,6 +260,9 @@ func rotate(matrix [][]int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="048-rotate-image-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

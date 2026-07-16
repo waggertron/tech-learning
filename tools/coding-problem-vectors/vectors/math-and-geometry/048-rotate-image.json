@@ -1,0 +1,229 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "math-and-geometry",
+    "slug": "048-rotate-image"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "matrix",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int-matrix",
+      "comparison": "mutated-arguments"
+    },
+    "mutatedParameters": [
+      "matrix"
+    ],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "rotate"
+      },
+      "typescript": {
+        "function": "rotate"
+      },
+      "go": {
+        "function": "rotate"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "rotate"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "three-by-three",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            7,
+            4,
+            1
+          ],
+          [
+            8,
+            5,
+            2
+          ],
+          [
+            9,
+            6,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "four-by-four",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            5,
+            1,
+            9,
+            11
+          ],
+          [
+            2,
+            4,
+            8,
+            10
+          ],
+          [
+            13,
+            3,
+            6,
+            7
+          ],
+          [
+            15,
+            14,
+            12,
+            16
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            15,
+            13,
+            2,
+            5
+          ],
+          [
+            14,
+            3,
+            4,
+            1
+          ],
+          [
+            12,
+            6,
+            8,
+            9
+          ],
+          [
+            16,
+            7,
+            10,
+            11
+          ]
+        ]
+      }
+    },
+    {
+      "id": "two-by-two",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "single-cell",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            7
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "empty-matrix",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The matrix dimension must be at least one."
+      }
+    },
+    {
+      "id": "non-square-matrix",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input must be a square matrix."
+      }
+    }
+  ],
+  "proofFixture": false
+}

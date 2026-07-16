@@ -5,16 +5,21 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './054-spiral-matrix.py?raw';
 import practiceCodeTs from './054-spiral-matrix.ts?raw';
 import practiceCodeGo from './054-spiral-matrix.go?raw';
+import practiceCodeSwift from './054-spiral-matrix.swift?raw';
+import approach1SwiftCode from './054-spiral-matrix-approach1.swift?raw';
+import approach2SwiftCode from './054-spiral-matrix-approach2.swift?raw';
+import approach3SwiftCode from './054-spiral-matrix-approach3.swift?raw';
 import approach2PyCode from './054-spiral-matrix-approach2.py?raw';
 import approach2TsCode from './054-spiral-matrix-approach2.ts?raw';
 import approach2GoCode from './054-spiral-matrix-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 54 · [Link](https://leetcode.com/problems/spiral-matrix/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="spiral-matrix-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="054-spiral-matrix-swift" />
   </TabItem>
 </Tabs>
 
@@ -120,6 +128,9 @@ func spiralOrder(matrix [][]int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="054-spiral-matrix-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -234,6 +245,9 @@ func spiralOrder(matrix [][]int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="054-spiral-matrix-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -271,6 +285,8 @@ The `if top <= bottom` / `if left <= right` guards handle the last single row or
 
 Append the top row, then **rotate** the rest of the matrix 90° counterclockwise (each column becomes a row, then reverse the row order). Recurse on the rotated remainder.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def spiral_order(matrix):
     if not matrix or not matrix[0]:
@@ -283,6 +299,11 @@ def spiral_order(matrix):
     rotated = [list(col) for col in list(zip(*rest))[::-1]]
     return result + spiral_order(rotated)
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="054-spiral-matrix-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 The rotation lines up the next clockwise side as the new "top row," so the same `peel-the-top-row` rule produces the spiral. Elegant but allocates rotated matrices at each level.
 

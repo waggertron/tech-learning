@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "math-and-geometry",
+    "slug": "050-pow-x-n"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "x",
+        "codec": "float"
+      },
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "float",
+      "comparison": "approximate"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "my_pow"
+      },
+      "typescript": {
+        "function": "myPow"
+      },
+      "go": {
+        "function": "myPow"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "myPow"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "positive-exponent",
+      "classification": "valid",
+      "arguments": [
+        2,
+        10
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1024
+      }
+    },
+    {
+      "id": "fractional-base",
+      "classification": "valid",
+      "arguments": [
+        2.1,
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 9.261
+      }
+    },
+    {
+      "id": "negative-exponent",
+      "classification": "valid",
+      "arguments": [
+        2,
+        -2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0.25
+      }
+    },
+    {
+      "id": "zero-exponent",
+      "classification": "boundary",
+      "arguments": [
+        2,
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "zero-base-positive-exponent",
+      "classification": "boundary",
+      "arguments": [
+        0,
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "negative-base",
+      "classification": "valid",
+      "arguments": [
+        -2,
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -8
+      }
+    },
+    {
+      "id": "zero-base-negative-exponent",
+      "classification": "invalid",
+      "arguments": [
+        0,
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Zero raised to a negative exponent is undefined."
+      }
+    }
+  ],
+  "proofFixture": false
+}

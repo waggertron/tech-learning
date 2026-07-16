@@ -5,16 +5,21 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, hash-tables, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './2013-detect-squares.py?raw';
 import practiceCodeTs from './2013-detect-squares.ts?raw';
 import practiceCodeGo from './2013-detect-squares.go?raw';
+import practiceCodeSwift from './2013-detect-squares.swift?raw';
+import approach1SwiftCode from './2013-detect-squares-approach1.swift?raw';
+import approach2SwiftCode from './2013-detect-squares-approach2.swift?raw';
+import approach3SwiftCode from './2013-detect-squares-approach3.swift?raw';
 import approach2PyCode from './2013-detect-squares-approach2.py?raw';
 import approach2TsCode from './2013-detect-squares-approach2.ts?raw';
 import approach2GoCode from './2013-detect-squares-approach2.go?raw';
@@ -50,12 +55,17 @@ LeetCode 2013 · [Link](https://leetcode.com/problems/detect-squares/) · *Mediu
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="detect-squares-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="2013-detect-squares-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, pairwise check
 
 On `count(p)`, scan every ordered pair of stored points; test if one is q's column-mate and the other is q's row-mate, with equal side lengths. The diagonal corner is `(bx, ay)`; add its multiplicity.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -83,6 +93,11 @@ class DetectSquares:
                 total += self.counts[(bx, ay)]    # diagonal multiplicity
         return total
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="2013-detect-squares-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 Iterating `points_list` with duplicates means the multiplicities of A and B are baked in implicitly; only D's multiplicity is read from `counts`. Each square formed by (q, A, B, D) is counted exactly once.
 
@@ -194,6 +209,9 @@ func (ds *DetectSquares) Count(point []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="2013-detect-squares-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -230,6 +248,8 @@ func (ds *DetectSquares) Count(point []int) int {
 
 Maintain `by_x[x] = set of y's seen at that x`. On `count(qx, qy)`, iterate y's at `qx`, compute side length = |y - qy|, check the two other corners.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import defaultdict
 
@@ -256,6 +276,11 @@ class DetectSquares:
                           * self.counts.get((nx, y), 0))  # L6: O(1)
         return total
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="2013-detect-squares-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 

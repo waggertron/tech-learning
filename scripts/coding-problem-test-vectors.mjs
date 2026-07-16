@@ -902,9 +902,36 @@ function renderEqualAssertion(document, language, call, expected, caseId, indent
   return `${indent}expectEqual(${call}, ${expected}, ${quoteString(caseId)})`;
 }
 
+function renderApproximateAssertion(language, call, expected, caseId, indent) {
+  const tolerance = {
+    python: `1e-9 * max(1.0, abs(${expected}))`,
+    typescript: `1e-9 * Math.max(1, Math.abs(${expected}))`,
+    go: `1e-9 * math.Max(1, math.Abs(${expected}))`,
+    swift: `1e-9 * max(1.0, abs(${expected}))`,
+  }[language];
+  const difference = {
+    python: `abs(${call} - ${expected})`,
+    typescript: `Math.abs(${call} - ${expected})`,
+    go: `math.Abs(${call} - ${expected})`,
+    swift: `abs(${call} - ${expected})`,
+  }[language];
+  const comparison = `${difference} <= ${tolerance}`;
+
+  if (language === "python") {
+    return `${indent}assert ${comparison}, ${quoteString(caseId)}`;
+  }
+  if (language === "typescript") {
+    return `${indent}assert(${comparison}, ${quoteString(caseId)});`;
+  }
+  if (language === "go") {
+    return `${indent}assert(${comparison}, ${quoteString(caseId)})`;
+  }
+  return `${indent}expectTrue(${comparison}, ${quoteString(caseId)})`;
+}
+
 export function renderVectorBlock(document, language) {
   if (!vectorLanguages.includes(language)) throw new Error(`Unknown vector language ${language}`);
-  const supportedFunctionComparisons = ["equal", "identity", "mutated-arguments", "structure"];
+  const supportedFunctionComparisons = ["approximate", "equal", "identity", "mutated-arguments", "structure"];
   if (document.execution.kind === "function" &&
       !supportedFunctionComparisons.includes(document.contract.result.comparison)) {
     throw new Error("Proof rendering does not support this result comparison");
@@ -979,6 +1006,16 @@ export function renderVectorBlock(document, language) {
 
     const call = renderCall(document, language, testCase.arguments);
     const expected = renderLiteral(document.contract.result.codec, testCase.expected.value, language);
+    if (document.contract.result.comparison === "approximate") {
+      lines.push(renderApproximateAssertion(
+        language,
+        call,
+        expected,
+        testCase.id,
+        indent,
+      ));
+      continue;
+    }
     lines.push(renderEqualAssertion(
       document,
       language,

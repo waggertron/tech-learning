@@ -5,16 +5,21 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, matrix, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './073-set-matrix-zeroes.py?raw';
 import practiceCodeTs from './073-set-matrix-zeroes.ts?raw';
 import practiceCodeGo from './073-set-matrix-zeroes.go?raw';
+import practiceCodeSwift from './073-set-matrix-zeroes.swift?raw';
+import approach1SwiftCode from './073-set-matrix-zeroes-approach1.swift?raw';
+import approach2SwiftCode from './073-set-matrix-zeroes-approach2.swift?raw';
+import approach3SwiftCode from './073-set-matrix-zeroes-approach3.swift?raw';
 import approach2PyCode from './073-set-matrix-zeroes-approach2.py?raw';
 import approach2TsCode from './073-set-matrix-zeroes-approach2.ts?raw';
 import approach2GoCode from './073-set-matrix-zeroes-approach2.go?raw';
@@ -44,12 +49,17 @@ LeetCode 73 · [Link](https://leetcode.com/problems/set-matrix-zeroes/) · *Medi
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="set-matrix-zeroes-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="073-set-matrix-zeroes-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, make a copy
 
 Snapshot the matrix; identify zero rows and columns from the snapshot; then write zeroes back into the original.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def set_zeroes(matrix):
     rows, cols = len(matrix), len(matrix[0])
@@ -63,6 +73,11 @@ def set_zeroes(matrix):
             if r in zero_rows or c in zero_cols:
                 matrix[r][c] = 0
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="073-set-matrix-zeroes-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 The snapshot is what makes it correct: without it, the in-place writes would propagate ("a zero I just wrote would trigger more zero-outs"). With a snapshot, the writes only depend on the original state.
 
@@ -148,6 +163,9 @@ func setZeroes(matrix [][]int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="073-set-matrix-zeroes-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -277,6 +295,9 @@ func setZeroes(matrix [][]int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="073-set-matrix-zeroes-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

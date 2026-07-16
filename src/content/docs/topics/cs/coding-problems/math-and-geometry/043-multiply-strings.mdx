@@ -5,16 +5,21 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './043-multiply-strings.py?raw';
 import practiceCodeTs from './043-multiply-strings.ts?raw';
 import practiceCodeGo from './043-multiply-strings.go?raw';
+import practiceCodeSwift from './043-multiply-strings.swift?raw';
+import approach1SwiftCode from './043-multiply-strings-approach1.swift?raw';
+import approach2SwiftCode from './043-multiply-strings-approach2.swift?raw';
+import approach3SwiftCode from './043-multiply-strings-approach3.swift?raw';
 import approach2PyCode from './043-multiply-strings-approach2.py?raw';
 import approach2TsCode from './043-multiply-strings-approach2.ts?raw';
 import approach2GoCode from './043-multiply-strings-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 43 · [Link](https://leetcode.com/problems/multiply-strings/) · *Mediu
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="multiply-strings-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="043-multiply-strings-swift" />
   </TabItem>
 </Tabs>
 
@@ -72,6 +80,9 @@ func multiply(num1 string, num2 string) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="043-multiply-strings-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**
@@ -157,6 +168,9 @@ func multiply(num1 string, num2 string) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="043-multiply-strings-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -205,6 +219,8 @@ xy = x_hi y_hi · 10^(2m) + (x_hi y_lo + x_lo y_hi) · 10^m + x_lo y_lo
 
 Karatsuba does **three** by computing `M = (x_hi + x_lo)(y_hi + y_lo)` and recovering the cross terms as `M - x_hi y_hi - x_lo y_lo`.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def multiply(num1, num2):
     if num1 == "0" or num2 == "0":
@@ -255,6 +271,11 @@ def multiply(num1, num2):
 
     return kar(num1, num2)
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="043-multiply-strings-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 The recursion does T(n) = 3T(n/2) + $O(n)$, which solves to $O(n^{log₂3})$. Helpers do string-level addition and subtraction so we never cast the full input to int.
 

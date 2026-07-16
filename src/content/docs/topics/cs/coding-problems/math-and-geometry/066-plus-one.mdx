@@ -5,16 +5,20 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, arrays, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './066-plus-one.py?raw';
 import practiceCodeTs from './066-plus-one.ts?raw';
 import practiceCodeGo from './066-plus-one.go?raw';
+import practiceCodeSwift from './066-plus-one.swift?raw';
+import approach1SwiftCode from './066-plus-one-approach1.swift?raw';
+import approach2SwiftCode from './066-plus-one-approach2.swift?raw';
 import approach2PyCode from './066-plus-one-approach2.py?raw';
 import approach2TsCode from './066-plus-one-approach2.ts?raw';
 import approach2GoCode from './066-plus-one-approach2.go?raw';
@@ -40,6 +44,9 @@ LeetCode 66 · [Link](https://leetcode.com/problems/plus-one/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="plus-one-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="066-plus-one-swift" />
   </TabItem>
 </Tabs>
 
@@ -82,6 +89,9 @@ func plusOne(digits []int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="066-plus-one-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -143,6 +153,9 @@ func plusOne(digits []int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="066-plus-one-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

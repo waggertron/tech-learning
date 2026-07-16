@@ -5,16 +5,21 @@ parent: math-and-geometry
 tags: [leetcode, neetcode-150, math, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './050-pow-x-n.py?raw';
 import practiceCodeTs from './050-pow-x-n.ts?raw';
 import practiceCodeGo from './050-pow-x-n.go?raw';
+import practiceCodeSwift from './050-pow-x-n.swift?raw';
+import approach1SwiftCode from './050-pow-x-n-approach1.swift?raw';
+import approach2SwiftCode from './050-pow-x-n-approach2.swift?raw';
+import approach3SwiftCode from './050-pow-x-n-approach3.swift?raw';
 import approach2PyCode from './050-pow-x-n-approach2.py?raw';
 import approach2TsCode from './050-pow-x-n-approach2.ts?raw';
 import approach2GoCode from './050-pow-x-n-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 50 · [Link](https://leetcode.com/problems/powx-n/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="pow-x-n-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="050-pow-x-n-swift" />
   </TabItem>
 </Tabs>
 
@@ -81,6 +89,9 @@ func myPow(x float64, n int) float64 {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="050-pow-x-n-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -160,6 +171,9 @@ func myPow(x float64, n int) float64 {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="050-pow-x-n-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -244,6 +258,9 @@ func myPow(x float64, n int) float64 {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="050-pow-x-n-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

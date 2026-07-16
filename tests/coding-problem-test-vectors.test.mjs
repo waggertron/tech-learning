@@ -21,7 +21,7 @@ function binarySearchVector() {
 
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 71);
+  assert.equal(records.length, 79);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -193,6 +193,60 @@ test("renders ordered array equality in every language", () => {
   assert.match(renderVectorBlock(arrayResult, "typescript"), /JSON\.stringify\(search\(/);
   assert.match(renderVectorBlock(arrayResult, "go"), /func\(actual, expected \[\]int\) bool/);
   assert.match(renderVectorBlock(arrayResult, "swift"), /expectEqual\(Solution\(\)\.search\(/);
+});
+
+test("renders scale-aware approximate floating point assertions in every language", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [
+    { name: "x", codec: "float" },
+    { name: "n", codec: "int" },
+  ];
+  document.contract.result = { codec: "float", comparison: "approximate" };
+  document.execution.entrypoints = {
+    python: { function: "my_pow" },
+    typescript: { function: "myPow" },
+    go: { function: "myPow" },
+    swift: { type: "Solution", method: "myPow" },
+  };
+  document.cases = [
+    {
+      id: "negative-exponent",
+      classification: "valid",
+      arguments: [2, -2],
+      expected: { kind: "value", value: 0.25 },
+    },
+    {
+      id: "zero-exponent",
+      classification: "boundary",
+      arguments: [2, 0],
+      expected: { kind: "value", value: 1 },
+    },
+    {
+      id: "zero-negative-exponent",
+      classification: "invalid",
+      arguments: [0, -1],
+      expected: { kind: "excluded", reason: "The result is undefined." },
+    },
+  ];
+  delete document.proofFixture;
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  assert.match(
+    renderVectorBlock(document, "python"),
+    /abs\(my_pow\(2, -2\) - 0\.25\) <= 1e-9 \* max\(1\.0, abs\(0\.25\)\)/,
+  );
+  assert.match(
+    renderVectorBlock(document, "typescript"),
+    /Math\.abs\(myPow\(2, -2\) - 0\.25\) <= 1e-9 \* Math\.max\(1, Math\.abs\(0\.25\)\)/,
+  );
+  assert.match(
+    renderVectorBlock(document, "go"),
+    /math\.Abs\(myPow\(2, -2\) - 0\.25\) <= 1e-9 \* math\.Max\(1, math\.Abs\(0\.25\)\)/,
+  );
+  assert.match(
+    renderVectorBlock(document, "swift"),
+    /expectTrue\(abs\(Solution\(\)\.myPow\(2, -2\) - 0\.25\) <= 1e-9 \* max\(1\.0, abs\(0\.25\)\), "negative-exponent"\)/,
+  );
 });
 
 test("renders Swift inout mutation observations", () => {

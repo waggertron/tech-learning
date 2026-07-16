@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "math-and-geometry",
+    "slug": "202-happy-number"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_happy"
+      },
+      "typescript": {
+        "function": "isHappy"
+      },
+      "go": {
+        "function": "isHappy"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isHappy"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-happy",
+      "classification": "valid",
+      "arguments": [
+        19
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "canonical-cycle",
+      "classification": "valid",
+      "arguments": [
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-digit-happy",
+      "classification": "valid",
+      "arguments": [
+        7
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "larger-happy",
+      "classification": "valid",
+      "arguments": [
+        100
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "one",
+      "classification": "boundary",
+      "arguments": [
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "zero",
+      "classification": "invalid",
+      "arguments": [
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input must be a positive integer."
+      }
+    },
+    {
+      "id": "negative",
+      "classification": "invalid",
+      "arguments": [
+        -7
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input must be a positive integer."
+      }
+    }
+  ],
+  "proofFixture": false
+}
