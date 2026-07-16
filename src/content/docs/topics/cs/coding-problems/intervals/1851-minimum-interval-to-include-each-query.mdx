@@ -5,16 +5,21 @@ parent: intervals
 tags: [leetcode, neetcode-150, intervals, heap, offline-query, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-15
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './1851-minimum-interval-to-include-each-query.py?raw';
 import practiceCodeTs from './1851-minimum-interval-to-include-each-query.ts?raw';
 import practiceCodeGo from './1851-minimum-interval-to-include-each-query.go?raw';
+import practiceCodeSwift from './1851-minimum-interval-to-include-each-query.swift?raw';
+import approach1SwiftCode from './1851-minimum-interval-to-include-each-query-approach1.swift?raw';
+import approach2SwiftCode from './1851-minimum-interval-to-include-each-query-approach2.swift?raw';
+import approach3SwiftCode from './1851-minimum-interval-to-include-each-query-approach3.swift?raw';
 import approach2PyCode from './1851-minimum-interval-to-include-each-query-approach2.py?raw';
 import approach2TsCode from './1851-minimum-interval-to-include-each-query-approach2.ts?raw';
 import approach2GoCode from './1851-minimum-interval-to-include-each-query-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 1851 · [Link](https://leetcode.com/problems/minimum-interval-to-includ
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="minimum-interval-to-include-each-query-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1851-minimum-interval-to-include-each-query-swift" />
   </TabItem>
 </Tabs>
 
@@ -93,6 +101,9 @@ func minInterval(intervals [][]int, queries []int) []int {
     return result
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="1851-minimum-interval-to-include-each-query-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -219,6 +230,9 @@ func minInterval(intervals [][]int, queries []int) []int {
 }
 ```
 </TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="1851-minimum-interval-to-include-each-query-approach2-swift" />
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -262,6 +276,8 @@ Processing queries out of order turns a "for each query, find the best interval"
 
 More code and more flexibility. Used in competitive programming for online variants. The shape: coordinate-compress the endpoints, then for each interval do a **range-min update** of its length over `[start, end]`. Each query is a **point query** for the minimum length covering that coordinate.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def min_interval(intervals, queries):
     # Coordinate compression
@@ -300,6 +316,11 @@ def min_interval(intervals, queries):
         result.append(ans if ans != INF else -1)
     return result
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="1851-minimum-interval-to-include-each-query-approach3-swift" />
+</TabItem>
+</Tabs>
 
 Skip unless the interviewer asks for $O(log n)$ per query online.
 

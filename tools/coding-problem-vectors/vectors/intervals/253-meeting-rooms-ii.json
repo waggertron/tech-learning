@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "intervals",
+    "slug": "253-meeting-rooms-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "intervals",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_meeting_rooms"
+      },
+      "typescript": {
+        "function": "minMeetingRooms"
+      },
+      "go": {
+        "function": "minMeetingRooms"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minMeetingRooms"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "two-rooms-required",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "one-room-for-disjoint-meetings",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "touching-meetings-reuse-room",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            0,
+            10
+          ],
+          [
+            10,
+            20
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "no-meetings",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "zero-length-meeting",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Meeting start times must be less than end times."
+      }
+    }
+  ]
+}

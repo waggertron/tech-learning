@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "intervals",
+    "slug": "1851-minimum-interval-to-include-each-query"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "intervals",
+        "codec": "int-matrix"
+      },
+      {
+        "name": "queries",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_interval"
+      },
+      "typescript": {
+        "function": "minInterval"
+      },
+      "go": {
+        "function": "minInterval"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minInterval"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "overlapping-candidates",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            6
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        [
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          3,
+          3,
+          1,
+          4
+        ]
+      }
+    },
+    {
+      "id": "queries-with-gaps",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            1,
+            8
+          ],
+          [
+            20,
+            25
+          ]
+        ],
+        [
+          2,
+          19,
+          5,
+          22
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          -1,
+          4,
+          6
+        ]
+      }
+    },
+    {
+      "id": "repeated-query",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        [
+          2,
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "id": "single-point-and-miss",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            5,
+            5
+          ]
+        ],
+        [
+          5,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          -1
+        ]
+      }
+    },
+    {
+      "id": "empty-interval-list",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The problem contract requires at least one interval."
+      }
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "intervals",
+    "slug": "252-meeting-rooms"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "intervals",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "can_attend_meetings"
+      },
+      "typescript": {
+        "function": "canAttendMeetings"
+      },
+      "go": {
+        "function": "canAttendMeetings"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "canAttendMeetings"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "overlapping-meetings",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "separate-meetings",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "touching-meetings",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            0,
+            10
+          ],
+          [
+            10,
+            20
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "no-meetings",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "reversed-meeting",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            4,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Meeting start times must be less than end times."
+      }
+    }
+  ]
+}

@@ -87,17 +87,18 @@ This supersedes the plan's earlier hand-counted 188-page baseline. Summary Range
 
 ## Category progress, 2026-07-15
 
-Binary Search, Bit Manipulation, Graphs, Greedy, and Heap and Priority Queue are complete:
+Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, and Intervals are complete:
 
-- 51 Swift-ready pages.
-- 134 Swift-ready documented approaches.
-- 185 standalone Swift source files, including 51 compile-only starters.
-- 51 reviewed shared-vector documents with 269 total valid, boundary, and excluded invalid cases.
-- 134 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
+- 57 Swift-ready pages.
+- 152 Swift-ready documented approaches.
+- 209 standalone Swift source files, including 57 compile-only starters.
+- 57 reviewed shared-vector documents with 299 total valid, boundary, and excluded invalid cases.
+- 152 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
 - Binary Search contributes 8 pages, 23 approaches, and 64 cases.
 - Bit Manipulation contributes 7 pages, 21 approaches, and 57 cases.
 - Graphs contributes 19 pages, 39 approaches, and 76 cases.
 - Greedy contributes 10 pages, 31 approaches, and 40 cases.
 - Heap and Priority Queue contributes 7 pages, 20 approaches, and 32 cases.
+- Intervals contributes 6 pages, 18 approaches, and 30 cases.
 
-The other 138 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.
+The other 132 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.

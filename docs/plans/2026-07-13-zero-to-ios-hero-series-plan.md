@@ -83,7 +83,7 @@ Category rollout checklist:
 - [x] **S2.C08**: Graphs, 19 pages. All 19 starters and 39 documented approaches are wired to Swift REPL tabs, share 76 reviewed vectors, compile under Swift 6 mode, and add inout mutation plus graph structure and identity observations to the vector renderer.
 - [x] **S2.C09**: Greedy, 10 pages. All 10 starters and 31 documented approaches are wired to Swift REPL tabs, share 40 reviewed vectors, compile under Swift 6 mode, and preserve the canonical heap helper for Hand of Straights.
 - [x] **S2.C10**: Heap and priority queue, 7 pages. All 7 starters and 20 documented approaches are wired to Swift REPL tabs, share 32 reviewed vectors, compile under Swift 6 mode, and extend stateful fixtures to constructor arguments plus collection-valued operation results.
-- [ ] **S2.C11**: Intervals, 6 pages.
+- [x] **S2.C11**: Intervals, 6 pages. All 6 starters and 18 documented approaches are wired to Swift REPL tabs, share 30 reviewed vectors, compile under Swift 6 mode, and cover sorting, greedy selection, sweep lines, binary search, heaps, and segment-tree range updates.
 - [ ] **S2.C12**: Linked lists, 14 pages.
 - [ ] **S2.C13**: Math and geometry, 8 pages.
 - [ ] **S2.C14**: Sliding window, 8 pages.
