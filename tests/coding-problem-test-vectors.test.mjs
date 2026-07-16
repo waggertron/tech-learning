@@ -21,7 +21,7 @@ function binarySearchVector() {
 
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 154);
+  assert.equal(records.length, 162);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -247,6 +247,29 @@ test("renders scale-aware approximate floating point assertions in every languag
     renderVectorBlock(document, "swift"),
     /expectTrue\(abs\(Solution\(\)\.myPow\(2, -2\) - 0\.25\) <= 1e-9 \* max\(1\.0, abs\(0\.25\)\), "negative-exponent"\)/,
   );
+});
+
+test("renders floating point array inputs in every language", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "weights", codec: "float-array" }];
+  document.contract.result = { codec: "float", comparison: "approximate" };
+  document.execution.entrypoints = {
+    python: { function: "best_weight" },
+    typescript: { function: "bestWeight" },
+    go: { function: "bestWeight" },
+    swift: { type: "Solution", method: "bestWeight" },
+  };
+  document.cases = [{
+    id: "fractional-weights",
+    classification: "valid",
+    arguments: [[0.5, 0.25]],
+    expected: { kind: "value", value: 0.5 },
+  }];
+
+  assert.match(renderVectorBlock(document, "python"), /best_weight\(\[0.5, 0.25\]\)/);
+  assert.match(renderVectorBlock(document, "typescript"), /bestWeight\(\[0.5, 0.25\]\)/);
+  assert.match(renderVectorBlock(document, "go"), /bestWeight\(\[\]float64\{0.5, 0.25\}\)/);
+  assert.match(renderVectorBlock(document, "swift"), /bestWeight\(\[0.5, 0.25\]\)/);
 });
 
 test("renders Swift inout mutation observations", () => {

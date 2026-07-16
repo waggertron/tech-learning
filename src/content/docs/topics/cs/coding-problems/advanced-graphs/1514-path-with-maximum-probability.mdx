@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, advanced-graphs, dijkstra, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,10 @@ import practiceCodeGo from './1514-path-with-maximum-probability.go?raw';
 import approach2PyCode from './1514-path-with-maximum-probability-approach2.py?raw';
 import approach2TsCode from './1514-path-with-maximum-probability-approach2.ts?raw';
 import approach2GoCode from './1514-path-with-maximum-probability-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './1514-path-with-maximum-probability.swift?raw';
+import approach1SwiftCode from './1514-path-with-maximum-probability-approach1.swift?raw';
+import approach2SwiftCode from './1514-path-with-maximum-probability-approach2.swift?raw';
 
 ## Problem
 
@@ -42,6 +46,9 @@ LeetCode 1514 · [Link](https://leetcode.com/problems/path-with-maximum-probabil
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="path-with-maximum-probability-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1514-path-with-maximum-probability-swift" />
   </TabItem>
 </Tabs>
 
@@ -117,6 +124,9 @@ func maxProbability(n int, edges [][]int, succProb []float64, start int, end int
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="1514-path-with-maximum-probability-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -304,6 +314,9 @@ Pop (-0.25, 2), p=0.25: u==end -> return 0.25
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="path-with-maximum-probability-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="1514-path-with-maximum-probability-approach2-swift" />
   </TabItem>
 </Tabs>
 

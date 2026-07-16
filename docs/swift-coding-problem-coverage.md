@@ -87,15 +87,16 @@ This supersedes the plan's earlier hand-counted 188-page baseline. Summary Range
 
 ## Category progress, 2026-07-16
 
-1D Dynamic Programming, 2D Dynamic Programming, Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers are complete:
+1D Dynamic Programming, 2D Dynamic Programming, Advanced Graphs, Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers are complete:
 
-- 154 Swift-ready pages.
-- 417 Swift-ready documented approaches.
-- 571 standalone Swift source files, including 154 compile-only starters.
-- 154 reviewed shared-vector documents with 866 total valid, boundary, and excluded invalid cases.
-- 417 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
+- 162 Swift-ready pages.
+- 436 Swift-ready documented approaches.
+- 598 standalone Swift source files, including 162 compile-only starters.
+- 162 reviewed shared-vector documents with 922 total valid, boundary, and excluded invalid cases.
+- 436 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
 - 1D Dynamic Programming contributes 12 pages, 39 approaches, and 71 cases.
 - 2D Dynamic Programming contributes 12 pages, 35 approaches, and 84 cases.
+- Advanced Graphs contributes 8 pages, 19 approaches, and 56 cases.
 - Binary Search contributes 8 pages, 23 approaches, and 64 cases.
 - Bit Manipulation contributes 7 pages, 21 approaches, and 57 cases.
 - Graphs contributes 19 pages, 39 approaches, and 76 cases.
@@ -110,4 +111,4 @@ This supersedes the plan's earlier hand-counted 188-page baseline. Summary Range
 - Tries contributes 3 pages, 9 approaches, and 14 cases.
 - Two Pointers contributes 7 pages, 19 approaches, and 43 cases.
 
-The other 35 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.
+The other 27 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.

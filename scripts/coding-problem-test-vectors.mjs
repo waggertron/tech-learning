@@ -44,6 +44,7 @@ const codecs = [
   "boolean",
   "cyclic-list",
   "float",
+  "float-array",
   "graph-adjacency",
   "int",
   "int-array",
@@ -100,6 +101,9 @@ function codecValueErrors(codec, value, location) {
   if (codec === "int" && !Number.isSafeInteger(value)) errors.push(`${location} must be an integer`);
   if (codec === "float" && (typeof value !== "number" || !Number.isFinite(value))) {
     errors.push(`${location} must be a finite number`);
+  }
+  if (codec === "float-array" && !arrayOf((item) => typeof item === "number" && Number.isFinite(item))) {
+    errors.push(`${location} must be an array of finite numbers`);
   }
   if (codec === "boolean" && typeof value !== "boolean") {
     errors.push(`${location} must be a boolean`);
@@ -500,6 +504,7 @@ function renderLiteral(codec, value, language) {
   }
 
   const elementCodec = {
+    "float-array": "float",
     "graph-adjacency": "int-array",
     "int-array": "int",
     "int-matrix": "int-array",
@@ -513,6 +518,7 @@ function renderLiteral(codec, value, language) {
   const items = value.map((item) => renderLiteral(elementCodec, item, language));
   if (language === "go") {
     const goType = {
+      "float-array": "[]float64",
       "graph-adjacency": "[][]int",
       "int-array": "[]int",
       "int-matrix": "[][]int",

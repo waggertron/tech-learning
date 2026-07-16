@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, eulerian-path, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './332-reconstruct-itinerary-approach2.go?raw';
 import approach3PyCode from './332-reconstruct-itinerary-approach3.py?raw';
 import approach3TsCode from './332-reconstruct-itinerary-approach3.ts?raw';
 import approach3GoCode from './332-reconstruct-itinerary-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './332-reconstruct-itinerary.swift?raw';
+import approach1SwiftCode from './332-reconstruct-itinerary-approach1.swift?raw';
+import approach2SwiftCode from './332-reconstruct-itinerary-approach2.swift?raw';
+import approach3SwiftCode from './332-reconstruct-itinerary-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 332 · [Link](https://leetcode.com/problems/reconstruct-itinerary/) · 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reconstruct-itinerary-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="332-reconstruct-itinerary-swift" />
   </TabItem>
 </Tabs>
 
@@ -148,6 +156,9 @@ func findItinerary(tickets [][]string) []string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="332-reconstruct-itinerary-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -282,6 +293,9 @@ In an Eulerian path, you may hit dead ends along the way. Hierholzer's handles t
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="reconstruct-itinerary-approach2-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="332-reconstruct-itinerary-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Hierholzer's with sorted adjacency lists + pointer
@@ -400,6 +414,9 @@ Iterative form avoids recursion depth concerns.
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="reconstruct-itinerary-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="332-reconstruct-itinerary-approach3-swift" />
   </TabItem>
 </Tabs>
 

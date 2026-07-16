@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, bellman-ford, bfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './787-cheapest-flights-within-k-stops-approach2.go?
 import approach3PyCode from './787-cheapest-flights-within-k-stops-approach3.py?raw';
 import approach3TsCode from './787-cheapest-flights-within-k-stops-approach3.ts?raw';
 import approach3GoCode from './787-cheapest-flights-within-k-stops-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './787-cheapest-flights-within-k-stops.swift?raw';
+import approach1SwiftCode from './787-cheapest-flights-within-k-stops-approach1.swift?raw';
+import approach2SwiftCode from './787-cheapest-flights-within-k-stops-approach2.swift?raw';
+import approach3SwiftCode from './787-cheapest-flights-within-k-stops-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 787 · [Link](https://leetcode.com/problems/cheapest-flights-within-k-s
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="cheapest-flights-within-k-stops-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="787-cheapest-flights-within-k-stops-swift" />
   </TabItem>
 </Tabs>
 
@@ -136,6 +144,9 @@ func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="787-cheapest-flights-within-k-stops-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -267,6 +278,9 @@ Works but may re-expand nodes with fewer stops and higher cost.
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="cheapest-flights-within-k-stops-approach2-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="787-cheapest-flights-within-k-stops-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Bellman-Ford with hop limit (canonical)
@@ -365,6 +379,9 @@ Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="cheapest-flights-within-k-stops-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="787-cheapest-flights-within-k-stops-approach3-swift" />
   </TabItem>
 </Tabs>
 

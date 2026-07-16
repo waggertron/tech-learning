@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "advanced-graphs",
+    "slug": "787-cheapest-flights-within-k-stops"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      },
+      {
+        "name": "flights",
+        "codec": "int-matrix"
+      },
+      {
+        "name": "src",
+        "codec": "int"
+      },
+      {
+        "name": "dst",
+        "codec": "int"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_cheapest_price"
+      },
+      "typescript": {
+        "function": "findCheapestPrice"
+      },
+      "go": {
+        "function": "findCheapestPrice"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findCheapestPrice"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "one-stop-limit",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1,
+            100
+          ],
+          [
+            1,
+            2,
+            100
+          ],
+          [
+            2,
+            3,
+            100
+          ],
+          [
+            0,
+            2,
+            500
+          ]
+        ],
+        0,
+        3,
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 600
+      }
+    },
+    {
+      "id": "two-stop-limit",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1,
+            100
+          ],
+          [
+            1,
+            2,
+            100
+          ],
+          [
+            2,
+            3,
+            100
+          ],
+          [
+            0,
+            2,
+            500
+          ]
+        ],
+        0,
+        3,
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 300
+      }
+    },
+    {
+      "id": "direct-only",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          [
+            0,
+            1,
+            100
+          ],
+          [
+            1,
+            2,
+            100
+          ],
+          [
+            0,
+            2,
+            500
+          ]
+        ],
+        0,
+        2,
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "id": "unreachable",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          [
+            0,
+            1,
+            100
+          ]
+        ],
+        0,
+        2,
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "same-city",
+      "classification": "boundary",
+      "arguments": [
+        1,
+        [],
+        0,
+        0,
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "zero-cities",
+      "classification": "invalid",
+      "arguments": [
+        0,
+        [],
+        0,
+        0,
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one city is provided."
+      }
+    },
+    {
+      "id": "negative-stops",
+      "classification": "invalid",
+      "arguments": [
+        2,
+        [
+          [
+            0,
+            1,
+            5
+          ]
+        ],
+        0,
+        1,
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The stop limit is nonnegative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

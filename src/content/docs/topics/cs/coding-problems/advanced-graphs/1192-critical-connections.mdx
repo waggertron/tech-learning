@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, advanced-graphs, tarjans, hard]
 status: draft
 created: 2026-05-07
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,9 @@ import practiceCodeGo from './1192-critical-connections.go?raw';
 import approach2PyCode from './1192-critical-connections-approach2.py?raw';
 import approach2TsCode from './1192-critical-connections-approach2.ts?raw';
 import approach2GoCode from './1192-critical-connections-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './1192-critical-connections.swift?raw';
+import approach1SwiftCode from './1192-critical-connections-approach1.swift?raw';
 
 ## Problem
 
@@ -43,6 +46,9 @@ LeetCode 1192 · [Link](https://leetcode.com/problems/critical-connections-in-a-
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="critical-connections-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1192-critical-connections-swift" />
   </TabItem>
 </Tabs>
 
@@ -212,6 +218,9 @@ Each node is visited exactly once; each edge is examined twice (once from each e
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="critical-connections-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="1192-critical-connections-approach1-swift" />
   </TabItem>
 </Tabs>
 

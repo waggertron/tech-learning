@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "advanced-graphs",
+    "slug": "1192-critical-connections"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      },
+      {
+        "name": "connections",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "critical_connections"
+      },
+      "typescript": {
+        "function": "criticalConnections"
+      },
+      "go": {
+        "function": "criticalConnections"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "criticalConnections"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "one-bridge",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            1,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "chain",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cycle",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "cycles-with-bridge",
+      "classification": "valid",
+      "arguments": [
+        6,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "two-nodes",
+      "classification": "boundary",
+      "arguments": [
+        2,
+        [
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "zero-nodes",
+      "classification": "invalid",
+      "arguments": [
+        0,
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The graph contains at least two nodes."
+      }
+    },
+    {
+      "id": "disconnected",
+      "classification": "invalid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published graph is connected."
+      }
+    }
+  ],
+  "proofFixture": false
+}

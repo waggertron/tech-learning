@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "advanced-graphs",
+    "slug": "332-reconstruct-itinerary"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "tickets",
+        "codec": "string-matrix"
+      }
+    ],
+    "result": {
+      "codec": "string-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_itinerary"
+      },
+      "typescript": {
+        "function": "findItinerary"
+      },
+      "go": {
+        "function": "findItinerary"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findItinerary"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "MUC",
+            "LHR"
+          ],
+          [
+            "JFK",
+            "MUC"
+          ],
+          [
+            "SFO",
+            "SJC"
+          ],
+          [
+            "LHR",
+            "SFO"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "JFK",
+          "MUC",
+          "LHR",
+          "SFO",
+          "SJC"
+        ]
+      }
+    },
+    {
+      "id": "lexical-choice",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "JFK",
+            "SFO"
+          ],
+          [
+            "JFK",
+            "ATL"
+          ],
+          [
+            "SFO",
+            "ATL"
+          ],
+          [
+            "ATL",
+            "JFK"
+          ],
+          [
+            "ATL",
+            "SFO"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "JFK",
+          "ATL",
+          "JFK",
+          "SFO",
+          "ATL",
+          "SFO"
+        ]
+      }
+    },
+    {
+      "id": "return-cycle",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "JFK",
+            "A"
+          ],
+          [
+            "A",
+            "JFK"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "JFK",
+          "A",
+          "JFK"
+        ]
+      }
+    },
+    {
+      "id": "duplicate-tickets",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "JFK",
+            "A"
+          ],
+          [
+            "JFK",
+            "A"
+          ],
+          [
+            "A",
+            "JFK"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "JFK",
+          "A",
+          "JFK",
+          "A"
+        ]
+      }
+    },
+    {
+      "id": "single-ticket",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            "JFK",
+            "SFO"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "JFK",
+          "SFO"
+        ]
+      }
+    },
+    {
+      "id": "empty-tickets",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one ticket is provided."
+      }
+    },
+    {
+      "id": "no-jfk",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            "SFO",
+            "LAX"
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "A valid itinerary begins at JFK."
+      }
+    }
+  ],
+  "proofFixture": false
+}

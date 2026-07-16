@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 571
+      "swift": 598
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 154,
-        "starterHarnesses": 154,
-        "practiceTabs": 154,
-        "practiceRepls": 154,
-        "approachTabs": 417,
-        "approachSources": 417,
-        "approachHarnesses": 417
+        "starterFiles": 162,
+        "starterHarnesses": 162,
+        "practiceTabs": 162,
+        "practiceRepls": 162,
+        "approachTabs": 436,
+        "approachSources": 436,
+        "approachHarnesses": 436
       }
     },
-    "swiftReadyPages": 154,
-    "swiftReadyApproaches": 417,
-    "vectorReadyPages": 154
+    "swiftReadyPages": 162,
+    "swiftReadyApproaches": 436,
+    "vectorReadyPages": 162
   },
   "categories": [
     {
@@ -74,9 +74,9 @@
       "category": "advanced-graphs",
       "pages": 8,
       "documentedApproaches": 19,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 8,
+      "swiftReadyApproaches": 19,
+      "vectorReadyPages": 8
     },
     {
       "category": "arrays-and-hashing",
@@ -3768,45 +3768,47 @@
       "page": "advanced-graphs/1192-critical-connections.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/1192-critical-connections.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/1192-critical-connections.py",
         "typescript": "advanced-graphs/1192-critical-connections.ts",
         "go": "advanced-graphs/1192-critical-connections.go",
-        "swift": null
+        "swift": "advanced-graphs/1192-critical-connections.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -3814,7 +3816,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3824,17 +3827,20 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/1192-critical-connections-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3845,45 +3851,47 @@
       "page": "advanced-graphs/1489-critical-and-pseudo-critical-edges.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/1489-critical-and-pseudo-critical-edges.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/1489-critical-and-pseudo-critical-edges.py",
         "typescript": "advanced-graphs/1489-critical-and-pseudo-critical-edges.ts",
         "go": "advanced-graphs/1489-critical-and-pseudo-critical-edges.go",
-        "swift": null
+        "swift": "advanced-graphs/1489-critical-and-pseudo-critical-edges.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -3891,7 +3899,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3901,17 +3910,20 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/1489-critical-and-pseudo-critical-edges-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3924,45 +3936,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/1514-path-with-maximum-probability.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/1514-path-with-maximum-probability.py",
         "typescript": "advanced-graphs/1514-path-with-maximum-probability.ts",
         "go": "advanced-graphs/1514-path-with-maximum-probability.go",
-        "swift": null
+        "swift": "advanced-graphs/1514-path-with-maximum-probability.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -3970,23 +3984,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/1514-path-with-maximum-probability-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -3994,7 +4013,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4004,21 +4024,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/1514-path-with-maximum-probability-approach2.py",
             "typescript": "advanced-graphs/1514-path-with-maximum-probability-approach2.ts",
             "go": "advanced-graphs/1514-path-with-maximum-probability-approach2.go",
-            "swift": null
+            "swift": "advanced-graphs/1514-path-with-maximum-probability-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -4031,45 +4053,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/1584-min-cost-to-connect-all-points.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/1584-min-cost-to-connect-all-points.py",
         "typescript": "advanced-graphs/1584-min-cost-to-connect-all-points.ts",
         "go": "advanced-graphs/1584-min-cost-to-connect-all-points.go",
-        "swift": null
+        "swift": "advanced-graphs/1584-min-cost-to-connect-all-points.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4077,23 +4101,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/1584-min-cost-to-connect-all-points-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -4101,7 +4130,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4111,21 +4141,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/1584-min-cost-to-connect-all-points-approach2.py",
             "typescript": "advanced-graphs/1584-min-cost-to-connect-all-points-approach2.ts",
             "go": "advanced-graphs/1584-min-cost-to-connect-all-points-approach2.go",
-            "swift": null
+            "swift": "advanced-graphs/1584-min-cost-to-connect-all-points-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -4133,7 +4165,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4143,21 +4176,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/1584-min-cost-to-connect-all-points-approach3.py",
             "typescript": "advanced-graphs/1584-min-cost-to-connect-all-points-approach3.ts",
             "go": "advanced-graphs/1584-min-cost-to-connect-all-points-approach3.go",
-            "swift": null
+            "swift": "advanced-graphs/1584-min-cost-to-connect-all-points-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -4170,45 +4205,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/332-reconstruct-itinerary.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/332-reconstruct-itinerary.py",
         "typescript": "advanced-graphs/332-reconstruct-itinerary.ts",
         "go": "advanced-graphs/332-reconstruct-itinerary.go",
-        "swift": null
+        "swift": "advanced-graphs/332-reconstruct-itinerary.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4216,23 +4253,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/332-reconstruct-itinerary-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -4240,7 +4282,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4250,21 +4293,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/332-reconstruct-itinerary-approach2.py",
             "typescript": "advanced-graphs/332-reconstruct-itinerary-approach2.ts",
             "go": "advanced-graphs/332-reconstruct-itinerary-approach2.go",
-            "swift": null
+            "swift": "advanced-graphs/332-reconstruct-itinerary-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -4272,7 +4317,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4282,21 +4328,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/332-reconstruct-itinerary-approach3.py",
             "typescript": "advanced-graphs/332-reconstruct-itinerary-approach3.ts",
             "go": "advanced-graphs/332-reconstruct-itinerary-approach3.go",
-            "swift": null
+            "swift": "advanced-graphs/332-reconstruct-itinerary-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -4309,45 +4357,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/743-network-delay-time.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/743-network-delay-time.py",
         "typescript": "advanced-graphs/743-network-delay-time.ts",
         "go": "advanced-graphs/743-network-delay-time.go",
-        "swift": null
+        "swift": "advanced-graphs/743-network-delay-time.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4355,23 +4405,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/743-network-delay-time-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -4379,7 +4434,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4389,21 +4445,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/743-network-delay-time-approach2.py",
             "typescript": "advanced-graphs/743-network-delay-time-approach2.ts",
             "go": "advanced-graphs/743-network-delay-time-approach2.go",
-            "swift": null
+            "swift": "advanced-graphs/743-network-delay-time-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -4411,7 +4469,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4421,21 +4480,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/743-network-delay-time-approach3.py",
             "typescript": "advanced-graphs/743-network-delay-time-approach3.ts",
             "go": "advanced-graphs/743-network-delay-time-approach3.go",
-            "swift": null
+            "swift": "advanced-graphs/743-network-delay-time-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -4448,45 +4509,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/778-swim-in-rising-water.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/778-swim-in-rising-water.py",
         "typescript": "advanced-graphs/778-swim-in-rising-water.ts",
         "go": "advanced-graphs/778-swim-in-rising-water.go",
-        "swift": null
+        "swift": "advanced-graphs/778-swim-in-rising-water.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4494,23 +4557,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/778-swim-in-rising-water-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -4518,7 +4586,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4528,21 +4597,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/778-swim-in-rising-water-approach2.py",
             "typescript": "advanced-graphs/778-swim-in-rising-water-approach2.ts",
             "go": "advanced-graphs/778-swim-in-rising-water-approach2.go",
-            "swift": null
+            "swift": "advanced-graphs/778-swim-in-rising-water-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -4550,7 +4621,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4560,21 +4632,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/778-swim-in-rising-water-approach3.py",
             "typescript": "advanced-graphs/778-swim-in-rising-water-approach3.ts",
             "go": "advanced-graphs/778-swim-in-rising-water-approach3.go",
-            "swift": null
+            "swift": "advanced-graphs/778-swim-in-rising-water-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -4587,45 +4661,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/advanced-graphs/787-cheapest-flights-within-k-stops.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "advanced-graphs/787-cheapest-flights-within-k-stops.py",
         "typescript": "advanced-graphs/787-cheapest-flights-within-k-stops.ts",
         "go": "advanced-graphs/787-cheapest-flights-within-k-stops.go",
-        "swift": null
+        "swift": "advanced-graphs/787-cheapest-flights-within-k-stops.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4633,23 +4709,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "advanced-graphs/787-cheapest-flights-within-k-stops-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -4657,7 +4738,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4667,21 +4749,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/787-cheapest-flights-within-k-stops-approach2.py",
             "typescript": "advanced-graphs/787-cheapest-flights-within-k-stops-approach2.ts",
             "go": "advanced-graphs/787-cheapest-flights-within-k-stops-approach2.go",
-            "swift": null
+            "swift": "advanced-graphs/787-cheapest-flights-within-k-stops-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -4689,7 +4773,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -4699,21 +4784,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "advanced-graphs/787-cheapest-flights-within-k-stops-approach3.py",
             "typescript": "advanced-graphs/787-cheapest-flights-within-k-stops-approach3.ts",
             "go": "advanced-graphs/787-cheapest-flights-within-k-stops-approach3.go",
-            "swift": null
+            "swift": "advanced-graphs/787-cheapest-flights-within-k-stops-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

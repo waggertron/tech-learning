@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, mst, prim, kruskal, union-find, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -24,6 +24,11 @@ import approach3GoCode from './1584-min-cost-to-connect-all-points-approach3.go?
 import approach4PyCode from './1584-min-cost-to-connect-all-points-approach4.py?raw';
 import approach4TsCode from './1584-min-cost-to-connect-all-points-approach4.ts?raw';
 import approach4GoCode from './1584-min-cost-to-connect-all-points-approach4.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './1584-min-cost-to-connect-all-points.swift?raw';
+import approach1SwiftCode from './1584-min-cost-to-connect-all-points-approach1.swift?raw';
+import approach2SwiftCode from './1584-min-cost-to-connect-all-points-approach2.swift?raw';
+import approach3SwiftCode from './1584-min-cost-to-connect-all-points-approach3.swift?raw';
 
 ## Problem
 
@@ -46,6 +51,9 @@ LeetCode 1584 · [Link](https://leetcode.com/problems/min-cost-to-connect-all-po
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="min-cost-to-connect-all-points-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1584-min-cost-to-connect-all-points-swift" />
   </TabItem>
 </Tabs>
 
@@ -137,6 +145,9 @@ function minCostConnectPoints(points: number[][]): number {
 // See 1584-min-cost-to-connect-all-points.go for the stub to implement.
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="1584-min-cost-to-connect-all-points-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 By Cayley's formula, K_n has n^(n-2) spanning trees, so this explodes past n ≈ 8.
@@ -281,6 +292,9 @@ Sorting E = $O(V²)$ edges costs $O(V² log V² )$ = $O(V² log V)$. The union-f
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="min-cost-to-connect-all-points-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="1584-min-cost-to-connect-all-points-approach2-swift" />
   </TabItem>
 </Tabs>
 
@@ -517,6 +531,9 @@ No heap needed. The inner scans at L5 and L8 each visit all V nodes once per out
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach4GoCode} id="min-cost-to-connect-all-points-approach4-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="1584-min-cost-to-connect-all-points-approach3-swift" />
   </TabItem>
 </Tabs>
 

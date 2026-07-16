@@ -75,7 +75,7 @@ Category rollout checklist:
 
 - [x] **S2.C01**: 1D dynamic programming, 12 pages. All 12 starters and 39 documented approaches are wired to Swift REPL tabs, share 71 reviewed vectors, compile under Swift 6 mode, and cover recursion, memoization, bottom-up tables, rolling state, palindrome expansion, subset targets, and negative-product sign changes.
 - [x] **S2.C02**: 2D dynamic programming, 12 pages. All 12 starters and 35 documented approaches are wired to Swift REPL tabs, share 84 reviewed vectors, compile under Swift 6 mode, and cover grid recurrence, string alignment, interval DP, matrix paths, stock state machines, and subset counting.
-- [ ] **S2.C03**: Advanced graphs, 8 pages.
+- [x] **S2.C03**: Advanced graphs, 8 pages. All 8 starters and 19 documented approaches are wired to Swift REPL tabs, share 56 reviewed vectors, compile under Swift 6 mode, and cover bridge discovery, minimum spanning trees, path probability, Eulerian traversal, shortest paths, constrained hops, and union-find activation.
 - [ ] **S2.C04**: Arrays and hashing, 18 pages.
 - [ ] **S2.C05**: Backtracking, 9 pages.
 - [x] **S2.C06**: Binary search, 8 pages. All 8 starters and 23 documented approaches are wired to Swift REPL tabs, share 64 reviewed vectors, compile under Swift 6 mode, and satisfy the coverage contract.

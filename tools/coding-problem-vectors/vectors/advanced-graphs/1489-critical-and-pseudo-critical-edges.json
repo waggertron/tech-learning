@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "advanced-graphs",
+    "slug": "1489-critical-and-pseudo-critical-edges"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      },
+      {
+        "name": "edges",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_critical_and_pseudo_critical_edges"
+      },
+      "typescript": {
+        "function": "findCriticalAndPseudoCriticalEdges"
+      },
+      "go": {
+        "function": "findCriticalAndPseudoCriticalEdges"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findCriticalAndPseudoCriticalEdges"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        5,
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            2
+          ],
+          [
+            0,
+            3,
+            2
+          ],
+          [
+            0,
+            4,
+            3
+          ],
+          [
+            3,
+            4,
+            3
+          ],
+          [
+            1,
+            4,
+            6
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "equal-triangle",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [],
+          [
+            0,
+            1,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "unique-tree",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            0,
+            1
+          ],
+          []
+        ]
+      }
+    },
+    {
+      "id": "equal-cycle",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            0,
+            3,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [],
+          [
+            0,
+            1,
+            2,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "single-edge",
+      "classification": "boundary",
+      "arguments": [
+        2,
+        [
+          [
+            0,
+            1,
+            7
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            0
+          ],
+          []
+        ]
+      }
+    },
+    {
+      "id": "disconnected",
+      "classification": "invalid",
+      "arguments": [
+        4,
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The graph is connected."
+      }
+    },
+    {
+      "id": "malformed-edge",
+      "classification": "invalid",
+      "arguments": [
+        2,
+        [
+          [
+            0,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each edge contains two endpoints and one weight."
+      }
+    }
+  ],
+  "proofFixture": false
+}

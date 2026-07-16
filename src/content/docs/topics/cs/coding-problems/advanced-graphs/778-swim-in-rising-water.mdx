@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, dijkstra, binary-search, union-find, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './778-swim-in-rising-water-approach2.go?raw';
 import approach3PyCode from './778-swim-in-rising-water-approach3.py?raw';
 import approach3TsCode from './778-swim-in-rising-water-approach3.ts?raw';
 import approach3GoCode from './778-swim-in-rising-water-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './778-swim-in-rising-water.swift?raw';
+import approach1SwiftCode from './778-swim-in-rising-water-approach1.swift?raw';
+import approach2SwiftCode from './778-swim-in-rising-water-approach2.swift?raw';
+import approach3SwiftCode from './778-swim-in-rising-water-approach3.swift?raw';
 
 ## Problem
 
@@ -45,6 +50,9 @@ LeetCode 778 · [Link](https://leetcode.com/problems/swim-in-rising-water/) · *
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="swim-in-rising-water-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="778-swim-in-rising-water-swift" />
   </TabItem>
 </Tabs>
 
@@ -157,6 +165,9 @@ func swimInWater(grid [][]int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="778-swim-in-rising-water-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -290,6 +301,9 @@ The heap holds at most n² entries (one per cell). Each cell is popped exactly o
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="swim-in-rising-water-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="778-swim-in-rising-water-approach2-swift" />
   </TabItem>
 </Tabs>
 
@@ -445,6 +459,9 @@ L1 dominates: sorting n² cells costs $O(n² log n)$. The union-find operations 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="swim-in-rising-water-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="778-swim-in-rising-water-approach3-swift" />
   </TabItem>
 </Tabs>
 

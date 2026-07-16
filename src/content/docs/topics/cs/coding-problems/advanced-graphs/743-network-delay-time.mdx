@@ -5,7 +5,7 @@ parent: advanced-graphs
 tags: [leetcode, neetcode-150, graphs, dijkstra, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './743-network-delay-time-approach2.go?raw';
 import approach3PyCode from './743-network-delay-time-approach3.py?raw';
 import approach3TsCode from './743-network-delay-time-approach3.ts?raw';
 import approach3GoCode from './743-network-delay-time-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './743-network-delay-time.swift?raw';
+import approach1SwiftCode from './743-network-delay-time-approach1.swift?raw';
+import approach2SwiftCode from './743-network-delay-time-approach2.swift?raw';
+import approach3SwiftCode from './743-network-delay-time-approach3.swift?raw';
 
 ## Problem
 
@@ -44,6 +49,9 @@ LeetCode 743 · [Link](https://leetcode.com/problems/network-delay-time/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="network-delay-time-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="743-network-delay-time-swift" />
   </TabItem>
 </Tabs>
 
@@ -107,6 +115,9 @@ func networkDelayTime(times [][]int, n int, k int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="743-network-delay-time-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -240,6 +251,9 @@ Single-source only needs `V²`; Floyd-Warshall is wasteful here.
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="network-delay-time-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="743-network-delay-time-approach2-swift" />
   </TabItem>
 </Tabs>
 
@@ -377,6 +391,9 @@ Each edge can produce at most one push (L10), so the heap holds at most E entrie
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="network-delay-time-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="743-network-delay-time-approach3-swift" />
   </TabItem>
 </Tabs>
 
