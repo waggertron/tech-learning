@@ -5,16 +5,21 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, bfs, dfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './199-binary-tree-right-side-view.py?raw';
 import practiceCodeTs from './199-binary-tree-right-side-view.ts?raw';
 import practiceCodeGo from './199-binary-tree-right-side-view.go?raw';
+import practiceCodeSwift from './199-binary-tree-right-side-view.swift?raw';
+import approach1SwiftCode from './199-binary-tree-right-side-view-approach1.swift?raw';
+import approach2SwiftCode from './199-binary-tree-right-side-view-approach2.swift?raw';
+import approach3SwiftCode from './199-binary-tree-right-side-view-approach3.swift?raw';
 import approach2PyCode from './199-binary-tree-right-side-view-approach2.py?raw';
 import approach2TsCode from './199-binary-tree-right-side-view-approach2.ts?raw';
 import approach2GoCode from './199-binary-tree-right-side-view-approach2.go?raw';
@@ -41,6 +46,9 @@ LeetCode 199 · [Link](https://leetcode.com/problems/binary-tree-right-side-view
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="binary-tree-right-side-view-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="199-binary-tree-right-side-view-swift" />
   </TabItem>
 </Tabs>
 
@@ -131,6 +139,9 @@ func rightSideView(root *TreeNode) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="199-binary-tree-right-side-view-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -153,6 +164,8 @@ Every node is enqueued and dequeued exactly once. Only h nodes (one per level) a
 
 Enqueue right child first, then left; then the first node popped at each level is the rightmost.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 from collections import deque
 
@@ -171,6 +184,11 @@ def right_side_view(root):
                 q.append(node.left)     # L4: enqueue left second
     return result
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="199-binary-tree-right-side-view-approach2-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -247,6 +265,9 @@ func rightSideView(root *TreeNode) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="199-binary-tree-right-side-view-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

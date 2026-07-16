@@ -5,16 +5,21 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, dfs, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './1448-count-good-nodes-in-binary-tree.py?raw';
 import practiceCodeTs from './1448-count-good-nodes-in-binary-tree.ts?raw';
 import practiceCodeGo from './1448-count-good-nodes-in-binary-tree.go?raw';
+import practiceCodeSwift from './1448-count-good-nodes-in-binary-tree.swift?raw';
+import approach1SwiftCode from './1448-count-good-nodes-in-binary-tree-approach1.swift?raw';
+import approach2SwiftCode from './1448-count-good-nodes-in-binary-tree-approach2.swift?raw';
+import approach3SwiftCode from './1448-count-good-nodes-in-binary-tree-approach3.swift?raw';
 import approach2PyCode from './1448-count-good-nodes-in-binary-tree-approach2.py?raw';
 import approach2TsCode from './1448-count-good-nodes-in-binary-tree-approach2.ts?raw';
 import approach2GoCode from './1448-count-good-nodes-in-binary-tree-approach2.go?raw';
@@ -42,12 +47,17 @@ LeetCode 1448 · [Link](https://leetcode.com/problems/count-good-nodes-in-binary
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="count-good-nodes-in-binary-tree-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1448-count-good-nodes-in-binary-tree-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, for each node, walk up to the root
 
 For every node, walk its ancestor chain to verify the invariant.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def good_nodes(root):
     from collections import deque
@@ -72,6 +82,11 @@ def good_nodes(root):
             count += 1
     return count
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="1448-count-good-nodes-in-binary-tree-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 
@@ -155,6 +170,9 @@ func goodNodes(root *TreeNode) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="1448-count-good-nodes-in-binary-tree-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -194,6 +212,8 @@ Carry a running invariant (max, min, sum, seen-set) as a parameter. Works for ev
 
 Stack of `(node, max_so_far)` pairs.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def good_nodes(root):
     if not root:
@@ -211,6 +231,11 @@ def good_nodes(root):
             stack.append((node.right, new_max))  # L6: O(1) push
     return count
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="1448-count-good-nodes-in-binary-tree-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 

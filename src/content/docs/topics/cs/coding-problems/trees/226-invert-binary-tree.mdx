@@ -5,16 +5,21 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './226-invert-binary-tree.py?raw';
 import practiceCodeTs from './226-invert-binary-tree.ts?raw';
 import practiceCodeGo from './226-invert-binary-tree.go?raw';
+import practiceCodeSwift from './226-invert-binary-tree.swift?raw';
+import approach1SwiftCode from './226-invert-binary-tree-approach1.swift?raw';
+import approach2SwiftCode from './226-invert-binary-tree-approach2.swift?raw';
+import approach3SwiftCode from './226-invert-binary-tree-approach3.swift?raw';
 import approach2PyCode from './226-invert-binary-tree-approach2.py?raw';
 import approach2TsCode from './226-invert-binary-tree-approach2.ts?raw';
 import approach2GoCode from './226-invert-binary-tree-approach2.go?raw';
@@ -39,6 +44,9 @@ LeetCode 226 · [Link](https://leetcode.com/problems/invert-binary-tree/) · *Ea
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="invert-binary-tree-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="226-invert-binary-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -95,6 +103,9 @@ func invertTree(root *TreeNode) *TreeNode {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="226-invert-binary-tree-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -179,6 +190,9 @@ func invertTree(root *TreeNode) *TreeNode {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="226-invert-binary-tree-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -213,6 +227,8 @@ func invertTree(root *TreeNode) *TreeNode {
 
 Same as BFS but with a LIFO stack instead of a FIFO queue.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def invert_tree(root):
     if not root:
@@ -227,6 +243,11 @@ def invert_tree(root):
             stack.append(node.right)  # L5: O(1) push
     return root
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="226-invert-binary-tree-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 

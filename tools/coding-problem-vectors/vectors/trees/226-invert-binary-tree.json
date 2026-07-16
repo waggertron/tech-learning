@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "226-invert-binary-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "tree-level-order",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "invert_tree"
+      },
+      "typescript": {
+        "function": "invertTree"
+      },
+      "go": {
+        "function": "invertTree"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "invertTree"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "full-tree",
+      "classification": "valid",
+      "arguments": [
+        [
+          4,
+          2,
+          7,
+          1,
+          3,
+          6,
+          9
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          4,
+          7,
+          2,
+          9,
+          6,
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "three-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          1,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "orphaned-node",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          null,
+          null,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Level-order values must not follow a closed frontier."
+      }
+    }
+  ],
+  "proofFixture": false
+}

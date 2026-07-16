@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "104-maximum-depth-of-binary-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "max_depth"
+      },
+      "typescript": {
+        "function": "maxDepth"
+      },
+      "go": {
+        "function": "maxDepth"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxDepth"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "three-levels",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "right-child",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          null,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "orphaned-node",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          null,
+          null,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Level-order values must not follow a closed frontier."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -5,15 +5,18 @@ parent: trees
 tags: [leetcode, trees, greedy, hard]
 status: draft
 created: 2026-05-07
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './968-binary-tree-cameras.py?raw';
 import practiceCodeTs from './968-binary-tree-cameras.ts?raw';
+import practiceCodeSwift from './968-binary-tree-cameras.swift?raw';
+import approach1SwiftCode from './968-binary-tree-cameras-approach1.swift?raw';
 import approach2PyCode from './968-binary-tree-cameras-approach2.py?raw';
 import approach2TsCode from './968-binary-tree-cameras-approach2.ts?raw';
 import approach2GoCode from './968-binary-tree-cameras-approach2.go?raw';
@@ -36,6 +39,9 @@ LeetCode 968 · [Link](https://leetcode.com/problems/binary-tree-cameras/) · *H
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="binary-tree-cameras-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="968-binary-tree-cameras-swift" />
   </TabItem>
 </Tabs>
 
@@ -119,6 +125,9 @@ function minCameraCover(root: TreeNode | null): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="968-binary-tree-cameras-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Why null nodes return 2 (covered):** Null is not a real node and does not need coverage. If we returned 0, every leaf would place a camera -- that is too eager. Returning 2 lets leaves return 0 (not covered), which pushes camera placement up to the leaf's parent where it covers more nodes.

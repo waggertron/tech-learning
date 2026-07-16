@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "968-binary-tree-cameras"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_camera_cover"
+      },
+      "typescript": {
+        "function": "minCameraCover"
+      },
+      "go": {
+        "function": "minCameraCover"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minCameraCover"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "single-camera-root",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0,
+          null,
+          0,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "deep-chain",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0,
+          null,
+          0,
+          null,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "nonzero-value",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Camera placement ignores values, and the published examples use zero-valued nodes."
+      }
+    }
+  ],
+  "proofFixture": false
+}

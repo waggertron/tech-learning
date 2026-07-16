@@ -5,15 +5,20 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal.py?raw';
 import practiceCodeTs from './105-construct-binary-tree-from-preorder-and-inorder-traversal.ts?raw';
+import practiceCodeSwift from './105-construct-binary-tree-from-preorder-and-inorder-traversal.swift?raw';
+import approach1SwiftCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach1.swift?raw';
+import approach2SwiftCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.swift?raw';
+import approach3SwiftCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach3.swift?raw';
 import approach2PyCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.py?raw';
 import approach2TsCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.ts?raw';
 import approach2GoCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.go?raw';
@@ -36,6 +41,9 @@ LeetCode 105 · [Link](https://leetcode.com/problems/construct-binary-tree-from-
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="construct-binary-tree-from-preorder-and-inorder-traversal-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-swift" />
   </TabItem>
 </Tabs>
 
@@ -77,6 +85,9 @@ function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -141,6 +152,9 @@ function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -183,6 +197,8 @@ We consume the preorder from left to right, but we must process the left subtree
 
 More code; rarely preferred unless recursion depth is a specific concern. The iterative form pushes preorder values while walking the inorder until the top matches; then pops and assigns to the next preorder root.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def build_tree(preorder, inorder):
     if not preorder:
@@ -206,6 +222,11 @@ def build_tree(preorder, inorder):
         stack.append(node)
     return root
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 The invariant: the stack holds the current path of "left-child ancestors." When the top matches the inorder cursor, we've finished a left subtree, and the next preorder value belongs to a **right** child further up the path. The pop-while loop walks up to find which one.
 

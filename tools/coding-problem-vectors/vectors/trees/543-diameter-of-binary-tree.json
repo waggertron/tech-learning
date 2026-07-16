@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "543-diameter-of-binary-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "diameter_of_binary_tree"
+      },
+      "typescript": {
+        "function": "diameterOfBinaryTree"
+      },
+      "go": {
+        "function": "diameterOfBinaryTree"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "diameterOfBinaryTree"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "classic",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "two-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "orphaned-node",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          null,
+          null,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Level-order values must not follow a closed frontier."
+      }
+    }
+  ],
+  "proofFixture": false
+}

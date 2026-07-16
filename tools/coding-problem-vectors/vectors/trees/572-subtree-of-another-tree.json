@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "572-subtree-of-another-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      },
+      {
+        "name": "subRoot",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_subtree"
+      },
+      "typescript": {
+        "function": "isSubtree"
+      },
+      "go": {
+        "function": "isSubtree"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isSubtree"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "contained",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          4,
+          5,
+          1,
+          2
+        ],
+        [
+          4,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "extra-descendant",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          4,
+          5,
+          1,
+          2,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        [
+          4,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "same-single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "empty-root",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published root tree is nonempty."
+      }
+    },
+    {
+      "id": "empty-subtree",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1
+        ],
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published subtree is nonempty."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -59,6 +59,7 @@ const codecs = [
   "string-array",
   "string-matrix",
   "tree-level-order",
+  "tree-node-value",
   "void",
 ];
 
@@ -140,6 +141,9 @@ function codecValueErrors(codec, value, location) {
     (item) => item === null || Number.isSafeInteger(item),
   )) {
     errors.push(`${location} must be a level-order array of integers and nulls`);
+  }
+  if (codec === "tree-node-value" && !Number.isSafeInteger(value)) {
+    errors.push(`${location} must be an integer node value`);
   }
   if (codec === "graph-adjacency" && !arrayOf(isIntegerArray)) {
     errors.push(`${location} must be an integer adjacency list`);
@@ -487,6 +491,13 @@ function renderLiteral(codec, value, language) {
     return value ? "true" : "false";
   }
   if (codec === "string") return quoteString(value);
+  if (codec === "tree-node-value") return String(value);
+  if (codec === "tree-level-order") {
+    if (language !== "swift") {
+      throw new Error(`Proof renderer supports tree-level-order literals in Swift only`);
+    }
+    return `[${value.map((item) => item === null ? "nil" : String(item)).join(", ")}]`;
+  }
 
   const elementCodec = {
     "graph-adjacency": "int-array",
@@ -862,6 +873,61 @@ function renderGraphStructureCase(document, language, testCase, caseIndex, inden
   return [`${indent}${declaration}`, `${indent}${assertion}`];
 }
 
+function renderTreeCase(document, language, testCase, caseIndex, indent) {
+  if (language !== "swift") {
+    throw new Error("Tree harness rendering is currently supported for Swift catalog sources only");
+  }
+
+  const declarations = [];
+  let rootVariable = null;
+  const callArguments = testCase.arguments.map((value, index) => {
+    const parameter = document.contract.parameters[index];
+    if (parameter.codec === "tree-level-order") {
+      const variable = `treeArgument${index + 1}Case${caseIndex + 1}`;
+      declarations.push(
+        `${indent}let ${variable} = makeTree(${renderLiteral(parameter.codec, value, language)})`,
+      );
+      rootVariable ??= variable;
+      return variable;
+    }
+    if (parameter.codec === "tree-node-value") {
+      if (!rootVariable) {
+        throw new Error("tree-node-value parameters require an earlier tree-level-order parameter");
+      }
+      const variable = `treeNodeArgument${index + 1}Case${caseIndex + 1}`;
+      declarations.push(`${indent}let ${variable} = findTreeNode(${rootVariable}, ${value})`);
+      return variable;
+    }
+    return renderLiteral(parameter.codec, value, language);
+  });
+  const entrypoint = document.execution.entrypoints.swift;
+  const call = `${entrypoint.type}().${entrypoint.method}(${callArguments.join(", ")})`;
+
+  if (document.contract.result.codec === "tree-level-order") {
+    const expected = renderLiteral("tree-level-order", testCase.expected.value, language);
+    return [
+      ...declarations,
+      `${indent}expectEqual(treeValues(${call}), ${expected}, ${quoteString(testCase.id)})`,
+    ];
+  }
+
+  if (document.contract.result.codec === "tree-node-value") {
+    if (!rootVariable) throw new Error("tree-node-value results require a tree-level-order parameter");
+    const expectedVariable = `expectedTreeNodeCase${caseIndex + 1}`;
+    return [
+      ...declarations,
+      `${indent}let ${expectedVariable} = findTreeNode(${rootVariable}, ${testCase.expected.value})`,
+      `${indent}expectTrue(sameTreeNode(${call}, ${expectedVariable}), ${quoteString(testCase.id)})`,
+    ];
+  }
+
+  const expected = renderLiteral(document.contract.result.codec, testCase.expected.value, language);
+  return [
+    ...declarations,
+    renderEqualAssertion(document, language, call, expected, testCase.id, indent),
+  ];
+}
+
 function commentPrefix(language) {
   return language === "python" ? "#" : "//";
 }
@@ -937,7 +1003,7 @@ export function renderVectorBlock(document, language) {
     throw new Error("Proof rendering does not support this result comparison");
   }
   if (document.execution.kind === "function" &&
-      !["boolean", "float", "graph-adjacency", "int", "list-node", "random-list", "string", "int-array", "int-matrix", "string-array", "string-matrix"]
+      !["boolean", "float", "graph-adjacency", "int", "list-node", "random-list", "string", "int-array", "int-matrix", "string-array", "string-matrix", "tree-level-order", "tree-node-value"]
         .includes(document.contract.result.codec)) {
     throw new Error("Proof rendering does not support this result codec");
   }
@@ -972,6 +1038,15 @@ export function renderVectorBlock(document, language) {
         caseIndex,
         indent,
       ));
+      continue;
+    }
+
+    if (language === "swift" && (
+      document.contract.parameters.some((parameter) =>
+        ["tree-level-order", "tree-node-value"].includes(parameter.codec)) ||
+      ["tree-level-order", "tree-node-value"].includes(document.contract.result.codec)
+    )) {
+      lines.push(...renderTreeCase(document, language, testCase, caseIndex, indent));
       continue;
     }
 

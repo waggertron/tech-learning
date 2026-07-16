@@ -5,16 +5,21 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, bfs, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './104-maximum-depth-of-binary-tree.py?raw';
 import practiceCodeTs from './104-maximum-depth-of-binary-tree.ts?raw';
 import practiceCodeGo from './104-maximum-depth-of-binary-tree.go?raw';
+import practiceCodeSwift from './104-maximum-depth-of-binary-tree.swift?raw';
+import approach1SwiftCode from './104-maximum-depth-of-binary-tree-approach1.swift?raw';
+import approach2SwiftCode from './104-maximum-depth-of-binary-tree-approach2.swift?raw';
+import approach3SwiftCode from './104-maximum-depth-of-binary-tree-approach3.swift?raw';
 import approach2PyCode from './104-maximum-depth-of-binary-tree-approach2.py?raw';
 import approach2TsCode from './104-maximum-depth-of-binary-tree-approach2.ts?raw';
 import approach2GoCode from './104-maximum-depth-of-binary-tree-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 104 · [Link](https://leetcode.com/problems/maximum-depth-of-binary-tre
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="maximum-depth-of-binary-tree-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="104-maximum-depth-of-binary-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -92,6 +100,9 @@ func maxDepth(root *TreeNode) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="104-maximum-depth-of-binary-tree-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -185,6 +196,9 @@ func maxDepth(root *TreeNode) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="104-maximum-depth-of-binary-tree-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -221,6 +235,8 @@ Useful when recursion depth is a concern; also the starting point for level-orde
 
 Stack of `(node, current_depth)` pairs.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def max_depth(root):
     if not root:
@@ -236,6 +252,11 @@ def max_depth(root):
             stack.append((node.right, d + 1))  # L5: O(1) push
     return best
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="104-maximum-depth-of-binary-tree-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 

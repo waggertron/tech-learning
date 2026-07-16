@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "235-lowest-common-ancestor-of-a-bst"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      },
+      {
+        "name": "p",
+        "codec": "tree-node-value"
+      },
+      {
+        "name": "q",
+        "codec": "tree-node-value"
+      }
+    ],
+    "result": {
+      "codec": "tree-node-value",
+      "comparison": "identity"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "lowest_common_ancestor"
+      },
+      "typescript": {
+        "function": "lowestCommonAncestor"
+      },
+      "go": {
+        "function": "lowestCommonAncestor"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "lowestCommonAncestor"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "root-split",
+      "classification": "valid",
+      "arguments": [
+        [
+          6,
+          2,
+          8,
+          0,
+          4,
+          7,
+          9,
+          null,
+          null,
+          3,
+          5
+        ],
+        2,
+        8
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "ancestor-input",
+      "classification": "valid",
+      "arguments": [
+        [
+          6,
+          2,
+          8,
+          0,
+          4,
+          7,
+          9,
+          null,
+          null,
+          3,
+          5
+        ],
+        2,
+        4
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single-root",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        1,
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "missing-reference",
+      "classification": "invalid",
+      "arguments": [
+        [
+          2,
+          1,
+          3
+        ],
+        1,
+        4
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Both node references must exist in the tree."
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        1,
+        1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published tree and both references are nonempty."
+      }
+    }
+  ],
+  "proofFixture": false
+}

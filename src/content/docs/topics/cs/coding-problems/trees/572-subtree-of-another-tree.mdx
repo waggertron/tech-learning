@@ -5,16 +5,21 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, recursion, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './572-subtree-of-another-tree.py?raw';
 import practiceCodeTs from './572-subtree-of-another-tree.ts?raw';
 import practiceCodeGo from './572-subtree-of-another-tree.go?raw';
+import practiceCodeSwift from './572-subtree-of-another-tree.swift?raw';
+import approach1SwiftCode from './572-subtree-of-another-tree-approach1.swift?raw';
+import approach2SwiftCode from './572-subtree-of-another-tree-approach2.swift?raw';
+import approach3SwiftCode from './572-subtree-of-another-tree-approach3.swift?raw';
 import approach2PyCode from './572-subtree-of-another-tree-approach2.py?raw';
 import approach2TsCode from './572-subtree-of-another-tree-approach2.ts?raw';
 import approach2GoCode from './572-subtree-of-another-tree-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 572 Â· [Link](https://leetcode.com/problems/subtree-of-another-tree/) Â
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="subtree-of-another-tree-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="572-subtree-of-another-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -116,6 +124,9 @@ func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="572-subtree-of-another-tree-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -183,6 +194,9 @@ func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="572-subtree-of-another-tree-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -221,6 +235,8 @@ Without unique delimiters, `serialize(subRoot)` could match a substring of `seri
 
 Assign each subtree a hash using a recurrence: `hash(node) = H(val, hash(left), hash(right))`. Compute the target hash for `subRoot`, then DFS `root` comparing hashes.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def is_subtree(root, subRoot):
     target = None
@@ -254,6 +270,11 @@ def is_subtree(root, subRoot):
     dfs(root)
     return found
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="572-subtree-of-another-tree-approach3-swift" />
+  </TabItem>
+</Tabs>
 
 **Where the time goes, line by line**
 

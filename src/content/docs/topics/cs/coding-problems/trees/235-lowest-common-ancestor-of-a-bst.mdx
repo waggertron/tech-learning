@@ -5,15 +5,20 @@ parent: trees
 tags: [leetcode, neetcode-150, trees, bst, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './235-lowest-common-ancestor-of-a-bst.py?raw';
 import practiceCodeTs from './235-lowest-common-ancestor-of-a-bst.ts?raw';
+import practiceCodeSwift from './235-lowest-common-ancestor-of-a-bst.swift?raw';
+import approach1SwiftCode from './235-lowest-common-ancestor-of-a-bst-approach1.swift?raw';
+import approach2SwiftCode from './235-lowest-common-ancestor-of-a-bst-approach2.swift?raw';
+import approach3SwiftCode from './235-lowest-common-ancestor-of-a-bst-approach3.swift?raw';
 import approach2PyCode from './235-lowest-common-ancestor-of-a-bst-approach2.py?raw';
 import approach2TsCode from './235-lowest-common-ancestor-of-a-bst-approach2.ts?raw';
 import approach2GoCode from './235-lowest-common-ancestor-of-a-bst-approach2.go?raw';
@@ -36,6 +41,9 @@ LeetCode 235 · [Link](https://leetcode.com/problems/lowest-common-ancestor-of-a
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="lowest-common-ancestor-of-a-bst-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="235-lowest-common-ancestor-of-a-bst-swift" />
   </TabItem>
 </Tabs>
 
@@ -74,6 +82,9 @@ function lowestCommonAncestor(root: TreeNode | null, p: TreeNode, q: TreeNode): 
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="235-lowest-common-ancestor-of-a-bst-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -120,6 +131,9 @@ function lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode): TreeNod
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="235-lowest-common-ancestor-of-a-bst-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -187,6 +201,9 @@ function lowestCommonAncestor(root: TreeNode | null, p: TreeNode, q: TreeNode): 
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="235-lowest-common-ancestor-of-a-bst-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

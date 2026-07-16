@@ -21,7 +21,7 @@ function binarySearchVector() {
 
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 113);
+  assert.equal(records.length, 130);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -464,4 +464,75 @@ test("renders random-pointer list structure and deep-copy observations", () => {
   const block = renderVectorBlock(document, "swift");
   assert.match(block, /let original1 = makeRandomList\(\[RandomListEntry\(value: 7, randomIndex: nil\), RandomListEntry\(value: 13, randomIndex: 0\)\]\)/);
   assert.match(block, /expectTrue\(isValidRandomListClone\(original1, Solution\(\)\.copyRandomList\(original1\),/);
+});
+
+test("renders Swift level-order tree construction and observation", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "root", codec: "tree-level-order" }];
+  document.contract.result = { codec: "tree-level-order", comparison: "equal" };
+  document.contract.mutatedParameters = [];
+  document.execution.entrypoints.swift = { type: "Solution", method: "invertTree" };
+  document.cases = [
+    {
+      id: "full-tree",
+      classification: "valid",
+      arguments: [[4, 2, 7, 1, 3, 6, 9]],
+      expected: { kind: "value", value: [4, 7, 2, 9, 6, 3, 1] },
+    },
+    {
+      id: "empty-tree",
+      classification: "boundary",
+      arguments: [[]],
+      expected: { kind: "value", value: [] },
+    },
+    {
+      id: "orphaned-node",
+      classification: "invalid",
+      arguments: [[1, null, null, 2]],
+      expected: { kind: "excluded", reason: "Level-order values must not follow a closed frontier." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let treeArgument1Case1 = makeTree\(\[4, 2, 7, 1, 3, 6, 9\]\)/);
+  assert.match(block, /expectEqual\(treeValues\(Solution\(\)\.invertTree\(treeArgument1Case1\)\), \[4, 7, 2, 9, 6, 3, 1\], "full-tree"\)/);
+});
+
+test("renders Swift tree node references with identity comparison", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [
+    { name: "root", codec: "tree-level-order" },
+    { name: "p", codec: "tree-node-value" },
+    { name: "q", codec: "tree-node-value" },
+  ];
+  document.contract.result = { codec: "tree-node-value", comparison: "identity" };
+  document.contract.mutatedParameters = [];
+  document.execution.entrypoints.swift = { type: "Solution", method: "lowestCommonAncestor" };
+  document.cases = [
+    {
+      id: "root-split",
+      classification: "valid",
+      arguments: [[6, 2, 8, 0, 4, 7, 9, null, null, 3, 5], 2, 8],
+      expected: { kind: "value", value: 6 },
+    },
+    {
+      id: "ancestor-input",
+      classification: "boundary",
+      arguments: [[2, 1], 2, 1],
+      expected: { kind: "value", value: 2 },
+    },
+    {
+      id: "missing-reference",
+      classification: "invalid",
+      arguments: [[2, 1, 3], 1, 4],
+      expected: { kind: "excluded", reason: "Both node references must exist in the tree." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let treeNodeArgument2Case1 = findTreeNode\(treeArgument1Case1, 2\)/);
+  assert.match(block, /let expectedTreeNodeCase1 = findTreeNode\(treeArgument1Case1, 6\)/);
+  assert.match(block, /expectTrue\(sameTreeNode\(Solution\(\)\.lowestCommonAncestor\(treeArgument1Case1, treeNodeArgument2Case1, treeNodeArgument3Case1\), expectedTreeNodeCase1\), "root-split"\)/);
 });

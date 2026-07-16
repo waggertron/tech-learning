@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "230-kth-smallest-element-in-a-bst"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "kth_smallest"
+      },
+      "typescript": {
+        "function": "kthSmallest"
+      },
+      "go": {
+        "function": "kthSmallest"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "kthSmallest"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "third-smallest",
+      "classification": "valid",
+      "arguments": [
+        [
+          5,
+          3,
+          6,
+          2,
+          4,
+          null,
+          null,
+          1
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "first-smallest",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          1,
+          4,
+          null,
+          2
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "zero-rank",
+      "classification": "invalid",
+      "arguments": [
+        [
+          2,
+          1,
+          3
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The rank starts at one."
+      }
+    },
+    {
+      "id": "rank-too-large",
+      "classification": "invalid",
+      "arguments": [
+        [
+          2,
+          1,
+          3
+        ],
+        4
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The rank cannot exceed the node count."
+      }
+    }
+  ],
+  "proofFixture": false
+}

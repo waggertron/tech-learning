@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "110-balanced-binary-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_balanced"
+      },
+      "typescript": {
+        "function": "isBalanced"
+      },
+      "go": {
+        "function": "isBalanced"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isBalanced"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "balanced",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "unbalanced",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          2,
+          3,
+          3,
+          null,
+          null,
+          4,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "orphaned-node",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          null,
+          null,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Level-order values must not follow a closed frontier."
+      }
+    }
+  ],
+  "proofFixture": false
+}

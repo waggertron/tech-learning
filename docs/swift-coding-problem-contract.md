@@ -68,7 +68,7 @@ The canonical blocks live under `tools/swift-catalog/helpers/`. A standalone fil
 | Manifest helper | Canonical file | Contract |
 | --- | --- | --- |
 | `list-node` | `ListNode.swift` | `ListNode` plus deterministic acyclic, cyclic, list-array, and shared-tail builders and observations |
-| `tree-node` | `TreeNode.swift` | `TreeNode` with `val`, optional `left`, and optional `right` |
+| `tree-node` | `TreeNode.swift` | `TreeNode` plus deterministic level-order construction, observation, value lookup, and identity comparison |
 | `graph-node` | `GraphNode.swift` | LeetCode-style `Node` with `val` and optional neighbors |
 | `random-list-node` | `RandomListNode.swift` | LeetCode-style `Node` plus deterministic builders and a structure and identity clone validator |
 | `trie-node` | `TrieNode.swift` | Character-keyed children and an end-of-word flag |
@@ -118,6 +118,6 @@ Use `npm run validate:swift-catalog-coverage` only when checking migration compl
 
 ## Current evidence
 
-The contract fixtures, canonical helpers, and all 411 migrated Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Tries, and Two Pointers catalog sources compile with Apple Swift 6.3.2 in Swift 6 language mode with warnings treated as errors. All 298 completed approaches run and print the exact success marker. Compiler invocations have a 60-second ceiling. Completed programs have a 10-second runtime ceiling and a 1 MiB output cap.
+The contract fixtures, canonical helpers, and all 473 migrated Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers catalog sources compile with Apple Swift 6.3.2 in Swift 6 language mode with warnings treated as errors. All 343 completed approaches run and print the exact success marker. Compiler invocations have a 60-second ceiling. Completed programs have a 10-second runtime ceiling and a 1 MiB output cap.
 
 The pinned browser executor remains the exact Swift 6.3.3 Linux evidence boundary. Re-run its Docker-backed suite when executor behavior, compiler pinning, isolation, or source transfer changes. This contract change does not alter that executor boundary.

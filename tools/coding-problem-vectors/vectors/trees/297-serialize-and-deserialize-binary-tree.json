@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "trees",
+    "slug": "297-serialize-and-deserialize-binary-tree"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "root",
+        "codec": "tree-level-order"
+      }
+    ],
+    "result": {
+      "codec": "tree-level-order",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "round_trip"
+      },
+      "typescript": {
+        "function": "roundTrip"
+      },
+      "go": {
+        "function": "roundTrip"
+      },
+      "swift": {
+        "type": "Codec",
+        "method": "roundTrip"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "mixed-tree",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          null,
+          null,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2,
+          3,
+          null,
+          null,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          -2,
+          3,
+          null,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          -1,
+          -2,
+          3,
+          null,
+          4
+        ]
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-tree",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "orphaned-node",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          null,
+          null,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Level-order values must not follow a closed frontier."
+      }
+    }
+  ],
+  "proofFixture": false
+}
