@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "tries",
+    "slug": "211-design-add-and-search-words-data-structure"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "WordDictionary"
+      },
+      "typescript": {
+        "type": "WordDictionary"
+      },
+      "go": {
+        "type": "WordDictionary"
+      },
+      "swift": {
+        "type": "WordDictionary"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-wildcards",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "addWord",
+            "arguments": [
+              "bad"
+            ]
+          },
+          {
+            "operation": "addWord",
+            "arguments": [
+              "dad"
+            ]
+          },
+          {
+            "operation": "addWord",
+            "arguments": [
+              "mad"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "pad"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "bad"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              ".ad"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "b.."
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          null,
+          false,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "id": "length-matters",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "addWord",
+            "arguments": [
+              "at"
+            ]
+          },
+          {
+            "operation": "addWord",
+            "arguments": [
+              "atom"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "a."
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "a.."
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "...."
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          true,
+          false,
+          true
+        ]
+      }
+    },
+    {
+      "id": "empty-dictionary",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "."
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          false
+        ]
+      }
+    },
+    {
+      "id": "unsupported-pattern-character",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "a*"
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Search patterns contain lowercase letters and dots only."
+      }
+    }
+  ],
+  "proofFixture": false
+}

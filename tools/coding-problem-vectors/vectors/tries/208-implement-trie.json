@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "tries",
+    "slug": "208-implement-trie"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "Trie"
+      },
+      "typescript": {
+        "type": "Trie"
+      },
+      "go": {
+        "type": "Trie"
+      },
+      "swift": {
+        "type": "Trie"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-prefix-flow",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "insert",
+            "arguments": [
+              "apple"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "apple"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "app"
+            ]
+          },
+          {
+            "operation": "startsWith",
+            "arguments": [
+              "app"
+            ]
+          },
+          {
+            "operation": "insert",
+            "arguments": [
+              "app"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "app"
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          true,
+          false,
+          true,
+          null,
+          true
+        ]
+      }
+    },
+    {
+      "id": "shared-prefixes",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "insert",
+            "arguments": [
+              "apple"
+            ]
+          },
+          {
+            "operation": "insert",
+            "arguments": [
+              "application"
+            ]
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "apply"
+            ]
+          },
+          {
+            "operation": "startsWith",
+            "arguments": [
+              "appli"
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          false,
+          true
+        ]
+      }
+    },
+    {
+      "id": "empty-trie",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "search",
+            "arguments": [
+              "a"
+            ]
+          },
+          {
+            "operation": "startsWith",
+            "arguments": [
+              "a"
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          false,
+          false
+        ]
+      }
+    },
+    {
+      "id": "empty-word",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "insert",
+            "arguments": [
+              ""
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Inserted words contain at least one lowercase letter."
+      }
+    }
+  ],
+  "proofFixture": false
+}

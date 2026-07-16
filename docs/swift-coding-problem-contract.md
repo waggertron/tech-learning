@@ -118,6 +118,6 @@ Use `npm run validate:swift-catalog-coverage` only when checking migration compl
 
 ## Current evidence
 
-The contract fixtures, canonical helpers, and all 324 migrated Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, and Sliding Window catalog sources compile with Apple Swift 6.3.2 in Swift 6 language mode with warnings treated as errors. All 237 completed approaches run and print the exact success marker. Compiler invocations have a 60-second ceiling. Completed programs have a 10-second runtime ceiling and a 1 MiB output cap.
+The contract fixtures, canonical helpers, and all 336 migrated Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, and Tries catalog sources compile with Apple Swift 6.3.2 in Swift 6 language mode with warnings treated as errors. All 246 completed approaches run and print the exact success marker. Compiler invocations have a 60-second ceiling. Completed programs have a 10-second runtime ceiling and a 1 MiB output cap.
 
 The pinned browser executor remains the exact Swift 6.3.3 Linux evidence boundary. Re-run its Docker-backed suite when executor behavior, compiler pinning, isolation, or source transfer changes. This contract change does not alter that executor boundary.

@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 324
+      "swift": 336
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 87,
-        "starterHarnesses": 87,
-        "practiceTabs": 87,
-        "practiceRepls": 87,
-        "approachTabs": 237,
-        "approachSources": 237,
-        "approachHarnesses": 237
+        "starterFiles": 90,
+        "starterHarnesses": 90,
+        "practiceTabs": 90,
+        "practiceRepls": 90,
+        "approachTabs": 246,
+        "approachSources": 246,
+        "approachHarnesses": 246
       }
     },
-    "swiftReadyPages": 87,
-    "swiftReadyApproaches": 237,
-    "vectorReadyPages": 87
+    "swiftReadyPages": 90,
+    "swiftReadyApproaches": 246,
+    "vectorReadyPages": 90
   },
   "categories": [
     {
@@ -186,9 +186,9 @@
       "category": "tries",
       "pages": 3,
       "documentedApproaches": 9,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 3,
+      "swiftReadyApproaches": 9,
+      "vectorReadyPages": 3
     },
     {
       "category": "two-pointers",
@@ -23130,45 +23130,47 @@
         "trie-node"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/tries/208-implement-trie.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "tries/208-implement-trie.py",
         "typescript": "tries/208-implement-trie.ts",
         "go": "tries/208-implement-trie.go",
-        "swift": null
+        "swift": "tries/208-implement-trie.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -23176,23 +23178,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "tries/208-implement-trie-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -23200,7 +23207,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23210,21 +23218,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "tries/208-implement-trie-approach2.py",
             "typescript": "tries/208-implement-trie-approach2.ts",
             "go": "tries/208-implement-trie-approach2.go",
-            "swift": null
+            "swift": "tries/208-implement-trie-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -23232,7 +23242,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23242,21 +23253,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "tries/208-implement-trie-approach3.py",
             "typescript": "tries/208-implement-trie-approach3.ts",
             "go": "tries/208-implement-trie-approach3.go",
-            "swift": null
+            "swift": "tries/208-implement-trie-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -23269,42 +23282,44 @@
         "trie-node"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/tries/211-design-add-and-search-words-data-structure.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "tries/211-design-add-and-search-words-data-structure.py",
         "typescript": "tries/211-design-add-and-search-words-data-structure.ts",
         "go": "tries/211-design-add-and-search-words-data-structure.go",
-        "swift": null
+        "swift": "tries/211-design-add-and-search-words-data-structure.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -23312,23 +23327,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "tries/211-design-add-and-search-words-data-structure-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -23336,7 +23356,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23346,21 +23367,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "tries/211-design-add-and-search-words-data-structure-approach2.py",
             "typescript": "tries/211-design-add-and-search-words-data-structure-approach2.ts",
             "go": "tries/211-design-add-and-search-words-data-structure-approach2.go",
-            "swift": null
+            "swift": "tries/211-design-add-and-search-words-data-structure-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -23368,7 +23391,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23378,21 +23402,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "tries/211-design-add-and-search-words-data-structure-approach3.py",
             "typescript": "tries/211-design-add-and-search-words-data-structure-approach3.ts",
             "go": "tries/211-design-add-and-search-words-data-structure-approach3.go",
-            "swift": null
+            "swift": "tries/211-design-add-and-search-words-data-structure-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -23405,42 +23431,44 @@
         "trie-node"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/tries/212-word-search-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "tries/212-word-search-ii.py",
         "typescript": "tries/212-word-search-ii.ts",
         "go": "tries/212-word-search-ii.go",
-        "swift": null
+        "swift": "tries/212-word-search-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -23448,23 +23476,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "tries/212-word-search-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -23472,7 +23505,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23482,21 +23516,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "tries/212-word-search-ii-approach2.py",
             "typescript": "tries/212-word-search-ii-approach2.ts",
             "go": "tries/212-word-search-ii-approach2.go",
-            "swift": null
+            "swift": "tries/212-word-search-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -23504,7 +23540,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23514,21 +23551,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "tries/212-word-search-ii-approach3.py",
             "typescript": "tries/212-word-search-ii-approach3.ts",
             "go": "tries/212-word-search-ii-approach3.go",
-            "swift": null
+            "swift": "tries/212-word-search-ii-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

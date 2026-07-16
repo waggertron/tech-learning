@@ -89,7 +89,7 @@ Category rollout checklist:
 - [x] **S2.C14**: Sliding window, 8 pages. All 8 starters and 22 documented approaches are wired to Swift REPL tabs, share 52 reviewed vectors, compile under Swift 6 mode, use `Character` arrays where integer offsets would violate Swift string indexing, and preserve the canonical heap helper for Sliding Window Maximum.
 - [ ] **S2.C15**: Stack, 16 pages.
 - [ ] **S2.C16**: Trees, 17 pages.
-- [ ] **S2.C17**: Tries, 3 pages.
+- [x] **S2.C17**: Tries, 3 pages. All 3 starters and 9 documented approaches are wired to Swift REPL tabs, share 14 reviewed vectors, compile under Swift 6 mode, and preserve the exact canonical trie node helper across stateful prefix, wildcard, and board-search implementations.
 - [ ] **S2.C18**: Two pointers, 7 pages.
 
 ### Gate 3: Establish the series workspace

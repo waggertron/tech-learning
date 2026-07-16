@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "tries",
+    "slug": "212-word-search-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "board",
+        "codec": "string-matrix"
+      },
+      {
+        "name": "words",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "string-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_words"
+      },
+      "typescript": {
+        "function": "findWords"
+      },
+      "go": {
+        "function": "findWords"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findWords"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-board",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "o",
+            "a",
+            "a",
+            "n"
+          ],
+          [
+            "e",
+            "t",
+            "a",
+            "e"
+          ],
+          [
+            "i",
+            "h",
+            "k",
+            "r"
+          ],
+          [
+            "i",
+            "f",
+            "l",
+            "v"
+          ]
+        ],
+        [
+          "oath",
+          "pea",
+          "eat",
+          "rain"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "oath",
+          "eat"
+        ]
+      }
+    },
+    {
+      "id": "overlapping-paths",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        [
+          "ab",
+          "ac",
+          "abd",
+          "abcd",
+          "bd"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "ab",
+          "ac",
+          "abd",
+          "bd"
+        ]
+      }
+    },
+    {
+      "id": "no-word-found",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        [
+          "xyz",
+          "aaa"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "single-cell",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            "a"
+          ]
+        ],
+        [
+          "a",
+          "b"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a"
+        ]
+      }
+    },
+    {
+      "id": "ragged-board",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c"
+          ]
+        ],
+        [
+          "ab"
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every board row must have the same number of cells."
+      }
+    },
+    {
+      "id": "empty-word-list",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            "a"
+          ]
+        ],
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The word list must contain at least one word."
+      }
+    }
+  ],
+  "proofFixture": false
+}
