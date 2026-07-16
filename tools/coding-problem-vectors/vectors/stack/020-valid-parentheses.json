@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "020-valid-parentheses"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_valid"
+      },
+      "typescript": {
+        "function": "isValid"
+      },
+      "go": {
+        "function": "isValid"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isValid"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "single-pair",
+      "classification": "valid",
+      "arguments": [
+        "()"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "mixed-pairs",
+      "classification": "valid",
+      "arguments": [
+        "()[]{}"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "wrong-type",
+      "classification": "valid",
+      "arguments": [
+        "(]"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "crossed-order",
+      "classification": "valid",
+      "arguments": [
+        "([)]"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "nested-pairs",
+      "classification": "boundary",
+      "arguments": [
+        "{[]}"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one bracket."
+      }
+    },
+    {
+      "id": "non-bracket",
+      "classification": "invalid",
+      "arguments": [
+        "(a)"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input alphabet contains only bracket characters."
+      }
+    }
+  ],
+  "proofFixture": false
+}

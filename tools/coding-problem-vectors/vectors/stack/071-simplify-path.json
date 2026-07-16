@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "071-simplify-path"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "path",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "simplify_path"
+      },
+      "typescript": {
+        "function": "simplifyPath"
+      },
+      "go": {
+        "function": "simplifyPath"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "simplifyPath"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "trailing-slash",
+      "classification": "valid",
+      "arguments": [
+        "/home/"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "/home"
+      }
+    },
+    {
+      "id": "above-root",
+      "classification": "valid",
+      "arguments": [
+        "/../"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "/"
+      }
+    },
+    {
+      "id": "repeated-slash",
+      "classification": "valid",
+      "arguments": [
+        "/home//foo/"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "/home/foo"
+      }
+    },
+    {
+      "id": "dot-and-parent",
+      "classification": "valid",
+      "arguments": [
+        "/a/./b/../../c/"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "/c"
+      }
+    },
+    {
+      "id": "root",
+      "classification": "boundary",
+      "arguments": [
+        "/"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "/"
+      }
+    },
+    {
+      "id": "relative-path",
+      "classification": "invalid",
+      "arguments": [
+        "home/user"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input is an absolute path."
+      }
+    },
+    {
+      "id": "empty-path",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The path must begin with a slash."
+      }
+    }
+  ],
+  "proofFixture": false
+}

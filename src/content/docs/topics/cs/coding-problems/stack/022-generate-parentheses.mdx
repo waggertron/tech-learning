@@ -5,16 +5,21 @@ parent: stack
 tags: [leetcode, neetcode-150, stacks, backtracking, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './022-generate-parentheses.py?raw';
 import practiceCodeTs from './022-generate-parentheses.ts?raw';
 import practiceCodeGo from './022-generate-parentheses.go?raw';
+import practiceCodeSwift from './022-generate-parentheses.swift?raw';
+import approach1SwiftCode from './022-generate-parentheses-approach1.swift?raw';
+import approach2SwiftCode from './022-generate-parentheses-approach2.swift?raw';
+import approach3SwiftCode from './022-generate-parentheses-approach3.swift?raw';
 import approach2PyCode from './022-generate-parentheses-approach2.py?raw';
 import approach2TsCode from './022-generate-parentheses-approach2.ts?raw';
 import approach2GoCode from './022-generate-parentheses-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 22 · [Link](https://leetcode.com/problems/generate-parentheses/) · *M
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="generate-parentheses-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="022-generate-parentheses-swift" />
   </TabItem>
 </Tabs>
 
@@ -125,6 +133,9 @@ func generateParenthesis(n int) []string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="022-generate-parentheses-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -194,6 +205,9 @@ func generateParenthesis(n int) []string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="022-generate-parentheses-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -311,6 +325,9 @@ func generateParenthesis(n int) []string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="022-generate-parentheses-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

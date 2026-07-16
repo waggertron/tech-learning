@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "503-next-greater-element-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "next_greater_elements"
+      },
+      "typescript": {
+        "function": "nextGreaterElements"
+      },
+      "go": {
+        "function": "nextGreaterElements"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "nextGreaterElements"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "wraparound",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          -1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "mixed-circular",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          3,
+          4,
+          -1,
+          4
+        ]
+      }
+    },
+    {
+      "id": "descending",
+      "classification": "valid",
+      "arguments": [
+        [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          -1,
+          5,
+          5,
+          5,
+          5
+        ]
+      }
+    },
+    {
+      "id": "single-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          -1
+        ]
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published array contains at least one value."
+      }
+    }
+  ],
+  "proofFixture": false
+}

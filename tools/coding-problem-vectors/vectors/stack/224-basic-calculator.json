@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "224-basic-calculator"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "calculate"
+      },
+      "typescript": {
+        "function": "calculate"
+      },
+      "go": {
+        "function": "calculate"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "calculate"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "simple-addition",
+      "classification": "valid",
+      "arguments": [
+        "1 + 1"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "mixed-signs",
+      "classification": "valid",
+      "arguments": [
+        " 2-1 + 2 "
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "nested-groups",
+      "classification": "valid",
+      "arguments": [
+        "(1+(4+5+2)-3)+(6+8)"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 23
+      }
+    },
+    {
+      "id": "unary-before-group",
+      "classification": "valid",
+      "arguments": [
+        "-(2+3)+10"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "zero",
+      "classification": "boundary",
+      "arguments": [
+        "0"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-expression",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published expression contains at least one character."
+      }
+    },
+    {
+      "id": "unsupported-operator",
+      "classification": "invalid",
+      "arguments": [
+        "1*2"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Only addition, subtraction, parentheses, digits, and spaces are supported."
+      }
+    }
+  ],
+  "proofFixture": false
+}

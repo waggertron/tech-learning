@@ -5,16 +5,21 @@ parent: stack
 tags: [leetcode, neetcode-150, stacks, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './155-min-stack.py?raw';
 import practiceCodeTs from './155-min-stack.ts?raw';
 import practiceCodeGo from './155-min-stack.go?raw';
+import practiceCodeSwift from './155-min-stack.swift?raw';
+import approach1SwiftCode from './155-min-stack-approach1.swift?raw';
+import approach2SwiftCode from './155-min-stack-approach2.swift?raw';
+import approach3SwiftCode from './155-min-stack-approach3.swift?raw';
 import approach2PyCode from './155-min-stack-approach2.py?raw';
 import approach2TsCode from './155-min-stack-approach2.ts?raw';
 import approach2GoCode from './155-min-stack-approach2.go?raw';
@@ -49,6 +54,9 @@ LeetCode 155 · [Link](https://leetcode.com/problems/min-stack/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="min-stack-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="155-min-stack-swift" />
   </TabItem>
 </Tabs>
 
@@ -109,6 +117,9 @@ func (ms *MinStack) GetMin() int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="155-min-stack-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -209,6 +220,9 @@ func (ms *MinStack) GetMin() int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="155-min-stack-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -319,6 +333,9 @@ func (ms *MinStack) GetMin() int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="155-min-stack-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

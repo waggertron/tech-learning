@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "155-min-stack"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "MinStack"
+      },
+      "typescript": {
+        "type": "MinStack"
+      },
+      "go": {
+        "type": "MinStack"
+      },
+      "swift": {
+        "type": "MinStack"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "sequence",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "push",
+            "arguments": [
+              -2
+            ]
+          },
+          {
+            "operation": "push",
+            "arguments": [
+              0
+            ]
+          },
+          {
+            "operation": "push",
+            "arguments": [
+              -3
+            ]
+          },
+          {
+            "operation": "getMin",
+            "arguments": []
+          },
+          {
+            "operation": "pop",
+            "arguments": []
+          },
+          {
+            "operation": "top",
+            "arguments": []
+          },
+          {
+            "operation": "getMin",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          null,
+          -3,
+          null,
+          0,
+          -2
+        ]
+      }
+    },
+    {
+      "id": "duplicate-minimum",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "push",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "push",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "getMin",
+            "arguments": []
+          },
+          {
+            "operation": "pop",
+            "arguments": []
+          },
+          {
+            "operation": "getMin",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          2,
+          null,
+          2
+        ]
+      }
+    },
+    {
+      "id": "single-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "push",
+            "arguments": [
+              7
+            ]
+          },
+          {
+            "operation": "top",
+            "arguments": []
+          },
+          {
+            "operation": "getMin",
+            "arguments": []
+          },
+          {
+            "operation": "pop",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          7,
+          7,
+          null
+        ]
+      }
+    },
+    {
+      "id": "pop-empty",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": []
+          },
+          {
+            "operation": "pop",
+            "arguments": []
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published operation sequence does not pop an empty stack."
+      }
+    }
+  ],
+  "proofFixture": false
+}

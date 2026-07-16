@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "084-largest-rectangle-in-histogram"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "heights",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "largest_rectangle_area"
+      },
+      "typescript": {
+        "function": "largestRectangleArea"
+      },
+      "go": {
+        "function": "largestRectangleArea"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "largestRectangleArea"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "classic",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          1,
+          5,
+          6,
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 10
+      }
+    },
+    {
+      "id": "two-bars",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "flat",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "single-bar",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "empty-histogram",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published histogram contains at least one bar."
+      }
+    },
+    {
+      "id": "negative-height",
+      "classification": "invalid",
+      "arguments": [
+        [
+          2,
+          -1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Bar heights must be nonnegative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

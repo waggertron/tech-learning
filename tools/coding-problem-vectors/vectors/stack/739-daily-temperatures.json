@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "739-daily-temperatures"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "temperatures",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "daily_temperatures"
+      },
+      "typescript": {
+        "function": "dailyTemperatures"
+      },
+      "go": {
+        "function": "dailyTemperatures"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "dailyTemperatures"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "classic",
+      "classification": "valid",
+      "arguments": [
+        [
+          73,
+          74,
+          75,
+          71,
+          69,
+          72,
+          76,
+          73
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          1,
+          4,
+          2,
+          1,
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "increasing",
+      "classification": "valid",
+      "arguments": [
+        [
+          30,
+          40,
+          50,
+          60
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          1,
+          1,
+          0
+        ]
+      }
+    },
+    {
+      "id": "decreasing",
+      "classification": "valid",
+      "arguments": [
+        [
+          90,
+          80,
+          70
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "single-day",
+      "classification": "boundary",
+      "arguments": [
+        [
+          70
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one temperature."
+      }
+    },
+    {
+      "id": "out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        [
+          20
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published temperatures range from 30 through 100."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "394-decode-string"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "decode_string"
+      },
+      "typescript": {
+        "function": "decodeString"
+      },
+      "go": {
+        "function": "decodeString"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "decodeString"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-groups",
+      "classification": "valid",
+      "arguments": [
+        "3[a]2[bc]"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "aaabcbc"
+      }
+    },
+    {
+      "id": "nested-group",
+      "classification": "valid",
+      "arguments": [
+        "3[a2[c]]"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "accaccacc"
+      }
+    },
+    {
+      "id": "suffix-text",
+      "classification": "valid",
+      "arguments": [
+        "2[abc]3[cd]ef"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "abcabccdcdcdef"
+      }
+    },
+    {
+      "id": "plain-text",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "a"
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one character."
+      }
+    },
+    {
+      "id": "unclosed-group",
+      "classification": "invalid",
+      "arguments": [
+        "3[a"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The encoded string is guaranteed to be valid."
+      }
+    }
+  ],
+  "proofFixture": false
+}

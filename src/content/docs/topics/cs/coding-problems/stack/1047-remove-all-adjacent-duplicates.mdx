@@ -5,16 +5,20 @@ parent: stack
 tags: [leetcode, stacks, strings, easy]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './1047-remove-all-adjacent-duplicates.py?raw';
 import practiceCodeTs from './1047-remove-all-adjacent-duplicates.ts?raw';
 import practiceCodeGo from './1047-remove-all-adjacent-duplicates.go?raw';
+import practiceCodeSwift from './1047-remove-all-adjacent-duplicates.swift?raw';
+import approach1SwiftCode from './1047-remove-all-adjacent-duplicates-approach1.swift?raw';
+import approach2SwiftCode from './1047-remove-all-adjacent-duplicates-approach2.swift?raw';
 import approach2PyCode from './1047-remove-all-adjacent-duplicates-approach2.py?raw';
 import approach2TsCode from './1047-remove-all-adjacent-duplicates-approach2.ts?raw';
 import approach2GoCode from './1047-remove-all-adjacent-duplicates-approach2.go?raw';
@@ -46,6 +50,9 @@ LeetCode 1047 · [Link](https://leetcode.com/problems/remove-all-adjacent-duplic
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="remove-all-adjacent-duplicates-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="1047-remove-all-adjacent-duplicates-swift" />
   </TabItem>
 </Tabs>
 
@@ -118,6 +125,9 @@ func removeDuplicates(s string) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="1047-remove-all-adjacent-duplicates-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**
@@ -172,6 +182,9 @@ func removeDuplicates(s string) string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="1047-remove-all-adjacent-duplicates-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

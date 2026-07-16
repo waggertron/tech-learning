@@ -5,16 +5,19 @@ parent: stack
 tags: [leetcode, stacks, strings, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './394-decode-string.py?raw';
 import practiceCodeTs from './394-decode-string.ts?raw';
 import practiceCodeGo from './394-decode-string.go?raw';
+import practiceCodeSwift from './394-decode-string.swift?raw';
+import approach1SwiftCode from './394-decode-string-approach1.swift?raw';
 import approach2PyCode from './394-decode-string-approach2.py?raw';
 import approach2TsCode from './394-decode-string-approach2.ts?raw';
 import approach2GoCode from './394-decode-string-approach2.go?raw';
@@ -41,6 +44,9 @@ LeetCode 394 · [Link](https://leetcode.com/problems/decode-string/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="decode-string-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="394-decode-string-swift" />
   </TabItem>
 </Tabs>
 
@@ -100,6 +106,9 @@ function decodeString(s: string): string {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="394-decode-string-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Tracing `"3[a2[c]]"`**

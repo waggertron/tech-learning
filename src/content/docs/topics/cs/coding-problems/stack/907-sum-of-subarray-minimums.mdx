@@ -5,16 +5,20 @@ parent: stack
 tags: [leetcode, stacks, dynamic-programming, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './907-sum-of-subarray-minimums.py?raw';
 import practiceCodeTs from './907-sum-of-subarray-minimums.ts?raw';
 import practiceCodeGo from './907-sum-of-subarray-minimums.go?raw';
+import practiceCodeSwift from './907-sum-of-subarray-minimums.swift?raw';
+import approach1SwiftCode from './907-sum-of-subarray-minimums-approach1.swift?raw';
+import approach2SwiftCode from './907-sum-of-subarray-minimums-approach2.swift?raw';
 import approach2PyCode from './907-sum-of-subarray-minimums-approach2.py?raw';
 import approach2TsCode from './907-sum-of-subarray-minimums-approach2.ts?raw';
 import approach2GoCode from './907-sum-of-subarray-minimums-approach2.go?raw';
@@ -46,6 +50,9 @@ LeetCode 907 · [Link](https://leetcode.com/problems/sum-of-subarray-minimums/) 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="sum-of-subarray-minimums-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="907-sum-of-subarray-minimums-swift" />
   </TabItem>
 </Tabs>
 
@@ -85,6 +92,9 @@ function sumSubarrayMins(arr: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="907-sum-of-subarray-minimums-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Complexity**
@@ -159,6 +169,9 @@ function sumSubarrayMins(arr: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="907-sum-of-subarray-minimums-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

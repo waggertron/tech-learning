@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "022-generate-parentheses"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "string-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "generate_parenthesis"
+      },
+      "typescript": {
+        "function": "generateParenthesis"
+      },
+      "go": {
+        "function": "generateParenthesis"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "generateParenthesis"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-pairs",
+      "classification": "valid",
+      "arguments": [
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "(())",
+          "()()"
+        ]
+      }
+    },
+    {
+      "id": "three-pairs",
+      "classification": "valid",
+      "arguments": [
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "((()))",
+          "(()())",
+          "(())()",
+          "()(())",
+          "()()()"
+        ]
+      }
+    },
+    {
+      "id": "single-pair",
+      "classification": "boundary",
+      "arguments": [
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "()"
+        ]
+      }
+    },
+    {
+      "id": "zero-pairs",
+      "classification": "invalid",
+      "arguments": [
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published range starts at one pair."
+      }
+    },
+    {
+      "id": "negative-pairs",
+      "classification": "invalid",
+      "arguments": [
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The pair count must be positive."
+      }
+    }
+  ],
+  "proofFixture": false
+}

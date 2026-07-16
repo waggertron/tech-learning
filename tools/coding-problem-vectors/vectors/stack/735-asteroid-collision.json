@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "735-asteroid-collision"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "asteroids",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "asteroid_collision"
+      },
+      "typescript": {
+        "function": "asteroidCollision"
+      },
+      "go": {
+        "function": "asteroidCollision"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "asteroidCollision"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "smaller-left-mover",
+      "classification": "valid",
+      "arguments": [
+        [
+          5,
+          10,
+          -5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          5,
+          10
+        ]
+      }
+    },
+    {
+      "id": "equal-collision",
+      "classification": "valid",
+      "arguments": [
+        [
+          8,
+          -8
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "chain-collision",
+      "classification": "valid",
+      "arguments": [
+        [
+          10,
+          2,
+          -5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          10
+        ]
+      }
+    },
+    {
+      "id": "moving-apart",
+      "classification": "valid",
+      "arguments": [
+        [
+          -2,
+          -1,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          -2,
+          -1,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "single-asteroid",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one asteroid."
+      }
+    },
+    {
+      "id": "zero-size",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Asteroid sizes are nonzero."
+      }
+    }
+  ],
+  "proofFixture": false
+}

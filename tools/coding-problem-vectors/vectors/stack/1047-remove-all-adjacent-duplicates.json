@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "stack",
+    "slug": "1047-remove-all-adjacent-duplicates"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "remove_duplicates"
+      },
+      "typescript": {
+        "function": "removeDuplicates"
+      },
+      "go": {
+        "function": "removeDuplicates"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "removeDuplicates"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "cascade",
+      "classification": "valid",
+      "arguments": [
+        "abbaca"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "ca"
+      }
+    },
+    {
+      "id": "nested-cascade",
+      "classification": "valid",
+      "arguments": [
+        "azxxzy"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "ay"
+      }
+    },
+    {
+      "id": "all-cancel",
+      "classification": "valid",
+      "arguments": [
+        "aaaaaaaa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": ""
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "a"
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one character."
+      }
+    },
+    {
+      "id": "non-lowercase",
+      "classification": "invalid",
+      "arguments": [
+        "aA"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains lowercase English letters only."
+      }
+    }
+  ],
+  "proofFixture": false
+}
