@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "dev:swift": "node scripts/dev-with-swift-runner.mjs",
     "start": "astro dev",
     "prebuild": "bash scripts/check-secrets.sh",
     "build": "node scripts/clear-astro-cache.mjs && astro check && astro build",
@@ -13,8 +14,10 @@
     "astro": "astro",
     "test:react-outputs": "node --test tests/react-example-output-views.test.mjs",
     "test:swift-runner-contract": "vitest run tests/swift-runner-contract/contract.test.ts",
+    "test:swift-runner-service": "node --test tests/swift-runner-service/server.test.mjs",
     "test:swift-repl": "vitest run tests/swift-repl/component.test.ts",
     "test:swift-runner-executor": "node --test tests/swift-runner-executor/runner.test.mjs",
+    "swift-runner:local": "node tools/swift-runner/server.mjs",
     "test:swift-catalog-coverage": "node --test tests/swift-catalog-coverage.test.mjs",
     "test:swift-catalog-contract": "node --test tests/swift-coding-problem-contract.test.mjs",
     "test:swift-catalog-compile": "node scripts/test-swift-coding-problem-contract.mjs",
@@ -35,6 +38,7 @@
     "validate:published-content": "node scripts/validate-published-content.mjs",
     "validate:custom-pages": "node scripts/validate-custom-pages.mjs",
     "validate:swift-repl-browser": "node scripts/validate-swift-repl.mjs",
+    "validate:swift-runner-local-browser": "node scripts/validate-swift-runner-local-browser.mjs",
     "validate:pre-push": "node scripts/validate-pre-push.mjs",
     "new:topic": "bash scripts/new-topic.sh",
     "new:post": "bash scripts/new-post.sh"

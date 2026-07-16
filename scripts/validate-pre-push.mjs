@@ -10,6 +10,7 @@ const steps = [
   ["React output sync", "npm", ["run", "check:react-outputs"]],
   ["React output tests", "npm", ["run", "test:react-outputs"]],
   ["Swift runner contract tests", "npm", ["run", "test:swift-runner-contract"]],
+  ["Swift runner service tests", "npm", ["run", "test:swift-runner-service"]],
   ["Swift REPL component tests", "npm", ["run", "test:swift-repl"]],
   ["Coding-problem vector tests", "npm", ["run", "test:coding-problem-vectors"]],
   ["Coding-problem vector sync", "npm", ["run", "check:coding-problem-vectors"]],

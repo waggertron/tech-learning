@@ -27,6 +27,7 @@ npm run validate:published-content
 npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
+npm run test:swift-runner-service
 npm run test:swift-repl
 npm run test:coding-problem-vectors
 npm run check:coding-problem-vectors
@@ -103,6 +104,7 @@ npm run validate:code-examples
 npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
+npm run test:swift-runner-service
 npm run test:swift-repl
 npm run test:coding-problem-vectors
 npm run check:coding-problem-vectors
@@ -111,7 +113,7 @@ npm run test:swift-catalog-coverage
 npm run check:swift-catalog-coverage
 ```
 
-The code validator checks fenced code language tags and syntax for source examples. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
+The code validator checks fenced code language tags and syntax for source examples. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, loopback HTTP service, request validation, queue bounds, retention, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
 
 The coding-problem vector commands validate canonical valid, boundary, and invalid cases, then reject stale generated proof sources. Run `npm run test:coding-problem-vector-fixtures` when vector codecs, renderers, or proof fixtures change and all four language toolchains are available.
 
@@ -145,6 +147,15 @@ npm run test:swift-runner-executor
 ```
 
 Run the Docker-backed executor suite when a change affects the pinned Swift image, container arguments, resource limits, timeouts, output accounting, source transfer, host isolation, or cleanup. It is not part of the default pre-push command because it requires a working local Docker daemon. A passing executor test proves the documented Swift 6.3.3 Linux standard-library boundary. It does not prove Apple SDK, simulator, signing, entitlement, or device behavior.
+
+Run the real local browser path when the loopback service, development supervisor, endpoint injection, or local execution workflow changes:
+
+```bash
+npm run dev:swift
+npm run validate:swift-runner-local-browser
+```
+
+Keep the development command running in one terminal and run the validator in another. This tier checks an edited CodeMirror source through the real HTTP service and Docker executor. It remains separate from the default pre-push command because it requires Docker and two local ports.
 
 ## Before pushing
 

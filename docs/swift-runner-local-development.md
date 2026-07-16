@@ -1,6 +1,6 @@
 # Swift Runner Local Development
 
-R1.4 provides a credential-free browser contract, deterministic mock, and local executor evidence for the Swift runner. Browser and component tests should use the mock by default. Docker is reserved for executor integration tests.
+The local Swift runner provides three separate evidence layers: a credential-free deterministic mock, a contract-shaped loopback HTTP service, and the pinned Docker executor. Browser and component tests use the mock by default. Interactive local pages use the loopback service and Docker executor.
 
 ## Contract Files
 
@@ -14,8 +14,12 @@ R1.4 provides a credential-free browser contract, deterministic mock, and local 
 - Contract tests: `tests/swift-runner-contract/contract.test.ts`
 - Component tests: `tests/swift-repl/component.test.ts`
 - Local executor: `tools/swift-runner/runner.mjs`
+- Loopback HTTP service: `tools/swift-runner/server.mjs`
+- Swift-enabled development supervisor: `scripts/dev-with-swift-runner.mjs`
+- Service tests: `tests/swift-runner-service/server.test.mjs`
 - Executor tests: `tests/swift-runner-executor/runner.test.mjs`
 - Isolation contract: `docs/swift-runner-isolation.md`
+- Local service decision: `docs/adr/2026-07-15-swift-runner-local-service.md`
 
 ## Commands
 
@@ -23,8 +27,39 @@ Run the contract and mock tests without Docker, network, accounts, or credential
 
 ```bash
 npm run test:swift-runner-contract
+npm run test:swift-runner-service
 npm run test:swift-repl
 ```
+
+Start Astro and the real local runner together:
+
+```bash
+npm run dev:swift
+```
+
+The site is available at `http://127.0.0.1:4321/tech-learning`. The supervisor configures `PUBLIC_SWIFT_RUNNER_URL=http://127.0.0.1:8787`, waits for the capability endpoint before starting Astro, and stops both processes on interrupt. Docker must be running when a job executes. The first run may need to obtain the pinned Swift image used by `tools/swift-runner/runner.mjs`.
+
+Use different loopback ports when the defaults are occupied:
+
+```bash
+SWIFT_SITE_PORT=4322 SWIFT_RUNNER_PORT=8788 npm run dev:swift
+```
+
+The supervisor derives the allowed Astro origin from `SWIFT_SITE_PORT`. The service still binds only to `127.0.0.1`.
+
+Start only the HTTP service when Astro is already running with the matching runner URL:
+
+```bash
+npm run swift-runner:local
+```
+
+With `npm run dev:swift` running, prove an edited source reaches the real Docker executor through the page:
+
+```bash
+npm run validate:swift-runner-local-browser
+```
+
+The validator checks the capability endpoint and rendered runner URL before launching Playwright. It opens the Kth Largest Element in a Stream page, selects the Swift practice tab, replaces the starter with a small program, runs it, and requires successful output plus the exact Swift 6.3.3 Linux evidence. This command requires Docker and is intentionally separate from the default pre-push workflow.
 
 Run the exact Swift 6.3.3 executor integration tests when Docker and the pinned image are available:
 
@@ -32,7 +67,7 @@ Run the exact Swift 6.3.3 executor integration tests when Docker and the pinned 
 npm run test:swift-runner-executor
 ```
 
-The integration command creates ephemeral containers and removes them after success, failure, timeout, cancellation, or output limit. It does not start a persistent service or bind a host port. The compiler and program share one bounded output budget.
+The executor integration command creates ephemeral containers and removes them after success, failure, timeout, cancellation, or output limit. It does not start a persistent service or bind a host port. The compiler and program share one bounded output budget.
 
 Run the isolated Astro and Playwright fixture without Docker, network services, accounts, or credentials:
 
@@ -53,11 +88,11 @@ The browser validator serves only `tests/swift-repl/browser-fixture/`. It checks
 
 The polling coordinator calls the same port for the HTTP adapter and deterministic mock. An abort signal calls `cancelJob`; it does not merely abandon the browser request.
 
-The HTTP adapter validates every service response with Zod before the response reaches UI state. It sends no authorization header or embedded credential. A future public endpoint must be safe for unauthenticated traffic and enforce its own quotas and trust boundary as required by the ADR.
+The HTTP adapter validates every service response with Zod before the response reaches UI state. It sends no authorization header or embedded credential. The local service validates the request again, accepts only the known harness and exact toolchain, bounds active and queued jobs, and rejects extra fields before executor allocation. A future public endpoint still needs production quotas, client ownership controls, observability, and the deployment trust boundary required by Gate 1B.
 
 ## Browser Configuration
 
-`SwiftRepl.astro` reads the public runner endpoint from its `runnerURL` prop or `PUBLIC_SWIFT_RUNNER_URL`. When neither value exists, Run Swift reports `runner unavailable` and leaves the source in the editor.
+`SwiftRepl.astro` reads the public runner endpoint from its `runnerURL` prop or `PUBLIC_SWIFT_RUNNER_URL`. `npm run dev:swift` supplies the local value. When neither value exists, Run Swift reports `runner unavailable` and leaves the source in the editor.
 
 Local browser tests can install `window.__SWIFT_RUNNER_CLIENT_FACTORY__` before the component script attaches. The factory receives the public endpoint and REPL identifier, then returns any `SwiftRunnerClient`. It takes precedence over HTTP so tests can inject `createMockSwiftRunnerClient(...)` without opening a port or using credentials.
 
@@ -106,8 +141,8 @@ Neither path is iOS evidence. SwiftUI, UIKit, Apple SDK frameworks, simulator be
 
 The mock creates only in-memory jobs. Each mock client instance owns its own monotonically numbered job ids and loses all state when the test ends.
 
-The real executor creates a unique container and two tmpfs workspaces per job. Its `finally` path removes the container, and the executor suite fails if any runner-labeled container remains. Repeated test runs should leave no job containers, ports, volumes, source files, or compiled artifacts.
+The real executor creates a unique container and two tmpfs workspaces per job. Its `finally` path removes the container, and the executor suite fails if any runner-labeled container remains. The local service removes source from terminal job state, expires results after five minutes, aborts active work during shutdown, and keeps no volume or job directory. The development supervisor stops the service and Astro together. Repeated runs should leave no job containers, ports, volumes, source files, or compiled artifacts.
 
-## Next Integration
+## Production Boundary
 
-R1.6 should harden the service boundary around the proved executor. R1.7 should exercise multiple components, hidden tabs, keyboard and screen-reader semantics, mobile layout, cancellation, timeout, output limiting, unavailable service, and one representative approach harness in a real browser.
+The loopback service is a local development adapter, not a live deployment. It has no public bind mode. Gate 1B separately tracks the production host decision, public quotas, ownership and abuse controls, retention, metrics, alerts, spending limits, TLS, rollback, emergency shutdown, and proof from the published GitHub Pages origin.
