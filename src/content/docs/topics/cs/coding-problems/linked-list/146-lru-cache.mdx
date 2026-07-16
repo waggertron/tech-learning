@@ -5,16 +5,21 @@ parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, hash-tables, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './146-lru-cache.py?raw';
 import practiceCodeTs from './146-lru-cache.ts?raw';
 import practiceCodeGo from './146-lru-cache.go?raw';
+import practiceCodeSwift from './146-lru-cache.swift?raw';
+import approach1SwiftCode from './146-lru-cache-approach1.swift?raw';
+import approach2SwiftCode from './146-lru-cache-approach2.swift?raw';
+import approach3SwiftCode from './146-lru-cache-approach3.swift?raw';
 import approach3PyCode from './146-lru-cache-approach3.py?raw';
 import approach3TsCode from './146-lru-cache-approach3.ts?raw';
 import approach3GoCode from './146-lru-cache-approach3.go?raw';
@@ -50,6 +55,9 @@ LeetCode 146 · [Link](https://leetcode.com/problems/lru-cache/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="lru-cache-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="146-lru-cache-swift" />
   </TabItem>
 </Tabs>
 
@@ -113,6 +121,9 @@ class LRUCache {
     }
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="146-lru-cache-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -189,6 +200,9 @@ class LRUCache {
     }
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="146-lru-cache-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -323,6 +337,9 @@ class LRUCache {
     }
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="146-lru-cache-approach3-swift" />
 </TabItem>
 </Tabs>
 

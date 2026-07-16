@@ -42,13 +42,16 @@ const comparisons = [
 ];
 const codecs = [
   "boolean",
+  "cyclic-list",
   "float",
   "graph-adjacency",
   "int",
   "int-array",
   "int-matrix",
+  "intersecting-lists",
   "interval-list",
   "list-node",
+  "list-node-array",
   "operation-sequence",
   "operation-results",
   "random-list",
@@ -103,6 +106,24 @@ function codecValueErrors(codec, value, location) {
   if (codec === "string" && typeof value !== "string") errors.push(`${location} must be a string`);
   if ((codec === "int-array" || codec === "list-node") && !isIntegerArray(value)) {
     errors.push(`${location} must be an integer array`);
+  }
+  if (codec === "list-node-array" && !arrayOf(isIntegerArray)) {
+    errors.push(`${location} must be an array of integer arrays`);
+  }
+  if (codec === "cyclic-list" && (
+    !exactObjectShape(value, ["values", "pos"]) ||
+    !isIntegerArray(value.values) ||
+    !Number.isSafeInteger(value.pos)
+  )) {
+    errors.push(`${location} must contain integer values and an integer cycle position`);
+  }
+  if (codec === "intersecting-lists" && (
+    !exactObjectShape(value, ["prefixA", "prefixB", "shared"]) ||
+    !isIntegerArray(value.prefixA) ||
+    !isIntegerArray(value.prefixB) ||
+    !isIntegerArray(value.shared)
+  )) {
+    errors.push(`${location} must contain integer prefixA, prefixB, and shared arrays`);
   }
   if (codec === "string-array" && !arrayOf((item) => typeof item === "string")) {
     errors.push(`${location} must be a string array`);
@@ -471,6 +492,8 @@ function renderLiteral(codec, value, language) {
     "graph-adjacency": "int-array",
     "int-array": "int",
     "int-matrix": "int-array",
+    "list-node": "int",
+    "list-node-array": "list-node",
     "string-array": "string",
     "string-matrix": "string-array",
   }[codec];
@@ -482,6 +505,8 @@ function renderLiteral(codec, value, language) {
       "graph-adjacency": "[][]int",
       "int-array": "[]int",
       "int-matrix": "[][]int",
+      "list-node": "[]int",
+      "list-node-array": "[][]int",
       "string-array": "[]string",
       "string-matrix": "[][]string",
     }[codec];
@@ -582,6 +607,174 @@ function renderCall(document, language, arguments_) {
   return `${entrypoint.function}(${renderedArguments.join(", ")})`;
 }
 
+function structuredArgumentName(index, caseIndex) {
+  return `argument${index + 1}Case${caseIndex + 1}`;
+}
+
+function renderListBuilder(codec, value, language) {
+  const literal = renderLiteral(codec, value, language);
+  const builder = codec === "list-node-array"
+    ? { python: "make_lists", typescript: "makeLists", go: "makeLists", swift: "makeLists" }
+    : { python: "make_list", typescript: "makeList", go: "makeList", swift: "makeList" };
+  return `${builder[language]}(${literal})`;
+}
+
+function renderStructuredListCase(document, language, testCase, caseIndex, indent) {
+  const entrypoint = document.execution.entrypoints[language];
+  const declarations = [];
+  const callArguments = testCase.arguments.map((value, index) => {
+    const parameter = document.contract.parameters[index];
+    if (!["list-node", "list-node-array"].includes(parameter.codec)) {
+      return renderLiteral(parameter.codec, value, language);
+    }
+    const variable = structuredArgumentName(index, caseIndex);
+    const keyword = language === "typescript" ? "const " : language === "swift" ? "let " : "";
+    const assignment = language === "go" ? ":=" : "=";
+    const suffix = language === "typescript" ? ";" : "";
+    declarations.push(
+      `${indent}${keyword}${variable} ${assignment} ${renderListBuilder(parameter.codec, value, language)}${suffix}`,
+    );
+    return variable;
+  });
+  const call = language === "swift"
+    ? `${entrypoint.type}().${entrypoint.method}(${callArguments.join(", ")})`
+    : `${entrypoint.function}(${callArguments.join(", ")})`;
+  const expected = renderLiteral("list-node", testCase.expected.value, language);
+  const observed = language === "python"
+    ? `list_values(${call})`
+    : language === "typescript"
+      ? `listValues(${call})`
+      : `listValues(${call})`;
+
+  return [
+    ...declarations,
+    renderEqualAssertion(
+      { contract: { result: { codec: "int-array" } } },
+      language,
+      observed,
+      expected,
+      testCase.id,
+      indent,
+    ),
+  ];
+}
+
+function renderCyclicListCase(document, language, testCase, caseIndex, indent) {
+  const value = testCase.arguments[0];
+  const values = renderLiteral("int-array", value.values, language);
+  const variable = `cycle${caseIndex + 1}`;
+  const builder = language === "python" ? "make_cyclic_list" : "makeCyclicList";
+  const declaration = language === "python"
+    ? `${variable} = ${builder}(${values}, ${value.pos})`
+    : language === "typescript"
+      ? `const ${variable} = ${builder}(${values}, ${value.pos});`
+      : language === "go"
+        ? `${variable} := ${builder}(${values}, ${value.pos})`
+        : `let ${variable} = ${builder}(${values}, ${value.pos})`;
+  const entrypoint = document.execution.entrypoints[language];
+  const call = language === "swift"
+    ? `${entrypoint.type}().${entrypoint.method}(${variable})`
+    : `${entrypoint.function}(${variable})`;
+  const expected = renderLiteral("boolean", testCase.expected.value, language);
+  return [
+    `${indent}${declaration}`,
+    renderEqualAssertion(document, language, call, expected, testCase.id, indent),
+  ];
+}
+
+function renderIntersectionIdentityCase(document, language, testCase, caseIndex, indent) {
+  const value = testCase.arguments[0];
+  const prefixA = renderLiteral("int-array", value.prefixA, language);
+  const prefixB = renderLiteral("int-array", value.prefixB, language);
+  const shared = renderLiteral("int-array", value.shared, language);
+  const expected = renderLiteral("list-node", testCase.expected.value, language);
+  const variable = `intersection${caseIndex + 1}`;
+  const builder = language === "python" ? "make_intersecting_lists" : "makeIntersectingLists";
+  const declaration = language === "python"
+    ? `${variable} = ${builder}(${prefixA}, ${prefixB}, ${shared})`
+    : language === "typescript"
+      ? `const ${variable} = ${builder}(${prefixA}, ${prefixB}, ${shared});`
+      : language === "go"
+        ? `${variable} := ${builder}(${prefixA}, ${prefixB}, ${shared})`
+        : `let ${variable} = ${builder}(${prefixA}, ${prefixB}, ${shared})`;
+  const entrypoint = document.execution.entrypoints[language];
+  const fields = {
+    python: [`${variable}.head_a`, `${variable}.head_b`, `${variable}.shared_head`],
+    typescript: [`${variable}.headA`, `${variable}.headB`, `${variable}.sharedHead`],
+    go: [`${variable}.headA`, `${variable}.headB`, `${variable}.sharedHead`],
+    swift: [`${variable}.headA`, `${variable}.headB`, `${variable}.sharedHead`],
+  }[language];
+  const call = language === "swift"
+    ? `${entrypoint.type}().${entrypoint.method}(${fields[0]}, ${fields[1]})`
+    : `${entrypoint.function}(${fields[0]}, ${fields[1]})`;
+  const identity = language === "python"
+    ? `${call} is ${fields[2]}`
+    : language === "typescript"
+      ? `${call} === ${fields[2]}`
+      : `${call} == ${fields[2]}`;
+  const identityAssertion = language === "python"
+    ? `assert ${identity}, ${quoteString(testCase.id)}`
+    : language === "typescript"
+      ? `assert(${identity}, ${quoteString(testCase.id)});`
+      : language === "go"
+        ? `assert(${identity}, ${quoteString(testCase.id)})`
+        : `expectTrue(sameNode(${call}, ${fields[2]}), ${quoteString(testCase.id)})`;
+  const observed = language === "python" ? `list_values(${fields[2]})` : `listValues(${fields[2]})`;
+  return [
+    `${indent}${declaration}`,
+    renderEqualAssertion(
+      { contract: { result: { codec: "int-array" } } },
+      language,
+      observed,
+      expected,
+      `${testCase.id}-shape`,
+      indent,
+    ),
+    `${indent}${identityAssertion}`,
+  ];
+}
+
+function renderRandomListLiteral(value, language) {
+  if (language === "python") {
+    return `[${value.map((entry) => `(${entry.value}, ${entry.randomIndex ?? "None"})`).join(", ")}]`;
+  }
+  if (language === "typescript") {
+    return `[${value.map((entry) => `[${entry.value}, ${entry.randomIndex ?? "null"}]`).join(", ")}]`;
+  }
+  if (language === "go") {
+    return `[]randomListEntry{${value.map((entry) => `{value: ${entry.value}, randomIndex: ${entry.randomIndex ?? -1}}`).join(", ")}}`;
+  }
+  return `[${value.map((entry) => `RandomListEntry(value: ${entry.value}, randomIndex: ${entry.randomIndex === null ? "nil" : entry.randomIndex})`).join(", ")}]`;
+}
+
+function renderRandomListStructureCase(document, language, testCase, caseIndex, indent) {
+  const original = `original${caseIndex + 1}`;
+  const input = renderRandomListLiteral(testCase.arguments[0], language);
+  const expected = renderRandomListLiteral(testCase.expected.value, language);
+  const builder = language === "python" ? "make_random_list" : "makeRandomList";
+  const declaration = language === "python"
+    ? `${original} = ${builder}(${input})`
+    : language === "typescript"
+      ? `const ${original} = ${builder}(${input});`
+      : language === "go"
+        ? `${original} := ${builder}(${input})`
+        : `let ${original} = ${builder}(${input})`;
+  const entrypoint = document.execution.entrypoints[language];
+  const call = language === "swift"
+    ? `${entrypoint.type}().${entrypoint.method}(${original})`
+    : `${entrypoint.function}(${original})`;
+  const validator = language === "python" ? "is_valid_random_list_clone" : "isValidRandomListClone";
+  const condition = `${validator}(${original}, ${call}, ${expected})`;
+  const assertion = language === "python"
+    ? `assert ${condition}, ${quoteString(testCase.id)}`
+    : language === "typescript"
+      ? `assert(${condition}, ${quoteString(testCase.id)});`
+      : language === "go"
+        ? `assert(${condition}, ${quoteString(testCase.id)})`
+        : `expectTrue(${condition}, ${quoteString(testCase.id)})`;
+  return [`${indent}${declaration}`, `${indent}${assertion}`];
+}
+
 function renderMutatedArgumentsCase(document, language, testCase, caseIndex, indent) {
   const mutated = document.contract.mutatedParameters;
   if (mutated.length !== 1) {
@@ -607,7 +800,13 @@ function renderMutatedArgumentsCase(document, language, testCase, caseIndex, ind
     language,
   );
   const entrypoint = document.execution.entrypoints[language];
-  const declaration = {
+  const listMutation = parameter.codec === "list-node";
+  const declaration = listMutation ? {
+    python: `${variable} = ${renderListBuilder(parameter.codec, testCase.arguments[parameterIndex], language)}`,
+    typescript: `const ${variable} = ${renderListBuilder(parameter.codec, testCase.arguments[parameterIndex], language)};`,
+    go: `${variable} := ${renderListBuilder(parameter.codec, testCase.arguments[parameterIndex], language)}`,
+    swift: `let ${variable} = ${renderListBuilder(parameter.codec, testCase.arguments[parameterIndex], language)}`,
+  }[language] : {
     python: `${variable} = ${renderedArguments[parameterIndex]}`,
     typescript: `const ${variable} = ${renderedArguments[parameterIndex]};`,
     go: `${variable} := ${renderedArguments[parameterIndex]}`,
@@ -615,7 +814,7 @@ function renderMutatedArgumentsCase(document, language, testCase, caseIndex, ind
       ? `var ${variable}: [[Character]] = ${renderedArguments[parameterIndex]}`
       : `var ${variable} = ${renderedArguments[parameterIndex]}`,
   }[language];
-  renderedArguments[parameterIndex] = language === "swift" ? `&${variable}` : variable;
+  renderedArguments[parameterIndex] = language === "swift" && !listMutation ? `&${variable}` : variable;
   const call = language === "swift"
     ? `${entrypoint.type}().${entrypoint.method}(${renderedArguments.join(", ")})`
     : `${entrypoint.function}(${renderedArguments.join(", ")})`;
@@ -623,7 +822,14 @@ function renderMutatedArgumentsCase(document, language, testCase, caseIndex, ind
   return [
     `${indent}${declaration}`,
     `${indent}${call}${language === "typescript" ? ";" : ""}`,
-    renderEqualAssertion(document, language, variable, expected, testCase.id, indent),
+    renderEqualAssertion(
+      listMutation ? { contract: { result: { codec: "int-array" } } } : document,
+      language,
+      listMutation ? (language === "python" ? `list_values(${variable})` : `listValues(${variable})`) : variable,
+      expected,
+      testCase.id,
+      indent,
+    ),
   ];
 }
 
@@ -698,13 +904,13 @@ function renderEqualAssertion(document, language, call, expected, caseId, indent
 
 export function renderVectorBlock(document, language) {
   if (!vectorLanguages.includes(language)) throw new Error(`Unknown vector language ${language}`);
-  const supportedFunctionComparisons = ["equal", "mutated-arguments", "structure"];
+  const supportedFunctionComparisons = ["equal", "identity", "mutated-arguments", "structure"];
   if (document.execution.kind === "function" &&
       !supportedFunctionComparisons.includes(document.contract.result.comparison)) {
     throw new Error("Proof rendering does not support this result comparison");
   }
   if (document.execution.kind === "function" &&
-      !["boolean", "float", "graph-adjacency", "int", "string", "int-array", "int-matrix", "string-array", "string-matrix"]
+      !["boolean", "float", "graph-adjacency", "int", "list-node", "random-list", "string", "int-array", "int-matrix", "string-array", "string-matrix"]
         .includes(document.contract.result.codec)) {
     throw new Error("Proof rendering does not support this result codec");
   }
@@ -742,14 +948,32 @@ export function renderVectorBlock(document, language) {
       continue;
     }
 
-    if (document.contract.result.comparison === "structure") {
-      lines.push(...renderGraphStructureCase(
+    if (document.contract.result.comparison === "identity") {
+      lines.push(...renderIntersectionIdentityCase(
         document,
         language,
         testCase,
         caseIndex,
         indent,
       ));
+      continue;
+    }
+
+    if (document.contract.result.comparison === "structure") {
+      const renderer = document.contract.result.codec === "random-list"
+        ? renderRandomListStructureCase
+        : renderGraphStructureCase;
+      lines.push(...renderer(document, language, testCase, caseIndex, indent));
+      continue;
+    }
+
+    if (document.contract.parameters[0].codec === "cyclic-list") {
+      lines.push(...renderCyclicListCase(document, language, testCase, caseIndex, indent));
+      continue;
+    }
+
+    if (document.contract.result.codec === "list-node") {
+      lines.push(...renderStructuredListCase(document, language, testCase, caseIndex, indent));
       continue;
     }
 

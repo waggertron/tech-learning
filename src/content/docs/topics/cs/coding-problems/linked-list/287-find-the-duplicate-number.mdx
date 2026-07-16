@@ -5,16 +5,21 @@ parent: linked-list
 tags: [leetcode, neetcode-150, arrays, linked-lists, two-pointers, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './287-find-the-duplicate-number.py?raw';
 import practiceCodeTs from './287-find-the-duplicate-number.ts?raw';
 import practiceCodeGo from './287-find-the-duplicate-number.go?raw';
+import practiceCodeSwift from './287-find-the-duplicate-number.swift?raw';
+import approach1SwiftCode from './287-find-the-duplicate-number-approach1.swift?raw';
+import approach2SwiftCode from './287-find-the-duplicate-number-approach2.swift?raw';
+import approach3SwiftCode from './287-find-the-duplicate-number-approach3.swift?raw';
 import approach3PyCode from './287-find-the-duplicate-number-approach3.py?raw';
 import approach3TsCode from './287-find-the-duplicate-number-approach3.ts?raw';
 import approach3GoCode from './287-find-the-duplicate-number-approach3.go?raw';
@@ -47,6 +52,9 @@ LeetCode 287 · [Link](https://leetcode.com/problems/find-the-duplicate-number/)
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="find-the-duplicate-number-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="287-find-the-duplicate-number-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, sort
@@ -74,6 +82,9 @@ function findDuplicate(nums: number[]): number {
     return -1;
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="287-find-the-duplicate-number-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -121,6 +132,9 @@ function findDuplicate(nums: number[]): number {
     return -1;
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="287-find-the-duplicate-number-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -186,6 +200,9 @@ function findDuplicate(nums: number[]): number {
     return slow;
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="287-find-the-duplicate-number-approach3-swift" />
 </TabItem>
 </Tabs>
 

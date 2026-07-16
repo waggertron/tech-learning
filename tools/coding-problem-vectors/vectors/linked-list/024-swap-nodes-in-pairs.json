@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "024-swap-nodes-in-pairs"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "list-node"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "swap_pairs"
+      },
+      "typescript": {
+        "function": "swapPairs"
+      },
+      "go": {
+        "function": "swapPairs"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "swapPairs"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "even-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          1,
+          4,
+          3
+        ]
+      }
+    },
+    {
+      "id": "odd-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          1,
+          4,
+          3,
+          5
+        ]
+      }
+    },
+    {
+      "id": "two-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          7,
+          8
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          8,
+          7
+        ]
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "value-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        [
+          101
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Node values stay within the published range."
+      }
+    }
+  ]
+}

@@ -5,16 +5,21 @@ parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './025-reverse-nodes-in-k-group.py?raw';
 import practiceCodeTs from './025-reverse-nodes-in-k-group.ts?raw';
 import practiceCodeGo from './025-reverse-nodes-in-k-group.go?raw';
+import practiceCodeSwift from './025-reverse-nodes-in-k-group.swift?raw';
+import approach1SwiftCode from './025-reverse-nodes-in-k-group-approach1.swift?raw';
+import approach2SwiftCode from './025-reverse-nodes-in-k-group-approach2.swift?raw';
+import approach3SwiftCode from './025-reverse-nodes-in-k-group-approach3.swift?raw';
 import approach2PyCode from './025-reverse-nodes-in-k-group-approach2.py?raw';
 import approach2TsCode from './025-reverse-nodes-in-k-group-approach2.ts?raw';
 import approach2GoCode from './025-reverse-nodes-in-k-group-approach2.go?raw';
@@ -41,6 +46,9 @@ LeetCode 25 Â· [Link](https://leetcode.com/problems/reverse-nodes-in-k-group/) Â
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reverse-nodes-in-k-group-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="025-reverse-nodes-in-k-group-swift" />
   </TabItem>
 </Tabs>
 
@@ -122,6 +130,9 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
     return dummy.Next
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="025-reverse-nodes-in-k-group-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -247,6 +258,9 @@ func reverseKGroup(head *ListNode, k int) *ListNode {
 }
 ```
 </TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="025-reverse-nodes-in-k-group-approach2-swift" />
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -336,6 +350,9 @@ function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
     return prev;
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="025-reverse-nodes-in-k-group-approach3-swift" />
 </TabItem>
 </Tabs>
 

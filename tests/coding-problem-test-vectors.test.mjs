@@ -21,7 +21,7 @@ function binarySearchVector() {
 
 test("loads the canonical registry with valid, boundary, and invalid cases", () => {
   const records = loadVectorDocuments();
-  assert.equal(records.length, 57);
+  assert.equal(records.length, 71);
   for (const record of records) {
     assert.deepEqual(record.errors, []);
     const classifications = new Set(record.document.cases.map((testCase) => testCase.classification));
@@ -262,4 +262,152 @@ test("renders Swift graph structure and identity observations", () => {
   const block = renderVectorBlock(document, "swift");
   assert.match(block, /let original1 = makeGraph\(\[\[2\], \[1\]\]\)/);
   assert.match(block, /expectTrue\(isValidClone\(original1, Solution\(\)\.cloneGraph\(original1\), \[\[2\], \[1\]\]\), "two-node-cycle"\)/);
+});
+
+test("renders linked-list inputs, outputs, and mutation observations", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "head", codec: "list-node" }];
+  document.contract.result = { codec: "list-node", comparison: "equal" };
+  document.contract.mutatedParameters = [];
+  document.execution.entrypoints.swift = { type: "Solution", method: "reverseList" };
+  document.cases = [
+    {
+      id: "three-nodes",
+      classification: "valid",
+      arguments: [[1, 2, 3]],
+      expected: { kind: "value", value: [3, 2, 1] },
+    },
+    {
+      id: "empty-list",
+      classification: "boundary",
+      arguments: [[]],
+      expected: { kind: "value", value: [] },
+    },
+    {
+      id: "value-out-of-range",
+      classification: "invalid",
+      arguments: [[501]],
+      expected: { kind: "excluded", reason: "Node values stay within the published range." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let argument1Case1 = makeList\(\[1, 2, 3\]\)/);
+  assert.match(block, /expectEqual\(listValues\(Solution\(\)\.reverseList\(argument1Case1\)\), \[3, 2, 1\], "three-nodes"\)/);
+
+  document.contract.result.comparison = "mutated-arguments";
+  document.contract.mutatedParameters = ["head"];
+  document.execution.entrypoints.swift.method = "reorderList";
+  const mutationBlock = renderVectorBlock(document, "swift");
+  assert.match(mutationBlock, /let argument1 = makeList\(\[1, 2, 3\]\)/);
+  assert.match(mutationBlock, /Solution\(\)\.reorderList\(argument1\)/);
+  assert.match(mutationBlock, /expectEqual\(listValues\(argument1\), \[3, 2, 1\], "three-nodes"\)/);
+});
+
+test("renders cyclic linked-list construction without normalizing the cycle position", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "head", codec: "cyclic-list" }];
+  document.contract.result = { codec: "boolean", comparison: "equal" };
+  document.contract.mutatedParameters = [];
+  document.execution.entrypoints.swift = { type: "Solution", method: "hasCycle" };
+  document.cases = [
+    {
+      id: "cycle-to-middle",
+      classification: "valid",
+      arguments: [{ values: [3, 2, 0, -4], pos: 1 }],
+      expected: { kind: "value", value: true },
+    },
+    {
+      id: "single-node",
+      classification: "boundary",
+      arguments: [{ values: [1], pos: -1 }],
+      expected: { kind: "value", value: false },
+    },
+    {
+      id: "position-out-of-range",
+      classification: "invalid",
+      arguments: [{ values: [1], pos: 1 }],
+      expected: { kind: "excluded", reason: "The cycle position must name an existing node." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let cycle1 = makeCyclicList\(\[3, 2, 0, -4\], 1\)/);
+  assert.match(block, /expectEqual\(Solution\(\)\.hasCycle\(cycle1\), true, "cycle-to-middle"\)/);
+  assert.match(block, /EXCLUDED_VECTOR position-out-of-range/);
+});
+
+test("renders intersecting lists with an identity assertion", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "lists", codec: "intersecting-lists" }];
+  document.contract.result = { codec: "list-node", comparison: "identity" };
+  document.contract.mutatedParameters = [];
+  document.execution.entrypoints.swift = { type: "Solution", method: "getIntersectionNode" };
+  document.cases = [
+    {
+      id: "shared-tail",
+      classification: "valid",
+      arguments: [{ prefixA: [4, 1], prefixB: [5, 6, 1], shared: [8, 4, 5] }],
+      expected: { kind: "value", value: [8, 4, 5] },
+    },
+    {
+      id: "no-intersection",
+      classification: "boundary",
+      arguments: [{ prefixA: [1], prefixB: [2], shared: [] }],
+      expected: { kind: "value", value: [] },
+    },
+    {
+      id: "empty-first-list",
+      classification: "invalid",
+      arguments: [{ prefixA: [], prefixB: [2], shared: [] }],
+      expected: { kind: "excluded", reason: "Both published input lists are non-empty." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let intersection1 = makeIntersectingLists\(\[4, 1\], \[5, 6, 1\], \[8, 4, 5\]\)/);
+  assert.match(block, /expectEqual\(listValues\(intersection1\.sharedHead\), \[8, 4, 5\], "shared-tail-shape"\)/);
+  assert.match(block, /expectTrue\(sameNode\(Solution\(\)\.getIntersectionNode\(intersection1\.headA, intersection1\.headB\), intersection1\.sharedHead\), "shared-tail"\)/);
+});
+
+test("renders random-pointer list structure and deep-copy observations", () => {
+  const document = clone(binarySearchVector());
+  document.contract.parameters = [{ name: "head", codec: "random-list" }];
+  document.contract.result = { codec: "random-list", comparison: "structure" };
+  document.contract.mutatedParameters = [];
+  document.execution.entrypoints.swift = { type: "Solution", method: "copyRandomList" };
+  document.cases = [
+    {
+      id: "cross-links",
+      classification: "valid",
+      arguments: [[
+        { value: 7, randomIndex: null },
+        { value: 13, randomIndex: 0 },
+      ]],
+      expected: { kind: "value", value: [
+        { value: 7, randomIndex: null },
+        { value: 13, randomIndex: 0 },
+      ] },
+    },
+    {
+      id: "empty-list",
+      classification: "boundary",
+      arguments: [[]],
+      expected: { kind: "value", value: [] },
+    },
+    {
+      id: "random-index-out-of-range",
+      classification: "invalid",
+      arguments: [[{ value: 1, randomIndex: 1 }]],
+      expected: { kind: "excluded", reason: "Random indexes must name an existing node." },
+    },
+  ];
+
+  assert.deepEqual(vectorDocumentErrors(document), []);
+  const block = renderVectorBlock(document, "swift");
+  assert.match(block, /let original1 = makeRandomList\(\[RandomListEntry\(value: 7, randomIndex: nil\), RandomListEntry\(value: 13, randomIndex: 0\)\]\)/);
+  assert.match(block, /expectTrue\(isValidRandomListClone\(original1, Solution\(\)\.copyRandomList\(original1\),/);
 });

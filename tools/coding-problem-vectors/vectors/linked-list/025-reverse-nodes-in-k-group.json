@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "025-reverse-nodes-in-k-group"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "list-node"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "reverse_k_group"
+      },
+      "typescript": {
+        "function": "reverseKGroup"
+      },
+      "go": {
+        "function": "reverseKGroup"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "reverseKGroup"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "pairs",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          1,
+          4,
+          3,
+          5
+        ]
+      }
+    },
+    {
+      "id": "groups-of-three",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          3,
+          2,
+          1,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "whole-list",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        4
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          4,
+          3,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "k-exceeds-length",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "k must stay within the list length."
+      }
+    }
+  ]
+}

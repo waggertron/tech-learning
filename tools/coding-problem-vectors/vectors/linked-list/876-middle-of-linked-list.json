@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "876-middle-of-linked-list"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "list-node"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "middle_node"
+      },
+      "typescript": {
+        "function": "middleNode"
+      },
+      "go": {
+        "function": "middleNode"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "middleNode"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "odd-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "even-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          4,
+          5,
+          6
+        ]
+      }
+    },
+    {
+      "id": "two-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published problem requires at least one node."
+      }
+    }
+  ]
+}

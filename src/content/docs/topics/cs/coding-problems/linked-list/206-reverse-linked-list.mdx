@@ -5,16 +5,21 @@ parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './206-reverse-linked-list.py?raw';
 import practiceCodeTs from './206-reverse-linked-list.ts?raw';
 import practiceCodeGo from './206-reverse-linked-list.go?raw';
+import practiceCodeSwift from './206-reverse-linked-list.swift?raw';
+import approach1SwiftCode from './206-reverse-linked-list-approach1.swift?raw';
+import approach2SwiftCode from './206-reverse-linked-list-approach2.swift?raw';
+import approach3SwiftCode from './206-reverse-linked-list-approach3.swift?raw';
 import approach2PyCode from './206-reverse-linked-list-approach2.py?raw';
 import approach2TsCode from './206-reverse-linked-list-approach2.ts?raw';
 import approach2GoCode from './206-reverse-linked-list-approach2.go?raw';
@@ -44,6 +49,9 @@ LeetCode 206 · [Link](https://leetcode.com/problems/reverse-linked-list/) · *E
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reverse-linked-list-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="206-reverse-linked-list-swift" />
   </TabItem>
 </Tabs>
 
@@ -121,6 +129,9 @@ func reverseList(head *ListNode) *ListNode {
 }
 ```
 </TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="206-reverse-linked-list-approach1-swift" />
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -191,6 +202,9 @@ func reverseList(head *ListNode) *ListNode {
     return prev
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="206-reverse-linked-list-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -267,6 +281,9 @@ func reverseList(head *ListNode) *ListNode {
     return newHead
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="206-reverse-linked-list-approach3-swift" />
 </TabItem>
 </Tabs>
 

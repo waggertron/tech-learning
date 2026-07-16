@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "138-copy-list-with-random-pointer"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "random-list"
+      }
+    ],
+    "result": {
+      "codec": "random-list",
+      "comparison": "structure"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "copy_random_list"
+      },
+      "typescript": {
+        "function": "copyRandomList"
+      },
+      "go": {
+        "function": "copyRandomList"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "copyRandomList"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "canonical-cross-links",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "value": 7,
+            "randomIndex": null
+          },
+          {
+            "value": 13,
+            "randomIndex": 0
+          },
+          {
+            "value": 11,
+            "randomIndex": 4
+          },
+          {
+            "value": 10,
+            "randomIndex": 2
+          },
+          {
+            "value": 1,
+            "randomIndex": 0
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          {
+            "value": 7,
+            "randomIndex": null
+          },
+          {
+            "value": 13,
+            "randomIndex": 0
+          },
+          {
+            "value": 11,
+            "randomIndex": 4
+          },
+          {
+            "value": 10,
+            "randomIndex": 2
+          },
+          {
+            "value": 1,
+            "randomIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "self-reference",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "value": 1,
+            "randomIndex": 0
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          {
+            "value": 1,
+            "randomIndex": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "all-random-nil",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "value": -1,
+            "randomIndex": null
+          },
+          {
+            "value": 2,
+            "randomIndex": null
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          {
+            "value": -1,
+            "randomIndex": null
+          },
+          {
+            "value": 2,
+            "randomIndex": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "random-index-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "value": 1,
+            "randomIndex": 1
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Random indexes must name an existing node."
+      }
+    }
+  ]
+}

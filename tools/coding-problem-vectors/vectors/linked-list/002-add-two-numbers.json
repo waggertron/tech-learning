@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "002-add-two-numbers"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "l1",
+        "codec": "list-node"
+      },
+      {
+        "name": "l2",
+        "codec": "list-node"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "add_two_numbers"
+      },
+      "typescript": {
+        "function": "addTwoNumbers"
+      },
+      "go": {
+        "function": "addTwoNumbers"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "addTwoNumbers"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "carry-across-digits",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          4,
+          3
+        ],
+        [
+          5,
+          6,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          7,
+          0,
+          8
+        ]
+      }
+    },
+    {
+      "id": "unequal-lengths",
+      "classification": "valid",
+      "arguments": [
+        [
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "zero-plus-zero",
+      "classification": "valid",
+      "arguments": [
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "single-carry",
+      "classification": "boundary",
+      "arguments": [
+        [
+          9
+        ],
+        [
+          9
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          8,
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-first-number",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each input number contains at least one node."
+      }
+    }
+  ]
+}

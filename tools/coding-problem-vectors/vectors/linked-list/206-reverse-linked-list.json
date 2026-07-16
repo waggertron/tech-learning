@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "206-reverse-linked-list"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "list-node"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "reverse_list"
+      },
+      "typescript": {
+        "function": "reverseList"
+      },
+      "go": {
+        "function": "reverseList"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "reverseList"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "five-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "two-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -3,
+          0,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          4,
+          0,
+          -3
+        ]
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "value-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        [
+          5001
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Node values stay within the published range."
+      }
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "143-reorder-list"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "list-node"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "mutated-arguments"
+    },
+    "mutatedParameters": [
+      "head"
+    ],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "reorder_list"
+      },
+      "typescript": {
+        "function": "reorderList"
+      },
+      "go": {
+        "function": "reorderList"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "reorderList"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "even-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          4,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "odd-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          5,
+          2,
+          4,
+          3
+        ]
+      }
+    },
+    {
+      "id": "two-nodes",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "single-node",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published problem requires at least one node."
+      }
+    }
+  ]
+}

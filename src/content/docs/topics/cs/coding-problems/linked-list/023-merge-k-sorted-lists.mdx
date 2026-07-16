@@ -5,16 +5,22 @@ parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, heaps, divide-and-conquer, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './023-merge-k-sorted-lists.py?raw';
 import practiceCodeTs from './023-merge-k-sorted-lists.ts?raw';
 import practiceCodeGo from './023-merge-k-sorted-lists.go?raw';
+import practiceCodeSwift from './023-merge-k-sorted-lists.swift?raw';
+import approach1SwiftCode from './023-merge-k-sorted-lists-approach1.swift?raw';
+import approach2SwiftCode from './023-merge-k-sorted-lists-approach2.swift?raw';
+import approach3SwiftCode from './023-merge-k-sorted-lists-approach3.swift?raw';
+import approach4SwiftCode from './023-merge-k-sorted-lists-approach4.swift?raw';
 import approach3aPyCode from './023-merge-k-sorted-lists-approach3a.py?raw';
 import approach3aTsCode from './023-merge-k-sorted-lists-approach3a.ts?raw';
 import approach3aGoCode from './023-merge-k-sorted-lists-approach3a.go?raw';
@@ -43,6 +49,9 @@ LeetCode 23 · [Link](https://leetcode.com/problems/merge-k-sorted-lists/) · *H
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="merge-k-sorted-lists-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="023-merge-k-sorted-lists-swift" />
   </TabItem>
 </Tabs>
 
@@ -126,6 +135,9 @@ func mergeKLists(lists []*ListNode) *ListNode {
     return dummy.Next
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="023-merge-k-sorted-lists-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -223,6 +235,9 @@ func mergeKLists(lists []*ListNode) *ListNode {
 }
 ```
 </TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="023-merge-k-sorted-lists-approach2-swift" />
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -242,7 +257,7 @@ The i-th call to `merge_two` merges a result of size `(i-1) · N/k` with a list 
 
 Simple but slow for large k.
 
-## Approach 3a: Divide-and-conquer pairwise merge (optimal)
+## Approach 3: Divide-and-conquer pairwise merge (optimal)
 
 Merge lists in pairs like merge sort, $O(log k)$ levels, $O(N)$ work each.
 
@@ -302,6 +317,9 @@ func mergeKLists(lists []*ListNode) *ListNode {
 }
 ```
 </TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="023-merge-k-sorted-lists-approach3-swift" />
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -334,7 +352,7 @@ At each round, the total work across all pairwise merges is $O(N)$ (every node i
   </TabItem>
 </Tabs>
 
-## Approach 3b: Min-heap of heads (optimal)
+## Approach 4: Min-heap of heads (optimal)
 
 Put the head of each list in a min-heap keyed by value. Repeatedly pop the smallest and push its `next`.
 
@@ -362,7 +380,7 @@ def merge_k_lists(lists):
 </TabItem>
 <TabItem label="TypeScript">
 ```typescript
-// TypeScript doesn't have a built-in heap; use the divide-and-conquer (Approach 3a)
+// TypeScript doesn't have a built-in heap; use the divide-and-conquer (Approach 3)
 // in interviews. Shown here as a min-heap simulation for illustration.
 function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
     // Seed a sorted array of [val, listIndex, node] tuples as a naive heap simulation
@@ -384,6 +402,9 @@ function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
     return dummy.next;
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach4SwiftCode} id="023-merge-k-sorted-lists-approach4-swift" />
 </TabItem>
 </Tabs>
 
@@ -410,7 +431,7 @@ The heap never exceeds k entries (one per list). Each of the N nodes triggers on
 <TabItem label="Python">
 ```python
 # Quick smoke tests, paste into a REPL or save as test_023.py and run.
-# Uses the min-heap approach (Approach 3b).
+# Uses the min-heap approach (Approach 4).
 import heapq
 
 class ListNode:

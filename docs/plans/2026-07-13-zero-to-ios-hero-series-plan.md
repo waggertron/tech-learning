@@ -57,7 +57,7 @@ Do not mark the live runner available or describe GitHub Pages as executing Swif
 
 ### Workstream 2: Add Swift to every coding problem
 
-The generated baseline on 2026-07-13 is 189 coding-problem pages, 504 documented approaches, 0 pages with Swift, 470 Python source files, 469 TypeScript source files, and 469 Go source files across starter and approach implementations. The durable inventory lives in [Swift Coding Problem Coverage](../swift-coding-problem-coverage.md).
+The generated baseline on 2026-07-13 found 189 coding-problem pages, 504 numeric documented approaches, 0 pages with Swift, 470 Python source files, 469 TypeScript source files, and 469 Go source files across starter and approach implementations. S2.C12 normalized two lettered Merge k Sorted Lists headings into approaches 3 and 4, correcting the tracked approach total to 506 without adding algorithms. The durable inventory lives in [Swift Coding Problem Coverage](../swift-coding-problem-coverage.md).
 
 S2.1 through S2.3, the browser runner, and one representative category form the pilot gate. After that gate passes, the remaining categories can advance in checked batches alongside curriculum authoring. The complete catalog remains a required program deliverable, but it does not block post 1.
 
@@ -84,7 +84,7 @@ Category rollout checklist:
 - [x] **S2.C09**: Greedy, 10 pages. All 10 starters and 31 documented approaches are wired to Swift REPL tabs, share 40 reviewed vectors, compile under Swift 6 mode, and preserve the canonical heap helper for Hand of Straights.
 - [x] **S2.C10**: Heap and priority queue, 7 pages. All 7 starters and 20 documented approaches are wired to Swift REPL tabs, share 32 reviewed vectors, compile under Swift 6 mode, and extend stateful fixtures to constructor arguments plus collection-valued operation results.
 - [x] **S2.C11**: Intervals, 6 pages. All 6 starters and 18 documented approaches are wired to Swift REPL tabs, share 30 reviewed vectors, compile under Swift 6 mode, and cover sorting, greedy selection, sweep lines, binary search, heaps, and segment-tree range updates.
-- [ ] **S2.C12**: Linked lists, 14 pages.
+- [x] **S2.C12**: Linked lists, 14 pages. All 14 starters and 40 documented approaches are wired to Swift REPL tabs, share 70 reviewed vectors, compile under Swift 6 mode, and cover acyclic lists, list arrays, cycles, shared-tail identity, random-pointer deep copies, heaps, in-place mutation, and stateful LRU behavior.
 - [ ] **S2.C13**: Math and geometry, 8 pages.
 - [ ] **S2.C14**: Sliding window, 8 pages.
 - [ ] **S2.C15**: Stack, 16 pages.

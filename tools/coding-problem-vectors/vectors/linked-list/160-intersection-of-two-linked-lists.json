@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "160-intersection-of-two-linked-lists"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "lists",
+        "codec": "intersecting-lists"
+      }
+    ],
+    "result": {
+      "codec": "list-node",
+      "comparison": "identity"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "get_intersection_node"
+      },
+      "typescript": {
+        "function": "getIntersectionNode"
+      },
+      "go": {
+        "function": "getIntersectionNode"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "getIntersectionNode"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "shared-tail",
+      "classification": "valid",
+      "arguments": [
+        {
+          "prefixA": [
+            4,
+            1
+          ],
+          "prefixB": [
+            5,
+            6,
+            1
+          ],
+          "shared": [
+            8,
+            4,
+            5
+          ]
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          8,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "id": "shared-single-node",
+      "classification": "valid",
+      "arguments": [
+        {
+          "prefixA": [
+            2,
+            6,
+            4
+          ],
+          "prefixB": [
+            1,
+            5
+          ],
+          "shared": [
+            9
+          ]
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          9
+        ]
+      }
+    },
+    {
+      "id": "no-intersection",
+      "classification": "valid",
+      "arguments": [
+        {
+          "prefixA": [
+            2,
+            6,
+            4
+          ],
+          "prefixB": [
+            1,
+            5
+          ],
+          "shared": []
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "heads-are-shared",
+      "classification": "boundary",
+      "arguments": [
+        {
+          "prefixA": [],
+          "prefixB": [],
+          "shared": [
+            1
+          ]
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty-first-list",
+      "classification": "invalid",
+      "arguments": [
+        {
+          "prefixA": [],
+          "prefixB": [
+            2
+          ],
+          "shared": []
+        }
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Both published input lists are non-empty."
+      }
+    }
+  ]
+}

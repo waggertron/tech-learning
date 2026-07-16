@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "146-lru-cache"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "operations",
+        "codec": "operation-sequence"
+      }
+    ],
+    "result": {
+      "codec": "operation-results",
+      "comparison": "operation-results"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "operation-sequence",
+    "entrypoints": {
+      "python": {
+        "type": "LRUCache"
+      },
+      "typescript": {
+        "type": "LRUCache"
+      },
+      "go": {
+        "type": "LRUCache"
+      },
+      "swift": {
+        "type": "LRUCache"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "canonical-eviction",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              1,
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              2,
+              2
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              3,
+              3
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              4,
+              4
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              3
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              4
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          1,
+          null,
+          -1,
+          null,
+          -1,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "update-existing-key",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              1,
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              1,
+              9
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              1
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          9
+        ]
+      }
+    },
+    {
+      "id": "get-refreshes-recency",
+      "classification": "valid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              2
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              1,
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              2,
+              2
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              3,
+              3
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              2
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          1,
+          null,
+          -1
+        ]
+      }
+    },
+    {
+      "id": "capacity-one",
+      "classification": "boundary",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              1,
+              1
+            ]
+          },
+          {
+            "operation": "put",
+            "arguments": [
+              2,
+              2
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              1
+            ]
+          },
+          {
+            "operation": "get",
+            "arguments": [
+              2
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          null,
+          null,
+          null,
+          -1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "zero-capacity",
+      "classification": "invalid",
+      "arguments": [
+        [
+          {
+            "operation": "init",
+            "arguments": [
+              0
+            ]
+          }
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Capacity must be at least one."
+      }
+    }
+  ]
+}

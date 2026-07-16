@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "linked-list",
+    "slug": "141-linked-list-cycle"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "head",
+        "codec": "cyclic-list"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "has_cycle"
+      },
+      "typescript": {
+        "function": "hasCycle"
+      },
+      "go": {
+        "function": "hasCycle"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "hasCycle"
+      }
+    }
+  },
+  "proofFixture": false,
+  "cases": [
+    {
+      "id": "cycle-to-middle",
+      "classification": "valid",
+      "arguments": [
+        {
+          "values": [
+            3,
+            2,
+            0,
+            -4
+          ],
+          "pos": 1
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "cycle-to-head",
+      "classification": "valid",
+      "arguments": [
+        {
+          "values": [
+            1,
+            2
+          ],
+          "pos": 0
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "no-cycle",
+      "classification": "valid",
+      "arguments": [
+        {
+          "values": [
+            1,
+            2,
+            3
+          ],
+          "pos": -1
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "boundary",
+      "arguments": [
+        {
+          "values": [],
+          "pos": -1
+        }
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "position-out-of-range",
+      "classification": "invalid",
+      "arguments": [
+        {
+          "values": [
+            1
+          ],
+          "pos": 1
+        }
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The cycle position must name an existing node or be -1."
+      }
+    }
+  ]
+}

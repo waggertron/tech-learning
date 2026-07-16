@@ -5,16 +5,20 @@ parent: linked-list
 tags: [leetcode, linked-list, two-pointers, easy]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './876-middle-of-linked-list.py?raw';
 import practiceCodeTs from './876-middle-of-linked-list.ts?raw';
 import practiceCodeGo from './876-middle-of-linked-list.go?raw';
+import practiceCodeSwift from './876-middle-of-linked-list.swift?raw';
+import approach1SwiftCode from './876-middle-of-linked-list-approach1.swift?raw';
+import approach2SwiftCode from './876-middle-of-linked-list-approach2.swift?raw';
 import approach2PyCode from './876-middle-of-linked-list-approach2.py?raw';
 import approach2TsCode from './876-middle-of-linked-list-approach2.ts?raw';
 import approach2GoCode from './876-middle-of-linked-list-approach2.go?raw';
@@ -40,6 +44,9 @@ LeetCode 876 · [Link](https://leetcode.com/problems/middle-of-the-linked-list/)
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="middle-of-linked-list-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="876-middle-of-linked-list-swift" />
   </TabItem>
 </Tabs>
 
@@ -76,6 +83,9 @@ function middleNode(head: ListNode | null): ListNode | null {
     return cur;
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="876-middle-of-linked-list-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -120,6 +130,9 @@ function middleNode(head: ListNode | null): ListNode | null {
     return slow;                       // L4: slow is at the middle
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="876-middle-of-linked-list-approach2-swift" />
 </TabItem>
 </Tabs>
 

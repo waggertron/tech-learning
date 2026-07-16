@@ -5,16 +5,21 @@ parent: linked-list
 tags: [leetcode, neetcode-150, linked-lists, math, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './002-add-two-numbers.py?raw';
 import practiceCodeTs from './002-add-two-numbers.ts?raw';
 import practiceCodeGo from './002-add-two-numbers.go?raw';
+import practiceCodeSwift from './002-add-two-numbers.swift?raw';
+import approach1SwiftCode from './002-add-two-numbers-approach1.swift?raw';
+import approach2SwiftCode from './002-add-two-numbers-approach2.swift?raw';
+import approach3SwiftCode from './002-add-two-numbers-approach3.swift?raw';
 import approach2PyCode from './002-add-two-numbers-approach2.py?raw';
 import approach2TsCode from './002-add-two-numbers-approach2.ts?raw';
 import approach2GoCode from './002-add-two-numbers-approach2.go?raw';
@@ -41,6 +46,9 @@ LeetCode 2 · [Link](https://leetcode.com/problems/add-two-numbers/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="add-two-numbers-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="002-add-two-numbers-swift" />
   </TabItem>
 </Tabs>
 
@@ -139,6 +147,9 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 }
 ```
 </TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach1SwiftCode} id="002-add-two-numbers-approach1-swift" />
+</TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -228,6 +239,9 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
     return dummy.Next
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach2SwiftCode} id="002-add-two-numbers-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -328,6 +342,9 @@ func addHelper(l1, l2 *ListNode, carry int) *ListNode {
     return node
 }
 ```
+</TabItem>
+<TabItem label="Swift">
+  <SwiftRepl code={approach3SwiftCode} id="002-add-two-numbers-approach3-swift" />
 </TabItem>
 </Tabs>
 
