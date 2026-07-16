@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 336
+      "swift": 362
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 90,
-        "starterHarnesses": 90,
-        "practiceTabs": 90,
-        "practiceRepls": 90,
-        "approachTabs": 246,
-        "approachSources": 246,
-        "approachHarnesses": 246
+        "starterFiles": 97,
+        "starterHarnesses": 97,
+        "practiceTabs": 97,
+        "practiceRepls": 97,
+        "approachTabs": 265,
+        "approachSources": 265,
+        "approachHarnesses": 265
       }
     },
-    "swiftReadyPages": 90,
-    "swiftReadyApproaches": 246,
-    "vectorReadyPages": 90
+    "swiftReadyPages": 97,
+    "swiftReadyApproaches": 265,
+    "vectorReadyPages": 97
   },
   "categories": [
     {
@@ -194,9 +194,9 @@
       "category": "two-pointers",
       "pages": 7,
       "documentedApproaches": 19,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 7,
+      "swiftReadyApproaches": 19,
+      "vectorReadyPages": 7
     }
   ],
   "problems": [
@@ -23578,45 +23578,47 @@
       "page": "two-pointers/011-container-with-most-water.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/011-container-with-most-water.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/011-container-with-most-water.py",
         "typescript": "two-pointers/011-container-with-most-water.ts",
         "go": "two-pointers/011-container-with-most-water.go",
-        "swift": null
+        "swift": "two-pointers/011-container-with-most-water.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -23624,23 +23626,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/011-container-with-most-water-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -23648,7 +23655,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23658,21 +23666,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/011-container-with-most-water-approach2.py",
             "typescript": "two-pointers/011-container-with-most-water-approach2.ts",
             "go": "two-pointers/011-container-with-most-water-approach2.go",
-            "swift": null
+            "swift": "two-pointers/011-container-with-most-water-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -23683,45 +23693,47 @@
       "page": "two-pointers/015-3sum.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/015-3sum.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/015-3sum.py",
         "typescript": "two-pointers/015-3sum.ts",
         "go": "two-pointers/015-3sum.go",
-        "swift": null
+        "swift": "two-pointers/015-3sum.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -23729,23 +23741,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/015-3sum-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -23753,7 +23770,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23763,21 +23781,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/015-3sum-approach2.py",
             "typescript": "two-pointers/015-3sum-approach2.ts",
             "go": "two-pointers/015-3sum-approach2.go",
-            "swift": null
+            "swift": "two-pointers/015-3sum-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -23785,7 +23805,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23795,21 +23816,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/015-3sum-approach3.py",
             "typescript": "two-pointers/015-3sum-approach3.ts",
             "go": "two-pointers/015-3sum-approach3.go",
-            "swift": null
+            "swift": "two-pointers/015-3sum-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -23820,45 +23843,47 @@
       "page": "two-pointers/042-trapping-rain-water.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/042-trapping-rain-water.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/042-trapping-rain-water.py",
         "typescript": "two-pointers/042-trapping-rain-water.ts",
         "go": "two-pointers/042-trapping-rain-water.go",
-        "swift": null
+        "swift": "two-pointers/042-trapping-rain-water.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -23866,23 +23891,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/042-trapping-rain-water-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -23890,7 +23920,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23900,21 +23931,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/042-trapping-rain-water-approach2.py",
             "typescript": "two-pointers/042-trapping-rain-water-approach2.ts",
             "go": "two-pointers/042-trapping-rain-water-approach2.go",
-            "swift": null
+            "swift": "two-pointers/042-trapping-rain-water-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -23922,7 +23955,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -23932,21 +23966,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/042-trapping-rain-water-approach3.py",
             "typescript": "two-pointers/042-trapping-rain-water-approach3.ts",
             "go": "two-pointers/042-trapping-rain-water-approach3.go",
-            "swift": null
+            "swift": "two-pointers/042-trapping-rain-water-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -23957,45 +23993,47 @@
       "page": "two-pointers/125-valid-palindrome.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/125-valid-palindrome.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/125-valid-palindrome.py",
         "typescript": "two-pointers/125-valid-palindrome.ts",
         "go": "two-pointers/125-valid-palindrome.go",
-        "swift": null
+        "swift": "two-pointers/125-valid-palindrome.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -24003,23 +24041,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/125-valid-palindrome-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -24027,7 +24070,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -24037,21 +24081,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/125-valid-palindrome-approach2.py",
             "typescript": "two-pointers/125-valid-palindrome-approach2.ts",
             "go": "two-pointers/125-valid-palindrome-approach2.go",
-            "swift": null
+            "swift": "two-pointers/125-valid-palindrome-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -24059,7 +24105,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -24069,21 +24116,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/125-valid-palindrome-approach3.py",
             "typescript": "two-pointers/125-valid-palindrome-approach3.ts",
             "go": "two-pointers/125-valid-palindrome-approach3.go",
-            "swift": null
+            "swift": "two-pointers/125-valid-palindrome-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -24094,45 +24143,47 @@
       "page": "two-pointers/167-two-sum-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/167-two-sum-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/167-two-sum-ii.py",
         "typescript": "two-pointers/167-two-sum-ii.ts",
         "go": "two-pointers/167-two-sum-ii.go",
-        "swift": null
+        "swift": "two-pointers/167-two-sum-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -24140,23 +24191,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/167-two-sum-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -24164,7 +24220,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -24174,21 +24231,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/167-two-sum-ii-approach2.py",
             "typescript": "two-pointers/167-two-sum-ii-approach2.ts",
             "go": "two-pointers/167-two-sum-ii-approach2.go",
-            "swift": null
+            "swift": "two-pointers/167-two-sum-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -24196,7 +24255,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -24206,21 +24266,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "two-pointers/167-two-sum-ii-approach3.py",
             "typescript": "two-pointers/167-two-sum-ii-approach3.ts",
             "go": "two-pointers/167-two-sum-ii-approach3.go",
-            "swift": null
+            "swift": "two-pointers/167-two-sum-ii-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -24231,43 +24293,45 @@
       "page": "two-pointers/189-rotate-array.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/189-rotate-array.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/189-rotate-array.py",
         "typescript": "two-pointers/189-rotate-array.ts",
         "go": "two-pointers/189-rotate-array.go",
-        "swift": null
+        "swift": "two-pointers/189-rotate-array.swift"
       },
       "starterHarnesses": [
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -24275,23 +24339,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/189-rotate-array-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -24299,25 +24368,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "two-pointers/189-rotate-array-approach2.py",
             "typescript": "two-pointers/189-rotate-array-approach2.ts",
             "go": "two-pointers/189-rotate-array-approach2.go",
-            "swift": null
+            "swift": "two-pointers/189-rotate-array-approach2.swift"
           },
           "sourceHarnesses": [
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -24325,25 +24398,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "two-pointers/189-rotate-array-approach3.py",
             "typescript": "two-pointers/189-rotate-array-approach3.ts",
             "go": "two-pointers/189-rotate-array-approach3.go",
-            "swift": null
+            "swift": "two-pointers/189-rotate-array-approach3.swift"
           },
           "sourceHarnesses": [
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -24354,43 +24431,45 @@
       "page": "two-pointers/443-string-compression.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/two-pointers/443-string-compression.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "two-pointers/443-string-compression.py",
         "typescript": "two-pointers/443-string-compression.ts",
         "go": "two-pointers/443-string-compression.go",
-        "swift": null
+        "swift": "two-pointers/443-string-compression.swift"
       },
       "starterHarnesses": [
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -24398,23 +24477,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "two-pointers/443-string-compression-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -24422,25 +24506,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "two-pointers/443-string-compression-approach2.py",
             "typescript": "two-pointers/443-string-compression-approach2.ts",
             "go": "two-pointers/443-string-compression-approach2.go",
-            "swift": null
+            "swift": "two-pointers/443-string-compression-approach2.swift"
           },
           "sourceHarnesses": [
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     }

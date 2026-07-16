@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "two-pointers",
+    "slug": "015-3sum"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "three_sum"
+      },
+      "typescript": {
+        "function": "threeSum"
+      },
+      "go": {
+        "function": "threeSum"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "threeSum"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "mixed-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          0,
+          1,
+          2,
+          -1,
+          -4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            -1,
+            -1,
+            2
+          ],
+          [
+            -1,
+            0,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "no-triplet",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "all-zero",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "duplicate-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -2,
+          0,
+          1,
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            -2,
+            0,
+            2
+          ],
+          [
+            -2,
+            1,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "minimum-length-no-answer",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1,
+          2,
+          -2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "too-short",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least three values are required to form a triplet."
+      }
+    }
+  ],
+  "proofFixture": false
+}

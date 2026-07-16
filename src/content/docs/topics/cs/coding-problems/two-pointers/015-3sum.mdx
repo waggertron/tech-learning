@@ -5,16 +5,21 @@ parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './015-3sum.py?raw';
 import practiceCodeTs from './015-3sum.ts?raw';
 import practiceCodeGo from './015-3sum.go?raw';
+import practiceCodeSwift from './015-3sum.swift?raw';
+import approach1SwiftCode from './015-3sum-approach1.swift?raw';
+import approach2SwiftCode from './015-3sum-approach2.swift?raw';
+import approach3SwiftCode from './015-3sum-approach3.swift?raw';
 import approach2PyCode from './015-3sum-approach2.py?raw';
 import approach2TsCode from './015-3sum-approach2.ts?raw';
 import approach2GoCode from './015-3sum-approach2.go?raw';
@@ -44,6 +49,9 @@ LeetCode 15 · [Link](https://leetcode.com/problems/3sum/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="3sum-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="015-3sum-swift" />
   </TabItem>
 </Tabs>
 
@@ -111,6 +119,9 @@ func threeSum(nums []int) [][]int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="015-3sum-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -211,6 +222,9 @@ func threeSum(nums []int) [][]int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="015-3sum-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -337,6 +351,9 @@ func threeSum(nums []int) [][]int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="015-3sum-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

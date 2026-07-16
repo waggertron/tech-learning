@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "two-pointers",
+    "slug": "189-rotate-array"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "mutated-arguments"
+    },
+    "mutatedParameters": [
+      "nums"
+    ],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "rotate"
+      },
+      "typescript": {
+        "function": "rotate"
+      },
+      "go": {
+        "function": "rotate"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "rotate"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "rotate-three",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          5,
+          6,
+          7,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          -100,
+          3,
+          99
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          3,
+          99,
+          -1,
+          -100
+        ]
+      }
+    },
+    {
+      "id": "offset-larger-than-length",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3
+        ],
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2,
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "zero-offset",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "single-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          7
+        ],
+        100
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          7
+        ]
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        3
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one value."
+      }
+    },
+    {
+      "id": "negative-offset",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2,
+          3
+        ],
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The rotation count must be nonnegative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

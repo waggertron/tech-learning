@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "two-pointers",
+    "slug": "167-two-sum-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "numbers",
+        "codec": "int-array"
+      },
+      {
+        "name": "target",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "two_sum"
+      },
+      "typescript": {
+        "function": "twoSum"
+      },
+      "go": {
+        "function": "twoSum"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "twoSum"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "first-pair",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          7,
+          11,
+          15
+        ],
+        9
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "outer-pair",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          3,
+          4
+        ],
+        6
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          3
+        ]
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          0
+        ],
+        -1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "minimum-length",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "unsorted-input",
+      "classification": "invalid",
+      "arguments": [
+        [
+          3,
+          2,
+          4
+        ],
+        6
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input array must be sorted in nondecreasing order."
+      }
+    },
+    {
+      "id": "no-solution",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2,
+          3
+        ],
+        8
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published problem guarantees exactly one solution."
+      }
+    }
+  ],
+  "proofFixture": false
+}

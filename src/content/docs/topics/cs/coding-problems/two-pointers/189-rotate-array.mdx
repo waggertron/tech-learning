@@ -5,16 +5,21 @@ parent: two-pointers
 tags: [leetcode, two-pointers, medium]
 status: draft
 created: 2026-06-25
-updated: 2026-06-25
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './189-rotate-array.py?raw';
 import practiceCodeTs from './189-rotate-array.ts?raw';
 import practiceCodeGo from './189-rotate-array.go?raw';
+import practiceCodeSwift from './189-rotate-array.swift?raw';
+import approach1SwiftCode from './189-rotate-array-approach1.swift?raw';
+import approach2SwiftCode from './189-rotate-array-approach2.swift?raw';
+import approach3SwiftCode from './189-rotate-array-approach3.swift?raw';
 import approach2PyCode from './189-rotate-array-approach2.py?raw';
 import approach2TsCode from './189-rotate-array-approach2.ts?raw';
 import approach2GoCode from './189-rotate-array-approach2.go?raw';
@@ -52,6 +57,9 @@ LeetCode 189 · [Link](https://leetcode.com/problems/rotate-array/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="rotate-array-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="189-rotate-array-swift" />
   </TabItem>
 </Tabs>
 
@@ -97,6 +105,9 @@ func rotate(nums []int, k int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="189-rotate-array-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -180,6 +191,9 @@ func rotate(nums []int, k int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="189-rotate-array-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Why three reversals work**
@@ -268,6 +282,9 @@ func rotate(nums []int, k int) {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="189-rotate-array-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

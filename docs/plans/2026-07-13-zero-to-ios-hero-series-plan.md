@@ -90,7 +90,7 @@ Category rollout checklist:
 - [ ] **S2.C15**: Stack, 16 pages.
 - [ ] **S2.C16**: Trees, 17 pages.
 - [x] **S2.C17**: Tries, 3 pages. All 3 starters and 9 documented approaches are wired to Swift REPL tabs, share 14 reviewed vectors, compile under Swift 6 mode, and preserve the exact canonical trie node helper across stateful prefix, wildcard, and board-search implementations.
-- [ ] **S2.C18**: Two pointers, 7 pages.
+- [x] **S2.C18**: Two pointers, 7 pages. All 7 starters and 19 documented approaches are wired to Swift REPL tabs, share 43 reviewed vectors, compile under Swift 6 mode, and cover deterministic triplet output plus inout rotation and character compression.
 
 ### Gate 3: Establish the series workspace
 

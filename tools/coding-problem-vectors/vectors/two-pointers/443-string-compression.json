@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "two-pointers",
+    "slug": "443-string-compression"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "chars",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "string-array",
+      "comparison": "mutated-arguments"
+    },
+    "mutatedParameters": [
+      "chars"
+    ],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "compress"
+      },
+      "typescript": {
+        "function": "compress"
+      },
+      "go": {
+        "function": "compress"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "compress"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "mixed-groups",
+      "classification": "valid",
+      "arguments": [
+        [
+          "a",
+          "a",
+          "b",
+          "b",
+          "c",
+          "c",
+          "c"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a",
+          "2",
+          "b",
+          "2",
+          "c",
+          "3"
+        ]
+      }
+    },
+    {
+      "id": "two-digit-count",
+      "classification": "valid",
+      "arguments": [
+        [
+          "a",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a",
+          "b",
+          "1",
+          "2"
+        ]
+      }
+    },
+    {
+      "id": "separate-groups",
+      "classification": "valid",
+      "arguments": [
+        [
+          "a",
+          "a",
+          "a",
+          "b",
+          "a",
+          "a"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a",
+          "3",
+          "b",
+          "a",
+          "2"
+        ]
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        [
+          "a"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a"
+        ]
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one character."
+      }
+    },
+    {
+      "id": "multi-character-element",
+      "classification": "invalid",
+      "arguments": [
+        [
+          "ab"
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each array element must contain exactly one character."
+      }
+    }
+  ],
+  "proofFixture": false
+}

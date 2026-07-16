@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "two-pointers",
+    "slug": "011-container-with-most-water"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "height",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "max_area"
+      },
+      "typescript": {
+        "function": "maxArea"
+      },
+      "go": {
+        "function": "maxArea"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxArea"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "classic",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          8,
+          6,
+          2,
+          5,
+          4,
+          8,
+          3,
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 49
+      }
+    },
+    {
+      "id": "equal-ends",
+      "classification": "valid",
+      "arguments": [
+        [
+          4,
+          3,
+          2,
+          1,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 16
+      }
+    },
+    {
+      "id": "best-inside",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          4,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "minimum-length",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "too-short",
+      "classification": "invalid",
+      "arguments": [
+        [
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "A container requires at least two lines."
+      }
+    },
+    {
+      "id": "negative-height",
+      "classification": "invalid",
+      "arguments": [
+        [
+          2,
+          -1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Line heights must be nonnegative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

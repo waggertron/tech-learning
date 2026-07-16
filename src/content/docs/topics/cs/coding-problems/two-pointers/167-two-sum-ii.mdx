@@ -5,16 +5,21 @@ parent: two-pointers
 tags: [leetcode, neetcode-150, arrays, two-pointers, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './167-two-sum-ii.py?raw';
 import practiceCodeTs from './167-two-sum-ii.ts?raw';
 import practiceCodeGo from './167-two-sum-ii.go?raw';
+import practiceCodeSwift from './167-two-sum-ii.swift?raw';
+import approach1SwiftCode from './167-two-sum-ii-approach1.swift?raw';
+import approach2SwiftCode from './167-two-sum-ii-approach2.swift?raw';
+import approach3SwiftCode from './167-two-sum-ii-approach3.swift?raw';
 import approach2PyCode from './167-two-sum-ii-approach2.py?raw';
 import approach2TsCode from './167-two-sum-ii-approach2.ts?raw';
 import approach2GoCode from './167-two-sum-ii-approach2.go?raw';
@@ -45,6 +50,9 @@ LeetCode 167 · [Link](https://leetcode.com/problems/two-sum-ii-input-array-is-s
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="two-sum-ii-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="167-two-sum-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -91,6 +99,9 @@ func twoSum(numbers []int, target int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="167-two-sum-ii-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -166,6 +177,9 @@ func twoSum(numbers []int, target int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="167-two-sum-ii-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -252,6 +266,9 @@ func twoSum(numbers []int, target int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="167-two-sum-ii-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

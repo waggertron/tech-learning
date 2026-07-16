@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "two-pointers",
+    "slug": "125-valid-palindrome"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_palindrome"
+      },
+      "typescript": {
+        "function": "isPalindrome"
+      },
+      "go": {
+        "function": "isPalindrome"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isPalindrome"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "phrase-palindrome",
+      "classification": "valid",
+      "arguments": [
+        "A man, a plan, a canal: Panama"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "not-palindrome",
+      "classification": "valid",
+      "arguments": [
+        "race a car"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "digits-and-letters",
+      "classification": "valid",
+      "arguments": [
+        "0P"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "punctuation-only",
+      "classification": "boundary",
+      "arguments": [
+        " "
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "z"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "non-ascii-character",
+      "classification": "invalid",
+      "arguments": [
+        "été"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input alphabet is printable ASCII."
+      }
+    }
+  ],
+  "proofFixture": false
+}
