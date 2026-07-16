@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "028-find-the-index-of-the-first-occurrence"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "haystack",
+        "codec": "string"
+      },
+      {
+        "name": "needle",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "str_str"
+      },
+      "typescript": {
+        "function": "strStr"
+      },
+      "go": {
+        "function": "strStr"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "strStr"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "match-at-start",
+      "classification": "valid",
+      "arguments": [
+        "sadbutsad",
+        "sad"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "missing-needle",
+      "classification": "valid",
+      "arguments": [
+        "leetcode",
+        "leeto"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "match-in-middle",
+      "classification": "valid",
+      "arguments": [
+        "mississippi",
+        "issip"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "needle-longer-than-haystack",
+      "classification": "valid",
+      "arguments": [
+        "a",
+        "aa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "single-character-match",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-needle",
+      "classification": "invalid",
+      "arguments": [
+        "abc",
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The needle must contain at least one character."
+      }
+    }
+  ],
+  "proofFixture": false
+}

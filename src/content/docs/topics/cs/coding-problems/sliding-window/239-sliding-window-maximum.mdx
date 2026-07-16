@@ -5,16 +5,21 @@ parent: sliding-window
 tags: [leetcode, neetcode-150, arrays, sliding-window, deque, heap, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './239-sliding-window-maximum.py?raw';
 import practiceCodeTs from './239-sliding-window-maximum.ts?raw';
 import practiceCodeGo from './239-sliding-window-maximum.go?raw';
+import practiceCodeSwift from './239-sliding-window-maximum.swift?raw';
+import approach1SwiftCode from './239-sliding-window-maximum-approach1.swift?raw';
+import approach2SwiftCode from './239-sliding-window-maximum-approach2.swift?raw';
+import approach3SwiftCode from './239-sliding-window-maximum-approach3.swift?raw';
 import approach2PyCode from './239-sliding-window-maximum-approach2.py?raw';
 import approach2TsCode from './239-sliding-window-maximum-approach2.ts?raw';
 import approach2GoCode from './239-sliding-window-maximum-approach2.go?raw';
@@ -43,6 +48,9 @@ LeetCode 239 · [Link](https://leetcode.com/problems/sliding-window-maximum/) ·
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="sliding-window-maximum-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="239-sliding-window-maximum-swift" />
   </TabItem>
 </Tabs>
 
@@ -88,6 +96,9 @@ func maxSlidingWindow(nums []int, k int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="239-sliding-window-maximum-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -197,6 +208,9 @@ func maxSlidingWindow(nums []int, k int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="239-sliding-window-maximum-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -303,6 +317,9 @@ func maxSlidingWindow(nums []int, k int) []int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="239-sliding-window-maximum-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

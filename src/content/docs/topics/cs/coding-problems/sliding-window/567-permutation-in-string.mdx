@@ -5,16 +5,21 @@ parent: sliding-window
 tags: [leetcode, neetcode-150, strings, sliding-window, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './567-permutation-in-string.py?raw';
 import practiceCodeTs from './567-permutation-in-string.ts?raw';
 import practiceCodeGo from './567-permutation-in-string.go?raw';
+import practiceCodeSwift from './567-permutation-in-string.swift?raw';
+import approach1SwiftCode from './567-permutation-in-string-approach1.swift?raw';
+import approach2SwiftCode from './567-permutation-in-string-approach2.swift?raw';
+import approach3SwiftCode from './567-permutation-in-string-approach3.swift?raw';
 import approach3PyCode from './567-permutation-in-string-approach3.py?raw';
 import approach3TsCode from './567-permutation-in-string-approach3.ts?raw';
 import approach3GoCode from './567-permutation-in-string-approach3.go?raw';
@@ -40,6 +45,9 @@ LeetCode 567 · [Link](https://leetcode.com/problems/permutation-in-string/) · 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="permutation-in-string-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="567-permutation-in-string-swift" />
   </TabItem>
 </Tabs>
 
@@ -102,6 +110,9 @@ func checkInclusion(s1 string, s2 string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="567-permutation-in-string-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -198,6 +209,9 @@ func checkInclusion(s1 string, s2 string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="567-permutation-in-string-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -316,6 +330,9 @@ func checkInclusion(s1 string, s2 string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="567-permutation-in-string-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

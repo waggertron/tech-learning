@@ -5,16 +5,21 @@ parent: sliding-window
 tags: [leetcode, neetcode-150, strings, sliding-window, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './003-longest-substring-without-repeating-characters.py?raw';
 import practiceCodeTs from './003-longest-substring-without-repeating-characters.ts?raw';
 import practiceCodeGo from './003-longest-substring-without-repeating-characters.go?raw';
+import practiceCodeSwift from './003-longest-substring-without-repeating-characters.swift?raw';
+import approach1SwiftCode from './003-longest-substring-without-repeating-characters-approach1.swift?raw';
+import approach2SwiftCode from './003-longest-substring-without-repeating-characters-approach2.swift?raw';
+import approach3SwiftCode from './003-longest-substring-without-repeating-characters-approach3.swift?raw';
 import approach3PyCode from './003-longest-substring-without-repeating-characters-approach3.py?raw';
 import approach3TsCode from './003-longest-substring-without-repeating-characters-approach3.ts?raw';
 import approach3GoCode from './003-longest-substring-without-repeating-characters-approach3.go?raw';
@@ -41,6 +46,9 @@ LeetCode 3 · [Link](https://leetcode.com/problems/longest-substring-without-rep
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="longest-substring-without-repeating-characters-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="003-longest-substring-without-repeating-characters-swift" />
   </TabItem>
 </Tabs>
 
@@ -96,6 +104,9 @@ func lengthOfLongestSubstring(s string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="003-longest-substring-without-repeating-characters-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -173,6 +184,9 @@ func lengthOfLongestSubstring(s string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="003-longest-substring-without-repeating-characters-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -250,6 +264,9 @@ func lengthOfLongestSubstring(s string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="003-longest-substring-without-repeating-characters-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

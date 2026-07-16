@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "567-permutation-in-string"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s1",
+        "codec": "string"
+      },
+      {
+        "name": "s2",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "check_inclusion"
+      },
+      "typescript": {
+        "function": "checkInclusion"
+      },
+      "go": {
+        "function": "checkInclusion"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "checkInclusion"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "permutation-present",
+      "classification": "valid",
+      "arguments": [
+        "ab",
+        "eidbaooo"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "permutation-missing",
+      "classification": "valid",
+      "arguments": [
+        "ab",
+        "eidboaoo"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "overlapping-window",
+      "classification": "valid",
+      "arguments": [
+        "adc",
+        "dcda"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "repeated-characters",
+      "classification": "valid",
+      "arguments": [
+        "aabc",
+        "caaebcaab"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "pattern-longer-than-text",
+      "classification": "boundary",
+      "arguments": [
+        "abcd",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "empty-pattern",
+      "classification": "invalid",
+      "arguments": [
+        "",
+        "abc"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The pattern must contain at least one lowercase letter."
+      }
+    }
+  ],
+  "proofFixture": false
+}

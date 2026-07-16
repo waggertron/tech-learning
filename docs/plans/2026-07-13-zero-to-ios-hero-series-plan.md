@@ -86,7 +86,7 @@ Category rollout checklist:
 - [x] **S2.C11**: Intervals, 6 pages. All 6 starters and 18 documented approaches are wired to Swift REPL tabs, share 30 reviewed vectors, compile under Swift 6 mode, and cover sorting, greedy selection, sweep lines, binary search, heaps, and segment-tree range updates.
 - [x] **S2.C12**: Linked lists, 14 pages. All 14 starters and 40 documented approaches are wired to Swift REPL tabs, share 70 reviewed vectors, compile under Swift 6 mode, and cover acyclic lists, list arrays, cycles, shared-tail identity, random-pointer deep copies, heaps, in-place mutation, and stateful LRU behavior.
 - [x] **S2.C13**: Math and geometry, 8 pages. All 8 starters and 23 documented approaches are wired to Swift REPL tabs, share 50 reviewed vectors, compile under Swift 6 mode, and add scale-aware approximate floating-point assertions to the cross-language vector renderer.
-- [ ] **S2.C14**: Sliding window, 8 pages.
+- [x] **S2.C14**: Sliding window, 8 pages. All 8 starters and 22 documented approaches are wired to Swift REPL tabs, share 52 reviewed vectors, compile under Swift 6 mode, use `Character` arrays where integer offsets would violate Swift string indexing, and preserve the canonical heap helper for Sliding Window Maximum.
 - [ ] **S2.C15**: Stack, 16 pages.
 - [ ] **S2.C16**: Trees, 17 pages.
 - [ ] **S2.C17**: Tries, 3 pages.

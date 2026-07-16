@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 294
+      "swift": 324
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 79,
-        "starterHarnesses": 79,
-        "practiceTabs": 79,
-        "practiceRepls": 79,
-        "approachTabs": 215,
-        "approachSources": 215,
-        "approachHarnesses": 215
+        "starterFiles": 87,
+        "starterHarnesses": 87,
+        "practiceTabs": 87,
+        "practiceRepls": 87,
+        "approachTabs": 237,
+        "approachSources": 237,
+        "approachHarnesses": 237
       }
     },
-    "swiftReadyPages": 79,
-    "swiftReadyApproaches": 215,
-    "vectorReadyPages": 79
+    "swiftReadyPages": 87,
+    "swiftReadyApproaches": 237,
+    "vectorReadyPages": 87
   },
   "categories": [
     {
@@ -162,9 +162,9 @@
       "category": "sliding-window",
       "pages": 8,
       "documentedApproaches": 22,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 8,
+      "swiftReadyApproaches": 22,
+      "vectorReadyPages": 8
     },
     {
       "category": "stack",
@@ -18334,45 +18334,47 @@
       "page": "sliding-window/003-longest-substring-without-repeating-characters.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/003-longest-substring-without-repeating-characters.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/003-longest-substring-without-repeating-characters.py",
         "typescript": "sliding-window/003-longest-substring-without-repeating-characters.ts",
         "go": "sliding-window/003-longest-substring-without-repeating-characters.go",
-        "swift": null
+        "swift": "sliding-window/003-longest-substring-without-repeating-characters.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -18380,23 +18382,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/003-longest-substring-without-repeating-characters-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -18404,23 +18411,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/003-longest-substring-without-repeating-characters-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -18428,7 +18440,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -18438,21 +18451,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/003-longest-substring-without-repeating-characters-approach3.py",
             "typescript": "sliding-window/003-longest-substring-without-repeating-characters-approach3.ts",
             "go": "sliding-window/003-longest-substring-without-repeating-characters-approach3.go",
-            "swift": null
+            "swift": "sliding-window/003-longest-substring-without-repeating-characters-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -18463,45 +18478,47 @@
       "page": "sliding-window/028-find-the-index-of-the-first-occurrence.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/028-find-the-index-of-the-first-occurrence.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/028-find-the-index-of-the-first-occurrence.py",
         "typescript": "sliding-window/028-find-the-index-of-the-first-occurrence.ts",
         "go": "sliding-window/028-find-the-index-of-the-first-occurrence.go",
-        "swift": null
+        "swift": "sliding-window/028-find-the-index-of-the-first-occurrence.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -18509,23 +18526,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/028-find-the-index-of-the-first-occurrence-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -18533,7 +18555,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -18543,21 +18566,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.py",
             "typescript": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.ts",
             "go": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.go",
-            "swift": null
+            "swift": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -18568,45 +18593,47 @@
       "page": "sliding-window/076-minimum-window-substring.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/076-minimum-window-substring.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/076-minimum-window-substring.py",
         "typescript": "sliding-window/076-minimum-window-substring.ts",
         "go": "sliding-window/076-minimum-window-substring.go",
-        "swift": null
+        "swift": "sliding-window/076-minimum-window-substring.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -18614,23 +18641,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/076-minimum-window-substring-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -18638,23 +18670,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/076-minimum-window-substring-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -18662,7 +18699,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -18672,21 +18710,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/076-minimum-window-substring-approach3.py",
             "typescript": "sliding-window/076-minimum-window-substring-approach3.ts",
             "go": "sliding-window/076-minimum-window-substring-approach3.go",
-            "swift": null
+            "swift": "sliding-window/076-minimum-window-substring-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -18697,45 +18737,47 @@
       "page": "sliding-window/121-best-time-to-buy-and-sell-stock.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/121-best-time-to-buy-and-sell-stock.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/121-best-time-to-buy-and-sell-stock.py",
         "typescript": "sliding-window/121-best-time-to-buy-and-sell-stock.ts",
         "go": "sliding-window/121-best-time-to-buy-and-sell-stock.go",
-        "swift": null
+        "swift": "sliding-window/121-best-time-to-buy-and-sell-stock.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -18743,23 +18785,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/121-best-time-to-buy-and-sell-stock-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -18767,23 +18814,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/121-best-time-to-buy-and-sell-stock-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -18791,7 +18843,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -18801,21 +18854,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/121-best-time-to-buy-and-sell-stock-approach3.py",
             "typescript": "sliding-window/121-best-time-to-buy-and-sell-stock-approach3.ts",
             "go": "sliding-window/121-best-time-to-buy-and-sell-stock-approach3.go",
-            "swift": null
+            "swift": "sliding-window/121-best-time-to-buy-and-sell-stock-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -18828,45 +18883,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/239-sliding-window-maximum.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/239-sliding-window-maximum.py",
         "typescript": "sliding-window/239-sliding-window-maximum.ts",
         "go": "sliding-window/239-sliding-window-maximum.go",
-        "swift": null
+        "swift": "sliding-window/239-sliding-window-maximum.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -18874,23 +18931,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/239-sliding-window-maximum-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -18898,7 +18960,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -18908,21 +18971,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/239-sliding-window-maximum-approach2.py",
             "typescript": "sliding-window/239-sliding-window-maximum-approach2.ts",
             "go": "sliding-window/239-sliding-window-maximum-approach2.go",
-            "swift": null
+            "swift": "sliding-window/239-sliding-window-maximum-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -18930,7 +18995,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -18940,21 +19006,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/239-sliding-window-maximum-approach3.py",
             "typescript": "sliding-window/239-sliding-window-maximum-approach3.ts",
             "go": "sliding-window/239-sliding-window-maximum-approach3.go",
-            "swift": null
+            "swift": "sliding-window/239-sliding-window-maximum-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -18965,45 +19033,47 @@
       "page": "sliding-window/424-longest-repeating-character-replacement.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/424-longest-repeating-character-replacement.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/424-longest-repeating-character-replacement.py",
         "typescript": "sliding-window/424-longest-repeating-character-replacement.ts",
         "go": "sliding-window/424-longest-repeating-character-replacement.go",
-        "swift": null
+        "swift": "sliding-window/424-longest-repeating-character-replacement.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -19011,23 +19081,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/424-longest-repeating-character-replacement-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -19035,23 +19110,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/424-longest-repeating-character-replacement-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -19059,7 +19139,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -19069,21 +19150,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/424-longest-repeating-character-replacement-approach3.py",
             "typescript": "sliding-window/424-longest-repeating-character-replacement-approach3.ts",
             "go": "sliding-window/424-longest-repeating-character-replacement-approach3.go",
-            "swift": null
+            "swift": "sliding-window/424-longest-repeating-character-replacement-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -19094,45 +19177,47 @@
       "page": "sliding-window/560-subarray-sum-equals-k.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/560-subarray-sum-equals-k.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/560-subarray-sum-equals-k.py",
         "typescript": "sliding-window/560-subarray-sum-equals-k.ts",
         "go": "sliding-window/560-subarray-sum-equals-k.go",
-        "swift": null
+        "swift": "sliding-window/560-subarray-sum-equals-k.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -19140,23 +19225,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/560-subarray-sum-equals-k-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -19164,7 +19254,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -19174,21 +19265,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/560-subarray-sum-equals-k-approach2.py",
             "typescript": "sliding-window/560-subarray-sum-equals-k-approach2.ts",
             "go": "sliding-window/560-subarray-sum-equals-k-approach2.go",
-            "swift": null
+            "swift": "sliding-window/560-subarray-sum-equals-k-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -19199,45 +19292,47 @@
       "page": "sliding-window/567-permutation-in-string.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/567-permutation-in-string.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "sliding-window/567-permutation-in-string.py",
         "typescript": "sliding-window/567-permutation-in-string.ts",
         "go": "sliding-window/567-permutation-in-string.go",
-        "swift": null
+        "swift": "sliding-window/567-permutation-in-string.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -19245,23 +19340,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/567-permutation-in-string-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -19269,23 +19369,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "sliding-window/567-permutation-in-string-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -19293,7 +19398,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -19303,21 +19409,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "sliding-window/567-permutation-in-string-approach3.py",
             "typescript": "sliding-window/567-permutation-in-string-approach3.ts",
             "go": "sliding-window/567-permutation-in-string-approach3.go",
-            "swift": null
+            "swift": "sliding-window/567-permutation-in-string-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

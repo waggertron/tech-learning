@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "121-best-time-to-buy-and-sell-stock"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "prices",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "max_profit"
+      },
+      "typescript": {
+        "function": "maxProfit"
+      },
+      "go": {
+        "function": "maxProfit"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxProfit"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "buy-low-sell-high",
+      "classification": "valid",
+      "arguments": [
+        [
+          7,
+          1,
+          5,
+          3,
+          6,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "strictly-decreasing",
+      "classification": "valid",
+      "arguments": [
+        [
+          7,
+          6,
+          4,
+          3,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "short-opportunity",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          4,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "flat-prices",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          3,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-day",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-prices",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one daily price is required."
+      }
+    }
+  ],
+  "proofFixture": false
+}

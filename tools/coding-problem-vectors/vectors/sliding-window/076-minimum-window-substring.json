@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "076-minimum-window-substring"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "t",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_window"
+      },
+      "typescript": {
+        "function": "minWindow"
+      },
+      "go": {
+        "function": "minWindow"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minWindow"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-window",
+      "classification": "valid",
+      "arguments": [
+        "ADOBECODEBANC",
+        "ABC"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "BANC"
+      }
+    },
+    {
+      "id": "exact-single-character",
+      "classification": "valid",
+      "arguments": [
+        "a",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "a"
+      }
+    },
+    {
+      "id": "insufficient-frequency",
+      "classification": "valid",
+      "arguments": [
+        "a",
+        "aa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": ""
+      }
+    },
+    {
+      "id": "whole-string-window",
+      "classification": "valid",
+      "arguments": [
+        "aa",
+        "aa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "aa"
+      }
+    },
+    {
+      "id": "target-not-present",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        "b"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": ""
+      }
+    },
+    {
+      "id": "empty-target",
+      "classification": "invalid",
+      "arguments": [
+        "abc",
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The target must contain at least one character."
+      }
+    }
+  ],
+  "proofFixture": false
+}

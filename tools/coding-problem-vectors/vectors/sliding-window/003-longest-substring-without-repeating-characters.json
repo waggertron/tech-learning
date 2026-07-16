@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "003-longest-substring-without-repeating-characters"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "length_of_longest_substring"
+      },
+      "typescript": {
+        "function": "lengthOfLongestSubstring"
+      },
+      "go": {
+        "function": "lengthOfLongestSubstring"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "lengthOfLongestSubstring"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "repeating-block",
+      "classification": "valid",
+      "arguments": [
+        "abcabcbb"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "single-repeated-character",
+      "classification": "valid",
+      "arguments": [
+        "bbbbb"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "overlapping-repeat",
+      "classification": "valid",
+      "arguments": [
+        "pwwkew"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "left-edge-must-jump",
+      "classification": "valid",
+      "arguments": [
+        "abba"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "boundary",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "x"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "non-ascii-character",
+      "classification": "invalid",
+      "arguments": [
+        "a🐉b"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input alphabet is ASCII letters, digits, symbols, and spaces."
+      }
+    }
+  ],
+  "proofFixture": false
+}

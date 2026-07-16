@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "424-longest-repeating-character-replacement"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "character_replacement"
+      },
+      "typescript": {
+        "function": "characterReplacement"
+      },
+      "go": {
+        "function": "characterReplacement"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "characterReplacement"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-replacements",
+      "classification": "valid",
+      "arguments": [
+        "ABAB",
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "one-replacement",
+      "classification": "valid",
+      "arguments": [
+        "AABABBA",
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "all-distinct",
+      "classification": "valid",
+      "arguments": [
+        "ABCD",
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "no-replacements",
+      "classification": "valid",
+      "arguments": [
+        "AABA",
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "A",
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        "",
+        1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input string must contain at least one uppercase letter."
+      }
+    },
+    {
+      "id": "negative-budget",
+      "classification": "invalid",
+      "arguments": [
+        "ABC",
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The replacement budget cannot be negative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

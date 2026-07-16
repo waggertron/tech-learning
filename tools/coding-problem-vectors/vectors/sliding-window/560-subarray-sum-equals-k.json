@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "560-subarray-sum-equals-k"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      },
+      {
+        "name": "k",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "subarray_sum"
+      },
+      "typescript": {
+        "function": "subarraySum"
+      },
+      "go": {
+        "function": "subarraySum"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "subarraySum"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-overlapping-subarrays",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          1,
+          1
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "different-length-subarrays",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "negative-and-zero-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          -1,
+          0
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "negative-target",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          -1,
+          1
+        ],
+        -1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "single-zero",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The array must contain at least one integer."
+      }
+    }
+  ],
+  "proofFixture": false
+}
