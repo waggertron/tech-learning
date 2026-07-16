@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 473
+      "swift": 524
     },
     "languageCoverage": {
       "python": {
@@ -17,7 +17,7 @@
         "starterHarnesses": 183,
         "practiceTabs": 188,
         "practiceRepls": 189,
-        "approachTabs": 476,
+        "approachTabs": 477,
         "approachSources": 262,
         "approachHarnesses": 256
       },
@@ -40,27 +40,27 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 130,
-        "starterHarnesses": 130,
-        "practiceTabs": 130,
-        "practiceRepls": 130,
-        "approachTabs": 343,
-        "approachSources": 343,
-        "approachHarnesses": 343
+        "starterFiles": 142,
+        "starterHarnesses": 142,
+        "practiceTabs": 142,
+        "practiceRepls": 142,
+        "approachTabs": 382,
+        "approachSources": 382,
+        "approachHarnesses": 382
       }
     },
-    "swiftReadyPages": 130,
-    "swiftReadyApproaches": 343,
-    "vectorReadyPages": 130
+    "swiftReadyPages": 142,
+    "swiftReadyApproaches": 382,
+    "vectorReadyPages": 142
   },
   "categories": [
     {
       "category": "1d-dynamic-programming",
       "pages": 12,
       "documentedApproaches": 39,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 12,
+      "swiftReadyApproaches": 39,
+      "vectorReadyPages": 12
     },
     {
       "category": "2d-dynamic-programming",
@@ -207,45 +207,47 @@
       "page": "1d-dynamic-programming/005-longest-palindromic-substring.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/005-longest-palindromic-substring.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/005-longest-palindromic-substring.py",
         "typescript": "1d-dynamic-programming/005-longest-palindromic-substring.ts",
         "go": "1d-dynamic-programming/005-longest-palindromic-substring.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/005-longest-palindromic-substring.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -253,23 +255,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/005-longest-palindromic-substring-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -277,7 +284,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -287,21 +295,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/005-longest-palindromic-substring-approach2.py",
             "typescript": "1d-dynamic-programming/005-longest-palindromic-substring-approach2.ts",
             "go": "1d-dynamic-programming/005-longest-palindromic-substring-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/005-longest-palindromic-substring-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -309,7 +319,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -319,21 +330,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/005-longest-palindromic-substring-approach3.py",
             "typescript": "1d-dynamic-programming/005-longest-palindromic-substring-approach3.ts",
             "go": "1d-dynamic-programming/005-longest-palindromic-substring-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/005-longest-palindromic-substring-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -344,45 +357,47 @@
       "page": "1d-dynamic-programming/070-climbing-stairs.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/070-climbing-stairs.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/070-climbing-stairs.py",
         "typescript": "1d-dynamic-programming/070-climbing-stairs.ts",
         "go": "1d-dynamic-programming/070-climbing-stairs.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/070-climbing-stairs.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -390,23 +405,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/070-climbing-stairs-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -414,7 +434,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -424,21 +445,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/070-climbing-stairs-approach2.py",
             "typescript": "1d-dynamic-programming/070-climbing-stairs-approach2.ts",
             "go": "1d-dynamic-programming/070-climbing-stairs-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/070-climbing-stairs-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -446,7 +469,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -456,21 +480,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/070-climbing-stairs-approach3.py",
             "typescript": "1d-dynamic-programming/070-climbing-stairs-approach3.ts",
             "go": "1d-dynamic-programming/070-climbing-stairs-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/070-climbing-stairs-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 4,
@@ -478,7 +504,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -488,21 +515,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/070-climbing-stairs-approach4.py",
             "typescript": "1d-dynamic-programming/070-climbing-stairs-approach4.ts",
             "go": "1d-dynamic-programming/070-climbing-stairs-approach4.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/070-climbing-stairs-approach4.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -513,45 +542,47 @@
       "page": "1d-dynamic-programming/091-decode-ways.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/091-decode-ways.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/091-decode-ways.py",
         "typescript": "1d-dynamic-programming/091-decode-ways.ts",
         "go": "1d-dynamic-programming/091-decode-ways.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/091-decode-ways.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -559,23 +590,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/091-decode-ways-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -583,7 +619,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -593,21 +630,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/091-decode-ways-approach2.py",
             "typescript": "1d-dynamic-programming/091-decode-ways-approach2.ts",
             "go": "1d-dynamic-programming/091-decode-ways-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/091-decode-ways-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -615,7 +654,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -625,21 +665,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/091-decode-ways-approach3.py",
             "typescript": "1d-dynamic-programming/091-decode-ways-approach3.ts",
             "go": "1d-dynamic-programming/091-decode-ways-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/091-decode-ways-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -650,45 +692,47 @@
       "page": "1d-dynamic-programming/139-word-break.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/139-word-break.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/139-word-break.py",
         "typescript": "1d-dynamic-programming/139-word-break.ts",
         "go": "1d-dynamic-programming/139-word-break.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/139-word-break.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -696,23 +740,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/139-word-break-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -720,7 +769,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -730,21 +780,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/139-word-break-approach2.py",
             "typescript": "1d-dynamic-programming/139-word-break-approach2.ts",
             "go": "1d-dynamic-programming/139-word-break-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/139-word-break-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -752,7 +804,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -762,21 +815,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/139-word-break-approach3.py",
             "typescript": "1d-dynamic-programming/139-word-break-approach3.ts",
             "go": "1d-dynamic-programming/139-word-break-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/139-word-break-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -787,45 +842,47 @@
       "page": "1d-dynamic-programming/152-maximum-product-subarray.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/152-maximum-product-subarray.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/152-maximum-product-subarray.py",
         "typescript": "1d-dynamic-programming/152-maximum-product-subarray.ts",
         "go": "1d-dynamic-programming/152-maximum-product-subarray.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/152-maximum-product-subarray.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -833,23 +890,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/152-maximum-product-subarray-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -857,23 +919,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/152-maximum-product-subarray-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -881,7 +948,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -891,21 +959,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/152-maximum-product-subarray-approach3.py",
             "typescript": "1d-dynamic-programming/152-maximum-product-subarray-approach3.ts",
             "go": "1d-dynamic-programming/152-maximum-product-subarray-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/152-maximum-product-subarray-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -916,67 +986,74 @@
       "page": "1d-dynamic-programming/198-house-robber.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/198-house-robber.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/198-house-robber.py",
         "typescript": "1d-dynamic-programming/198-house-robber.ts",
         "go": "1d-dynamic-programming/198-house-robber.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/198-house-robber.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Recursive with take/skip",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/198-house-robber-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -984,7 +1061,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -993,21 +1071,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/198-house-robber-approach2.py",
             "typescript": "1d-dynamic-programming/198-house-robber-approach2.ts",
             "go": "1d-dynamic-programming/198-house-robber-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/198-house-robber-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1015,7 +1095,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1024,21 +1105,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/198-house-robber-approach3.py",
             "typescript": "1d-dynamic-programming/198-house-robber-approach3.ts",
             "go": "1d-dynamic-programming/198-house-robber-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/198-house-robber-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 4,
@@ -1046,7 +1129,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1055,21 +1139,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/198-house-robber-approach4.py",
             "typescript": "1d-dynamic-programming/198-house-robber-approach4.ts",
             "go": "1d-dynamic-programming/198-house-robber-approach4.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/198-house-robber-approach4.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -1080,64 +1166,71 @@
       "page": "1d-dynamic-programming/213-house-robber-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/213-house-robber-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/213-house-robber-ii.py",
         "typescript": "1d-dynamic-programming/213-house-robber-ii.ts",
         "go": "1d-dynamic-programming/213-house-robber-ii.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/213-house-robber-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, enumerate all non-adjacent subsets",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/213-house-robber-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -1145,7 +1238,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1154,21 +1248,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/213-house-robber-ii-approach2.py",
             "typescript": "1d-dynamic-programming/213-house-robber-ii-approach2.ts",
             "go": "1d-dynamic-programming/213-house-robber-ii-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/213-house-robber-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1176,7 +1272,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1185,21 +1282,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/213-house-robber-ii-approach3.py",
             "typescript": "1d-dynamic-programming/213-house-robber-ii-approach3.ts",
             "go": "1d-dynamic-programming/213-house-robber-ii-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/213-house-robber-ii-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -1210,60 +1309,69 @@
       "page": "1d-dynamic-programming/300-longest-increasing-subsequence.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/300-longest-increasing-subsequence.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/300-longest-increasing-subsequence.py",
         "typescript": "1d-dynamic-programming/300-longest-increasing-subsequence.ts",
         "go": "1d-dynamic-programming/300-longest-increasing-subsequence.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/300-longest-increasing-subsequence.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, try every subsequence",
-          "languageTabs": [],
+          "languageTabs": [
+            "python",
+            "swift"
+          ],
           "codeFences": [
             "python"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/300-longest-increasing-subsequence-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -1271,7 +1379,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1280,21 +1389,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/300-longest-increasing-subsequence-approach2.py",
             "typescript": "1d-dynamic-programming/300-longest-increasing-subsequence-approach2.ts",
             "go": "1d-dynamic-programming/300-longest-increasing-subsequence-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/300-longest-increasing-subsequence-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1302,7 +1413,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1311,21 +1423,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/300-longest-increasing-subsequence-approach3.py",
             "typescript": "1d-dynamic-programming/300-longest-increasing-subsequence-approach3.ts",
             "go": "1d-dynamic-programming/300-longest-increasing-subsequence-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/300-longest-increasing-subsequence-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -1336,64 +1450,71 @@
       "page": "1d-dynamic-programming/322-coin-change.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/322-coin-change.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/322-coin-change.py",
         "typescript": "1d-dynamic-programming/322-coin-change.ts",
         "go": "1d-dynamic-programming/322-coin-change.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/322-coin-change.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Recursive",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/322-coin-change-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -1401,7 +1522,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1410,21 +1532,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/322-coin-change-approach2.py",
             "typescript": "1d-dynamic-programming/322-coin-change-approach2.ts",
             "go": "1d-dynamic-programming/322-coin-change-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/322-coin-change-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1432,7 +1556,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1441,21 +1566,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/322-coin-change-approach3.py",
             "typescript": "1d-dynamic-programming/322-coin-change-approach3.ts",
             "go": "1d-dynamic-programming/322-coin-change-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/322-coin-change-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -1466,64 +1593,71 @@
       "page": "1d-dynamic-programming/416-partition-equal-subset-sum.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/416-partition-equal-subset-sum.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/416-partition-equal-subset-sum.py",
         "typescript": "1d-dynamic-programming/416-partition-equal-subset-sum.ts",
         "go": "1d-dynamic-programming/416-partition-equal-subset-sum.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/416-partition-equal-subset-sum.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, enumerate subsets",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/416-partition-equal-subset-sum-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -1531,7 +1665,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1540,21 +1675,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/416-partition-equal-subset-sum-approach2.py",
             "typescript": "1d-dynamic-programming/416-partition-equal-subset-sum-approach2.ts",
             "go": "1d-dynamic-programming/416-partition-equal-subset-sum-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/416-partition-equal-subset-sum-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1562,7 +1699,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1571,21 +1709,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/416-partition-equal-subset-sum-approach3.py",
             "typescript": "1d-dynamic-programming/416-partition-equal-subset-sum-approach3.ts",
             "go": "1d-dynamic-programming/416-partition-equal-subset-sum-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/416-partition-equal-subset-sum-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -1596,64 +1736,71 @@
       "page": "1d-dynamic-programming/647-palindromic-substrings.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/647-palindromic-substrings.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/647-palindromic-substrings.py",
         "typescript": "1d-dynamic-programming/647-palindromic-substrings.ts",
         "go": "1d-dynamic-programming/647-palindromic-substrings.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/647-palindromic-substrings.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, check every substring",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/647-palindromic-substrings-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -1661,7 +1808,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1670,21 +1818,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/647-palindromic-substrings-approach2.py",
             "typescript": "1d-dynamic-programming/647-palindromic-substrings-approach2.ts",
             "go": "1d-dynamic-programming/647-palindromic-substrings-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/647-palindromic-substrings-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1692,7 +1842,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1701,21 +1852,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/647-palindromic-substrings-approach3.py",
             "typescript": "1d-dynamic-programming/647-palindromic-substrings-approach3.ts",
             "go": "1d-dynamic-programming/647-palindromic-substrings-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/647-palindromic-substrings-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -1726,64 +1879,71 @@
       "page": "1d-dynamic-programming/746-min-cost-climbing-stairs.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/1d-dynamic-programming/746-min-cost-climbing-stairs.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 2,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "1d-dynamic-programming/746-min-cost-climbing-stairs.py",
         "typescript": "1d-dynamic-programming/746-min-cost-climbing-stairs.ts",
         "go": "1d-dynamic-programming/746-min-cost-climbing-stairs.go",
-        "swift": null
+        "swift": "1d-dynamic-programming/746-min-cost-climbing-stairs.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Recursive, min cost from step i",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -1791,7 +1951,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1800,21 +1961,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach2.py",
             "typescript": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach2.ts",
             "go": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach2.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -1822,7 +1985,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1831,21 +1995,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach3.py",
             "typescript": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach3.ts",
             "go": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach3.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 4,
@@ -1853,7 +2019,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -1862,21 +2029,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach4.py",
             "typescript": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach4.ts",
             "go": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach4.go",
-            "swift": null
+            "swift": "1d-dynamic-programming/746-min-cost-climbing-stairs-approach4.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

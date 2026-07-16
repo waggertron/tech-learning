@@ -5,16 +5,22 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './198-house-robber.py?raw';
 import practiceCodeTs from './198-house-robber.ts?raw';
 import practiceCodeGo from './198-house-robber.go?raw';
+import practiceCodeSwift from './198-house-robber.swift?raw';
+import approach1SwiftCode from './198-house-robber-approach1.swift?raw';
+import approach2SwiftCode from './198-house-robber-approach2.swift?raw';
+import approach3SwiftCode from './198-house-robber-approach3.swift?raw';
+import approach4SwiftCode from './198-house-robber-approach4.swift?raw';
 import approach2PyCode from './198-house-robber-approach2.py?raw';
 import approach2TsCode from './198-house-robber-approach2.ts?raw';
 import approach2GoCode from './198-house-robber-approach2.go?raw';
@@ -47,6 +53,9 @@ LeetCode 198 · [Link](https://leetcode.com/problems/house-robber/) · *Medium*
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="house-robber-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="198-house-robber-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Recursive with take/skip
@@ -75,6 +84,9 @@ function rob(nums: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="198-house-robber-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -126,6 +138,9 @@ function rob(nums: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="198-house-robber-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -194,6 +209,9 @@ function rob(nums: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="198-house-robber-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -251,6 +269,9 @@ function rob(nums: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach4SwiftCode} id="198-house-robber-approach4-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

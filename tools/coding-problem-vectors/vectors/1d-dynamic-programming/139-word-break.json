@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "139-word-break"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "wordDict",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "word_break"
+      },
+      "typescript": {
+        "function": "wordBreak"
+      },
+      "go": {
+        "function": "wordBreak"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "wordBreak"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-words",
+      "classification": "valid",
+      "arguments": [
+        "leetcode",
+        [
+          "leet",
+          "code"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "reused-word",
+      "classification": "valid",
+      "arguments": [
+        "applepenapple",
+        [
+          "apple",
+          "pen"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "no-segmentation",
+      "classification": "valid",
+      "arguments": [
+        "catsandog",
+        [
+          "cats",
+          "dog",
+          "sand",
+          "and",
+          "cat"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single-word",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        [
+          "a"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        "",
+        [
+          "a"
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input string is nonempty."
+      }
+    },
+    {
+      "id": "empty-dictionary",
+      "classification": "invalid",
+      "arguments": [
+        "a",
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published dictionary is nonempty."
+      }
+    }
+  ],
+  "proofFixture": false
+}

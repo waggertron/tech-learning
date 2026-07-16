@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "647-palindromic-substrings"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "count_substrings"
+      },
+      "typescript": {
+        "function": "countSubstrings"
+      },
+      "go": {
+        "function": "countSubstrings"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "countSubstrings"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "distinct",
+      "classification": "valid",
+      "arguments": [
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "repeated",
+      "classification": "valid",
+      "arguments": [
+        "aaa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "even-center",
+      "classification": "valid",
+      "arguments": [
+        "abba"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one character."
+      }
+    },
+    {
+      "id": "non-ascii",
+      "classification": "invalid",
+      "arguments": [
+        "été"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The runnable contract uses the published ASCII alphabet."
+      }
+    }
+  ],
+  "proofFixture": false
+}

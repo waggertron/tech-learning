@@ -5,16 +5,21 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, binary-search, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './300-longest-increasing-subsequence.py?raw';
 import practiceCodeTs from './300-longest-increasing-subsequence.ts?raw';
 import practiceCodeGo from './300-longest-increasing-subsequence.go?raw';
+import practiceCodeSwift from './300-longest-increasing-subsequence.swift?raw';
+import approach1SwiftCode from './300-longest-increasing-subsequence-approach1.swift?raw';
+import approach2SwiftCode from './300-longest-increasing-subsequence-approach2.swift?raw';
+import approach3SwiftCode from './300-longest-increasing-subsequence-approach3.swift?raw';
 import approach2PyCode from './300-longest-increasing-subsequence-approach2.py?raw';
 import approach2TsCode from './300-longest-increasing-subsequence-approach2.ts?raw';
 import approach2GoCode from './300-longest-increasing-subsequence-approach2.go?raw';
@@ -44,12 +49,17 @@ LeetCode 300 · [Link](https://leetcode.com/problems/longest-increasing-subseque
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="longest-increasing-subsequence-ts" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="300-longest-increasing-subsequence-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, try every subsequence
 
 Enumerate all 2ⁿ subsequences; keep the longest strictly increasing.
 
+<Tabs>
+<TabItem label="Python">
 ```python
 def length_of_lis(nums):
     n = len(nums)
@@ -60,6 +70,11 @@ def length_of_lis(nums):
             best = max(best, len(subseq))
     return best
 ```
+</TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="300-longest-increasing-subsequence-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 Bitmask enumerates all subsequences; for each, checking strict-increase is $O(n)$. Total $O(2^n · n)$. Don't run this past n ≈ 20.
 
@@ -102,6 +117,9 @@ function lengthOfLIS(nums: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="300-longest-increasing-subsequence-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -181,6 +199,9 @@ function lengthOfLIS(nums: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="300-longest-increasing-subsequence-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

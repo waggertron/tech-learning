@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "005-longest-palindromic-substring"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "longest_palindrome"
+      },
+      "typescript": {
+        "function": "longestPalindrome"
+      },
+      "go": {
+        "function": "longestPalindrome"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "longestPalindrome"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "odd-palindrome",
+      "classification": "valid",
+      "arguments": [
+        "babad"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "bab"
+      }
+    },
+    {
+      "id": "even-palindrome",
+      "classification": "valid",
+      "arguments": [
+        "cbbd"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "bb"
+      }
+    },
+    {
+      "id": "long-center",
+      "classification": "valid",
+      "arguments": [
+        "forgeeksskeegfor"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "geeksskeeg"
+      }
+    },
+    {
+      "id": "single-character",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "a"
+      }
+    },
+    {
+      "id": "two-characters",
+      "classification": "boundary",
+      "arguments": [
+        "ac"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "a"
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one character."
+      }
+    },
+    {
+      "id": "non-ascii",
+      "classification": "invalid",
+      "arguments": [
+        "été"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The runnable contract uses the published ASCII alphabet."
+      }
+    }
+  ],
+  "proofFixture": false
+}

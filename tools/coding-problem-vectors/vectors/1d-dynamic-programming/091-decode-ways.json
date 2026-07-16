@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "091-decode-ways"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "num_decodings"
+      },
+      "typescript": {
+        "function": "numDecodings"
+      },
+      "go": {
+        "function": "numDecodings"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "numDecodings"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-options",
+      "classification": "valid",
+      "arguments": [
+        "12"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "three-options",
+      "classification": "valid",
+      "arguments": [
+        "226"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "leading-zero",
+      "classification": "valid",
+      "arguments": [
+        "06"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "internal-zero",
+      "classification": "valid",
+      "arguments": [
+        "2101"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-digit",
+      "classification": "boundary",
+      "arguments": [
+        "1"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one digit."
+      }
+    },
+    {
+      "id": "non-digit",
+      "classification": "invalid",
+      "arguments": [
+        "1a"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contains decimal digits only."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "416-partition-equal-subset-sum"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "can_partition"
+      },
+      "typescript": {
+        "function": "canPartition"
+      },
+      "go": {
+        "function": "canPartition"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "canPartition"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "partitionable",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          5,
+          11,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "not-partitionable",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "duplicates",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          2,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "single-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one value."
+      }
+    },
+    {
+      "id": "zero-value",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published values are positive."
+      }
+    }
+  ],
+  "proofFixture": false
+}

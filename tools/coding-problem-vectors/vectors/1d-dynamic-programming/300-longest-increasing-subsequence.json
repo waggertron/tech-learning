@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "300-longest-increasing-subsequence"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "length_of_l_i_s"
+      },
+      "typescript": {
+        "function": "lengthOfLIS"
+      },
+      "go": {
+        "function": "lengthOfLIS"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "lengthOfLIS"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "classic",
+      "classification": "valid",
+      "arguments": [
+        [
+          10,
+          9,
+          2,
+          5,
+          3,
+          7,
+          101,
+          18
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "mixed",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          1,
+          0,
+          3,
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "duplicates",
+      "classification": "valid",
+      "arguments": [
+        [
+          7,
+          7,
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-value",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published input contains at least one value."
+      }
+    }
+  ],
+  "proofFixture": false
+}

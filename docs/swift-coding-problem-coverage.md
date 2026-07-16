@@ -87,13 +87,14 @@ This supersedes the plan's earlier hand-counted 188-page baseline. Summary Range
 
 ## Category progress, 2026-07-16
 
-Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers are complete:
+1D Dynamic Programming, Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers are complete:
 
-- 130 Swift-ready pages.
-- 343 Swift-ready documented approaches.
-- 473 standalone Swift source files, including 130 compile-only starters.
-- 130 reviewed shared-vector documents with 711 total valid, boundary, and excluded invalid cases.
-- 343 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
+- 142 Swift-ready pages.
+- 382 Swift-ready documented approaches.
+- 524 standalone Swift source files, including 142 compile-only starters.
+- 142 reviewed shared-vector documents with 782 total valid, boundary, and excluded invalid cases.
+- 382 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
+- 1D Dynamic Programming contributes 12 pages, 39 approaches, and 71 cases.
 - Binary Search contributes 8 pages, 23 approaches, and 64 cases.
 - Bit Manipulation contributes 7 pages, 21 approaches, and 57 cases.
 - Graphs contributes 19 pages, 39 approaches, and 76 cases.
@@ -108,4 +109,4 @@ Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Interv
 - Tries contributes 3 pages, 9 approaches, and 14 cases.
 - Two Pointers contributes 7 pages, 19 approaches, and 43 cases.
 
-The other 59 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.
+The other 47 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.

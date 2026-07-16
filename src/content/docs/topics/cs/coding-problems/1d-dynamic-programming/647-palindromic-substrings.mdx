@@ -5,16 +5,21 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './647-palindromic-substrings.py?raw';
 import practiceCodeTs from './647-palindromic-substrings.ts?raw';
 import practiceCodeGo from './647-palindromic-substrings.go?raw';
+import practiceCodeSwift from './647-palindromic-substrings.swift?raw';
+import approach1SwiftCode from './647-palindromic-substrings-approach1.swift?raw';
+import approach2SwiftCode from './647-palindromic-substrings-approach2.swift?raw';
+import approach3SwiftCode from './647-palindromic-substrings-approach3.swift?raw';
 import approach2PyCode from './647-palindromic-substrings-approach2.py?raw';
 import approach2TsCode from './647-palindromic-substrings-approach2.ts?raw';
 import approach2GoCode from './647-palindromic-substrings-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 647 · [Link](https://leetcode.com/problems/palindromic-substrings/) ·
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="palindromic-substrings-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="647-palindromic-substrings-swift" />
   </TabItem>
 </Tabs>
 
@@ -75,6 +83,9 @@ function countSubstrings(s: string): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="647-palindromic-substrings-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -132,6 +143,9 @@ function countSubstrings(s: string): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="647-palindromic-substrings-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -212,6 +226,9 @@ function countSubstrings(s: string): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="647-palindromic-substrings-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

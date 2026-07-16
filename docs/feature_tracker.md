@@ -50,6 +50,7 @@ As of this audit, the repo contains:
 
 ### Coding Problem Learning Features
 
+- **2026-07-16: 1D Dynamic Programming Swift category**: Added runnable Swift practice and approach tabs to all 12 1D Dynamic Programming pages, with 51 standalone sources covering all 39 documented approaches. The 71 reviewed vectors cover palindrome ties, stair recurrences, digit decoding, word segmentation, negative-product sign flips, linear and circular robbery, subsequence length, coin impossibility, subset targets, and rolling stair costs. Evidence: `src/content/docs/topics/cs/coding-problems/1d-dynamic-programming/`, `tools/coding-problem-vectors/vectors/1d-dynamic-programming/`, `tests/coding-problem-test-vectors.test.mjs`, `docs/data/swift-coding-problem-coverage.json`, `docs/swift-coding-problem-coverage.md`.
 - **2026-04-27: Complexity tables and runnable tests across coding problems**: Annotated every original coding problem with complexity tables and runnable tests, then added difficulty indexes. Evidence: `src/content/docs/topics/cs/coding-problems/`.
 - **2026-04-30: Cross-page link repair**: Fixed 228 broken cross-page links and added approach code blocks to all original coding problem pages. Evidence: commit `804c4c7`, commit `144c746`.
 - **2026-05-01 to 2026-05-04: Browser Python REPL**: Added a CodeMirror-powered Python REPL, code completion, runtime timing, large-input tests, and a five-second execution timeout. REPL means read evaluate print loop. Evidence: `src/components/PythonRepl.astro`, `scripts/test_build.py`, coding problem pages.

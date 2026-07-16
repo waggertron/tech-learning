@@ -5,16 +5,21 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './091-decode-ways.py?raw';
 import practiceCodeTs from './091-decode-ways.ts?raw';
 import practiceCodeGo from './091-decode-ways.go?raw';
+import practiceCodeSwift from './091-decode-ways.swift?raw';
+import approach1SwiftCode from './091-decode-ways-approach1.swift?raw';
+import approach2SwiftCode from './091-decode-ways-approach2.swift?raw';
+import approach3SwiftCode from './091-decode-ways-approach3.swift?raw';
 import approach2PyCode from './091-decode-ways-approach2.py?raw';
 import approach2TsCode from './091-decode-ways-approach2.ts?raw';
 import approach2GoCode from './091-decode-ways-approach2.go?raw';
@@ -44,6 +49,9 @@ LeetCode 91 · [Link](https://leetcode.com/problems/decode-ways/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="decode-ways-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="091-decode-ways-swift" />
   </TabItem>
 </Tabs>
 
@@ -108,6 +116,9 @@ func numDecodings(s string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="091-decode-ways-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -196,6 +207,9 @@ func numDecodings(s string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="091-decode-ways-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -288,6 +302,9 @@ func numDecodings(s string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="091-decode-ways-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

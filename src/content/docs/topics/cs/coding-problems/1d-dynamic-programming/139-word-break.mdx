@@ -5,16 +5,21 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './139-word-break.py?raw';
 import practiceCodeTs from './139-word-break.ts?raw';
 import practiceCodeGo from './139-word-break.go?raw';
+import practiceCodeSwift from './139-word-break.swift?raw';
+import approach1SwiftCode from './139-word-break-approach1.swift?raw';
+import approach2SwiftCode from './139-word-break-approach2.swift?raw';
+import approach3SwiftCode from './139-word-break-approach3.swift?raw';
 import approach2PyCode from './139-word-break-approach2.py?raw';
 import approach2TsCode from './139-word-break-approach2.ts?raw';
 import approach2GoCode from './139-word-break-approach2.go?raw';
@@ -44,6 +49,9 @@ LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="word-break-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="139-word-break-swift" />
   </TabItem>
 </Tabs>
 
@@ -117,6 +125,9 @@ func wordBreak(s string, wordDict []string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="139-word-break-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -209,6 +220,9 @@ func wordBreak(s string, wordDict []string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="139-word-break-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -304,6 +318,9 @@ func wordBreak(s string, wordDict []string) bool {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="139-word-break-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "322-coin-change"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "coins",
+        "codec": "int-array"
+      },
+      {
+        "name": "amount",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "coin_change"
+      },
+      "typescript": {
+        "function": "coinChange"
+      },
+      "go": {
+        "function": "coinChange"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "coinChange"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          5
+        ],
+        11
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "impossible",
+      "classification": "valid",
+      "arguments": [
+        [
+          2
+        ],
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "mixed-coins",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          5,
+          10,
+          1
+        ],
+        27
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "zero-amount",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-coins",
+      "classification": "invalid",
+      "arguments": [
+        [],
+        3
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one coin denomination is required."
+      }
+    },
+    {
+      "id": "zero-coin",
+      "classification": "invalid",
+      "arguments": [
+        [
+          0,
+          1
+        ],
+        2
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Coin denominations must be positive."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "746-min-cost-climbing-stairs"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "cost",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_cost_climbing_stairs"
+      },
+      "typescript": {
+        "function": "minCostClimbingStairs"
+      },
+      "go": {
+        "function": "minCostClimbingStairs"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minCostClimbingStairs"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "three-steps",
+      "classification": "valid",
+      "arguments": [
+        [
+          10,
+          15,
+          20
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 15
+      }
+    },
+    {
+      "id": "long-example",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          100,
+          1,
+          1,
+          1,
+          100,
+          1,
+          1,
+          100,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "free-steps",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "too-short",
+      "classification": "invalid",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published staircase contains at least two steps."
+      }
+    },
+    {
+      "id": "negative-cost",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          -1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Step costs are nonnegative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

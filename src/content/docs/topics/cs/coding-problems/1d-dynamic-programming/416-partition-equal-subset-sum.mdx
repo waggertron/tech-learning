@@ -5,16 +5,21 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-05-12
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
 import practiceCode from './416-partition-equal-subset-sum.py?raw';
 import practiceCodeTs from './416-partition-equal-subset-sum.ts?raw';
 import practiceCodeGo from './416-partition-equal-subset-sum.go?raw';
+import practiceCodeSwift from './416-partition-equal-subset-sum.swift?raw';
+import approach1SwiftCode from './416-partition-equal-subset-sum-approach1.swift?raw';
+import approach2SwiftCode from './416-partition-equal-subset-sum-approach2.swift?raw';
+import approach3SwiftCode from './416-partition-equal-subset-sum-approach3.swift?raw';
 import approach2PyCode from './416-partition-equal-subset-sum-approach2.py?raw';
 import approach2TsCode from './416-partition-equal-subset-sum-approach2.ts?raw';
 import approach2GoCode from './416-partition-equal-subset-sum-approach2.go?raw';
@@ -40,6 +45,9 @@ LeetCode 416 · [Link](https://leetcode.com/problems/partition-equal-subset-sum/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="partition-equal-subset-sum-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="416-partition-equal-subset-sum-swift" />
   </TabItem>
 </Tabs>
 
@@ -79,6 +87,9 @@ function canPartition(nums: number[]): boolean {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="416-partition-equal-subset-sum-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -144,6 +155,9 @@ function canPartition(nums: number[]): boolean {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="416-partition-equal-subset-sum-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -215,6 +229,9 @@ function canPartition(nums: number[]): boolean {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="416-partition-equal-subset-sum-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**

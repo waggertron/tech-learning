@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "070-climbing-stairs"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "climb_stairs"
+      },
+      "typescript": {
+        "function": "climbStairs"
+      },
+      "go": {
+        "function": "climbStairs"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "climbStairs"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-steps",
+      "classification": "valid",
+      "arguments": [
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "three-steps",
+      "classification": "valid",
+      "arguments": [
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "five-steps",
+      "classification": "valid",
+      "arguments": [
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 8
+      }
+    },
+    {
+      "id": "one-step",
+      "classification": "boundary",
+      "arguments": [
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "zero-steps",
+      "classification": "invalid",
+      "arguments": [
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published range starts at one step."
+      }
+    },
+    {
+      "id": "negative-steps",
+      "classification": "invalid",
+      "arguments": [
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The step count must be positive."
+      }
+    }
+  ],
+  "proofFixture": false
+}

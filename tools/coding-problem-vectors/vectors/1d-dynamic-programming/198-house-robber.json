@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "1d-dynamic-programming",
+    "slug": "198-house-robber"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "rob"
+      },
+      "typescript": {
+        "function": "rob"
+      },
+      "go": {
+        "function": "rob"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "rob"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "alternating",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "larger-example",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          7,
+          9,
+          3,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 12
+      }
+    },
+    {
+      "id": "all-zero",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-house",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "empty-array",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The published street contains at least one house."
+      }
+    },
+    {
+      "id": "negative-money",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          -1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "House values are nonnegative."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -73,7 +73,7 @@ S2.1 through S2.3, the browser runner, and one representative category form the 
 
 Category rollout checklist:
 
-- [ ] **S2.C01**: 1D dynamic programming, 12 pages.
+- [x] **S2.C01**: 1D dynamic programming, 12 pages. All 12 starters and 39 documented approaches are wired to Swift REPL tabs, share 71 reviewed vectors, compile under Swift 6 mode, and cover recursion, memoization, bottom-up tables, rolling state, palindrome expansion, subset targets, and negative-product sign changes.
 - [ ] **S2.C02**: 2D dynamic programming, 12 pages.
 - [ ] **S2.C03**: Advanced graphs, 8 pages.
 - [ ] **S2.C04**: Arrays and hashing, 18 pages.
