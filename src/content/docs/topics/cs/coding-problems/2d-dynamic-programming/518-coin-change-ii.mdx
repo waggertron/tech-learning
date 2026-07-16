@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './518-coin-change-ii-approach2.go?raw';
 import approach3PyCode from './518-coin-change-ii-approach3.py?raw';
 import approach3TsCode from './518-coin-change-ii-approach3.ts?raw';
 import approach3GoCode from './518-coin-change-ii-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './518-coin-change-ii.swift?raw';
+import approach1SwiftCode from './518-coin-change-ii-approach1.swift?raw';
+import approach2SwiftCode from './518-coin-change-ii-approach2.swift?raw';
+import approach3SwiftCode from './518-coin-change-ii-approach3.swift?raw';
 
 ## Problem
 
@@ -40,6 +45,9 @@ LeetCode 518 · [Link](https://leetcode.com/problems/coin-change-ii/) · *Medium
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="coin-change-ii-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="518-coin-change-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -72,6 +80,9 @@ function change(amount: number, coins: number[]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="518-coin-change-ii-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -157,6 +168,9 @@ Each unique `(i, remaining)` pair is computed once. There are `n * (A+1)` such p
     <GoRepl code={approach2GoCode} id="coin-change-ii-approach2-go" />
   </TabItem>
 
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="518-coin-change-ii-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Bottom-up 1-D DP with outer loop over coins (canonical)
@@ -223,6 +237,9 @@ With coin-outside, each coin is "introduced" once; by the time the inner loop fi
     <GoRepl code={approach3GoCode} id="coin-change-ii-approach3-go" />
   </TabItem>
 
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="518-coin-change-ii-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 ## Summary

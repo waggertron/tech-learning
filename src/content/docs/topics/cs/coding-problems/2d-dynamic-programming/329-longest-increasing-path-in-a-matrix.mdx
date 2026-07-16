@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, dfs, memoization, grid, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './329-longest-increasing-path-in-a-matrix-approach2
 import approach3PyCode from './329-longest-increasing-path-in-a-matrix-approach3.py?raw';
 import approach3TsCode from './329-longest-increasing-path-in-a-matrix-approach3.ts?raw';
 import approach3GoCode from './329-longest-increasing-path-in-a-matrix-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './329-longest-increasing-path-in-a-matrix.swift?raw';
+import approach1SwiftCode from './329-longest-increasing-path-in-a-matrix-approach1.swift?raw';
+import approach2SwiftCode from './329-longest-increasing-path-in-a-matrix-approach2.swift?raw';
+import approach3SwiftCode from './329-longest-increasing-path-in-a-matrix-approach3.swift?raw';
 
 ## Problem
 
@@ -40,6 +45,9 @@ LeetCode 329 · [Link](https://leetcode.com/problems/longest-increasing-path-in-
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="longest-increasing-path-in-a-matrix-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="329-longest-increasing-path-in-a-matrix-swift" />
   </TabItem>
 </Tabs>
 
@@ -89,6 +97,9 @@ function longestIncreasingPath(matrix: number[][]): number {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="329-longest-increasing-path-in-a-matrix-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -195,6 +206,9 @@ Strict inequality implies no cycles, the sequence of values on any path is stric
     <GoRepl code={approach2GoCode} id="longest-increasing-path-in-a-matrix-approach2-go" />
   </TabItem>
 
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="329-longest-increasing-path-in-a-matrix-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: Topological sort + BFS (iterative, avoids recursion)
@@ -309,6 +323,9 @@ Useful when recursion depth is a concern (very tall/wide matrices).
     <GoRepl code={approach3GoCode} id="longest-increasing-path-in-a-matrix-approach3-go" />
   </TabItem>
 
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="329-longest-increasing-path-in-a-matrix-approach3-swift" />
+  </TabItem>
 </Tabs>
 
 ## Summary

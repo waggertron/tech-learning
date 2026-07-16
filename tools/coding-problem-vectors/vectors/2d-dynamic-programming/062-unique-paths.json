@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "062-unique-paths"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "m",
+        "codec": "int"
+      },
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "unique_paths"
+      },
+      "typescript": {
+        "function": "uniquePaths"
+      },
+      "go": {
+        "function": "uniquePaths"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "uniquePaths"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "three-by-seven",
+      "classification": "valid",
+      "arguments": [
+        3,
+        7
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 28
+      }
+    },
+    {
+      "id": "three-by-two",
+      "classification": "valid",
+      "arguments": [
+        3,
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "single-row",
+      "classification": "valid",
+      "arguments": [
+        1,
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-column",
+      "classification": "valid",
+      "arguments": [
+        4,
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-cell",
+      "classification": "boundary",
+      "arguments": [
+        1,
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "zero-rows",
+      "classification": "invalid",
+      "arguments": [
+        0,
+        3
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Grid dimensions are positive."
+      }
+    },
+    {
+      "id": "negative-column",
+      "classification": "invalid",
+      "arguments": [
+        3,
+        -1
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Grid dimensions are positive."
+      }
+    }
+  ],
+  "proofFixture": false
+}

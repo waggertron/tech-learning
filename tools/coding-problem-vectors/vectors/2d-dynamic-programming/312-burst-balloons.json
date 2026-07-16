@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "312-burst-balloons"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "max_coins"
+      },
+      "typescript": {
+        "function": "maxCoins"
+      },
+      "go": {
+        "function": "maxCoins"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxCoins"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          1,
+          5,
+          8
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 167
+      }
+    },
+    {
+      "id": "two-balloons",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 10
+      }
+    },
+    {
+      "id": "three-ones",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "mixed-small",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          4,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 33
+      }
+    },
+    {
+      "id": "single-balloon",
+      "classification": "boundary",
+      "arguments": [
+        [
+          7
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 7
+      }
+    },
+    {
+      "id": "empty-balloons",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one balloon is provided."
+      }
+    },
+    {
+      "id": "zero-value",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          0,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Balloon values are positive integers."
+      }
+    }
+  ],
+  "proofFixture": false
+}

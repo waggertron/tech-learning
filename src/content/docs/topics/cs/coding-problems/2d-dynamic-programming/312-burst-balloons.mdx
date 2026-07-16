@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, interval-dp, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,11 @@ import practiceCodeGo from './312-burst-balloons.go?raw';
 import approach3PyCode from './312-burst-balloons-approach3.py?raw';
 import approach3TsCode from './312-burst-balloons-approach3.ts?raw';
 import approach3GoCode from './312-burst-balloons-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './312-burst-balloons.swift?raw';
+import approach1SwiftCode from './312-burst-balloons-approach1.swift?raw';
+import approach2SwiftCode from './312-burst-balloons-approach2.swift?raw';
+import approach3SwiftCode from './312-burst-balloons-approach3.swift?raw';
 
 ## Problem
 
@@ -41,12 +46,17 @@ LeetCode 312 · [Link](https://leetcode.com/problems/burst-balloons/) · *Hard*
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="burst-balloons-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="312-burst-balloons-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, try every order
 
 `n!` orderings. Feasible only for tiny inputs.
 
+<Tabs>
+  <TabItem label="Python">
 ```python
 from itertools import permutations
 
@@ -68,6 +78,11 @@ def max_coins(nums):
         best = max(best, coins)
     return best
 ```
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="312-burst-balloons-approach1-swift" />
+  </TabItem>
+</Tabs>
 
 For each permutation, scan inward to find the active left and right neighbors at burst time.
 
@@ -79,6 +94,8 @@ For each permutation, scan inward to find the active left and right neighbors at
 
 Picking the first to burst leaves a dependency where the next step depends on which balloons are gone, messy. The trick is to reframe.
 
+<Tabs>
+  <TabItem label="Python">
 ```python
 def max_coins(nums):
     if not nums:
@@ -92,6 +109,11 @@ def max_coins(nums):
         best = max(best, coins)
     return best
 ```
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="312-burst-balloons-approach2-swift" />
+  </TabItem>
+</Tabs>
 
 Correct, but the subproblem state is "the actual remaining sequence," which has exponentially many distinct values. Memoization on the **list itself** is unwieldy, and the recurrence doesn't simplify into a clean (i, j) pair the way "last to burst" does. Exponential time without memoization, and even with memoization the state space blows up.
 
@@ -195,6 +217,9 @@ When `k` is the last balloon in `(i, j)`, everything between `i` and `k`, and be
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="burst-balloons-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="312-burst-balloons-approach3-swift" />
   </TabItem>
 </Tabs>
 

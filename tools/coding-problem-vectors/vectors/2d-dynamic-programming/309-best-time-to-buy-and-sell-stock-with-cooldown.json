@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "309-best-time-to-buy-and-sell-stock-with-cooldown"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "prices",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "max_profit"
+      },
+      "typescript": {
+        "function": "maxProfit"
+      },
+      "go": {
+        "function": "maxProfit"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "maxProfit"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "cooldown-example",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          0,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "rising-after-drop",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          1,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "two-days",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "declining",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          2,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-price",
+      "classification": "boundary",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-prices",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one price is provided."
+      }
+    },
+    {
+      "id": "negative-price",
+      "classification": "invalid",
+      "arguments": [
+        [
+          -1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Prices are nonnegative integers."
+      }
+    }
+  ],
+  "proofFixture": false
+}

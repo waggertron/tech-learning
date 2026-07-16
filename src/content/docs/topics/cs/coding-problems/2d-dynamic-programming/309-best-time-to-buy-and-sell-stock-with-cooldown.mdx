@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, state-machine, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './309-best-time-to-buy-and-sell-stock-with-cooldown
 import approach3PyCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.py?raw';
 import approach3TsCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.ts?raw';
 import approach3GoCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './309-best-time-to-buy-and-sell-stock-with-cooldown.swift?raw';
+import approach1SwiftCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach1.swift?raw';
+import approach2SwiftCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.swift?raw';
+import approach3SwiftCode from './309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.swift?raw';
 
 ## Problem
 
@@ -46,6 +51,9 @@ LeetCode 309 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-s
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="best-time-to-buy-and-sell-stock-with-cooldown-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="309-best-time-to-buy-and-sell-stock-with-cooldown-swift" />
   </TabItem>
 </Tabs>
 
@@ -107,6 +115,9 @@ func maxProfit(prices []int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="309-best-time-to-buy-and-sell-stock-with-cooldown-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -196,6 +207,9 @@ The state space is `n * 2 * 2 = 4n` (day, holding bool, cooldown bool). Each sta
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="best-time-to-buy-and-sell-stock-with-cooldown-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="309-best-time-to-buy-and-sell-stock-with-cooldown-approach2-swift" />
   </TabItem>
 </Tabs>
 
@@ -295,6 +309,9 @@ The three states are nodes in a DAG:
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="best-time-to-buy-and-sell-stock-with-cooldown-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="309-best-time-to-buy-and-sell-stock-with-cooldown-approach3-swift" />
   </TabItem>
 </Tabs>
 

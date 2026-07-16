@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "010-regular-expression-matching"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "p",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_match"
+      },
+      "typescript": {
+        "function": "isMatch"
+      },
+      "go": {
+        "function": "isMatch"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isMatch"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "literal-mismatch",
+      "classification": "valid",
+      "arguments": [
+        "aa",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "star-repeat",
+      "classification": "valid",
+      "arguments": [
+        "aa",
+        "a*"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "wildcard-star",
+      "classification": "valid",
+      "arguments": [
+        "ab",
+        ".*"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "complex-miss",
+      "classification": "valid",
+      "arguments": [
+        "mississippi",
+        "mis*is*p*."
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "both-empty",
+      "classification": "boundary",
+      "arguments": [
+        "",
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "leading-star",
+      "classification": "invalid",
+      "arguments": [
+        "a",
+        "*a"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Patterns do not begin with an asterisk."
+      }
+    },
+    {
+      "id": "double-star",
+      "classification": "invalid",
+      "arguments": [
+        "a",
+        "a**"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Each asterisk follows a valid atom exactly once."
+      }
+    }
+  ],
+  "proofFixture": false
+}

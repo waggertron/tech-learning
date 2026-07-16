@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hard]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './072-edit-distance-approach2.go?raw';
 import approach3PyCode from './072-edit-distance-approach3.py?raw';
 import approach3TsCode from './072-edit-distance-approach3.ts?raw';
 import approach3GoCode from './072-edit-distance-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './072-edit-distance.swift?raw';
+import approach1SwiftCode from './072-edit-distance-approach1.swift?raw';
+import approach2SwiftCode from './072-edit-distance-approach2.swift?raw';
+import approach3SwiftCode from './072-edit-distance-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 72 · [Link](https://leetcode.com/problems/edit-distance/) · *Hard*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="edit-distance-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="072-edit-distance-swift" />
   </TabItem>
 </Tabs>
 
@@ -101,6 +109,9 @@ func minDistance(word1 string, word2 string) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="072-edit-distance-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -192,6 +203,9 @@ Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pair
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="edit-distance-approach2-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="072-edit-distance-approach2-swift" />
   </TabItem>
 </Tabs>
 
@@ -298,6 +312,9 @@ Every cell of the DP table is filled in $O(1)$ via three table lookups. The doub
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="edit-distance-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="072-edit-distance-approach3-swift" />
   </TabItem>
 </Tabs>
 

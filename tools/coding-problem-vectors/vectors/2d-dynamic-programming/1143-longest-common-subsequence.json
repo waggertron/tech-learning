@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "1143-longest-common-subsequence"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "text1",
+        "codec": "string"
+      },
+      {
+        "name": "text2",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "longest_common_subsequence"
+      },
+      "typescript": {
+        "function": "longestCommonSubsequence"
+      },
+      "go": {
+        "function": "longestCommonSubsequence"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "longestCommonSubsequence"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "shared-subsequence",
+      "classification": "valid",
+      "arguments": [
+        "abcde",
+        "ace"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "identical",
+      "classification": "valid",
+      "arguments": [
+        "abc",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "disjoint",
+      "classification": "valid",
+      "arguments": [
+        "abc",
+        "def"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-first",
+      "classification": "valid",
+      "arguments": [
+        "",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "both-empty",
+      "classification": "boundary",
+      "arguments": [
+        "",
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "uppercase",
+      "classification": "invalid",
+      "arguments": [
+        "ABC",
+        "abc"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use lowercase English letters."
+      }
+    },
+    {
+      "id": "digit",
+      "classification": "invalid",
+      "arguments": [
+        "a1",
+        "a"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use lowercase English letters."
+      }
+    }
+  ],
+  "proofFixture": false
+}

@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "518-coin-change-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "amount",
+        "codec": "int"
+      },
+      {
+        "name": "coins",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "change"
+      },
+      "typescript": {
+        "function": "change"
+      },
+      "go": {
+        "function": "change"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "change"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "standard",
+      "classification": "valid",
+      "arguments": [
+        5,
+        [
+          1,
+          2,
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "impossible",
+      "classification": "valid",
+      "arguments": [
+        3,
+        [
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "single-coin",
+      "classification": "valid",
+      "arguments": [
+        10,
+        [
+          10
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "multiple-combinations",
+      "classification": "valid",
+      "arguments": [
+        4,
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "zero-amount",
+      "classification": "boundary",
+      "arguments": [
+        0,
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "negative-amount",
+      "classification": "invalid",
+      "arguments": [
+        -1,
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The amount is nonnegative."
+      }
+    },
+    {
+      "id": "zero-coin",
+      "classification": "invalid",
+      "arguments": [
+        3,
+        [
+          0,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Coin denominations are positive."
+      }
+    }
+  ],
+  "proofFixture": false
+}

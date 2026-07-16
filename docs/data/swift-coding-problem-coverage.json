@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 524
+      "swift": 571
     },
     "languageCoverage": {
       "python": {
@@ -17,7 +17,7 @@
         "starterHarnesses": 183,
         "practiceTabs": 188,
         "practiceRepls": 189,
-        "approachTabs": 477,
+        "approachTabs": 479,
         "approachSources": 262,
         "approachHarnesses": 256
       },
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 142,
-        "starterHarnesses": 142,
-        "practiceTabs": 142,
-        "practiceRepls": 142,
-        "approachTabs": 382,
-        "approachSources": 382,
-        "approachHarnesses": 382
+        "starterFiles": 154,
+        "starterHarnesses": 154,
+        "practiceTabs": 154,
+        "practiceRepls": 154,
+        "approachTabs": 417,
+        "approachSources": 417,
+        "approachHarnesses": 417
       }
     },
-    "swiftReadyPages": 142,
-    "swiftReadyApproaches": 382,
-    "vectorReadyPages": 142
+    "swiftReadyPages": 154,
+    "swiftReadyApproaches": 417,
+    "vectorReadyPages": 154
   },
   "categories": [
     {
@@ -66,9 +66,9 @@
       "category": "2d-dynamic-programming",
       "pages": 12,
       "documentedApproaches": 35,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 12,
+      "swiftReadyApproaches": 35,
+      "vectorReadyPages": 12
     },
     {
       "category": "advanced-graphs",
@@ -2056,64 +2056,71 @@
       "page": "2d-dynamic-programming/010-regular-expression-matching.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/010-regular-expression-matching.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/010-regular-expression-matching.py",
         "typescript": "2d-dynamic-programming/010-regular-expression-matching.ts",
         "go": "2d-dynamic-programming/010-regular-expression-matching.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/010-regular-expression-matching.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Recursive",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/010-regular-expression-matching-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2121,7 +2128,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2130,21 +2138,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/010-regular-expression-matching-approach2.py",
             "typescript": "2d-dynamic-programming/010-regular-expression-matching-approach2.ts",
             "go": "2d-dynamic-programming/010-regular-expression-matching-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/010-regular-expression-matching-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2152,7 +2162,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2161,21 +2172,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/010-regular-expression-matching-approach3.py",
             "typescript": "2d-dynamic-programming/010-regular-expression-matching-approach3.ts",
             "go": "2d-dynamic-programming/010-regular-expression-matching-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/010-regular-expression-matching-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -2186,45 +2199,47 @@
       "page": "2d-dynamic-programming/062-unique-paths.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/062-unique-paths.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/062-unique-paths.py",
         "typescript": "2d-dynamic-programming/062-unique-paths.ts",
         "go": "2d-dynamic-programming/062-unique-paths.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/062-unique-paths.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -2232,23 +2247,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/062-unique-paths-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2256,7 +2276,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2266,21 +2287,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/062-unique-paths-approach2.py",
             "typescript": "2d-dynamic-programming/062-unique-paths-approach2.ts",
             "go": "2d-dynamic-programming/062-unique-paths-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/062-unique-paths-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2288,7 +2311,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2298,21 +2322,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/062-unique-paths-approach3.py",
             "typescript": "2d-dynamic-programming/062-unique-paths-approach3.ts",
             "go": "2d-dynamic-programming/062-unique-paths-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/062-unique-paths-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -2323,45 +2349,47 @@
       "page": "2d-dynamic-programming/072-edit-distance.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/072-edit-distance.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/072-edit-distance.py",
         "typescript": "2d-dynamic-programming/072-edit-distance.ts",
         "go": "2d-dynamic-programming/072-edit-distance.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/072-edit-distance.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -2369,23 +2397,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/072-edit-distance-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2393,7 +2426,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2402,21 +2436,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/072-edit-distance-approach2.py",
             "typescript": "2d-dynamic-programming/072-edit-distance-approach2.ts",
             "go": "2d-dynamic-programming/072-edit-distance-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/072-edit-distance-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2424,7 +2460,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2434,21 +2471,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/072-edit-distance-approach3.py",
             "typescript": "2d-dynamic-programming/072-edit-distance-approach3.ts",
             "go": "2d-dynamic-programming/072-edit-distance-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/072-edit-distance-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -2459,45 +2498,47 @@
       "page": "2d-dynamic-programming/097-interleaving-string.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/097-interleaving-string.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/097-interleaving-string.py",
         "typescript": "2d-dynamic-programming/097-interleaving-string.ts",
         "go": "2d-dynamic-programming/097-interleaving-string.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/097-interleaving-string.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -2505,23 +2546,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/097-interleaving-string-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2529,7 +2575,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2538,21 +2585,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/097-interleaving-string-approach2.py",
             "typescript": "2d-dynamic-programming/097-interleaving-string-approach2.ts",
             "go": "2d-dynamic-programming/097-interleaving-string-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/097-interleaving-string-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2560,7 +2609,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2570,21 +2620,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/097-interleaving-string-approach3.py",
             "typescript": "2d-dynamic-programming/097-interleaving-string-approach3.ts",
             "go": "2d-dynamic-programming/097-interleaving-string-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/097-interleaving-string-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -2595,45 +2647,47 @@
       "page": "2d-dynamic-programming/1143-longest-common-subsequence.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/1143-longest-common-subsequence.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/1143-longest-common-subsequence.py",
         "typescript": "2d-dynamic-programming/1143-longest-common-subsequence.ts",
         "go": "2d-dynamic-programming/1143-longest-common-subsequence.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/1143-longest-common-subsequence.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -2641,23 +2695,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/1143-longest-common-subsequence-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2665,7 +2724,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2675,21 +2735,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/1143-longest-common-subsequence-approach2.py",
             "typescript": "2d-dynamic-programming/1143-longest-common-subsequence-approach2.ts",
             "go": "2d-dynamic-programming/1143-longest-common-subsequence-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/1143-longest-common-subsequence-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2697,7 +2759,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2707,21 +2770,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/1143-longest-common-subsequence-approach3.py",
             "typescript": "2d-dynamic-programming/1143-longest-common-subsequence-approach3.ts",
             "go": "2d-dynamic-programming/1143-longest-common-subsequence-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/1143-longest-common-subsequence-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -2732,45 +2797,47 @@
       "page": "2d-dynamic-programming/115-distinct-subsequences.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/115-distinct-subsequences.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/115-distinct-subsequences.py",
         "typescript": "2d-dynamic-programming/115-distinct-subsequences.ts",
         "go": "2d-dynamic-programming/115-distinct-subsequences.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/115-distinct-subsequences.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -2778,23 +2845,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/115-distinct-subsequences-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2802,7 +2874,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2811,21 +2884,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/115-distinct-subsequences-approach2.py",
             "typescript": "2d-dynamic-programming/115-distinct-subsequences-approach2.ts",
             "go": "2d-dynamic-programming/115-distinct-subsequences-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/115-distinct-subsequences-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2833,7 +2908,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2843,21 +2919,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/115-distinct-subsequences-approach3.py",
             "typescript": "2d-dynamic-programming/115-distinct-subsequences-approach3.ts",
             "go": "2d-dynamic-programming/115-distinct-subsequences-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/115-distinct-subsequences-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -2868,45 +2946,47 @@
       "page": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.py",
         "typescript": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.ts",
         "go": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -2914,23 +2994,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -2938,7 +3023,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2947,21 +3033,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.py",
             "typescript": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.ts",
             "go": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -2969,7 +3057,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -2979,21 +3068,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.py",
             "typescript": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.ts",
             "go": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/309-best-time-to-buy-and-sell-stock-with-cooldown-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3004,81 +3095,97 @@
       "page": "2d-dynamic-programming/312-burst-balloons.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/312-burst-balloons.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/312-burst-balloons.py",
         "typescript": "2d-dynamic-programming/312-burst-balloons.ts",
         "go": "2d-dynamic-programming/312-burst-balloons.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/312-burst-balloons.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, try every order",
-          "languageTabs": [],
+          "languageTabs": [
+            "python",
+            "swift"
+          ],
           "codeFences": [
             "python"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/312-burst-balloons-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
           "title": "Recursive, pick the \"first to burst\" in each subproblem (wrong framing)",
-          "languageTabs": [],
+          "languageTabs": [
+            "python",
+            "swift"
+          ],
           "codeFences": [
             "python"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/312-burst-balloons-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -3086,7 +3193,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3096,21 +3204,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/312-burst-balloons-approach3.py",
             "typescript": "2d-dynamic-programming/312-burst-balloons-approach3.ts",
             "go": "2d-dynamic-programming/312-burst-balloons-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/312-burst-balloons-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3121,64 +3231,71 @@
       "page": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.py",
         "typescript": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.ts",
         "go": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "DFS from every cell",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -3186,7 +3303,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3195,21 +3313,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach2.py",
             "typescript": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach2.ts",
             "go": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -3217,7 +3337,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3226,21 +3347,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach3.py",
             "typescript": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach3.ts",
             "go": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/329-longest-increasing-path-in-a-matrix-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3251,64 +3374,71 @@
       "page": "2d-dynamic-programming/494-target-sum.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/494-target-sum.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/494-target-sum.py",
         "typescript": "2d-dynamic-programming/494-target-sum.ts",
         "go": "2d-dynamic-programming/494-target-sum.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/494-target-sum.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Recursive, try both signs per element",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/494-target-sum-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -3316,7 +3446,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3325,21 +3456,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/494-target-sum-approach2.py",
             "typescript": "2d-dynamic-programming/494-target-sum-approach2.ts",
             "go": "2d-dynamic-programming/494-target-sum-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/494-target-sum-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -3347,7 +3480,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3356,21 +3490,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/494-target-sum-approach3.py",
             "typescript": "2d-dynamic-programming/494-target-sum-approach3.ts",
             "go": "2d-dynamic-programming/494-target-sum-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/494-target-sum-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3381,64 +3517,71 @@
       "page": "2d-dynamic-programming/518-coin-change-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/518-coin-change-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/518-coin-change-ii.py",
         "typescript": "2d-dynamic-programming/518-coin-change-ii.ts",
         "go": "2d-dynamic-programming/518-coin-change-ii.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/518-coin-change-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Recursive with coin index",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/518-coin-change-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -3446,7 +3589,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3455,21 +3599,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/518-coin-change-ii-approach2.py",
             "typescript": "2d-dynamic-programming/518-coin-change-ii-approach2.ts",
             "go": "2d-dynamic-programming/518-coin-change-ii-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/518-coin-change-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -3477,7 +3623,8 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
@@ -3486,21 +3633,23 @@
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/518-coin-change-ii-approach3.py",
             "typescript": "2d-dynamic-programming/518-coin-change-ii-approach3.ts",
             "go": "2d-dynamic-programming/518-coin-change-ii-approach3.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/518-coin-change-ii-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -3511,43 +3660,45 @@
       "page": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 2
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.py",
         "typescript": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.ts",
         "go": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.go",
-        "swift": null
+        "swift": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee.swift"
       },
       "starterHarnesses": [
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -3555,23 +3706,28 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -3579,25 +3735,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
             "go"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.py",
             "typescript": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.ts",
             "go": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.go",
-            "swift": null
+            "swift": "2d-dynamic-programming/714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.swift"
           },
           "sourceHarnesses": [
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

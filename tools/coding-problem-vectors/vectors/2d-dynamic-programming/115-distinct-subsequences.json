@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "115-distinct-subsequences"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "t",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "num_distinct"
+      },
+      "typescript": {
+        "function": "numDistinct"
+      },
+      "go": {
+        "function": "numDistinct"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "numDistinct"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "rabbbit-rabbit",
+      "classification": "valid",
+      "arguments": [
+        "rabbbit",
+        "rabbit"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "babgbag-bag",
+      "classification": "valid",
+      "arguments": [
+        "babgbag",
+        "bag"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "same",
+      "classification": "valid",
+      "arguments": [
+        "abc",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "target-longer",
+      "classification": "valid",
+      "arguments": [
+        "abc",
+        "abcd"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-target",
+      "classification": "boundary",
+      "arguments": [
+        "abc",
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "uppercase",
+      "classification": "invalid",
+      "arguments": [
+        "ABC",
+        "A"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use English letters with documented case constraints."
+      }
+    },
+    {
+      "id": "digit",
+      "classification": "invalid",
+      "arguments": [
+        "a1",
+        "a"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs contain letters only."
+      }
+    }
+  ],
+  "proofFixture": false
+}

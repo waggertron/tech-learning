@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "097-interleaving-string"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s1",
+        "codec": "string"
+      },
+      {
+        "name": "s2",
+        "codec": "string"
+      },
+      {
+        "name": "s3",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_interleave"
+      },
+      "typescript": {
+        "function": "isInterleave"
+      },
+      "go": {
+        "function": "isInterleave"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isInterleave"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "valid-weave",
+      "classification": "valid",
+      "arguments": [
+        "aabcc",
+        "dbbca",
+        "aadbbcbcac"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "invalid-weave",
+      "classification": "valid",
+      "arguments": [
+        "aabcc",
+        "dbbca",
+        "aadbbbaccc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "empty-first",
+      "classification": "valid",
+      "arguments": [
+        "",
+        "abc",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "length-mismatch",
+      "classification": "valid",
+      "arguments": [
+        "a",
+        "b",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "all-empty",
+      "classification": "boundary",
+      "arguments": [
+        "",
+        "",
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "uppercase",
+      "classification": "invalid",
+      "arguments": [
+        "A",
+        "b",
+        "Ab"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use lowercase English letters."
+      }
+    },
+    {
+      "id": "digit",
+      "classification": "invalid",
+      "arguments": [
+        "a",
+        "1",
+        "a1"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use lowercase English letters."
+      }
+    }
+  ],
+  "proofFixture": false
+}

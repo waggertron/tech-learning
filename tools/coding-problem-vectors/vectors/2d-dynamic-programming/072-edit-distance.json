@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "072-edit-distance"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "word1",
+        "codec": "string"
+      },
+      {
+        "name": "word2",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "min_distance"
+      },
+      "typescript": {
+        "function": "minDistance"
+      },
+      "go": {
+        "function": "minDistance"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "minDistance"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "horse-ros",
+      "classification": "valid",
+      "arguments": [
+        "horse",
+        "ros"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "intention-execution",
+      "classification": "valid",
+      "arguments": [
+        "intention",
+        "execution"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "id": "same-word",
+      "classification": "valid",
+      "arguments": [
+        "abc",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "empty-source",
+      "classification": "valid",
+      "arguments": [
+        "",
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "both-empty",
+      "classification": "boundary",
+      "arguments": [
+        "",
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "uppercase",
+      "classification": "invalid",
+      "arguments": [
+        "ABC",
+        "abc"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use lowercase English letters."
+      }
+    },
+    {
+      "id": "non-letter",
+      "classification": "invalid",
+      "arguments": [
+        "a1",
+        "a"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Published inputs use lowercase English letters."
+      }
+    }
+  ],
+  "proofFixture": false
+}

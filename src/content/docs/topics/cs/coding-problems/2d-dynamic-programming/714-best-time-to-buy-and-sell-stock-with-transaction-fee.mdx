@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, dp, state-machine, greedy, medium]
 status: draft
 created: 2026-06-26
-updated: 2026-06-26
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,10 @@ import approach2GoCode from './714-best-time-to-buy-and-sell-stock-with-transact
 import approach3PyCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach3.py?raw';
 import approach3TsCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach3.ts?raw';
 import approach3GoCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './714-best-time-to-buy-and-sell-stock-with-transaction-fee.swift?raw';
+import approach1SwiftCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach1.swift?raw';
+import approach2SwiftCode from './714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2.swift?raw';
 
 ## Problem
 
@@ -50,6 +54,9 @@ LeetCode 714 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-s
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="buy-sell-fee-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="714-best-time-to-buy-and-sell-stock-with-transaction-fee-swift" />
   </TabItem>
 </Tabs>
 
@@ -120,6 +127,9 @@ func maxProfit(prices []int, fee int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Why charge the fee on the sell, not the buy**
@@ -197,6 +207,9 @@ func maxProfit(prices []int, fee int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="714-best-time-to-buy-and-sell-stock-with-transaction-fee-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 **The one subtle line: `buy = p` after a sell**

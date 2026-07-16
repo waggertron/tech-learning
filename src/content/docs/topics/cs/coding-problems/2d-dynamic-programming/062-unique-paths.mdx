@@ -5,7 +5,7 @@ parent: 2d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, grid, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './062-unique-paths-approach2.go?raw';
 import approach3PyCode from './062-unique-paths-approach3.py?raw';
 import approach3TsCode from './062-unique-paths-approach3.ts?raw';
 import approach3GoCode from './062-unique-paths-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './062-unique-paths.swift?raw';
+import approach1SwiftCode from './062-unique-paths-approach1.swift?raw';
+import approach2SwiftCode from './062-unique-paths-approach2.swift?raw';
+import approach3SwiftCode from './062-unique-paths-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 62 · [Link](https://leetcode.com/problems/unique-paths/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="unique-paths-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="062-unique-paths-swift" />
   </TabItem>
 </Tabs>
 
@@ -84,6 +92,9 @@ func uniquePaths(m int, n int) int {
 }
 ```
 </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach1SwiftCode} id="062-unique-paths-approach1-swift" />
+  </TabItem>
 </Tabs>
 
 **Where the time goes, line by line**
@@ -177,6 +188,9 @@ Every cell is visited once; each fill is a single addition. The double loop is t
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="unique-paths-approach2-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach2SwiftCode} id="062-unique-paths-approach2-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 3: 1-D rolling array (optimal space)
@@ -253,6 +267,9 @@ The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` tot
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="unique-paths-approach3-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={approach3SwiftCode} id="062-unique-paths-approach3-swift" />
   </TabItem>
 </Tabs>
 

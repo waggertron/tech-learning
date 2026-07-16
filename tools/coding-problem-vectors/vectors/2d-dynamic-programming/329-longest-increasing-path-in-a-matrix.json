@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "2d-dynamic-programming",
+    "slug": "329-longest-increasing-path-in-a-matrix"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "matrix",
+        "codec": "int-matrix"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "longest_increasing_path"
+      },
+      "typescript": {
+        "function": "longestIncreasingPath"
+      },
+      "go": {
+        "function": "longestIncreasingPath"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "longestIncreasingPath"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            9,
+            9,
+            4
+          ],
+          [
+            6,
+            6,
+            8
+          ],
+          [
+            2,
+            1,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "second-example",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            3,
+            4,
+            5
+          ],
+          [
+            3,
+            2,
+            6
+          ],
+          [
+            2,
+            2,
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "id": "single-row",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            1,
+            2,
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "flat",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "single-cell",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            1
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty-matrix",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The matrix has at least one row and column."
+      }
+    },
+    {
+      "id": "ragged-matrix",
+      "classification": "invalid",
+      "arguments": [
+        [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every matrix row has the same length."
+      }
+    }
+  ],
+  "proofFixture": false
+}
