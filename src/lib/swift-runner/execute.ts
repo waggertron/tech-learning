@@ -45,7 +45,7 @@ export async function executeSwift(
       options.onUpdate?.(job);
       if (isTerminalSwiftJob(job)) return job;
 
-      await waitForPoll(options.pollIntervalMs ?? 100, options.signal);
+      await waitForPoll(options.pollIntervalMs ?? 250, options.signal);
     }
   } catch (error) {
     if (options.signal?.aborted) return client.cancelJob(created.jobID);

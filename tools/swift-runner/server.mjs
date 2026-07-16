@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { createServer } from "node:http";
 import { pathToFileURL } from "node:url";
 import { EXPECTED_TOOLCHAIN, runSwiftJob } from "./runner.mjs";
@@ -11,6 +11,7 @@ const TOOLCHAIN_VERSION = "6.3.3";
 const MAX_SOURCE_BYTES = 64 * 1024;
 const MAX_BODY_BYTES = MAX_SOURCE_BYTES + 4 * 1024;
 const DEFAULT_RETENTION_MS = 5 * 60 * 1000;
+const DEFAULT_RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const TERMINAL_STATUSES = new Set([
   "succeeded",
   "compile_failed",
@@ -36,8 +37,8 @@ const capabilities = Object.freeze({
   toolchain: TOOLCHAIN_VERSION,
 });
 
-function httpError(status, message) {
-  return Object.assign(new Error(message), { status });
+function httpError(status, message, details = {}) {
+  return Object.assign(new Error(message), { status, ...details });
 }
 
 function isObject(value) {
@@ -87,6 +88,11 @@ function validateJobRequest(value) {
 async function readJsonBody(request) {
   if (!request.headers["content-type"]?.toLowerCase().startsWith("application/json")) {
     throw httpError(415, "Content-Type must be application/json.");
+  }
+
+  const contentLength = Number(request.headers["content-length"]);
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    throw httpError(413, `Request body exceeds ${MAX_BODY_BYTES} bytes.`);
   }
 
   const chunks = [];
@@ -183,15 +189,44 @@ function defaultOrigins() {
   return ["http://127.0.0.1:4321", "http://localhost:4321"];
 }
 
+function digestJobRequest(request) {
+  const hash = createHash("sha256");
+  hash.update(request.harnessID);
+  hash.update("\0");
+  hash.update(request.requestID);
+  hash.update("\0");
+  hash.update(request.toolchain);
+  hash.update("\0");
+  hash.update(request.source);
+  return hash.digest("hex");
+}
+
+function defaultClientID(request) {
+  return request.socket.remoteAddress || "unknown-local-client";
+}
+
+function retryAfterSeconds(milliseconds) {
+  return Math.max(1, Math.ceil(milliseconds / 1000));
+}
+
 export function createSwiftRunnerServer(options = {}) {
   const executeJob = options.executeJob ?? runSwiftJob;
+  const resolveClientID = options.resolveClientID ?? defaultClientID;
   const allowedOrigins = new Set(options.allowedOrigins ?? defaultOrigins());
   const maxConcurrentJobs = options.maxConcurrentJobs ?? 2;
   const maxQueuedJobs = options.maxQueuedJobs ?? 16;
   const maxStoredJobs = options.maxStoredJobs ?? 256;
+  const maxOutstandingJobsPerClient = options.maxOutstandingJobsPerClient ?? 2;
+  const maxPollsPerWindow = options.maxPollsPerWindow ?? 300;
+  const maxSubmissionsPerWindow = options.maxSubmissionsPerWindow ?? 12;
+  const pollWindowMs = options.pollWindowMs ?? DEFAULT_RATE_LIMIT_WINDOW_MS;
+  const submissionWindowMs = options.submissionWindowMs ?? DEFAULT_RATE_LIMIT_WINDOW_MS;
+  const requireOrigin = options.requireOrigin ?? false;
   const retentionMs = options.retentionMs ?? DEFAULT_RETENTION_MS;
   const sweepIntervalMs = options.sweepIntervalMs ?? Math.min(retentionMs, 30_000);
   const jobs = new Map();
+  const idempotency = new Map();
+  const rateWindows = new Map();
   const queue = [];
   let activeJobs = 0;
   let closing = false;
@@ -205,8 +240,43 @@ export function createSwiftRunnerServer(options = {}) {
 
   function sweepExpiredJobs(now = Date.now()) {
     for (const [jobID, job] of jobs) {
-      if (job.terminalAt !== null && now - job.terminalAt >= retentionMs) jobs.delete(jobID);
+      if (job.terminalAt !== null && now - job.terminalAt >= retentionMs) {
+        jobs.delete(jobID);
+        idempotency.delete(job.idempotencyKey);
+      }
     }
+    for (const [clientID, windows] of rateWindows) {
+      windows.polls = windows.polls.filter((timestamp) => now - timestamp < pollWindowMs);
+      windows.submissions = windows.submissions.filter(
+        (timestamp) => now - timestamp < submissionWindowMs,
+      );
+      if (windows.polls.length === 0 && windows.submissions.length === 0) {
+        rateWindows.delete(clientID);
+      }
+    }
+  }
+
+  function consumeRateLimit(clientID, kind, maximum, windowMs) {
+    const now = Date.now();
+    const windows = rateWindows.get(clientID) ?? { polls: [], submissions: [] };
+    const timestamps = windows[kind].filter((timestamp) => now - timestamp < windowMs);
+    windows[kind] = timestamps;
+    rateWindows.set(clientID, windows);
+    if (timestamps.length >= maximum) {
+      const retryInMs = windowMs - (now - timestamps[0]);
+      throw httpError(429, `Swift runner ${kind} rate limit exceeded.`, {
+        retryAfter: retryAfterSeconds(retryInMs),
+      });
+    }
+    timestamps.push(now);
+  }
+
+  function outstandingJobsForClient(clientID) {
+    let count = 0;
+    for (const job of jobs.values()) {
+      if (job.clientID === clientID && job.terminalAt === null) count += 1;
+    }
+    return count;
   }
 
   async function runJob(job) {
@@ -252,43 +322,64 @@ export function createSwiftRunnerServer(options = {}) {
     }
   }
 
-  function createJob(request) {
+  function createJob(request, clientID) {
     sweepExpiredJobs();
     if (closing) throw httpError(503, "The local Swift runner is shutting down.");
+
+    const idempotencyKey = `${clientID}\0${request.requestID}`;
+    const requestDigest = digestJobRequest(request);
+    const existingJobID = idempotency.get(idempotencyKey);
+    if (existingJobID) {
+      const existingJob = jobs.get(existingJobID);
+      if (existingJob?.requestDigest !== requestDigest) {
+        throw httpError(409, "requestID was already used with different Swift job input.");
+      }
+      if (existingJob) return { job: existingJob, reused: true };
+      idempotency.delete(idempotencyKey);
+    }
+
     if (jobs.size >= maxStoredJobs) {
       throw httpError(503, "The local Swift runner job store is full.");
+    }
+    if (outstandingJobsForClient(clientID) >= maxOutstandingJobsPerClient) {
+      throw httpError(429, "This client already has the maximum number of active Swift jobs.");
     }
     if (activeJobs >= maxConcurrentJobs && queue.length >= maxQueuedJobs) {
       throw httpError(429, "The local Swift runner queue is full.");
     }
+    consumeRateLimit(clientID, "submissions", maxSubmissionsPerWindow, submissionWindowMs);
 
     const jobID = randomUUID();
     const job = {
       active: false,
+      clientID,
       controller: new AbortController(),
       harnessID: request.harnessID,
+      idempotencyKey,
       jobID,
       requestID: request.requestID,
+      requestDigest,
       snapshot: blankSnapshot(jobID, request.harnessID),
       source: request.source,
       task: null,
       terminalAt: null,
     };
     jobs.set(jobID, job);
+    idempotency.set(idempotencyKey, jobID);
     queue.push(jobID);
     drainQueue();
-    return job;
+    return { job, reused: false };
   }
 
-  function requireJob(jobID) {
+  function requireJob(jobID, clientID) {
     sweepExpiredJobs();
     const job = jobs.get(jobID);
-    if (!job) throw httpError(404, "Swift job not found.");
+    if (!job || job.clientID !== clientID) throw httpError(404, "Swift job not found.");
     return job;
   }
 
-  function cancelJob(jobID) {
-    const job = requireJob(jobID);
+  function cancelJob(jobID, clientID) {
+    const job = requireJob(jobID, clientID);
     if (job.terminalAt !== null) return job;
     const queuedIndex = queue.indexOf(jobID);
     if (queuedIndex >= 0) queue.splice(queuedIndex, 1);
@@ -302,6 +393,7 @@ export function createSwiftRunnerServer(options = {}) {
     response.setHeader("Cache-Control", "no-store");
     response.setHeader("Content-Type", "application/json; charset=utf-8");
     response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("Referrer-Policy", "no-referrer");
     const origin = request.headers.origin;
     if (origin && allowedOrigins.has(origin)) {
       response.setHeader("Access-Control-Allow-Origin", origin);
@@ -309,14 +401,19 @@ export function createSwiftRunnerServer(options = {}) {
     }
   }
 
-  function sendJson(request, response, status, body) {
+  function sendJson(request, response, status, body, headers = {}) {
     applyResponseHeaders(request, response);
+    for (const [name, value] of Object.entries(headers)) response.setHeader(name, value);
     response.writeHead(status);
     response.end(JSON.stringify(body));
   }
 
   async function handleRequest(request, response) {
     const origin = request.headers.origin;
+    if (requireOrigin && !origin) {
+      sendJson(request, response, 403, { error: "Origin is required." });
+      return;
+    }
     if (origin && !allowedOrigins.has(origin)) {
       sendJson(request, response, 403, { error: "Origin is not allowed." });
       return;
@@ -332,6 +429,11 @@ export function createSwiftRunnerServer(options = {}) {
     }
 
     const url = new URL(request.url ?? "/", "http://127.0.0.1");
+    const resolvedClientID = resolveClientID(request);
+    if (typeof resolvedClientID !== "string" || resolvedClientID.length < 1 || resolvedClientID.length > 200) {
+      throw httpError(400, "The Swift runner could not identify this client.");
+    }
+    const clientID = resolvedClientID;
     if (request.method === "GET" && url.pathname === "/v1/swift/capabilities") {
       sendJson(request, response, 200, capabilities);
       return;
@@ -339,29 +441,31 @@ export function createSwiftRunnerServer(options = {}) {
 
     if (request.method === "POST" && url.pathname === "/v1/swift/jobs") {
       const jobRequest = validateJobRequest(await readJsonBody(request));
-      const job = createJob(jobRequest);
-      sendJson(request, response, 202, { jobID: job.jobID });
+      const { job, reused } = createJob(jobRequest, clientID);
+      sendJson(request, response, reused ? 200 : 202, { jobID: job.jobID });
       return;
     }
 
     const jobID = parseJobID(url.pathname);
     if (request.method === "GET" && jobID !== null) {
-      sendJson(request, response, 200, requireJob(jobID).snapshot);
+      consumeRateLimit(clientID, "polls", maxPollsPerWindow, pollWindowMs);
+      sendJson(request, response, 200, requireJob(jobID, clientID).snapshot);
       return;
     }
     if (request.method === "DELETE" && jobID !== null) {
-      sendJson(request, response, 200, cancelJob(jobID).snapshot);
+      sendJson(request, response, 200, cancelJob(jobID, clientID).snapshot);
       return;
     }
 
     sendJson(request, response, 404, { error: "Route not found." });
   }
 
-  const server = createServer((request, response) => {
+  const server = createServer({ maxHeaderSize: 8 * 1024 }, (request, response) => {
     void handleRequest(request, response).catch((error) => {
       const status = Number.isInteger(error?.status) ? error.status : 500;
       const message = status === 500 ? "The local Swift runner failed." : error.message;
-      if (!response.headersSent) sendJson(request, response, status, { error: message });
+      const headers = error?.retryAfter ? { "Retry-After": error.retryAfter } : undefined;
+      if (!response.headersSent) sendJson(request, response, status, { error: message }, headers);
       else response.end();
     });
   });
@@ -393,6 +497,8 @@ export function createSwiftRunnerServer(options = {}) {
       );
       await serverClosed;
       jobs.clear();
+      idempotency.clear();
+      rateWindows.clear();
       queue.length = 0;
     },
 

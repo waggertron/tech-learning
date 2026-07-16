@@ -19,7 +19,9 @@ The local Swift runner provides three separate evidence layers: a credential-fre
 - Service tests: `tests/swift-runner-service/server.test.mjs`
 - Executor tests: `tests/swift-runner-executor/runner.test.mjs`
 - Isolation contract: `docs/swift-runner-isolation.md`
+- Public API policy: `docs/swift-runner-public-api.md`
 - Local service decision: `docs/adr/2026-07-15-swift-runner-local-service.md`
+- Production deployment decision: `docs/adr/2026-07-15-swift-runner-production-deployment.md`
 
 ## Commands
 
@@ -88,7 +90,7 @@ The browser validator serves only `tests/swift-repl/browser-fixture/`. It checks
 
 The polling coordinator calls the same port for the HTTP adapter and deterministic mock. An abort signal calls `cancelJob`; it does not merely abandon the browser request.
 
-The HTTP adapter validates every service response with Zod before the response reaches UI state. It sends no authorization header or embedded credential. The local service validates the request again, accepts only the known harness and exact toolchain, bounds active and queued jobs, and rejects extra fields before executor allocation. A future public endpoint still needs production quotas, client ownership controls, observability, and the deployment trust boundary required by Gate 1B.
+The HTTP adapter validates every service response with Zod before the response reaches UI state. It sends no authorization header or embedded credential. The shared service validates the request again, accepts only the known harness and exact toolchain, rejects extra fields before executor allocation, deduplicates repeated request IDs, scopes jobs to a client identity, and bounds per-client submissions, outstanding jobs, polling, global active work, and queued work. Local development identifies the client by its loopback socket. A production adapter must supply trustworthy edge-derived identity and the deployment trust boundary required by Gate 1B.
 
 ## Browser Configuration
 
@@ -145,4 +147,4 @@ The real executor creates a unique container and two tmpfs workspaces per job. I
 
 ## Production Boundary
 
-The loopback service is a local development adapter, not a live deployment. It has no public bind mode. Gate 1B separately tracks the production host decision, public quotas, ownership and abuse controls, retention, metrics, alerts, spending limits, TLS, rollback, emergency shutdown, and proof from the published GitHub Pages origin.
+The loopback service is a local development adapter, not a live deployment. It has no public bind mode. The shared coordinator policy now covers R2.3 quotas, ownership, idempotency, polling, queueing, and request rejection. Gate 1B still tracks the provider identity resolver, isolated worker boundary, retention proof, metrics, alerts, spending limits, TLS, rollback, emergency shutdown, and proof from the published GitHub Pages origin.

@@ -45,10 +45,12 @@ async function postJob(baseURL, body = validRequest, headers = {}) {
   });
 }
 
-async function waitForTerminal(baseURL, jobID) {
+async function waitForTerminal(baseURL, jobID, headers = {}) {
   const deadline = Date.now() + 2_000;
   while (Date.now() < deadline) {
-    const response = await fetch(`${baseURL}/v1/swift/jobs/${encodeURIComponent(jobID)}`);
+    const response = await fetch(`${baseURL}/v1/swift/jobs/${encodeURIComponent(jobID)}`, {
+      headers,
+    });
     const snapshot = await response.json();
     if ([
       "succeeded",
@@ -238,4 +240,135 @@ test("bounds active work and rejects jobs beyond the configured queue", async ()
 
   const secondJob = await second.json();
   await waitForTerminal(baseURL, secondJob.jobID);
+});
+
+test("deduplicates identical request IDs and rejects conflicting reuse", async () => {
+  let executions = 0;
+  const { baseURL } = await startRunner({
+    executeJob: async () => {
+      executions += 1;
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      return successfulResult();
+    },
+  });
+
+  const firstResponse = await postJob(baseURL);
+  assert.equal(firstResponse.status, 202);
+  const first = await firstResponse.json();
+
+  const duplicateResponse = await postJob(baseURL);
+  assert.equal(duplicateResponse.status, 200);
+  assert.deepEqual(await duplicateResponse.json(), first);
+
+  const conflict = await postJob(baseURL, { ...validRequest, source: 'print("different")' });
+  assert.equal(conflict.status, 409);
+  assert.match((await conflict.json()).error, /different Swift job input/);
+
+  await waitForTerminal(baseURL, first.jobID);
+  assert.equal(executions, 1);
+});
+
+test("enforces submission and polling windows before allocating more work", async () => {
+  let executions = 0;
+  const { baseURL } = await startRunner({
+    executeJob: async () => {
+      executions += 1;
+      return successfulResult();
+    },
+    maxPollsPerWindow: 1,
+    maxSubmissionsPerWindow: 1,
+    pollWindowMs: 5_000,
+    submissionWindowMs: 5_000,
+  });
+
+  const firstResponse = await postJob(baseURL);
+  const first = await firstResponse.json();
+  const secondResponse = await postJob(baseURL, {
+    ...validRequest,
+    requestID: "request-rate-limited",
+  });
+  assert.equal(secondResponse.status, 429);
+  assert.equal(secondResponse.headers.get("retry-after"), "5");
+
+  const firstPoll = await fetch(`${baseURL}/v1/swift/jobs/${first.jobID}`);
+  assert.equal(firstPoll.status, 200);
+  const secondPoll = await fetch(`${baseURL}/v1/swift/jobs/${first.jobID}`);
+  assert.equal(secondPoll.status, 429);
+  assert.equal(secondPoll.headers.get("retry-after"), "5");
+  assert.equal(executions, 1);
+});
+
+test("keeps job reads and cancellation scoped to the creating client", async () => {
+  let finishExecution;
+  const { baseURL } = await startRunner({
+    executeJob: () => new Promise((resolve) => { finishExecution = resolve; }),
+    resolveClientID: (request) => String(request.headers["x-test-client"] ?? "missing"),
+  });
+  const aliceHeaders = { "X-Test-Client": "alice" };
+  const bobHeaders = { "X-Test-Client": "bob" };
+
+  const created = await (await postJob(baseURL, validRequest, aliceHeaders)).json();
+  const hiddenRead = await fetch(`${baseURL}/v1/swift/jobs/${created.jobID}`, {
+    headers: bobHeaders,
+  });
+  assert.equal(hiddenRead.status, 404);
+  const hiddenCancel = await fetch(`${baseURL}/v1/swift/jobs/${created.jobID}`, {
+    headers: bobHeaders,
+    method: "DELETE",
+  });
+  assert.equal(hiddenCancel.status, 404);
+
+  const ownerRead = await fetch(`${baseURL}/v1/swift/jobs/${created.jobID}`, {
+    headers: aliceHeaders,
+  });
+  assert.equal(ownerRead.status, 200);
+  finishExecution(successfulResult());
+  await waitForTerminal(baseURL, created.jobID, aliceHeaders);
+});
+
+test("caps outstanding jobs per client without blocking a different client", async () => {
+  const resolvers = [];
+  const { baseURL } = await startRunner({
+    executeJob: () => new Promise((resolve) => resolvers.push(resolve)),
+    maxConcurrentJobs: 2,
+    maxOutstandingJobsPerClient: 1,
+    resolveClientID: (request) => String(request.headers["x-test-client"] ?? "missing"),
+  });
+
+  const aliceFirst = await postJob(baseURL, validRequest, { "X-Test-Client": "alice" });
+  const aliceSecond = await postJob(baseURL, {
+    ...validRequest,
+    requestID: "alice-second",
+  }, { "X-Test-Client": "alice" });
+  const bobFirst = await postJob(baseURL, {
+    ...validRequest,
+    requestID: "bob-first",
+  }, { "X-Test-Client": "bob" });
+  assert.equal(aliceFirst.status, 202);
+  assert.equal(aliceSecond.status, 429);
+  assert.equal(bobFirst.status, 202);
+
+  for (const resolve of resolvers) resolve(successfulResult());
+});
+
+test("can require an exact browser origin for every route", async () => {
+  const origin = "https://waggertron.github.io";
+  const { baseURL } = await startRunner({
+    allowedOrigins: [origin],
+    executeJob: async () => successfulResult(),
+    requireOrigin: true,
+  });
+
+  const missing = await fetch(`${baseURL}/v1/swift/capabilities`);
+  assert.equal(missing.status, 403);
+  const denied = await fetch(`${baseURL}/v1/swift/capabilities`, {
+    headers: { Origin: "https://example.invalid" },
+  });
+  assert.equal(denied.status, 403);
+  const allowed = await fetch(`${baseURL}/v1/swift/capabilities`, {
+    headers: { Origin: origin },
+  });
+  assert.equal(allowed.status, 200);
+  assert.equal(allowed.headers.get("access-control-allow-origin"), origin);
+  assert.equal(allowed.headers.get("referrer-policy"), "no-referrer");
 });
