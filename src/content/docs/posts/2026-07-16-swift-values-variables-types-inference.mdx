@@ -1,0 +1,360 @@
+---
+title: "Zero to iOS Hero 4: Values, variables, types, and inference"
+description: "Use constants, variables, type annotations, and Swift's inference rules to model facts without reaching for mutation or Any."
+date: 2026-07-16
+tags: [swift, ios, types, type-inference]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-values-variables-types-inference/
+series:
+  slug: zero-to-ios-hero
+  order: 4
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import fieldNoteCode from './2026-07-16-swift-values-variables-types-inference.swift?raw';
+
+This is part 4 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+Every Swift program begins by giving names to values. Those names do more than save typing. They state which facts remain fixed, which state may change, and which operations are valid.
+
+Swift checks those decisions before the program runs. That is the first major safety boundary in the language.
+
+## The four parts of a declaration
+
+Start with one line:
+
+```swift
+let title: String = "Fog over the north ridge"
+```
+
+It contains four decisions:
+
+| Part | Meaning |
+| --- | --- |
+| `let` | Bind the name once |
+| `title` | Give the value a readable name |
+| `String` | Accept a text value |
+| The quoted text | Supply the initial value |
+
+The type annotation is explicit here, but Swift can infer it from the initializer:
+
+```swift
+let title = "Fog over the north ridge"
+```
+
+Both declarations create a constant named `title` whose type is `String`.
+
+## A constant is a stable binding
+
+Use `let` when a name should receive one value:
+
+```swift
+let title = "Fog over the north ridge"
+let capturedAt = "2026-07-16T07:30:00-07:00"
+```
+
+Reassignment is a compile-time error:
+
+```swift
+let title = "Fog over the north ridge"
+title = "Sunset at the lake" // Error: cannot assign to value
+```
+
+The error is useful. It says the implementation is trying to change something the model declared stable.
+
+`let` does not mean that every object reachable from a constant is deeply immutable. That distinction matters later when classes and reference identity enter the course. For the value types used here, treating `let` as a fixed fact is the right starting model.
+
+## A variable permits reassignment
+
+Use `var` when the named value is expected to change:
+
+```swift
+var rating = 3
+rating = 4
+```
+
+The declaration permits reassignment, but it does not erase the type. `rating` remains an `Int`:
+
+```swift
+var rating = 3
+rating = "excellent" // Error: String cannot be assigned to Int
+```
+
+Mutation is a capability. Grant it because the model needs it, not because typing `var` feels familiar.
+
+## Run the Field Notes checkpoint
+
+This example models four fields without an app framework:
+
+<SwiftRepl code={fieldNoteCode} id="swift-values-variables-types-inference" />
+
+Expected output:
+
+```text
+Fog over the north ridge | 2026-07-16T07:30:00-07:00 | rating 4/5 | favorite true
+```
+
+The editor runs against Swift 6.3.3 on Linux when the runner is available. This program uses only the Swift standard library, so it fits that environment. It does not prove an iOS view, an Apple SDK date type, persistence, or device behavior.
+
+The names show two categories:
+
+- `title` and `capturedAt` are facts about this note, so they use `let`.
+- `rating` and `isFavorite` change during the example, so they use `var`.
+
+The `precondition` protects the rating invariant at runtime. The compiler protects the types before runtime. Those are different safety layers.
+
+## Every value has a type
+
+Swift's common standard-library value types include:
+
+| Type | Represents | Example |
+| --- | --- | --- |
+| `String` | Text with zero or more characters | `"Redwood trail"` |
+| `Character` | One extended grapheme cluster | `"🌲"` |
+| `Int` | A signed integer using the platform's native word size | `4` |
+| `Double` | A 64-bit floating-point value | `4.5` |
+| `Bool` | `true` or `false` | `true` |
+
+These are named types with behavior, not unstructured primitive boxes. A `String` can be queried and transformed. An `Int` has minimum and maximum values. A `Bool` participates in conditions.
+
+The type determines which operations make sense:
+
+```swift
+let title = "Ridge"
+let rating = 4
+
+let heading = title.uppercased()
+let nextRating = rating + 1
+```
+
+Swapping those operations would be meaningless, so the compiler rejects them.
+
+## Type inference reads the initializer
+
+When an initializer supplies enough context, Swift infers the type:
+
+```swift
+let count = 3          // Int
+let distance = 2.75   // Double
+let favorite = false  // Bool
+let marker = "🌲"     // String, not Character
+```
+
+A one-character string literal defaults to `String`. Add context when `Character` is the intended type:
+
+```swift
+let marker: Character = "🌲"
+```
+
+Inference does not make Swift dynamically typed. The compiler determines a concrete type, then checks later uses against it.
+
+```text
+initializer -> inferred type -> checked operations
+```
+
+The type is known at compile time even when it is not written beside the name.
+
+## Context can guide a literal
+
+Literals begin as source notation. Context determines the concrete type that accepts them:
+
+```swift
+let whole: Int = 4
+let precise: Double = 4
+let small: UInt8 = 4
+```
+
+The literal is spelled `4` in every line, but the surrounding annotation asks for a different type.
+
+Swift also infers types through an expression:
+
+```swift
+let score = 3 + 0.5 // Double
+```
+
+The floating-point literal gives the expression enough context to produce a `Double`. This does not mean an existing `Int` variable will silently convert to `Double`. Explicit numeric conversion belongs to the next post.
+
+## Add annotations at important boundaries
+
+Inference keeps local code compact. An annotation is valuable when it communicates a contract, resolves ambiguity, or prevents an unintended inferred type.
+
+```swift
+let capturedAt: String = "2026-07-16T07:30:00-07:00"
+var isFavorite: Bool = false
+let maximumRating: UInt8 = 5
+```
+
+Useful annotation sites include:
+
+- A declaration without an initializer.
+- A public or cross-module API whose contract should be obvious.
+- A literal whose intended type differs from the default.
+- An empty collection with no elements from which to infer types.
+- A domain boundary where storage width or external representation matters.
+
+Avoid annotating every obvious local value. Noise can hide the annotations that carry real design information.
+
+## Declaration without immediate initialization
+
+A variable can be declared before its value is chosen, but it needs an explicit type:
+
+```swift
+let displayTitle: String
+
+if isFavorite {
+    displayTitle = "★ \(title)"
+} else {
+    displayTitle = title
+}
+
+print(displayTitle)
+```
+
+The compiler accepts this constant because every path assigns it exactly once before use. This is definite initialization: the compiler proves the binding has a value when read.
+
+If one branch forgot the assignment, compilation would fail. Swift does not fill an uninitialized `String` with an empty string or a mystery value.
+
+## Scope controls where a name exists
+
+A declaration is visible only within its scope:
+
+```swift
+let title = "Fog over the north ridge"
+
+if title.count > 10 {
+    let label = "Long title"
+    print(label)
+}
+
+// print(label) // Error: label is out of scope
+```
+
+Narrow scope reduces the number of places that can use or mutate a name. Keep temporary values close to the operation they explain.
+
+Swift allows a nested scope to introduce another name that shadows an outer name, but casual shadowing makes code harder to follow. Prefer a distinct name when both meanings matter.
+
+## Why `Any` is the wrong escape hatch
+
+`Any` can hold an instance of any type:
+
+```swift
+var mystery: Any = "Fog"
+mystery = 4
+mystery = true
+```
+
+That flexibility moves knowledge out of the type system. Before useful work, later code must discover and cast the value back to a concrete type.
+
+For the Field Notes fields, `Any` weakens the model:
+
+```swift
+// Weak model
+let rating: Any = 4
+
+// Useful model
+let rating: Int = 4
+```
+
+Use `Any` at a boundary that genuinely receives heterogeneous values, then convert those values into a precise model quickly. Do not use it to silence a type error that is revealing a missing design decision.
+
+## Prefer the smallest mutation surface
+
+Compare two versions:
+
+```swift
+var title = "Fog over the north ridge"
+var capturedAt = "2026-07-16T07:30:00-07:00"
+var rating = 3
+var isFavorite = false
+```
+
+```swift
+let title = "Fog over the north ridge"
+let capturedAt = "2026-07-16T07:30:00-07:00"
+var rating = 3
+var isFavorite = false
+```
+
+The second version communicates more. A reader knows immediately that only two names participate in state changes.
+
+This pays off when code becomes concurrent. State that cannot change does not need coordination for mutation. The concurrency model arrives much later, but the design habit starts with the first declaration.
+
+## Read compiler diagnostics as contract feedback
+
+Try three deliberate mistakes one at a time:
+
+```swift
+let rating = 3
+rating = 4
+```
+
+```swift
+var rating = 3
+rating = "four"
+```
+
+```swift
+let marker: Character = "forest"
+```
+
+Each diagnostic points to a different broken promise:
+
+1. The binding was declared constant.
+2. The new value does not match the inferred type.
+3. The literal contains more than one `Character` value.
+
+Do not paste all three failures into one file. Run one small experiment, read its first diagnostic, make a prediction, and repair it. That preserves the debugging loop from part 3.
+
+## A practical declaration checklist
+
+Before writing a declaration, ask:
+
+1. Does this name represent a fixed fact or changing state?
+2. Is the inferred type the domain type I intend?
+3. Would an annotation clarify a boundary or prevent ambiguity?
+4. Can the name live in a narrower scope?
+5. Am I reaching for `Any` because I have not modeled the data?
+
+Most local declarations should be short. The thought behind them should be precise.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Change `rating` to `5` and predict the output.
+2. Change `rating` from `var` to `let`, leave `rating += 1`, and read the compiler diagnostic.
+3. Add `let marker: Character = "🌲"` and include it in the summary.
+4. Change the initial rating to `6` and observe which safety layer catches it.
+5. Add `let distance: Double = 4` and print it without changing the literal spelling.
+
+The fifth exercise demonstrates contextual typing. The fourth demonstrates that a correct type can still contain an invalid domain value.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- Why `let` is the default for stable facts.
+- Why `var` permits reassignment but does not permit type changes.
+- How inference reduces annotations without weakening static typing.
+- When an explicit annotation adds useful context.
+- Why `Any` usually hides rather than solves a modeling problem.
+- Why compile-time type safety and runtime invariants catch different failures.
+
+The next post uses these typed values in arithmetic and comparisons, then makes numeric conversions and overflow behavior explicit.
+
+## Series navigation
+
+- Previous: [Part 3: How to learn by building and debugging](../2026-07-16-learning-by-building-debugging/)
+- Next: [Part 5: Operators, conversion, and overflow](../2026-07-16-swift-operators-conversion-overflow/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Constants, variables, and safety**: The Swift Programming Language chapter [The Basics](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics/) defines `let`, `var`, common value types, type safety, inference, annotations, and numeric boundaries.
+- **Inference and annotations**: Swift's [Types reference](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/types/) describes how type information flows through an expression and how an annotation supplies context.
+- **Declaration rules**: The language reference chapter [Declarations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/declarations/) specifies constant and variable declarations, initialization, and the relationship between an initializer and an optional type annotation.
+
+## Related topics
+
+- [Coding concepts](../../topics/cs/coding-concepts/), transferable problem-solving patterns that depend on precise values and data shapes.
+- [Functional core, imperative shell](../../topics/cs/functional-core-imperative-shell/), an architecture pattern that benefits from narrow mutation boundaries.
+- [Web development](../../topics/web/), neighboring typed and untyped ecosystems that make different inference and mutation tradeoffs.

@@ -1,0 +1,413 @@
+---
+title: "Zero to iOS Hero 6: Control flow, ranges, and patterns"
+description: "Express decisions and repetition with if, switch, loops, ranges, where clauses, and Swift pattern matching."
+date: 2026-07-16
+tags: [swift, ios, control-flow, pattern-matching]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-control-flow-patterns/
+series:
+  slug: zero-to-ios-hero
+  order: 6
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import controlFlowCode from './2026-07-16-swift-control-flow-patterns.swift?raw';
+
+This is part 6 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+Values become behavior when a program chooses a branch or repeats an operation. Swift gives those choices structure: Boolean conditions for open-ended questions, exhaustive switches for known alternatives, and sequence-based loops for repeated work.
+
+The goal is not to memorize syntax. It is to make the shape of a decision visible.
+
+## Choose the construct that matches the question
+
+Use this first approximation:
+
+| Question | Starting construct |
+| --- | --- |
+| Is one condition true? | `if` |
+| Which of several patterns matches one value? | `switch` |
+| Do this for every element in a sequence | `for`-`in` |
+| Repeat while a condition remains true | `while` |
+| Run once, then decide whether to repeat | `repeat`-`while` |
+| Skip or stop a loop early | `continue` or `break` |
+
+Any of these can be abused. A long chain of `if` statements may be hiding one finite classification. A `while` loop may be manually reproducing sequence iteration. The construct should reveal the rule.
+
+## Use `if` for Boolean decisions
+
+An `if` branch requires a `Bool`:
+
+```swift
+let rating = 4
+
+if rating >= 4 {
+    print("Recommended")
+}
+```
+
+Swift does not treat integers, strings, or object references as implicit truth values:
+
+```swift
+let rating = 4
+
+// if rating { } // Error: Int is not Bool
+```
+
+State the question:
+
+```swift
+if rating > 0 {
+    print("Rated")
+}
+```
+
+An `else` branch handles the remaining possibility:
+
+```swift
+if rating >= 4 {
+    print("Recommended")
+} else {
+    print("Keep reviewing")
+}
+```
+
+Use `else if` when later conditions are meaningful only after earlier conditions fail. When every branch compares the same value against categories, a `switch` is often clearer.
+
+## Ranges express intervals
+
+Swift provides closed and half-open ranges:
+
+```swift
+let validRatings = 1...5     // Includes 1 and 5
+let listIndexes = 0..<5      // Includes 0, excludes 5
+```
+
+Check membership with `contains`:
+
+```swift
+let rating = 4
+
+if validRatings.contains(rating) {
+    print("Valid rating")
+}
+```
+
+Half-open ranges fit zero-based indexes because a collection with five elements has indexes from zero through four. Do not construct index ranges manually when a collection can expose its own `indices`; collection rules arrive in post 9.
+
+Ranges also work as sequences:
+
+```swift
+for attempt in 1...3 {
+    print("Attempt \(attempt)")
+}
+```
+
+The loop binds each generated value to a constant named `attempt`.
+
+## `switch` matches patterns
+
+A `switch` evaluates one value, then executes the first matching case:
+
+```swift
+let rating = 4
+
+switch rating {
+case 5:
+    print("Excellent")
+case 4:
+    print("Recommended")
+case 1...3:
+    print("Needs context")
+default:
+    print("Invalid")
+}
+```
+
+The cases are patterns, not just equality checks. The third case matches an interval.
+
+Swift switches do not fall through to the next case by default. Once a case finishes, the switch finishes. This removes the routine `break` needed by some languages.
+
+An explicit `fallthrough` exists, but it transfers directly to the next case without checking that case's pattern. Prefer shared functions or compound cases unless that exact transfer is the rule.
+
+## A switch must be exhaustive
+
+Every possible input needs a match. An `Int` has many possible values, so the example uses `default` for everything outside the documented rating cases.
+
+Exhaustiveness is more powerful when switching over a finite type such as an enumeration. When a later post adds a new enum case, a switch without `default` can force every affected decision to be revisited.
+
+For an open numeric range, `default` is honest. For a closed domain, a broad `default` can hide a missing case. The type determines which choice protects future changes.
+
+## Compound cases share one outcome
+
+Separate values with commas when they produce the same branch:
+
+```swift
+let command = "save"
+
+switch command {
+case "save", "commit":
+    print("Record the note")
+case "cancel", "discard":
+    print("Leave without recording")
+default:
+    print("Unknown command")
+}
+```
+
+This is not fallthrough. Both patterns belong to one case body.
+
+## Tuples classify several dimensions
+
+A tuple lets one switch consider related values together:
+
+```swift
+let rating = 5
+let isFavorite = true
+
+switch (rating, isFavorite) {
+case (5, true):
+    print("Featured")
+case (4...5, _):
+    print("Recommended")
+default:
+    print("Review")
+}
+```
+
+The underscore is a wildcard pattern. It matches any value in that tuple position without binding a name.
+
+Case order matters because the first match wins. `(5, true)` also fits `(4...5, _)`, so the more specific case must come first.
+
+## Bind matched values
+
+A pattern can bind part of its input to a local name:
+
+```swift
+let point = (x: 3, y: 0)
+
+switch point {
+case (let x, 0):
+    print("On the horizontal axis at \(x)")
+case (0, let y):
+    print("On the vertical axis at \(y)")
+case let (x, y):
+    print("At \(x), \(y)")
+}
+```
+
+The last case binds both values and therefore covers every remaining tuple. No `default` is needed.
+
+The bound names exist only inside their case body. Pattern matching both selects a branch and exposes the data that branch needs.
+
+## Add a `where` clause for a guard on a pattern
+
+A case can match a shape and then require another Boolean condition:
+
+```swift
+let note = (rating: 5, title: "Fog")
+
+switch note {
+case let (rating, title) where rating >= 4 && !title.isEmpty:
+    print("Recommended: \(title)")
+default:
+    print("Not selected")
+}
+```
+
+Use `where` when the pattern identifies the relevant values and an additional predicate refines the match. If every case repeats a long condition, extract the concept into a well-named function after post 7 introduces API shape.
+
+## Run the classification checkpoint
+
+The Field Notes example filters notes to ratings in `4...5`, then classifies the selected notes with a tuple switch:
+
+<SwiftRepl code={controlFlowCode} id="swift-control-flow-patterns" />
+
+Expected output:
+
+```text
+Featured: Fog over the north ridge
+Recommended: Lake trail reopened
+Recommended: Alpine flowers
+```
+
+The `where` clause on the loop removes the rating-2 note before the body runs. The switch then uses rating and favorite status together. The precondition proves exactly three notes passed the filter.
+
+This is standard-library code for the Swift 6.3.3 Linux runner. It does not prove an iOS list, predicate API, persistence query, or Apple framework.
+
+## `for`-`in` follows a sequence
+
+Use `for`-`in` when a sequence already describes the values to visit:
+
+```swift
+let ratings = [5, 4, 2]
+
+for rating in ratings {
+    print(rating)
+}
+```
+
+The loop does not expose an integer index because the operation does not need one. Ask for positions only when positions are part of the rule.
+
+A loop can ignore the current value:
+
+```swift
+for _ in 1...3 {
+    print("Retry")
+}
+```
+
+The wildcard says the repetition count matters, but the individual number does not.
+
+## Filter a loop with `where`
+
+The `where` clause keeps the selection beside the iteration:
+
+```swift
+for rating in ratings where rating >= 4 {
+    print("Selected: \(rating)")
+}
+```
+
+This is useful for a short predicate and a straightforward body. For multi-step transformations, collection operations such as `filter` and `map` may express the pipeline better after closures arrive in post 15.
+
+Swift also supports `for case` to iterate only over elements that match a pattern. That becomes especially useful with enum associated values and optionals later in the series.
+
+## Use `while` when repetition depends on changing state
+
+A `while` loop checks its condition before every iteration:
+
+```swift
+var remainingAttempts = 3
+
+while remainingAttempts > 0 {
+    print("Attempts: \(remainingAttempts)")
+    remainingAttempts -= 1
+}
+```
+
+If the condition begins false, the body never runs.
+
+Every `while` needs a visible path toward termination. If the condition depends on a value that never changes, the loop may never finish.
+
+Use a `for` loop when you already have the values to traverse. Use `while` when the next iteration depends on state produced by the last one.
+
+## Use `repeat` when the body must run once
+
+`repeat`-`while` checks after the body:
+
+```swift
+var attempt = 0
+
+repeat {
+    attempt += 1
+    print("Attempt \(attempt)")
+} while attempt < 3
+```
+
+The body executes at least once. Choose this form only when that first execution is valid without checking the condition first.
+
+## Transfer control deliberately
+
+`continue` skips the rest of the current iteration:
+
+```swift
+for rating in [5, 0, 4] {
+    if rating == 0 {
+        continue
+    }
+
+    print(rating)
+}
+```
+
+`break` ends the nearest loop:
+
+```swift
+for rating in [5, 4, -1, 3] {
+    if rating < 0 {
+        break
+    }
+
+    print(rating)
+}
+```
+
+Labels can identify which loop a `break` or `continue` targets in nested control flow. Before adding labels, ask whether a small function could give the nested operation a clearer boundary.
+
+## Avoid the nested-string-comparison trap
+
+This shape scales poorly:
+
+```swift
+if status == "draft" {
+    // ...
+} else if status == "saved" {
+    // ...
+} else if status == "syncing" {
+    // ...
+} else if status == "failed" {
+    // ...
+}
+```
+
+Strings allow misspellings and unknown values. The control flow cannot prove that the branch list covers the domain.
+
+Post 12 will replace this kind of state with an enum and an exhaustive switch. For now, recognize the smell: several branches compare one string against a finite list.
+
+## Keep branches at one conceptual level
+
+A condition should decide. The branch body should perform work at a consistent level of detail.
+
+```swift
+if shouldFeature {
+    print("Feature the note")
+} else {
+    print("Keep the normal order")
+}
+```
+
+When a branch validates input, writes storage, starts networking, formats text, and updates interface state inline, the decision disappears inside mechanics. Functions, types, and architecture boundaries will separate those responsibilities as the series progresses.
+
+## Practice
+
+Modify the runnable example one rule at a time:
+
+1. Change the filter from `4...5` to `3...5` and add a rating-3 note.
+2. Add a compound switch case that labels ratings `1, 2` as `Low` in a separate experiment.
+3. Move `(4...5, _)` above `(5, true)` and explain the changed output.
+4. Replace the loop's `where` clause with an `if` and compare readability.
+5. Add a note with rating `6` and decide whether to filter, classify, clamp, or reject it.
+6. Count down from three with `while`, then rewrite the same fixed traversal with a range.
+
+The fifth exercise has no universal answer. The correct behavior depends on whether the input is user editing, trusted internal state, or untrusted decoded data.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- Why `if` requires an explicit Boolean condition.
+- How closed and half-open ranges differ.
+- Why Swift switches are exhaustive and do not fall through by default.
+- How tuple, wildcard, interval, binding, and `where` patterns refine a match.
+- When `for`-`in`, `while`, and `repeat`-`while` fit different repetition shapes.
+- How `break` and `continue` change loop execution.
+
+The next post moves repeated behavior into functions and turns call sites into readable domain language.
+
+## Series navigation
+
+- Previous: [Part 5: Operators, conversion, and overflow](../2026-07-16-swift-operators-conversion-overflow/)
+- Next: [Part 7: Functions and API shape](../2026-07-16-swift-functions-api-shape/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Branching, loops, and patterns**: The Swift Programming Language chapter [Control Flow](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow/) defines `if`, `switch`, intervals, tuple and value-binding patterns, `where`, loops, and control transfers.
+- **Statement rules**: The language reference chapter [Statements](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/statements/) specifies loop statements, branch statements, labeled statements, and `where` clauses.
+- **Pattern vocabulary**: The language reference chapter [Patterns](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/patterns/) catalogs wildcard, identifier, value-binding, tuple, enumeration-case, optional, type-casting, and expression patterns.
+
+## Related topics
+
+- [Coding concepts](../../topics/cs/coding-concepts/), reusable decision and traversal patterns.
+- [Two pointers](../../topics/cs/coding-problems/two-pointers/), problems driven by loop invariants and branch movement.
+- [Stack problems](../../topics/cs/coding-problems/stack/), examples where control flow preserves parser and monotonic-stack invariants.

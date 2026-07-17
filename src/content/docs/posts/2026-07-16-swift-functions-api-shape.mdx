@@ -1,0 +1,444 @@
+---
+title: "Zero to iOS Hero 7: Functions and API shape"
+description: "Design Swift functions whose names, argument labels, parameters, defaults, returns, and mutation behavior make call sites readable."
+date: 2026-07-16
+tags: [swift, ios, functions, api-design]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-functions-api-shape/
+series:
+  slug: zero-to-ios-hero
+  order: 7
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import rankingCode from './2026-07-16-swift-functions-api-shape.swift?raw';
+
+This is part 7 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A function gives one operation a name, typed inputs, and a typed result. A good function also makes its call site read like the product rule it performs.
+
+Compare these calls:
+
+```swift
+process(notes, "ridge", 2)
+rank(notes: notes, matching: "ridge", limit: 2)
+```
+
+Both could execute the same algorithm. Only one carries its meaning into the caller.
+
+## The function contract
+
+A function declaration has four central parts:
+
+```swift
+func relevance(for rating: Int) -> Int {
+    return rating * 10
+}
+```
+
+| Part | Role |
+| --- | --- |
+| `relevance` | Names the operation |
+| `for` and `rating` | Shape the call site and implementation name |
+| `Int` parameter type | Defines accepted input |
+| `-> Int` | Defines returned output |
+
+Call it with an argument:
+
+```swift
+let score = relevance(for: 4)
+```
+
+`rating` is a parameter in the declaration. `4` is the argument supplied by this call.
+
+## Function names should state behavior
+
+A function name is an API decision. Prefer a verb or a question that identifies one responsibility:
+
+```swift
+rank(notes:matching:limit:)
+containsTag(_:in:)
+normalizedTitle(_:)
+isValid(rating:)
+```
+
+Vague names hide unrelated work:
+
+```swift
+process()
+handleData()
+doStuff()
+updateEverything()
+```
+
+If the only accurate name contains several verbs, the function may own several jobs. Split the behavior at the product boundaries, not at arbitrary line counts.
+
+## Parameters are local constants
+
+Parameters are constants inside the function by default:
+
+```swift
+func normalized(_ query: String) -> String {
+    // query = "other" // Error: query is a let constant
+    return query.lowercased()
+}
+```
+
+Create a local variable when the implementation needs evolving state:
+
+```swift
+func clamped(_ score: Int) -> Int {
+    var result = score
+    result = max(result, 0)
+    result = min(result, 100)
+    return result
+}
+```
+
+Do not make caller-owned data mutable merely because one implementation uses several steps.
+
+## Argument labels shape the sentence
+
+By default, a parameter name is also its argument label:
+
+```swift
+func feature(note: String) {
+    print(note)
+}
+
+feature(note: "Fog over the north ridge")
+```
+
+Give the call site and function body different names when each context needs different grammar:
+
+```swift
+func contains(_ query: String, in title: String) -> Bool {
+    title.lowercased().contains(query.lowercased())
+}
+
+contains("ridge", in: "Fog over the north ridge")
+```
+
+Inside the body, `query` and `title` are clear nouns. At the call site, `contains(_:in:)` reads as one phrase.
+
+## Omit a label only when the call stays clear
+
+An underscore removes the argument label:
+
+```swift
+func normalized(_ text: String) -> String {
+    text.lowercased()
+}
+
+let query = normalized("RIDGE")
+```
+
+The unlabeled argument works because the function name and single value form an obvious phrase.
+
+Several unlabeled values are harder to read:
+
+```swift
+// What do the two integers mean?
+resize(image, 300, 200)
+
+// The call carries the dimensions.
+resize(image, width: 300, height: 200)
+```
+
+Labels should remove ambiguity, not narrate the type system. `add(firstNumber:secondNumber:)` is usually noisier than `add(_:_:)`; `schedule(note:at:)` benefits from the relationship word.
+
+## Return values carry results to the caller
+
+Declare a result after `->` and return a matching value on every path:
+
+```swift
+func classification(for rating: Int) -> String {
+    switch rating {
+    case 5:
+        return "Featured"
+    case 4:
+        return "Recommended"
+    default:
+        return "Review"
+    }
+}
+```
+
+Returning a value gives the caller control over what happens next:
+
+```swift
+let label = classification(for: 5)
+print(label)
+```
+
+A function that prints the label internally couples classification to one output mechanism. Return the value when another layer should decide how to display, store, test, or transmit it.
+
+## Single-expression functions can return implicitly
+
+When a function body is one expression, Swift can infer the return from that expression:
+
+```swift
+func isRecommended(rating: Int) -> Bool {
+    rating >= 4
+}
+```
+
+Use the compact form when the result remains immediate. Keep an explicit `return` when multiple steps or branches make the exit point valuable.
+
+## A function without a result returns `Void`
+
+Omit the arrow when a function performs an operation but has no meaningful result:
+
+```swift
+func printCheckpoint(_ message: String) {
+    print(message)
+}
+```
+
+Its complete type includes `Void`, which is an alias for the empty tuple `()`:
+
+```swift
+(String) -> Void
+```
+
+Not every side effect needs a return value. The important boundary is honesty: a function named `loadNotes()` that silently prints and mutates global state is harder to reason about than an API whose effects are explicit.
+
+## Default values reduce routine call-site noise
+
+A parameter can supply a default:
+
+```swift
+func rank(
+    notes: [String],
+    matching query: String,
+    limit: Int = 3
+) -> [String] {
+    // ...
+}
+```
+
+Callers can use the ordinary policy or override it:
+
+```swift
+rank(notes: notes, matching: "ridge")
+rank(notes: notes, matching: "ridge", limit: 10)
+```
+
+Place required parameters before defaulted parameters. A default should be a stable policy, not a way to accumulate unrelated modes in one function.
+
+Boolean defaults deserve suspicion:
+
+```swift
+loadNotes(includeArchived: true, ignoreCache: false)
+```
+
+The labels help, but several behavior flags often signal that separate operations or an options type would communicate the valid combinations better.
+
+## Run the ranking checkpoint
+
+The Field Notes example implements the planned API exactly:
+
+<SwiftRepl code={rankingCode} id="swift-functions-api-shape" />
+
+Expected output:
+
+```text
+1. Fog over the north ridge
+2. Alpine flowers
+```
+
+The call reads:
+
+```swift
+rank(notes: notes, matching: "ridge", limit: 2)
+```
+
+The function normalizes the query, selects matching titles or tags, calculates a score, orders candidates, applies the limit, and returns titles. A precondition checks the deterministic result.
+
+The example uses standard-library tuples and arrays so it can run in the Swift 6.3.3 Linux editor. Later posts replace the tuple with a `FieldNote` value type, add collection and closure depth, and move ranking into the companion package. This runner does not prove an iOS search interface or Apple framework.
+
+## Type aliases can make temporary shapes readable
+
+The example names two tuple types:
+
+```swift
+typealias Note = (title: String, tags: [String], rating: Int)
+typealias RankedNote = (title: String, score: Int)
+```
+
+A type alias gives an existing type another name. It does not create a distinct domain type or add invariants.
+
+This is suitable for a short language checkpoint. A production note deserves a structure with initialization and behavior, introduced in post 11.
+
+## Tuple returns package closely related values
+
+A function can return several named values as one tuple:
+
+```swift
+func bounds(of ratings: [Int]) -> (minimum: Int, maximum: Int) {
+    var minimum = ratings[0]
+    var maximum = ratings[0]
+
+    for rating in ratings.dropFirst() {
+        minimum = min(minimum, rating)
+        maximum = max(maximum, rating)
+    }
+
+    return (minimum, maximum)
+}
+```
+
+The call receives named fields:
+
+```swift
+let result = bounds(of: [2, 5, 4])
+print(result.minimum)
+print(result.maximum)
+```
+
+Tuples fit small, local groupings whose fields travel together briefly. When the result has identity in the domain, needs methods, or appears across several APIs, define a named structure.
+
+The empty-input case is intentionally unresolved in this sketch. Post 8 introduces optionals so the signature can represent "no bounds" without an unsafe index.
+
+## Variadic parameters accept repeated arguments
+
+A variadic parameter collects zero or more arguments into an array:
+
+```swift
+func average(_ ratings: Double...) -> Double {
+    var total = 0.0
+
+    for rating in ratings {
+        total += rating
+    }
+
+    return total / Double(ratings.count)
+}
+
+average(3, 4, 5)
+```
+
+Use a variadic parameter when separate arguments form the natural call. Prefer an array parameter when the caller already owns a collection or when empty input needs a deliberate policy.
+
+## `inout` makes caller mutation explicit
+
+Ordinary parameters do not let a function replace a caller's variable. An `inout` parameter opts into that effect:
+
+```swift
+func clampRating(_ rating: inout Int) {
+    rating = min(max(rating, 1), 5)
+}
+
+var rating = 8
+clampRating(&rating)
+print(rating) // 5
+```
+
+The ampersand at the call site says this function may change `rating`.
+
+Prefer returning a new value for ordinary transformations:
+
+```swift
+func clampedRating(_ rating: Int) -> Int {
+    min(max(rating, 1), 5)
+}
+
+rating = clampedRating(rating)
+```
+
+Use `inout` when in-place mutation is truly the API contract, including algorithms that mutate a collection or operations that need to update several caller-owned values together. Do not use it merely to avoid writing `return`.
+
+## Functions have types
+
+The function:
+
+```swift
+func ranksBefore(_ left: RankedNote, _ right: RankedNote) -> Bool
+```
+
+has a function type shaped like:
+
+```swift
+(RankedNote, RankedNote) -> Bool
+```
+
+The ranking example passes the function as the ordering rule:
+
+```swift
+let ordered = candidates.sorted(by: ranksBefore)
+```
+
+The function itself is a value. Post 15 develops this idea through closures, captures, and higher-order collection operations.
+
+## Guard invalid requests near the boundary
+
+The ranking function rejects nonpositive limits and empty normalized queries:
+
+```swift
+guard limit > 0 else { return [] }
+
+let normalizedQuery = query.lowercased()
+guard !normalizedQuery.isEmpty else { return [] }
+```
+
+`guard` requires its `else` branch to leave the current scope with `return`, `throw`, `break`, `continue`, or another nonreturning operation. It keeps the successful path from nesting inside several `if` blocks.
+
+An empty result is the documented policy here. If an empty query is invalid input rather than a valid no-results request, a later error-modeling API can express that distinction.
+
+## API review questions
+
+Before keeping a function, ask:
+
+1. Does the base name identify one operation?
+2. Do argument labels make the call read clearly?
+3. Are parameter and return types precise?
+4. Does the return value leave presentation and storage decisions to the caller?
+5. Are defaults stable policies rather than hidden modes?
+6. Is mutation visible at the call site?
+7. Can invalid or missing results actually be represented?
+8. Is the function at one conceptual level?
+
+A short function can still have a poor contract. A longer function can still have a coherent one. Shape the boundary before counting lines.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Omit `limit` and confirm the default selects up to three titles.
+2. Search for `access` and predict the score order.
+3. Pass a zero limit and explain why the function returns an empty array.
+4. Rename `matching query` to `for query` and compare both call sites aloud.
+5. Make the tie-break sort descending by title, then update the precondition.
+6. Rewrite a small clamping function as both a returned value and an `inout` mutation.
+
+Call-site readability is part of each exercise. If two signatures compile, prefer the one that states the rule without comments.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- The difference between a parameter and an argument.
+- How argument labels and parameter names serve different readers.
+- When an unlabeled argument improves or harms a call.
+- How defaults, tuple returns, variadics, and `inout` change a function contract.
+- Why functions have types and can be passed as values.
+- Why a precise function name is an architecture tool, not just style.
+
+The next post makes missing input and missing results explicit with optionals.
+
+## Series navigation
+
+- Previous: [Part 6: Control flow, ranges, and patterns](../2026-07-16-swift-control-flow-patterns/)
+- Next: [Part 8: Optionals and absence](../2026-07-16-swift-optionals-absence/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Function syntax and calls**: The Swift Programming Language chapter [Functions](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/functions/) covers parameters, argument labels, return values, defaults, variadics, `inout`, function types, and nested functions.
+- **Declaration contract**: The language reference chapter [Declarations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/declarations/) specifies function declarations, parameter names and modifiers, implicit single-expression returns, and value-passing behavior.
+- **API naming guidance**: The official [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/) describe clear usage, fluent call sites, role-based naming, and conventions for side effects and mutating operations.
+
+## Related topics
+
+- [Functional core, imperative shell](../../topics/cs/functional-core-imperative-shell/), separating returned decisions from effectful orchestration.
+- [Coding concepts](../../topics/cs/coding-concepts/), transferable operations that benefit from explicit inputs and outputs.
+- [Binary search problems](../../topics/cs/coding-problems/binary-search/), focused function contracts with precise boundary behavior.

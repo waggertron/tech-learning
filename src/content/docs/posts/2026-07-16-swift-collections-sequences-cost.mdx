@@ -1,0 +1,404 @@
+---
+title: "Zero to iOS Hero 9: Collections, sequences, and cost"
+description: "Choose arrays for order, dictionaries for keyed lookup, sets for uniqueness, and lazy sequences when deferred work matches consumption."
+date: 2026-07-16
+tags: [swift, ios, collections, performance]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-collections-sequences-cost/
+series:
+  slug: zero-to-ios-hero
+  order: 9
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import collectionCode from './2026-07-16-swift-collections-sequences-cost.swift?raw';
+
+This is part 9 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A collection choice is a statement about the data. Arrays preserve order, dictionaries associate keys with values, and sets enforce uniqueness without promising an order.
+
+Choosing an array for every problem can still produce correct output. It can also hide repeated linear searches, accidental duplicates, and positional assumptions the product never needed.
+
+## Start with the question the collection answers
+
+| Need | Collection |
+| --- | --- |
+| Ordered values, duplicates allowed | `Array<Element>` or `[Element]` |
+| One value associated with each unique key | `Dictionary<Key, Value>` or `[Key: Value]` |
+| Unique values and efficient membership tests | `Set<Element>` |
+
+All three are generic. Their element, key, and value types are part of the compile-time contract.
+
+```swift
+let titles: [String] = ["Fog", "Lake"]
+let ratings: [String: Int] = ["Fog": 5, "Lake": 4]
+let tags: Set<String> = ["ridge", "weather"]
+```
+
+A collection cannot accept a value whose type does not match its declaration.
+
+## Mutability still begins with `let` and `var`
+
+A collection bound with `let` cannot change its contents:
+
+```swift
+let titles = ["Fog", "Lake"]
+// titles.append("Flowers") // Error
+```
+
+Use `var` when insertion, removal, replacement, or reordering is part of the operation:
+
+```swift
+var titles = ["Fog", "Lake"]
+titles.append("Flowers")
+```
+
+Keep a collection constant when its contents do not need to change. The same narrow-mutation rule from post 4 applies to many values at once.
+
+## Arrays preserve order and allow duplicates
+
+An array is an ordered collection of one element type:
+
+```swift
+var titles = ["Fog", "Lake", "Fog"]
+```
+
+Both `"Fog"` values remain because arrays do not enforce uniqueness.
+
+Common operations include:
+
+```swift
+titles.append("Flowers")
+titles.insert("Trail", at: 1)
+let first = titles.first
+let count = titles.count
+let isEmpty = titles.isEmpty
+```
+
+`first` and `last` return optionals because an array may be empty.
+
+## A valid index is a precondition
+
+Array subscripting does not return an optional:
+
+```swift
+let title = titles[0]
+```
+
+Passing an invalid index traps. Check the collection's own index rules:
+
+```swift
+let requestedIndex = 2
+
+if titles.indices.contains(requestedIndex) {
+    print(titles[requestedIndex])
+}
+```
+
+Do not assume every `Collection` begins at integer zero or uses `Int` indexes. `Array` does, but generic collection algorithms should use `startIndex`, `endIndex`, `indices`, and index-advancement APIs.
+
+`endIndex` is the position after the last element. It is never a valid subscript.
+
+## Dictionaries model keyed lookup
+
+A dictionary associates one value with each unique key:
+
+```swift
+var ratingByTitle: [String: Int] = [
+    "Fog": 5,
+    "Lake": 4,
+]
+```
+
+The key must conform to `Hashable`. Standard strings, integers, and many other standard-library value types already do.
+
+Key-based lookup returns an optional:
+
+```swift
+let fogRating = ratingByTitle["Fog"]      // Int?
+let missing = ratingByTitle["Unknown"]   // nil
+```
+
+That optional is the lookup contract. A key may not exist.
+
+Assign through the subscript to insert or replace:
+
+```swift
+ratingByTitle["Flowers"] = 5
+ratingByTitle["Fog"] = 4
+```
+
+Assigning `nil` removes the key:
+
+```swift
+ratingByTitle["Lake"] = nil
+```
+
+Use `removeValue(forKey:)` when the returned removed value matters.
+
+## A defaulted dictionary subscript updates accumulators
+
+The tag index maps one tag to several titles:
+
+```swift
+var tagIndex: [String: [String]] = [:]
+
+tagIndex["ridge", default: []].append("Fog")
+```
+
+If `"ridge"` exists, the array is updated. If it does not, the empty array supplies the initial value before appending.
+
+This pattern also fits counting:
+
+```swift
+var counts: [String: Int] = [:]
+counts["ridge", default: 0] += 1
+```
+
+The ordinary dictionary subscript still returns an optional. The defaulted subscript declares a different policy for this operation: a missing key starts from the provided value.
+
+## Dictionary iteration has no defined order
+
+Do not present raw dictionary iteration as stable output:
+
+```swift
+for (tag, titles) in tagIndex {
+    print(tag, titles)
+}
+```
+
+If display or test output requires order, sort explicitly:
+
+```swift
+for tag in tagIndex.keys.sorted() {
+    print(tag, tagIndex[tag, default: []])
+}
+```
+
+Order is now part of the operation rather than an accident of the current process.
+
+## Sets enforce uniqueness
+
+A set stores distinct hashable values without a defined order:
+
+```swift
+let tags: Set<String> = ["ridge", "weather", "ridge"]
+print(tags.count) // 2
+```
+
+Use `contains` for membership:
+
+```swift
+if tags.contains("ridge") {
+    print("Ridge note")
+}
+```
+
+Insertion reports whether the member was new:
+
+```swift
+var selectedTags: Set<String> = []
+let result = selectedTags.insert("ridge")
+print(result.inserted)
+```
+
+Set operations express relationships directly:
+
+```swift
+let noteTags: Set = ["ridge", "weather"]
+let queryTags: Set = ["ridge", "flowers"]
+
+let either = noteTags.union(queryTags)
+let both = noteTags.intersection(queryTags)
+let onlyNote = noteTags.subtracting(queryTags)
+let noOverlap = noteTags.isDisjoint(with: queryTags)
+```
+
+Convert a set to a sorted array when a stable order becomes part of output:
+
+```swift
+let displayTags = tags.sorted()
+```
+
+## Array membership and set membership express different costs
+
+This code searches the array until it finds a match or reaches the end:
+
+```swift
+let tags = ["ridge", "weather", "flowers"]
+let hasRidge = tags.contains("ridge")
+```
+
+If membership is the primary operation and duplicates do not matter, build a set:
+
+```swift
+let tagSet = Set(tags)
+let hasRidge = tagSet.contains("ridge")
+```
+
+The conversion itself visits the input. Do not rebuild a set inside every lookup. Construct the representation once at the boundary where the membership requirement begins.
+
+## Cost belongs to an operation, not a collection name
+
+For an array with `n` elements, the common shape is:
+
+| Operation | Typical complexity | Why |
+| --- | --- | --- |
+| Read a valid integer index | O(1) | Direct position access |
+| Append repeatedly | O(1) amortized per append | Occasional storage growth copies elements |
+| Search with `contains` | O(n) | May inspect every element |
+| Insert or remove near the front | O(n) | Later elements shift |
+
+For sets and dictionaries, hash-based membership, insertion, and keyed lookup are designed for efficient access and are commonly treated as O(1) expected operations under suitable hashing. Hash computation, collisions, resizing, bridging, and adversarial keys affect actual cost.
+
+Do not repeat a complexity slogan without naming the exact API and assumptions. Apple documents complexity on individual standard-library operations, and those operation contracts are the source of truth.
+
+## Sequence and Collection are different capabilities
+
+A `Sequence` supplies values one at a time. It may be single-pass. A `Collection` adds stable traversal over a finite set of positions and supports repeated iteration.
+
+```text
+Sequence
+    |
+    +-> values can be iterated
+          |
+          v
+Collection
+    |
+    +-> finite positions, indices, repeated traversal
+```
+
+Arrays, dictionaries, and sets are collections. Many generated or lazy pipelines are sequences whose values are produced as consumers ask for them.
+
+Accept `Sequence` in an API when one pass is enough. Require `Collection` when the algorithm needs a count, stable indexes, or multiple passes. Require `RandomAccessCollection` when constant-time movement between positions matters.
+
+## Eager operations produce results now
+
+Calling `filter` on an array produces a new array:
+
+```swift
+let selected = notes.filter { note in
+    note.rating >= 4
+}
+```
+
+The operation visits the input and stores every matching element before the next statement uses the result.
+
+Eager evaluation is often the clearest choice. The result is reusable, its work happens at a predictable point, and debugging can inspect the complete collection.
+
+## Lazy operations defer work until consumption
+
+Add `.lazy` before a transformation pipeline:
+
+```swift
+let firstSelected = notes.lazy
+    .filter { $0.rating >= 4 }
+    .first
+```
+
+The lazy filter does not build an intermediate array of all matches. `first` asks only for the first matching value, so evaluation can stop early.
+
+Laziness is valuable when:
+
+- The pipeline has several transformations.
+- Only part of the result will be consumed.
+- Avoiding intermediate storage matters.
+- Deferred evaluation does not surprise the caller.
+
+Laziness can be wrong when the input or captured state changes before iteration, when the result must be reused several times, or when deferred work makes performance harder to predict.
+
+## Run the tag index and evaluation comparison
+
+The Field Notes checkpoint builds a dictionary index, prints it in sorted-key order, and instruments eager and lazy filters:
+
+<SwiftRepl code={collectionCode} id="swift-collections-sequences-cost" />
+
+Expected output:
+
+```text
+access: Parking lot full, Lake trail reopened
+flowers: Alpine flowers
+ridge: Fog over the north ridge, Alpine flowers
+trail: Lake trail reopened
+weather: Fog over the north ridge
+Eager checks: 4
+Lazy checks: 2
+First selected: Fog over the north ridge
+```
+
+The eager filter checks all four notes before `first` reads its array. The lazy pipeline checks the rating-2 note, then the rating-5 note, and stops when it finds the first match.
+
+Both paths return the same first selected title. They differ in when and how much work they perform.
+
+This is standard-library code for the Swift 6.3.3 Linux editor. It does not prove persistence indexes, fetched-results behavior, SwiftUI list identity, or device memory performance.
+
+## Copy-on-write preserves value semantics
+
+Arrays, dictionaries, sets, and strings are value types. Assigning one collection to another creates an independent logical value:
+
+```swift
+var original = ["Fog", "Lake"]
+var copy = original
+
+copy.append("Flowers")
+
+print(original) // ["Fog", "Lake"]
+print(copy)     // ["Fog", "Lake", "Flowers"]
+```
+
+The standard library can share storage until one copy mutates. This copy-on-write optimization avoids an immediate element copy while preserving the visible rule that changing `copy` does not change `original`.
+
+Value semantics and allocation timing are different concepts. Code should depend on the former, then measure the latter when performance matters.
+
+## Wrong first moves
+
+- **Using an array for repeated keyed lookup**: Build a dictionary when the key is the access path.
+- **Using an array for uniqueness checks**: Use a set when order is irrelevant and uniqueness is the invariant.
+- **Depending on set or dictionary iteration order**: Sort at the output boundary.
+- **Subscripting an array with unchecked external input**: Validate against the collection's indices.
+- **Rebuilding a set before every membership test**: Construct it once and reuse it.
+- **Adding `.lazy` as a universal optimization**: Match evaluation strategy to actual consumption and lifetime.
+- **Quoting O(1) without the operation and assumptions**: Read the API's complexity contract.
+
+## Practice
+
+Modify the runnable example one part at a time:
+
+1. Add the `ridge` tag twice to one note and decide whether the index should preserve or remove the duplicate.
+2. Change the tag index values from arrays to sets, then sort them for output.
+3. Look up a missing tag with the ordinary subscript and with the defaulted subscript.
+4. Replace `first` with `prefix(3)`, materialize the result, and predict the lazy check count.
+5. Move the first rating-5 note to the end and compare eager and lazy work.
+6. Copy the notes array, mutate the copy, and prove the original is unchanged.
+
+The first exercise is a model decision. Array and set are both valid only under different tag-index contracts.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- Why order, uniqueness, and keyed lookup point to different collection types.
+- Why dictionary lookup returns an optional.
+- How a defaulted dictionary subscript supports counting and grouping.
+- Why set and dictionary output needs explicit sorting when order matters.
+- Which array operations are constant, amortized, or linear under their normal contracts.
+- How sequence, collection, eager, and lazy evaluation differ.
+
+The next post handles the collection with the most human complexity: Unicode text.
+
+## Series navigation
+
+- Previous: [Part 8: Optionals and absence](../2026-07-16-swift-optionals-absence/)
+- Next: [Part 10: Strings, Unicode, and formatting](../2026-07-16-swift-strings-unicode-formatting/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Collection semantics**: The Swift Programming Language chapter [Collection Types](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/collectiontypes/) defines arrays, sets, dictionaries, mutability, iteration, subscripts, and set operations.
+- **Concrete standard-library contracts**: Apple's current [`Array`](https://developer.apple.com/documentation/swift/array), [`Set`](https://developer.apple.com/documentation/swift/set), and [`Dictionary`](https://developer.apple.com/documentation/swift/dictionary) references document their APIs, ordering rules, indexing behavior, and per-operation complexity notes.
+- **Lazy filtering**: Apple's [`LazyFilterSequence`](https://developer.apple.com/documentation/swift/lazyfiltersequence) reference describes a sequence whose elements are computed when iterated.
+
+## Related topics
+
+- [Hash map counting](../../topics/cs/coding-concepts/hash-map-counting/), keyed aggregation as a transferable pattern.
+- [Sorting as preprocessing](../../topics/cs/coding-concepts/sorting-as-preprocessing/), paying an ordering cost to simplify later operations.
+- [Top k](../../topics/cs/coding-concepts/top-k/), choosing data structures around partial-result consumption.

@@ -1,0 +1,102 @@
+---
+title: Zero to iOS Hero, post series
+description: "A production-shaped path from the Swift language and Apple development tools through SwiftUI, UIKit, architecture, testing, shipping, platform capabilities, and complete app case studies."
+sidebar:
+  label: zero to iOS hero
+---
+
+Zero to iOS Hero teaches the layers that turn Swift source into an Apple platform product. The path begins with the language and toolchain, builds the same Field Notes product through SwiftUI and UIKit, separates product rules from framework code, and carries the result through testing and release work.
+
+Each post names its evidence boundary. Standard-library exercises can run in the browser's Swift 6.3.3 Linux environment. Apple SDK, Simulator, signing, entitlement, account, and physical-device claims require their matching Apple development surface.
+
+## Reading order
+
+### Orientation and development workflow
+
+1. [The Apple development map](../../2026-07-16-apple-development-map/), place Swift, Xcode, SDKs, frameworks, targets, schemes, runtimes, and devices into separate layers.
+2. [Xcode, simulators, devices, and Git](../../2026-07-16-xcode-simulators-devices-git/), follow a project through building, running, signing, and its first source-control checkpoint.
+3. [Learn by building and debugging](../../2026-07-16-learning-by-building-debugging/), use predictions, assertions, compiler diagnostics, LLDB, logs, documentation, and small experiments to shorten the feedback loop.
+
+### Swift from first principles
+
+4. [Values, variables, types, and inference](../../2026-07-16-swift-values-variables-types-inference/), use constants, mutation, annotations, and inference to model Field Notes data precisely.
+5. [Operators, conversion, and overflow](../../2026-07-16-swift-operators-conversion-overflow/), combine typed values, make numeric conversions explicit, and choose checked or wrapping arithmetic deliberately.
+6. [Control flow, ranges, and patterns](../../2026-07-16-swift-control-flow-patterns/), select branches, classify tuples, filter sequences, and repeat work with the construct that matches the rule.
+7. [Functions and API shape](../../2026-07-16-swift-functions-api-shape/), name behavior, design readable argument labels, and make results and mutation visible at the call site.
+8. [Optionals and absence](../../2026-07-16-swift-optionals-absence/), model missing input and results with binding, guard, chaining, coalescing, and explicit propagation.
+9. [Collections, sequences, and cost](../../2026-07-16-swift-collections-sequences-cost/), choose order, keyed lookup, uniqueness, and eager or lazy evaluation with their operation costs visible.
+10. [Strings, Unicode, and formatting](../../2026-07-16-swift-strings-unicode-formatting/), handle grapheme clusters, indexes, search keys, dates, measurements, and localized display boundaries.
+
+## Where the path goes
+
+The orientation arc establishes the tools and evidence vocabulary. The later curriculum follows eight connected tracks:
+
+```text
+Swift language
+    |
+    v
+Product and interface design
+    |
+    +-> SwiftUI
+    |
+    +-> UIKit
+    |
+    v
+Architecture and data boundaries
+    |
+    v
+Testing and production engineering
+    |
+    v
+Shipping and Apple platform capabilities
+    |
+    v
+Complete product case studies
+```
+
+The same Field Notes domain appears across the core path. Keeping one product spine makes framework differences visible without changing every business rule at the same time.
+
+## Evidence labels
+
+Examples use the smallest environment that can prove their claim:
+
+- **Compiled**: The named Swift source or target completed compilation.
+- **Package tested**: Swift package tests passed.
+- **Linux runner tested**: Browser or executor checks passed against Swift 6.3.3 on Linux.
+- **Simulator tested**: A named journey passed on a recorded Simulator runtime.
+- **Device tested**: A named journey passed on recorded physical hardware.
+- **Account tested**: A service integration passed with the named development or sandbox account.
+- **Not verified**: The required tool, destination, hardware, entitlement, account, or service was unavailable.
+
+One label never silently upgrades into another. A successful browser run does not prove SwiftUI. A successful Simulator run does not prove camera behavior or device performance.
+
+## Practice surfaces
+
+The course uses several execution shapes because one shape cannot prove everything:
+
+- Editable browser exercises for Swift standard-library work.
+- Standalone Swift files for compiler and debugger experiments.
+- Swift packages for domain rules and deterministic tests.
+- Xcode targets for SwiftUI, UIKit, extensions, and Apple SDK integrations.
+- Simulator journeys for supported interface and runtime behavior.
+- Physical-device checks for hardware, performance, background execution, and service boundaries.
+
+The current browser editor has an explicit unavailable state when no execution service is configured. Source remains editable and visible in that state.
+
+## Product spine
+
+Field Notes is a local-first notebook for short observations, tags, favorites, search, and later synchronization. It begins as a command-line package checkpoint, gains separate SwiftUI and UIKit adapters, and grows only when a lesson introduces a new product pressure.
+
+The shared core does not depend on either interface framework. This lets the series compare framework models without duplicating domain behavior or pretending that an interface type owns persistence and networking rules.
+
+## How to read the series
+
+Read in order when Swift or Apple development is new. Experienced Swift developers can use the orientation arc as a vocabulary check, then enter at product design, SwiftUI, UIKit, architecture, testing, production engineering, or the platform capability atlas.
+
+Run the code when the environment is available. When it is not, keep the evidence label honest and continue with lessons whose claims fit the installed tools.
+
+## Related topics
+
+- [Swift coding problems](../../../topics/cs/coding-problems/), runnable standard-library practice across the full coding-problem catalog.
+- [Testing](../../../topics/testing/), the test distances and feedback loops used throughout the course.
+- [Software design principles](../software-design-principles/), neighboring design guidance for boundaries, composition, and maintainable change.

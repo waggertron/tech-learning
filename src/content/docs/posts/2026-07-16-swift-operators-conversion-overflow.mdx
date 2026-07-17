@@ -1,0 +1,341 @@
+---
+title: "Zero to iOS Hero 5: Operators, conversion, and overflow"
+description: "Build typed expressions, convert numeric values deliberately, clamp a score, and distinguish checked arithmetic from wrapping overflow."
+date: 2026-07-16
+tags: [swift, ios, operators, numeric-conversion]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-operators-conversion-overflow/
+series:
+  slug: zero-to-ios-hero
+  order: 5
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import relevanceCode from './2026-07-16-swift-operators-conversion-overflow.swift?raw';
+
+This is part 5 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+An expression combines values to produce another value. Swift operators make those combinations compact, but the type system still decides which combinations are legal and what the result means.
+
+That is why `3 + 4`, `3 / 4`, `3.0 / 4.0`, and `UInt8.max &+ 1` tell four different stories.
+
+## Read an expression as a typed tree
+
+Consider a relevance score:
+
+```swift
+let rawScore = Double(tagPoints) + freshness * maximumFreshnessBonus
+```
+
+The expression is evaluated from smaller parts:
+
+```text
+tagPoints --explicit conversion---> Double
+                                      |
+freshness * maximumFreshnessBonus --->+---> rawScore: Double
+```
+
+Every operand has a type. Every operator has valid operand combinations. The whole expression has a resulting type.
+
+When a compiler diagnostic points to a large expression, inspect its smaller branches before rewriting the entire line.
+
+## Arithmetic preserves numeric meaning
+
+Swift supplies the common arithmetic operators:
+
+```swift
+let sum = 8 + 3
+let difference = 8 - 3
+let product = 8 * 3
+let integerQuotient = 8 / 3
+let floatingQuotient = 8.0 / 3.0
+let remainder = 8 % 3
+```
+
+The values are:
+
+| Expression | Result | Result type |
+| --- | ---: | --- |
+| `8 + 3` | `11` | `Int` |
+| `8 - 3` | `5` | `Int` |
+| `8 * 3` | `24` | `Int` |
+| `8 / 3` | `2` | `Int` |
+| `8.0 / 3.0` | Approximately `2.6667` | `Double` |
+| `8 % 3` | `2` | `Int` |
+
+Integer division discards the fractional remainder. It does not round to the nearest integer.
+
+The `%` operator is a remainder operation. With negative operands, do not assume its result follows every mathematical modulo convention. Test the exact rule your domain expects.
+
+## Assignment changes a binding
+
+The assignment operator stores a new value:
+
+```swift
+var score = 10
+score = 12
+```
+
+Compound assignment combines an operation with reassignment:
+
+```swift
+score += 3
+score *= 2
+```
+
+After those lines, `score` is `30`.
+
+Swift's assignment expression does not return a value. Code such as `if x = y` cannot silently turn an assignment into a Boolean condition. This removes a common typo from C-shaped languages.
+
+## Comparisons produce Boolean values
+
+Comparison operators answer questions:
+
+```swift
+let rating = 4
+
+let isPerfect = rating == 5
+let needsReview = rating != 5
+let isRecommended = rating >= 4
+let isValid = rating > 0 && rating <= 5
+```
+
+The results are `Bool` values. They can be stored, printed, passed to a function, or used by control flow.
+
+Use parentheses when they make the business rule easier to scan:
+
+```swift
+let shouldFeature = isFavorite && (rating >= 4)
+```
+
+The compiler knows the precedence without the parentheses. A teammate should not need to recite the precedence table to understand the rule.
+
+## Boolean operators short-circuit
+
+The logical operators are negation (`!`), conjunction (`&&`), and disjunction (`||`).
+
+`&&` stops when its left side is `false`. `||` stops when its left side is `true`.
+
+```swift
+let hasSearchText = !query.isEmpty
+let shouldSearch = hasSearchText && noteCount > 0
+```
+
+Short-circuiting is part of the expression's behavior. It can prevent unnecessary work and can protect a later expression that is only safe after an earlier condition passes.
+
+Keep side effects out of complex Boolean expressions. A condition should read as a decision, not as a hidden workflow.
+
+## Numeric types do not silently coerce
+
+Existing values of different numeric types need an explicit conversion:
+
+```swift
+let tagPoints = 36
+let freshnessBonus = 15.0
+
+let total = Double(tagPoints) + freshnessBonus
+```
+
+This fails:
+
+```swift
+let total = tagPoints + freshnessBonus
+```
+
+Swift does not guess whether the intended result should be an `Int`, a `Double`, or something else. Writing `Double(tagPoints)` makes the loss model visible.
+
+The direction matters:
+
+```swift
+let precise = 4.9
+let whole = Int(precise) // 4
+```
+
+Converting a finite `Double` to `Int` truncates the fractional part toward zero. It does not round. If the product rule says "nearest whole point," round first:
+
+```swift
+let whole = Int(precise.rounded()) // 5
+```
+
+Conversion is a design decision, not a ceremony to silence the compiler.
+
+## Run the bounded relevance score
+
+The Field Notes checkpoint combines integer tag points with a floating-point freshness bonus:
+
+<SwiftRepl code={relevanceCode} id="swift-operators-conversion-overflow" />
+
+Expected output:
+
+```text
+Relevance: 51/100
+UInt8.max &+ 1: 0
+```
+
+The important sequence is explicit:
+
+```text
+Int tag points
+    |
+    v
+convert to Double
+    |
+    v
+add floating-point bonus
+    |
+    v
+round to a whole score
+    |
+    v
+clamp to 0...100
+    |
+    v
+convert to UInt8
+```
+
+The conversion to `UInt8` happens only after the program proves the value is inside the target range. Reversing those steps would ask the narrow type to accept an unchecked value.
+
+The editor uses Swift 6.3.3 on Linux when available. It proves this standard-library calculation, not an Apple SDK ranking interface.
+
+## Clamping protects a domain range
+
+The score is bounded with nested standard-library functions:
+
+```swift
+let boundedScore = min(max(roundedScore, 0), 100)
+```
+
+Read from the inside out:
+
+1. `max(roundedScore, 0)` prevents a negative result.
+2. `min(..., 100)` prevents a result above the maximum.
+
+Clamping is correct when out-of-range inputs should map to the nearest boundary. It is wrong when an out-of-range input indicates corrupt data that should be rejected. The operator is easy; the domain policy requires judgment.
+
+## Default integer overflow is checked
+
+Each fixed-width integer type has a finite range:
+
+```swift
+let smallest = UInt8.min // 0
+let largest = UInt8.max  // 255
+```
+
+Ordinary arithmetic does not silently wrap across that boundary:
+
+```swift
+var count = UInt8.max
+count += 1 // Runtime trap
+```
+
+The trap prevents `255 + 1` from quietly becoming `0` in ordinary arithmetic. A crash is still undesirable in a shipped product, so validate external values and use an overflow-reporting operation when exceeding the range is an expected possibility.
+
+## Overflow-reporting operations keep control
+
+Fixed-width integers can report overflow without trapping:
+
+```swift
+let result = UInt8.max.addingReportingOverflow(1)
+
+print(result.partialValue) // 0
+print(result.overflow)     // true
+```
+
+The returned tuple gives the wrapped partial value and an overflow flag. Use the partial value only under a policy that defines what it means.
+
+A score pipeline might reject an overflow:
+
+```swift
+let result = current.addingReportingOverflow(increment)
+precondition(!result.overflow, "Score arithmetic exceeded UInt8")
+let updated = result.partialValue
+```
+
+In production, a throwing function or validation result may be more appropriate than a precondition. Error modeling arrives later in the foundations arc.
+
+## Wrapping operators opt in
+
+Swift's overflow operators are `&+`, `&-`, and `&*`:
+
+```swift
+let wrapped = UInt8.max &+ 1 // 0
+```
+
+The ampersand is an explicit opt-in to fixed-width wrapping. It is useful for algorithms and protocols whose rules are defined in terms of bits. It is usually wrong for money, counts, ratings, and user-visible scores.
+
+The runnable example prints one wrapping result so the behavior is visible. Its relevance calculation uses normal checked arithmetic and a deliberate clamp.
+
+## Operator precedence is not a product rule
+
+Multiplication binds more tightly than addition:
+
+```swift
+let score = base + freshness * weight
+```
+
+That expression is equivalent to:
+
+```swift
+let score = base + (freshness * weight)
+```
+
+Precedence explains evaluation order. It does not explain why freshness is multiplied by that weight. Name intermediate values when the domain meaning matters:
+
+```swift
+let freshnessBonus = freshness * maximumFreshnessBonus
+let rawScore = Double(tagPoints) + freshnessBonus
+```
+
+The second version gives the calculation vocabulary.
+
+## Common wrong moves
+
+- **Mixing `Int` and `Double` until the compiler accepts something**: Choose the intended numeric domain, then convert at a named boundary.
+- **Using `Int(value)` as rounding**: It truncates. Apply the required rounding rule first.
+- **Choosing `UInt` because a value should not be negative**: Validate the domain. Unsigned arithmetic can still underflow and complicate differences.
+- **Using wrapping operators to prevent a crash**: Wrapping changes the result. It is not generic error recovery.
+- **Compressing a business formula into one line**: Name intermediate values that explain the policy.
+- **Assuming floating-point values represent decimal fractions exactly**: Treat comparisons and rounding according to the domain's tolerance and precision needs.
+
+## Practice
+
+Change one part of the runnable program at a time:
+
+1. Set `freshness` to `1.0` and predict the score.
+2. Set `matchingTagCount` to `20` and confirm the score clamps to `100`.
+3. Remove `Double(tagPoints)` and read the type error.
+4. Change `.rounded()` to `.rounded(.down)` and compare a score with a fractional part.
+5. Replace the wrapping expression with `UInt8.max.addingReportingOverflow(1)` and print both tuple elements.
+6. Try ordinary `UInt8.max + 1` as a separate experiment and classify whether the compiler or runtime catches it.
+
+Keep the overflow experiment separate from useful work. A deliberate failure should be easy to remove and easy to explain.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- How operand types determine an expression's valid operations and result.
+- Why integer and floating-point division produce different answers.
+- Why numeric conversion is explicit.
+- Why conversion and rounding are separate decisions.
+- When clamping is a product policy rather than a universal repair.
+- How checked, reporting, and wrapping arithmetic differ.
+
+The next post feeds these expressions into conditions, switches, loops, ranges, and patterns.
+
+## Series navigation
+
+- Previous: [Part 4: Values, variables, types, and inference](../2026-07-16-swift-values-variables-types-inference/)
+- Next: [Part 6: Control flow, ranges, and patterns](../2026-07-16-swift-control-flow-patterns/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Operator behavior**: The Swift Programming Language chapter [Basic Operators](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/basicoperators/) defines assignment, arithmetic, comparison, Boolean, range, and precedence behavior.
+- **Numeric types and conversion**: [The Basics](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics/) covers integer ranges, floating-point types, explicit numeric conversion, and type safety.
+- **Overflow choices**: [Advanced Operators](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/advancedoperators/) documents checked integer arithmetic and the explicit overflow operators.
+
+## Related topics
+
+- [Coding concepts](../../topics/cs/coding-concepts/), reasoning about how repeated operations scale.
+- [Binary search](../../topics/cs/coding-problems/binary-search/), a catalog where midpoint arithmetic and numeric boundaries matter.
+- [Testing](../../topics/testing/), boundary checks that make numeric policies executable.

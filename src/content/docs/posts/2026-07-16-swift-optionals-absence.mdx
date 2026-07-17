@@ -1,0 +1,331 @@
+---
+title: "Zero to iOS Hero 8: Optionals and absence"
+description: "Represent missing values explicitly and choose among optional binding, guard, chaining, nil coalescing, propagation, and force unwrapping."
+date: 2026-07-16
+tags: [swift, ios, optionals, nil]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-optionals-absence/
+series:
+  slug: zero-to-ios-hero
+  order: 8
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import optionalCode from './2026-07-16-swift-optionals-absence.swift?raw';
+
+This is part 8 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+Missing data is not unusual. A search can find nothing. A user can omit a location. Text may fail to parse as a number. A cache may not contain a record yet.
+
+Swift makes absence part of the type instead of hiding it behind a sentinel value or an unchecked null reference.
+
+## An optional has two states
+
+Append `?` to a type when a value may be absent:
+
+```swift
+let subtitle: String? = "North ridge"
+let coordinate: String? = nil
+```
+
+Conceptually, `String?` has two cases:
+
+```text
+Optional<String>
+    |
+    +-> some(String)
+    |
+    +-> none
+```
+
+`String?` is shorthand for `Optional<String>`. It is a different type from `String`.
+
+A non-optional `String` promises a string exists. An optional `String` promises either a string or explicit absence. The compiler prevents code from forgetting that second possibility.
+
+## `nil` means no value of this optional type
+
+Assign `nil` only where the type permits absence:
+
+```swift
+var coordinate: String? = nil
+coordinate = "37.7749,-122.4194"
+coordinate = nil
+```
+
+This is invalid:
+
+```swift
+var title: String = "Fog"
+// title = nil // Error: nil cannot be assigned to String
+```
+
+`nil` is not an empty string, zero, `false`, an empty array, or a placeholder object. Each of those is a present value with domain meaning.
+
+Choose absence only when "not present" is a real state.
+
+## Parsing naturally returns an optional
+
+Standard-library numeric initializers represent conversion failure with an optional:
+
+```swift
+let valid = Int("42")    // Int? containing 42
+let invalid = Int("hi")  // Int? containing nil
+```
+
+The signature tells the truth: not every string is an integer.
+
+Code cannot use `valid` as an ordinary `Int` until it handles the missing case.
+
+## Optional binding handles both branches
+
+Use `if let` when the present and absent paths both belong near the decision:
+
+```swift
+let input = "42"
+
+if let number = Int(input) {
+    print("Parsed \(number)")
+} else {
+    print("Not an integer")
+}
+```
+
+Inside the first branch, `number` is a non-optional `Int`. The binding unwraps only after proving the optional contains a value.
+
+Modern Swift can use shorthand when the unwrapped name should match the optional name:
+
+```swift
+let coordinate: String? = "37.7749,-122.4194"
+
+if let coordinate {
+    print(coordinate)
+}
+```
+
+The inner `coordinate` is non-optional and scoped to the successful branch.
+
+## `guard let` protects the successful path
+
+Use `guard` in a function when later work requires the value:
+
+```swift
+func characterCount(_ text: String?) -> Int? {
+    guard let text else { return nil }
+    return text.count
+}
+```
+
+After the guard, `text` is a non-optional `String` for the rest of the function.
+
+The `else` branch must leave the enclosing scope. It can `return`, `throw`, `break`, `continue`, or call something that never returns. This rule is what makes the unwrapped value safe afterward.
+
+Prefer `guard` for required preconditions and `if let` for local branching. Do not turn every optional into a ladder of early exits without considering whether absence should instead be propagated.
+
+## Bind several values together
+
+One condition can unwrap several optionals:
+
+```swift
+let latitudeText = "37.7749"
+let longitudeText = "-122.4194"
+
+if let latitude = Double(latitudeText),
+   let longitude = Double(longitudeText) {
+    print(latitude, longitude)
+}
+```
+
+The body runs only when both conversions succeed. Conditions are evaluated from left to right, so later clauses can use names bound by earlier clauses.
+
+This is useful when the operation needs the complete group. If partial success has meaning, model and report the fields separately.
+
+## Optional chaining propagates absence
+
+Use `?.` to access a member only when the optional contains a value:
+
+```swift
+let title: String? = "Fog"
+let count = title?.count
+```
+
+`String.count` normally returns `Int`. Access through an optional chain returns `Int?` because the title may be absent.
+
+If `title` is `nil`, the access is skipped and the result is `nil`. If the title exists, the result contains its character count.
+
+Chains can continue through several optional levels:
+
+```swift
+let firstTagLength = note?.tags.first?.count
+```
+
+The result remains one optional around the final value. Chaining through two optional links does not automatically produce `Int??`.
+
+Use chaining when absence should flow to the result. Use binding when the code needs to perform a body of work only after proving values exist.
+
+## Nil coalescing supplies a fallback
+
+The `??` operator unwraps a present value or evaluates a default:
+
+```swift
+let title: String? = nil
+let displayTitle = title ?? "Untitled note"
+```
+
+`displayTitle` is a non-optional `String`.
+
+The right side is evaluated only when the optional is `nil`. This matters when building the fallback is expensive or has side effects.
+
+A fallback should preserve the domain meaning. `0` is not always a harmless replacement for a missing measurement, and `""` is not always an honest replacement for an absent title.
+
+## Run the coordinate parser
+
+The Field Notes checkpoint accepts an optional coordinate string, validates both components, and returns an optional tuple:
+
+<SwiftRepl code={optionalCode} id="swift-optionals-absence" />
+
+Expected output:
+
+```text
+Input characters: 17
+Coordinate: 37.7749, -122.4194
+Missing input: not available
+```
+
+The example uses each planned operation:
+
+- `rawCoordinate?.count` chains through optional input.
+- `?? 0` supplies a display count fallback.
+- `guard let input` unwraps the parser input.
+- Two `Double` conversions bind together.
+- Range guards reject coordinates outside latitude and longitude bounds.
+- The function returns `nil` for absent or invalid input.
+- `if let coordinate` exposes valid parsed values.
+
+This is standard-library code for the Swift 6.3.3 Linux editor. It does not prove Core Location, MapKit, device location permission, or a coordinate interface.
+
+## Returning `nil` propagates an unavailable result
+
+The parser's signature is:
+
+```swift
+func parseCoordinate(
+    _ input: String?
+) -> (latitude: Double, longitude: Double)?
+```
+
+Both input and output are optional for different reasons:
+
+- The input is optional because a note may not contain coordinate text.
+- The output is optional because present text may still be malformed or out of range.
+
+Returning `nil` combines those failure reasons into one unavailable result. That is enough when callers only need success or absence. When callers must tell missing, malformed, and out-of-range inputs apart, a richer enum or thrown error is the better contract.
+
+Optionals answer "is there a value?" They do not carry a detailed failure explanation.
+
+## Force unwrapping asserts a runtime fact
+
+Appending `!` extracts the wrapped value without a conditional path:
+
+```swift
+let number = Int("42")!
+```
+
+If the optional is `nil`, the program traps. Force unwrapping does not disable safety; it turns the programmer's claim into a runtime assertion.
+
+This is rarely appropriate for user input, network data, stored data, timing-dependent state, or values controlled by another process.
+
+A force unwrap can be justified when the invariant is truly established outside the type system and failure is a programmer defect. Even then, an explicit guard with a useful failure message may make the assumption easier to audit.
+
+Avoid writing `!` merely because the compiler asks you to handle absence. The compiler has identified a missing branch in the design.
+
+## Implicitly unwrapped optionals are still optional
+
+A type spelled `String!` is an implicitly unwrapped optional. It can contain `nil`, but Swift may unwrap it automatically when a non-optional value is required.
+
+That behavior makes an invalid assumption fail far from the declaration. Modern Swift code should prefer ordinary optionals and explicit initialization wherever possible.
+
+You may encounter implicitly unwrapped outlets or framework APIs whose lifecycle establishes a value after initialization. Treat them as lifecycle contracts, not as a convenient default type.
+
+## Optional Boolean has three states
+
+`Bool?` is not a complicated spelling of `Bool`:
+
+```swift
+let isFavorite: Bool? = nil
+```
+
+It can be:
+
+1. `true`
+2. `false`
+3. `nil`
+
+The third state needs meaning, such as "not loaded" or "user has not answered." If the product has only yes and no, use a non-optional `Bool` with an honest default or require initialization.
+
+This condition is explicit:
+
+```swift
+if isFavorite == true {
+    print("Favorite")
+}
+```
+
+It intentionally treats `false` and `nil` the same. Use binding or a switch when those states require different behavior.
+
+## Nested optionals signal layered absence
+
+`String??` can occur when two layers each have a missing state. For example, a dictionary lookup may return no entry while the stored entry itself may contain an optional string.
+
+Do not flatten nested optionals without deciding what each absence means. Sometimes the two missing states are genuinely different. More often, the type reveals an awkward boundary that should use a named result type.
+
+## Wrong first moves
+
+- **Force unwrap user or network input**: Bind or propagate the optional and define the failure behavior.
+- **Replace every `nil` with a neutral-looking default**: A default can erase the difference between missing and present data.
+- **Use an optional for every property just to make initialization easy**: Require values that define a valid instance.
+- **Check `value != nil`, then force unwrap later**: Bind once so the checked value is the value used.
+- **Represent detailed errors with `nil`**: Use a richer result when callers need the reason.
+- **Treat empty, zero, false, and nil as interchangeable**: Model each state according to product meaning.
+
+## Practice
+
+Modify the runnable example one case at a time:
+
+1. Set `rawCoordinate` to `nil` and predict all three output lines.
+2. Use `"north,west"` and identify which guard fails.
+3. Use `"91,0"` and identify the range that rejects it.
+4. Replace `inputLength`'s fallback with `-1` and discuss whether that sentinel is clearer.
+5. Return a display label with `??` while preserving `nil` inside the parser.
+6. Change the parser to accept non-optional input and decide which caller should own the missing-input branch.
+
+The last exercise is API design. Optional placement determines which layer owns absence.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- Why `T?` and `T` are different types.
+- How optional binding turns a successful `T?` into a scoped `T`.
+- Why `guard let` keeps the successful path flat.
+- When chaining, coalescing, propagation, and binding express different policies.
+- Why force unwrapping is a runtime assertion rather than ordinary extraction.
+- Why optionals represent absence but not detailed failure reasons.
+
+The next post stores many values and chooses among arrays, dictionaries, sets, sequences, and lazy operations.
+
+## Series navigation
+
+- Previous: [Part 7: Functions and API shape](../2026-07-16-swift-functions-api-shape/)
+- Next: [Part 9: Collections, sequences, and cost](../2026-07-16-swift-collections-sequences-cost/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Optional values and binding**: The Swift Programming Language chapter [The Basics](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics/) defines optional types, `nil`, binding, fallback values, force unwrapping, and implicitly unwrapped optionals.
+- **Member access through absence**: [Optional Chaining](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/optionalchaining/) explains optional property, method, and subscript access and how several chain levels affect the result type.
+- **Guard scope**: The language reference chapter [Statements](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/statements/) specifies guard conditions, control transfer, and the scope of bound values.
+
+## Related topics
+
+- [Testing](../../topics/testing/), boundary tests for missing, malformed, and out-of-range inputs.
+- [Coding concepts](../../topics/cs/coding-concepts/), algorithms whose not-found and invalid-input cases need explicit contracts.
+- [Binary search](../../topics/cs/coding-problems/binary-search/), algorithms whose not-found result needs an explicit contract.

@@ -1,0 +1,265 @@
+---
+title: "Zero to iOS Hero 1: The Apple development map"
+description: "Swift, Xcode, SDKs, frameworks, targets, schemes, Simulator runtimes, and devices placed into one development map."
+date: 2026-07-16
+tags: [swift, ios, xcode, apple-platforms]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-apple-development-map/
+series:
+  slug: zero-to-ios-hero
+  order: 1
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import helloCode from './2026-07-16-apple-development-map.swift?raw';
+
+This is part 1 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+An Apple app begins as source code, but source code is not an app. The compiler, standard library, platform SDK, frameworks, build target, scheme, and run destination each own a different part of the trip from text to a running process.
+
+Mix those names together and every build error feels like an Xcode problem. Separate them and the error usually points to one layer.
+
+## The map
+
+The shortest useful map has two routes:
+
+```text
+Swift source
+    |
+    +-> Swift compiler + standard library
+    |       |
+    |       +-> command-line executable
+    |
+    +-> Xcode target + platform SDK + frameworks
+            |
+            +-> app product
+                    |
+                    +-> scheme action + run destination
+                            |
+                            +-> simulated or physical device
+```
+
+The first route is enough for language exercises and command-line programs. The second route is needed when code imports Apple platform frameworks, builds an application bundle, or runs under iOS.
+
+## Terms that belong to different layers
+
+| Term | What it owns | Concrete example |
+| --- | --- | --- |
+| Swift | The programming language and its rules | `let`, functions, optionals, actors |
+| Swift toolchain | The compiler and related command-line tools | `swiftc`, `swift`, Swift Package Manager |
+| Standard library | Common types and operations available to Swift programs | `String`, `Array`, `print` |
+| Xcode | Apple's development environment and tool suite | Editor, build system, debugger, signing, Device Hub |
+| SDK | The development resources for a platform and SDK version | The iOS 26.5 SDK |
+| Framework | A packaged library and its public interfaces | SwiftUI, UIKit, Foundation |
+| Project | Xcode's container for related files, settings, and targets | A Field Notes project |
+| Target | A recipe for one product | An iOS app or unit-test bundle |
+| Scheme | The actions and configuration used to build, run, test, profile, or archive targets | A Field Notes development scheme |
+| Run destination | The place where the selected scheme runs | A simulated iPhone or connected iPhone |
+| Simulator runtime | The installed operating-system runtime used by simulated devices | An iOS 26.5 runtime |
+| Product | The output created by a target | An app bundle, framework, or test bundle |
+
+These terms connect to each other, but none is a synonym for another.
+
+## Swift is the language
+
+Swift defines syntax, type rules, control flow, functions, value and reference types, error handling, concurrency, and the other rules used to express a program. The open-source Swift toolchain can also build software for servers and other non-Apple environments.
+
+That distinction matters. Swift code is not automatically iOS code.
+
+```swift
+let platforms = ["iOS", "macOS", "Linux"]
+print(platforms.joined(separator: ", "))
+```
+
+This program uses Swift language syntax and standard-library types. It does not import SwiftUI or UIKit. A compatible Swift toolchain can compile it without an iOS SDK.
+
+## Run the smallest program
+
+The first executable contains one statement:
+
+<SwiftRepl code={helloCode} id="apple-development-map" />
+
+Expected output:
+
+```text
+Hello, Apple platforms
+```
+
+The editor runs against the project's Swift 6.3.3 Linux service when that service is available. It proves standard-library compilation and execution. It does not prove Xcode, an Apple SDK, SwiftUI, UIKit, Simulator, signing, or device behavior.
+
+The same source can be compiled locally:
+
+```bash
+swiftc -swift-version 6 -warnings-as-errors Hello.swift -o hello
+./hello
+```
+
+Compilation turns the source into an executable for the selected host platform. Running that executable starts a process. The text `Apple platforms` is only output. It does not make the binary an Apple platform app.
+
+## The compiler and standard library
+
+The compiler reads source, checks it against Swift's rules, reports diagnostics, and emits the next build artifacts. The standard library supplies many of the types and functions that feel like part of the language during daily use.
+
+`print` is a useful example. Calling a function is Swift syntax. The `print` function itself comes from the standard library.
+
+That separation explains two common failures:
+
+- A syntax or type error is a language and compiler problem.
+- A missing standard-library capability can be a toolchain or target-environment problem.
+
+Neither error requires an iOS simulator to understand.
+
+## Xcode is the development environment
+
+Xcode coordinates Apple platform development. Its source editor is only the visible center. Xcode also owns project editing, target settings, build actions, diagnostics, debugging, previews, signing, archives, source-control integration, Simulator management, and device deployment.
+
+The command-line tools expose part of that world. They can compile standalone Swift and Swift packages. Full Xcode adds the Apple platform SDKs, app build system, Simulator tooling, signing workflow, archives, and device support.
+
+This gives us a clean rule:
+
+```text
+Swift question?             Start with the language and compiler.
+Package question?           Start with Swift Package Manager.
+Apple framework question?   Check the SDK, imports, and deployment target.
+App build question?         Check the target and build settings.
+Run question?               Check the scheme and destination.
+Device question?            Check signing, capability, and hardware state.
+```
+
+## An SDK is a platform development kit
+
+An SDK collects the frameworks, interface descriptions, libraries, tools, and other resources needed to build for a particular platform version. The iOS SDK gives the compiler and linker the development view of iOS APIs.
+
+An SDK is not the operating system installed on a phone. It is also not the minimum iOS version supported by an app.
+
+Three version values often appear together:
+
+- **SDK version**: The API surface used to build the app.
+- **Deployment target**: The oldest operating-system version the app promises to support.
+- **Runtime version**: The operating system actually running the built app.
+
+Building with a newer SDK does not mean every API in that SDK can run on the deployment target. Availability checks bridge that difference.
+
+## A framework is one packaged capability surface
+
+A framework packages library code and related resources behind a public interface. Apple distributes much of its platform API through frameworks.
+
+Examples have different jobs:
+
+- **SwiftUI**: A declarative interface framework.
+- **UIKit**: An event-driven interface framework for iOS and related platforms.
+- **Foundation**: Core data, text, date, URL, file, process, and service abstractions.
+
+An SDK contains many frameworks. Importing one framework does not import the entire SDK as one library.
+
+```swift
+import SwiftUI
+```
+
+That statement asks the compiler for the `SwiftUI` module in the active build environment. A Linux standard-library runner cannot satisfy it because SwiftUI is an Apple SDK framework, not part of the Swift language.
+
+## A target describes one product
+
+Apple defines an Xcode target as the recipe for a product. A project can contain several related targets:
+
+```text
+FieldNotes project
+    |
+    +-> FieldNotes app target
+    +-> FieldNotes unit-test target
+    +-> FieldNotes UI-test target
+    +-> FieldNotes widget target
+```
+
+Each target chooses source membership, resources, dependencies, build settings, capabilities, and product type. Adding a file to the project does not guarantee that every target compiles it. Target membership decides that.
+
+If a source file exists in the navigator but a symbol is missing during one build, inspect target membership before rewriting the code.
+
+## A scheme describes an action
+
+A scheme tells Xcode what to do with one or more targets for a selected action. The common actions are Build, Run, Test, Profile, Analyze, and Archive.
+
+A scheme can choose:
+
+- Targets to build.
+- Build configuration, such as Debug or Release.
+- Executable to launch.
+- Test targets or test plans.
+- Launch arguments and environment values.
+- Diagnostics used during a run.
+
+The target answers, "What product can Xcode build?" The scheme answers, "What action should Xcode perform with these products right now?"
+
+## A run destination answers where
+
+The run destination is the environment selected next to the scheme. It can be a simulated device, a connected physical device, or the Mac when the product supports macOS.
+
+The scheme limits the valid destination list. An iOS app scheme shows compatible iOS destinations. A macOS command-line scheme runs on the Mac.
+
+The destination affects more than screen shape. It selects a platform, operating-system version, architecture, and available capabilities.
+
+## Simulator has three nearby meanings
+
+The names around Simulator are easy to collapse:
+
+- **Simulator or Device Hub**: The Mac application that hosts simulated devices.
+- **Simulator runtime**: An installed operating-system runtime, such as iOS 26.5.
+- **Simulated device**: A configured device model paired with a runtime.
+
+A simulated device gives fast feedback across screen sizes and operating-system versions. It does not reproduce every hardware feature, performance characteristic, thermal condition, service, or entitlement behavior of a physical device.
+
+Simulator evidence stays Simulator evidence. Device claims need device checks.
+
+## Read errors by layer
+
+Suppose a build fails. Classify the first useful diagnostic before changing code.
+
+| Diagnostic shape | First layer to inspect |
+| --- | --- |
+| Expected expression or type mismatch | Swift source and compiler |
+| No such module | Active toolchain, SDK, target, dependency |
+| Symbol unavailable on the deployment target | SDK availability and deployment target |
+| File not found in one product | Target membership and build phases |
+| Scheme has no eligible destinations | Scheme, platform support, and installed runtimes |
+| Signing requires a development team | Target signing settings and Apple account |
+| Feature unavailable in Simulator | Capability boundary and physical device |
+
+The first diagnostic can cause many later diagnostics. Fix it first, then rebuild before chasing the rest.
+
+## The wrong first move
+
+Calling every layer "Xcode" hides the actual contract.
+
+"Xcode does not understand my array" is probably a Swift type question. "Swift cannot run an iPhone" is probably a target, SDK, destination, or signing question. "SwiftUI is iOS" ignores that SwiftUI also targets other Apple platforms and still depends on the selected SDK.
+
+Name the layer. Then choose the tool.
+
+## Checkpoint
+
+You can now classify each item without opening Xcode:
+
+1. `let title = "Redwood trail"` belongs to the Swift language and standard-library layer.
+2. `import SwiftUI` asks for an Apple framework module supplied by the active SDK.
+3. An iOS app bundle is a target product.
+4. Running tests with diagnostics is a scheme action.
+5. An iPhone configuration paired with iOS 26.5 is a simulated destination.
+6. Camera performance on a real iPhone is physical-device evidence.
+
+The next post uses this map to follow code from an Xcode project into Simulator, onto a device, and into Git history.
+
+## Series navigation
+
+- Previous: none. Start here.
+- Next: [Part 2: Xcode, simulators, devices, and Git](../2026-07-16-xcode-simulators-devices-git/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Swift language and library boundaries**: The Swift project's [About Swift](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutswift/) and [language-reference introduction](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutthelanguagereference/) distinguish the language, compiler, and standard library.
+- **Xcode build vocabulary**: Apple's current documentation for [Xcode](https://developer.apple.com/documentation/xcode), [targets](https://developer.apple.com/documentation/xcode/configuring-a-new-target-in-your-project), [schemes](https://developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project), and [running an app](https://developer.apple.com/documentation/xcode/building-and-running-an-app) defines how products move through the build system.
+- **SDKs, frameworks, and runtimes**: Apple's [software product overview](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/OSX_Technology_Overview/SoftwareProducts/SoftwareProducts.html), [framework guide](https://developer.apple.com/library/archive/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/WhatAreFrameworks.html), and current [Xcode component guide](https://developer.apple.com/documentation/xcode/downloading-and-installing-additional-xcode-components) provide the structural definitions and current runtime-management workflow.
+
+## Related topics
+
+- [Swift coding problems](../../topics/cs/coding-problems/), standard-library exercises with runnable Swift implementations.
+- [Testing](../../topics/testing/), the testing distances used throughout this series.
+- [Expo and React Native](../2026-07-07-react-expo-react-native/), a contrasting native application toolchain built around JavaScript and TypeScript.

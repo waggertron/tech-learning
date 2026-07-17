@@ -10,6 +10,16 @@ This matrix defines the minimum evidence required before a post checkbox can clo
 
 Evidence records name the command, commit, compiler, language mode, SDK, destination, result, and unavailable boundary. A result is never promoted from simulator to device, from preview to accessibility, or from Linux Swift to an Apple SDK.
 
+## Publication and Compilation Boundary
+
+Compilation is tied to executable claims, not to the existence of a post. A prose-only lesson can record compile, test, simulator, and device evidence as not applicable when it introduces no executable behavior. A lesson with runnable Swift uses the narrowest artifact that proves its claim: standalone `swiftc`, Swift Package Manager, or a named Xcode target.
+
+Full Xcode is required only for claims involving an Apple SDK, application target, Simulator runtime, signing, archive, or physical-device deployment. Command Line Tools can validate standalone Swift and compatible packages. The browser runner can validate the pinned Swift 6.3.3 Linux standard-library boundary. Neither surface proves Apple framework behavior.
+
+An unavailable Xcode, simulator, device, account, or entitlement blocks only the post or claim assigned to that evidence. It does not block prose-only lessons, standard-library lessons, package lessons, or the series as a whole.
+
+Authoring status is independent from evidence status. A post may be created, reviewed, indexed, and published while one or more assigned evidence values remain Not verified. Its evidence record names the gap, its completion checkbox stays open, and authoring proceeds to the next post. This separation prevents missing hardware or platform services from turning the curriculum into a set of empty placeholders.
+
 ## Evidence Values
 
 - **Required:** The post cannot close without the artifact.

@@ -1,0 +1,381 @@
+---
+title: "Zero to iOS Hero 3: Learn by building and debugging"
+description: "A prediction-first Swift debugging loop using compiler diagnostics, assertions, LLDB breakpoints, variable inspection, logs, documentation, and small experiments."
+date: 2026-07-16
+tags: [swift, debugging, lldb, testing]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-learning-by-building-debugging/
+series:
+  slug: zero-to-ios-hero
+  order: 3
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import debuggingCode from './2026-07-16-learning-by-building-debugging.swift?raw';
+
+This is part 3 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+Fast learning is not the same as fast typing. The useful loop is prediction, experiment, observation, and explanation. A compiler diagnostic, failed assertion, breakpoint, log line, or tiny test gives the observation. Your explanation turns it into knowledge you can reuse.
+
+This post uses one arithmetic bug because the domain is obvious. The debugging method is the lesson.
+
+## The feedback loop
+
+Use the same loop for language questions, interface bugs, state races, persistence failures, and device-only behavior:
+
+```text
+State a prediction
+        |
+        v
+Change one variable
+        |
+        v
+Build or run the smallest proof
+        |
+        v
+Inspect the first mismatch
+        |
+        v
+Explain the cause
+        |
+        v
+Keep a test or checkpoint
+```
+
+The loop gets weak when several variables change at once. A new framework, copied architecture, network call, database, and animation in one experiment produce a failure with too many possible owners.
+
+## Start with a passing anchor
+
+The program calculates the integer average of three readings:
+
+<SwiftRepl code={debuggingCode} id="learning-by-building-debugging" />
+
+Expected output:
+
+```text
+Average: 4
+```
+
+The browser runner proves only the Swift standard-library path on Linux. The same source can be compiled with debug information on macOS:
+
+```bash
+swiftc \
+  -swift-version 6 \
+  -warnings-as-errors \
+  -Onone \
+  -g \
+  DebuggingLoop.swift \
+  -o debugging-loop
+
+./debugging-loop
+```
+
+`-Onone` keeps the unoptimized development shape. `-g` emits debug information LLDB can use to map machine execution back to source and variables.
+
+## Form a prediction before breaking it
+
+The inputs are `[2, 4, 6]`.
+
+```text
+total    = 2 + 4 + 6 = 12
+divisor  = 3
+average  = 12 / 3 = 4
+```
+
+The prediction is precise: `total` should be 12, `divisor` should be 3, and `observed` should be 4.
+
+Now introduce one fault:
+
+```swift
+let divisor = values.count - 1
+```
+
+Nothing else changes. The faulty program calculates `12 / 2`, so the assertion should report an observed value of 6.
+
+## Assertions turn assumptions into failures
+
+The program records its expected behavior:
+
+```swift
+assert(observed == expected, "Expected \(expected), got \(observed)")
+```
+
+Without the assertion, the program prints a plausible integer and exits successfully. With the assertion, the process stops near the violated assumption.
+
+Use assertion families deliberately:
+
+- **`assert`**: A development check for an internal assumption. Optimized production builds can remove it.
+- **`precondition`**: A requirement that callers must satisfy. It remains active in ordinary optimized builds.
+- **Throwing error**: A recoverable condition the caller can handle.
+- **Test expectation**: A durable behavior contract run by the test suite.
+
+An empty readings array is a caller contract in this example, so `precondition` guards it. The expected average is a learning checkpoint, so `assert` exposes the deliberate bug.
+
+## Read the failure before opening a debugger
+
+Run the broken executable once outside LLDB:
+
+```bash
+./average-readings-broken
+```
+
+The process should exit unsuccessfully and report the assertion message:
+
+```text
+Expected 4, got 6
+```
+
+That message already narrows the search. The inputs were accepted and the function returned. The mismatch is in the calculation or expectation, not program launch.
+
+The debugger is useful when the message does not reveal which intermediate value became wrong.
+
+## Compile the deliberate failing variant
+
+The companion lab keeps broken and corrected sources separate so the failure is reproducible:
+
+```bash
+swiftc \
+  -swift-version 6 \
+  -warnings-as-errors \
+  -Onone \
+  -g \
+  AverageReadingsBroken.swift \
+  -o average-readings-broken
+```
+
+An intentional runtime failure can still compile cleanly. Compilation proves syntax and type correctness. It does not prove behavior.
+
+## Stop in LLDB
+
+Launch the executable under LLDB:
+
+```bash
+lldb ./average-readings-broken
+```
+
+Set a symbolic breakpoint on the function and run:
+
+```text
+(lldb) breakpoint set --name average
+(lldb) run
+```
+
+LLDB stops when execution enters `average`. Step over the precondition and assignments:
+
+```text
+(lldb) next
+(lldb) next
+(lldb) next
+```
+
+Inspect the current frame:
+
+```text
+(lldb) frame variable values
+(lldb) frame variable total
+(lldb) frame variable divisor
+```
+
+The decisive mismatch is:
+
+```text
+total = 12
+divisor = 2
+```
+
+The expected divisor was 3. The debugger has moved the problem from "the average is wrong" to one expression: `values.count - 1`.
+
+Continue and let the assertion record the consequence:
+
+```text
+(lldb) continue
+```
+
+## What a breakpoint actually does
+
+A breakpoint asks the debugger to interrupt execution at a source location, symbol, exception, or condition. While the process is stopped, LLDB can inspect the active stack frame, variables, memory, threads, and expressions.
+
+Useful commands for the first week:
+
+| Command | Question it answers |
+| --- | --- |
+| `breakpoint set --name average` | Can I stop when this function begins? |
+| `run` | What happens from a fresh process? |
+| `next` | What changes after the next source line without entering called functions? |
+| `step` | What happens inside the function called by this line? |
+| `finish` | What happens when the current function returns? |
+| `frame variable` | What values exist in the current frame? |
+| `bt` | Which calls led to this point? |
+| `continue` | What happens after this breakpoint? |
+
+Commands are observations, not repairs. Change the source only after you can name the bad value and the expression that produced it.
+
+## Fix one line
+
+Restore the correct divisor:
+
+```swift
+let divisor = values.count
+```
+
+Compile and run the corrected checkpoint:
+
+```bash
+swiftc \
+  -swift-version 6 \
+  -warnings-as-errors \
+  -Onone \
+  -g \
+  AverageReadingsFixed.swift \
+  -o average-readings-fixed
+
+./average-readings-fixed
+```
+
+Expected output:
+
+```text
+Average: 4
+```
+
+The fix is small because the experiment isolated one variable. A large rewrite would erase the evidence that explains why behavior changed.
+
+## Keep the failure as a test
+
+An assertion inside an executable is useful for a small experiment. Product behavior belongs in a test target once it needs to survive refactoring.
+
+The future test shape is:
+
+```swift
+import Testing
+
+@Test("Average uses every reading")
+func averageUsesEveryReading() {
+    #expect(average([2, 4, 6]) == 4)
+}
+```
+
+The function is small enough that this test names its contract directly. Later lessons add boundary cases, error behavior, asynchronous work, deterministic dependencies, and UI journeys at their lowest useful testing distance.
+
+## Compiler diagnostics are part of the loop
+
+Not every experiment reaches runtime. Remove the closing quote from a string or pass a `String` where an `Int` is required and the compiler stops earlier.
+
+Treat a diagnostic as structured evidence:
+
+1. Read the file and line.
+2. Read the primary message before its notes.
+3. Identify the expected and actual types or syntax forms.
+4. Fix the earliest owned cause.
+5. Compile again before changing anything else.
+
+Do not paste ten diagnostics into a search box and accept the first unrelated fix. Later errors often describe damage caused by the first one.
+
+## Logs answer timeline questions
+
+Breakpoints pause a process and can change timing. Logs are better when the question is event order, repeated work, or a failure that is hard to stop near.
+
+A small command-line experiment can start with `print`:
+
+```swift
+print("average input count: \(values.count)")
+```
+
+Apple platform apps later use structured logging with privacy-aware fields and subsystem categories. The rule stays the same: log the smallest fact that distinguishes competing explanations. Do not dump private user content or credentials.
+
+Remove noisy temporary output after the cause is understood. Keep durable operational logs only when they answer a real support or production question.
+
+## Documentation answers contract questions
+
+Search documentation after naming the missing contract.
+
+Weak question:
+
+```text
+Why is Swift broken?
+```
+
+Useful questions:
+
+```text
+Does assert run in optimized Swift builds?
+What does LLDB frame variable inspect?
+Which Xcode scheme action enables the debugger?
+Is this API available on the deployment target?
+```
+
+Use the symbol's Quick Help, Apple Developer Documentation, the Swift book, Swift Evolution proposals, and LLDB documentation. Record the API version or availability when the answer can change with the toolchain.
+
+## Small experiments beat copied applications
+
+Copying a finished application gives you many lines that once worked together. It does not show which line owns the behavior you care about.
+
+A small experiment has a tighter contract:
+
+- One question.
+- One changed variable.
+- One expected result.
+- One observation surface.
+- One retained test or note.
+
+When the small proof works, move the lesson into the product. If the product then fails, the integration boundary becomes the next variable to inspect.
+
+## A practical debugging ladder
+
+Use the least expensive observation that can answer the question:
+
+```text
+Read the source and diagnostic
+        |
+        v
+Compile the smallest unit
+        |
+        v
+Run a focused test or assertion
+        |
+        v
+Add one log or breakpoint
+        |
+        v
+Inspect the integration boundary
+        |
+        v
+Use Simulator or physical-device evidence
+```
+
+Do not start with a physical-device mystery when a standalone function already returns the wrong value. Do not stop at a standalone proof when the claim depends on signing, sensors, background behavior, or a platform service.
+
+## Checkpoint
+
+The complete learning record for this bug is short:
+
+```text
+Prediction: total 12, divisor 3, result 4.
+Change: divisor became values.count - 1.
+Failure: assertion reported expected 4, got 6.
+Inspection: LLDB showed total 12 and divisor 2.
+Cause: the calculation dropped one element from the divisor only.
+Fix: divide by values.count.
+Proof: corrected executable printed Average: 4.
+```
+
+That record is more useful than "changed code until it worked." It preserves the recognition pattern for the next off-by-one bug.
+
+The orientation arc is complete. The next lesson starts Swift from first principles with values, variables, concrete types, and inference.
+
+## Series navigation
+
+- Previous: [Part 2: Xcode, simulators, devices, and Git](../2026-07-16-xcode-simulators-devices-git/)
+- Next: [Part 4: Values, variables, types, and inference](../2026-07-16-swift-values-variables-types-inference/)
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Swift failure contracts**: The Swift book's [assertions and preconditions](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/thebasics/#Assertions-and-Preconditions) explains development assertions, preconditions, and when execution stops.
+- **Apple's LLDB model**: Apple's [LLDB debugging guide](https://developer.apple.com/library/archive/documentation/General/Conceptual/lldb-guide/) and [breakpoint chapter](https://developer.apple.com/library/archive/documentation/General/Conceptual/lldb-guide/chapters/C3-Breakpoints.html) describe execution control, state inspection, source breakpoints, symbolic breakpoints, and Swift error breakpoints.
+- **Current LLDB command behavior**: The LLDB project's [tutorial](https://lldb.llvm.org/use/tutorial.html) and [variable formatting guide](https://lldb.llvm.org/use/variable.html) document `run`, stepping, backtraces, frame selection, expressions, and variable inspection.
+
+## Related topics
+
+- [Test-driven development](../../topics/testing/tdd/), turning a reproduced failure into a durable development loop.
+- [Unit tests](../../topics/testing/unit-tests/), keeping pure behavior checks close to the function.
+- [Swift coding problems](../../topics/cs/coding-problems/), small exercises suited to prediction-first debugging.
