@@ -1,0 +1,401 @@
+---
+title: "Zero to iOS Hero 12: Enumerations, associated values, and pattern matching"
+description: "Replace contradictory loading flags with one exhaustive Swift enumeration whose cases carry only the data each state needs."
+date: 2026-07-16
+tags: [swift, ios, enumerations, pattern-matching, state-modeling]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-enumerations-associated-values-pattern-matching/
+series:
+  slug: zero-to-ios-hero
+  order: 12
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import enumPatternCode from './2026-07-16-swift-enumerations-associated-values-pattern-matching.swift?raw';
+
+This is part 12 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A loading screen can be idle, loading, loaded, or failed. It cannot be all four at once. Swift enumerations put that product rule into the type system.
+
+Each case can carry exactly the data that belongs to that alternative. A `switch` then forces the caller to decide what every possible state means.
+
+## Several booleans create impossible combinations
+
+This model looks simple:
+
+```swift
+struct LoadingFlags {
+    var isLoading: Bool
+    var hasLoaded: Bool
+    var hasFailed: Bool
+}
+```
+
+It can represent valid moments, but it can also represent nonsense:
+
+```swift
+let contradictory = LoadingFlags(
+    isLoading: true,
+    hasLoaded: true,
+    hasFailed: true
+)
+```
+
+Every caller must remember an unwritten coordination rule. Adding optional notes, an optional error message, and a retry flag creates more combinations to validate.
+
+The problem is the shape of the data. It permits states the product rejects.
+
+## An enumeration defines one alternative at a time
+
+Declare the valid alternatives directly:
+
+```swift
+enum NoteLoadState {
+    case idle
+    case loading
+    case loaded
+    case failed
+}
+```
+
+A value of `NoteLoadState` holds one case at a time:
+
+```swift
+var state = NoteLoadState.idle
+state = .loading
+state = .loaded
+```
+
+Once Swift knows the type, leading-dot syntax keeps assignments and arguments compact. The case is still a typed value, not a string or an integer disguised by a constant.
+
+Enums are value types. Assignment and argument passing preserve the same independent-value rule used by structures.
+
+## Associated values put data on the right case
+
+The real states do not carry the same information:
+
+- Idle needs no payload.
+- Loading needs an attempt number.
+- Loaded needs notes and their source.
+- Failed needs a message and retry policy.
+
+Associated values express those differences:
+
+```swift
+enum NoteLoadState {
+    case idle
+    case loading(attempt: Int)
+    case loaded(notes: [String], fromCache: Bool)
+    case failed(message: String, retryable: Bool)
+}
+```
+
+Construct each value with data appropriate to its case:
+
+```swift
+let waiting = NoteLoadState.idle
+let request = NoteLoadState.loading(attempt: 2)
+let success = NoteLoadState.loaded(
+    notes: ["Fog", "Tide"],
+    fromCache: false
+)
+let failure = NoteLoadState.failed(
+    message: "Offline",
+    retryable: true
+)
+```
+
+An idle value cannot retain a stale error message. A failure cannot claim to contain loaded notes. Code can still put bad values inside a payload, such as attempt zero, but it cannot combine mutually exclusive cases.
+
+## A switch extracts the payload
+
+Case patterns both select an alternative and bind its associated data:
+
+```swift
+func summary(of state: NoteLoadState) -> String {
+    switch state {
+    case .idle:
+        return "Idle"
+    case let .loading(attempt):
+        return "Loading attempt \(attempt)"
+    case let .loaded(notes, fromCache):
+        let source = fromCache ? "cache" : "network"
+        return "Loaded \(notes.count) notes from \(source)"
+    case let .failed(message, retryable):
+        return retryable
+            ? "Failed: \(message) | retry available"
+            : "Failed: \(message) | retry unavailable"
+    }
+}
+```
+
+`case let .loaded(notes, fromCache)` means three things:
+
+1. Match only the `.loaded` case.
+2. Extract both associated values.
+3. Bind those values as constants inside that branch.
+
+The bindings exist only where the case guarantees their presence. No optional unwrapping is needed.
+
+## Exhaustiveness turns change into a compiler task
+
+Swift requires a `switch` to cover every possible value. This switch has one branch for each `NoteLoadState` case, so it needs no `default`.
+
+Suppose the product adds a refreshing state:
+
+```swift
+case refreshing(notes: [String])
+```
+
+Every explicit exhaustive switch over the enum stops compiling until it handles `.refreshing`. The compiler finds the decisions that need product input.
+
+Adding `default` to a switch over an enum you own throws away that help:
+
+```swift
+switch state {
+case .loaded:
+    showNotes()
+default:
+    showSpinner()
+}
+```
+
+A future `.failed` or `.cancelled` case would silently show a spinner. Prefer explicit cases for a closed domain you control.
+
+When a public enum from another module may gain cases without breaking binary compatibility, `@unknown default` is the forward-compatibility branch. It still asks the compiler to warn about known cases that were omitted. That is a library-evolution boundary, not a shortcut for your own state model.
+
+## Patterns can include conditions
+
+A `where` clause narrows a matching case:
+
+```swift
+switch state {
+case let .loaded(notes, _) where notes.isEmpty:
+    showEmptyState()
+case let .loaded(notes, _):
+    show(notes)
+case let .failed(_, retryable) where retryable:
+    showRetryButton()
+case .idle, .loading, .failed:
+    break
+}
+```
+
+Case order matters. The empty loaded state must appear before the general loaded state because the first matching case wins.
+
+An underscore ignores a payload that does not matter to that branch. Ignoring it is clearer than binding an unused name.
+
+## Match one case with `if case`
+
+A full switch is best when behavior must cover the whole domain. Use `if case` when one alternative matters:
+
+```swift
+func isRetryAvailable(for state: NoteLoadState) -> Bool {
+    if case let .failed(_, retryable) = state {
+        return retryable
+    }
+
+    return false
+}
+```
+
+The pattern appears on the left of `=` and the value being tested appears on the right. The body runs only when the case matches.
+
+Add an ordinary Boolean condition with a comma:
+
+```swift
+if case let .failed(message, retryable) = state, retryable {
+    print("Retry after: \(message)")
+}
+```
+
+Use this shape for a focused check. If several `if case` statements start reassembling the enum's whole behavior, return to one exhaustive switch.
+
+## `guard case` establishes a case for the remaining scope
+
+Use `guard case` when a function cannot continue without one alternative:
+
+```swift
+func loadedNotes(from state: NoteLoadState) -> [String]? {
+    guard case let .loaded(notes, _) = state else {
+        return nil
+    }
+
+    return notes
+}
+```
+
+After the guard, `notes` is available for the rest of the function. The early exit keeps the success path flat.
+
+## `for case` filters and extracts
+
+Pattern matching also works while iterating:
+
+```swift
+let history: [NoteLoadState] = [
+    .idle,
+    .failed(message: "Offline", retryable: true),
+    .loading(attempt: 2),
+    .failed(message: "Unauthorized", retryable: false)
+]
+
+for case let .failed(message, _) in history {
+    print(message)
+}
+```
+
+Only failure values enter the loop body, and their messages arrive already extracted. Use `for case` when the skipped alternatives genuinely require no work. Use a normal loop and exhaustive switch when every case deserves behavior.
+
+## Run the loading-state proof
+
+The checkpoint walks through four valid states, extracts their payloads, applies a `where` clause, and checks one case with `if case`:
+
+<SwiftRepl code={enumPatternCode} id="swift-enumerations-associated-values-pattern-matching" />
+
+Expected output:
+
+```text
+Idle
+Loading attempt 1
+Loaded 2 notes from network: Fog, Tide
+Failed: Offline | retry available
+Retry available: true
+```
+
+The preconditions prove the loaded summary and retry decision before printing. The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary.
+
+This checkpoint proves enum construction, exhaustive switching, associated-value extraction, and pattern matching. It does not prove SwiftUI view updates, UIKit rendering, networking, observation, persistence, Simulator, or device behavior.
+
+## Raw values and associated values solve different problems
+
+A raw value is one fixed literal attached to each case:
+
+```swift
+enum NoteSort: String, CaseIterable {
+    case modified = "modified"
+    case created = "created"
+    case title = "title"
+}
+```
+
+Every `.modified` value has the same raw string. `NoteSort(rawValue:)` returns an optional because an incoming string might not name a case.
+
+An associated value belongs to one enum instance and can vary each time that case is constructed:
+
+```swift
+let first = NoteLoadState.loading(attempt: 1)
+let third = NoteLoadState.loading(attempt: 3)
+```
+
+Use raw values for stable representations only when the representation is truly part of the boundary. Do not assign database or network meanings to implicit integer raw values. An added or reordered case can make that accidental contract painful.
+
+`CaseIterable` provides `allCases` for enums whose cases can be synthesized without payload construction. It fits finite choices such as sort order, not a loading state whose cases require arbitrary associated values.
+
+## Enums can own behavior
+
+An enum can define computed properties and methods just like other named types:
+
+```swift
+extension NoteLoadState {
+    var isBusy: Bool {
+        switch self {
+        case .loading:
+            return true
+        case .idle, .loaded, .failed:
+            return false
+        }
+    }
+}
+```
+
+This keeps a rule about the state beside the state. Avoid turning the enum into a service container. Loading notes from a network or database belongs at an external boundary; deciding whether one state counts as busy belongs on the value.
+
+## Recursive enums model recursive data
+
+An associated value cannot contain the enum directly without a layer of indirection. Mark a recursive case or the whole enum with `indirect`:
+
+```swift
+indirect enum FilterExpression {
+    case tag(String)
+    case and(FilterExpression, FilterExpression)
+    case or(FilterExpression, FilterExpression)
+}
+```
+
+This can represent a tree such as `tag("swift") AND (tag("ios") OR tag("mobile"))`. An exhaustive recursive function can interpret the tree one case at a time.
+
+Use recursion because the domain is recursive, not because nesting cases looks clever. A flat enum is easier when the product has a flat set of states.
+
+## State transitions still need policy
+
+The enum prevents simultaneous alternatives, but it does not automatically restrict transitions. Code can still assign `.loaded` directly after `.idle` or use attempt zero.
+
+Put transition rules in the layer that owns them:
+
+```swift
+func beginRetry(from state: NoteLoadState) -> NoteLoadState? {
+    guard case let .failed(_, retryable) = state, retryable else {
+        return nil
+    }
+
+    return .loading(attempt: 2)
+}
+```
+
+For a small value, a method or pure transition function may be enough. Larger workflows may need a reducer or state machine with events and explicit effects. The enum remains the vocabulary of valid states.
+
+## Common mistakes
+
+- **Coordinating a finite state with independent booleans**: The combinations grow faster than the valid product states.
+- **Using strings for cases**: Misspellings and unknown values move failures from compilation to runtime.
+- **Putting every possible payload on one structure**: Most properties become optional and callers must rediscover which combinations are valid.
+- **Adding `default` to an enum you own**: New cases disappear into an old fallback instead of identifying incomplete decisions.
+- **Confusing raw and associated values**: Raw values are fixed case representations. Associated values vary per instance.
+- **Using `if case` for every branch**: Several independent checks can lose exhaustiveness and repeat work.
+- **Assuming the enum controls transitions**: It restricts representable states, while transition policy remains separate behavior.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Add `.cancelled` and let the compiler find every incomplete switch.
+2. Add an empty `.loaded` value and verify the `where` branch wins.
+3. Use `guard case` to extract loaded notes.
+4. Use `for case` to print only failure messages from the timeline.
+5. Replace the two failure branches with one binding and a conditional expression.
+6. Add a `canDisplayNotes` computed property that returns true only for `.loaded`.
+7. Model a retry event separately, then write a pure transition function.
+
+Do not add `default` just to silence the diagnostic. The missing branch is the lesson.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- Why one enum value cannot occupy several cases at once.
+- How associated values attach different data to different alternatives.
+- How a case pattern extracts payloads.
+- Why exhaustive switches make domain changes visible.
+- When `if case`, `guard case`, and `for case` improve focus.
+- How raw values differ from associated values.
+- What `indirect` changes for recursive data.
+- Why valid states and valid transitions are separate concerns.
+
+The next post compares these independent values with class identity and shared references.
+
+## Series navigation
+
+- Previous: [Part 11: Structures and value semantics](../2026-07-16-swift-structures-value-semantics/)
+- Next: Part 13, Classes, identity, inheritance, and type casting
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Enumeration model**: The Swift Programming Language chapter [Enumerations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/enumerations/) defines cases, associated values, raw values, case iteration, and recursive enumerations.
+- **Branching and patterns**: [Control Flow](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/controlflow/) documents exhaustive switches, value binding, `where` clauses, and pattern conditions.
+- **Declaration rules**: [Declarations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/declarations/) specifies enum value semantics, raw-value forms, associated-value case constructors, and indirection.
+
+## Related topics
+
+- [State pattern](../../topics/cs/design-patterns/state/), an object-oriented alternative for behavior that changes with state.
+- [Functional core, imperative shell](../../topics/cs/functional-core-imperative-shell/), keeping state transitions pure while effects stay at the boundary.
+- [Switch control flow](../2026-07-16-swift-control-flow-patterns/), the earlier introduction to ranges, tuples, and pattern-driven branches.
