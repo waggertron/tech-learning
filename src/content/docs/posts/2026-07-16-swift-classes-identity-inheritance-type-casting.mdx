@@ -1,0 +1,362 @@
+---
+title: "Zero to iOS Hero 13: Classes, identity, inheritance, and type casting"
+description: "Use a shared editing session to distinguish reference identity from value equality, then keep inheritance and runtime casting inside deliberate boundaries."
+date: 2026-07-16
+tags: [swift, ios, classes, reference-semantics, inheritance, type-casting]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-classes-identity-inheritance-type-casting/
+series:
+  slug: zero-to-ios-hero
+  order: 13
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import classIdentityCode from './2026-07-16-swift-classes-identity-inheritance-type-casting.swift?raw';
+
+This is part 13 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+Two copies of a `FieldNote` should evolve independently. Two references to one active editing session should observe the same draft. That product distinction separates value semantics from reference identity.
+
+Swift classes provide identity and shared mutation. They also support inheritance, runtime type casting, deinitialization, and automatic reference counting. Those capabilities make classes useful when the model needs them, not a universal default.
+
+## A class represents one reference identity
+
+Declare a class and its initializer:
+
+```swift
+class EditingSession {
+    let noteID: Int
+    var draftTitle: String
+
+    init(noteID: Int, draftTitle: String) {
+        self.noteID = noteID
+        self.draftTitle = draftTitle
+    }
+
+    func rename(to newTitle: String) {
+        draftTitle = newTitle
+    }
+}
+```
+
+Classes do not receive a structure-style memberwise initializer. This initializer establishes both stored properties before the instance becomes available.
+
+The identifier is stable for the session. The draft title remains mutable because editing is the session's purpose.
+
+## Assignment shares the instance
+
+Create one session and assign its reference to another constant:
+
+```swift
+let first = EditingSession(noteID: 1, draftTitle: "Fog")
+let alias = first
+
+alias.rename(to: "North ridge fog")
+```
+
+Both bindings refer to the same instance:
+
+```text
+first ----+
+          +----> EditingSession(noteID: 1, draftTitle: "North ridge fog")
+alias ----+
+```
+
+Reading `first.draftTitle` now returns `"North ridge fog"`. Assignment copied the reference, not the class instance.
+
+That is useful when several parts of a program intentionally coordinate through one object. It is dangerous when a caller expected an isolated snapshot.
+
+## A `let` reference can still observe mutation
+
+Both `first` and `alias` are constants. The constants prevent either binding from being redirected to another session:
+
+```swift
+// first = EditingSession(noteID: 2, draftTitle: "Tide") // Error
+```
+
+They do not freeze the referenced object. A class property declared with `var` can still change through a `let` reference:
+
+```swift
+first.draftTitle = "Tide at dawn" // Allowed
+```
+
+Compare that with a `let` structure, which prevents mutation of all stored properties. Binding immutability and object immutability are different rules.
+
+If the object should not expose mutation, design its public API and property access accordingly. The word `let` alone does not make a class instance immutable.
+
+## Identity is not equality
+
+Swift supplies two reference identity operators for class instances:
+
+- `===` asks whether two references point to the same instance.
+- `!==` asks whether they point to different instances.
+
+```swift
+let first = EditingSession(noteID: 1, draftTitle: "Fog")
+let alias = first
+let independent = EditingSession(noteID: 1, draftTitle: "Fog")
+
+first === alias       // true
+first === independent // false
+```
+
+`first` and `independent` begin with equal property values, but they have different identities. Mutating one does not mutate the other.
+
+The `==` operator answers a type-defined value-equality question and requires an `Equatable` conformance. The `===` operator answers only reference identity. Do not substitute one question for the other.
+
+`ObjectIdentifier` can turn class or metatype identity into a hashable value when identity must be a dictionary key or set member. Keep domain identifiers such as `noteID` separate. A domain ID can survive persistence and process restarts; an object identity describes one in-memory instance.
+
+## Run the identity proof
+
+The checkpoint creates an alias and an independent session, mutates through the alias, and conditionally downcasts the shared instance:
+
+<SwiftRepl code={classIdentityCode} id="swift-classes-identity-inheritance-type-casting" />
+
+Expected output:
+
+```text
+Same instance: true
+Independent instance: true
+Title through first: North ridge fog
+Dynamic type: Shared with Mira
+```
+
+The preconditions prove shared identity, separate identity, visible mutation through an alias, and the instance's runtime subclass.
+
+The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary. It proves language-level class semantics. It does not prove SwiftUI observation, UIKit ownership, Interface Builder connections, Objective-C interoperability, an app lifecycle, Simulator, or device behavior.
+
+## The static and dynamic types can differ
+
+The checkpoint creates a subclass value behind a superclass reference:
+
+```swift
+let session: EditingSession = SharedEditingSession(
+    noteID: 1,
+    draftTitle: "Fog",
+    collaborator: "Mira"
+)
+```
+
+The variable's static type is `EditingSession`. That is the member surface the compiler permits without a cast.
+
+The instance's dynamic type is `SharedEditingSession`. Dynamic dispatch selects overridden behavior from that runtime type.
+
+This distinction enables polymorphism, but it can also hide subtype-specific capabilities. If callers constantly need to recover the subtype, the abstraction may be too broad or the hierarchy may be carrying unrelated models.
+
+## Inheritance reuses and specializes class behavior
+
+A subclass names its superclass after a colon:
+
+```swift
+class EditingSession {
+    let noteID: Int
+
+    init(noteID: Int) {
+        self.noteID = noteID
+    }
+
+    func status() -> String {
+        "Editing note \(noteID)"
+    }
+}
+
+class SharedEditingSession: EditingSession {
+    let collaborator: String
+
+    init(noteID: Int, collaborator: String) {
+        self.collaborator = collaborator
+        super.init(noteID: noteID)
+    }
+
+    override func status() -> String {
+        "Shared with \(collaborator)"
+    }
+}
+```
+
+The subclass initializes its own stored property, delegates inherited initialization to `super.init`, and marks the replacement method with `override`. Swift checks that the overridden member exists and has a compatible declaration.
+
+Inheritance should mean substitutability: code written for `EditingSession` must remain correct when it receives a `SharedEditingSession`.
+
+Sharing a few stored properties is not enough. If the subtype weakens invariants, rejects valid superclass operations, or changes their meaning, the hierarchy is lying.
+
+## `final` closes an inheritance boundary
+
+Mark a method or property `final` when subclasses must not replace its behavior. Mark the whole class `final` when the type is not designed as a superclass:
+
+```swift
+final class SharedEditingSession: EditingSession {
+    // No further subclassing.
+}
+```
+
+Use `final` as a design statement. A safe superclass needs documented override points, initialization rules, and invariants. Most application classes do not need that extension surface.
+
+Frameworks sometimes require subclassing because their lifecycle is designed around overrides. Follow the documented contract at that boundary, keep the subclass thin, and move product rules into values or collaborators that can be tested without the framework lifecycle.
+
+## Prefer composition for independent capabilities
+
+Suppose a session needs autosave. Inheritance makes autosave part of the session's taxonomic identity:
+
+```swift
+class AutosavingEditingSession: EditingSession {
+    // Autosave details mixed into the hierarchy.
+}
+```
+
+Composition makes it a replaceable collaborator:
+
+```swift
+protocol DraftSaving {
+    func save(noteID: Int, title: String)
+}
+
+final class EditingSession {
+    private let saver: any DraftSaving
+
+    init(saver: any DraftSaving) {
+        self.saver = saver
+    }
+}
+```
+
+The session has a saver rather than claiming it is a special kind of saver. The dependency can vary without multiplying subclasses for every combination of saving, analytics, collaboration, and synchronization.
+
+Composition is not automatically better. Inheritance fits a real is-a relationship with a stable substitution contract. Composition fits capabilities that vary independently.
+
+## Type checks and casts answer different questions
+
+Use `is` for a Boolean runtime type check:
+
+```swift
+if session is SharedEditingSession {
+    print("Collaboration is active")
+}
+```
+
+Use `as?` for a conditional downcast that can fail:
+
+```swift
+if let shared = session as? SharedEditingSession {
+    print(shared.collaborator)
+}
+```
+
+The result is optional because the superclass reference might hold another subtype.
+
+Use `as` for a cast the compiler knows is safe, such as an upcast from a subclass to its superclass:
+
+```swift
+let shared = SharedEditingSession(
+    noteID: 1,
+    draftTitle: "Fog",
+    collaborator: "Mira"
+)
+let base = shared as EditingSession
+```
+
+`as!` force-casts and traps if the runtime value has the wrong type. Treat it like force unwrapping: use it only where a proven invariant makes failure a programmer error and that invariant is visible at the call site. User input, decoded data, and mixed framework collections do not provide that proof.
+
+## Avoid type erasure without a boundary reason
+
+`Any` can hold a value of any type. `AnyObject` can hold a class instance. Both remove static information:
+
+```swift
+let mixed: [Any] = ["Fog", 3, session]
+```
+
+Code must inspect or cast each element before using type-specific behavior. This is appropriate at a genuinely heterogeneous interoperability boundary. It is usually a poor model for ordinary application data.
+
+Prefer an enum when the alternatives are closed, a protocol when values share a capability, or a generic when an algorithm should preserve the caller's concrete type. Those tools let the compiler carry more information.
+
+## Reference lifetime is managed by ARC
+
+Swift uses automatic reference counting, or ARC, for class instances. A strong reference keeps an instance alive. When no strong references remain, ARC deallocates the instance and runs its deinitializer, if it has one.
+
+```swift
+final class EditingLease {
+    let noteID: Int
+
+    init(noteID: Int) {
+        self.noteID = noteID
+    }
+
+    deinit {
+        print("Released note \(noteID)")
+    }
+}
+```
+
+Deinitializers are for resource cleanup tied to object deallocation, not a substitute for an explicit save or network request. Retain cycles can prevent deallocation entirely.
+
+Post 19 develops ownership, strong and weak references, closure capture, and retain-cycle diagnosis. Post 14 looks more closely at initialization and deinitialization rules.
+
+## Choose the model from the product rule
+
+| Product rule | Starting model |
+| --- | --- |
+| Edits should create independent before and after values | Structure |
+| Several owners intentionally coordinate through one in-memory identity | Class or actor |
+| The domain is one of a closed set of alternatives | Enumeration |
+| Behavior varies independently from the main model | Composed collaborator |
+| Runtime substitution is a stable is-a relationship | Class inheritance |
+
+An app can use all of these. The useful boundary is not class versus struct as a team preference. It is shared identity versus independent values in the domain being modeled.
+
+## Common mistakes
+
+- **Choosing classes by default**: Shared mutation spreads through aliases and makes local reasoning harder.
+- **Expecting `let` to freeze an object**: It freezes the reference binding, not mutable properties on the instance.
+- **Using `===` as domain identity**: In-memory object identity does not replace a stable record identifier.
+- **Using inheritance for code reuse alone**: A few shared methods do not establish substitutability.
+- **Downcasting throughout the app**: Repeated casts often expose a weak superclass, protocol, or data model.
+- **Force-casting external values**: A changed payload becomes a runtime trap.
+- **Putting ordinary data in `Any`**: The model discards type information and pushes checks into every consumer.
+- **Saving critical work in `deinit`**: Lifetime may be extended by a strong cycle, and product effects deserve an explicit API.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Create a second independent session and prove equal fields do not imply `===`.
+2. Change `first` from `let` to `var`, then explain which new operation becomes legal.
+3. Add a second subclass and let `as?` fail safely.
+4. Replace the conditional cast with a virtual method available on the base class.
+5. Mark `EditingSession` as `final` and read the subclass diagnostic.
+6. Extract collaboration into a composed collaborator instead of a subclass.
+7. Add a scoped class with a `deinit` print, then observe when its last strong reference disappears.
+
+Each change should answer an identity or substitution question, not merely exercise syntax.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- Why class assignment shares an instance.
+- Why a `let` reference does not freeze mutable object state.
+- How `===` differs from `==` and a domain identifier.
+- How static type, dynamic type, overriding, and dynamic dispatch interact.
+- When inheritance expresses a valid substitution relationship.
+- When composition avoids a growing hierarchy.
+- How `is`, `as`, `as?`, and `as!` differ.
+- Why ARC and reference lifetime apply to classes, not structures or enumerations.
+
+The next post concentrates on properties, subscripts, initialization, and lifecycle invariants across Swift types.
+
+## Series navigation
+
+- Previous: [Part 12: Enumerations, associated values, and pattern matching](../2026-07-16-swift-enumerations-associated-values-pattern-matching/)
+- Next: Part 14, Properties, methods, subscripts, initialization, and deinitialization
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Reference and value models**: [Structures and Classes](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/structuresandclasses/) defines shared capabilities, class-only capabilities, reference semantics, and identity operators.
+- **Subclass contracts**: [Inheritance](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/inheritance/) documents subclassing, overriding, property observers, and `final` restrictions.
+- **Runtime types**: [Type Casting](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/typecasting/) specifies `is`, conditional and forced downcasts, `Any`, and `AnyObject`.
+- **Reference lifetime**: [Automatic Reference Counting](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/automaticreferencecounting/) and [Deinitialization](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/deinitialization/) describe strong-reference lifetime, cycles, and class cleanup.
+
+## Related topics
+
+- [Composition over inheritance](../2026-04-24-composition-over-inheritance/), choosing replaceable collaborators over expanding subclass trees.
+- [Strategy pattern](../../topics/cs/design-patterns/strategy/), varying one capability behind a stable interface.
+- [Memento pattern](../../topics/cs/design-patterns/memento/), preserving value snapshots apart from an active reference-owned session.
