@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, arrays, hash-tables, medium]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,10 @@ import practiceCodeGo from './454-4sum-ii.go?raw';
 import approach2PyCode from './454-4sum-ii-approach2.py?raw';
 import approach2TsCode from './454-4sum-ii-approach2.ts?raw';
 import approach2GoCode from './454-4sum-ii-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './454-4sum-ii.swift?raw';
+import approach1SwiftCode from './454-4sum-ii-approach1.swift?raw';
+import approach2SwiftCode from './454-4sum-ii-approach2.swift?raw';
 
 ## Problem
 
@@ -42,6 +46,9 @@ LeetCode 454 · [Link](https://leetcode.com/problems/4sum-ii/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="4sum-ii-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="454-4sum-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -80,6 +87,24 @@ function fourSumCount(nums1: number[], nums2: number[],
 </Tabs>
 
 **Complexity:** $O(n^4)$ time, $O(1)$ space. Completely impractical for n > 50.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func fourSumCount(_ nums1: [Int], _ nums2: [Int], _ nums3: [Int], _ nums4: [Int]) -> Int {
+        var total = 0
+        for a in nums1 { for b in nums2 { for c in nums3 { for d in nums4 where a + b + c + d == 0 { total += 1 } } } }
+        return total
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="454-4sum-ii-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Hash map on pairwise sums (optimal)
 
@@ -154,6 +179,24 @@ Two separate $O(n^2)$ passes rather than one $O(n^4)$. The hash map bridges the 
     <GoRepl code={approach2GoCode} id="4sum-ii-approach2-go" />
   </TabItem>
 
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func fourSumCount(_ nums1: [Int], _ nums2: [Int], _ nums3: [Int], _ nums4: [Int]) -> Int {
+        var sums: [Int: Int] = [:]; for a in nums1 { for b in nums2 { sums[a + b, default: 0] += 1 } }
+        var total = 0; for c in nums3 { for d in nums4 { total += sums[-c - d, default: 0] } }
+        return total
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="454-4sum-ii-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Why split 4 into 2+2?

@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "454-4sum-ii"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums1",
+        "codec": "int-array"
+      },
+      {
+        "name": "nums2",
+        "codec": "int-array"
+      },
+      {
+        "name": "nums3",
+        "codec": "int-array"
+      },
+      {
+        "name": "nums4",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "four_sum_count"
+      },
+      "typescript": {
+        "function": "fourSumCount"
+      },
+      "go": {
+        "function": "fourSumCount"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "fourSumCount"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        [
+          -2,
+          -1
+        ],
+        [
+          -1,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "zeros",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "duplicates",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          -1
+        ],
+        [
+          -1,
+          1
+        ],
+        [
+          -1,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 6
+      }
+    },
+    {
+      "id": "no-match",
+      "classification": "valid",
+      "arguments": [
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "multiple",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "different-length",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The four arrays have equal length."
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, arrays, hash-tables, strings, easy]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,9 @@ import practiceCodeGo from './387-first-unique-character.go?raw';
 import approach2PyCode from './387-first-unique-character-approach2.py?raw';
 import approach2TsCode from './387-first-unique-character-approach2.ts?raw';
 import approach2GoCode from './387-first-unique-character-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './387-first-unique-character.swift?raw';
+import approach1SwiftCode from './387-first-unique-character-approach1.swift?raw';
 
 ## Problem
 
@@ -38,6 +41,9 @@ LeetCode 387 · [Link](https://leetcode.com/problems/first-unique-character-in-a
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="first-unique-character-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="387-first-unique-character-swift" />
   </TabItem>
 </Tabs>
 
@@ -106,6 +112,24 @@ The space bound is $O(1)$ because the problem constrains `s` to lowercase Englis
     <GoRepl code={approach2GoCode} id="first-unique-character-approach2-go" />
   </TabItem>
 
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func firstUniqChar(_ s: String) -> Int {
+        var counts: [Character: Int] = [:]; for char in s { counts[char, default: 0] += 1 }
+        for (index, char) in s.enumerated() where counts[char] == 1 { return index }
+        return -1
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="387-first-unique-character-approach1-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

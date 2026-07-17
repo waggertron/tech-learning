@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, arrays, intervals, easy]
 status: draft
 created: 2026-07-13
-updated: 2026-07-13
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,10 @@ import practiceCodeGo from './228-summary-ranges.go?raw';
 import approach2PyCode from './228-summary-ranges-approach2.py?raw';
 import approach2TsCode from './228-summary-ranges-approach2.ts?raw';
 import approach2GoCode from './228-summary-ranges-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './228-summary-ranges.swift?raw';
+import approach1SwiftCode from './228-summary-ranges-approach1.swift?raw';
+import approach2SwiftCode from './228-summary-ranges-approach2.swift?raw';
 
 ## Problem
 
@@ -64,6 +68,9 @@ LeetCode 228 · [Top Interview 150 link](https://leetcode.com/problems/summary-r
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="summary-ranges-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="228-summary-ranges-swift" />
   </TabItem>
 </Tabs>
 
@@ -169,6 +176,24 @@ Each value is visited by the outer loop. Across all range starts, the expansion 
 
 - **Time:** $O(n)$ average.
 - **Space:** $O(n)$ for the set, excluding the output.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func summaryRanges(_ nums: [Int]) -> [String] {
+        let values = Set(nums); var result: [String] = []
+        for start in nums where !values.contains(start - 1) { var end = start; while values.contains(end + 1) { end += 1 }; result.append(start == end ? "\(start)" : "\(start)->\(end)") }
+        return result
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="228-summary-ranges-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Close a range at each gap
 
@@ -289,6 +314,24 @@ func summaryRanges(nums []int) []string {
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="summary-ranges-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func summaryRanges(_ nums: [Int]) -> [String] {
+        var result: [String] = [], index = 0
+        while index < nums.count { let start = nums[index]; while index + 1 < nums.count && nums[index + 1] == nums[index] + 1 { index += 1 }; let end = nums[index]; result.append(start == end ? "\(start)" : "\(start)->\(end)"); index += 1 }
+        return result
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="228-summary-ranges-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Why the scan is correct

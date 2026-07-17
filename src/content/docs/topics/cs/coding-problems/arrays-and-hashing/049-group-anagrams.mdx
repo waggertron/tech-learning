@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './049-group-anagrams-approach2.go?raw';
 import approach3PyCode from './049-group-anagrams-approach3.py?raw';
 import approach3TsCode from './049-group-anagrams-approach3.ts?raw';
 import approach3GoCode from './049-group-anagrams-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './049-group-anagrams.swift?raw';
+import approach1SwiftCode from './049-group-anagrams-approach1.swift?raw';
+import approach2SwiftCode from './049-group-anagrams-approach2.swift?raw';
+import approach3SwiftCode from './049-group-anagrams-approach3.swift?raw';
 
 ## Problem
 
@@ -44,6 +49,9 @@ LeetCode 49 · [Link](https://leetcode.com/problems/group-anagrams/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="group-anagrams-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="049-group-anagrams-swift" />
   </TabItem>
 </Tabs>
 
@@ -139,6 +147,32 @@ For each of `n` strings, the inner loop scans up to `n` existing groups and does
 - **Time:** $O(n²·k)$, driven by L5/L6 (inner loop with counter comparison).
 - **Space:** $O(n·k)$ for the output plus counters.
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ groups: [[String]]) -> [[String]] {
+        groups.map { $0.sorted() }.sorted {
+            $0.joined(separator: "\u{1F}") < $1.joined(separator: "\u{1F}")
+        }
+    }
+
+    func groupAnagrams(_ strs: [String]) -> [[String]] {
+        var groups: [[String]] = []
+        for word in strs {
+            if let index = groups.firstIndex(where: { $0.first!.sorted() == word.sorted() }) { groups[index].append(word) } else { groups.append([word]) }
+        }
+        return normalized(groups)
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="049-group-anagrams-approach1-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 2: Sorted-string as hash key
 
 Anagrams share the same multiset of characters; their sorted form is identical. Use the sorted string as a hash map key.
@@ -218,6 +252,30 @@ The sort step on each string drives the total. Key hashing is $O(k)$ but that's 
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="group-anagrams-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ groups: [[String]]) -> [[String]] {
+        groups.map { $0.sorted() }.sorted {
+            $0.joined(separator: "\u{1F}") < $1.joined(separator: "\u{1F}")
+        }
+    }
+
+    func groupAnagrams(_ strs: [String]) -> [[String]] {
+        var groups: [String: [String]] = [:]
+        for word in strs { groups[String(word.sorted()), default: []].append(word) }
+        return normalized(Array(groups.values))
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="049-group-anagrams-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Char-count tuple as key (optimal for bounded alphabet)
@@ -307,6 +365,34 @@ The inner loop counts each character in $O(1)$; no sort is needed. The tuple key
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="group-anagrams-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ groups: [[String]]) -> [[String]] {
+        groups.map { $0.sorted() }.sorted {
+            $0.joined(separator: "\u{1F}") < $1.joined(separator: "\u{1F}")
+        }
+    }
+
+    func groupAnagrams(_ strs: [String]) -> [[String]] {
+        var groups: [[Int]: [String]] = [:]
+        for word in strs {
+            var counts = Array(repeating: 0, count: 26)
+            for byte in word.utf8 { counts[Int(byte - 97)] += 1 }
+            groups[counts, default: []].append(word)
+        }
+        return normalized(Array(groups.values))
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="049-group-anagrams-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

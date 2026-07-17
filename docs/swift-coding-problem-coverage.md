@@ -87,16 +87,18 @@ This supersedes the plan's earlier hand-counted 188-page baseline. Summary Range
 
 ## Category progress, 2026-07-16
 
-1D Dynamic Programming, 2D Dynamic Programming, Advanced Graphs, Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers are complete:
+1D Dynamic Programming, 2D Dynamic Programming, Advanced Graphs, Arrays and Hashing, Binary Search, Bit Manipulation, Graphs, Greedy, Heap and Priority Queue, Intervals, Linked Lists, Math and Geometry, Sliding Window, Stack, Trees, Tries, and Two Pointers are complete:
 
-- 162 Swift-ready pages.
-- 436 Swift-ready documented approaches.
-- 598 standalone Swift source files, including 162 compile-only starters.
-- 162 reviewed shared-vector documents with 922 total valid, boundary, and excluded invalid cases.
-- 436 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
+- 180 Swift-ready pages.
+- 479 Swift-ready documented approaches.
+- 659 standalone Swift source files, including 180 compile-only starters.
+- 180 reviewed shared-vector documents with 1,033 total valid, boundary, and excluded invalid cases.
+- 479 completed approaches compiled and executed with Apple Swift 6.3.2 in Swift 6 language mode.
 - 1D Dynamic Programming contributes 12 pages, 39 approaches, and 71 cases.
 - 2D Dynamic Programming contributes 12 pages, 35 approaches, and 84 cases.
 - Advanced Graphs contributes 8 pages, 19 approaches, and 56 cases.
+- Arrays and Hashing contributes 18 pages, 43 approaches, and 111 cases.
+- Backtracking is the final remaining category, with 9 pages and 27 approaches.
 - Binary Search contributes 8 pages, 23 approaches, and 64 cases.
 - Bit Manipulation contributes 7 pages, 21 approaches, and 57 cases.
 - Graphs contributes 19 pages, 39 approaches, and 76 cases.

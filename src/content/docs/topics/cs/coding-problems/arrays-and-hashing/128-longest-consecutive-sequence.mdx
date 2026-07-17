@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './128-longest-consecutive-sequence-approach2.go?raw
 import approach3PyCode from './128-longest-consecutive-sequence-approach3.py?raw';
 import approach3TsCode from './128-longest-consecutive-sequence-approach3.ts?raw';
 import approach3GoCode from './128-longest-consecutive-sequence-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './128-longest-consecutive-sequence.swift?raw';
+import approach1SwiftCode from './128-longest-consecutive-sequence-approach1.swift?raw';
+import approach2SwiftCode from './128-longest-consecutive-sequence-approach2.swift?raw';
+import approach3SwiftCode from './128-longest-consecutive-sequence-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 128 · [Link](https://leetcode.com/problems/longest-consecutive-sequenc
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="longest-consecutive-sequence-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="128-longest-consecutive-sequence-swift" />
   </TabItem>
 </Tabs>
 
@@ -125,6 +133,24 @@ Each `in nums` on a list costs $O(n)$, called up to n times per outer loop itera
 - **Space:** $O(1)$ extra.
 
 Clearly doesn't meet the $O(n)$ requirement, useful to see what the naive instinct would cost.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func longestConsecutive(_ nums: [Int]) -> Int {
+        let values = Set(nums); var best = 0
+        for value in nums { var current = value, length = 0; while values.contains(current) { length += 1; current += 1 }; best = max(best, length) }
+        return best
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="128-longest-consecutive-sequence-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Sort, then count runs
 
@@ -218,6 +244,25 @@ Correct and simple, but violates the explicit $O(n)$ constraint in the prompt.
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="longest-consecutive-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func longestConsecutive(_ nums: [Int]) -> Int {
+        guard !nums.isEmpty else { return 0 }
+        let sorted = nums.sorted(); var best = 1, current = 1
+        for index in 1..<sorted.count { if sorted[index] == sorted[index - 1] { continue }; if sorted[index] == sorted[index - 1] + 1 { current += 1 } else { current = 1 }; best = max(best, current) }
+        return best
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="128-longest-consecutive-sequence-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Hash set + run-start detection (optimal)
@@ -321,6 +366,24 @@ L4's guard ensures each element is walked from its run-start exactly once. Even 
 ### Alternative: Union-Find
 
 A second $O(n)$ approach unions every `x` with `x - 1` and `x + 1` in a disjoint-set structure and returns the largest component size. Same asymptotics, more code, worth knowing for the pattern.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func longestConsecutive(_ nums: [Int]) -> Int {
+        let values = Set(nums); var best = 0
+        for value in values where !values.contains(value - 1) { var current = value, length = 1; while values.contains(current + 1) { current += 1; length += 1 }; best = max(best, length) }
+        return best
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="128-longest-consecutive-sequence-approach3-swift" />
+</TabItem>
+</Tabs>
 
 ## Summary
 

@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "349-intersection-of-two-arrays"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums1",
+        "codec": "int-array"
+      },
+      {
+        "name": "nums2",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "intersection"
+      },
+      "typescript": {
+        "function": "intersection"
+      },
+      "go": {
+        "function": "intersection"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "intersection"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "duplicates",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          2
+        ]
+      }
+    },
+    {
+      "id": "two-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          4,
+          9,
+          5
+        ],
+        [
+          9,
+          4,
+          9,
+          8,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          4,
+          9
+        ]
+      }
+    },
+    {
+      "id": "disjoint",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          5,
+          6
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "same-duplicates",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "boundary",
+      "arguments": [
+        [],
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "unbounded",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1001
+        ],
+        [
+          1001
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Values follow the documented integer bounds."
+      }
+    }
+  ]
+}

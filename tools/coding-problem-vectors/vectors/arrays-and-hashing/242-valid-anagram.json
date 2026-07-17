@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "242-valid-anagram"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "t",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_anagram"
+      },
+      "typescript": {
+        "function": "isAnagram"
+      },
+      "go": {
+        "function": "isAnagram"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isAnagram"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        "anagram",
+        "nagaram"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "different",
+      "classification": "valid",
+      "arguments": [
+        "rat",
+        "car"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "same",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "reordered",
+      "classification": "valid",
+      "arguments": [
+        "ab",
+        "ba"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "different-length",
+      "classification": "valid",
+      "arguments": [
+        "ab",
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "boundary",
+      "arguments": [
+        "",
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "uppercase",
+      "classification": "invalid",
+      "arguments": [
+        "A",
+        "A"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The original problem limits input to lowercase English letters."
+      }
+    }
+  ]
+}

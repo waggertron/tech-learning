@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "238-product-of-array-except-self"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "product_except_self"
+      },
+      "typescript": {
+        "function": "productExceptSelf"
+      },
+      "go": {
+        "function": "productExceptSelf"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "productExceptSelf"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          24,
+          12,
+          8,
+          6
+        ]
+      }
+    },
+    {
+      "id": "contains-zero",
+      "classification": "valid",
+      "arguments": [
+        [
+          -1,
+          1,
+          0,
+          -3,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "two",
+      "classification": "boundary",
+      "arguments": [
+        [
+          2,
+          3
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "one-zero",
+      "classification": "valid",
+      "arguments": [
+        [
+          1,
+          0
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "two-zeros",
+      "classification": "valid",
+      "arguments": [
+        [
+          0,
+          0,
+          2
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "single",
+      "classification": "invalid",
+      "arguments": [
+        [
+          5
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contains at least two values."
+      }
+    }
+  ]
+}

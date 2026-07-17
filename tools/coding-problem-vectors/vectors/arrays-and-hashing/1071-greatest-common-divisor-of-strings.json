@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "1071-greatest-common-divisor-of-strings"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "str1",
+        "codec": "string"
+      },
+      {
+        "name": "str2",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "gcd_of_strings"
+      },
+      "typescript": {
+        "function": "gcdOfStrings"
+      },
+      "go": {
+        "function": "gcdOfStrings"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "gcdOfStrings"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "repeated-ab",
+      "classification": "valid",
+      "arguments": [
+        "ABCABC",
+        "ABC"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "ABC"
+      }
+    },
+    {
+      "id": "shared-ab",
+      "classification": "valid",
+      "arguments": [
+        "ABABAB",
+        "ABAB"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "AB"
+      }
+    },
+    {
+      "id": "incompatible",
+      "classification": "valid",
+      "arguments": [
+        "LEET",
+        "CODE"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": ""
+      }
+    },
+    {
+      "id": "same",
+      "classification": "boundary",
+      "arguments": [
+        "A",
+        "A"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": "A"
+      }
+    },
+    {
+      "id": "no-full-divisor",
+      "classification": "valid",
+      "arguments": [
+        "ABAB",
+        "ABAC"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": ""
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "invalid",
+      "arguments": [
+        "",
+        "A"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Both strings are non-empty."
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, arrays, hash-tables, easy]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,9 @@ import practiceCodeGo from './349-intersection-of-two-arrays.go?raw';
 import approach2PyCode from './349-intersection-of-two-arrays-approach2.py?raw';
 import approach2TsCode from './349-intersection-of-two-arrays-approach2.ts?raw';
 import approach2GoCode from './349-intersection-of-two-arrays-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './349-intersection-of-two-arrays.swift?raw';
+import approach1SwiftCode from './349-intersection-of-two-arrays-approach1.swift?raw';
 
 ## Problem
 
@@ -40,6 +43,9 @@ LeetCode 349 · [Link](https://leetcode.com/problems/intersection-of-two-arrays/
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="intersection-of-two-arrays-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="349-intersection-of-two-arrays-swift" />
   </TabItem>
 </Tabs>
 
@@ -103,6 +109,22 @@ Building both sets dominates. The `&` operation iterates the smaller set and che
     <GoRepl code={approach2GoCode} id="intersection-approach2-go" />
   </TabItem>
 
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func intersection(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+        Array(Set(nums1).intersection(Set(nums2))).sorted()
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="349-intersection-of-two-arrays-approach1-swift" />
+</TabItem>
 </Tabs>
 
 ## Why sets work here

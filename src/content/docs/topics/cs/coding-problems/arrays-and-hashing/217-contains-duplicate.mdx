@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './217-contains-duplicate-approach2.go?raw';
 import approach3PyCode from './217-contains-duplicate-approach3.py?raw';
 import approach3TsCode from './217-contains-duplicate-approach3.ts?raw';
 import approach3GoCode from './217-contains-duplicate-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './217-contains-duplicate.swift?raw';
+import approach1SwiftCode from './217-contains-duplicate-approach1.swift?raw';
+import approach2SwiftCode from './217-contains-duplicate-approach2.swift?raw';
+import approach3SwiftCode from './217-contains-duplicate-approach3.swift?raw';
 
 ## Problem
 
@@ -44,6 +49,9 @@ LeetCode 217 · [Link](https://leetcode.com/problems/contains-duplicate/) · *Ea
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="contains-duplicate-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="217-contains-duplicate-swift" />
   </TabItem>
 </Tabs>
 
@@ -111,6 +119,23 @@ The nested loops each run up to n, yielding ~n²/2 comparisons in the worst case
 - **Space:** $O(1)$. No extra structures; only the loop indices.
 
 This is the most direct approach but quadratic time makes it unusable for large inputs.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func containsDuplicate(_ nums: [Int]) -> Bool {
+        for i in nums.indices { for j in (i + 1)..<nums.count where nums[i] == nums[j] { return true } }
+        return false
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="217-contains-duplicate-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Sort and compare adjacent
 
@@ -183,6 +208,24 @@ Improvement: we dropped one order of growth. Worth knowing as an alternative whe
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="contains-duplicate-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func containsDuplicate(_ nums: [Int]) -> Bool {
+        let sorted = nums.sorted()
+        for index in 1..<sorted.count where sorted[index] == sorted[index - 1] { return true }
+        return false
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="217-contains-duplicate-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Hash set (optimal)
@@ -268,6 +311,24 @@ def contains_duplicate(nums: list[int]) -> bool:
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="contains-duplicate-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func containsDuplicate(_ nums: [Int]) -> Bool {
+        var seen = Set<Int>()
+        for value in nums where !seen.insert(value).inserted { return true }
+        return false
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="217-contains-duplicate-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

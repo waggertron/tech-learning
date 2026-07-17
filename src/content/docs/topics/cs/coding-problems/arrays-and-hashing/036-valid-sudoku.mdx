@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './036-valid-sudoku-approach2.go?raw';
 import approach3PyCode from './036-valid-sudoku-approach3.py?raw';
 import approach3TsCode from './036-valid-sudoku-approach3.ts?raw';
 import approach3GoCode from './036-valid-sudoku-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './036-valid-sudoku.swift?raw';
+import approach1SwiftCode from './036-valid-sudoku-approach1.swift?raw';
+import approach2SwiftCode from './036-valid-sudoku-approach2.swift?raw';
+import approach3SwiftCode from './036-valid-sudoku-approach3.swift?raw';
 
 ## Problem
 
@@ -45,6 +50,9 @@ LeetCode 36 · [Link](https://leetcode.com/problems/valid-sudoku/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="valid-sudoku-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="036-valid-sudoku-swift" />
   </TabItem>
 </Tabs>
 
@@ -193,6 +201,38 @@ All three passes together visit 81 cells three times each. The board is fixed-si
 
 Works, but reads the board three times. The larger Big-O lesson: a "constant-sized" input has $O(1)$ time regardless of method; the engineering question is clarity.
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isValidSudoku(_ board: [[String]]) -> Bool {
+        for row in 0..<9 {
+            var seen = Set<String>()
+            for col in 0..<9 where board[row][col] != "." { if !seen.insert(board[row][col]).inserted { return false } }
+        }
+        for col in 0..<9 {
+            var seen = Set<String>()
+            for row in 0..<9 where board[row][col] != "." { if !seen.insert(board[row][col]).inserted { return false } }
+        }
+        for boxRow in stride(from: 0, to: 9, by: 3) {
+            for boxCol in stride(from: 0, to: 9, by: 3) {
+                var seen = Set<String>()
+                for row in boxRow..<(boxRow + 3) { for col in boxCol..<(boxCol + 3) where board[row][col] != "." {
+                    if !seen.insert(board[row][col]).inserted { return false }
+                }}
+            }
+        }
+        return true
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="036-valid-sudoku-approach1-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 2: Single pass with nine sets per dimension
 
 Maintain 9 row-sets, 9 column-sets, and 9 box-sets; one pass over the board.
@@ -303,6 +343,31 @@ One pass, constant work per cell, short-circuits on the first conflict.
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isValidSudoku(_ board: [[String]]) -> Bool {
+        var rows = Array(repeating: Set<String>(), count: 9)
+        var columns = Array(repeating: Set<String>(), count: 9)
+        var boxes = Array(repeating: Set<String>(), count: 9)
+        for row in 0..<9 { for col in 0..<9 {
+            let value = board[row][col]
+            if value == "." { continue }
+            let box = (row / 3) * 3 + col / 3
+            guard rows[row].insert(value).inserted, columns[col].insert(value).inserted, boxes[box].insert(value).inserted else { return false }
+        }}
+        return true
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="036-valid-sudoku-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: Bitmask-based single pass (optimal constant factors)
 
 Replace each set with a 9-bit integer. Bit `i` is set if digit `i+1` is already present.
@@ -406,6 +471,30 @@ Integer bit operations (`&`, `|`, `<<`) are faster than hash-set operations at t
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="valid-sudoku-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isValidSudoku(_ board: [[String]]) -> Bool {
+        var rows = Array(repeating: 0, count: 9), columns = rows, boxes = rows
+        for row in 0..<9 { for col in 0..<9 {
+            let value = board[row][col]
+            if value == "." { continue }
+            let bit = 1 << (Int(value)! - 1), box = (row / 3) * 3 + col / 3
+            if rows[row] & bit != 0 || columns[col] & bit != 0 || boxes[box] & bit != 0 { return false }
+            rows[row] |= bit; columns[col] |= bit; boxes[box] |= bit
+        }}
+        return true
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="036-valid-sudoku-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

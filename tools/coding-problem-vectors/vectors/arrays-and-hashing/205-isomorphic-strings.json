@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "205-isomorphic-strings"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "t",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "is_isomorphic"
+      },
+      "typescript": {
+        "function": "isIsomorphic"
+      },
+      "go": {
+        "function": "isIsomorphic"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "isIsomorphic"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "egg-add",
+      "classification": "valid",
+      "arguments": [
+        "egg",
+        "add"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "foo-bar",
+      "classification": "valid",
+      "arguments": [
+        "foo",
+        "bar"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "paper-title",
+      "classification": "valid",
+      "arguments": [
+        "paper",
+        "title"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "target-reuse",
+      "classification": "valid",
+      "arguments": [
+        "ab",
+        "aa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        "a",
+        "z"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "different-length",
+      "classification": "invalid",
+      "arguments": [
+        "a",
+        "ab"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The strings have equal length."
+      }
+    }
+  ]
+}

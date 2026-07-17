@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, arrays, strings, easy]
 status: draft
 created: 2026-05-07
-updated: 2026-05-07
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,10 @@ import practiceCodeGo from './459-repeated-substring-pattern.go?raw';
 import approach2PyCode from './459-repeated-substring-pattern-approach2.py?raw';
 import approach2TsCode from './459-repeated-substring-pattern-approach2.ts?raw';
 import approach2GoCode from './459-repeated-substring-pattern-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './459-repeated-substring-pattern.swift?raw';
+import approach1SwiftCode from './459-repeated-substring-pattern-approach1.swift?raw';
+import approach2SwiftCode from './459-repeated-substring-pattern-approach2.swift?raw';
 
 ## Problem
 
@@ -38,6 +42,9 @@ LeetCode 459 · [Link](https://leetcode.com/problems/repeated-substring-pattern/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="repeated-substring-pattern-ts" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="459-repeated-substring-pattern-swift" />
   </TabItem>
 </Tabs>
 
@@ -89,6 +96,25 @@ The string construction `s[:p] * (n // p)` allocates and fills a string of lengt
 **Complexity**
 - **Time:** $O(n^2)$, driven by L4 (the $O(n)$ build-and-compare inside an $O(n)$ loop).
 - **Space:** $O(n)$ for the constructed candidate string at each step.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func repeatedSubstringPattern(_ s: String) -> Bool {
+        let chars = Array(s)
+        if chars.count < 2 { return false }
+        for length in 1...(chars.count / 2) where chars.count % length == 0 { if String(repeating: String(chars[0..<length]), count: chars.count / length) == s { return true } }
+        return false
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="459-repeated-substring-pattern-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: The (s + s)[1:-1] trick
 
@@ -165,6 +191,22 @@ Does "aba" appear in "baab"? No. Correctly returns False.
 Removing the first character breaks the leading copy of `s`; removing the last breaks the trailing copy. Any remaining occurrence of `s` must be an internal one, which only exists when `s` is genuinely periodic.
 
 Note: with KMP for the substring search inside L2, the full algorithm is $O(n)$ with no hidden constant. See [KMP](../../../named-algorithms/kmp/) for details.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func repeatedSubstringPattern(_ s: String) -> Bool {
+        guard s.count > 1 else { return false }; let doubled = s + s; return doubled.dropFirst().dropLast().contains(s)
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="459-repeated-substring-pattern-approach2-swift" />
+</TabItem>
+</Tabs>
 
 ## Summary
 

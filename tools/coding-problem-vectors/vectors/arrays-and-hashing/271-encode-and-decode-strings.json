@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "271-encode-and-decode-strings"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "strs",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "string-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "round_trip"
+      },
+      "typescript": {
+        "function": "roundTrip"
+      },
+      "go": {
+        "function": "roundTrip"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "roundTrip"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "words",
+      "classification": "valid",
+      "arguments": [
+        [
+          "hello",
+          "world"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "hello",
+          "world"
+        ]
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "boundary",
+      "arguments": [
+        [
+          ""
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          ""
+        ]
+      }
+    },
+    {
+      "id": "empty-list",
+      "classification": "boundary",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "delimiter-and-digits",
+      "classification": "valid",
+      "arguments": [
+        [
+          "a#b",
+          "12",
+          "x|y"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a#b",
+          "12",
+          "x|y"
+        ]
+      }
+    },
+    {
+      "id": "backslash",
+      "classification": "valid",
+      "arguments": [
+        [
+          "a\\b",
+          "plain"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a\\b",
+          "plain"
+        ]
+      }
+    },
+    {
+      "id": "ascii-only",
+      "classification": "invalid",
+      "arguments": [
+        [
+          "🐉"
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The original problem limits inputs to valid ASCII characters."
+      }
+    }
+  ]
+}

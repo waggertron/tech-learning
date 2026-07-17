@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, heaps, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './347-top-k-frequent-elements-approach2.go?raw';
 import approach3PyCode from './347-top-k-frequent-elements-approach3.py?raw';
 import approach3TsCode from './347-top-k-frequent-elements-approach3.ts?raw';
 import approach3GoCode from './347-top-k-frequent-elements-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './347-top-k-frequent-elements.swift?raw';
+import approach1SwiftCode from './347-top-k-frequent-elements-approach1.swift?raw';
+import approach2SwiftCode from './347-top-k-frequent-elements-approach2.swift?raw';
+import approach3SwiftCode from './347-top-k-frequent-elements-approach3.swift?raw';
 
 ## Problem
 
@@ -45,6 +50,9 @@ LeetCode 347 Â· [Link](https://leetcode.com/problems/top-k-frequent-elements/) Â
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="top-k-frequent-elements-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="347-top-k-frequent-elements-swift" />
   </TabItem>
 </Tabs>
 
@@ -109,6 +117,23 @@ func topKFrequent(nums []int, k int) []int {
 - **Space:** $O(n)$ for the counter.
 
 `most_common(k)` internally uses a heap ($O(n log k)$), but for "brute" purposes treat it as a full sort.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
+        var counts: [Int: Int] = [:]; for value in nums { counts[value, default: 0] += 1 }
+        return counts.sorted { $0.value == $1.value ? $0.key < $1.key : $0.value > $1.value }.prefix(k).map(\.key)
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="347-top-k-frequent-elements-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Size-k min-heap
 
@@ -207,6 +232,26 @@ When `k` is small relative to `n`, this is noticeably faster than the $O(n log n
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
+        var counts: [Int: Int] = [:]; for value in nums { counts[value, default: 0] += 1 }
+        var heap = BinaryHeap<(Int, Int)> { a, b in a.0 == b.0 ? a.1 > b.1 : a.0 < b.0 }
+        for (value, count) in counts { heap.insert((count, value)); if heap.count > k { _ = heap.removeRoot() } }
+        var result: [(Int, Int)] = []; while let item = heap.removeRoot() { result.append(item) }
+        return result.sorted { $0.0 == $1.0 ? $0.1 < $1.1 : $0.0 > $1.0 }.map(\.1)
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="347-top-k-frequent-elements-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: Bucket sort by frequency (optimal)
 
 Frequencies are bounded by `n` (no value can appear more than `n` times). Bucket each distinct element into `buckets[freq]`, then scan from high to low.
@@ -301,6 +346,25 @@ Every distinct element is bucketed once and visited at most once during the scan
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="top-k-frequent-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func topKFrequent(_ nums: [Int], _ k: Int) -> [Int] {
+        var counts: [Int: Int] = [:]; for value in nums { counts[value, default: 0] += 1 }; var buckets = Array(repeating: [Int](), count: nums.count + 1)
+        for (value, count) in counts { buckets[count].append(value) }
+        var result: [Int] = []; for count in stride(from: buckets.count - 1, through: 1, by: -1) { for value in buckets[count].sorted() { result.append(value); if result.count == k { return result } } }
+        return result
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="347-top-k-frequent-elements-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

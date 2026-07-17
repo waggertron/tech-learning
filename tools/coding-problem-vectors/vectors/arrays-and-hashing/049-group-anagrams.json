@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "049-group-anagrams"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "strs",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "string-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "group_anagrams"
+      },
+      "typescript": {
+        "function": "groupAnagrams"
+      },
+      "go": {
+        "function": "groupAnagrams"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "groupAnagrams"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          "eat",
+          "tea",
+          "tan",
+          "ate",
+          "nat",
+          "bat"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "ate",
+            "eat",
+            "tea"
+          ],
+          [
+            "bat"
+          ],
+          [
+            "nat",
+            "tan"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "empty-string",
+      "classification": "boundary",
+      "arguments": [
+        [
+          ""
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            ""
+          ]
+        ]
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        [
+          "a"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "one-group",
+      "classification": "valid",
+      "arguments": [
+        [
+          "abc",
+          "bca",
+          "cab"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "abc",
+            "bca",
+            "cab"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "separate-groups",
+      "classification": "valid",
+      "arguments": [
+        [
+          "a",
+          "b",
+          "c"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a"
+          ],
+          [
+            "b"
+          ],
+          [
+            "c"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "empty-input",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contains at least one string."
+      }
+    }
+  ]
+}

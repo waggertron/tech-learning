@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "1010-pairs-of-songs-divisible-by-60"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "time",
+        "codec": "int-array"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "num_pairs_divisible_by60"
+      },
+      "typescript": {
+        "function": "numPairsDivisibleBy60"
+      },
+      "go": {
+        "function": "numPairsDivisibleBy60"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "numPairsDivisibleBy60"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          30,
+          20,
+          150,
+          100,
+          40
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "all-sixty",
+      "classification": "valid",
+      "arguments": [
+        [
+          60,
+          60,
+          60
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "id": "complementary",
+      "classification": "valid",
+      "arguments": [
+        [
+          10,
+          50,
+          90,
+          30
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        [
+          1
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "two-multiples",
+      "classification": "valid",
+      "arguments": [
+        [
+          120,
+          60
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "invalid",
+      "arguments": [
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "At least one song is provided."
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, hash-tables, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-05-01
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './001-two-sum-approach2.go?raw';
 import approach3PyCode from './001-two-sum-approach3.py?raw';
 import approach3TsCode from './001-two-sum-approach3.ts?raw';
 import approach3GoCode from './001-two-sum-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './001-two-sum.swift?raw';
+import approach1SwiftCode from './001-two-sum-approach1.swift?raw';
+import approach2SwiftCode from './001-two-sum-approach2.swift?raw';
+import approach3SwiftCode from './001-two-sum-approach3.swift?raw';
 
 ## Problem
 
@@ -44,6 +49,9 @@ LeetCode 1 · [Link](https://leetcode.com/problems/two-sum/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="two-sum-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="001-two-sum-swift" />
   </TabItem>
 </Tabs>
 
@@ -110,6 +118,25 @@ The nested loops make this quadratic. For `n = 10⁴`, that's ~50 million compar
 **Complexity**
 - **Time:** $O(n²)$, driven by L3/L4 (nested loops).
 - **Space:** $O(1)$.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        for i in 0..<nums.count {
+            for j in (i + 1)..<nums.count where nums[i] + nums[j] == target { return [i, j] }
+        }
+        return []
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="001-two-sum-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Sort with remembered indices + two pointers
 
@@ -210,6 +237,29 @@ This is the right approach for LeetCode **167. Two Sum II** (input already sorte
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        let indexed = nums.enumerated().map { ($0.element, $0.offset) }.sorted { $0.0 < $1.0 }
+        var left = 0, right = indexed.count - 1
+        while left < right {
+            let sum = indexed[left].0 + indexed[right].0
+            if sum == target { return [indexed[left].1, indexed[right].1].sorted() }
+            if sum < target { left += 1 } else { right -= 1 }
+        }
+        return []
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="001-two-sum-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: Hash map in a single pass (optimal)
 
 For each element `x`, look up its complement `target - x` in a hash map of elements seen so far. If it's there, we've found the pair.
@@ -289,6 +339,27 @@ Every operation is $O(1)$ average per iteration. One pass over n elements gives 
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="two-sum-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+        var seen: [Int: Int] = [:]
+        for (index, value) in nums.enumerated() {
+            if let match = seen[target - value] { return [match, index] }
+            seen[value] = index
+        }
+        return []
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="001-two-sum-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

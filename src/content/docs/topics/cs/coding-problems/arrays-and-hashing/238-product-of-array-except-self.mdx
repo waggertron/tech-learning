@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, prefix-suffix, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './238-product-of-array-except-self-approach2.go?raw
 import approach3PyCode from './238-product-of-array-except-self-approach3.py?raw';
 import approach3TsCode from './238-product-of-array-except-self-approach3.ts?raw';
 import approach3GoCode from './238-product-of-array-except-self-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './238-product-of-array-except-self.swift?raw';
+import approach1SwiftCode from './238-product-of-array-except-self-approach1.swift?raw';
+import approach2SwiftCode from './238-product-of-array-except-self-approach2.swift?raw';
+import approach3SwiftCode from './238-product-of-array-except-self-approach3.swift?raw';
 
 ## Problem
 
@@ -45,6 +50,9 @@ LeetCode 238 · [Link](https://leetcode.com/problems/product-of-array-except-sel
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="product-of-array-except-self-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="238-product-of-array-except-self-swift" />
   </TabItem>
 </Tabs>
 
@@ -119,6 +127,22 @@ The nested multiply gives exactly n*(n-1) multiplications.
 - **Space:** $O(1)$ excluding the output.
 
 Too slow for the problem's stated constraint but useful as a sanity check.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func productExceptSelf(_ nums: [Int]) -> [Int] {
+        nums.indices.map { excluded in nums.indices.reduce(1) { product, index in index == excluded ? product : product * nums[index] } }
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="238-product-of-array-except-self-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Prefix and suffix products (two auxiliary arrays)
 
@@ -213,6 +237,25 @@ Three linear passes, each $O(n)$. All three contribute equally; none dominates a
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="product-except-self-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func productExceptSelf(_ nums: [Int]) -> [Int] {
+        let count = nums.count; var prefix = Array(repeating: 1, count: count), suffix = prefix
+        for index in 1..<count { prefix[index] = prefix[index - 1] * nums[index - 1] }
+        for index in stride(from: count - 2, through: 0, by: -1) { suffix[index] = suffix[index + 1] * nums[index + 1] }
+        return zip(prefix, suffix).map(*)
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="238-product-of-array-except-self-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Space-optimized ($O(1)$ extra space)
@@ -311,6 +354,26 @@ Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the ne
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="product-except-self-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func productExceptSelf(_ nums: [Int]) -> [Int] {
+        var result = Array(repeating: 1, count: nums.count), prefix = 1
+        for index in nums.indices { result[index] = prefix; prefix *= nums[index] }
+        var suffix = 1
+        for index in nums.indices.reversed() { result[index] *= suffix; suffix *= nums[index] }
+        return result
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="238-product-of-array-except-self-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

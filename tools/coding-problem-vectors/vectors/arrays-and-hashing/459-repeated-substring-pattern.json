@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "459-repeated-substring-pattern"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "repeated_substring_pattern"
+      },
+      "typescript": {
+        "function": "repeatedSubstringPattern"
+      },
+      "go": {
+        "function": "repeatedSubstringPattern"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "repeatedSubstringPattern"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "repeat-two",
+      "classification": "valid",
+      "arguments": [
+        "abab"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "not-repeat",
+      "classification": "valid",
+      "arguments": [
+        "aba"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "repeat-four",
+      "classification": "valid",
+      "arguments": [
+        "abcabcabcabc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "same-char",
+      "classification": "valid",
+      "arguments": [
+        "aa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "repeat-three",
+      "classification": "valid",
+      "arguments": [
+        "abaaba"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contains at least one lowercase letter."
+      }
+    }
+  ]
+}

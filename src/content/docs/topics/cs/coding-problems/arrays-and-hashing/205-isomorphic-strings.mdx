@@ -5,11 +5,17 @@ parent: arrays-and-hashing
 tags: [leetcode, strings, hash-tables, easy]
 status: draft
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-16
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import practiceCode from './205-isomorphic-strings.py?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './205-isomorphic-strings.swift?raw';
+import approach1SwiftCode from './205-isomorphic-strings-approach1.swift?raw';
+import approach2SwiftCode from './205-isomorphic-strings-approach2.swift?raw';
+import approach3SwiftCode from './205-isomorphic-strings-approach3.swift?raw';
 
 ## Problem
 
@@ -33,7 +39,14 @@ LeetCode 205 - [Link](https://leetcode.com/problems/isomorphic-strings/) - *Easy
 
 ## Try it yourself
 
-<PythonRepl code={practiceCode} id="isomorphic-strings" />
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="isomorphic-strings" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="205-isomorphic-strings-swift" />
+  </TabItem>
+</Tabs>
 
 ## Approach 1: Brute force, compare prior positions
 
@@ -65,6 +78,24 @@ This is correct, but it does not fit the constraint of up to 50,000 characters.
 
 - **Time:** $O(n^2)$, driven by comparing pairs of positions.
 - **Space:** $O(1)$.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isIsomorphic(_ s: String, _ t: String) -> Bool {
+        let a = Array(s), b = Array(t)
+        for i in a.indices { for j in (i + 1)..<a.count { if (a[i] == a[j]) != (b[i] == b[j]) { return false } } }
+        return true
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="205-isomorphic-strings-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Two maps for a bijection
 
@@ -110,6 +141,24 @@ Each character pair is processed once. Hash map lookups and writes are constant 
 - **Time:** $O(n)$, driven by the single paired scan.
 - **Space:** $O(k)$, where `k` is the number of distinct characters stored in the maps. With ASCII input, this is bounded by a fixed alphabet size.
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isIsomorphic(_ s: String, _ t: String) -> Bool {
+        var forward: [Character: Character] = [:], reverse: [Character: Character] = [:]
+        for (a, b) in zip(s, t) { if let mapped = forward[a], mapped != b { return false }; if let mapped = reverse[b], mapped != a { return false }; forward[a] = b; reverse[b] = a }
+        return true
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="205-isomorphic-strings-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: Pattern signatures
 
 Another way to see the problem is that isomorphic strings have the same first-occurrence pattern.
@@ -142,6 +191,23 @@ def is_isomorphic(s: str, t: str) -> bool:
 - **Space:** $O(n)$ for the two signature arrays.
 
 This version is compact and easy to reason about, but the two-map bijection uses less extra memory because it does not store a full pattern array.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isIsomorphic(_ s: String, _ t: String) -> Bool {
+        func signature(_ word: String) -> [Int] { var first: [Character: Int] = [:]; return word.enumerated().map { index, char in if first[char] == nil { first[char] = index }; return first[char]! } }
+        return signature(s) == signature(t)
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="205-isomorphic-strings-approach3-swift" />
+</TabItem>
+</Tabs>
 
 ## How to recognize this pattern
 

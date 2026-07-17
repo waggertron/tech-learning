@@ -9,13 +9,13 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 598
+      "swift": 659
     },
     "languageCoverage": {
       "python": {
         "starterFiles": 189,
         "starterHarnesses": 183,
-        "practiceTabs": 188,
+        "practiceTabs": 189,
         "practiceRepls": 189,
         "approachTabs": 479,
         "approachSources": 262,
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 162,
-        "starterHarnesses": 162,
-        "practiceTabs": 162,
-        "practiceRepls": 162,
-        "approachTabs": 436,
-        "approachSources": 436,
-        "approachHarnesses": 436
+        "starterFiles": 180,
+        "starterHarnesses": 180,
+        "practiceTabs": 180,
+        "practiceRepls": 180,
+        "approachTabs": 479,
+        "approachSources": 479,
+        "approachHarnesses": 479
       }
     },
-    "swiftReadyPages": 162,
-    "swiftReadyApproaches": 436,
-    "vectorReadyPages": 162
+    "swiftReadyPages": 180,
+    "swiftReadyApproaches": 479,
+    "vectorReadyPages": 180
   },
   "categories": [
     {
@@ -82,9 +82,9 @@
       "category": "arrays-and-hashing",
       "pages": 18,
       "documentedApproaches": 43,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 18,
+      "swiftReadyApproaches": 43,
+      "vectorReadyPages": 18
     },
     {
       "category": "backtracking",
@@ -4811,45 +4811,47 @@
       "page": "arrays-and-hashing/001-two-sum.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/001-two-sum.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/001-two-sum.py",
         "typescript": "arrays-and-hashing/001-two-sum.ts",
         "go": "arrays-and-hashing/001-two-sum.go",
-        "swift": null
+        "swift": "arrays-and-hashing/001-two-sum.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4857,23 +4859,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/001-two-sum-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -4881,31 +4889,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/001-two-sum-approach2.py",
             "typescript": "arrays-and-hashing/001-two-sum-approach2.ts",
             "go": "arrays-and-hashing/001-two-sum-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/001-two-sum-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -4913,31 +4925,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/001-two-sum-approach3.py",
             "typescript": "arrays-and-hashing/001-two-sum-approach3.ts",
             "go": "arrays-and-hashing/001-two-sum-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/001-two-sum-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -4948,45 +4964,47 @@
       "page": "arrays-and-hashing/036-valid-sudoku.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/036-valid-sudoku.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/036-valid-sudoku.py",
         "typescript": "arrays-and-hashing/036-valid-sudoku.ts",
         "go": "arrays-and-hashing/036-valid-sudoku.go",
-        "swift": null
+        "swift": "arrays-and-hashing/036-valid-sudoku.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -4994,23 +5012,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/036-valid-sudoku-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5018,31 +5042,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/036-valid-sudoku-approach2.py",
             "typescript": "arrays-and-hashing/036-valid-sudoku-approach2.ts",
             "go": "arrays-and-hashing/036-valid-sudoku-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/036-valid-sudoku-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -5050,31 +5078,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/036-valid-sudoku-approach3.py",
             "typescript": "arrays-and-hashing/036-valid-sudoku-approach3.ts",
             "go": "arrays-and-hashing/036-valid-sudoku-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/036-valid-sudoku-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5085,45 +5117,47 @@
       "page": "arrays-and-hashing/049-group-anagrams.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/049-group-anagrams.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/049-group-anagrams.py",
         "typescript": "arrays-and-hashing/049-group-anagrams.ts",
         "go": "arrays-and-hashing/049-group-anagrams.go",
-        "swift": null
+        "swift": "arrays-and-hashing/049-group-anagrams.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -5131,23 +5165,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/049-group-anagrams-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5155,31 +5195,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/049-group-anagrams-approach2.py",
             "typescript": "arrays-and-hashing/049-group-anagrams-approach2.ts",
             "go": "arrays-and-hashing/049-group-anagrams-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/049-group-anagrams-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -5187,31 +5231,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/049-group-anagrams-approach3.py",
             "typescript": "arrays-and-hashing/049-group-anagrams-approach3.ts",
             "go": "arrays-and-hashing/049-group-anagrams-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/049-group-anagrams-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5222,64 +5270,72 @@
       "page": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.py",
         "typescript": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.ts",
         "go": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.go",
-        "swift": null
+        "swift": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Remainder frequency map",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/1010-pairs-of-songs-divisible-by-60-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5290,64 +5346,72 @@
       "page": "arrays-and-hashing/1071-greatest-common-divisor-of-strings.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/1071-greatest-common-divisor-of-strings.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/1071-greatest-common-divisor-of-strings.py",
         "typescript": "arrays-and-hashing/1071-greatest-common-divisor-of-strings.ts",
         "go": "arrays-and-hashing/1071-greatest-common-divisor-of-strings.go",
-        "swift": null
+        "swift": "arrays-and-hashing/1071-greatest-common-divisor-of-strings.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Try all prefix lengths",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/1071-greatest-common-divisor-of-strings-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5355,30 +5419,34 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/1071-greatest-common-divisor-of-strings-approach2.py",
             "typescript": "arrays-and-hashing/1071-greatest-common-divisor-of-strings-approach2.ts",
             "go": "arrays-and-hashing/1071-greatest-common-divisor-of-strings-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/1071-greatest-common-divisor-of-strings-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5389,45 +5457,47 @@
       "page": "arrays-and-hashing/128-longest-consecutive-sequence.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/128-longest-consecutive-sequence.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/128-longest-consecutive-sequence.py",
         "typescript": "arrays-and-hashing/128-longest-consecutive-sequence.ts",
         "go": "arrays-and-hashing/128-longest-consecutive-sequence.go",
-        "swift": null
+        "swift": "arrays-and-hashing/128-longest-consecutive-sequence.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -5435,23 +5505,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/128-longest-consecutive-sequence-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5459,31 +5535,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/128-longest-consecutive-sequence-approach2.py",
             "typescript": "arrays-and-hashing/128-longest-consecutive-sequence-approach2.ts",
             "go": "arrays-and-hashing/128-longest-consecutive-sequence-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/128-longest-consecutive-sequence-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -5491,31 +5571,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/128-longest-consecutive-sequence-approach3.py",
             "typescript": "arrays-and-hashing/128-longest-consecutive-sequence-approach3.ts",
             "go": "arrays-and-hashing/128-longest-consecutive-sequence-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/128-longest-consecutive-sequence-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5526,89 +5610,114 @@
       "page": "arrays-and-hashing/205-isomorphic-strings.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/205-isomorphic-strings.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
-      "practiceTabs": [],
+      "practiceTabs": [
+        "python",
+        "swift"
+      ],
       "practiceRepls": [
-        "python"
+        "python",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/205-isomorphic-strings.py",
         "typescript": null,
         "go": null,
-        "swift": null
+        "swift": "arrays-and-hashing/205-isomorphic-strings.swift"
       },
       "starterHarnesses": [
-        "python"
+        "python",
+        "swift"
       ],
       "starterImports": [
-        "python"
+        "python",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, compare prior positions",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/205-isomorphic-strings-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
           "title": "Two maps for a bijection",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/205-isomorphic-strings-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
           "title": "Pattern signatures",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/205-isomorphic-strings-approach3.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5619,45 +5728,47 @@
       "page": "arrays-and-hashing/217-contains-duplicate.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/217-contains-duplicate.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/217-contains-duplicate.py",
         "typescript": "arrays-and-hashing/217-contains-duplicate.ts",
         "go": "arrays-and-hashing/217-contains-duplicate.go",
-        "swift": null
+        "swift": "arrays-and-hashing/217-contains-duplicate.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -5665,23 +5776,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/217-contains-duplicate-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5689,31 +5806,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/217-contains-duplicate-approach2.py",
             "typescript": "arrays-and-hashing/217-contains-duplicate-approach2.ts",
             "go": "arrays-and-hashing/217-contains-duplicate-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/217-contains-duplicate-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -5721,31 +5842,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/217-contains-duplicate-approach3.py",
             "typescript": "arrays-and-hashing/217-contains-duplicate-approach3.ts",
             "go": "arrays-and-hashing/217-contains-duplicate-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/217-contains-duplicate-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5756,45 +5881,47 @@
       "page": "arrays-and-hashing/228-summary-ranges.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/228-summary-ranges.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/228-summary-ranges.py",
         "typescript": "arrays-and-hashing/228-summary-ranges.ts",
         "go": "arrays-and-hashing/228-summary-ranges.go",
-        "swift": null
+        "swift": "arrays-and-hashing/228-summary-ranges.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -5802,23 +5929,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/228-summary-ranges-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5826,31 +5959,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/228-summary-ranges-approach2.py",
             "typescript": "arrays-and-hashing/228-summary-ranges-approach2.ts",
             "go": "arrays-and-hashing/228-summary-ranges-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/228-summary-ranges-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5861,45 +5998,47 @@
       "page": "arrays-and-hashing/238-product-of-array-except-self.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/238-product-of-array-except-self.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/238-product-of-array-except-self.py",
         "typescript": "arrays-and-hashing/238-product-of-array-except-self.ts",
         "go": "arrays-and-hashing/238-product-of-array-except-self.go",
-        "swift": null
+        "swift": "arrays-and-hashing/238-product-of-array-except-self.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -5907,23 +6046,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/238-product-of-array-except-self-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -5931,31 +6076,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/238-product-of-array-except-self-approach2.py",
             "typescript": "arrays-and-hashing/238-product-of-array-except-self-approach2.ts",
             "go": "arrays-and-hashing/238-product-of-array-except-self-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/238-product-of-array-except-self-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -5963,31 +6112,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/238-product-of-array-except-self-approach3.py",
             "typescript": "arrays-and-hashing/238-product-of-array-except-self-approach3.ts",
             "go": "arrays-and-hashing/238-product-of-array-except-self-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/238-product-of-array-except-self-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -5998,45 +6151,47 @@
       "page": "arrays-and-hashing/242-valid-anagram.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/242-valid-anagram.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/242-valid-anagram.py",
         "typescript": "arrays-and-hashing/242-valid-anagram.ts",
         "go": "arrays-and-hashing/242-valid-anagram.go",
-        "swift": null
+        "swift": "arrays-and-hashing/242-valid-anagram.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -6044,23 +6199,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/242-valid-anagram-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -6068,31 +6229,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/242-valid-anagram-approach2.py",
             "typescript": "arrays-and-hashing/242-valid-anagram-approach2.ts",
             "go": "arrays-and-hashing/242-valid-anagram-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/242-valid-anagram-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -6100,31 +6265,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/242-valid-anagram-approach3.py",
             "typescript": "arrays-and-hashing/242-valid-anagram-approach3.ts",
             "go": "arrays-and-hashing/242-valid-anagram-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/242-valid-anagram-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6135,45 +6304,47 @@
       "page": "arrays-and-hashing/271-encode-and-decode-strings.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/271-encode-and-decode-strings.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/271-encode-and-decode-strings.py",
         "typescript": "arrays-and-hashing/271-encode-and-decode-strings.ts",
         "go": "arrays-and-hashing/271-encode-and-decode-strings.go",
-        "swift": null
+        "swift": "arrays-and-hashing/271-encode-and-decode-strings.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -6181,23 +6352,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/271-encode-and-decode-strings-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -6205,31 +6382,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/271-encode-and-decode-strings-approach2.py",
             "typescript": "arrays-and-hashing/271-encode-and-decode-strings-approach2.ts",
             "go": "arrays-and-hashing/271-encode-and-decode-strings-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/271-encode-and-decode-strings-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -6237,31 +6418,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/271-encode-and-decode-strings-approach3.py",
             "typescript": "arrays-and-hashing/271-encode-and-decode-strings-approach3.ts",
             "go": "arrays-and-hashing/271-encode-and-decode-strings-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/271-encode-and-decode-strings-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6272,45 +6457,47 @@
       "page": "arrays-and-hashing/303-range-sum-query-immutable.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/303-range-sum-query-immutable.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/303-range-sum-query-immutable.py",
         "typescript": "arrays-and-hashing/303-range-sum-query-immutable.ts",
         "go": "arrays-and-hashing/303-range-sum-query-immutable.go",
-        "swift": null
+        "swift": "arrays-and-hashing/303-range-sum-query-immutable.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -6318,23 +6505,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/303-range-sum-query-immutable-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -6342,31 +6535,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/303-range-sum-query-immutable-approach2.py",
             "typescript": "arrays-and-hashing/303-range-sum-query-immutable-approach2.ts",
             "go": "arrays-and-hashing/303-range-sum-query-immutable-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/303-range-sum-query-immutable-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6379,45 +6576,47 @@
         "heap"
       ],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/347-top-k-frequent-elements.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/347-top-k-frequent-elements.py",
         "typescript": "arrays-and-hashing/347-top-k-frequent-elements.ts",
         "go": "arrays-and-hashing/347-top-k-frequent-elements.go",
-        "swift": null
+        "swift": "arrays-and-hashing/347-top-k-frequent-elements.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -6425,23 +6624,29 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/347-top-k-frequent-elements-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -6449,31 +6654,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/347-top-k-frequent-elements-approach2.py",
             "typescript": "arrays-and-hashing/347-top-k-frequent-elements-approach2.ts",
             "go": "arrays-and-hashing/347-top-k-frequent-elements-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/347-top-k-frequent-elements-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -6481,31 +6690,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/347-top-k-frequent-elements-approach3.py",
             "typescript": "arrays-and-hashing/347-top-k-frequent-elements-approach3.ts",
             "go": "arrays-and-hashing/347-top-k-frequent-elements-approach3.go",
-            "swift": null
+            "swift": "arrays-and-hashing/347-top-k-frequent-elements-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6516,45 +6729,47 @@
       "page": "arrays-and-hashing/349-intersection-of-two-arrays.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/349-intersection-of-two-arrays.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/349-intersection-of-two-arrays.py",
         "typescript": "arrays-and-hashing/349-intersection-of-two-arrays.ts",
         "go": "arrays-and-hashing/349-intersection-of-two-arrays.go",
-        "swift": null
+        "swift": "arrays-and-hashing/349-intersection-of-two-arrays.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -6562,26 +6777,31 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/349-intersection-of-two-arrays-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6592,42 +6812,44 @@
       "page": "arrays-and-hashing/387-first-unique-character.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/387-first-unique-character.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/387-first-unique-character.py",
         "typescript": "arrays-and-hashing/387-first-unique-character.ts",
         "go": "arrays-and-hashing/387-first-unique-character.go",
-        "swift": null
+        "swift": "arrays-and-hashing/387-first-unique-character.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -6635,26 +6857,31 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/387-first-unique-character-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6665,64 +6892,72 @@
       "page": "arrays-and-hashing/454-4sum-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/454-4sum-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/454-4sum-ii.py",
         "typescript": "arrays-and-hashing/454-4sum-ii.ts",
         "go": "arrays-and-hashing/454-4sum-ii.go",
-        "swift": null
+        "swift": "arrays-and-hashing/454-4sum-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force (four nested loops)",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/454-4sum-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -6730,30 +6965,34 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/454-4sum-ii-approach2.py",
             "typescript": "arrays-and-hashing/454-4sum-ii-approach2.ts",
             "go": "arrays-and-hashing/454-4sum-ii-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/454-4sum-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -6764,64 +7003,72 @@
       "page": "arrays-and-hashing/459-repeated-substring-pattern.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/arrays-and-hashing/459-repeated-substring-pattern.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 5,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "practiceRepls": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "starterFiles": {
         "python": "arrays-and-hashing/459-repeated-substring-pattern.py",
         "typescript": "arrays-and-hashing/459-repeated-substring-pattern.ts",
         "go": "arrays-and-hashing/459-repeated-substring-pattern.go",
-        "swift": null
+        "swift": "arrays-and-hashing/459-repeated-substring-pattern.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
-        "typescript"
+        "typescript",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Try all divisor lengths",
           "languageTabs": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
-          "repls": [],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "arrays-and-hashing/459-repeated-substring-pattern-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -6829,30 +7076,34 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
-            "typescript"
+            "typescript",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "arrays-and-hashing/459-repeated-substring-pattern-approach2.py",
             "typescript": "arrays-and-hashing/459-repeated-substring-pattern-approach2.ts",
             "go": "arrays-and-hashing/459-repeated-substring-pattern-approach2.go",
-            "swift": null
+            "swift": "arrays-and-hashing/459-repeated-substring-pattern-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, hash-tables, easy]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './242-valid-anagram-approach2.go?raw';
 import approach3PyCode from './242-valid-anagram-approach3.py?raw';
 import approach3TsCode from './242-valid-anagram-approach3.ts?raw';
 import approach3GoCode from './242-valid-anagram-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './242-valid-anagram.swift?raw';
+import approach1SwiftCode from './242-valid-anagram-approach1.swift?raw';
+import approach2SwiftCode from './242-valid-anagram-approach2.swift?raw';
+import approach3SwiftCode from './242-valid-anagram-approach3.swift?raw';
 
 ## Problem
 
@@ -45,6 +50,9 @@ LeetCode 242 · [Link](https://leetcode.com/problems/valid-anagram/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="valid-anagram-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="242-valid-anagram-swift" />
   </TabItem>
 </Tabs>
 
@@ -100,6 +108,22 @@ Sorting each string costs $O(n log n)$; the final equality check scans both sort
 - **Space:** $O(n)$. Python's `sorted` returns a new list per string.
 
 "Brute" in the sense of doing more work than necessary, but this is surprisingly common and acceptable for small inputs.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isAnagram(_ s: String, _ t: String) -> Bool {
+        s.sorted() == t.sorted()
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="242-valid-anagram-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Two hash maps (Counter)
 
@@ -173,6 +197,24 @@ Clean, correct, Unicode-safe. This is usually the right production answer.
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="valid-anagram-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isAnagram(_ s: String, _ t: String) -> Bool {
+        var left: [Character: Int] = [:], right: [Character: Int] = [:]
+        for char in s { left[char, default: 0] += 1 }; for char in t { right[char, default: 0] += 1 }
+        return left == right
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="242-valid-anagram-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Single count array (optimal for bounded alphabet)
@@ -260,6 +302,24 @@ For Unicode input, substitute a `dict` (which is equivalent to the Counter appro
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="valid-anagram-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func isAnagram(_ s: String, _ t: String) -> Bool {
+        guard s.utf8.count == t.utf8.count else { return false }; var counts = Array(repeating: 0, count: 26)
+        for byte in s.utf8 { counts[Int(byte - 97)] += 1 }; for byte in t.utf8 { counts[Int(byte - 97)] -= 1 }
+        return counts.allSatisfy { $0 == 0 }
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="242-valid-anagram-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

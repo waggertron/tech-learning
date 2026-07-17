@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "001-two-sum"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "nums",
+        "codec": "int-array"
+      },
+      {
+        "name": "target",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "two_sum"
+      },
+      "typescript": {
+        "function": "twoSum"
+      },
+      "go": {
+        "function": "twoSum"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "twoSum"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical",
+      "classification": "valid",
+      "arguments": [
+        [
+          2,
+          7,
+          11,
+          15
+        ],
+        9
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "middle-pair",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          2,
+          4
+        ],
+        6
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "duplicate-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          3,
+          3
+        ],
+        6
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "negative-values",
+      "classification": "valid",
+      "arguments": [
+        [
+          -3,
+          4,
+          3,
+          90
+        ],
+        0
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          2
+        ]
+      }
+    },
+    {
+      "id": "two-elements",
+      "classification": "boundary",
+      "arguments": [
+        [
+          0,
+          4
+        ],
+        4
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "no-solution",
+      "classification": "invalid",
+      "arguments": [
+        [
+          1,
+          2
+        ],
+        8
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Exactly one valid answer exists."
+      }
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "arrays-and-hashing",
+    "slug": "387-first-unique-character"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "int",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "first_uniq_char"
+      },
+      "typescript": {
+        "function": "firstUniqChar"
+      },
+      "go": {
+        "function": "firstUniqChar"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "firstUniqChar"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "first",
+      "classification": "valid",
+      "arguments": [
+        "leetcode"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "middle",
+      "classification": "valid",
+      "arguments": [
+        "loveleetcode"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "none",
+      "classification": "valid",
+      "arguments": [
+        "aabb"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        "z"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "id": "last",
+      "classification": "valid",
+      "arguments": [
+        "aab"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contains at least one lowercase letter."
+      }
+    }
+  ]
+}

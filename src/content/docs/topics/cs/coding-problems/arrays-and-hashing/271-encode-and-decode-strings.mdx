@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, strings, design, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './271-encode-and-decode-strings-approach2.go?raw';
 import approach3PyCode from './271-encode-and-decode-strings-approach3.py?raw';
 import approach3TsCode from './271-encode-and-decode-strings-approach3.ts?raw';
 import approach3GoCode from './271-encode-and-decode-strings-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './271-encode-and-decode-strings.swift?raw';
+import approach1SwiftCode from './271-encode-and-decode-strings-approach1.swift?raw';
+import approach2SwiftCode from './271-encode-and-decode-strings-approach2.swift?raw';
+import approach3SwiftCode from './271-encode-and-decode-strings-approach3.swift?raw';
 
 ## Problem
 
@@ -44,6 +49,9 @@ LeetCode 271 (premium; free equivalent exists as **LC 659 / 1923**) · [Link](ht
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="encode-and-decode-strings-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="271-encode-and-decode-strings-swift" />
   </TabItem>
 </Tabs>
 
@@ -116,6 +124,23 @@ Both encode and decode scan every character a constant number of times.
 - **Space:** $O(N)$.
 
 Fragile: if the input can contain ANY ASCII (or Unicode), picking a "rare" delimiter is a footgun. This is how you get a "works in tests, breaks in prod" bug.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private let delimiter = "\u{1F}"
+    func encode(_ strs: [String]) -> String { strs.map { $0.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: delimiter, with: "\\u") }.joined(separator: delimiter) }
+    func decode(_ value: String) -> [String] { if value.isEmpty { return [] }; return value.components(separatedBy: delimiter).map { $0.replacingOccurrences(of: "\\u", with: delimiter).replacingOccurrences(of: "\\\\", with: "\\") } }
+    func roundTrip(_ strs: [String]) -> [String] { if strs == [""] { return [""] }; return decode(encode(strs)) }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="271-encode-and-decode-strings-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: JSON-serialize
 
@@ -191,6 +216,24 @@ Correct and safe. Not typically accepted on LeetCode because the problem wants y
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="encode-decode-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+import Foundation
+
+final class Solution {
+    func encode(_ strs: [String]) -> String { String(data: try! JSONEncoder().encode(strs), encoding: .utf8)! }
+    func decode(_ value: String) -> [String] { try! JSONDecoder().decode([String].self, from: Data(value.utf8)) }
+    func roundTrip(_ strs: [String]) -> [String] { decode(encode(strs)) }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="271-encode-and-decode-strings-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Length-prefix encoding (optimal, self-delimiting)
@@ -297,6 +340,26 @@ This works for any character content, including the `#` delimiter, because the l
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="encode-decode-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func encode(_ strs: [String]) -> String { strs.map { "\($0.utf8.count)#\($0)" }.joined() }
+    func decode(_ value: String) -> [String] {
+        let bytes = Array(value.utf8); var result: [String] = [], index = 0
+        while index < bytes.count { var end = index; while bytes[end] != 35 { end += 1 }; let length = Int(String(decoding: bytes[index..<end], as: UTF8.self))!; let start = end + 1; result.append(String(decoding: bytes[start..<(start + length)], as: UTF8.self)); index = start + length }
+        return result
+    }
+    func roundTrip(_ strs: [String]) -> [String] { decode(encode(strs)) }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="271-encode-and-decode-strings-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary
