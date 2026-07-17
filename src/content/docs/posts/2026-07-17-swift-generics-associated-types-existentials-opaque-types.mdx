@@ -1,0 +1,263 @@
+---
+title: "Zero to iOS Hero 18: Generics, associated types, existentials, and opaque types"
+description: "Build a generic page and protocol-backed note source while preserving type relationships across constraints, associated types, existentials, and opaque returns."
+date: 2026-07-17
+tags: [swift, ios, generics, associated-types, existentials, opaque-types]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-17-swift-generics-associated-types-existentials-opaque-types/
+series:
+  slug: zero-to-ios-hero
+  order: 18
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import genericCode from './2026-07-17-swift-generics-associated-types-existentials-opaque-types.swift?raw';
+
+This is part 18 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A page of notes and a page of tags share the same mechanics. Their element types are different, and that difference matters. Generics reuse the mechanics while preserving the type selected by the caller.
+
+Protocols add another relationship: every note source chooses the exact value it produces. Associated types, existential boxes, and opaque types express different answers to who chooses that concrete type and whether its identity remains available.
+
+## Generics preserve a caller-selected type
+
+A generic type uses a placeholder that becomes concrete at each use site:
+
+```swift
+struct Page<Element> {
+    let items: [Element]
+    let nextCursor: Int?
+}
+
+let notePage: Page<FieldNote>
+let tagPage: Page<String>
+```
+
+`Page<FieldNote>` and `Page<String>` are distinct types. The compiler prevents a string page from entering an API that expects notes. Replacing `Element` with `Any` would allow the wrong values and move type checks into runtime casts.
+
+Name a generic parameter for the role it plays when that improves the API. `Element`, `Success`, `Failure`, `Key`, and `Value` communicate more than a sequence of single letters in a declaration with several relationships.
+
+## Generic functions reuse algorithms
+
+The paging function works for any element type:
+
+```swift
+func page<Element>(
+    _ elements: [Element],
+    after cursor: Int?,
+    size: Int
+) -> Page<Element> {
+    let start = min(cursor ?? 0, elements.count)
+    let end = min(start + max(0, size), elements.count)
+    return Page(
+        items: Array(elements[start..<end]),
+        nextCursor: end < elements.count ? end : nil
+    )
+}
+```
+
+The caller chooses `Element` through the argument. The return type keeps that choice. No cast or separate note-specific paging function is needed.
+
+Generic code is not automatically faster or better. It earns its place when the same operation is correct across a family of types and the shared implementation retains meaningful type information.
+
+## Constraints state required capabilities
+
+A generic algorithm can use only operations known for every possible type parameter. Add a constraint when the algorithm needs more:
+
+```swift
+func deduplicated<Element: Hashable>(
+    _ elements: [Element]
+) -> [Element] {
+    var seen: Set<Element> = []
+    return elements.filter { seen.insert($0).inserted }
+}
+```
+
+`Hashable` permits set membership. It does not promise sorting, arithmetic, or display formatting.
+
+Prefer the weakest constraint that supports the implementation. An unnecessary class, collection, or concrete-type requirement rejects valid callers and couples the algorithm to details it does not use.
+
+## Generic methods can change the element type
+
+`Page.map` introduces a second generic parameter for the output:
+
+```swift
+extension Page {
+    func map<Transformed>(
+        _ transform: (Element) -> Transformed
+    ) -> Page<Transformed> {
+        Page<Transformed>(
+            items: items.map(transform),
+            nextCursor: nextCursor
+        )
+    }
+}
+```
+
+Mapping a note page to titles changes `Page<FieldNote>` into `Page<String>` while preserving pagination metadata. The function type connects the input element to the transformed element.
+
+## Associated types let a conformer choose
+
+A protocol cannot always name one concrete type for every conformer. An associated type leaves that choice to each conformance:
+
+```swift
+protocol NoteSource<Note> {
+    associatedtype Note
+    func fetch() -> [Note]
+}
+```
+
+`MemorySource<FieldNote>` produces `FieldNote`. A different conformer could produce another note representation. The requirement keeps `fetch()` tied to the conformer's chosen `Note` type.
+
+The name in angle brackets is a primary associated type. It makes constraints such as `any NoteSource<FieldNote>` and `some NoteSource<FieldNote>` readable. The protocol still declares the associated type in its body.
+
+An associated type belongs to `Self`. A generic parameter belongs to the generic declaration and is chosen by its caller. That ownership difference explains why they solve neighboring but different problems.
+
+## Where clauses express relationships
+
+A generic constraint can connect several types:
+
+```swift
+func count<Source: NoteSource>(
+    in source: Source
+) -> Int where Source.Note == FieldNote {
+    source.fetch().count
+}
+```
+
+The `where` clause says this algorithm accepts any source whose associated note is exactly `FieldNote`. Other useful clauses require conformance, superclass relationships, or equality between associated types from different parameters.
+
+Write constraints that reveal why the body is valid. A dense chain of generic parameters and same-type rules can be a sign that a named adapter or concrete domain type would be easier to maintain.
+
+## `some` parameters are lightweight generics
+
+This form creates an unnamed generic parameter:
+
+```swift
+func sourceCount(_ source: some NoteSource<FieldNote>) -> Int {
+    source.fetch().count
+}
+```
+
+The caller still chooses one concrete source type, and the compiler preserves it for the call. Use a named generic parameter when the type appears more than once, participates in another constraint, or improves the explanation.
+
+Two separate `some Protocol` parameters introduce two independent hidden generic parameters. They do not promise the arguments have the same concrete type.
+
+## Opaque returns hide one implementation
+
+An opaque return lets the function choose one concrete type while hiding its name:
+
+```swift
+func makePreviewSource() -> some NoteSource<FieldNote> {
+    MemorySource(notes: previewNotes)
+}
+```
+
+The compiler knows the underlying type and preserves its associated `FieldNote` relationship. Callers know only the stated protocol contract.
+
+Every return path must use the same underlying concrete type. `some` is not a runtime box that can switch among unrelated conformers. Wrap choices in one concrete enum or use an existential when runtime variation is the real requirement.
+
+Opaque returns are useful at module boundaries and in SwiftUI, where a concrete composed type can be large or intentionally private. They do not erase type identity.
+
+## `any` stores a runtime-selected conformer
+
+An existential value uses `any`:
+
+```swift
+let source: any NoteSource<FieldNote> = filteredSource
+let notes = source.fetch()
+```
+
+The box can hold any conforming source whose primary associated type is `FieldNote`. The underlying concrete source can vary at runtime. Code through the box sees only protocol requirements and known associated-type constraints.
+
+That flexibility introduces indirection and erases concrete relationships that are not part of the existential constraint. It is often appropriate for stored dependencies, heterogeneous collections, plugin boundaries, and runtime composition.
+
+Do not use `any` merely to shorten a generic signature. Decide whether runtime type variation is part of the requirement.
+
+## Generic, opaque, and existential choices
+
+| Form | Concrete type chosen by | Identity preserved for compilation | Common use |
+| --- | --- | --- | --- |
+| `<Source: NoteSource>` | Caller | Yes | Reusable algorithm with related types |
+| `some NoteSource` parameter | Caller | Yes | One simple generic parameter |
+| `some NoteSource` return | Implementation | Yes, but hidden from caller | Hide one return implementation |
+| `any NoteSource` | Runtime value | No beyond stated constraints | Store or switch among conformers |
+
+Start from ownership. If the caller chooses the type, use a generic. If the implementation chooses one hidden type, return `some`. If the stored value must vary at runtime, use `any`.
+
+## Type erasure is a deliberate adapter
+
+An existential is built-in type erasure for a protocol boundary. A custom eraser such as `AnyNoteSource<Note>` can be useful when you need extra behavior, compatibility with an older language boundary, or a stable concrete wrapper.
+
+Custom erasers add closures, storage, forwarding code, and another public type. Do not build one before the actual API requires it. Constrained existentials now cover many cases that once needed hand-written erasers.
+
+## Run the source checkpoint
+
+The checkpoint pages notes, maps them to titles, filters a generic source wrapper, calls a constrained generic algorithm, returns an opaque source, and stores a constrained existential:
+
+<SwiftRepl code={genericCode} id="swift-generics-associated-types-existentials-opaque-types" />
+
+Expected output:
+
+```text
+Page: Fog, Forest
+Next cursor: 2
+Generic count: 2
+Existential titles: Fog, Forest
+Opaque source count: 3
+```
+
+The preconditions prove page boundaries, cursor preservation through a type-changing map, the generic associated-type constraint, existential dispatch, and opaque return behavior.
+
+The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary. It proves generic functions and types, generic methods, primary associated types, same-type constraints, constrained existentials, and opaque returns. It does not prove SwiftUI `some View`, framework type erasure, Objective-C generics, module resilience, compiler specialization decisions, binary size, Simulator, signing, entitlements, or device behavior.
+
+## Common mistakes
+
+- **Replacing the type relationship with `Any`**: Runtime casts take over work the compiler could prove.
+- **Adding constraints for convenience**: Valid conformers are rejected even though the algorithm does not need the capability.
+- **Using an existential for every protocol value**: Concrete relationships and specialization opportunities disappear.
+- **Assuming `some` can return unrelated types**: An opaque declaration has one underlying type per generic substitution.
+- **Assuming two `some` parameters match**: Each unnamed parameter is independent.
+- **Building custom type erasure too early**: Forwarding code appears before runtime variation requires it.
+- **Writing unreadable generic signatures**: A concrete adapter or named domain type may express the boundary better.
+
+## Practice
+
+1. Page strings instead of notes and verify no paging code changes.
+2. Add `filter` to `Page` while preserving its cursor.
+3. Constrain a function to sources whose notes conform to `Equatable`.
+4. Add a second `NoteSource<FieldNote>` conformer and store both in an existential array.
+5. Try returning either conformer from one opaque factory and read the compiler error.
+6. Replace the opaque factory return with `any NoteSource<FieldNote>` and compare the contract.
+7. Write an `AnyNoteSource<Note>` eraser, then list the extra code it introduces.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- How a generic preserves the concrete type selected by its caller.
+- Why constraints should state only capabilities the implementation uses.
+- How an associated type belongs to a conformer and differs from a generic parameter.
+- What primary associated type syntax enables at use sites.
+- How `where` clauses connect generic and associated types.
+- Who chooses the concrete type for generics, opaque returns, and existentials.
+- When runtime variation justifies `any` or custom type erasure.
+
+The next post defines ownership before adding asynchronous work, then reproduces and repairs a retain cycle between an editor and an escaping callback.
+
+## Series navigation
+
+- Previous: [Part 17: Errors, Result, throwing APIs, and recovery](../2026-07-17-swift-errors-result-throwing-recovery/)
+- Next: Part 19, ARC, ownership, capture lists, and memory safety
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Generic relationships**: [Generics](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/generics/) covers generic functions and types, constraints, associated types, generic where clauses, and opaque parameters.
+- **Opaque and existential boundaries**: [Opaque and Boxed Protocol Types](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/opaquetypes/) compares preserved opaque identity with runtime existential storage.
+- **Protocol use forms**: [Protocols](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/) distinguishes generic constraints, opaque types, and boxed protocol values.
+
+## Related topics
+
+- [Protocols, extensions, and protocol-oriented design](../2026-07-16-swift-protocols-extensions-protocol-oriented-design/), defining the capability contracts used by generic and existential boundaries.
+- [Collections, sequences, and cost](../2026-07-16-swift-collections-sequences-cost/), standard-library generic collections and their operation costs.
+- [Adapter pattern](../../topics/cs/design-patterns/adapter/), translating a provider into one concrete source contract.
