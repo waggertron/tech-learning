@@ -9,6 +9,10 @@ The Zero to iOS Hero program uses one reusable skill and a versioned reference s
 - Focused references: `.agents/skills/ios-swift-development/references/`
 - Stable matrix: `.agents/skills/ios-swift-development/references/supported-matrix.md`
 - Validation commands: `.agents/skills/ios-swift-development/references/validation.md`
+- Field Notes acceptance: `docs/field-notes-acceptance-specification.md`
+- Post evidence matrix: `docs/zero-to-ios-hero-validation-matrix.md`
+- Companion workspace: `companion/field-notes/`
+- Companion workspace ADR: `docs/adr/2026-07-16-field-notes-companion-workspace.md`
 - Browser runner baseline: `docs/swift-browser-runner.md`
 - Browser execution ADR: `docs/adr/2026-07-13-swift-browser-execution.md`
 - Browser executor spike: `docs/spikes/2026-07-13-swift-runner.md`

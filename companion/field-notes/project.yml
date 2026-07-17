@@ -1,0 +1,141 @@
+name: FieldNotes
+options:
+  minimumXcodeGenVersion: 2.45.4
+  bundleIdPrefix: io.github.waggertron.techlearning
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "17.0"
+
+packages:
+  FieldNotesCore:
+    path: Packages/FieldNotesCore
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    TARGETED_DEVICE_FAMILY: "1,2"
+
+targets:
+  FieldNotesSwiftUI:
+    type: application
+    platform: iOS
+    sources:
+      - Apps/SwiftUI
+    dependencies:
+      - package: FieldNotesCore
+        product: FieldNotesCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.waggertron.techlearning.fieldnotes.swiftui
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+
+  FieldNotesUIKit:
+    type: application
+    platform: iOS
+    sources:
+      - Apps/UIKit
+    dependencies:
+      - package: FieldNotesCore
+        product: FieldNotesCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.waggertron.techlearning.fieldnotes.uikit
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+
+  FieldNotesSwiftUIAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests/SwiftUIAppTests
+    dependencies:
+      - target: FieldNotesSwiftUI
+      - package: FieldNotesCore
+        products:
+          - FieldNotesCore
+          - FieldNotesTestSupport
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.waggertron.techlearning.fieldnotes.swiftui.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  FieldNotesUIKitAppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests/UIKitAppTests
+    dependencies:
+      - target: FieldNotesUIKit
+      - package: FieldNotesCore
+        products:
+          - FieldNotesCore
+          - FieldNotesTestSupport
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.waggertron.techlearning.fieldnotes.uikit.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  FieldNotesSwiftUIUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - Tests/SwiftUIUITests
+    dependencies:
+      - target: FieldNotesSwiftUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.waggertron.techlearning.fieldnotes.swiftui.uitests
+        GENERATE_INFOPLIST_FILE: YES
+
+  FieldNotesUIKitUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - Tests/UIKitUITests
+    dependencies:
+      - target: FieldNotesUIKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.waggertron.techlearning.fieldnotes.uikit.uitests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  FieldNotesSwiftUI:
+    build:
+      targets:
+        FieldNotesSwiftUI: all
+        FieldNotesSwiftUIAppTests: [test]
+        FieldNotesSwiftUIUITests: [test]
+    run:
+      config: Debug
+      executable: FieldNotesSwiftUI
+    test:
+      gatherCoverageData: true
+      coverageTargets:
+        - FieldNotesSwiftUI
+      targets:
+        - FieldNotesSwiftUIAppTests
+        - FieldNotesSwiftUIUITests
+    archive:
+      config: Release
+
+  FieldNotesUIKit:
+    build:
+      targets:
+        FieldNotesUIKit: all
+        FieldNotesUIKitAppTests: [test]
+        FieldNotesUIKitUITests: [test]
+    run:
+      config: Debug
+      executable: FieldNotesUIKit
+    test:
+      gatherCoverageData: true
+      coverageTargets:
+        - FieldNotesUIKit
+      targets:
+        - FieldNotesUIKitAppTests
+        - FieldNotesUIKitUITests
+    archive:
+      config: Release

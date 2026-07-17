@@ -1,6 +1,6 @@
 # Feature Tracker
 
-Last audited: 2026-07-15
+Last audited: 2026-07-16
 
 This document tracks major features added to the tech-learning repo over time. It is a historical record, a current capability map, and a checklist for future feature work.
 
@@ -103,6 +103,7 @@ As of this audit, the repo contains:
 
 ### Post Series
 
+- **2026-07-16: Zero to iOS Hero series workspace**: Established the shared Field Notes product acceptance contract, a 140-post evidence matrix, a SwiftPM core and CLI checkpoint, deterministic Swift Testing fixtures, local repository boundaries, and reproducible SwiftUI and UIKit app and test target declarations. The package passes seven tests locally; Xcode, simulator, accessibility, signing, archive, and device evidence remain explicitly Not verified until the supported full Xcode environment is available. Evidence: `companion/field-notes/`, `docs/field-notes-acceptance-specification.md`, `docs/zero-to-ios-hero-validation-matrix.md`, `docs/adr/2026-07-16-field-notes-companion-workspace.md`, `docs/plans/2026-07-13-zero-to-ios-hero-series-plan.md`.
 - **2026-07-12: Domain-Specific Languages series plan and value calculator**: Added a research-backed DSL series plan with tooling landscape, tradeoff criteria, implementation value scoring, and an interactive calculator that recommends normal code, existing DSL/tool adoption, an internal DSL prototype, or a custom DSL candidate from user inputs. Evidence: `src/content/docs/posts/series/domain-specific-languages/index.mdx`, `src/components/DslValueCalculator.astro`, `src/content/docs/posts/index.mdx`, `src/content/docs/posts/series/index.mdx`.
 - **2026-07-07: Post series content model**: Added series frontmatter support, series landing pages, and post index discovery for grouped post sequences. Evidence: `src/content.config.ts`, `src/content/docs/posts/series/`, `src/content/docs/posts/index.mdx`.
 - **2026-07-07: Modern React development series**: Added a 40-part Modern React post series covering React fundamentals, state, effects, forms, routing, frameworks, tooling, testing, deployment, and related ecosystem choices. Evidence: `src/content/docs/posts/2026-07-07-react-*.md`, `src/content/docs/posts/series/modern-react-development/index.mdx`.

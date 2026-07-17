@@ -22,6 +22,11 @@ pnpm-debug.log*
 .idea/
 *.swp
 
+# generated Field Notes Xcode workspace artifacts
+/companion/field-notes/FieldNotes.xcodeproj/
+/companion/field-notes/DerivedData/
+/companion/field-notes/Packages/FieldNotesCore/.build/
+
 # local tooling / session state
 .omc/
 

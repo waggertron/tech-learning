@@ -1,7 +1,7 @@
 # Zero to iOS Hero, Series Plan
 
 **Date:** 2026-07-13
-**Status:** Proposed curriculum
+**Status:** In execution, Gate 3 established
 **Series slug:** `zero-to-ios-hero`
 
 ## Execution checklist
@@ -64,12 +64,12 @@ S2.1 through S2.3, the browser runner, and one representative category form the 
 - [x] **S2.1, generate a coverage manifest**: Inventory every problem page, starter file, documented approach, helper type, test harness, and language tab. Fail validation when a page or approach lacks Swift.
 - [x] **S2.2, define the Swift solution contract**: Standardize `.swift` filenames, starter TODOs, assertion output, `runTests`, LeetCode-compatible signatures, and shared `ListNode`, `TreeNode`, graph-node, heap, and interval helpers. The maintained contract, canonical helpers, validation rules, and compile specimens live in [Swift Coding Problem Contract](../swift-coding-problem-contract.md).
 - [x] **S2.3, create shared cross-language test vectors**: Reuse the same valid, boundary, and deliberate invalid cases in Python, TypeScript, Go, and Swift without silently normalizing contract violations. The schema, invalid-input policy, deterministic renderers, drift checks, and four-language proof live in [Coding Problem Test Vectors](../coding-problem-test-vectors.md).
-- [ ] **S2.4, add Swift starter code to all 189 pages**: Every Try it yourself section gets a Swift tab backed by an editable `.swift` file and embedded tests.
-- [ ] **S2.5, add Swift for every documented approach**: Match each approach section with compiling Swift code. Do not stop at one canonical solution when the page teaches brute-force, recursive, iterative, optimized, or follow-up variants.
-- [ ] **S2.6, teach Swift-specific tradeoffs**: Explain value and reference semantics, `String.Index`, `Character`, Unicode, integer width and overflow, recursion depth, copy-on-write collections, optional handling, missing standard-library heap types, and mutation costs where they change an approach.
-- [ ] **S2.7, compile the entire catalog**: Run every standalone Swift source and its tests under the supported stable Swift toolchain. Add time and output limits and report file-specific diagnostics.
-- [ ] **S2.8, verify the rendered integration**: Build the site, spot-test representative array, tree, graph, heap, dynamic-programming, string, and linked-list pages, and run browser tests against the selected Swift runner.
-- [ ] **S2.9, update authoring and feature records**: Teach future coding-problem work to require Swift parity, update templates and validators, record the capability in `docs/feature_tracker.md`, and update the iOS and Swift skill.
+- [x] **S2.4, add Swift starter code to all 189 pages**: Every Try it yourself section gets a Swift tab backed by an editable `.swift` file and embedded tests.
+- [x] **S2.5, add Swift for every documented approach**: Match each approach section with compiling Swift code. Do not stop at one canonical solution when the page teaches brute-force, recursive, iterative, optimized, or follow-up variants.
+- [x] **S2.6, teach Swift-specific tradeoffs**: Explain value and reference semantics, `String.Index`, `Character`, Unicode, integer width and overflow, recursion depth, copy-on-write collections, optional handling, missing standard-library heap types, and mutation costs where they change an approach.
+- [x] **S2.7, compile the entire catalog**: Run every standalone Swift source and its tests under the supported stable Swift toolchain. Add time and output limits and report file-specific diagnostics.
+- [x] **S2.8, verify the rendered integration**: Build the site, spot-test representative array, tree, graph, heap, dynamic-programming, string, and linked-list pages, and run browser tests against the selected Swift runner.
+- [x] **S2.9, update authoring and feature records**: Teach future coding-problem work to require Swift parity, update templates and validators, record the capability in `docs/feature_tracker.md`, and update the iOS and Swift skill.
 
 Category rollout checklist:
 
@@ -94,9 +94,9 @@ Category rollout checklist:
 
 ### Gate 3: Establish the series workspace
 
-- [ ] **F3.1, create the Field Notes acceptance specification**: Define shared behavior, accessibility, error-state, and persistence acceptance criteria for the SwiftUI and UIKit implementations.
-- [ ] **F3.2, create companion-code workspaces**: Establish the Swift package, SwiftUI target, UIKit target, shared test support, deterministic fixtures, and local mock boundaries.
-- [ ] **F3.3, create the validation matrix**: Map every post to its compile, test, simulator, device, accessibility, performance, and manual-review evidence.
+- [x] **F3.1, create the Field Notes acceptance specification**: The [Field Notes acceptance specification](../field-notes-acceptance-specification.md) defines shared behavior, accessibility, error-state, persistence, framework-specific, and evidence criteria for the SwiftUI and UIKit implementations.
+- [x] **F3.2, create companion-code workspaces**: `companion/field-notes/` establishes the Swift package, command-line checkpoint, SwiftUI target, UIKit target, shared Swift Testing support, deterministic fixtures, local in-memory adapter, app unit tests, UI tests, and generated-project boundary. The [workspace ADR](../adr/2026-07-16-field-notes-companion-workspace.md) records the decision and current Not verified Xcode boundary.
+- [x] **F3.3, create the validation matrix**: The [Zero to iOS Hero validation matrix](../zero-to-ios-hero-validation-matrix.md) maps all 140 posts to compile, automated-test, simulator, device, accessibility, performance, and manual-review evidence.
 - [ ] **F3.4, create the series landing page when the first arc is publishable**: Do not publish a placeholder landing page before working posts exist.
 
 ### Batch gates
@@ -524,6 +524,8 @@ Run this review again after the skill is forward-tested, after each batch, and w
 
 Testing begins with the first Swift function. The dedicated testing arc organizes the tools and tradeoffs after readers have real SwiftUI, UIKit, persistence, concurrency, and architecture code to test.
 
+The [Zero to iOS Hero validation matrix](../zero-to-ios-hero-validation-matrix.md) assigns this evidence to every planned post and adds capability-specific requirements.
+
 | Surface | Primary evidence | Required failure coverage |
 | --- | --- | --- |
 | Swift values and algorithms | Swift Testing unit and parameterized tests | Boundaries, Unicode, optionals, invalid input, error mapping, and overflow where relevant. |
@@ -587,6 +589,7 @@ The program has seven portfolio checkpoints:
 
 ## Companion code strategy
 
+- Keep the Field Notes core path in `companion/field-notes/`. The Swift package is the shared source boundary, and `project.yml` declares disposable generated Xcode targets for the SwiftUI and UIKit adapters.
 - Keep one workspace for the Field Notes core path and one workspace per case study.
 - Keep a versioned Swift runner contract and a catalog manifest that maps every coding-problem approach to its `.swift` file and tests. Local and live runner adapters use the same browser contract.
 - Tag the repository at every post checkpoint.
