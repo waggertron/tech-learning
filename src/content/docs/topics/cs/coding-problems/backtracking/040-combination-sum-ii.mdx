@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,11 @@ import practiceCodeGo from './040-combination-sum-ii.go?raw';
 import approach3PyCode from './040-combination-sum-ii-approach3.py?raw';
 import approach3TsCode from './040-combination-sum-ii-approach3.ts?raw';
 import approach3GoCode from './040-combination-sum-ii-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './040-combination-sum-ii.swift?raw';
+import approach1SwiftCode from './040-combination-sum-ii-approach1.swift?raw';
+import approach2SwiftCode from './040-combination-sum-ii-approach2.swift?raw';
+import approach3SwiftCode from './040-combination-sum-ii-approach3.swift?raw';
 
 ## Problem
 
@@ -41,6 +46,9 @@ LeetCode 40 · [Link](https://leetcode.com/problems/combination-sum-ii/) · *Med
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="combination-sum-ii-go" />
   </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="040-combination-sum-ii-swift" />
+  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, all subsets, filter by sum, dedup
@@ -63,6 +71,28 @@ def combination_sum2(candidates, target):
 - **Space:** same.
 
 Exponential and wasteful.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func combinationSum2(_ candidates: [Int], _ target: Int) -> [[Int]] {
+        let count = candidates.count; var unique = Set<[Int]>()
+        for mask in 0..<(1 << count) { var sum = 0, values: [Int] = []; for index in 0..<count where mask & (1 << index) != 0 { sum += candidates[index]; values.append(candidates[index]) }; if sum == target { unique.insert(values.sorted()) } }
+        return normalized(Array(unique))
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="040-combination-sum-ii-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Backtracking with `start` index (no skip)
 
@@ -95,6 +125,28 @@ def combination_sum2(candidates, target):
 - **Space:** exponential storage.
 
 The dedup step is a symptom, fix it at the source.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func combinationSum2(_ candidates: [Int], _ target: Int) -> [[Int]] {
+        let values = candidates.sorted(); var unique = Set<[Int]>()
+        func search(_ start: Int, _ remaining: Int, _ current: [Int]) { if remaining == 0 { unique.insert(current); return }; if remaining < 0 { return }; for index in start..<values.count { search(index + 1, remaining - values[index], current + [values[index]]) } }
+        search(0, target, []); return normalized(Array(unique))
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="040-combination-sum-ii-approach2-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 3: Sort + skip same-level duplicates (canonical)
 
@@ -215,6 +267,28 @@ Sorting enables both L3 (early termination) and L4 (same-level duplicate skip). 
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="combination-sum-ii-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func combinationSum2(_ candidates: [Int], _ target: Int) -> [[Int]] {
+        let values = candidates.sorted(); var result: [[Int]] = []
+        func search(_ start: Int, _ remaining: Int, _ current: [Int]) { if remaining == 0 { result.append(current); return }; var previous: Int?; for index in start..<values.count { let value = values[index]; if value > remaining { break }; if value == previous { continue }; previous = value; search(index + 1, remaining - value, current + [value]) } }
+        search(0, target, []); return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="040-combination-sum-ii-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './017-letter-combinations-of-a-phone-number-approac
 import approach3PyCode from './017-letter-combinations-of-a-phone-number-approach3.py?raw';
 import approach3TsCode from './017-letter-combinations-of-a-phone-number-approach3.ts?raw';
 import approach3GoCode from './017-letter-combinations-of-a-phone-number-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './017-letter-combinations-of-a-phone-number.swift?raw';
+import approach1SwiftCode from './017-letter-combinations-of-a-phone-number-approach1.swift?raw';
+import approach2SwiftCode from './017-letter-combinations-of-a-phone-number-approach2.swift?raw';
+import approach3SwiftCode from './017-letter-combinations-of-a-phone-number-approach3.swift?raw';
 
 ## Problem
 
@@ -49,6 +54,9 @@ LeetCode 17 · [Link](https://leetcode.com/problems/letter-combinations-of-a-pho
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="letter-combinations-of-a-phone-number-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="017-letter-combinations-of-a-phone-number-swift" />
   </TabItem>
 </Tabs>
 
@@ -146,6 +154,25 @@ After processing digit i, `result` has k^i entries each of length i. The compreh
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="letter-combinations-approach1-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func letterCombinations(_ digits: String) -> [String] {
+        let map: [Character: [Character]] = ["2": Array("abc"), "3": Array("def"), "4": Array("ghi"), "5": Array("jkl"), "6": Array("mno"), "7": Array("pqrs"), "8": Array("tuv"), "9": Array("wxyz")]
+        var combinations = [""]
+        for digit in digits { var next: [String] = []; for prefix in combinations { for letter in map[digit]! { next.append(prefix + String(letter)) } }; combinations = next }
+        return digits.isEmpty ? [] : combinations
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="017-letter-combinations-of-a-phone-number-approach1-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 2: Backtracking DFS (canonical)
@@ -267,6 +294,25 @@ The recursion tree has k^n leaves (one per combination) and n levels. Most work 
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func letterCombinations(_ digits: String) -> [String] {
+        let map: [Character: [Character]] = ["2": Array("abc"), "3": Array("def"), "4": Array("ghi"), "5": Array("jkl"), "6": Array("mno"), "7": Array("pqrs"), "8": Array("tuv"), "9": Array("wxyz")]
+        let values = Array(digits); if values.isEmpty { return [] }; var result: [String] = []
+        func search(_ index: Int, _ current: [Character]) { if index == values.count { result.append(String(current)); return }; for letter in map[values[index]]! { search(index + 1, current + [letter]) } }
+        search(0, []); return result
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="017-letter-combinations-of-a-phone-number-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: `itertools.product`
 
 Python one-liner using the standard library.
@@ -295,6 +341,24 @@ def letter_combinations(digits):
 - **Space:** $O(4^n · n)$.
 
 Production-correct; rarely accepted in an interview that wants the algorithm.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func letterCombinations(_ digits: String) -> [String] {
+        let map: [Character: [String]] = ["2": ["a","b","c"], "3": ["d","e","f"], "4": ["g","h","i"], "5": ["j","k","l"], "6": ["m","n","o"], "7": ["p","q","r","s"], "8": ["t","u","v"], "9": ["w","x","y","z"]]
+        if digits.isEmpty { return [] }
+        return digits.reduce([""]) { partial, digit in partial.flatMap { prefix in map[digit]!.map { prefix + $0 } } }
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="017-letter-combinations-of-a-phone-number-approach3-swift" />
+</TabItem>
+</Tabs>
 
 ## Summary
 

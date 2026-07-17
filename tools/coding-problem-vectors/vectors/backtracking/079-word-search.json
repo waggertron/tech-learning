@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "backtracking",
+    "slug": "079-word-search"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "board",
+        "codec": "string-matrix"
+      },
+      {
+        "name": "word",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "boolean",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "exist"
+      },
+      "typescript": {
+        "function": "exist"
+      },
+      "go": {
+        "function": "exist"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "exist"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-true",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "ABCCED"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "second-true",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "SEE"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "reuse-false",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "A",
+            "B",
+            "C",
+            "E"
+          ],
+          [
+            "S",
+            "F",
+            "C",
+            "S"
+          ],
+          [
+            "A",
+            "D",
+            "E",
+            "E"
+          ]
+        ],
+        "ABCB"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        [
+          [
+            "A"
+          ]
+        ],
+        "A"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": true
+      }
+    },
+    {
+      "id": "missing-single",
+      "classification": "valid",
+      "arguments": [
+        [
+          [
+            "A"
+          ]
+        ],
+        "B"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": false
+      }
+    },
+    {
+      "id": "empty-board",
+      "classification": "invalid",
+      "arguments": [
+        [
+          []
+        ],
+        "A"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The board has at least one row and one column."
+      }
+    }
+  ]
+}

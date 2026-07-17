@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,11 @@ import practiceCodeGo from './078-subsets.go?raw';
 import approach3PyCode from './078-subsets-approach3.py?raw';
 import approach3TsCode from './078-subsets-approach3.ts?raw';
 import approach3GoCode from './078-subsets-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './078-subsets.swift?raw';
+import approach1SwiftCode from './078-subsets-approach1.swift?raw';
+import approach2SwiftCode from './078-subsets-approach2.swift?raw';
+import approach3SwiftCode from './078-subsets-approach3.swift?raw';
 
 ## Problem
 
@@ -40,6 +45,9 @@ LeetCode 78 · [Link](https://leetcode.com/problems/subsets/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="subsets-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="078-subsets-swift" />
   </TabItem>
 </Tabs>
 
@@ -72,6 +80,28 @@ def subsets(nums):
 
 Simple and fast for small n. Struggles past n ≈ 20.
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func subsets(_ nums: [Int]) -> [[Int]] {
+        var result: [[Int]] = []
+        for mask in 0..<(1 << nums.count) { var subset: [Int] = []; for index in nums.indices where mask & (1 << index) != 0 { subset.append(nums[index]) }; result.append(subset) }
+        return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="078-subsets-approach1-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 2: Iterative build (grow by appending each element)
 
 Start with `[[]]`; for each element, duplicate every existing subset and add the element to the duplicates.
@@ -100,6 +130,28 @@ At step i, `result` has 2^i entries and we copy each to produce 2^i new ones. To
 - **Space:** $O(n · 2^n)$.
 
 Elegant, especially in Python. Slightly more allocation than the backtracking version.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func subsets(_ nums: [Int]) -> [[Int]] {
+        var result: [[Int]] = [[]]
+        for value in nums { result += result.map { $0 + [value] } }
+        return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="078-subsets-approach2-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 3: Backtracking with include/exclude (canonical)
 
@@ -211,6 +263,28 @@ We mutate `path` in place across recursive calls. When we record a subset, we ne
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="subsets-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func subsets(_ nums: [Int]) -> [[Int]] {
+        var result: [[Int]] = []
+        func search(_ index: Int, _ current: [Int]) { if index == nums.count { result.append(current); return }; search(index + 1, current); search(index + 1, current + [nums[index]]) }
+        search(0, []); return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="078-subsets-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

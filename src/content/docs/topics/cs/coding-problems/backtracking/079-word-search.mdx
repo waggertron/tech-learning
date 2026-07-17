@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, dfs, grid, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,11 @@ import practiceCodeGo from './079-word-search.go?raw';
 import approach2PyCode from './079-word-search-approach2.py?raw';
 import approach2TsCode from './079-word-search-approach2.ts?raw';
 import approach2GoCode from './079-word-search-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './079-word-search.swift?raw';
+import approach1SwiftCode from './079-word-search-approach1.swift?raw';
+import approach2SwiftCode from './079-word-search-approach2.swift?raw';
+import approach3SwiftCode from './079-word-search-approach3.swift?raw';
 
 ## Problem
 
@@ -41,6 +46,9 @@ LeetCode 79 · [Link](https://leetcode.com/problems/word-search/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="word-search-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="079-word-search-swift" />
   </TabItem>
 </Tabs>
 
@@ -77,6 +85,24 @@ def exist(board, word):
 **Complexity**
 - **Time:** $O(m · n · 4^L)$ where L = word length.
 - **Space:** $O(L)$ visited + recursion.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func exist(_ board: [[String]], _ word: String) -> Bool {
+        let letters = Array(word); let rows = board.count, columns = board[0].count
+        func search(_ row: Int, _ column: Int, _ index: Int, _ visited: Set<Int>) -> Bool { if index == letters.count { return true }; if row < 0 || row >= rows || column < 0 || column >= columns || board[row][column] != String(letters[index]) || visited.contains(row * columns + column) { return false }; var next = visited; next.insert(row * columns + column); return search(row + 1, column, index + 1, next) || search(row - 1, column, index + 1, next) || search(row, column + 1, index + 1, next) || search(row, column - 1, index + 1, next) }
+        for row in 0..<rows { for column in 0..<columns where search(row, column, 0, []) { return true } }; return false
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="079-word-search-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: DFS with in-place mutation (canonical)
 
@@ -201,6 +227,24 @@ Standard interview answer. The "restore on backtrack" is the essential pattern.
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func exist(_ board: [[String]], _ word: String) -> Bool {
+        var grid = board; let letters = Array(word), rows = grid.count, columns = grid[0].count
+        func search(_ row: Int, _ column: Int, _ index: Int) -> Bool { if index == letters.count { return true }; if row < 0 || row >= rows || column < 0 || column >= columns || grid[row][column] != String(letters[index]) { return false }; let saved = grid[row][column]; grid[row][column] = "#"; defer { grid[row][column] = saved }; return search(row + 1, column, index + 1) || search(row - 1, column, index + 1) || search(row, column + 1, index + 1) || search(row, column - 1, index + 1) }
+        for row in 0..<rows { for column in 0..<columns where search(row, column, 0) { return true } }; return false
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="079-word-search-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: Start-cell pruning with character counts
 
 Before doing any DFS, count characters on the board. If the board lacks any character of `word` (or not enough of each), return `false` immediately. If the last character of `word` is rarer on the board than the first, reverse `word` before searching. DFS from rare characters prunes faster.
@@ -247,6 +291,25 @@ def exist(board, word):
 **Complexity**
 - **Time:** Same worst case; much faster in practice on edge-case inputs.
 - **Space:** $O(L)$ recursion.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func exist(_ board: [[String]], _ word: String) -> Bool {
+        var available: [Character: Int] = [:]; for row in board { for value in row { available[value.first!, default: 0] += 1 } }; var needed: [Character: Int] = [:]; for value in word { needed[value, default: 0] += 1 }; for (value, count) in needed where available[value, default: 0] < count { return false }
+        var letters = Array(word); if available[letters.first!, default: 0] > available[letters.last!, default: 0] { letters.reverse() }; var grid = board; let rows = grid.count, columns = grid[0].count
+        func search(_ row: Int, _ column: Int, _ index: Int) -> Bool { if index == letters.count { return true }; if row < 0 || row >= rows || column < 0 || column >= columns || grid[row][column] != String(letters[index]) { return false }; let saved = grid[row][column]; grid[row][column] = "#"; defer { grid[row][column] = saved }; return search(row + 1, column, index + 1) || search(row - 1, column, index + 1) || search(row, column + 1, index + 1) || search(row, column - 1, index + 1) }
+        for row in 0..<rows { for column in 0..<columns where search(row, column, 0) { return true } }; return false
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="079-word-search-approach3-swift" />
+</TabItem>
+</Tabs>
 
 ## Summary
 

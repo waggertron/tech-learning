@@ -27,6 +27,7 @@ const knownFenceLanguages = new Set([
   "shell",
   "solidity",
   "sql",
+  "swift",
   "text",
   "toml",
   "ts",

@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, strings, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './131-palindrome-partitioning-approach2.go?raw';
 import approach3PyCode from './131-palindrome-partitioning-approach3.py?raw';
 import approach3TsCode from './131-palindrome-partitioning-approach3.ts?raw';
 import approach3GoCode from './131-palindrome-partitioning-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './131-palindrome-partitioning.swift?raw';
+import approach1SwiftCode from './131-palindrome-partitioning-approach1.swift?raw';
+import approach2SwiftCode from './131-palindrome-partitioning-approach2.swift?raw';
+import approach3SwiftCode from './131-palindrome-partitioning-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 131 · [Link](https://leetcode.com/problems/palindrome-partitioning/) �
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="palindrome-partitioning-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="131-palindrome-partitioning-swift" />
   </TabItem>
 </Tabs>
 
@@ -88,6 +96,24 @@ There are 2^(n-1) possible cut positions, so the search space is $O(2^n)$. Each 
 **Complexity**
 - **Time:** $O(n · 2^n)$. For each of 2^(n-1) possible partitions, $O(n)$ palindrome checks.
 - **Space:** $O(n)$ recursion.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func partition(_ s: String) -> [[String]] {
+        let chars = Array(s); var result: [[String]] = []
+        func search(_ start: Int, _ current: [String]) { if start == chars.count { result.append(current); return }; for end in start..<chars.count { let piece = String(chars[start...end]); if Array(piece) == Array(piece.reversed()) { search(end + 1, current + [piece]) } } }
+        search(0, []); return result
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="131-palindrome-partitioning-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Two-pointer palindrome check (same Big-O, no string slicing)
 
@@ -224,6 +250,25 @@ func partition(s string) [][]string {
   <TabItem label="Go">
     <GoRepl code={approach2GoCode} id="palindrome-partitioning-approach2-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func partition(_ s: String) -> [[String]] {
+        let chars = Array(s); var result: [[String]] = []
+        func palindrome(_ left: Int, _ right: Int) -> Bool { var left = left, right = right; while left < right { if chars[left] != chars[right] { return false }; left += 1; right -= 1 }; return true }
+        func search(_ start: Int, _ current: [String]) { if start == chars.count { result.append(current); return }; for end in start..<chars.count where palindrome(start, end) { search(end + 1, current + [String(chars[start...end])]) } }
+        search(0, []); return result
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="131-palindrome-partitioning-approach2-swift" />
+</TabItem>
 </Tabs>
 
 ## Approach 3: Precompute palindrome DP table (optimal constant factor)
@@ -373,6 +418,24 @@ The $O(n^2)$ DP preprocessing pays off when there are many palindrome checks; ea
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="palindrome-partitioning-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    func partition(_ s: String) -> [[String]] {
+        let chars = Array(s), count = s.count; var table = Array(repeating: Array(repeating: false, count: count), count: count)
+        for left in stride(from: count - 1, through: 0, by: -1) { for right in left..<count where chars[left] == chars[right] && (right - left < 2 || table[left + 1][right - 1]) { table[left][right] = true } }
+        var result: [[String]] = []; func search(_ start: Int, _ current: [String]) { if start == count { result.append(current); return }; for end in start..<count where table[start][end] { search(end + 1, current + [String(chars[start...end])]) } }; search(0, []); return result
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="131-palindrome-partitioning-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

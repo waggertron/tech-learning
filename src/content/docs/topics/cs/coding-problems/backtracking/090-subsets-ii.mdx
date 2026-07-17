@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,6 +18,11 @@ import practiceCodeGo from './090-subsets-ii.go?raw';
 import approach2PyCode from './090-subsets-ii-approach2.py?raw';
 import approach2TsCode from './090-subsets-ii-approach2.ts?raw';
 import approach2GoCode from './090-subsets-ii-approach2.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './090-subsets-ii.swift?raw';
+import approach1SwiftCode from './090-subsets-ii-approach1.swift?raw';
+import approach2SwiftCode from './090-subsets-ii-approach2.swift?raw';
+import approach3SwiftCode from './090-subsets-ii-approach3.swift?raw';
 
 ## Problem
 
@@ -40,6 +45,9 @@ LeetCode 90 · [Link](https://leetcode.com/problems/subsets-ii/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="subsets-ii-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="090-subsets-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -74,6 +82,28 @@ def subsets_with_dup(nums):
 - **Space:** $O(n · 2^n)$.
 
 Works but wastes effort generating then filtering duplicates.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func subsetsWithDup(_ nums: [Int]) -> [[Int]] {
+        let values = nums.sorted(); var unique = Set<[Int]>()
+        for mask in 0..<(1 << values.count) { var subset: [Int] = []; for index in values.indices where mask & (1 << index) != 0 { subset.append(values[index]) }; unique.insert(subset) }
+        return normalized(Array(unique))
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="090-subsets-ii-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Sort + skip duplicates at the same level (canonical)
 
@@ -185,6 +215,28 @@ Every node in the recursion tree emits a result (unlike Combination Sum where on
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func subsetsWithDup(_ nums: [Int]) -> [[Int]] {
+        let values = nums.sorted(); var result: [[Int]] = []
+        func search(_ start: Int, _ current: [Int]) { result.append(current); var previous: Int?; for index in start..<values.count { if values[index] == previous { continue }; previous = values[index]; search(index + 1, current + [values[index]]) } }
+        search(0, []); return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="090-subsets-ii-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: Counter / multiset iteration
 
 Count each distinct value; for each distinct value, choose to include it 0 to `count` times.
@@ -227,6 +279,28 @@ def subsets_with_dup(nums):
 **Complexity**
 - **Time:** Same asymptotic, often faster in practice with heavy duplicates.
 - **Space:** $O(n)$ recursion.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func subsetsWithDup(_ nums: [Int]) -> [[Int]] {
+        var counts: [Int: Int] = [:]; for value in nums { counts[value, default: 0] += 1 }; let entries = counts.sorted { $0.key < $1.key }; var result: [[Int]] = []
+        func search(_ index: Int, _ current: [Int]) { if index == entries.count { result.append(current); return }; let (value, count) = entries[index]; for amount in 0...count { search(index + 1, current + Array(repeating: value, count: amount)) } }
+        search(0, []); return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="090-subsets-ii-approach3-swift" />
+</TabItem>
+</Tabs>
 
 ## Summary
 

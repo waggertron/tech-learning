@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "backtracking",
+    "slug": "017-letter-combinations-of-a-phone-number"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "digits",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "letter_combinations"
+      },
+      "typescript": {
+        "function": "letterCombinations"
+      },
+      "go": {
+        "function": "letterCombinations"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "letterCombinations"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "two-digits",
+      "classification": "valid",
+      "arguments": [
+        "23"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "ad",
+          "ae",
+          "af",
+          "bd",
+          "be",
+          "bf",
+          "cd",
+          "ce",
+          "cf"
+        ]
+      }
+    },
+    {
+      "id": "one-digit",
+      "classification": "boundary",
+      "arguments": [
+        "2"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "boundary",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "four-letter-digit",
+      "classification": "valid",
+      "arguments": [
+        "7"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "p",
+          "q",
+          "r",
+          "s"
+        ]
+      }
+    },
+    {
+      "id": "repeated-digit",
+      "classification": "valid",
+      "arguments": [
+        "22"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          "aa",
+          "ab",
+          "ac",
+          "ba",
+          "bb",
+          "bc",
+          "ca",
+          "cb",
+          "cc"
+        ]
+      }
+    },
+    {
+      "id": "unsupported-digit",
+      "classification": "invalid",
+      "arguments": [
+        "1"
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Digits are between 2 and 9."
+      }
+    }
+  ]
+}

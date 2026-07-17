@@ -9,7 +9,7 @@
       "python": 470,
       "typescript": 469,
       "go": 469,
-      "swift": 659
+      "swift": 695
     },
     "languageCoverage": {
       "python": {
@@ -40,18 +40,18 @@
         "approachHarnesses": 262
       },
       "swift": {
-        "starterFiles": 180,
-        "starterHarnesses": 180,
-        "practiceTabs": 180,
-        "practiceRepls": 180,
-        "approachTabs": 479,
-        "approachSources": 479,
-        "approachHarnesses": 479
+        "starterFiles": 189,
+        "starterHarnesses": 189,
+        "practiceTabs": 189,
+        "practiceRepls": 189,
+        "approachTabs": 506,
+        "approachSources": 506,
+        "approachHarnesses": 506
       }
     },
-    "swiftReadyPages": 180,
-    "swiftReadyApproaches": 479,
-    "vectorReadyPages": 180
+    "swiftReadyPages": 189,
+    "swiftReadyApproaches": 506,
+    "vectorReadyPages": 189
   },
   "categories": [
     {
@@ -90,9 +90,9 @@
       "category": "backtracking",
       "pages": 9,
       "documentedApproaches": 27,
-      "swiftReadyPages": 0,
-      "swiftReadyApproaches": 0,
-      "vectorReadyPages": 0
+      "swiftReadyPages": 9,
+      "swiftReadyApproaches": 27,
+      "vectorReadyPages": 9
     },
     {
       "category": "binary-search",
@@ -7114,45 +7114,47 @@
       "page": "backtracking/017-letter-combinations-of-a-phone-number.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/017-letter-combinations-of-a-phone-number.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/017-letter-combinations-of-a-phone-number.py",
         "typescript": "backtracking/017-letter-combinations-of-a-phone-number.ts",
         "go": "backtracking/017-letter-combinations-of-a-phone-number.go",
-        "swift": null
+        "swift": "backtracking/017-letter-combinations-of-a-phone-number.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
@@ -7160,27 +7162,32 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/017-letter-combinations-of-a-phone-number-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7188,53 +7195,63 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/017-letter-combinations-of-a-phone-number-approach2.py",
             "typescript": "backtracking/017-letter-combinations-of-a-phone-number-approach2.ts",
             "go": "backtracking/017-letter-combinations-of-a-phone-number-approach2.go",
-            "swift": null
+            "swift": "backtracking/017-letter-combinations-of-a-phone-number-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
           "title": "`itertools.product`",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": "backtracking/017-letter-combinations-of-a-phone-number-approach3.py",
             "typescript": "backtracking/017-letter-combinations-of-a-phone-number-approach3.ts",
             "go": "backtracking/017-letter-combinations-of-a-phone-number-approach3.go",
-            "swift": null
+            "swift": "backtracking/017-letter-combinations-of-a-phone-number-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7245,63 +7262,72 @@
       "page": "backtracking/039-combination-sum.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/039-combination-sum.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/039-combination-sum.py",
         "typescript": "backtracking/039-combination-sum.ts",
         "go": "backtracking/039-combination-sum.go",
-        "swift": null
+        "swift": "backtracking/039-combination-sum.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, try all orderings, dedup",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/039-combination-sum-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7309,31 +7335,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/039-combination-sum-approach2.py",
             "typescript": "backtracking/039-combination-sum-approach2.ts",
             "go": "backtracking/039-combination-sum-approach2.go",
-            "swift": null
+            "swift": "backtracking/039-combination-sum-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7341,31 +7371,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/039-combination-sum-approach3.py",
             "typescript": "backtracking/039-combination-sum-approach3.ts",
             "go": "backtracking/039-combination-sum-approach3.go",
-            "swift": null
+            "swift": "backtracking/039-combination-sum-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7376,81 +7410,97 @@
       "page": "backtracking/040-combination-sum-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/040-combination-sum-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/040-combination-sum-ii.py",
         "typescript": "backtracking/040-combination-sum-ii.ts",
         "go": "backtracking/040-combination-sum-ii.go",
-        "swift": null
+        "swift": "backtracking/040-combination-sum-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, all subsets, filter by sum, dedup",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/040-combination-sum-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
           "title": "Backtracking with `start` index (no skip)",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/040-combination-sum-ii-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7458,31 +7508,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/040-combination-sum-ii-approach3.py",
             "typescript": "backtracking/040-combination-sum-ii-approach3.ts",
             "go": "backtracking/040-combination-sum-ii-approach3.go",
-            "swift": null
+            "swift": "backtracking/040-combination-sum-ii-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7493,63 +7547,72 @@
       "page": "backtracking/046-permutations.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/046-permutations.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/046-permutations.py",
         "typescript": "backtracking/046-permutations.ts",
         "go": "backtracking/046-permutations.go",
-        "swift": null
+        "swift": "backtracking/046-permutations.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, `itertools.permutations`",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/046-permutations-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7557,31 +7620,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/046-permutations-approach2.py",
             "typescript": "backtracking/046-permutations-approach2.ts",
             "go": "backtracking/046-permutations-approach2.go",
-            "swift": null
+            "swift": "backtracking/046-permutations-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7589,31 +7656,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/046-permutations-approach3.py",
             "typescript": "backtracking/046-permutations-approach3.ts",
             "go": "backtracking/046-permutations-approach3.go",
-            "swift": null
+            "swift": "backtracking/046-permutations-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7624,81 +7695,97 @@
       "page": "backtracking/051-n-queens.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/051-n-queens.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/051-n-queens.py",
         "typescript": "backtracking/051-n-queens.ts",
         "go": "backtracking/051-n-queens.go",
-        "swift": null
+        "swift": "backtracking/051-n-queens.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, try all n^n placements",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/051-n-queens-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
           "title": "Backtracking row-by-row with linear conflict check",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/051-n-queens-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7706,31 +7793,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/051-n-queens-approach3.py",
             "typescript": "backtracking/051-n-queens-approach3.ts",
             "go": "backtracking/051-n-queens-approach3.go",
-            "swift": null
+            "swift": "backtracking/051-n-queens-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7741,81 +7832,97 @@
       "page": "backtracking/078-subsets.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/078-subsets.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/078-subsets.py",
         "typescript": "backtracking/078-subsets.ts",
         "go": "backtracking/078-subsets.go",
-        "swift": null
+        "swift": "backtracking/078-subsets.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Bitmask enumeration",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/078-subsets-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
           "title": "Iterative build (grow by appending each element)",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/078-subsets-approach2.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -7823,31 +7930,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/078-subsets-approach3.py",
             "typescript": "backtracking/078-subsets-approach3.ts",
             "go": "backtracking/078-subsets-approach3.go",
-            "swift": null
+            "swift": "backtracking/078-subsets-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7858,63 +7969,72 @@
       "page": "backtracking/079-word-search.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/079-word-search.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/079-word-search.py",
         "typescript": "backtracking/079-word-search.ts",
         "go": "backtracking/079-word-search.go",
-        "swift": null
+        "swift": "backtracking/079-word-search.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, DFS from every cell with a visited set",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/079-word-search-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -7922,49 +8042,60 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/079-word-search-approach2.py",
             "typescript": "backtracking/079-word-search-approach2.ts",
             "go": "backtracking/079-word-search-approach2.go",
-            "swift": null
+            "swift": "backtracking/079-word-search-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
           "title": "Start-cell pruning with character counts",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/079-word-search-approach3.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -7975,63 +8106,72 @@
       "page": "backtracking/090-subsets-ii.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/090-subsets-ii.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 3,
+          "boundary": 2,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/090-subsets-ii.py",
         "typescript": "backtracking/090-subsets-ii.ts",
         "go": "backtracking/090-subsets-ii.go",
-        "swift": null
+        "swift": "backtracking/090-subsets-ii.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Subsets with set-dedup",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/090-subsets-ii-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8039,49 +8179,60 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/090-subsets-ii-approach2.py",
             "typescript": "backtracking/090-subsets-ii-approach2.ts",
             "go": "backtracking/090-subsets-ii-approach2.go",
-            "swift": null
+            "swift": "backtracking/090-subsets-ii-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
           "title": "Counter / multiset iteration",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/090-subsets-ii-approach3.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },
@@ -8092,63 +8243,72 @@
       "page": "backtracking/131-palindrome-partitioning.mdx",
       "helperTypes": [],
       "sharedTestVectors": {
-        "file": null,
+        "file": "tools/coding-problem-vectors/vectors/backtracking/131-palindrome-partitioning.json",
         "caseCounts": {
-          "valid": 0,
-          "boundary": 0,
-          "invalid": 0
+          "valid": 4,
+          "boundary": 1,
+          "invalid": 1
         },
-        "errors": [
-          "shared vector file is missing"
-        ],
-        "ready": false
+        "errors": [],
+        "ready": true
       },
       "practiceTabs": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "practiceRepls": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterFiles": {
         "python": "backtracking/131-palindrome-partitioning.py",
         "typescript": "backtracking/131-palindrome-partitioning.ts",
         "go": "backtracking/131-palindrome-partitioning.go",
-        "swift": null
+        "swift": "backtracking/131-palindrome-partitioning.swift"
       },
       "starterHarnesses": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "starterImports": [
         "python",
         "typescript",
-        "go"
+        "go",
+        "swift"
       ],
       "swiftContractErrors": [],
-      "swiftReady": false,
+      "swiftReady": true,
       "approaches": [
         {
           "number": 1,
           "title": "Brute force, backtracking with per-cut palindrome check",
-          "languageTabs": [],
-          "codeFences": [
-            "python"
+          "languageTabs": [
+            "swift"
           ],
-          "repls": [],
+          "codeFences": [
+            "python",
+            "swift"
+          ],
+          "repls": [
+            "swift"
+          ],
           "sourceFiles": {
             "python": null,
             "typescript": null,
             "go": null,
-            "swift": null
+            "swift": "backtracking/131-palindrome-partitioning-approach1.swift"
           },
-          "sourceHarnesses": [],
+          "sourceHarnesses": [
+            "swift"
+          ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 2,
@@ -8156,31 +8316,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/131-palindrome-partitioning-approach2.py",
             "typescript": "backtracking/131-palindrome-partitioning-approach2.ts",
             "go": "backtracking/131-palindrome-partitioning-approach2.go",
-            "swift": null
+            "swift": "backtracking/131-palindrome-partitioning-approach2.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         },
         {
           "number": 3,
@@ -8188,31 +8352,35 @@
           "languageTabs": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "codeFences": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "repls": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "sourceFiles": {
             "python": "backtracking/131-palindrome-partitioning-approach3.py",
             "typescript": "backtracking/131-palindrome-partitioning-approach3.ts",
             "go": "backtracking/131-palindrome-partitioning-approach3.go",
-            "swift": null
+            "swift": "backtracking/131-palindrome-partitioning-approach3.swift"
           },
           "sourceHarnesses": [
             "python",
             "typescript",
-            "go"
+            "go",
+            "swift"
           ],
           "swiftContractErrors": [],
-          "swiftReady": false
+          "swiftReady": true
         }
       ]
     },

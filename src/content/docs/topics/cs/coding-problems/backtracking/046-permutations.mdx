@@ -5,7 +5,7 @@ parent: backtracking
 tags: [leetcode, neetcode-150, backtracking, recursion, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-04-23
+updated: 2026-07-16
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,11 @@ import approach2GoCode from './046-permutations-approach2.go?raw';
 import approach3PyCode from './046-permutations-approach3.py?raw';
 import approach3TsCode from './046-permutations-approach3.ts?raw';
 import approach3GoCode from './046-permutations-approach3.go?raw';
+import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import practiceCodeSwift from './046-permutations.swift?raw';
+import approach1SwiftCode from './046-permutations-approach1.swift?raw';
+import approach2SwiftCode from './046-permutations-approach2.swift?raw';
+import approach3SwiftCode from './046-permutations-approach3.swift?raw';
 
 ## Problem
 
@@ -43,6 +48,9 @@ LeetCode 46 · [Link](https://leetcode.com/problems/permutations/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="permutations-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftRepl code={practiceCodeSwift} id="046-permutations-swift" />
   </TabItem>
 </Tabs>
 
@@ -70,6 +78,28 @@ def permute(nums):
 - **Space:** $O(n · n!)$ output.
 
 Production-correct; usually rejected in interviews that want the algorithm.
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func permute(_ nums: [Int]) -> [[Int]] {
+        if nums.isEmpty { return [[]] }; var result: [[Int]] = []
+        for value in nums { let remaining = nums.filter { $0 != value }; for suffix in permute(remaining) { result.append([value] + suffix) } }
+        return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach1SwiftCode} id="046-permutations-approach1-swift" />
+</TabItem>
+</Tabs>
 
 ## Approach 2: Backtracking with a `used` array
 
@@ -196,6 +226,28 @@ The clearest expression of the backtracking template for permutations.
   </TabItem>
 </Tabs>
 
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func permute(_ nums: [Int]) -> [[Int]] {
+        var result: [[Int]] = [], used = Array(repeating: false, count: nums.count)
+        func search(_ current: [Int]) { if current.count == nums.count { result.append(current); return }; for index in nums.indices where !used[index] { used[index] = true; search(current + [nums[index]]); used[index] = false } }
+        search([]); return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach2SwiftCode} id="046-permutations-approach2-swift" />
+</TabItem>
+</Tabs>
+
 ## Approach 3: In-place swap (no auxiliary `used`)
 
 Swap the current position with every other position; recurse on the tail. Undo the swap on the way back up.
@@ -299,6 +351,28 @@ Saves the `used` array. Slightly less readable; mutates input.
   <TabItem label="Go">
     <GoRepl code={approach3GoCode} id="permutations-approach3-go" />
   </TabItem>
+</Tabs>
+
+
+<Tabs>
+<TabItem label="Swift">
+
+```swift
+final class Solution {
+    private func normalized(_ values: [[Int]]) -> [[Int]] {
+        values.sorted { $0.lexicographicallyPrecedes($1) }
+    }
+
+    func permute(_ nums: [Int]) -> [[Int]] {
+        var values = nums, result: [[Int]] = []
+        func search(_ start: Int) { if start == values.count { result.append(values); return }; for index in start..<values.count { values.swapAt(start, index); search(start + 1); values.swapAt(start, index) } }
+        search(0); return normalized(result)
+    }
+}
+```
+
+<SwiftRepl code={approach3SwiftCode} id="046-permutations-approach3-swift" />
+</TabItem>
 </Tabs>
 
 ## Summary

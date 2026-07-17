@@ -113,7 +113,7 @@ npm run test:swift-catalog-coverage
 npm run check:swift-catalog-coverage
 ```
 
-The code validator checks fenced code language tags and syntax for source examples. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, loopback HTTP service, request validation, queue bounds, retention, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
+The code validator checks fenced code language tags, including Swift, and syntax for source examples. Swift catalog syntax and execution are enforced by the separate Swift contract and compiler gates. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, loopback HTTP service, request validation, queue bounds, retention, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
 
 The coding-problem vector commands validate canonical valid, boundary, and invalid cases, then reject stale generated proof sources. Run `npm run test:coding-problem-vector-fixtures` when vector codecs, renderers, or proof fixtures change and all four language toolchains are available.
 

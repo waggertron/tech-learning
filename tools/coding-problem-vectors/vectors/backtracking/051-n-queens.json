@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "backtracking",
+    "slug": "051-n-queens"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "n",
+        "codec": "int"
+      }
+    ],
+    "result": {
+      "codec": "string-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "solve_n_queens"
+      },
+      "typescript": {
+        "function": "solveNQueens"
+      },
+      "go": {
+        "function": "solveNQueens"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "solveNQueens"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "four",
+      "classification": "valid",
+      "arguments": [
+        4
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            ".Q..",
+            "...Q",
+            "Q...",
+            "..Q."
+          ],
+          [
+            "..Q.",
+            "Q...",
+            "...Q",
+            ".Q.."
+          ]
+        ]
+      }
+    },
+    {
+      "id": "one",
+      "classification": "boundary",
+      "arguments": [
+        1
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "Q"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "two",
+      "classification": "valid",
+      "arguments": [
+        2
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "three",
+      "classification": "valid",
+      "arguments": [
+        3
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "five-count",
+      "classification": "valid",
+      "arguments": [
+        5
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "Q....",
+            "..Q..",
+            "....Q",
+            ".Q...",
+            "...Q."
+          ],
+          [
+            "Q....",
+            "...Q.",
+            ".Q...",
+            "....Q",
+            "..Q.."
+          ],
+          [
+            ".Q...",
+            "...Q.",
+            "Q....",
+            "..Q..",
+            "....Q"
+          ],
+          [
+            ".Q...",
+            "....Q",
+            "..Q..",
+            "Q....",
+            "...Q."
+          ],
+          [
+            "..Q..",
+            "Q....",
+            "...Q.",
+            ".Q...",
+            "....Q"
+          ],
+          [
+            "..Q..",
+            "....Q",
+            ".Q...",
+            "...Q.",
+            "Q...."
+          ],
+          [
+            "...Q.",
+            "Q....",
+            "..Q..",
+            "....Q",
+            ".Q..."
+          ],
+          [
+            "...Q.",
+            ".Q...",
+            "....Q",
+            "..Q..",
+            "Q...."
+          ],
+          [
+            "....Q",
+            ".Q...",
+            "...Q.",
+            "Q....",
+            "..Q.."
+          ],
+          [
+            "....Q",
+            "..Q..",
+            "Q....",
+            "...Q.",
+            ".Q..."
+          ]
+        ]
+      }
+    },
+    {
+      "id": "zero",
+      "classification": "invalid",
+      "arguments": [
+        0
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "n is at least one."
+      }
+    }
+  ]
+}

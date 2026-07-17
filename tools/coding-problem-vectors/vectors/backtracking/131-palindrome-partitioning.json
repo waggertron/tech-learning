@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "backtracking",
+    "slug": "131-palindrome-partitioning"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      }
+    ],
+    "result": {
+      "codec": "string-matrix",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "partition"
+      },
+      "typescript": {
+        "function": "partition"
+      },
+      "go": {
+        "function": "partition"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "partition"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "aab",
+      "classification": "valid",
+      "arguments": [
+        "aab"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a",
+            "a",
+            "b"
+          ],
+          [
+            "aa",
+            "b"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "single",
+      "classification": "boundary",
+      "arguments": [
+        "a"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "double",
+      "classification": "valid",
+      "arguments": [
+        "aa"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a",
+            "a"
+          ],
+          [
+            "aa"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "distinct",
+      "classification": "valid",
+      "arguments": [
+        "abc"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a",
+            "b",
+            "c"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "palindrome",
+      "classification": "valid",
+      "arguments": [
+        "aba"
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          [
+            "a",
+            "b",
+            "a"
+          ],
+          [
+            "aba"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "empty",
+      "classification": "invalid",
+      "arguments": [
+        ""
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The input contains at least one lowercase letter."
+      }
+    }
+  ]
+}
