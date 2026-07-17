@@ -1,0 +1,431 @@
+---
+title: "Zero to iOS Hero 14: Properties, methods, subscripts, initialization, and deinitialization"
+description: "Build a validated Tag value whose properties, methods, subscript, initializer, and lifecycle boundaries protect its invariants."
+date: 2026-07-16
+tags: [swift, ios, properties, methods, subscripts, initialization, deinitialization]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization/
+series:
+  slug: zero-to-ios-hero
+  order: 14
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import typeBoundaryCode from './2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization.swift?raw';
+
+This is part 14 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A tag should not be blank, too long, or filled with punctuation the product cannot search consistently. The strongest place to enforce that rule is the type's construction boundary.
+
+Properties describe its state and derived views. Methods name its behavior. A subscript can provide familiar indexed access. Initialization decides whether an instance may exist. For classes, deinitialization closes the lifetime when the last strong reference disappears.
+
+## Start from the invariant
+
+The Field Notes rule for a tag is:
+
+- Input is lowercased.
+- Runs of whitespace become one hyphen.
+- Letters, numbers, and hyphens are allowed.
+- The normalized value has at most 24 characters.
+- An invalid input does not create a `Tag`.
+
+The type can make those statements true for every initialized value:
+
+```swift
+struct Tag {
+    static let maximumLength = 24
+    let value: String
+
+    init?(_ input: String) {
+        let words = input.lowercased().split(whereSeparator: { $0.isWhitespace })
+        guard !words.isEmpty else { return nil }
+
+        let normalized = words.joined(separator: "-")
+        guard normalized.count <= Self.maximumLength else { return nil }
+        guard normalized.allSatisfy({ character in
+            character.isLetter || character.isNumber || character == "-"
+        }) else { return nil }
+
+        value = normalized
+    }
+}
+```
+
+There is no public path that assigns an arbitrary string to `value`. Code either receives a valid `Tag` or receives `nil`.
+
+## Stored properties hold instance state
+
+A stored property keeps a value as part of a structure or class instance:
+
+```swift
+let value: String
+var usageCount: Int
+```
+
+Choose `let` when the property should not change after initialization. Choose `var` only when mutation is part of the model.
+
+Access control can expose reading while restricting writes:
+
+```swift
+struct TagUsage {
+    private(set) var count = 0
+
+    mutating func recordUse() {
+        count += 1
+    }
+}
+```
+
+Callers can read `count`, but only the type's permitted behavior changes it. This is stronger than asking every caller to increment carefully.
+
+Stored properties belong only to structures and classes. Enumerations store state through their selected case and associated values.
+
+## Computed properties derive a value
+
+A computed property runs a getter instead of storing another field:
+
+```swift
+extension Tag {
+    var displayName: String {
+        "#\(value)"
+    }
+
+    var length: Int {
+        value.count
+    }
+}
+```
+
+Neither value needs independent storage. If `value` is the source of truth, the display name and length cannot drift out of sync.
+
+Use a computed property when the operation is conceptually a characteristic of the value, is inexpensive enough for property syntax, and does not surprise the caller with an effect.
+
+Use a method when arguments, substantial work, mutation, failure, or effects deserve a call that reads like an action.
+
+## A computed property can have a setter
+
+Computed properties can translate reads and writes:
+
+```swift
+struct Distance {
+    var meters: Double
+
+    var kilometers: Double {
+        get {
+            meters / 1_000
+        }
+        set {
+            meters = newValue * 1_000
+        }
+    }
+}
+```
+
+The setter receives an implicit `newValue`. A named parameter is allowed when another name makes the conversion clearer.
+
+Do not create two writable stored representations of the same fact. A computed view with one source of truth avoids synchronization bugs.
+
+## Lazy properties defer stored work
+
+A lazy stored property evaluates its initializer on first access:
+
+```swift
+final class SearchIndex {
+    lazy var normalizedTerms: [String] = buildIndex()
+
+    private func buildIndex() -> [String] {
+        // Expensive setup.
+        []
+    }
+}
+```
+
+A lazy property must be `var` because its value is assigned after instance initialization completes.
+
+Use `lazy` when setup is expensive or depends on a fully initialized `self`. Do not assume it provides thread-safe one-time initialization. Simultaneous first access can evaluate the initializer more than once, so synchronization still belongs in a concurrency-aware design.
+
+## Property observers react to assignment
+
+`willSet` runs before a stored value changes. `didSet` runs after it changes:
+
+```swift
+final class DraftMetrics {
+    var title: String = "" {
+        willSet {
+            print("Will store \(newValue.count) characters")
+        }
+        didSet {
+            print("Replaced \(oldValue.count) characters")
+        }
+    }
+}
+```
+
+Observers run when the property is set, even when the new value equals the old value. Assignments made while the instance is establishing its initial stored values do not call observers.
+
+Observers fit small reactions local to the type. They are a poor hiding place for network requests, database writes, or broad application coordination. An explicit method makes those effects visible and testable.
+
+For a computed property you define, put response logic in its setter rather than trying to add observers to the same declaration.
+
+## Type properties belong to the type
+
+The maximum tag length is shared policy, not per-instance data:
+
+```swift
+static let maximumLength = 24
+```
+
+Access it through the type:
+
+```swift
+Tag.maximumLength
+```
+
+Inside the type, `Self.maximumLength` follows the current type. `static` type members cannot be overridden by subclasses. Classes can use `class` for computed type members that allow overriding.
+
+Global mutable type properties are shared mutable state. Give them synchronization and ownership when concurrency enters the design. Prefer immutable type constants for fixed policy.
+
+## Methods name behavior on the type
+
+An instance method can use stored and computed properties:
+
+```swift
+extension Tag {
+    func matches(prefix: String) -> Bool {
+        value.hasPrefix(prefix.lowercased())
+    }
+}
+```
+
+The call site states the question:
+
+```swift
+tag.matches(prefix: "IOS")
+```
+
+Structure and enumeration methods need `mutating` when they change stored state or replace `self`. Class methods mutate exposed `var` properties without the keyword because the reference identity remains the same.
+
+Type methods use `static func`. A class can use `class func` when subclasses should override the behavior.
+
+## Subscripts provide parameterized access
+
+A subscript supports bracket syntax without naming a method:
+
+```swift
+extension Tag {
+    subscript(offset: Int) -> Character? {
+        guard offset >= 0,
+              let index = value.index(
+                  value.startIndex,
+                  offsetBy: offset,
+                  limitedBy: value.endIndex
+              ),
+              index != value.endIndex else {
+            return nil
+        }
+
+        return value[index]
+    }
+}
+```
+
+Usage reads like indexed access:
+
+```swift
+tag[0]  // Optional("i")
+tag[99] // nil
+```
+
+The public index is an integer offset, but the implementation advances a real `String.Index`. It does not pretend a Swift string accepts integer indexing.
+
+Returning an optional makes missing offsets part of this type's contract. Array subscripts trap outside their bounds. A custom type may choose either policy, but it should make the choice deliberate and consistent.
+
+Subscripts can be read-only or provide getters and setters. They can accept several parameters and can be overloaded by parameter and return types. Use them when bracket access has an unsurprising domain meaning. Prefer a named method when the operation needs explanation at the call site.
+
+## A failable initializer rejects invalid construction
+
+Place a question mark after `init` when construction can fail:
+
+```swift
+init?(_ input: String) {
+    guard !input.isEmpty else { return nil }
+    value = input
+}
+```
+
+The call produces `Tag?`:
+
+```swift
+let valid = Tag("swift") // Tag?
+let blank = Tag("")     // nil
+```
+
+An initializer does not return a successful instance with `return`. It finishes establishing `self`. Writing `return nil` abandons a failable initialization.
+
+Use `init?` when callers only need success or failure. Use a throwing initializer or a separate validating factory when callers need a reason such as blank, too long, or unsupported character. Post 17 develops that error boundary.
+
+## Initialization must leave a complete valid instance
+
+Every stored property without a default must have a value before initialization finishes:
+
+```swift
+struct Tag {
+    let value: String
+
+    init(value: String) {
+        self.value = value
+    }
+}
+```
+
+The explicit `self.` distinguishes the property from the parameter with the same name.
+
+Value types can delegate to another initializer with `self.init`. Class initialization adds designated and convenience initializers plus superclass delegation. Swift uses two-phase class initialization so stored properties are established before code can use a partially initialized instance.
+
+Keep the initializer focused on establishing validity. Starting network work, registering global observers, or publishing `self` during construction creates lifetime and failure paths that are hard to control.
+
+## Default, memberwise, and custom initializers interact
+
+A structure with defaulted stored properties can receive a default initializer. A structure without a custom initializer receives a memberwise initializer based on its stored properties.
+
+Declaring a custom initializer in the original structure suppresses synthesized initializer access that callers may have relied on. A convenience initializer in an extension can preserve the generated memberwise form when it does not need to replace the type's construction invariant.
+
+Classes do not receive a memberwise initializer. They can receive a default initializer when all stored properties have defaults and superclass initialization permits it.
+
+Treat initializer shape as API design. A synthesized convenience is useful until it exposes state that callers should not control.
+
+## Deinitialization belongs only to classes
+
+A class can declare one parameterless `deinit` block:
+
+```swift
+final class TagLease {
+    let tag: Tag
+
+    init(tag: Tag) {
+        self.tag = tag
+    }
+
+    deinit {
+        print("Released: \(tag)")
+    }
+}
+```
+
+ARC calls the deinitializer immediately before deallocating the instance. Code cannot call `deinit` directly.
+
+Deinitialization fits resource cleanup tied to object lifetime, such as unregistering a low-level resource owned by that object. It is not a reliable place for a required product action. A retain cycle can delay it forever, and effects such as saving or uploading deserve explicit completion and error handling.
+
+Structures and enumerations have no deinitializer because they are values rather than ARC-managed reference identities.
+
+## Run the complete boundary
+
+The checkpoint normalizes and validates a tag, exposes computed properties and a method, performs safe subscript access, and observes one class deinitializer:
+
+<SwiftRepl code={typeBoundaryCode} id="swift-properties-methods-subscripts-initialization-deinitialization" />
+
+Expected output:
+
+```text
+Tag: #ios-development
+Length: 15
+First: i
+Missing: nil
+Rejected blank: true
+Lease: #ios-development
+Released: #ios-development
+```
+
+The preconditions also reject unsupported punctuation, verify case-insensitive prefix matching, and prove the out-of-range subscript returns `nil`.
+
+The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary. It proves language-level property, method, subscript, failable-initialization, and deinitialization behavior. It does not prove SwiftUI property wrappers, observation, UIKit lifecycle callbacks, persistence, Simulator, or device behavior.
+
+## Preserve the invariant after initialization
+
+An initializer can create a valid instance and a later setter can still break it:
+
+```swift
+struct WeakTag {
+    var value: String
+
+    init?(_ value: String) {
+        guard !value.isEmpty else { return nil }
+        self.value = value
+    }
+}
+
+var tag = WeakTag("swift")!
+tag.value = ""
+```
+
+Construction validation is not enough when unrestricted mutation remains public.
+
+Use an immutable stored value, a restricted setter plus validated mutation methods, or a computed setter that enforces the same rule. Every public mutation path must preserve the invariant.
+
+## Property wrappers are reusable access policy
+
+A property wrapper packages repeated storage, getter, and setter behavior behind an attribute-like declaration. Wrappers power many Apple-framework APIs, including later SwiftUI state and environment lessons.
+
+They do not make a vague property model correct. First decide the source of truth, mutation policy, ownership, and failure behavior. Then use a wrapper when the same access policy genuinely repeats.
+
+This post keeps the checkpoint on ordinary properties so the generated behavior stays visible. Later posts introduce wrappers at the framework boundary where their lifecycle rules matter.
+
+## Common mistakes
+
+- **Exposing every stored property as writable**: A valid initializer cannot protect an invariant that later assignment can bypass.
+- **Storing a derived value separately**: Two sources of truth eventually disagree.
+- **Hiding expensive work behind innocent property syntax**: Callers cannot see the cost or failure boundary.
+- **Putting product effects in property observers**: Assignment unexpectedly starts work and complicates testing.
+- **Assuming `lazy` is synchronized**: Concurrent first access is not guaranteed to initialize only once.
+- **Writing an integer string subscript by byte offset**: Swift string positions are not byte indexes.
+- **Using a trapping subscript without choosing that contract**: Untrusted offsets should usually return absence or a named error.
+- **Returning a half-valid instance**: Initialization must establish all stored properties and invariants before use.
+- **Relying on `deinit` to save required work**: Reference cycles and effect failures make that lifecycle boundary unsuitable.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Reject a normalized tag that begins or ends with a hyphen.
+2. Add a computed `displayName` and prove it cannot drift from `value`.
+3. Replace the optional subscript with a named `character(at:)` method and compare the call sites.
+4. Add a validated `renamed(to:)` method that returns a new `Tag`.
+5. Change the failable initializer into a throwing factory with distinct validation errors.
+6. Add a `TagUsage` value with `private(set)` count and one mutating method.
+7. Move the lease creation into a function and observe deinitialization after its last strong reference.
+
+Every public operation should leave the model valid.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- How stored and computed properties differ.
+- When `private(set)`, `lazy`, observers, and type properties fit.
+- Why methods should expose meaningful behavior rather than raw mutation.
+- How a subscript defines indexed access and its failure policy.
+- How `init?` models construction failure.
+- Why every stored property must be initialized before use.
+- How synthesized and custom initializer surfaces interact.
+- Why deinitializers are class-only and should not hide required product effects.
+- Why invariants must survive every later mutation path.
+
+The next post passes behavior as values with closures and makes capture semantics explicit.
+
+## Series navigation
+
+- Previous: [Part 13: Classes, identity, inheritance, and type casting](../2026-07-16-swift-classes-identity-inheritance-type-casting/)
+- Next: Part 15, Closures, function types, capture, and higher-order operations
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Property behavior**: [Properties](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/) defines stored, computed, lazy, observed, wrapped, instance, and type properties.
+- **Methods on types**: [Methods](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/methods/) documents instance and type methods, `self`, mutation, and method behavior across classes, structures, and enumerations.
+- **Indexed access**: [Subscripts](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/subscripts/) specifies read-only and read-write subscripts, overloading, multiple parameters, and type subscripts.
+- **Construction and cleanup**: [Initialization](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/initialization/) and [Deinitialization](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/deinitialization/) define complete initialization, delegation, failure, two-phase class safety, and class cleanup.
+
+## Related topics
+
+- [Encapsulation](../../topics/cs/design-patterns/), neighboring patterns for protecting state behind controlled behavior.
+- [Builder pattern](../../topics/cs/design-patterns/builder/), separating multi-step assembly from the final valid product.
+- [Optionals and absence](../2026-07-16-swift-optionals-absence/), handling the optional result of a failable initializer or safe subscript.
