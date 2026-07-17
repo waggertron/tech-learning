@@ -1,0 +1,349 @@
+---
+title: "Zero to iOS Hero 11: Structures and value semantics"
+description: "Model a Field Note as a structure, distinguish stored values from instances, and prove that editing one copy leaves the original unchanged."
+date: 2026-07-16
+tags: [swift, ios, structures, value-semantics]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-structures-value-semantics/
+series:
+  slug: zero-to-ios-hero
+  order: 11
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import valueSemanticsCode from './2026-07-16-swift-structures-value-semantics.swift?raw';
+
+This is part 11 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A tuple can carry a title, tags, rating, and favorite flag. A structure turns those related values into one named type with one initialization boundary and behavior that belongs to the model.
+
+Swift structures use value semantics. Assignment, argument passing, and returns produce independent logical values. Editing a copy does not silently edit the original.
+
+## Define a named model
+
+Use `struct` to declare a new type:
+
+```swift
+struct FieldNote {
+    let id: Int
+    var title: String
+    var tags: [String]
+    var isFavorite: Bool
+}
+```
+
+The declaration describes every `FieldNote`. Create an instance by supplying its stored properties:
+
+```swift
+let note = FieldNote(
+    id: 1,
+    title: "Fog over the north ridge",
+    tags: ["weather", "ridge"],
+    isFavorite: false
+)
+```
+
+`FieldNote` is the type. `note` is one value of that type.
+
+## Stored properties define the value
+
+Each stored property contributes data to the instance:
+
+| Property | Declaration | Model rule |
+| --- | --- | --- |
+| Identity | `let id: Int` | This note keeps its identifier |
+| Title | `var title: String` | An edit may replace the title |
+| Tags | `var tags: [String]` | An edit may change the tag collection |
+| Favorite | `var isFavorite: Bool` | The user may toggle the flag |
+
+Property mutability and binding mutability work together. A `var` property says the type permits a change. The instance still needs to be stored in a variable before code can make that change.
+
+```swift
+let fixed = FieldNote(id: 1, title: "Fog", tags: [], isFavorite: false)
+// fixed.title = "Lake" // Error
+
+var editable = fixed
+editable.title = "Lake" // Allowed
+```
+
+A constant structure freezes all of its stored properties, including properties declared with `var`.
+
+## Memberwise initialization is generated
+
+When a structure declares no custom initializer, Swift provides a memberwise initializer:
+
+```swift
+FieldNote(id:title:tags:isFavorite:)
+```
+
+The compiler uses the property names, types, order, and defaults to form that initializer. This is convenient inside a module and for small models.
+
+A public library type does not expose an automatically public memberwise initializer. Write the initializer explicitly when construction is part of a public module contract.
+
+Defining a custom initializer inside the original structure also changes which synthesized initializers remain available. Put a convenience initializer in an extension when retaining the memberwise form is useful and the custom path does not own a required invariant.
+
+## Assignment creates an independent value
+
+Copy the note, then edit only the copy:
+
+```swift
+let original = FieldNote(
+    id: 1,
+    title: "Fog over the north ridge",
+    tags: ["weather", "ridge"],
+    isFavorite: false
+)
+
+var edited = original
+edited.title = "Fog lifting over the north ridge"
+edited.tags.append("morning")
+```
+
+Afterward:
+
+```text
+original.title -> Fog over the north ridge
+edited.title   -> Fog lifting over the north ridge
+
+original.tags  -> weather, ridge
+edited.tags    -> weather, ridge, morning
+```
+
+The two variables do not point at one shared `FieldNote` object. Each represents its own logical value.
+
+## Run the copy proof
+
+The checkpoint edits a copied title, copied tags, and copied favorite flag. It also returns a renamed copy from a nonmutating method:
+
+<SwiftRepl code={valueSemanticsCode} id="swift-structures-value-semantics" />
+
+Expected output:
+
+```text
+Original: Fog over the north ridge | weather, ridge | favorite false
+Edited: Fog lifting over the north ridge | weather, ridge, morning | favorite true
+Renamed copy: North ridge fog
+```
+
+The preconditions prove the original retained its title, two tags, and false favorite flag. The copied array also behaves as an independent value.
+
+This is standard-library code for the Swift 6.3.3 Linux editor. It proves Swift structure and collection value semantics. It does not prove persistence identity, SwiftUI observation, an app target, Simulator, or device behavior.
+
+## Collections use copy-on-write storage
+
+The `tags` array is also a value type. Its visible rule is simple: changing `edited.tags` does not change `original.tags`.
+
+Swift collections can avoid copying their complete storage at assignment time. Two logical values may share a buffer until one value mutates. At that point, the mutating value obtains storage it can change without affecting the other value.
+
+```text
+assignment
+original.tags ----+
+                  +-> shared buffer
+edited.tags ------+
+
+mutation of edited.tags
+original.tags ------> original buffer
+edited.tags --------> copied, changed buffer
+```
+
+This copy-on-write optimization changes allocation timing, not value semantics. Code depends on independent logical values. Performance work measures when large values trigger copies.
+
+## Methods put behavior beside the model
+
+A method is a function associated with the type:
+
+```swift
+struct FieldNote {
+    var title: String
+
+    func renamed(to newTitle: String) -> FieldNote {
+        var copy = self
+        copy.title = newTitle
+        return copy
+    }
+}
+```
+
+The call reads as an operation on a note:
+
+```swift
+let renamed = original.renamed(to: "North ridge fog")
+```
+
+The method does not mutate `original`. It creates a local copy of `self`, changes that copy, and returns it.
+
+This shape works well when the caller needs both the before and after values, or when a transformation pipeline benefits from explicit returned values.
+
+## Mutating methods change the variable
+
+Structure methods cannot change stored properties unless marked `mutating`:
+
+```swift
+mutating func toggleFavorite() {
+    isFavorite.toggle()
+}
+```
+
+Call the method on a variable:
+
+```swift
+var note = original
+note.toggleFavorite()
+```
+
+The keyword makes mutation part of the method contract. The call still cannot mutate a `let` instance.
+
+A mutating method may assign new property values or replace `self` with a new complete value. Use it when in-place editing is the natural API. Return a new value when preserving both versions or making the transformation explicit helps the caller.
+
+## `self` names the current value
+
+Inside an instance method, `self` refers to the instance receiving the call:
+
+```swift
+func hasTitle(_ title: String) -> Bool {
+    self.title == title
+}
+```
+
+The explicit prefix resolves the collision between the property and parameter. Swift lets most property access omit `self` when no ambiguity exists.
+
+Do not add `self.` to every expression as decoration. Use it where the language requires it or where it clarifies which value owns a member.
+
+## Value semantics apply across function boundaries
+
+Passing a structure to a normal parameter gives the function a value:
+
+```swift
+func renamed(_ note: FieldNote, to title: String) -> FieldNote {
+    var result = note
+    result.title = title
+    return result
+}
+```
+
+The function cannot mutate the caller's variable through an ordinary parameter. An `inout` parameter can make caller mutation explicit, as post 7 demonstrated.
+
+Returning a structure also returns a value. The compiler may optimize physical copies while preserving behavior as if values were independent.
+
+## Equality can be synthesized
+
+Declare `Equatable` when equality of every stored property matches the model's equality rule:
+
+```swift
+struct FieldNote: Equatable {
+    let id: Int
+    var title: String
+    var tags: [String]
+    var isFavorite: Bool
+}
+```
+
+Because each property is equatable, Swift can synthesize `==`:
+
+```swift
+let unchanged = original == original
+let differs = original != edited
+```
+
+Full stored-value equality is not always domain identity. Two versions with the same `id` but different titles are the same logical record under an identifier policy, yet they are not equal under synthesized structural equality.
+
+Name the rule. Use `Equatable` for value equality and a dedicated identifier comparison when the product asks whether two versions refer to the same record.
+
+## A structure can protect invariants
+
+The automatic memberwise initializer accepts any values of the declared types. A blank title is still a `String`, and duplicate tags still form an array.
+
+Move construction behind an explicit initializer when every valid instance must satisfy more rules:
+
+```swift
+import Foundation
+
+struct FieldNote {
+    let id: Int
+    var title: String
+
+    init?(id: Int, title: String) {
+        guard id > 0 else { return nil }
+
+        let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        self.id = id
+        self.title = trimmed
+    }
+}
+```
+
+This example needs Foundation for whitespace trimming, so it does not belong in the browser checkpoint. Post 14 develops initialization and invariant protection in depth.
+
+The design principle starts now: do not create an invalid value and rely on every caller to repair it later.
+
+## Struct is the default, not a law
+
+Structures fit values that should be copied, compared, transformed, serialized, or moved across boundaries without shared identity.
+
+Classes fit shared identity and reference semantics. They also support inheritance, deinitialization, and reference counting. Post 13 uses a shared editing session to show when those capabilities change the model.
+
+Choose from the product rule:
+
+| Product rule | Likely starting point |
+| --- | --- |
+| Each assignment should create an independent logical value | Structure |
+| Several owners must observe and mutate one shared identity | Class or actor |
+| The domain is a closed set of alternatives | Enumeration |
+| The type needs inheritance from a class | Class |
+
+"Struct by default" is useful because independent values are easier to reason about. It is not permission to simulate shared identity with global indexes and manual pointer-like plumbing.
+
+## Wrong first moves
+
+- **Choosing a class because the model has methods**: Structures can define methods, properties, subscripts, initializers, extensions, and protocol conformances.
+- **Assuming assignment always shares an object**: Structure assignment creates an independent logical value.
+- **Assuming value semantics always copy bytes immediately**: Copy-on-write and compiler optimization can delay physical copying.
+- **Declaring every property with `var`**: Keep stable facts constant inside the model.
+- **Using synthesized equality as record identity without deciding the rule**: Structural equality and identity answer different questions.
+- **Adding a custom initializer without considering the memberwise initializer**: The synthesized construction surface can change.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Change only `edited.id` and explain why the compiler rejects it.
+2. Remove `mutating` from `toggleFavorite()` and read the diagnostic.
+3. Store `original` in a `let`, then try to call the mutating method.
+4. Add a rating property and prove changing the copy leaves the original rating intact.
+5. Compare `original` and `edited` with synthesized equality.
+6. Write a nonmutating `tagged(with:)` method that returns a changed copy.
+
+Each exercise checks a type contract, not just syntax.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- How a structure turns related values into one named type.
+- Why a `let` structure prevents property mutation.
+- How assignment and argument passing preserve value semantics.
+- Why copy-on-write does not turn arrays into reference types.
+- When a method needs `mutating`.
+- Why structural equality and record identity can differ.
+- When shared identity points toward a class instead.
+
+The next post models a closed set of loading states with an enumeration and associated values.
+
+## Series navigation
+
+- Previous: [Part 10: Strings, Unicode, and formatting](../2026-07-16-swift-strings-unicode-formatting/)
+- Next: Part 12, Enumerations, associated values, and pattern matching
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Value and reference models**: The Swift Programming Language chapter [Structures and Classes](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/structuresandclasses/) defines shared capabilities, structure copying, class identity, and copy-on-write collections.
+- **Structure construction**: [Initialization](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/initialization/) documents default, memberwise, and custom initializers and their synthesis rules.
+- **Behavior on values**: [Methods](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/methods/) specifies instance methods, `self`, and mutating methods for structures and enumerations.
+
+## Related topics
+
+- [Functional core, imperative shell](../../topics/cs/functional-core-imperative-shell/), architecture built around explicit value transformations.
+- [Memento pattern](../../topics/cs/design-patterns/memento/), preserving snapshots without sharing later mutations.
+- [Value objects](../../topics/cs/design-patterns/), neighboring patterns that compare values by their contents.
