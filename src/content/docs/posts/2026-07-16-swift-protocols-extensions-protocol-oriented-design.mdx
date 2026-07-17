@@ -1,0 +1,373 @@
+---
+title: "Zero to iOS Hero 16: Protocols, extensions, and protocol-oriented design"
+description: "Define a small Clock capability, supply deterministic and composed implementations, and choose carefully between generics, existentials, and default behavior."
+date: 2026-07-16
+tags: [swift, ios, protocols, extensions, protocol-oriented-design, dependency-injection]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-protocols-extensions-protocol-oriented-design/
+series:
+  slug: zero-to-ios-hero
+  order: 16
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import protocolCode from './2026-07-16-swift-protocols-extensions-protocol-oriented-design.swift?raw';
+
+This is part 16 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A note timestamp depends on time, but the stamping rule should not depend directly on Foundation or the wall clock. A small protocol can name the needed capability: provide the current instant in the domain's chosen representation.
+
+Protocols describe requirements. Conforming types supply implementations. Extensions organize related behavior and can provide shared defaults. The design stays useful only while the requirements remain small, semantic, and owned by the caller that needs them.
+
+## Define the capability from the caller's need
+
+The note stamper needs one operation:
+
+```swift
+protocol Clock {
+    func nowSeconds() -> Int
+}
+```
+
+This protocol says nothing about Foundation, time zones, formatting, timers, or networking. It describes the smallest value the domain operation consumes.
+
+A protocol is a type and a conformance contract. Structures, enumerations, and classes can adopt it. The conforming type decides whether a requirement is backed by stored state, computed state, another service, or a constant.
+
+Name protocols after capabilities or roles. A protocol called `Clock` states what a value does. A protocol called `ClockProtocol` repeats the language feature without adding domain meaning.
+
+## Requirements specify access, not storage
+
+A property requirement states the visible contract:
+
+```swift
+protocol IdentifiedNote {
+    var id: Int { get }
+    var title: String { get set }
+}
+```
+
+`{ get }` requires readable access. A conformer may satisfy it with a constant, variable, or read-only computed property. `{ get set }` also requires a setter visible at the conformance boundary.
+
+Method requirements declare signatures without bodies:
+
+```swift
+protocol NoteValidating {
+    func validate(_ note: StampedNote) -> Bool
+}
+```
+
+Use `mutating` on a protocol method when value-type conformers may need to change `self`:
+
+```swift
+protocol Resettable {
+    mutating func reset()
+}
+```
+
+Classes satisfy that requirement without writing `mutating`. Structures and enumerations write it on changing implementations.
+
+## A fixed implementation makes time deterministic
+
+The test implementation returns one chosen instant:
+
+```swift
+struct FixedClock: Clock {
+    let instant: Int
+
+    func nowSeconds() -> Int {
+        instant
+    }
+}
+```
+
+The note stamper consumes the protocol instead of constructing a clock internally:
+
+```swift
+struct NoteStamper {
+    private let clock: any Clock
+
+    init(clock: any Clock) {
+        self.clock = clock
+    }
+
+    func stamp(title: String) -> StampedNote {
+        StampedNote(title: title, createdAt: clock.nowSeconds())
+    }
+}
+```
+
+Tests inject a fixed clock and assert an exact timestamp. Production composition injects the real adapter. The domain code is the same in both cases.
+
+This is dependency injection in its simplest form: pass the capability in. No container or framework is required.
+
+## Keep the production adapter at the framework boundary
+
+A Foundation-backed wall clock can satisfy the same requirement:
+
+```swift
+import Foundation
+
+struct FoundationClock: Clock {
+    func nowSeconds() -> Int {
+        Int(Date().timeIntervalSince1970)
+    }
+}
+```
+
+This adapter belongs outside the browser checkpoint because the public runner promises the Swift 6.3.3 Linux standard-library boundary, not Foundation parity with Apple platforms.
+
+Epoch seconds are an example contract for this lesson, not a universal display format. Preserve richer precision or a dedicated instant type when the product needs it. Format user-facing dates only at the presentation boundary.
+
+## Protocol extensions share behavior
+
+An extension can build a derived operation from the required primitive:
+
+```swift
+extension Clock {
+    func seconds(since earlier: Int) -> Int {
+        max(0, nowSeconds() - earlier)
+    }
+}
+```
+
+Every conforming clock gains the method. The default depends only on the protocol requirement, so it behaves consistently for fixed, shifted, and production clocks.
+
+Protocol extensions can provide implementations for requirements or add convenience members that are not requirements. That distinction affects dispatch.
+
+If polymorphic callers must see a conformer's specialized implementation, declare the member as a protocol requirement and optionally provide its default in an extension. An extension-only member is selected from the static protocol context, not as an open class-style override point.
+
+## Defaults should encode one honest rule
+
+A default implementation reduces repetition when one behavior is correct for most or all conformers:
+
+```swift
+protocol DisplayNamed {
+    var displayName: String { get }
+}
+
+extension DisplayNamed {
+    var displayName: String {
+        String(describing: Self.self)
+    }
+}
+```
+
+Defaults become dangerous when conformers have different semantics but inherit a convenient approximation. A default that silently returns an empty array, false, or no operation can hide missing behavior.
+
+Make required differences explicit. Share mechanics, not invented meaning.
+
+## Extensions organize conformance
+
+Move a conformance into an extension when that grouping improves navigation:
+
+```swift
+struct StampedNote {
+    let title: String
+    let createdAt: Int
+}
+
+extension StampedNote: CustomStringConvertible {
+    var description: String {
+        "\(title) @ \(createdAt)"
+    }
+}
+```
+
+Extensions can add computed properties, methods, initializers, subscripts, nested types, and protocol conformances. They cannot add stored properties, add class inheritance, define a deinitializer, or override an existing member.
+
+Keep related behavior together. Splitting every two methods into a separate extension scatters the type instead of clarifying it.
+
+## Extend types you do not own with care
+
+Swift supports retroactive modeling, so an extension can make an existing type conform to a protocol. This is useful when the conformance is unambiguous and belongs in the integration layer.
+
+The risk appears when neither the type nor protocol belongs to your module. Another module can add the same conformance, creating a collision. Semantics can also be unclear: there may be several reasonable ways for one external type to satisfy one external protocol.
+
+Prefer a small wrapper type when the conformance is application-specific, contested, or needs stored configuration. The wrapper makes ownership and meaning explicit.
+
+## An existential stores any conforming value
+
+The `any` keyword forms an existential value:
+
+```swift
+let clock: any Clock = FixedClock(instant: 1_700_000_120)
+```
+
+The concrete type is hidden behind the protocol interface. `NoteStamper` uses an existential because it stores one clock selected at composition time.
+
+Existentials also support heterogeneous collections:
+
+```swift
+let clocks: [any Clock] = [
+    FixedClock(instant: 100),
+    OffsetClock(base: FixedClock(instant: 100), offset: 10)
+]
+```
+
+Each element may have a different concrete type. Code can use only the members available through the existential's protocol and constraints.
+
+Existential storage can introduce indirection and erase concrete type relationships. That cost is often acceptable at a dependency boundary. Do not reach for `any` merely because a protocol exists.
+
+## A generic preserves the concrete type
+
+This function accepts one concrete clock type chosen by the caller:
+
+```swift
+func ages<C: Clock>(
+    of notes: [StampedNote],
+    using clock: C
+) -> [Int] {
+    notes.map { clock.seconds(since: $0.createdAt) }
+}
+```
+
+The generic parameter `C` preserves the concrete type throughout the call. This supports static specialization and relationships involving associated types.
+
+Choose from the requirement:
+
+| Need | Starting form |
+| --- | --- |
+| Store one runtime-selected conformer | `any Clock` |
+| Store several different conformers together | `[any Clock]` |
+| Preserve one caller-selected concrete type | `<C: Clock>` or `some Clock` parameter |
+| Hide one implementation behind a stable returned type | `some Clock` return |
+
+Post 18 develops associated types, existentials, opaque types, and generic constraints in depth. Here, the important point is that a protocol declaration does not force every use site into existential storage.
+
+## Opaque types hide identity without erasing it
+
+An opaque return promises one hidden concrete type that conforms:
+
+```swift
+func makePreviewClock() -> some Clock {
+    FixedClock(instant: 1_700_000_120)
+}
+```
+
+The caller does not name the underlying type, but the compiler still tracks one specific type. All return paths must agree on that underlying type.
+
+An existential means any conforming type can inhabit the value at runtime. An opaque type means the function chooses one concrete type and hides its name. Those are different abstraction tools.
+
+## Protocol composition requires several capabilities
+
+Use `&` when a caller needs multiple independent contracts:
+
+```swift
+protocol Titled {
+    var title: String { get }
+}
+
+protocol Timestamped {
+    var createdAt: Int { get }
+}
+
+func audit(_ note: any Titled & Timestamped) {
+    print("\(note.title) @ \(note.createdAt)")
+}
+```
+
+A composition creates a local combined constraint. It does not declare a new protocol or new semantic role. Declare a named refined protocol when the combination itself has durable domain meaning.
+
+## Class-only protocols express reference semantics
+
+Inherit from `AnyObject` when conformance requires class identity:
+
+```swift
+protocol EditingSessionDelegate: AnyObject {
+    func sessionDidSave()
+}
+```
+
+Class-only protocols allow weak references at delegate boundaries:
+
+```swift
+weak var delegate: (any EditingSessionDelegate)?
+```
+
+Do not restrict a protocol to classes only because the first conformer is a class. Use `AnyObject` when shared identity, weak ownership, Objective-C interoperability, or another reference-only rule belongs to the contract.
+
+## Run the clock seam
+
+The checkpoint injects a fixed clock, composes an offset clock around an existential base, uses extension behavior, calls a generic function, and stores heterogeneous conformers:
+
+<SwiftRepl code={protocolCode} id="swift-protocols-extensions-protocol-oriented-design" />
+
+Expected output:
+
+```text
+Created: 1700000120
+Age: 120
+Future age clamped: 0
+Shifted age: 60
+Clock instants: 1700000120, 1700000180
+```
+
+The preconditions prove exact stamping, default extension behavior, clamping, generic use, and heterogeneous existential dispatch.
+
+The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary. It proves language-level protocols, conformances, extensions, generics, and existentials. It does not prove Foundation `Date`, system-clock accuracy, locale behavior, SwiftUI environment injection, UIKit delegates, Objective-C optional requirements, Simulator, or device behavior.
+
+## Protocol-oriented design starts from semantics
+
+Protocol-oriented design does not mean turning every type into a protocol. It means using small capability contracts, value types, constrained extensions, and generic algorithms where those tools express the model.
+
+A useful protocol usually has at least two plausible conformers or creates a meaningful boundary for testing, platform integration, or substitution. A protocol that mirrors every method of one concrete service adds a second name without improving the design.
+
+The `Clock` seam earns its place because wall time is nondeterministic and the domain needs an exact test substitute. A `NoteTitleProvidingFactoryProtocol` with one implementation probably does not.
+
+## Common mistakes
+
+- **Creating a protocol for every concrete type**: One-to-one abstractions add indirection without substitution value.
+- **Designing requirements from the provider's entire API**: Callers become coupled to operations they do not need.
+- **Using an empty default implementation**: Missing behavior looks like successful work.
+- **Assuming extension-only methods dynamically override**: Polymorphic specialization needs a protocol requirement.
+- **Using `any` at every protocol use site**: Existential storage erases concrete relationships that a generic can preserve.
+- **Making a protocol class-only by habit**: Value conformers are excluded without a semantic reason.
+- **Adding external-type and external-protocol conformance casually**: Another module can claim the same retroactive conformance.
+- **Hiding the production dependency inside the domain type**: Deterministic tests lose control of time, randomness, or I/O.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Add a `SequenceClock` class that returns configured instants in order.
+2. Move the age calculation out of the extension and compare duplication across conformers.
+3. Add a specialized required method with a default, then override it in `OffsetClock`.
+4. Change `NoteStamper` from existential storage to a generic `NoteStamper<C: Clock>`.
+5. Return `some Clock` from a preview factory.
+6. Add a `Clock & CustomStringConvertible` composition at one call site.
+7. Wrap an external type instead of adding an application-specific retroactive conformance.
+
+Each abstraction should answer who owns the requirement and why substitution matters.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- How property, method, mutation, and initializer requirements form a protocol contract.
+- Why a fixed clock makes time-dependent rules deterministic.
+- How protocol extensions share behavior and how requirement dispatch differs from extension-only behavior.
+- What extensions can and cannot add.
+- Why retroactive conformance needs clear ownership.
+- When `any`, a generic constraint, `some`, or a protocol composition fits.
+- Why class-only protocols should encode a reference-specific rule.
+- Why protocol-oriented design does not require a protocol for every type.
+
+The next post chooses among thrown errors, `Result`, optional absence, and domain state for different failure boundaries.
+
+## Series navigation
+
+- Previous: [Part 15: Closures, function types, capture, and higher-order operations](../2026-07-16-swift-closures-function-types-capture-higher-order-operations/)
+- Next: Part 17, Errors, Result, throwing APIs, and recovery
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Protocol contracts**: [Protocols](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/) defines requirements, conformances, delegation, compositions, class-only protocols, existentials, and protocol extensions.
+- **Extending behavior**: [Extensions](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/extensions/) documents added methods, computed properties, initializers, subscripts, nested types, conformances, and extension limits.
+- **Associated and generic relationships**: [Generics](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/generics/) introduces generic constraints and associated types used by protocols.
+- **Existential and opaque forms**: [Types](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/types/) specifies protocol compositions, `any` existentials, and `some` opaque types.
+
+## Related topics
+
+- [Dependency inversion principle](../2026-04-24-solid-principles/), owning abstractions near high-level policy.
+- [Strategy pattern](../../topics/cs/design-patterns/strategy/), swapping one capability behind a stable contract.
+- [Adapter pattern](../../topics/cs/design-patterns/adapter/), translating Foundation or another provider into a domain-owned port.
