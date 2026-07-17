@@ -1,0 +1,424 @@
+---
+title: "Zero to iOS Hero 15: Closures, function types, capture, and higher-order operations"
+description: "Pass Field Notes behavior as typed values, compose collection operations, and make closure capture and lifetime choices visible."
+date: 2026-07-16
+tags: [swift, ios, closures, function-types, capture, higher-order-functions]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-16-swift-closures-function-types-capture-higher-order-operations/
+series:
+  slug: zero-to-ios-hero
+  order: 15
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import closureCode from './2026-07-16-swift-closures-function-types-capture-higher-order-operations.swift?raw';
+
+This is part 15 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+A ranking rule is behavior. Swift can store that behavior in a variable, accept it as a parameter, return it from a function, and pass it through collection operations.
+
+Closures make that possible. Their compact syntax is useful, but their deeper contract is more important: parameter and return types, captured context, whether they outlive a call, and which references they keep alive.
+
+## A function type describes callable behavior
+
+This function accepts two notes and returns a Boolean ordering decision:
+
+```swift
+func ranksBefore(_ left: Note, _ right: Note) -> Bool {
+    left.rating > right.rating
+}
+```
+
+Its function type is:
+
+```swift
+(Note, Note) -> Bool
+```
+
+Assign the function itself without calling it:
+
+```swift
+let ordering: (Note, Note) -> Bool = ranksBefore
+```
+
+Parentheses contain the parameter types. The arrow points to the result type. `() -> Void` takes no arguments and returns no meaningful value. `(String) throws -> Note` can throw. Async function types add `async` to the type.
+
+Function values are ordinary typed values. The compiler checks them at assignment and at every call.
+
+## A closure expression defines an unnamed function
+
+Write the same ordering rule inline:
+
+```swift
+let ranksBefore: (Note, Note) -> Bool = { left, right in
+    if left.rating == right.rating {
+        return left.title < right.title
+    }
+
+    return left.rating > right.rating
+}
+```
+
+The opening type annotation gives Swift the parameter and result types. Inside the braces, `in` separates the parameter list from the body.
+
+Without contextual type information, spell the signature inside the closure:
+
+```swift
+let ranksBefore = { (left: Note, right: Note) -> Bool in
+    left.rating > right.rating
+}
+```
+
+Closure expressions, nested functions, and global functions are all closure forms. Named functions are often clearer when behavior has domain meaning or needs reuse.
+
+## Syntax can shrink only while intent survives
+
+Swift can infer types, omit `return` for one expression, and use numbered shorthand arguments:
+
+```swift
+let descending = notes.sorted { $0.rating > $1.rating }
+```
+
+That line remains readable because the rule is short and local.
+
+This version asks the reader to decode too much:
+
+```swift
+let result = notes
+    .filter { !$0.tags.isEmpty && $0.rating > 2 }
+    .sorted { $0.rating == $1.rating ? $0.title < $1.title : $0.rating > $1.rating }
+    .map { "\($0.title):\($0.rating)" }
+```
+
+Extract the predicate, comparator, or formatting operation when the closure contains several rules. Shorter text is not automatically clearer code.
+
+## Higher-order functions accept or return functions
+
+A higher-order function works with another function as data:
+
+```swift
+func rankedTitles(
+    in notes: [Note],
+    matching predicate: (Note) -> Bool
+) -> [String] {
+    notes
+        .filter(predicate)
+        .sorted(by: ranksBefore)
+        .map(\.title)
+}
+```
+
+`rankedTitles` accepts a predicate. `filter`, `sorted`, and `map` also accept functions. The pipeline keeps each transformation visible:
+
+```text
+all notes
+   |
+   v
+filter by caller policy
+   |
+   v
+sort by rating and title
+   |
+   v
+project to titles
+```
+
+The function owns the stable ranking pipeline while the caller supplies the changing selection rule.
+
+## Choose the collection operation by its result
+
+The common higher-order operations answer different questions:
+
+| Operation | Closure role | Result |
+| --- | --- | --- |
+| `map` | Transform every element | Same number of transformed elements |
+| `compactMap` | Transform and discard `nil` results | Zero or more transformed elements |
+| `filter` | Keep elements whose predicate is true | A subset of the original elements |
+| `sorted` | Decide pairwise ordering | A new ordered array |
+| `reduce` | Fold elements into an accumulator | One accumulated value |
+| `forEach` | Perform a closure for every element | `Void` |
+
+Use `for` when the loop needs `break`, `continue`, early `return`, several mutable steps, or clearer control flow. A chain of collection calls should reveal a data transformation, not conceal a procedural algorithm.
+
+## Key paths can replace simple projections
+
+This closure extracts every title:
+
+```swift
+let titles = notes.map { $0.title }
+```
+
+The equivalent key-path form is:
+
+```swift
+let titles = notes.map(\.title)
+```
+
+Use a key path for direct property access. Use a closure when transformation, optional handling, arguments, or policy needs code.
+
+## Closures capture surrounding values
+
+A closure can refer to values outside its parameter list:
+
+```swift
+var minimumRating = 3
+
+let matchesMinimum: (Note) -> Bool = { note in
+    note.rating >= minimumRating
+}
+```
+
+The closure closes over `minimumRating`. Captured local variables can stay alive after their original scope would otherwise end.
+
+By default, this closure observes later changes to the captured variable:
+
+```swift
+minimumRating = 5
+let visible = notes.filter(matchesMinimum) // Uses 5.
+```
+
+That is sometimes intentional. It can also make behavior change because distant code mutated a variable.
+
+## A capture list takes an explicit snapshot
+
+Place a capture list before the parameters:
+
+```swift
+var minimumRating = 3
+
+let capturedMinimum: (Note) -> Bool = { [minimumRating] note in
+    note.rating >= minimumRating
+}
+
+minimumRating = 5
+```
+
+The capture-list entry evaluates when the closure is created. This closure retains the captured value `3`, so later changes to the outer variable do not change its filter.
+
+Rename a capture to make the snapshot explicit:
+
+```swift
+let predicate: (Note) -> Bool = { [threshold = minimumRating] note in
+    note.rating >= threshold
+}
+```
+
+For value types, the capture entry stores that value. For class instances, a plain capture stores a strong reference to the same object unless the list marks it `weak` or `unowned`.
+
+## Run the capture comparison
+
+The checkpoint builds one predicate that observes the current variable and one capture-list snapshot. It then composes filtering, sorting, mapping, reducing, and a returned tag matcher:
+
+<SwiftRepl code={closureCode} id="swift-closures-function-types-capture-higher-order-operations" />
+
+Expected output:
+
+```text
+Snapshot >= 3: Fog, Ridge, Tide
+Live >= 5: Fog
+Total snapshot rating: 12
+Swift tagged: Fog, Ridge
+```
+
+The preconditions prove the two capture policies produce different results after `minimumRating` changes.
+
+The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary. It proves synchronous function types, capture lists, and collection transformations. It does not prove `@Sendable` checking, actor isolation, asynchronous callback delivery, SwiftUI actions, UIKit target-action behavior, ARC leak detection, Simulator, or device behavior.
+
+## A function can return a closure
+
+A returned closure can package configured behavior:
+
+```swift
+func makeTagMatcher(_ tag: String) -> (Note) -> Bool {
+    { note in
+        note.tags.contains(tag)
+    }
+}
+
+let matchesSwift = makeTagMatcher("swift")
+let swiftNotes = notes.filter(matchesSwift)
+```
+
+The returned closure captures the function's `tag` parameter. The caller receives a focused predicate without carrying the configuration separately.
+
+This is useful for strategies, validators, formatters, and dependency seams. If the returned closure starts accumulating several related operations or mutable state, a named type may express the capability better.
+
+## Nonescaping is the default parameter contract
+
+A closure parameter is nonescaping unless marked otherwise:
+
+```swift
+func withMatchingNotes(
+    _ notes: [Note],
+    predicate: (Note) -> Bool,
+    body: ([Note]) -> Void
+) {
+    body(notes.filter(predicate))
+}
+```
+
+Both closures execute before the function returns. The function cannot store them for later use.
+
+Nonescaping is the narrow contract. It gives the compiler stronger lifetime and exclusive-access information, and it tells the reader the callback completes within the call.
+
+## Mark a closure `@escaping` when it outlives the call
+
+Storing a closure requires the escaping contract:
+
+```swift
+final class NoteAction {
+    private let action: (Note) -> Void
+
+    init(action: @escaping (Note) -> Void) {
+        self.action = action
+    }
+
+    func run(with note: Note) {
+        action(note)
+    }
+}
+```
+
+The initializer returns while the stored closure remains available. `@escaping` belongs on the parameter type because the value can escape the call.
+
+Asynchronous completion handlers commonly escape, but escaping does not itself mean asynchronous. A stored closure may run later on the same thread. Threading and actor isolation need their own contracts.
+
+Escaping closures that use a class instance require explicit `self` or a capture-list entry. The syntax forces the lifetime decision into view.
+
+## Class captures can create strong cycles
+
+Closures are reference types. A class can retain a stored closure while that closure retains the class:
+
+```text
+Editor ----strong----> saved closure
+   ^                       |
+   |                       |
+   +-------strong----------+
+```
+
+Break the cycle only after defining ownership:
+
+```swift
+final class Editor {
+    var onSave: (() -> Void)?
+
+    func connect() {
+        onSave = { [weak self] in
+            self?.saveDraft()
+        }
+    }
+
+    private func saveDraft() {}
+}
+```
+
+A weak capture is optional because the instance may disappear before the closure runs. An unowned capture is nonoptional and traps if the instance has already deallocated.
+
+Do not add `[weak self]` mechanically. Sometimes the operation must keep its owner alive. Sometimes the closure should capture a smaller immutable value instead of the whole object. Post 19 develops the ownership decision and leak proof.
+
+## Trailing closures shape the call site
+
+When a closure is the final argument, write it after the parentheses:
+
+```swift
+let highlyRated = notes.filter { note in
+    note.rating >= 4
+}
+```
+
+Multiple trailing closure syntax can label later closures:
+
+```swift
+performRequest {
+    showLoading()
+} success: { notes in
+    show(notes)
+} failure: { error in
+    show(error)
+}
+```
+
+This can read well when every label names a distinct outcome. It can also hide the call's overall shape when bodies become long. Extract named functions or use a result value when nested callbacks dominate the code.
+
+## Autoclosures defer an expression
+
+`@autoclosure` wraps a call-site expression in a zero-argument closure:
+
+```swift
+func logIfNeeded(_ message: @autoclosure () -> String) {
+    guard loggingEnabled else { return }
+    print(message())
+}
+```
+
+The call looks like an ordinary value argument even though evaluation is deferred:
+
+```swift
+logIfNeeded(expensiveDiagnostic())
+```
+
+Standard assertions use this idea so messages need not be evaluated on a passing path. It is uncommon to define custom autoclosure APIs. Overuse hides evaluation timing and effects, so the function name must make deferral unsurprising.
+
+## Capture and concurrency are separate contracts
+
+A closure that crosses a concurrency boundary may need `@Sendable`. Actor-isolated state, mutable captures, and transferred values then receive additional compiler checks.
+
+Do not assume a closure is safe to run concurrently because its syntax is short or because it uses a capture list. This post proves synchronous capture behavior only. The structured concurrency arc introduces task lifetime, sendability, actors, and isolation with the matching compiler evidence.
+
+## Common mistakes
+
+- **Compressing every closure to `$0` and `$1`**: Dense shorthand hides domain roles and tie-breaking rules.
+- **Using higher-order chains for procedural control flow**: A direct loop is clearer when work needs early exit or several dependent mutations.
+- **Capturing a mutable variable without choosing live or snapshot semantics**: Later mutation changes behavior at a distance.
+- **Marking every closure `@escaping`**: The broader lifetime contract permits storage and requires more capture reasoning.
+- **Assuming escaping means background execution**: Lifetime, scheduling, and isolation are separate decisions.
+- **Capturing `self` strongly in its stored closure**: The two references can form a cycle.
+- **Adding `[weak self]` everywhere**: Optional disappearance may violate an operation that should retain its owner or capture a smaller value.
+- **Overusing `@autoclosure`**: Value-like syntax conceals deferred work and possible effects.
+
+## Practice
+
+Modify the runnable example in small steps:
+
+1. Replace the named comparator with a closure and keep the rating tie break readable.
+2. Change `minimumRating` after both predicates are created and predict both outputs before running.
+3. Rename the capture-list entry to `threshold`.
+4. Replace `map(\.title)` with an explicit formatting closure.
+5. Rewrite the pipeline as a `for` loop and compare control flow and intermediate allocations.
+6. Return a predicate that matches any one of several captured tags.
+7. Store an action in a class, then document why it needs `@escaping`.
+
+Every exercise should make the function type and capture policy visible.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- How a function type describes parameters and a result.
+- How named functions and closure expressions become values.
+- When inference, shorthand arguments, and trailing closures help readability.
+- How `map`, `compactMap`, `filter`, `sorted`, and `reduce` differ.
+- How default capture differs from a capture-list snapshot.
+- How a function returns configured behavior.
+- Why closure parameters are nonescaping by default.
+- When `@escaping`, weak capture, unowned capture, and `@autoclosure` change the contract.
+- Why lifetime and concurrency safety require separate reasoning.
+
+The next post generalizes capabilities with protocols and extensions while preserving substitutability.
+
+## Series navigation
+
+- Previous: [Part 14: Properties, methods, subscripts, initialization, and deinitialization](../2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization/)
+- Next: Part 16, Protocols, extensions, and protocol-oriented design
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Closure syntax and lifetime**: [Closures](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures/) defines closure expressions, capture, escaping parameters, trailing syntax, and autoclosures.
+- **Callable type rules**: [Types](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/types/) specifies synchronous, throwing, asynchronous, variadic, nonescaping, and attributed function types.
+- **Captured reference ownership**: [Automatic Reference Counting](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/automaticreferencecounting/) documents closure reference cycles and weak and unowned capture lists.
+
+## Related topics
+
+- [Strategy pattern](../../topics/cs/design-patterns/strategy/), supplying interchangeable behavior behind one call shape.
+- [Functional core, imperative shell](../../topics/cs/functional-core-imperative-shell/), composing value transformations while effects remain explicit.
+- [Functions and API shape](../2026-07-16-swift-functions-api-shape/), the earlier foundation for parameter labels, returns, defaults, and mutation contracts.
