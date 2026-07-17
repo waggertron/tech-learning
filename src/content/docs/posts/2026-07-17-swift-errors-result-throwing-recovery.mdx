@@ -1,0 +1,289 @@
+---
+title: "Zero to iOS Hero 17: Errors, Result, throwing APIs, and recovery"
+description: "Model import failures as typed values, map transport details at a boundary, preserve deferred outcomes with Result, and choose recovery from the failure contract."
+date: 2026-07-17
+tags: [swift, ios, error-handling, result, recovery, typed-throws]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-17-swift-errors-result-throwing-recovery/
+series:
+  slug: zero-to-ios-hero
+  order: 17
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import errorCode from './2026-07-17-swift-errors-result-throwing-recovery.swift?raw';
+
+This is part 17 of the [Zero to iOS Hero series](../series/zero-to-ios-hero/).
+
+An import can fail because its source is unavailable, a row has the wrong shape, an identifier is invalid, or two rows claim the same identity. Returning an empty array for every failure destroys those distinctions. The caller cannot tell whether there were no notes or whether useful data was lost.
+
+Swift gives several ways to represent an operation that does not produce a normal value. The choice depends on what the caller needs to know and when the outcome becomes available.
+
+## Start with the meaning of failure
+
+Use separate shapes for separate contracts:
+
+| Situation | Starting representation | Reason |
+| --- | --- | --- |
+| A value may legitimately be absent | `Optional<Wrapped>` | There is no failure detail to preserve |
+| A synchronous operation cannot continue | `throws` | Normal control flow stops and the caller chooses recovery |
+| Success or failure must be stored or passed | `Result<Success, Failure>` | The outcome becomes a value |
+| A finite product condition persists over time | Domain enum state | Loading, empty, failed, and loaded states belong in the model |
+| A programmer invariant is broken | Assertion or precondition | Recovery is not part of the function contract |
+
+An empty search result is usually data. A malformed import is a failure. A screen that is currently retrying is domain state. Treating all three as `nil` makes the API small by deleting meaning.
+
+## Errors are values
+
+A Swift error is a value whose type conforms to `Error`. An enumeration fits a closed family of related failures:
+
+```swift
+enum ImportError: Error, Equatable {
+    case emptyInput
+    case malformedLine(line: Int, fieldCount: Int)
+    case invalidIdentifier(line: Int, value: String)
+    case emptyTitle(line: Int)
+    case duplicateIdentifier(Int)
+    case sourceUnavailable
+}
+```
+
+Associated values keep the context needed for diagnostics and recovery. A line number helps a user repair a document. A duplicate identifier tells the importer which invariant failed.
+
+Do not put every implementation detail into a public error. A socket code, parser token offset, or database driver type may be useful in logs while still being the wrong contract for a caller. Errors cross boundaries, so their vocabulary should belong to the layer that handles them.
+
+## Throw when normal work cannot continue
+
+A throwing function marks the alternate control-flow path in its signature:
+
+```swift
+func decodeImport(_ text: String) throws(ImportError) -> [ImportedNote] {
+    guard text.contains(where: { !$0.isWhitespace }) else {
+        throw .emptyInput
+    }
+
+    // Parse rows or throw one ImportError.
+}
+```
+
+The Swift 6 typed-throws form names the only error type this function emits. The compiler rejects attempts to throw another type from this body. Most Swift APIs still use untyped `throws`, which means the dynamic error value can be any `Error`. Typed throws earns its place when a closed failure set is part of a deliberate boundary.
+
+A throwing function does not need to catch an error merely to throw it again. Let it propagate until a layer can retry, substitute a fallback, translate it, record it, or present it.
+
+## `do` and `catch` choose recovery
+
+`do` and `catch` pattern-match a thrown value:
+
+```swift
+do {
+    let notes = try decodeImport(text)
+    save(notes)
+} catch ImportError.sourceUnavailable {
+    scheduleRetry()
+} catch let ImportError.invalidIdentifier(line, value) {
+    showRepairPrompt(line: line, value: value)
+} catch {
+    showGenericImportFailure()
+}
+```
+
+The first matching clause handles the error. A catch-all protects the boundary when the called work can throw types that are not exhaustively known.
+
+Catch only where a useful decision exists. Logging an error and returning an empty collection makes the call look successful. Logging and rethrowing at every layer also produces noise without adding context.
+
+## Map provider failures into domain language
+
+The import source may fail with a transport-specific error. The domain importer should not force every caller to understand that provider:
+
+```swift
+func loadImport(
+    fetch: () throws -> String
+) throws(ImportError) -> [ImportedNote] {
+    do {
+        return try decodeImport(fetch())
+    } catch let error as ImportError {
+        throw error
+    } catch TransportError.unavailable {
+        throw .sourceUnavailable
+    } catch {
+        throw .sourceUnavailable
+    }
+}
+```
+
+This boundary preserves `ImportError` values raised by decoding and translates transport failures into the smaller vocabulary the import feature owns. Production code can record the underlying provider error in diagnostics before mapping it, provided logs do not expose imported content or credentials.
+
+Do not erase distinctions the caller actually uses. If authentication failure, rate limiting, and offline state lead to different recovery paths, one `sourceUnavailable` case is too broad.
+
+## Result turns an outcome into data
+
+`Result<Success, Failure>` has two cases. Both carry a value:
+
+```swift
+func capture<Success>(
+    _ operation: @autoclosure () throws(ImportError) -> Success
+) -> Result<Success, ImportError> {
+    do {
+        return .success(try operation())
+    } catch {
+        return .failure(error)
+    }
+}
+
+let outcome = capture(try decodeImport(text))
+
+switch outcome {
+case let .success(notes):
+    print("Imported \(notes.count)")
+case let .failure(error):
+    print("Import failed: \(error)")
+}
+```
+
+Use `Result` when an outcome must be stored, queued, cached, combined with other values, delivered through a callback, or inspected later. A synchronous function that immediately produces or fails usually reads better as `throws`. The helper keeps the concrete typed-throws failure on the Swift 6.3 course baseline instead of widening it to `any Error` through the standard catching initializer.
+
+`Result.get()` converts the value back into throwing control flow. `map` transforms only success. `mapError` transforms only failure. `flatMap` chains another result-producing operation without nesting results.
+
+Do not wrap every throwing call in `Result` by habit. The wrapper has value when the outcome itself needs identity, lifetime, or composition beyond the current stack frame.
+
+## `try?` deliberately discards the reason
+
+`try?` converts a thrown error into `nil`:
+
+```swift
+let cachedNotes = try? decodeImport(cacheText)
+```
+
+This is correct only when all failures genuinely mean the same thing to this caller. A cache lookup may treat corrupted or missing cached data as a signal to fetch fresh data. An import editor usually needs the actual error so the user can repair the correct row.
+
+If a caller needs to distinguish failure from legitimate absence, do not collapse both into the same optional.
+
+## `try!` asserts that failure is impossible
+
+`try!` traps if an error is thrown. It does not handle or recover from the error.
+
+Use it only when a nearby invariant proves the operation cannot fail and a trap is the intended response if that invariant is wrong. User input, files, networks, persisted data, and service responses do not satisfy that condition.
+
+Tests can often use `try` and report a useful failure instead of trapping. Production examples in this series keep `try!` away from recoverable boundaries.
+
+## `defer` protects cleanup paths
+
+`defer` runs when control leaves its scope, including a thrown exit:
+
+```swift
+func importWithAccess() throws -> [ImportedNote] {
+    startAccess()
+    defer { stopAccess() }
+
+    let text = try readImport()
+    return try decodeImport(text)
+}
+```
+
+Use it to pair resource acquisition with release near the acquisition site. Files, scoped system access, temporary state, locks, and observation tokens often need this shape.
+
+`defer` does not replace ownership design. If cleanup belongs to an object's whole lifetime, that object should own it. If cleanup can fail, hiding that failure inside `defer` may also be wrong because deferred work cannot change the function's already chosen return value cleanly.
+
+## Recovery belongs above detection
+
+The parser knows why a row is invalid. It usually does not know whether the product should stop, skip the row, ask for repair, or preserve partial progress.
+
+Keep these decisions separate:
+
+```text
+detect precise failure
+        |
+        v
+map provider detail at the boundary
+        |
+        v
+choose retry, repair, fallback, or presentation
+```
+
+Low-level code reports facts. A use case or interface layer chooses policy. This prevents a reusable parser from silently inventing product behavior.
+
+Partial success needs an explicit contract. Returning the valid rows while dropping invalid rows is not automatically more resilient. It can hide data loss. A batch importer can instead return a report containing accepted rows and line-specific rejections when the product explicitly supports review and correction.
+
+## Cancellation is not an ordinary failure
+
+Asynchronous Swift code can throw `CancellationError`, but cancellation expresses that work is no longer wanted. It should not automatically become a red error banner, retry loop, or generic service failure.
+
+Post 20 develops cancellation with structured concurrency. The boundary rule starts here: preserve cancellation long enough for the task owner to stop follow-up work and choose whether any user-facing state change is needed.
+
+## Run the import checkpoint
+
+The checkpoint parses a valid import, rejects an invalid identifier with its line number, maps a simulated transport error, stores outcomes in `Result`, and selects recovery from the typed error:
+
+<SwiftRepl code={errorCode} id="swift-errors-result-throwing-recovery" />
+
+Expected output:
+
+```text
+Imported: 2
+First: Fog|ridge,morning
+Mapped transport: source unavailable
+Invalid row: line 2 has invalid identifier "oops"
+Result counts: 2, failure
+Recovery: retry import
+```
+
+The preconditions prove the two parsed notes, exact first value, success transformation, invalid-row context, transport mapping, and recovery decision.
+
+The source uses only the Swift standard library and fits the Swift 6.3.3 Linux runner boundary. It proves typed error values, typed throws, propagation, catch mapping, `Result`, pattern matching, and deterministic recovery. It does not prove file access, `NSError` bridging, `LocalizedError`, URL loading, Foundation decoding, SwiftUI alerts, UIKit presentation, Simulator, signing, entitlements, or device behavior.
+
+## Common mistakes
+
+- **Returning an empty value after catching**: Failure becomes indistinguishable from a successful empty result.
+- **Catching at every layer**: Repeated logs and rethrows add noise without choosing recovery.
+- **Exposing provider errors directly**: Domain callers become coupled to transport, database, or parser implementation details.
+- **Mapping every failure into one case**: Distinct repair, authentication, offline, and retry paths disappear.
+- **Using `try?` without accepting information loss**: The reason for failure vanishes.
+- **Using `try!` around external input**: A recoverable condition becomes a process trap.
+- **Treating cancellation as service failure**: Deliberately stopped work can trigger misleading UI and retries.
+- **Silently accepting partial imports**: Data loss looks like resilience.
+
+## Practice
+
+Modify the runnable checkpoint in small steps:
+
+1. Add an `invalidTag(line:value:)` case and reject empty tags.
+2. Change duplicate handling to return a line number as well as the identifier.
+3. Use `map` to extract imported titles from a successful result.
+4. Use `mapError` to translate `ImportError` into a smaller presentation error.
+5. Add a batch report with accepted rows and explicit rejected rows.
+6. Remove the catch-all from `loadImport`, then inspect why an untyped fetching closure prevents exhaustive mapping.
+7. Compare `try?` with a full `do` and `catch` for the invalid input.
+
+Each change should preserve the difference between no data, invalid data, unavailable data, and cancelled work.
+
+## Checkpoint
+
+You should now be able to explain:
+
+- When optional absence, thrown failure, `Result`, domain state, and a failed invariant differ.
+- How an error enum carries repair context without leaking provider details.
+- Why typed throws fits a closed error boundary and why most APIs still use untyped throws.
+- Where `do` and `catch` belong in a call chain.
+- When `Result` adds value beyond a throwing function.
+- What information `try?` discards and what `try!` asserts.
+- How `defer` keeps cleanup paired across normal and thrown exits.
+- Why detection and recovery policy belong at different layers.
+
+The next post uses generics, associated types, existentials, and opaque types to preserve useful type relationships across reusable APIs.
+
+## Series navigation
+
+- Previous: [Part 16: Protocols, extensions, and protocol-oriented design](../2026-07-16-swift-protocols-extensions-protocol-oriented-design/)
+- Next: Part 18, Generics, associated types, existentials, and opaque types
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Throwing and recovery**: [Error Handling](https://docs.swift.org/swift-book/LanguageGuide/ErrorHandling.html) specifies error values, propagation, `do` and `catch`, optional conversion, disabled propagation, cleanup, and typed throws.
+- **Stored outcomes**: Apple documents [`Result`](https://developer.apple.com/documentation/swift/result) as a success or failure value and provides transformations and conversion back to throwing control flow.
+- **Function contracts**: [Declarations](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/declarations/) defines throwing and typed-throwing function forms and their type relationships.
+
+## Related topics
+
+- [Optionals and absence](../2026-07-16-swift-optionals-absence/), representing a missing value without failure detail.
+- [Enumerations, associated values, and pattern matching](../2026-07-16-swift-enumerations-associated-values-pattern-matching/), building exhaustive state and error models.
+- [Protocols, extensions, and protocol-oriented design](../2026-07-16-swift-protocols-extensions-protocol-oriented-design/), placing provider translation behind a caller-owned capability boundary.
