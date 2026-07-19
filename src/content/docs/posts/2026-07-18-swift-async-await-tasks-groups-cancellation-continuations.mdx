@@ -1,0 +1,150 @@
+---
+title: Async and await, tasks, groups, cancellation, and continuations
+description: "Load note assets with structured child tasks, propagate cancellation, and bridge one callback without losing its completion contract."
+date: 2026-07-18
+tags: [swift, ios, concurrency, async-await, task-groups, cancellation]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-18-swift-async-await-tasks-groups-cancellation-continuations/
+series:
+  slug: zero-to-ios-hero
+  order: 20
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import concurrencyCode from './2026-07-18-swift-async-await-tasks-groups-cancellation-continuations.swift?raw';
+
+An asynchronous function can pause without blocking the thread that began it. Swift marks that possibility with `async`, and a caller marks each suspension point with `await`. Those keywords describe control flow. Tasks provide the lifetime, priority, cancellation, and result container around that work.
+
+Structured concurrency keeps child work inside a lexical scope. The parent cannot finish until its child tasks finish or are cancelled. This gives asynchronous work an ownership tree instead of a loose collection of callbacks.
+
+## Suspension is not a new thread
+
+`await` means the function may suspend at that expression. The runtime can use the underlying thread for other work, then resume the task later. Code after an `await` must not assume it runs on the same thread.
+
+```swift
+func loadMetadata() async throws -> NoteAsset {
+    try await Task.sleep(for: .milliseconds(10))
+    try Task.checkCancellation()
+    return NoteAsset(kind: "metadata", value: "Tide Pools")
+}
+```
+
+The type states both effects: the function can suspend and can throw. Callers must acknowledge both with `try await`.
+
+## Tasks give work a lifetime
+
+A `Task` starts asynchronous work and returns a handle. The handle exposes its eventual `value` and supports cancellation. A task created only to escape the current structure needs a documented owner and cancellation point.
+
+Use ordinary `async` calls when the operations are sequential. Use `async let` for a fixed small set of child operations. Use a task group when the number of children is dynamic or when results should be collected as they finish.
+
+| Shape | Best fit |
+| --- | --- |
+| sequential `await` | next operation depends on previous result |
+| `async let` | fixed independent child operations |
+| task group | dynamic fan-out or completion-order collection |
+| unstructured `Task` | work needs a lifetime outside the current async function |
+| detached task | rare work that must not inherit task context |
+
+## Load assets with a throwing task group
+
+Field Notes needs metadata and a photo before it can present a complete note. The checkpoint adds both operations to a throwing group:
+
+```swift
+try await withThrowingTaskGroup(of: NoteAsset.self) { group in
+    group.addTask { try await loadMetadata() }
+    group.addTask { try await loadPhoto() }
+
+    var assets: [NoteAsset] = []
+    for try await asset in group {
+        assets.append(asset)
+    }
+    return assets
+}
+```
+
+The loop receives results in completion order, not submission order. The example sorts before asserting so its output stays deterministic. If a child throws, the group propagates the error and cancels unfinished siblings before leaving the scope.
+
+## Cancellation is cooperative
+
+`cancel()` records a request. It does not forcibly stop arbitrary Swift instructions. Suspending APIs such as `Task.sleep` often throw `CancellationError`. CPU-bound loops and custom operations need explicit checks:
+
+```swift
+try Task.checkCancellation()
+```
+
+Use `Task.isCancelled` when cleanup or a partial result is appropriate. Use `checkCancellation()` when the operation should stop through its throwing contract.
+
+Cancellation is part of product behavior. Leaving a screen, replacing a search query, or starting a newer sync can make older work irrelevant. Decide whether cancellation preserves local edits, discards partial output, or records a resumable checkpoint.
+
+## Continuations bridge callbacks
+
+A checked continuation turns one completion-based operation into an async function:
+
+```swift
+func bridgedTitle() async throws -> String {
+    try await withCheckedThrowingContinuation { continuation in
+        legacyTitle { result in
+            continuation.resume(with: result)
+        }
+    }
+}
+```
+
+The callback must resume the continuation exactly once on every path. Never resuming leaves the awaiting task suspended. Resuming twice violates the continuation contract. Checked continuations diagnose misuse during development, but the design still needs a clear one-shot callback contract.
+
+Do not wrap an already async API in a continuation. The bridge belongs at the legacy boundary, then the rest of the application can remain async.
+
+## Run the checkpoint
+
+<SwiftRepl code={concurrencyCode} id="swift-async-await-tasks-groups-cancellation-continuations" />
+
+Expected output:
+
+```text
+Assets: metadata, photo
+Continuation title: Forest Light
+Cancellation observed: true
+```
+
+The source uses the Swift standard library. It proves async functions, a throwing task group, deterministic result collection, checked continuation bridging, task handles, and cooperative cancellation under the runner boundary. It does not prove URLSession, Photos, SwiftUI task lifetime, background execution, MainActor behavior, Simulator scheduling, or device energy use.
+
+## The unstructured Task trap
+
+Wrapping every callback in `Task { ... }` hides rather than solves lifetime design. Ask:
+
+- Who stores the task handle?
+- What event cancels it?
+- Does it inherit actor context and priority intentionally?
+- Can a newer request supersede it?
+- Where does its thrown error go?
+
+Prefer child tasks whose lifetime is bounded by the function doing the work. Reach for an unstructured task when a UI or service owner genuinely needs to start and later cancel work.
+
+## Check your understanding
+
+You should now be able to explain:
+
+- How suspension differs from blocking a thread.
+- Why a task group cannot leak child work beyond its scope.
+- Why task-group results need ordering when output must be deterministic.
+- Why cancellation is a request rather than forced termination.
+- Which exact-once rule makes a continuation safe.
+
+The next post isolates shared sync bookkeeping in an actor, then separates that domain boundary from UI work on the main actor.
+
+## Series navigation
+
+- Previous: [Part 19: ARC, ownership, capture lists, and memory safety](../2026-07-18-swift-arc-ownership-capture-lists-memory-safety/)
+- Next: Part 21, actors, global actors, Sendable, and data isolation
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Structured asynchronous work**: [Concurrency](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/) covers async functions, tasks, groups, cancellation, actors, and sendable types.
+- **Concurrency design**: [Swift Evolution proposal SE-0304](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0304-structured-concurrency.md) defines structured task trees and cancellation behavior.
+- **Callback migration**: [Swift Evolution proposal SE-0300](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0300-continuation.md) defines checked and unsafe continuations.
+
+## Related topics
+
+- [ARC, ownership, capture lists, and memory safety](../2026-07-18-swift-arc-ownership-capture-lists-memory-safety/), ownership rules for closures and task handles.
+- [Errors, Result, throwing APIs, and recovery](../2026-07-17-swift-errors-result-throwing-recovery/), typed failure propagation across async calls.
+- [Protocols, extensions, and protocol-oriented design](../2026-07-16-swift-protocols-extensions-protocol-oriented-design/), injectable capabilities for deterministic asynchronous tests.
