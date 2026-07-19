@@ -65,7 +65,7 @@ Do not tune chunk size only by generated answer quality. A model can sometimes a
 
 ## References
 
-- [Contextual Retrieval, Anthropic](https://www.anthropic.com/news/contextual-retrieval)
+- [Contextual Retrieval, Anthropic](https://www.anthropic.com/engineering/contextual-retrieval)
 - [LlamaIndex: Node Parsers & Text Splitters](https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/)
 - [Chunking Strategies for LLM Applications, Pinecone](https://www.pinecone.io/learn/chunking-strategies/)
 - [Unstructured.io documentation](https://docs.unstructured.io/)

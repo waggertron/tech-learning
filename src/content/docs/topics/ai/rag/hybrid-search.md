@@ -70,7 +70,7 @@ The exact fusion method matters less than measuring whether the answer-bearing e
 
 ## References
 
-- [Anthropic Contextual Retrieval, section on BM25 + embeddings](https://www.anthropic.com/news/contextual-retrieval)
+- [Anthropic Contextual Retrieval, section on BM25 + embeddings](https://www.anthropic.com/engineering/contextual-retrieval)
 - [Reciprocal Rank Fusion paper (Cormack et al. 2009)](https://doi.org/10.1145/1571941.1572114)
 - [Hybrid Search, Weaviate docs](https://weaviate.io/developers/weaviate/search/hybrid)
 - [Introduction to BM25, Elasticsearch blog](https://www.elastic.co/blog/practical-bm25-part-2-the-bm25-algorithm-and-its-variables)

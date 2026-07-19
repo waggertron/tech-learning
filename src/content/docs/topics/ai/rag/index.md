@@ -52,7 +52,7 @@ RAG is a pattern for grounding LLM responses in external knowledge: at query tim
 - [Lewis et al. 2020, "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"](https://arxiv.org/abs/2005.11401)
 - [Guu et al. 2020, "REALM: Retrieval-Augmented Language Model Pre-Training"](https://arxiv.org/abs/2002.08909)
 - [Gao et al. 2022, "Precise Zero-Shot Dense Retrieval without Relevance Labels" (HyDE)](https://arxiv.org/abs/2212.10496)
-- [Contextual Retrieval, Anthropic](https://www.anthropic.com/news/contextual-retrieval)
+- [Contextual Retrieval, Anthropic](https://www.anthropic.com/engineering/contextual-retrieval)
 - [OpenAI Cookbook, Question Answering with RAG](https://cookbook.openai.com/examples/question_answering_using_embeddings)
 - [LlamaIndex, RAG documentation](https://docs.llamaindex.ai/en/stable/getting_started/concepts/)
 - [Pinecone, What is RAG?](https://www.pinecone.io/learn/retrieval-augmented-generation/)
