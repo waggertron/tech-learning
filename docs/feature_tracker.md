@@ -103,6 +103,7 @@ As of this audit, the repo contains:
 
 ### Post Series
 
+- **2026-07-19: Zero to iOS Hero interaction design lesson, post 27**: Added framework-neutral contracts for controls, focus, save progress, autosave, deletion, undo, errors, gesture alternatives, and accessible feedback. Evidence: `src/content/docs/posts/2026-07-19-ios-interaction-design-feedback.md`, `docs/evidence/zero-to-ios-hero/post-027.md`.
 - **2026-07-19: Zero to iOS Hero information architecture lesson, post 26**: Added a Field Notes route graph and shared compact and regular navigation model based on user objects, stable identity, context preservation, and restoration. Evidence: `src/content/docs/posts/2026-07-19-ios-information-architecture-navigation.md`, `docs/evidence/zero-to-ios-hero/post-026.md`.
 - **2026-07-19: Zero to iOS Hero journey modeling lesson, post 25**: Expanded the Field Notes release loop into observable happy, empty, offline, permission, interruption, destructive, failure, and recovery behavior. Evidence: `src/content/docs/posts/2026-07-19-ios-user-journeys-tasks-states-edge-cases.md`, `docs/evidence/zero-to-ios-hero/post-025.md`.
 - **2026-07-19: Zero to iOS Hero product framing lesson, post 24**: Added a one-page Field Notes brief with a narrow user, behavioral problem, first-release loop, evidence map, non-goals, and measurable outcome. Evidence: `src/content/docs/posts/2026-07-19-ios-app-idea-user-problem.md`, `docs/evidence/zero-to-ios-hero/post-024.md`.

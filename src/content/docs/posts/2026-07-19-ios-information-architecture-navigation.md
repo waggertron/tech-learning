@@ -172,7 +172,7 @@ The next post turns each transition into an interaction contract with focus, pro
 ## Series navigation
 
 - Previous: [Part 25: User journeys, tasks, states, and edge cases](../2026-07-19-ios-user-journeys-tasks-states-edge-cases/)
-- Next: Part 27, interaction design and feedback
+- Next: [Part 27: Interaction design and feedback](../2026-07-19-ios-interaction-design-feedback/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
