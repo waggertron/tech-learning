@@ -1,0 +1,181 @@
+---
+title: Visual systems, HIG, typography, color, symbols, and materials
+description: "Define semantic Field Notes tokens for type, spacing, color, shape, symbols, materials, and motion, then audit their behavior across appearance and accessibility settings."
+date: 2026-07-19
+tags: [ios, product-design, visual-design, hig, typography, color, sf-symbols]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials/
+series:
+  slug: zero-to-ios-hero
+  order: 28
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import visualTokenCode from './2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials.swift?raw';
+
+A visual system turns product meaning into repeatable presentation choices. It does not freeze every screen at one size. It defines semantic roles that can adapt to content size, appearance, contrast, motion preferences, window size, and platform conventions.
+
+Field Notes needs a system that remains legible outdoors, works in light and dark appearances, survives large text, and communicates state without relying on color alone.
+
+## Name meaning, not pigment
+
+`blue500` describes an ingredient. `actionPrimary` describes a role. Semantic names let the implementation change with environment:
+
+```text
+text.primary
+text.secondary
+surface.primary
+surface.grouped
+action.primary
+status.success
+status.warning
+status.failure
+separator
+focus
+```
+
+Each role maps to platform colors or asset-catalog variants in the UI target. The domain does not import color types. A token source belongs at the presentation edge.
+
+System colors carry tested appearance behavior and familiar meaning. Custom brand colors still need light, dark, increased-contrast, and differentiated-without-color variants.
+
+## Typography starts with text styles
+
+Use semantic text styles instead of fixed point sizes:
+
+| Content | Starting role |
+| --- | --- |
+| note title | title or headline |
+| note body | body |
+| metadata | subheadline or footnote |
+| button label | body or headline based on hierarchy |
+| validation message | footnote with explicit status text |
+
+Dynamic Type can change line count, control height, navigation density, and whether columns remain useful. Test the largest accessibility sizes. Do not solve clipping by truncating the information a person needs to act.
+
+Avoid using weight alone to create hierarchy. Size, spacing, grouping, and position can reinforce it.
+
+## Spacing creates relationships
+
+Use a small scale, then choose by relationship:
+
+```text
+space.1 = 4
+space.2 = 8
+space.3 = 12
+space.4 = 16
+space.6 = 24
+space.8 = 32
+```
+
+Exact values can evolve. The names express a shared scale. Related title and body content sit closer together than separate sections. Touch targets need adequate size even when visible artwork is smaller.
+
+At large text sizes, vertical spacing may grow and horizontal clusters may stack. A token is a default, not permission to ignore layout pressure.
+
+## Shape and elevation stay restrained
+
+Define shape roles such as control, card, sheet, and capsule only when shape carries structure. Applying rounded cards to every group weakens hierarchy and reduces usable space.
+
+Apple platform interfaces often express depth through system materials, bars, sheets, separators, and motion. Use materials where foreground legibility and context remain clear. A translucent effect is not decoration to place behind dense text without testing.
+
+## Symbols need semantics and labels
+
+SF Symbols provide platform-aligned vector symbols with weight, scale, rendering, and localization behavior. Choose a symbol for meaning, not visual novelty.
+
+- Pair unfamiliar symbols with text.
+- Give icon-only controls accessible labels.
+- Do not encode success and failure only through symbol shape or color.
+- Check mirrored meaning in right-to-left layouts.
+- Avoid repurposing a familiar system symbol for an unrelated action.
+
+A symbol in a decorative image can remain hidden from accessibility. A symbol that performs an action needs a control role, label, state, and adequate target.
+
+## Motion explains change
+
+Motion can preserve spatial context, confirm a transition, or reveal hierarchy. It should not delay common work.
+
+Define motion semantically:
+
+```text
+motion.insert
+motion.remove
+motion.navigate
+motion.emphasize
+```
+
+When Reduce Motion is enabled, replace large movement with a subtle fade, state change, or no animation. Never require motion perception to understand the result.
+
+Haptics can reinforce save, selection, or destructive completion on supported hardware. They do not replace visible and spoken feedback.
+
+## Build a Field Notes token contract
+
+The presentation layer needs a small first contract:
+
+| Category | Tokens |
+| --- | --- |
+| type | title, body, metadata, control, status |
+| color | primary text, secondary text, primary surface, action, status roles |
+| spacing | inline, control, group, section, page |
+| shape | control, card, sheet |
+| symbol | add note, search, place, favorite, delete, undo |
+| motion | insert, remove, navigate, emphasize |
+
+Components consume semantic roles. Screens do not choose arbitrary fonts, colors, corner radii, and animation durations independently.
+
+## Run the token audit
+
+The checkpoint models two appearances, two contrast modes, and two content-size roles. It checks all eight combinations, requires semantic roles to remain populated, increases spacing for accessibility sizes, and removes motion when requested.
+
+<SwiftRepl code={visualTokenCode} id="ios-visual-systems-hig-typography-color-symbols-materials" />
+
+Expected output:
+
+```text
+Visual token combinations audited: 8
+Semantic roles remain stable: true
+```
+
+This standard-library model proves exhaustive token selection logic, not visual quality. It does not render `Color`, `UIColor`, fonts, SF Symbols, materials, Dynamic Type, contrast, VoiceOver, right-to-left layout, Reduce Motion, haptics, Simulator, or a physical display.
+
+## Audit the rendered system
+
+The later UI implementation needs a real matrix:
+
+1. Light and dark appearances.
+2. Standard and increased contrast.
+3. Small through largest accessibility text sizes.
+4. Differentiate Without Color enabled.
+5. Reduce Motion and Reduce Transparency enabled.
+6. Left-to-right and right-to-left layout.
+7. iPhone compact width and iPad regular width.
+8. VoiceOver, keyboard, and switch access paths.
+
+Automated snapshots can catch drift, but human review is still needed for hierarchy, meaning, truncation, and motion.
+
+## Check your understanding
+
+You should now be able to explain:
+
+- Why semantic token names survive theme changes better than raw values.
+- How Dynamic Type changes layout, not only font size.
+- Why a symbol still needs an accessible control contract.
+- When material and motion support hierarchy.
+- Which settings belong in a rendered visual audit.
+
+The next post adapts this route and visual system across iPhone, iPad, window sizes, orientation, pointer, keyboard, and multiple scenes.
+
+## Series navigation
+
+- Previous: [Part 27: Interaction design and feedback](../2026-07-19-ios-interaction-design-feedback/)
+- Next: Part 29, adaptive design for iPhone, iPad, and windows
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Visual and interaction foundation**: [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) covers typography, color, layout, materials, motion, and platform conventions.
+- **System symbols**: [SF Symbols](https://developer.apple.com/sf-symbols/) provides Apple's symbol library, tools, and design resources.
+- **Accessible display settings**: [Accessibility](https://developer.apple.com/accessibility/) provides resources for text, contrast, motion, input, and assistive technologies.
+
+## Related topics
+
+- [Interaction design and feedback](../2026-07-19-ios-interaction-design-feedback/), the states and outcomes the visual system must communicate.
+- [Information architecture and navigation](../2026-07-19-ios-information-architecture-navigation/), the hierarchy that typography and spacing make visible.
+- [Strings, Unicode, and formatting](../2026-07-16-swift-strings-unicode-formatting/), locale-aware display content that the visual system must fit.

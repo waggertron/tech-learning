@@ -173,7 +173,7 @@ The next post turns these interaction states into a semantic visual system that 
 ## Series navigation
 
 - Previous: [Part 26: Information architecture and navigation](../2026-07-19-ios-information-architecture-navigation/)
-- Next: Part 28, visual systems, HIG, typography, color, symbols, and materials
+- Next: [Part 28: Visual systems, HIG, typography, color, symbols, and materials](../2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
