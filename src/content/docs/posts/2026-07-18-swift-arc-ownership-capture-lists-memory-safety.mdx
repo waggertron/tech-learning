@@ -1,0 +1,152 @@
+---
+title: ARC, ownership, capture lists, and memory safety
+description: "Trace strong reference graphs, reproduce an editor callback cycle, and choose weak or unowned captures from explicit lifetime rules."
+date: 2026-07-18
+tags: [swift, ios, arc, ownership, closures, memory-safety]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-18-swift-arc-ownership-capture-lists-memory-safety/
+series:
+  slug: zero-to-ios-hero
+  order: 19
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import ownershipCode from './2026-07-18-swift-arc-ownership-capture-lists-memory-safety.swift?raw';
+
+Swift prevents many memory errors through initialization rules, bounds checks, and type safety. Reference lifetimes still depend on ownership. Automatic Reference Counting, usually shortened to ARC, releases a class instance when its strong reference count reaches zero. ARC cannot infer which edge in a cycle is accidental.
+
+The useful question is not "where should I write `weak`?" It is "which object owns which lifetime?"
+
+## ARC follows strong references
+
+Every strong variable, stored property, and closure capture can keep a class instance alive. Assignment adds or transfers a strong path. Setting a path to `nil`, replacing it, or leaving its scope removes that path. When no strong path remains, ARC deinitializes the instance.
+
+```text
+editor variable ----strong----> EditorSession
+                                  |
+                                  | strong stored property
+                                  v
+                               closure
+                                  |
+                                  | strong capture
+                                  +------------> EditorSession
+```
+
+The local variable disappears at the end of the scope, but the two stored edges remain. The editor owns the closure and the closure owns the editor. Neither reference count reaches zero.
+
+ARC applies to class instances. Structs and enums are values. A value can contain a class reference, but copying the value does not turn the referenced object into a value.
+
+## A closure captures what it uses
+
+An escaping closure can outlive the call that created it. If its body uses a local class reference, Swift captures that reference strongly by default. The behavior is correct for many callbacks because the callback needs its dependencies to remain alive.
+
+It becomes a cycle when the captured object also owns the escaping closure:
+
+```swift
+let editor = EditorSession(title: "Tide Pools")
+editor.onSave = {
+    editor.recordSave()
+}
+```
+
+The mistake is not closure capture by itself. The cycle comes from the complete graph.
+
+## Capture lists change an edge
+
+A capture list appears before a closure's parameter list:
+
+```swift
+editor.onSave = { [weak editor] in
+    editor?.recordSave()
+}
+```
+
+`weak` creates a non-owning optional reference. ARC sets it to `nil` after the instance deinitializes. The closure must handle absence because the callback may outlive the editor.
+
+`unowned` is also non-owning, but it is not optional. Accessing it after deinitialization traps. Use it only when the lifetime rule proves that the referenced instance outlives every possible closure invocation.
+
+| Capture | Owns instance | Access shape | Safe lifetime rule |
+| --- | :---: | --- | --- |
+| strong default | Yes | non-optional | Closure may extend the dependency's lifetime |
+| `weak` | No | optional | Dependency may disappear before callback |
+| `unowned` | No | non-optional | Dependency is guaranteed to outlive callback |
+
+Capture lists can also capture values deliberately. `[title = editor.title]` freezes that current value for the closure. It does not retain the editor unless another expression captures it.
+
+## Reproduce and repair the cycle
+
+The checkpoint creates two editors. The first installs a strong callback cycle. A global weak observer proves the editor remains alive after its local scope ends. Clearing the callback removes one strong edge and releases it. The second editor uses a weak capture and releases normally.
+
+<SwiftRepl code={ownershipCode} id="swift-arc-ownership-capture-lists-memory-safety" />
+
+Expected output:
+
+```text
+Strong capture kept editor alive: true
+Breaking callback edge released editor: true
+Weak capture released editor: true
+```
+
+The observer is weak so the test can inspect lifetime without changing it. This is the same principle used by memory leak tests: observe ownership without becoming an owner.
+
+## Define ownership before choosing a capture
+
+For an editor callback, several policies can be correct:
+
+- The editor owns a short-lived callback and the callback may use `[weak editor]` because saving after dismissal is harmless.
+- A coordinator owns both editor and callback. The callback can capture the coordinator weakly while the coordinator controls the editor lifetime.
+- A one-shot operation stores a completion only until it fires, then clears it. A strong capture can be acceptable because the cycle has an explicit terminal edge.
+
+Write that policy in terms of lifetimes. A weak capture used without a policy often turns a visible leak into silently skipped work.
+
+## Weak everywhere is not memory safety
+
+Weak references trade ownership for optionality. Too many weak links make a graph fragile:
+
+- required dependencies disappear during work
+- callbacks become no-ops with no recorded failure
+- tests pass only because timing happens to keep an owner alive
+- business behavior depends on incidental view lifetime
+
+Prefer a clear owner for every long-lived object. Use value types for immutable snapshots. Keep callback storage narrow, and clear one-shot callbacks after use.
+
+## Other common cycles
+
+Delegates are often weak because a parent object owns a child while the child reports events back to the parent. Timers, notification observers, animation completions, and task closures need separate analysis because their storage and cancellation rules differ.
+
+Nested closures deserve special care. A weak capture in an outer closure does not automatically control how an inner escaping closure captures a promoted strong local. Draw the actual graph at the storage points.
+
+## What memory safety does and does not promise
+
+Swift's memory safety rules prevent many invalid accesses. ARC manages reference counts. Neither system guarantees that an application has no leaks, uses little memory, or releases an object at the moment you expect. Instruments, memory graphs, focused lifetime tests, and explicit cancellation remain part of Apple platform work.
+
+The runnable source uses only the Swift standard library and fits the Swift 6.3.3 Linux browser boundary. It proves class reference cycles, weak observation, callback edge removal, and weak closure capture. It does not prove Xcode's memory graph, Instruments behavior, UIKit or SwiftUI lifecycle, Objective-C interoperability, Simulator behavior, or device memory pressure.
+
+## Check your understanding
+
+You should now be able to explain:
+
+- Why a reference count can stay above zero after every local variable leaves scope.
+- Which two edges form the editor and callback cycle.
+- Why a weak observer can inspect a lifetime without extending it.
+- When `weak` is safer than `unowned`.
+- Why adding weak captures without an ownership policy can lose required work.
+
+The next post replaces long-lived callbacks with structured asynchronous work, including child tasks, cancellation, and a checked continuation at a legacy boundary.
+
+## Series navigation
+
+- Previous: [Part 18: Generics, associated types, existentials, and opaque types](../2026-07-17-swift-generics-associated-types-existentials-opaque-types/)
+- Next: Part 20, async and await, tasks, groups, cancellation, and continuations
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Reference counting and cycles**: [Automatic Reference Counting](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/automaticreferencecounting/) explains strong reference cycles, weak and unowned references, and closure cycles.
+- **Capture syntax and semantics**: [Closures](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures/) covers escaping closures and capture lists.
+- **Language safety boundary**: [Memory Safety](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/memorysafety/) describes conflicting memory access and Swift's exclusivity rules.
+
+## Related topics
+
+- [Closures, function types, capture, and higher-order operations](../2026-07-16-swift-closures-function-types-capture-higher-order-operations/), closure values and snapshot versus live capture.
+- [Classes, identity, inheritance, and type casting](../2026-07-16-swift-classes-identity-inheritance-type-casting/), shared identity and class lifetime.
+- [Properties, methods, subscripts, initialization, and deinitialization](../2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization/), observing the end of an instance lifetime.
