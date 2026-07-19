@@ -175,7 +175,7 @@ The next post organizes notes, maps, details, editing, and settings into a route
 ## Series navigation
 
 - Previous: [Part 24: From app idea to user problem](../2026-07-19-ios-app-idea-user-problem/)
-- Next: Part 26, information architecture and navigation
+- Next: [Part 26: Information architecture and navigation](../2026-07-19-ios-information-architecture-navigation/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
