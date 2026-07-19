@@ -1,0 +1,121 @@
+---
+title: Property wrappers, result builders, and macros
+description: "Inspect three forms of generated Swift, build a clamped property and validation builder, and decide when compiler expansion clarifies an API."
+date: 2026-07-19
+tags: [swift, ios, property-wrappers, result-builders, macros]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-swift-property-wrappers-result-builders-macros/
+series:
+  slug: zero-to-ios-hero
+  order: 22
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import generatedCode from './2026-07-19-swift-property-wrappers-result-builders-macros.swift?raw';
+
+Swift can synthesize code from declarations and expressions. Property wrappers transform stored-property access. Result builders transform a closure's statements into a value. Macros expand source during compilation through a compiler plugin.
+
+These features remove repeated syntax, but they do not remove behavior. Read the expansion model before adopting the shorthand.
+
+## Property wrappers split storage from access
+
+A wrapper type exposes `wrappedValue`. Applying `@Clamped` to a property creates wrapper-backed storage and routes reads and writes through that value:
+
+```swift
+struct Draft {
+    @Clamped(0...280) var summaryLength = 0
+}
+```
+
+Conceptually, Swift synthesizes storage resembling `_summaryLength: Clamped<Int>` and a computed `summaryLength` that forwards to `wrappedValue`. A wrapper can also expose `projectedValue` through the dollar-prefixed form.
+
+Wrappers work well for a repeated access policy such as clamping, dependency lookup, or observation integration. They are a poor hiding place for network calls, surprising persistence, or rules that need several properties at once. A domain initializer or method is clearer for cross-field invariants.
+
+## Result builders transform closure statements
+
+The validation builder accepts rules as separate expressions:
+
+```swift
+let validation = rules {
+    Rule.titlePresent
+    Rule.bodyPresent
+    if includeLocation {
+        Rule.locationAllowed
+    }
+}
+```
+
+The compiler feeds each expression through `buildExpression`, combines parts through `buildBlock`, and uses `buildOptional` for the conditional branch. The result is an ordinary `[Rule]`.
+
+Builders fit APIs where ordered, nested declarations are the domain, including SwiftUI view construction. They fit poorly when ordinary control flow or an array literal says the same thing more directly.
+
+## Macros expand syntax
+
+Swift macros can be freestanding expressions or declarations, or attached roles that add peers, members, accessors, conformances, and other syntax around a declaration. A macro implementation runs in a compiler plugin and returns syntax. It does not receive unrestricted access to the running application's state.
+
+```swift
+@Observable
+final class EditorModel {
+    var title = ""
+}
+```
+
+The useful debugging move is to inspect the expansion. In Xcode, expand the macro from the editor. In command-line package work, compiler flags and macro tests can expose generated source. Confirm what members and conformances exist rather than guessing from the attribute name.
+
+Macros add package, compiler-plugin, diagnostic, and testing cost. Prefer a function, generic, protocol, or wrapper when it expresses the contract without source generation.
+
+## Compare the three tools
+
+| Tool | Input | Output center | Good fit |
+| --- | --- | --- | --- |
+| property wrapper | property declaration | storage and access behavior | repeated single-property policy |
+| result builder | closure statements | one constructed value | declarative nested content |
+| macro | Swift syntax | new Swift syntax | repeated patterns requiring compile-time generation |
+
+## Run the checkpoint
+
+<SwiftRepl code={generatedCode} id="swift-property-wrappers-result-builders-macros" />
+
+Expected output:
+
+```text
+Clamped summary: 280
+Rules: titlePresent, bodyPresent, locationAllowed
+```
+
+The standard-library source proves wrapper initialization and mutation plus result-builder expression, block, and optional transforms. It does not prove a macro plugin, SwiftSyntax compatibility, Xcode expansion UI, Observation, SwiftUI, Simulator, or device behavior.
+
+## Read generated behavior as an API
+
+Generated syntax still affects access control, overload resolution, diagnostics, initialization, and compile time. Keep the public contract visible in names and documentation. Add focused tests around behavior users depend on, not snapshots of every generated token.
+
+Avoid stacking several attributes until no reader can tell which feature supplied a member. Generated code is most useful when the expansion is predictable and the handwritten call site becomes easier to review.
+
+## Check your understanding
+
+You should now be able to explain:
+
+- What backing storage a property wrapper introduces.
+- How builder methods correspond to closure syntax.
+- Why a builder is not a runtime parser.
+- What boundary executes a macro implementation.
+- Why inspecting expansion is part of debugging generated code.
+
+The next post places Swift code behind module and package boundaries, then makes public API, implementation detail, and C or Objective-C interoperability explicit.
+
+## Series navigation
+
+- Previous: [Part 21: Actors, global actors, Sendable, and data isolation](../2026-07-18-swift-actors-global-actors-sendable-data-isolation/)
+- Next: Part 23, modules, packages, access control, interoperability, and API design
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Generated declaration features**: [Attributes](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/attributes/) documents property wrappers, result builders, and macro attributes.
+- **Macro model**: [Macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros/) explains expansion roles and compiler-plugin behavior.
+- **Builder transformation**: [Swift Evolution proposal SE-0289](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0289-result-builders.md) specifies result-builder transforms.
+
+## Related topics
+
+- [Properties, methods, subscripts, initialization, and deinitialization](../2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization/), the access and initialization rules wrappers extend.
+- [Closures, function types, capture, and higher-order operations](../2026-07-16-swift-closures-function-types-capture-higher-order-operations/), the closure syntax builders transform.
+- [Actors, global actors, Sendable, and data isolation](../2026-07-18-swift-actors-global-actors-sendable-data-isolation/), compiler-enforced isolation expressed through declarations and attributes.
