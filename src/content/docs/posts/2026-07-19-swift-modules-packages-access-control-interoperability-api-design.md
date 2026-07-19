@@ -154,7 +154,7 @@ The language foundation is now complete. The next post begins with the person us
 ## Series navigation
 
 - Previous: [Part 22: Property wrappers, result builders, and macros](../2026-07-19-swift-property-wrappers-result-builders-macros/)
-- Next: Part 24, from app idea to user problem
+- Next: [Part 24: From app idea to user problem](../2026-07-19-ios-app-idea-user-problem/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
