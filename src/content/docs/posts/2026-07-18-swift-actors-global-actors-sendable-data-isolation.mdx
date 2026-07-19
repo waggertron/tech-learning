@@ -1,0 +1,148 @@
+---
+title: Actors, global actors, Sendable, and data isolation
+description: "Protect sync bookkeeping with an actor, move UI-observed state to MainActor, and define which values can cross concurrency boundaries."
+date: 2026-07-18
+tags: [swift, ios, concurrency, actors, mainactor, sendable]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-18-swift-actors-global-actors-sendable-data-isolation/
+series:
+  slug: zero-to-ios-hero
+  order: 21
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import actorCode from './2026-07-18-swift-actors-global-actors-sendable-data-isolation.swift?raw';
+
+Concurrent tasks can overlap. Shared mutable state turns that overlap into a data race unless access is isolated. Swift actors attach mutable state and the code allowed to touch it to one isolation domain.
+
+An actor is not a dedicated thread. It serializes access to actor-isolated state while the runtime schedules tasks on available threads.
+
+## Put the invariant inside the actor
+
+Field Notes receives sync events out of order. The stored revision must never move backward:
+
+```swift
+actor SyncLedger {
+    private var revisions: [Int: Int] = [:]
+
+    func record(_ event: SyncEvent) {
+        revisions[event.noteID] = max(
+            revisions[event.noteID, default: 0],
+            event.revision
+        )
+    }
+}
+```
+
+The dictionary is private and actor-isolated. Callers send an event instead of reading, changing, and writing the dictionary in separate steps. That keeps the comparison and mutation inside one serialized operation.
+
+Calls from outside the actor use `await` because they may suspend until the actor can run them. A synchronous actor method can still require `await` at an external call site.
+
+## Reentrancy changes reasoning across await
+
+An actor runs one synchronous region at a time. When an actor method suspends, other work can enter the actor before the original method resumes. Values read before an `await` may be stale afterward.
+
+```swift
+actor Editor {
+    private var revision = 0
+
+    func save(using repository: Repository) async throws {
+        let startedAt = revision
+        try await repository.save(revision: startedAt)
+        guard revision == startedAt else {
+            throw SaveError.changedDuringSave
+        }
+    }
+}
+```
+
+The guard is part of the design, not defensive noise. Split work into small synchronous actor operations when an invariant cannot span suspension safely.
+
+## MainActor is an isolation contract
+
+`MainActor` is a global actor used for work that belongs to the application's main isolation domain. UI-observed mutation commonly belongs there:
+
+```swift
+@MainActor
+final class SyncViewModel {
+    private(set) var status = "Idle"
+
+    func showSynced(count: Int) {
+        status = "Synced \(count)"
+    }
+}
+```
+
+Do not place parsing, storage, or networking on `MainActor` merely because the result eventually updates a view. Perform independent work in its own isolation domain, then cross to the main actor for the small state mutation the interface observes.
+
+`MainActor` describes isolation. It is more precise than teaching every UI update as an arbitrary dispatch to the main queue.
+
+## Sendable describes crossing safety
+
+A `Sendable` value can cross an isolation boundary without exposing unsafe shared mutation. Value types whose stored properties are sendable can often gain checked conformance directly:
+
+```swift
+struct SyncEvent: Sendable {
+    let noteID: Int
+    let revision: Int
+}
+```
+
+Mutable reference types do not become safe because they are marked `Sendable`. Prefer immutable values, actors, or synchronization with a documented invariant. `@unchecked Sendable` moves proof from the compiler to the programmer. It needs a real synchronization rule and focused tests.
+
+| Boundary | What it protects |
+| --- | --- |
+| actor | mutable state owned by one actor instance |
+| global actor | declarations sharing one global isolation domain |
+| `Sendable` | values transferred between concurrency domains |
+| `await` | a possible suspension or isolation hop |
+
+## Run the checkpoint
+
+Three child tasks submit revisions 1, 3, and 2 to one ledger. Arrival order does not matter because the actor owns the maximum-revision invariant. The result then updates a main-actor view model.
+
+<SwiftRepl code={actorCode} id="swift-actors-global-actors-sendable-data-isolation" />
+
+Expected output:
+
+```text
+Stored revision: 3
+Main actor status: Synced 3
+```
+
+The source compiles with Swift 6 language mode, complete strict concurrency checking, and warnings treated as errors on the available host. It uses only the Swift standard library and fits the browser runner boundary. It does not prove SwiftUI observation, UIKit thread assertions, URLSession callbacks, Simulator scheduling, or physical-device behavior.
+
+## Common isolation mistakes
+
+Making every type an actor creates unnecessary suspension points and fragments simple value flow. Putting an entire application on `MainActor` prevents useful compiler guidance about work that does not belong there. Adding `nonisolated` to silence an error can expose state the actor was meant to protect.
+
+The compiler warning is design feedback. Identify the value crossing a boundary, its owner, and whether it can be immutable before reaching for an unchecked escape hatch.
+
+## Check your understanding
+
+You should now be able to explain:
+
+- Why actor isolation is not thread affinity.
+- Why the revision invariant belongs inside `record`.
+- What can change while an actor method is suspended.
+- Why UI-observed mutation belongs on `MainActor` but parsing may not.
+- What a checked `Sendable` conformance promises.
+
+The next post examines code Swift generates for property wrappers and result builders, then places macros at the compiler-plugin boundary instead of treating them as magic.
+
+## Series navigation
+
+- Previous: [Part 20: Async and await, tasks, groups, cancellation, and continuations](../2026-07-18-swift-async-await-tasks-groups-cancellation-continuations/)
+- Next: Part 22, property wrappers, result builders, and macros
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Language isolation model**: [Concurrency](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/) covers actors, global actors, sendable values, and isolation.
+- **Actor design**: [Swift Evolution proposal SE-0306](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0306-actors.md) defines actor isolation and reentrancy.
+- **Transfer contracts**: [Swift Evolution proposal SE-0302](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0302-concurrent-value-and-concurrent-closures.md) defines `Sendable` and `@Sendable`.
+
+## Related topics
+
+- [Async and await, tasks, groups, cancellation, and continuations](../2026-07-18-swift-async-await-tasks-groups-cancellation-continuations/), the task tree that crosses actor boundaries.
+- [Structures and value semantics](../2026-07-16-swift-structures-value-semantics/), immutable value transfer and copy behavior.
+- [Protocols, extensions, and protocol-oriented design](../2026-07-16-swift-protocols-extensions-protocol-oriented-design/), capability boundaries that keep concurrency dependencies testable.
