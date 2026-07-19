@@ -181,7 +181,7 @@ The next post organizes notes, maps, details, editing, and settings into a route
 ## References
 
 - **State-aware interface guidance**: [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) covers navigation, feedback, loading, settings, and platform interaction patterns.
-- **Permission experience**: [Accessing private data](https://developer.apple.com/documentation/uikit/protecting-the-user-s-privacy/accessing-private-data) describes purpose strings and system authorization.
+- **Permission experience**: [Requesting access to protected resources](https://developer.apple.com/documentation/uikit/requesting-access-to-protected-resources) describes purpose strings and system authorization.
 - **Accessible journeys**: [Accessibility](https://developer.apple.com/accessibility/) provides Apple platform accessibility resources and testing guidance.
 
 ## Related topics

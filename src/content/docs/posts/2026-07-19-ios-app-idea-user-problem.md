@@ -147,7 +147,7 @@ The next post expands that release loop into journeys, states, denials, offline 
 ## References
 
 - **Apple design principles**: [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) provides the platform design foundation used after product framing.
-- **Research with real behavior**: [Design Kit, The Field Guide to Human-Centered Design](https://www.designkit.org/resources/1) covers interviewing, observation, synthesis, and prototyping practices.
+- **Research with real behavior**: [Design Kit](https://www.designkit.org/) provides the Field Guide to Human-Centered Design alongside interviewing, observation, synthesis, and prototyping methods.
 - **Accessible product choices**: [Accessibility](https://developer.apple.com/accessibility/) frames accessibility as part of product and interface design.
 
 ## Related topics

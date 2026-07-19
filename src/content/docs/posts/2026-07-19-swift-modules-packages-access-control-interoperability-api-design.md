@@ -161,7 +161,7 @@ The language foundation is now complete. The next post begins with the person us
 
 - **Package model**: [Swift Package Manager](https://www.swift.org/documentation/package-manager/) documents manifests, products, targets, dependencies, and package workflows.
 - **Visibility rules**: [Access Control](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/accesscontrol/) defines Swift access levels and their constraints.
-- **Imported APIs**: [Using Imported C Functions and Macros in Swift](https://developer.apple.com/documentation/swift/using-imported-c-functions-and-macros-in-swift) covers Swift's C import conventions.
+- **Imported APIs**: [Using Imported C Functions in Swift](https://developer.apple.com/documentation/swift/using-imported-c-functions-in-swift) covers Swift's C function and pointer import conventions.
 
 ## Related topics
 
