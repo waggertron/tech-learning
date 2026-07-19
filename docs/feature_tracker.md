@@ -103,6 +103,7 @@ As of this audit, the repo contains:
 
 ### Post Series
 
+- **2026-07-19: Zero to iOS Hero journey modeling lesson, post 25**: Expanded the Field Notes release loop into observable happy, empty, offline, permission, interruption, destructive, failure, and recovery behavior. Evidence: `src/content/docs/posts/2026-07-19-ios-user-journeys-tasks-states-edge-cases.md`, `docs/evidence/zero-to-ios-hero/post-025.md`.
 - **2026-07-19: Zero to iOS Hero product framing lesson, post 24**: Added a one-page Field Notes brief with a narrow user, behavioral problem, first-release loop, evidence map, non-goals, and measurable outcome. Evidence: `src/content/docs/posts/2026-07-19-ios-app-idea-user-problem.md`, `docs/evidence/zero-to-ios-hero/post-024.md`.
 - **2026-07-19: Zero to iOS Hero packaging lesson, post 23**: Documented the real FieldNotesCore module, public API, test boundary, and C or Objective-C adapter seam with honest host-package evidence. Evidence: `src/content/docs/posts/2026-07-19-swift-modules-packages-access-control-interoperability-api-design.md`, `companion/field-notes/Packages/FieldNotesCore/`, `docs/evidence/zero-to-ios-hero/post-023.md`.
 - **2026-07-19: Zero to iOS Hero generated Swift lesson, post 22**: Added a runnable property-wrapper and result-builder checkpoint plus an explicit unverified compiler-plugin boundary for macros. Evidence: `src/content/docs/posts/2026-07-19-swift-property-wrappers-result-builders-macros.mdx`, `docs/evidence/zero-to-ios-hero/post-022.md`.

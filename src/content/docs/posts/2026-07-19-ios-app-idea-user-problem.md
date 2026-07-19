@@ -141,7 +141,7 @@ The next post expands that release loop into journeys, states, denials, offline 
 ## Series navigation
 
 - Previous: [Part 23: Modules, packages, access control, interoperability, and API design](../2026-07-19-swift-modules-packages-access-control-interoperability-api-design/)
-- Next: Part 25, user journeys, tasks, states, and edge cases
+- Next: [Part 25: User journeys, tasks, states, and edge cases](../2026-07-19-ios-user-journeys-tasks-states-edge-cases/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
