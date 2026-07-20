@@ -34,7 +34,7 @@ This chapter records product and architecture decisions. Apple framework behavio
 ## Series navigation
 
 - Previous: [Part 128: ScreenRoom testing and release review](../2026-07-20-screenroom-testing-release-review/)
-- Next: Part 130, NeighborLink architecture, identity, and API contracts
+- Next: [Part 130: NeighborLink architecture, identity, and API contracts](../2026-07-20-neighborlink-architecture-identity-api-contracts/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
@@ -47,4 +47,3 @@ This chapter records product and architecture decisions. Apple framework behavio
 
 - [Networking, authentication, pagination, real-time updates, and resilience](../2026-07-19-ios-networking-authentication-realtime-resilience/)
 - [Privacy, security, Keychain, biometrics, and platform integrity](../2026-07-19-ios-privacy-security-keychain-biometrics-platform-integrity/)
-
