@@ -104,6 +104,7 @@ As of this audit, the repo contains:
 
 ### Post Series
 
+- **2026-07-19: Zero to iOS Hero adaptive design lesson, post 29**: Added a shared stack and split navigation model for compact phones, resized iPad windows, multiple scenes, touch, pointer, and keyboard use, with a runnable environment decision checkpoint. Evidence: `src/content/docs/posts/2026-07-19-ios-adaptive-design-iphone-ipad-windows.mdx`, `docs/evidence/zero-to-ios-hero/post-029.md`.
 - **2026-07-19: Zero to iOS Hero visual system lesson, post 28**: Added semantic type, color, spacing, shape, symbol, material, and motion guidance plus a runnable eight-combination token audit with explicit rendered Apple UI boundaries. Evidence: `src/content/docs/posts/2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials.mdx`, `docs/evidence/zero-to-ios-hero/post-028.md`.
 - **2026-07-19: Zero to iOS Hero interaction design lesson, post 27**: Added framework-neutral contracts for controls, focus, save progress, autosave, deletion, undo, errors, gesture alternatives, and accessible feedback. Evidence: `src/content/docs/posts/2026-07-19-ios-interaction-design-feedback.md`, `docs/evidence/zero-to-ios-hero/post-027.md`.
 - **2026-07-19: Zero to iOS Hero information architecture lesson, post 26**: Added a Field Notes route graph and shared compact and regular navigation model based on user objects, stable identity, context preservation, and restoration. Evidence: `src/content/docs/posts/2026-07-19-ios-information-architecture-navigation.md`, `docs/evidence/zero-to-ios-hero/post-026.md`.

@@ -1,0 +1,194 @@
+---
+title: Adaptive design for iPhone, iPad, and windows
+description: "Transform one Field Notes navigation model across compact phones, regular iPads, resized windows, multiple scenes, touch, pointer, and keyboard input."
+date: 2026-07-19
+tags: [ios, ipados, adaptive-design, navigation, multitasking, windows]
+canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-adaptive-design-iphone-ipad-windows/
+series:
+  slug: zero-to-ios-hero
+  order: 29
+---
+
+import SwiftRepl from '../../../components/SwiftRepl.astro';
+import adaptiveCode from './2026-07-19-ios-adaptive-design-iphone-ipad-windows.swift?raw';
+
+Adaptive design preserves the task while presentation changes. Field Notes still lets a person browse, select, edit, and recover notes whether the app occupies a narrow phone, a resized iPad window, or one of several scenes.
+
+The wrong question is "Is this an iPad?" The useful question is "What space, traits, input methods, and scene state are available now?"
+
+## One model, several presentations
+
+Part 26 established a route model with library, detail, editor, search, places, and settings. Adaptation changes how many regions are visible:
+
+```text
+Compact
+
++--------------------------+
+| Library                  |
+|                          |
+| Note A                   |
+| Note B                   |
++--------------------------+
+             |
+             v
++--------------------------+
+| Note detail              |
+|                          |
+| Title                    |
+| Body                     |
++--------------------------+
+
+Regular
+
++--------------------+-------------------------------+
+| Library            | Note detail                   |
+|                    |                               |
+| Note A             | Title                         |
+| Note B             | Body                          |
++--------------------+-------------------------------+
+```
+
+Both presentations share selection and navigation identity. Collapsing from two columns to one should place the selected detail on the stack. Expanding should restore the sidebar and current selection rather than reset the journey.
+
+## Adapt to available space
+
+Device-name checks age badly and fail under multitasking. An iPad window can be narrower than an iPhone in landscape. A phone can gain more horizontal space through orientation, but that does not guarantee a multicolumn layout is useful.
+
+Use environment inputs:
+
+- proposed container size
+- horizontal and vertical size classes
+- safe-area insets
+- Dynamic Type size
+- presentation context
+- content requirements
+
+Size classes are broad signals, not pixel measurements. Pair them with the actual space a component receives.
+
+## Choose a container from the task
+
+A split presentation fits when the collection and selected detail benefit from remaining visible together. A stack fits when each region needs most of the available width.
+
+In SwiftUI, `NavigationSplitView` can adapt columns across environments while `NavigationStack` handles depth. In UIKit, `UISplitViewController` and `UINavigationController` provide object-based counterparts.
+
+Do not build separate phone and tablet route graphs. Give each framework adapter one navigation state and define how it collapses and expands.
+
+## Run the layout decision
+
+The checkpoint maps width, width class, input, and a content preference into a presentation. It deliberately chooses a stack for a 600-point regular-width window because two useful columns do not fit.
+
+<SwiftRepl code={adaptiveCode} id="ios-adaptive-design-iphone-ipad-windows" />
+
+Expected output:
+
+```text
+Compact phone: stack
+Wide window: split
+Narrow regular window: stack
+Keyboard shortcuts visible: true
+```
+
+The model proves deterministic decision logic with the Swift standard library. It does not prove SwiftUI layout proposals, UIKit trait transitions, safe areas, Stage Manager, device orientation, window resizing, keyboard delivery, pointer interaction, Simulator, or physical-device behavior.
+
+## Components adapt locally
+
+A screen-wide device branch forces every component into the same mode. Prefer local adaptation:
+
+- a metadata row wraps when its proposed width shrinks
+- editor actions move from an inline row to a menu when they no longer fit
+- a tag grid changes column count from available width
+- a detail pane replaces side-by-side metadata with stacked groups at large text sizes
+
+SwiftUI containers such as stacks, grids, `ViewThatFits`, and custom layouts can respond to proposals. UIKit uses Auto Layout, trait changes, and container callbacks. In either framework, fixed screenshots are not layout contracts.
+
+## Orientation is one input
+
+Avoid separate portrait and landscape designs unless the task genuinely changes. Rotation changes available dimensions and sometimes keyboard or pointer context. Let the same rules recalculate.
+
+Preserve:
+
+- selected note identity
+- editor draft and focus intent
+- search query and filters
+- scroll position where practical
+- pending save or sync status
+
+A layout transition should not become a data reset.
+
+## Input methods can coexist
+
+iPad users may touch, type, click, hover, drag, or switch between methods during one session. Add keyboard commands for frequent actions such as new note, search, save, and close. Keep every command available through visible controls.
+
+Pointer hover can reinforce click targets but cannot reveal the only explanation. Focus order must remain logical when the layout moves from one column to two.
+
+## Multiple scenes own separate presentation state
+
+Two windows can show different notes. Shared persistence does not mean shared navigation:
+
+```text
+Application data
+      |
+      +-> Scene A: library query, selected Note 12, editor closed
+      |
+      +-> Scene B: favorites filter, selected Note 48, editor open
+```
+
+Store navigation, selection, and transient presentation per scene. Coordinate durable note changes through the shared application boundary. Resolve deletion or modification when another scene displays the same note.
+
+## Restoration rebuilds meaning
+
+Restore stable identifiers and intent, not view instances. At launch:
+
+1. Decode the scene's route and selected note ID.
+2. Resolve the ID through current application data.
+3. Restore the closest valid destination.
+4. Present a recoverable state if the note no longer exists.
+
+Restoration data needs versioning because routes and product rules change.
+
+## Test a matrix, not one device
+
+The supported course matrix requires a current iPhone, a compact compatibility destination, and a current iPad for adaptive work. Add window sizes that exercise collapse thresholds and large text.
+
+For each environment, test:
+
+- empty, populated, error, and editing states
+- smallest and largest supported windows
+- largest accessibility text sizes
+- left-to-right and right-to-left layout
+- software and hardware keyboards
+- touch and pointer paths
+- collapse and expansion with selection preserved
+- two scenes showing different navigation state
+
+Simulator evidence can cover much of this matrix. Pointer feel, hardware keyboard behavior, performance, and real multitasking still benefit from device checks.
+
+## Check your understanding
+
+You should now be able to explain:
+
+- Why device model is a poor layout input.
+- How one route state supports stack and split presentations.
+- Why regular width does not guarantee enough room for columns.
+- Which state belongs to a scene rather than the shared store.
+- What must survive collapse, expansion, and restoration.
+
+The next post audits the editor for VoiceOver, Dynamic Type, contrast, motion, keyboard access, right-to-left layout, and localization before the SwiftUI implementation begins.
+
+## Series navigation
+
+- Previous: [Part 28: Visual systems, HIG, typography, color, symbols, and materials](../2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials/)
+- Next: Part 30, accessibility, localization, and inclusive product design
+- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+
+## References
+
+- **Adaptive layout foundation**: [Layout](https://developer.apple.com/design/human-interface-guidelines/layout) covers adaptable interfaces, safe areas, and platform layout guidance.
+- **SwiftUI multicolumn navigation**: [NavigationSplitView](https://developer.apple.com/documentation/swiftui/navigationsplitview) documents adaptive sidebar and detail presentation.
+- **UIKit split presentation**: [UISplitViewController](https://developer.apple.com/documentation/uikit/uisplitviewcontroller) documents UIKit's primary and secondary view-controller container.
+
+## Related topics
+
+- [Information architecture and navigation](../2026-07-19-ios-information-architecture-navigation/), the route and selection model adapted here.
+- [Visual systems, HIG, typography, color, symbols, and materials](../2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials/), semantic tokens that respond to environment changes.
+- [Interaction design and feedback](../2026-07-19-ios-interaction-design-feedback/), focus and recovery contracts that survive layout transitions.
