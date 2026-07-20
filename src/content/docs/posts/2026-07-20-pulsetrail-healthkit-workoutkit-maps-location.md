@@ -34,7 +34,7 @@ This chapter is an architecture and review artifact. Apple SDK behavior still ne
 ## Series navigation
 
 - Previous: [Part 118: PulseTrail cross-device architecture](../2026-07-20-pulsetrail-cross-device-architecture/)
-- Next: Part 120, PulseTrail watch UI, complications, widgets, and Live Activities
+- Next: [Part 120: PulseTrail watch UI, complications, widgets, and Live Activities](../2026-07-20-pulsetrail-watch-ui-complications-widgets-live-activities/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
@@ -47,4 +47,3 @@ This chapter is an architecture and review artifact. Apple SDK behavior still ne
 
 - [HealthKit, WorkoutKit, and health-data design](../2026-07-19-healthkit-workoutkit-health-data-design/)
 - [MapKit, Core Location, geocoding, and WeatherKit](../2026-07-19-mapkit-core-location-geocoding-weatherkit/)
-
