@@ -40,7 +40,7 @@ This chapter records product and architecture decisions. Apple framework behavio
 ## References
 
 - [App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
-- [Privacy](https://developer.apple.com/privacy/)
+- [User privacy and data use](https://developer.apple.com/app-store/user-privacy-and-data-use/)
 - [Security](https://developer.apple.com/documentation/security)
 
 ## Related topics
