@@ -59,7 +59,7 @@ The examples were not compiled. Push and pop behavior, split collapse, tab state
 ## Series navigation
 
 - Previous: [Part 48: UIKit view-controller lifecycle and containment](../2026-07-19-uikit-view-controller-lifecycle-containment-composition/)
-- Next: Part 50, Sheets, popovers, alerts, activities, and system pickers
+- Next: [Part 50: UIKit sheets, popovers, alerts, activities, and pickers](../2026-07-19-uikit-sheets-popovers-alerts-activities-system-pickers/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
