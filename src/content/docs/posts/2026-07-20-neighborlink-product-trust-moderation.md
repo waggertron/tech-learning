@@ -46,4 +46,4 @@ This chapter records product and architecture decisions. Apple framework behavio
 ## Related topics
 
 - [Networking, authentication, pagination, real-time updates, and resilience](../2026-07-19-ios-networking-authentication-realtime-resilience/)
-- [Privacy, security, Keychain, biometrics, and platform integrity](../2026-07-19-ios-privacy-security-keychain-biometrics-platform-integrity/)
+- [Security, privacy, permissions, and platform policy](../2026-07-19-ios-security-privacy-permissions-platform-policy/)

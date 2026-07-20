@@ -45,6 +45,5 @@ This chapter records product and architecture decisions. Apple framework behavio
 
 ## Related topics
 
-- [Background work, scheduling, uploads, and expiration](../2026-07-19-background-work-scheduling-uploads-expiration/)
+- [Background work, notifications, deep links, and app extensions](../2026-07-19-ios-background-work-notifications-deep-links-app-extensions/)
 - [Testing performance, memory, energy, launch, and device matrices](../2026-07-19-ios-performance-memory-energy-launch-device-matrices/)
-

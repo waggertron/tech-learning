@@ -46,5 +46,4 @@ This chapter is an architecture and review artifact. Apple SDK behavior still ne
 ## Related topics
 
 - [CloudKit, iCloud containers, sharing, and sync](../2026-07-19-cloudkit-icloud-containers-sharing-sync/)
-- [App extensions, widgets, Live Activities, and App Groups](../2026-07-19-app-extensions-widgets-live-activities-app-groups/)
-
+- [Background work, notifications, deep links, and app extensions](../2026-07-19-ios-background-work-notifications-deep-links-app-extensions/)
