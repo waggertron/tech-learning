@@ -73,7 +73,7 @@ This post assembles the release contract but does not claim a shipped app. The c
 ## Series navigation
 
 - Previous: [Part 43: SwiftUI previews, tests, accessibility, and performance](../2026-07-19-swiftui-previews-testing-ui-accessibility-performance/)
-- Next: Part 45, UIKit's event-driven mental model and app lifecycle
+- Next: [Part 45: UIKit's event-driven mental model and app lifecycle](../2026-07-19-uikit-event-driven-mental-model-app-lifecycle/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
