@@ -32,6 +32,7 @@ As of this audit, the repo contains:
 
 - **2026-04-23: Astro and Starlight site scaffold**: Added the static site, topic and post structure, templates, GitHub Pages deployment, and the original scaffold design record. Evidence: `astro.config.mjs`, `src/content/docs/`, `templates/`, `.github/workflows/deploy.yml`, `docs/plans/2026-04-23-tech-learning-scaffold-design.md`.
 - **2026-04-23: GitHub Pages deployment pipeline**: Bumped the workflow to modern GitHub Actions and Node 22 so pushes to `main` deploy the site. Evidence: `.github/workflows/deploy.yml`.
+- **2026-07-20: Single-lockfile MCP companion workspace**: Integrated the MCP Engineering Operations companion into the root npm workspace so clean installs, local pre-push validation, and GitHub Pages use one lockfile and run the same companion test and build contracts. Evidence: `package.json`, `package-lock.json`, `companion/mcp-engineering-ops/package.json`, `scripts/validate-pre-push.mjs`, `.github/workflows/deploy.yml`, `docs/pre-push-validation.md`.
 - **2026-04-24: Here Be Dragons site identity**: Rebranded the site, added footer behavior, and made the sidebar visible across the site. Evidence: `src/components/Footer.astro`, `src/content/docs/index.mdx`, `src/styles/custom.css`.
 - **2026-05-10: Agent operating rules**: Added `AGENTS.md` with repo-specific safety, authoring, and build rules for AI coding agents. Evidence: `AGENTS.md`.
 

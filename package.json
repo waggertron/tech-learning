@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "companion/mcp-engineering-ops"
+  ],
   "scripts": {
     "dev": "astro dev",
     "dev:swift": "node scripts/dev-with-swift-runner.mjs",
@@ -16,6 +19,8 @@
     "test:swift-runner-contract": "vitest run tests/swift-runner-contract/contract.test.ts",
     "test:swift-runner-service": "node --test tests/swift-runner-service/server.test.mjs",
     "test:swift-repl": "vitest run tests/swift-repl/component.test.ts",
+    "test:mcp-companion": "npm run test --workspace=mcp-engineering-ops-companion",
+    "build:mcp-companion": "npm run build --workspace=mcp-engineering-ops-companion",
     "test:swift-runner-executor": "node --test tests/swift-runner-executor/runner.test.mjs",
     "swift-runner:local": "node tools/swift-runner/server.mjs",
     "test:swift-catalog-coverage": "node --test tests/swift-catalog-coverage.test.mjs",

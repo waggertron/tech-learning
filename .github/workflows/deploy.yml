@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate MCP companion
+        run: |
+          npm run test:mcp-companion
+          npm run build:mcp-companion
+
       - name: Build site
         run: npm run build
 

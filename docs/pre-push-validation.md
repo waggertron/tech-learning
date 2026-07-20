@@ -6,7 +6,7 @@ This repo uses an outcome-based validation workflow. A push is ready when the si
 
 1. **Pages display intended content**: Built HTML pages are non-empty, have titles, have visible headings, include the Starlight content region, and do not contain build or runtime failure markers.
 2. **Links connect**: Built internal links resolve under `/tech-learning`, generated assets exist, and hash links point to real anchors.
-3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, generated React output views are in sync, React output behavior tests pass, and the Swift runner contract and component tests pass.
+3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, generated React output views are in sync, React output behavior tests pass, the MCP companion compiles and passes its deterministic tests, and the Swift runner contract and component tests pass.
 4. **Custom functionality behaves as intended**: Browser smoke tests cover the DSL calculator, generated React output interaction, representative Python, TypeScript, and Go REPL markup, and the complete Swift REPL browser contract.
 5. **The repo is safe to push**: No realistic credential strings, no banned prose patterns, no rendered planning residue, clean worktree, and no local preview process left behind.
 
@@ -16,6 +16,12 @@ Run the full workflow before pushing:
 
 ```bash
 npm run validate:pre-push
+```
+
+The repository uses one npm lockfile. A clean checkout installs both the Astro site and the MCP companion workspace from the repository root:
+
+```bash
+npm ci
 ```
 
 The command runs:
@@ -29,6 +35,8 @@ npm run test:react-outputs
 npm run test:swift-runner-contract
 npm run test:swift-runner-service
 npm run test:swift-repl
+npm run test:mcp-companion
+npm run build:mcp-companion
 npm run test:coding-problem-vectors
 npm run check:coding-problem-vectors
 npm run test:swift-catalog-contract
@@ -106,6 +114,8 @@ npm run test:react-outputs
 npm run test:swift-runner-contract
 npm run test:swift-runner-service
 npm run test:swift-repl
+npm run test:mcp-companion
+npm run build:mcp-companion
 npm run test:coding-problem-vectors
 npm run check:coding-problem-vectors
 npm run test:swift-catalog-contract
@@ -113,7 +123,7 @@ npm run test:swift-catalog-coverage
 npm run check:swift-catalog-coverage
 ```
 
-The code validator checks fenced code language tags, including Swift, and syntax for source examples. Swift catalog syntax and execution are enforced by the separate Swift contract and compiler gates. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The deterministic Swift runner commands verify the versioned browser-client contract, loopback HTTP service, request validation, queue bounds, retention, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
+The code validator checks fenced code language tags, including Swift, and syntax for source examples. Swift catalog syntax and execution are enforced by the separate Swift contract and compiler gates. The React commands verify generated output panels, live entry registration, runner panels, and example rendering contracts. The MCP commands compile and test the workspace that supports the MCP Server Design series. The deterministic Swift runner commands verify the versioned browser-client contract, loopback HTTP service, request validation, queue bounds, retention, component markup, result presentation, cancellation coordination, and unavailable state without credentials or Docker.
 
 The coding-problem vector commands validate canonical valid, boundary, and invalid cases, then reject stale generated proof sources. Run `npm run test:coding-problem-vector-fixtures` when vector codecs, renderers, or proof fixtures change and all four language toolchains are available.
 

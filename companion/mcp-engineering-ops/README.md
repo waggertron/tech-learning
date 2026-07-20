@@ -1,11 +1,11 @@
 # MCP Engineering Operations Companion
 
-This package backs the MCP Server Design post series with compiling TypeScript and deterministic tests.
+This npm workspace backs the MCP Server Design post series with compiling TypeScript and deterministic tests. Install dependencies once from the repository root so the site and companion use the shared lockfile.
 
 ```bash
-npm install
-npm test
-npm run build
+npm ci
+npm run test:mcp-companion
+npm run build:mcp-companion
 ```
 
 Run the local stdio server after building:
