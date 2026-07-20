@@ -201,7 +201,7 @@ The product-design arc is complete. The next post begins SwiftUI with its value-
 ## Series navigation
 
 - Previous: [Part 29: Adaptive design for iPhone, iPad, and windows](../2026-07-19-ios-adaptive-design-iphone-ipad-windows/)
-- Next: Part 31, SwiftUI's value-view mental model
+- Next: [Part 31: SwiftUI's value-view mental model](../2026-07-19-swiftui-value-view-mental-model/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
