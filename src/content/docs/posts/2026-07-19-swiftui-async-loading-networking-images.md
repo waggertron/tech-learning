@@ -121,7 +121,7 @@ The code was not compiled with Observation or SwiftUI, and no live service was c
 ## Series navigation
 
 - Previous: [Part 38: SwiftUI navigation, presentation, alerts, and deep links](../2026-07-19-swiftui-navigation-presentation-alerts-deep-links/)
-- Next: Part 40, SwiftData, queries, relationships, migration, and test stores
+- Next: [Part 40: SwiftUI with SwiftData, queries, migration, and test stores](../2026-07-19-swiftui-swiftdata-queries-relationships-migration-test-stores/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
