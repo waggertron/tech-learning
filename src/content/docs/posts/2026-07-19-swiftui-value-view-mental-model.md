@@ -216,7 +216,7 @@ The next post turns these value descriptions into reusable views, modifiers, and
 ## Series navigation
 
 - Previous: [Part 30: Accessibility, localization, and inclusive product design](../2026-07-19-ios-accessibility-localization-inclusive-product-design/)
-- Next: Part 32, Composition, modifiers, styles, and custom components
+- Next: [Part 32: SwiftUI composition, modifiers, styles, and components](../2026-07-19-swiftui-composition-modifiers-styles-components/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
