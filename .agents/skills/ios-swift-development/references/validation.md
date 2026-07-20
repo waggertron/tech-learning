@@ -45,6 +45,15 @@ swift test --parallel
 
 Add `-Xswiftc -warnings-as-errors` for teaching examples when warnings would indicate stale or unsafe code. Keep package tools and language versions aligned with `supported-matrix.md`.
 
+Inspect the repository for a package-test wrapper before using raw `swift test`. Command Line Tools installations can contain the `Testing` framework and macro plugin without exposing their search paths to a raw SwiftPM invocation. The Field Notes workspace handles that toolchain shape with:
+
+```bash
+cd companion/field-notes
+./scripts/test-package.sh
+```
+
+If SwiftPM reports `sandbox-exec`, module-cache permission, or manifest compilation failures inside Codex, rerun the same repository wrapper outside the managed sandbox before changing package code. A passing unsandboxed wrapper identifies an agent-environment boundary. A repeated unsandboxed failure is a package or toolchain issue to diagnose normally.
+
 ## Browser Swift Runner
 
 Use the narrowest stable check that matches the change:

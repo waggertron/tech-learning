@@ -1,6 +1,6 @@
 # Apple Source Research Reference
 
-Reviewed on 2026-07-13. Use for claims about current APIs, framework direction, toolchains, platform support, design, privacy, signing, entitlements, review, and distribution.
+Reviewed on 2026-07-19. Use for claims about current APIs, framework direction, toolchains, platform support, design, privacy, signing, entitlements, review, and distribution.
 
 ## Source Order
 
@@ -41,3 +41,6 @@ Use third-party material to discover questions or compare practice, not as the f
 - [Swift 6.3.3 announcement](https://forums.swift.org/t/announcing-swift-6-3-3/87888)
 - [App Store submission requirements](https://developer.apple.com/app-store/submitting/)
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
+- [Requesting access to protected resources](https://developer.apple.com/documentation/uikit/requesting-access-to-protected-resources)
+- [Using imported C functions in Swift](https://developer.apple.com/documentation/swift/using-imported-c-functions-in-swift)
+- [Design Kit](https://www.designkit.org/)

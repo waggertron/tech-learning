@@ -46,9 +46,9 @@ Do not raise the stable deployment target or rewrite stable examples to adopt a 
 
 ## Current Local Evidence
 
-The development machine checked on 2026-07-13 has macOS 26.5.1 and Apple Swift 6.3.2 through `/Library/Developer/CommandLineTools`. Full Xcode and simulator runtimes are not installed or selected.
+The development machine rechecked on 2026-07-19 has macOS 26.5.1 and Apple Swift 6.3.2 through `/Library/Developer/CommandLineTools`. Full Xcode and simulator runtimes are not installed or selected.
 
-This machine can validate standalone Swift and Swift packages that remain compatible with Swift 6.3.2. It cannot yet provide Xcode 26.6, Swift 6.3.3, iOS SDK, scheme, simulator, signing, archive, or device evidence. Install and select full Xcode 26.6 before app-target validation.
+This machine can validate standalone Swift and compatible Swift packages. Raw `swift test` does not discover the Command Line Tools `Testing` framework and macro-plugin paths for Field Notes. `companion/field-notes/scripts/test-package.sh` supplies those toolchain-owned paths and passes seven tests when run outside the Codex managed sandbox. This machine still cannot provide Xcode 26.6, Swift 6.3.3, iOS SDK, scheme, simulator, signing, archive, or device evidence. Install and select full Xcode 26.6 before app-target validation.
 
 ## Primary Sources
 

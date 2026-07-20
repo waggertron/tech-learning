@@ -52,9 +52,11 @@ A preview is visual development feedback. It is not simulator, device, accessibi
 
 ## Local Machine Boundary
 
-On 2026-07-13, the local machine had macOS 26.5.1 and Swift 6.3.2 from Command Line Tools. It did not have full Xcode selected or simulator runtimes installed.
+On 2026-07-19, the local machine had macOS 26.5.1 and Swift 6.3.2 from Command Line Tools. It did not have full Xcode selected or simulator runtimes installed.
 
-The current environment can compile standalone Swift and compatible Swift packages. It cannot validate iOS app schemes, simulator behavior, signing, archives, entitlements, or physical-device behavior until full Xcode 26.6 is installed and selected.
+The current environment can compile standalone Swift and compatible Swift packages. Raw `swift test` does not discover the Command Line Tools paths for the Swift `Testing` framework and macro plugin in the Field Notes package. Run `companion/field-notes/scripts/test-package.sh`, which supplies those paths. Inside Codex, retry that repository wrapper outside the managed sandbox when SwiftPM reports `sandbox-exec`, module-cache permission, or manifest compilation failures.
+
+The wrapper passed all seven Field Notes package tests under Apple Swift 6.3.2 on 2026-07-19. This does not validate iOS app schemes, simulator behavior, signing, archives, entitlements, or physical-device behavior. Those surfaces still require full Xcode 26.6 and their matching destinations.
 
 ## Updating the Matrix
 

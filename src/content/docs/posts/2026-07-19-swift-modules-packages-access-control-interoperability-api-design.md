@@ -137,7 +137,7 @@ Start with the source boundary. Add binary distribution constraints only when a 
 
 The companion package uses Swift tools version 6.0 and Swift 6 language mode. Its library, test-support, and command-line products build with warnings treated as errors under the available Apple Swift 6.3.2 Command Line Tools.
 
-The package's seven Swift Testing checks are present, but this Command Line Tools installation does not expose the `Testing` module to `swift test`. The successful build proves the manifest, module imports, public API, in-memory actor repository, and CLI composition. It does not prove the test run, Xcode 26.6, an iOS SDK build, Objective-C header generation, a mixed-language target, binary library evolution, Simulator, signing, or device behavior.
+The repository's package-test wrapper supplies the Command Line Tools framework, macro-plugin, and linker paths that raw `swift test` does not discover. All seven Swift Testing checks pass through that wrapper. The package evidence proves the manifest, module imports, public API, in-memory actor repository, CLI composition, and tested domain behavior. It does not prove Xcode 26.6, an iOS SDK build, Objective-C header generation, a mixed-language target, binary library evolution, Simulator, signing, or device behavior.
 
 ## Check your understanding
 
