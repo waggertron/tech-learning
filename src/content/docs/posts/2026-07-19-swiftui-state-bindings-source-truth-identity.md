@@ -139,7 +139,7 @@ The state and binding examples were claims-audited but not compiled with SwiftUI
 ## Series navigation
 
 - Previous: [Part 34: SwiftUI controls, forms, validation, focus, and keyboards](../2026-07-19-swiftui-controls-forms-validation-focus-keyboard/)
-- Next: Part 36, Observation, environment, and dependency flow
+- Next: [Part 36: SwiftUI Observation, environment, and dependency flow](../2026-07-19-swiftui-observation-environment-dependency-flow/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
