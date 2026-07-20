@@ -1,0 +1,46 @@
+---
+title: MCP Server Design, post series
+description: "A nine-part path from HTTP and REST comparisons through MCP protocol mechanics, server construction, client consumption, model integration, bidirectional features, and production security."
+sidebar:
+  hidden: true
+---
+
+MCP is easiest to learn from familiar ground. This series begins with an ordinary REST API, separates HTTP transport from MCP semantics, then builds both sides of the connection: a TypeScript server and a client that places discovered tools inside a controlled model interaction loop.
+
+The same engineering-operations example continues through every part. It exposes incident tools, runbook resources, an investigation prompt, sampling, elicitation, roots, tasks, and a remote production boundary.
+
+## What you will be able to do
+
+- Explain how MCP differs from HTTP, REST, OpenAPI, JSON-RPC, and function calling.
+- Design a curated capability surface instead of exporting every backend endpoint.
+- Build and inspect a local stdio server.
+- Consume tools, resources, templates, and prompts through an MCP client.
+- Connect MCP tools to a model while preserving approval and authorization boundaries.
+- Use sampling, elicitation, roots, and experimental tasks deliberately.
+- Deploy Streamable HTTP with OAuth, isolation, limits, testing, and observability.
+
+## Reading order
+
+1. [HTTP, REST APIs, and MCP Compared](../../2026-07-19-what-is-mcp-http-rest-apis-compared/), place each protocol and description layer correctly before writing code.
+2. [Architecture and the Model Interaction Loop](../../2026-07-19-mcp-architecture-model-interaction-loop/), trace user intent through host, model, client, server, and backend.
+3. [Lifecycle, Capabilities, and JSON-RPC](../../2026-07-19-mcp-lifecycle-capabilities-json-rpc/), understand the handshake and wire contract.
+4. [Tools, Resources, and Prompts](../../2026-07-19-mcp-tools-resources-prompts/), choose the right primitive for execution, context, or reusable interaction.
+5. [Tool Design for Models](../../2026-07-19-mcp-tool-design-for-models/), design schemas, results, errors, approvals, and evals around model behavior.
+6. [Build a Local TypeScript Server](../../2026-07-19-build-local-typescript-mcp-server/), create the working stdio server backed by tested domain code.
+7. [Build a Client and Model Tool Loop](../../2026-07-19-build-mcp-client-model-loop/), consume the server and connect it to provider-neutral model function calling.
+8. [Sampling, Elicitation, Roots, and Tasks](../../2026-07-19-mcp-sampling-elicitation-roots-tasks/), add negotiated bidirectional workflows.
+9. [Remote Production, Security, and Operations](../../2026-07-19-remote-mcp-production-security/), move to Streamable HTTP without collapsing trust boundaries.
+
+## Version baseline
+
+The protocol examples target MCP specification `2025-11-25`. The companion TypeScript project pins `@modelcontextprotocol/sdk@1.29.0`, the stable v1 SDK baseline on July 19, 2026. The official v2 SDK remains pre-release at this baseline.
+
+## Companion implementation
+
+The source lives under `companion/mcp-engineering-ops/` in the repository. It includes the domain service, MCP server, stdio transport, client catalog inspection, a provider-neutral model loop, and deterministic tests for approved and denied calls.
+
+## Related topics
+
+- [Harness development](../../../topics/ai/harness-development/)
+- [API design](../../../topics/system-design/api-design/)
+- [Prompt injection defense](../../../topics/ai/prompt-engineering/prompt-injection-defense/)
