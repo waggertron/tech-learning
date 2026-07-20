@@ -110,7 +110,7 @@ The code is claims-audited but not compiled. SwiftData requires an Apple SDK and
 ## References
 
 - [SwiftData](https://developer.apple.com/documentation/swiftdata) documents models, containers, contexts, and queries.
-- [Modeling data](https://developer.apple.com/documentation/swiftdata/modeling-data) covers persistent model definitions.
+- [Adding and editing persistent data in your app](https://developer.apple.com/documentation/swiftdata/adding-and-editing-persistent-data-in-your-app) shows SwiftData model definitions and editing.
 - [Preserving your app's model data across launches](https://developer.apple.com/documentation/swiftdata/preserving-your-apps-model-data-across-launches) covers container-backed persistence.
 
 ## Related topics
