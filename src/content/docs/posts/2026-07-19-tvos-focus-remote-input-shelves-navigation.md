@@ -31,7 +31,6 @@ No tvOS target, focus engine run, Siri Remote input, television layout, or devic
 ## References
 
 - [Focus-based navigation](https://developer.apple.com/documentation/uikit/focus-based-navigation)
-- [tvOS](https://developer.apple.com/documentation/tvos-apps)
 - [Designing for tvOS](https://developer.apple.com/design/human-interface-guidelines/designing-for-tvos)
 
 ## Related topics

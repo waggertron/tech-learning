@@ -30,7 +30,6 @@ No additional Apple platform target was built. iOS evidence does not automatical
 
 ## References
 
-- [Technology overviews](https://developer.apple.com/documentation/technology-overviews)
 - [Swift Package Manager](https://www.swift.org/documentation/package-manager/)
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 

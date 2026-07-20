@@ -32,7 +32,7 @@ No HealthKit store, health data, workout session, background delivery, entitleme
 
 - [HealthKit](https://developer.apple.com/documentation/healthkit)
 - [WorkoutKit](https://developer.apple.com/documentation/workoutkit)
-- [Health and fitness HIG](https://developer.apple.com/design/human-interface-guidelines/health-and-fitness)
+- [HealthKit design guidance](https://developer.apple.com/design/human-interface-guidelines/healthkit)
 
 ## Related topics
 

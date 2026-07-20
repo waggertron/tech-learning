@@ -32,7 +32,7 @@ No intent extension, Shortcut, Siri invocation, Spotlight index, entitlement, la
 
 - [App Intents](https://developer.apple.com/documentation/appintents)
 - [Core Spotlight](https://developer.apple.com/documentation/corespotlight)
-- [Shortcuts](https://developer.apple.com/documentation/shortcuts)
+- [App Shortcuts](https://developer.apple.com/documentation/appintents/app-shortcuts)
 
 ## Related topics
 
