@@ -65,7 +65,7 @@ The scorecard is a design tool, not runtime evidence. Its value must be checked 
 ## Series navigation
 
 - Previous: [Part 58: UIKit Field Notes capstone](../2026-07-19-uikit-field-notes-capstone/)
-- Next: Part 60, MVC and controller boundaries
+- Next: [Part 60: MVC and controller boundaries](../2026-07-19-ios-mvc-controller-boundaries/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
