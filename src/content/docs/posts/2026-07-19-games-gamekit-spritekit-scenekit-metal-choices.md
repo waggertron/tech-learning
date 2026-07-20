@@ -25,7 +25,7 @@ No game target, renderer, physics simulation, Game Center account, leaderboard, 
 ## Series navigation
 
 - Previous: [Part 108: Apple Pay, passes, Wallet, and transaction UX](../2026-07-19-apple-pay-passes-wallet-transaction-ux/)
-- Next: Part 110, Home, Matter, CarPlay, files, collaboration, and specialized extensions
+- Next: [Part 110: Home, Matter, CarPlay, files, collaboration, and specialized extensions](../2026-07-20-home-matter-carplay-files-collaboration-specialized-extensions/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
