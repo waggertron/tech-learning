@@ -223,6 +223,12 @@ async function validateActiveSidebarEntry(browser) {
         boxShadow: getComputedStyle(activeEntry).boxShadow,
         color: getComputedStyle(activeEntry).color,
         ancestorsOpen: activeEntry.closest("details:not([open])") === null,
+        inactiveOpenCount: Array.from(sidebar.querySelectorAll("details")).filter(
+          (group) => group.open && !group.contains(activeEntry),
+        ).length,
+        closedInactiveCount: Array.from(sidebar.querySelectorAll("details")).filter(
+          (group) => !group.open && !group.contains(activeEntry),
+        ).length,
       };
     });
 
@@ -240,6 +246,12 @@ async function validateActiveSidebarEntry(browser) {
     }
     if (!activeState.ancestorsOpen) {
       throw new Error("Active sidebar entry is hidden inside a collapsed group");
+    }
+    if (activeState.inactiveOpenCount !== 0) {
+      throw new Error(`Expected inactive sidebar groups to stay closed, found ${activeState.inactiveOpenCount} open`);
+    }
+    if (activeState.closedInactiveCount < 1) {
+      throw new Error("Expected at least one inactive sidebar group to be collapsed");
     }
   });
   await page.close();

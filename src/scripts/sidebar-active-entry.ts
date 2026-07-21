@@ -11,11 +11,18 @@ function openActiveEntryPath(activeEntry: HTMLAnchorElement): void {
   }
 }
 
+function collapseInactiveEntryPaths(sidebar: HTMLElement, activeEntry: HTMLAnchorElement): void {
+  for (const group of sidebar.querySelectorAll('details')) {
+    group.open = group.contains(activeEntry);
+  }
+}
+
 export function revealActiveSidebarEntry(): void {
   const sidebar = document.getElementById(SIDEBAR_ID);
   const activeEntry = sidebar?.querySelector<HTMLAnchorElement>(ACTIVE_ENTRY_SELECTOR);
   if (!sidebar || !activeEntry) return;
 
+  collapseInactiveEntryPaths(sidebar, activeEntry);
   openActiveEntryPath(activeEntry);
 
   const sidebarRect = sidebar.getBoundingClientRect();
