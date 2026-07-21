@@ -14,6 +14,39 @@
   --sl-content-width: 65rem;
 }
 
+/* Keep the current page easy to find in long sidebar catalogs. */
+#starlight__sidebar a[aria-current='page'] {
+  position: relative;
+  color: #422006;
+  background: linear-gradient(120deg, #fde68a 0%, #facc15 52%, #eab308 100%);
+  box-shadow: 0 4px 12px rgb(234 179 8 / 28%);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 35%);
+  scroll-margin-block: 1.5rem;
+  transition: filter 160ms ease, box-shadow 160ms ease;
+}
+
+#starlight__sidebar a[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-block: 0.35rem;
+  inset-inline-start: 0;
+  width: 0.2rem;
+  border-radius: 999px;
+  background: #713f12;
+}
+
+#starlight__sidebar a[aria-current='page']:hover {
+  color: #422006;
+  filter: brightness(1.04);
+  box-shadow: 0 5px 16px rgb(234 179 8 / 36%);
+}
+
+#starlight__sidebar a[aria-current='page']:focus-visible {
+  color: #422006;
+  outline: 2px solid #fef08a;
+  outline-offset: 2px;
+}
+
 /* Toolbar inserted above each Python code block */
 .code-run-toolbar {
   display: flex;

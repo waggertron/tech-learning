@@ -187,6 +187,64 @@ async function validateReplMarkup(browser) {
   await page.close();
 }
 
+async function validateActiveSidebarEntry(browser) {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+  await assertNoPageErrors(page, async () => {
+    await page.goto(`${baseUrl}/topics/cs/coding-problems/binary-search/704-binary-search/`, {
+      waitUntil: "domcontentloaded",
+    });
+
+    await page.waitForFunction(
+      () => {
+        const sidebar = document.getElementById("starlight__sidebar");
+        const activeEntry = sidebar?.querySelector('a[aria-current="page"]');
+        if (!sidebar || !activeEntry || sidebar.dataset.activeEntryReady !== "true") return false;
+
+        const sidebarRect = sidebar.getBoundingClientRect();
+        const activeRect = activeEntry.getBoundingClientRect();
+        return (
+          sidebar.scrollTop > 0 &&
+          activeRect.top >= sidebarRect.top &&
+          activeRect.bottom <= sidebarRect.bottom
+        );
+      },
+      undefined,
+      { timeout: 5000 },
+    );
+
+    const activeState = await page.evaluate(() => {
+      const sidebar = document.getElementById("starlight__sidebar");
+      const activeEntry = sidebar?.querySelector('a[aria-current="page"]');
+      if (!(activeEntry instanceof HTMLAnchorElement)) return null;
+
+      return {
+        href: activeEntry.getAttribute("href"),
+        backgroundImage: getComputedStyle(activeEntry).backgroundImage,
+        boxShadow: getComputedStyle(activeEntry).boxShadow,
+        color: getComputedStyle(activeEntry).color,
+        ancestorsOpen: activeEntry.closest("details:not([open])") === null,
+      };
+    });
+
+    if (!activeState?.href?.endsWith("/topics/cs/coding-problems/binary-search/704-binary-search/")) {
+      throw new Error(`Unexpected active sidebar entry: ${activeState?.href ?? "missing"}`);
+    }
+    if (!activeState.backgroundImage.includes("linear-gradient")) {
+      throw new Error("Active sidebar entry is missing its yellow gradient");
+    }
+    if (activeState.boxShadow.includes("inset")) {
+      throw new Error("Active sidebar entry still has an inset border");
+    }
+    if (activeState.color !== "rgb(66, 32, 6)") {
+      throw new Error(`Unexpected active sidebar text color: ${activeState.color}`);
+    }
+    if (!activeState.ancestorsOpen) {
+      throw new Error("Active sidebar entry is hidden inside a collapsed group");
+    }
+  });
+  await page.close();
+}
+
 try {
   await ensurePreview();
   const browser = await chromium.launch({ headless: true });
@@ -194,10 +252,11 @@ try {
     await validateDslCalculator(browser);
     await validateReactOutput(browser);
     await validateReplMarkup(browser);
+    await validateActiveSidebarEntry(browser);
   } finally {
     await browser.close();
   }
-  console.log("Custom page validation passed: DSL calculator, React output, and four-language REPL markup checked.");
+  console.log("Custom page validation passed: sidebar state, DSL calculator, React output, and four-language REPL markup checked.");
 } finally {
   await stopPreview();
 }
