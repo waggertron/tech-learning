@@ -1,6 +1,6 @@
 ---
 title: Here Be Dragons
-description: 'A knowledge base about the complex, underexplored, and easy-to-break corners of software, the places where old maps used to say "here be dragons."'
+description: "A knowledge base for the edges of software: the parts we do not know yet, the hard truths we avoid, and the ideas still waiting to be found."
 ---
 
 Notes from the edges of the map, where software gets strange, complex, and occasionally bites.
@@ -9,9 +9,13 @@ Start with [Topics](/tech-learning/topics/) for evergreen reference, or [Posts](
 
 ## Where the name comes from
 
-**"Here be dragons"** is a phrase used since the Middle Ages to mark regions of a map a cartographer didn't understand. Its only confirmed historical appearance is on the **Hunt–Lenox Globe (c. 1508)**, the third-oldest known terrestrial globe, inscribed near the eastern coast of Asia with the Latin **"HIC SVNT DRACONES"**, literally *"here are dragons."* Earlier medieval maps used the related phrase **"HIC SVNT LEONES"** ("here are lions") to mark uncharted territory.
+**Here Be Dragons** is not just a map joke. It is a way to stay honest at the edge of certainty.
 
-The actual practice was less about mythical beasts than about honest humility: a cartographer drawing the known world had to decide what to do with the parts they hadn't been to, hadn't been mapped, or had only third-hand rumors about. *Here be dragons* was a way of saying: **"I don't know what's here. Tread carefully."** The Hunt–Lenox Globe now lives at the New York Public Library; you can still see the phrase right where the mapmaker ran out of certainty.
+Old maps needed a way to mark the places the mapmaker could not claim to know. That is the part of the phrase that matters here. Not the monster. Not the warning label. The humility.
+
+This site uses the name for the same reason. Software is full of edges: ideas we half understand, systems that work for reasons nobody has fully written down, tradeoffs we avoid naming, and corners of the field that are still only rough sketches. A useful map does not pretend those places are settled. It marks them clearly and keeps going.
+
+For this site, **Here Be Dragons** is about acknowledging what we don't know, what's hard to acknowledge, and what's potentially out there to find out.
 
 ## Why software borrowed it
 
@@ -26,16 +30,16 @@ Programmers have picked up the phrase as a comment for the same reason:
 
 A *here be dragons* comment marks a region of a codebase where:
 
-- **The logic works**: nobody fully understands why.
-- **The next person will break it** if they refactor without reading the history.
-- **The constraint isn't visible** in the code itself; it lives in an incident report, a regulation, a race condition, or a performance cliff that doesn't surface in tests.
-- **Modifying it has unforeseen consequences** that ripple into parts of the system the author doesn't know about.
+- **The logic works**: nobody has fully explained why.
+- **The history matters**: the next change can break a promise that is not obvious from the code.
+- **The real constraint is hidden**: it may live in an incident report, a regulation, a race condition, or a performance cliff that tests do not cover.
+- **The map is incomplete**: changing one small path can lead into parts of the system the author has never seen.
 
-It's the opposite of clean-code bravado. It's a cartographer's note: *I mapped this as well as I could. Don't assume the map is the territory.*
+That is not defeatist. It is useful. A good engineer leaves a better map than the one they found, even when the honest note is: *I mapped this as well as I could. Don't assume the map is the territory.*
 
 ## What this site is
 
-A place to sketch those parts of the tech landscape I've been wandering through, the ones that fit in textbooks, and the ones that only show up when a system is already running and something breaks.
+A place to sketch the parts of the tech landscape I have been walking through: the clean textbook ideas, the brittle production lessons, and the questions that still deserve a better answer.
 
 - **Topics**: evergreen, categorized reference entries. Things like [Kubernetes](topics/ops/kubernetes/), RAG, the vehicle-routing problem, SOLID principles, HIPAA compliance. Written to still be useful a year from now.
 - **Posts**: dated write-ups. What I learned this week, notes from a project, patterns pulled out of real code.

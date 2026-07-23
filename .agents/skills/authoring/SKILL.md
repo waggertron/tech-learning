@@ -167,6 +167,8 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
 
    Keep rendered content reader-facing. Do not leave internal planning notes, future file paths, agent instructions, or "add this later" sections in the page body. Move those notes to `docs/`, `.agents/memory/`, or a focused planning document.
 
+   Run a concern-fit pass before publishing. If a deployment detail, credential note, local workflow, tool habit, or maintainer-only concern does not help the target reader understand the topic, cut it or replace it with a link to a focused doc or official source.
+
    In research sections, synthesize repeated sources. If several bullets cite the same author, publication, or source family for one argument, combine them into one stronger attribution and explain the shared insight.
 
 5. **Link to neighbors.** Every new topic/post should:
@@ -251,6 +253,7 @@ Before calling a new page done:
 - [ ] No `**Term**, Description` comma patterns in bullet lists (use colon: `**Term**: Description`).
 - [ ] No prose semicolons joining independent clauses (split into two sentences instead).
 - [ ] No internal plan headings, future-file TODOs, or repeated same-author source piles are rendered in the page body.
+- [ ] No irrelevant local, credential, deployment, tool, or maintainer concerns leak into a broad reader-facing page.
 - [ ] See [prose-cleanup skill](../prose-cleanup/SKILL.md) for the full AI-marker checklist.
 
 ## Examples

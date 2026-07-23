@@ -29,6 +29,7 @@ The automated check is a floor. Also read the rendered page source and fix these
 - **Future file paths**: Move implementation paths, future topic paths, and agent TODOs to `docs/`, `.agents/memory/`, or a planning document.
 - **Systematic source piles**: Do not write five separate bullets for the same author, blog, or paper family. Combine them into one substantial attribution that explains the shared insight and links the relevant pieces together.
 - **Thin bullet runs**: Keep bullets when they improve scanning. Expand or fold them into prose when they are only one-sentence placeholders.
+- **Irrelevant concern leakage**: Remove details that belong to a different problem than the page is teaching. Local ops hygiene, credential scaffolding, private deployment habits, contributor workflow, and agent or skill assumptions belong only when the page is explicitly about that concern. Otherwise, explain the reader-facing choice and link to the maintained source.
 - **Meta language**: Avoid phrases such as "this page is the plan," "after review, add," "planned reading order," "code anchor," "wrong first move," and "follow-up path" in public pages.
 
 ## Source attribution rule
@@ -59,3 +60,4 @@ The bad shape reads systematic, noisy, shallow, and mechanical. It makes attribu
 - Source bullets are synthesized by author or source family when they make the same claim.
 - Bullets outside core takeaways carry enough explanation to be useful.
 - Internal notes live outside rendered content.
+- Local or private concerns are scoped to reader value rather than leaked from the authoring workflow.

@@ -30,6 +30,36 @@ const bannedPatterns = [
   },
 ];
 
+const concernLeakPatterns = [
+  {
+    label: "local skill concern leak",
+    pattern: /\blocal (?:deployment )?skill\b/i,
+  },
+  {
+    label: "credential-export concern leak",
+    pattern: /\bcredential exports?\b/i,
+  },
+  {
+    label: "shared-credential concern leak",
+    pattern: /\bshared credentials?\b/i,
+  },
+  {
+    label: "env-example concern leak",
+    pattern: /\.env\.example\b/i,
+  },
+  {
+    label: "n8n runtime-secret concern leak",
+    pattern: /\b(?:N8N_ENCRYPTION_KEY|RUNNERS_AUTH_TOKEN)\b/,
+  },
+];
+
+const concernLeakAllowlist = new Map([
+  [
+    "src/content/docs/topics/ops/secrets-keys-tokens.md",
+    new Set(["env-example concern leak"]),
+  ],
+]);
+
 const sourceAliases = [
   {
     label: "Martin Fowler",
@@ -59,6 +89,10 @@ function stripFencedCode(content) {
   return content.replace(/```[\s\S]*?```/g, "");
 }
 
+function isConcernLeakAllowed(path, label) {
+  return concernLeakAllowlist.get(path)?.has(label) ?? false;
+}
+
 function findPlanningLeaks(path, content) {
   const findings = [];
   const lines = stripFencedCode(content).split("\n");
@@ -73,6 +107,27 @@ function findPlanningLeaks(path, content) {
           text: line.trim(),
         });
       }
+    }
+  });
+
+  return findings;
+}
+
+function findConcernLeaks(path, content) {
+  const findings = [];
+  const lines = content.split("\n");
+
+  lines.forEach((line, index) => {
+    for (const check of concernLeakPatterns) {
+      if (!check.pattern.test(line)) continue;
+      if (isConcernLeakAllowed(path, check.label)) continue;
+
+      findings.push({
+        path,
+        line: index + 1,
+        label: check.label,
+        text: line.trim(),
+      });
     }
   });
 
@@ -117,6 +172,7 @@ const findings = [];
 for (const path of listMarkdownFiles(root)) {
   const content = readFileSync(path, "utf8");
   findings.push(...findPlanningLeaks(path, content));
+  findings.push(...findConcernLeaks(path, content));
   findings.push(...findRepeatedSourceBullets(path, content));
 }
 
@@ -126,7 +182,7 @@ if (findings.length > 0) {
     console.error(`${finding.path}:${finding.line}: ${finding.label}: ${finding.text}`);
   }
   console.error("");
-  console.error("Move internal planning notes to docs or memory. Consolidate repeated attribution bullets into a stronger grouped source discussion.");
+  console.error("Move internal planning notes to docs or memory. Remove local/private concern leakage from public instructional content. Consolidate repeated attribution bullets into a stronger grouped source discussion.");
   process.exit(1);
 }
 

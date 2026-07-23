@@ -81,9 +81,9 @@ Failure matching should stay structural. A teaching page may mention an error ph
 npm run validate:published-content
 ```
 
-This catches public-content leaks such as internal series plans, future-file TODO sections, planning field labels, and repeated same-author source bullets in source sections. It protects the reader-facing boundary: page bodies should read like finished explanations, not agent work notes.
+This catches public-content leaks such as internal series plans, future-file TODO sections, planning field labels, repeated same-author source bullets in source sections, and high-risk local concern leakage. It protects the reader-facing boundary: page bodies should read like finished explanations, not agent work notes or private setup residue.
 
-The check is intentionally narrow. It does not replace manual review for weak bullets, mechanical attribution, or source piles that use new wording.
+The check is intentionally narrow. It does not replace manual review for weak bullets, mechanical attribution, source piles that use new wording, or details that are technically correct but belong to a different audience than the page is serving.
 
 ### Links
 

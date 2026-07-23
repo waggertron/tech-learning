@@ -30,6 +30,8 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 12. **Keep Swift runner evidence honest.** Browser Swift executes against the pinned Swift 6.3.3 Linux standard-library boundary. It does not prove Apple SDK, SwiftUI, UIKit, simulator, signing, entitlement, or device behavior. Run the focused contract, component, browser, or Docker executor checks that match any runner change.
 
+13. **Prevent irrelevant concern leakage.** Public instructional pages should teach the reader's problem, not expose local workflow habits, private deployment choices, credential scaffolding, agent assumptions, or maintainer-only concerns unless the page is explicitly about that concern. Cut the detail or link to a focused source.
+
 ## Repo structure
 
 ```

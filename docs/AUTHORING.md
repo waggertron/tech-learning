@@ -250,6 +250,8 @@ For an unwritten long-form series, create one hidden series plan page under `pos
 
 The rendered page still has to read as public content. Do not leave internal implementation notes, future file paths, "add this later" sections, agent instructions, or maintenance checklists in the page body. Move those notes to `docs/`, `.agents/memory/`, or a focused planning document.
 
+Run a concern-fit pass before publishing. If a deployment detail, credential note, local workflow, tool habit, or maintainer-only concern does not help the target reader understand the topic, cut it or replace it with a link to a focused doc or official source.
+
 If a post needs a one-off calculator or similar interactive aid, put the component in `src/components/`, import it from MDX, keep the page useful without the widget, and update `docs/feature_tracker.md`. Run `npm run build` after the content change. If client-side behavior matters, spot-check the rendered route under local preview.
 
 ### Source attribution synthesis
@@ -348,7 +350,7 @@ For content edits that came from notes or research, also pay attention to the pu
 npm run validate:published-content
 ```
 
-That check catches known planning-leak phrases and repeated same-author bullets in source sections. It is not a substitute for reading the page.
+That check catches known planning-leak phrases, repeated same-author bullets in source sections, and high-risk local concern leakage such as shared credential framing, credential exports, local skill references, and `.env.example` scaffolding. It is not a substitute for reading the page.
 
 ### Local
 
