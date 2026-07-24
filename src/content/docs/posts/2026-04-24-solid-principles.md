@@ -115,7 +115,7 @@ Four of five are really about one thing: minimizing ripple effects. That's the w
 ## References
 
 - [Robert Martin, *Agile Software Development, Principles, Patterns, and Practices*](https://www.oreilly.com/library/view/agile-software-development/0135974445/), the original book-length treatment
-- [Uncle Bob's article series](https://web.archive.org/web/20150906155800/http://www.objectmentor.com/resources/articles/srp.pdf) (SRP PDF, 2005)
+- [Uncle Bob's article series](https://web.archive.org/web/20150202200348/http://www.objectmentor.com/resources/articles/srp.pdf) (SRP PDF, 2005)
 - [Barbara Liskov, *Data Abstraction and Hierarchy* (1987)](https://dl.acm.org/doi/10.1145/62139.62141), LSP in its original context
 - [Sandi Metz, *Practical Object-Oriented Design in Ruby (POODR)*](https://www.poodr.com/), SOLID without the dogma
 - [Dan North, *CUPID, the back story*](https://dannorth.net/cupid-the-back-story/), the critical response that proposes an alternative

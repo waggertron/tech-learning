@@ -118,7 +118,7 @@ Ethereum L2s have canonical bridges maintained by the L2 team, with optimistic w
 
 ## References
 
-- [WBTC Whitepaper](https://wbtc.network/assets/wrapped-bitcoin-whitepaper.pdf), the original WBTC design
+- [WBTC Whitepaper](https://wbtc.network/assets/wrapped-tokens-whitepaper.pdf), the original WBTC design
 - [IBC Protocol Specification](https://github.com/cosmos/ibc), Cosmos IBC spec
 - [Ronin bridge attack analysis, Chainalysis](https://www.chainalysis.com/blog/axie-infinity-ronin-bridge-dprk-hack-seizure/), analysis of the largest bridge exploit
 - [Wormhole exploit analysis, Chainalysis](https://www.chainalysis.com/blog/wormhole-hack-february-2022/), analysis of the 2022 bridge exploit
