@@ -1,0 +1,45 @@
+---
+title: Coding Agent Internals, post series
+description: "A clean-room series on how terminal coding agents work: loops, context, tools, permissions, hooks, subagents, MCP, evals, and containment, without reproducing or relying on leaked proprietary code."
+sidebar:
+  hidden: true
+---
+
+Coding agents look like chat products from the outside, but the useful engineering is in the harness around the model. The harness assembles context, exposes tools, routes tool calls, enforces permission policy, stores task state, compacts long sessions, and decides when the work is done.
+
+This series is motivated by the public discussion around leaked Claude Code source, but it does not inspect, quote, link to, reproduce, or depend on leaked proprietary material. The point is to extract durable engineering lessons from public documentation, observable behavior, and clean-room examples.
+
+## Source boundary
+
+The series uses these source categories:
+
+- **Allowed**: official Claude Code documentation, Anthropic engineering posts, public protocol specs, public SDK behavior, public CLI behavior, and independent clean-room examples.
+- **Allowed with care**: commentary about the leak as an event, only when it explains why clean-room analysis matters.
+- **Not used**: leaked source files, copied implementation details, private identifiers, private prompts, private code structure, or links to unauthorized mirrors.
+
+That boundary keeps the writing useful. A leak can provoke a question, but it should not become the evidence.
+
+## Reading order
+
+1. [Claude Code, leaks, and the clean-room way to study agents](../../2026-07-24-claude-code-clean-room-agent-internals/), establish the source boundary and the architecture map before touching implementation ideas.
+
+## Planned arc
+
+Later installments can cover:
+
+- **The harness loop**: how a terminal agent turns model output into file reads, edits, commands, observations, and another turn.
+- **Context assembly**: how repo instructions, file excerpts, user intent, tool results, and summaries compete for a finite window.
+- **Tool contracts**: why tool names, schemas, return shapes, and error types determine agent quality.
+- **Permissions and containment**: why deny, ask, allow policy is different from prompt guidance, and how sandboxing caps blast radius.
+- **Hooks and extension points**: where a team can inject logging, policy, formatting, checks, or human approval.
+- **Subagents and task isolation**: why delegation helps when the child task has evidence the parent should not carry forever.
+- **MCP and external capability surfaces**: how tools move out of the local harness and into explicit server contracts.
+- **Evals and release discipline**: how to test a coding agent by behavior rather than vibes.
+
+## Related topics
+
+- [AI Harness Development](../../../topics/ai/harness-development/)
+- [Context Engineering](../../../topics/ai/harness-development/context-engineering/)
+- [Tool Design and Schema Discipline](../../../topics/ai/harness-development/tool-design/)
+- [Permission and Trust Models](../../../topics/ai/harness-development/permission-models/)
+- [LLMs, agentic AI, and AI agents](../../../topics/ai/llm-vs-agentic-ai/)
