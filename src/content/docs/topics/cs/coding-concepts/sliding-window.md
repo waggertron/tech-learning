@@ -5,7 +5,7 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-07-01
+updated: 2026-07-30
 ---
 
 ## Tactic
@@ -69,6 +69,7 @@ These prompt words often point toward this concept:
 
 - [3. Longest Substring Without Repeating Characters](../../coding-problems/sliding-window/003-longest-substring-without-repeating-characters/)
 - [76. Minimum Window Substring](../../coding-problems/sliding-window/076-minimum-window-substring/)
+- [209. Minimum Size Subarray Sum](../../coding-problems/sliding-window/209-minimum-size-subarray-sum/)
 - [239. Sliding Window Maximum](../../coding-problems/sliding-window/239-sliding-window-maximum/)
 - [424. Longest Repeating Character Replacement](../../coding-problems/sliding-window/424-longest-repeating-character-replacement/)
 - [567. Permutation in String](../../coding-problems/sliding-window/567-permutation-in-string/)

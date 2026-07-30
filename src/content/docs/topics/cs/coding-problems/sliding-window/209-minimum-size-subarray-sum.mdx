@@ -1,0 +1,372 @@
+---
+title: "209. Minimum Size Subarray Sum (Medium)"
+description: "Find the shortest positive-integer subarray whose sum reaches a target by shrinking a valid sliding window."
+parent: sliding-window
+tags: [leetcode, sliding-window, arrays, medium]
+status: draft
+created: 2026-07-30
+updated: 2026-07-30
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import practiceCode from './209-minimum-size-subarray-sum.py?raw';
+import practiceCodeTs from './209-minimum-size-subarray-sum.ts?raw';
+import practiceCodeGo from './209-minimum-size-subarray-sum.go?raw';
+import approach2PyCode from './209-minimum-size-subarray-sum-approach2.py?raw';
+import approach2TsCode from './209-minimum-size-subarray-sum-approach2.ts?raw';
+import approach2GoCode from './209-minimum-size-subarray-sum-approach2.go?raw';
+
+## Problem
+
+Given an array of positive integers `nums` and a positive integer `target`, return the minimal length of a subarray whose sum is greater than or equal to `target`. If there is no such subarray, return `0`.
+
+**Examples**
+
+- `target = 7`, `nums = [2,3,1,2,4,3]` -> `2`, because `[4,3]` is the shortest valid subarray.
+- `target = 4`, `nums = [1,4,4]` -> `1`.
+- `target = 11`, `nums = [1,1,1,1,1,1,1,1]` -> `0`.
+
+**Constraints**
+
+- `1 <= target <= 10^9`
+- `1 <= nums.length <= 10^5`
+- `1 <= nums[i] <= 10^4`
+
+LeetCode 209 · [Link](https://leetcode.com/problems/minimum-size-subarray-sum/) · *Medium*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="minimum-size-subarray-sum-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="minimum-size-subarray-sum-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="minimum-size-subarray-sum-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Brute force, extend every start
+
+For each start index, keep extending the right edge and accumulating the sum. The first time the sum reaches `target`, record that length and stop extending this start. Later right edges can only make the window longer, so they cannot improve this particular start.
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+def min_sub_array_len(target: int, nums: list[int]) -> int:
+    best = len(nums) + 1
+    n = len(nums)
+
+    for i in range(n):                              # L1: n possible starts
+        total = 0
+        for j in range(i, n):                       # L2: extend from this start
+            total += nums[j]                         # L3: O(1) add one value
+            if total >= target:                      # L4: O(1) validity check
+                best = min(best, j - i + 1)          # L5: O(1) record length
+                break                                # L6: no longer window from i can be better
+
+    return 0 if best == len(nums) + 1 else best      # L7: O(1)
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```typescript
+function minSubArrayLen(target: number, nums: number[]): number {
+    let best = nums.length + 1;
+
+    for (let i = 0; i < nums.length; i++) {          // L1: n possible starts
+        let total = 0;
+        for (let j = i; j < nums.length; j++) {      // L2: extend from this start
+            total += nums[j];                        // L3: O(1) add one value
+            if (total >= target) {                   // L4: O(1) validity check
+                best = Math.min(best, j - i + 1);    // L5: O(1) record length
+                break;                               // L6: no longer window from i can be better
+            }
+        }
+    }
+
+    return best === nums.length + 1 ? 0 : best;      // L7: O(1)
+}
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+func minSubArrayLen(target int, nums []int) int {
+	best := len(nums) + 1
+
+	for i := 0; i < len(nums); i++ {                 // L1: n possible starts
+		total := 0
+		for j := i; j < len(nums); j++ {             // L2: extend from this start
+			total += nums[j]                         // L3: O(1) add one value
+			if total >= target {                     // L4: O(1) validity check
+				if j-i+1 < best {                    // L5: O(1) record length
+					best = j - i + 1
+				}
+				break                                // L6: no longer window from i can be better
+			}
+		}
+	}
+
+	if best == len(nums)+1 {                         // L7: O(1)
+		return 0
+	}
+	return best
+}
+```
+
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1 (outer loop) | $O(1)$ | n | $O(n)$ |
+| **L2-L4 (inner scan)** | **$O(1)$** | **up to n^2 / 2** | **$O(n^2)$** |
+| L5-L6 (record and break) | $O(1)$ | at most n | $O(n)$ |
+| L7 (return) | $O(1)$ | 1 | $O(1)$ |
+
+**Complexity**
+
+- **Time:** $O(n^2)$ worst case, driven by L2-L4. If `target` is larger than every suffix sum, most starts scan to the end.
+- **Space:** $O(1)$.
+
+## Approach 2: Sliding window, shrink while valid (optimal)
+
+The key fact is that every value is positive. When `right` moves forward, the sum can only increase. When `left` moves forward, the sum can only decrease. That monotonic behavior lets us shrink a valid window until it becomes invalid, recording every valid length on the way.
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+def min_sub_array_len(target: int, nums: list[int]) -> int:
+    left = 0
+    total = 0
+    best = len(nums) + 1
+
+    for right, value in enumerate(nums):                 # L1: right expands n times
+        total += value                                    # L2: O(1) add entering value
+        while total >= target:                            # L3: shrink while window is valid
+            best = min(best, right - left + 1)            # L4: O(1) record current length
+            total -= nums[left]                           # L5: O(1) remove leaving value
+            left += 1                                     # L6: left advances at most n times
+
+    return 0 if best == len(nums) + 1 else best           # L7: O(1)
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```typescript
+function minSubArrayLen(target: number, nums: number[]): number {
+    let left = 0;
+    let total = 0;
+    let best = nums.length + 1;
+
+    for (let right = 0; right < nums.length; right++) {   // L1: right expands n times
+        total += nums[right];                             // L2: O(1) add entering value
+        while (total >= target) {                         // L3: shrink while window is valid
+            best = Math.min(best, right - left + 1);      // L4: O(1) record current length
+            total -= nums[left];                          // L5: O(1) remove leaving value
+            left++;                                       // L6: left advances at most n times
+        }
+    }
+
+    return best === nums.length + 1 ? 0 : best;           // L7: O(1)
+}
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+func minSubArrayLen(target int, nums []int) int {
+	left, total := 0, 0
+	best := len(nums) + 1
+
+	for right, value := range nums {                      // L1: right expands n times
+		total += value                                     // L2: O(1) add entering value
+		for total >= target {                             // L3: shrink while window is valid
+			if right-left+1 < best {                      // L4: O(1) record current length
+				best = right - left + 1
+			}
+			total -= nums[left]                            // L5: O(1) remove leaving value
+			left++                                        // L6: left advances at most n times
+		}
+	}
+
+	if best == len(nums)+1 {                              // L7: O(1)
+		return 0
+	}
+	return best
+}
+```
+
+</TabItem>
+</Tabs>
+
+**Where the time goes, line by line**
+
+*Variables: n = len(nums).*
+
+| Line | Per-call cost | Times executed | Contribution |
+| --- | --- | --- | --- |
+| L1-L2 (expand right) | $O(1)$ | n | $O(n)$ |
+| **L3-L6 (contract left)** | **$O(1)$** | **at most n total** | **$O(n)$** |
+| L7 (return) | $O(1)$ | 1 | $O(1)$ |
+
+The nested `while` does not make this quadratic. `left` only moves forward. Across the whole function, L5-L6 can run at most `n` times.
+
+**Complexity**
+
+- **Time:** $O(n)$, driven by one pass from `right` and at most one pass from `left`.
+- **Space:** $O(1)$.
+
+**Try this approach:**
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="minimum-size-subarray-sum-approach2-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="minimum-size-subarray-sum-approach2-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="minimum-size-subarray-sum-approach2-go" />
+  </TabItem>
+</Tabs>
+
+## How to recognize this pattern
+
+- **The signal:** the prompt asks for a shortest contiguous subarray and every `nums[i]` is positive.
+- **The counterexample:** if negative numbers were allowed, `target = 7`, `nums = [8, -100, 7]` would break the window logic. Removing `8` makes the sum much smaller, then adding `7` can recover it later.
+- **Why the wrong approach fails:** a sliding sum only works when expansion and contraction move validity in predictable directions.
+- **The mental model:** expand until the window is good enough, then shrink until it is just barely not good enough.
+
+| Problem | Window state | Why the window moves |
+| --- | --- | --- |
+| [209. Minimum Size Subarray Sum](./) | Running sum | Positive values make sum monotonic under endpoint movement. |
+| [3. Longest Substring Without Repeating Characters](../003-longest-substring-without-repeating-characters/) | Set or last-seen map | A duplicate invalidates the current window. |
+| [76. Minimum Window Substring](../076-minimum-window-substring/) | Need and have counters | Required characters become satisfied, then can be removed carefully. |
+| [560. Subarray Sum Equals K](../560-subarray-sum-equals-k/) | Prefix sum counts | Arbitrary signs remove the monotonic window guarantee. |
+
+## Summary
+
+| Approach | Time | Space |
+| --- | --- | --- |
+| Brute force with early break | $O(n^2)$ | $O(1)$ |
+| **Sliding window, shrink while valid** | **$O(n)$** | **$O(1)$** |
+
+## Test cases
+
+<Tabs>
+<TabItem label="Python">
+
+```python
+def min_sub_array_len(target: int, nums: list[int]) -> int:
+    left = 0
+    total = 0
+    best = len(nums) + 1
+
+    for right, value in enumerate(nums):
+        total += value
+        while total >= target:
+            best = min(best, right - left + 1)
+            total -= nums[left]
+            left += 1
+
+    return 0 if best == len(nums) + 1 else best
+
+
+def _run_tests():
+    assert min_sub_array_len(7, [2, 3, 1, 2, 4, 3]) == 2
+    assert min_sub_array_len(4, [1, 4, 4]) == 1
+    assert min_sub_array_len(11, [1, 1, 1, 1, 1, 1, 1, 1]) == 0
+    assert min_sub_array_len(3, [1, 1, 1]) == 3
+    assert min_sub_array_len(15, [5, 1, 3, 5, 10, 7, 4, 9, 2, 8]) == 2
+    print("all tests pass")
+
+
+if __name__ == "__main__":
+    _run_tests()
+```
+
+</TabItem>
+<TabItem label="TypeScript">
+
+```typescript
+function minSubArrayLen(target: number, nums: number[]): number {
+    let left = 0;
+    let total = 0;
+    let best = nums.length + 1;
+
+    for (let right = 0; right < nums.length; right++) {
+        total += nums[right];
+        while (total >= target) {
+            best = Math.min(best, right - left + 1);
+            total -= nums[left];
+            left++;
+        }
+    }
+
+    return best === nums.length + 1 ? 0 : best;
+}
+
+console.assert(minSubArrayLen(7, [2, 3, 1, 2, 4, 3]) === 2);
+console.assert(minSubArrayLen(4, [1, 4, 4]) === 1);
+console.assert(minSubArrayLen(11, [1, 1, 1, 1, 1, 1, 1, 1]) === 0);
+console.assert(minSubArrayLen(3, [1, 1, 1]) === 3);
+console.assert(minSubArrayLen(15, [5, 1, 3, 5, 10, 7, 4, 9, 2, 8]) === 2);
+console.log("all tests pass");
+```
+
+</TabItem>
+<TabItem label="Go">
+
+```go
+func minSubArrayLen(target int, nums []int) int {
+	left, total := 0, 0
+	best := len(nums) + 1
+
+	for right, value := range nums {
+		total += value
+		for total >= target {
+			if right-left+1 < best {
+				best = right - left + 1
+			}
+			total -= nums[left]
+			left++
+		}
+	}
+
+	if best == len(nums)+1 {
+		return 0
+	}
+	return best
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Related topics
+
+- [Sliding Window](../), the category page for contiguous ranges maintained by moving endpoints.
+- [560. Subarray Sum Equals K](../560-subarray-sum-equals-k/), the contrast case where prefix sums handle arbitrary signed values.
+- [76. Minimum Window Substring](../076-minimum-window-substring/), the string version of "expand until valid, then contract."
+
+## Related concepts
+
+- [Sliding Window](../../../coding-concepts/sliding-window/), contiguous-range tactics for maintaining a valid subarray or substring while endpoints move forward.
+- [Array Scans](../../../coding-concepts/array-scans/), the linear pass habit of carrying just enough state while reading each item once.

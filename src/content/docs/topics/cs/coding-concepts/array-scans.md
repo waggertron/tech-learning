@@ -5,7 +5,7 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-07-13
+updated: 2026-07-30
 ---
 
 ## Tactic
@@ -84,6 +84,7 @@ These prompt words often point toward this concept:
 - [136. Single Number](../../coding-problems/bit-manipulation/136-single-number/)
 - [152. Maximum Product Subarray](../../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/)
 - [189. Rotate Array](../../coding-problems/two-pointers/189-rotate-array/)
+- [209. Minimum Size Subarray Sum](../../coding-problems/sliding-window/209-minimum-size-subarray-sum/)
 - [217. Contains Duplicate](../../coding-problems/arrays-and-hashing/217-contains-duplicate/)
 - [228. Summary Ranges](../../coding-problems/arrays-and-hashing/228-summary-ranges/)
 - [238. Product of Array Except Self](../../coding-problems/arrays-and-hashing/238-product-of-array-except-self/)

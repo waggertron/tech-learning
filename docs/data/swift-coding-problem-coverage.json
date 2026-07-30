@@ -2,42 +2,42 @@
   "schemaVersion": 3,
   "catalogRoot": "src/content/docs/topics/cs/coding-problems",
   "summary": {
-    "pages": 189,
+    "pages": 190,
     "categories": 18,
-    "documentedApproaches": 506,
+    "documentedApproaches": 508,
     "sourceFiles": {
-      "python": 470,
-      "typescript": 469,
-      "go": 469,
+      "python": 472,
+      "typescript": 471,
+      "go": 471,
       "swift": 695
     },
     "languageCoverage": {
       "python": {
-        "starterFiles": 189,
-        "starterHarnesses": 183,
-        "practiceTabs": 189,
-        "practiceRepls": 189,
-        "approachTabs": 479,
-        "approachSources": 262,
-        "approachHarnesses": 256
+        "starterFiles": 190,
+        "starterHarnesses": 184,
+        "practiceTabs": 190,
+        "practiceRepls": 190,
+        "approachTabs": 481,
+        "approachSources": 263,
+        "approachHarnesses": 257
       },
       "typescript": {
-        "starterFiles": 188,
-        "starterHarnesses": 184,
-        "practiceTabs": 186,
-        "practiceRepls": 186,
-        "approachTabs": 458,
-        "approachSources": 262,
-        "approachHarnesses": 256
+        "starterFiles": 189,
+        "starterHarnesses": 185,
+        "practiceTabs": 187,
+        "practiceRepls": 187,
+        "approachTabs": 460,
+        "approachSources": 263,
+        "approachHarnesses": 257
       },
       "go": {
-        "starterFiles": 188,
-        "starterHarnesses": 188,
-        "practiceTabs": 167,
-        "practiceRepls": 167,
-        "approachTabs": 407,
-        "approachSources": 262,
-        "approachHarnesses": 262
+        "starterFiles": 189,
+        "starterHarnesses": 189,
+        "practiceTabs": 168,
+        "practiceRepls": 168,
+        "approachTabs": 409,
+        "approachSources": 263,
+        "approachHarnesses": 263
       },
       "swift": {
         "starterFiles": 189,
@@ -160,8 +160,8 @@
     },
     {
       "category": "sliding-window",
-      "pages": 8,
-      "documentedApproaches": 22,
+      "pages": 9,
+      "documentedApproaches": 24,
       "swiftReadyPages": 8,
       "swiftReadyApproaches": 22,
       "vectorReadyPages": 8
@@ -19706,6 +19706,111 @@
           ],
           "swiftContractErrors": [],
           "swiftReady": true
+        }
+      ]
+    },
+    {
+      "category": "sliding-window",
+      "slug": "209-minimum-size-subarray-sum",
+      "title": "209. Minimum Size Subarray Sum (Medium)",
+      "page": "sliding-window/209-minimum-size-subarray-sum.mdx",
+      "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
+      "practiceTabs": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "practiceRepls": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "starterFiles": {
+        "python": "sliding-window/209-minimum-size-subarray-sum.py",
+        "typescript": "sliding-window/209-minimum-size-subarray-sum.ts",
+        "go": "sliding-window/209-minimum-size-subarray-sum.go",
+        "swift": null
+      },
+      "starterHarnesses": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "starterImports": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "swiftContractErrors": [],
+      "swiftReady": false,
+      "approaches": [
+        {
+          "number": 1,
+          "title": "Brute force, extend every start",
+          "languageTabs": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "codeFences": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "repls": [],
+          "sourceFiles": {
+            "python": null,
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 2,
+          "title": "Sliding window, shrink while valid (optimal)",
+          "languageTabs": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "codeFences": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "repls": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "sourceFiles": {
+            "python": "sliding-window/209-minimum-size-subarray-sum-approach2.py",
+            "typescript": "sliding-window/209-minimum-size-subarray-sum-approach2.ts",
+            "go": "sliding-window/209-minimum-size-subarray-sum-approach2.go",
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
         }
       ]
     },

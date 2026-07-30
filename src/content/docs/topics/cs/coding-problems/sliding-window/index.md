@@ -1,11 +1,11 @@
 ---
 title: Sliding Window
-description: "8 problems that teach the sliding-window pattern, maintaining a dynamic contiguous range over an array or string to reduce O(n²) to O(n)."
+description: "9 problems that teach the sliding-window pattern, maintaining a dynamic contiguous range over an array or string to reduce O(n²) to O(n)."
 parent: coding-problems
 tags: [leetcode, neetcode-150, sliding-window]
 status: draft
 created: 2026-04-23
-updated: 2026-07-13
+updated: 2026-07-30
 ---
 
 ## Contiguous range state
@@ -44,6 +44,7 @@ The key test is whether moving `right` and `left` changes validity in a predicta
 **Bonus problems (same pattern, outside NeetCode 150):**
 
 - [28. Find the Index of the First Occurrence in a String (Easy)](./028-find-the-index-of-the-first-occurrence/) -- $O(n*m)$ sliding window over character windows.
+- [209. Minimum Size Subarray Sum (Medium)](./209-minimum-size-subarray-sum/) -- $O(n)$ variable window over positive-integer sums.
 - [560. Subarray Sum Equals K (Medium)](./560-subarray-sum-equals-k/) -- prefix sum + hash map; the window isn't contiguous in the traditional sense but uses the same "complement in a map" idea.
 
 ## Key patterns unlocked here
@@ -53,6 +54,7 @@ The key test is whether moving `right` and `left` changes validity in a predicta
 - **Window + frequency count with max-freq invariant**: Longest Repeating Character Replacement.
 - **Anagram detection with matching counters**: Permutation in String.
 - **Two-counter tracking (have vs. need)**: Minimum Window Substring.
+- **Positive-sum shrink loop**: Minimum Size Subarray Sum.
 - **Monotonic deque for window min/max**: Sliding Window Maximum.
 - **Prefix sum + hash map for subarray sum problems**: Subarray Sum Equals K.
 
@@ -68,7 +70,7 @@ The key test is whether moving `right` and `left` changes validity in a predicta
 
 [Best Time to Buy and Sell Stock](./121-best-time-to-buy-and-sell-stock/) is the lightest version: a one-pass running minimum acts like a collapsed window. [Longest Substring Without Repeating Characters](./003-longest-substring-without-repeating-characters/) teaches variable-size validity. [Longest Repeating Character Replacement](./424-longest-repeating-character-replacement/) adds a less obvious invariant: window length minus max frequency is the edit count.
 
-[Permutation in String](./567-permutation-in-string/) and [Minimum Window Substring](./076-minimum-window-substring/) are frequency-map problems. The first is fixed-size. The second is variable-size and asks for the smallest valid range. [Sliding Window Maximum](./239-sliding-window-maximum/) shows why a window sometimes needs a second data structure. [Subarray Sum Equals K](./560-subarray-sum-equals-k/) is included as the contrast case: it solves a contiguous-range question, but with prefix sums rather than a traditional window.
+[Permutation in String](./567-permutation-in-string/) and [Minimum Window Substring](./076-minimum-window-substring/) are frequency-map problems. The first is fixed-size. The second is variable-size and asks for the smallest valid range. [Minimum Size Subarray Sum](./209-minimum-size-subarray-sum/) is the numeric version where positivity makes the shrink loop valid. [Sliding Window Maximum](./239-sliding-window-maximum/) shows why a window sometimes needs a second data structure. [Subarray Sum Equals K](./560-subarray-sum-equals-k/) is included as the contrast case: it solves a contiguous-range question, but with prefix sums rather than a traditional window.
 
 ## Related concepts
 
