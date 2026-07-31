@@ -1,11 +1,12 @@
 ---
 title: AI
-description: "Topics in artificial intelligence, prompt engineering, harness development, RAG, skill development, coding-tool blindspots, context development lifecycle, and the DESIGN.md spec for agents."
+description: "Topics in artificial intelligence, natural language processing, prompt engineering, harness development, RAG, skill development, coding-tool blindspots, context development lifecycle, and the DESIGN.md spec for agents."
 ---
 
 ## Topics
 
 - [Prompt Engineering](./prompt-engineering/): crafting LLM inputs to reliably elicit a target output
+- [Natural Language Processing](./natural-language-processing/): classical NLP, spaCy pipelines, NLTK corpus analysis, sparse classifiers, and where LLMs fit
 - [AI Harness Development](./harness-development/): the scaffolding around an LLM that turns it into something useful
 - [RAG (Retrieval-Augmented Generation)](./rag/): grounding LLM responses in external knowledge
 - [AI Skill Development](./skill-development/): packaged, invocable capabilities loaded on demand
