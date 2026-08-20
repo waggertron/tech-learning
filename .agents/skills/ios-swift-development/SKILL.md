@@ -38,7 +38,7 @@ Read only the references needed for the task:
 
 ## Planning and Research
 
-- Start series work from `docs/plans/2026-07-13-zero-to-ios-hero-series-plan.md` until a newer approved source of truth replaces it.
+- Start series work from `docs/plans/current/2026-07-13-zero-to-ios-hero-series-plan.md` until a newer approved source of truth replaces it.
 - Map every planned lesson to a code anchor, common misconception, validation method, primary source, and dependency on earlier material.
 - Treat framework recommendations, supported operating systems, distribution rules, privacy manifests, required reason APIs, entitlements, and review requirements as time-sensitive.
 - Cite the page that supports the claim. Do not cite a search result or a broad documentation landing page when a focused source exists.
@@ -94,7 +94,7 @@ Read only the references needed for the task:
 
 - Quote every frontmatter description with double quotes.
 - Use relative links calculated from rendered routes.
-- Keep internal planning notes and future work outside `src/content/docs`.
+- Keep internal planning notes and future work outside `src/content/docs`. Use `docs/plans/current/` for active tracked plans and `docs/plans/history/` for finished plans.
 - Use ASCII diagrams only.
 - Never place realistic-looking credentials, tokens, signing identities, team IDs, bundle IDs, or provisioning data in examples.
 - Explain permissions and entitlements before code depends on them. Include the denial path and the least access needed.

@@ -26,7 +26,7 @@ This check scans `src/content/docs` for known planning-leak phrases and repeated
 The automated check is a floor. Also read the rendered page source and fix these patterns:
 
 - **Internal planning residue**: Remove headings and paragraphs that tell the maintainer what to add later. Public content can discuss a roadmap only when the roadmap is reader-facing.
-- **Future file paths**: Move implementation paths, future topic paths, and agent TODOs to `docs/`, `.agents/memory/`, or a planning document.
+- **Future file paths**: Move implementation paths, future topic paths, and agent TODOs to `docs/plans/current/` for active tracked plans, `docs/plans/history/` for finished plans, `docs/research/` for private source gathering, or `.agents/memory/` for local session memory.
 - **Systematic source piles**: Do not write five separate bullets for the same author, blog, or paper family. Combine them into one substantial attribution that explains the shared insight and links the relevant pieces together.
 - **Thin bullet runs**: Keep bullets when they improve scanning. Expand or fold them into prose when they are only one-sentence placeholders.
 - **Irrelevant concern leakage**: Remove details that belong to a different problem than the page is teaching. Local ops hygiene, credential scaffolding, private deployment habits, contributor workflow, and agent or skill assumptions belong only when the page is explicitly about that concern. Otherwise, explain the reader-facing choice and link to the maintained source.

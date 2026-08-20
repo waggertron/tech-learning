@@ -78,7 +78,7 @@ Keep the series index visible. Keep detail pages hidden from the sidebar unless 
 
 ## Planning New Series
 
-For an unwritten long-form series, create a plan page rather than empty post stubs.
+For an unwritten long-form series, create a tracked plan under `docs/plans/current/` rather than empty post stubs. Keep public series landing pages under `src/content/docs/posts/series/<series-slug>/index.mdx` reader-facing. Move the plan to `docs/plans/history/` when it is finished, superseded, or no longer active.
 
 Each planned part should include:
 
@@ -87,9 +87,9 @@ Each planned part should include:
 - **Wrong first move**: The mistake the post should warn against, if known.
 - **Follow-up path**: What the next part depends on.
 
-Do not create 10+ empty posts unless the user explicitly asks for individual drafts. A single plan page keeps the site useful and avoids placeholder clutter.
+Do not create 10+ empty posts unless the user explicitly asks for individual drafts. A single tracked plan keeps the repo useful and avoids placeholder clutter.
 
-Research-first plan pages can also carry the working material that will become the series:
+Research-first tracked plans can also carry the working material that will become the series:
 
 - Strict definitions and boundaries.
 - Business use cases and concrete examples.
@@ -98,7 +98,7 @@ Research-first plan pages can also carry the working material that will become t
 - A scoring model or decision checklist.
 - One-off interactive helper components, imported from `src/components/`, when the post benefits from user input.
 
-Keep the rendered page reader-facing. Do not publish internal implementation TODOs, future file paths, "add this later" notes, or scaffolding fields such as `Code anchor`, `Wrong first move`, and `Follow-up path`. Move those to `docs/`, `.agents/memory/`, or a focused planning document.
+Keep the rendered page reader-facing. Do not publish internal implementation TODOs, future file paths, "add this later" notes, or scaffolding fields such as `Code anchor`, `Wrong first move`, and `Follow-up path`. Move tracked planning details to `docs/plans/current/` or `docs/plans/history/` based on status. Move private research notes to ignored `docs/research/`.
 
 When a source section cites the same author or publication several times for one argument, consolidate those bullets into one stronger synthesis. A source pile reads mechanical and low-value.
 

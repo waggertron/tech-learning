@@ -37,7 +37,9 @@ tech-learning/
 │   └── workflows/
 │       └── deploy.yml           # build + deploy to GitHub Pages
 ├── docs/
-│   └── plans/                   # design docs (this file)
+│   └── plans/
+│       ├── current/             # active tracked plans
+│       └── history/             # finished or superseded plans
 ├── src/
 │   ├── content/
 │   │   ├── config.ts            # Zod schema for frontmatter validation

@@ -59,7 +59,7 @@ Interpretation rules:
 - Rule: if 3+ bullets are each a single sentence that would flow naturally together, fold to prose
 - Rule: keep lists when they aid scanning (steps, options, comparisons, reference tables)
 - Repeated same-author source bullets -> combine into one stronger attribution that explains the shared insight
-- Internal planning residue in rendered pages -> move to `docs/`, `.agents/memory/`, or a planning document
+- Internal planning residue in rendered pages -> move active tracked plans to `docs/plans/current/`, finished plans to `docs/plans/history/`, private research to `docs/research/`, or local session memory to `.agents/memory/`
 - Uniform sentence length -> vary: short punchy sentences mixed with longer complex ones
 
 ## What NOT to touch

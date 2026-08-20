@@ -20,7 +20,7 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 7. **ASCII diagrams only.** Mermaid is not wired up in this build.
 
-8. **Rendered content must be reader-facing.** Do not publish internal planning scaffolding, future-file TODOs, implementation checklists, agent instructions, or hidden "add this later" notes in `src/content/docs`. Move that material to `docs/`, `.agents/memory/`, or a private planning note.
+8. **Rendered content must be reader-facing.** Do not publish internal planning scaffolding, future-file TODOs, implementation checklists, agent instructions, or hidden "add this later" notes in `src/content/docs`. Move tracked plans to `docs/plans/current/` or `docs/plans/history/`, local session memory to `.agents/memory/`, and private source gathering to ignored `docs/research/`.
 
 9. **Synthesize repeated source attribution.** If several bullets cite the same author, publication, or source family for one argument, combine them into one stronger explanation. Mechanical source piles read noisy and low-value.
 
@@ -31,6 +31,8 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 12. **Keep Swift runner evidence honest.** Browser Swift executes against the pinned Swift 6.3.3 Linux standard-library boundary. It does not prove Apple SDK, SwiftUI, UIKit, simulator, signing, entitlement, or device behavior. Run the focused contract, component, browser, or Docker executor checks that match any runner change.
 
 13. **Prevent irrelevant concern leakage.** Public instructional pages should teach the reader's problem, not expose local workflow habits, private deployment choices, credential scaffolding, agent assumptions, or maintainer-only concerns unless the page is explicitly about that concern. Cut the detail or link to a focused source.
+
+14. **Keep plans in the plans workspace.** Tracked planning documents live under `docs/plans/`. Put underway plans in `docs/plans/current/` and move finished or superseded plans to `docs/plans/history/`. Private source gathering belongs in ignored `docs/research/`.
 
 ## Repo structure
 

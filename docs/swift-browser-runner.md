@@ -167,4 +167,4 @@ R1.2 must make each answer explicit:
 - Build assertions: `scripts/test_build.py`
 - Browser presence check: `scripts/validate-custom-pages.mjs`
 - Representative integration: `src/content/docs/topics/cs/coding-problems/binary-search/704-binary-search.mdx`
-- Execution plan: `docs/plans/2026-07-13-zero-to-ios-hero-series-plan.md`
+- Execution plan: `docs/plans/current/2026-07-13-zero-to-ios-hero-series-plan.md`

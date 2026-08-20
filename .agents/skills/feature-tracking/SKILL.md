@@ -25,8 +25,9 @@ Small typo fixes, prose-only edits, and one-off content polish usually do not ne
 1. **Feature tracker**: Update `docs/feature_tracker.md` with a dated entry and evidence paths.
 2. **Focused docs**: Add or update a docs page when the feature has a workflow, convention, generator, test contract, or maintenance process.
 3. **AGENTS.md**: Add or change a rule only when every future agent should follow it.
-4. **Local memory**: Update `.agents/memory/feature_tracker.md` for local in-progress reminders. Do not rely on memory as the only durable record because `.agents/memory/` is ignored.
-5. **Skill**: Add or update a skill when future Codex sessions should reuse the workflow.
+4. **Tracked plans**: Put active implementation or authoring plans in `docs/plans/current/`. Move finished or superseded plans to `docs/plans/history/`.
+5. **Local memory**: Update `.agents/memory/feature_tracker.md` for local in-progress reminders. Do not rely on memory as the only durable record because `.agents/memory/` is ignored.
+6. **Skill**: Add or update a skill when future Codex sessions should reuse the workflow.
 
 ## Workflow
 

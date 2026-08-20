@@ -246,9 +246,9 @@ Lines 550+ usually mean the topic should split.
 
 ### Planned series pages and one-off helpers
 
-For an unwritten long-form series, create one hidden series plan page under `posts/series/<slug>/index.mdx` rather than empty post stubs. The page can hold research notes, the reading order, tradeoff criteria, source links, and the intended code anchors.
+For an unwritten long-form series, create a tracked plan in `docs/plans/current/` rather than empty post stubs. Keep the public series landing page under `posts/series/<slug>/index.mdx` reader-facing. Move the tracked plan to `docs/plans/history/` when the series plan is finished, superseded, or no longer active.
 
-The rendered page still has to read as public content. Do not leave internal implementation notes, future file paths, "add this later" sections, agent instructions, or maintenance checklists in the page body. Move those notes to `docs/`, `.agents/memory/`, or a focused planning document.
+The rendered page still has to read as public content. Do not leave internal implementation notes, future file paths, "add this later" sections, agent instructions, or maintenance checklists in the page body. Move private source gathering and tool evaluation notes to `docs/research/`, which is gitignored. Use `docs/` for tracked workflow documentation and `.agents/memory/` for local session memory.
 
 Run a concern-fit pass before publishing. If a deployment detail, credential note, local workflow, tool habit, or maintainer-only concern does not help the target reader understand the topic, cut it or replace it with a link to a focused doc or official source.
 

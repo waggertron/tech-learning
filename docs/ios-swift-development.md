@@ -4,7 +4,7 @@ The Zero to iOS Hero program uses one reusable skill and a versioned reference s
 
 ## Source of Truth
 
-- Execution plan: `docs/plans/2026-07-13-zero-to-ios-hero-series-plan.md`
+- Execution plan: `docs/plans/current/2026-07-13-zero-to-ios-hero-series-plan.md`
 - Skill workflow: `.agents/skills/ios-swift-development/SKILL.md`
 - Focused references: `.agents/skills/ios-swift-development/references/`
 - Stable matrix: `.agents/skills/ios-swift-development/references/supported-matrix.md`

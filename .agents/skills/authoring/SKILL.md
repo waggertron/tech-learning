@@ -165,7 +165,7 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
    - `## References`, external authoritative links.
    - `## Related topics`, 2-5 internal links using relative paths (`../sibling/`, `../../posts/...`).
 
-   Keep rendered content reader-facing. Do not leave internal planning notes, future file paths, agent instructions, or "add this later" sections in the page body. Move those notes to `docs/`, `.agents/memory/`, or a focused planning document.
+   Keep rendered content reader-facing. Do not leave internal planning notes, future file paths, agent instructions, or "add this later" sections in the page body. Move tracked planning notes to `docs/plans/current/` while work is underway and `docs/plans/history/` when finished. Move private source gathering to ignored `docs/research/`.
 
    Run a concern-fit pass before publishing. If a deployment detail, credential note, local workflow, tool habit, or maintainer-only concern does not help the target reader understand the topic, cut it or replace it with a link to a focused doc or official source.
 
