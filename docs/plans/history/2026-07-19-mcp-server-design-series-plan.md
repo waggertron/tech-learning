@@ -1,9 +1,14 @@
 # MCP Server Design, Educational Series Plan
 
 **Date:** 2026-07-19
-**Status:** Nine-post series and companion implementation drafted
+**Status:** Completed and published
+**Completed:** 2026-08-20
 **Proposed series slug:** `mcp-server-design`
 **Working title:** MCP Server Design, from Web APIs to Model Interaction
+
+## Completion record
+
+The nine reader-facing posts, series landing page, and MCP Engineering Operations companion are published. The companion's deterministic domain and model-loop tests run in the repository's pre-push validation, and the series is listed in both post indexes. This plan is retained as a historical design and source record.
 
 ## Goal
 
