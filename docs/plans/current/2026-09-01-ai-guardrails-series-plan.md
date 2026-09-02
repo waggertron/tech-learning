@@ -1139,9 +1139,9 @@ This checklist is the execution ledger for the series. Check an item only after 
 - [x] Run `npm run validate:links` against the final Wave 1 build. Evidence: final Wave 1 run checked 786 HTML pages and passed.
 - [x] Inspect the rendered posts index and series landing route. Evidence: local Astro preview returned HTTP 200 HTML for the posts index, series index, landing page, and all four posts; rendered markers confirmed the series link, outcomes, reading order, and post titles.
 - [x] Run `npm run validate:pre-push`. Evidence: the full gate passed secret, style, published-content, generated-output, React, Swift, MCP companion, coding-problem, code-example, build, 786-page, link, custom-page, and browser validation tiers.
-- [ ] Commit the Wave 1 implementation and checklist evidence. Evidence: pending.
-- [ ] Push the Wave 1 commit and confirm `origin/main`. Evidence: pending.
-- [ ] Mark Wave 1 complete only after every Wave 1 item has evidence and is checked. Evidence: pending.
+- [x] Commit the Wave 1 implementation and checklist evidence. Evidence: commit `83c3f27` (`Publish AI guardrails foundations`).
+- [x] Push the Wave 1 commit and confirm `origin/main`. Evidence: push advanced `origin/main` from `f5c37c6` to `83c3f27`, and local HEAD matches the remote-tracking ref.
+- [x] Mark Wave 1 complete only after every Wave 1 item has evidence and is checked. Evidence: all 80 Wave 1 checklist items are checked with evidence after commit and push confirmation.
 
 ### Wave 2: Application surfaces
 
