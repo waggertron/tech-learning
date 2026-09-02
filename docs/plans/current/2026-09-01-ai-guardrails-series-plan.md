@@ -1,6 +1,6 @@
 # Engineering Guardrails for AI Systems, series plan
 
-Status: ready for authoring
+Status: in progress
 
 Created: 2026-09-01
 
@@ -1028,6 +1028,383 @@ Use primary sources for technical claims. Secondary writing can supply examples 
 - `src/content/docs/posts/series/mcp-server-design/index.mdx`
 
 Every post should link to two to five relevant neighbors. Do not include the whole list mechanically in every article.
+
+## Execution checklist
+
+This checklist is the execution ledger for the series. Check an item only after the named artifact or validation evidence exists. A wave is complete only when every child item is checked, its commit is pushed, and the remote state is confirmed.
+
+### Series prerequisites
+
+- [x] Complete the private research baseline. Evidence: `docs/research/2026-09-01-ai-guardrails-series-research.md`, 1,062 lines, local and ignored by design.
+- [x] Complete and push the decision-ready series plan. Evidence: commit `5b06f9f` on `origin/main`.
+- [x] Install a user-wide plan execution skill. Evidence: `/Users/weylinwagnon/.agents/skills/track-plan-execution/SKILL.md` passes `quick_validate.py`.
+- [ ] Commit and push this execution checklist before authoring Wave 1. Evidence: pending.
+
+### Wave 1: Foundations
+
+#### Part 1: Guardrails Are Systems, Not Prompts
+
+- [ ] Create `src/content/docs/posts/2026-09-01-ai-guardrails-are-systems-not-prompts.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 1. Evidence: pending.
+- [ ] Open with the support assistant following an injected instruction. Evidence: pending.
+- [ ] Separate unsafe model text from an external side effect. Evidence: pending.
+- [ ] Define influence, detection, enforcement, explanation, and recovery. Evidence: pending.
+- [ ] Map controls to ingress, context, inference, tool, execution, and egress boundaries. Evidence: pending.
+- [ ] Establish that model output is a proposal subject to host policy. Evidence: pending.
+- [ ] Define guardrail bypass, failure propagation, and the informal term guardrail hop without overstating them. Evidence: pending.
+- [ ] Show the unsafe direct-dispatch pipeline and the safe `proposeAction` plus `evaluatePolicy` pipeline. Evidence: pending.
+- [ ] Include a test proving a blocked proposal never reaches the executor. Evidence: pending.
+- [ ] Include an ASCII diagram of the layered pipeline. Evidence: pending.
+- [ ] Include a table that distinguishes the five guardrail jobs. Evidence: pending.
+- [ ] Ground claims in the listed OWASP, NIST, Anthropic, and OpenAI primary sources. Evidence: pending.
+
+#### Part 2: Threat-Model an AI Application
+
+- [ ] Create `src/content/docs/posts/2026-09-01-threat-model-ai-application.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 2. Evidence: pending.
+- [ ] Inventory the support workflow's assets, actors, data classes, tools, destinations, and state. Evidence: pending.
+- [ ] Mark trusted, mixed, and untrusted sources. Evidence: pending.
+- [ ] Cover direct, indirect, tool, memory, and handoff entry points. Evidence: pending.
+- [ ] Separate model compromise from system impact. Evidence: pending.
+- [ ] Explain the risk created by private data, untrusted content, and external communication in one workflow. Evidence: pending.
+- [ ] Turn prohibited outcomes into control requirements and release tests. Evidence: pending.
+- [ ] Implement the `ThreatBoundary` inventory and reject boundaries missing ownership or destination facts. Evidence: pending.
+- [ ] Include an ASCII data-flow diagram for the support workflow. Evidence: pending.
+- [ ] Include a threat table for direct injection, indirect injection, tool poisoning, confused deputy, memory poisoning, approval deception, and cost abuse. Evidence: pending.
+- [ ] Map at least one prohibited outcome to one deterministic release test. Evidence: pending.
+- [ ] Ground claims in the listed OWASP, MITRE ATLAS, NIST, and existing repo sources. Evidence: pending.
+
+#### Part 3: Design a Layered Guardrail Architecture
+
+- [ ] Create `src/content/docs/posts/2026-09-01-layered-ai-guardrail-architecture.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 3. Evidence: pending.
+- [ ] Build the identity, input, context, tool, authorization, execution, and output control stack. Evidence: pending.
+- [ ] Define fail-closed, fail-open, quarantine, and degraded behavior. Evidence: pending.
+- [ ] Separate syntactic validation, semantic policy, and authorization. Evidence: pending.
+- [ ] Define stable decision and audit contracts. Evidence: pending.
+- [ ] Explain time-of-check to time-of-use drift. Evidence: pending.
+- [ ] Explain policy versioning and rollback. Evidence: pending.
+- [ ] Implement composable TypeScript guardrails and a policy gate over authenticated identity and normalized arguments. Evidence: pending.
+- [ ] Include a table of layer, available facts, possible decisions, failure behavior, and evidence. Evidence: pending.
+- [ ] Test allow, block, ask, quarantine, timeout, and unknown-policy behavior. Evidence: pending.
+- [ ] Show a schema-valid request that authorization still blocks. Evidence: pending.
+- [ ] Ground claims in the listed NIST, OWASP, OpenAI, and Anthropic primary sources. Evidence: pending.
+
+#### Part 4: Prompt Injection and Control-Data Separation
+
+- [ ] Create `src/content/docs/posts/2026-09-01-prompt-injection-control-data-separation.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 4. Evidence: pending.
+- [ ] Distinguish jailbreaks, direct injection, and indirect injection. Evidence: pending.
+- [ ] Trace an injection from untrusted ticket text to a tool proposal. Evidence: pending.
+- [ ] Explain why delimiters and classifiers are partial controls. Evidence: pending.
+- [ ] Preserve source, trust, and data classification outside content strings. Evidence: pending.
+- [ ] Introduce capability-scoped execution and CaMeL's control-data direction. Evidence: pending.
+- [ ] Explain residual risk and task-coverage tradeoffs. Evidence: pending.
+- [ ] Replace unsafe string concatenation with structured tool results carrying provenance metadata. Evidence: pending.
+- [ ] Enforce an action policy that does not derive capabilities from instructions inside untrusted content. Evidence: pending.
+- [ ] Test plain, paraphrased, encoded, split, and multi-turn synthetic injections. Evidence: pending.
+- [ ] Test benign hard negatives that discuss prompt injection without attempting one. Evidence: pending.
+- [ ] State clearly that provenance labels can guide a model while application metadata supports enforcement. Evidence: pending.
+- [ ] Ground claims in the listed OWASP, Anthropic, AgentDojo, InjecAgent, and CaMeL sources. Evidence: pending.
+
+#### Wave 1 landing page and discovery
+
+- [ ] Create `src/content/docs/posts/series/engineering-ai-guardrails/index.mdx` with the planned title, quoted description, and hidden sidebar entry. Evidence: pending.
+- [ ] State the series argument and reader outcomes on the landing page. Evidence: pending.
+- [ ] Explain the fictional support workflow and the version-baseline policy. Evidence: pending.
+- [ ] List only the four published Wave 1 posts in reading order. Evidence: pending.
+- [ ] Add related links to prompt injection, permission models, benchmarks, and MCP. Evidence: pending.
+- [ ] Add the series to `src/content/docs/posts/index.mdx`. Evidence: pending.
+- [ ] Add the series to `src/content/docs/posts/series/index.mdx`. Evidence: pending.
+
+#### Wave 1 shared quality review
+
+- [ ] Keep terminology, `GuardrailDecision` semantics, data classes, support-domain facts, and tool names consistent across all four posts. Evidence: pending.
+- [ ] Confirm no post claims that prompt injection is solved or describes influence or detection as enforcement. Evidence: pending.
+- [ ] Confirm every post opens with a concrete failure or engineering decision and defines its boundary. Evidence: pending.
+- [ ] Confirm every post contains one central working code anchor and at least one test that affects execution. Evidence: pending.
+- [ ] Confirm every post explains tradeoffs, residual risk, and common failure modes. Evidence: pending.
+- [ ] Confirm every post cites primary references and links to two to five relevant internal neighbors. Evidence: pending.
+- [ ] Confirm previous and next links point only to published series parts. Evidence: pending.
+- [ ] Confirm public pages contain no plan headings, future-file TODOs, attack payload galleries, raw private content, universal thresholds, or mechanical source piles. Evidence: pending.
+- [ ] Confirm every unsafe example uses fake executors and cannot perform a real external write. Evidence: pending.
+
+#### Wave 1 code and site validation
+
+- [ ] Extract or mirror the Wave 1 TypeScript examples into a temporary validation directory. Evidence: pending.
+- [ ] Type-check the central Wave 1 TypeScript examples with the repo toolchain. Evidence: pending.
+- [ ] Run the included deterministic tests for the Wave 1 examples. Evidence: pending.
+- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
+- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
+- [ ] Run `npm run validate:style`. Evidence: pending.
+- [ ] Run `npm run validate:code-examples`. Evidence: pending.
+- [ ] Run `npm run validate:published-content`. Evidence: pending.
+- [ ] Run `npm run build` after every Wave 1 file-change batch. Evidence: pending.
+- [ ] Run `npm run validate:links` against the final Wave 1 build. Evidence: pending.
+- [ ] Inspect the rendered posts index and series landing route. Evidence: pending.
+- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [ ] Commit the Wave 1 implementation and checklist evidence. Evidence: pending.
+- [ ] Push the Wave 1 commit and confirm `origin/main`. Evidence: pending.
+- [ ] Mark Wave 1 complete only after every Wave 1 item has evidence and is checked. Evidence: pending.
+
+### Wave 2: Application surfaces
+
+#### Part 5: Guardrails for Production Chatbots
+
+- [ ] Create `src/content/docs/posts/2026-09-01-production-chatbot-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 5. Evidence: pending.
+- [ ] Start with the text-only support chatbot and add caller identity, limits, and normalized input validation. Evidence: pending.
+- [ ] Add structured model screening with explicit uncertainty behavior. Evidence: pending.
+- [ ] Add structured output and egress checks. Evidence: pending.
+- [ ] Cover refusal, appeal, throttling, and repeated-abuse behavior. Evidence: pending.
+- [ ] Measure false refusals and latency. Evidence: pending.
+- [ ] Implement parallel TypeScript and Python handlers with deterministic checks before optional screening and output policy before release. Evidence: pending.
+- [ ] Test malformed input, policy violations, safe technical discussion, classifier timeout, and output redaction. Evidence: pending.
+- [ ] Include a latency budget for parallel and blocking checks. Evidence: pending.
+- [ ] Distinguish content moderation, injection detection, and application authorization in a table. Evidence: pending.
+- [ ] Ground claims in the listed Anthropic, OpenAI, and OWASP primary sources. Evidence: pending.
+
+#### Part 6: Tool Calls, Approvals, and Least Privilege
+
+- [ ] Create `src/content/docs/posts/2026-09-01-ai-tool-calls-approvals-least-privilege.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 6. Evidence: pending.
+- [ ] Separate read, draft, send, credit, and administrative capabilities. Evidence: pending.
+- [ ] Define strict schemas and semantic invariants. Evidence: pending.
+- [ ] Normalize tool arguments before policy evaluation. Evidence: pending.
+- [ ] Authorize every resource and destination. Evidence: pending.
+- [ ] Render approvals from validated facts and bind them to an action digest and expiration. Evidence: pending.
+- [ ] Revalidate at execution and use idempotency keys. Evidence: pending.
+- [ ] Implement `executeToolProposal` over validation, authorization, approval, and a fake executor. Evidence: pending.
+- [ ] Prove no executor call follows validation, authorization, or approval failure. Evidence: pending.
+- [ ] Test cross-tenant account access. Evidence: pending.
+- [ ] Show approval deception exposed by canonical fields. Evidence: pending.
+- [ ] Prove retries cannot duplicate a side effect. Evidence: pending.
+- [ ] Ground claims in the listed OWASP, OpenAI, and existing MCP sources. Evidence: pending.
+
+#### Part 7: Guardrails for MCP Clients and Servers
+
+- [ ] Recheck the current stable MCP specification and record the selected version before authoring. Evidence: pending.
+- [ ] Create `src/content/docs/posts/2026-09-01-mcp-client-server-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 7. Evidence: pending.
+- [ ] Map host, client, server, authorization server, and protected resource boundaries. Evidence: pending.
+- [ ] Treat remote tool definitions and annotations as untrusted hints. Evidence: pending.
+- [ ] Cover pinning, review, and diffing of tool definitions. Evidence: pending.
+- [ ] Validate and label tool results. Evidence: pending.
+- [ ] Bind tokens to resource and audience, prevent token passthrough, and prevent session identity mixing. Evidence: pending.
+- [ ] Evaluate dangerous tool combinations and data movement. Evidence: pending.
+- [ ] Add limits, timeouts, audit events, and revocation. Evidence: pending.
+- [ ] Implement a TypeScript MCP host wrapper that checks definitions, applies per-tool policy, labels results, and records server and definition versions. Evidence: pending.
+- [ ] Test changed descriptions, oversized results, hostile text, wrong token audience, and cross-session state. Evidence: pending.
+- [ ] Include a tool-combination table for private read plus external write. Evidence: pending.
+- [ ] Cross-link the MCP Server Design series instead of repeating the protocol lifecycle. Evidence: pending.
+- [ ] Keep code in the post unless a documented snippet-testability gap requires a separate feature decision. Evidence: pending.
+
+#### Part 8: Agents, Delegation, and Guardrail Propagation
+
+- [ ] Create `src/content/docs/posts/2026-09-01-agent-delegation-guardrail-propagation.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 8. Evidence: pending.
+- [ ] Compare manager-as-tool, handoff, and independent-worker orchestration. Evidence: pending.
+- [ ] Identify endpoint-only guardrails and the gaps they leave inside a workflow. Evidence: pending.
+- [ ] Define a typed handoff envelope. Evidence: pending.
+- [ ] Reduce authority for delegated work and apply tool policy at every child invocation. Evidence: pending.
+- [ ] Protect shared memory and summaries from handoff laundering. Evidence: pending.
+- [ ] Link parent and child traces, budgets, cancellation, and outcomes. Evidence: pending.
+- [ ] Implement `HandoffEnvelope` and allow child runners to derive only narrower capabilities. Evidence: pending.
+- [ ] Property-test that child capability is a subset of parent capability. Evidence: pending.
+- [ ] Test handoff laundering, child tool denial, and linked trace events. Evidence: pending.
+- [ ] Include an ASCII diagram of parent, handoff, child, tool, and result paths. Evidence: pending.
+- [ ] Ground claims in the listed OpenAI, Anthropic, and OWASP primary sources. Evidence: pending.
+
+#### Wave 2 landing page and shared quality review
+
+- [ ] Add Parts 5 through 8 to the landing page in order, using only working links. Evidence: pending.
+- [ ] Keep terminology, support-domain facts, tool names, decision semantics, and policy boundaries consistent across Wave 2. Evidence: pending.
+- [ ] Confirm every side-effecting example has a pre-execution policy check and a fake executor. Evidence: pending.
+- [ ] Confirm MCP examples match the selected stable specification. Evidence: pending.
+- [ ] Confirm handoffs preserve lineage and reduce capability. Evidence: pending.
+- [ ] Confirm no Wave 2 post repeats the MCP protocol introduction. Evidence: pending.
+- [ ] Apply every shared per-post content quality gate from Wave 1 to Parts 5 through 8. Evidence: pending.
+
+#### Wave 2 code and site validation
+
+- [ ] Extract or mirror central Wave 2 TypeScript and Python examples into a temporary validation directory. Evidence: pending.
+- [ ] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: pending.
+- [ ] Run included deterministic Wave 2 tests. Evidence: pending.
+- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
+- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
+- [ ] Run `npm run validate:style`. Evidence: pending.
+- [ ] Run `npm run validate:code-examples`. Evidence: pending.
+- [ ] Run `npm run validate:published-content`. Evidence: pending.
+- [ ] Run `npm run build` after every Wave 2 file-change batch. Evidence: pending.
+- [ ] Run `npm run validate:links` against the final Wave 2 build. Evidence: pending.
+- [ ] Inspect every new route and the updated series landing page. Evidence: pending.
+- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [ ] Commit the Wave 2 implementation and checklist evidence. Evidence: pending.
+- [ ] Push the Wave 2 commit and confirm `origin/main`. Evidence: pending.
+- [ ] Mark Wave 2 complete only after every Wave 2 item has evidence and is checked. Evidence: pending.
+
+### Wave 3: Vendor implementations
+
+#### Part 9: Claude API and Agent SDK Guardrails
+
+- [ ] Recheck all named Anthropic documentation on the authoring day. Evidence: pending.
+- [ ] Record exact SDK versions, API status, and Managed Agents beta status. Evidence: pending.
+- [ ] Create `src/content/docs/posts/2026-09-01-claude-api-agent-sdk-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 9. Evidence: pending.
+- [ ] Show a Messages API tool loop with third-party content in `tool_result` blocks. Evidence: pending.
+- [ ] Preserve source and trust metadata in application state. Evidence: pending.
+- [ ] Add structured injection screening as detection rather than authorization. Evidence: pending.
+- [ ] Add Agent SDK tool permission logic and enforceable pre-tool and post-tool hooks. Evidence: pending.
+- [ ] Map controls to Managed Agents permission policies and confirmation events. Evidence: pending.
+- [ ] Explain session evidence, agent versions, and beta limitations. Evidence: pending.
+- [ ] Implement credential-free Python snippets for Messages API, Agent SDK, and Managed Agents. Evidence: pending.
+- [ ] Test application permission callbacks without live credentials. Evidence: pending.
+- [ ] Include a mock tool result with a safe synthetic injection. Evidence: pending.
+- [ ] Map each vendor control to layer, enforcement authority, and limitation. Evidence: pending.
+- [ ] State exclusions and uncovered Claude tool paths explicitly. Evidence: pending.
+
+#### Part 10: OpenAI Agents SDK and Codex SDK Guardrails
+
+- [ ] Recheck all named official OpenAI and Codex documentation on the authoring day. Evidence: pending.
+- [ ] Record exact SDK versions, API status, and beta status. Evidence: pending.
+- [ ] Create `src/content/docs/posts/2026-09-01-openai-agents-codex-sdk-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 10. Evidence: pending.
+- [ ] Implement an input guardrail and explain blocking versus parallel execution. Evidence: pending.
+- [ ] Implement supported custom-tool input and output guardrails. Evidence: pending.
+- [ ] Explain endpoint-only input and output coverage in multi-agent workflows. Evidence: pending.
+- [ ] Add human review for side-effecting support tools. Evidence: pending.
+- [ ] Emit trace metadata and custom policy spans. Evidence: pending.
+- [ ] Wrap a synthetic Codex SDK task with repository, execution, network, time, and event boundaries. Evidence: pending.
+- [ ] State which hosted, built-in, handoff, and SDK paths require separate enforcement. Evidence: pending.
+- [ ] Keep Python OpenAI Agents SDK and TypeScript Codex SDK examples credential-free. Evidence: pending.
+- [ ] Test blocking input behavior and pre-executor custom-tool policy. Evidence: pending.
+- [ ] Assert trace guardrail results and tool lineage. Evidence: pending.
+- [ ] Test Codex host policy with fake process and event adapters where supported. Evidence: pending.
+- [ ] State exclusions and uncovered OpenAI or Codex tool paths explicitly. Evidence: pending.
+
+#### Wave 3 landing page and shared quality review
+
+- [ ] Add Parts 9 and 10 to the landing page in order, using only working links. Evidence: pending.
+- [ ] Keep Claude and OpenAI or Codex examples structurally comparable without forcing identical APIs. Evidence: pending.
+- [ ] Keep vendor-specific results separate from vendor-neutral architecture claims. Evidence: pending.
+- [ ] Label beta surfaces visibly and avoid using them as the basis for vendor-neutral claims. Evidence: pending.
+- [ ] Confirm credential-free tests cover host-owned policy in both posts. Evidence: pending.
+- [ ] Apply every shared per-post content quality gate from Wave 1 to Parts 9 and 10. Evidence: pending.
+
+#### Wave 3 code and site validation
+
+- [ ] Extract or mirror central Wave 3 TypeScript and Python examples into a temporary validation directory. Evidence: pending.
+- [ ] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: pending.
+- [ ] Run included credential-free Wave 3 tests. Evidence: pending.
+- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
+- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
+- [ ] Run `npm run validate:style`. Evidence: pending.
+- [ ] Run `npm run validate:code-examples`. Evidence: pending.
+- [ ] Run `npm run validate:published-content`. Evidence: pending.
+- [ ] Run `npm run build` after every Wave 3 file-change batch. Evidence: pending.
+- [ ] Run `npm run validate:links` against the final Wave 3 build. Evidence: pending.
+- [ ] Inspect both vendor routes and the updated series landing page. Evidence: pending.
+- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [ ] Commit the Wave 3 implementation and checklist evidence. Evidence: pending.
+- [ ] Push the Wave 3 commit and confirm `origin/main`. Evidence: pending.
+- [ ] Mark Wave 3 complete only after every Wave 3 item has evidence and is checked. Evidence: pending.
+
+### Wave 4: Evidence and operations
+
+#### Part 11: Deterministic Guardrail Testing
+
+- [ ] Create `src/content/docs/posts/2026-09-01-deterministic-guardrail-testing.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 11. Evidence: pending.
+- [ ] Define a guardrail test pyramid. Evidence: pending.
+- [ ] Cover pure policy unit tests, adapter contracts, and audit-event contracts. Evidence: pending.
+- [ ] Use fake model trajectories and recording tools. Evidence: pending.
+- [ ] Test timeout, retry, cancellation, and failure policy. Evidence: pending.
+- [ ] Add properties for capability monotonicity and side-effect evidence. Evidence: pending.
+- [ ] Explain which behavior still requires live-model evaluation. Evidence: pending.
+- [ ] Implement a credential-free Python fake agent and TypeScript recording executor. Evidence: pending.
+- [ ] Include table-driven unit tests and fake-model tool or handoff trajectories. Evidence: pending.
+- [ ] Test fail-closed, quarantine, and explicit degraded behavior. Evidence: pending.
+- [ ] Prove every executed external effect has a preceding allow or approval event. Evidence: pending.
+- [ ] Prove reducing authority cannot turn `block` into `allow`. Evidence: pending.
+
+#### Part 12: Adversarial Evals and Security-Utility Measurement
+
+- [ ] Create `src/content/docs/posts/2026-09-01-adversarial-ai-security-evals.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 12. Evidence: pending.
+- [ ] Define allowed and prohibited outcomes independently. Evidence: pending.
+- [ ] Build benign, attack, hard-negative, mutation-family, and multi-turn fixtures. Evidence: pending.
+- [ ] Compare baseline, control, and adaptive-attack conditions. Evidence: pending.
+- [ ] Measure attack success, benign success, utility under attack, false refusals, latency, and cost. Evidence: pending.
+- [ ] Account for stochastic variance and model updates. Evidence: pending.
+- [ ] Turn metrics into risk-specific release gates. Evidence: pending.
+- [ ] Implement a Python eval runner over `SecurityEvalCase` with deterministic outcome checks and optional graders. Evidence: pending.
+- [ ] Include the four-outcome AgentDojo-style matrix. Evidence: pending.
+- [ ] Run repeated trials for stochastic cases and safe hard negatives. Evidence: pending.
+- [ ] Compare baseline utility with utility under attack. Evidence: pending.
+- [ ] Explain benchmark overfitting and adaptive attackers. Evidence: pending.
+
+#### Part 13: Trace Guardrail Bypasses and Boundary Hops
+
+- [ ] Create `src/content/docs/posts/2026-09-01-trace-guardrail-bypasses-boundary-hops.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 13. Evidence: pending.
+- [ ] Start causal analysis from the prohibited external outcome. Evidence: pending.
+- [ ] Define trace, run, turn, tool-call, handoff, approval, and policy identifiers. Evidence: pending.
+- [ ] Walk causal parent links backward and build expected-versus-observed control ledgers. Evidence: pending.
+- [ ] Separate malicious input, first preventable failure, and contributing conditions. Evidence: pending.
+- [ ] Minimize captured content and protect audit data. Evidence: pending.
+- [ ] Build a synthetic incident timeline and causal graph. Evidence: pending.
+- [ ] Implement TypeScript audit types and a reconstruction function that returns the effect, untrusted source, failed or missing controls, override path, and first preventable failure. Evidence: pending.
+- [ ] Include complete synthetic traces for missing authorization, classifier timeout, and approval deception. Evidence: pending.
+- [ ] Define redaction rules for credentials, personal data, and untrusted content. Evidence: pending.
+- [ ] Test orphan spans, duplicate tool calls, and mismatched approval digests. Evidence: pending.
+
+#### Part 14: Incident Response and Continuous Improvement
+
+- [ ] Create `src/content/docs/posts/2026-09-01-ai-guardrail-incident-response.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 14. Evidence: pending.
+- [ ] Cover detection and identifier preservation. Evidence: pending.
+- [ ] Cover containment of tools, capabilities, destinations, sessions, and tokens. Evidence: pending.
+- [ ] Reproduce the incident with fake tools before live systems. Evidence: pending.
+- [ ] Pin model, prompt, policy, tool-definition, and SDK versions. Evidence: pending.
+- [ ] Write the causal explanation and control ledger. Evidence: pending.
+- [ ] Fix the enforcement boundary before changing prompt wording. Evidence: pending.
+- [ ] Add deterministic and live-model regression cases. Evidence: pending.
+- [ ] Restore gradually while measuring security and utility. Evidence: pending.
+- [ ] Feed the failure pattern back into threat models and release gates. Evidence: pending.
+- [ ] Implement a minimized Python regression fixture backed by a reader-facing incident record. Evidence: pending.
+- [ ] Prove the prohibited outcome cannot recur while the allowed support task still succeeds. Evidence: pending.
+- [ ] Include the causal timeline, first preventable failure, contributing conditions, containment checklist, before-and-after results, and recurring review cadence. Evidence: pending.
+- [ ] End with a production checklist and links to every implementation and testing installment. Evidence: pending.
+
+#### Wave 4 landing page and shared quality review
+
+- [ ] Add Parts 11 through 14 to the landing page and confirm the complete 14-part reading order. Evidence: pending.
+- [ ] Include attack success and benign utility in eval reporting. Evidence: pending.
+- [ ] Confirm trace reconstruction identifies the first preventable failure. Evidence: pending.
+- [ ] Confirm audit examples minimize sensitive content. Evidence: pending.
+- [ ] Confirm the incident regression proves safety and retained task utility. Evidence: pending.
+- [ ] Apply every shared per-post content quality gate from Wave 1 to Parts 11 through 14. Evidence: pending.
+
+#### Wave 4 code and site validation
+
+- [ ] Extract or mirror central Wave 4 TypeScript and Python examples into a temporary validation directory. Evidence: pending.
+- [ ] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: pending.
+- [ ] Run deterministic, workflow, property, adversarial, hard-negative, and regression tests. Evidence: pending.
+- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
+- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
+- [ ] Run `npm run validate:style`. Evidence: pending.
+- [ ] Run `npm run validate:code-examples`. Evidence: pending.
+- [ ] Run `npm run validate:published-content`. Evidence: pending.
+- [ ] Run `npm run build` after every Wave 4 file-change batch. Evidence: pending.
+- [ ] Run `npm run validate:links` against the final Wave 4 build. Evidence: pending.
+- [ ] Inspect every new route and the complete series landing page. Evidence: pending.
+- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [ ] Commit the Wave 4 implementation and checklist evidence. Evidence: pending.
+- [ ] Push the Wave 4 commit and confirm `origin/main`. Evidence: pending.
+- [ ] Mark Wave 4 complete only after every Wave 4 item has evidence and is checked. Evidence: pending.
+
+### Final series closeout
+
+- [ ] Confirm all 14 posts exist with the `engineering-ai-guardrails` slug and unique orders 1 through 14. Evidence: pending.
+- [ ] Confirm both post indexes link to the series and the landing page lists the complete reading order. Evidence: pending.
+- [ ] Confirm every central TypeScript and Python example has recorded validation evidence. Evidence: pending.
+- [ ] Confirm vendor posts match current official documentation and record versions and beta status. Evidence: pending.
+- [ ] Confirm prompt-injection coverage includes direct, indirect, tool, memory, handoff, and approval paths. Evidence: pending.
+- [ ] Confirm testing covers deterministic policy, workflow, adversarial, hard-negative, property, and live-model cases. Evidence: pending.
+- [ ] Confirm metrics cover security, utility, latency, cost, and evidence completeness. Evidence: pending.
+- [ ] Confirm the trace post reconstructs the first preventable failure and the incident post converts it into a passing regression. Evidence: pending.
+- [ ] Run final published-content, style, credential, em-dash, code-example, build, link, route, browser, and pre-push validation. Evidence: pending.
+- [ ] Review changed external references and beta notes. Evidence: pending.
+- [ ] Update `docs/feature_tracker.md` only if implementation added a validator, generator, component, content model, or reusable repo workflow. Evidence: pending.
+- [ ] Move this plan from `docs/plans/current/` to `docs/plans/history/`. Evidence: pending.
+- [ ] Commit and push final closeout, then confirm a clean worktree synchronized with `origin/main`. Evidence: pending.
+- [ ] Mark the whole series complete only after every wave and final closeout item is checked. Evidence: pending.
 
 ## Authoring waves
 
