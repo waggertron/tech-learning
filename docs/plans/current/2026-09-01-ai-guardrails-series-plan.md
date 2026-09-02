@@ -1038,107 +1038,107 @@ This checklist is the execution ledger for the series. Check an item only after 
 - [x] Complete the private research baseline. Evidence: `docs/research/2026-09-01-ai-guardrails-series-research.md`, 1,062 lines, local and ignored by design.
 - [x] Complete and push the decision-ready series plan. Evidence: commit `5b06f9f` on `origin/main`.
 - [x] Install a user-wide plan execution skill. Evidence: `/Users/weylinwagnon/.agents/skills/track-plan-execution/SKILL.md` passes `quick_validate.py`.
-- [ ] Commit and push this execution checklist before authoring Wave 1. Evidence: pending.
+- [x] Commit and push this execution checklist before authoring Wave 1. Evidence: commit `f5c37c6` pushed to `origin/main`.
 
 ### Wave 1: Foundations
 
 #### Part 1: Guardrails Are Systems, Not Prompts
 
-- [ ] Create `src/content/docs/posts/2026-09-01-ai-guardrails-are-systems-not-prompts.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 1. Evidence: pending.
-- [ ] Open with the support assistant following an injected instruction. Evidence: pending.
-- [ ] Separate unsafe model text from an external side effect. Evidence: pending.
-- [ ] Define influence, detection, enforcement, explanation, and recovery. Evidence: pending.
-- [ ] Map controls to ingress, context, inference, tool, execution, and egress boundaries. Evidence: pending.
-- [ ] Establish that model output is a proposal subject to host policy. Evidence: pending.
-- [ ] Define guardrail bypass, failure propagation, and the informal term guardrail hop without overstating them. Evidence: pending.
-- [ ] Show the unsafe direct-dispatch pipeline and the safe `proposeAction` plus `evaluatePolicy` pipeline. Evidence: pending.
-- [ ] Include a test proving a blocked proposal never reaches the executor. Evidence: pending.
-- [ ] Include an ASCII diagram of the layered pipeline. Evidence: pending.
-- [ ] Include a table that distinguishes the five guardrail jobs. Evidence: pending.
-- [ ] Ground claims in the listed OWASP, NIST, Anthropic, and OpenAI primary sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-ai-guardrails-are-systems-not-prompts.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 1. Evidence: frontmatter in the created file includes the quoted description, canonical route, series slug, and order 1.
+- [x] Open with the support assistant following an injected instruction. Evidence: the opening ticket combines a billing request with an embedded instruction to disclose an internal note.
+- [x] Separate unsafe model text from an external side effect. Evidence: `The first boundary is text versus effect` distinguishes drafting, account reads, sends, and release controls.
+- [x] Define influence, detection, enforcement, explanation, and recovery. Evidence: `Five jobs hide behind one word` defines all five jobs and their authority.
+- [x] Map controls to ingress, context, inference, tool, execution, and egress boundaries. Evidence: `Put controls where the facts exist` contains the six-stage ASCII pipeline and boundary explanation.
+- [x] Establish that model output is a proposal subject to host policy. Evidence: the opening rule and `runSupportTurn` route every proposal through `evaluatePolicy` before execution.
+- [x] Define guardrail bypass, failure propagation, and the informal term guardrail hop without overstating them. Evidence: `Use precise failure names` defines all three and labels guardrail hop as informal.
+- [x] Show the unsafe direct-dispatch pipeline and the safe `proposeAction` plus `evaluatePolicy` pipeline. Evidence: `runUnsafeTurn` dispatches directly, while `runSupportTurn` separates proposal, policy, and execution.
+- [x] Include a test proving a blocked proposal never reaches the executor. Evidence: `blockedProposalNeverExecutes` asserts `executor.calls.length === 0` and is invoked at top level.
+- [x] Include an ASCII diagram of the layered pipeline. Evidence: `Put controls where the facts exist` contains an ASCII-only boundary diagram.
+- [x] Include a table that distinguishes the five guardrail jobs. Evidence: the five-row job table records purpose, examples, and effect-stopping authority.
+- [x] Ground claims in the listed OWASP, NIST, Anthropic, and OpenAI primary sources. Evidence: the References section links OWASP LLM01, NIST AI RMF and AI 600-1, Anthropic research, and OpenAI guardrail documentation.
 
 #### Part 2: Threat-Model an AI Application
 
-- [ ] Create `src/content/docs/posts/2026-09-01-threat-model-ai-application.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 2. Evidence: pending.
-- [ ] Inventory the support workflow's assets, actors, data classes, tools, destinations, and state. Evidence: pending.
-- [ ] Mark trusted, mixed, and untrusted sources. Evidence: pending.
-- [ ] Cover direct, indirect, tool, memory, and handoff entry points. Evidence: pending.
-- [ ] Separate model compromise from system impact. Evidence: pending.
-- [ ] Explain the risk created by private data, untrusted content, and external communication in one workflow. Evidence: pending.
-- [ ] Turn prohibited outcomes into control requirements and release tests. Evidence: pending.
-- [ ] Implement the `ThreatBoundary` inventory and reject boundaries missing ownership or destination facts. Evidence: pending.
-- [ ] Include an ASCII data-flow diagram for the support workflow. Evidence: pending.
-- [ ] Include a threat table for direct injection, indirect injection, tool poisoning, confused deputy, memory poisoning, approval deception, and cost abuse. Evidence: pending.
-- [ ] Map at least one prohibited outcome to one deterministic release test. Evidence: pending.
-- [ ] Ground claims in the listed OWASP, MITRE ATLAS, NIST, and existing repo sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-threat-model-ai-application.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 2. Evidence: frontmatter in the created file includes the quoted description, canonical route, series slug, and order 2.
+- [x] Inventory the support workflow's assets, actors, data classes, tools, destinations, and state. Evidence: `Ask what the system can change`, the workflow map, and `ThreatBoundary` cover each inventory category.
+- [x] Mark trusted, mixed, and untrusted sources. Evidence: the data-flow map labels the trusted control plane, mixed-trust context, and untrusted ticket source.
+- [x] Cover direct, indirect, tool, memory, and handoff entry points. Evidence: `Mark every entry point` enumerates user, retrieved, tool, memory, handoff, approval, and coding-agent channels.
+- [x] Separate model compromise from system impact. Evidence: `Separate compromise from impact` traces behavior change through capability and policy failures to a prohibited effect.
+- [x] Explain the risk created by private data, untrusted content, and external communication in one workflow. Evidence: `The dangerous combination` names all three conditions and shows how to break each edge.
+- [x] Turn prohibited outcomes into control requirements and release tests. Evidence: the threat table maps threats to prohibited outcomes, control requirements, and evidence.
+- [x] Implement the `ThreatBoundary` inventory and reject boundaries missing ownership or destination facts. Evidence: `validateThreatBoundary` returns `MISSING_OWNER` and `MISSING_DESTINATION_INVENTORY`, with executable assertions.
+- [x] Include an ASCII data-flow diagram for the support workflow. Evidence: `Map the support workflow` contains an ASCII trust-boundary and capability flow.
+- [x] Include a threat table for direct injection, indirect injection, tool poisoning, confused deputy, memory poisoning, approval deception, and cost abuse. Evidence: the seven-row threat table covers every named case.
+- [x] Map at least one prohibited outcome to one deterministic release test. Evidence: `releaseIfAllowed` blocks restricted data to an unapproved destination and proves the fake sink records zero releases.
+- [x] Ground claims in the listed OWASP, MITRE ATLAS, NIST, and existing repo sources. Evidence: References link OWASP agent and injection guidance, MITRE ATLAS, and NIST AI 600-1, with four internal related-topic links.
 
 #### Part 3: Design a Layered Guardrail Architecture
 
-- [ ] Create `src/content/docs/posts/2026-09-01-layered-ai-guardrail-architecture.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 3. Evidence: pending.
-- [ ] Build the identity, input, context, tool, authorization, execution, and output control stack. Evidence: pending.
-- [ ] Define fail-closed, fail-open, quarantine, and degraded behavior. Evidence: pending.
-- [ ] Separate syntactic validation, semantic policy, and authorization. Evidence: pending.
-- [ ] Define stable decision and audit contracts. Evidence: pending.
-- [ ] Explain time-of-check to time-of-use drift. Evidence: pending.
-- [ ] Explain policy versioning and rollback. Evidence: pending.
-- [ ] Implement composable TypeScript guardrails and a policy gate over authenticated identity and normalized arguments. Evidence: pending.
-- [ ] Include a table of layer, available facts, possible decisions, failure behavior, and evidence. Evidence: pending.
-- [ ] Test allow, block, ask, quarantine, timeout, and unknown-policy behavior. Evidence: pending.
-- [ ] Show a schema-valid request that authorization still blocks. Evidence: pending.
-- [ ] Ground claims in the listed NIST, OWASP, OpenAI, and Anthropic primary sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-layered-ai-guardrail-architecture.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 3. Evidence: frontmatter in the created file includes the quoted description, canonical route, series slug, and order 3.
+- [x] Build the identity, input, context, tool, authorization, execution, and output control stack. Evidence: `One pipeline, several enforcement points` maps the complete control path.
+- [x] Define fail-closed, fail-open, quarantine, and degraded behavior. Evidence: `Define failure behavior before production` defines all four modes and where they fit.
+- [x] Separate syntactic validation, semantic policy, and authorization. Evidence: `Separate validation, policy, and authorization` asks and answers the three independent questions.
+- [x] Define stable decision and audit contracts. Evidence: `GuardrailDecision` and `GuardrailAuditEvent` provide stable actions, reason codes, policy versions, layers, and outcomes.
+- [x] Explain time-of-check to time-of-use drift. Evidence: `Recheck at execution time` covers changed state, expired approval, revoked permission, normalized argument binding, and reauthorization.
+- [x] Explain policy versioning and rollback. Evidence: `Version policy and rollback independently` records decision versions and separates policy rollback from model and prompt changes.
+- [x] Implement composable TypeScript guardrails and a policy gate over authenticated identity and normalized arguments. Evidence: the guardrail stack evaluates a `GuardrailContext` containing actor, tenant, authorized accounts, source trust, policy version, and normalized proposal.
+- [x] Include a table of layer, available facts, possible decisions, failure behavior, and evidence. Evidence: `Match each layer to its facts` contains the required five-column table.
+- [x] Test allow, block, ask, quarantine, timeout, and unknown-policy behavior. Evidence: `guardrailDecisionTests` covers all six paths and is invoked at top level.
+- [x] Show a schema-valid request that authorization still blocks. Evidence: the opening credit and cross-tenant draft are well shaped but fail tenant and account authorization.
+- [x] Ground claims in the listed NIST, OWASP, OpenAI, and Anthropic primary sources. Evidence: References link NIST AI RMF, OWASP agent guidance, OpenAI guardrail documentation, and Anthropic research.
 
 #### Part 4: Prompt Injection and Control-Data Separation
 
-- [ ] Create `src/content/docs/posts/2026-09-01-prompt-injection-control-data-separation.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 4. Evidence: pending.
-- [ ] Distinguish jailbreaks, direct injection, and indirect injection. Evidence: pending.
-- [ ] Trace an injection from untrusted ticket text to a tool proposal. Evidence: pending.
-- [ ] Explain why delimiters and classifiers are partial controls. Evidence: pending.
-- [ ] Preserve source, trust, and data classification outside content strings. Evidence: pending.
-- [ ] Introduce capability-scoped execution and CaMeL's control-data direction. Evidence: pending.
-- [ ] Explain residual risk and task-coverage tradeoffs. Evidence: pending.
-- [ ] Replace unsafe string concatenation with structured tool results carrying provenance metadata. Evidence: pending.
-- [ ] Enforce an action policy that does not derive capabilities from instructions inside untrusted content. Evidence: pending.
-- [ ] Test plain, paraphrased, encoded, split, and multi-turn synthetic injections. Evidence: pending.
-- [ ] Test benign hard negatives that discuss prompt injection without attempting one. Evidence: pending.
-- [ ] State clearly that provenance labels can guide a model while application metadata supports enforcement. Evidence: pending.
-- [ ] Ground claims in the listed OWASP, Anthropic, AgentDojo, InjecAgent, and CaMeL sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-prompt-injection-control-data-separation.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 4. Evidence: frontmatter in the created file includes the quoted description, canonical route, series slug, and order 4.
+- [x] Distinguish jailbreaks, direct injection, and indirect injection. Evidence: `Three related attacks have different entry points` defines and locates all three.
+- [x] Trace an injection from untrusted ticket text to a tool proposal. Evidence: `Trace influence all the way to an effect` follows the ticket through context, proposal, destination selection, and disclosure.
+- [x] Explain why delimiters and classifiers are partial controls. Evidence: `Delimiters and classifiers are partial controls` covers paraphrase, encoding, split, multi-turn, false-block, and missed-attack limits.
+- [x] Preserve source, trust, and data classification outside content strings. Evidence: `ContentEnvelope` stores `sourceId`, `sourceType`, `trust`, and `dataClasses` in application-owned metadata.
+- [x] Introduce capability-scoped execution and CaMeL's control-data direction. Evidence: `Capabilities come from the host, not the ticket` explains the CaMeL direction and implements host-selected capabilities.
+- [x] Explain residual risk and task-coverage tradeoffs. Evidence: `Control-data separation has a cost` covers declassification, approval, task coverage, policy bugs, and permitted-action risk.
+- [x] Replace unsafe string concatenation with structured tool results carrying provenance metadata. Evidence: `buildUnsafePrompt` is followed by `TicketToolResult` and `ContentEnvelope`.
+- [x] Enforce an action policy that does not derive capabilities from instructions inside untrusted content. Evidence: `evaluateAction` reads only host policy, known-source records, normalized action, and verified destination.
+- [x] Test plain, paraphrased, encoded, split, and multi-turn synthetic injections. Evidence: `injectionCases` covers all five variants, blocks each proposal, and proves zero fake-executor calls.
+- [x] Test benign hard negatives that discuss prompt injection without attempting one. Evidence: `benignDiscussion` mentions prompt injection, allows a draft, and records one fake draft effect.
+- [x] State clearly that provenance labels can guide a model while application metadata supports enforcement. Evidence: the statement appears directly after the structured ticket result.
+- [x] Ground claims in the listed OWASP, Anthropic, AgentDojo, InjecAgent, and CaMeL sources. Evidence: References link all five source families directly.
 
 #### Wave 1 landing page and discovery
 
-- [ ] Create `src/content/docs/posts/series/engineering-ai-guardrails/index.mdx` with the planned title, quoted description, and hidden sidebar entry. Evidence: pending.
-- [ ] State the series argument and reader outcomes on the landing page. Evidence: pending.
-- [ ] Explain the fictional support workflow and the version-baseline policy. Evidence: pending.
-- [ ] List only the four published Wave 1 posts in reading order. Evidence: pending.
-- [ ] Add related links to prompt injection, permission models, benchmarks, and MCP. Evidence: pending.
-- [ ] Add the series to `src/content/docs/posts/index.mdx`. Evidence: pending.
-- [ ] Add the series to `src/content/docs/posts/series/index.mdx`. Evidence: pending.
+- [x] Create `src/content/docs/posts/series/engineering-ai-guardrails/index.mdx` with the planned title, quoted description, and hidden sidebar entry. Evidence: the created landing page matches the planned frontmatter and sets `sidebar.hidden: true`.
+- [x] State the series argument and reader outcomes on the landing page. Evidence: the opening states the layered-systems argument and `What you will be able to do` lists six outcomes.
+- [x] Explain the fictional support workflow and the version-baseline policy. Evidence: `The running workflow` and `Version baseline` define both.
+- [x] List only the four published Wave 1 posts in reading order. Evidence: `Published reading order` contains Parts 1 through 4 and no future post links.
+- [x] Add related links to prompt injection, permission models, benchmarks, and MCP. Evidence: the four-item Related topics section covers each required neighbor.
+- [x] Add the series to `src/content/docs/posts/index.mdx`. Evidence: the first Post series entry links `./series/engineering-ai-guardrails/`.
+- [x] Add the series to `src/content/docs/posts/series/index.mdx`. Evidence: the Long-form series list links `./engineering-ai-guardrails/`.
 
 #### Wave 1 shared quality review
 
-- [ ] Keep terminology, `GuardrailDecision` semantics, data classes, support-domain facts, and tool names consistent across all four posts. Evidence: pending.
-- [ ] Confirm no post claims that prompt injection is solved or describes influence or detection as enforcement. Evidence: pending.
-- [ ] Confirm every post opens with a concrete failure or engineering decision and defines its boundary. Evidence: pending.
-- [ ] Confirm every post contains one central working code anchor and at least one test that affects execution. Evidence: pending.
-- [ ] Confirm every post explains tradeoffs, residual risk, and common failure modes. Evidence: pending.
-- [ ] Confirm every post cites primary references and links to two to five relevant internal neighbors. Evidence: pending.
-- [ ] Confirm previous and next links point only to published series parts. Evidence: pending.
-- [ ] Confirm public pages contain no plan headings, future-file TODOs, attack payload galleries, raw private content, universal thresholds, or mechanical source piles. Evidence: pending.
-- [ ] Confirm every unsafe example uses fake executors and cannot perform a real external write. Evidence: pending.
+- [x] Keep terminology, `GuardrailDecision` semantics, data classes, support-domain facts, and tool names consistent across all four posts. Evidence: manual cross-post review confirmed common allow, block, ask, quarantine semantics; public, internal, and restricted classes; and the same support ticket, account, reply, recipient, tenant, and credit vocabulary.
+- [x] Confirm no post claims that prompt injection is solved or describes influence or detection as enforcement. Evidence: Parts 1 and 4 explicitly reject a solved-injection claim, and Part 1's five-job table separates influence and detection from enforcement.
+- [x] Confirm every post opens with a concrete failure or engineering decision and defines its boundary. Evidence: the openings cover an injected ticket, a classifier with missing tenancy, a schema-valid cross-tenant credit, and untrusted text selecting a send.
+- [x] Confirm every post contains one central working code anchor and at least one test that affects execution. Evidence: final extracted suites execute in all four posts and assert zero effects for blocked proposals or releases; Part 4 also asserts one allowed fake draft effect.
+- [x] Confirm every post explains tradeoffs, residual risk, and common failure modes. Evidence: all four posts contain explicit tradeoff or residual-risk discussion and a `Common failure modes` section.
+- [x] Confirm every post cites primary references and links to two to five relevant internal neighbors. Evidence: each References section uses primary standards, vendor documentation, or papers, and each Related topics section contains four internal links.
+- [x] Confirm previous and next links point only to published series parts. Evidence: Parts 1 through 3 link adjacent published parts, Part 4 links only Part 3, and every post links the published landing page.
+- [x] Confirm public pages contain no plan headings, future-file TODOs, attack payload galleries, raw private content, universal thresholds, or mechanical source piles. Evidence: manual published-content review and `npm run validate:published-content` found no internal scaffolding or prohibited residue.
+- [x] Confirm every unsafe example uses fake executors and cannot perform a real external write. Evidence: executed examples use only in-memory recording executors and `example.invalid` destinations; no network or service client appears in the Wave 1 code.
 
 #### Wave 1 code and site validation
 
-- [ ] Extract or mirror the Wave 1 TypeScript examples into a temporary validation directory. Evidence: pending.
-- [ ] Type-check the central Wave 1 TypeScript examples with the repo toolchain. Evidence: pending.
-- [ ] Run the included deterministic tests for the Wave 1 examples. Evidence: pending.
-- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
-- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
-- [ ] Run `npm run validate:style`. Evidence: pending.
-- [ ] Run `npm run validate:code-examples`. Evidence: pending.
-- [ ] Run `npm run validate:published-content`. Evidence: pending.
-- [ ] Run `npm run build` after every Wave 1 file-change batch. Evidence: pending.
-- [ ] Run `npm run validate:links` against the final Wave 1 build. Evidence: pending.
-- [ ] Inspect the rendered posts index and series landing route. Evidence: pending.
-- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [x] Extract or mirror the Wave 1 TypeScript examples into a temporary validation directory. Evidence: `.tmp-guardrails-wave1` held one extracted TypeScript module per post, containing 3, 3, 3, and 4 fenced blocks.
+- [x] Type-check the central Wave 1 TypeScript examples with the repo toolchain. Evidence: `npx tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --types node .tmp-guardrails-wave1/*.ts` exited 0.
+- [x] Run the included deterministic tests for the Wave 1 examples. Evidence: all four extracted modules ran with the local `tsx` binary and exited 0 after top-level test invocation.
+- [x] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: the five temporary files were removed, `rmdir` succeeded, and `test ! -e .tmp-guardrails-wave1` printed `temporary-validation-clean`.
+- [x] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: `bash scripts/check-secrets.sh` passed and the U+2014 scan returned no matches across all touched Wave 1 files.
+- [x] Run `npm run validate:style`. Evidence: final Wave 1 run exited 0 with `Style validation passed.`
+- [x] Run `npm run validate:code-examples`. Evidence: final Wave 1 run exited 0 with fence tags and source syntax checked.
+- [x] Run `npm run validate:published-content`. Evidence: final Wave 1 run exited 0 with `Published content review passed.`
+- [x] Run `npm run build` after every Wave 1 file-change batch. Evidence: builds passed after each post, the landing and discovery batch, test refinements, tradeoff additions, and checklist evidence batches; the final build generated 786 pages with zero Astro diagnostics.
+- [x] Run `npm run validate:links` against the final Wave 1 build. Evidence: final Wave 1 run checked 786 HTML pages and passed.
+- [x] Inspect the rendered posts index and series landing route. Evidence: local Astro preview returned HTTP 200 HTML for the posts index, series index, landing page, and all four posts; rendered markers confirmed the series link, outcomes, reading order, and post titles.
+- [x] Run `npm run validate:pre-push`. Evidence: the full gate passed secret, style, published-content, generated-output, React, Swift, MCP companion, coding-problem, code-example, build, 786-page, link, custom-page, and browser validation tiers.
 - [ ] Commit the Wave 1 implementation and checklist evidence. Evidence: pending.
 - [ ] Push the Wave 1 commit and confirm `origin/main`. Evidence: pending.
 - [ ] Mark Wave 1 complete only after every Wave 1 item has evidence and is checked. Evidence: pending.

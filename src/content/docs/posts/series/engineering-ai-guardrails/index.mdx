@@ -1,0 +1,43 @@
+---
+title: Engineering Guardrails for AI Systems, post series
+description: "A 14-part path from AI threat models and prompt injection through enforceable tool boundaries, MCP and agent controls, security evals, causal tracing, and incident response."
+sidebar:
+  hidden: true
+---
+
+AI guardrails work when model influence, deterministic enforcement, evidence, and recovery are designed as one system. This series follows an unsafe proposal from untrusted input to an external effect, then places controls at the boundaries that can still stop it.
+
+## What you will be able to do
+
+- Threat-model a chatbot, MCP server, or agent as a data flow with actors, assets, trust boundaries, capabilities, and destinations.
+- Separate model guidance and attack detection from policy, authorization, approval, and execution controls.
+- Preserve provenance and keep untrusted content from granting capabilities.
+- Test guardrails with effect assertions, adaptive attacks, benign hard negatives, and utility measurements.
+- Trace a guardrail bypass across prompt, model, policy, tool, and executor versions.
+- Turn incident findings into regression tests, safer defaults, and auditable release evidence.
+
+## The running workflow
+
+The examples use a fictional customer-support assistant. It can read tickets, retrieve tenant-scoped account facts, draft replies, send to a verified customer address, and propose limited service credits. Later parts add MCP tools and longer-running agent behavior.
+
+The domain stays deliberately small so the security boundary remains visible. Tickets and retrieved documents are untrusted data. Identity, tenant ownership, capabilities, verified destinations, approvals, and policy versions come from the host application.
+
+## Published reading order
+
+1. [AI Guardrails Are Systems, Not Prompts](../../2026-09-01-ai-guardrails-are-systems-not-prompts/), define influence, detection, enforcement, evidence, and recovery around external effects.
+2. [Threat-Model an AI Application](../../2026-09-01-threat-model-ai-application/), map actors, assets, trust boundaries, capabilities, destinations, and failure paths.
+3. [Design a Layered AI Guardrail Architecture](../../2026-09-01-layered-ai-guardrail-architecture/), compose identity, context, policy, authorization, approval, execution, and output controls.
+4. [Prompt Injection and Control-Data Separation](../../2026-09-01-prompt-injection-control-data-separation/), preserve provenance and prevent untrusted content from selecting capabilities or destinations.
+
+New parts will join this reading order only after their pages and examples pass the repository's publication checks.
+
+## Version baseline
+
+The architectural examples are provider-neutral. Vendor-specific and MCP posts record the documentation, protocol, SDK, and model baselines used at publication. Treat those details as dated evidence, recheck them before copying configuration, and rerun the examples when a dependency or hosted behavior changes.
+
+## Related topics
+
+- [Prompt injection defense](../../../topics/ai/prompt-engineering/prompt-injection-defense/)
+- [Permission and trust models](../../../topics/ai/harness-development/permission-models/)
+- [Agent benchmarks](../../../topics/ai/benchmarks/agent-benchmarks/)
+- [MCP Server Design series](../mcp-server-design/)
