@@ -1391,18 +1391,18 @@ This checklist is the execution ledger for the series. Check an item only after 
 
 ### Final series closeout
 
-- [ ] Confirm all 14 posts exist with the `engineering-ai-guardrails` slug and unique orders 1 through 14. Evidence: pending.
-- [ ] Confirm both post indexes link to the series and the landing page lists the complete reading order. Evidence: pending.
-- [ ] Confirm every central TypeScript and Python example has recorded validation evidence. Evidence: pending.
-- [ ] Confirm vendor posts match current official documentation and record versions and beta status. Evidence: pending.
-- [ ] Confirm prompt-injection coverage includes direct, indirect, tool, memory, handoff, and approval paths. Evidence: pending.
-- [ ] Confirm testing covers deterministic policy, workflow, adversarial, hard-negative, property, and live-model cases. Evidence: pending.
-- [ ] Confirm metrics cover security, utility, latency, cost, and evidence completeness. Evidence: pending.
-- [ ] Confirm the trace post reconstructs the first preventable failure and the incident post converts it into a passing regression. Evidence: pending.
-- [ ] Run final published-content, style, credential, em-dash, code-example, build, link, route, browser, and pre-push validation. Evidence: pending.
-- [ ] Review changed external references and beta notes. Evidence: pending.
-- [ ] Update `docs/feature_tracker.md` only if implementation added a validator, generator, component, content model, or reusable repo workflow. Evidence: pending.
-- [ ] Move this plan from `docs/plans/current/` to `docs/plans/history/`. Evidence: pending.
+- [x] Confirm all 14 posts exist with the `engineering-ai-guardrails` slug and unique orders 1 through 14. Evidence: a Node frontmatter audit found exactly 14 top-level post files, printed every title and filename, and proved a unique contiguous order set from 1 through 14.
+- [x] Confirm both post indexes link to the series and the landing page lists the complete reading order. Evidence: the same audit found `./series/engineering-ai-guardrails/` in the posts index, `./engineering-ai-guardrails/` in the series index, and exactly 14 numbered linked landing entries.
+- [x] Confirm every central TypeScript and Python example has recorded validation evidence. Evidence: Wave 1 records four strict TypeScript suites, Wave 2 records four TypeScript and one Python suite, Wave 3 records ten Python and two TypeScript fences against pinned SDKs, and Wave 4 records three Python and two TypeScript programs; every relevant compile, parse, and execution row is checked above.
+- [x] Confirm vendor posts match current official documentation and record versions and beta status. Evidence: Wave 3 records the September 1, 2026 official-documentation review and exact Anthropic, Claude Agent SDK, Managed Agents beta, OpenAI Agents SDK, Codex SDK, alpha-tag exclusion, and hosted multi-agent beta baselines.
+- [x] Confirm prompt-injection coverage includes direct, indirect, tool, memory, handoff, and approval paths. Evidence: final cross-series search found direct and indirect definitions in Part 4, hostile tool-result paths in Parts 2, 4, 7, and 12, memory and handoff propagation in Parts 2 and 8, and approval deception in Parts 2, 6, 12, 13, and 14.
+- [x] Confirm testing covers deterministic policy, workflow, adversarial, hard-negative, property, and live-model cases. Evidence: Parts 11, 12, and 14 define and execute deterministic policy, fake workflow, adversarial, hard-negative, and property layers, then define pinned repeated live-model trials and release gates for behavior outside the fake boundary.
+- [x] Confirm metrics cover security, utility, latency, cost, and evidence completeness. Evidence: Part 12 reports attack success, benign success, utility under attack, false refusals, latency, cost, and permit-plus-receipt evidence completeness by condition and fixture family.
+- [x] Confirm the trace post reconstructs the first preventable failure and the incident post converts it into a passing regression. Evidence: Part 13's executed traces identify authorization, classifier, and approval failures; Part 14 reproduces the vulnerable fake send, blocks it after the executor fix, and retains the allowed support read.
+- [x] Run final published-content, style, credential, em-dash, code-example, build, link, route, browser, and pre-push validation. Evidence: the final documented split gate passed every deterministic pre-push tier and focused browser tier, builds generated 796 pages with zero diagnostics, links checked 796 pages, the whole-series scan covered all 14 sources, HTTP returned 200 for 14 posts plus landing, and Playwright verified every exact H1 and all 14 landing links.
+- [x] Review changed external references and beta notes. Evidence: the final source review retained primary OpenAI testing, Anthropic tracing, NIST, OWASP, AgentDojo, InjecAgent, and CaMeL references; Wave 3's dated vendor review records pre-1.0, alpha, and beta limitations without presenting them as stable guarantees.
+- [x] Update `docs/feature_tracker.md` only if implementation added a validator, generator, component, content model, or reusable repo workflow. Evidence: no update is required because the repository change is reader-facing content and navigation only; the plan-tracking skill is installed user-wide outside this repository and did not add a repo validator, generator, component, content model, or repo workflow.
+- [x] Move this plan from `docs/plans/current/` to `docs/plans/history/`. Evidence: `git mv` placed the completed plan at `docs/plans/history/2026-09-01-ai-guardrails-series-plan.md`; the former current path no longer exists.
 - [ ] Commit and push final closeout, then confirm a clean worktree synchronized with `origin/main`. Evidence: pending.
 - [ ] Mark the whole series complete only after every wave and final closeout item is checked. Evidence: pending.
 
