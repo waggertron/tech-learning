@@ -387,7 +387,7 @@ Residual risk includes compromised orchestrators, incorrect trusted constraints,
 ## Series navigation
 
 - Previous: [Part 7: Guardrails for MCP Clients and Servers](../2026-09-01-mcp-client-server-guardrails/)
-- Next: Part 9 maps these boundaries to the Claude API and Agent SDK.
+- Next: [Part 9: Claude API and Agent SDK Guardrails](../2026-09-01-claude-api-agent-sdk-guardrails/)
 - Series index: [Engineering Guardrails for AI Systems](../series/engineering-ai-guardrails/)
 
 ## References

@@ -1239,62 +1239,62 @@ This checklist is the execution ledger for the series. Check an item only after 
 
 #### Part 9: Claude API and Agent SDK Guardrails
 
-- [ ] Recheck all named Anthropic documentation on the authoring day. Evidence: pending.
-- [ ] Record exact SDK versions, API status, and Managed Agents beta status. Evidence: pending.
-- [ ] Create `src/content/docs/posts/2026-09-01-claude-api-agent-sdk-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 9. Evidence: pending.
-- [ ] Show a Messages API tool loop with third-party content in `tool_result` blocks. Evidence: pending.
-- [ ] Preserve source and trust metadata in application state. Evidence: pending.
-- [ ] Add structured injection screening as detection rather than authorization. Evidence: pending.
-- [ ] Add Agent SDK tool permission logic and enforceable pre-tool and post-tool hooks. Evidence: pending.
-- [ ] Map controls to Managed Agents permission policies and confirmation events. Evidence: pending.
-- [ ] Explain session evidence, agent versions, and beta limitations. Evidence: pending.
-- [ ] Implement credential-free Python snippets for Messages API, Agent SDK, and Managed Agents. Evidence: pending.
-- [ ] Test application permission callbacks without live credentials. Evidence: pending.
-- [ ] Include a mock tool result with a safe synthetic injection. Evidence: pending.
-- [ ] Map each vendor control to layer, enforcement authority, and limitation. Evidence: pending.
-- [ ] State exclusions and uncovered Claude tool paths explicitly. Evidence: pending.
+- [x] Recheck all named Anthropic documentation on the authoring day. Evidence: rechecked the official Messages API, tool-use loop, Agent SDK permission, Agent SDK hook, Python SDK, Managed Agents permission, event, setup, session, operation, and migration documentation on September 1, 2026; the post links the primary references it relies on.
+- [x] Record exact SDK versions, API status, and Managed Agents beta status. Evidence: the version table records `anthropic==1.3.0`, `@anthropic-ai/sdk@0.123.0`, `claude-agent-sdk==0.2.151`, `@anthropic-ai/claude-agent-sdk@0.3.258`, and the `managed-agents-2026-04-01` beta header, with Alpha, pre-1.0, and beta labels where applicable.
+- [x] Create `src/content/docs/posts/2026-09-01-claude-api-agent-sdk-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 9. Evidence: the created page contains a quoted description, stable tags, its canonical route, `engineering-ai-guardrails`, and series order 9.
+- [x] Show a Messages API tool loop with third-party content in `tool_result` blocks. Evidence: `run_support_turn` consumes client `tool_use` blocks, executes the fake ticket reader after authorization, and returns labelled third-party content in matching user-side `tool_result` blocks.
+- [x] Preserve source and trust metadata in application state. Evidence: the host-owned `Evidence` record stores source ID, tenant, trust class, classification, original content, tool-use ID, and policy version outside the model message.
+- [x] Add structured injection screening as detection rather than authorization. Evidence: `screen_untrusted_text` returns a structured decision and detector, while the surrounding explanation states that its label cannot change ticket capability, destination, or external-effect approval.
+- [x] Add Agent SDK tool permission logic and enforceable pre-tool and post-tool hooks. Evidence: `decide_agent_tool`, `can_use_tool`, `PreToolUse`, and the ticket-scoped `PostToolUse` hook demonstrate policy, pre-execution denial or review, and schema-aware result labelling.
+- [x] Map controls to Managed Agents permission policies and confirmation events. Evidence: the Managed Agents section configures explicit `always_ask`, disables write, edit, and shell tools, restricts web fetch, and creates canonical `user.tool_confirmation` events.
+- [x] Explain session evidence, agent versions, and beta limitations. Evidence: `Pin sessions to evidence, not just an agent name` lists version, environment, session, event, permission, approval, custom-tool, SDK, and beta evidence, then explains session-local configuration drift.
+- [x] Implement credential-free Python snippets for Messages API, Agent SDK, and Managed Agents. Evidence: all five Python fences use fakes, pure policy, configuration dictionaries, and callbacks without API keys or live service calls; they parsed and the combined examples ran against the pinned SDKs.
+- [x] Test application permission callbacks without live credentials. Evidence: `test_agent_policy` checks scoped reads, path escape, tenant ticket access, destination denial, and shell denial; `test_callbacks` asserts a pre-hook denial and post-hook injection label without launching Claude.
+- [x] Include a mock tool result with a safe synthetic injection. Evidence: `FakeTickets` returns a fictional sentence asking the assistant to ignore support policy and change destination, using only `example.invalid` data and an in-memory fake.
+- [x] Map each vendor control to layer, enforcement authority, and limitation. Evidence: `Map each control to its real authority` covers ten prompt, detector, loop, permission, hook, Managed Agents, and custom-tool controls across all three required columns.
+- [x] State exclusions and uncovered Claude tool paths explicitly. Evidence: `Know what this post does not cover` enumerates Messages server tools, callback shadowing, post-execution limits, settings hooks, subagents, client custom tools, beta drift, and detector limits.
 
 #### Part 10: OpenAI Agents SDK and Codex SDK Guardrails
 
-- [ ] Recheck all named official OpenAI and Codex documentation on the authoring day. Evidence: pending.
-- [ ] Record exact SDK versions, API status, and beta status. Evidence: pending.
-- [ ] Create `src/content/docs/posts/2026-09-01-openai-agents-codex-sdk-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 10. Evidence: pending.
-- [ ] Implement an input guardrail and explain blocking versus parallel execution. Evidence: pending.
-- [ ] Implement supported custom-tool input and output guardrails. Evidence: pending.
-- [ ] Explain endpoint-only input and output coverage in multi-agent workflows. Evidence: pending.
-- [ ] Add human review for side-effecting support tools. Evidence: pending.
-- [ ] Emit trace metadata and custom policy spans. Evidence: pending.
-- [ ] Wrap a synthetic Codex SDK task with repository, execution, network, time, and event boundaries. Evidence: pending.
-- [ ] State which hosted, built-in, handoff, and SDK paths require separate enforcement. Evidence: pending.
-- [ ] Keep Python OpenAI Agents SDK and TypeScript Codex SDK examples credential-free. Evidence: pending.
-- [ ] Test blocking input behavior and pre-executor custom-tool policy. Evidence: pending.
-- [ ] Assert trace guardrail results and tool lineage. Evidence: pending.
-- [ ] Test Codex host policy with fake process and event adapters where supported. Evidence: pending.
-- [ ] State exclusions and uncovered OpenAI or Codex tool paths explicitly. Evidence: pending.
+- [x] Recheck all named official OpenAI and Codex documentation on the authoring day. Evidence: rechecked the official Agents SDK guardrail, human-review, result, and tracing references plus the official Codex TypeScript README, options, thread, and event sources on September 1, 2026.
+- [x] Record exact SDK versions, API status, and beta status. Evidence: the version table records `openai-agents==0.22.0`, the Responses API default path, `@openai/codex-sdk@0.152.1`, matching `@openai/codex@0.152.1`, and the excluded `0.153.0-alpha.4` and hosted multi-agent beta surfaces.
+- [x] Create `src/content/docs/posts/2026-09-01-openai-agents-codex-sdk-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 10. Evidence: the created page contains a quoted description, stable tags, its canonical route, `engineering-ai-guardrails`, and series order 10.
+- [x] Implement an input guardrail and explain blocking versus parallel execution. Evidence: `support_input_boundary` uses `run_in_parallel=False`, and the adjacent explanation contrasts its start guarantee with the default parallel mode's latency and possible early model or tool work.
+- [x] Implement supported custom-tool input and output guardrails. Evidence: the `function_tool` example attaches `send_reply_policy` and `send_reply_result_policy`, validates canonical arguments before execution, and validates the synthetic effect receipt afterward.
+- [x] Explain endpoint-only input and output coverage in multi-agent workflows. Evidence: the coverage map and custom-tool section state that agent input guards only the first workflow agent and output guards only the final producing agent, not each handoff or internal proposal.
+- [x] Add human review for side-effecting support tools. Evidence: `send_reply` sets `needs_approval=True`, the prose distinguishes pre-approval from post-approval checks, and the HITL section covers interruptions, serialized run state, reviewer evidence, resume, and freshness revalidation.
+- [x] Emit trace metadata and custom policy spans. Evidence: the trace example emits a synthetic group ID, policy version, tool name, decision, and argument digest inside a named custom policy span, while the host harness records linked trace and span IDs.
+- [x] Wrap a synthetic Codex SDK task with repository, execution, network, time, and event boundaries. Evidence: the real wiring pins working directory, workspace-write, untrusted approval, no network, disabled web search, no extra directories, a 30-second abort, minimized events, a reduced environment, and disabled history persistence.
+- [x] State which hosted, built-in, handoff, and SDK paths require separate enforcement. Evidence: the approval-path list and `State uncovered paths explicitly` separate handoffs, hosted tools, built-in execution tools, direct agent-as-tool calls, later agents, hosted shell and multi-agent paths, streamed events, CLI environment, cancellation, plugins, and MCP.
+- [x] Keep Python OpenAI Agents SDK and TypeScript Codex SDK examples credential-free. Evidence: the Python examples construct guardrails and run fake executors with no model request, while the real Codex snippet is not executed and the runnable TypeScript suite uses fake process, thread, deadline, and event adapters.
+- [x] Test blocking input behavior and pre-executor custom-tool policy. Evidence: the input guardrail is explicitly blocking; the runnable host-policy suite sends an unauthorized destination, expects `PermissionError`, and proves `executor.calls` remains empty before exercising the allowed path.
+- [x] Assert trace guardrail results and tool lineage. Evidence: `test_host_policy` checks the block decision, the immediately preceding allowed tool-input event, and the executor event's parent span link; the post explains the SDK's four guardrail-result lists.
+- [x] Test Codex host policy with fake process and event adapters where supported. Evidence: the standalone TypeScript suite asserts exact thread settings, successful in-repository events, deadline expiration, and outside-repository file-change detection; strict type checking and `tsx` execution both exited 0.
+- [x] State exclusions and uncovered OpenAI or Codex tool paths explicitly. Evidence: separate lists enumerate the Agents SDK and Codex coverage gaps and require a path-specific boundary or exclusion for each.
 
 #### Wave 3 landing page and shared quality review
 
-- [ ] Add Parts 9 and 10 to the landing page in order, using only working links. Evidence: pending.
-- [ ] Keep Claude and OpenAI or Codex examples structurally comparable without forcing identical APIs. Evidence: pending.
-- [ ] Keep vendor-specific results separate from vendor-neutral architecture claims. Evidence: pending.
-- [ ] Label beta surfaces visibly and avoid using them as the basis for vendor-neutral claims. Evidence: pending.
-- [ ] Confirm credential-free tests cover host-owned policy in both posts. Evidence: pending.
-- [ ] Apply every shared per-post content quality gate from Wave 1 to Parts 9 and 10. Evidence: pending.
+- [x] Add Parts 9 and 10 to the landing page in order, using only working links. Evidence: the published reading order now lists linked Parts 9 and 10 after Part 8; the final link validator resolved both and local preview returned HTTP 200 for both destinations.
+- [x] Keep Claude and OpenAI or Codex examples structurally comparable without forcing identical APIs. Evidence: both posts use version baselines, authority maps, pure host policy, vendor wiring, fake effects, explicit coverage gaps, tradeoffs, failure modes, navigation, primary references, and internal links, while retaining each SDK's actual callbacks, hooks, decorators, interruptions, and thread options.
+- [x] Keep vendor-specific results separate from vendor-neutral architecture claims. Evidence: both openings and coverage tables identify vendor controls as bounded adapters, link back to the earlier neutral architecture, and assign application-owned policy or executors independent authority.
+- [x] Label beta surfaces visibly and avoid using them as the basis for vendor-neutral claims. Evidence: Claude Managed Agents and hosted OpenAI multi-agent behavior are visibly marked beta, excluded where appropriate, and discussed only as vendor-specific coverage.
+- [x] Confirm credential-free tests cover host-owned policy in both posts. Evidence: the Claude policy and callback suites and the OpenAI executor and Codex adapter suites ran with no credentials, including denial, zero-effect, trace-lineage, timeout, and path-observation assertions.
+- [x] Apply every shared per-post content quality gate from Wave 1 to Parts 9 and 10. Evidence: manual review confirmed concrete failure openings, explicit boundaries, central working examples, execution-affecting tests, tradeoffs, residual risk, common failures, primary references, four internal neighbors, published-only navigation, fake effects, and no solved-injection or enforcement-confusion claims; automated style and published-content review passed.
 
 #### Wave 3 code and site validation
 
-- [ ] Extract or mirror central Wave 3 TypeScript and Python examples into a temporary validation directory. Evidence: pending.
-- [ ] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: pending.
-- [ ] Run included credential-free Wave 3 tests. Evidence: pending.
-- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
-- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
-- [ ] Run `npm run validate:style`. Evidence: pending.
-- [ ] Run `npm run validate:code-examples`. Evidence: pending.
-- [ ] Run `npm run validate:published-content`. Evidence: pending.
-- [ ] Run `npm run build` after every Wave 3 file-change batch. Evidence: pending.
-- [ ] Run `npm run validate:links` against the final Wave 3 build. Evidence: pending.
-- [ ] Inspect both vendor routes and the updated series landing page. Evidence: pending.
-- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [x] Extract or mirror central Wave 3 TypeScript and Python examples into a temporary validation directory. Evidence: all ten Python and two TypeScript fences were mechanically extracted to `/private/tmp/guardrails-wave3.o8oBQK`, with combined runners assembled from the exact published fences.
+- [x] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: every Python fence passed `py_compile`; both TypeScript fences passed strict NodeNext checking against `@openai/codex-sdk@0.152.1`; the combined Python and standalone TypeScript suites exited 0.
+- [x] Run included credential-free Wave 3 tests. Evidence: Claude Messages, pure Agent policy, callbacks, Managed configuration, OpenAI host policy, Agents SDK wiring, trace construction, and Codex fake-adapter tests all ran without credentials; exact vendor imports used the versions documented in the posts.
+- [x] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: `/private/tmp/guardrails-wave3.o8oBQK` and three rendered-route HTML files were removed; `git status --short` contains only the intended four Wave 3 source files.
+- [x] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: the full repository secret scan passed, and the U+2014 scan returned no matches across all four touched content files.
+- [x] Run `npm run validate:style`. Evidence: final Wave 3 run exited 0 with `Style validation passed.`
+- [x] Run `npm run validate:code-examples`. Evidence: final Wave 3 run exited 0 with fence tags and source syntax checked.
+- [x] Run `npm run validate:published-content`. Evidence: final Wave 3 run exited 0 with `Published content review passed.`
+- [x] Run `npm run build` after every Wave 3 file-change batch. Evidence: builds passed after Part 9, Part 10, navigation and landing updates, the Codex event-minimization correction, the Claude hook-scope correction, and checklist evidence; the full pre-push build generated 792 pages and 791 indexed pages with zero Astro diagnostics.
+- [x] Run `npm run validate:links` against the final Wave 3 build. Evidence: the link validator checked 792 HTML pages and passed.
+- [x] Inspect both vendor routes and the updated series landing page. Evidence: local Astro preview returned HTTP 200 for both vendor posts and the series landing; rendered title markers for both posts appeared on their routes and in the landing reading order, then the server and temporary HTML files were removed.
+- [x] Run `npm run validate:pre-push`. Evidence: the full gate passed secret, style, published-content, generated-output, React, Swift, MCP companion, coding-problem, code-example, build, 792-page, link, custom-page, and browser validation tiers.
 - [ ] Commit the Wave 3 implementation and checklist evidence. Evidence: pending.
 - [ ] Push the Wave 3 commit and confirm `origin/main`. Evidence: pending.
 - [ ] Mark Wave 3 complete only after every Wave 3 item has evidence and is checked. Evidence: pending.
