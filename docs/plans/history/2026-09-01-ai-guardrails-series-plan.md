@@ -1403,8 +1403,8 @@ This checklist is the execution ledger for the series. Check an item only after 
 - [x] Review changed external references and beta notes. Evidence: the final source review retained primary OpenAI testing, Anthropic tracing, NIST, OWASP, AgentDojo, InjecAgent, and CaMeL references; Wave 3's dated vendor review records pre-1.0, alpha, and beta limitations without presenting them as stable guarantees.
 - [x] Update `docs/feature_tracker.md` only if implementation added a validator, generator, component, content model, or reusable repo workflow. Evidence: no update is required because the repository change is reader-facing content and navigation only; the plan-tracking skill is installed user-wide outside this repository and did not add a repo validator, generator, component, content model, or repo workflow.
 - [x] Move this plan from `docs/plans/current/` to `docs/plans/history/`. Evidence: `git mv` placed the completed plan at `docs/plans/history/2026-09-01-ai-guardrails-series-plan.md`; the former current path no longer exists.
-- [ ] Commit and push final closeout, then confirm a clean worktree synchronized with `origin/main`. Evidence: pending.
-- [ ] Mark the whole series complete only after every wave and final closeout item is checked. Evidence: pending.
+- [x] Commit and push final closeout, then confirm a clean worktree synchronized with `origin/main`. Evidence: commit `043734e` (`Complete AI guardrails series`) archives the plan with the final audit; local HEAD, `origin/main`, and GitHub `refs/heads/main` all resolved to `043734efbf1c099b5404fef7f802a683cff0831c`, and `git status --short` was empty.
+- [x] Mark the whole series complete only after every wave and final closeout item is checked. Evidence: Waves 1 through 4 and all 14 final closeout rows are checked with concrete evidence; the Engineering Guardrails for AI Systems series is complete.
 
 ## Authoring waves
 
