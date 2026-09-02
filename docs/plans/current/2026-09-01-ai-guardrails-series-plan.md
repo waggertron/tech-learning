@@ -1303,88 +1303,88 @@ This checklist is the execution ledger for the series. Check an item only after 
 
 #### Part 11: Deterministic Guardrail Testing
 
-- [ ] Create `src/content/docs/posts/2026-09-01-deterministic-guardrail-testing.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 11. Evidence: pending.
-- [ ] Define a guardrail test pyramid. Evidence: pending.
-- [ ] Cover pure policy unit tests, adapter contracts, and audit-event contracts. Evidence: pending.
-- [ ] Use fake model trajectories and recording tools. Evidence: pending.
-- [ ] Test timeout, retry, cancellation, and failure policy. Evidence: pending.
-- [ ] Add properties for capability monotonicity and side-effect evidence. Evidence: pending.
-- [ ] Explain which behavior still requires live-model evaluation. Evidence: pending.
-- [ ] Implement a credential-free Python fake agent and TypeScript recording executor. Evidence: pending.
-- [ ] Include table-driven unit tests and fake-model tool or handoff trajectories. Evidence: pending.
-- [ ] Test fail-closed, quarantine, and explicit degraded behavior. Evidence: pending.
-- [ ] Prove every executed external effect has a preceding allow or approval event. Evidence: pending.
-- [ ] Prove reducing authority cannot turn `block` into `allow`. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-deterministic-guardrail-testing.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 11. Evidence: the published source contains quoted description frontmatter, five stable tags, the production canonical route, the series slug, and order 11.
+- [x] Define a guardrail test pyramid. Evidence: `Build a guardrail test pyramid` defines seven deterministic, integration, and live-model layers with their replacements and assertions.
+- [x] Cover pure policy unit tests, adapter contracts, and audit-event contracts. Evidence: the policy table, provider-boundary discussion, TypeScript executor contract, and audit-event negative cases cover all three surfaces.
+- [x] Use fake model trajectories and recording tools. Evidence: `FakeModel`, `ModelStep`, and `RecordingTools` drive credential-free tool, attack, and handoff trajectories.
+- [x] Test timeout, retry, cancellation, and failure policy. Evidence: `test_retry_timeout_and_cancellation` asserts retry bounds, unknown-outcome quarantine, descendant cancellation, and zero effects; `test_failure_policy` covers authorization, detector, and optional dependency failures.
+- [x] Add properties for capability monotonicity and side-effect evidence. Evidence: powerset coverage proves reduced capability sets cannot unlock an allow, and effect scans require prior permit evidence.
+- [x] Explain which behavior still requires live-model evaluation. Evidence: `Know what deterministic tests cannot prove` separates model, hosted-tool, sandbox, transport, and reviewer behavior from fake-boundary evidence.
+- [x] Implement a credential-free Python fake agent and TypeScript recording executor. Evidence: both standalone fenced programs use in-memory state and passed execution without credentials or network access.
+- [x] Include table-driven unit tests and fake-model tool or handoff trajectories. Evidence: `test_policy_table` covers four decisions and `test_workflow_trajectories` covers allowed read, attacked send, and reduced-authority handoff paths.
+- [x] Test fail-closed, quarantine, and explicit degraded behavior. Evidence: `test_failure_policy` maps authorization timeout to block, detector timeout to quarantine, and optional summarizer timeout to degrade.
+- [x] Prove every executed external effect has a preceding allow or approval event. Evidence: Python `assert_effects_have_permits` and TypeScript `assertEveryEffectHasPriorPermit` both pass, while the missing-permit negative test fails before any call.
+- [x] Prove reducing authority cannot turn `block` into `allow`. Evidence: `test_authority_monotonicity` exhaustively checks every subset of the three-capability universe against both example actions.
 
 #### Part 12: Adversarial Evals and Security-Utility Measurement
 
-- [ ] Create `src/content/docs/posts/2026-09-01-adversarial-ai-security-evals.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 12. Evidence: pending.
-- [ ] Define allowed and prohibited outcomes independently. Evidence: pending.
-- [ ] Build benign, attack, hard-negative, mutation-family, and multi-turn fixtures. Evidence: pending.
-- [ ] Compare baseline, control, and adaptive-attack conditions. Evidence: pending.
-- [ ] Measure attack success, benign success, utility under attack, false refusals, latency, and cost. Evidence: pending.
-- [ ] Account for stochastic variance and model updates. Evidence: pending.
-- [ ] Turn metrics into risk-specific release gates. Evidence: pending.
-- [ ] Implement a Python eval runner over `SecurityEvalCase` with deterministic outcome checks and optional graders. Evidence: pending.
-- [ ] Include the four-outcome AgentDojo-style matrix. Evidence: pending.
-- [ ] Run repeated trials for stochastic cases and safe hard negatives. Evidence: pending.
-- [ ] Compare baseline utility with utility under attack. Evidence: pending.
-- [ ] Explain benchmark overfitting and adaptive attackers. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-adversarial-ai-security-evals.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 12. Evidence: the published source contains quoted description frontmatter, five stable tags, the production canonical route, the series slug, and order 12.
+- [x] Define allowed and prohibited outcomes independently. Evidence: `Define outcomes before prompts` gives separate effect-based oracles and rejects refusal-only scoring.
+- [x] Build benign, attack, hard-negative, mutation-family, and multi-turn fixtures. Evidence: the fixture taxonomy defines all five classes and the runnable cases instantiate each class.
+- [x] Compare baseline, control, and adaptive-attack conditions. Evidence: the three-condition experimental design and `scripted_trials` data execute identical cases under baseline, control, and adaptive conditions.
+- [x] Measure attack success, benign success, utility under attack, false refusals, latency, and cost. Evidence: `Metrics`, `summarize`, reporting guidance, and passing assertions cover all six measures.
+- [x] Account for stochastic variance and model updates. Evidence: `Account for model variance` specifies repeated samples, mutation and history variation, pinned snapshots, and separate conditions for provider updates.
+- [x] Turn metrics into risk-specific release gates. Evidence: the release-gate table defines security, utility, and evidence thresholds for cross-tenant reads, outbound sends, and coding actions.
+- [x] Implement a Python eval runner over `SecurityEvalCase` with deterministic outcome checks and optional graders. Evidence: `run_cases` enforces trial counts and effect claims, accepts `SemanticGrader | None`, and the standalone program exits 0.
+- [x] Include the four-outcome AgentDojo-style matrix. Evidence: the opening matrix independently crosses intended-task success with prohibited-effect occurrence and interprets all four cells.
+- [x] Run repeated trials for stochastic cases and safe hard negatives. Evidence: every case supplies two or three trials per condition, including the quoted-injection hard negative, and the runner enforces each `min_trials` value.
+- [x] Compare baseline utility with utility under attack. Evidence: the reports retain separate benign success and attack-case utility for all three conditions, with assertions on baseline and control utility.
+- [x] Explain benchmark overfitting and adaptive attackers. Evidence: `Resist benchmark overfitting` prescribes private holdouts, semantic mutations, independent authors, visible control behavior, and re-evaluation after material changes.
 
 #### Part 13: Trace Guardrail Bypasses and Boundary Hops
 
-- [ ] Create `src/content/docs/posts/2026-09-01-trace-guardrail-bypasses-boundary-hops.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 13. Evidence: pending.
-- [ ] Start causal analysis from the prohibited external outcome. Evidence: pending.
-- [ ] Define trace, run, turn, tool-call, handoff, approval, and policy identifiers. Evidence: pending.
-- [ ] Walk causal parent links backward and build expected-versus-observed control ledgers. Evidence: pending.
-- [ ] Separate malicious input, first preventable failure, and contributing conditions. Evidence: pending.
-- [ ] Minimize captured content and protect audit data. Evidence: pending.
-- [ ] Build a synthetic incident timeline and causal graph. Evidence: pending.
-- [ ] Implement TypeScript audit types and a reconstruction function that returns the effect, untrusted source, failed or missing controls, override path, and first preventable failure. Evidence: pending.
-- [ ] Include complete synthetic traces for missing authorization, classifier timeout, and approval deception. Evidence: pending.
-- [ ] Define redaction rules for credentials, personal data, and untrusted content. Evidence: pending.
-- [ ] Test orphan spans, duplicate tool calls, and mismatched approval digests. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-trace-guardrail-bypasses-boundary-hops.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 13. Evidence: the published source contains quoted description frontmatter, five stable tags, the production canonical route, the series slug, and order 13.
+- [x] Start causal analysis from the prohibited external outcome. Evidence: the opening and reverse-walk procedure begin with an external effect receipt and walk toward the untrusted source.
+- [x] Define trace, run, turn, tool-call, handoff, approval, and policy identifiers. Evidence: the identifier table defines every requested scope, while `AuditEvent` carries their code-level forms.
+- [x] Walk causal parent links backward and build expected-versus-observed control ledgers. Evidence: `causalPath`, `buildLedger`, and the worked ledger validate parents and compare each required control with observed evidence.
+- [x] Separate malicious input, first preventable failure, and contributing conditions. Evidence: `Separate trigger, cause, and contributors` gives non-overlapping definitions and applies them to boundary failures.
+- [x] Minimize captured content and protect audit data. Evidence: the audit-content table specifies digests, safe fields, bounded samples, access separation, encryption, retention, and monitoring.
+- [x] Build a synthetic incident timeline and causal graph. Evidence: the approval-deception example includes a timestamped timeline and ASCII causal graph marking the first preventable failure.
+- [x] Implement TypeScript audit types and a reconstruction function that returns the effect, untrusted source, failed or missing controls, override path, and first preventable failure. Evidence: `Finding` and `reconstruct` expose every requested result, and strict type-check plus runtime assertions pass.
+- [x] Include complete synthetic traces for missing authorization, classifier timeout, and approval deception. Evidence: three trace builders terminate in the same confirmed effect and assert distinct first preventable failures.
+- [x] Define redaction rules for credentials, personal data, and untrusted content. Evidence: field rules prohibit secret values, replace personal data with scoped references, and retain only source metadata and bounded protected samples for untrusted content.
+- [x] Test orphan spans, duplicate tool calls, and mismatched approval digests. Evidence: the standalone TypeScript suite asserts orphan and duplicate validation errors and identifies approval as the first failure for a mismatched digest.
 
 #### Part 14: Incident Response and Continuous Improvement
 
-- [ ] Create `src/content/docs/posts/2026-09-01-ai-guardrail-incident-response.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 14. Evidence: pending.
-- [ ] Cover detection and identifier preservation. Evidence: pending.
-- [ ] Cover containment of tools, capabilities, destinations, sessions, and tokens. Evidence: pending.
-- [ ] Reproduce the incident with fake tools before live systems. Evidence: pending.
-- [ ] Pin model, prompt, policy, tool-definition, and SDK versions. Evidence: pending.
-- [ ] Write the causal explanation and control ledger. Evidence: pending.
-- [ ] Fix the enforcement boundary before changing prompt wording. Evidence: pending.
-- [ ] Add deterministic and live-model regression cases. Evidence: pending.
-- [ ] Restore gradually while measuring security and utility. Evidence: pending.
-- [ ] Feed the failure pattern back into threat models and release gates. Evidence: pending.
-- [ ] Implement a minimized Python regression fixture backed by a reader-facing incident record. Evidence: pending.
-- [ ] Prove the prohibited outcome cannot recur while the allowed support task still succeeds. Evidence: pending.
-- [ ] Include the causal timeline, first preventable failure, contributing conditions, containment checklist, before-and-after results, and recurring review cadence. Evidence: pending.
-- [ ] End with a production checklist and links to every implementation and testing installment. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-ai-guardrail-incident-response.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 14. Evidence: the published source contains quoted description frontmatter, five stable tags, the production canonical route, the series slug, and order 14.
+- [x] Cover detection and identifier preservation. Evidence: `Detect the effect and preserve identity` defines effect and evidence alerts plus the identifiers, version pins, digests, and bounded content to preserve.
+- [x] Cover containment of tools, capabilities, destinations, sessions, and tokens. Evidence: the containment table addresses every requested surface and adds queues, retries, credentials, and deployment rollback.
+- [x] Reproduce the incident with fake tools before live systems. Evidence: the five-step ladder begins with deterministic fake effects and defers controlled end-to-end verification until the final stage.
+- [x] Pin model, prompt, policy, tool-definition, and SDK versions. Evidence: both the preservation guidance and executable `VersionPins` record all five version dimensions.
+- [x] Write the causal explanation and control ledger. Evidence: the example record names the trigger, first preventable failure, contributors, and expected-versus-observed ledger.
+- [x] Fix the enforcement boundary before changing prompt wording. Evidence: a dedicated section prioritizes executor permit enforcement, exact action binding, least privilege, explicit failure policy, and receipt reconciliation before prompt defense in depth.
+- [x] Add deterministic and live-model regression cases. Evidence: the executable deterministic fixture and seven-stage regression ladder include policy, executor, scripted trajectory, property, integration, repeated live-model, and reconstruction checks.
+- [x] Restore gradually while measuring security and utility. Evidence: the ASCII restoration ladder moves through shadow, allowlisted, cohort, and normal operation while gating on security, utility, evidence, latency, and cost.
+- [x] Feed the failure pattern back into threat models and release gates. Evidence: `Feed the finding back into engineering` updates threat models, ledgers, fixtures, gates, tools, runbooks, and sibling systems.
+- [x] Implement a minimized Python regression fixture backed by a reader-facing incident record. Evidence: the incident record supplies impact, timeline, cause, ledger, containment, and correction; the standalone Python reproduction uses only `FakeEffects`.
+- [x] Prove the prohibited outcome cannot recur while the allowed support task still succeeds. Evidence: the fixture reproduces the vulnerable send, asserts `BLOCKED_POLICY` with zero post-fix effects, then records exactly one allowed ticket read.
+- [x] Include the causal timeline, first preventable failure, contributing conditions, containment checklist, before-and-after results, and recurring review cadence. Evidence: the incident record, containment table, comparison table, and quarterly plus change-triggered review guidance cover every requested artifact.
+- [x] End with a production checklist and links to every implementation and testing installment. Evidence: the final reader checklist links Parts 2 through 13 across threat modeling, implementation, vendor controls, deterministic tests, evals, and tracing.
 
 #### Wave 4 landing page and shared quality review
 
-- [ ] Add Parts 11 through 14 to the landing page and confirm the complete 14-part reading order. Evidence: pending.
-- [ ] Include attack success and benign utility in eval reporting. Evidence: pending.
-- [ ] Confirm trace reconstruction identifies the first preventable failure. Evidence: pending.
-- [ ] Confirm audit examples minimize sensitive content. Evidence: pending.
-- [ ] Confirm the incident regression proves safety and retained task utility. Evidence: pending.
-- [ ] Apply every shared per-post content quality gate from Wave 1 to Parts 11 through 14. Evidence: pending.
+- [x] Add Parts 11 through 14 to the landing page and confirm the complete 14-part reading order. Evidence: the landing page lists unique linked entries 1 through 14, and the Playwright route check counted exactly 14 list items.
+- [x] Include attack success and benign utility in eval reporting. Evidence: Part 12 reports attack success, benign success, utility under attack, and false refusal separately across all three conditions.
+- [x] Confirm trace reconstruction identifies the first preventable failure. Evidence: Part 13's executed traces return authorization, injection classifier, and approval for their corresponding causal failures.
+- [x] Confirm audit examples minimize sensitive content. Evidence: Parts 11, 13, and 14 use synthetic identifiers, digests, `example.invalid` destinations, bounded metadata, and no raw secret or private-content values.
+- [x] Confirm the incident regression proves safety and retained task utility. Evidence: Part 14 blocks the prohibited send with zero post-fix calls and preserves the legitimate read with one recorded receipt.
+- [x] Apply every shared per-post content quality gate from Wave 1 to Parts 11 through 14. Evidence: manual cross-post review plus passing style and published-content validators confirmed concrete openings, central working anchors, explicit boundaries, tradeoffs, residual risk, failure modes, primary sources, two to five related links, adjacent navigation, fake effects, and no public planning residue.
 
 #### Wave 4 code and site validation
 
-- [ ] Extract or mirror central Wave 4 TypeScript and Python examples into a temporary validation directory. Evidence: pending.
-- [ ] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: pending.
-- [ ] Run deterministic, workflow, property, adversarial, hard-negative, and regression tests. Evidence: pending.
-- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
-- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
-- [ ] Run `npm run validate:style`. Evidence: pending.
-- [ ] Run `npm run validate:code-examples`. Evidence: pending.
-- [ ] Run `npm run validate:published-content`. Evidence: pending.
-- [ ] Run `npm run build` after every Wave 4 file-change batch. Evidence: pending.
-- [ ] Run `npm run validate:links` against the final Wave 4 build. Evidence: pending.
-- [ ] Inspect every new route and the complete series landing page. Evidence: pending.
-- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [x] Extract or mirror central Wave 4 TypeScript and Python examples into a temporary validation directory. Evidence: `/private/tmp/guardrails-wave4.Hu7I1s` held Part 11 Python and TypeScript, Part 12 Python, Part 13 TypeScript, and Part 14 Python programs extracted from the Markdown fences.
+- [x] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: strict `tsc` over both TypeScript files exited 0; `py_compile` and direct execution over all three Python files exited 0; both TypeScript programs also ran through `tsx`.
+- [x] Run deterministic, workflow, property, adversarial, hard-negative, and regression tests. Evidence: the five programs passed policy and audit contracts, fake tool and handoff trajectories, capability monotonicity, baseline/control/adaptive eval fixtures, hard negatives, causal-trace negatives, and the incident safety plus utility regression.
+- [x] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: the explicit temporary directory was recursively removed, `test ! -e` passed, and `git status --short` showed only the six intended Wave 4 source changes.
+- [x] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: targeted `rg` scans returned no matches and each post batch also passed the repository secret scan through `npm run build`.
+- [x] Run `npm run validate:style`. Evidence: the Wave 4 run exited 0 with `Style validation passed.`
+- [x] Run `npm run validate:code-examples`. Evidence: the Wave 4 run exited 0 with fence tags and source syntax checked.
+- [x] Run `npm run validate:published-content`. Evidence: the Wave 4 run exited 0 with `Published content review passed.`
+- [x] Run `npm run build` after every Wave 4 file-change batch. Evidence: successful 796-page builds followed Part 11, Part 12, Part 13, Part 14, complete navigation, strengthened retry tests, and checklist evidence; every run reported zero Astro diagnostics and completed the search index.
+- [x] Run `npm run validate:links` against the final Wave 4 build. Evidence: link validation checked all 796 generated HTML pages and passed.
+- [x] Inspect every new route and the complete series landing page. Evidence: local preview returned HTTP 200 for all four posts and the landing page; Playwright confirmed every exact H1, substantial main content, and the 14-item landing order.
+- [x] Run `npm run validate:pre-push`. Evidence: the documented split gate passed: `npm run validate:pre-push -- --skip-custom` exited 0 across all deterministic tiers, the original full run passed custom-page validation, and the focused Swift Playwright suite passed outside the managed sandbox after a macOS Mach-port denial; ports 4322 and 4334 were closed afterward.
 - [ ] Commit the Wave 4 implementation and checklist evidence. Evidence: pending.
 - [ ] Push the Wave 4 commit and confirm `origin/main`. Evidence: pending.
 - [ ] Mark Wave 4 complete only after every Wave 4 item has evidence and is checked. Evidence: pending.

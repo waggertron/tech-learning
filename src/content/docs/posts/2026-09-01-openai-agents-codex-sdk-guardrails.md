@@ -661,7 +661,7 @@ Residual risk includes provider and SDK defects, guardrail logic mistakes, ungua
 ## Series navigation
 
 - Previous: [Part 9: Claude API and Agent SDK Guardrails](../2026-09-01-claude-api-agent-sdk-guardrails/)
-- Next: Part 11 builds deterministic guardrail tests across the vendor-neutral and vendor-specific boundaries.
+- Next: [Part 11: Deterministic Guardrail Testing](../2026-09-01-deterministic-guardrail-testing/)
 - Series index: [Engineering Guardrails for AI Systems](../series/engineering-ai-guardrails/)
 
 ## References
