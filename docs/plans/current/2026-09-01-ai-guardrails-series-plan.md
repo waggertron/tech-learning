@@ -1385,9 +1385,9 @@ This checklist is the execution ledger for the series. Check an item only after 
 - [x] Run `npm run validate:links` against the final Wave 4 build. Evidence: link validation checked all 796 generated HTML pages and passed.
 - [x] Inspect every new route and the complete series landing page. Evidence: local preview returned HTTP 200 for all four posts and the landing page; Playwright confirmed every exact H1, substantial main content, and the 14-item landing order.
 - [x] Run `npm run validate:pre-push`. Evidence: the documented split gate passed: `npm run validate:pre-push -- --skip-custom` exited 0 across all deterministic tiers, the original full run passed custom-page validation, and the focused Swift Playwright suite passed outside the managed sandbox after a macOS Mach-port denial; ports 4322 and 4334 were closed afterward.
-- [ ] Commit the Wave 4 implementation and checklist evidence. Evidence: pending.
-- [ ] Push the Wave 4 commit and confirm `origin/main`. Evidence: pending.
-- [ ] Mark Wave 4 complete only after every Wave 4 item has evidence and is checked. Evidence: pending.
+- [x] Commit the Wave 4 implementation and checklist evidence. Evidence: commit `c8777ee` (`Publish AI guardrails evidence and operations`) contains all four posts, complete navigation, landing-page updates, and the evidence checklist.
+- [x] Push the Wave 4 commit and confirm `origin/main`. Evidence: push advanced `origin/main` from `e280d2f` to `c8777ee`; local HEAD, the remote-tracking ref, and GitHub `refs/heads/main` all resolved to `c8777ee4110180aba15640e8537858d96d6dc4d4`.
+- [x] Mark Wave 4 complete only after every Wave 4 item has evidence and is checked. Evidence: every Part 11 through 14, landing, quality, code, site, commit, and push row above is checked with specific evidence; Wave 4 is complete.
 
 ### Final series closeout
 
