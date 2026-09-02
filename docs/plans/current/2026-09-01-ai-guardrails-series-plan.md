@@ -1295,9 +1295,9 @@ This checklist is the execution ledger for the series. Check an item only after 
 - [x] Run `npm run validate:links` against the final Wave 3 build. Evidence: the link validator checked 792 HTML pages and passed.
 - [x] Inspect both vendor routes and the updated series landing page. Evidence: local Astro preview returned HTTP 200 for both vendor posts and the series landing; rendered title markers for both posts appeared on their routes and in the landing reading order, then the server and temporary HTML files were removed.
 - [x] Run `npm run validate:pre-push`. Evidence: the full gate passed secret, style, published-content, generated-output, React, Swift, MCP companion, coding-problem, code-example, build, 792-page, link, custom-page, and browser validation tiers.
-- [ ] Commit the Wave 3 implementation and checklist evidence. Evidence: pending.
-- [ ] Push the Wave 3 commit and confirm `origin/main`. Evidence: pending.
-- [ ] Mark Wave 3 complete only after every Wave 3 item has evidence and is checked. Evidence: pending.
+- [x] Commit the Wave 3 implementation and checklist evidence. Evidence: commit `9b02113` (`Publish AI guardrails vendor implementations`) contains Parts 9 and 10, landing and navigation updates, and the verified checklist evidence.
+- [x] Push the Wave 3 commit and confirm `origin/main`. Evidence: `git push origin main` advanced GitHub from `04d12a4` to `9b02113`; `git ls-remote` and the refreshed local `origin/main` both resolved to `9b021134b2674b5f202a6cd0f87b4816bec001a7`.
+- [x] Mark Wave 3 complete only after every Wave 3 item has evidence and is checked. Evidence: every Wave 3 content, shared-quality, code-validation, site-validation, commit, and push line above is checked with specific evidence; Wave 3 is complete.
 
 ### Wave 4: Evidence and operations
 
