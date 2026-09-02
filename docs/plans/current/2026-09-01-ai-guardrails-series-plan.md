@@ -609,7 +609,7 @@ Trusting `readOnlyHint` or another annotation as authorization.
 
 ### Sources
 
-- MCP `2025-11-25` specification.
+- MCP `2026-07-28` specification.
 - MCP authorization and security best practices.
 - MCP tool-annotation guidance.
 - Existing MCP production-security post.
@@ -1147,90 +1147,90 @@ This checklist is the execution ledger for the series. Check an item only after 
 
 #### Part 5: Guardrails for Production Chatbots
 
-- [ ] Create `src/content/docs/posts/2026-09-01-production-chatbot-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 5. Evidence: pending.
-- [ ] Start with the text-only support chatbot and add caller identity, limits, and normalized input validation. Evidence: pending.
-- [ ] Add structured model screening with explicit uncertainty behavior. Evidence: pending.
-- [ ] Add structured output and egress checks. Evidence: pending.
-- [ ] Cover refusal, appeal, throttling, and repeated-abuse behavior. Evidence: pending.
-- [ ] Measure false refusals and latency. Evidence: pending.
-- [ ] Implement parallel TypeScript and Python handlers with deterministic checks before optional screening and output policy before release. Evidence: pending.
-- [ ] Test malformed input, policy violations, safe technical discussion, classifier timeout, and output redaction. Evidence: pending.
-- [ ] Include a latency budget for parallel and blocking checks. Evidence: pending.
-- [ ] Distinguish content moderation, injection detection, and application authorization in a table. Evidence: pending.
-- [ ] Ground claims in the listed Anthropic, OpenAI, and OWASP primary sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-production-chatbot-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 5. Evidence: the built post has quoted description frontmatter, five stable tags, the production URL, series slug `engineering-ai-guardrails`, and order 5.
+- [x] Start with the text-only support chatbot and add caller identity, limits, and normalized input validation. Evidence: the opening boundary and normalization sections require verified actor and tenant facts, quotas, length limits, Unicode normalization, and authorized account lookup.
+- [x] Add structured model screening with explicit uncertainty behavior. Evidence: the post defines a small screen schema and maps uncertain, timeout, block, and allow results to named behaviors.
+- [x] Add structured output and egress checks. Evidence: `Draft` constrains the response, while `release` checks citations, forbids actions, redacts synthetic secret markers, and caps output before release.
+- [x] Cover refusal, appeal, throttling, and repeated-abuse behavior. Evidence: the refusal and abuse section covers safe alternatives, appeals, authenticated history, warnings, throttling, temporary suspension, and human review.
+- [x] Measure false refusals and latency. Evidence: the utility section defines false-refusal, appeal, degraded-mode, latency percentile, redaction, and repeated-abuse measures.
+- [x] Implement parallel TypeScript and Python handlers with deterministic checks before optional screening and output policy before release. Evidence: both handlers implement the same ordered boundary and ran locally with fake adapters at exit code 0.
+- [x] Test malformed input, policy violations, safe technical discussion, classifier timeout, and output redaction. Evidence: executable TypeScript assertions cover all five cases; the Python timeout and redaction assertion also passed.
+- [x] Include a latency budget for parallel and blocking checks. Evidence: the latency table assigns p95 budgets, parallel eligibility, and release-blocking status to each stage.
+- [x] Distinguish content moderation, injection detection, and application authorization in a table. Evidence: the three-row control table states each question, evidence, and non-substitutable boundary.
+- [x] Ground claims in the listed Anthropic, OpenAI, and OWASP primary sources. Evidence: references link current official Anthropic injection guidance, OpenAI moderation and safety guidance, and OWASP LLM01 and LLM02 pages; each URL was re-opened on 2026-09-01.
 
 #### Part 6: Tool Calls, Approvals, and Least Privilege
 
-- [ ] Create `src/content/docs/posts/2026-09-01-ai-tool-calls-approvals-least-privilege.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 6. Evidence: pending.
-- [ ] Separate read, draft, send, credit, and administrative capabilities. Evidence: pending.
-- [ ] Define strict schemas and semantic invariants. Evidence: pending.
-- [ ] Normalize tool arguments before policy evaluation. Evidence: pending.
-- [ ] Authorize every resource and destination. Evidence: pending.
-- [ ] Render approvals from validated facts and bind them to an action digest and expiration. Evidence: pending.
-- [ ] Revalidate at execution and use idempotency keys. Evidence: pending.
-- [ ] Implement `executeToolProposal` over validation, authorization, approval, and a fake executor. Evidence: pending.
-- [ ] Prove no executor call follows validation, authorization, or approval failure. Evidence: pending.
-- [ ] Test cross-tenant account access. Evidence: pending.
-- [ ] Show approval deception exposed by canonical fields. Evidence: pending.
-- [ ] Prove retries cannot duplicate a side effect. Evidence: pending.
-- [ ] Ground claims in the listed OWASP, OpenAI, and existing MCP sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-ai-tool-calls-approvals-least-privilege.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 6. Evidence: the built post contains the required quoted description, tags, canonical URL, series slug, and order 6.
+- [x] Separate read, draft, send, credit, and administrative capabilities. Evidence: the opening capability table separates all five by example, effect, and default decision.
+- [x] Define strict schemas and semantic invariants. Evidence: the validation section defines closed shapes, formats, destination, tenant, amount, workflow, and capability invariants; the executable union and validators enforce the central subset.
+- [x] Normalize tool arguments before policy evaluation. Evidence: `normalize` canonicalizes account identifiers, Unicode body text, whitespace, and email case before authorization or approval.
+- [x] Authorize every resource and destination. Evidence: `authorize` checks the account allowlist and the exact verified destination, then runs again at the execution boundary.
+- [x] Render approvals from validated facts and bind them to an action digest and expiration. Evidence: the approval-deception example shows canonical fields, while `digest` and `verifyApproval` bind actor, tenant, workflow, policy, action, arguments, decision, and expiration.
+- [x] Revalidate at execution and use idempotency keys. Evidence: the executor path repeats authorization immediately before deriving a workflow-scoped idempotency key; the prose lists mutable facts to reload after approval pauses.
+- [x] Implement `executeToolProposal` over validation, authorization, approval, and a fake executor. Evidence: the central TypeScript example implements the full gate over a recording executor and ran locally at exit code 0.
+- [x] Prove no executor call follows validation, authorization, or approval failure. Evidence: executable assertions check `calls.length === 0` after invalid identifiers, unauthorized accounts, unauthorized destinations, and approval-binding mismatch.
+- [x] Test cross-tenant account access. Evidence: the `ACCOUNT_EXAMPLE_99` fixture is absent from the caller's tenant-scoped allowlist and fails with `ACCOUNT_NOT_AUTHORIZED` before execution.
+- [x] Show approval deception exposed by canonical fields. Evidence: the post contrasts a friendly model summary with the actual outside destination, and the destination test blocks the mismatch.
+- [x] Prove retries cannot duplicate a side effect. Evidence: two identical approved calls return the same effect ID while the fake executor records exactly one effect.
+- [x] Ground claims in the listed OWASP, OpenAI, and existing MCP sources. Evidence: references include current OWASP Excessive Agency, official OpenAI human review, tool, and guardrail guides, plus the existing MCP tool-design post.
 
 #### Part 7: Guardrails for MCP Clients and Servers
 
-- [ ] Recheck the current stable MCP specification and record the selected version before authoring. Evidence: pending.
-- [ ] Create `src/content/docs/posts/2026-09-01-mcp-client-server-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 7. Evidence: pending.
-- [ ] Map host, client, server, authorization server, and protected resource boundaries. Evidence: pending.
-- [ ] Treat remote tool definitions and annotations as untrusted hints. Evidence: pending.
-- [ ] Cover pinning, review, and diffing of tool definitions. Evidence: pending.
-- [ ] Validate and label tool results. Evidence: pending.
-- [ ] Bind tokens to resource and audience, prevent token passthrough, and prevent session identity mixing. Evidence: pending.
-- [ ] Evaluate dangerous tool combinations and data movement. Evidence: pending.
-- [ ] Add limits, timeouts, audit events, and revocation. Evidence: pending.
-- [ ] Implement a TypeScript MCP host wrapper that checks definitions, applies per-tool policy, labels results, and records server and definition versions. Evidence: pending.
-- [ ] Test changed descriptions, oversized results, hostile text, wrong token audience, and cross-session state. Evidence: pending.
-- [ ] Include a tool-combination table for private read plus external write. Evidence: pending.
-- [ ] Cross-link the MCP Server Design series instead of repeating the protocol lifecycle. Evidence: pending.
-- [ ] Keep code in the post unless a documented snippet-testability gap requires a separate feature decision. Evidence: pending.
+- [x] Recheck the current stable MCP specification and record the selected version before authoring. Evidence: official specification and release pages confirm `2026-07-28` is stable; the plan and post baseline were updated from the superseded `2025-11-25` assumption.
+- [x] Create `src/content/docs/posts/2026-09-01-mcp-client-server-guardrails.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 7. Evidence: the built post contains the required quoted description, tags, canonical URL, series slug, and order 7.
+- [x] Map host, client, server, authorization server, and protected resource boundaries. Evidence: the opening ASCII flow and role definitions map all five parties, credentials, policy ownership, and downstream-token separation.
+- [x] Treat remote tool definitions and annotations as untrusted hints. Evidence: the definition section applies this rule to the entire model-facing definition and explicitly denies authorization authority to `readOnlyHint`, `destructiveHint`, `idempotentHint`, and `openWorldHint`.
+- [x] Cover pinning, review, and diffing of tool definitions. Evidence: the five-step definition workflow canonicalizes, digests, reviews, diffs, and quarantines definitions by canonical server identity.
+- [x] Validate and label tool results. Evidence: the host wrapper enforces byte and structural limits, labels source, trust, and data class, and quarantines suspicious model-facing text while preserving audit evidence.
+- [x] Bind tokens to resource and audience, prevent token passthrough, and prevent session identity mixing. Evidence: the post follows MCP resource and audience requirements, requires separate downstream credentials, and tests host-owned application state against authenticated actor and tenant; it also explains that MCP `2026-07-28` retired protocol sessions.
+- [x] Evaluate dangerous tool combinations and data movement. Evidence: the combination table covers public and private reads, internal drafts, external sends, credits, broad file reads, and open-world writes.
+- [x] Add limits, timeouts, audit events, and revocation. Evidence: the operations section covers per-identity quotas, bytes, concurrency, calls, redirects, retries, wall time, cancellation limits, revocation targets, and linked audit fields.
+- [x] Implement a TypeScript MCP host wrapper that checks definitions, applies per-tool policy, labels results, and records server and definition versions. Evidence: `callMcpTool` pins a definition digest, checks identity and token facts, applies resource and approval policy, validates results, and records server URI plus definition digest; it ran locally at exit code 0.
+- [x] Test changed descriptions, oversized results, hostile text, wrong token audience, and cross-session state. Evidence: executable assertions cover all five cases and assert transport-call counts or quarantine evidence at the appropriate boundary.
+- [x] Include a tool-combination table for private read plus external write. Evidence: the table assigns `ask` to private-ticket read plus external send and `deny or isolate` to broad-file read plus arbitrary HTTP write.
+- [x] Cross-link the MCP Server Design series instead of repeating the protocol lifecycle. Evidence: the version baseline and related topics link the series, production-security post, and tool-design post while this page stays focused on trust and enforcement boundaries.
+- [x] Keep code in the post unless a documented snippet-testability gap requires a separate feature decision. Evidence: the complete wrapper and deterministic tests remain in the post; no companion or generator changes were needed.
 
 #### Part 8: Agents, Delegation, and Guardrail Propagation
 
-- [ ] Create `src/content/docs/posts/2026-09-01-agent-delegation-guardrail-propagation.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 8. Evidence: pending.
-- [ ] Compare manager-as-tool, handoff, and independent-worker orchestration. Evidence: pending.
-- [ ] Identify endpoint-only guardrails and the gaps they leave inside a workflow. Evidence: pending.
-- [ ] Define a typed handoff envelope. Evidence: pending.
-- [ ] Reduce authority for delegated work and apply tool policy at every child invocation. Evidence: pending.
-- [ ] Protect shared memory and summaries from handoff laundering. Evidence: pending.
-- [ ] Link parent and child traces, budgets, cancellation, and outcomes. Evidence: pending.
-- [ ] Implement `HandoffEnvelope` and allow child runners to derive only narrower capabilities. Evidence: pending.
-- [ ] Property-test that child capability is a subset of parent capability. Evidence: pending.
-- [ ] Test handoff laundering, child tool denial, and linked trace events. Evidence: pending.
-- [ ] Include an ASCII diagram of parent, handoff, child, tool, and result paths. Evidence: pending.
-- [ ] Ground claims in the listed OpenAI, Anthropic, and OWASP primary sources. Evidence: pending.
+- [x] Create `src/content/docs/posts/2026-09-01-agent-delegation-guardrail-propagation.md` with quoted frontmatter, stable tags, canonical URL, series slug, and order 8. Evidence: the built post contains the required quoted description, tags, canonical URL, series slug, and order 8.
+- [x] Compare manager-as-tool, handoff, and independent-worker orchestration. Evidence: the opening table compares control ownership, state movement, appropriate use, and security pressure across all three patterns.
+- [x] Identify endpoint-only guardrails and the gaps they leave inside a workflow. Evidence: the endpoint-only section identifies internal handoffs, summaries, memory writes, and child tool calls, then assigns controls to each boundary.
+- [x] Define a typed handoff envelope. Evidence: `HandoffEnvelope` separates task, host constraints, untrusted inputs, tools, data classes, budgets, policy, lineage, and cancellation.
+- [x] Reduce authority for delegated work and apply tool policy at every child invocation. Evidence: `deriveChildEnvelope` rejects capability, data-class, and budget escalation; `runChildTool` rechecks cancellation, capability, budget, and the exact resource.
+- [x] Protect shared memory and summaries from handoff laundering. Evidence: summaries are appended as `agent-summary` values under `untrustedInputs`, while the memory section specifies provenance, write proposals, reader authorization, expiry, and rebuilding.
+- [x] Link parent and child traces, budgets, cancellation, and outcomes. Evidence: the envelope and trace events carry parent trace and span IDs, task, bounded budgets, and cancellation identity; the operations section covers outcome and effect reconciliation.
+- [x] Implement `HandoffEnvelope` and allow child runners to derive only narrower capabilities. Evidence: the central TypeScript example implements the envelope and monotonic derivation and ran locally at exit code 0.
+- [x] Property-test that child capability is a subset of parent capability. Evidence: an executable exhaustive property test covers all 256 parent and child set combinations across four capabilities and accepts only subsets.
+- [x] Test handoff laundering, child tool denial, and linked trace events. Evidence: executable assertions keep the laundering string out of trusted constraints, deny the credit tool with zero executor calls, and verify the linked parent trace and span.
+- [x] Include an ASCII diagram of parent, handoff, child, tool, and result paths. Evidence: the diagram shows parent, policy gate, child, child tool policy, fake tool, trace event, validated result, and final parent policy.
+- [x] Ground claims in the listed OpenAI, Anthropic, and OWASP primary sources. Evidence: references link official OpenAI orchestration, handoff, and workflow-boundary guidance, Anthropic multi-agent engineering and Managed Agents docs, and OWASP Agentic Top 10 2026.
 
 #### Wave 2 landing page and shared quality review
 
-- [ ] Add Parts 5 through 8 to the landing page in order, using only working links. Evidence: pending.
-- [ ] Keep terminology, support-domain facts, tool names, decision semantics, and policy boundaries consistent across Wave 2. Evidence: pending.
-- [ ] Confirm every side-effecting example has a pre-execution policy check and a fake executor. Evidence: pending.
-- [ ] Confirm MCP examples match the selected stable specification. Evidence: pending.
-- [ ] Confirm handoffs preserve lineage and reduce capability. Evidence: pending.
-- [ ] Confirm no Wave 2 post repeats the MCP protocol introduction. Evidence: pending.
-- [ ] Apply every shared per-post content quality gate from Wave 1 to Parts 5 through 8. Evidence: pending.
+- [x] Add Parts 5 through 8 to the landing page in order, using only working links. Evidence: the published reading order now lists Parts 1 through 8 and links each new title to its built route.
+- [x] Keep terminology, support-domain facts, tool names, decision semantics, and policy boundaries consistent across Wave 2. Evidence: all four posts use the same fictional support tenant, account, verified destination, ticket, draft, send, and credit boundary with host-owned allow, ask, block, quarantine, and degraded decisions.
+- [x] Confirm every side-effecting example has a pre-execution policy check and a fake executor. Evidence: Parts 6 through 8 place authorization, approval, capability, resource, and cancellation checks before recording executors or fake transports; Part 5 has no side-effecting tool.
+- [x] Confirm MCP examples match the selected stable specification. Evidence: Part 7 records and follows MCP `2026-07-28`, including stateless requests, retired protocol sessions, current authorization, untrusted annotations, result validation, and tool-operation guidance.
+- [x] Confirm handoffs preserve lineage and reduce capability. Evidence: Part 8 carries parent trace and span identifiers, rejects wider tool, data, and budget requests, and exhaustively tests the capability subset invariant.
+- [x] Confirm no Wave 2 post repeats the MCP protocol introduction. Evidence: Part 7 gives only the boundary and current-version delta needed for security decisions, then links the existing MCP Server Design series for lifecycle and protocol teaching; the other Wave 2 posts do not introduce MCP.
+- [x] Apply every shared per-post content quality gate from Wave 1 to Parts 5 through 8. Evidence: manual cross-post review confirmed concrete failure openings, defined boundaries, working central examples, effect assertions, tradeoffs, residual risk, common failures, primary references, two to five internal neighbors, published-only navigation, fake effects, and no solved-injection or enforcement-confusion claims; automated style and published-content gates passed.
 
 #### Wave 2 code and site validation
 
-- [ ] Extract or mirror central Wave 2 TypeScript and Python examples into a temporary validation directory. Evidence: pending.
-- [ ] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: pending.
-- [ ] Run included deterministic Wave 2 tests. Evidence: pending.
-- [ ] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: pending.
-- [ ] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: pending.
-- [ ] Run `npm run validate:style`. Evidence: pending.
-- [ ] Run `npm run validate:code-examples`. Evidence: pending.
-- [ ] Run `npm run validate:published-content`. Evidence: pending.
-- [ ] Run `npm run build` after every Wave 2 file-change batch. Evidence: pending.
-- [ ] Run `npm run validate:links` against the final Wave 2 build. Evidence: pending.
-- [ ] Inspect every new route and the updated series landing page. Evidence: pending.
-- [ ] Run `npm run validate:pre-push`. Evidence: pending.
+- [x] Extract or mirror central Wave 2 TypeScript and Python examples into a temporary validation directory. Evidence: `/private/tmp/guardrails-wave2` held one extracted TypeScript module per post, the Part 5 Python handler, and a module-type manifest.
+- [x] Type-check TypeScript and parse or run Python examples with fake adapters. Evidence: strict `tsc` with NodeNext and Node types passed all four modules after correcting one union-narrowing defect; the extracted Python handler ran with its fake callbacks at exit code 0.
+- [x] Run included deterministic Wave 2 tests. Evidence: all four TypeScript modules ran with the local `tsx` binary at exit code 0, covering chatbot decisions, executor effects, MCP trust failures, and delegation properties; the Python assertion also passed.
+- [x] Delete temporary validation artifacts and confirm no local-only files remain. Evidence: each extracted file and manifest was unlinked, the temporary directory was removed, `test ! -e` printed `temporary-validation-clean`, and git status lists only intended Wave 2 files.
+- [x] Run the forbidden credential-pattern and em-dash scans over touched files. Evidence: `bash scripts/check-secrets.sh` passed and the U+2014 scan passed across all seven touched files.
+- [x] Run `npm run validate:style`. Evidence: final Wave 2 run exited 0 with `Style validation passed.`
+- [x] Run `npm run validate:code-examples`. Evidence: final Wave 2 run exited 0 with fence tags and source syntax checked.
+- [x] Run `npm run validate:published-content`. Evidence: final Wave 2 run exited 0 with `Published content review passed.`
+- [x] Run `npm run build` after every Wave 2 file-change batch. Evidence: builds passed after each new post, navigation update, checklist batch, landing-page batch, and strict-TypeScript correction; the latest build generated 790 pages with zero Astro diagnostics.
+- [x] Run `npm run validate:links` against the final Wave 2 build. Evidence: the final link validator checked 790 HTML pages and passed.
+- [x] Inspect every new route and the updated series landing page. Evidence: local Astro preview returned HTTP 200 and expected rendered title markers for the posts index, series landing, and Parts 5 through 8; the preview process was stopped afterward.
+- [x] Run `npm run validate:pre-push`. Evidence: the full gate passed secret, style, published-content, generated-output, React, Swift, MCP companion, coding-problem, code-example, build, 790-page, link, custom-page, and browser validation tiers.
 - [ ] Commit the Wave 2 implementation and checklist evidence. Evidence: pending.
 - [ ] Push the Wave 2 commit and confirm `origin/main`. Evidence: pending.
 - [ ] Mark Wave 2 complete only after every Wave 2 item has evidence and is checked. Evidence: pending.

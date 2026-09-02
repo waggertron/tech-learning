@@ -308,6 +308,7 @@ The residual risk includes unsafe text that remains within the allowed destinati
 ## Series navigation
 
 - Previous: [Part 3: Design a Layered AI Guardrail Architecture](../2026-09-01-layered-ai-guardrail-architecture/)
+- Next: [Part 5: Guardrails for Production Chatbots](../2026-09-01-production-chatbot-guardrails/)
 - Series index: [Engineering Guardrails for AI Systems](../series/engineering-ai-guardrails/)
 
 ## References
