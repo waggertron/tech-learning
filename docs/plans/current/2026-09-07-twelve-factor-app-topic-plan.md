@@ -1132,37 +1132,47 @@ Proposed repositories:
 
 ### Wave 7: publication review and validation
 
-- [ ] Run the writing-style review, including the U+2014 em dash ban and restrained hyphenation.
+- [x] Run the writing-style review, including the U+2014 em dash ban and restrained hyphenation.
+  - Evidence: `npm run validate:style` passed, and the direct U+2014 scan returned zero matches across `src`, `docs`, `.agents`, `AGENTS.md`, and `README.md`.
+- [x] Run prose cleanup for repetition, canned transitions, inflated claims, and mechanical bullet structure.
+  - Evidence: manual review corrected overclaims in the build, dependency, backing-service, shutdown, and telemetry tab explanations; canned-language and bold-label comma scans returned zero topic matches.
+- [x] Run the published-content review and remove planning residue, maintainer notes, and repeated source piles.
+  - Evidence: the four public pages were read as rendered prose, source families remain synthesized, and `npm run validate:published-content` passed.
+- [x] Confirm all frontmatter descriptions are double quoted.
+  - Evidence: all four `description:` fields are double quoted, confirmed by a focused source scan and the successful Astro content check.
+- [x] Confirm the hub, child pages, table of contents, links, and audit mappings consistently use the exact `Factor I: Codebase` through `Factor XII: Admin processes` titles.
+  - Evidence: `npm run validate:twelve-factor-topic` passed its exact-title contracts and negative tests; built HTML inspection found all 12 canonical headings on the hub and the correct four headings on each child page.
+- [x] Scan changed content for realistic credential patterns and unsafe examples.
+  - Evidence: `bash scripts/check-secrets.sh` and the build precheck passed after the final content edits.
+- [x] Verify claims against primary sources and keep third-party proposals labeled by author and status.
+  - Evidence: official Twelve-Factor repository API checks confirmed default branch `next`, open issues 3, 4, and 9, open pull requests 32, 34, and 40, and pull request 33 closed without merge on September 8, 2026. Official OpenAI and Anthropic documentation links now support the Codex and Claude discovery claims. Hoffman, IBM, CNCF-hosted, and NGINX material remains explicitly independent or historical.
+- [x] Confirm the published pages contain exactly twelve TypeScript, twelve Python, and twelve Go factor examples.
+  - Evidence: the source manifest reports 12 factors and 36 examples, split exactly 12 TypeScript, 12 Python, and 12 Go.
+- [x] Align each language-tab explanation with the exact behavior visible in its locked excerpt.
+  - Evidence: all 36 tabs were reviewed against their displayed excerpts; mismatched claims about revision labels, wheel output, worker drain behavior, backing clients, and telemetry emission were rewritten to match visible code.
+- [x] Confirm every example imports or calls at least one actual library or direct runtime API named in its locked reference repository.
+  - Evidence: every source-map entry now declares a concrete proof token, covering ecosystem entry points, package managers, container instructions, and APIs from Zod, Pydantic Settings, Cobra, BullMQ, FastAPI, PostgreSQL clients, Uvicorn, Asynq, Testcontainers, OpenTelemetry, Typer, and language runtimes.
+- [x] Add deterministic proof-token coverage so validation fails when a tagged example no longer contains its named library, package-manager, container, or runtime API.
+  - Evidence: the source synchronizer rejects missing proof tokens in tagged excerpts, the topic validator rejects missing proof tokens in displayed code, and a focused negative test removes `z.object` and observes the expected failure. All nine topic contract tests passed.
+- [x] Confirm language-tab selection is synchronized and keyboard accessible on all three example pages.
+  - Evidence: the rendered browser test confirmed four synchronized groups on each page, three correctly related tabs and panels per group, persisted selection across pages, and Arrow Right, Home, and End navigation.
+- [x] Add a focused rendered-browser check for synchronized language selection and keyboard navigation across all three example pages.
+  - Evidence: `scripts/validate-twelve-factor-browser.mjs` performs HTTP checks before Chromium, tests all three routes, and stops its preview; `npm run validate:twelve-factor-browser` passed outside the macOS process sandbox.
+- [x] Re-run the snippet-to-source synchronization check after prose cleanup.
+  - Evidence: `npm run validate:twelve-factor-topic` passed after cleanup, including byte-for-byte comparison of all 36 excerpts with their immutable tagged sources.
+- [x] Confirm the final page length or apply the documented split rule.
+  - Evidence: the conceptual hub is 414 lines, below its planned 450 to 550 target and the 550-line split threshold. The three detailed example pages remain intentionally split at 276, 392, and 385 lines.
+- [x] Run `npm run build` and record the result.
+  - Evidence: the final content build passed with 0 errors, 0 warnings, 0 hints, 800 generated pages, and 799 Pagefind entries.
+- [x] Run `npm run validate:pre-push` and record the result.
+  - Evidence: the complete gate passed secret, style, published-content, Twelve-Factor, React, Swift, MCP companion, coding-problem, code-example, 800-page build, page, internal-link, Twelve-Factor browser, custom-page, and Swift browser checks.
+- [x] Inspect the built topic route and intended content.
+  - Evidence: built HTML inspection found the intended H1 and all 12 canonical factor headings on the 349,587-byte hub, plus the intended H1, four headings, and four tab groups on each nonempty child page.
+- [x] Verify internal links and spot-check external sources.
+  - Evidence: `npm run validate:links` passed all 800 pages. The full external sweep found no Twelve-Factor topic failures; it reported seven unrelated legacy links elsewhere. Official Twelve-Factor, OpenAI, Anthropic, and tagged repository sources were also opened or checked directly.
+- [ ] Commit and push the Wave 7 publication batch.
   - Evidence: pending.
-- [ ] Run prose cleanup for repetition, canned transitions, inflated claims, and mechanical bullet structure.
-  - Evidence: pending.
-- [ ] Run the published-content review and remove planning residue, maintainer notes, and repeated source piles.
-  - Evidence: pending.
-- [ ] Confirm all frontmatter descriptions are double quoted.
-  - Evidence: pending.
-- [ ] Confirm the hub, child pages, table of contents, links, and audit mappings consistently use the exact `Factor I: Codebase` through `Factor XII: Admin processes` titles.
-  - Evidence: pending.
-- [ ] Scan changed content for realistic credential patterns and unsafe examples.
-  - Evidence: pending.
-- [ ] Verify claims against primary sources and keep third-party proposals labeled by author and status.
-  - Evidence: pending.
-- [ ] Confirm the published pages contain exactly twelve TypeScript, twelve Python, and twelve Go factor examples.
-  - Evidence: pending.
-- [ ] Confirm every example imports or calls at least one actual library or direct runtime API named in its locked reference repository.
-  - Evidence: pending.
-- [ ] Confirm language-tab selection is synchronized and keyboard accessible on all three example pages.
-  - Evidence: pending.
-- [ ] Re-run the snippet-to-source synchronization check after prose cleanup.
-  - Evidence: pending.
-- [ ] Confirm the final page length or apply the documented split rule.
-  - Evidence: pending.
-- [ ] Run `npm run build` and record the result.
-  - Evidence: pending.
-- [ ] Run `npm run validate:pre-push` and record the result.
-  - Evidence: pending.
-- [ ] Inspect the built topic route and intended content.
-  - Evidence: pending.
-- [ ] Verify internal links and spot-check external sources.
+- [ ] Confirm the GitHub Pages deployment for the Wave 7 publication batch succeeds.
   - Evidence: pending.
 - [ ] Confirm Wave 7 is complete.
   - Evidence: pending until every Wave 7 child item is checked.

@@ -45,6 +45,7 @@
     "validate:code-examples": "node scripts/validate-code-examples.mjs",
     "validate:published-content": "node scripts/validate-published-content.mjs",
     "validate:twelve-factor-topic": "npm run test:twelve-factor-topic && node scripts/validate-twelve-factor-topic.mjs",
+    "validate:twelve-factor-browser": "node scripts/validate-twelve-factor-browser.mjs",
     "validate:custom-pages": "node scripts/validate-custom-pages.mjs",
     "validate:swift-repl-browser": "node scripts/validate-swift-repl.mjs",
     "validate:swift-runner-local-browser": "node scripts/validate-swift-runner-local-browser.mjs",

@@ -4,7 +4,7 @@ The Twelve-Factor topic uses one shared order-service contract across TypeScript
 
 ## Source map
 
-`scripts/twelve-factor-example-sources.mjs` is the source map. It records the 12 canonical factor titles, the example page for each factor, the three repository tags, and one source range for every factor-language pair.
+`scripts/twelve-factor-example-sources.mjs` is the source map. It records the 12 canonical factor titles, the example page for each factor, the three repository tags, one source range for every factor-language pair, and an API proof token for every excerpt.
 
 The current releases are:
 
@@ -45,6 +45,7 @@ The command runs negative contract tests and then checks the real topic. It fail
 - A hub heading, example heading, scan-table label, source label, or audit row loses an exact `Factor I` through `Factor XII` numeral-title pair.
 - A factor's hub-to-example link hides its canonical title or points to the wrong rendered route or anchor.
 - Any factor lacks a TypeScript, Python, or Go tab and tagged source.
+- A displayed excerpt loses the named library, package-manager, container, or runtime API that proves the example is concrete.
 - The Operations indexes, related-topic links, or focused Secrets, Docker, and Kubernetes backlinks disappear.
 - Any example page stops linking all three immutable reference releases.
 - A repository release, root instruction file, Codex skill, Claude skill, factor checklist, or deterministic checker link is absent.
@@ -53,6 +54,16 @@ The command runs negative contract tests and then checks the real topic. It fail
 
 The full `npm run validate:pre-push` workflow includes this gate.
 
+## Validate the rendered tabs
+
+After building the site, run:
+
+```bash
+npm run validate:twelve-factor-browser
+```
+
+The command starts a local preview and performs an HTTP check before opening Chromium. It checks all three example routes, their tab and panel relationships, four synchronized language groups per page, saved language selection between pages, and Arrow, Home, and End keyboard navigation. The process stops the preview it starts.
+
 ## Updating a release
 
 1. Verify the replacement repository tag and its complete deterministic test suite.
@@ -60,6 +71,6 @@ The full `npm run validate:pre-push` workflow includes this gate.
 3. Update the hub's release table and repository-level harness links.
 4. Run `npm run sync:twelve-factor-examples`.
 5. Run `npm run validate:twelve-factor-topic`.
-6. Run `npm run build` and inspect the four rendered routes.
+6. Run `npm run build`, then `npm run validate:twelve-factor-browser` and inspect the four rendered routes.
 
 Do not move the source markers by hand. The validator expects each marker, language tab, and link inside the matching factor section.

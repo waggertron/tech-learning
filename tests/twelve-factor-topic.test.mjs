@@ -62,6 +62,15 @@ test("rejects a missing language tab and source evidence", () => {
   assert(failures.some((failure) => failure.includes("Factor V: Build, release, run is missing its Go tab")));
 });
 
+test("rejects an example without its library or runtime API proof", () => {
+  const changed = mutatedPages("examples-factors-01-04.mdx", "const baseSchema = z.object({", "const baseSchema = z.record({");
+  assert(
+    validateTopicDocuments(hub, changed).some((failure) =>
+      failure.includes("factor-03-typescript code is missing its API proof token: z.object"),
+    ),
+  );
+});
+
 test("rejects a hub example link that hides the canonical factor title", () => {
   const changedHub = hub.replace(
     "See Factor I: Codebase examples in TypeScript, Python, and Go",

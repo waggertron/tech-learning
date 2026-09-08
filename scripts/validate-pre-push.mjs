@@ -31,6 +31,7 @@ if (includeExternal) {
 }
 
 if (!skipCustom) {
+  steps.push(["Twelve-Factor browser validation", "npm", ["run", "validate:twelve-factor-browser"]]);
   steps.push(["Custom page validation", "npm", ["run", "validate:custom-pages"]]);
   steps.push(["Swift REPL browser validation", "npm", ["run", "validate:swift-repl-browser"]]);
 }

@@ -18,7 +18,7 @@ The build creates one immutable artifact. A release adds deployment configuratio
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    A multi-stage container restores from the npm lock, compiles once, and copies only runtime files forward. The source revision labels the artifact while deploy configuration stays outside it.
+    A multi-stage container restores from the npm lock, compiles once, and copies only runtime files forward. The deployment can identify those image bytes by digest while keeping release configuration outside them.
 
 {/* twelve-factor-source: factor-05-typescript */}
 ```dockerfile
@@ -43,7 +43,7 @@ CMD ["node", "dist/web.js"]
 [Factor V: Build, release, run TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/Dockerfile#L1-L17)
 </TabItem>
   <TabItem label="Python">
-    uv validates the lock and builds one wheel. The runtime installs the locked dependency set and project wheel before the artifact is published.
+    uv restores the frozen dependency graph and project into one virtual environment. The runtime image copies that environment instead of resolving packages during startup.
 
 {/* twelve-factor-source: factor-05-python */}
 ```dockerfile
@@ -65,7 +65,7 @@ CMD ["web"]
 [Factor V: Build, release, run Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/Dockerfile#L1-L14)
 </TabItem>
   <TabItem label="Go">
-    The build embeds the source revision in one binary. The runtime image copies those bytes and contains no Go toolchain or module cache.
+    The build compiles one static binary from the locked module graph. The runtime image copies those bytes and contains no Go toolchain or module cache.
 
 {/* twelve-factor-source: factor-05-go */}
 ```dockerfile

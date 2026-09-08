@@ -27,7 +27,11 @@ async function fetchExcerpt(example, cache) {
   if (lines.length < example.endLine) {
     fail(`${example.id} ends at line ${example.endLine}, but its source has ${lines.length} lines`);
   }
-  return lines.slice(example.startLine - 1, example.endLine).join("\n");
+  const excerpt = lines.slice(example.startLine - 1, example.endLine).join("\n");
+  if (!excerpt.includes(example.proofToken)) {
+    fail(`${example.id} is missing its API proof token: ${example.proofToken}`);
+  }
+  return excerpt;
 }
 
 function replaceExample(document, example, excerpt) {

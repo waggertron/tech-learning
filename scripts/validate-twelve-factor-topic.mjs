@@ -29,6 +29,14 @@ function factorAnchor(factor) {
     .replaceAll(/^-|-$/g, "");
 }
 
+function tabCode(section, language) {
+  const tabStart = section.indexOf(`<TabItem label="${language}">`);
+  if (tabStart === -1) return "";
+  const tabEnd = section.indexOf("</TabItem>", tabStart);
+  if (tabEnd === -1) return "";
+  return section.slice(tabStart, tabEnd).match(/```[^\n]*\n([\s\S]*?)```/)?.[1] ?? "";
+}
+
 export function validateTopicDocuments(hub, pages) {
   const failures = [];
   const requireMatch = (condition, message) => {
@@ -57,6 +65,10 @@ export function validateTopicDocuments(hub, pages) {
       requireMatch(section.includes(`<TabItem label="${language}">`), `${factor.heading} is missing its ${language} tab`);
       requireMatch(section.includes(`{/* twelve-factor-source: ${example.id} */}`), `${example.id} source marker is missing from ${factor.heading}`);
       requireMatch(section.includes(`[${factor.heading} ${language} source](${example.sourceUrl})`), `${example.id} tagged source link is missing from ${factor.heading}`);
+      requireMatch(
+        tabCode(section, language).includes(example.proofToken),
+        `${example.id} code is missing its API proof token: ${example.proofToken}`,
+      );
     }
   }
 

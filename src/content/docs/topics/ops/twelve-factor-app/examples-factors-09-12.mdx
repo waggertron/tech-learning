@@ -18,7 +18,7 @@ The web process starts quickly, advertises readiness only after its dependencies
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Node signal handlers remove readiness before Fastify stops accepting requests. BullMQ waits for active work, then shared database and Redis clients close inside the platform's deadline.
+    Node signal handlers enter one idempotent shutdown path. The web process stops dispatch, drains readiness, closes Fastify and attached clients, and uses the configured grace deadline.
 
 {/* twelve-factor-source: factor-09-typescript */}
 ```typescript
@@ -44,7 +44,7 @@ The web process starts quickly, advertises readiness only after its dependencies
 [Factor IX: Disposability TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/web.ts#L30-L47)
 </TabItem>
   <TabItem label="Python">
-    FastAPI lifespan keeps readiness false until PostgreSQL opens. Shutdown removes readiness before closing the pool and broker. Uvicorn owns signal delivery and stops accepting HTTP work.
+    Dramatiq consumers pause before the worker drains. The configured deadline bounds the pause and stop sequence, then the broker and store close through the shared readiness wrapper.
 
 {/* twelve-factor-source: factor-09-python */}
 ```python
@@ -70,7 +70,7 @@ def shutdown_worker(
 [Factor IX: Disposability Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/worker.py#L37-L54)
 </TabItem>
   <TabItem label="Go">
-    `signal.NotifyContext` begins one shutdown path. Readiness drops first, Asynq stops taking jobs, and `http.Server.Shutdown` drains requests within a fixed timeout.
+    The web command waits for cancellation, drops readiness, emits a draining event, and calls `http.Server.Shutdown` with a fixed timeout.
 
 {/* twelve-factor-source: factor-09-go */}
 ```go
@@ -176,7 +176,7 @@ Application processes write structured events to standard output and standard er
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Fastify exposes its Pino logger on each request. The active OpenTelemetry span supplies trace identity without changing where the event stream is written.
+    The event builder reads the active OpenTelemetry span and adds its trace identifier when present. The emitter serializes the structured record to standard output.
 
 {/* twelve-factor-source: factor-11-typescript */}
 ```typescript

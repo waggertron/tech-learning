@@ -18,7 +18,7 @@ The deployable application is the unit of identity. Its web, worker, and admin p
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    One `package.json` exposes the three process types. The source entry points import Fastify, BullMQ, and Commander from the same locked dependency graph.
+    One `package.json` exposes the web, worker, and admin commands. Every process starts from the same compiled package and locked dependency graph.
 
 {/* twelve-factor-source: factor-01-typescript */}
 ```json
@@ -55,7 +55,7 @@ admin = "order_service.admin:main"
 [Factor I: Codebase Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/pyproject.toml#L23-L26)
 </TabItem>
   <TabItem label="Go">
-    One Go module builds a Cobra command with web, worker, and admin subcommands that share internal application packages. The web package imports chi, and the worker package imports Asynq.
+    One Go module builds a Cobra command with web, worker, and admin subcommands that share internal application packages.
 
 {/* twelve-factor-source: factor-01-go */}
 ```go
@@ -102,7 +102,7 @@ uv run python scripts/check_twelve_factor.py
 [Factor II: Dependencies Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/README.md#L16-L17)
 </TabItem>
   <TabItem label="Go">
-    `go.mod` declares module requirements. `go.sum` records integrity data. Module verification checks downloaded content before the build.
+    `go.mod` declares module requirements. `go.sum` records integrity data. Module download and the repository test commands exercise the resolved dependency graph.
 
 {/* twelve-factor-source: factor-02-go */}
 ```bash
@@ -191,7 +191,7 @@ PostgreSQL and the queue are attachments, not host assumptions. The application 
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    `pg` and BullMQ clients are constructed at startup from validated endpoints. The queue accepts an injected ioredis connection, and application modules receive explicit clients.
+    The BullMQ client is constructed at startup from a validated Redis endpoint. The queue accepts an injected ioredis connection, and application modules receive the explicit queue boundary.
 
 {/* twelve-factor-source: factor-04-typescript */}
 ```typescript

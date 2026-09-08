@@ -6,8 +6,8 @@ This repo uses an outcome-based validation workflow. A push is ready when the si
 
 1. **Pages display intended content**: Built HTML pages are non-empty, have titles, have visible headings, include the Starlight content region, and do not contain build or runtime failure markers.
 2. **Links connect**: Built internal links resolve under `/tech-learning`, generated assets exist, and hash links point to real anchors.
-3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, Twelve-Factor excerpts match immutable tagged releases, generated React output views are in sync, React output behavior tests pass, the MCP companion compiles and passes its deterministic tests, and the Swift runner contract and component tests pass.
-4. **Custom functionality behaves as intended**: Browser smoke tests cover the DSL calculator, generated React output interaction, representative Python, TypeScript, and Go REPL markup, and the complete Swift REPL browser contract.
+3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, Twelve-Factor excerpts match immutable tagged releases and retain their API proof tokens, generated React output views are in sync, React output behavior tests pass, the MCP companion compiles and passes its deterministic tests, and the Swift runner contract and component tests pass.
+4. **Custom functionality behaves as intended**: Browser smoke tests cover synchronized Twelve-Factor language tabs, the DSL calculator, generated React output interaction, representative Python, TypeScript, and Go REPL markup, and the complete Swift REPL browser contract.
 5. **The repo is safe to push**: No realistic credential strings, no banned prose patterns, no rendered planning residue, clean worktree, and no local preview process left behind.
 
 ## Commands
@@ -47,6 +47,7 @@ npm run validate:code-examples
 npm run build
 npm run validate:pages
 npm run validate:links
+npm run validate:twelve-factor-browser
 npm run validate:custom-pages
 npm run validate:swift-repl-browser
 ```
@@ -59,6 +60,7 @@ If only the custom browser stage hits that sandbox bind error after the determin
 
 ```bash
 npm run validate:pre-push -- --skip-custom
+npm run validate:twelve-factor-browser
 npm run validate:custom-pages
 npm run validate:swift-repl-browser
 ```
@@ -135,12 +137,13 @@ The Swift catalog commands test the source contract and coverage scanner, then c
 
 Not every Markdown fence is executable. Explanatory snippets still need review, but source files and generated examples get deterministic checks.
 
-The Twelve-Factor topic validator enforces all 12 canonical numeral-title pairs across the hub, scan table, example headings, source labels, and audit map. It also requires TypeScript, Python, and Go evidence for every factor, verifies the shared application contract and harness links, and compares all 36 displayed excerpts with the tagged GitHub sources. Because the final comparison reads immutable public release files, this tier requires network access.
+The Twelve-Factor topic validator enforces all 12 canonical numeral-title pairs across the hub, scan table, example headings, source labels, and audit map. It also requires TypeScript, Python, and Go evidence for every factor, verifies the shared application contract and harness links, checks a concrete API proof token in every excerpt, and compares all 36 displayed excerpts with the tagged GitHub sources. Because the final comparison reads immutable public release files, this tier requires network access.
 
 ### Custom page functionality
 
 ```bash
 npm run validate:custom-pages
+npm run validate:twelve-factor-browser
 npm run validate:swift-repl-browser
 ```
 
@@ -150,6 +153,7 @@ This starts or reuses local preview, then runs Playwright smoke checks against:
 - A React output panel: live counter interaction.
 - A coding problem page: Python, TypeScript, and Go REPL markup and controls.
 - The representative Binary Search page: visible Python, TypeScript, Go, and Swift practice tabs with their matching REPL controls.
+- The three Twelve-Factor example pages: tab semantics, synchronized language selection, saved selection between pages, and Arrow, Home, and End keyboard navigation.
 - The isolated Swift REPL fixture: repeated and changed-source execution, hidden-panel layout, keyboard and accessible controls, timeout, cancellation, compiler failure, unavailable service behavior, one approach harness, and mobile width.
 
 The tests stop any preview or fixture server they start. The Swift validator performs HTTP and served-script checks before launching Chromium, then removes its generated fixture caches.

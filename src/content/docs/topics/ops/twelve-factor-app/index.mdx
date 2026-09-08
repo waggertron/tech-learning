@@ -66,7 +66,7 @@ The examples implement one contract in three public repositories. Each tagged re
 | Python | [`v1.0.2`](https://github.com/waggertron/twelve-factor-python/tree/v1.0.2) | `web`, `worker`, `admin migrate --target 001` | `3102` | `uv run python scripts/check_twelve_factor.py` |
 | Go | [`v1.0.3`](https://github.com/waggertron/twelve-factor-go/tree/v1.0.3) | `orders web`, `orders worker`, `orders admin migrate --target 001` | `3103` | `./scripts/check-twelve-factor.sh` |
 
-All three accept `POST /v1/orders`, require an `Idempotency-Key`, and return accepted work through `GET /v1/orders/{orderId}`. The request has `customerId` and `amountCents`; `amountCents` is an integer from 1 through 99. PostgreSQL stores the order schema from `db/migrations/001_orders.sql`, and Redis carries jobs through `orders.v1`.
+All three accept `POST /v1/orders`, require an `Idempotency-Key`, and return accepted work through `GET /v1/orders/{orderId}`. The request has `customerId` and `amountCents`. The `amountCents` value is an integer from 1 through 99. PostgreSQL stores the order schema from `db/migrations/001_orders.sql`, and Redis carries jobs through `orders.v1`.
 
 The configuration boundary uses the same names in every implementation: `DATABASE_URL`, `REDIS_URL`, `RELEASE_ID`, `APP_HOST`, `PORT`, `WORKER_CONCURRENCY`, `SHUTDOWN_GRACE_MS`, and `TELEMETRY_MODE`. Language-specific defaults explain the three local ports, while the behavior and failure contract stay aligned.
 
@@ -236,7 +236,9 @@ Record the starting state, injected fault, expected observation, actual observat
 
 Each reference repository separates guidance from enforcement. The root instructions give every task the application contract. The skills provide a focused Twelve-Factor review workflow for Codex and Claude. The repository-owned check remains the authority because it runs without either agent.
 
-Codex reads repository `AGENTS.md` instructions before work and can load repository skills from `.agents/skills`; the [official AGENTS.md guide](https://learn.chatgpt.com/docs/agent-configuration/agents-md) and [official skills guide](https://learn.chatgpt.com/docs/build-skills) describe those discovery rules. A `SKILL.md` can guide factor analysis, focused checks, and reporting, but executable tests must decide whether a contract passed.
+Codex reads repository `AGENTS.md` instructions before work and can load repository skills from `.agents/skills`. The [official AGENTS.md guide](https://learn.chatgpt.com/docs/agent-configuration/agents-md) and [official skills guide](https://learn.chatgpt.com/docs/build-skills) describe those discovery rules. A `SKILL.md` can guide factor analysis, focused checks, and reporting, but executable tests must decide whether a contract passed.
+
+Claude Code reads project instructions from `CLAUDE.md` and project skills from `.claude/skills`. Anthropic's [official project-memory guide](https://code.claude.com/docs/en/memory) recommends importing an existing `AGENTS.md` from `CLAUDE.md` when both tools share a contract. Its [official skills guide](https://code.claude.com/docs/en/skills) documents project skill discovery and description-based activation. These files guide behavior; repository checks enforce the result.
 
 ### TypeScript harness at `v1.0.2`
 
