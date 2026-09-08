@@ -56,6 +56,20 @@ The running example throughout this topic is an order service with three process
 - **Worker**: Consumes queued work and applies retry-safe effects.
 - **Admin**: Runs bounded tasks such as database migrations from the same release.
 
+## One service, three ecosystems
+
+The examples implement one contract in three public repositories. Each tagged release is runnable without cloud credentials and exposes the same web, worker, and admin responsibilities through its native toolchain.
+
+| Ecosystem | Tested release | Process commands | Local port | Deterministic check |
+| --- | --- | --- | --- | --- |
+| TypeScript | [`v1.0.2`](https://github.com/waggertron/twelve-factor-typescript/tree/v1.0.2) | `npm run start:web`, `npm run start:worker`, `npm run admin -- migrate --target 001` | `3101` | `npm run verify` |
+| Python | [`v1.0.2`](https://github.com/waggertron/twelve-factor-python/tree/v1.0.2) | `web`, `worker`, `admin migrate --target 001` | `3102` | `uv run python scripts/check_twelve_factor.py` |
+| Go | [`v1.0.3`](https://github.com/waggertron/twelve-factor-go/tree/v1.0.3) | `orders web`, `orders worker`, `orders admin migrate --target 001` | `3103` | `./scripts/check-twelve-factor.sh` |
+
+All three accept `POST /v1/orders`, require an `Idempotency-Key`, and return accepted work through `GET /v1/orders/{orderId}`. The request has `customerId` and `amountCents`; `amountCents` is an integer from 1 through 99. PostgreSQL stores the order schema from `db/migrations/001_orders.sql`, and Redis carries jobs through `orders.v1`.
+
+The configuration boundary uses the same names in every implementation: `DATABASE_URL`, `REDIS_URL`, `RELEASE_ID`, `APP_HOST`, `PORT`, `WORKER_CONCURRENCY`, `SHUTDOWN_GRACE_MS`, and `TELEMETRY_MODE`. Language-specific defaults explain the three local ports, while the behavior and failure contract stay aligned.
+
 ## The twelve factors at a glance
 
 Each factor answers a failure mode. The modern reading preserves that intent while replacing dated mechanisms where the platform contract has evolved.
@@ -196,6 +210,47 @@ The detailed sections use the same sequence: original principle, failure prevent
 **Modern reading:** Package narrow admin commands in the normal artifact and run them as bounded jobs. Give each invocation short-lived identity, least privilege, a timeout, resource limits, concurrency policy, and audit evidence. Restartable migrations are safer than an unrestricted production shell or interactive REPL.
 
 **Verify it:** Run the migration from the production artifact in a non-production environment, interrupt it, and retry it. Record the actor or workload identity, exact command, release digest, target, start and end times, and result. Confirm the admin identity cannot perform unrelated runtime actions. [Compare bounded migration commands](./examples-factors-09-12/#factor-xii-admin-processes).
+
+## Audit the factors by breaking assumptions
+
+A document review can show intent, but it cannot prove runtime behavior. Start with one observable question for each factor, then inject the smallest safe failure that could disprove the claim.
+
+| Factor | Observable audit question | Failure exercise |
+| --- | --- | --- |
+| Factor I: Codebase | Can each web, worker, and admin process report the same release and source revision? | Deploy an artifact with mismatched revision metadata and require the release gate to reject it. |
+| Factor II: Dependencies | Can a clean environment install, test, and start from only committed manifests and locks? | Empty the dependency cache and block undeclared global tools during the build. |
+| Factor III: Config | Does invalid configuration fail before readiness without exposing its value? | Remove `DATABASE_URL`, corrupt `PORT`, and place a synthetic sensitive marker in a rejected value. |
+| Factor IV: Backing services | Can an attachment move to a fresh compatible endpoint without a source edit? | Replace PostgreSQL or Redis with an unavailable endpoint, then a fresh valid instance, and inspect both paths. |
+| Factor V: Build, release, run | Does promotion and rollback select existing artifact bytes without rebuilding? | Block package registries at runtime and attempt rollback by digest after the source branch changes. |
+| Factor VI: Processes | Does accepted state survive instance loss and repeated delivery? | Terminate the accepting web process, restart elsewhere, and deliver the same order job twice. |
+| Factor VII: Port binding | Can the same artifact bind a supplied address and port without a host-installed server? | Start two copies on different ports, then occupy one port and require a visible startup failure. |
+| Factor VIII: Concurrency | Can web and worker capacity change independently while work remains bounded? | Increase worker replicas and queue depth while holding the per-worker limit and database budget fixed. |
+| Factor IX: Disposability | Does readiness drop before intake stops, and does shutdown meet its deadline? | Send termination during active HTTP and worker work, then repeat with a hard kill. |
+| Factor X: Dev/prod parity | Is every production-significant difference owned by a faithful test layer? | Swap a local fake for the production database type and run the same contract suite. |
+| Factor XI: Logs | Can an operator reconstruct one failure from external events without entering the instance? | Trigger a traced failure, terminate the process, and search collected output by release, request, and trace identifiers. |
+| Factor XII: Admin processes | Can each one-off action be tied to its actor, release, target, duration, and result? | Run an unsupported migration target and require bounded failure with no unrestricted shell or broad authority. |
+
+Record the starting state, injected fault, expected observation, actual observation, and cleanup result. A passing agent explanation is not evidence. The test output, artifact identity, event stream, database state, and process exit behavior are the evidence.
+
+## Repository-level AI harnesses
+
+Each reference repository separates guidance from enforcement. The root instructions give every task the application contract. The skills provide a focused Twelve-Factor review workflow for Codex and Claude. The repository-owned check remains the authority because it runs without either agent.
+
+Codex reads repository `AGENTS.md` instructions before work and can load repository skills from `.agents/skills`; the [official AGENTS.md guide](https://learn.chatgpt.com/docs/agent-configuration/agents-md) and [official skills guide](https://learn.chatgpt.com/docs/build-skills) describe those discovery rules. A `SKILL.md` can guide factor analysis, focused checks, and reporting, but executable tests must decide whether a contract passed.
+
+### TypeScript harness at `v1.0.2`
+
+[Root `AGENTS.md`](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/AGENTS.md), [root `CLAUDE.md`](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/CLAUDE.md), [Codex skill](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/.agents/skills/twelve-factor-app/SKILL.md), [Claude skill](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/.claude/skills/twelve-factor-app/SKILL.md), [factor checklist](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/.agents/skills/twelve-factor-app/references/factor-checklist.md), and [`check-twelve-factor.mjs`](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/scripts/check-twelve-factor.mjs).
+
+### Python harness at `v1.0.2`
+
+[Root `AGENTS.md`](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/AGENTS.md), [root `CLAUDE.md`](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/CLAUDE.md), [Codex skill](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/.agents/skills/twelve-factor-app/SKILL.md), [Claude skill](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/.claude/skills/twelve-factor-app/SKILL.md), [factor checklist](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/.agents/skills/twelve-factor-app/references/factor-checklist.md), and [`check_twelve_factor.py`](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/scripts/check_twelve_factor.py).
+
+### Go harness at `v1.0.3`
+
+[Root `AGENTS.md`](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/AGENTS.md), [root `CLAUDE.md`](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/CLAUDE.md), [Codex skill](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/.agents/skills/twelve-factor-app/SKILL.md), [Claude skill](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/.claude/skills/twelve-factor-app/SKILL.md), [factor checklist](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/.agents/skills/twelve-factor-app/references/factor-checklist.md), and [`check-twelve-factor.sh`](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/scripts/check-twelve-factor.sh).
+
+Use the same evaluation shape for either agent: ask for an explicit factor review, make a related change without naming the skill, ask for an unrelated change that should not invoke it, introduce a deliberate violation, and make the deterministic check fail. Record which instructions were loaded, which factors were named, which commands ran, and whether the agent surfaced the failing evidence.
 
 ## Where literal compliance misleads
 

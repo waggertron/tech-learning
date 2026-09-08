@@ -7,6 +7,7 @@ const steps = [
   ["Secret scan", "bash", ["scripts/check-secrets.sh"]],
   ["Style validation", "npm", ["run", "validate:style"]],
   ["Published content review", "npm", ["run", "validate:published-content"]],
+  ["Twelve-Factor topic contract", "npm", ["run", "validate:twelve-factor-topic"]],
   ["React output sync", "npm", ["run", "check:react-outputs"]],
   ["React output tests", "npm", ["run", "test:react-outputs"]],
   ["Swift runner contract tests", "npm", ["run", "test:swift-runner-contract"]],

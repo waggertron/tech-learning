@@ -996,8 +996,8 @@ Proposed repositories:
   - Evidence: both tools confirmed each ecosystem's web, worker, and admin commands already came from one artifact and proposed no edit.
 - [x] Record sanitized prompt, output, discovery, validator, and deterministic-check evidence for both tools in each repository.
   - Evidence: each repository contains `docs/agent-evaluation.md` with the case matrix, tool versions or constraints, validator result, deterministic failure, and executable evidence.
-- [ ] Link the `AGENTS.md`, `CLAUDE.md`, Codex skill, Claude skill, factor checklist, and deterministic check from the article's AI harness section.
-  - Evidence: pending.
+- [x] Link the `AGENTS.md`, `CLAUDE.md`, Codex skill, Claude skill, factor checklist, and deterministic check from the article's AI harness section.
+  - Evidence: the hub's `Repository-level AI harnesses` section links all six artifacts for each immutable TypeScript `v1.0.2`, Python `v1.0.2`, and Go `v1.0.3` release. The topic validator confirms every release and artifact link remains present.
 - [x] Confirm each tagged reference release contains the tested harness files and matches the linked source.
   - Evidence: TypeScript `v1.0.2`, Python `v1.0.2`, and Go `v1.0.3` resolve to the tested remediation commits, which retain both agent harnesses, deterministic checks, and evaluation records.
 
@@ -1078,26 +1078,26 @@ Proposed repositories:
   - Evidence: each `migrate` image shares its web and worker build, target 001 succeeded, and unsupported target 999 failed with a nonzero status and no framework traceback.
 - [x] Confirm all examples use safe placeholders and contain no realistic credential patterns.
   - Evidence: every complete repository checker passed its credential-pattern scan after the remediation changes.
-- [ ] Add observable audit questions and failure-injection ideas for all twelve factors.
-  - Evidence: pending.
-- [ ] Make every displayed snippet originate from a tagged repository source file or pass an exact snippet-to-source synchronization check.
-  - Evidence: pending.
-- [ ] Validate configuration names, process commands, ports, payloads, database schema, and paths across the article and all three repositories.
-  - Evidence: pending.
-- [ ] Add a tech-learning coverage check that fails unless every factor has TypeScript, Python, and Go example evidence.
-  - Evidence: pending.
-- [ ] Make the coverage check fail when any hub heading, example heading, link label, or audit mapping omits or mismatches its required `Factor I` through `Factor XII` numeral-title pair.
-  - Evidence: pending.
-- [ ] Add a tech-learning validation command that checks coverage, source links, release tags, and snippet synchronization.
-  - Evidence: pending.
-- [ ] Update `docs/feature_tracker.md` for the durable example validation command.
-  - Evidence: pending.
+- [x] Add observable audit questions and failure-injection ideas for all twelve factors.
+  - Evidence: `Audit the factors by breaking assumptions` contains one observable question and one concrete failure exercise for each canonical Factor I through Factor XII title. The topic validator requires all twelve mappings.
+- [x] Make every displayed snippet originate from a tagged repository source file or pass an exact snippet-to-source synchronization check.
+  - Evidence: the source map defines 36 exact tagged file ranges, and `npm run check:twelve-factor-examples` fetches those immutable sources and compares them byte for byte with the three language examples for every factor.
+- [x] Validate configuration names, process commands, ports, payloads, database schema, and paths across the article and all three repositories.
+  - Evidence: the shared article contract names the common configuration, route, payload, schema, process, port, and migration surfaces. The topic validator checks the article tokens and repository metadata, while all three tagged repository checkers previously passed the shared live contract matrix.
+- [x] Add a tech-learning coverage check that fails unless every factor has TypeScript, Python, and Go example evidence.
+  - Evidence: `scripts/validate-twelve-factor-topic.mjs` requires one TypeScript, Python, and Go tab and one source mapping inside each of the twelve factor sections, for 36 required examples.
+- [x] Make the coverage check fail when any hub heading, example heading, link label, or audit mapping omits or mismatches its required `Factor I` through `Factor XII` numeral-title pair.
+  - Evidence: six focused tests cover the valid documents plus intentionally mismatched hub headings, example headings, scan labels, audit rows, and language tabs. Each negative case fails for the intended reason.
+- [x] Add a tech-learning validation command that checks coverage, source links, release tags, and snippet synchronization.
+  - Evidence: `npm run validate:twelve-factor-topic` runs the six contract tests and the live tagged-source validator. It passed with 12 factors, 36 source-backed examples, release links, harness links, audit mappings, and the shared contract.
+- [x] Update `docs/feature_tracker.md` for the durable example validation command.
+  - Evidence: the September 8, 2026 `Tagged Twelve-Factor example validation` entry records the source map, synchronizer, negative tests, pre-push integration, and maintenance documentation.
 - [x] Confirm each reference repository URL and tagged-release URL returns successfully.
   - Evidence: all three public repository roots were used for push and CI inspection, and `curl` returned HTTP 200 for the TypeScript `v1.0.2`, Python `v1.0.2`, and Go `v1.0.3` tree URLs.
-- [ ] Run `npm run build` for the Wave 5 article batch.
-  - Evidence: pending.
-- [ ] Confirm Wave 5 is complete.
-  - Evidence: pending until every Wave 5 child item is checked.
+- [x] Run `npm run build` for the Wave 5 article batch.
+  - Evidence: the Wave 5 build passed with secret scanning, 0 Astro errors, 0 warnings, 0 hints, 800 generated pages, and 799 Pagefind entries. The subsequent complete pre-push gate also passed page, link, custom-page, code-contract, and browser validation.
+- [x] Confirm Wave 5 is complete.
+  - Evidence: every Wave 5 child item is checked with tagged-release, clean-clone, live contract, deterministic checker, focused topic validation, build, rendered-route, or complete pre-push evidence.
 
 ### Wave 6: discovery and cross-linking
 
@@ -1200,4 +1200,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 4 are complete, and Wave 5 is in progress. The shared application contract and all three public, runnable, tested, and tagged reference repositories are complete. Cross-repository verification, article synchronization, discovery, and final publication work remain.
+Waves 0 through 5 are complete. The shared application contract, three public reference repositories, cross-repository verification, tagged article examples, and deterministic topic validation are complete. Discovery, cross-linking, and final publication work remain.

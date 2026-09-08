@@ -6,7 +6,7 @@ This repo uses an outcome-based validation workflow. A push is ready when the si
 
 1. **Pages display intended content**: Built HTML pages are non-empty, have titles, have visible headings, include the Starlight content region, and do not contain build or runtime failure markers.
 2. **Links connect**: Built internal links resolve under `/tech-learning`, generated assets exist, and hash links point to real anchors.
-3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, generated React output views are in sync, React output behavior tests pass, the MCP companion compiles and passes its deterministic tests, and the Swift runner contract and component tests pass.
+3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, Twelve-Factor excerpts match immutable tagged releases, generated React output views are in sync, React output behavior tests pass, the MCP companion compiles and passes its deterministic tests, and the Swift runner contract and component tests pass.
 4. **Custom functionality behaves as intended**: Browser smoke tests cover the DSL calculator, generated React output interaction, representative Python, TypeScript, and Go REPL markup, and the complete Swift REPL browser contract.
 5. **The repo is safe to push**: No realistic credential strings, no banned prose patterns, no rendered planning residue, clean worktree, and no local preview process left behind.
 
@@ -30,6 +30,7 @@ The command runs:
 bash scripts/check-secrets.sh
 npm run validate:style
 npm run validate:published-content
+npm run validate:twelve-factor-topic
 npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
@@ -111,6 +112,7 @@ External checks are separate because public sites rate-limit, block bots, or fai
 
 ```bash
 npm run validate:code-examples
+npm run validate:twelve-factor-topic
 npm run check:react-outputs
 npm run test:react-outputs
 npm run test:swift-runner-contract
@@ -132,6 +134,8 @@ The coding-problem vector commands validate canonical valid, boundary, and inval
 The Swift catalog commands test the source contract and coverage scanner, then confirm that `docs/data/swift-coding-problem-coverage.json` matches the current problem pages, approaches, source files, harnesses, tabs, REPLs, helper needs, shared vectors, and contract errors. Run `npm run test:swift-catalog-compile` when Swift catalog sources, canonical helpers, fixtures, or source rules change and a Swift compiler is available. It compiles every migrated Swift source and executes completed approaches under time and output limits. Run both sync commands after vector or catalog changes. `npm run validate:swift-catalog-coverage` intentionally remains outside default pre-push validation until every page and approach has Swift parity.
 
 Not every Markdown fence is executable. Explanatory snippets still need review, but source files and generated examples get deterministic checks.
+
+The Twelve-Factor topic validator enforces all 12 canonical numeral-title pairs across the hub, scan table, example headings, source labels, and audit map. It also requires TypeScript, Python, and Go evidence for every factor, verifies the shared application contract and harness links, and compares all 36 displayed excerpts with the tagged GitHub sources. Because the final comparison reads immutable public release files, this tier requires network access.
 
 ### Custom page functionality
 

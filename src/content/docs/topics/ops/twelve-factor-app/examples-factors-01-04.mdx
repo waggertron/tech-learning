@@ -5,7 +5,7 @@ parent: twelve-factor-app
 tags: [twelve-factor, typescript, python, go, configuration]
 status: draft
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-08
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -20,57 +20,58 @@ The deployable application is the unit of identity. Its web, worker, and admin p
   <TabItem label="TypeScript">
     One `package.json` exposes the three process types. The source entry points import Fastify, BullMQ, and Commander from the same locked dependency graph.
 
+{/* twelve-factor-source: factor-01-typescript */}
 ```json
-{
-  "name": "order-service",
-  "private": true,
-  "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "web": "node dist/web.js",
-    "worker": "node dist/worker.js",
-    "admin": "node dist/admin.js"
-  }
-}
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "start:web": "node dist/web.js",
+    "start:worker": "node dist/worker.js",
+    "admin": "node dist/admin.js",
+    "dev:web": "tsx src/web.ts",
+    "dev:worker": "tsx src/worker.ts",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test": "vitest run",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "check:twelve-factor": "node scripts/check-twelve-factor.mjs",
+    "verify": "npm run check:twelve-factor",
+    "local:up": "docker compose -p tf_typescript up -d postgres redis",
+    "local:down": "docker compose -p tf_typescript down",
+    "local:clean": "node scripts/cleanup.mjs"
 ```
-  </TabItem>
+[Factor I: Codebase TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/package.json#L6-L22)
+</TabItem>
   <TabItem label="Python">
     One package exposes wrappers for the FastAPI web process, Dramatiq worker, and Typer admin application.
 
+{/* twelve-factor-source: factor-01-python */}
 ```toml
-[project]
-name = "order-service"
-version = "0.1.0"
-dependencies = ["fastapi", "uvicorn", "dramatiq[redis]", "typer"]
-
 [project.scripts]
-order-web = "order_service.web:main"
-order-worker = "order_service.worker:main"
-order-admin = "order_service.admin:app"
+web = "order_service.web:main"
+worker = "order_service.worker:main"
+admin = "order_service.admin:main"
 ```
-  </TabItem>
+[Factor I: Codebase Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/pyproject.toml#L23-L26)
+</TabItem>
   <TabItem label="Go">
     One Go module builds a Cobra command with web, worker, and admin subcommands that share internal application packages. The web package imports chi, and the worker package imports Asynq.
 
-```text
-order-service/
-|-- go.mod
-|-- go.sum
-|-- cmd/
-|   `-- order-service/main.go
-`-- internal/
-    |-- httpapi/
-    |-- jobs/
-    `-- order/
+{/* twelve-factor-source: factor-01-go */}
+```go
+func New(logger *slog.Logger) *cobra.Command {
+	root := &cobra.Command{
+		Use:           "orders",
+		Short:         "Twelve-Factor order service",
+		SilenceUsage:  true,
+		SilenceErrors: true,
+	}
+	root.AddCommand(webCommand(logger), workerCommand(logger), adminCommand(logger))
+	return root
+}
 ```
-
-```bash
-go build ./cmd/order-service
-./order-service web
-./order-service worker
-./order-service admin migrate
-```
-  </TabItem>
+[Factor I: Codebase Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/commands/root.go#L11-L20)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Given a running process, recover its release identifier, source revision, and named build target.
@@ -83,30 +84,35 @@ The dependency declaration is complete only when a clean environment can resolve
   <TabItem label="TypeScript">
     `package.json` declares direct dependencies. `package-lock.json` records the resolved graph. `npm ci` rejects drift between them, and `npm ls` proves the named runtime libraries resolve.
 
+{/* twelve-factor-source: factor-02-typescript */}
 ```bash
 npm ci
-npm ls fastify zod pg bullmq commander ioredis
-npm run build
+npm run verify
 ```
-  </TabItem>
+[Factor II: Dependencies TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/README.md#L15-L16)
+</TabItem>
   <TabItem label="Python">
     `pyproject.toml` declares direct dependencies. `uv.lock` records exact resolutions. Frozen synchronization rejects an outdated lock, and the import command checks the installed runtime surface.
 
+{/* twelve-factor-source: factor-02-python */}
 ```bash
 uv sync --frozen
-uv run python -c "import fastapi, pydantic_settings, psycopg, dramatiq, structlog, typer"
+uv run python scripts/check_twelve_factor.py
 ```
-  </TabItem>
+[Factor II: Dependencies Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/README.md#L16-L17)
+</TabItem>
   <TabItem label="Go">
     `go.mod` declares module requirements. `go.sum` records integrity data. Module verification checks downloaded content before the build.
 
+{/* twelve-factor-source: factor-02-go */}
 ```bash
 go mod download
-go mod verify
-go list -m github.com/caarlos0/env/v11 github.com/go-chi/chi/v5 github.com/jackc/pgx/v5 github.com/hibiken/asynq github.com/spf13/cobra
-go build ./...
+go test ./internal/...
+go test ./tests/integration/...
+./scripts/check-twelve-factor.sh
 ```
-  </TabItem>
+[Factor II: Dependencies Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/README.md#L39-L42)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Install and test from an empty dependency cache or clean container, then inspect the runtime artifact for undeclared assumptions.
@@ -119,89 +125,62 @@ The application owns a typed configuration schema. Each deployment supplies valu
   <TabItem label="TypeScript">
     Zod parses deploy values once and returns a typed object. Calling code receives `config`, not unrestricted access to `process.env`.
 
+{/* twelve-factor-source: factor-03-typescript */}
 ```typescript
-import { z } from "zod";
-
-const ConfigSchema = z.object({
-  PORT: z.coerce.number().int().min(1).max(65_535).default(8080),
-  DATABASE_URL: z.string().url(),
-  REDIS_URL: z.string().url(),
-  RELEASE_ID: z.string().min(1),
+const baseSchema = z.object({
+  APP_HOST: z.string().default("0.0.0.0"),
+  PORT: z.coerce.number().int().min(1024).max(65535).default(3101),
+  DATABASE_URL: z.url().refine((value) => usesScheme(value, ["postgres:", "postgresql:"]), {
+    message: "must use PostgreSQL"
+  }),
+  REDIS_URL: z.url().refine((value) => usesScheme(value, ["redis:", "rediss:"]), {
+    message: "must use Redis"
+  }).optional(),
+  RELEASE_ID: z.string().regex(/^[A-Za-z0-9._-]{1,64}$/),
+  WORKER_CONCURRENCY: z.coerce.number().int().min(1).max(32).default(4),
+  SHUTDOWN_GRACE_MS: z.coerce.number().int().min(1000).max(60000).default(10000),
+  TELEMETRY_MODE: z.enum(["console", "memory", "disabled"]).default("console")
 });
-
-const parsed = ConfigSchema.safeParse(process.env);
-if (!parsed.success) {
-  console.error("Invalid configuration", parsed.error.flatten().fieldErrors);
-  process.exit(1);
-}
-
-export const config = parsed.data;
 ```
-  </TabItem>
+[Factor III: Config TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/config.ts#L13-L26)
+</TabItem>
   <TabItem label="Python">
     Pydantic Settings validates the same boundary before FastAPI or Dramatiq starts. Validation errors name fields without logging their values.
 
+{/* twelve-factor-source: factor-03-python */}
 ```python
-import sys
-
-from pydantic import Field, PostgresDsn, RedisDsn, ValidationError
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(extra="ignore")
 
-    port: int = Field(default=8080, ge=1, le=65_535)
-    database_url: PostgresDsn
-    redis_url: RedisDsn
-    release_id: str = Field(min_length=1)
-
-
-try:
-    settings = Settings()
-except ValidationError as error:
-    print(error.errors(include_input=False), file=sys.stderr)
-    raise SystemExit(1) from error
+    database_url: str = Field(alias="DATABASE_URL")
+    redis_url: str | None = Field(default=None, alias="REDIS_URL")
+    release_id: str = Field(alias="RELEASE_ID", pattern=r"^[A-Za-z0-9._-]{1,64}$")
+    app_host: str = Field(default="0.0.0.0", alias="APP_HOST")
+    port: int = Field(default=3102, ge=1024, le=65535, alias="PORT")
+    worker_concurrency: int = Field(default=4, ge=1, le=32, alias="WORKER_CONCURRENCY")
+    shutdown_grace_ms: int = Field(default=10000, ge=1000, le=60000, alias="SHUTDOWN_GRACE_MS")
+    telemetry_mode: Literal["console", "memory", "disabled"] = Field(default="console", alias="TELEMETRY_MODE")
 ```
-  </TabItem>
+[Factor III: Config Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/config.py#L12-L22)
+</TabItem>
   <TabItem label="Go">
     `caarlos0/env` decodes environment values into a typed struct. The loader validates fields before starting listeners or resource clients.
 
+{/* twelve-factor-source: factor-03-go */}
 ```go
-package config
-
-import (
-    "fmt"
-    "net/url"
-
-    "github.com/caarlos0/env/v11"
-)
-
 type Config struct {
-    Port        int    `env:"PORT" envDefault:"8080"`
-    DatabaseURL string `env:"DATABASE_URL,required"`
-    RedisURL    string `env:"REDIS_URL,required"`
-    ReleaseID   string `env:"RELEASE_ID,required"`
-}
-
-func Load() (Config, error) {
-    cfg, err := env.ParseAs[Config]()
-    if err != nil {
-        return Config{}, fmt.Errorf("parse configuration: %w", err)
-    }
-    if cfg.Port < 1 || cfg.Port > 65535 {
-        return Config{}, fmt.Errorf("PORT is outside the valid range")
-    }
-    if _, err := url.ParseRequestURI(cfg.DatabaseURL); err != nil {
-        return Config{}, fmt.Errorf("DATABASE_URL is invalid")
-    }
-    if _, err := url.ParseRequestURI(cfg.RedisURL); err != nil {
-        return Config{}, fmt.Errorf("REDIS_URL is invalid")
-    }
-    return cfg, nil
+	AppHost           string `env:"APP_HOST" envDefault:"0.0.0.0"`
+	DatabaseURL       string `env:"DATABASE_URL,required"`
+	RedisURL          string `env:"REDIS_URL"`
+	Port              int    `env:"PORT" envDefault:"3103"`
+	WorkerConcurrency int    `env:"WORKER_CONCURRENCY" envDefault:"4"`
+	ShutdownGraceMS   int    `env:"SHUTDOWN_GRACE_MS" envDefault:"10000"`
+	ReleaseID         string `env:"RELEASE_ID,required"`
+	TelemetryMode     string `env:"TELEMETRY_MODE" envDefault:"console"`
 }
 ```
-  </TabItem>
+[Factor III: Config Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/config/config.go#L12-L21)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Start with a required value missing, a port outside its valid range, and a malformed backing-service URL. Each run must fail safely before readiness.
@@ -214,80 +193,70 @@ PostgreSQL and the queue are attachments, not host assumptions. The application 
   <TabItem label="TypeScript">
     `pg` and BullMQ clients are constructed at startup from validated endpoints. The queue accepts an injected ioredis connection, and application modules receive explicit clients.
 
+{/* twelve-factor-source: factor-04-typescript */}
 ```typescript
-import { Queue } from "bullmq";
-import { Redis } from "ioredis";
-import { Pool } from "pg";
+export class BullOrderQueue implements OrderQueue {
+  readonly queue: Queue<OrderJob>;
 
-import { config } from "./config.js";
+  constructor(redisUrl: string) {
+    this.queue = new Queue<OrderJob>(queueName, { connection: redisConnection(redisUrl) });
+  }
 
-export const database = new Pool({
-  connectionString: config.DATABASE_URL,
-  max: 10,
-});
+  async ready(): Promise<void> {
+    await this.queue.waitUntilReady();
+  }
 
-const redis = new Redis(config.REDIS_URL, {
-  maxRetriesPerRequest: null,
-});
-
-export const orderQueue = new Queue("orders", { connection: redis });
+  async publish(job: OrderJob): Promise<void> {
+    await this.queue.add("complete-order", job, {
+      jobId: job.orderId,
+      attempts: 3,
+      backoff: { type: "exponential", delay: 250 },
+      removeOnComplete: 50,
+      removeOnFail: 50
+    });
+  }
 ```
-  </TabItem>
+[Factor IV: Backing services TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/queue.ts#L23-L42)
+</TabItem>
   <TabItem label="Python">
     Psycopg and Dramatiq resources are created from validated settings. The application startup boundary owns their lifecycle.
 
+{/* twelve-factor-source: factor-04-python */}
 ```python
-import dramatiq
-from dramatiq.brokers.redis import RedisBroker
-from psycopg_pool import AsyncConnectionPool
-
-from order_service.config import settings
-
-database = AsyncConnectionPool(
-    conninfo=str(settings.database_url),
-    min_size=1,
-    max_size=10,
-    open=False,
-)
-broker = RedisBroker(url=str(settings.redis_url))
-dramatiq.set_broker(broker)
+def create_runtime_app() -> tuple[FastAPI, Settings]:
+    settings = load_settings(os.environ, "web")
+    pool = create_pool(settings.database_url)
+    store = PostgresOrderStore(pool)
+    broker = create_broker(settings.redis_url or "")
+    actor = create_order_actor(broker, store, lambda _job, _result: None)
+    queue = DramatiqOrderQueue(broker, actor)
+    readiness = Readiness()
 ```
-  </TabItem>
+[Factor IV: Backing services Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/web.py#L20-L27)
+</TabItem>
   <TabItem label="Go">
     `pgxpool` and Asynq clients are built at the composition root. Handlers, workers, and commands receive them through constructors.
 
+{/* twelve-factor-source: factor-04-go */}
 ```go
-package resources
-
-import (
-    "context"
-    "fmt"
-
-    "github.com/hibiken/asynq"
-    "github.com/jackc/pgx/v5/pgxpool"
-
-    "order-service/internal/config"
-)
-
-type Resources struct {
-    Database *pgxpool.Pool
-    Queue    *asynq.Client
-}
-
-func Open(ctx context.Context, cfg config.Config) (Resources, error) {
-    database, err := pgxpool.New(ctx, cfg.DatabaseURL)
-    if err != nil {
-        return Resources{}, fmt.Errorf("open database: %w", err)
-    }
-    redis, err := asynq.ParseRedisURI(cfg.RedisURL)
-    if err != nil {
-        database.Close()
-        return Resources{}, fmt.Errorf("parse queue endpoint: %w", err)
-    }
-    return Resources{Database: database, Queue: asynq.NewClient(redis)}, nil
-}
+	pool, err := store.NewPool(ctx, cfg.DatabaseURL)
+	if err != nil {
+		return fmt.Errorf("database unavailable")
+	}
+	defer pool.Close()
+	if err := migrations.Ready(ctx, pool); err != nil {
+		return err
+	}
+	queueClient, err := queue.NewClient(cfg.RedisURL)
+	if err != nil {
+		return fmt.Errorf("queue unavailable")
+	}
+	defer queueClient.Close()
+	state := &readiness.State{}
+	api := httpapi.API{Orders: store.Postgres{Pool: pool}, Queue: queueClient, Readiness: state}
 ```
-  </TabItem>
+[Factor IV: Backing services Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/commands/web.go#L43-L57)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Replace an attachment endpoint without editing source, then run contract tests that expose semantic differences instead of assuming providers are interchangeable.

@@ -20,75 +20,72 @@ The build creates one immutable artifact. A release adds deployment configuratio
   <TabItem label="TypeScript">
     A multi-stage container restores from the npm lock, compiles once, and copies only runtime files forward. The source revision labels the artifact while deploy configuration stays outside it.
 
+{/* twelve-factor-source: factor-05-typescript */}
 ```dockerfile
-FROM node:24-bookworm-slim AS build
+FROM node:24-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
-COPY tsconfig.json ./
+COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
 RUN npm run build && npm prune --omit=dev
 
-FROM node:24-bookworm-slim AS runtime
-ARG SOURCE_REVISION
-LABEL org.opencontainers.image.revision=$SOURCE_REVISION
+FROM node:24-alpine AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/package.json /app/package-lock.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY db ./db
 USER node
 CMD ["node", "dist/web.js"]
 ```
-  </TabItem>
+[Factor V: Build, release, run TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/Dockerfile#L1-L17)
+</TabItem>
   <TabItem label="Python">
     uv validates the lock and builds one wheel. The runtime installs the locked dependency set and project wheel before the artifact is published.
 
+{/* twelve-factor-source: factor-05-python */}
 ```dockerfile
-FROM python:3.13-slim AS build
+FROM python:3.14-slim AS build
 WORKDIR /app
-RUN pip install --no-cache-dir uv
-COPY pyproject.toml uv.lock ./
-RUN uv export --frozen --no-dev --no-emit-project --output-file requirements.lock
+RUN pip install --no-cache-dir uv==0.9.22
+COPY pyproject.toml uv.lock README.md ./
 COPY src ./src
-RUN uv build --wheel
+RUN uv sync --frozen --no-dev --no-editable
 
-FROM python:3.13-slim AS runtime
-ARG SOURCE_REVISION
-LABEL org.opencontainers.image.revision=$SOURCE_REVISION
+FROM python:3.14-slim AS runtime
+ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
 WORKDIR /app
-COPY --from=build /app/requirements.lock ./requirements.lock
-COPY --from=build /app/dist /wheels
-RUN pip install --no-cache-dir -r requirements.lock \
-    && pip install --no-cache-dir --no-deps /wheels/*.whl \
-    && rm -rf requirements.lock /wheels
-USER nobody
-CMD ["order-web"]
+COPY --from=build /app/.venv ./.venv
+COPY db ./db
+USER 65532:65532
+CMD ["web"]
 ```
-  </TabItem>
+[Factor V: Build, release, run Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/Dockerfile#L1-L14)
+</TabItem>
   <TabItem label="Go">
     The build embeds the source revision in one binary. The runtime image copies those bytes and contains no Go toolchain or module cache.
 
+{/* twelve-factor-source: factor-05-go */}
 ```dockerfile
-FROM golang:1.26-bookworm AS build
+FROM golang:1.25-alpine AS build
 WORKDIR /src
 COPY go.mod go.sum ./
-RUN go mod download && go mod verify
+RUN go mod download
 COPY cmd ./cmd
 COPY internal ./internal
-ARG SOURCE_REVISION
-RUN CGO_ENABLED=0 go build \
-    -ldflags "-s -w -X main.revision=$SOURCE_REVISION" \
-    -o /out/order-service ./cmd/order-service
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/orders ./cmd/orders
 
-FROM gcr.io/distroless/static-debian12:nonroot
-ARG SOURCE_REVISION
-LABEL org.opencontainers.image.revision=$SOURCE_REVISION
-COPY --from=build /out/order-service /order-service
-ENTRYPOINT ["/order-service"]
+FROM alpine:3.22
+RUN addgroup -S app && adduser -S -G app app
+COPY --from=build /out/orders /usr/local/bin/orders
+USER app
+ENTRYPOINT ["orders"]
 CMD ["web"]
 ```
-  </TabItem>
+[Factor V: Build, release, run Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/Dockerfile#L1-L14)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Promote the same artifact digest between environments, change only release configuration, and roll back without rebuilding.
@@ -101,123 +98,119 @@ Web and worker instances keep no required durable state in memory or on their lo
   <TabItem label="TypeScript">
     The Fastify route receives a PostgreSQL pool. The database generates and persists the order identifier, so a later request can reach any web process.
 
+{/* twelve-factor-source: factor-06-typescript */}
 ```typescript
-import type { FastifyInstance } from "fastify";
-import type { Pool } from "pg";
-import { z } from "zod";
-
-const CreateOrder = z.object({ sku: z.string().min(1), quantity: z.number().int().positive() });
-
-export function registerOrderRoutes(app: FastifyInstance, database: Pool): void {
-  app.post("/orders", async (request, reply) => {
-    const order = CreateOrder.parse(request.body);
-    const result = await database.query(
-      `INSERT INTO orders (sku, quantity)
-       VALUES ($1, $2)
-       RETURNING id, sku, quantity, status`,
-      [order.sku, order.quantity],
-    );
-    return reply.code(201).send(result.rows[0]);
-  });
-}
+  async create(input: OrderInput, idempotencyKey: string, id = randomUUID()): Promise<CreateResult> {
+    const client = await this.pool.connect();
+    try {
+      await client.query("BEGIN");
+      const prior = await existingByKey(client, idempotencyKey);
+      if (prior) {
+        await client.query("COMMIT");
+        return prior.customerId === input.customerId && prior.amountCents === input.amountCents
+          ? { kind: "duplicate", order: prior }
+          : { kind: "conflict" };
+      }
+      const inserted = await client.query<DbOrder>(
+        `INSERT INTO orders (id, idempotency_key, customer_id, amount_cents, status, created_at)
+         VALUES ($1, $2, $3, $4, 'accepted', now()) RETURNING *`,
+        [id, idempotencyKey, input.customerId, input.amountCents]
+      );
+      await client.query(
+        "INSERT INTO order_jobs (order_id, schema_version) VALUES ($1, 1)",
+        [id]
+      );
+      await client.query("COMMIT");
+      const order = inserted.rows[0];
+      if (!order) throw new Error("insert did not return an order");
+      return { kind: "created", order: mapOrder(order) };
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
 ```
-  </TabItem>
+[Factor VI: Processes TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/store.ts#L46-L75)
+</TabItem>
   <TabItem label="Python">
     FastAPI retrieves the pool from application state and writes through Psycopg. Application state holds a connection resource, not the durable order.
 
+{/* twelve-factor-source: factor-06-python */}
 ```python
-from typing import Annotated
-
-from fastapi import Depends, FastAPI, Request, status
-from pydantic import BaseModel, Field
-from psycopg.rows import dict_row
-from psycopg_pool import AsyncConnectionPool
-
-app = FastAPI()
-
-
-class CreateOrder(BaseModel):
-    sku: str = Field(min_length=1)
-    quantity: int = Field(gt=0)
-
-
-def get_database(request: Request) -> AsyncConnectionPool:
-    return request.app.state.database
-
-
-@app.post("/orders", status_code=status.HTTP_201_CREATED)
-async def create_order(
-    order: CreateOrder,
-    database: Annotated[AsyncConnectionPool, Depends(get_database)],
-) -> dict[str, object]:
-    async with database.connection() as connection:
-        async with connection.cursor(row_factory=dict_row) as cursor:
-            await cursor.execute(
-                "INSERT INTO orders (sku, quantity) VALUES (%s, %s) "
-                "RETURNING id, sku, quantity, status",
-                (order.sku, order.quantity),
-            )
-            row = await cursor.fetchone()
-    if row is None:
-        raise RuntimeError("database did not return the created order")
-    return row
+    def create(self, value: OrderInput, idempotency_key: str) -> tuple[CreateKind, Order]:
+        with self.pool.connection() as connection:
+            with connection.transaction():
+                existing = connection.execute(
+                    """SELECT id, idempotency_key, customer_id, amount_cents, status, created_at, completed_at
+                    FROM orders WHERE idempotency_key = %s FOR UPDATE""", (idempotency_key,),
+                ).fetchone()
+                if existing:
+                    order = self._order(existing)
+                    same = order.customer_id == value.customer_id and order.amount_cents == value.amount_cents
+                    return ("duplicate" if same else "conflict", order)
+                order_id = uuid4()
+                now = datetime.now(UTC)
+                row = connection.execute(
+                    """INSERT INTO orders(id, idempotency_key, customer_id, amount_cents, status, created_at)
+                    VALUES (%s, %s, %s, %s, 'accepted', %s)
+                    RETURNING id, idempotency_key, customer_id, amount_cents, status, created_at, completed_at""",
+                    (order_id, idempotency_key, value.customer_id, value.amount_cents, now),
+                ).fetchone()
+                job = new_job(order_id, idempotency_key)
+                connection.execute(
+                    "INSERT INTO order_jobs(order_id, schema_version) VALUES (%s, %s)",
+                    (order_id, job.schema_version),
+                )
+                if row is None:
+                    raise RuntimeError("order insert returned no row")
+                return "created", self._order(row)
 ```
-  </TabItem>
+[Factor VI: Processes Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/store.py#L86-L112)
+</TabItem>
   <TabItem label="Go">
     A chi handler owns no durable map. Its `pgxpool` dependency writes the order and returns the stored representation.
 
+{/* twelve-factor-source: factor-06-go */}
 ```go
-package httpapi
-
-import (
-    "encoding/json"
-    "net/http"
-
-    "github.com/go-chi/chi/v5"
-    "github.com/jackc/pgx/v5/pgxpool"
-)
-
-type Server struct {
-    database *pgxpool.Pool
-}
-
-func New(database *pgxpool.Pool) http.Handler {
-    server := &Server{database: database}
-    router := chi.NewRouter()
-    router.Post("/orders", server.createOrder)
-    return router
-}
-
-func (s *Server) createOrder(writer http.ResponseWriter, request *http.Request) {
-    var input struct {
-        SKU      string `json:"sku"`
-        Quantity int    `json:"quantity"`
-    }
-    if err := json.NewDecoder(request.Body).Decode(&input); err != nil {
-        http.Error(writer, "invalid request", http.StatusBadRequest)
-        return
-    }
-
-    var order struct {
-        ID     string `json:"id"`
-        Status string `json:"status"`
-    }
-    err := s.database.QueryRow(
-        request.Context(),
-        `INSERT INTO orders (sku, quantity)
-         VALUES ($1, $2) RETURNING id, status`,
-        input.SKU,
-        input.Quantity,
-    ).Scan(&order.ID, &order.Status)
-    if err != nil {
-        http.Error(writer, "order storage failed", http.StatusInternalServerError)
-        return
-    }
-    writer.WriteHeader(http.StatusCreated)
-    _ = json.NewEncoder(writer).Encode(order)
+func (p Postgres) Create(ctx context.Context, key string, input domain.OrderInput) (domain.Order, bool, error) {
+	tx, err := p.Pool.Begin(ctx)
+	if err != nil {
+		return domain.Order{}, false, err
+	}
+	defer tx.Rollback(ctx)
+	now := time.Now().UTC()
+	var order domain.Order
+	err = tx.QueryRow(ctx, `
+		INSERT INTO orders(id,idempotency_key,customer_id,amount_cents,status,created_at)
+		VALUES(gen_random_uuid(),$1,$2,$3,'accepted',$4)
+		ON CONFLICT(idempotency_key) DO NOTHING
+		RETURNING id::text,idempotency_key,customer_id,amount_cents,status,created_at,completed_at`,
+		key, input.CustomerID, input.AmountCents, now,
+	).Scan(&order.ID, &order.IdempotencyKey, &order.CustomerID, &order.AmountCents, &order.Status, &order.CreatedAt, &order.CompletedAt)
+	created := err == nil
+	if errors.Is(err, pgx.ErrNoRows) {
+		order, err = getWith(ctx, tx, key, true)
+		if err == nil && (order.CustomerID != input.CustomerID || order.AmountCents != input.AmountCents) {
+			return domain.Order{}, false, domain.ErrConflict
+		}
+	}
+	if err != nil {
+		return domain.Order{}, false, err
+	}
+	if created {
+		if _, err = tx.Exec(ctx, `INSERT INTO order_jobs(order_id,schema_version) VALUES($1,1)`, order.ID); err != nil {
+			return domain.Order{}, false, err
+		}
+	}
+	if err = tx.Commit(ctx); err != nil {
+		return domain.Order{}, false, err
+	}
+	return order, created, nil
 }
 ```
-  </TabItem>
+[Factor VI: Processes Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/store/store.go#L36-L70)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Terminate the instance that accepted an order, route the next read to another instance, and verify the same durable result.
@@ -230,74 +223,65 @@ The web process owns its HTTP listener and binds the configured port. The platfo
   <TabItem label="TypeScript">
     Fastify owns the HTTP server and listens on the validated port. Rejected startup propagates to the process entry point, so a bind failure cannot look ready.
 
+{/* twelve-factor-source: factor-07-typescript */}
 ```typescript
-import Fastify from "fastify";
-
-import { config } from "./config.js";
-import { registerOrderRoutes } from "./orders.js";
-import { database } from "./resources.js";
-
-const app = Fastify({ logger: true });
-registerOrderRoutes(app, database);
-
-app.get("/live", async () => ({ status: "alive" }));
-
-await app.listen({
-  host: "0.0.0.0",
-  port: config.PORT,
-});
+export async function runWeb(): Promise<void> {
+  const config = parseConfig(process.env, "web");
+  const tracing = startTracing(config.TELEMETRY_MODE);
+  const pool = createPool(config.DATABASE_URL);
+  const store = new PostgresOrderStore(pool);
+  const queue = new BullOrderQueue(config.REDIS_URL!);
+  const readiness = new Readiness();
+  const app = buildApp({ store, queue, readiness, releaseId: config.RELEASE_ID });
+  try {
+    await Promise.all([assertDatabaseReady(pool), queue.ready()]);
+    await app.listen({ host: config.APP_HOST, port: config.PORT });
+  } catch (error) {
+    await Promise.allSettled([app.close(), queue.close(), store.close(), tracing?.shutdown()]);
+    throw error;
+  }
+  readiness.markReady();
+  const interval = setInterval(() => void dispatchPending(store, queue), 1000);
+  emit(eventRecord("web", config.RELEASE_ID, "info", "web.ready"));
 ```
-  </TabItem>
+[Factor VII: Port binding TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/web.ts#L11-L28)
+</TabItem>
   <TabItem label="Python">
     Uvicorn serves the FastAPI application directly. The entry point receives its host and port from validated settings rather than treating the public URL as a listener address.
 
+{/* twelve-factor-source: factor-07-python */}
 ```python
-import uvicorn
-
-from order_service.config import settings
-
-
 def main() -> None:
+    app, settings = create_runtime_app()
     uvicorn.run(
-        "order_service.web:app",
-        host="0.0.0.0",
+        app,
+        host=settings.app_host,
         port=settings.port,
-        access_log=False,
+        log_config=None,
+        timeout_graceful_shutdown=settings.shutdown_grace_ms // 1000,
     )
 ```
-  </TabItem>
+[Factor VII: Port binding Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/web.py#L46-L54)
+</TabItem>
   <TabItem label="Go">
     `http.Server` owns the listener and serves a chi router. `ListenAndServe` returns bind and runtime failures to the command entry point.
 
+{/* twelve-factor-source: factor-07-go */}
 ```go
-package web
-
-import (
-    "errors"
-    "fmt"
-    "net/http"
-    "strconv"
-
-    "github.com/go-chi/chi/v5"
-
-    "order-service/internal/config"
-)
-
-func Listen(cfg config.Config, orders http.HandlerFunc) error {
-    router := chi.NewRouter()
-    router.Get("/orders/{id}", orders)
-
-    server := &http.Server{
-        Addr:    ":" + strconv.Itoa(cfg.Port),
-        Handler: router,
-    }
-    if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-        return fmt.Errorf("serve HTTP: %w", err)
-    }
-    return nil
-}
+	state := &readiness.State{}
+	api := httpapi.API{Orders: store.Postgres{Pool: pool}, Queue: queueClient, Readiness: state}
+	server := &http.Server{
+		Addr:              net.JoinHostPort(cfg.AppHost, fmt.Sprintf("%d", cfg.Port)),
+		Handler:           otelhttp.NewHandler(api.Router(), "orders.http"),
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+	errorsCh := make(chan error, 1)
+	go func() { errorsCh <- server.ListenAndServe() }()
+	state.MarkReady()
+	telemetry.Event(ctx, logger, "web", cfg.ReleaseID, "web.ready", "port", cfg.Port)
 ```
-  </TabItem>
+[Factor VII: Port binding Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/commands/web.go#L56-L66)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Start the artifact with a new valid port and route traffic without installing a framework-specific server on the host.
@@ -310,78 +294,85 @@ Web and worker fleets scale as separate process types. Each worker also limits i
   <TabItem label="TypeScript">
     BullMQ caps active jobs in each worker process. The platform can add worker replicas independently, while the per-process bound protects database and API capacity.
 
+{/* twelve-factor-source: factor-08-typescript */}
 ```typescript
-import { Worker } from "bullmq";
-import { Redis } from "ioredis";
-
-import { config } from "./config.js";
-import { fulfillOrder } from "./order-service.js";
-
-type OrderJob = { orderId: string };
-
-const connection = new Redis(config.REDIS_URL, {
-  maxRetriesPerRequest: null,
-});
-
-export const worker = new Worker<OrderJob>(
-  "orders",
-  async (job) => fulfillOrder(job.data.orderId),
-  {
-    connection,
-    concurrency: config.WORKER_CONCURRENCY,
-    limiter: { max: 100, duration: 1_000 },
-  },
-);
+export function createOrderWorker(
+  redisUrl: string,
+  store: OrderStore,
+  concurrency: number,
+  onResult: (job: Job<OrderJob>, result: string) => void
+): Worker<OrderJob> {
+  return new Worker<OrderJob>(
+    queueName,
+    async (job) => {
+      const payload = orderJobSchema.parse(job.data);
+      const result = await store.complete(payload.orderId);
+      if (result === "missing") throw new Error("order does not exist");
+      onResult(job, result);
+      return result;
+    },
+    { connection: redisConnection(redisUrl), concurrency }
+  );
+}
 ```
-  </TabItem>
+[Factor VIII: Concurrency TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/queue.ts#L58-L75)
+</TabItem>
   <TabItem label="Python">
     The Dramatiq actor defines retry and execution limits. The worker command fixes the process and thread counts, which gives each replica a known concurrency budget.
 
+{/* twelve-factor-source: factor-08-python */}
 ```python
-import asyncio
+    try:
+        pool.open(wait=True)
+        assert_database_ready(pool)
+        actor = create_order_actor(
+            broker,
+            store,
+            lambda job, result: emit(event_record(
+                "worker", settings.release_id, "info", f"order.{result}", orderId=str(job.order_id)
+            )),
+        )
+        del actor
+        broker.client.ping()
+        worker = Worker(broker, worker_threads=settings.worker_concurrency)
+        worker.start()
 
-import dramatiq
+        def stop(_signum: int, _frame: object) -> None:
+            stopped.set()
 
-from order_service.orders import fulfill_order
-
-
-@dramatiq.actor(queue_name="orders", max_retries=8, time_limit=30_000)
-def fulfill_order_job(order_id: str) -> None:
-    asyncio.run(fulfill_order(order_id))
+        signal.signal(signal.SIGTERM, stop)
+        signal.signal(signal.SIGINT, stop)
+        readiness.mark_ready()
+        emit(event_record("worker", settings.release_id, "info", "worker.ready"))
 ```
-
-```bash
-dramatiq order_service.worker --processes 2 --threads 4
-```
-  </TabItem>
+[Factor VIII: Concurrency Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/worker.py#L67-L88)
+</TabItem>
   <TabItem label="Go">
     Asynq gives the worker process a fixed concurrency and weighted queues. Adding replicas increases capacity in explicit increments instead of opening an unbounded goroutine path.
 
+{/* twelve-factor-source: factor-08-go */}
 ```go
-package worker
-
-import (
-    "github.com/hibiken/asynq"
-
-    "order-service/internal/config"
-)
-
-func Run(cfg config.Config, handler asynq.Handler) error {
-    redis, err := asynq.ParseRedisURI(cfg.RedisURL)
-    if err != nil {
-        return err
-    }
-    server := asynq.NewServer(redis, asynq.Config{
-        Concurrency: cfg.WorkerConcurrency,
-        Queues: map[string]int{
-            "critical": 3,
-            "default":  1,
-        },
-    })
-    return server.Run(handler)
-}
+	redisOptions, err := orderqueue.RedisOptions(cfg.RedisURL)
+	if err != nil {
+		return fmt.Errorf("queue unavailable")
+	}
+	server := asynq.NewServer(redisOptions, asynq.Config{Concurrency: cfg.WorkerConcurrency, Queues: map[string]int{orderqueue.QueueName: 1}})
+	mux := asynq.NewServeMux()
+	processor := orderqueue.Processor{
+		Orders: store.Postgres{Pool: pool},
+		OnResult: func(ctx context.Context, job domain.Job, result string) {
+			retryCount, _ := asynq.GetRetryCount(ctx)
+			telemetry.Event(ctx, logger, "worker", cfg.ReleaseID, "order."+result, "orderId", job.OrderID, "attempt", retryCount+1)
+		},
+	}
+	mux.HandleFunc(orderqueue.TaskType, processor.Handle)
+	if err := server.Start(mux); err != nil {
+		return err
+	}
+	telemetry.Event(ctx, logger, "worker", cfg.ReleaseID, "worker.ready", "concurrency", cfg.WorkerConcurrency)
 ```
-  </TabItem>
+[Factor VIII: Concurrency Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/commands/worker.go#L67-L84)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Increase worker replicas while holding the web fleet constant, then verify queue throughput improves without exceeding database connection limits.

@@ -20,146 +20,78 @@ The web process starts quickly, advertises readiness only after its dependencies
   <TabItem label="TypeScript">
     Node signal handlers remove readiness before Fastify stops accepting requests. BullMQ waits for active work, then shared database and Redis clients close inside the platform's deadline.
 
+{/* twelve-factor-source: factor-09-typescript */}
 ```typescript
-import type { FastifyInstance } from "fastify";
-import type { Worker } from "bullmq";
-import type { Redis } from "ioredis";
-import type { Pool } from "pg";
-
-export function installLifecycle(
-  app: FastifyInstance,
-  worker: Worker,
-  database: Pool,
-  redis: Redis,
-  shutdownTimeoutMs: number,
-): void {
-  let ready = false;
-  app.get("/ready", async (_request, reply) =>
-    ready ? { status: "ready" } : reply.code(503).send({ status: "draining" }),
-  );
-
-  app.addHook("onReady", async () => {
-    ready = true;
+  const stop = onceAsync(async () => {
+    try {
+      clearInterval(interval);
+      await drain(readiness, async () => {
+        await app.close();
+        await queue.close();
+        await store.close();
+        await tracing?.shutdown();
+      }, config.SHUTDOWN_GRACE_MS);
+    } catch {
+      emit(eventRecord("web", config.RELEASE_ID, "error", "web.shutdown_deadline", {
+        errorCategory: "shutdown_deadline"
+      }));
+      process.exitCode = 1;
+    }
   });
-
-  const shutdown = async (signal: NodeJS.Signals): Promise<void> => {
-    ready = false;
-    const deadline = setTimeout(() => {
-      app.log.error({ signal }, "graceful shutdown timed out");
-      process.exit(1);
-    }, shutdownTimeoutMs);
-    deadline.unref();
-
-    await app.close();
-    await worker.close(false);
-    await database.end();
-    await redis.quit();
-    clearTimeout(deadline);
-  };
-
-  process.once("SIGTERM", () => void shutdown("SIGTERM"));
-  process.once("SIGINT", () => void shutdown("SIGINT"));
-}
+  process.once("SIGTERM", () => void stop());
+  process.once("SIGINT", () => void stop());
 ```
-  </TabItem>
+[Factor IX: Disposability TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/web.ts#L30-L47)
+</TabItem>
   <TabItem label="Python">
     FastAPI lifespan keeps readiness false until PostgreSQL opens. Shutdown removes readiness before closing the pool and broker. Uvicorn owns signal delivery and stops accepting HTTP work.
 
+{/* twelve-factor-source: factor-09-python */}
 ```python
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
-
-import dramatiq
-from dramatiq.brokers.redis import RedisBroker
-from fastapi import FastAPI, Response, status
-from psycopg_pool import AsyncConnectionPool
-
-from order_service.config import settings
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    app.state.ready = False
-    database = AsyncConnectionPool(str(settings.database_url), open=False)
-    broker = RedisBroker(url=str(settings.redis_url))
-    await database.open(wait=True)
-    dramatiq.set_broker(broker)
-    app.state.database = database
-    app.state.ready = True
-    try:
-        yield
-    finally:
-        app.state.ready = False
+def shutdown_worker(
+    worker: DrainingWorker,
+    readiness: Readiness,
+    broker: Closeable,
+    store: Closeable,
+    grace_ms: int,
+) -> None:
+    def close() -> None:
+        for consumer in worker.consumers.values():
+            consumer.pause()
+        for consumer in worker.consumers.values():
+            if not consumer.paused_event.wait(grace_ms / 1000):
+                raise TimeoutError("consumer did not stop accepting work")
+        worker.stop(timeout=grace_ms)
         broker.close()
-        await database.close()
+        store.close()
 
-
-app = FastAPI(lifespan=lifespan)
-
-
-@app.get("/ready")
-async def readiness(response: Response) -> dict[str, str]:
-    if not app.state.ready:
-        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return {"status": "draining"}
-    return {"status": "ready"}
+    drain(readiness, close, grace_ms)
 ```
-  </TabItem>
+[Factor IX: Disposability Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/worker.py#L37-L54)
+</TabItem>
   <TabItem label="Go">
     `signal.NotifyContext` begins one shutdown path. Readiness drops first, Asynq stops taking jobs, and `http.Server.Shutdown` drains requests within a fixed timeout.
 
+{/* twelve-factor-source: factor-09-go */}
 ```go
-package runtime
-
-import (
-    "context"
-    "net/http"
-    "os"
-    "os/signal"
-    "sync/atomic"
-    "syscall"
-    "time"
-
-    "github.com/hibiken/asynq"
-)
-
-func Run(httpServer *http.Server, worker *asynq.Server, mux asynq.Handler) error {
-    ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-    defer stop()
-
-    var ready atomic.Bool
-    ready.Store(true)
-    httpServer.Handler = readinessHandler(&ready, httpServer.Handler)
-
-    if err := worker.Start(mux); err != nil {
-        return err
-    }
-    go func() { _ = httpServer.ListenAndServe() }()
-
-    <-ctx.Done()
-    ready.Store(false)
-    worker.Shutdown()
-
-    shutdownContext, cancel := context.WithTimeout(context.Background(), 25*time.Second)
-    defer cancel()
-    return httpServer.Shutdown(shutdownContext)
-}
-
-func readinessHandler(ready *atomic.Bool, next http.Handler) http.Handler {
-    return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-        if request.URL.Path == "/ready" {
-            if !ready.Load() {
-                http.Error(writer, "draining", http.StatusServiceUnavailable)
-                return
-            }
-            writer.WriteHeader(http.StatusOK)
-            return
-        }
-        next.ServeHTTP(writer, request)
-    })
-}
+	case <-ctx.Done():
+	case err := <-errorsCh:
+		if !errors.Is(err, http.ErrServerClosed) {
+			return err
+		}
+	}
+	state.BeginDrain()
+	telemetry.Event(context.Background(), logger, "web", cfg.ReleaseID, "web.draining")
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.ShutdownGraceMS)*time.Millisecond)
+	defer cancel()
+	if err := server.Shutdown(shutdownCtx); err != nil {
+		return fmt.Errorf("web shutdown deadline: %w", err)
+	}
+	telemetry.Event(context.Background(), logger, "web", cfg.ReleaseID, "web.stopped")
+	return nil
 ```
-  </TabItem>
+[Factor IX: Disposability Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/commands/web.go#L68-L82)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Send the termination signal during active HTTP and worker tasks. Verify readiness fails first, accepted work finishes or retries safely, and the process exits within the configured grace period.
@@ -172,127 +104,68 @@ Parity focuses on production-significant behavior. The local and CI paths use th
   <TabItem label="TypeScript">
     Vitest starts a disposable PostgreSQL service through Testcontainers. The test uses the production `pg` client and migrations, so transaction and query behavior are not replaced by an in-memory fake.
 
+{/* twelve-factor-source: factor-10-typescript */}
 ```typescript
-import {
-  PostgreSqlContainer,
-  type StartedPostgreSqlContainer,
-} from "@testcontainers/postgresql";
-import { Pool } from "pg";
-import { afterAll, beforeAll, expect, test } from "vitest";
+  beforeAll(async () => {
+    [postgres, redis] = await Promise.all([
+      new PostgreSqlContainer("postgres:18-alpine").withDatabase("orders").withUsername("orders").withPassword("local_only").start(),
+      new GenericContainer("redis:8-alpine").withExposedPorts(6379).start()
+    ]);
+    databaseUrl = postgres.getConnectionUri();
+    redisUrl = `redis://${redis.getHost()}:${redis.getMappedPort(6379)}`;
+  }, 120_000);
 
-let container: StartedPostgreSqlContainer;
-let database: Pool;
-
-beforeAll(async () => {
-  container = await new PostgreSqlContainer("postgres:18-alpine").start();
-  database = new Pool({ connectionString: container.getConnectionUri() });
-  await database.query("CREATE TABLE orders (id text PRIMARY KEY, status text NOT NULL)");
-}, 60_000);
-
-afterAll(async () => {
-  await database.end();
-  await container.stop();
-});
-
-test("persists an order through PostgreSQL", async () => {
-  await database.query("INSERT INTO orders VALUES ($1, $2)", ["order-1", "accepted"]);
-  const result = await database.query("SELECT status FROM orders WHERE id = $1", ["order-1"]);
-  expect(result.rows[0]).toEqual({ status: "accepted" });
-});
+  afterAll(async () => {
+    await Promise.all([postgres?.stop(), redis?.stop()]);
+  });
 ```
-  </TabItem>
+[Factor X: Dev/prod parity TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/tests/integration/services.test.ts#L20-L31)
+</TabItem>
   <TabItem label="Python">
     pytest starts the same PostgreSQL service type used in production. Psycopg executes the schema and assertions through its normal wire protocol.
 
+{/* twelve-factor-source: factor-10-python */}
 ```python
-from collections.abc import Iterator
-
-import psycopg
-import pytest
-from psycopg import Connection
-from testcontainers.community.postgres import PostgresContainer
-
-
-@pytest.fixture
-def database() -> Iterator[Connection[tuple[object, ...]]]:
-    with PostgresContainer("postgres:18-alpine") as postgres:
-        connection_url = postgres.get_connection_url().replace(
-            "postgresql+psycopg2", "postgresql"
-        )
-        with psycopg.connect(connection_url) as connection:
-            connection.execute(
-                "CREATE TABLE orders (id text PRIMARY KEY, status text NOT NULL)"
-            )
-            yield connection
-
-
-def test_persists_order(database: Connection[tuple[object, ...]]) -> None:
-    database.execute("INSERT INTO orders VALUES (%s, %s)", ("order-1", "accepted"))
-    row = database.execute(
-        "SELECT status FROM orders WHERE id = %s", ("order-1",)
-    ).fetchone()
-    assert row == ("accepted",)
+def services() -> tuple[PostgresContainer, DockerContainer, str, str]:
+    postgres = PostgresContainer("postgres:18-alpine", username="orders", password="local_only", dbname="orders")
+    redis = DockerContainer("redis:8-alpine").with_exposed_ports(6379)
+    postgres.start()
+    redis.start()
+    redis_url = f"redis://{redis.get_container_host_ip()}:{redis.get_exposed_port(6379)}"
+    return postgres, redis, postgres.get_connection_url(driver=None), redis_url
 ```
-  </TabItem>
+[Factor X: Dev/prod parity Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/tests/integration/test_services.py#L33-L39)
+</TabItem>
   <TabItem label="Go">
     Go's testing package starts PostgreSQL through the Testcontainers module. pgx applies the schema and exercises the same protocol as the application.
 
+{/* twelve-factor-source: factor-10-go */}
 ```go
-package repository_test
-
-import (
-    "context"
-    "testing"
-
-    "github.com/jackc/pgx/v5"
-    "github.com/testcontainers/testcontainers-go/modules/postgres"
-)
-
-func TestPersistsOrder(t *testing.T) {
-    ctx := context.Background()
-    database, err := postgres.Run(ctx, "postgres:18-alpine",
-        postgres.WithDatabase("orders"),
-        postgres.WithUsername("orders"),
-        postgres.WithPassword("orders"),
-        postgres.BasicWaitStrategies(),
-    )
-    if err != nil {
-        t.Fatal(err)
-    }
-    t.Cleanup(func() { _ = database.Terminate(ctx) })
-
-    connectionString, err := database.ConnectionString(ctx, "sslmode=disable")
-    if err != nil {
-        t.Fatal(err)
-    }
-    connection, err := pgx.Connect(ctx, connectionString)
-    if err != nil {
-        t.Fatal(err)
-    }
-    t.Cleanup(func() { _ = connection.Close(ctx) })
-
-    _, err = connection.Exec(ctx,
-        "CREATE TABLE orders (id text PRIMARY KEY, status text NOT NULL)")
-    if err != nil {
-        t.Fatal(err)
-    }
-    _, err = connection.Exec(ctx,
-        "INSERT INTO orders VALUES ($1, $2)", "order-1", "accepted")
-    if err != nil {
-        t.Fatal(err)
-    }
-
-    var status string
-    if err := connection.QueryRow(ctx,
-        "SELECT status FROM orders WHERE id = $1", "order-1").Scan(&status); err != nil {
-        t.Fatal(err)
-    }
-    if status != "accepted" {
-        t.Fatalf("status = %q", status)
-    }
-}
+func TestPostgresAndRedisWorkflow(t *testing.T) {
+	ctx := context.Background()
+	postgresContainer, err := postgres.Run(ctx, "postgres:18-alpine", postgres.WithDatabase("orders"), postgres.WithUsername("orders"), postgres.WithPassword("local_only"), postgres.BasicWaitStrategies())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = postgresContainer.Terminate(context.Background()) })
+	databaseURL, err := postgresContainer.ConnectionString(ctx, "sslmode=disable")
+	if err != nil {
+		t.Fatal(err)
+	}
+	pool, err := store.NewPool(ctx, databaseURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(pool.Close)
+	if err := migrations.Apply(ctx, pool, "001"); err != nil {
+		t.Fatal(err)
+	}
+	if err := migrations.Ready(ctx, pool); err != nil {
+		t.Fatal(err)
+	}
 ```
-  </TabItem>
+[Factor X: Dev/prod parity Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/tests/integration/services_test.go#L17-L38)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** List every production-significant difference, name the test layer that covers it, and fail review when a difference has no owner or check.
@@ -305,92 +178,85 @@ Application processes write structured events to standard output and standard er
   <TabItem label="TypeScript">
     Fastify exposes its Pino logger on each request. The active OpenTelemetry span supplies trace identity without changing where the event stream is written.
 
+{/* twelve-factor-source: factor-11-typescript */}
 ```typescript
-import { context, trace } from "@opentelemetry/api";
-import type { FastifyRequest } from "fastify";
-
-export function logOrderAccepted(
-  request: FastifyRequest,
+export function eventRecord(
+  processType: ProcessType,
   releaseId: string,
-  orderId: string,
-): void {
-  const spanContext = trace.getSpan(context.active())?.spanContext();
-  request.log.info(
-    {
-      event: "order.accepted",
-      service: "order-service",
-      release_id: releaseId,
-      request_id: request.id,
-      trace_id: spanContext?.traceId,
-      order_id: orderId,
-    },
-    "order accepted",
-  );
+  level: Level,
+  event: string,
+  fields: Partial<Pick<EventFields, "orderId" | "jobId" | "attempt" | "errorCategory">> = {},
+  activeContext: Context = context.active()
+): EventFields {
+  const traceId = trace.getSpan(activeContext)?.spanContext().traceId;
+  return {
+    timestamp: new Date().toISOString(),
+    level,
+    event,
+    service: "twelve-factor-orders",
+    processType,
+    releaseId,
+    ...(traceId ? { traceId } : {}),
+    ...fields
+  };
+}
+
+export function emit(record: EventFields): void {
+  process.stdout.write(`${JSON.stringify(record)}\n`);
 }
 ```
-  </TabItem>
+[Factor XI: Logs TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/telemetry.ts#L21-L44)
+</TabItem>
   <TabItem label="Python">
     structlog renders JSON to standard output. OpenTelemetry contributes the current trace identifier when a valid span is active.
 
+{/* twelve-factor-source: factor-11-python */}
 ```python
-import structlog
-from opentelemetry import trace
-
-structlog.configure(
-    processors=[
-        structlog.processors.TimeStamper(fmt="iso", utc=True),
-        structlog.processors.add_log_level,
-        structlog.processors.JSONRenderer(),
-    ]
-)
-logger = structlog.get_logger("order-service")
-
-
-def log_order_accepted(release_id: str, request_id: str, order_id: str) -> None:
+def event_record(
+    process_type: ProcessType,
+    release_id: str,
+    level: str,
+    event: str,
+    **fields: Any,
+) -> dict[str, Any]:
     span_context = trace.get_current_span().get_span_context()
-    trace_id = format(span_context.trace_id, "032x") if span_context.is_valid else None
-    logger.info(
-        "order.accepted",
-        service="order-service",
-        release_id=release_id,
-        request_id=request_id,
-        trace_id=trace_id,
-        order_id=order_id,
-    )
+    record: dict[str, Any] = {
+        "timestamp": datetime.now(UTC).isoformat(),
+        "level": level,
+        "event": event,
+        "service": "twelve-factor-orders",
+        "processType": process_type,
+        "releaseId": release_id,
+        **fields,
+    }
+    if span_context.is_valid:
+        record["traceId"] = format(span_context.trace_id, "032x")
+    return record
+
+
+def emit(record: dict[str, Any]) -> None:
+    values = dict(record)
+    event = str(values.pop("event"))
+    LOGGER.msg(event, **values)
 ```
-  </TabItem>
+[Factor XI: Logs Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/telemetry.py#L20-L45)
+</TabItem>
   <TabItem label="Go">
     `slog` writes JSON to standard output. OpenTelemetry extracts trace context from the request context and adds it to the same event.
 
+{/* twelve-factor-source: factor-11-go */}
 ```go
-package telemetry
-
-import (
-    "context"
-    "log/slog"
-    "os"
-
-    "go.opentelemetry.io/otel/trace"
-)
-
-var logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
-
-func OrderAccepted(ctx context.Context, releaseID, requestID, orderID string) {
-    attributes := []any{
-        "event", "order.accepted",
-        "service", "order-service",
-        "release_id", releaseID,
-        "request_id", requestID,
-        "order_id", orderID,
-    }
-    spanContext := trace.SpanContextFromContext(ctx)
-    if spanContext.IsValid() {
-        attributes = append(attributes, "trace_id", spanContext.TraceID().String())
-    }
-    logger.InfoContext(ctx, "order accepted", attributes...)
+func Event(ctx context.Context, logger *slog.Logger, processType, releaseID, event string, attrs ...any) {
+	fields := []any{"service", "twelve-factor-orders", "processType", processType, "releaseId", releaseID, "event", event}
+	span := oteltrace.SpanContextFromContext(ctx)
+	if span.IsValid() {
+		fields = append(fields, "traceId", span.TraceID().String())
+	}
+	logger.InfoContext(ctx, event, append(fields, attrs...)...)
 }
 ```
-  </TabItem>
+[Factor XI: Logs Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/telemetry/log.go#L47-L54)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Submit one failing request and reconstruct its path from the external event stream using release, request, and trace identifiers.
@@ -403,93 +269,102 @@ The migration command uses the same application packages, dependency graph, conf
   <TabItem label="TypeScript">
     Commander parses a narrow migration command. The action reuses the validated config, PostgreSQL client, and migration function shipped with web and worker processes.
 
+{/* twelve-factor-source: factor-12-typescript */}
 ```typescript
-import { Command } from "commander";
-
-import { config } from "./config.js";
-import { openDatabase } from "./resources.js";
-import { runMigrations } from "./migrations.js";
-
-const program = new Command();
-program
-  .name("order-admin")
-  .command("migrate")
-  .requiredOption("--to <version>")
-  .action(async ({ to }: { to: string }) => {
-    const database = openDatabase(config);
-    try {
-      await runMigrations(database, to);
-    } finally {
-      await database.end();
-    }
+export async function runAdmin(argv: string[]): Promise<void> {
+  const config = parseConfig(process.env, "admin");
+  const pool = createPool(config.DATABASE_URL);
+  const command = buildAdminCommand(async (target) => {
+    emit(eventRecord("admin", config.RELEASE_ID, "info", "admin.migration_started"));
+    await migrate(pool, target);
+    emit(eventRecord("admin", config.RELEASE_ID, "info", "admin.migration_finished"));
   });
-
-await program.parseAsync();
+  try {
+    await command.parseAsync(argv, { from: "user" });
+  } finally {
+    await pool.end();
+  }
+}
 ```
-  </TabItem>
+[Factor XII: Admin processes TypeScript source](https://github.com/waggertron/twelve-factor-typescript/blob/v1.0.2/src/admin.ts#L7-L20)
+</TabItem>
   <TabItem label="Python">
     Typer exposes one versioned operation. The command imports the same settings, connection factory, and migration code as the rest of the installed package.
 
+{/* twelve-factor-source: factor-12-python */}
 ```python
-from typing import Annotated
-
-import typer
-
-from order_service.config import settings
-from order_service.migrations import run_migrations
-from order_service.resources import open_database
-
-app = typer.Typer(no_args_is_help=True)
-
-
-@app.command()
-def migrate(
-    target: Annotated[str, typer.Option("--to", help="Target schema version")],
-) -> None:
-    with open_database(settings) as database:
-        run_migrations(database, target)
+def migrate_command(target: str) -> None:
+    settings = load_settings(os.environ, "admin")
+    pool = create_pool(settings.database_url)
+    try:
+        pool.open(wait=True)
+        emit(event_record("admin", settings.release_id, "info", "admin.migration_started"))
+        run_database_migration(pool, target)
+        emit(event_record("admin", settings.release_id, "info", "admin.migration_finished"))
+    finally:
+        pool.close()
 
 
-if __name__ == "__main__":
-    app()
+def build_cli(run: Callable[[str], None] = migrate_command) -> typer.Typer:
+    cli = typer.Typer(add_completion=False)
+
+    @cli.callback()
+    def root() -> None:
+        """Run bounded administrative commands."""
+
+    @cli.command("migrate")
+    def migration(target: str = typer.Option(..., help="Exact migration target")) -> None:
+        try:
+            run(target)
+        except ValueError as error:
+            raise typer.BadParameter(str(error), param_hint="--target") from None
+
+    return cli
 ```
-  </TabItem>
+[Factor XII: Admin processes Python source](https://github.com/waggertron/twelve-factor-python/blob/v1.0.2/src/order_service/admin.py#L13-L39)
+</TabItem>
   <TabItem label="Go">
     Cobra adds a migration subcommand to the normal binary. It loads the shared config and `pgxpool` resource, then delegates schema work to the versioned migration package.
 
+{/* twelve-factor-source: factor-12-go */}
 ```go
-package admin
-
-import (
-    "github.com/spf13/cobra"
-
-    "order-service/internal/config"
-    "order-service/internal/migrations"
-    "order-service/internal/resources"
-)
-
-func NewMigrateCommand() *cobra.Command {
-    var target string
-    command := &cobra.Command{
-        Use: "migrate",
-        RunE: func(command *cobra.Command, _ []string) error {
-            cfg, err := config.Load()
-            if err != nil {
-                return err
-            }
-            database, err := resources.OpenDatabase(command.Context(), cfg)
-            if err != nil {
-                return err
-            }
-            defer database.Close()
-            return migrations.Run(command.Context(), database, target)
-        },
-    }
-    command.Flags().StringVar(&target, "to", "latest", "target schema version")
-    return command
+func adminCommand(logger *slog.Logger) *cobra.Command {
+	admin := &cobra.Command{Use: "admin", Short: "Run one-off administrative processes"}
+	var target string
+	migrate := &cobra.Command{Use: "migrate", Short: "Apply a bounded schema migration", RunE: func(cmd *cobra.Command, _ []string) error {
+		if target != "001" {
+			return fmt.Errorf("unsupported migration target")
+		}
+		cfg, err := config.Load("admin")
+		if err != nil {
+			return err
+		}
+		shutdownTracing, err := telemetry.Configure(cfg.TelemetryMode)
+		if err != nil {
+			return err
+		}
+		defer shutdownTracing(context.Background())
+		ctx := context.Background()
+		pool, err := store.NewPool(ctx, cfg.DatabaseURL)
+		if err != nil {
+			return fmt.Errorf("database unavailable")
+		}
+		defer pool.Close()
+		telemetry.Event(ctx, logger, "admin", cfg.ReleaseID, "admin.migration_started", "target", target)
+		if err := migrations.Apply(ctx, pool, target); err != nil {
+			return err
+		}
+		telemetry.Event(ctx, logger, "admin", cfg.ReleaseID, "admin.migration_finished", "target", target)
+		return nil
+	}}
+	migrate.Flags().StringVar(&target, "target", "", "migration target")
+	_ = migrate.MarkFlagRequired("target")
+	admin.AddCommand(migrate)
+	return admin
 }
 ```
-  </TabItem>
+[Factor XII: Admin processes Go source](https://github.com/waggertron/twelve-factor-go/blob/v1.0.3/internal/commands/admin.go#L15-L48)
+</TabItem>
 </Tabs>
 
 **Evidence to collect:** Tie the migration to an actor, command, release digest, start time, end time, and result without opening an unrestricted shell in a running instance.
