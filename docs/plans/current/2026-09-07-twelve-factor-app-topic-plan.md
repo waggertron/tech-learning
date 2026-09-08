@@ -1057,12 +1057,12 @@ Proposed repositories:
   - Evidence: Docker name audits, port probes, and filesystem existence checks returned no scoped runtime or generated residue.
 - [x] Confirm the cold-cache and warm-cache Swift browser matrix leaves no fixture server or fixture-local cache behind.
   - Evidence: both corrected matrix cells passed; port 4334 had no listener afterward, and the fixture's `.astro` and `node_modules` paths were absent.
-- [ ] Confirm all four worktrees contain only intended tracked changes before commit and are clean after push.
-  - Evidence: pending.
+- [x] Confirm all four worktrees contain only intended tracked changes before commit and are clean after push.
+  - Evidence: final status checks were empty in all four repositories, and each local `HEAD` exactly matched its upstream commit: TypeScript `94b2c68`, Python `e012661`, Go `1e41287`, and tech-learning `5f64ac2`.
 - [x] Commit and push each corrected standalone repository.
   - Evidence: TypeScript `94b2c68`, Python `e012661`, and Go `1e41287` are on their public `main` branches.
-- [ ] Commit and push the updated plan and durable validation records in `tech-learning`.
-  - Evidence: pending.
+- [x] Commit and push the updated plan and durable validation records in `tech-learning`.
+  - Evidence: commit `5f64ac2` is on public `main` with the remediation ledger, Swift browser validation hardening, focused validation documentation, and feature history entry.
 
 - [x] Run the same valid and invalid contract fixtures against all three repositories.
   - Evidence: one shared live matrix passed the canonical small and boundary fixtures plus duplicate, conflict, malformed UUID, amount, field, header, content-type, unknown-order, and migration failures against all three fresh stacks.
