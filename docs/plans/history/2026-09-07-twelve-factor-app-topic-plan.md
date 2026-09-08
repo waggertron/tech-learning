@@ -1,6 +1,6 @@
 # Twelve-Factor App long-form topic plan
 
-Status: in progress
+Status: complete
 
 Created: 2026-09-07
 
@@ -1170,44 +1170,44 @@ Proposed repositories:
   - Evidence: built HTML inspection found the intended H1 and all 12 canonical factor headings on the 349,587-byte hub, plus the intended H1, four headings, and four tab groups on each nonempty child page.
 - [x] Verify internal links and spot-check external sources.
   - Evidence: `npm run validate:links` passed all 800 pages. The full external sweep found no Twelve-Factor topic failures; it reported seven unrelated legacy links elsewhere. Official Twelve-Factor, OpenAI, Anthropic, and tagged repository sources were also opened or checked directly.
-- [ ] Commit and push the Wave 7 publication batch.
-  - Evidence: pending.
-- [ ] Confirm the GitHub Pages deployment for the Wave 7 publication batch succeeds.
-  - Evidence: pending.
-- [ ] Confirm Wave 7 is complete.
-  - Evidence: pending until every Wave 7 child item is checked.
+- [x] Commit and push the Wave 7 publication batch.
+  - Evidence: commit `6362167` is on `origin/main` with the publication review, proof-token enforcement, rendered tab validator, documentation, and checklist evidence.
+- [x] Confirm the GitHub Pages deployment for the Wave 7 publication batch succeeds.
+  - Evidence: Pages workflow run `34273047810` completed successfully for commit `6362167`; the live hub and final example page returned HTTP 200 with the new source references and corrected prose.
+- [x] Confirm Wave 7 is complete.
+  - Evidence: every Wave 7 child item is checked with manual review, primary-source, static analysis, tagged-source, browser, build, pre-push, commit, push, deployment, or live-route evidence.
 
 ### Final closeout
 
-- [ ] Confirm every wave and child item is checked with evidence.
-  - Evidence: pending.
-- [ ] Confirm the published topic answers the audience outcomes in this plan.
-  - Evidence: pending.
-- [ ] Confirm all 36 factor-language examples are present, source-backed, and covered by the focused validation command.
-  - Evidence: pending.
-- [ ] Confirm all twelve factor sections are visibly numbered with the correct Roman numeral and canonical title everywhere they are presented or linked.
-  - Evidence: pending.
-- [ ] Confirm the TypeScript reference repository is public, runnable from a clean clone, unit tested, integration tested, CI green, tagged, and linked from the entry.
-  - Evidence: pending.
-- [ ] Confirm the TypeScript repository includes discovered and evaluated Codex and Claude skills, shared always-on instructions, and a green deterministic Twelve-Factor CI check.
-  - Evidence: pending.
-- [ ] Confirm the Python reference repository is public, runnable from a clean clone, unit tested, integration tested, CI green, tagged, and linked from the entry.
-  - Evidence: pending.
-- [ ] Confirm the Python repository includes discovered and evaluated Codex and Claude skills, shared always-on instructions, and a green deterministic Twelve-Factor CI check.
-  - Evidence: pending.
-- [ ] Confirm the Go reference repository is public, runnable from a clean clone, unit tested, integration tested, CI green, tagged, and linked from the entry.
-  - Evidence: pending.
-- [ ] Confirm the Go repository includes discovered and evaluated Codex and Claude skills, shared always-on instructions, and a green deterministic Twelve-Factor CI check.
-  - Evidence: pending.
-- [ ] Confirm official proposal statuses were checked on the publication date.
-  - Evidence: pending.
-- [ ] Confirm the worktree contains only intended changes.
-  - Evidence: pending.
-- [ ] Move this plan from `docs/plans/current/` to `docs/plans/history/` in the final content batch.
-  - Evidence: pending.
-- [ ] Mark the plan complete only after the history path exists and all validation evidence is recorded.
-  - Evidence: pending.
+- [x] Confirm every wave and child item is checked with evidence.
+  - Evidence: the archived ledger contains no unchecked boxes or `Evidence: pending` entries across Waves 0 through 7 and final closeout.
+- [x] Confirm the published topic answers the audience outcomes in this plan.
+  - Evidence: the hub explains each original failure mode, modern application-platform interpretation, production-limit boundary, official and independent extensions, and evidence-based service audit. The three child pages provide implementation and failure-test detail.
+- [x] Confirm all 36 factor-language examples are present, source-backed, and covered by the focused validation command.
+  - Evidence: `npm run validate:twelve-factor-topic` passed with 12 TypeScript, 12 Python, and 12 Go excerpts, exact immutable source comparison, and a concrete API proof token for every mapping.
+- [x] Confirm all twelve factor sections are visibly numbered with the correct Roman numeral and canonical title everywhere they are presented or linked.
+  - Evidence: focused negative tests and built HTML inspection confirmed the canonical numeral-title pairs in hub headings, scan labels, hub links, example headings, source labels, audit rows, and navigation.
+- [x] Confirm the TypeScript reference repository is public, runnable from a clean clone, unit tested, integration tested, CI green, tagged, and linked from the entry.
+  - Evidence: Wave 5 records the clean-clone and complete verification run. A fresh API check confirmed the public repository, `v1.0.2` at commit `94b2c68`, and successful CI run `34242378715`; the hub and all example pages link that release.
+- [x] Confirm the TypeScript repository includes discovered and evaluated Codex and Claude skills, shared always-on instructions, and a green deterministic Twelve-Factor CI check.
+  - Evidence: the `v1.0.2` tree contains `AGENTS.md`, `CLAUDE.md`, both Twelve-Factor skills, the shared factor checklist, secret checker, and deterministic checker. Wave 5 records trigger evaluation, and CI run `34242378715` passed the tagged commit.
+- [x] Confirm the Python reference repository is public, runnable from a clean clone, unit tested, integration tested, CI green, tagged, and linked from the entry.
+  - Evidence: Wave 5 records the clean-clone and complete verification run. A fresh API check confirmed the public repository, `v1.0.2` at commit `e012661`, and successful CI run `34242378465`; the hub and all example pages link that release.
+- [x] Confirm the Python repository includes discovered and evaluated Codex and Claude skills, shared always-on instructions, and a green deterministic Twelve-Factor CI check.
+  - Evidence: the `v1.0.2` tree contains `AGENTS.md`, `CLAUDE.md`, both Twelve-Factor skills, the shared factor checklist, secret checker, and deterministic checker. Wave 5 records trigger evaluation, and CI run `34242378465` passed the tagged commit.
+- [x] Confirm the Go reference repository is public, runnable from a clean clone, unit tested, integration tested, CI green, tagged, and linked from the entry.
+  - Evidence: Wave 5 records the clean-clone and complete verification run. A fresh API check confirmed the public repository, `v1.0.3` at commit `1e41287`, and successful CI run `34242378168`; the hub and all example pages link that release.
+- [x] Confirm the Go repository includes discovered and evaluated Codex and Claude skills, shared always-on instructions, and a green deterministic Twelve-Factor CI check.
+  - Evidence: the `v1.0.3` tree contains `AGENTS.md`, `CLAUDE.md`, both Twelve-Factor skills, the shared factor checklist, secret checker, and deterministic checker. Wave 5 records trigger evaluation, and CI run `34242378168` passed the tagged commit.
+- [x] Confirm official proposal statuses were checked on the publication date.
+  - Evidence: GitHub API responses on September 8, 2026 confirmed `next` as the default branch, issues 3, 4, and 9 open, pull requests 32, 34, and 40 open, and pull request 33 closed without merge.
+- [x] Confirm the worktree contains only intended changes.
+  - Evidence: after publication commit `6362167` was pushed, local `HEAD` equaled `origin/main` and the worktree was clean. The only subsequent change is this intended plan move and closeout update.
+- [x] Move this plan from `docs/plans/current/` to `docs/plans/history/` in the final content batch.
+  - Evidence: the plan now exists at `docs/plans/history/2026-09-07-twelve-factor-app-topic-plan.md` and no longer exists under `docs/plans/current/`.
+- [x] Mark the plan complete only after the history path exists and all validation evidence is recorded.
+  - Evidence: `Status: complete` was set after the history move, Wave 7 deployment confirmation, and final acceptance evidence were recorded.
 
 ## Current position
 
-Waves 0 through 6 are complete. The shared application contract, three public reference repositories, cross-repository verification, tagged article examples, deterministic topic validation, discovery, and cross-linking are complete. Final publication review and closeout remain.
+Waves 0 through 7 are complete. The topic, three public reference repositories, AI harnesses, cross-repository verification, tagged examples, deterministic and rendered-browser validation, discovery, publication review, deployment, and plan closeout are complete.
