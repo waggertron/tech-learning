@@ -768,22 +768,22 @@ Proposed repositories:
 
 #### Shared application contract
 
-- [ ] Define one versioned HTTP, job-payload, database, config, telemetry, health, and admin-command contract for all three repositories.
-  - Evidence: pending.
-- [ ] Define the order lifecycle and idempotency invariant used by all three implementations.
-  - Evidence: pending.
-- [ ] Define valid fixtures that stay within the documented order and job schemas.
-  - Evidence: pending.
-- [ ] Define separate, intentional invalid fixtures for config, HTTP, job, and migration failure tests.
-  - Evidence: pending.
-- [ ] Inventory every external surface: PostgreSQL, Redis-backed queue, telemetry export, container runtime, and HTTP clients.
-  - Evidence: pending.
-- [ ] Assign a local path to every external surface using Docker services, in-memory exporters, or strict fakes without cloud credentials.
-  - Evidence: pending.
-- [ ] Define common commands for setup, unit tests, integration tests, start, stop, and cleanup in each repository.
-  - Evidence: pending.
-- [ ] Reserve configurable local ports and isolated Docker Compose project names so the three repositories can run without collisions.
-  - Evidence: pending.
+- [x] Define one versioned HTTP, job-payload, database, config, telemetry, health, and admin-command contract for all three repositories.
+  - Evidence: `docs/plans/current/twelve-factor-reference-contract.md` defines contract version 1.0.0 across all seven surfaces and requires each repository to carry a release-matched copy.
+- [x] Define the order lifecycle and idempotency invariant used by all three implementations.
+  - Evidence: the shared contract defines `accepted`, `processing`, `completed`, and `failed` transitions; one order per submission key; a transactional queue intent; conditional worker claims; and completion as an at-most-once database effect under redelivery.
+- [x] Define valid fixtures that stay within the documented order and job schemas.
+  - Evidence: the fixture contract contains fixed `small_order` and `boundary_order` cases whose identifiers and amounts satisfy the HTTP, job, and database ranges.
+- [x] Define separate, intentional invalid fixtures for config, HTTP, job, and migration failure tests.
+  - Evidence: five named invalid fixtures isolate missing database config, zero amount, unsupported job schema, unsupported migration target, and conflicting idempotency reuse, with exact expected evidence.
+- [x] Inventory every external surface: PostgreSQL, Redis-backed queue, telemetry export, container runtime, and HTTP clients.
+  - Evidence: `External surfaces and credential-free local paths` lists all five boundaries, their production-shaped interfaces, local paths, and required verification.
+- [x] Assign a local path to every external surface using Docker services, in-memory exporters, or strict fakes without cloud credentials.
+  - Evidence: PostgreSQL 18 and Redis 8 use Compose and Testcontainers; telemetry uses console and in-memory exporters; OCI builds use local Docker; and HTTP tests use loopback clients. The contract forbids cloud accounts and production data in local and CI validation.
+- [x] Define common commands for setup, unit tests, integration tests, start, stop, and cleanup in each repository.
+  - Evidence: `Common command outcomes` defines ecosystem-native locked install, unit, integration, full verification, local start, and targeted cleanup commands for TypeScript, Python, and Go.
+- [x] Reserve configurable local ports and isolated Docker Compose project names so the three repositories can run without collisions.
+  - Evidence: the isolation table assigns `tf_typescript`, `tf_python`, and `tf_go`; web ports 3101 through 3103; PostgreSQL ports 55431 through 55433; and Redis ports 56379 through 56381, with override and cleanup rules.
 
 #### TypeScript reference repository
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 4 are complete. Wave 5 is the next execution wave. The hub and three example pages now cover all twelve factors with verified language examples plus a dated analysis of official modernization work, independent extensions, and remaining production concerns. The standalone reference repositories, AI harnesses, integrated article sections, and final publication work remain pending.
+Waves 0 through 4 are complete, and Wave 5 is in progress. The shared reference application contract is complete, including payloads, lifecycle and idempotency rules, fixtures, local providers, commands, ports, and cleanup ownership. The TypeScript repository is the next implementation checkpoint, followed by Python, Go, cross-repository verification, integrated article sections, and final publication work.
