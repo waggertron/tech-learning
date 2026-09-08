@@ -163,6 +163,7 @@ The application code reads `process.env.DATABASE_URL` (or `os.environ["DATABASE_
 
 ## Related topics
 
+- [Twelve-Factor Apps](../twelve-factor-app/), the broader configuration contract and its test for keeping deploy-specific values out of source
 - [Kubernetes](../kubernetes/), where Secrets objects live and how to use External Secrets Operator
 - [GitOps](../gitops/), how secrets flow through a GitOps pipeline without being committed to git
 - [Django Part 5: Authentication](../../web/django/part-05-authentication/), tokens and sessions in practice

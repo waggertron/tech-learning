@@ -464,6 +464,7 @@ That's the baseline. Everything beyond (service mesh, multi-cluster federation, 
 
 ## Related topics
 
+- [Twelve-Factor Apps](../twelve-factor-app/), the application-platform boundary that Kubernetes can implement without being required by the methodology
 - [Docker](../docker/), building and running containers that Kubernetes orchestrates
 - [Helm](../helm/), the package manager for Kubernetes
 - [Terraform](../terraform/), provisioning the cluster itself

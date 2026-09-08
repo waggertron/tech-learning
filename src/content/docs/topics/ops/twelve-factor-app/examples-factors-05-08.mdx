@@ -377,8 +377,16 @@ export function createOrderWorker(
 
 **Evidence to collect:** Increase worker replicas while holding the web fleet constant, then verify queue throughput improves without exceeding database connection limits.
 
+## Reference releases
+
+The examples on this page are exact excerpts from independently runnable releases:
+
+- [TypeScript `v1.0.2`](https://github.com/waggertron/twelve-factor-typescript/tree/v1.0.2), verified with `npm run verify`
+- [Python `v1.0.2`](https://github.com/waggertron/twelve-factor-python/tree/v1.0.2), verified with `uv run python scripts/check_twelve_factor.py`
+- [Go `v1.0.3`](https://github.com/waggertron/twelve-factor-go/tree/v1.0.3), verified with `./scripts/check-twelve-factor.sh`
+
 ## Navigation
 
 - [Return to the Twelve-Factor overview](../)
-- [Back to Factor I through Factor IV](../examples-factors-01-04/)
-- [Continue with Factor IX through Factor XII](../examples-factors-09-12/)
+- [Back to Factor I: Codebase through Factor IV: Backing services](../examples-factors-01-04/)
+- [Continue with Factor IX: Disposability through Factor XII: Admin processes](../examples-factors-09-12/)

@@ -43,7 +43,10 @@ npm run validate:twelve-factor-topic
 The command runs negative contract tests and then checks the real topic. It fails when:
 
 - A hub heading, example heading, scan-table label, source label, or audit row loses an exact `Factor I` through `Factor XII` numeral-title pair.
+- A factor's hub-to-example link hides its canonical title or points to the wrong rendered route or anchor.
 - Any factor lacks a TypeScript, Python, or Go tab and tagged source.
+- The Operations indexes, related-topic links, or focused Secrets, Docker, and Kubernetes backlinks disappear.
+- Any example page stops linking all three immutable reference releases.
 - A repository release, root instruction file, Codex skill, Claude skill, factor checklist, or deterministic checker link is absent.
 - A shared configuration name, process command, port, API path, request field, amount boundary, queue name, or migration path is absent.
 - A displayed excerpt differs from the selected lines in its immutable tagged source.

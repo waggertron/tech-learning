@@ -1101,34 +1101,34 @@ Proposed repositories:
 
 ### Wave 6: discovery and cross-linking
 
-- [ ] Add the topic under Platform in `src/content/docs/topics/ops/index.md`.
-  - Evidence: pending.
-- [ ] Add the topic under Operations in `src/content/docs/topics/index.mdx`.
-  - Evidence: pending.
-- [ ] Add related links from the topic to Docker, Kubernetes, GitOps, secrets, and scalability using rendered-route-relative paths.
-  - Evidence: pending.
-- [ ] Link the hub and all three example pages in both directions, including previous and next example navigation.
-  - Evidence: pending.
-- [ ] Verify each factor's hub link resolves to the correct example-page heading.
-  - Evidence: pending.
-- [ ] Verify every rendered factor link and heading displays the exact Roman numeral and canonical factor title.
-  - Evidence: pending.
-- [ ] Link the TypeScript example tabs and repository summary to the tagged TypeScript reference release.
-  - Evidence: pending.
-- [ ] Link the Python example tabs and repository summary to the tagged Python reference release.
-  - Evidence: pending.
-- [ ] Link the Go example tabs and repository summary to the tagged Go reference release.
-  - Evidence: pending.
-- [ ] Replace or supplement the secrets page's passing Twelve-Factor reference with a local topic link.
-  - Evidence: pending.
-- [ ] Evaluate focused backlinks from Docker and Kubernetes, adding only links that improve reader navigation.
-  - Evidence: pending.
-- [ ] Verify every changed internal link from its rendered route.
-  - Evidence: pending.
-- [ ] Run `npm run build` for the Wave 6 batch.
-  - Evidence: pending.
-- [ ] Confirm Wave 6 is complete.
-  - Evidence: pending until every Wave 6 child item is checked.
+- [x] Add the topic under Platform in `src/content/docs/topics/ops/index.md`.
+  - Evidence: the Operations category index lists `Twelve-Factor Apps` under Platform with the application-platform contract, canonical-factor coverage, extensions, and three reference ecosystems.
+- [x] Add the topic under Operations in `src/content/docs/topics/index.mdx`.
+  - Evidence: the root topic catalog lists the same reader-facing entry under Operations and links the rendered `/topics/ops/twelve-factor-app/` route.
+- [x] Add related links from the topic to Docker, Kubernetes, GitOps, secrets, and scalability using rendered-route-relative paths.
+  - Evidence: the hub's `Related topics` section links all five neighboring topics with a concise explanation of the boundary each one extends. The 800-page internal-link validator accepted every route.
+- [x] Link the hub and all three example pages in both directions, including previous and next example navigation.
+  - Evidence: all twelve hub sections link directly to their matching example anchors. Each example page links back to the hub, the first links forward, the middle links backward and forward, and the last links backward and to the hub audit.
+- [x] Verify each factor's hub link resolves to the correct example-page heading.
+  - Evidence: the focused validator derives each rendered child route and canonical heading anchor, then requires the exact pair. `npm run validate:links` also resolved every target and hash across 800 built pages.
+- [x] Verify every rendered factor link and heading displays the exact Roman numeral and canonical factor title.
+  - Evidence: `npm run validate:twelve-factor-topic` passed all twelve hub headings, scan labels, example headings, hub-to-example labels, source labels, and audit mappings. A new negative test proves that hiding `Factor I: Codebase` behind generic link text fails.
+- [x] Link the TypeScript example tabs and repository summary to the tagged TypeScript reference release.
+  - Evidence: all twelve TypeScript tabs link exact `v1.0.2` source ranges, and each example page now links the release root beside `npm run verify`. The release URL returned successfully.
+- [x] Link the Python example tabs and repository summary to the tagged Python reference release.
+  - Evidence: all twelve Python tabs link exact `v1.0.2` source ranges, and each example page now links the release root beside its deterministic checker command. The release URL returned successfully.
+- [x] Link the Go example tabs and repository summary to the tagged Go reference release.
+  - Evidence: all twelve Go tabs link exact `v1.0.3` source ranges, and each example page now links the release root beside its deterministic checker command. The release URL returned successfully.
+- [x] Replace or supplement the secrets page's passing Twelve-Factor reference with a local topic link.
+  - Evidence: the Secrets topic retains the canonical Config reference and adds a focused local `Twelve-Factor Apps` related-topic link for the broader deploy-configuration contract.
+- [x] Evaluate focused backlinks from Docker and Kubernetes, adding only links that improve reader navigation.
+  - Evidence: Docker links the topic for immutable artifacts, explicit processes, attached resources, and disposability. Kubernetes links it to distinguish the application-platform boundary from any requirement to use that orchestrator.
+- [x] Verify every changed internal link from its rendered route.
+  - Evidence: `npm run validate:links` passed all 800 built pages. A local preview returned HTTP 200 with nonempty HTML for the hub, three example pages, both indexes, Secrets, Docker, and Kubernetes.
+- [x] Run `npm run build` for the Wave 6 batch.
+  - Evidence: the build passed secret scanning, Astro checking with 0 errors, 0 warnings, and 0 hints, 800 generated pages, and 799 Pagefind entries.
+- [x] Confirm Wave 6 is complete.
+  - Evidence: every Wave 6 child item is checked with source, focused contract, tagged release, built-link, local HTTP, full build, or complete pre-push evidence. The full gate passed page, internal-link, custom-page, code-contract, and browser validation after the discovery changes.
 
 ### Wave 7: publication review and validation
 
@@ -1200,4 +1200,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 5 are complete. The shared application contract, three public reference repositories, cross-repository verification, tagged article examples, and deterministic topic validation are complete. Discovery, cross-linking, and final publication work remain.
+Waves 0 through 6 are complete. The shared application contract, three public reference repositories, cross-repository verification, tagged article examples, deterministic topic validation, discovery, and cross-linking are complete. Final publication review and closeout remain.

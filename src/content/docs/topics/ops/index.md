@@ -13,6 +13,7 @@ description: "The disciplines that turn working code into running systems, Kuber
   - [Security Hardening](./kubernetes/security/), Pod Security Standards, admission controllers, RBAC lockdown, secrets
   - [Troubleshooting](./kubernetes/troubleshooting/), systematic debugging for every common failure mode
   - [Workloads Reference](./kubernetes/workloads/), Deployment, StatefulSet, DaemonSet, Job, CronJob, probes, resource management
+- [Twelve-Factor Apps](./twelve-factor-app/), the application-platform contract, all twelve canonical factors, current extensions, and runnable TypeScript, Python, and Go reference services
 - [Helm](./helm/), the package manager for Kubernetes: charts, values, templates, releases, OCI distribution
 - [Terraform](./terraform/), infrastructure as code: providers, resources, state, modules, multi-environment patterns
 - [n8n](./n8n/), workflow automation from the beginner mental model through local Docker, cloud VM, n8n Cloud, queue mode, and Kubernetes hosting

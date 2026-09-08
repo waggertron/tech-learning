@@ -99,7 +99,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Treat the deployable application as the unit of identity. A monorepo can contain several applications when each has an explicit build target and release history. Several repositories can contribute libraries to one application when dependency versions make the resulting source graph reproducible. Repository count is less useful than the path from release to revision.
 
-**Verify it:** Pick a running web, worker, and admin process. Recover the application name, release identifier, source revision, and build target for each. All process types in one release should point to the same application revision. [Compare the TypeScript, Python, and Go process layouts](./examples-factors-01-04/#factor-i-codebase).
+**Verify it:** Pick a running web, worker, and admin process. Recover the application name, release identifier, source revision, and build target for each. All process types in one release should point to the same application revision. [See Factor I: Codebase examples in TypeScript, Python, and Go](./examples-factors-01-04/#factor-i-codebase).
 
 ## Factor II: Dependencies
 
@@ -109,7 +109,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** A manifest declares direct dependencies. A lockfile records the resolved graph. Isolation keeps the process from importing host packages by accident. Clean installation and artifact inspection prove completeness. Integrity verification and signed provenance strengthen the supply chain, but they extend beyond the original claim.
 
-**Verify it:** Install and test in an empty environment with only the manifest and lockfile available. Confirm the runtime artifact contains every required dependency and starts without compiler or registry access. [Compare locked dependency workflows](./examples-factors-01-04/#factor-ii-dependencies).
+**Verify it:** Install and test in an empty environment with only the manifest and lockfile available. Confirm the runtime artifact contains every required dependency and starts without compiler or registry access. [See Factor II: Dependencies examples in TypeScript, Python, and Go](./examples-factors-01-04/#factor-ii-dependencies).
 
 ## Factor III: Config
 
@@ -119,7 +119,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Source code owns the configuration schema, defaults, and validation rules. The deployment supplies values through environment variables, mounted files, secret stores, or identity-based access. Configuration groups by independent operational concern rather than named environment bundles. Secret delivery and application configuration meet at the schema boundary, but secret material never belongs in the schema or error output.
 
-**Verify it:** Start with missing and malformed values. The process should reject them before readiness without printing secret contents. Change a valid deploy setting without rebuilding the artifact. [Compare typed startup validation](./examples-factors-01-04/#factor-iii-config).
+**Verify it:** Start with missing and malformed values. The process should reject them before readiness without printing secret contents. Change a valid deploy setting without rebuilding the artifact. [See Factor III: Config examples in TypeScript, Python, and Go](./examples-factors-01-04/#factor-iii-config).
 
 ## Factor IV: Backing services
 
@@ -129,7 +129,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Construct provider clients at the application boundary and pass narrow interfaces inward. A URL can make attachment replaceable, but it cannot make different products semantically equivalent. Transaction behavior, delivery guarantees, consistency, limits, and failure responses still need contract tests.
 
-**Verify it:** Point a release at a fresh compatible resource without editing source. Run the same contract suite against both attachments and confirm that an incompatible provider fails visibly. [Compare injected PostgreSQL and queue clients](./examples-factors-01-04/#factor-iv-backing-services).
+**Verify it:** Point a release at a fresh compatible resource without editing source. Run the same contract suite against both attachments and confirm that an incompatible provider fails visibly. [See Factor IV: Backing services examples in TypeScript, Python, and Go](./examples-factors-01-04/#factor-iv-backing-services).
 
 ## Factor V: Build, release, run
 
@@ -139,7 +139,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Build once, identify the artifact by an immutable digest, attach provenance and source revision, then promote those bytes. A release adds deploy configuration and its own identifier without mutating the artifact. Database migrations are explicit admin work, not a hidden side effect of every process start.
 
-**Verify it:** Promote one artifact digest through two environments with different release configuration. Block network access to source and package registries at runtime. Roll back by selecting the prior release without invoking a build. [Compare artifact and release layouts](./examples-factors-05-08/#factor-v-build-release-run).
+**Verify it:** Promote one artifact digest through two environments with different release configuration. Block network access to source and package registries at runtime. Roll back by selecting the prior release without invoking a build. [See Factor V: Build, release, run examples in TypeScript, Python, and Go](./examples-factors-05-08/#factor-v-build-release-run).
 
 ## Factor VI: Processes
 
@@ -149,7 +149,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Process memory remains useful for bounded caches and active work, but correctness cannot depend on it surviving. PostgreSQL, object storage, and queues hold durable state. Idempotency keys and database constraints protect effects that may be retried after an ambiguous failure.
 
-**Verify it:** Accept an order, terminate that instance, and read the order through another instance. Deliver the same job twice and observe one durable effect. [Compare externally persisted request handling](./examples-factors-05-08/#factor-vi-processes).
+**Verify it:** Accept an order, terminate that instance, and read the order through another instance. Deliver the same job twice and observe one durable effect. [See Factor VI: Processes examples in TypeScript, Python, and Go](./examples-factors-05-08/#factor-vi-processes).
 
 ## Factor VII: Port binding
 
@@ -159,7 +159,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** A network process owns a self-contained listener and binds an injected address and port. The platform supplies discovery, public routing, and any edge proxy. Workers, scheduled jobs, message consumers, and function handlers have non-HTTP invocation contracts, so they do not open a port merely to satisfy the factor.
 
-**Verify it:** Start two instances of the same artifact on different ports and route traffic to both. No framework-specific server should be installed on the host. Confirm that web, worker, and admin process types each expose the invocation contract their workload needs. [Compare self-contained HTTP listeners](./examples-factors-05-08/#factor-vii-port-binding).
+**Verify it:** Start two instances of the same artifact on different ports and route traffic to both. No framework-specific server should be installed on the host. Confirm that web, worker, and admin process types each expose the invocation contract their workload needs. [See Factor VII: Port binding examples in TypeScript, Python, and Go](./examples-factors-05-08/#factor-vii-port-binding).
 
 ## Factor VIII: Concurrency
 
@@ -169,7 +169,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Scale the web and worker fleets independently, then bound concurrency inside each process. Queue depth, processing latency, and resource saturation inform worker replica count. Backpressure protects backing services because horizontal scaling can multiply database connections and outbound requests faster than it improves throughput.
 
-**Verify it:** Increase worker replicas without changing the web fleet. Confirm the queue drains faster, each worker respects its concurrency limit, and total work stays within database and downstream capacity. [Compare bounded worker process types](./examples-factors-05-08/#factor-viii-concurrency).
+**Verify it:** Increase worker replicas without changing the web fleet. Confirm the queue drains faster, each worker respects its concurrency limit, and total work stays within database and downstream capacity. [See Factor VIII: Concurrency examples in TypeScript, Python, and Go](./examples-factors-05-08/#factor-viii-concurrency).
 
 ## Factor IX: Disposability
 
@@ -179,7 +179,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Startup, readiness, liveness, and shutdown are separate contracts. A terminating instance removes readiness, stops new work, drains within a deadline, closes resources, and exits before the platform's grace period. Idempotency and retry safety remain necessary because hard kills bypass graceful shutdown.
 
-**Verify it:** Measure time to readiness. Send termination during an HTTP request and a queued job, then confirm readiness fails first, accepted work finishes or is retried safely, and the process exits within its deadline. Force-kill a worker to test the path that signal handlers cannot protect. [Compare lifecycle handling](./examples-factors-09-12/#factor-ix-disposability).
+**Verify it:** Measure time to readiness. Send termination during an HTTP request and a queued job, then confirm readiness fails first, accepted work finishes or is retried safely, and the process exits within its deadline. Force-kill a worker to test the path that signal handlers cannot protect. [See Factor IX: Disposability examples in TypeScript, Python, and Go](./examples-factors-09-12/#factor-ix-disposability).
 
 ## Factor X: Dev/prod parity
 
@@ -189,7 +189,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Parity means production-significant contracts match, not that every environment is identical. Unit tests cover pure behavior. Disposable integration environments exercise the real database and queue types. Staging or controlled production checks cover identity, topology, scale, network policy, and failure modes that a laptop cannot reproduce honestly.
 
-**Verify it:** Inventory every deliberate difference across local, CI, staging, and production. Name the behavior it can change, the test layer that covers it, and the owner of that evidence. Track how quickly a merged change reaches production and whether its authors can observe the result. [Compare PostgreSQL contract tests](./examples-factors-09-12/#factor-x-devprod-parity).
+**Verify it:** Inventory every deliberate difference across local, CI, staging, and production. Name the behavior it can change, the test layer that covers it, and the owner of that evidence. Track how quickly a merged change reaches production and whether its authors can observe the result. [See Factor X: Dev/prod parity examples in TypeScript, Python, and Go](./examples-factors-09-12/#factor-x-devprod-parity).
 
 ## Factor XI: Logs
 
@@ -199,7 +199,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Standard output and standard error remain the collection boundary for containers. Structured events carry timestamp, severity, service, release, request, and trace fields. Metrics and traces answer questions that logs cannot, while the platform owns collection, sampling, routing, retention, and access policy. Sensitive values are redacted before emission.
 
-**Verify it:** Submit one failing request and reconstruct its path from the external event stream using release, request, and trace identifiers. Repeat with a synthetic sensitive marker and confirm it never reaches collected output. [Compare structured event pipelines](./examples-factors-09-12/#factor-xi-logs).
+**Verify it:** Submit one failing request and reconstruct its path from the external event stream using release, request, and trace identifiers. Repeat with a synthetic sensitive marker and confirm it never reaches collected output. [See Factor XI: Logs examples in TypeScript, Python, and Go](./examples-factors-09-12/#factor-xi-logs).
 
 ## Factor XII: Admin processes
 
@@ -209,7 +209,7 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Modern reading:** Package narrow admin commands in the normal artifact and run them as bounded jobs. Give each invocation short-lived identity, least privilege, a timeout, resource limits, concurrency policy, and audit evidence. Restartable migrations are safer than an unrestricted production shell or interactive REPL.
 
-**Verify it:** Run the migration from the production artifact in a non-production environment, interrupt it, and retry it. Record the actor or workload identity, exact command, release digest, target, start and end times, and result. Confirm the admin identity cannot perform unrelated runtime actions. [Compare bounded migration commands](./examples-factors-09-12/#factor-xii-admin-processes).
+**Verify it:** Run the migration from the production artifact in a non-production environment, interrupt it, and retry it. Record the actor or workload identity, exact command, release digest, target, start and end times, and result. Confirm the admin identity cannot perform unrelated runtime actions. [See Factor XII: Admin processes examples in TypeScript, Python, and Go](./examples-factors-09-12/#factor-xii-admin-processes).
 
 ## Audit the factors by breaking assumptions
 
@@ -405,8 +405,8 @@ OpenTelemetry, SLSA, NIST SSDF, and platform-specific contracts complement Twelv
 
 ## Related topics
 
-- [Docker](../docker/)
-- [Kubernetes](../kubernetes/)
-- [GitOps](../gitops/)
-- [Secrets, keys, and tokens](../secrets-keys-tokens/)
-- [Scalability](../../system-design/scalability/)
+- [Docker](../docker/), the artifact and process boundary used by the reference services
+- [Kubernetes](../kubernetes/), one platform that can schedule, route, configure, and stop those processes
+- [GitOps](../gitops/), reconciliation and release promotion after the application contract is defined
+- [Secrets, keys, and tokens](../secrets-keys-tokens/), credential types and secure delivery into deploy configuration
+- [Scalability](../../system-design/scalability/), capacity, bottleneck, partitioning, and replication models beyond process concurrency

@@ -298,6 +298,7 @@ Docker Compose is for local development and small single-host deployments. When 
 
 ## Related topics
 
+- [Twelve-Factor Apps](../twelve-factor-app/), the application contract behind immutable images, explicit processes, attached resources, and disposable runtime instances
 - [Kubernetes](../kubernetes/), the orchestrator that runs containers at scale
 - [Helm](../helm/), packaging Kubernetes workloads that use Docker images
 - [GitOps](../gitops/), automated deployment pipelines that push Docker images to Kubernetes

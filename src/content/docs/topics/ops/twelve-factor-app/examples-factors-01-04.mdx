@@ -261,8 +261,16 @@ def create_runtime_app() -> tuple[FastAPI, Settings]:
 
 **Evidence to collect:** Replace an attachment endpoint without editing source, then run contract tests that expose semantic differences instead of assuming providers are interchangeable.
 
+## Reference releases
+
+The examples on this page are exact excerpts from independently runnable releases:
+
+- [TypeScript `v1.0.2`](https://github.com/waggertron/twelve-factor-typescript/tree/v1.0.2), verified with `npm run verify`
+- [Python `v1.0.2`](https://github.com/waggertron/twelve-factor-python/tree/v1.0.2), verified with `uv run python scripts/check_twelve_factor.py`
+- [Go `v1.0.3`](https://github.com/waggertron/twelve-factor-go/tree/v1.0.3), verified with `./scripts/check-twelve-factor.sh`
+
 ## Navigation
 
 - [Return to the Twelve-Factor overview](../)
-- [Continue with Factor V through Factor VIII](../examples-factors-05-08/)
+- [Continue with Factor V: Build, release, run through Factor VIII: Concurrency](../examples-factors-05-08/)
 - [Docker](../../docker/)

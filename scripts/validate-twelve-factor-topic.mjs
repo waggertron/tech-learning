@@ -21,6 +21,14 @@ function factorSection(document, heading) {
   return document.slice(start, end === -1 ? document.length : end);
 }
 
+function factorAnchor(factor) {
+  return factor.heading
+    .toLowerCase()
+    .replaceAll("/", "")
+    .replaceAll(/[^a-z0-9]+/g, "-")
+    .replaceAll(/^-|-$/g, "");
+}
+
 export function validateTopicDocuments(hub, pages) {
   const failures = [];
   const requireMatch = (condition, message) => {
@@ -34,6 +42,11 @@ export function validateTopicDocuments(hub, pages) {
     requireMatch(count(page, `## ${factor.heading}`) === 1, `${factor.page} must contain one ${factor.heading} heading`);
     requireMatch(hub.includes(`[${factor.heading}](#factor-`), `Hub scan table must link ${factor.heading}`);
     requireMatch(hub.includes(`| ${factor.heading} |`), `Audit table must map ${factor.heading}`);
+    const exampleRoute = `./${factor.page.replace(".mdx", "/")}#${factorAnchor(factor)}`;
+    requireMatch(
+      hub.includes(`[See ${factor.heading} examples in TypeScript, Python, and Go](${exampleRoute})`),
+      `Hub example link must preserve ${factor.heading} and its rendered route`,
+    );
 
     const factorExamples = examples.filter((example) => example.number === factor.number);
     requireMatch(factorExamples.length === 3, `${factor.heading} must have three language sources`);
@@ -49,6 +62,9 @@ export function validateTopicDocuments(hub, pages) {
 
   for (const [language, repository] of Object.entries(repositories)) {
     requireMatch(hub.includes(releaseUrl(repository)), `${language} release ${repository.tag} is not linked from the hub`);
+    for (const page of pages.values()) {
+      requireMatch(page.includes(releaseUrl(repository)), `${language} release ${repository.tag} is not linked from every example page`);
+    }
     for (const path of [
       "AGENTS.md",
       "CLAUDE.md",
@@ -90,6 +106,34 @@ export function validateTopicDocuments(hub, pages) {
   return failures;
 }
 
+export function validateDiscoveryDocuments(documents) {
+  const failures = [];
+  const requireLink = (document, link, location) => {
+    if (!document.includes(link)) failures.push(`${location} is missing ${link}`);
+  };
+
+  requireLink(documents.opsIndex, "[Twelve-Factor Apps](./twelve-factor-app/)", "Operations index");
+  requireLink(documents.topicsIndex, "[Twelve-Factor Apps](./ops/twelve-factor-app/)", "Topics index");
+  for (const [location, document] of [
+    ["Secrets topic", documents.secrets],
+    ["Docker topic", documents.docker],
+    ["Kubernetes topic", documents.kubernetes],
+  ]) {
+    requireLink(document, "[Twelve-Factor Apps](../twelve-factor-app/)", location);
+  }
+  for (const link of [
+    "[Docker](../docker/)",
+    "[Kubernetes](../kubernetes/)",
+    "[GitOps](../gitops/)",
+    "[Secrets, keys, and tokens](../secrets-keys-tokens/)",
+    "[Scalability](../../system-design/scalability/)",
+  ]) {
+    requireLink(documents.hub, link, "Twelve-Factor related topics");
+  }
+
+  return failures;
+}
+
 async function main() {
   const hub = await readFile(`${topicDirectory}/index.mdx`, "utf8");
   const pages = new Map(
@@ -101,6 +145,15 @@ async function main() {
     ),
   );
   const failures = validateTopicDocuments(hub, pages);
+  const discoveryDocuments = {
+    hub,
+    opsIndex: await readFile("src/content/docs/topics/ops/index.md", "utf8"),
+    topicsIndex: await readFile("src/content/docs/topics/index.mdx", "utf8"),
+    secrets: await readFile("src/content/docs/topics/ops/secrets-keys-tokens.md", "utf8"),
+    docker: await readFile("src/content/docs/topics/ops/docker/index.md", "utf8"),
+    kubernetes: await readFile("src/content/docs/topics/ops/kubernetes/index.md", "utf8"),
+  };
+  failures.push(...validateDiscoveryDocuments(discoveryDocuments));
 
   try {
     const changed = await synchronizeTwelveFactorExamples({ write: false });
@@ -114,7 +167,7 @@ async function main() {
     for (const failure of failures) console.error(`- ${failure}`);
     process.exitCode = 1;
   } else {
-    console.log("Twelve-Factor topic validation passed: 12 factors, 36 tagged language examples, release links, harness links, audit mappings, and shared contract.");
+    console.log("Twelve-Factor topic validation passed: 12 factors, 36 tagged language examples, discovery links, release links, harness links, audit mappings, and shared contract.");
   }
 }
 

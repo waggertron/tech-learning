@@ -369,8 +369,17 @@ func adminCommand(logger *slog.Logger) *cobra.Command {
 
 **Evidence to collect:** Tie the migration to an actor, command, release digest, start time, end time, and result without opening an unrestricted shell in a running instance.
 
+## Reference releases
+
+The examples on this page are exact excerpts from independently runnable releases:
+
+- [TypeScript `v1.0.2`](https://github.com/waggertron/twelve-factor-typescript/tree/v1.0.2), verified with `npm run verify`
+- [Python `v1.0.2`](https://github.com/waggertron/twelve-factor-python/tree/v1.0.2), verified with `uv run python scripts/check_twelve_factor.py`
+- [Go `v1.0.3`](https://github.com/waggertron/twelve-factor-go/tree/v1.0.3), verified with `./scripts/check-twelve-factor.sh`
+
 ## Navigation
 
 - [Return to the Twelve-Factor overview](../)
-- [Back to Factor V through Factor VIII](../examples-factors-05-08/)
+- [Back to Factor V: Build, release, run through Factor VIII: Concurrency](../examples-factors-05-08/)
+- [Use the Twelve-Factor service audit](../#audit-the-factors-by-breaking-assumptions)
 - [Kubernetes](../../kubernetes/)
