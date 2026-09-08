@@ -769,7 +769,7 @@ Proposed repositories:
 #### Shared application contract
 
 - [x] Define one versioned HTTP, job-payload, database, config, telemetry, health, and admin-command contract for all three repositories.
-  - Evidence: `docs/plans/current/twelve-factor-reference-contract.md` defines contract version 1.0.0 across all seven surfaces and requires each repository to carry a release-matched copy.
+  - Evidence: `docs/plans/current/twelve-factor-reference-contract.md` defines corrected contract version 1.0.1 across all seven surfaces, including the `amountCents` range of 1 through 99, and requires each repository to carry a release-matched copy.
 - [x] Define the order lifecycle and idempotency invariant used by all three implementations.
   - Evidence: the shared contract defines `accepted`, `processing`, `completed`, and `failed` transitions; one order per submission key; a transactional queue intent; conditional worker claims; and completion as an at-most-once database effect under redelivery.
 - [x] Define valid fixtures that stay within the documented order and job schemas.
@@ -832,60 +832,60 @@ Proposed repositories:
 - [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
   - Evidence: targeted cleanup left no `tf_typescript` containers or volumes; generated build and dependency directories are ignored.
 - [x] Commit and push the verified TypeScript repository.
-  - Evidence: commit `5ba05e0` is on public `main` at `https://github.com/waggertron/twelve-factor-typescript`.
+  - Evidence: corrected release commit `e922721` is on public `main` at `https://github.com/waggertron/twelve-factor-typescript`.
 - [x] Tag the exact TypeScript release referenced by the entry and confirm the remote tag.
-  - Evidence: annotated tag `v1.0.0` resolves remotely to tag object `a9b36ecd6c27a93e4e8ad83a7b94e54467a51698`.
+  - Evidence: corrected contract release tag `v1.0.1` was pushed after the amount range changed to 1 through 99.
 
 #### Python reference repository
 
-- [ ] Create the standalone `waggertron/twelve-factor-python` repository with README, license, `.gitignore`, and contribution notes.
-  - Evidence: pending.
-- [ ] Add `pyproject.toml`, a committed `uv.lock`, package layout, and type-checker configuration.
-  - Evidence: pending.
-- [ ] Pin FastAPI, Uvicorn, `pydantic-settings`, Psycopg, Dramatiq, structlog, OpenTelemetry, Typer, pytest, and Testcontainers dependencies to resolved versions.
-  - Evidence: pending.
-- [ ] Implement startup config validation with `pydantic-settings` and safe error output.
-  - Evidence: pending.
-- [ ] Implement the FastAPI order API, liveness endpoint, and readiness endpoint.
-  - Evidence: pending.
-- [ ] Implement PostgreSQL persistence with Psycopg and `psycopg_pool`.
-  - Evidence: pending.
-- [ ] Implement Dramatiq enqueue and worker process types with bounded concurrency.
-  - Evidence: pending.
-- [ ] Implement idempotent order processing under repeated delivery.
-  - Evidence: pending.
-- [ ] Implement FastAPI lifespan and worker shutdown with readiness removal before drain.
-  - Evidence: pending.
-- [ ] Implement structlog JSON events and OpenTelemetry trace and release correlation.
-  - Evidence: pending.
-- [ ] Implement a Typer migration command using the normal settings and database modules.
-  - Evidence: pending.
-- [ ] Add a multi-stage Dockerfile that installs from the lock and runs one immutable image.
-  - Evidence: pending.
-- [ ] Add Docker Compose services for the app, PostgreSQL, Redis, and an optional local telemetry collector or console exporter.
-  - Evidence: pending.
-- [ ] Add unit tests for config parsing, order validation, idempotency, readiness transitions, log fields, and command argument handling.
-  - Evidence: pending.
-- [ ] Add Testcontainers integration tests for PostgreSQL persistence and Dramatiq retry behavior.
-  - Evidence: pending.
-- [ ] Add an HTTP smoke test covering startup, readiness, order submission, processing, and persisted result retrieval.
-  - Evidence: pending.
-- [ ] Add a failure test proving shutdown does not accept new work after readiness changes.
-  - Evidence: pending.
-- [ ] Add targeted start, stop, and cleanup commands that remove only this repository's containers, volumes, virtual environments, caches, and temporary test artifacts.
-  - Evidence: pending.
-- [ ] Add CI for frozen install, type checking, unit tests, integration tests, container build, and secret scanning.
-  - Evidence: pending.
-- [ ] Document local setup, architecture, process types, configuration, all twelve factor mappings, test commands, and cleanup.
-  - Evidence: pending.
-- [ ] Run the documented workflow from a clean clone without cloud credentials.
-  - Evidence: pending.
-- [ ] Confirm no containers, processes, generated files, or test data remain after cleanup.
-  - Evidence: pending.
-- [ ] Commit and push the verified Python repository.
-  - Evidence: pending.
-- [ ] Tag the exact Python release referenced by the entry and confirm the remote tag.
-  - Evidence: pending.
+- [x] Create the standalone `waggertron/twelve-factor-python` repository with README, license, `.gitignore`, and contribution notes.
+  - Evidence: the public repository is available at `https://github.com/waggertron/twelve-factor-python` with all four files on `main`.
+- [x] Add `pyproject.toml`, a committed `uv.lock`, package layout, and type-checker configuration.
+  - Evidence: the package uses a `src` layout, frozen uv lock, strict mypy configuration, and installed `web`, `worker`, and `admin` commands.
+- [x] Pin FastAPI, Uvicorn, `pydantic-settings`, Psycopg, Dramatiq, structlog, OpenTelemetry, Typer, pytest, and Testcontainers dependencies to resolved versions.
+  - Evidence: exact direct versions and the complete resolution are committed in `pyproject.toml` and `uv.lock`; frozen install passed from a clean clone.
+- [x] Implement startup config validation with `pydantic-settings` and safe error output.
+  - Evidence: process-specific requirements, URL schemes, concurrency, grace limits, and value-free configuration errors pass focused unit tests.
+- [x] Implement the FastAPI order API, liveness endpoint, and readiness endpoint.
+  - Evidence: unit, integration, and live Compose checks cover liveness, readiness, valid submission, invalid submission, duplicate behavior, conflict, and retrieval.
+- [x] Implement PostgreSQL persistence with Psycopg and `psycopg_pool`.
+  - Evidence: the shared store and transaction boundary pass against disposable PostgreSQL 18 in integration tests and Compose.
+- [x] Implement Dramatiq enqueue and worker process types with bounded concurrency.
+  - Evidence: the real Redis 8 integration consumes `orders.v1`; Pydantic bounds `WORKER_CONCURRENCY` from 1 through 32.
+- [x] Implement idempotent order processing under repeated delivery.
+  - Evidence: a unique idempotency key, payload conflict detection, conditional processing claim, and conditional completion make redelivery a database no-op.
+- [x] Implement FastAPI lifespan and worker shutdown with readiness removal before drain.
+  - Evidence: web lifespan owns its pool; worker shutdown removes readiness, pauses consumer intake, applies a deadline, and closes with status 0 under Docker `SIGTERM`, emitting `worker.draining` and `worker.stopped`.
+- [x] Implement structlog JSON events and OpenTelemetry trace and release correlation.
+  - Evidence: unit tests parse emitted JSON and assert service, process, release, order, attempt, and active trace fields without configuration leakage.
+- [x] Implement a Typer migration command using the normal settings and database modules.
+  - Evidence: `admin migrate --target 001` uses the installed package, normal configuration, shared pool, and packaged migration; the live Compose migration passed.
+- [x] Add a multi-stage Dockerfile that installs from the lock and runs one immutable image.
+  - Evidence: a clean-clone Docker build installed a non-editable wheel from `uv.lock`; web, worker, and admin use the same runtime image.
+- [x] Add Docker Compose services for the app, PostgreSQL, Redis, and an optional local telemetry collector or console exporter.
+  - Evidence: isolated project `tf_python` ran PostgreSQL 18, Redis 8, migration, web, worker, and console telemetry without cloud credentials.
+- [x] Add unit tests for config parsing, order validation, idempotency, readiness transitions, log fields, and command argument handling.
+  - Evidence: 13 unit tests pass across all named surfaces, including 99 as valid and 100 as invalid.
+- [x] Add Testcontainers integration tests for PostgreSQL persistence and Dramatiq retry behavior.
+  - Evidence: 2 integration tests pass with PostgreSQL 18 and Redis 8, including schema readiness, completion, redelivery safety, and finite retry.
+- [x] Add an HTTP smoke test covering startup, readiness, order submission, processing, and persisted result retrieval.
+  - Evidence: Compose returned ready, accepted an amount of 99, completed the queued order, persisted its result, and rejected 100 with HTTP 400.
+- [x] Add a failure test proving shutdown does not accept new work after readiness changes.
+  - Evidence: readiness and drain tests prove new work receives HTTP 503 after drain begins and that missed deadlines raise `TimeoutError`.
+- [x] Add targeted start, stop, and cleanup commands that remove only this repository's containers, volumes, virtual environments, caches, and temporary test artifacts.
+  - Evidence: `scripts/cleanup.py` targets only `tf_python` and repository-local generated paths; the post-run cleanup removed all named resources.
+- [x] Add CI for frozen install, type checking, unit tests, integration tests, container build, and secret scanning.
+  - Evidence: branch and release-tag runs for `dfc4475` completed successfully, including `https://github.com/waggertron/twelve-factor-python/actions/runs/34211108176`.
+- [x] Document local setup, architecture, process types, configuration, all twelve factor mappings, test commands, and cleanup.
+  - Evidence: README and focused contract and evaluation documents cover every named area and link the two repository harnesses.
+- [x] Run the documented workflow from a clean clone without cloud credentials.
+  - Evidence: `/private/tmp/verify-twelve-factor-python` passed frozen install, strict type checking, 13 unit tests, 2 integration tests, package builds, secret scanning, and Docker build.
+- [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
+  - Evidence: targeted cleanup left no `tf_python` containers or volumes and removed the repository virtual environment, caches, and build output.
+- [x] Commit and push the verified Python repository.
+  - Evidence: commit `dfc4475` is on public `main` at `https://github.com/waggertron/twelve-factor-python`.
+- [x] Tag the exact Python release referenced by the entry and confirm the remote tag.
+  - Evidence: annotated tag `v1.0.1` resolves remotely to tag object `6acb1546cdcd870f54b1f217b40e22b39171e6a7`.
 
 #### Go reference repository
 

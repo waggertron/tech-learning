@@ -2,7 +2,7 @@
 
 Status: active
 
-Contract version: 1.0.0
+Contract version: 1.0.1
 
 Created: 2026-09-08
 
@@ -78,7 +78,7 @@ Request body:
 ```json
 {
   "customerId": "customer-001",
-  "amountCents": 2599
+  "amountCents": 59
 }
 ```
 
@@ -86,7 +86,7 @@ Constraints:
 
 - `Idempotency-Key` is 8 to 64 ASCII letters, digits, or hyphens.
 - `customerId` is 3 to 64 ASCII letters, digits, or hyphens.
-- `amountCents` is an integer from 1 through 10000000.
+- `amountCents` is an integer from 1 through 99.
 
 The first valid request returns status `202`. Repeating the same key and body returns status `200` and the existing order. Reusing the same key with a different body returns status `409`.
 
@@ -96,7 +96,7 @@ Success body:
 {
   "id": "00000000-0000-4000-8000-000000000001",
   "customerId": "customer-001",
-  "amountCents": 2599,
+  "amountCents": 59,
   "status": "accepted"
 }
 ```
@@ -161,7 +161,7 @@ CREATE TABLE orders (
   id uuid PRIMARY KEY,
   idempotency_key text NOT NULL UNIQUE,
   customer_id text NOT NULL,
-  amount_cents integer NOT NULL CHECK (amount_cents BETWEEN 1 AND 10000000),
+  amount_cents integer NOT NULL CHECK (amount_cents BETWEEN 1 AND 99),
   status text NOT NULL CHECK (status IN ('accepted', 'processing', 'completed', 'failed')),
   created_at timestamptz NOT NULL,
   completed_at timestamptz
@@ -225,7 +225,7 @@ Each artifact exposes:
 admin migrate --target 001
 ```
 
-Only target `001` is valid in contract version 1.0.0. The command uses the normal configuration and PostgreSQL modules, records `admin.migration_started` and `admin.migration_finished`, enforces the configured deadline, and returns a nonzero status for an unsupported target or migration failure.
+Only target `001` is valid in contract version 1.0.1. The command uses the normal configuration and PostgreSQL modules, records `admin.migration_started` and `admin.migration_finished`, enforces the configured deadline, and returns a nonzero status for an unsupported target or migration failure.
 
 ## Fixture contract
 
@@ -233,8 +233,8 @@ Valid fixtures are fixed and deterministic:
 
 | Fixture | Idempotency key | Customer | Amount | Order ID |
 | --- | --- | --- | --- | --- |
-| `small_order` | `order-submit-001` | `customer-001` | `2599` | `00000000-0000-4000-8000-000000000001` |
-| `boundary_order` | `order-submit-002` | `c-2` | `10000000` | `00000000-0000-4000-8000-000000000002` |
+| `small_order` | `order-submit-001` | `customer-001` | `59` | `00000000-0000-4000-8000-000000000001` |
+| `boundary_order` | `order-submit-002` | `c-2` | `99` | `00000000-0000-4000-8000-000000000002` |
 
 Valid fixture helpers may select only these values or other values proven to satisfy the documented ranges. They may not clamp, wrap, normalize, or repair their inputs.
 
