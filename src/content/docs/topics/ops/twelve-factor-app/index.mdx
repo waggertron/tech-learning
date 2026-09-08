@@ -79,39 +79,63 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 ## Factor I: Codebase
 
-One application has one authoritative body of version-controlled source and any number of deploys. The principle concerns application identity and traceability, not a rigid repository count. A monorepo can hold several independently built applications, while shared libraries can have their own lifecycle.
+**Original claim:** [Factor I](https://12factor.net/codebase) defines one codebase tracked in revision control with many deploys. A deploy is a running instance of the application in an environment such as production or staging.
 
-The useful proof is a path from a running release back to its commit and build target. [Compare the TypeScript, Python, and Go process layouts](./examples-factors-01-04/#factor-i-codebase).
+**Failure mode:** A service assembled from copied directories, untracked server patches, or several unrelated source roots has no authoritative history. Teams cannot answer which code produced a running release or reproduce it after a machine fails.
+
+**Modern reading:** Treat the deployable application as the unit of identity. A monorepo can contain several applications when each has an explicit build target and release history. Several repositories can contribute libraries to one application when dependency versions make the resulting source graph reproducible. Repository count is less useful than the path from release to revision.
+
+**Verify it:** Pick a running web, worker, and admin process. Recover the application name, release identifier, source revision, and build target for each. All process types in one release should point to the same application revision. [Compare the TypeScript, Python, and Go process layouts](./examples-factors-01-04/#factor-i-codebase).
 
 ## Factor II: Dependencies
 
-Every required dependency is declared and isolated from packages that happen to exist on a developer laptop or server. A manifest describes intent. A lockfile records the resolved graph. A clean installation and artifact inspection show whether the declaration is complete.
+**Original claim:** [Factor II](https://12factor.net/dependencies) requires explicit dependency declaration and isolation. The application cannot rely on a library or executable merely because the host operating system happens to provide it.
 
-Modern systems also verify dependency integrity and preserve supply-chain evidence, but those are extensions to the original factor. [Compare locked dependency workflows](./examples-factors-01-04/#factor-ii-dependencies).
+**Failure mode:** An undeclared package works on a developer laptop and fails in a clean build. A floating version resolves to different code during rollback. A runtime artifact reaches a package registry during startup and becomes unavailable when the registry or network is down.
+
+**Modern reading:** A manifest declares direct dependencies. A lockfile records the resolved graph. Isolation keeps the process from importing host packages by accident. Clean installation and artifact inspection prove completeness. Integrity verification and signed provenance strengthen the supply chain, but they extend beyond the original claim.
+
+**Verify it:** Install and test in an empty environment with only the manifest and lockfile available. Confirm the runtime artifact contains every required dependency and starts without compiler or registry access. [Compare locked dependency workflows](./examples-factors-01-04/#factor-ii-dependencies).
 
 ## Factor III: Config
 
-Configuration contains values that vary between deploys. Source code defines the schema and behavior. The deployment supplies endpoints, limits, feature settings, and credentials through an explicit platform boundary.
+**Original claim:** [Factor III](https://12factor.net/config) keeps values that vary between deploys out of source code. Its test is blunt and useful: the codebase should be publishable without exposing credentials or environment-specific configuration.
 
-Environment variables remain common, but mounted files, secret stores, and workload identity can serve the same principle. The stronger test is whether the codebase could be published without exposing a credential or environment-specific value. [Compare typed startup validation](./examples-factors-01-04/#factor-iii-config).
+**Failure mode:** A database URL compiled into the artifact forces a rebuild for every environment. A credential committed beside source leaks through history. Scattered string lookups let an invalid value survive until the first request reaches a rarely used path.
+
+**Modern reading:** Source code owns the configuration schema, defaults, and validation rules. The deployment supplies values through environment variables, mounted files, secret stores, or identity-based access. Configuration groups by independent operational concern rather than named environment bundles. Secret delivery and application configuration meet at the schema boundary, but secret material never belongs in the schema or error output.
+
+**Verify it:** Start with missing and malformed values. The process should reject them before readiness without printing secret contents. Change a valid deploy setting without rebuilding the artifact. [Compare typed startup validation](./examples-factors-01-04/#factor-iii-config).
 
 ## Factor IV: Backing services
 
-Databases, queues, caches, object stores, and third-party APIs are attached resources. The application receives their locations and credentials through configuration instead of assuming a host-local service.
+**Original claim:** [Factor IV](https://12factor.net/backing-services) treats databases, queues, caches, object stores, and external APIs as attached resources. The application receives connection details through configuration instead of assuming a service lives on the same host.
 
-Attachment does not mean semantic interchangeability. Replacing one queue or database with another still needs a compatible contract and focused tests. [Compare injected PostgreSQL and queue clients](./examples-factors-01-04/#factor-iv-backing-services).
+**Failure mode:** Code embeds a production hostname, imports a provider throughout the domain layer, or depends on a daemon installed beside the application. Replacing an attachment then requires source edits and a broad rewrite.
+
+**Modern reading:** Construct provider clients at the application boundary and pass narrow interfaces inward. A URL can make attachment replaceable, but it cannot make different products semantically equivalent. Transaction behavior, delivery guarantees, consistency, limits, and failure responses still need contract tests.
+
+**Verify it:** Point a release at a fresh compatible resource without editing source. Run the same contract suite against both attachments and confirm that an incompatible provider fails visibly. [Compare injected PostgreSQL and queue clients](./examples-factors-01-04/#factor-iv-backing-services).
 
 ## Factor V: Build, release, run
 
-Build turns source into an artifact. Release combines that artifact with deploy-specific configuration and an identity. Run starts the selected process without changing the artifact.
+**Original claim:** [Factor V](https://12factor.net/build-release-run) separates build, release, and run. Build converts source into an executable artifact. Release combines that artifact with deploy configuration. Run starts processes from the selected release.
 
-Installing packages, compiling source, or mutating code during startup collapses these boundaries. Promotion and rollback become trustworthy when each environment receives the same immutable bytes. [Compare artifact and release layouts](./examples-factors-05-08/#factor-v-build-release-run).
+**Failure mode:** Startup installs dependencies, compiles source, or applies unversioned patches. Two starts of the same nominal release can produce different bytes. Promotion rebuilds from source, and rollback cannot recover the artifact that previously ran.
+
+**Modern reading:** Build once, identify the artifact by an immutable digest, attach provenance and source revision, then promote those bytes. A release adds deploy configuration and its own identifier without mutating the artifact. Database migrations are explicit admin work, not a hidden side effect of every process start.
+
+**Verify it:** Promote one artifact digest through two environments with different release configuration. Block network access to source and package registries at runtime. Roll back by selecting the prior release without invoking a build. [Compare artifact and release layouts](./examples-factors-05-08/#factor-v-build-release-run).
 
 ## Factor VI: Processes
 
-Application processes are stateless and share nothing with one another. Durable state still exists, but it belongs in backing services that survive process replacement.
+**Original claim:** [Factor VI](https://12factor.net/processes) runs the application as stateless, share-nothing processes. Durable state belongs in a backing service that outlives any one process.
 
-Sessions, uploaded files, retry records, and business effects must not depend on one instance's memory or local filesystem. [Compare externally persisted request handling](./examples-factors-05-08/#factor-vi-processes).
+**Failure mode:** Sessions live in web-process memory, uploads live on an instance filesystem, or worker retries rely on an in-memory completed set. Routing a request elsewhere loses state. Restarting an instance erases accepted work or repeats a business effect.
+
+**Modern reading:** Process memory remains useful for bounded caches and active work, but correctness cannot depend on it surviving. PostgreSQL, object storage, and queues hold durable state. Idempotency keys and database constraints protect effects that may be retried after an ambiguous failure.
+
+**Verify it:** Accept an order, terminate that instance, and read the order through another instance. Deliver the same job twice and observe one durable effect. [Compare externally persisted request handling](./examples-factors-05-08/#factor-vi-processes).
 
 ## Factor VII: Port binding
 

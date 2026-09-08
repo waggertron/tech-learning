@@ -18,13 +18,76 @@ The build creates one immutable artifact. A release adds deployment configuratio
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    A multi-stage container runs compiled Node.js output with production dependencies restored from the npm lock. Web, worker, and admin commands select code already present in the image.
+    A multi-stage container restores from the npm lock, compiles once, and copies only runtime files forward. The source revision labels the artifact while deploy configuration stays outside it.
+
+```dockerfile
+FROM node:24-bookworm-slim AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build && npm prune --omit=dev
+
+FROM node:24-bookworm-slim AS runtime
+ARG SOURCE_REVISION
+LABEL org.opencontainers.image.revision=$SOURCE_REVISION
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/dist ./dist
+USER node
+CMD ["node", "dist/web.js"]
+```
   </TabItem>
   <TabItem label="Python">
-    A wheel and its locked dependencies are installed during the image build. Uvicorn, Dramatiq, and Typer start from the installed package without modifying it.
+    uv validates the lock and builds one wheel. The runtime installs the locked dependency set and project wheel before the artifact is published.
+
+```dockerfile
+FROM python:3.13-slim AS build
+WORKDIR /app
+RUN pip install --no-cache-dir uv
+COPY pyproject.toml uv.lock ./
+RUN uv export --frozen --no-dev --no-emit-project --output-file requirements.lock
+COPY src ./src
+RUN uv build --wheel
+
+FROM python:3.13-slim AS runtime
+ARG SOURCE_REVISION
+LABEL org.opencontainers.image.revision=$SOURCE_REVISION
+WORKDIR /app
+COPY --from=build /app/requirements.lock ./requirements.lock
+COPY --from=build /app/dist /wheels
+RUN pip install --no-cache-dir -r requirements.lock \
+    && pip install --no-cache-dir --no-deps /wheels/*.whl \
+    && rm -rf requirements.lock /wheels
+USER nobody
+CMD ["order-web"]
+```
   </TabItem>
   <TabItem label="Go">
-    The build produces a static application binary with embedded revision metadata. The runtime image contains the binary and selects its web, worker, or admin subcommand.
+    The build embeds the source revision in one binary. The runtime image copies those bytes and contains no Go toolchain or module cache.
+
+```dockerfile
+FROM golang:1.26-bookworm AS build
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+COPY cmd ./cmd
+COPY internal ./internal
+ARG SOURCE_REVISION
+RUN CGO_ENABLED=0 go build \
+    -ldflags "-s -w -X main.revision=$SOURCE_REVISION" \
+    -o /out/order-service ./cmd/order-service
+
+FROM gcr.io/distroless/static-debian12:nonroot
+ARG SOURCE_REVISION
+LABEL org.opencontainers.image.revision=$SOURCE_REVISION
+COPY --from=build /out/order-service /order-service
+ENTRYPOINT ["/order-service"]
+CMD ["web"]
+```
   </TabItem>
 </Tabs>
 
@@ -36,13 +99,124 @@ Web and worker instances keep no required durable state in memory or on their lo
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Fastify handlers and BullMQ workers call application services backed by PostgreSQL. Request completion does not depend on a particular Node.js process surviving.
+    The Fastify route receives a PostgreSQL pool. The database generates and persists the order identifier, so a later request can reach any web process.
+
+```typescript
+import type { FastifyInstance } from "fastify";
+import type { Pool } from "pg";
+import { z } from "zod";
+
+const CreateOrder = z.object({ sku: z.string().min(1), quantity: z.number().int().positive() });
+
+export function registerOrderRoutes(app: FastifyInstance, database: Pool): void {
+  app.post("/orders", async (request, reply) => {
+    const order = CreateOrder.parse(request.body);
+    const result = await database.query(
+      `INSERT INTO orders (sku, quantity)
+       VALUES ($1, $2)
+       RETURNING id, sku, quantity, status`,
+      [order.sku, order.quantity],
+    );
+    return reply.code(201).send(result.rows[0]);
+  });
+}
+```
   </TabItem>
   <TabItem label="Python">
-    FastAPI handlers and Dramatiq actors use Psycopg repositories. Process memory can hold transient caches, but correctness never depends on them.
+    FastAPI retrieves the pool from application state and writes through Psycopg. Application state holds a connection resource, not the durable order.
+
+```python
+from typing import Annotated
+
+from fastapi import Depends, FastAPI, Request, status
+from pydantic import BaseModel, Field
+from psycopg.rows import dict_row
+from psycopg_pool import AsyncConnectionPool
+
+app = FastAPI()
+
+
+class CreateOrder(BaseModel):
+    sku: str = Field(min_length=1)
+    quantity: int = Field(gt=0)
+
+
+def get_database(request: Request) -> AsyncConnectionPool:
+    return request.app.state.database
+
+
+@app.post("/orders", status_code=status.HTTP_201_CREATED)
+async def create_order(
+    order: CreateOrder,
+    database: Annotated[AsyncConnectionPool, Depends(get_database)],
+) -> dict[str, object]:
+    async with database.connection() as connection:
+        async with connection.cursor(row_factory=dict_row) as cursor:
+            await cursor.execute(
+                "INSERT INTO orders (sku, quantity) VALUES (%s, %s) "
+                "RETURNING id, sku, quantity, status",
+                (order.sku, order.quantity),
+            )
+            row = await cursor.fetchone()
+    if row is None:
+        raise RuntimeError("database did not return the created order")
+    return row
+```
   </TabItem>
   <TabItem label="Go">
-    chi handlers and Asynq tasks use interfaces implemented by `pgxpool` repositories. Restarting a process does not erase accepted orders.
+    A chi handler owns no durable map. Its `pgxpool` dependency writes the order and returns the stored representation.
+
+```go
+package httpapi
+
+import (
+    "encoding/json"
+    "net/http"
+
+    "github.com/go-chi/chi/v5"
+    "github.com/jackc/pgx/v5/pgxpool"
+)
+
+type Server struct {
+    database *pgxpool.Pool
+}
+
+func New(database *pgxpool.Pool) http.Handler {
+    server := &Server{database: database}
+    router := chi.NewRouter()
+    router.Post("/orders", server.createOrder)
+    return router
+}
+
+func (s *Server) createOrder(writer http.ResponseWriter, request *http.Request) {
+    var input struct {
+        SKU      string `json:"sku"`
+        Quantity int    `json:"quantity"`
+    }
+    if err := json.NewDecoder(request.Body).Decode(&input); err != nil {
+        http.Error(writer, "invalid request", http.StatusBadRequest)
+        return
+    }
+
+    var order struct {
+        ID     string `json:"id"`
+        Status string `json:"status"`
+    }
+    err := s.database.QueryRow(
+        request.Context(),
+        `INSERT INTO orders (sku, quantity)
+         VALUES ($1, $2) RETURNING id, status`,
+        input.SKU,
+        input.Quantity,
+    ).Scan(&order.ID, &order.Status)
+    if err != nil {
+        http.Error(writer, "order storage failed", http.StatusInternalServerError)
+        return
+    }
+    writer.WriteHeader(http.StatusCreated)
+    _ = json.NewEncoder(writer).Encode(order)
+}
+```
   </TabItem>
 </Tabs>
 

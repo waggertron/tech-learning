@@ -617,60 +617,60 @@ Checkboxes may be marked complete only when their Evidence line points to an art
 
 ### Wave 2: canonical factors I through VI
 
-- [ ] Teach I. Codebase with deploy traceability, monorepo nuance, and an audit question.
-  - Evidence: pending.
-- [ ] Teach II. Dependencies with complete declaration, isolation, lockfiles, and artifact verification.
-  - Evidence: pending.
-- [ ] Teach III. Config with deploy variance, schema validation, mounted delivery, secrets, and identity boundaries.
-  - Evidence: pending.
-- [ ] Teach IV. Backing services with attachment contracts, semantic portability limits, and contract testing.
-  - Evidence: pending.
-- [ ] Teach V. Build, release, run with immutable artifacts, release identity, provenance, promotion, and rollback.
-  - Evidence: pending.
-- [ ] Teach VI. Processes with stateless execution, external durable state, session handling, and idempotency.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Codebase example using the Fastify and BullMQ process scripts from one `package.json`.
-  - Evidence: pending.
-- [ ] Add and verify the Python Codebase example using FastAPI, Dramatiq, and Typer entry points from one `pyproject.toml`.
-  - Evidence: pending.
-- [ ] Add and verify the Go Codebase example using one module with web, worker, and admin commands.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Dependencies example using a committed lockfile and explicit imports.
-  - Evidence: pending.
-- [ ] Add and verify the Python Dependencies example using `pyproject.toml`, `uv.lock`, and frozen synchronization.
-  - Evidence: pending.
-- [ ] Add and verify the Go Dependencies example using `go.mod`, `go.sum`, and module verification.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Config example using Zod.
-  - Evidence: pending.
-- [ ] Add and verify the Python Config example using `pydantic-settings`.
-  - Evidence: pending.
-- [ ] Add and verify the Go Config example using `caarlos0/env/v11`.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Backing services example using PostgreSQL and BullMQ clients built from injected endpoints.
-  - Evidence: pending.
-- [ ] Add and verify the Python Backing services example using Psycopg and Dramatiq configuration.
-  - Evidence: pending.
-- [ ] Add and verify the Go Backing services example using `pgxpool` and Asynq clients.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Build, release, run example using compiled Node output and release metadata.
-  - Evidence: pending.
-- [ ] Add and verify the Python Build, release, run example using one locked wheel and release metadata.
-  - Evidence: pending.
-- [ ] Add and verify the Go Build, release, run example using one compiled binary and build metadata.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Processes example using PostgreSQL instead of process-local durable state.
-  - Evidence: pending.
-- [ ] Add and verify the Python Processes example using FastAPI dependencies and Psycopg instead of process globals.
-  - Evidence: pending.
-- [ ] Add and verify the Go Processes example using chi handlers and `pgxpool` instead of process-local durable state.
-  - Evidence: pending.
-- [ ] Give every factor an original claim, failure mode, modern reading, and verification method.
-  - Evidence: pending.
-- [ ] Run `npm run build` for the Wave 2 batch.
-  - Evidence: pending.
-- [ ] Confirm Wave 2 is complete.
-  - Evidence: pending until every Wave 2 child item is checked.
+- [x] Teach I. Codebase with deploy traceability, monorepo nuance, and an audit question.
+  - Evidence: the hub's `Factor I: Codebase` section connects one revision to many deploys, distinguishes a monorepo from multiple codebases, and gives a revision-trace audit method.
+- [x] Teach II. Dependencies with complete declaration, isolation, lockfiles, and artifact verification.
+  - Evidence: the hub's `Factor II: Dependencies` section covers manifests, transitive lock state, clean isolated installation, and artifact-time verification.
+- [x] Teach III. Config with deploy variance, schema validation, mounted delivery, secrets, and identity boundaries.
+  - Evidence: the hub's `Factor III: Config` section defines deploy-varying config, typed startup validation, environment and mounted delivery, secret-manager boundaries, workload identity, and safe failures.
+- [x] Teach IV. Backing services with attachment contracts, semantic portability limits, and contract testing.
+  - Evidence: the hub's `Factor IV: Backing services` section treats services as replaceable attachments while requiring semantic compatibility and contract tests.
+- [x] Teach V. Build, release, run with immutable artifacts, release identity, provenance, promotion, and rollback.
+  - Evidence: the hub's `Factor V: Build, release, run` section separates artifact creation, release binding, and execution, then adds identity, provenance, promotion, and rollback checks.
+- [x] Teach VI. Processes with stateless execution, external durable state, session handling, and idempotency.
+  - Evidence: the hub's `Factor VI: Processes` section covers replaceable processes, external session and durable state, interruption, retry, and idempotency.
+- [x] Add and verify the TypeScript Codebase example using the Fastify and BullMQ process scripts from one `package.json`.
+  - Evidence: `examples-factors-01-04.mdx` defines web, worker, and admin scripts in one manifest; an isolated strict TypeScript build imported Fastify and BullMQ successfully.
+- [x] Add and verify the Python Codebase example using FastAPI, Dramatiq, and Typer entry points from one `pyproject.toml`.
+  - Evidence: `examples-factors-01-04.mdx` defines all three entry points in one project; an isolated locked environment imported the FastAPI, Dramatiq, and Typer entry modules successfully.
+- [x] Add and verify the Go Codebase example using one module with web, worker, and admin commands.
+  - Evidence: `examples-factors-01-04.mdx` defines one Cobra command tree; `go test ./...` and `go build ./cmd/order-service` passed in the isolated verification module.
+- [x] Add and verify the TypeScript Dependencies example using a committed lockfile and explicit imports.
+  - Evidence: the example uses `npm ci` and `npm ls`; the isolated project generated a lockfile, installed Fastify, BullMQ, ioredis, pg, Zod, and Commander, and passed strict compilation.
+- [x] Add and verify the Python Dependencies example using `pyproject.toml`, `uv.lock`, and frozen synchronization.
+  - Evidence: the example uses `uv lock`, `uv sync --frozen`, and `uv run`; all commands passed in the isolated project, followed by compilation and import checks.
+- [x] Add and verify the Go Dependencies example using `go.mod`, `go.sum`, and module verification.
+  - Evidence: the example uses `go mod tidy`, `go mod verify`, and `go test ./...`; module verification and tests passed with the documented libraries.
+- [x] Add and verify the TypeScript Config example using Zod.
+  - Evidence: the example validates PostgreSQL, Redis, port, and environment fields with Zod; strict compilation passed against Zod 4.5.4.
+- [x] Add and verify the Python Config example using `pydantic-settings`.
+  - Evidence: the example uses `BaseSettings`, typed URLs, a prefix, and input-redacted validation errors; compilation and imports passed against Pydantic Settings 2.15.
+- [x] Add and verify the Go Config example using `caarlos0/env/v11`.
+  - Evidence: the example parses required PostgreSQL and Redis URLs plus port and environment values; `go test ./...` passed against env/v11 11.4.1.
+- [x] Add and verify the TypeScript Backing services example using PostgreSQL and BullMQ clients built from injected endpoints.
+  - Evidence: the example constructs `pg.Pool`, an ioredis connection, and a BullMQ queue from validated config; strict compilation passed with current packages.
+- [x] Add and verify the Python Backing services example using Psycopg and Dramatiq configuration.
+  - Evidence: the example constructs a Psycopg pool and Redis-backed Dramatiq broker from settings; compilation and imports passed in the locked environment.
+- [x] Add and verify the Go Backing services example using `pgxpool` and Asynq clients.
+  - Evidence: the example constructs both clients from parsed URLs; `go test ./...` and the production binary build passed with pgx/v5 5.11.0 and Asynq 0.26.0.
+- [x] Add and verify the TypeScript Build, release, run example using compiled Node output and release metadata.
+  - Evidence: the multi-stage Dockerfile installs from the lockfile, compiles once, labels the image revision, and copies only production output; an exact Docker build succeeded with revision `verify`.
+- [x] Add and verify the Python Build, release, run example using one locked wheel and release metadata.
+  - Evidence: the multi-stage Dockerfile creates wheels from the frozen environment and installs them into the runtime image; an exact Docker build succeeded with revision `verify`.
+- [x] Add and verify the Go Build, release, run example using one compiled binary and build metadata.
+  - Evidence: the multi-stage Dockerfile verifies modules, embeds revision metadata with `-ldflags`, and copies one binary; an exact Docker build succeeded with revision `verify`.
+- [x] Add and verify the TypeScript Processes example using PostgreSQL instead of process-local durable state.
+  - Evidence: the Fastify handler writes order state through `pg.Pool`; strict compilation passed in the isolated project.
+- [x] Add and verify the Python Processes example using FastAPI dependencies and Psycopg instead of process globals.
+  - Evidence: the FastAPI route receives a request-scoped Psycopg connection through dependency injection; compilation and imports passed.
+- [x] Add and verify the Go Processes example using chi handlers and `pgxpool` instead of process-local durable state.
+  - Evidence: the chi handler writes through `pgxpool.Pool`; `go test ./...` and the production build passed.
+- [x] Give every factor an original claim, failure mode, modern reading, and verification method.
+  - Evidence: Factors I through VI each contain labeled `Original claim`, `Failure mode`, `Modern reading`, and `Verify it` passages in the hub.
+- [x] Run `npm run build` for the Wave 2 batch.
+  - Evidence: the final Wave 2 build passed with the secret scan, 0 Astro errors, 0 warnings, 0 hints, and 800 generated pages.
+- [x] Confirm Wave 2 is complete.
+  - Evidence: every Wave 2 child item is checked with source, dependency, compiler, test, container-build, or site-build evidence.
 
 ### Wave 3: canonical factors VII through XII
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 and 1 are complete. Wave 2 is the next execution wave. The hub and three example-page foundations now exist, but the runnable reference implementations and final publication work remain pending.
+Waves 0 through 2 are complete. Wave 3 is the next execution wave. The hub and three example-page foundations now cover the first six factors with verified language examples, but the runnable reference repositories and final publication work remain pending.

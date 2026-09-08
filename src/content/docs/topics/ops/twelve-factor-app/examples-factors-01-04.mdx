@@ -18,13 +18,58 @@ The deployable application is the unit of identity. Its web, worker, and admin p
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    One `package.json` declares Fastify web, BullMQ worker, and Commander admin scripts. Release metadata records the Git revision and build target.
+    One `package.json` exposes the three process types. The source entry points import Fastify, BullMQ, and Commander from the same locked dependency graph.
+
+```json
+{
+  "name": "order-service",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "web": "node dist/web.js",
+    "worker": "node dist/worker.js",
+    "admin": "node dist/admin.js"
+  }
+}
+```
   </TabItem>
   <TabItem label="Python">
-    One `pyproject.toml` declares FastAPI web, Dramatiq worker, and Typer admin entry points from the same package and revision.
+    One package exposes wrappers for the FastAPI web process, Dramatiq worker, and Typer admin application.
+
+```toml
+[project]
+name = "order-service"
+version = "0.1.0"
+dependencies = ["fastapi", "uvicorn", "dramatiq[redis]", "typer"]
+
+[project.scripts]
+order-web = "order_service.web:main"
+order-worker = "order_service.worker:main"
+order-admin = "order_service.admin:app"
+```
   </TabItem>
   <TabItem label="Go">
-    One Go module builds web, worker, and admin commands that share internal application packages and release metadata.
+    One Go module builds a Cobra command with web, worker, and admin subcommands that share internal application packages. The web package imports chi, and the worker package imports Asynq.
+
+```text
+order-service/
+|-- go.mod
+|-- go.sum
+|-- cmd/
+|   `-- order-service/main.go
+`-- internal/
+    |-- httpapi/
+    |-- jobs/
+    `-- order/
+```
+
+```bash
+go build ./cmd/order-service
+./order-service web
+./order-service worker
+./order-service admin migrate
+```
   </TabItem>
 </Tabs>
 
@@ -36,13 +81,31 @@ The dependency declaration is complete only when a clean environment can resolve
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    `package.json` declares direct dependencies. `package-lock.json` records the resolved graph. `npm ci` rejects drift between them.
+    `package.json` declares direct dependencies. `package-lock.json` records the resolved graph. `npm ci` rejects drift between them, and `npm ls` proves the named runtime libraries resolve.
+
+```bash
+npm ci
+npm ls fastify zod pg bullmq commander ioredis
+npm run build
+```
   </TabItem>
   <TabItem label="Python">
-    `pyproject.toml` declares direct dependencies. `uv.lock` records exact resolutions. Frozen synchronization rejects an outdated lock.
+    `pyproject.toml` declares direct dependencies. `uv.lock` records exact resolutions. Frozen synchronization rejects an outdated lock, and the import command checks the installed runtime surface.
+
+```bash
+uv sync --frozen
+uv run python -c "import fastapi, pydantic_settings, psycopg, dramatiq, structlog, typer"
+```
   </TabItem>
   <TabItem label="Go">
     `go.mod` declares module requirements. `go.sum` records integrity data. Module verification checks downloaded content before the build.
+
+```bash
+go mod download
+go mod verify
+go list -m github.com/caarlos0/env/v11 github.com/go-chi/chi/v5 github.com/jackc/pgx/v5 github.com/hibiken/asynq github.com/spf13/cobra
+go build ./...
+```
   </TabItem>
 </Tabs>
 
@@ -54,13 +117,90 @@ The application owns a typed configuration schema. Each deployment supplies valu
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Zod parses the process environment into a typed settings object. Errors identify invalid fields without printing secret values.
+    Zod parses deploy values once and returns a typed object. Calling code receives `config`, not unrestricted access to `process.env`.
+
+```typescript
+import { z } from "zod";
+
+const ConfigSchema = z.object({
+  PORT: z.coerce.number().int().min(1).max(65_535).default(8080),
+  DATABASE_URL: z.string().url(),
+  REDIS_URL: z.string().url(),
+  RELEASE_ID: z.string().min(1),
+});
+
+const parsed = ConfigSchema.safeParse(process.env);
+if (!parsed.success) {
+  console.error("Invalid configuration", parsed.error.flatten().fieldErrors);
+  process.exit(1);
+}
+
+export const config = parsed.data;
+```
   </TabItem>
   <TabItem label="Python">
-    Pydantic Settings loads deployment values and validates them before FastAPI or Dramatiq starts processing work.
+    Pydantic Settings validates the same boundary before FastAPI or Dramatiq starts. Validation errors name fields without logging their values.
+
+```python
+import sys
+
+from pydantic import Field, PostgresDsn, RedisDsn, ValidationError
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(extra="ignore")
+
+    port: int = Field(default=8080, ge=1, le=65_535)
+    database_url: PostgresDsn
+    redis_url: RedisDsn
+    release_id: str = Field(min_length=1)
+
+
+try:
+    settings = Settings()
+except ValidationError as error:
+    print(error.errors(include_input=False), file=sys.stderr)
+    raise SystemExit(1) from error
+```
   </TabItem>
   <TabItem label="Go">
-    `caarlos0/env` decodes environment values into a typed struct. Validation returns safe field-level errors before listeners or clients start.
+    `caarlos0/env` decodes environment values into a typed struct. The loader validates fields before starting listeners or resource clients.
+
+```go
+package config
+
+import (
+    "fmt"
+    "net/url"
+
+    "github.com/caarlos0/env/v11"
+)
+
+type Config struct {
+    Port        int    `env:"PORT" envDefault:"8080"`
+    DatabaseURL string `env:"DATABASE_URL,required"`
+    RedisURL    string `env:"REDIS_URL,required"`
+    ReleaseID   string `env:"RELEASE_ID,required"`
+}
+
+func Load() (Config, error) {
+    cfg, err := env.ParseAs[Config]()
+    if err != nil {
+        return Config{}, fmt.Errorf("parse configuration: %w", err)
+    }
+    if cfg.Port < 1 || cfg.Port > 65535 {
+        return Config{}, fmt.Errorf("PORT is outside the valid range")
+    }
+    if _, err := url.ParseRequestURI(cfg.DatabaseURL); err != nil {
+        return Config{}, fmt.Errorf("DATABASE_URL is invalid")
+    }
+    if _, err := url.ParseRequestURI(cfg.RedisURL); err != nil {
+        return Config{}, fmt.Errorf("REDIS_URL is invalid")
+    }
+    return cfg, nil
+}
+```
   </TabItem>
 </Tabs>
 
@@ -72,13 +212,81 @@ PostgreSQL and the queue are attachments, not host assumptions. The application 
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    `pg` and BullMQ clients are constructed from injected database and Redis URLs. Application modules receive those clients rather than reading process globals.
+    `pg` and BullMQ clients are constructed at startup from validated endpoints. The queue accepts an injected ioredis connection, and application modules receive explicit clients.
+
+```typescript
+import { Queue } from "bullmq";
+import { Redis } from "ioredis";
+import { Pool } from "pg";
+
+import { config } from "./config.js";
+
+export const database = new Pool({
+  connectionString: config.DATABASE_URL,
+  max: 10,
+});
+
+const redis = new Redis(config.REDIS_URL, {
+  maxRetriesPerRequest: null,
+});
+
+export const orderQueue = new Queue("orders", { connection: redis });
+```
   </TabItem>
   <TabItem label="Python">
-    Psycopg and Dramatiq brokers are created from validated settings, then passed through the application's startup boundary.
+    Psycopg and Dramatiq resources are created from validated settings. The application startup boundary owns their lifecycle.
+
+```python
+import dramatiq
+from dramatiq.brokers.redis import RedisBroker
+from psycopg_pool import AsyncConnectionPool
+
+from order_service.config import settings
+
+database = AsyncConnectionPool(
+    conninfo=str(settings.database_url),
+    min_size=1,
+    max_size=10,
+    open=False,
+)
+broker = RedisBroker(url=str(settings.redis_url))
+dramatiq.set_broker(broker)
+```
   </TabItem>
   <TabItem label="Go">
-    `pgxpool` and Asynq clients are created from the config struct and supplied to HTTP handlers, workers, and admin commands.
+    `pgxpool` and Asynq clients are built at the composition root. Handlers, workers, and commands receive them through constructors.
+
+```go
+package resources
+
+import (
+    "context"
+    "fmt"
+
+    "github.com/hibiken/asynq"
+    "github.com/jackc/pgx/v5/pgxpool"
+
+    "order-service/internal/config"
+)
+
+type Resources struct {
+    Database *pgxpool.Pool
+    Queue    *asynq.Client
+}
+
+func Open(ctx context.Context, cfg config.Config) (Resources, error) {
+    database, err := pgxpool.New(ctx, cfg.DatabaseURL)
+    if err != nil {
+        return Resources{}, fmt.Errorf("open database: %w", err)
+    }
+    redis, err := asynq.ParseRedisURI(cfg.RedisURL)
+    if err != nil {
+        database.Close()
+        return Resources{}, fmt.Errorf("parse queue endpoint: %w", err)
+    }
+    return Resources{Database: database, Queue: asynq.NewClient(redis)}, nil
+}
+```
   </TabItem>
 </Tabs>
 
