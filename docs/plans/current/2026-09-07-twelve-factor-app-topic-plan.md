@@ -731,32 +731,32 @@ Checkboxes may be marked complete only when their Evidence line points to an art
 
 ### Wave 4: extensions, limits, and current judgment
 
-- [ ] Add the literal-compliance pitfalls without caricaturing the original method.
-  - Evidence: pending.
-- [ ] Add a dated official modernization status box.
-  - Evidence: pending.
-- [ ] Explain the open Config, Logs, Identity, process-combination, and facets proposals.
-  - Evidence: pending.
-- [ ] Clearly label dynamic-config pull request 33 as closed without merge.
-  - Evidence: pending.
-- [ ] Compare Hoffman's 15-factor model and preserve its reordered sequence.
-  - Evidence: pending.
-- [ ] Compare IBM's seven missing factors and explain their enterprise platform scope.
-  - Evidence: pending.
-- [ ] Include CNCF's application-level versus service-level distinction and its security and testing critique.
-  - Evidence: pending.
-- [ ] Include the NGINX amendments as historical prior art with the source limitation.
-  - Evidence: pending.
-- [ ] Consolidate overlaps across API contracts, telemetry, identity, scheduling, upgrades, audit, security, measurement, and testing.
-  - Evidence: pending.
-- [ ] Add a missing-concerns section covering security, supply chain, health, resources, data, reliability, and governance.
-  - Evidence: pending.
-- [ ] Recheck official proposal status and record the check date in the published page.
-  - Evidence: pending.
-- [ ] Run `npm run build` for the Wave 4 batch.
-  - Evidence: pending.
-- [ ] Confirm Wave 4 is complete.
-  - Evidence: pending until every Wave 4 child item is checked.
+- [x] Add the literal-compliance pitfalls without caricaturing the original method.
+  - Evidence: `Where literal compliance misleads` preserves eight durable principles while correcting overly literal readings of repository layout, config delivery, resource attachment, state, invocation, parity, logs, and admin access.
+- [x] Add a dated official modernization status box.
+  - Evidence: `Official modernization status` begins with a September 8, 2026 status callout that separates the `next` development branch from the canonical text still hosted at `12factor.net`.
+- [x] Explain the open Config, Logs, Identity, process-combination, and facets proposals.
+  - Evidence: the official-work table links issues 3, 4, and 9 and pull requests 32, 34, and 40, records each as open, and explains the proposed direction without calling it adopted.
+- [x] Clearly label dynamic-config pull request 33 as closed without merge.
+  - Evidence: the official-work table says `Closed without merge`; the GitHub API reported `state: closed`, `closed_at: 2025-04-02T19:36:15Z`, and `merged_at: null` for pull request 33.
+- [x] Compare Hoffman's 15-factor model and preserve its reordered sequence.
+  - Evidence: `Hoffman's reordered 15-factor model` reproduces the complete 1 through 15 sequence verified against the O'Reilly book page and explains API First, Telemetry, Authentication and Authorization, and the reordered lifecycle.
+- [x] Compare IBM's seven missing factors and explain their enterprise platform scope.
+  - Evidence: the IBM section preserves Factors XIII through XIX from Observable through Measurable and identifies their containerized microservice, Kubernetes, enterprise production-readiness scope and internal overlaps.
+- [x] Include CNCF's application-level versus service-level distinction and its security and testing critique.
+  - Evidence: `A CNCF-hosted 2022 reassessment` explains the two levels, identifies security and automated testing as omissions, and labels the source as a guest post rather than CNCF policy.
+- [x] Include the NGINX amendments as historical prior art with the source limitation.
+  - Evidence: the NGINX section links the archived 58-page deck retained by the official project's prior-art list, notes the original article is unavailable, and declines to invent a numbered factor canon.
+- [x] Consolidate overlaps across API contracts, telemetry, identity, scheduling, upgrades, audit, security, measurement, and testing.
+  - Evidence: `Where the extensions overlap` maps all nine concerns to proposal families, their nearest canonical homes, and practical treatment in one comparison table.
+- [x] Add a missing-concerns section covering security, supply chain, health, resources, data, reliability, and governance.
+  - Evidence: `What the factors still do not settle` covers identity, secure development, software supply chain, health and resources, data lifecycle, network security, reliability, and delivery governance with complementary directions.
+- [x] Recheck official proposal status and record the check date in the published page.
+  - Evidence: GitHub API checks on September 8, 2026 found `next` as the default branch at `3ad5a5f36312cc8ad876abae1bd691acd790d4d1`; issues 3, 4, and 9 and pull requests 32, 34, and 40 open; and pull request 33 closed without merge. The date appears in both the status callout and table.
+- [x] Run `npm run build` for the Wave 4 batch.
+  - Evidence: build passed with the secret scan, 0 Astro errors, 0 warnings, 0 hints, and 800 generated pages. Style, published-content, code-example, and 800-page internal-link validation also passed.
+- [x] Confirm Wave 4 is complete.
+  - Evidence: every Wave 4 child item is checked with published source, rendered HTML, primary-source status, or validation evidence.
 
 ### Wave 5: standalone reference repositories and verification
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 3 are complete. Wave 4 is the next execution wave. The hub and three example pages now cover all twelve factors with verified language examples, but the modernization analysis, runnable reference repositories, and final publication work remain pending.
+Waves 0 through 4 are complete. Wave 5 is the next execution wave. The hub and three example pages now cover all twelve factors with verified language examples plus a dated analysis of official modernization work, independent extensions, and remaining production concerns. The standalone reference repositories, AI harnesses, integrated article sections, and final publication work remain pending.

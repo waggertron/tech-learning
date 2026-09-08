@@ -197,17 +197,153 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 **Verify it:** Run the migration from the production artifact in a non-production environment, interrupt it, and retry it. Record the actor or workload identity, exact command, release digest, target, start and end times, and result. Confirm the admin identity cannot perform unrelated runtime actions. [Compare bounded migration commands](./examples-factors-09-12/#factor-xii-admin-processes).
 
-## What the factors do not settle
+## Where literal compliance misleads
 
-Twelve-Factor gives an application a clean operational boundary. It does not choose an authorization model, define recovery objectives, prove artifact provenance, set service-level objectives, or establish a secure development lifecycle. Treating it as a complete scorecard hides those gaps.
+The original wording describes useful application properties through mechanisms common to its era. Preserve the property when a newer mechanism provides stronger evidence. Do not stretch the wording into a rule the methodology never needed.
 
-Use complementary guidance for the concern at hand: OpenTelemetry for telemetry semantics, SLSA for artifact provenance, NIST SSDF for secure development, and platform-specific contracts for health, resources, identity, and scheduling.
+| Literal reading | Durable principle | Better evidence |
+| --- | --- | --- |
+| One codebase forbids monorepos | A deployable application has one traceable source history | A release resolves to an exact revision and build target |
+| Every configuration value must be an environment variable | Deploy-varying configuration stays outside the artifact | Validated environment values, mounted files, external stores, or workload identity can configure one unchanged artifact |
+| Two attached services are interchangeable when their URLs have the same shape | Providers attach through explicit boundaries | Contract tests expose differences in transactions, consistency, delivery, limits, and failures |
+| Stateless processes mean a stateless system | Replaceable processes do not own durable state | An instance can disappear while required state survives in a backing service |
+| Every workload must bind a port | Each process exposes a narrow invocation contract | Servers bind listeners, while workers and jobs accept messages or commands |
+| Dev and production must reproduce the same topology | Production-significant contracts need faithful tests | Every deliberate difference has a named risk, test layer, and owner |
+| Writing text to stdout completes observability | The application emits externally collectable signals | Correlated logs, metrics, and traces reconstruct an outcome without entering an instance |
+| Admin processes justify an unrestricted production shell | One-off work uses the release's code and configuration | Bounded commands run with short-lived authority and durable audit evidence |
+
+This interpretation does not weaken Twelve-Factor. It makes each claim testable against the application-platform contract instead of a preferred tool.
+
+## Official modernization status
+
+> **Status checked September 8, 2026:** The official repository uses [`next`](https://github.com/twelve-factor/twelve-factor/tree/next) as its default development branch. Its README says this work is intended to replace the hosted text when maintainers agree it is complete. [12factor.net](https://12factor.net/) still presents the original twelve factors. The work below is proposed, not adopted canon.
+
+The modernization effort keeps the narrow application-platform interface at its center. Its [vision](https://github.com/twelve-factor/twelve-factor/blob/next/VISION.md) separates factors, concrete examples, and broader guidance so a durable requirement does not become tied to one platform mechanism.
+
+| Official work | State on September 8, 2026 | Direction under discussion |
+| --- | --- | --- |
+| [Issue 3: Logs](https://github.com/twelve-factor/twelve-factor/issues/3) | Open | Replace a stdout-only reading with standards-based telemetry and correlation |
+| [Issue 4: Config](https://github.com/twelve-factor/twelve-factor/issues/4) | Open | Permit mounted and externally supplied configuration or secrets while preserving separation from code |
+| [Issue 9: Identity](https://github.com/twelve-factor/twelve-factor/issues/9) | Open | Make short-lived workload identity part of the application-platform contract |
+| [Pull request 32: Processes](https://github.com/twelve-factor/twelve-factor/pull/32) | Open | Combine related process guidance, including one-off administration |
+| [Pull request 34: Identity](https://github.com/twelve-factor/twelve-factor/pull/34) | Open | Move admin guidance into Processes and use Factor XII for workload identity |
+| [Pull request 40: Facets](https://github.com/twelve-factor/twelve-factor/pull/40) | Open | Group factors by the operating properties they enable |
+| [Pull request 33: Dynamic config](https://github.com/twelve-factor/twelve-factor/pull/33) | Closed without merge | Proposed a reference from an environment value to an external dynamic-config source |
+
+The Identity proposal is the largest structural change. It depends on the process consolidation in pull request 32, then proposes short-lived credentials supplied at runtime and scoped to an audience or backing service. That model separates workload identity from static application configuration. Until the pull request merges and the hosted method changes, it remains a design proposal.
+
+The facets proposal is a reading aid, not four new factors. It asks what operating property a group of factors makes possible:
+
+```text
+Continuously Deployable
+  codebase + dependencies + config + build/release/run
+  + disposability + dev/prod parity
+
+Configurable
+  config + backing services + build/release/run + parity
+
+Scalable
+  backing services + processes + port binding
+  + concurrency + disposability
+
+Observable
+  process and service boundaries + telemetry
+```
+
+A team could use these facets to find a weak property across several factors. It should not report them as a replacement list while pull request 40 remains open.
+
+## Independent extension models
+
+There is no single accepted "extended Twelve-Factor App." Later authors reorder the original factors, add production concerns, or move the discussion from an application to a whole service platform. Compare them by the gap they address instead of combining them into an invented canon.
+
+### Hoffman's reordered 15-factor model
+
+Kevin Hoffman's 2016 book, [*Beyond the Twelve-Factor App*](https://www.oreilly.com/library/view/beyond-the-twelve-factor/9781492042631/), revises and reorders the model for cloud-native applications. Calling it the original twelve plus three hides those changes. Its sequence is:
+
+1. One Codebase, One Application
+2. API First
+3. Dependency Management
+4. Design, Build, Release, Run
+5. Configuration, Credentials, and Code
+6. Logs
+7. Disposability
+8. Backing Services
+9. Environment Parity
+10. Administrative Processes
+11. Port Binding
+12. Stateless Processes
+13. Concurrency
+14. Telemetry
+15. Authentication and Authorization
+
+API First makes the service contract a design input. Telemetry expands operational evidence beyond log streams. Authentication and Authorization makes trust explicit. The reordered sequence also places design in the release lifecycle and credentials beside configuration, so use Hoffman's framework as an independent revision rather than an official amendment.
+
+### IBM's seven missing factors
+
+IBM engineer Shikha Srivastava's 2019 proposal, [*7 Missing Factors from 12-Factor Applications*](https://medium.com/ibm-cloud/7-missing-factors-from-12-factor-application-2a3e1169bd9d), adds factors XIII through XIX for containerized microservices on Kubernetes and enterprise platforms.
+
+| Number | Factor | Production concern |
+| --- | --- | --- |
+| XIII | Observable | Operational visibility beyond emitted log streams |
+| XIV | Schedulable | Resource and placement requirements the platform can act on |
+| XV | Upgradable | Safe evolution of code, dependencies, interfaces, and persistent data |
+| XVI | Least privilege | Minimum authority for users, workloads, and components |
+| XVII | Auditable | Durable evidence of operational and security-relevant actions |
+| XVIII | Securable | Protection across development, delivery, and runtime boundaries |
+| XIX | Measurable | Attributable resource use, cost, and delivered value |
+
+This is best read as an enterprise production-readiness extension. It reaches beyond application packaging into scheduling, governance, cost, and platform operations. Its categories also overlap: least privilege and auditability support security, while measurement and observability can share instruments without answering the same questions.
+
+### A CNCF-hosted 2022 reassessment
+
+The CNCF-hosted guest post [*Twelve-factor app anno 2022*](https://www.cncf.io/blog/2022/04/28/twelve-factor-app-anno-2022/) distinguishes application-level properties from service-level properties. Source layout and dependency declarations largely belong to the built application. Scheduling, routing, rollout, and some configuration behavior emerge from the application plus deployment definitions and platform controllers.
+
+That distinction prevents a common review error: crediting application code for a platform control, or blaming code for a missing platform contract. The post also identifies security and automated testing as clear omissions. Security should influence every relevant boundary, while tests need to cover units, components, integrations, and end-to-end behavior at the appropriate application or service layer. This is a guest reassessment hosted by CNCF, not official CNCF policy or a replacement standard.
+
+### NGINX amendments as historical prior art
+
+The official modernization repository lists NGINX's microservices amendments as prior art. The original article is no longer available at its former location. The repository preserves an [archived 58-page microservices reference architecture deck](https://slidrio-decks.global.ssl.fastly.net/1020/original.pdf) that discusses API routing, service discovery, load balancing, security, resilience, and health checks.
+
+Those ideas helped move the conversation toward service-level architecture, but the surviving source does not justify reconstructing a definitive numbered NGINX factor list. Treat it as historical influence with a limited primary record.
+
+## Where the extensions overlap
+
+The useful result is not a longer checklist. It is a map from a missing concern to the canonical boundary it strengthens and the separate framework it may require.
+
+| Modern concern | Proposal families | Nearest canonical home | Practical treatment |
+| --- | --- | --- | --- |
+| API contracts | Hoffman, NGINX | Backing services, port binding | Design interfaces first and test compatibility across versions and providers |
+| Telemetry and observability | Hoffman, IBM, CNCF, issue 3, facets proposal | Logs | Keep event streams, then add correlated metrics, traces, profiles, and operating outcomes |
+| Workload identity and authorization | Hoffman, IBM, issue 9, pull request 34 | Config, backing services | Supply short-lived identity at runtime and authorize each intended audience |
+| Scheduling and resource contracts | IBM | Concurrency, disposability | Declare resources, placement, bounded work, backpressure, and termination behavior |
+| Safe upgrades | IBM | Build/release/run, admin processes | Test interface and schema compatibility, progressive rollout, migration, and rollback |
+| Audit evidence | IBM | Logs, admin processes | Record who or what acted, against which release and target, under which authority |
+| Security and least privilege | IBM, CNCF, Hoffman | Every factor | Apply threat-driven controls throughout and use a complete secure-development framework |
+| Measurement and cost attribution | IBM | Concurrency, telemetry | Connect resource consumption to service outcomes without equating activity with value |
+| Automated testing | CNCF | Dependencies, parity, release lifecycle | Prove contracts and failure behavior at the cheapest faithful layer |
+
+## What the factors still do not settle
+
+Twelve-Factor gives an application a clean operational boundary. It does not provide a complete production, security, reliability, or data-management system. A review should name these gaps rather than award a compliance score that hides them.
+
+| Missing concern | Questions Twelve-Factor does not answer | Complementary direction |
+| --- | --- | --- |
+| Identity and authorization | Which user or workload may call which resource, with what scope, lifetime, and revocation path? | Workload identity, service authorization, least privilege, and policy tests |
+| Secure development | How are threats identified, vulnerabilities handled, secrets scanned, and security requirements verified? | [NIST Secure Software Development Framework](https://csrc.nist.gov/projects/ssdf) |
+| Software supply chain | Who built the artifact, from which inputs, and what proves it reached deployment unchanged? | SBOMs, trusted builders, attestations, verification policy, and [SLSA provenance](https://slsa.dev/spec/v1.2/provenance) |
+| Health and resources | When is a process ready, when should it restart, and how much CPU, memory, storage, or downstream capacity may it consume? | Startup, readiness, liveness, drain, resource, quota, and backpressure contracts |
+| Data lifecycle | How do schemas evolve, backups restore, records expire, residency rules hold, and regions recover? | Migration compatibility, restore tests, retention policy, consistency decisions, and recovery exercises |
+| Network security | Where is transport authenticated, which egress is allowed, and how are abusive or unexpected calls contained? | TLS boundaries, segmentation, service policy, rate limits, and denial-of-service controls |
+| Reliability | What availability and latency are promised, how much failure is acceptable, and when should the system shed load? | Service-level objectives, error budgets, capacity tests, load shedding, and regional recovery |
+| Delivery governance | Who may promote or roll back, which evidence gates a release, and how are risky changes introduced safely? | Policy checks, separation of duties, progressive delivery, compatibility gates, and audited rollback |
+
+OpenTelemetry, SLSA, NIST SSDF, and platform-specific contracts complement Twelve-Factor because they answer different questions. They do not need to be renamed as more factors to belong in the same engineering review.
 
 ## References
 
 - [The Twelve-Factor App](https://12factor.net/)
-- [Narrow Conduits and the Application-Platform Interface](https://12factor.net/blog/narrow-conduits)
-- [Evolving Twelve-Factor](https://12factor.net/blog/evolving-twelve-factor)
+- Official project context: [Narrow Conduits and the Application-Platform Interface](https://12factor.net/blog/narrow-conduits), [Evolving Twelve-Factor](https://12factor.net/blog/evolving-twelve-factor), and the [`next` modernization branch](https://github.com/twelve-factor/twelve-factor/tree/next)
+- Independent extensions: [*Beyond the Twelve-Factor App*](https://www.oreilly.com/library/view/beyond-the-twelve-factor/9781492042631/), [IBM's seven missing factors](https://medium.com/ibm-cloud/7-missing-factors-from-12-factor-application-2a3e1169bd9d), [the CNCF-hosted reassessment](https://www.cncf.io/blog/2022/04/28/twelve-factor-app-anno-2022/), and the [archived NGINX microservices deck](https://slidrio-decks.global.ssl.fastly.net/1020/original.pdf)
 - [OpenTelemetry signals](https://opentelemetry.io/docs/concepts/signals/)
 - [SLSA provenance](https://slsa.dev/spec/v1.2/provenance)
 - [NIST Secure Software Development Framework](https://csrc.nist.gov/projects/ssdf)
