@@ -101,6 +101,16 @@ async function verifyBrowser() {
     if ((await page.locator(".swiftrepl").count()) !== 5) {
       throw new Error("Expected five independent Swift REPL instances.");
     }
+    await page.waitForFunction(() => {
+      const repls = [...document.querySelectorAll(".swiftrepl")];
+      const approachRunner = document.querySelector(
+        '[data-test-section="approach"] .swift-code-run-toolbar',
+      );
+      return repls.length === 5
+        && repls.every((repl) => repl.getAttribute("data-swift-attached") === "true"
+          && repl.querySelector(".cm-editor"))
+        && approachRunner !== null;
+    });
 
     const success = root(page, "success");
     const runButton = success.getByRole("button", { name: "Run Swift" });

@@ -832,9 +832,9 @@ Proposed repositories:
 - [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
   - Evidence: targeted cleanup left no `tf_typescript` containers or volumes; generated build and dependency directories are ignored.
 - [x] Commit and push the verified TypeScript repository.
-  - Evidence: corrected release commit `e922721` is on public `main` at `https://github.com/waggertron/twelve-factor-typescript`.
+  - Evidence: remediated release commit `94b2c68` is on public `main` at `https://github.com/waggertron/twelve-factor-typescript`.
 - [x] Tag the exact TypeScript release referenced by the entry and confirm the remote tag.
-  - Evidence: corrected contract release tag `v1.0.1` was pushed after the amount range changed to 1 through 99.
+  - Evidence: annotated tag `v1.0.2` resolves remotely to tested commit `94b2c68` and its tag URL returns HTTP 200.
 
 #### Python reference repository
 
@@ -883,9 +883,9 @@ Proposed repositories:
 - [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
   - Evidence: targeted cleanup left no `tf_python` containers or volumes and removed the repository virtual environment, caches, and build output.
 - [x] Commit and push the verified Python repository.
-  - Evidence: commit `dfc4475` is on public `main` at `https://github.com/waggertron/twelve-factor-python`.
+  - Evidence: remediated release commit `e012661` is on public `main` at `https://github.com/waggertron/twelve-factor-python`.
 - [x] Tag the exact Python release referenced by the entry and confirm the remote tag.
-  - Evidence: annotated tag `v1.0.1` resolves remotely to tag object `6acb1546cdcd870f54b1f217b40e22b39171e6a7`.
+  - Evidence: annotated tag `v1.0.2` resolves remotely to tested commit `e012661` and its tag URL returns HTTP 200.
 
 #### Go reference repository
 
@@ -934,9 +934,9 @@ Proposed repositories:
 - [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
   - Evidence: targeted cleanup left no `tf_go` containers or volumes and removed repository-local Go caches and binaries.
 - [x] Commit and push the verified Go repository.
-  - Evidence: commit `74a91a2` is on public `main` at `https://github.com/waggertron/twelve-factor-go`.
+  - Evidence: remediated release commit `1e41287` is on public `main` at `https://github.com/waggertron/twelve-factor-go`.
 - [x] Tag the exact Go release referenced by the entry and confirm the remote tag.
-  - Evidence: annotated release tag `v1.0.2` contains the corrected 1 through 99 contract and fully numbered harness checklist and resolves remotely to tag object `a8f091bbaae64565443157c16e0c545daad73df8`.
+  - Evidence: annotated tag `v1.0.3` resolves remotely to tested commit `1e41287` and its tag URL returns HTTP 200.
 
 #### Repository-level Codex and Claude harnesses
 
@@ -999,24 +999,85 @@ Proposed repositories:
 - [ ] Link the `AGENTS.md`, `CLAUDE.md`, Codex skill, Claude skill, factor checklist, and deterministic check from the article's AI harness section.
   - Evidence: pending.
 - [x] Confirm each tagged reference release contains the tested harness files and matches the linked source.
-  - Evidence: TypeScript `v1.0.1`, Python `v1.0.1`, and Go `v1.0.2` were tagged only after harness files, deterministic checks, and evaluation records were committed.
+  - Evidence: TypeScript `v1.0.2`, Python `v1.0.2`, and Go `v1.0.3` resolve to the tested remediation commits, which retain both agent harnesses, deterministic checks, and evaluation records.
 
 #### Cross-repository parity and article synchronization
 
-- [ ] Run the same valid and invalid contract fixtures against all three repositories.
+##### Audit remediation: addition
+
+- [x] Make the TypeScript cleanup command remove repository-generated build output and installed dependency state in addition to its isolated Compose resources.
+  - Evidence: TypeScript commit `94b2c68` adds `scripts/cleanup.mjs`; `npm run local:clean` removed the scoped stack, dependencies, build output, coverage output, and caches while its regression test preserved source files.
+- [x] Align the Python valid fixtures exactly with the shared `small_order` and `boundary_order` values.
+  - Evidence: Python commit `e012661` carries the exact fixed IDs, keys, customers, and amounts, and the equality regression test passed.
+- [x] Align the Python migration with the shared `completed_at` and `order_jobs.schema_version` database contract.
+  - Evidence: both Python migration copies use `completed_at`, `schema_version`, and `published_at`; the static schema regression and live PostgreSQL 18 introspection passed.
+- [x] Make the Python admin command report an unsupported migration target without a framework traceback.
+  - Evidence: the Typer boundary translates the domain `ValueError` into a concise parameter error; target 999 exited 2 with no traceback in unit and live Compose checks.
+- [x] Align the Go valid fixtures exactly with the shared `small_order` and `boundary_order` values.
+  - Evidence: Go commit `1e41287` carries the exact fixed IDs, keys, customers, and amounts, and its equality regression test passed.
+- [x] Align the Go job payload, task name, queue name, retry metadata, and enqueue-intent persistence with the shared job and database contracts.
+  - Evidence: Go now uses queue `orders.v1`, task `complete-order`, the four-field versioned payload, Asynq retry metadata, and the canonical `order_jobs` outbox columns; focused and live integration checks passed.
+- [x] Make the Go HTTP API return `200` for an identical idempotent retry and `400` for an invalid order UUID.
+  - Evidence: focused HTTP tests and the shared live Compose matrix observed 200 for an identical retry and 400 with `invalid_request` for a malformed UUID.
+- [x] Keep Go queue failures inside the shared public error-code set.
+  - Evidence: the Go API maps enqueue failure to the shared `internal_error` code, enforced by a focused regression test.
+- [x] Align Go configuration with the shared `APP_HOST`, port, required `RELEASE_ID`, release identifier, and telemetry-mode contracts.
+  - Evidence: Go configuration now supports `APP_HOST`, bounds ports from 1024 through 65535, requires a safe release identifier, and accepts only `console`, `memory`, or `disabled`; focused tests passed.
+- [x] Initialize Go tracing for supported telemetry modes so runtime trace correlation is executable rather than synthetic test context only.
+  - Evidence: Go initializes console, in-memory, and disabled tracer providers; rebuilt web and worker containers emitted real spans and worker events with trace IDs and `service.name=twelve-factor-orders`.
+
+##### Audit remediation: validation
+
+- [x] Extend every repository-owned Twelve-Factor checker to reject fixture, payload, schema, configuration, HTTP-status, and cleanup drift relevant to that implementation.
+  - Evidence: each repository's full checker owns the new focused contract files and runs their unit, integration, build, and secret-scan gates.
+- [x] Add focused regression tests for the TypeScript cleanup scope.
+  - Evidence: `tests/unit/cleanup.test.mjs` creates source and generated fixtures, runs the cleanup primitive, and proves only the generated paths disappear.
+- [x] Add focused Python tests for canonical fixtures, canonical database columns, and concise invalid-admin output.
+  - Evidence: the Python unit suite now asserts exact fixtures, required and forbidden migration columns, nonzero invalid-target status, and the absence of `Traceback`.
+- [x] Add focused Go tests for canonical fixtures, canonical job payloads, database columns, duplicate status, invalid UUID status, public error codes, configuration bounds, and telemetry modes.
+  - Evidence: the Go suite covers every named surface and passed under `go test -race ./...` within the complete repository checker.
+- [x] Run the same valid, boundary, duplicate, conflict, malformed-path, invalid-field, and invalid-admin fixtures against all three rebuilt Compose applications.
+  - Evidence: the shared matrix passed on ports 3101 through 3103, including amounts 59 and 99, duplicate 200, conflict 409, amounts 0 and 100 as 400, unknown fields, missing headers, bad content types, unknown valid UUID 404, malformed UUID 400, and migration target 999 without traceback.
+- [x] Run each repository's complete deterministic verification command from locked dependencies.
+  - Evidence: `npm ci && npm run verify`, frozen `uv` synchronization plus the Python checker, and the Go checker all passed with unit, integration, build, type, race, and secret checks applicable to each ecosystem.
+- [x] Build each repository's runtime image without reusing a stale application image and confirm the corrected contract runs in Compose.
+  - Evidence: all web, worker, and migration images were rebuilt with `--no-cache`; the fresh images passed migration, readiness, HTTP, job completion, schema introspection, and shutdown checks.
+- [x] Make the main pre-push Swift browser gate wait for client attachment after first-run dependency optimization before interacting.
+  - Evidence: the original cold-cache cell timed out after Vite optimized CodeMirror and reloaded; the unchanged warm-cache cell passed, and the validator now waits for all five editors and the approach runner to attach before interaction.
+- [x] Confirm the corrected commits pass every required GitHub Actions job.
+  - Evidence: successful branch runs are TypeScript `34242378715`, Python `34242378465`, and Go `34242378168`; successful tag runs are TypeScript `34242752922`, Python `34242752311`, and Go `34242753533`.
+- [x] Create and push corrected annotated release tags for TypeScript, Python, and Go, then confirm each remote tag resolves to the tested commit.
+  - Evidence: TypeScript `v1.0.2` resolves to `94b2c68`, Python `v1.0.2` resolves to `e012661`, and Go `v1.0.3` resolves to `1e41287` on each remote.
+
+##### Audit remediation: cleanup
+
+- [x] Run each documented cleanup command after the full validation matrix.
+  - Evidence: `npm run local:clean`, the Python cleanup module, and `./scripts/cleanup.sh` all completed successfully after Compose shutdown checks.
+- [x] Confirm no `tf_typescript`, `tf_python`, or `tf_go` containers, networks, volumes, processes, build outputs, dependency environments, or test caches remain.
+  - Evidence: Docker name audits, port probes, and filesystem existence checks returned no scoped runtime or generated residue.
+- [x] Confirm the cold-cache and warm-cache Swift browser matrix leaves no fixture server or fixture-local cache behind.
+  - Evidence: both corrected matrix cells passed; port 4334 had no listener afterward, and the fixture's `.astro` and `node_modules` paths were absent.
+- [ ] Confirm all four worktrees contain only intended tracked changes before commit and are clean after push.
   - Evidence: pending.
-- [ ] Confirm all three repositories expose equivalent web, worker, and admin behavior.
+- [x] Commit and push each corrected standalone repository.
+  - Evidence: TypeScript `94b2c68`, Python `e012661`, and Go `1e41287` are on their public `main` branches.
+- [ ] Commit and push the updated plan and durable validation records in `tech-learning`.
   - Evidence: pending.
-- [ ] Confirm all three repositories demonstrate graceful shutdown and readiness ordering.
-  - Evidence: pending.
-- [ ] Confirm all three repositories demonstrate idempotent or deduplicated worker behavior under retry.
-  - Evidence: pending.
-- [ ] Confirm all three repositories emit structured events with release and trace correlation.
-  - Evidence: pending.
-- [ ] Confirm all three repositories run a bounded migration from the same artifact as their long-running process types.
-  - Evidence: pending.
-- [ ] Confirm all examples use safe placeholders and contain no realistic credential patterns.
-  - Evidence: pending.
+
+- [x] Run the same valid and invalid contract fixtures against all three repositories.
+  - Evidence: one shared live matrix passed the canonical small and boundary fixtures plus duplicate, conflict, malformed UUID, amount, field, header, content-type, unknown-order, and migration failures against all three fresh stacks.
+- [x] Confirm all three repositories expose equivalent web, worker, and admin behavior.
+  - Evidence: all stacks exposed matching health and order routes, asynchronous completion on `orders.v1`, and bounded target 001 migration behavior from their language-native artifact.
+- [x] Confirm all three repositories demonstrate graceful shutdown and readiness ordering.
+  - Evidence: focused readiness-before-drain tests passed; Docker stop delivered termination signals and every web, worker, PostgreSQL, and Redis container exited with status 0. Python and Go workers emitted drain and stopped events, and Go web emitted both lifecycle events.
+- [x] Confirm all three repositories demonstrate idempotent or deduplicated worker behavior under retry.
+  - Evidence: all integration suites passed repeated delivery with one completion effect, while the shared HTTP matrix proved duplicate submission returns the original order without a second intent.
+- [x] Confirm all three repositories emit structured events with release and trace correlation.
+  - Evidence: all focused telemetry tests passed structured service, process, release, and trace fields; the rebuilt Go runtime additionally emitted console spans and trace-linked worker events with the canonical service name.
+- [x] Confirm all three repositories run a bounded migration from the same artifact as their long-running process types.
+  - Evidence: each `migrate` image shares its web and worker build, target 001 succeeded, and unsupported target 999 failed with a nonzero status and no framework traceback.
+- [x] Confirm all examples use safe placeholders and contain no realistic credential patterns.
+  - Evidence: every complete repository checker passed its credential-pattern scan after the remediation changes.
 - [ ] Add observable audit questions and failure-injection ideas for all twelve factors.
   - Evidence: pending.
 - [ ] Make every displayed snippet originate from a tagged repository source file or pass an exact snippet-to-source synchronization check.
@@ -1031,8 +1092,8 @@ Proposed repositories:
   - Evidence: pending.
 - [ ] Update `docs/feature_tracker.md` for the durable example validation command.
   - Evidence: pending.
-- [ ] Confirm each reference repository URL and tagged-release URL returns successfully.
-  - Evidence: pending.
+- [x] Confirm each reference repository URL and tagged-release URL returns successfully.
+  - Evidence: all three public repository roots were used for push and CI inspection, and `curl` returned HTTP 200 for the TypeScript `v1.0.2`, Python `v1.0.2`, and Go `v1.0.3` tree URLs.
 - [ ] Run `npm run build` for the Wave 5 article batch.
   - Evidence: pending.
 - [ ] Confirm Wave 5 is complete.

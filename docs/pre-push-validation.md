@@ -50,6 +50,8 @@ npm run validate:custom-pages
 npm run validate:swift-repl-browser
 ```
 
+The browser fixture waits for all five CodeMirror editors and the approach runner to attach before interaction. This keeps a first run reliable when Vite discovers and optimizes browser dependencies, reloads the fixture, and then finishes client initialization.
+
 If local preview cannot bind a port inside Codex and reports `listen EPERM`, rerun the same validation command with escalated permissions. That is a sandbox limitation until it reproduces outside Codex.
 
 If only the custom browser stage hits that sandbox bind error after the deterministic stages pass, use this split:
