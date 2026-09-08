@@ -889,117 +889,117 @@ Proposed repositories:
 
 #### Go reference repository
 
-- [ ] Create the standalone `waggertron/twelve-factor-go` repository with README, license, `.gitignore`, and contribution notes.
-  - Evidence: pending.
-- [ ] Add `go.mod`, committed `go.sum`, command layout, and internal package boundaries.
-  - Evidence: pending.
-- [ ] Pin chi, `caarlos0/env`, pgx, Asynq, OpenTelemetry, Cobra, and Testcontainers dependencies to resolved versions.
-  - Evidence: pending.
-- [ ] Implement startup config validation with `caarlos0/env` and safe error output.
-  - Evidence: pending.
-- [ ] Implement the chi order API, liveness endpoint, and readiness endpoint.
-  - Evidence: pending.
-- [ ] Implement PostgreSQL persistence with `pgxpool`.
-  - Evidence: pending.
-- [ ] Implement Asynq enqueue and worker process types with bounded concurrency.
-  - Evidence: pending.
-- [ ] Implement idempotent order processing under repeated delivery.
-  - Evidence: pending.
-- [ ] Implement context-driven web and worker shutdown with readiness removal before drain.
-  - Evidence: pending.
-- [ ] Implement `slog` JSON events and OpenTelemetry trace and release correlation.
-  - Evidence: pending.
-- [ ] Implement a Cobra migration command using the normal config and database packages.
-  - Evidence: pending.
-- [ ] Add a multi-stage Dockerfile that copies one binary into an immutable runtime image.
-  - Evidence: pending.
-- [ ] Add Docker Compose services for the app, PostgreSQL, Redis, and an optional local telemetry collector or console exporter.
-  - Evidence: pending.
-- [ ] Add unit tests for config parsing, order validation, idempotency, readiness transitions, log fields, and command argument handling.
-  - Evidence: pending.
-- [ ] Add Testcontainers integration tests for PostgreSQL persistence and Asynq retry behavior.
-  - Evidence: pending.
-- [ ] Add an HTTP smoke test covering startup, readiness, order submission, processing, and persisted result retrieval.
-  - Evidence: pending.
-- [ ] Add a failure test proving shutdown does not accept new work after readiness changes.
-  - Evidence: pending.
-- [ ] Add targeted start, stop, and cleanup commands that remove only this repository's containers, volumes, binaries, caches, and temporary test artifacts.
-  - Evidence: pending.
-- [ ] Add CI for module verification, formatting, vetting, unit tests, integration tests, container build, and secret scanning.
-  - Evidence: pending.
-- [ ] Document local setup, architecture, process types, configuration, all twelve factor mappings, test commands, and cleanup.
-  - Evidence: pending.
-- [ ] Run the documented workflow from a clean clone without cloud credentials.
-  - Evidence: pending.
-- [ ] Confirm no containers, processes, generated files, or test data remain after cleanup.
-  - Evidence: pending.
-- [ ] Commit and push the verified Go repository.
-  - Evidence: pending.
-- [ ] Tag the exact Go release referenced by the entry and confirm the remote tag.
-  - Evidence: pending.
+- [x] Create the standalone `waggertron/twelve-factor-go` repository with README, license, `.gitignore`, and contribution notes.
+  - Evidence: the public repository is available at `https://github.com/waggertron/twelve-factor-go` with all four files on `main`.
+- [x] Add `go.mod`, committed `go.sum`, command layout, and internal package boundaries.
+  - Evidence: one `cmd/orders` artifact composes focused internal config, domain, HTTP, migration, queue, readiness, store, telemetry, and command packages.
+- [x] Pin chi, `caarlos0/env`, pgx, Asynq, OpenTelemetry, Cobra, and Testcontainers dependencies to resolved versions.
+  - Evidence: direct versions are declared in `go.mod`, the full graph is committed in `go.sum`, and `go mod verify` passed from a clean clone.
+- [x] Implement startup config validation with `caarlos0/env` and safe error output.
+  - Evidence: process-specific requirements, URL schemes, port, concurrency, shutdown grace, and telemetry mode pass focused tests without value leakage.
+- [x] Implement the chi order API, liveness endpoint, and readiness endpoint.
+  - Evidence: unit and live Compose checks cover health, valid and invalid submission, duplicate behavior, conflict, and retrieval.
+- [x] Implement PostgreSQL persistence with `pgxpool`.
+  - Evidence: transactional persistence, conditional transitions, and migration readiness pass with PostgreSQL 18 through pgx 5.11.0.
+- [x] Implement Asynq enqueue and worker process types with bounded concurrency.
+  - Evidence: Redis 8 integration consumes `orders.v1.complete`; environment validation bounds worker concurrency from 1 through 32.
+- [x] Implement idempotent order processing under repeated delivery.
+  - Evidence: the unique submission key and conditional claim and completion transitions keep a completed order unchanged after redelivery.
+- [x] Implement context-driven web and worker shutdown with readiness removal before drain.
+  - Evidence: signal contexts trigger readiness withdrawal, HTTP shutdown, Asynq intake stop, and bounded active drain; focused lifecycle tests and Docker exit status 0 verify ordering.
+- [x] Implement `slog` JSON events and OpenTelemetry trace and release correlation.
+  - Evidence: structured-event tests assert service, process, release, order, and active trace fields; worker callbacks add the delivery attempt.
+- [x] Implement a Cobra migration command using the normal config and database packages.
+  - Evidence: `orders admin migrate --target 001` uses the normal binary, configuration, pgx pool, telemetry, and embedded migration; unsupported target 999 fails before config access.
+- [x] Add a multi-stage Dockerfile that copies one binary into an immutable runtime image.
+  - Evidence: the clean-clone image build produced digest `sha256:edf4327abac35e7cc8329f0eed66f43695e4eb197da324663d9298fe13b7adf4` with one non-root `orders` binary.
+- [x] Add Docker Compose services for the app, PostgreSQL, Redis, and an optional local telemetry collector or console exporter.
+  - Evidence: isolated project `tf_go` ran PostgreSQL 18, Redis 8, migration, web, worker, and stdout JSON telemetry without cloud credentials.
+- [x] Add unit tests for config parsing, order validation, idempotency, readiness transitions, log fields, and command argument handling.
+  - Evidence: race-enabled tests cover all named surfaces, including 99 as valid, 100 as invalid, drain ordering, and deadline failure.
+- [x] Add Testcontainers integration tests for PostgreSQL persistence and Asynq retry behavior.
+  - Evidence: integration tests pass against disposable PostgreSQL 18 and Redis 8 with production pgx and Asynq clients, a two-retry task budget, and redelivery safety.
+- [x] Add an HTTP smoke test covering startup, readiness, order submission, processing, and persisted result retrieval.
+  - Evidence: Compose returned ready, accepted 99, completed and returned the persisted order, and rejected 100 with HTTP 400.
+- [x] Add a failure test proving shutdown does not accept new work after readiness changes.
+  - Evidence: the HTTP test begins drain before submission and receives HTTP 503; worker tests prove intake stop precedes drain and the deadline fails closed.
+- [x] Add targeted start, stop, and cleanup commands that remove only this repository's containers, volumes, binaries, caches, and temporary test artifacts.
+  - Evidence: `scripts/cleanup.sh` targets only `tf_go` and repository-local paths; it handles Go's read-only module cache and leaves no named resources.
+- [x] Add CI for module verification, formatting, vetting, unit tests, integration tests, container build, and secret scanning.
+  - Evidence: final branch and `v1.0.2` tag runs for `74a91a2` passed, including `https://github.com/waggertron/twelve-factor-go/actions/runs/34214846048`.
+- [x] Document local setup, architecture, process types, configuration, all twelve factor mappings, test commands, and cleanup.
+  - Evidence: README, application contract, and agent evaluation cover every named area and use the exact Factor I through Factor XII titles.
+- [x] Run the documented workflow from a clean clone without cloud credentials.
+  - Evidence: `/private/tmp/verify-twelve-factor-go` passed module download and verification, vet, race-enabled unit and integration tests, binary build, secret scan, and Docker build.
+- [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
+  - Evidence: targeted cleanup left no `tf_go` containers or volumes and removed repository-local Go caches and binaries.
+- [x] Commit and push the verified Go repository.
+  - Evidence: commit `74a91a2` is on public `main` at `https://github.com/waggertron/twelve-factor-go`.
+- [x] Tag the exact Go release referenced by the entry and confirm the remote tag.
+  - Evidence: annotated release tag `v1.0.2` contains the corrected 1 through 99 contract and fully numbered harness checklist and resolves remotely to tag object `a8f091bbaae64565443157c16e0c545daad73df8`.
 
 #### Repository-level Codex and Claude harnesses
 
-- [ ] Add a concise root `AGENTS.md` to each reference repository with its application contract, architecture boundaries, safe example rules, normal commands, and required Twelve-Factor checks.
-  - Evidence: pending.
-- [ ] Add a root `CLAUDE.md` to each reference repository that imports `@AGENTS.md` and contains only Claude-specific skill invocation or troubleshooting guidance.
-  - Evidence: pending.
-- [ ] Create `.agents/skills/twelve-factor-app/SKILL.md` in each reference repository using the Codex skill structure and language-specific commands.
-  - Evidence: pending.
-- [ ] Add `agents/openai.yaml` to each Codex skill and verify its metadata matches the skill's purpose and invocation text.
-  - Evidence: pending.
-- [ ] Create `.claude/skills/twelve-factor-app/SKILL.md` in each reference repository using the Claude project-skill structure and the same language-specific workflow.
-  - Evidence: pending.
-- [ ] Add a concise `references/factor-checklist.md` to both tool-specific skill directories in each repository, covering `Factor I` through `Factor XII` with the exact canonical titles.
-  - Evidence: pending.
-- [ ] Keep the Codex and Claude `SKILL.md` workflow bodies equivalent within each repository and add a deterministic drift check.
-  - Evidence: pending.
-- [ ] Tailor the TypeScript harness to npm, Fastify, Zod, BullMQ, PostgreSQL, OpenTelemetry, Commander, Vitest, and its repository commands.
-  - Evidence: pending.
-- [ ] Tailor the Python harness to uv, FastAPI, Pydantic Settings, Dramatiq, Psycopg, structlog, OpenTelemetry, Typer, pytest, and its repository commands.
-  - Evidence: pending.
-- [ ] Tailor the Go harness to Go modules, chi, `caarlos0/env`, Asynq, pgx, `slog`, OpenTelemetry, Cobra, `go test`, and its repository commands.
-  - Evidence: pending.
-- [ ] Make each skill description trigger for relevant dependency, configuration, backing-service, build, release, process, networking, concurrency, shutdown, parity, telemetry, and admin-command work.
-  - Evidence: pending.
-- [ ] Require each skill workflow to identify affected factors, inspect current contracts, preserve application-platform boundaries, run focused checks, and report commands and evidence.
-  - Evidence: pending.
-- [ ] Require each skill to surface failed deterministic checks and forbid claims of compliance based only on instructions, skill presence, or agent explanation.
-  - Evidence: pending.
-- [ ] Add a repository-owned `scripts/check-twelve-factor.*` command to each language repository for mechanically verifiable contracts.
-  - Evidence: pending.
-- [ ] Make the deterministic command validate dependency locks, declared process commands, configuration tests, artifact boundaries, health behavior, structured telemetry, admin-command parity, harness drift, and the full required test suite.
-  - Evidence: pending.
-- [ ] Wire the deterministic Twelve-Factor command into each repository's normal verification command and CI workflow without requiring Codex, Claude, or a paid agent invocation.
-  - Evidence: pending.
-- [ ] Validate every Codex skill with the official skill validator and verify that Codex discovers the root `AGENTS.md` and repository skill.
-  - Evidence: pending.
-- [ ] Test explicit Codex invocation with a configuration change and record the factor analysis, commands, and results.
-  - Evidence: pending.
-- [ ] Test implicit Codex invocation with a worker-concurrency change and record the factor analysis, commands, and results.
-  - Evidence: pending.
-- [ ] Test an unrelated Codex documentation request and confirm the Twelve-Factor skill does not trigger unnecessarily.
-  - Evidence: pending.
-- [ ] Test a violating Codex request and a failing deterministic check, confirming the violation and failure are surfaced rather than explained away.
-  - Evidence: pending.
-- [ ] Verify that Claude loads the root `CLAUDE.md` import and discovers the repository skill.
-  - Evidence: pending.
-- [ ] Test explicit Claude invocation with a configuration change and record the factor analysis, commands, and results.
-  - Evidence: pending.
-- [ ] Test implicit Claude invocation with a worker-concurrency change and record the factor analysis, commands, and results.
-  - Evidence: pending.
-- [ ] Test an unrelated Claude documentation request and confirm the Twelve-Factor skill does not trigger unnecessarily.
-  - Evidence: pending.
-- [ ] Test a violating Claude request and a failing deterministic check, confirming the violation and failure are surfaced rather than explained away.
-  - Evidence: pending.
-- [ ] Run the no-change audit case in Codex and Claude and confirm both report verified no-op status without inventing work.
-  - Evidence: pending.
-- [ ] Record sanitized prompt, output, discovery, validator, and deterministic-check evidence for both tools in each repository.
-  - Evidence: pending.
+- [x] Add a concise root `AGENTS.md` to each reference repository with its application contract, architecture boundaries, safe example rules, normal commands, and required Twelve-Factor checks.
+  - Evidence: all three tagged repositories contain root instructions covering the contract, one-artifact boundary, safe values, local services, verification, and cleanup.
+- [x] Add a root `CLAUDE.md` to each reference repository that imports `@AGENTS.md` and contains only Claude-specific skill invocation or troubleshooting guidance.
+  - Evidence: all three root files import `@AGENTS.md` and point Claude to the project skill without duplicating shared rules.
+- [x] Create `.agents/skills/twelve-factor-app/SKILL.md` in each reference repository using the Codex skill structure and language-specific commands.
+  - Evidence: each repository contains the skill with valid frontmatter and its ecosystem-specific workflow.
+- [x] Add `agents/openai.yaml` to each Codex skill and verify its metadata matches the skill's purpose and invocation text.
+  - Evidence: all three skills include matching display name, short description, default prompt, and implicit-invocation policy metadata.
+- [x] Create `.claude/skills/twelve-factor-app/SKILL.md` in each reference repository using the Claude project-skill structure and the same language-specific workflow.
+  - Evidence: each repository contains an equivalent Claude project skill discovered by the live CLI cases.
+- [x] Add a concise `references/factor-checklist.md` to both tool-specific skill directories in each repository, covering `Factor I` through `Factor XII` with the exact canonical titles.
+  - Evidence: every tagged checklist names all twelve Roman numeral and canonical title pairs; repository drift checks compare the two copies.
+- [x] Keep the Codex and Claude `SKILL.md` workflow bodies equivalent within each repository and add a deterministic drift check.
+  - Evidence: the normal TypeScript, Python, and Go verification commands fail when either skill or checklist copy differs.
+- [x] Tailor the TypeScript harness to npm, Fastify, Zod, BullMQ, PostgreSQL, OpenTelemetry, Commander, Vitest, and its repository commands.
+  - Evidence: the TypeScript skill and factor checklist route review and verification through the committed npm toolchain and `npm run verify`.
+- [x] Tailor the Python harness to uv, FastAPI, Pydantic Settings, Dramatiq, Psycopg, structlog, OpenTelemetry, Typer, pytest, and its repository commands.
+  - Evidence: the Python skill and factor checklist route review and verification through the frozen uv environment and Python verification script.
+- [x] Tailor the Go harness to Go modules, chi, `caarlos0/env`, Asynq, pgx, `slog`, OpenTelemetry, Cobra, `go test`, and its repository commands.
+  - Evidence: the Go skill names each library boundary and runs module, vet, race-enabled test, build, Docker, and cleanup checks.
+- [x] Make each skill description trigger for relevant dependency, configuration, backing-service, build, release, process, networking, concurrency, shutdown, parity, telemetry, and admin-command work.
+  - Evidence: descriptions cover the operational surfaces and explicitly exclude unrelated spelling, formatting, and isolated prose work.
+- [x] Require each skill workflow to identify affected factors, inspect current contracts, preserve application-platform boundaries, run focused checks, and report commands and evidence.
+  - Evidence: all three equivalent workflows contain these ordered review and completion requirements.
+- [x] Require each skill to surface failed deterministic checks and forbid claims of compliance based only on instructions, skill presence, or agent explanation.
+  - Evidence: the skills call executable evidence authoritative; each evaluation record includes a deliberately missing-lock failure and restored green gate.
+- [x] Add a repository-owned `scripts/check-twelve-factor.*` command to each language repository for mechanically verifiable contracts.
+  - Evidence: TypeScript supplies its Node check, Python supplies `scripts/check_twelve_factor.py`, and Go supplies `scripts/check-twelve-factor.sh`.
+- [x] Make the deterministic command validate dependency locks, declared process commands, configuration tests, artifact boundaries, health behavior, structured telemetry, admin-command parity, harness drift, and the full required test suite.
+  - Evidence: required-file and drift checks plus each full unit, integration, compile, package, or build suite cover all named surfaces.
+- [x] Wire the deterministic Twelve-Factor command into each repository's normal verification command and CI workflow without requiring Codex, Claude, or a paid agent invocation.
+  - Evidence: all three CI workflows invoke their repository-owned gates and Docker builds with no model dependency.
+- [x] Validate every Codex skill with the official skill validator and verify that Codex discovers the root `AGENTS.md` and repository skill.
+  - Evidence: `quick_validate.py` passed in all three repositories, and explicit and implicit Codex cases loaded project instructions and the skill.
+- [x] Test explicit Codex invocation with a configuration change and record the factor analysis, commands, and results.
+  - Evidence: each repository's `docs/agent-evaluation.md` records explicit skill use against its validated configuration or amount boundary.
+- [x] Test implicit Codex invocation with a worker-concurrency change and record the factor analysis, commands, and results.
+  - Evidence: implicit lifecycle reviews selected the skill, named Factors VIII and IX, and found actionable shutdown gaps that were fixed and regression tested.
+- [x] Test an unrelated Codex documentation request and confirm the Twelve-Factor skill does not trigger unnecessarily.
+  - Evidence: README spelling cases skipped the architecture skill and proposed no changes.
+- [x] Test a violating Codex request and a failing deterministic check, confirming the violation and failure are surfaced rather than explained away.
+  - Evidence: hardcoded deployment URL requests were rejected; temporarily removing each dependency lock produced the expected nonzero failure.
+- [x] Verify that Claude loads the root `CLAUDE.md` import and discovers the repository skill.
+  - Evidence: live Claude Code cases used the imported project rules and project skills in all three repositories.
+- [x] Test explicit Claude invocation with a configuration change and record the factor analysis, commands, and results.
+  - Evidence: explicit cases confirmed the corrected contract and named the code and test boundaries.
+- [x] Test implicit Claude invocation with a worker-concurrency change and record the factor analysis, commands, and results.
+  - Evidence: implicit worker reviews used project skill context and checked bounded concurrency, intake stop, drain, and deadlines.
+- [x] Test an unrelated Claude documentation request and confirm the Twelve-Factor skill does not trigger unnecessarily.
+  - Evidence: isolated README spelling cases did not expand into architecture work.
+- [x] Test a violating Claude request and a failing deterministic check, confirming the violation and failure are surfaced rather than explained away.
+  - Evidence: Claude rejected hardcoded production database URLs; the repository records retain the missing-lock failure evidence.
+- [x] Run the no-change audit case in Codex and Claude and confirm both report verified no-op status without inventing work.
+  - Evidence: both tools confirmed each ecosystem's web, worker, and admin commands already came from one artifact and proposed no edit.
+- [x] Record sanitized prompt, output, discovery, validator, and deterministic-check evidence for both tools in each repository.
+  - Evidence: each repository contains `docs/agent-evaluation.md` with the case matrix, tool versions or constraints, validator result, deterministic failure, and executable evidence.
 - [ ] Link the `AGENTS.md`, `CLAUDE.md`, Codex skill, Claude skill, factor checklist, and deterministic check from the article's AI harness section.
   - Evidence: pending.
-- [ ] Confirm each tagged reference release contains the tested harness files and matches the linked source.
-  - Evidence: pending.
+- [x] Confirm each tagged reference release contains the tested harness files and matches the linked source.
+  - Evidence: TypeScript `v1.0.1`, Python `v1.0.1`, and Go `v1.0.2` were tagged only after harness files, deterministic checks, and evaluation records were committed.
 
 #### Cross-repository parity and article synchronization
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 4 are complete, and Wave 5 is in progress. The shared application contract and the public, tagged TypeScript reference repository are complete. Python is the next implementation checkpoint, followed by Go, cross-repository verification, integrated article sections, and final publication work.
+Waves 0 through 4 are complete, and Wave 5 is in progress. The shared application contract and all three public, runnable, tested, and tagged reference repositories are complete. Cross-repository verification, article synchronization, discovery, and final publication work remain.
