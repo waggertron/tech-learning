@@ -1,0 +1,91 @@
+---
+title: Twelve-Factor Examples, Factors IX through XII
+description: "TypeScript, Python, and Go mappings for process disposal, environment parity, event streams, and bounded administrative work."
+parent: twelve-factor-app
+tags: [twelve-factor, typescript, python, go, observability]
+status: draft
+created: 2026-09-07
+updated: 2026-09-07
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+These examples finish the shared order-service lifecycle. They focus on replacement, verification, operational evidence, and one-off work. Choose a language in any tab group. Every group on this page follows that selection.
+
+## Factor IX: Disposability
+
+The web process starts quickly, advertises readiness only after its dependencies are usable, and removes readiness before shutdown drains active work. The worker stops accepting jobs before its grace period expires.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Node.js signal handlers change readiness, close Fastify, and drain BullMQ workers with bounded deadlines.
+  </TabItem>
+  <TabItem label="Python">
+    FastAPI lifespan state controls readiness. Uvicorn and Dramatiq shutdown hooks stop new work before closing database resources.
+  </TabItem>
+  <TabItem label="Go">
+    A signal-derived context changes readiness, calls `http.Server.Shutdown`, and closes the Asynq worker and `pgxpool` within a deadline.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Send the termination signal during active HTTP and worker tasks. Verify readiness fails first, accepted work finishes or retries safely, and the process exits within the configured grace period.
+
+## Factor X: Dev/prod parity
+
+Parity focuses on production-significant behavior. The local and CI paths use the same database and queue service types as production while keeping credentials, scale, and topology local.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Vitest and Testcontainers for Node.js exercise PostgreSQL and Redis contracts with the same migrations and client libraries used by the application.
+  </TabItem>
+  <TabItem label="Python">
+    pytest and Testcontainers for Python start disposable PostgreSQL and Redis services for repository and worker integration tests.
+  </TabItem>
+  <TabItem label="Go">
+    Go tests and Testcontainers for Go run schema, repository, and queue contracts against disposable service containers.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** List every production-significant difference, name the test layer that covers it, and fail review when a difference has no owner or check.
+
+## Factor XI: Logs
+
+Application processes write structured events to standard output and standard error. They do not choose log files, retention periods, or remote storage destinations.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Fastify's Pino logger emits JSON with service, release, request, and trace fields. OpenTelemetry supplies the active trace context.
+  </TabItem>
+  <TabItem label="Python">
+    structlog emits JSON events enriched with release and request context. OpenTelemetry correlates spans without changing the collection boundary.
+  </TabItem>
+  <TabItem label="Go">
+    `slog` writes structured JSON to standard output. OpenTelemetry span identifiers and release metadata travel with relevant events.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Submit one failing request and reconstruct its path from the external event stream using release, request, and trace identifiers.
+
+## Factor XII: Admin processes
+
+The migration command uses the same application packages, dependency graph, configuration loader, and artifact as web and worker processes. The platform runs it as a bounded job with an attributable result.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Commander selects the migration operation and calls the same Zod config and PostgreSQL modules packaged for the long-running processes.
+  </TabItem>
+  <TabItem label="Python">
+    Typer exposes the migration command from the installed application package and reuses Pydantic Settings and Psycopg setup.
+  </TabItem>
+  <TabItem label="Go">
+    Cobra exposes a migration subcommand from the same binary and reuses the normal config and `pgxpool` packages.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Tie the migration to an actor, command, release digest, start time, end time, and result without opening an unrestricted shell in a running instance.
+
+## Navigation
+
+- [Return to the Twelve-Factor overview](../)
+- [Back to Factor V through Factor VIII](../examples-factors-05-08/)
+- [Kubernetes](../../kubernetes/)

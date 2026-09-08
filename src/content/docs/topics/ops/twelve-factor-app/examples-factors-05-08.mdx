@@ -1,0 +1,91 @@
+---
+title: Twelve-Factor Examples, Factors V through VIII
+description: "TypeScript, Python, and Go mappings for immutable releases, stateless processes, port binding, and independently scalable workloads."
+parent: twelve-factor-app
+tags: [twelve-factor, typescript, python, go, deployment]
+status: draft
+created: 2026-09-07
+updated: 2026-09-07
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+These examples continue the shared order service. One build produces the web, worker, and admin process entry points. Choose a language in any tab group. Every group on this page follows that selection.
+
+## Factor V: Build, release, run
+
+The build creates one immutable artifact. A release adds deployment configuration and an identity. Runtime selects a process command without downloading dependencies or compiling source.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    A multi-stage container runs compiled Node.js output with production dependencies restored from the npm lock. Web, worker, and admin commands select code already present in the image.
+  </TabItem>
+  <TabItem label="Python">
+    A wheel and its locked dependencies are installed during the image build. Uvicorn, Dramatiq, and Typer start from the installed package without modifying it.
+  </TabItem>
+  <TabItem label="Go">
+    The build produces a static application binary with embedded revision metadata. The runtime image contains the binary and selects its web, worker, or admin subcommand.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Promote the same artifact digest between environments, change only release configuration, and roll back without rebuilding.
+
+## Factor VI: Processes
+
+Web and worker instances keep no required durable state in memory or on their local filesystem. PostgreSQL stores orders and idempotency records. Redis coordinates queued work but does not replace the system of record.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Fastify handlers and BullMQ workers call application services backed by PostgreSQL. Request completion does not depend on a particular Node.js process surviving.
+  </TabItem>
+  <TabItem label="Python">
+    FastAPI handlers and Dramatiq actors use Psycopg repositories. Process memory can hold transient caches, but correctness never depends on them.
+  </TabItem>
+  <TabItem label="Go">
+    chi handlers and Asynq tasks use interfaces implemented by `pgxpool` repositories. Restarting a process does not erase accepted orders.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Terminate the instance that accepted an order, route the next read to another instance, and verify the same durable result.
+
+## Factor VII: Port binding
+
+The web process owns its HTTP listener and binds the configured port. The platform routes to that listener. Workers and admin jobs expose commands because their invocation model is not HTTP.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Fastify listens on the validated `PORT` value and all interfaces inside the container. The process exits if binding fails.
+  </TabItem>
+  <TabItem label="Python">
+    Uvicorn starts the FastAPI application on the validated host and port supplied by the release command.
+  </TabItem>
+  <TabItem label="Go">
+    `net/http` serves the chi router on the configured address. Startup reports a binding error and exits instead of appearing ready.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Start the artifact with a new valid port and route traffic without installing a framework-specific server on the host.
+
+## Factor VIII: Concurrency
+
+Web and worker fleets scale as separate process types. Each worker also limits in-process concurrency so horizontal scaling does not multiply unbounded work.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    BullMQ sets explicit worker concurrency. Queue depth and processing latency guide worker replica count independently from Fastify replicas.
+  </TabItem>
+  <TabItem label="Python">
+    Dramatiq worker processes and threads have declared bounds. Web scaling remains a separate Uvicorn deployment decision.
+  </TabItem>
+  <TabItem label="Go">
+    Asynq configures a finite concurrency limit. HTTP and task process counts change independently while sharing the same application release.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Increase worker replicas while holding the web fleet constant, then verify queue throughput improves without exceeding database connection limits.
+
+## Navigation
+
+- [Return to the Twelve-Factor overview](../)
+- [Back to Factor I through Factor IV](../examples-factors-01-04/)
+- [Continue with Factor IX through Factor XII](../examples-factors-09-12/)

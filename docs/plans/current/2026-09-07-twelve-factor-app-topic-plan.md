@@ -588,32 +588,32 @@ Checkboxes may be marked complete only when their Evidence line points to an art
 
 ### Wave 1: page foundation and teaching frame
 
-- [ ] Create the topic directory and `index.mdx` with valid frontmatter.
-  - Evidence: pending.
-- [ ] Create the three child example pages with valid frontmatter and parent metadata.
-  - Evidence: pending.
-- [ ] Import Starlight `Tabs` and `TabItem` components and configure synchronized language selection on every child page.
-  - Evidence: pending.
-- [ ] Quote the frontmatter description and verify title, sidebar label, and metadata conventions against neighboring Ops topics.
-  - Evidence: pending.
-- [ ] Write the opening failure story and define the methodology's scope.
-  - Evidence: pending.
-- [ ] Add the application-platform ASCII diagram and explain the narrow-conduit model.
-  - Evidence: pending.
-- [ ] Add the twelve-factor scan table with original intent and modern reading.
-  - Evidence: pending.
-- [ ] Use the exact visible heading titles `Factor I: Codebase` through `Factor XII: Admin processes` in the hub and matching example sections.
-  - Evidence: pending.
-- [ ] Verify the table of contents, factor links, and rendered heading anchors preserve each Roman numeral and canonical title.
-  - Evidence: pending.
-- [ ] Add direct links from every hub factor section to its factor heading on the matching example page.
-  - Evidence: pending.
-- [ ] Verify the opening does not present microservices, cloud, containers, or Kubernetes as requirements.
-  - Evidence: pending.
-- [ ] Run `npm run build` for the Wave 1 batch.
-  - Evidence: pending.
-- [ ] Confirm Wave 1 is complete.
-  - Evidence: pending until every Wave 1 child item is checked.
+- [x] Create the topic directory and `index.mdx` with valid frontmatter.
+  - Evidence: `src/content/docs/topics/ops/twelve-factor-app/index.mdx`; Astro check reported 0 errors, warnings, or hints.
+- [x] Create the three child example pages with valid frontmatter and parent metadata.
+  - Evidence: `examples-factors-01-04.mdx`, `examples-factors-05-08.mdx`, and `examples-factors-09-12.mdx` built as child routes under `/topics/ops/twelve-factor-app/`.
+- [x] Import Starlight `Tabs` and `TabItem` components and configure synchronized language selection on every child page.
+  - Evidence: all three child files import both components; the built HTML contains 12 `data-sync-key="twelve-factor-language"` tab groups.
+- [x] Quote the frontmatter description and verify title, sidebar label, and metadata conventions against neighboring Ops topics.
+  - Evidence: all four descriptions are double quoted; the hub follows the neighboring Ops topic schema, and child pages use `parent: twelve-factor-app` with title-based labels.
+- [x] Write the opening failure story and define the methodology's scope.
+  - Evidence: the hub opens with hidden packages, config, sessions, runtime compilation, and host-log failures, then defines the language-neutral methodology and its limits.
+- [x] Add the application-platform ASCII diagram and explain the narrow-conduit model.
+  - Evidence: `The application-platform contract` contains the ASCII flow from source to artifact, process types, configuration, attached resources, signals, and platform responsibilities.
+- [x] Add the twelve-factor scan table with original intent and modern reading.
+  - Evidence: `The twelve factors at a glance` contains twelve rows with original intent, modern reading, and proof question columns.
+- [x] Use the exact visible heading titles `Factor I: Codebase` through `Factor XII: Admin processes` in the hub and matching example sections.
+  - Evidence: source inspection found all twelve exact H2 titles once in the hub and once across the three child pages.
+- [x] Verify the table of contents, factor links, and rendered heading anchors preserve each Roman numeral and canonical title.
+  - Evidence: built HTML inspection found the twelve expected `factor-i-codebase` through `factor-xii-admin-processes` IDs in the hub and matching child pages; `npm run validate:links` passed.
+- [x] Add direct links from every hub factor section to its factor heading on the matching example page.
+  - Evidence: each hub factor section ends with a route-relative link to its child page and rendered factor anchor; all links passed the 800-page link validator.
+- [x] Verify the opening does not present microservices, cloud, containers, or Kubernetes as requirements.
+  - Evidence: `What Twelve-Factor is` explicitly states that none of those technologies or architectural forms is required.
+- [x] Run `npm run build` for the Wave 1 batch.
+  - Evidence: build passed with secret scan success, 0 Astro errors, 0 warnings, 0 hints, and 800 generated pages.
+- [x] Confirm Wave 1 is complete.
+  - Evidence: every Wave 1 child item is checked with file, rendered-output, build, or link-validation evidence.
 
 ### Wave 2: canonical factors I through VI
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Wave 0 is complete. Wave 1 is the next execution wave. No public content has been created yet.
+Waves 0 and 1 are complete. Wave 2 is the next execution wave. The hub and three example-page foundations now exist, but the runnable reference implementations and final publication work remain pending.

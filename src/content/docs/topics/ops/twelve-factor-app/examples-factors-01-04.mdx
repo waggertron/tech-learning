@@ -1,0 +1,91 @@
+---
+title: Twelve-Factor Examples, Factors I through IV
+description: "TypeScript, Python, and Go mappings for codebase identity, locked dependencies, validated configuration, and attached backing services."
+parent: twelve-factor-app
+tags: [twelve-factor, typescript, python, go, configuration]
+status: draft
+created: 2026-09-07
+updated: 2026-09-07
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+These examples use the same order-service contract in three ecosystems. Each application exposes web, worker, and admin process types from one versioned source tree. Choose a language in any tab group. Every group on this page follows that selection.
+
+## Factor I: Codebase
+
+The deployable application is the unit of identity. Its web, worker, and admin processes come from one revision even though each starts through a different command.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    One `package.json` declares Fastify web, BullMQ worker, and Commander admin scripts. Release metadata records the Git revision and build target.
+  </TabItem>
+  <TabItem label="Python">
+    One `pyproject.toml` declares FastAPI web, Dramatiq worker, and Typer admin entry points from the same package and revision.
+  </TabItem>
+  <TabItem label="Go">
+    One Go module builds web, worker, and admin commands that share internal application packages and release metadata.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Given a running process, recover its release identifier, source revision, and named build target.
+
+## Factor II: Dependencies
+
+The dependency declaration is complete only when a clean environment can resolve the same graph without relying on globally installed packages.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    `package.json` declares direct dependencies. `package-lock.json` records the resolved graph. `npm ci` rejects drift between them.
+  </TabItem>
+  <TabItem label="Python">
+    `pyproject.toml` declares direct dependencies. `uv.lock` records exact resolutions. Frozen synchronization rejects an outdated lock.
+  </TabItem>
+  <TabItem label="Go">
+    `go.mod` declares module requirements. `go.sum` records integrity data. Module verification checks downloaded content before the build.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Install and test from an empty dependency cache or clean container, then inspect the runtime artifact for undeclared assumptions.
+
+## Factor III: Config
+
+The application owns a typed configuration schema. Each deployment supplies values. Startup rejects missing or invalid input before accepting traffic or work.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    Zod parses the process environment into a typed settings object. Errors identify invalid fields without printing secret values.
+  </TabItem>
+  <TabItem label="Python">
+    Pydantic Settings loads deployment values and validates them before FastAPI or Dramatiq starts processing work.
+  </TabItem>
+  <TabItem label="Go">
+    `caarlos0/env` decodes environment values into a typed struct. Validation returns safe field-level errors before listeners or clients start.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Start with a required value missing, a port outside its valid range, and a malformed backing-service URL. Each run must fail safely before readiness.
+
+## Factor IV: Backing services
+
+PostgreSQL and the queue are attachments, not host assumptions. The application receives their endpoints and credentials through validated configuration.
+
+<Tabs syncKey="twelve-factor-language">
+  <TabItem label="TypeScript">
+    `pg` and BullMQ clients are constructed from injected database and Redis URLs. Application modules receive those clients rather than reading process globals.
+  </TabItem>
+  <TabItem label="Python">
+    Psycopg and Dramatiq brokers are created from validated settings, then passed through the application's startup boundary.
+  </TabItem>
+  <TabItem label="Go">
+    `pgxpool` and Asynq clients are created from the config struct and supplied to HTTP handlers, workers, and admin commands.
+  </TabItem>
+</Tabs>
+
+**Evidence to collect:** Replace an attachment endpoint without editing source, then run contract tests that expose semantic differences instead of assuming providers are interchangeable.
+
+## Navigation
+
+- [Return to the Twelve-Factor overview](../)
+- [Continue with Factor V through Factor VIII](../examples-factors-05-08/)
+- [Docker](../../docker/)

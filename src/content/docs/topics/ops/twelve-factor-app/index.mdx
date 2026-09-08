@@ -1,0 +1,173 @@
+---
+title: Twelve-Factor Apps, What Still Holds and What Changed
+description: "The original twelve factors, their modern application-platform contract, practical evidence for each factor, and the limits that newer production frameworks need to cover."
+category: ops
+tags: [twelve-factor, architecture, deployment, cloud-native, operations]
+status: draft
+created: 2026-09-07
+updated: 2026-09-07
+---
+
+A service runs perfectly on one long-lived server. Its dependencies came from a package installed by hand months ago. Its configuration lives in a file beside the source. User sessions sit in process memory. Startup compiles the application, and logs disappear into a host directory that nobody remembers to collect.
+
+The next deployment replaces that server. Startup fails on the missing package. Rollback rebuilds different bytes. Adding a second instance signs users out at random. The team has source code, but it does not have a reproducible application.
+
+The Twelve-Factor App methodology attacks this class of failure. It replaces hidden machine assumptions with an explicit contract between an application and the platform that builds, configures, runs, and observes it.
+
+## What Twelve-Factor is
+
+Twelve-Factor is a methodology for building service applications that can move between execution environments, deploy predictably, scale through additional processes, and keep development close enough to production to catch meaningful differences early.
+
+It is language-neutral. It does not require microservices, containers, Kubernetes, or a particular cloud. A modular monolith can follow the factors. A Kubernetes deployment can violate nearly all of them.
+
+The original methodology is also not a complete production-readiness standard. It says little about identity, authorization, software supply chains, disaster recovery, service-level objectives, or vulnerability response. Those concerns need additional frameworks and controls.
+
+## The application-platform contract
+
+The factors make the boundary between application and platform narrow enough to inspect:
+
+```text
+                         APPLICATION
+              source + declared dependencies
+                         |
+                         | build
+                         v
+                   immutable artifact
+                         |
+             +-----------+-----------+
+             |           |           |
+             v           v           v
+           web         worker       admin
+             |           |           |
+             +-----------+-----------+
+                         |
+        config + attached resources + process signals
+                         |
+                         v
+                          PLATFORM
+       scheduling + routing + secrets + telemetry collection
+```
+
+The application declares what it needs, accepts deploy-specific configuration, exposes process entry points, and treats attached services as resources. The platform supplies configuration, starts processes, routes traffic, sends lifecycle signals, and collects event streams.
+
+The running example throughout this topic is an order service with three process types:
+
+- **Web**: Accepts HTTP requests and persists orders.
+- **Worker**: Consumes queued work and applies retry-safe effects.
+- **Admin**: Runs bounded tasks such as database migrations from the same release.
+
+## The twelve factors at a glance
+
+Each factor answers a failure mode. The modern reading preserves that intent while replacing dated mechanisms where the platform contract has evolved.
+
+| Factor | Original intent | Modern reading | Proof question |
+| --- | --- | --- | --- |
+| [Factor I: Codebase](#factor-i-codebase) | One tracked codebase, many deploys | Trace each release to source and a build target | Can every release be traced to an exact revision? |
+| [Factor II: Dependencies](#factor-ii-dependencies) | Declare and isolate dependencies | Lock, verify, and package the full dependency graph | Can a clean environment install without hidden host state? |
+| [Factor III: Config](#factor-iii-config) | Keep deploy config out of code | Validate deploy inputs and deliver secrets through platform boundaries | Does bad config fail safely before work starts? |
+| [Factor IV: Backing services](#factor-iv-backing-services) | Treat services as attached resources | Inject endpoints and verify provider contracts | Can an attachment change without a code edit? |
+| [Factor V: Build, release, run](#factor-v-build-release-run) | Keep stages separate | Promote one immutable, attributable artifact | Can the same artifact roll forward or back without rebuilding? |
+| [Factor VI: Processes](#factor-vi-processes) | Run stateless, share-nothing processes | Put durable state outside replaceable instances | Can an instance disappear without losing required state? |
+| [Factor VII: Port binding](#factor-vii-port-binding) | Export services through a bound port | Expose a self-contained invocation contract | Can the platform start and route the service directly? |
+| [Factor VIII: Concurrency](#factor-viii-concurrency) | Scale through the process model | Scale workload types independently with bounded work | Can web and worker capacity change independently? |
+| [Factor IX: Disposability](#factor-ix-disposability) | Start fast and stop gracefully | Coordinate readiness, draining, timeouts, and retries | Can the platform stop an instance without corrupting work? |
+| [Factor X: Dev/prod parity](#factor-x-devprod-parity) | Keep environments close | Test production-significant contracts at the cheapest faithful layer | Are meaningful differences known and exercised? |
+| [Factor XI: Logs](#factor-xi-logs) | Emit logs as event streams | Write structured events and correlate logs, metrics, and traces | Can an operator reconstruct a failure outside the instance? |
+| [Factor XII: Admin processes](#factor-xii-admin-processes) | Run one-off tasks with the release | Use bounded, attributable commands with the same code and config | Can an admin action be tied to an identity and release? |
+
+The detailed sections use the same sequence: original principle, failure prevented, modern reading, implementation evidence, and an audit question.
+
+## Factor I: Codebase
+
+One application has one authoritative body of version-controlled source and any number of deploys. The principle concerns application identity and traceability, not a rigid repository count. A monorepo can hold several independently built applications, while shared libraries can have their own lifecycle.
+
+The useful proof is a path from a running release back to its commit and build target. [Compare the TypeScript, Python, and Go process layouts](./examples-factors-01-04/#factor-i-codebase).
+
+## Factor II: Dependencies
+
+Every required dependency is declared and isolated from packages that happen to exist on a developer laptop or server. A manifest describes intent. A lockfile records the resolved graph. A clean installation and artifact inspection show whether the declaration is complete.
+
+Modern systems also verify dependency integrity and preserve supply-chain evidence, but those are extensions to the original factor. [Compare locked dependency workflows](./examples-factors-01-04/#factor-ii-dependencies).
+
+## Factor III: Config
+
+Configuration contains values that vary between deploys. Source code defines the schema and behavior. The deployment supplies endpoints, limits, feature settings, and credentials through an explicit platform boundary.
+
+Environment variables remain common, but mounted files, secret stores, and workload identity can serve the same principle. The stronger test is whether the codebase could be published without exposing a credential or environment-specific value. [Compare typed startup validation](./examples-factors-01-04/#factor-iii-config).
+
+## Factor IV: Backing services
+
+Databases, queues, caches, object stores, and third-party APIs are attached resources. The application receives their locations and credentials through configuration instead of assuming a host-local service.
+
+Attachment does not mean semantic interchangeability. Replacing one queue or database with another still needs a compatible contract and focused tests. [Compare injected PostgreSQL and queue clients](./examples-factors-01-04/#factor-iv-backing-services).
+
+## Factor V: Build, release, run
+
+Build turns source into an artifact. Release combines that artifact with deploy-specific configuration and an identity. Run starts the selected process without changing the artifact.
+
+Installing packages, compiling source, or mutating code during startup collapses these boundaries. Promotion and rollback become trustworthy when each environment receives the same immutable bytes. [Compare artifact and release layouts](./examples-factors-05-08/#factor-v-build-release-run).
+
+## Factor VI: Processes
+
+Application processes are stateless and share nothing with one another. Durable state still exists, but it belongs in backing services that survive process replacement.
+
+Sessions, uploaded files, retry records, and business effects must not depend on one instance's memory or local filesystem. [Compare externally persisted request handling](./examples-factors-05-08/#factor-vi-processes).
+
+## Factor VII: Port binding
+
+A network service contains its own listener and exports itself through a configured port. The platform starts the process and routes traffic to it without installing an application-specific server around the code.
+
+Workers and scheduled jobs use different invocation contracts, so port binding should not be stretched into a rule that every process must open a socket. [Compare self-contained HTTP listeners](./examples-factors-05-08/#factor-vii-port-binding).
+
+## Factor VIII: Concurrency
+
+The process model names distinct workloads and lets the platform scale them independently. More HTTP traffic can add web processes. A deeper queue can add worker processes without coupling the two decisions.
+
+Horizontal scaling still needs bounded concurrency, resource limits, and backpressure. Otherwise every process can accept more work than it can finish. [Compare bounded worker process types](./examples-factors-05-08/#factor-viii-concurrency).
+
+## Factor IX: Disposability
+
+Processes start quickly and stop gracefully. A terminating instance stops advertising readiness, rejects new work, drains or safely abandons current work, and exits before the platform's grace period ends.
+
+Retries and idempotency complete the lifecycle contract. Shutdown cannot guarantee that every external operation finishes exactly once. [Compare lifecycle handling](./examples-factors-09-12/#factor-ix-disposability).
+
+## Factor X: Dev/prod parity
+
+The original factor targets gaps in time, people, and tools. Modern teams rarely reproduce an entire production topology on a laptop. They identify the differences that can change behavior and test each contract at the cheapest faithful layer.
+
+Unit tests cover pure behavior. Integration tests exercise the real service type. Staging and production checks cover boundaries that local environments cannot reproduce honestly. [Compare PostgreSQL contract tests](./examples-factors-09-12/#factor-x-devprod-parity).
+
+## Factor XI: Logs
+
+The application emits events without owning their routing, retention, or final storage. Standard output and standard error remain the usual container boundary. The platform collects, enriches, filters, and stores the stream.
+
+Logs alone do not provide modern observability. Structured events become more useful when release identifiers and trace context connect them to metrics and traces. [Compare structured event pipelines](./examples-factors-09-12/#factor-xi-logs).
+
+## Factor XII: Admin processes
+
+One-off administration uses the same code, dependencies, configuration model, and release artifact as long-running processes. A migration should not run from an operator's stale checkout or an unrestricted production shell.
+
+Modern platforms can add short-lived authority, timeouts, audit records, and job-level resource limits. [Compare bounded migration commands](./examples-factors-09-12/#factor-xii-admin-processes).
+
+## What the factors do not settle
+
+Twelve-Factor gives an application a clean operational boundary. It does not choose an authorization model, define recovery objectives, prove artifact provenance, set service-level objectives, or establish a secure development lifecycle. Treating it as a complete scorecard hides those gaps.
+
+Use complementary guidance for the concern at hand: OpenTelemetry for telemetry semantics, SLSA for artifact provenance, NIST SSDF for secure development, and platform-specific contracts for health, resources, identity, and scheduling.
+
+## References
+
+- [The Twelve-Factor App](https://12factor.net/)
+- [Narrow Conduits and the Application-Platform Interface](https://12factor.net/blog/narrow-conduits)
+- [Evolving Twelve-Factor](https://12factor.net/blog/evolving-twelve-factor)
+- [OpenTelemetry signals](https://opentelemetry.io/docs/concepts/signals/)
+- [SLSA provenance](https://slsa.dev/spec/v1.2/provenance)
+- [NIST Secure Software Development Framework](https://csrc.nist.gov/projects/ssdf)
+
+## Related topics
+
+- [Docker](../docker/)
+- [Kubernetes](../kubernetes/)
+- [GitOps](../gitops/)
+- [Secrets, keys, and tokens](../secrets-keys-tokens/)
+- [Scalability](../../system-design/scalability/)
