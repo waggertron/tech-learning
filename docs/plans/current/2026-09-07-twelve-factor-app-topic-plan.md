@@ -787,54 +787,54 @@ Proposed repositories:
 
 #### TypeScript reference repository
 
-- [ ] Create the standalone `waggertron/twelve-factor-typescript` repository with README, license, `.gitignore`, and contribution notes.
-  - Evidence: pending.
-- [ ] Add a strict TypeScript configuration, `package.json`, and committed npm lockfile.
-  - Evidence: pending.
-- [ ] Pin Fastify, Zod, PostgreSQL, BullMQ, OpenTelemetry, Commander, Vitest, and Testcontainers dependencies to resolved versions.
-  - Evidence: pending.
-- [ ] Implement startup config validation with Zod and safe error output.
-  - Evidence: pending.
-- [ ] Implement the Fastify order API, liveness endpoint, and readiness endpoint.
-  - Evidence: pending.
-- [ ] Implement PostgreSQL persistence with the repository's declared client library.
-  - Evidence: pending.
-- [ ] Implement BullMQ enqueue and worker process types with bounded concurrency.
-  - Evidence: pending.
-- [ ] Implement idempotent order processing under repeated delivery.
-  - Evidence: pending.
-- [ ] Implement graceful web and worker shutdown with readiness removal before drain.
-  - Evidence: pending.
-- [ ] Implement Pino JSON events and OpenTelemetry trace and release correlation.
-  - Evidence: pending.
-- [ ] Implement a Commander migration command using the normal config and database modules.
-  - Evidence: pending.
-- [ ] Add a multi-stage Dockerfile that runs compiled output from one immutable image.
-  - Evidence: pending.
-- [ ] Add Docker Compose services for the app, PostgreSQL, Redis, and an optional local telemetry collector or console exporter.
-  - Evidence: pending.
-- [ ] Add unit tests for config parsing, order validation, idempotency, readiness transitions, log fields, and command argument handling.
-  - Evidence: pending.
-- [ ] Add Testcontainers integration tests for PostgreSQL persistence and BullMQ retry behavior.
-  - Evidence: pending.
-- [ ] Add an HTTP smoke test covering startup, readiness, order submission, processing, and persisted result retrieval.
-  - Evidence: pending.
-- [ ] Add a failure test proving shutdown does not accept new work after readiness changes.
-  - Evidence: pending.
-- [ ] Add targeted start, stop, and cleanup commands that remove only this repository's containers, volumes, and temporary test artifacts.
-  - Evidence: pending.
-- [ ] Add CI for clean install, type checking, unit tests, integration tests, container build, and secret scanning.
-  - Evidence: pending.
-- [ ] Document local setup, architecture, process types, configuration, all twelve factor mappings, test commands, and cleanup.
-  - Evidence: pending.
-- [ ] Run the documented workflow from a clean clone without cloud credentials.
-  - Evidence: pending.
-- [ ] Confirm no containers, processes, generated files, or test data remain after cleanup.
-  - Evidence: pending.
-- [ ] Commit and push the verified TypeScript repository.
-  - Evidence: pending.
-- [ ] Tag the exact TypeScript release referenced by the entry and confirm the remote tag.
-  - Evidence: pending.
+- [x] Create the standalone `waggertron/twelve-factor-typescript` repository with README, license, `.gitignore`, and contribution notes.
+  - Evidence: the public repository is available at `https://github.com/waggertron/twelve-factor-typescript` with all four files in commit `5ba05e0`.
+- [x] Add a strict TypeScript configuration, `package.json`, and committed npm lockfile.
+  - Evidence: strict `tsconfig.json`, the build config, manifest, and `package-lock.json` passed a clean `npm ci` and type check.
+- [x] Pin Fastify, Zod, PostgreSQL, BullMQ, OpenTelemetry, Commander, Vitest, and Testcontainers dependencies to resolved versions.
+  - Evidence: exact versions are committed in `package.json` and its npm lock, and clean install reported zero vulnerabilities.
+- [x] Implement startup config validation with Zod and safe error output.
+  - Evidence: URL schemes, process-specific requirements, bounds, defaults, and value-free `ConfigError` output pass focused tests.
+- [x] Implement the Fastify order API, liveness endpoint, and readiness endpoint.
+  - Evidence: unit and loopback HTTP integration tests cover health, submission, duplicate, conflict, and retrieval behavior.
+- [x] Implement PostgreSQL persistence with the repository's declared client library.
+  - Evidence: `pg` persistence and transactional order plus queue-intent writes pass against disposable PostgreSQL 18.
+- [x] Implement BullMQ enqueue and worker process types with bounded concurrency.
+  - Evidence: the real Redis 8 integration consumes `orders.v1`, while Zod bounds `WORKER_CONCURRENCY` from 1 through 32.
+- [x] Implement idempotent order processing under repeated delivery.
+  - Evidence: unique submission keys and conditional completion make repeat submission and worker redelivery observable no-ops.
+- [x] Implement graceful web and worker shutdown with readiness removal before drain.
+  - Evidence: `drain` withdraws readiness first, enforces the application grace deadline, and `onceAsync` coalesces concurrent signals; 3 focused tests pass.
+- [x] Implement Pino JSON events and OpenTelemetry trace and release correlation.
+  - Evidence: structured event tests assert service, process, release, order, attempt, and active trace identifiers without config leakage.
+- [x] Implement a Commander migration command using the normal config and database modules.
+  - Evidence: `admin migrate --target 001` uses compiled release code and its bounded target passes argument and live Compose checks.
+- [x] Add a multi-stage Dockerfile that runs compiled output from one immutable image.
+  - Evidence: Docker built image digest `sha256:4da3afcfa3a5d7be0bf4bf0977c798936cade4f27d3daa0313ba60ae37f168f3`; all process commands target `dist` output.
+- [x] Add Docker Compose services for the app, PostgreSQL, Redis, and an optional local telemetry collector or console exporter.
+  - Evidence: isolated project `tf_typescript` ran migration, web, worker, PostgreSQL 18, Redis 8, and console telemetry successfully.
+- [x] Add unit tests for config parsing, order validation, idempotency, readiness transitions, log fields, and command argument handling.
+  - Evidence: 14 unit tests across 5 files pass all named contracts.
+- [x] Add Testcontainers integration tests for PostgreSQL persistence and BullMQ retry behavior.
+  - Evidence: 2 integration tests pass with real PostgreSQL 18 and Redis 8, including schema readiness and a finite two-attempt retry.
+- [x] Add an HTTP smoke test covering startup, readiness, order submission, processing, and persisted result retrieval.
+  - Evidence: loopback Fastify and full Compose smoke tests both returned a persisted completed order.
+- [x] Add a failure test proving shutdown does not accept new work after readiness changes.
+  - Evidence: the focused test withdraws readiness, observes HTTP 503 for new work, and checks missed drain deadlines.
+- [x] Add targeted start, stop, and cleanup commands that remove only this repository's containers, volumes, and temporary test artifacts.
+  - Evidence: Compose uses `tf_typescript`; `npm run local:clean` targets that project with volumes and orphans only.
+- [x] Add CI for clean install, type checking, unit tests, integration tests, container build, and secret scanning.
+  - Evidence: the GitHub Actions branch run completed successfully at `https://github.com/waggertron/twelve-factor-typescript/actions/runs/34204892474`.
+- [x] Document local setup, architecture, process types, configuration, all twelve factor mappings, test commands, and cleanup.
+  - Evidence: the release README covers every named area and links the application contract and agent harnesses.
+- [x] Run the documented workflow from a clean clone without cloud credentials.
+  - Evidence: a fresh clone under `/private/tmp/verify-twelve-factor-typescript` passed `npm ci` and `npm run verify` with local Docker services only.
+- [x] Confirm no containers, processes, generated files, or test data remain after cleanup.
+  - Evidence: targeted cleanup left no `tf_typescript` containers or volumes; generated build and dependency directories are ignored.
+- [x] Commit and push the verified TypeScript repository.
+  - Evidence: commit `5ba05e0` is on public `main` at `https://github.com/waggertron/twelve-factor-typescript`.
+- [x] Tag the exact TypeScript release referenced by the entry and confirm the remote tag.
+  - Evidence: annotated tag `v1.0.0` resolves remotely to tag object `a9b36ecd6c27a93e4e8ad83a7b94e54467a51698`.
 
 #### Python reference repository
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 4 are complete, and Wave 5 is in progress. The shared reference application contract is complete, including payloads, lifecycle and idempotency rules, fixtures, local providers, commands, ports, and cleanup ownership. The TypeScript repository is the next implementation checkpoint, followed by Python, Go, cross-repository verification, integrated article sections, and final publication work.
+Waves 0 through 4 are complete, and Wave 5 is in progress. The shared application contract and the public, tagged TypeScript reference repository are complete. Python is the next implementation checkpoint, followed by Go, cross-repository verification, integrated article sections, and final publication work.
