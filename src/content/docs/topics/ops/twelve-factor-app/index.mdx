@@ -5,7 +5,7 @@ category: ops
 tags: [twelve-factor, architecture, deployment, cloud-native, operations]
 status: draft
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-08
 ---
 
 A service runs perfectly on one long-lived server. Its dependencies came from a package installed by hand months ago. Its configuration lives in a file beside the source. User sessions sit in process memory. Startup compiles the application, and logs disappear into a host directory that nobody remembers to collect.
@@ -139,39 +139,63 @@ The detailed sections use the same sequence: original principle, failure prevent
 
 ## Factor VII: Port binding
 
-A network service contains its own listener and exports itself through a configured port. The platform starts the process and routes traffic to it without installing an application-specific server around the code.
+**Original claim:** [Factor VII](https://12factor.net/port-binding) exports an HTTP service by binding to a port. The application includes the server it needs instead of relying on a web server injected into the runtime environment.
 
-Workers and scheduled jobs use different invocation contracts, so port binding should not be stretched into a rule that every process must open a socket. [Compare self-contained HTTP listeners](./examples-factors-05-08/#factor-vii-port-binding).
+**Failure mode:** The service depends on an undeclared host server, assumes one fixed port, or confuses its internal listener with its public URL. The same artifact cannot run twice on one host or move cleanly between a laptop, container, and scheduler.
+
+**Modern reading:** A network process owns a self-contained listener and binds an injected address and port. The platform supplies discovery, public routing, and any edge proxy. Workers, scheduled jobs, message consumers, and function handlers have non-HTTP invocation contracts, so they do not open a port merely to satisfy the factor.
+
+**Verify it:** Start two instances of the same artifact on different ports and route traffic to both. No framework-specific server should be installed on the host. Confirm that web, worker, and admin process types each expose the invocation contract their workload needs. [Compare self-contained HTTP listeners](./examples-factors-05-08/#factor-vii-port-binding).
 
 ## Factor VIII: Concurrency
 
-The process model names distinct workloads and lets the platform scale them independently. More HTTP traffic can add web processes. A deeper queue can add worker processes without coupling the two decisions.
+**Original claim:** [Factor VIII](https://12factor.net/concurrency) scales an application through the process model. Named process types represent different workloads, and the platform changes the number of processes for each type.
 
-Horizontal scaling still needs bounded concurrency, resource limits, and backpressure. Otherwise every process can accept more work than it can finish. [Compare bounded worker process types](./examples-factors-05-08/#factor-viii-concurrency).
+**Failure mode:** One opaque process handles HTTP, scheduled work, and queue consumption. A traffic spike scales unrelated work, while an unbounded worker accepts more jobs than its database, memory, or downstream APIs can sustain.
+
+**Modern reading:** Scale the web and worker fleets independently, then bound concurrency inside each process. Queue depth, processing latency, and resource saturation inform worker replica count. Backpressure protects backing services because horizontal scaling can multiply database connections and outbound requests faster than it improves throughput.
+
+**Verify it:** Increase worker replicas without changing the web fleet. Confirm the queue drains faster, each worker respects its concurrency limit, and total work stays within database and downstream capacity. [Compare bounded worker process types](./examples-factors-05-08/#factor-viii-concurrency).
 
 ## Factor IX: Disposability
 
-Processes start quickly and stop gracefully. A terminating instance stops advertising readiness, rejects new work, drains or safely abandons current work, and exits before the platform's grace period ends.
+**Original claim:** [Factor IX](https://12factor.net/disposability) makes processes easy to start and stop. Startup is fast, termination is graceful, and sudden death does not corrupt the system.
 
-Retries and idempotency complete the lifecycle contract. Shutdown cannot guarantee that every external operation finishes exactly once. [Compare lifecycle handling](./examples-factors-09-12/#factor-ix-disposability).
+**Failure mode:** A process advertises readiness before its dependencies work, continues accepting requests after termination begins, or abandons a job after producing an external effect but before acknowledging it. Slow startup delays recovery, while unsafe retry duplicates business actions.
+
+**Modern reading:** Startup, readiness, liveness, and shutdown are separate contracts. A terminating instance removes readiness, stops new work, drains within a deadline, closes resources, and exits before the platform's grace period. Idempotency and retry safety remain necessary because hard kills bypass graceful shutdown.
+
+**Verify it:** Measure time to readiness. Send termination during an HTTP request and a queued job, then confirm readiness fails first, accepted work finishes or is retried safely, and the process exits within its deadline. Force-kill a worker to test the path that signal handlers cannot protect. [Compare lifecycle handling](./examples-factors-09-12/#factor-ix-disposability).
 
 ## Factor X: Dev/prod parity
 
-The original factor targets gaps in time, people, and tools. Modern teams rarely reproduce an entire production topology on a laptop. They identify the differences that can change behavior and test each contract at the cheapest faithful layer.
+**Original claim:** [Factor X](https://12factor.net/dev-prod-parity) narrows three gaps: the time between writing and deploying code, the people who write and deploy it, and the tools or backing services used in each environment.
 
-Unit tests cover pure behavior. Integration tests exercise the real service type. Staging and production checks cover boundaries that local environments cannot reproduce honestly. [Compare PostgreSQL contract tests](./examples-factors-09-12/#factor-x-devprod-parity).
+**Failure mode:** A change waits weeks for release, passes from developers to a separate operations group without shared ownership, or runs against a substitute whose transaction and query behavior differ from production. The first faithful test happens after deployment.
+
+**Modern reading:** Parity means production-significant contracts match, not that every environment is identical. Unit tests cover pure behavior. Disposable integration environments exercise the real database and queue types. Staging or controlled production checks cover identity, topology, scale, network policy, and failure modes that a laptop cannot reproduce honestly.
+
+**Verify it:** Inventory every deliberate difference across local, CI, staging, and production. Name the behavior it can change, the test layer that covers it, and the owner of that evidence. Track how quickly a merged change reaches production and whether its authors can observe the result. [Compare PostgreSQL contract tests](./examples-factors-09-12/#factor-x-devprod-parity).
 
 ## Factor XI: Logs
 
-The application emits events without owning their routing, retention, or final storage. Standard output and standard error remain the usual container boundary. The platform collects, enriches, filters, and stores the stream.
+**Original claim:** [Factor XI](https://12factor.net/logs) treats logs as event streams. The application writes each event without managing log files, routing, retention, or final storage.
 
-Logs alone do not provide modern observability. Structured events become more useful when release identifiers and trace context connect them to metrics and traces. [Compare structured event pipelines](./examples-factors-09-12/#factor-xi-logs).
+**Failure mode:** A process writes rotating files to its local filesystem, sends directly to one vendor, or emits plain text without service and release identity. Operators enter a dying instance to reconstruct a request and lose the evidence when that instance disappears.
+
+**Modern reading:** Standard output and standard error remain the collection boundary for containers. Structured events carry timestamp, severity, service, release, request, and trace fields. Metrics and traces answer questions that logs cannot, while the platform owns collection, sampling, routing, retention, and access policy. Sensitive values are redacted before emission.
+
+**Verify it:** Submit one failing request and reconstruct its path from the external event stream using release, request, and trace identifiers. Repeat with a synthetic sensitive marker and confirm it never reaches collected output. [Compare structured event pipelines](./examples-factors-09-12/#factor-xi-logs).
 
 ## Factor XII: Admin processes
 
-One-off administration uses the same code, dependencies, configuration model, and release artifact as long-running processes. A migration should not run from an operator's stale checkout or an unrestricted production shell.
+**Original claim:** [Factor XII](https://12factor.net/admin-processes) runs one-off administration from the same codebase, configuration, dependency graph, and release as the application's long-running processes.
 
-Modern platforms can add short-lived authority, timeouts, audit records, and job-level resource limits. [Compare bounded migration commands](./examples-factors-09-12/#factor-xii-admin-processes).
+**Failure mode:** An operator runs a migration from a stale checkout with local tools and broad credentials. The command has no bound, no release identity, and no durable record connecting its actor, target, and result.
+
+**Modern reading:** Package narrow admin commands in the normal artifact and run them as bounded jobs. Give each invocation short-lived identity, least privilege, a timeout, resource limits, concurrency policy, and audit evidence. Restartable migrations are safer than an unrestricted production shell or interactive REPL.
+
+**Verify it:** Run the migration from the production artifact in a non-production environment, interrupt it, and retry it. Record the actor or workload identity, exact command, release digest, target, start and end times, and result. Confirm the admin identity cannot perform unrelated runtime actions. [Compare bounded migration commands](./examples-factors-09-12/#factor-xii-admin-processes).
 
 ## What the factors do not settle
 

@@ -674,60 +674,60 @@ Checkboxes may be marked complete only when their Evidence line points to an art
 
 ### Wave 3: canonical factors VII through XII
 
-- [ ] Teach VII. Port binding with self-contained listeners and non-HTTP invocation contracts.
-  - Evidence: pending.
-- [ ] Teach VIII. Concurrency with process types, horizontal scaling, bounded work, and backpressure.
-  - Evidence: pending.
-- [ ] Teach IX. Disposability with startup, readiness, shutdown, draining, interruption, and retry safety.
-  - Evidence: pending.
-- [ ] Teach X. Dev/prod parity with time, people, and tools, plus risk-based contract parity.
-  - Evidence: pending.
-- [ ] Teach XI. Logs with event streams, stdout collection, structured context, metrics, and traces.
-  - Evidence: pending.
-- [ ] Teach XII. Admin processes with one-off jobs, release parity, bounded authority, and audit evidence.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Port binding example using Fastify and validated `PORT` config.
-  - Evidence: pending.
-- [ ] Add and verify the Python Port binding example using FastAPI and Uvicorn.
-  - Evidence: pending.
-- [ ] Add and verify the Go Port binding example using chi and `http.Server`.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Concurrency example using a BullMQ `Worker` with a bound.
-  - Evidence: pending.
-- [ ] Add and verify the Python Concurrency example using a separately scalable Dramatiq actor.
-  - Evidence: pending.
-- [ ] Add and verify the Go Concurrency example using an Asynq server with a bound.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Disposability example using signal handlers, Fastify close, and BullMQ drain behavior.
-  - Evidence: pending.
-- [ ] Add and verify the Python Disposability example using FastAPI lifespan and explicit resource shutdown.
-  - Evidence: pending.
-- [ ] Add and verify the Go Disposability example using `signal.NotifyContext`, `http.Server.Shutdown`, and worker shutdown.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Dev/prod parity example using Vitest and Testcontainers for Node.js.
-  - Evidence: pending.
-- [ ] Add and verify the Python Dev/prod parity example using pytest and Testcontainers for Python.
-  - Evidence: pending.
-- [ ] Add and verify the Go Dev/prod parity example using Go `testing` and Testcontainers for Go.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Logs example using Fastify's Pino logger and OpenTelemetry trace context.
-  - Evidence: pending.
-- [ ] Add and verify the Python Logs example using structlog and OpenTelemetry trace context.
-  - Evidence: pending.
-- [ ] Add and verify the Go Logs example using `slog` and OpenTelemetry trace context.
-  - Evidence: pending.
-- [ ] Add and verify the TypeScript Admin processes example using Commander and the shared database module.
-  - Evidence: pending.
-- [ ] Add and verify the Python Admin processes example using Typer and the shared settings and database modules.
-  - Evidence: pending.
-- [ ] Add and verify the Go Admin processes example using Cobra and the shared config and database packages.
-  - Evidence: pending.
-- [ ] Give every factor an original claim, failure mode, modern reading, and verification method.
-  - Evidence: pending.
-- [ ] Run `npm run build` for the Wave 3 batch.
-  - Evidence: pending.
-- [ ] Confirm Wave 3 is complete.
-  - Evidence: pending until every Wave 3 child item is checked.
+- [x] Teach VII. Port binding with self-contained listeners and non-HTTP invocation contracts.
+  - Evidence: the hub's `Factor VII: Port binding` section separates the application listener, platform routing, and non-HTTP worker, job, consumer, and function contracts.
+- [x] Teach VIII. Concurrency with process types, horizontal scaling, bounded work, and backpressure.
+  - Evidence: the hub's `Factor VIII: Concurrency` section covers independent process scaling, per-process bounds, scaling signals, downstream capacity, and backpressure.
+- [x] Teach IX. Disposability with startup, readiness, shutdown, draining, interruption, and retry safety.
+  - Evidence: the hub's `Factor IX: Disposability` section distinguishes startup, readiness, liveness, graceful shutdown, hard kills, deadlines, idempotency, and retry checks.
+- [x] Teach X. Dev/prod parity with time, people, and tools, plus risk-based contract parity.
+  - Evidence: the hub's `Factor X: Dev/prod parity` section preserves the original three gaps and maps deliberate environment differences to unit, integration, staging, or production evidence.
+- [x] Teach XI. Logs with event streams, stdout collection, structured context, metrics, and traces.
+  - Evidence: the hub's `Factor XI: Logs` section covers event streams, stdout and stderr collection, structured fields, redaction, trace correlation, metrics, and platform-owned retention.
+- [x] Teach XII. Admin processes with one-off jobs, release parity, bounded authority, and audit evidence.
+  - Evidence: the hub's `Factor XII: Admin processes` section covers shared artifacts, narrow commands, short-lived authority, least privilege, timeouts, retry safety, and attributable results.
+- [x] Add and verify the TypeScript Port binding example using Fastify and validated `PORT` config.
+  - Evidence: `examples-factors-05-08.mdx` starts Fastify on `0.0.0.0` and `config.PORT`; strict TypeScript compilation passed against Fastify 5.12.3.
+- [x] Add and verify the Python Port binding example using FastAPI and Uvicorn.
+  - Evidence: the example starts the FastAPI import path through Uvicorn with validated settings; Python compilation and module imports passed against FastAPI 0.141.1 and Uvicorn 0.52.4.
+- [x] Add and verify the Go Port binding example using chi and `http.Server`.
+  - Evidence: the example serves a chi router through `http.Server` and returns listener failures; `go test ./...` compiled it against chi/v5 5.3.2.
+- [x] Add and verify the TypeScript Concurrency example using a BullMQ `Worker` with a bound.
+  - Evidence: the example declares worker concurrency and a rate limiter around an injected Redis connection; strict compilation passed against BullMQ 6.3.4 and ioredis 6.0.0.
+- [x] Add and verify the Python Concurrency example using a separately scalable Dramatiq actor.
+  - Evidence: the example defines retry and execution limits on a Dramatiq actor plus explicit process and thread counts in the worker command; compilation and imports passed against Dramatiq 2.2.1.
+- [x] Add and verify the Go Concurrency example using an Asynq server with a bound.
+  - Evidence: the example supplies a finite concurrency value and weighted queues to Asynq; `go test ./...` passed against Asynq 0.26.0.
+- [x] Add and verify the TypeScript Disposability example using signal handlers, Fastify close, and BullMQ drain behavior.
+  - Evidence: the example drops readiness on `SIGTERM` or `SIGINT`, closes Fastify, waits for active BullMQ jobs, closes clients, and enforces a deadline; strict compilation passed.
+- [x] Add and verify the Python Disposability example using FastAPI lifespan and explicit resource shutdown.
+  - Evidence: the example keeps readiness false until PostgreSQL opens, then removes readiness before closing the Dramatiq broker and Psycopg pool; compilation and imports passed.
+- [x] Add and verify the Go Disposability example using `signal.NotifyContext`, `http.Server.Shutdown`, and worker shutdown.
+  - Evidence: the example connects one signal context to readiness removal, Asynq shutdown, and bounded HTTP shutdown; Go tests verified both ready and draining responses.
+- [x] Add and verify the TypeScript Dev/prod parity example using Vitest and Testcontainers for Node.js.
+  - Evidence: the isolated Vitest test passed against a disposable PostgreSQL 18 container using `@testcontainers/postgresql` 12.1.0 and the production `pg` client.
+- [x] Add and verify the Python Dev/prod parity example using pytest and Testcontainers for Python.
+  - Evidence: the isolated pytest test passed against a disposable PostgreSQL 18 container using the current `testcontainers.community.postgres` import, Testcontainers 4.15.0, and Psycopg 3.3.5.
+- [x] Add and verify the Go Dev/prod parity example using Go `testing` and Testcontainers for Go.
+  - Evidence: the isolated Go test passed against a disposable PostgreSQL 18 container using the PostgreSQL Testcontainers module 0.44.0 and pgx/v5 5.11.0.
+- [x] Add and verify the TypeScript Logs example using Fastify's Pino logger and OpenTelemetry trace context.
+  - Evidence: the example emits structured service, release, request, trace, and order fields through `request.log`; strict compilation passed against OpenTelemetry API 1.9.1 and Fastify's Pino-backed logger.
+- [x] Add and verify the Python Logs example using structlog and OpenTelemetry trace context.
+  - Evidence: the example configures JSON rendering and adds a valid active trace identifier; compilation and imports passed against structlog 26.1.0 and OpenTelemetry API 1.44.0.
+- [x] Add and verify the Go Logs example using `slog` and OpenTelemetry trace context.
+  - Evidence: the example emits JSON to stdout through `slog` and adds valid OpenTelemetry span context; `go test ./...` passed against OpenTelemetry trace 1.46.0.
+- [x] Add and verify the TypeScript Admin processes example using Commander and the shared database module.
+  - Evidence: the example parses a bounded migration target and reuses the normal config, database, and migration modules; strict compilation passed against Commander 15.0.0.
+- [x] Add and verify the Python Admin processes example using Typer and the shared settings and database modules.
+  - Evidence: the example exposes one migration command through Typer and reuses the installed settings, connection, and migration modules; compilation and imports passed against Typer 0.27.2.
+- [x] Add and verify the Go Admin processes example using Cobra and the shared config and database packages.
+  - Evidence: the example adds a migration subcommand to the normal binary and reuses config, pgxpool, and migration packages; `go test ./...` passed against Cobra 1.10.2.
+- [x] Give every factor an original claim, failure mode, modern reading, and verification method.
+  - Evidence: Factors VII through XII each contain labeled `Original claim`, `Failure mode`, `Modern reading`, and `Verify it` passages; source inspection found all six exact factor headings in both the hub and matching example pages.
+- [x] Run `npm run build` for the Wave 3 batch.
+  - Evidence: the final Wave 3 build passed with the secret scan, 0 Astro errors, 0 warnings, 0 hints, and 800 generated pages.
+- [x] Confirm Wave 3 is complete.
+  - Evidence: every Wave 3 child item is checked with source review, current-library compilation or import, unit or integration tests, site build, or link-validation evidence. Go commands used task-specific caches after the Codex sandbox denied writes to the host cache; no repository workaround was added.
 
 ### Wave 4: extensions, limits, and current judgment
 
@@ -1139,4 +1139,4 @@ Proposed repositories:
 
 ## Current position
 
-Waves 0 through 2 are complete. Wave 3 is the next execution wave. The hub and three example-page foundations now cover the first six factors with verified language examples, but the runnable reference repositories and final publication work remain pending.
+Waves 0 through 3 are complete. Wave 4 is the next execution wave. The hub and three example pages now cover all twelve factors with verified language examples, but the modernization analysis, runnable reference repositories, and final publication work remain pending.

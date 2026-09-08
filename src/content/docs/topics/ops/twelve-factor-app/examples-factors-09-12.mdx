@@ -5,7 +5,7 @@ parent: twelve-factor-app
 tags: [twelve-factor, typescript, python, go, observability]
 status: draft
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-08
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,13 +18,147 @@ The web process starts quickly, advertises readiness only after its dependencies
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Node.js signal handlers change readiness, close Fastify, and drain BullMQ workers with bounded deadlines.
+    Node signal handlers remove readiness before Fastify stops accepting requests. BullMQ waits for active work, then shared database and Redis clients close inside the platform's deadline.
+
+```typescript
+import type { FastifyInstance } from "fastify";
+import type { Worker } from "bullmq";
+import type { Redis } from "ioredis";
+import type { Pool } from "pg";
+
+export function installLifecycle(
+  app: FastifyInstance,
+  worker: Worker,
+  database: Pool,
+  redis: Redis,
+  shutdownTimeoutMs: number,
+): void {
+  let ready = false;
+  app.get("/ready", async (_request, reply) =>
+    ready ? { status: "ready" } : reply.code(503).send({ status: "draining" }),
+  );
+
+  app.addHook("onReady", async () => {
+    ready = true;
+  });
+
+  const shutdown = async (signal: NodeJS.Signals): Promise<void> => {
+    ready = false;
+    const deadline = setTimeout(() => {
+      app.log.error({ signal }, "graceful shutdown timed out");
+      process.exit(1);
+    }, shutdownTimeoutMs);
+    deadline.unref();
+
+    await app.close();
+    await worker.close(false);
+    await database.end();
+    await redis.quit();
+    clearTimeout(deadline);
+  };
+
+  process.once("SIGTERM", () => void shutdown("SIGTERM"));
+  process.once("SIGINT", () => void shutdown("SIGINT"));
+}
+```
   </TabItem>
   <TabItem label="Python">
-    FastAPI lifespan state controls readiness. Uvicorn and Dramatiq shutdown hooks stop new work before closing database resources.
+    FastAPI lifespan keeps readiness false until PostgreSQL opens. Shutdown removes readiness before closing the pool and broker. Uvicorn owns signal delivery and stops accepting HTTP work.
+
+```python
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
+import dramatiq
+from dramatiq.brokers.redis import RedisBroker
+from fastapi import FastAPI, Response, status
+from psycopg_pool import AsyncConnectionPool
+
+from order_service.config import settings
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    app.state.ready = False
+    database = AsyncConnectionPool(str(settings.database_url), open=False)
+    broker = RedisBroker(url=str(settings.redis_url))
+    await database.open(wait=True)
+    dramatiq.set_broker(broker)
+    app.state.database = database
+    app.state.ready = True
+    try:
+        yield
+    finally:
+        app.state.ready = False
+        broker.close()
+        await database.close()
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/ready")
+async def readiness(response: Response) -> dict[str, str]:
+    if not app.state.ready:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {"status": "draining"}
+    return {"status": "ready"}
+```
   </TabItem>
   <TabItem label="Go">
-    A signal-derived context changes readiness, calls `http.Server.Shutdown`, and closes the Asynq worker and `pgxpool` within a deadline.
+    `signal.NotifyContext` begins one shutdown path. Readiness drops first, Asynq stops taking jobs, and `http.Server.Shutdown` drains requests within a fixed timeout.
+
+```go
+package runtime
+
+import (
+    "context"
+    "net/http"
+    "os"
+    "os/signal"
+    "sync/atomic"
+    "syscall"
+    "time"
+
+    "github.com/hibiken/asynq"
+)
+
+func Run(httpServer *http.Server, worker *asynq.Server, mux asynq.Handler) error {
+    ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+    defer stop()
+
+    var ready atomic.Bool
+    ready.Store(true)
+    httpServer.Handler = readinessHandler(&ready, httpServer.Handler)
+
+    if err := worker.Start(mux); err != nil {
+        return err
+    }
+    go func() { _ = httpServer.ListenAndServe() }()
+
+    <-ctx.Done()
+    ready.Store(false)
+    worker.Shutdown()
+
+    shutdownContext, cancel := context.WithTimeout(context.Background(), 25*time.Second)
+    defer cancel()
+    return httpServer.Shutdown(shutdownContext)
+}
+
+func readinessHandler(ready *atomic.Bool, next http.Handler) http.Handler {
+    return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+        if request.URL.Path == "/ready" {
+            if !ready.Load() {
+                http.Error(writer, "draining", http.StatusServiceUnavailable)
+                return
+            }
+            writer.WriteHeader(http.StatusOK)
+            return
+        }
+        next.ServeHTTP(writer, request)
+    })
+}
+```
   </TabItem>
 </Tabs>
 
@@ -36,13 +170,128 @@ Parity focuses on production-significant behavior. The local and CI paths use th
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Vitest and Testcontainers for Node.js exercise PostgreSQL and Redis contracts with the same migrations and client libraries used by the application.
+    Vitest starts a disposable PostgreSQL service through Testcontainers. The test uses the production `pg` client and migrations, so transaction and query behavior are not replaced by an in-memory fake.
+
+```typescript
+import {
+  PostgreSqlContainer,
+  type StartedPostgreSqlContainer,
+} from "@testcontainers/postgresql";
+import { Pool } from "pg";
+import { afterAll, beforeAll, expect, test } from "vitest";
+
+let container: StartedPostgreSqlContainer;
+let database: Pool;
+
+beforeAll(async () => {
+  container = await new PostgreSqlContainer("postgres:18-alpine").start();
+  database = new Pool({ connectionString: container.getConnectionUri() });
+  await database.query("CREATE TABLE orders (id text PRIMARY KEY, status text NOT NULL)");
+}, 60_000);
+
+afterAll(async () => {
+  await database.end();
+  await container.stop();
+});
+
+test("persists an order through PostgreSQL", async () => {
+  await database.query("INSERT INTO orders VALUES ($1, $2)", ["order-1", "accepted"]);
+  const result = await database.query("SELECT status FROM orders WHERE id = $1", ["order-1"]);
+  expect(result.rows[0]).toEqual({ status: "accepted" });
+});
+```
   </TabItem>
   <TabItem label="Python">
-    pytest and Testcontainers for Python start disposable PostgreSQL and Redis services for repository and worker integration tests.
+    pytest starts the same PostgreSQL service type used in production. Psycopg executes the schema and assertions through its normal wire protocol.
+
+```python
+from collections.abc import Iterator
+
+import psycopg
+import pytest
+from psycopg import Connection
+from testcontainers.community.postgres import PostgresContainer
+
+
+@pytest.fixture
+def database() -> Iterator[Connection[tuple[object, ...]]]:
+    with PostgresContainer("postgres:18-alpine") as postgres:
+        connection_url = postgres.get_connection_url().replace(
+            "postgresql+psycopg2", "postgresql"
+        )
+        with psycopg.connect(connection_url) as connection:
+            connection.execute(
+                "CREATE TABLE orders (id text PRIMARY KEY, status text NOT NULL)"
+            )
+            yield connection
+
+
+def test_persists_order(database: Connection[tuple[object, ...]]) -> None:
+    database.execute("INSERT INTO orders VALUES (%s, %s)", ("order-1", "accepted"))
+    row = database.execute(
+        "SELECT status FROM orders WHERE id = %s", ("order-1",)
+    ).fetchone()
+    assert row == ("accepted",)
+```
   </TabItem>
   <TabItem label="Go">
-    Go tests and Testcontainers for Go run schema, repository, and queue contracts against disposable service containers.
+    Go's testing package starts PostgreSQL through the Testcontainers module. pgx applies the schema and exercises the same protocol as the application.
+
+```go
+package repository_test
+
+import (
+    "context"
+    "testing"
+
+    "github.com/jackc/pgx/v5"
+    "github.com/testcontainers/testcontainers-go/modules/postgres"
+)
+
+func TestPersistsOrder(t *testing.T) {
+    ctx := context.Background()
+    database, err := postgres.Run(ctx, "postgres:18-alpine",
+        postgres.WithDatabase("orders"),
+        postgres.WithUsername("orders"),
+        postgres.WithPassword("orders"),
+        postgres.BasicWaitStrategies(),
+    )
+    if err != nil {
+        t.Fatal(err)
+    }
+    t.Cleanup(func() { _ = database.Terminate(ctx) })
+
+    connectionString, err := database.ConnectionString(ctx, "sslmode=disable")
+    if err != nil {
+        t.Fatal(err)
+    }
+    connection, err := pgx.Connect(ctx, connectionString)
+    if err != nil {
+        t.Fatal(err)
+    }
+    t.Cleanup(func() { _ = connection.Close(ctx) })
+
+    _, err = connection.Exec(ctx,
+        "CREATE TABLE orders (id text PRIMARY KEY, status text NOT NULL)")
+    if err != nil {
+        t.Fatal(err)
+    }
+    _, err = connection.Exec(ctx,
+        "INSERT INTO orders VALUES ($1, $2)", "order-1", "accepted")
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    var status string
+    if err := connection.QueryRow(ctx,
+        "SELECT status FROM orders WHERE id = $1", "order-1").Scan(&status); err != nil {
+        t.Fatal(err)
+    }
+    if status != "accepted" {
+        t.Fatalf("status = %q", status)
+    }
+}
+```
   </TabItem>
 </Tabs>
 
@@ -54,13 +303,93 @@ Application processes write structured events to standard output and standard er
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Fastify's Pino logger emits JSON with service, release, request, and trace fields. OpenTelemetry supplies the active trace context.
+    Fastify exposes its Pino logger on each request. The active OpenTelemetry span supplies trace identity without changing where the event stream is written.
+
+```typescript
+import { context, trace } from "@opentelemetry/api";
+import type { FastifyRequest } from "fastify";
+
+export function logOrderAccepted(
+  request: FastifyRequest,
+  releaseId: string,
+  orderId: string,
+): void {
+  const spanContext = trace.getSpan(context.active())?.spanContext();
+  request.log.info(
+    {
+      event: "order.accepted",
+      service: "order-service",
+      release_id: releaseId,
+      request_id: request.id,
+      trace_id: spanContext?.traceId,
+      order_id: orderId,
+    },
+    "order accepted",
+  );
+}
+```
   </TabItem>
   <TabItem label="Python">
-    structlog emits JSON events enriched with release and request context. OpenTelemetry correlates spans without changing the collection boundary.
+    structlog renders JSON to standard output. OpenTelemetry contributes the current trace identifier when a valid span is active.
+
+```python
+import structlog
+from opentelemetry import trace
+
+structlog.configure(
+    processors=[
+        structlog.processors.TimeStamper(fmt="iso", utc=True),
+        structlog.processors.add_log_level,
+        structlog.processors.JSONRenderer(),
+    ]
+)
+logger = structlog.get_logger("order-service")
+
+
+def log_order_accepted(release_id: str, request_id: str, order_id: str) -> None:
+    span_context = trace.get_current_span().get_span_context()
+    trace_id = format(span_context.trace_id, "032x") if span_context.is_valid else None
+    logger.info(
+        "order.accepted",
+        service="order-service",
+        release_id=release_id,
+        request_id=request_id,
+        trace_id=trace_id,
+        order_id=order_id,
+    )
+```
   </TabItem>
   <TabItem label="Go">
-    `slog` writes structured JSON to standard output. OpenTelemetry span identifiers and release metadata travel with relevant events.
+    `slog` writes JSON to standard output. OpenTelemetry extracts trace context from the request context and adds it to the same event.
+
+```go
+package telemetry
+
+import (
+    "context"
+    "log/slog"
+    "os"
+
+    "go.opentelemetry.io/otel/trace"
+)
+
+var logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
+func OrderAccepted(ctx context.Context, releaseID, requestID, orderID string) {
+    attributes := []any{
+        "event", "order.accepted",
+        "service", "order-service",
+        "release_id", releaseID,
+        "request_id", requestID,
+        "order_id", orderID,
+    }
+    spanContext := trace.SpanContextFromContext(ctx)
+    if spanContext.IsValid() {
+        attributes = append(attributes, "trace_id", spanContext.TraceID().String())
+    }
+    logger.InfoContext(ctx, "order accepted", attributes...)
+}
+```
   </TabItem>
 </Tabs>
 
@@ -72,13 +401,94 @@ The migration command uses the same application packages, dependency graph, conf
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Commander selects the migration operation and calls the same Zod config and PostgreSQL modules packaged for the long-running processes.
+    Commander parses a narrow migration command. The action reuses the validated config, PostgreSQL client, and migration function shipped with web and worker processes.
+
+```typescript
+import { Command } from "commander";
+
+import { config } from "./config.js";
+import { openDatabase } from "./resources.js";
+import { runMigrations } from "./migrations.js";
+
+const program = new Command();
+program
+  .name("order-admin")
+  .command("migrate")
+  .requiredOption("--to <version>")
+  .action(async ({ to }: { to: string }) => {
+    const database = openDatabase(config);
+    try {
+      await runMigrations(database, to);
+    } finally {
+      await database.end();
+    }
+  });
+
+await program.parseAsync();
+```
   </TabItem>
   <TabItem label="Python">
-    Typer exposes the migration command from the installed application package and reuses Pydantic Settings and Psycopg setup.
+    Typer exposes one versioned operation. The command imports the same settings, connection factory, and migration code as the rest of the installed package.
+
+```python
+from typing import Annotated
+
+import typer
+
+from order_service.config import settings
+from order_service.migrations import run_migrations
+from order_service.resources import open_database
+
+app = typer.Typer(no_args_is_help=True)
+
+
+@app.command()
+def migrate(
+    target: Annotated[str, typer.Option("--to", help="Target schema version")],
+) -> None:
+    with open_database(settings) as database:
+        run_migrations(database, target)
+
+
+if __name__ == "__main__":
+    app()
+```
   </TabItem>
   <TabItem label="Go">
-    Cobra exposes a migration subcommand from the same binary and reuses the normal config and `pgxpool` packages.
+    Cobra adds a migration subcommand to the normal binary. It loads the shared config and `pgxpool` resource, then delegates schema work to the versioned migration package.
+
+```go
+package admin
+
+import (
+    "github.com/spf13/cobra"
+
+    "order-service/internal/config"
+    "order-service/internal/migrations"
+    "order-service/internal/resources"
+)
+
+func NewMigrateCommand() *cobra.Command {
+    var target string
+    command := &cobra.Command{
+        Use: "migrate",
+        RunE: func(command *cobra.Command, _ []string) error {
+            cfg, err := config.Load()
+            if err != nil {
+                return err
+            }
+            database, err := resources.OpenDatabase(command.Context(), cfg)
+            if err != nil {
+                return err
+            }
+            defer database.Close()
+            return migrations.Run(command.Context(), database, target)
+        },
+    }
+    command.Flags().StringVar(&target, "to", "latest", "target schema version")
+    return command
+}
+```
   </TabItem>
 </Tabs>
 

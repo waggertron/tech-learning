@@ -5,7 +5,7 @@ parent: twelve-factor-app
 tags: [twelve-factor, typescript, python, go, deployment]
 status: draft
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-08
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -228,13 +228,75 @@ The web process owns its HTTP listener and binds the configured port. The platfo
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    Fastify listens on the validated `PORT` value and all interfaces inside the container. The process exits if binding fails.
+    Fastify owns the HTTP server and listens on the validated port. Rejected startup propagates to the process entry point, so a bind failure cannot look ready.
+
+```typescript
+import Fastify from "fastify";
+
+import { config } from "./config.js";
+import { registerOrderRoutes } from "./orders.js";
+import { database } from "./resources.js";
+
+const app = Fastify({ logger: true });
+registerOrderRoutes(app, database);
+
+app.get("/live", async () => ({ status: "alive" }));
+
+await app.listen({
+  host: "0.0.0.0",
+  port: config.PORT,
+});
+```
   </TabItem>
   <TabItem label="Python">
-    Uvicorn starts the FastAPI application on the validated host and port supplied by the release command.
+    Uvicorn serves the FastAPI application directly. The entry point receives its host and port from validated settings rather than treating the public URL as a listener address.
+
+```python
+import uvicorn
+
+from order_service.config import settings
+
+
+def main() -> None:
+    uvicorn.run(
+        "order_service.web:app",
+        host="0.0.0.0",
+        port=settings.port,
+        access_log=False,
+    )
+```
   </TabItem>
   <TabItem label="Go">
-    `net/http` serves the chi router on the configured address. Startup reports a binding error and exits instead of appearing ready.
+    `http.Server` owns the listener and serves a chi router. `ListenAndServe` returns bind and runtime failures to the command entry point.
+
+```go
+package web
+
+import (
+    "errors"
+    "fmt"
+    "net/http"
+    "strconv"
+
+    "github.com/go-chi/chi/v5"
+
+    "order-service/internal/config"
+)
+
+func Listen(cfg config.Config, orders http.HandlerFunc) error {
+    router := chi.NewRouter()
+    router.Get("/orders/{id}", orders)
+
+    server := &http.Server{
+        Addr:    ":" + strconv.Itoa(cfg.Port),
+        Handler: router,
+    }
+    if err := server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+        return fmt.Errorf("serve HTTP: %w", err)
+    }
+    return nil
+}
+```
   </TabItem>
 </Tabs>
 
@@ -246,13 +308,79 @@ Web and worker fleets scale as separate process types. Each worker also limits i
 
 <Tabs syncKey="twelve-factor-language">
   <TabItem label="TypeScript">
-    BullMQ sets explicit worker concurrency. Queue depth and processing latency guide worker replica count independently from Fastify replicas.
+    BullMQ caps active jobs in each worker process. The platform can add worker replicas independently, while the per-process bound protects database and API capacity.
+
+```typescript
+import { Worker } from "bullmq";
+import { Redis } from "ioredis";
+
+import { config } from "./config.js";
+import { fulfillOrder } from "./order-service.js";
+
+type OrderJob = { orderId: string };
+
+const connection = new Redis(config.REDIS_URL, {
+  maxRetriesPerRequest: null,
+});
+
+export const worker = new Worker<OrderJob>(
+  "orders",
+  async (job) => fulfillOrder(job.data.orderId),
+  {
+    connection,
+    concurrency: config.WORKER_CONCURRENCY,
+    limiter: { max: 100, duration: 1_000 },
+  },
+);
+```
   </TabItem>
   <TabItem label="Python">
-    Dramatiq worker processes and threads have declared bounds. Web scaling remains a separate Uvicorn deployment decision.
+    The Dramatiq actor defines retry and execution limits. The worker command fixes the process and thread counts, which gives each replica a known concurrency budget.
+
+```python
+import asyncio
+
+import dramatiq
+
+from order_service.orders import fulfill_order
+
+
+@dramatiq.actor(queue_name="orders", max_retries=8, time_limit=30_000)
+def fulfill_order_job(order_id: str) -> None:
+    asyncio.run(fulfill_order(order_id))
+```
+
+```bash
+dramatiq order_service.worker --processes 2 --threads 4
+```
   </TabItem>
   <TabItem label="Go">
-    Asynq configures a finite concurrency limit. HTTP and task process counts change independently while sharing the same application release.
+    Asynq gives the worker process a fixed concurrency and weighted queues. Adding replicas increases capacity in explicit increments instead of opening an unbounded goroutine path.
+
+```go
+package worker
+
+import (
+    "github.com/hibiken/asynq"
+
+    "order-service/internal/config"
+)
+
+func Run(cfg config.Config, handler asynq.Handler) error {
+    redis, err := asynq.ParseRedisURI(cfg.RedisURL)
+    if err != nil {
+        return err
+    }
+    server := asynq.NewServer(redis, asynq.Config{
+        Concurrency: cfg.WorkerConcurrency,
+        Queues: map[string]int{
+            "critical": 3,
+            "default":  1,
+        },
+    })
+    return server.Run(handler)
+}
+```
   </TabItem>
 </Tabs>
 
