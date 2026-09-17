@@ -21,8 +21,7 @@ import approach2GoCode from './518-coin-change-ii-approach2.go?raw';
 import approach3PyCode from './518-coin-change-ii-approach3.py?raw';
 import approach3TsCode from './518-coin-change-ii-approach3.ts?raw';
 import approach3GoCode from './518-coin-change-ii-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './518-coin-change-ii.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './518-coin-change-ii-approach1.swift?raw';
 import approach2SwiftCode from './518-coin-change-ii-approach2.swift?raw';
 import approach3SwiftCode from './518-coin-change-ii-approach3.swift?raw';
@@ -45,9 +44,6 @@ LeetCode 518 · [Link](https://leetcode.com/problems/coin-change-ii/) · *Medium
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="coin-change-ii-ts" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="518-coin-change-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -81,7 +77,7 @@ function change(amount: number, coins: number[]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="518-coin-change-ii-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -169,7 +165,7 @@ Each unique `(i, remaining)` pair is computed once. There are `n * (A+1)` such p
   </TabItem>
 
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="518-coin-change-ii-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -238,7 +234,7 @@ With coin-outside, each coin is "introduced" once; by the time the inner loop fi
   </TabItem>
 
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="518-coin-change-ii-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

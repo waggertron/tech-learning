@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './160-intersection-of-two-linked-lists.py?raw';
 import practiceCodeTs from './160-intersection-of-two-linked-lists.ts?raw';
 import practiceCodeGo from './160-intersection-of-two-linked-lists.go?raw';
-import practiceCodeSwift from './160-intersection-of-two-linked-lists.swift?raw';
 import approach1SwiftCode from './160-intersection-of-two-linked-lists-approach1.swift?raw';
 import approach2SwiftCode from './160-intersection-of-two-linked-lists-approach2.swift?raw';
 import approach2PyCode from './160-intersection-of-two-linked-lists-approach2.py?raw';
@@ -44,9 +43,6 @@ LeetCode 160 · [Link](https://leetcode.com/problems/intersection-of-two-linked-
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="intersection-of-two-linked-lists-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="160-intersection-of-two-linked-lists-swift" />
   </TabItem>
 </Tabs>
 
@@ -92,7 +88,7 @@ function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): Li
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="160-intersection-of-two-linked-lists-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -144,7 +140,7 @@ function getIntersectionNode(headA: ListNode | null, headB: ListNode | null): Li
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="160-intersection-of-two-linked-lists-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -270,7 +266,6 @@ console.log("all tests pass");
 ```
 </TabItem>
 </Tabs>
-
 
 ## Related topics
 

@@ -18,11 +18,6 @@ import practiceCodeGo from './078-subsets.go?raw';
 import approach3PyCode from './078-subsets-approach3.py?raw';
 import approach3TsCode from './078-subsets-approach3.ts?raw';
 import approach3GoCode from './078-subsets-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './078-subsets.swift?raw';
-import approach1SwiftCode from './078-subsets-approach1.swift?raw';
-import approach2SwiftCode from './078-subsets-approach2.swift?raw';
-import approach3SwiftCode from './078-subsets-approach3.swift?raw';
 
 ## Problem
 
@@ -45,9 +40,6 @@ LeetCode 78 · [Link](https://leetcode.com/problems/subsets/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="subsets-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="078-subsets-swift" />
   </TabItem>
 </Tabs>
 
@@ -80,7 +72,6 @@ def subsets(nums):
 
 Simple and fast for small n. Struggles past n ≈ 20.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -97,8 +88,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="078-subsets-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -131,7 +120,6 @@ At step i, `result` has 2^i entries and we copy each to produce 2^i new ones. To
 
 Elegant, especially in Python. Slightly more allocation than the backtracking version.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -148,8 +136,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="078-subsets-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -265,7 +251,6 @@ We mutate `path` in place across recursive calls. When we record a subset, we ne
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -282,8 +267,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="078-subsets-approach3-swift" />
 </TabItem>
 </Tabs>
 

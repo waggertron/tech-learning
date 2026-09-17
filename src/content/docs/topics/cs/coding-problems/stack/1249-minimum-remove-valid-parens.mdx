@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './1249-minimum-remove-valid-parens.py?raw';
 import practiceCodeTs from './1249-minimum-remove-valid-parens.ts?raw';
 import practiceCodeGo from './1249-minimum-remove-valid-parens.go?raw';
-import practiceCodeSwift from './1249-minimum-remove-valid-parens.swift?raw';
 import approach1SwiftCode from './1249-minimum-remove-valid-parens-approach1.swift?raw';
 import approach2PyCode from './1249-minimum-remove-valid-parens-approach2.py?raw';
 import approach2TsCode from './1249-minimum-remove-valid-parens-approach2.ts?raw';
@@ -47,9 +46,6 @@ LeetCode 1249 · [Link](https://leetcode.com/problems/minimum-remove-to-make-val
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="minimum-remove-valid-parens-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="1249-minimum-remove-valid-parens-swift" />
   </TabItem>
 </Tabs>
 
@@ -144,7 +140,7 @@ func minRemoveToMakeValid(s string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="1249-minimum-remove-valid-parens-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -166,9 +162,6 @@ func minRemoveToMakeValid(s string) string {
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="minimum-remove-valid-parens-approach1-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="minimum-remove-valid-parens-approach2-py" />
   </TabItem>
@@ -220,7 +213,6 @@ The unmatched `')'` are identified immediately (no stack to pop). But unmatched 
 - Unmatched `')'` (no opener on the stack) are caught in pass 1 immediately. Unmatched `'('` (stack still non-empty after pass 1) are caught by draining the stack into the remove set.
 - Using a set for `remove` gives $O(1)$ lookup in pass 2.
 - Any valid answer is accepted, so the two-pass approach (remove minimum, keep order) always produces one correct answer.
-
 
 ## Related topics
 

@@ -21,8 +21,7 @@ import approach2GoCode from './115-distinct-subsequences-approach2.go?raw';
 import approach3PyCode from './115-distinct-subsequences-approach3.py?raw';
 import approach3TsCode from './115-distinct-subsequences-approach3.ts?raw';
 import approach3GoCode from './115-distinct-subsequences-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './115-distinct-subsequences.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './115-distinct-subsequences-approach1.swift?raw';
 import approach2SwiftCode from './115-distinct-subsequences-approach2.swift?raw';
 import approach3SwiftCode from './115-distinct-subsequences-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 115 · [Link](https://leetcode.com/problems/distinct-subsequences/) · 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="distinct-subsequences-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="115-distinct-subsequences-swift" />
   </TabItem>
 </Tabs>
 
@@ -109,7 +105,7 @@ func numDistinct(s string, t string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="115-distinct-subsequences-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -201,7 +197,7 @@ Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pair
     <GoRepl code={approach2GoCode} id="distinct-subsequences-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="115-distinct-subsequences-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -286,7 +282,7 @@ The right-to-left inner loop is critical: it prevents an `s[i]` character from b
     <GoRepl code={approach3GoCode} id="distinct-subsequences-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="115-distinct-subsequences-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

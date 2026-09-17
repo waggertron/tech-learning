@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './021-merge-two-sorted-lists.py?raw';
 import practiceCodeTs from './021-merge-two-sorted-lists.ts?raw';
 import practiceCodeGo from './021-merge-two-sorted-lists.go?raw';
-import practiceCodeSwift from './021-merge-two-sorted-lists.swift?raw';
 import approach1SwiftCode from './021-merge-two-sorted-lists-approach1.swift?raw';
 import approach2SwiftCode from './021-merge-two-sorted-lists-approach2.swift?raw';
 import approach3SwiftCode from './021-merge-two-sorted-lists-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 21 · [Link](https://leetcode.com/problems/merge-two-sorted-lists/) · 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="merge-two-sorted-lists-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="021-merge-two-sorted-lists-swift" />
   </TabItem>
 </Tabs>
 
@@ -137,7 +133,7 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="021-merge-two-sorted-lists-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -229,7 +225,7 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="021-merge-two-sorted-lists-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -317,7 +313,7 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="021-merge-two-sorted-lists-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

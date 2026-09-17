@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './695-max-area-of-island.py?raw';
 import practiceCodeTs from './695-max-area-of-island.ts?raw';
 import practiceCodeGo from './695-max-area-of-island.go?raw';
-import practiceCodeSwift from './695-max-area-of-island.swift?raw';
 import approach1SwiftCode from './695-max-area-of-island-approach1.swift?raw';
 import approach2SwiftCode from './695-max-area-of-island-approach2.swift?raw';
 import approach2PyCode from './695-max-area-of-island-approach2.py?raw';
@@ -44,9 +43,6 @@ LeetCode 695 · [Link](https://leetcode.com/problems/max-area-of-island/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="max-area-of-island-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="695-max-area-of-island-swift" />
   </TabItem>
 </Tabs>
 
@@ -99,7 +95,7 @@ function maxAreaOfIsland(grid: number[][]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="695-max-area-of-island-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -188,7 +184,7 @@ function maxAreaOfIsland(grid: number[][]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="695-max-area-of-island-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -246,7 +242,6 @@ def max_area_of_island(grid):
                 best = max(best, dfs(r, c))
     return best
 
-
 def _run_tests():
     # Example from problem statement: largest island has area 6
     assert max_area_of_island([
@@ -282,7 +277,6 @@ def _run_tests():
     ]) == 4
 
     print("all tests pass")
-
 
 if __name__ == "__main__":
     _run_tests()

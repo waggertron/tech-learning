@@ -21,8 +21,7 @@ import approach2GoCode from './787-cheapest-flights-within-k-stops-approach2.go?
 import approach3PyCode from './787-cheapest-flights-within-k-stops-approach3.py?raw';
 import approach3TsCode from './787-cheapest-flights-within-k-stops-approach3.ts?raw';
 import approach3GoCode from './787-cheapest-flights-within-k-stops-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './787-cheapest-flights-within-k-stops.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './787-cheapest-flights-within-k-stops-approach1.swift?raw';
 import approach2SwiftCode from './787-cheapest-flights-within-k-stops-approach2.swift?raw';
 import approach3SwiftCode from './787-cheapest-flights-within-k-stops-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 787 · [Link](https://leetcode.com/problems/cheapest-flights-within-k-s
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="cheapest-flights-within-k-stops-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="787-cheapest-flights-within-k-stops-swift" />
   </TabItem>
 </Tabs>
 
@@ -145,7 +141,7 @@ func findCheapestPrice(n int, flights [][]int, src int, dst int, k int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="787-cheapest-flights-within-k-stops-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -279,7 +275,7 @@ Works but may re-expand nodes with fewer stops and higher cost.
     <GoRepl code={approach2GoCode} id="cheapest-flights-within-k-stops-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="787-cheapest-flights-within-k-stops-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -381,7 +377,7 @@ Without copying, a flight `u -> v` relaxed in iteration `i` could be immediately
     <GoRepl code={approach3GoCode} id="cheapest-flights-within-k-stops-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="787-cheapest-flights-within-k-stops-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

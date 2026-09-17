@@ -11,11 +11,6 @@ updated: 2026-07-16
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import practiceCode from './205-isomorphic-strings.py?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './205-isomorphic-strings.swift?raw';
-import approach1SwiftCode from './205-isomorphic-strings-approach1.swift?raw';
-import approach2SwiftCode from './205-isomorphic-strings-approach2.swift?raw';
-import approach3SwiftCode from './205-isomorphic-strings-approach3.swift?raw';
 
 ## Problem
 
@@ -42,9 +37,6 @@ LeetCode 205 - [Link](https://leetcode.com/problems/isomorphic-strings/) - *Easy
 <Tabs>
   <TabItem label="Python">
     <PythonRepl code={practiceCode} id="isomorphic-strings" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="205-isomorphic-strings-swift" />
   </TabItem>
 </Tabs>
 
@@ -79,7 +71,6 @@ This is correct, but it does not fit the constraint of up to 50,000 characters.
 - **Time:** $O(n^2)$, driven by comparing pairs of positions.
 - **Space:** $O(1)$.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -92,8 +83,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="205-isomorphic-strings-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -141,7 +130,6 @@ Each character pair is processed once. Hash map lookups and writes are constant 
 - **Time:** $O(n)$, driven by the single paired scan.
 - **Space:** $O(k)$, where `k` is the number of distinct characters stored in the maps. With ASCII input, this is bounded by a fixed alphabet size.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -154,8 +142,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="205-isomorphic-strings-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -180,7 +166,6 @@ def signature(word: str) -> list[int]:
 
     return pattern
 
-
 def is_isomorphic(s: str, t: str) -> bool:
     return signature(s) == signature(t)      # L7: build both and compare
 ```
@@ -191,7 +176,6 @@ def is_isomorphic(s: str, t: str) -> bool:
 - **Space:** $O(n)$ for the two signature arrays.
 
 This version is compact and easy to reason about, but the two-map bijection uses less extra memory because it does not store a full pattern array.
-
 
 <Tabs>
 <TabItem label="Swift">
@@ -204,8 +188,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="205-isomorphic-strings-approach3-swift" />
 </TabItem>
 </Tabs>
 

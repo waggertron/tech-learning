@@ -170,19 +170,22 @@ async function validateReplMarkup(browser) {
     await page.locator(".tsrepl .tsrepl__run", { hasText: "Run TS" }).first().waitFor();
     await page.getByRole("tab", { name: "Go" }).first().click();
     await page.locator(".gorepl .gorepl__run", { hasText: "Run Go" }).first().waitFor();
-    await page.getByRole("tab", { name: "Swift" }).first().click();
-    await page.locator(".swiftrepl button", { hasText: "Run Swift" }).first().waitFor();
 
     const replCounts = await page.evaluate(() => ({
       python: document.querySelectorAll(".pyrepl").length,
       typescript: document.querySelectorAll(".tsrepl").length,
       go: document.querySelectorAll(".gorepl").length,
-      swift: document.querySelectorAll(".swiftrepl").length,
     }));
 
     for (const [name, count] of Object.entries(replCounts)) {
       if (count < 1) throw new Error(`Expected at least one ${name} REPL`);
     }
+
+    const swiftReplCount = await page.locator(".swiftrepl").count();
+    if (swiftReplCount !== 0) throw new Error("Coding-problem pages must not render Swift REPLs");
+
+    await page.getByRole("tab", { name: "Swift" }).first().click();
+    await page.locator('pre[data-language="swift"]').first().waitFor();
   });
   await page.close();
 }
@@ -268,7 +271,9 @@ try {
   } finally {
     await browser.close();
   }
-  console.log("Custom page validation passed: sidebar state, DSL calculator, React output, and four-language REPL markup checked.");
+  console.log(
+    "Custom page validation passed: sidebar state, DSL calculator, React output, coding-problem REPLs, and static Swift markup checked.",
+  );
 } finally {
   await stopPreview();
 }

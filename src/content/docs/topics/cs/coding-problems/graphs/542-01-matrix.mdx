@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './542-01-matrix.py?raw';
 import practiceCodeTs from './542-01-matrix.ts?raw';
 import practiceCodeGo from './542-01-matrix.go?raw';
-import practiceCodeSwift from './542-01-matrix.swift?raw';
 import approach1SwiftCode from './542-01-matrix-approach1.swift?raw';
 import approach2PyCode from './542-01-matrix-approach2.py?raw';
 import approach2TsCode from './542-01-matrix-approach2.ts?raw';
@@ -43,9 +42,6 @@ LeetCode 542 · [Link](https://leetcode.com/problems/01-matrix/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="01-matrix-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="542-01-matrix-swift" />
   </TabItem>
 </Tabs>
 
@@ -114,7 +110,7 @@ function updateMatrix(mat: number[][]): number[][] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="542-01-matrix-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -187,7 +183,6 @@ def update_matrix(mat):
                 q.append((nr, nc))
     return dist
 
-
 def _run_tests():
     # Example 1: center 1-cell is distance 1 from any neighbor
     assert update_matrix([[0,0,0],[0,1,0],[0,0,0]]) == [[0,0,0],[0,1,0],[0,0,0]]
@@ -205,7 +200,6 @@ def _run_tests():
     assert update_matrix([[0,0,0],[0,0,0],[0,0,1]]) == [[0,0,0],[0,0,0],[0,0,1]]
 
     print("all tests pass")
-
 
 if __name__ == "__main__":
     _run_tests()
@@ -242,7 +236,6 @@ console.log("all tests pass");
 ```
 </TabItem>
 </Tabs>
-
 
 ## Related topics
 

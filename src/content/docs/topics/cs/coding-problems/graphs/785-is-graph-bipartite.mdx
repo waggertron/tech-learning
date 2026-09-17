@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './785-is-graph-bipartite.py?raw';
 import practiceCodeTs from './785-is-graph-bipartite.ts?raw';
 import practiceCodeGo from './785-is-graph-bipartite.go?raw';
-import practiceCodeSwift from './785-is-graph-bipartite.swift?raw';
 import approach1SwiftCode from './785-is-graph-bipartite-approach1.swift?raw';
 import approach2PyCode from './785-is-graph-bipartite-approach2.py?raw';
 import approach2TsCode from './785-is-graph-bipartite-approach2.ts?raw';
@@ -43,9 +42,6 @@ LeetCode 785 · [Link](https://leetcode.com/problems/is-graph-bipartite/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="is-graph-bipartite-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="785-is-graph-bipartite-swift" />
   </TabItem>
 </Tabs>
 
@@ -109,7 +105,7 @@ function isBipartite(graph: number[][]): boolean {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="785-is-graph-bipartite-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -191,7 +187,6 @@ def is_bipartite(graph):
 
     return True
 
-
 def _run_tests():
     # Odd cycle: not bipartite
     assert is_bipartite([[1,2,3],[0,2],[0,1,3],[0,2]]) == False
@@ -212,7 +207,6 @@ def _run_tests():
     assert is_bipartite([[1],[0],[3],[2]]) == True
 
     print("all tests pass")
-
 
 if __name__ == "__main__":
     _run_tests()
@@ -250,7 +244,6 @@ console.log("all tests pass");
 ```
 </TabItem>
 </Tabs>
-
 
 ## Related topics
 

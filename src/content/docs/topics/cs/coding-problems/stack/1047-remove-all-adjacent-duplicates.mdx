@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './1047-remove-all-adjacent-duplicates.py?raw';
 import practiceCodeTs from './1047-remove-all-adjacent-duplicates.ts?raw';
 import practiceCodeGo from './1047-remove-all-adjacent-duplicates.go?raw';
-import practiceCodeSwift from './1047-remove-all-adjacent-duplicates.swift?raw';
 import approach1SwiftCode from './1047-remove-all-adjacent-duplicates-approach1.swift?raw';
 import approach2SwiftCode from './1047-remove-all-adjacent-duplicates-approach2.swift?raw';
 import approach2PyCode from './1047-remove-all-adjacent-duplicates-approach2.py?raw';
@@ -50,9 +49,6 @@ LeetCode 1047 · [Link](https://leetcode.com/problems/remove-all-adjacent-duplic
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="remove-all-adjacent-duplicates-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="1047-remove-all-adjacent-duplicates-swift" />
   </TabItem>
 </Tabs>
 
@@ -126,7 +122,7 @@ func removeDuplicates(s string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="1047-remove-all-adjacent-duplicates-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -183,7 +179,7 @@ func removeDuplicates(s string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="1047-remove-all-adjacent-duplicates-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -206,9 +202,6 @@ Each character is pushed once and popped at most once. Total: $O(n)$.
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="remove-all-adjacent-duplicates-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="remove-all-adjacent-duplicates-approach2-py" />
   </TabItem>
@@ -245,7 +238,6 @@ The two `z` characters only became adjacent *after* the `xx` pair was removed. T
 - The pattern (push; if top equals current, pop instead) appears in several string cancellation problems.
 - `"".join(stack)` at the end is $O(n)$; calling it inside the loop would make the approach quadratic.
 - This is the building block for the harder variant (1209. Remove All Adjacent Duplicates in String II), where k-length runs are removed.
-
 
 ## Related topics
 

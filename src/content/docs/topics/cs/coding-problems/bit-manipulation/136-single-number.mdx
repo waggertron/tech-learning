@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './136-single-number.py?raw';
 import practiceCodeTs from './136-single-number.ts?raw';
 import practiceCodeGo from './136-single-number.go?raw';
-import practiceCodeSwift from './136-single-number.swift?raw';
 import approach1SwiftCode from './136-single-number-approach1.swift?raw';
 import approach2SwiftCode from './136-single-number-approach2.swift?raw';
 import approach3SwiftCode from './136-single-number-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 136 · [Link](https://leetcode.com/problems/single-number/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="single-number-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="136-single-number-swift" />
   </TabItem>
 </Tabs>
 
@@ -103,7 +99,7 @@ func singleNumber(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="136-single-number-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -164,7 +160,7 @@ func singleNumber(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="136-single-number-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -237,7 +233,7 @@ func singleNumber(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="136-single-number-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

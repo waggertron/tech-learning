@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './907-sum-of-subarray-minimums.py?raw';
 import practiceCodeTs from './907-sum-of-subarray-minimums.ts?raw';
 import practiceCodeGo from './907-sum-of-subarray-minimums.go?raw';
-import practiceCodeSwift from './907-sum-of-subarray-minimums.swift?raw';
 import approach1SwiftCode from './907-sum-of-subarray-minimums-approach1.swift?raw';
 import approach2SwiftCode from './907-sum-of-subarray-minimums-approach2.swift?raw';
 import approach2PyCode from './907-sum-of-subarray-minimums-approach2.py?raw';
@@ -50,9 +49,6 @@ LeetCode 907 · [Link](https://leetcode.com/problems/sum-of-subarray-minimums/) 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="sum-of-subarray-minimums-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="907-sum-of-subarray-minimums-swift" />
   </TabItem>
 </Tabs>
 
@@ -93,7 +89,7 @@ function sumSubarrayMins(arr: number[]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="907-sum-of-subarray-minimums-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -170,7 +166,7 @@ function sumSubarrayMins(arr: number[]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="907-sum-of-subarray-minimums-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -193,9 +189,6 @@ Each index is pushed once and popped at most once in each pass. Both passes are 
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="sum-of-subarray-minimums-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="sum-of-subarray-minimums-approach2-py" />
   </TabItem>
@@ -224,7 +217,6 @@ Each subarray containing both index 1 and 2 gets counted by exactly one of them.
 - The `left[i] * right[i]` formula counts subarrays: pick any of `left[i]` left boundaries and any of `right[i]` right boundaries independently.
 - Strict vs. non-strict boundary choice (strict left, non-strict right) is the standard fix for equal-element double counting.
 - The modulo must be applied at each addition step to avoid integer overflow.
-
 
 ## Related topics
 

@@ -12,10 +12,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal.py?raw';
 import practiceCodeTs from './105-construct-binary-tree-from-preorder-and-inorder-traversal.ts?raw';
-import practiceCodeSwift from './105-construct-binary-tree-from-preorder-and-inorder-traversal.swift?raw';
 import approach1SwiftCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach1.swift?raw';
 import approach2SwiftCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2.swift?raw';
 import approach3SwiftCode from './105-construct-binary-tree-from-preorder-and-inorder-traversal-approach3.swift?raw';
@@ -41,9 +40,6 @@ LeetCode 105 · [Link](https://leetcode.com/problems/construct-binary-tree-from-
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="construct-binary-tree-from-preorder-and-inorder-traversal-ts" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-swift" />
   </TabItem>
 </Tabs>
 
@@ -86,7 +82,7 @@ function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -153,7 +149,7 @@ function buildTree(preorder: number[], inorder: number[]): TreeNode | null {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -224,7 +220,7 @@ def build_tree(preorder, inorder):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="105-construct-binary-tree-from-preorder-and-inorder-traversal-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

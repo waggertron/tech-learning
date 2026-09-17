@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './020-valid-parentheses.py?raw';
 import practiceCodeTs from './020-valid-parentheses.ts?raw';
 import practiceCodeGo from './020-valid-parentheses.go?raw';
-import practiceCodeSwift from './020-valid-parentheses.swift?raw';
 import approach1SwiftCode from './020-valid-parentheses-approach1.swift?raw';
 import approach2SwiftCode from './020-valid-parentheses-approach2.swift?raw';
 import approach3SwiftCode from './020-valid-parentheses-approach3.swift?raw';
@@ -50,9 +49,6 @@ LeetCode 20 · [Link](https://leetcode.com/problems/valid-parentheses/) · *Easy
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="valid-parentheses-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="020-valid-parentheses-swift" />
   </TabItem>
 </Tabs>
 
@@ -92,7 +88,7 @@ func isValid(s string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="020-valid-parentheses-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -180,7 +176,7 @@ func isValid(s string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="020-valid-parentheses-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -204,9 +200,6 @@ Each character is pushed or popped exactly once.
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="valid-parentheses-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="valid-parentheses-approach2-py" />
   </TabItem>
@@ -274,7 +267,7 @@ func isValid(s string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="020-valid-parentheses-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -298,9 +291,6 @@ Same $O(n)$ work, but the pair-map removes all branching.
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="valid-parentheses-approach3-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach3PyCode} id="valid-parentheses-approach3-py" />
   </TabItem>

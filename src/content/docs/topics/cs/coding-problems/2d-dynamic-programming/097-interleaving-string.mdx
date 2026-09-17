@@ -21,8 +21,7 @@ import approach2GoCode from './097-interleaving-string-approach2.go?raw';
 import approach3PyCode from './097-interleaving-string-approach3.py?raw';
 import approach3TsCode from './097-interleaving-string-approach3.ts?raw';
 import approach3GoCode from './097-interleaving-string-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './097-interleaving-string.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './097-interleaving-string-approach1.swift?raw';
 import approach2SwiftCode from './097-interleaving-string-approach2.swift?raw';
 import approach3SwiftCode from './097-interleaving-string-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 97 · [Link](https://leetcode.com/problems/interleaving-string/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="interleaving-string-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="097-interleaving-string-swift" />
   </TabItem>
 </Tabs>
 
@@ -108,7 +104,7 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="097-interleaving-string-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -202,7 +198,7 @@ With memoization each `(i, j)` is computed once. Short-circuit evaluation means 
     <GoRepl code={approach2GoCode} id="interleaving-string-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="097-interleaving-string-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -304,7 +300,7 @@ Each cell requires at most two $O(1)$ lookups. The double loop at L5/L6 drives t
     <GoRepl code={approach3GoCode} id="interleaving-string-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="097-interleaving-string-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

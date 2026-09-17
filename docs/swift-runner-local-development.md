@@ -55,13 +55,13 @@ Start only the HTTP service when Astro is already running with the matching runn
 npm run swift-runner:local
 ```
 
-With `npm run dev:swift` running, prove an edited source reaches the real Docker executor through the page:
+With `npm run dev:swift` running, prove an edited source reaches the real Docker executor through a Swift curriculum post:
 
 ```bash
 npm run validate:swift-runner-local-browser
 ```
 
-The validator checks the capability endpoint and rendered runner URL before launching Playwright. It opens the Kth Largest Element in a Stream page, selects the Swift practice tab, replaces the starter with a small program, runs it, and requires successful output plus the exact Swift 6.3.3 Linux evidence. This command requires Docker and is intentionally separate from the default pre-push workflow.
+The validator checks the capability endpoint and rendered runner URL before launching Playwright. It opens the values, variables, types, and inference post, replaces the example with a small program, runs it, and requires successful output plus the exact Swift 6.3.3 Linux evidence. This command requires Docker and is intentionally separate from the default pre-push workflow.
 
 Run the exact Swift 6.3.3 executor integration tests when Docker and the pinned image are available:
 

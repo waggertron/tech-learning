@@ -21,11 +21,6 @@ import approach2GoCode from './238-product-of-array-except-self-approach2.go?raw
 import approach3PyCode from './238-product-of-array-except-self-approach3.py?raw';
 import approach3TsCode from './238-product-of-array-except-self-approach3.ts?raw';
 import approach3GoCode from './238-product-of-array-except-self-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './238-product-of-array-except-self.swift?raw';
-import approach1SwiftCode from './238-product-of-array-except-self-approach1.swift?raw';
-import approach2SwiftCode from './238-product-of-array-except-self-approach2.swift?raw';
-import approach3SwiftCode from './238-product-of-array-except-self-approach3.swift?raw';
 
 ## Problem
 
@@ -50,9 +45,6 @@ LeetCode 238 · [Link](https://leetcode.com/problems/product-of-array-except-sel
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="product-of-array-except-self-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="238-product-of-array-except-self-swift" />
   </TabItem>
 </Tabs>
 
@@ -128,7 +120,6 @@ The nested multiply gives exactly n*(n-1) multiplications.
 
 Too slow for the problem's stated constraint but useful as a sanity check.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -139,8 +130,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="238-product-of-array-except-self-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -239,7 +228,6 @@ Three linear passes, each $O(n)$. All three contribute equally; none dominates a
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -253,8 +241,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="238-product-of-array-except-self-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -356,7 +342,6 @@ Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the ne
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -371,8 +356,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="238-product-of-array-except-self-approach3-swift" />
 </TabItem>
 </Tabs>
 

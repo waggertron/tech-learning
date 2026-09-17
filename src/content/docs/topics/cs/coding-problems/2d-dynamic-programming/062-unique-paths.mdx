@@ -21,8 +21,7 @@ import approach2GoCode from './062-unique-paths-approach2.go?raw';
 import approach3PyCode from './062-unique-paths-approach3.py?raw';
 import approach3TsCode from './062-unique-paths-approach3.ts?raw';
 import approach3GoCode from './062-unique-paths-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './062-unique-paths.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './062-unique-paths-approach1.swift?raw';
 import approach2SwiftCode from './062-unique-paths-approach2.swift?raw';
 import approach3SwiftCode from './062-unique-paths-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 62 · [Link](https://leetcode.com/problems/unique-paths/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="unique-paths-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="062-unique-paths-swift" />
   </TabItem>
 </Tabs>
 
@@ -93,7 +89,7 @@ func uniquePaths(m int, n int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="062-unique-paths-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -189,7 +185,7 @@ Every cell is visited once; each fill is a single addition. The double loop is t
     <GoRepl code={approach2GoCode} id="unique-paths-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="062-unique-paths-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -269,7 +265,7 @@ The answer is `C(m + n - 2, m - 1)`, choose which `m - 1` of the `m + n - 2` tot
     <GoRepl code={approach3GoCode} id="unique-paths-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="062-unique-paths-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

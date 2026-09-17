@@ -3,7 +3,7 @@ import { chromium } from "playwright";
 
 const siteOrigin = process.env.SWIFT_SITE_ORIGIN ?? "http://127.0.0.1:4321";
 const runnerURL = process.env.SWIFT_RUNNER_URL ?? "http://127.0.0.1:8787";
-const pageURL = `${siteOrigin}/tech-learning/topics/cs/coding-problems/heap-priority-queue/703-kth-largest-element-in-a-stream/`;
+const pageURL = `${siteOrigin}/tech-learning/posts/2026-07-16-swift-values-variables-types-inference/`;
 
 async function verifyHTTP() {
   const capabilitiesResponse = await fetch(`${runnerURL}/v1/swift/capabilities`, {
@@ -27,7 +27,7 @@ async function verifyHTTP() {
     throw new Error(`Unexpected Swift page response: HTTP ${pageResponse.status}, ${html.length} bytes.`);
   }
   for (const marker of [
-    "703. Kth Largest Element in a Stream",
+    "Zero to iOS Hero 4: Values, variables, types, and inference",
     "Run Swift",
     `data-runner-url=\"${runnerURL}\"`,
   ]) {
@@ -50,10 +50,8 @@ async function verifyBrowser() {
 
     await page.goto(pageURL, { waitUntil: "domcontentloaded" });
     const repl = page.locator(
-      '.swiftrepl[data-repl-id^="703-kth-largest-element-in-a-stream-swift-"]',
+      '.swiftrepl[data-repl-id^="swift-values-variables-types-inference-"]',
     );
-    const tabs = repl.locator("xpath=ancestor::starlight-tabs");
-    await tabs.getByRole("tab", { exact: true, name: "Swift" }).click();
     await repl.waitFor({ state: "visible" });
 
     const editor = repl.locator(".cm-content");

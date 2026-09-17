@@ -86,7 +86,7 @@ Read only the references needed for the task:
 - Use the deterministic local mock for component and authoring tests. It must not require credentials, a public service, or Docker.
 - Run `npm run test:swift-runner-contract` and `npm run test:swift-repl` for contract or component changes. Run `npm run validate:swift-repl-browser` when interaction, layout, accessibility, failure states, or approach execution changes.
 - Run `npm run test:swift-runner-executor` when the pinned image, container controls, timeouts, output limits, source transfer, host isolation, or cleanup changes. This suite requires Docker and stays outside the default pre-push path.
-- Give every coding-problem approach a named harness that maps the editable solution contract to deterministic inputs and output. Do not hide required Apple frameworks behind the standard-library runner.
+- Give every coding-problem approach a named harness that maps the solution contract to deterministic inputs and output. Coding-problem pages render static Swift solution examples. Do not add `SwiftRepl` editors or approach run controls to those pages.
 - Follow `docs/swift-coding-problem-contract.md` for Swift coding-problem filenames, LeetCode type metadata, starter placeholders, canonical helpers, expectations, success output, and compile evidence.
 - Follow `docs/coding-problem-test-vectors.md` for shared Python, TypeScript, Go, and Swift cases. Keep invalid inputs explicit and use the problem's excluded or solution-handled policy without normalizing the arguments.
 

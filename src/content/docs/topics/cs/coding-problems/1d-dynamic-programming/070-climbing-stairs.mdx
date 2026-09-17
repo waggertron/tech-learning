@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './070-climbing-stairs.py?raw';
 import practiceCodeTs from './070-climbing-stairs.ts?raw';
 import practiceCodeGo from './070-climbing-stairs.go?raw';
-import practiceCodeSwift from './070-climbing-stairs.swift?raw';
 import approach1SwiftCode from './070-climbing-stairs-approach1.swift?raw';
 import approach2SwiftCode from './070-climbing-stairs-approach2.swift?raw';
 import approach3SwiftCode from './070-climbing-stairs-approach3.swift?raw';
@@ -53,9 +52,6 @@ LeetCode 70 · [Link](https://leetcode.com/problems/climbing-stairs/) · *Easy*
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="climbing-stairs-go" />
   </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="070-climbing-stairs-swift" />
-  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, naive recursion
@@ -90,7 +86,7 @@ func climbStairs(n int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="070-climbing-stairs-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -156,7 +152,7 @@ func climbStairs(n int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="070-climbing-stairs-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -236,7 +232,7 @@ func climbStairs(n int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="070-climbing-stairs-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -312,7 +308,7 @@ func climbStairs(n int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach4SwiftCode} id="070-climbing-stairs-approach4-swift" />
+    <SwiftCodeExample code={approach4SwiftCode} />
   </TabItem>
 </Tabs>
 

@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './560-subarray-sum-equals-k.py?raw';
 import practiceCodeTs from './560-subarray-sum-equals-k.ts?raw';
 import practiceCodeGo from './560-subarray-sum-equals-k.go?raw';
-import practiceCodeSwift from './560-subarray-sum-equals-k.swift?raw';
 import approach1SwiftCode from './560-subarray-sum-equals-k-approach1.swift?raw';
 import approach2SwiftCode from './560-subarray-sum-equals-k-approach2.swift?raw';
 import approach2PyCode from './560-subarray-sum-equals-k-approach2.py?raw';
@@ -46,9 +45,6 @@ LeetCode 560 · [Link](https://leetcode.com/problems/subarray-sum-equals-k/) · 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="subarray-sum-equals-k-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="560-subarray-sum-equals-k-swift" />
   </TabItem>
 </Tabs>
 
@@ -106,7 +102,7 @@ func subarraySum(nums []int, k int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="560-subarray-sum-equals-k-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -180,7 +176,7 @@ func subarraySum(nums []int, k int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="560-subarray-sum-equals-k-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -312,7 +308,6 @@ func subarraySum(nums []int, k int) int {
 ```
 </TabItem>
 </Tabs>
-
 
 ## Related topics
 

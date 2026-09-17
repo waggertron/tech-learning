@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './005-longest-palindromic-substring.py?raw';
 import practiceCodeTs from './005-longest-palindromic-substring.ts?raw';
 import practiceCodeGo from './005-longest-palindromic-substring.go?raw';
-import practiceCodeSwift from './005-longest-palindromic-substring.swift?raw';
 import approach1SwiftCode from './005-longest-palindromic-substring-approach1.swift?raw';
 import approach2SwiftCode from './005-longest-palindromic-substring-approach2.swift?raw';
 import approach3SwiftCode from './005-longest-palindromic-substring-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 5 · [Link](https://leetcode.com/problems/longest-palindromic-substring
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="longest-palindromic-substring-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="005-longest-palindromic-substring-swift" />
   </TabItem>
 </Tabs>
 
@@ -116,7 +112,7 @@ func longestPalindrome(s string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="005-longest-palindromic-substring-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -206,7 +202,7 @@ func longestPalindrome(s string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="005-longest-palindromic-substring-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -325,7 +321,7 @@ func longestPalindrome(s string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="005-longest-palindromic-substring-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -398,7 +394,6 @@ def longest_palindrome(s):
             if len(cand) > len(best):
                 best = cand
     return best
-
 
 def _run_tests():
     # LeetCode examples

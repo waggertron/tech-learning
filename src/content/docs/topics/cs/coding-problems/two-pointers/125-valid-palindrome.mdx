@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './125-valid-palindrome.py?raw';
 import practiceCodeTs from './125-valid-palindrome.ts?raw';
 import practiceCodeGo from './125-valid-palindrome.go?raw';
-import practiceCodeSwift from './125-valid-palindrome.swift?raw';
 import approach1SwiftCode from './125-valid-palindrome-approach1.swift?raw';
 import approach2SwiftCode from './125-valid-palindrome-approach2.swift?raw';
 import approach3SwiftCode from './125-valid-palindrome-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 125 · [Link](https://leetcode.com/problems/valid-palindrome/) · *Easy
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="valid-palindrome-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="125-valid-palindrome-swift" />
   </TabItem>
 </Tabs>
 
@@ -97,7 +93,7 @@ func isPalindrome(s string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="125-valid-palindrome-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -171,7 +167,7 @@ func isPalindrome(s string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="125-valid-palindrome-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -264,7 +260,7 @@ func isPalindrome(s string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="125-valid-palindrome-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

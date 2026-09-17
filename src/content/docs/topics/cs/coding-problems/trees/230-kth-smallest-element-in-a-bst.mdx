@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './230-kth-smallest-element-in-a-bst.py?raw';
 import practiceCodeTs from './230-kth-smallest-element-in-a-bst.ts?raw';
 import practiceCodeGo from './230-kth-smallest-element-in-a-bst.go?raw';
-import practiceCodeSwift from './230-kth-smallest-element-in-a-bst.swift?raw';
 import approach1SwiftCode from './230-kth-smallest-element-in-a-bst-approach1.swift?raw';
 import approach2SwiftCode from './230-kth-smallest-element-in-a-bst-approach2.swift?raw';
 import approach3SwiftCode from './230-kth-smallest-element-in-a-bst-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 230 · [Link](https://leetcode.com/problems/kth-smallest-element-in-a-b
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="kth-smallest-element-in-a-bst-go" />
   </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="230-kth-smallest-element-in-a-bst-swift" />
-  </TabItem>
 </Tabs>
 
 ## Approach 1: Full inorder traversal into a list
@@ -67,7 +63,7 @@ def kth_smallest(root, k):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="230-kth-smallest-element-in-a-bst-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -136,7 +132,7 @@ function kthSmallest(root: TreeNode | null, k: number): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="230-kth-smallest-element-in-a-bst-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -213,7 +209,7 @@ function kthSmallest(root: TreeNode | null, k: number): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="230-kth-smallest-element-in-a-bst-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

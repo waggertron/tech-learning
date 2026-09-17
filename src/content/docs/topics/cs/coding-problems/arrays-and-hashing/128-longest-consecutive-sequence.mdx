@@ -21,11 +21,6 @@ import approach2GoCode from './128-longest-consecutive-sequence-approach2.go?raw
 import approach3PyCode from './128-longest-consecutive-sequence-approach3.py?raw';
 import approach3TsCode from './128-longest-consecutive-sequence-approach3.ts?raw';
 import approach3GoCode from './128-longest-consecutive-sequence-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './128-longest-consecutive-sequence.swift?raw';
-import approach1SwiftCode from './128-longest-consecutive-sequence-approach1.swift?raw';
-import approach2SwiftCode from './128-longest-consecutive-sequence-approach2.swift?raw';
-import approach3SwiftCode from './128-longest-consecutive-sequence-approach3.swift?raw';
 
 ## Problem
 
@@ -48,9 +43,6 @@ LeetCode 128 · [Link](https://leetcode.com/problems/longest-consecutive-sequenc
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="longest-consecutive-sequence-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="128-longest-consecutive-sequence-swift" />
   </TabItem>
 </Tabs>
 
@@ -134,7 +126,6 @@ Each `in nums` on a list costs $O(n)$, called up to n times per outer loop itera
 
 Clearly doesn't meet the $O(n)$ requirement, useful to see what the naive instinct would cost.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -147,8 +138,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="128-longest-consecutive-sequence-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -246,7 +235,6 @@ Correct and simple, but violates the explicit $O(n)$ constraint in the prompt.
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -260,8 +248,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="128-longest-consecutive-sequence-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -367,7 +353,6 @@ L4's guard ensures each element is walked from its run-start exactly once. Even 
 
 A second $O(n)$ approach unions every `x` with `x - 1` and `x + 1` in a disjoint-set structure and returns the largest component size. Same asymptotics, more code, worth knowing for the pattern.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -380,8 +365,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="128-longest-consecutive-sequence-approach3-swift" />
 </TabItem>
 </Tabs>
 

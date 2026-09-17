@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './739-daily-temperatures.py?raw';
 import practiceCodeTs from './739-daily-temperatures.ts?raw';
 import practiceCodeGo from './739-daily-temperatures.go?raw';
-import practiceCodeSwift from './739-daily-temperatures.swift?raw';
 import approach1SwiftCode from './739-daily-temperatures-approach1.swift?raw';
 import approach2SwiftCode from './739-daily-temperatures-approach2.swift?raw';
 import approach3SwiftCode from './739-daily-temperatures-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 739 · [Link](https://leetcode.com/problems/daily-temperatures/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="daily-temperatures-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="739-daily-temperatures-swift" />
   </TabItem>
 </Tabs>
 
@@ -91,7 +87,7 @@ function dailyTemperatures(temperatures: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="739-daily-temperatures-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -148,7 +144,7 @@ function dailyTemperatures(temperatures: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="739-daily-temperatures-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -171,9 +167,6 @@ Each index is pushed once and popped at most once; total stack work across all i
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="daily-temperatures-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="daily-temperatures-approach2-py" />
   </TabItem>
@@ -223,7 +216,7 @@ function dailyTemperatures(temperatures: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="739-daily-temperatures-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -246,9 +239,6 @@ Each index is pushed once and popped at most once. The inner while loop is amort
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="daily-temperatures-approach3-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach3PyCode} id="daily-temperatures-approach3-py" />
   </TabItem>

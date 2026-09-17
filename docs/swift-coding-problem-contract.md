@@ -47,7 +47,13 @@ fatalError("TODO: Implement")
 
 An approach file contains a full implementation for the matching page section. It has no starter TODO placeholder. The same deterministic test cases used by the starter exercise that implementation.
 
-Each approach file compiles and runs on its own. The site may show only the implementation block in an explanation tab, but the raw source behind a runnable Swift panel retains the complete test program.
+Each approach file compiles and runs on its own. The site shows only the implementation block in a static explanation tab. The raw source retains the complete test program for contract and compiler validation.
+
+## Rendered page boundary
+
+Coding-problem pages do not expose Swift execution controls. Their Try it yourself sections remain runnable for the other supported browser languages, while Swift approach tabs use static highlighted code. `SwiftCodeExample.astro` removes canonical test support, shared fixture helpers, and `runTests()` from the rendered block without changing the standalone source file.
+
+The `.swift` starter and approach files remain compile and execution evidence. The browser Swift runner remains available for focused Swift curriculum posts and its isolated test fixture, not for coding-problem pages.
 
 ## Assertions and output
 

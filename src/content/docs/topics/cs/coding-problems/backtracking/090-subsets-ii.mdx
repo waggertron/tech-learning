@@ -18,11 +18,6 @@ import practiceCodeGo from './090-subsets-ii.go?raw';
 import approach2PyCode from './090-subsets-ii-approach2.py?raw';
 import approach2TsCode from './090-subsets-ii-approach2.ts?raw';
 import approach2GoCode from './090-subsets-ii-approach2.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './090-subsets-ii.swift?raw';
-import approach1SwiftCode from './090-subsets-ii-approach1.swift?raw';
-import approach2SwiftCode from './090-subsets-ii-approach2.swift?raw';
-import approach3SwiftCode from './090-subsets-ii-approach3.swift?raw';
 
 ## Problem
 
@@ -45,9 +40,6 @@ LeetCode 90 · [Link](https://leetcode.com/problems/subsets-ii/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="subsets-ii-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="090-subsets-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -83,7 +75,6 @@ def subsets_with_dup(nums):
 
 Works but wastes effort generating then filtering duplicates.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -100,8 +91,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="090-subsets-ii-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -215,7 +204,6 @@ Every node in the recursion tree emits a result (unlike Combination Sum where on
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -232,8 +220,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="090-subsets-ii-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -280,7 +266,6 @@ def subsets_with_dup(nums):
 - **Time:** Same asymptotic, often faster in practice with heavy duplicates.
 - **Space:** $O(n)$ recursion.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -297,8 +282,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="090-subsets-ii-approach3-swift" />
 </TabItem>
 </Tabs>
 

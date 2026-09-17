@@ -21,11 +21,6 @@ import approach2GoCode from './217-contains-duplicate-approach2.go?raw';
 import approach3PyCode from './217-contains-duplicate-approach3.py?raw';
 import approach3TsCode from './217-contains-duplicate-approach3.ts?raw';
 import approach3GoCode from './217-contains-duplicate-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './217-contains-duplicate.swift?raw';
-import approach1SwiftCode from './217-contains-duplicate-approach1.swift?raw';
-import approach2SwiftCode from './217-contains-duplicate-approach2.swift?raw';
-import approach3SwiftCode from './217-contains-duplicate-approach3.swift?raw';
 
 ## Problem
 
@@ -49,9 +44,6 @@ LeetCode 217 · [Link](https://leetcode.com/problems/contains-duplicate/) · *Ea
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="contains-duplicate-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="217-contains-duplicate-swift" />
   </TabItem>
 </Tabs>
 
@@ -120,7 +112,6 @@ The nested loops each run up to n, yielding ~n²/2 comparisons in the worst case
 
 This is the most direct approach but quadratic time makes it unusable for large inputs.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -132,8 +123,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="217-contains-duplicate-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -210,7 +199,6 @@ Improvement: we dropped one order of growth. Worth knowing as an alternative whe
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -223,8 +211,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="217-contains-duplicate-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -313,7 +299,6 @@ def contains_duplicate(nums: list[int]) -> bool:
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -326,8 +311,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="217-contains-duplicate-approach3-swift" />
 </TabItem>
 </Tabs>
 

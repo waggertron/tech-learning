@@ -18,10 +18,6 @@ import practiceCodeGo from './303-range-sum-query-immutable.go?raw';
 import approach2PyCode from './303-range-sum-query-immutable-approach2.py?raw';
 import approach2TsCode from './303-range-sum-query-immutable-approach2.ts?raw';
 import approach2GoCode from './303-range-sum-query-immutable-approach2.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './303-range-sum-query-immutable.swift?raw';
-import approach1SwiftCode from './303-range-sum-query-immutable-approach1.swift?raw';
-import approach2SwiftCode from './303-range-sum-query-immutable-approach2.swift?raw';
 
 ## Problem
 
@@ -49,9 +45,6 @@ LeetCode 303 · [Link](https://leetcode.com/problems/range-sum-query-immutable/)
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="range-sum-query-immutable-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="303-range-sum-query-immutable-swift" />
   </TabItem>
 </Tabs>
 
@@ -118,7 +111,6 @@ func (na *NumArray) sumRange(left int, right int) int {
 
 Adequate for one or two queries, but each additional query costs another $O(n)$ pass.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -129,8 +121,6 @@ final class NumArray {
     func sumRange(_ left: Int, _ right: Int) -> Int { nums[left...right].reduce(0, +) }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="303-range-sum-query-immutable-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -239,7 +229,6 @@ sumRange(2, 5) = prefix[6] - prefix[2] = -3 - (-2) = -1
 sumRange(0, 5) = prefix[6] - prefix[0] = -3 - 0 = -3
 ```
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -250,8 +239,6 @@ final class NumArray {
     func sumRange(_ left: Int, _ right: Int) -> Int { prefix[right + 1] - prefix[left] }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="303-range-sum-query-immutable-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -331,7 +318,6 @@ console.log("all tests pass");
 ```
 </TabItem>
 </Tabs>
-
 
 ## Related topics
 

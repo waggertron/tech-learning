@@ -18,11 +18,6 @@ import practiceCodeGo from './040-combination-sum-ii.go?raw';
 import approach3PyCode from './040-combination-sum-ii-approach3.py?raw';
 import approach3TsCode from './040-combination-sum-ii-approach3.ts?raw';
 import approach3GoCode from './040-combination-sum-ii-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './040-combination-sum-ii.swift?raw';
-import approach1SwiftCode from './040-combination-sum-ii-approach1.swift?raw';
-import approach2SwiftCode from './040-combination-sum-ii-approach2.swift?raw';
-import approach3SwiftCode from './040-combination-sum-ii-approach3.swift?raw';
 
 ## Problem
 
@@ -45,9 +40,6 @@ LeetCode 40 · [Link](https://leetcode.com/problems/combination-sum-ii/) · *Med
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="combination-sum-ii-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="040-combination-sum-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -72,7 +64,6 @@ def combination_sum2(candidates, target):
 
 Exponential and wasteful.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -89,8 +80,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="040-combination-sum-ii-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -126,7 +115,6 @@ def combination_sum2(candidates, target):
 
 The dedup step is a symptom, fix it at the source.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -143,8 +131,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="040-combination-sum-ii-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -269,7 +255,6 @@ Sorting enables both L3 (early termination) and L4 (same-level duplicate skip). 
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -286,8 +271,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="040-combination-sum-ii-approach3-swift" />
 </TabItem>
 </Tabs>
 

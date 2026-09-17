@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './138-copy-list-with-random-pointer.py?raw';
 import practiceCodeTs from './138-copy-list-with-random-pointer.ts?raw';
 import practiceCodeGo from './138-copy-list-with-random-pointer.go?raw';
-import practiceCodeSwift from './138-copy-list-with-random-pointer.swift?raw';
 import approach1SwiftCode from './138-copy-list-with-random-pointer-approach1.swift?raw';
 import approach2SwiftCode from './138-copy-list-with-random-pointer-approach2.swift?raw';
 import approach3SwiftCode from './138-copy-list-with-random-pointer-approach3.swift?raw';
@@ -41,9 +40,6 @@ LeetCode 138 · [Link](https://leetcode.com/problems/copy-list-with-random-point
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="copy-list-with-random-pointer-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="138-copy-list-with-random-pointer-swift" />
   </TabItem>
 </Tabs>
 
@@ -110,7 +106,7 @@ function copyRandomList(head: Node | null): Node | null {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="138-copy-list-with-random-pointer-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -175,7 +171,7 @@ function copyRandomList(head: Node | null): Node | null {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="138-copy-list-with-random-pointer-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -289,7 +285,7 @@ function copyRandomList(head: Node | null): Node | null {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="138-copy-list-with-random-pointer-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

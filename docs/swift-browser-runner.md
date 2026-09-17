@@ -140,7 +140,7 @@ R1.7 must close these gaps for Swift. Shared runner improvements can be proposed
 The current build and browser checks establish a limited regression floor:
 
 - `scripts/test_build.py` verifies that built coding-problem pages containing REPL data also contain run buttons. It checks one page for all three languages and at least nine non-trivial REPL instances.
-- `scripts/validate-custom-pages.mjs` opens the Binary Search 704 page, selects each language tab, waits for each run button, and confirms at least one REPL root per language.
+- `scripts/validate-custom-pages.mjs` opens the Binary Search 704 page, checks the Python, TypeScript, and Go practice controls, verifies that no Swift REPL is rendered, and confirms that a static Swift approach block is present.
 - `npm run build` runs the repository's build-time content and page checks.
 
 These checks validate rendered presence, not compiler or runtime behavior. The Swift spike and final component need contract tests below the browser surface plus focused browser tests for the user-visible states.
@@ -166,5 +166,6 @@ R1.2 must make each answer explicit:
 - Shared approach-runner styles: `src/styles/custom.css`
 - Build assertions: `scripts/test_build.py`
 - Browser presence check: `scripts/validate-custom-pages.mjs`
-- Representative integration: `src/content/docs/topics/cs/coding-problems/binary-search/704-binary-search.mdx`
+- Representative runner integration: `src/content/docs/posts/2026-07-16-swift-values-variables-types-inference.mdx`
+- Representative static coding-problem integration: `src/content/docs/topics/cs/coding-problems/binary-search/704-binary-search.mdx`
 - Execution plan: `docs/plans/current/2026-07-13-zero-to-ios-hero-series-plan.md`

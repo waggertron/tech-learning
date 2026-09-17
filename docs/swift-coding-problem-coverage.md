@@ -1,12 +1,12 @@
 # Swift Coding Problem Coverage
 
-The Swift catalog manifest turns the coding-problem migration into a checked inventory. It records every problem page, documented approach, starter file, source harness, language tab, REPL, and known shared helper need.
+The Swift catalog manifest turns the coding-problem migration into a checked inventory. It records every problem page, documented approach, starter file, source harness, language tab, static example, REPL, and known shared helper need.
 
 The generated manifest lives at `docs/data/swift-coding-problem-coverage.json`. Do not edit it by hand.
 
 ## Commands
 
-Regenerate the manifest after adding, removing, or changing a coding-problem page, approach, source file, language tab, REPL, or harness:
+Regenerate the manifest after adding, removing, or changing a coding-problem page, approach, source file, language tab, static example, REPL, or harness:
 
 ```bash
 npm run sync:swift-catalog-coverage
@@ -30,7 +30,7 @@ Require complete Swift parity:
 npm run validate:swift-catalog-coverage
 ```
 
-The final command is intentionally red during the migration. It exits nonzero for every page that lacks a runnable Swift starter and every documented approach that lacks Swift source, a harness, and rendered Swift code or REPL evidence. The default pre-push workflow runs the deterministic tests and manifest sync check, but it does not require complete parity until the migration closes.
+The final command is intentionally red while any newer page lacks Swift parity. It exits nonzero for every page that lacks a valid Swift starter source and every documented approach that lacks Swift source, a harness, and a static rendered solution. It also rejects `SwiftRepl` wiring in coding-problem pages. The default pre-push workflow runs the deterministic tests and manifest sync check, but it does not require complete parity until the migration closes.
 
 ## What the Manifest Records
 
@@ -39,9 +39,9 @@ Each problem entry includes:
 - Category, slug, title, and page path.
 - Known shared helper needs: list node, tree node, graph node, random-list node, trie node, heap, or interval.
 - Practice tabs and REPLs by language.
-- Starter source paths, harness evidence, and raw-import wiring by language.
+- Starter source paths and harness evidence by language.
 - Every numbered or unnumbered `## Approach` section.
-- Approach tabs, code fences, REPLs, source paths, and harness evidence by language.
+- Approach tabs, code fences, static examples, REPLs, source paths, and harness evidence by language.
 - Page-level and approach-level Swift readiness.
 - Shared vector path, valid, boundary, and invalid case counts, schema errors, and readiness.
 
@@ -53,15 +53,16 @@ A problem page is Swift-ready only when all of these are true:
 
 - The base `<slug>.swift` starter exists.
 - The starter contains recognized test-harness evidence.
-- The page imports the starter with `?raw` and passes it to the practice component.
-- The Try it yourself block includes a Swift tab and `SwiftRepl`.
+- The source follows the Swift contract and matches the shared vectors.
+- The Try it yourself block does not include a Swift tab or `SwiftRepl`.
 
 A documented approach is Swift-ready only when all of these are true:
 
 - `<slug>-approachN.swift` exists for the approach number.
 - The source contains recognized test-harness evidence.
 - The approach section includes a Swift tab.
-- The section contains a Swift code fence or Swift REPL.
+- The section contains a Swift code fence or `SwiftCodeExample`.
+- The section does not contain `SwiftRepl`.
 
 S2.2 owns the final solution and harness contract. If that gate changes the filename or harness convention, update the scanner, its synthetic fixtures, this document, and the generated manifest in the same batch.
 
@@ -113,4 +114,4 @@ All catalog categories are complete: 1D Dynamic Programming, 2D Dynamic Programm
 - Tries contributes 3 pages, 9 approaches, and 14 cases.
 - Two Pointers contributes 7 pages, 19 approaches, and 43 cases.
 
-The other 27 pages remain explicitly incomplete. The manifest continues to report them without weakening the page, approach, source, harness, REPL, or vector requirements.
+The newer Minimum Size Subarray Sum page remains explicitly incomplete. The manifest continues to report it without weakening the source, harness, static example, or vector requirements.

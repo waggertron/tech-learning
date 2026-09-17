@@ -21,11 +21,6 @@ import approach2GoCode from './271-encode-and-decode-strings-approach2.go?raw';
 import approach3PyCode from './271-encode-and-decode-strings-approach3.py?raw';
 import approach3TsCode from './271-encode-and-decode-strings-approach3.ts?raw';
 import approach3GoCode from './271-encode-and-decode-strings-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './271-encode-and-decode-strings.swift?raw';
-import approach1SwiftCode from './271-encode-and-decode-strings-approach1.swift?raw';
-import approach2SwiftCode from './271-encode-and-decode-strings-approach2.swift?raw';
-import approach3SwiftCode from './271-encode-and-decode-strings-approach3.swift?raw';
 
 ## Problem
 
@@ -49,9 +44,6 @@ LeetCode 271 (premium; free equivalent exists as **LC 659 / 1923**) · [Link](ht
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="encode-and-decode-strings-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="271-encode-and-decode-strings-swift" />
   </TabItem>
 </Tabs>
 
@@ -125,7 +117,6 @@ Both encode and decode scan every character a constant number of times.
 
 Fragile: if the input can contain ANY ASCII (or Unicode), picking a "rare" delimiter is a footgun. This is how you get a "works in tests, breaks in prod" bug.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -137,8 +128,6 @@ final class Solution {
     func roundTrip(_ strs: [String]) -> [String] { if strs == [""] { return [""] }; return decode(encode(strs)) }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="271-encode-and-decode-strings-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -218,7 +207,6 @@ Correct and safe. Not typically accepted on LeetCode because the problem wants y
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -231,8 +219,6 @@ final class Solution {
     func roundTrip(_ strs: [String]) -> [String] { decode(encode(strs)) }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="271-encode-and-decode-strings-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -342,7 +328,6 @@ This works for any character content, including the `#` delimiter, because the l
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -357,8 +342,6 @@ final class Solution {
     func roundTrip(_ strs: [String]) -> [String] { decode(encode(strs)) }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="271-encode-and-decode-strings-approach3-swift" />
 </TabItem>
 </Tabs>
 

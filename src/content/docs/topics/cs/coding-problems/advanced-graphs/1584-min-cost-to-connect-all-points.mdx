@@ -24,8 +24,7 @@ import approach3GoCode from './1584-min-cost-to-connect-all-points-approach3.go?
 import approach4PyCode from './1584-min-cost-to-connect-all-points-approach4.py?raw';
 import approach4TsCode from './1584-min-cost-to-connect-all-points-approach4.ts?raw';
 import approach4GoCode from './1584-min-cost-to-connect-all-points-approach4.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './1584-min-cost-to-connect-all-points.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './1584-min-cost-to-connect-all-points-approach1.swift?raw';
 import approach2SwiftCode from './1584-min-cost-to-connect-all-points-approach2.swift?raw';
 import approach3SwiftCode from './1584-min-cost-to-connect-all-points-approach3.swift?raw';
@@ -51,9 +50,6 @@ LeetCode 1584 · [Link](https://leetcode.com/problems/min-cost-to-connect-all-po
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="min-cost-to-connect-all-points-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="1584-min-cost-to-connect-all-points-swift" />
   </TabItem>
 </Tabs>
 
@@ -146,7 +142,7 @@ function minCostConnectPoints(points: number[][]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="1584-min-cost-to-connect-all-points-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -294,7 +290,7 @@ Sorting E = $O(V²)$ edges costs $O(V² log V² )$ = $O(V² log V)$. The union-f
     <GoRepl code={approach2GoCode} id="min-cost-to-connect-all-points-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="1584-min-cost-to-connect-all-points-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -533,7 +529,7 @@ No heap needed. The inner scans at L5 and L8 each visit all V nodes once per out
     <GoRepl code={approach4GoCode} id="min-cost-to-connect-all-points-approach4-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="1584-min-cost-to-connect-all-points-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

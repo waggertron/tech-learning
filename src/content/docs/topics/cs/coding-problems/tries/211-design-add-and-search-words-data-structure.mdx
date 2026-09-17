@@ -12,10 +12,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './211-design-add-and-search-words-data-structure.py?raw';
 import practiceCodeGo from './211-design-add-and-search-words-data-structure.go?raw';
-import practiceCodeSwift from './211-design-add-and-search-words-data-structure.swift?raw';
 import approach1SwiftCode from './211-design-add-and-search-words-data-structure-approach1.swift?raw';
 import approach2SwiftCode from './211-design-add-and-search-words-data-structure-approach2.swift?raw';
 import approach3SwiftCode from './211-design-add-and-search-words-data-structure-approach3.swift?raw';
@@ -53,9 +52,6 @@ LeetCode 211 · [Link](https://leetcode.com/problems/design-add-and-search-words
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="design-add-and-search-words-data-structure-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="211-design-add-and-search-words-data-structure-swift" />
   </TabItem>
 </Tabs>
 
@@ -135,7 +131,7 @@ func main() { runTests() }
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="211-design-add-and-search-words-data-structure-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -259,7 +255,7 @@ func main() { runTests() }
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="211-design-add-and-search-words-data-structure-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -447,7 +443,7 @@ func main() { runTests() }
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="211-design-add-and-search-words-data-structure-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

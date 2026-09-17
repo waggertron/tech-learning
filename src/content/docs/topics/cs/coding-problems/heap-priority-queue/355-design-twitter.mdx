@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './355-design-twitter.py?raw';
 import practiceCodeTs from './355-design-twitter.ts?raw';
 import practiceCodeGo from './355-design-twitter.go?raw';
-import practiceCodeSwift from './355-design-twitter.swift?raw';
 import approach2PyCode from './355-design-twitter-approach2.py?raw';
 import approach2TsCode from './355-design-twitter-approach2.ts?raw';
 import approach2GoCode from './355-design-twitter-approach2.go?raw';
@@ -48,9 +47,6 @@ LeetCode 355 · [Link](https://leetcode.com/problems/design-twitter/) · *Medium
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="design-twitter-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="355-design-twitter-swift" />
   </TabItem>
 </Tabs>
 
@@ -165,7 +161,7 @@ func (t *Twitter) GetNewsFeed(userId int) []int {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="355-design-twitter-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -408,7 +404,7 @@ func main() { runTests() }
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="355-design-twitter-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -456,7 +452,7 @@ Lower memory if you don't need long-term history.
 
 <Tabs>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="355-design-twitter-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

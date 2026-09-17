@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './647-palindromic-substrings.py?raw';
 import practiceCodeTs from './647-palindromic-substrings.ts?raw';
 import practiceCodeGo from './647-palindromic-substrings.go?raw';
-import practiceCodeSwift from './647-palindromic-substrings.swift?raw';
 import approach1SwiftCode from './647-palindromic-substrings-approach1.swift?raw';
 import approach2SwiftCode from './647-palindromic-substrings-approach2.swift?raw';
 import approach3SwiftCode from './647-palindromic-substrings-approach3.swift?raw';
@@ -45,9 +44,6 @@ LeetCode 647 · [Link](https://leetcode.com/problems/palindromic-substrings/) ·
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="palindromic-substrings-ts" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="647-palindromic-substrings-swift" />
   </TabItem>
 </Tabs>
 
@@ -84,7 +80,7 @@ function countSubstrings(s: string): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="647-palindromic-substrings-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -144,7 +140,7 @@ function countSubstrings(s: string): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="647-palindromic-substrings-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -227,7 +223,7 @@ function countSubstrings(s: string): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="647-palindromic-substrings-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

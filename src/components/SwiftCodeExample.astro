@@ -1,0 +1,30 @@
+---
+import { Code } from '@astrojs/starlight/components';
+import binaryHeap from '../../tools/swift-catalog/helpers/BinaryHeap.swift?raw';
+import graphNode from '../../tools/swift-catalog/helpers/GraphNode.swift?raw';
+import interval from '../../tools/swift-catalog/helpers/Interval.swift?raw';
+import listNode from '../../tools/swift-catalog/helpers/ListNode.swift?raw';
+import randomListNode from '../../tools/swift-catalog/helpers/RandomListNode.swift?raw';
+import testSupport from '../../tools/swift-catalog/helpers/TestSupport.swift?raw';
+import treeNode from '../../tools/swift-catalog/helpers/TreeNode.swift?raw';
+import trieNode from '../../tools/swift-catalog/helpers/TrieNode.swift?raw';
+import { extractSwiftExampleSource } from '../lib/swift-catalog/display-source.mjs';
+
+interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+const example = extractSwiftExampleSource(code, [
+  testSupport,
+  binaryHeap,
+  graphNode,
+  interval,
+  listNode,
+  randomListNode,
+  treeNode,
+  trieNode,
+]);
+---
+
+<Code code={example} lang="swift" />

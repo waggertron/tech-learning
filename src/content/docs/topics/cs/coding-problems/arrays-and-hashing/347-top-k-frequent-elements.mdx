@@ -21,11 +21,6 @@ import approach2GoCode from './347-top-k-frequent-elements-approach2.go?raw';
 import approach3PyCode from './347-top-k-frequent-elements-approach3.py?raw';
 import approach3TsCode from './347-top-k-frequent-elements-approach3.ts?raw';
 import approach3GoCode from './347-top-k-frequent-elements-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './347-top-k-frequent-elements.swift?raw';
-import approach1SwiftCode from './347-top-k-frequent-elements-approach1.swift?raw';
-import approach2SwiftCode from './347-top-k-frequent-elements-approach2.swift?raw';
-import approach3SwiftCode from './347-top-k-frequent-elements-approach3.swift?raw';
 
 ## Problem
 
@@ -50,9 +45,6 @@ LeetCode 347 Â· [Link](https://leetcode.com/problems/top-k-frequent-elements/) Â
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="top-k-frequent-elements-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="347-top-k-frequent-elements-swift" />
   </TabItem>
 </Tabs>
 
@@ -118,7 +110,6 @@ func topKFrequent(nums []int, k int) []int {
 
 `most_common(k)` internally uses a heap ($O(n log k)$), but for "brute" purposes treat it as a full sort.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -130,8 +121,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="347-top-k-frequent-elements-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -232,7 +221,6 @@ When `k` is small relative to `n`, this is noticeably faster than the $O(n log n
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -247,8 +235,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="347-top-k-frequent-elements-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -348,7 +334,6 @@ Every distinct element is bucketed once and visited at most once during the scan
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -362,8 +347,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="347-top-k-frequent-elements-approach3-swift" />
 </TabItem>
 </Tabs>
 

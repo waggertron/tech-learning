@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './496-next-greater-element-i.py?raw';
 import practiceCodeTs from './496-next-greater-element-i.ts?raw';
 import practiceCodeGo from './496-next-greater-element-i.go?raw';
-import practiceCodeSwift from './496-next-greater-element-i.swift?raw';
 import approach1SwiftCode from './496-next-greater-element-i-approach1.swift?raw';
 import approach2SwiftCode from './496-next-greater-element-i-approach2.swift?raw';
 import approach2PyCode from './496-next-greater-element-i-approach2.py?raw';
@@ -47,9 +46,6 @@ LeetCode 496 · [Link](https://leetcode.com/problems/next-greater-element-i/) ·
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="next-greater-element-i-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="496-next-greater-element-i-swift" />
   </TabItem>
 </Tabs>
 
@@ -90,7 +86,7 @@ function nextGreaterElement(nums1: number[], nums2: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="496-next-greater-element-i-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -141,7 +137,7 @@ function nextGreaterElement(nums1: number[], nums2: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="496-next-greater-element-i-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -165,9 +161,6 @@ Each element of nums2 is pushed once and popped at most once. Total stack work i
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="next-greater-element-i-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="next-greater-element-i-approach2-py" />
   </TabItem>
@@ -201,7 +194,6 @@ nums1=[4,1,2] -> [nge[4], nge[1], nge[2]] = [-1, 3, -1]
 - Separating precomputation (stack over nums2) from querying (hash map lookup for nums1) is a clean pattern: build once, query many times.
 - The stack stores values here (not indices) because nums1 queries are by value. For index-based problems like 503 or 739, store indices instead.
 - Elements that are never popped (nothing greater to their right) get marked -1 in the cleanup loop.
-
 
 ## Related topics
 

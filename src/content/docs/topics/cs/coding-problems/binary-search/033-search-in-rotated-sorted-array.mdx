@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './033-search-in-rotated-sorted-array.py?raw';
 import practiceCodeTs from './033-search-in-rotated-sorted-array.ts?raw';
 import practiceCodeGo from './033-search-in-rotated-sorted-array.go?raw';
-import practiceCodeSwift from './033-search-in-rotated-sorted-array.swift?raw';
 import approach1SwiftCode from './033-search-in-rotated-sorted-array-approach1.swift?raw';
 import approach2SwiftCode from './033-search-in-rotated-sorted-array-approach2.swift?raw';
 import approach3SwiftCode from './033-search-in-rotated-sorted-array-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 33 · [Link](https://leetcode.com/problems/search-in-rotated-sorted-arr
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="search-in-rotated-sorted-array-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="033-search-in-rotated-sorted-array-swift" />
   </TabItem>
 </Tabs>
 
@@ -90,7 +86,7 @@ func search(nums []int, target int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="033-search-in-rotated-sorted-array-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -204,7 +200,7 @@ func search(nums []int, target int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="033-search-in-rotated-sorted-array-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -311,7 +307,7 @@ func search(nums []int, target int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="033-search-in-rotated-sorted-array-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

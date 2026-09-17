@@ -21,8 +21,7 @@ import approach2GoCode from './072-edit-distance-approach2.go?raw';
 import approach3PyCode from './072-edit-distance-approach3.py?raw';
 import approach3TsCode from './072-edit-distance-approach3.ts?raw';
 import approach3GoCode from './072-edit-distance-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './072-edit-distance.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './072-edit-distance-approach1.swift?raw';
 import approach2SwiftCode from './072-edit-distance-approach2.swift?raw';
 import approach3SwiftCode from './072-edit-distance-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 72 · [Link](https://leetcode.com/problems/edit-distance/) · *Hard*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="edit-distance-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="072-edit-distance-swift" />
   </TabItem>
 </Tabs>
 
@@ -110,7 +106,7 @@ func minDistance(word1 string, word2 string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="072-edit-distance-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -205,7 +201,7 @@ Each `(i, j)` pair is computed exactly once. There are `(m+1) * (n+1)` such pair
     <GoRepl code={approach2GoCode} id="edit-distance-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="072-edit-distance-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -314,7 +310,7 @@ Every cell of the DP table is filled in $O(1)$ via three table lookups. The doub
     <GoRepl code={approach3GoCode} id="edit-distance-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="072-edit-distance-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

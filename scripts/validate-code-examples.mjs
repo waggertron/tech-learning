@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import ts from "typescript";
+import { validateCodingProblemTabContracts } from "../src/lib/coding-problem-tab-contracts.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const knownFenceLanguages = new Set([
@@ -49,6 +50,14 @@ function listFiles(args) {
 
 function listMarkdownFiles() {
   return listFiles(["src/content/docs", "-name", "*.md", "-o", "-name", "*.mdx"]);
+}
+
+function listCodingProblemFiles() {
+  return listFiles([
+    "src/content/docs/topics/cs/coding-problems",
+    "-name",
+    "*.mdx",
+  ]);
 }
 
 function listSourceFiles(extension) {
@@ -142,12 +151,20 @@ function checkGeneratedReactContracts(errors) {
   }
 }
 
+function checkCodingProblemTabContracts(errors) {
+  for (const filePath of listCodingProblemFiles()) {
+    const source = readFileSync(path.join(repoRoot, filePath), "utf8");
+    errors.push(...validateCodingProblemTabContracts(source, filePath));
+  }
+}
+
 const errors = [];
 checkFenceLanguages(errors);
 checkTypeScriptSyntax(errors);
 checkPythonSyntax(errors);
 checkGoSyntax(errors);
 checkGeneratedReactContracts(errors);
+checkCodingProblemTabContracts(errors);
 
 if (errors.length > 0) {
   console.error("Code example validation failed:");
@@ -160,4 +177,6 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("Code example validation passed: fence tags and source syntax checked.");
+console.log(
+  "Code example validation passed: fence tags, source syntax, and coding-problem tab contracts checked.",
+);

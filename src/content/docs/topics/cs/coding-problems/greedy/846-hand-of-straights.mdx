@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './846-hand-of-straights.py?raw';
 import practiceCodeTs from './846-hand-of-straights.ts?raw';
 import practiceCodeGo from './846-hand-of-straights.go?raw';
-import practiceCodeSwift from './846-hand-of-straights.swift?raw';
 import approach1SwiftCode from './846-hand-of-straights-approach1.swift?raw';
 import approach2SwiftCode from './846-hand-of-straights-approach2.swift?raw';
 import approach3SwiftCode from './846-hand-of-straights-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 846 · [Link](https://leetcode.com/problems/hand-of-straights/) · *Med
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="hand-of-straights-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="846-hand-of-straights-swift" />
   </TabItem>
 </Tabs>
 
@@ -139,7 +135,7 @@ func isNStraightHand(hand []int, groupSize int) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="846-hand-of-straights-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -215,7 +211,7 @@ func isNStraightHand(hand []int, groupSize int) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="846-hand-of-straights-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -324,7 +320,7 @@ func isNStraightHandHeap(hand []int, groupSize int) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="846-hand-of-straights-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

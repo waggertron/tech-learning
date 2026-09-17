@@ -28,25 +28,24 @@ description: "Synthetic coverage fixture."
 import PythonRepl from './PythonRepl.astro';
 import TypeScriptRepl from './TypeScriptRepl.astro';
 import GoRepl from './GoRepl.astro';
-import SwiftRepl from './SwiftRepl.astro';
+import SwiftCodeExample from './SwiftCodeExample.astro';
 import practiceCode from './001-complete.py?raw';
 import practiceCodeTs from './001-complete.ts?raw';
 import practiceCodeGo from './001-complete.go?raw';
-import practiceCodeSwift from './001-complete.swift?raw';
+import approach1SwiftCode from './001-complete-approach1.swift?raw';
 
 ## Try it yourself
 
 <TabItem label="Python"><PythonRepl code={practiceCode} /></TabItem>
 <TabItem label="TypeScript"><TypeScriptRepl code={practiceCodeTs} /></TabItem>
 <TabItem label="Go"><GoRepl code={practiceCodeGo} /></TabItem>
-<TabItem label="Swift"><SwiftRepl code={practiceCodeSwift} /></TabItem>
 
 ## Approach 1: Direct scan
 
 <TabItem label="Python">\n\`\`\`python\nprint('ok')\n\`\`\`\n</TabItem>
 <TabItem label="TypeScript">\n\`\`\`typescript\nconsole.log('ok')\n\`\`\`\n</TabItem>
 <TabItem label="Go">\n\`\`\`go\npackage main\n\`\`\`\n</TabItem>
-<TabItem label="Swift">\n\`\`\`swift\nprint("ok")\n\`\`\`\n</TabItem>
+<TabItem label="Swift"><SwiftCodeExample code={approach1SwiftCode} /></TabItem>
 `;
 
 const incompletePage = `---

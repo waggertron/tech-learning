@@ -21,11 +21,6 @@ import approach2GoCode from './242-valid-anagram-approach2.go?raw';
 import approach3PyCode from './242-valid-anagram-approach3.py?raw';
 import approach3TsCode from './242-valid-anagram-approach3.ts?raw';
 import approach3GoCode from './242-valid-anagram-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './242-valid-anagram.swift?raw';
-import approach1SwiftCode from './242-valid-anagram-approach1.swift?raw';
-import approach2SwiftCode from './242-valid-anagram-approach2.swift?raw';
-import approach3SwiftCode from './242-valid-anagram-approach3.swift?raw';
 
 ## Problem
 
@@ -50,9 +45,6 @@ LeetCode 242 · [Link](https://leetcode.com/problems/valid-anagram/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="valid-anagram-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="242-valid-anagram-swift" />
   </TabItem>
 </Tabs>
 
@@ -109,7 +101,6 @@ Sorting each string costs $O(n log n)$; the final equality check scans both sort
 
 "Brute" in the sense of doing more work than necessary, but this is surprisingly common and acceptable for small inputs.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -120,8 +111,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="242-valid-anagram-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -199,7 +188,6 @@ Clean, correct, Unicode-safe. This is usually the right production answer.
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -212,8 +200,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="242-valid-anagram-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -304,7 +290,6 @@ For Unicode input, substitute a `dict` (which is equivalent to the Counter appro
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -317,8 +302,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="242-valid-anagram-approach3-swift" />
 </TabItem>
 </Tabs>
 

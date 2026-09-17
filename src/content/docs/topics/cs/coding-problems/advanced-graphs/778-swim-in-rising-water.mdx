@@ -21,8 +21,7 @@ import approach2GoCode from './778-swim-in-rising-water-approach2.go?raw';
 import approach3PyCode from './778-swim-in-rising-water-approach3.py?raw';
 import approach3TsCode from './778-swim-in-rising-water-approach3.ts?raw';
 import approach3GoCode from './778-swim-in-rising-water-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './778-swim-in-rising-water.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './778-swim-in-rising-water-approach1.swift?raw';
 import approach2SwiftCode from './778-swim-in-rising-water-approach2.swift?raw';
 import approach3SwiftCode from './778-swim-in-rising-water-approach3.swift?raw';
@@ -50,9 +49,6 @@ LeetCode 778 · [Link](https://leetcode.com/problems/swim-in-rising-water/) · *
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="swim-in-rising-water-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="778-swim-in-rising-water-swift" />
   </TabItem>
 </Tabs>
 
@@ -166,7 +162,7 @@ func swimInWater(grid [][]int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="778-swim-in-rising-water-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -303,7 +299,7 @@ The heap holds at most n² entries (one per cell). Each cell is popped exactly o
     <GoRepl code={approach2GoCode} id="swim-in-rising-water-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="778-swim-in-rising-water-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -461,7 +457,7 @@ L1 dominates: sorting n² cells costs $O(n² log n)$. The union-find operations 
     <GoRepl code={approach3GoCode} id="swim-in-rising-water-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="778-swim-in-rising-water-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

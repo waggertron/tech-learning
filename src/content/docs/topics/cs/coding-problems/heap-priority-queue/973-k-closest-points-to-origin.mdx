@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './973-k-closest-points-to-origin.py?raw';
 import practiceCodeTs from './973-k-closest-points-to-origin.ts?raw';
 import practiceCodeGo from './973-k-closest-points-to-origin.go?raw';
-import practiceCodeSwift from './973-k-closest-points-to-origin.swift?raw';
 import approach2PyCode from './973-k-closest-points-to-origin-approach2.py?raw';
 import approach2TsCode from './973-k-closest-points-to-origin-approach2.ts?raw';
 import approach2GoCode from './973-k-closest-points-to-origin-approach2.go?raw';
@@ -48,9 +47,6 @@ LeetCode 973 · [Link](https://leetcode.com/problems/k-closest-points-to-origin/
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="k-closest-points-to-origin-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="973-k-closest-points-to-origin-swift" />
   </TabItem>
 </Tabs>
 
@@ -89,7 +85,7 @@ func kClosest(points [][]int, k int) [][]int {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="973-k-closest-points-to-origin-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -236,7 +232,7 @@ func main() { runTests() }
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="973-k-closest-points-to-origin-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -391,7 +387,7 @@ func main() { runTests() }
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="973-k-closest-points-to-origin-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

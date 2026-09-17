@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './763-partition-labels.py?raw';
 import practiceCodeTs from './763-partition-labels.ts?raw';
 import practiceCodeGo from './763-partition-labels.go?raw';
-import practiceCodeSwift from './763-partition-labels.swift?raw';
 import approach1SwiftCode from './763-partition-labels-approach1.swift?raw';
 import approach2SwiftCode from './763-partition-labels-approach2.swift?raw';
 import approach3SwiftCode from './763-partition-labels-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 763 · [Link](https://leetcode.com/problems/partition-labels/) · *Medi
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="partition-labels-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="763-partition-labels-swift" />
   </TabItem>
 </Tabs>
 
@@ -113,7 +109,7 @@ func partitionLabels(s string) []int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="763-partition-labels-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -180,7 +176,7 @@ func partitionLabels(s string) []int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="763-partition-labels-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -296,7 +292,7 @@ func partitionLabels(s string) []int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="763-partition-labels-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

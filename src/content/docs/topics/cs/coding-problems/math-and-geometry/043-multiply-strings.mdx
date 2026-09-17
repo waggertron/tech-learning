@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './043-multiply-strings.py?raw';
 import practiceCodeTs from './043-multiply-strings.ts?raw';
 import practiceCodeGo from './043-multiply-strings.go?raw';
-import practiceCodeSwift from './043-multiply-strings.swift?raw';
 import approach1SwiftCode from './043-multiply-strings-approach1.swift?raw';
 import approach2SwiftCode from './043-multiply-strings-approach2.swift?raw';
 import approach3SwiftCode from './043-multiply-strings-approach3.swift?raw';
@@ -45,9 +44,6 @@ LeetCode 43 · [Link](https://leetcode.com/problems/multiply-strings/) · *Mediu
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="multiply-strings-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="043-multiply-strings-swift" />
   </TabItem>
 </Tabs>
 
@@ -81,7 +77,7 @@ func multiply(num1 string, num2 string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="043-multiply-strings-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -169,7 +165,7 @@ func multiply(num1 string, num2 string) string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="043-multiply-strings-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -273,7 +269,7 @@ def multiply(num1, num2):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="043-multiply-strings-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

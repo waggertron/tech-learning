@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './199-binary-tree-right-side-view.py?raw';
 import practiceCodeTs from './199-binary-tree-right-side-view.ts?raw';
 import practiceCodeGo from './199-binary-tree-right-side-view.go?raw';
-import practiceCodeSwift from './199-binary-tree-right-side-view.swift?raw';
 import approach1SwiftCode from './199-binary-tree-right-side-view-approach1.swift?raw';
 import approach2SwiftCode from './199-binary-tree-right-side-view-approach2.swift?raw';
 import approach3SwiftCode from './199-binary-tree-right-side-view-approach3.swift?raw';
@@ -46,9 +45,6 @@ LeetCode 199 · [Link](https://leetcode.com/problems/binary-tree-right-side-view
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="binary-tree-right-side-view-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="199-binary-tree-right-side-view-swift" />
   </TabItem>
 </Tabs>
 
@@ -140,7 +136,7 @@ func rightSideView(root *TreeNode) []int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="199-binary-tree-right-side-view-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -186,7 +182,7 @@ def right_side_view(root):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="199-binary-tree-right-side-view-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -266,7 +262,7 @@ func rightSideView(root *TreeNode) []int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="199-binary-tree-right-side-view-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

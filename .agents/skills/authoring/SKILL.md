@@ -145,6 +145,8 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
 
    **Multiple implementations:** Prefer at least the canonical implementation plus meaningful alternatives when they exist. For coding problems, the current repo commonly uses Python, TypeScript, and Go tabs for each approach. Those language tabs are language variants of the same approach, not the approach limit. Add more than three approaches when the extra versions are pedagogically useful, for example brute force, sorting, hash-based, two-pointer, DP table, space-optimized DP, recursive, iterative, state-machine, heap-based, or follow-up-constrained variants. Do not add filler approaches that only rename variables or repeat the same idea.
 
+   **Approach tab uniqueness:** Each `<Tabs>` group contains at most one tab for each language. Runner IDs are unique within the page. `practiceCode`, `practiceCodeTs`, and `practiceCodeGo` belong only to `## Try it yourself`. Completed `## Approach` sections use their approach-specific source imports. Automation replaces a placeholder tab or stops with an error instead of inserting a second tab for the same language.
+
    **Minimal vs optional explanation:** The minimum standard for an implementation is tested code, the core idea, complexity, and enough explanation to know when to use it. Optional deeper explanation is welcome when it teaches the invariant, proof, recurrence, edge cases, or interview reasoning. Use normal Markdown in those sections, including tables, lists, code fences, and KaTeX math such as `$O(n^2)$` or `$$T(i) = \sum_{j=i+1}^{n-1} T(j)$$`. Keep optional sections clearly labeled with headings such as `### Further explanation` so the page can support both quick review and deep study.
 
    **Related concepts:** Every coding problem page needs this final section with at least two concept links, usually 2-5 total. Use it for concepts, not just more LeetCode neighbors: named algorithms, data structures, design patterns, complexity tools, proof ideas, or problem-solving patterns. Prefer links to `../../coding-concepts/<slug>/` from coding-problem pages. Keep the entries short and concrete, e.g. "why this concept matters for this problem." If the page already has `## Related topics`, keep both sections: related topics connect nearby pages, related concepts name the transferable ideas.
@@ -254,6 +256,8 @@ Before calling a new page done:
 - [ ] No prose semicolons joining independent clauses (split into two sentences instead).
 - [ ] No internal plan headings, future-file TODOs, or repeated same-author source piles are rendered in the page body.
 - [ ] No irrelevant local, credential, deployment, tool, or maintainer concerns leak into a broad reader-facing page.
+- [ ] Every coding-problem tab group has unique language labels and runner IDs, and completed approaches do not load generic starter code.
+- [ ] `npm run test:coding-problem-tab-contracts` and `npm run validate:code-examples` are green after coding-problem tab changes.
 - [ ] See [prose-cleanup skill](../prose-cleanup/SKILL.md) for the full AI-marker checklist.
 
 ## Examples

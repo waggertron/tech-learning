@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './102-binary-tree-level-order-traversal.py?raw';
 import practiceCodeTs from './102-binary-tree-level-order-traversal.ts?raw';
 import practiceCodeGo from './102-binary-tree-level-order-traversal.go?raw';
-import practiceCodeSwift from './102-binary-tree-level-order-traversal.swift?raw';
 import approach1SwiftCode from './102-binary-tree-level-order-traversal-approach1.swift?raw';
 import approach2SwiftCode from './102-binary-tree-level-order-traversal-approach2.swift?raw';
 import approach3SwiftCode from './102-binary-tree-level-order-traversal-approach3.swift?raw';
@@ -46,9 +45,6 @@ LeetCode 102 · [Link](https://leetcode.com/problems/binary-tree-level-order-tra
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="binary-tree-level-order-traversal-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="102-binary-tree-level-order-traversal-swift" />
   </TabItem>
 </Tabs>
 
@@ -142,7 +138,7 @@ func levelOrder(root *TreeNode) [][]int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="102-binary-tree-level-order-traversal-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -229,7 +225,7 @@ func levelOrder(root *TreeNode) [][]int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="102-binary-tree-level-order-traversal-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -288,7 +284,7 @@ def level_order(root):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="102-binary-tree-level-order-traversal-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

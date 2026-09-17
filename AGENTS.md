@@ -34,6 +34,10 @@ Codex-native reusable skills live in `.agents/skills/`. Local learning and quiz 
 
 14. **Keep plans in the plans workspace.** Tracked planning documents live under `docs/plans/`. Put underway plans in `docs/plans/current/` and move finished or superseded plans to `docs/plans/history/`. Private source gathering belongs in ignored `docs/research/`.
 
+15. **Keep Swift coding-problem examples static.** Coding-problem pages show Swift solutions as highlighted code, not `SwiftRepl` editors or approach run controls. Keep the standalone `.swift` starter and approach files as compile and test evidence.
+
+16. **Keep coding-problem tabs unique.** A `<Tabs>` group has at most one tab per language, every REPL ID is unique within its page, and completed `## Approach` sections use approach-specific sources instead of generic `practiceCode`. Run `npm run test:coding-problem-tab-contracts` after changing approach tabs or automation.
+
 ## Repo structure
 
 ```

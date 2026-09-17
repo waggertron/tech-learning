@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './703-kth-largest-element-in-a-stream.py?raw';
 import practiceCodeTs from './703-kth-largest-element-in-a-stream.ts?raw';
 import practiceCodeGo from './703-kth-largest-element-in-a-stream.go?raw';
-import practiceCodeSwift from './703-kth-largest-element-in-a-stream.swift?raw';
 import approach3TsCode from './703-kth-largest-element-in-a-stream-approach3.ts?raw';
 import approach3GoCode from './703-kth-largest-element-in-a-stream-approach3.go?raw';
 import approach1SwiftCode from './703-kth-largest-element-in-a-stream-approach1.swift?raw';
@@ -53,9 +52,6 @@ LeetCode 703 · [Link](https://leetcode.com/problems/kth-largest-element-in-a-st
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="kth-largest-element-in-a-stream-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="703-kth-largest-element-in-a-stream-swift" />
   </TabItem>
 </Tabs>
 
@@ -104,7 +100,7 @@ class KthLargest {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="703-kth-largest-element-in-a-stream-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -158,7 +154,7 @@ class KthLargest:
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="703-kth-largest-element-in-a-stream-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -311,7 +307,7 @@ func main() { runTests() }
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="703-kth-largest-element-in-a-stream-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

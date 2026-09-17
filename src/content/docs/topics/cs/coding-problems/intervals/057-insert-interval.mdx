@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './057-insert-interval.py?raw';
 import practiceCodeTs from './057-insert-interval.ts?raw';
 import practiceCodeGo from './057-insert-interval.go?raw';
-import practiceCodeSwift from './057-insert-interval.swift?raw';
 import approach1SwiftCode from './057-insert-interval-approach1.swift?raw';
 import approach2SwiftCode from './057-insert-interval-approach2.swift?raw';
 import approach3SwiftCode from './057-insert-interval-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 57 · [Link](https://leetcode.com/problems/insert-interval/) · *Medium
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="insert-interval-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="057-insert-interval-swift" />
   </TabItem>
 </Tabs>
 
@@ -110,7 +106,7 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="057-insert-interval-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -206,7 +202,7 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="057-insert-interval-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -217,9 +213,6 @@ Same $O(n)$ in the worst case.
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="insert-interval-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="insert-interval-approach2-py" />
   </TabItem>
@@ -330,7 +323,7 @@ func insert(intervals [][]int, newInterval []int) [][]int {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="057-insert-interval-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -354,9 +347,6 @@ No phase dominates; every interval is visited exactly once across the three phas
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="insert-interval-approach3-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach3PyCode} id="insert-interval-approach3-py" />
   </TabItem>

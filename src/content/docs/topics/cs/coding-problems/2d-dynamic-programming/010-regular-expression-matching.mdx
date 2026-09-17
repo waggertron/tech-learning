@@ -21,8 +21,7 @@ import approach2GoCode from './010-regular-expression-matching-approach2.go?raw'
 import approach3PyCode from './010-regular-expression-matching-approach3.py?raw';
 import approach3TsCode from './010-regular-expression-matching-approach3.ts?raw';
 import approach3GoCode from './010-regular-expression-matching-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './010-regular-expression-matching.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './010-regular-expression-matching-approach1.swift?raw';
 import approach2SwiftCode from './010-regular-expression-matching-approach2.swift?raw';
 import approach3SwiftCode from './010-regular-expression-matching-approach3.swift?raw';
@@ -52,9 +51,6 @@ LeetCode 10 · [Link](https://leetcode.com/problems/regular-expression-matching/
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="regular-expression-matching-ts" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="010-regular-expression-matching-swift" />
   </TabItem>
 </Tabs>
 
@@ -92,7 +88,7 @@ function isMatch(s: string, p: string): boolean {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="010-regular-expression-matching-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -186,7 +182,7 @@ With memoization, each unique `(i, j)` pair is computed exactly once. There are 
   </TabItem>
 
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="010-regular-expression-matching-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -279,7 +275,7 @@ Every cell is filled in $O(1)$ with a constant number of table lookups. The doub
   </TabItem>
 
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="010-regular-expression-matching-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './019-remove-nth-node-from-end-of-list.py?raw';
 import practiceCodeTs from './019-remove-nth-node-from-end-of-list.ts?raw';
 import practiceCodeGo from './019-remove-nth-node-from-end-of-list.go?raw';
-import practiceCodeSwift from './019-remove-nth-node-from-end-of-list.swift?raw';
 import approach1SwiftCode from './019-remove-nth-node-from-end-of-list-approach1.swift?raw';
 import approach2SwiftCode from './019-remove-nth-node-from-end-of-list-approach2.swift?raw';
 import approach3SwiftCode from './019-remove-nth-node-from-end-of-list-approach3.swift?raw';
@@ -46,9 +45,6 @@ LeetCode 19 · [Link](https://leetcode.com/problems/remove-nth-node-from-end-of-
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="remove-nth-node-from-end-of-list-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="019-remove-nth-node-from-end-of-list-swift" />
   </TabItem>
 </Tabs>
 
@@ -121,7 +117,7 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="019-remove-nth-node-from-end-of-list-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -204,7 +200,7 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="019-remove-nth-node-from-end-of-list-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -286,7 +282,7 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="019-remove-nth-node-from-end-of-list-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

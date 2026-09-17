@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './100-same-tree.py?raw';
 import practiceCodeTs from './100-same-tree.ts?raw';
 import practiceCodeGo from './100-same-tree.go?raw';
-import practiceCodeSwift from './100-same-tree.swift?raw';
 import approach1SwiftCode from './100-same-tree-approach1.swift?raw';
 import approach2SwiftCode from './100-same-tree-approach2.swift?raw';
 import approach3SwiftCode from './100-same-tree-approach3.swift?raw';
@@ -45,9 +44,6 @@ LeetCode 100 · [Link](https://leetcode.com/problems/same-tree/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="same-tree-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="100-same-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -108,7 +104,7 @@ func isSameTree(p *TreeNode, q *TreeNode) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="100-same-tree-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -196,7 +192,7 @@ func isSameTree(p *TreeNode, q *TreeNode) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="100-same-tree-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -246,7 +242,7 @@ def is_same_tree(p, q):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="100-same-tree-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

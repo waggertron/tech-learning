@@ -149,6 +149,8 @@ There is no hard cap at three implementations. Three approaches is a useful base
 
 For coding problem pages, keep each approach in its own `## Approach N: Name` section. Within an approach, Python, TypeScript, and Go tabs are language variants of the same approach. They do not count as separate approach slots. Additional approach files can use the existing naming pattern, e.g. `<slug>-approach4.py`, `<slug>-approach4.ts`, and `<slug>-approach4.go`.
 
+Each `<Tabs>` group has at most one tab for each language, and every REPL ID is unique within the page. Generic `practiceCode`, `practiceCodeTs`, and `practiceCodeGo` imports belong to `## Try it yourself`. Completed `## Approach` sections use approach-specific source imports. A script that wires approach files replaces an existing placeholder for that language or stops with an error. It does not insert a duplicate language tab. `npm run test:coding-problem-tab-contracts` and `npm run validate:code-examples` enforce this contract.
+
 For concept pages, use implementation subsections when the comparison is conceptual and tabs when the implementations are the same idea in different languages. Skip filler variants that only rename variables or restate the same algorithm.
 
 ### Minimal standard and optional explanation
@@ -340,7 +342,7 @@ npm run test:swift-runner-executor
 
 The contract and component tests are deterministic and credential-free. The browser validator uses an isolated local fixture under `tests/` and does not publish that fixture with the site. Run the Docker-backed executor suite when changing the pinned image, isolation controls, limits, source transfer, or cleanup. Finish every content or site batch with `npm run build`.
 
-Swift coding-problem files follow [the Swift coding-problem contract](swift-coding-problem-contract.md). Keep every starter and approach standalone, preserve the LeetCode type and method signature, copy the canonical test and data-structure blocks exactly, and keep deliberately invalid inputs separate from valid fixtures. The static contract test runs in the default pre-push gate. The focused compile command uses the selected local Swift compiler and records language evidence only.
+Swift coding-problem files follow [the Swift coding-problem contract](swift-coding-problem-contract.md). Keep every starter and approach standalone, preserve the LeetCode type and method signature, copy the canonical test and data-structure blocks exactly, and keep deliberately invalid inputs separate from valid fixtures. Coding-problem pages show Swift approaches as static highlighted examples. Do not add `SwiftRepl` to their practice or approach tabs. The static contract test runs in the default pre-push gate. The focused compile command uses the selected local Swift compiler and records language evidence only.
 
 Python, TypeScript, Go, and Swift harnesses share [one canonical vector document per problem](coding-problem-test-vectors.md). Record valid, boundary, and deliberate invalid inputs without repairing them in an adapter. Run the vector sync command before the coverage sync command. The four-language fixture command is focused evidence for changes to the schema or renderers.
 

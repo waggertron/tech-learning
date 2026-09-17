@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './189-rotate-array.py?raw';
 import practiceCodeTs from './189-rotate-array.ts?raw';
 import practiceCodeGo from './189-rotate-array.go?raw';
-import practiceCodeSwift from './189-rotate-array.swift?raw';
 import approach1SwiftCode from './189-rotate-array-approach1.swift?raw';
 import approach2SwiftCode from './189-rotate-array-approach2.swift?raw';
 import approach3SwiftCode from './189-rotate-array-approach3.swift?raw';
@@ -57,9 +56,6 @@ LeetCode 189 · [Link](https://leetcode.com/problems/rotate-array/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="rotate-array-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="189-rotate-array-swift" />
   </TabItem>
 </Tabs>
 
@@ -106,7 +102,7 @@ func rotate(nums []int, k int) {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="189-rotate-array-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -192,7 +188,7 @@ func rotate(nums []int, k int) {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="189-rotate-array-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -283,7 +279,7 @@ func rotate(nums []int, k int) {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="189-rotate-array-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -324,7 +320,6 @@ Every element is written exactly once across all cycles, so `count` reaches `n` 
 - The three-reversal trick is $O(n)$ time, $O(1)$ space, and the expected interview answer: reverse all, reverse first `k`, reverse the rest.
 - Cyclic replacement also hits $O(1)$ space but needs $\gcd(n, k)$ cycle starts, so it carries more bookkeeping for no asymptotic gain.
 - The naive "rotate one step `k` times" is $O(n \cdot k)$ and times out at the constraint limits.
-
 
 ## Related topics
 

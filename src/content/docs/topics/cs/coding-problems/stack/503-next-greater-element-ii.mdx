@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './503-next-greater-element-ii.py?raw';
 import practiceCodeTs from './503-next-greater-element-ii.ts?raw';
 import practiceCodeGo from './503-next-greater-element-ii.go?raw';
-import practiceCodeSwift from './503-next-greater-element-ii.swift?raw';
 import approach1SwiftCode from './503-next-greater-element-ii-approach1.swift?raw';
 import approach2SwiftCode from './503-next-greater-element-ii-approach2.swift?raw';
 import approach2PyCode from './503-next-greater-element-ii-approach2.py?raw';
@@ -50,9 +49,6 @@ LeetCode 503 Â· [Link](https://leetcode.com/problems/next-greater-element-ii/) Â
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="next-greater-element-ii-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="503-next-greater-element-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -91,7 +87,7 @@ function nextGreaterElements(nums: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="503-next-greater-element-ii-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -140,7 +136,7 @@ function nextGreaterElements(nums: number[]): number[] {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="503-next-greater-element-ii-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -163,9 +159,6 @@ Each index is pushed once (guard `i < n`) and popped at most once. Total stack w
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="next-greater-element-ii-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="next-greater-element-ii-approach2-py" />
   </TabItem>
@@ -202,7 +195,6 @@ Final: [2, -1, 2]
 - Store indices (not values) in the stack when you need to write back to a result array.
 - Only push during the first pass (`i < n`). The second pass only processes existing stack entries, not adds new ones. This keeps the total push count at n.
 - Elements left on the stack after both passes have no greater element anywhere in the circle: their default `-1` stands.
-
 
 ## Related topics
 

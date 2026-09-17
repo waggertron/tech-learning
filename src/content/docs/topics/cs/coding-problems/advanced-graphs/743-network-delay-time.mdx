@@ -21,8 +21,7 @@ import approach2GoCode from './743-network-delay-time-approach2.go?raw';
 import approach3PyCode from './743-network-delay-time-approach3.py?raw';
 import approach3TsCode from './743-network-delay-time-approach3.ts?raw';
 import approach3GoCode from './743-network-delay-time-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './743-network-delay-time.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './743-network-delay-time-approach1.swift?raw';
 import approach2SwiftCode from './743-network-delay-time-approach2.swift?raw';
 import approach3SwiftCode from './743-network-delay-time-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 743 · [Link](https://leetcode.com/problems/network-delay-time/) · *Me
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="network-delay-time-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="743-network-delay-time-swift" />
   </TabItem>
 </Tabs>
 
@@ -116,7 +112,7 @@ func networkDelayTime(times [][]int, n int, k int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="743-network-delay-time-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -253,7 +249,7 @@ Single-source only needs `V²`; Floyd-Warshall is wasteful here.
     <GoRepl code={approach2GoCode} id="network-delay-time-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="743-network-delay-time-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -393,7 +389,7 @@ Each edge can produce at most one push (L10), so the heap holds at most E entrie
     <GoRepl code={approach3GoCode} id="network-delay-time-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="743-network-delay-time-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

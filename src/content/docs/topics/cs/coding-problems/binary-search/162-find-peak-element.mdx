@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './162-find-peak-element.py?raw';
 import practiceCodeTs from './162-find-peak-element.ts?raw';
 import practiceCodeGo from './162-find-peak-element.go?raw';
-import practiceCodeSwift from './162-find-peak-element.swift?raw';
 import approach1SwiftCode from './162-find-peak-element-approach1.swift?raw';
 import approach2SwiftCode from './162-find-peak-element-approach2.swift?raw';
 import approach2PyCode from './162-find-peak-element-approach2.py?raw';
@@ -48,9 +47,6 @@ LeetCode 162 · [Link](https://leetcode.com/problems/find-peak-element/) · *Med
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="find-peak-element-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="162-find-peak-element-swift" />
   </TabItem>
 </Tabs>
 
@@ -91,7 +87,7 @@ func findPeakElement(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="162-find-peak-element-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -158,7 +154,7 @@ func findPeakElement(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="162-find-peak-element-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -316,7 +312,6 @@ func main() {
 ```
 </TabItem>
 </Tabs>
-
 
 ## Related topics
 

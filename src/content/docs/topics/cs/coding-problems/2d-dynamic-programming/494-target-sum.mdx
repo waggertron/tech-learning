@@ -21,8 +21,7 @@ import approach2GoCode from './494-target-sum-approach2.go?raw';
 import approach3PyCode from './494-target-sum-approach3.py?raw';
 import approach3TsCode from './494-target-sum-approach3.ts?raw';
 import approach3GoCode from './494-target-sum-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './494-target-sum.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './494-target-sum-approach1.swift?raw';
 import approach2SwiftCode from './494-target-sum-approach2.swift?raw';
 import approach3SwiftCode from './494-target-sum-approach3.swift?raw';
@@ -45,9 +44,6 @@ LeetCode 494 · [Link](https://leetcode.com/problems/target-sum/) · *Medium*
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="target-sum-ts" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="494-target-sum-swift" />
   </TabItem>
 </Tabs>
 
@@ -76,7 +72,7 @@ function findTargetSumWays(nums: number[], target: number): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="494-target-sum-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -159,7 +155,7 @@ The unique states are `(i, cur)` where `i` ranges over `n+1` values and `cur` ra
   </TabItem>
 
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="494-target-sum-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -235,7 +231,7 @@ The right-to-left inner loop (L7) is critical for 0/1 knapsack correctness: it e
   </TabItem>
 
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="494-target-sum-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

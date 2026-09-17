@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './098-validate-binary-search-tree.py?raw';
 import practiceCodeTs from './098-validate-binary-search-tree.ts?raw';
 import practiceCodeGo from './098-validate-binary-search-tree.go?raw';
-import practiceCodeSwift from './098-validate-binary-search-tree.swift?raw';
 import approach1SwiftCode from './098-validate-binary-search-tree-approach1.swift?raw';
 import approach2SwiftCode from './098-validate-binary-search-tree-approach2.swift?raw';
 import approach3SwiftCode from './098-validate-binary-search-tree-approach3.swift?raw';
@@ -52,9 +51,6 @@ LeetCode 98 · [Link](https://leetcode.com/problems/validate-binary-search-tree/
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="validate-binary-search-tree-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="098-validate-binary-search-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -144,7 +140,7 @@ func isValidBST(root *TreeNode) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="098-validate-binary-search-tree-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -237,7 +233,7 @@ func isValidBST(root *TreeNode) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="098-validate-binary-search-tree-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -330,7 +326,7 @@ func isValidBST(root *TreeNode) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="098-validate-binary-search-tree-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

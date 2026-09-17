@@ -18,11 +18,6 @@ import practiceCodeGo from './051-n-queens.go?raw';
 import approach3PyCode from './051-n-queens-approach3.py?raw';
 import approach3TsCode from './051-n-queens-approach3.ts?raw';
 import approach3GoCode from './051-n-queens-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './051-n-queens.swift?raw';
-import approach1SwiftCode from './051-n-queens-approach1.swift?raw';
-import approach2SwiftCode from './051-n-queens-approach2.swift?raw';
-import approach3SwiftCode from './051-n-queens-approach3.swift?raw';
 
 ## Problem
 
@@ -47,9 +42,6 @@ LeetCode 51 · [Link](https://leetcode.com/problems/n-queens/) · *Hard*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="n-queens-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="051-n-queens-swift" />
   </TabItem>
 </Tabs>
 
@@ -81,7 +73,6 @@ def solve_n_queens(n):
 - **Time:** $O(n^n · n²)$. Infeasible past n ≈ 7.
 - **Space:** same.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -95,8 +86,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="051-n-queens-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -133,7 +122,6 @@ def solve_n_queens(n):
 - **Time:** exponential; conflict check per placement is $O(r)$.
 - **Space:** $O(n)$ recursion + output.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -147,8 +135,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="051-n-queens-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -304,7 +290,6 @@ Cells on the same anti-diagonal share `row + col` (constant along the up-right d
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -317,8 +302,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="051-n-queens-approach3-swift" />
 </TabItem>
 </Tabs>
 

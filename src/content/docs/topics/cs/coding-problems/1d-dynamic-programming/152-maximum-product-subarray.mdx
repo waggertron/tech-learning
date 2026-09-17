@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './152-maximum-product-subarray.py?raw';
 import practiceCodeTs from './152-maximum-product-subarray.ts?raw';
 import practiceCodeGo from './152-maximum-product-subarray.go?raw';
-import practiceCodeSwift from './152-maximum-product-subarray.swift?raw';
 import approach1SwiftCode from './152-maximum-product-subarray-approach1.swift?raw';
 import approach2SwiftCode from './152-maximum-product-subarray-approach2.swift?raw';
 import approach3SwiftCode from './152-maximum-product-subarray-approach3.swift?raw';
@@ -46,9 +45,6 @@ LeetCode 152 · [Link](https://leetcode.com/problems/maximum-product-subarray/) 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="maximum-product-subarray-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="152-maximum-product-subarray-swift" />
   </TabItem>
 </Tabs>
 
@@ -102,7 +98,7 @@ func maxProduct(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="152-maximum-product-subarray-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -173,7 +169,7 @@ func maxProduct(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="152-maximum-product-subarray-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -250,7 +246,7 @@ func maxProduct(nums []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="152-maximum-product-subarray-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

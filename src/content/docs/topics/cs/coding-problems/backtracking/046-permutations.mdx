@@ -21,11 +21,6 @@ import approach2GoCode from './046-permutations-approach2.go?raw';
 import approach3PyCode from './046-permutations-approach3.py?raw';
 import approach3TsCode from './046-permutations-approach3.ts?raw';
 import approach3GoCode from './046-permutations-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './046-permutations.swift?raw';
-import approach1SwiftCode from './046-permutations-approach1.swift?raw';
-import approach2SwiftCode from './046-permutations-approach2.swift?raw';
-import approach3SwiftCode from './046-permutations-approach3.swift?raw';
 
 ## Problem
 
@@ -48,9 +43,6 @@ LeetCode 46 · [Link](https://leetcode.com/problems/permutations/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="permutations-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="046-permutations-swift" />
   </TabItem>
 </Tabs>
 
@@ -79,7 +71,6 @@ def permute(nums):
 
 Production-correct; usually rejected in interviews that want the algorithm.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -96,8 +87,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="046-permutations-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -226,7 +215,6 @@ The clearest expression of the backtracking template for permutations.
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -243,8 +231,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="046-permutations-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -353,7 +339,6 @@ Saves the `used` array. Slightly less readable; mutates input.
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -370,8 +355,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="046-permutations-approach3-swift" />
 </TabItem>
 </Tabs>
 

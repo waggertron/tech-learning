@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './300-longest-increasing-subsequence.py?raw';
 import practiceCodeTs from './300-longest-increasing-subsequence.ts?raw';
 import practiceCodeGo from './300-longest-increasing-subsequence.go?raw';
-import practiceCodeSwift from './300-longest-increasing-subsequence.swift?raw';
 import approach1SwiftCode from './300-longest-increasing-subsequence-approach1.swift?raw';
 import approach2SwiftCode from './300-longest-increasing-subsequence-approach2.swift?raw';
 import approach3SwiftCode from './300-longest-increasing-subsequence-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 300 · [Link](https://leetcode.com/problems/longest-increasing-subseque
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="longest-increasing-subsequence-ts" />
   </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="300-longest-increasing-subsequence-swift" />
-  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, try every subsequence
@@ -72,7 +68,7 @@ def length_of_lis(nums):
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="300-longest-increasing-subsequence-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -118,7 +114,7 @@ function lengthOfLIS(nums: number[]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="300-longest-increasing-subsequence-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -200,7 +196,7 @@ function lengthOfLIS(nums: number[]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="300-longest-increasing-subsequence-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

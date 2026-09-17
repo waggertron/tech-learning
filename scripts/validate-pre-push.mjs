@@ -15,6 +15,7 @@ const steps = [
   ["Swift REPL component tests", "npm", ["run", "test:swift-repl"]],
   ["MCP companion tests", "npm", ["run", "test:mcp-companion"]],
   ["MCP companion build", "npm", ["run", "build:mcp-companion"]],
+  ["Coding-problem tab contract tests", "npm", ["run", "test:coding-problem-tab-contracts"]],
   ["Coding-problem vector tests", "npm", ["run", "test:coding-problem-vectors"]],
   ["Coding-problem vector sync", "npm", ["run", "check:coding-problem-vectors"]],
   ["Swift coding-problem contract tests", "npm", ["run", "test:swift-catalog-contract"]],

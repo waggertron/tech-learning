@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './050-pow-x-n.py?raw';
 import practiceCodeTs from './050-pow-x-n.ts?raw';
 import practiceCodeGo from './050-pow-x-n.go?raw';
-import practiceCodeSwift from './050-pow-x-n.swift?raw';
 import approach1SwiftCode from './050-pow-x-n-approach1.swift?raw';
 import approach2SwiftCode from './050-pow-x-n-approach2.swift?raw';
 import approach3SwiftCode from './050-pow-x-n-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 50 · [Link](https://leetcode.com/problems/powx-n/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="pow-x-n-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="050-pow-x-n-swift" />
   </TabItem>
 </Tabs>
 
@@ -90,7 +86,7 @@ func myPow(x float64, n int) float64 {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="050-pow-x-n-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -172,7 +168,7 @@ func myPow(x float64, n int) float64 {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="050-pow-x-n-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -259,7 +255,7 @@ func myPow(x float64, n int) float64 {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="050-pow-x-n-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

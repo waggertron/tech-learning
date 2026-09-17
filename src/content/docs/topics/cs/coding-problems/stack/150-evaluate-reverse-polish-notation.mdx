@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './150-evaluate-reverse-polish-notation.py?raw';
 import practiceCodeTs from './150-evaluate-reverse-polish-notation.ts?raw';
 import practiceCodeGo from './150-evaluate-reverse-polish-notation.go?raw';
-import practiceCodeSwift from './150-evaluate-reverse-polish-notation.swift?raw';
 import approach1SwiftCode from './150-evaluate-reverse-polish-notation-approach1.swift?raw';
 import approach2SwiftCode from './150-evaluate-reverse-polish-notation-approach2.swift?raw';
 import approach2PyCode from './150-evaluate-reverse-polish-notation-approach2.py?raw';
@@ -44,9 +43,6 @@ LeetCode 150 · [Link](https://leetcode.com/problems/evaluate-reverse-polish-not
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="evaluate-rpn-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="150-evaluate-reverse-polish-notation-swift" />
   </TabItem>
 </Tabs>
 
@@ -122,7 +118,7 @@ func evalRPN(tokens []string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="150-evaluate-reverse-polish-notation-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -216,7 +212,7 @@ func evalRPN(tokens []string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="150-evaluate-reverse-polish-notation-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -240,9 +236,6 @@ Functionally identical to Approach 1; easier to extend (new operators) and easie
 **Try this approach:**
 
 <Tabs>
-  <TabItem label="Python">
-    <PythonRepl code={practiceCode} id="evaluate-rpn-approach2-py" />
-  </TabItem>
   <TabItem label="Python">
     <PythonRepl code={approach2PyCode} id="evaluate-rpn-approach2-py" />
   </TabItem>

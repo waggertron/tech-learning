@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './007-reverse-integer.py?raw';
 import practiceCodeTs from './007-reverse-integer.ts?raw';
 import practiceCodeGo from './007-reverse-integer.go?raw';
-import practiceCodeSwift from './007-reverse-integer.swift?raw';
 import approach1SwiftCode from './007-reverse-integer-approach1.swift?raw';
 import approach2SwiftCode from './007-reverse-integer-approach2.swift?raw';
 import approach3SwiftCode from './007-reverse-integer-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 7 · [Link](https://leetcode.com/problems/reverse-integer/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reverse-integer-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="007-reverse-integer-swift" />
   </TabItem>
 </Tabs>
 
@@ -104,7 +100,7 @@ func reverse(x int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="007-reverse-integer-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -200,7 +196,7 @@ func reverse(x int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="007-reverse-integer-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -252,12 +248,11 @@ def reverse(x):
     return rev
 ```
 
-
 **Try this approach:**
 
 <Tabs>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="007-reverse-integer-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

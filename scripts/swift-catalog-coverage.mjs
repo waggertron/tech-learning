@@ -48,6 +48,7 @@ export const languages = {
     fenceNames: ["swift"],
     label: "Swift",
     repl: "SwiftRepl",
+    staticExample: "SwiftCodeExample",
   },
 };
 
@@ -108,6 +109,9 @@ function sectionEvidence(section, language) {
     tab: labelPattern.test(section),
     codeFence: fencePattern.test(section),
     repl: new RegExp(`<${config.repl}\\b`).test(section),
+    staticExample: config.staticExample
+      ? new RegExp(`<${config.staticExample}\\b`).test(section)
+      : false,
   };
 }
 
@@ -263,6 +267,9 @@ function parseProblem({ catalogDir, category, pagePath, vectorRoot }) {
         (language) => languageEvidence[language].codeFence,
       ),
       repls: Object.keys(languages).filter((language) => languageEvidence[language].repl),
+      staticExamples: Object.keys(languages).filter(
+        (language) => languageEvidence[language].staticExample,
+      ),
       sourceFiles: Object.fromEntries(
         Object.keys(languages).map((language) => [
           language,
@@ -275,7 +282,8 @@ function parseProblem({ catalogDir, category, pagePath, vectorRoot }) {
       swiftContractErrors: swiftSource.contractErrors,
       swiftReady:
         swift.tab &&
-        (swift.codeFence || swift.repl) &&
+        !swift.repl &&
+        (swift.codeFence || (swift.staticExample && swiftSource.imported && swiftSource.usedInSection)) &&
         swiftSource.exists &&
         swiftSource.testHarness &&
         swiftSource.contractErrors.length === 0 &&
@@ -315,11 +323,9 @@ function parseProblem({ catalogDir, category, pagePath, vectorRoot }) {
     ),
     swiftContractErrors: swiftStarter.contractErrors,
     swiftReady:
-      swiftPractice.tab &&
-      swiftPractice.repl &&
+      !swiftPractice.tab &&
+      !swiftPractice.repl &&
       swiftStarter.exists &&
-      swiftStarter.imported &&
-      swiftStarter.usedInSection &&
       swiftStarter.testHarness &&
       swiftStarter.contractErrors.length === 0 &&
       vectorsReady,
@@ -355,6 +361,8 @@ function summarizeLanguage(problems, language) {
       .filter((approach) => approach.sourceFiles[language] !== null).length,
     approachHarnesses: problems.flatMap((problem) => problem.approaches)
       .filter((approach) => approach.sourceHarnesses.includes(language)).length,
+    approachStaticExamples: problems.flatMap((problem) => problem.approaches)
+      .filter((approach) => approach.staticExamples.includes(language)).length,
   };
 }
 
@@ -395,7 +403,7 @@ export function buildCoverageManifest({
   });
 
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     catalogRoot: "src/content/docs/topics/cs/coding-problems",
     summary: {
       pages: problems.length,
@@ -420,38 +428,38 @@ export function swiftCoverageErrors(manifest) {
 
   for (const problem of manifest.problems) {
     if (!problem.swiftReady) {
-      const missing = [];
-      if (problem.starterFiles.swift === null) missing.push("starter file");
-      if (!problem.starterHarnesses.includes("swift")) missing.push("starter test harness");
-      if (!problem.starterImports.includes("swift")) missing.push("starter import");
-      if (!problem.practiceTabs.includes("swift")) missing.push("practice tab");
-      if (!problem.practiceRepls.includes("swift")) missing.push("practice REPL");
+      const issues = [];
+      if (problem.starterFiles.swift === null) issues.push("starter file");
+      if (!problem.starterHarnesses.includes("swift")) issues.push("starter test harness");
+      if (problem.practiceTabs.includes("swift")) issues.push("remove the Swift practice tab");
+      if (problem.practiceRepls.includes("swift")) issues.push("remove the Swift practice REPL");
       for (const contractError of problem.swiftContractErrors) {
-        missing.push(`contract: ${contractError}`);
+        issues.push(`contract: ${contractError}`);
       }
       for (const vectorError of problem.sharedTestVectors.errors) {
-        missing.push(`test vectors: ${vectorError}`);
+        issues.push(`test vectors: ${vectorError}`);
       }
-      errors.push(`${problem.page}: missing Swift ${missing.join(", ")}`);
+      errors.push(`${problem.page}: Swift readiness issues: ${issues.join(", ")}`);
     }
 
     for (const approach of problem.approaches) {
       if (approach.swiftReady) continue;
-      const missing = [];
-      if (approach.sourceFiles.swift === null) missing.push("source file");
-      if (!approach.sourceHarnesses.includes("swift")) missing.push("test harness");
-      if (!approach.languageTabs.includes("swift")) missing.push("tab");
-      if (!approach.codeFences.includes("swift") && !approach.repls.includes("swift")) {
-        missing.push("code or REPL");
+      const issues = [];
+      if (approach.sourceFiles.swift === null) issues.push("source file");
+      if (!approach.sourceHarnesses.includes("swift")) issues.push("test harness");
+      if (!approach.languageTabs.includes("swift")) issues.push("tab");
+      if (!approach.codeFences.includes("swift") && !approach.staticExamples.includes("swift")) {
+        issues.push("static code example");
       }
+      if (approach.repls.includes("swift")) issues.push("remove the runnable REPL");
       for (const contractError of approach.swiftContractErrors) {
-        missing.push(`contract: ${contractError}`);
+        issues.push(`contract: ${contractError}`);
       }
       for (const vectorError of problem.sharedTestVectors.errors) {
-        missing.push(`test vectors: ${vectorError}`);
+        issues.push(`test vectors: ${vectorError}`);
       }
       errors.push(
-        `${problem.page} approach ${approach.number}: missing Swift ${missing.join(", ")}`,
+        `${problem.page} approach ${approach.number}: Swift readiness issues: ${issues.join(", ")}`,
       );
     }
   }

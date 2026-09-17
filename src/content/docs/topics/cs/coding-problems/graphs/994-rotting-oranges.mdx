@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './994-rotting-oranges.py?raw';
 import practiceCodeTs from './994-rotting-oranges.ts?raw';
 import practiceCodeGo from './994-rotting-oranges.go?raw';
-import practiceCodeSwift from './994-rotting-oranges.swift?raw';
 import approach1SwiftCode from './994-rotting-oranges-approach1.swift?raw';
 import approach2SwiftCode from './994-rotting-oranges-approach2.swift?raw';
 import approach3SwiftCode from './994-rotting-oranges-approach3.swift?raw';
@@ -53,16 +52,13 @@ LeetCode 994 · [Link](https://leetcode.com/problems/rotting-oranges/) · *Mediu
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="rotting-oranges-go" />
   </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="994-rotting-oranges-swift" />
-  </TabItem>
 </Tabs>
 
 ## Approach 1: Brute force, simulate minute-by-minute
 
 <Tabs>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="994-rotting-oranges-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -140,7 +136,7 @@ function orangesRotting(grid: number[][]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="994-rotting-oranges-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -237,7 +233,7 @@ function orangesRotting(grid: number[][]): number {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="994-rotting-oranges-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -303,7 +299,6 @@ def oranges_rotting(grid):
 
     return time if fresh == 0 else -1
 
-
 def _run_tests():
     # Example 1 from problem statement
     assert oranges_rotting([[2,1,1],[1,1,0],[0,1,1]]) == 4
@@ -324,7 +319,6 @@ def _run_tests():
     assert oranges_rotting([[2,1]]) == 1
 
     print("all tests pass")
-
 
 if __name__ == "__main__":
     _run_tests()

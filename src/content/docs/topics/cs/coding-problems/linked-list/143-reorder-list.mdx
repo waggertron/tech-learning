@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './143-reorder-list.py?raw';
 import practiceCodeTs from './143-reorder-list.ts?raw';
 import practiceCodeGo from './143-reorder-list.go?raw';
-import practiceCodeSwift from './143-reorder-list.swift?raw';
 import approach1SwiftCode from './143-reorder-list-approach1.swift?raw';
 import approach2SwiftCode from './143-reorder-list-approach2.swift?raw';
 import approach3SwiftCode from './143-reorder-list-approach3.swift?raw';
@@ -45,9 +44,6 @@ LeetCode 143 · [Link](https://leetcode.com/problems/reorder-list/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reorder-list-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="143-reorder-list-swift" />
   </TabItem>
 </Tabs>
 
@@ -105,7 +101,7 @@ function reorderList(head: ListNode | null): void {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach1SwiftCode} id="143-reorder-list-approach1-swift" />
+  <SwiftCodeExample code={approach1SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -173,7 +169,7 @@ function reorderList(head: ListNode | null): void {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach2SwiftCode} id="143-reorder-list-approach2-swift" />
+  <SwiftCodeExample code={approach2SwiftCode} />
 </TabItem>
 </Tabs>
 
@@ -272,7 +268,7 @@ function reorderList(head: ListNode | null): void {
 ```
 </TabItem>
 <TabItem label="Swift">
-  <SwiftRepl code={approach3SwiftCode} id="143-reorder-list-approach3-swift" />
+  <SwiftCodeExample code={approach3SwiftCode} />
 </TabItem>
 </Tabs>
 

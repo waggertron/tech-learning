@@ -21,11 +21,6 @@ import approach2GoCode from './017-letter-combinations-of-a-phone-number-approac
 import approach3PyCode from './017-letter-combinations-of-a-phone-number-approach3.py?raw';
 import approach3TsCode from './017-letter-combinations-of-a-phone-number-approach3.ts?raw';
 import approach3GoCode from './017-letter-combinations-of-a-phone-number-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './017-letter-combinations-of-a-phone-number.swift?raw';
-import approach1SwiftCode from './017-letter-combinations-of-a-phone-number-approach1.swift?raw';
-import approach2SwiftCode from './017-letter-combinations-of-a-phone-number-approach2.swift?raw';
-import approach3SwiftCode from './017-letter-combinations-of-a-phone-number-approach3.swift?raw';
 
 ## Problem
 
@@ -54,9 +49,6 @@ LeetCode 17 · [Link](https://leetcode.com/problems/letter-combinations-of-a-pho
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="letter-combinations-of-a-phone-number-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="017-letter-combinations-of-a-phone-number-swift" />
   </TabItem>
 </Tabs>
 
@@ -156,7 +148,6 @@ After processing digit i, `result` has k^i entries each of length i. The compreh
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -170,8 +161,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="017-letter-combinations-of-a-phone-number-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -294,7 +283,6 @@ The recursion tree has k^n leaves (one per combination) and n levels. Most work 
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -308,8 +296,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="017-letter-combinations-of-a-phone-number-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -342,7 +328,6 @@ def letter_combinations(digits):
 
 Production-correct; rarely accepted in an interview that wants the algorithm.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -355,8 +340,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="017-letter-combinations-of-a-phone-number-approach3-swift" />
 </TabItem>
 </Tabs>
 

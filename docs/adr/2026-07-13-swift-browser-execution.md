@@ -4,6 +4,8 @@
 **Status:** Accepted after R1.3 executor and R1.4 contract proofs
 **Decision owner:** Zero to iOS Hero program
 
+**Current catalog use:** Swift curriculum posts can use this runner. Coding-problem pages render static Swift solutions and keep standalone harnesses for compiler validation.
+
 ## Problem Statement
 
 The site needs an editable Swift practice surface with real compiler diagnostics and execution. It must support raw source changed after the static site build, capture standard output and errors, stop runaway work, cancel active work, and remain usable across several REPLs on one page.

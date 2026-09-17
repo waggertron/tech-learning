@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './011-container-with-most-water.py?raw';
 import practiceCodeTs from './011-container-with-most-water.ts?raw';
 import practiceCodeGo from './011-container-with-most-water.go?raw';
-import practiceCodeSwift from './011-container-with-most-water.swift?raw';
 import approach1SwiftCode from './011-container-with-most-water-approach1.swift?raw';
 import approach2SwiftCode from './011-container-with-most-water-approach2.swift?raw';
 import approach2PyCode from './011-container-with-most-water-approach2.py?raw';
@@ -46,9 +45,6 @@ LeetCode 11 · [Link](https://leetcode.com/problems/container-with-most-water/) 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="container-with-most-water-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="011-container-with-most-water-swift" />
   </TabItem>
 </Tabs>
 
@@ -102,7 +98,7 @@ func maxArea(height []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="011-container-with-most-water-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -180,7 +176,7 @@ func maxArea(height []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="011-container-with-most-water-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 

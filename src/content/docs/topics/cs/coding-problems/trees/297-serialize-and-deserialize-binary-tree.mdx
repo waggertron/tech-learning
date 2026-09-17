@@ -12,10 +12,9 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './297-serialize-and-deserialize-binary-tree.py?raw';
 import practiceCodeTs from './297-serialize-and-deserialize-binary-tree.ts?raw';
-import practiceCodeSwift from './297-serialize-and-deserialize-binary-tree.swift?raw';
 import approach1SwiftCode from './297-serialize-and-deserialize-binary-tree-approach1.swift?raw';
 import approach2SwiftCode from './297-serialize-and-deserialize-binary-tree-approach2.swift?raw';
 import approach3SwiftCode from './297-serialize-and-deserialize-binary-tree-approach3.swift?raw';
@@ -40,9 +39,6 @@ LeetCode 297 · [Link](https://leetcode.com/problems/serialize-and-deserialize-b
   </TabItem>
   <TabItem label="TypeScript">
     <TypeScriptRepl code={practiceCodeTs} id="serialize-and-deserialize-binary-tree-ts" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="297-serialize-and-deserialize-binary-tree-swift" />
   </TabItem>
 </Tabs>
 
@@ -143,7 +139,7 @@ class Codec {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="297-serialize-and-deserialize-binary-tree-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -231,7 +227,7 @@ class Codec {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="297-serialize-and-deserialize-binary-tree-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -303,7 +299,7 @@ class Codec:
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="297-serialize-and-deserialize-binary-tree-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

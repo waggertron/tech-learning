@@ -21,11 +21,6 @@ import approach2GoCode from './039-combination-sum-approach2.go?raw';
 import approach3PyCode from './039-combination-sum-approach3.py?raw';
 import approach3TsCode from './039-combination-sum-approach3.ts?raw';
 import approach3GoCode from './039-combination-sum-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './039-combination-sum.swift?raw';
-import approach1SwiftCode from './039-combination-sum-approach1.swift?raw';
-import approach2SwiftCode from './039-combination-sum-approach2.swift?raw';
-import approach3SwiftCode from './039-combination-sum-approach3.swift?raw';
 
 ## Problem
 
@@ -48,9 +43,6 @@ LeetCode 39 · [Link](https://leetcode.com/problems/combination-sum/) · *Medium
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="combination-sum-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="039-combination-sum-swift" />
   </TabItem>
 </Tabs>
 
@@ -81,7 +73,6 @@ def combination_sum(candidates, target):
 
 Wasteful; every combination is re-found under every permutation.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -98,8 +89,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="039-combination-sum-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -216,7 +205,6 @@ The recursion tree has branching factor n and maximum depth k = target / min(can
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -233,8 +221,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="039-combination-sum-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -352,7 +338,6 @@ Sorting enables L3 to cut entire subtrees. The asymptotic bound is the same, but
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -369,8 +354,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="039-combination-sum-approach3-swift" />
 </TabItem>
 </Tabs>
 

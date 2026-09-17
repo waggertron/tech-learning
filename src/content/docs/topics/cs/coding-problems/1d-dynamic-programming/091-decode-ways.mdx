@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './091-decode-ways.py?raw';
 import practiceCodeTs from './091-decode-ways.ts?raw';
 import practiceCodeGo from './091-decode-ways.go?raw';
-import practiceCodeSwift from './091-decode-ways.swift?raw';
 import approach1SwiftCode from './091-decode-ways-approach1.swift?raw';
 import approach2SwiftCode from './091-decode-ways-approach2.swift?raw';
 import approach3SwiftCode from './091-decode-ways-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 91 · [Link](https://leetcode.com/problems/decode-ways/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="decode-ways-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="091-decode-ways-swift" />
   </TabItem>
 </Tabs>
 
@@ -117,7 +113,7 @@ func numDecodings(s string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="091-decode-ways-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -208,7 +204,7 @@ func numDecodings(s string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="091-decode-ways-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -303,7 +299,7 @@ func numDecodings(s string) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="091-decode-ways-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -370,7 +366,6 @@ def num_decodings(s):
             cur += prev2
         prev2, prev1 = prev1, cur
     return prev1
-
 
 def _run_tests():
     # LeetCode examples

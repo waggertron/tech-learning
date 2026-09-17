@@ -21,11 +21,6 @@ import approach2GoCode from './001-two-sum-approach2.go?raw';
 import approach3PyCode from './001-two-sum-approach3.py?raw';
 import approach3TsCode from './001-two-sum-approach3.ts?raw';
 import approach3GoCode from './001-two-sum-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './001-two-sum.swift?raw';
-import approach1SwiftCode from './001-two-sum-approach1.swift?raw';
-import approach2SwiftCode from './001-two-sum-approach2.swift?raw';
-import approach3SwiftCode from './001-two-sum-approach3.swift?raw';
 
 ## Problem
 
@@ -49,9 +44,6 @@ LeetCode 1 · [Link](https://leetcode.com/problems/two-sum/) · *Easy*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="two-sum-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="001-two-sum-swift" />
   </TabItem>
 </Tabs>
 
@@ -119,7 +111,6 @@ The nested loops make this quadratic. For `n = 10⁴`, that's ~50 million compar
 - **Time:** $O(n²)$, driven by L3/L4 (nested loops).
 - **Space:** $O(1)$.
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -133,8 +124,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach1SwiftCode} id="001-two-sum-approach1-swift" />
 </TabItem>
 </Tabs>
 
@@ -237,7 +226,6 @@ This is the right approach for LeetCode **167. Two Sum II** (input already sorte
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -255,8 +243,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach2SwiftCode} id="001-two-sum-approach2-swift" />
 </TabItem>
 </Tabs>
 
@@ -341,7 +327,6 @@ Every operation is $O(1)$ average per iteration. One pass over n elements gives 
   </TabItem>
 </Tabs>
 
-
 <Tabs>
 <TabItem label="Swift">
 
@@ -357,8 +342,6 @@ final class Solution {
     }
 }
 ```
-
-<SwiftRepl code={approach3SwiftCode} id="001-two-sum-approach3-swift" />
 </TabItem>
 </Tabs>
 

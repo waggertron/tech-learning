@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './122-best-time-to-buy-and-sell-stock-ii.py?raw';
 import practiceCodeTs from './122-best-time-to-buy-and-sell-stock-ii.ts?raw';
 import practiceCodeGo from './122-best-time-to-buy-and-sell-stock-ii.go?raw';
-import practiceCodeSwift from './122-best-time-to-buy-and-sell-stock-ii.swift?raw';
 import approach1SwiftCode from './122-best-time-to-buy-and-sell-stock-ii-approach1.swift?raw';
 import approach2SwiftCode from './122-best-time-to-buy-and-sell-stock-ii-approach2.swift?raw';
 import approach3SwiftCode from './122-best-time-to-buy-and-sell-stock-ii-approach3.swift?raw';
@@ -55,9 +54,6 @@ LeetCode 122 · [Link](https://leetcode.com/problems/best-time-to-buy-and-sell-s
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="buy-sell-ii-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="122-best-time-to-buy-and-sell-stock-ii-swift" />
   </TabItem>
 </Tabs>
 
@@ -119,7 +115,7 @@ func maxProfit(prices []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="122-best-time-to-buy-and-sell-stock-ii-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -187,7 +183,7 @@ func maxProfit(prices []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="122-best-time-to-buy-and-sell-stock-ii-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -256,7 +252,7 @@ func maxProfit(prices []int) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="122-best-time-to-buy-and-sell-stock-ii-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -326,7 +322,6 @@ That coupling is why the friction variants need the hold/cash **state machine** 
 - The hold/cash state machine gives the same answer and is the version to remember, it survives when cooldowns or fees break the greedy sum.
 - A per-sale fee couples your days: splitting one climb into daily trades now pays the fee on every step, so you merge consecutive up-days into a single hold and pay once. Summing daily steps minus a per-step fee is wrong (it returns 0 on `[1,2,3]` with a $1 fee when the answer is 1).
 - Contrast with 121 (single transaction, running-min window): the constraint, not the surface, picks the technique.
-
 
 ## Related topics
 

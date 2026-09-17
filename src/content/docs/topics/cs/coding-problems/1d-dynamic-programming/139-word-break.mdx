@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './139-word-break.py?raw';
 import practiceCodeTs from './139-word-break.ts?raw';
 import practiceCodeGo from './139-word-break.go?raw';
-import practiceCodeSwift from './139-word-break.swift?raw';
 import approach1SwiftCode from './139-word-break-approach1.swift?raw';
 import approach2SwiftCode from './139-word-break-approach2.swift?raw';
 import approach3SwiftCode from './139-word-break-approach3.swift?raw';
@@ -49,9 +48,6 @@ LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="word-break-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="139-word-break-swift" />
   </TabItem>
 </Tabs>
 
@@ -126,7 +122,7 @@ func wordBreak(s string, wordDict []string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="139-word-break-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -221,7 +217,7 @@ func wordBreak(s string, wordDict []string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="139-word-break-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -319,7 +315,7 @@ func wordBreak(s string, wordDict []string) bool {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="139-word-break-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 

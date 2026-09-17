@@ -12,11 +12,10 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PythonRepl from '../../../../../../components/PythonRepl.astro';
 import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
 import GoRepl from '../../../../../../components/GoRepl.astro';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import practiceCode from './200-number-of-islands.py?raw';
 import practiceCodeTs from './200-number-of-islands.ts?raw';
 import practiceCodeGo from './200-number-of-islands.go?raw';
-import practiceCodeSwift from './200-number-of-islands.swift?raw';
 import approach1SwiftCode from './200-number-of-islands-approach1.swift?raw';
 import approach2SwiftCode from './200-number-of-islands-approach2.swift?raw';
 import approach2PyCode from './200-number-of-islands-approach2.py?raw';
@@ -44,9 +43,6 @@ LeetCode 200 · [Link](https://leetcode.com/problems/number-of-islands/) · *Med
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="number-of-islands-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="200-number-of-islands-swift" />
   </TabItem>
 </Tabs>
 
@@ -133,7 +129,7 @@ func numIslands(grid [][]byte) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="200-number-of-islands-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -261,7 +257,7 @@ func numIslands(grid [][]byte) int {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="200-number-of-islands-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -333,7 +329,6 @@ def num_islands(grid):
                 dfs(r, c)
     return count
 
-
 def _run_tests():
     # Example 1: single island
     g1 = [["1","1","1","1","0"],
@@ -363,7 +358,6 @@ def _run_tests():
     assert num_islands(g3) == 1
 
     print("all tests pass")
-
 
 if __name__ == "__main__":
     _run_tests()

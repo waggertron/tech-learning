@@ -21,8 +21,7 @@ import approach2GoCode from './332-reconstruct-itinerary-approach2.go?raw';
 import approach3PyCode from './332-reconstruct-itinerary-approach3.py?raw';
 import approach3TsCode from './332-reconstruct-itinerary-approach3.ts?raw';
 import approach3GoCode from './332-reconstruct-itinerary-approach3.go?raw';
-import SwiftRepl from '../../../../../../components/SwiftRepl.astro';
-import practiceCodeSwift from './332-reconstruct-itinerary.swift?raw';
+import SwiftCodeExample from "../../../../../../components/SwiftCodeExample.astro";
 import approach1SwiftCode from './332-reconstruct-itinerary-approach1.swift?raw';
 import approach2SwiftCode from './332-reconstruct-itinerary-approach2.swift?raw';
 import approach3SwiftCode from './332-reconstruct-itinerary-approach3.swift?raw';
@@ -48,9 +47,6 @@ LeetCode 332 · [Link](https://leetcode.com/problems/reconstruct-itinerary/) · 
   </TabItem>
   <TabItem label="Go">
     <GoRepl code={practiceCodeGo} id="reconstruct-itinerary-go" />
-  </TabItem>
-  <TabItem label="Swift">
-    <SwiftRepl code={practiceCodeSwift} id="332-reconstruct-itinerary-swift" />
   </TabItem>
 </Tabs>
 
@@ -157,7 +153,7 @@ func findItinerary(tickets [][]string) []string {
 ```
 </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach1SwiftCode} id="332-reconstruct-itinerary-approach1-swift" />
+    <SwiftCodeExample code={approach1SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -294,7 +290,7 @@ In an Eulerian path, you may hit dead ends along the way. Hierholzer's handles t
     <GoRepl code={approach2GoCode} id="reconstruct-itinerary-approach2-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach2SwiftCode} id="332-reconstruct-itinerary-approach2-swift" />
+    <SwiftCodeExample code={approach2SwiftCode} />
   </TabItem>
 </Tabs>
 
@@ -416,7 +412,7 @@ Iterative form avoids recursion depth concerns.
     <GoRepl code={approach3GoCode} id="reconstruct-itinerary-approach3-go" />
   </TabItem>
   <TabItem label="Swift">
-    <SwiftRepl code={approach3SwiftCode} id="332-reconstruct-itinerary-approach3-swift" />
+    <SwiftCodeExample code={approach3SwiftCode} />
   </TabItem>
 </Tabs>
 
