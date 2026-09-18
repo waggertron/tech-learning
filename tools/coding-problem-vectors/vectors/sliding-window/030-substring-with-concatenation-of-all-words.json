@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "problem": {
+    "category": "sliding-window",
+    "slug": "030-substring-with-concatenation-of-all-words"
+  },
+  "contract": {
+    "parameters": [
+      {
+        "name": "s",
+        "codec": "string"
+      },
+      {
+        "name": "words",
+        "codec": "string-array"
+      }
+    ],
+    "result": {
+      "codec": "int-array",
+      "comparison": "equal"
+    },
+    "mutatedParameters": [],
+    "invalidInputPolicy": "excluded"
+  },
+  "execution": {
+    "kind": "function",
+    "entrypoints": {
+      "python": {
+        "function": "find_substring"
+      },
+      "typescript": {
+        "function": "findSubstring"
+      },
+      "go": {
+        "function": "findSubstring"
+      },
+      "swift": {
+        "type": "Solution",
+        "method": "findSubstring"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "canonical-two-words",
+      "classification": "valid",
+      "arguments": [
+        "barfoothefoobarman",
+        [
+          "foo",
+          "bar"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          9
+        ]
+      }
+    },
+    {
+      "id": "missing-required-duplicate",
+      "classification": "valid",
+      "arguments": [
+        "wordgoodgoodgoodbestword",
+        [
+          "word",
+          "good",
+          "best",
+          "word"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "three-overlapping-matches",
+      "classification": "valid",
+      "arguments": [
+        "barfoofoobarthefoobarman",
+        [
+          "bar",
+          "foo",
+          "the"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          6,
+          9,
+          12
+        ]
+      }
+    },
+    {
+      "id": "duplicate-word-required",
+      "classification": "valid",
+      "arguments": [
+        "wordgoodgoodgoodbestword",
+        [
+          "word",
+          "good",
+          "best",
+          "good"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          8
+        ]
+      }
+    },
+    {
+      "id": "overlapping-identical-words",
+      "classification": "valid",
+      "arguments": [
+        "aaaaaa",
+        [
+          "aa",
+          "aa"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0,
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "id": "exact-whole-string",
+      "classification": "boundary",
+      "arguments": [
+        "foobar",
+        [
+          "foo",
+          "bar"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": [
+          0
+        ]
+      }
+    },
+    {
+      "id": "text-shorter-than-concatenation",
+      "classification": "boundary",
+      "arguments": [
+        "foo",
+        [
+          "foo",
+          "bar"
+        ]
+      ],
+      "expected": {
+        "kind": "value",
+        "value": []
+      }
+    },
+    {
+      "id": "empty-word-list",
+      "classification": "invalid",
+      "arguments": [
+        "foo",
+        []
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "The word list must contain at least one word."
+      }
+    },
+    {
+      "id": "unequal-word-lengths",
+      "classification": "invalid",
+      "arguments": [
+        "foobar",
+        [
+          "foo",
+          "ba"
+        ]
+      ],
+      "expected": {
+        "kind": "excluded",
+        "reason": "Every word must have the same length."
+      }
+    }
+  ],
+  "proofFixture": false
+}

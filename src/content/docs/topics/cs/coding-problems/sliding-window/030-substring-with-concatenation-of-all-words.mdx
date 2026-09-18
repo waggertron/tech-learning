@@ -1,0 +1,158 @@
+---
+title: "30. Substring with Concatenation of All Words (Hard)"
+description: "Find every substring formed by concatenating all required equal-length words in any order."
+parent: sliding-window
+tags: [leetcode, strings, sliding-window, hash-tables, hard]
+status: draft
+created: 2026-09-17
+updated: 2026-09-17
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import TypeScriptRepl from '../../../../../../components/TypeScriptRepl.astro';
+import GoRepl from '../../../../../../components/GoRepl.astro';
+import SwiftCodeExample from '../../../../../../components/SwiftCodeExample.astro';
+import practiceCode from './030-substring-with-concatenation-of-all-words.py?raw';
+import practiceCodeTs from './030-substring-with-concatenation-of-all-words.ts?raw';
+import practiceCodeGo from './030-substring-with-concatenation-of-all-words.go?raw';
+import approach1PyCode from './030-substring-with-concatenation-of-all-words-approach1.py?raw';
+import approach1TsCode from './030-substring-with-concatenation-of-all-words-approach1.ts?raw';
+import approach1GoCode from './030-substring-with-concatenation-of-all-words-approach1.go?raw';
+import approach1SwiftCode from './030-substring-with-concatenation-of-all-words-approach1.swift?raw';
+import approach2PyCode from './030-substring-with-concatenation-of-all-words-approach2.py?raw';
+import approach2TsCode from './030-substring-with-concatenation-of-all-words-approach2.ts?raw';
+import approach2GoCode from './030-substring-with-concatenation-of-all-words-approach2.go?raw';
+import approach2SwiftCode from './030-substring-with-concatenation-of-all-words-approach2.swift?raw';
+
+## Problem
+
+Given a string `s` and a list `words`, return every starting index where a substring is made from all the words in any order. Each word must appear exactly as many times as it appears in `words`, and every word has the same length.
+
+**Examples**
+
+- `s = "barfoothefoobarman"`, `words = ["foo", "bar"]` returns `[0, 9]`. The matching windows are `"barfoo"` and `"foobar"`.
+- `s = "wordgoodgoodgoodbestword"`, `words = ["word", "good", "best", "word"]` returns `[]`. The text never supplies the second required `"word"` inside one window.
+- `s = "barfoofoobarthefoobarman"`, `words = ["bar", "foo", "the"]` returns `[6, 9, 12]`.
+
+**Constraints**
+
+- `1 <= s.length <= 10⁴`
+- `1 <= words.length <= 5000`
+- `1 <= words[i].length <= 30`
+- `s` and every word contain lowercase English letters.
+
+LeetCode 30 · [Link](https://leetcode.com/problems/substring-with-concatenation-of-all-words/) · *Hard*
+
+## Try it yourself
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={practiceCode} id="substring-concatenation-practice-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={practiceCodeTs} id="substring-concatenation-practice-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={practiceCodeGo} id="substring-concatenation-practice-go" />
+  </TabItem>
+</Tabs>
+
+## Approach 1: Recount every candidate window
+
+The total candidate length is fixed: `words.length * words[0].length`. Start at every character where that full window fits, split the window into word-sized pieces, and compare its frequency map with the required frequencies.
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach1PyCode} id="substring-concatenation-brute-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach1TsCode} id="substring-concatenation-brute-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach1GoCode} id="substring-concatenation-brute-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftCodeExample code={approach1SwiftCode} />
+  </TabItem>
+</Tabs>
+
+Let `n` be the length of `s`, `m` the number of words, and `k` the length of each word.
+
+- **Time:** $O(n \cdot m \cdot k)$ character work. Each candidate rebuilds a map from `m` slices of length `k`.
+- **Space:** $O(m \cdot k)$ for the distinct word keys and counts, excluding the result. Swift also uses $O(n)$ space for its character array.
+
+This is correct, but neighboring candidates repeat almost all the same counting work.
+
+## Approach 2: Slide through word-aligned lanes
+
+A valid match can begin at any character, but once its start offset modulo `k` is fixed, every word boundary in that match is fixed too. Process the `k` possible offsets as independent lanes:
+
+1. Move `right` by one whole word at a time.
+2. Reset the lane when the new chunk is not required.
+3. If a required word becomes overrepresented, move `left` by whole words until its count is valid again.
+4. When the window contains exactly `m` words, record `left`, then remove one word so overlapping matches remain possible.
+
+<Tabs>
+  <TabItem label="Python">
+    <PythonRepl code={approach2PyCode} id="substring-concatenation-window-py" />
+  </TabItem>
+  <TabItem label="TypeScript">
+    <TypeScriptRepl code={approach2TsCode} id="substring-concatenation-window-ts" />
+  </TabItem>
+  <TabItem label="Go">
+    <GoRepl code={approach2GoCode} id="substring-concatenation-window-go" />
+  </TabItem>
+  <TabItem label="Swift">
+    <SwiftCodeExample code={approach2SwiftCode} />
+  </TabItem>
+</Tabs>
+
+- **Time:** $O(m \cdot k + n \cdot k + r \log r)$, where `r` is the number of matches. Building the required counts takes $O(m \cdot k)$. Across all lanes, the scan performs $O(n)$ hash-map operations, each involving a word of length `k`. These implementations sort the matching indices before returning them, adding $O(r \log r)$.
+- **Space:** $O(m \cdot k + r)$ for the word counts, result, and sorting workspace. Swift also uses $O(n)$ space for its character array.
+
+## Walkthrough
+
+For `s = "barfoofoobarthefoobarman"` and three-letter words, consider the lane starting at offset `0`:
+
+| Chunk entering | Window after adjustment | Result |
+| --- | --- | --- |
+| `bar` | `[bar]` | Not full yet. |
+| `foo` | `[bar, foo]` | Not full yet. |
+| `foo` | `[foo]` | `foo` was overused, so remove `bar` and the older `foo`. |
+| `bar` | `[foo, bar]` | Not full yet. |
+| `the` | `[foo, bar, the]` | Record index `6`. |
+| `foo` | `[bar, the, foo]` | Record index `9`. |
+| `bar` | `[the, foo, bar]` | Record index `12`. |
+
+Offsets `1` and `2` form their own lanes and produce no matches.
+
+## How to recognize this pattern
+
+Look for all three signals:
+
+- The answer concerns contiguous substrings.
+- Every token has the same fixed width.
+- The required tokens form a multiset, so duplicate counts matter.
+
+The equal-width rule is the giveaway. It turns an apparent permutation problem into a small number of aligned sliding-window scans. A character-frequency window is not enough because word boundaries and whole-word multiplicities define validity.
+
+## Key takeaways
+
+- Treat `words` as a frequency map, not a set. Duplicate requirements are part of the contract.
+- Split the string into `k` alignment lanes instead of advancing a word-based window one character at a time.
+- An unknown word invalidates the whole current lane window.
+- An overused known word only requires shrinking until that word's count is legal again.
+- After recording a match, advance by one word to preserve overlapping matches.
+
+## Related problems
+
+- [567. Permutation in String](../567-permutation-in-string/), the fixed-width character-frequency version.
+- [76. Minimum Window Substring](../076-minimum-window-substring/), a variable-width coverage window.
+- [3. Longest Substring Without Repeating Characters](../003-longest-substring-without-repeating-characters/), a variable window that shrinks on duplicate state.
+
+## Related concepts
+
+- [Sliding window](../../../coding-concepts/sliding-window/), maintaining reusable state across neighboring ranges.
+- [Hash map counting](../../../coding-concepts/hash-map-counting/), representing required and observed multiplicities.
+- [Two pointers](../../../coding-concepts/two-pointers/), the monotonic movement behind each aligned lane.

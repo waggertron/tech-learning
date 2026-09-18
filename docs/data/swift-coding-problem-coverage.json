@@ -2,60 +2,60 @@
   "schemaVersion": 4,
   "catalogRoot": "src/content/docs/topics/cs/coding-problems",
   "summary": {
-    "pages": 190,
+    "pages": 191,
     "categories": 18,
-    "documentedApproaches": 508,
+    "documentedApproaches": 510,
     "sourceFiles": {
-      "python": 472,
-      "typescript": 471,
-      "go": 471,
-      "swift": 695
+      "python": 475,
+      "typescript": 474,
+      "go": 474,
+      "swift": 698
     },
     "languageCoverage": {
       "python": {
-        "starterFiles": 190,
-        "starterHarnesses": 184,
-        "practiceTabs": 190,
-        "practiceRepls": 190,
-        "approachTabs": 481,
-        "approachSources": 263,
-        "approachHarnesses": 257,
+        "starterFiles": 191,
+        "starterHarnesses": 185,
+        "practiceTabs": 191,
+        "practiceRepls": 191,
+        "approachTabs": 483,
+        "approachSources": 265,
+        "approachHarnesses": 259,
         "approachStaticExamples": 0
       },
       "typescript": {
-        "starterFiles": 189,
-        "starterHarnesses": 185,
-        "practiceTabs": 187,
-        "practiceRepls": 187,
-        "approachTabs": 460,
-        "approachSources": 263,
-        "approachHarnesses": 257,
+        "starterFiles": 190,
+        "starterHarnesses": 186,
+        "practiceTabs": 188,
+        "practiceRepls": 188,
+        "approachTabs": 462,
+        "approachSources": 265,
+        "approachHarnesses": 259,
         "approachStaticExamples": 0
       },
       "go": {
-        "starterFiles": 189,
-        "starterHarnesses": 189,
-        "practiceTabs": 168,
-        "practiceRepls": 168,
-        "approachTabs": 409,
-        "approachSources": 263,
-        "approachHarnesses": 263,
+        "starterFiles": 190,
+        "starterHarnesses": 190,
+        "practiceTabs": 169,
+        "practiceRepls": 169,
+        "approachTabs": 411,
+        "approachSources": 265,
+        "approachHarnesses": 265,
         "approachStaticExamples": 0
       },
       "swift": {
-        "starterFiles": 189,
-        "starterHarnesses": 189,
+        "starterFiles": 190,
+        "starterHarnesses": 190,
         "practiceTabs": 0,
         "practiceRepls": 0,
-        "approachTabs": 506,
-        "approachSources": 506,
-        "approachHarnesses": 506,
-        "approachStaticExamples": 436
+        "approachTabs": 508,
+        "approachSources": 508,
+        "approachHarnesses": 508,
+        "approachStaticExamples": 438
       }
     },
-    "swiftReadyPages": 189,
-    "swiftReadyApproaches": 506,
-    "vectorReadyPages": 189
+    "swiftReadyPages": 190,
+    "swiftReadyApproaches": 508,
+    "vectorReadyPages": 190
   },
   "categories": [
     {
@@ -164,11 +164,11 @@
     },
     {
       "category": "sliding-window",
-      "pages": 9,
-      "documentedApproaches": 24,
-      "swiftReadyPages": 8,
-      "swiftReadyApproaches": 22,
-      "vectorReadyPages": 8
+      "pages": 10,
+      "documentedApproaches": 26,
+      "swiftReadyPages": 9,
+      "swiftReadyApproaches": 24,
+      "vectorReadyPages": 9
     },
     {
       "category": "stack",
@@ -19443,6 +19443,120 @@
             "typescript": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.ts",
             "go": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.go",
             "swift": "sliding-window/028-find-the-index-of-the-first-occurrence-approach2.swift"
+          },
+          "sourceHarnesses": [
+            "python",
+            "typescript",
+            "go",
+            "swift"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": true
+        }
+      ]
+    },
+    {
+      "category": "sliding-window",
+      "slug": "030-substring-with-concatenation-of-all-words",
+      "title": "30. Substring with Concatenation of All Words (Hard)",
+      "page": "sliding-window/030-substring-with-concatenation-of-all-words.mdx",
+      "helperTypes": [],
+      "sharedTestVectors": {
+        "file": "tools/coding-problem-vectors/vectors/sliding-window/030-substring-with-concatenation-of-all-words.json",
+        "caseCounts": {
+          "valid": 5,
+          "boundary": 2,
+          "invalid": 2
+        },
+        "errors": [],
+        "ready": true
+      },
+      "practiceTabs": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "practiceRepls": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "starterFiles": {
+        "python": "sliding-window/030-substring-with-concatenation-of-all-words.py",
+        "typescript": "sliding-window/030-substring-with-concatenation-of-all-words.ts",
+        "go": "sliding-window/030-substring-with-concatenation-of-all-words.go",
+        "swift": "sliding-window/030-substring-with-concatenation-of-all-words.swift"
+      },
+      "starterHarnesses": [
+        "python",
+        "typescript",
+        "go",
+        "swift"
+      ],
+      "starterImports": [
+        "python",
+        "typescript",
+        "go"
+      ],
+      "swiftContractErrors": [],
+      "swiftReady": true,
+      "approaches": [
+        {
+          "number": 1,
+          "title": "Recount every candidate window",
+          "languageTabs": [
+            "python",
+            "typescript",
+            "go",
+            "swift"
+          ],
+          "codeFences": [],
+          "repls": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "staticExamples": [
+            "swift"
+          ],
+          "sourceFiles": {
+            "python": "sliding-window/030-substring-with-concatenation-of-all-words-approach1.py",
+            "typescript": "sliding-window/030-substring-with-concatenation-of-all-words-approach1.ts",
+            "go": "sliding-window/030-substring-with-concatenation-of-all-words-approach1.go",
+            "swift": "sliding-window/030-substring-with-concatenation-of-all-words-approach1.swift"
+          },
+          "sourceHarnesses": [
+            "python",
+            "typescript",
+            "go",
+            "swift"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": true
+        },
+        {
+          "number": 2,
+          "title": "Slide through word-aligned lanes",
+          "languageTabs": [
+            "python",
+            "typescript",
+            "go",
+            "swift"
+          ],
+          "codeFences": [],
+          "repls": [
+            "python",
+            "typescript",
+            "go"
+          ],
+          "staticExamples": [
+            "swift"
+          ],
+          "sourceFiles": {
+            "python": "sliding-window/030-substring-with-concatenation-of-all-words-approach2.py",
+            "typescript": "sliding-window/030-substring-with-concatenation-of-all-words-approach2.ts",
+            "go": "sliding-window/030-substring-with-concatenation-of-all-words-approach2.go",
+            "swift": "sliding-window/030-substring-with-concatenation-of-all-words-approach2.swift"
           },
           "sourceHarnesses": [
             "python",

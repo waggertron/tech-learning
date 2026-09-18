@@ -29,7 +29,7 @@ For the reusable tactics behind those solutions, use [Coding Concepts](../coding
 | --- | --- |
 | [Arrays & Hashing](./arrays-and-hashing/) | 18 |
 | [Two Pointers](./two-pointers/) | 5 |
-| [Sliding Window](./sliding-window/) | 9 |
+| [Sliding Window](./sliding-window/) | 10 |
 | [Stack](./stack/) | 16 |
 | [Binary Search](./binary-search/) | 8 |
 | [Linked List](./linked-list/) | 14 |

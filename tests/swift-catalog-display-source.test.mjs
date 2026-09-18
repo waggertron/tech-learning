@@ -30,7 +30,7 @@ function approachFiles() {
 
 test("extracts every Swift approach without runner-only support code", () => {
   const files = approachFiles();
-  assert.equal(files.length, 506);
+  assert.equal(files.length, 508);
 
   for (const filePath of files) {
     const source = readFileSync(filePath, "utf8");
