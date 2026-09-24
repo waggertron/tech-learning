@@ -5,6 +5,8 @@ description: "Topics in artificial intelligence, natural language processing, pr
 
 ## Topics
 
+- [LLM model comparison](./llm-model-comparison/): 379 releases and size variants with creators, dates, parameters, licenses, local memory estimates, and model links
+
 - [Prompt Engineering](./prompt-engineering/): crafting LLM inputs to reliably elicit a target output
 - [Natural Language Processing](./natural-language-processing/): classical NLP, spaCy pipelines, NLTK corpus analysis, sparse classifiers, and where LLMs fit
 - [AI Harness Development](./harness-development/): the scaffolding around an LLM that turns it into something useful

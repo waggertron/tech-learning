@@ -45,6 +45,8 @@ As of this audit, the repo contains:
 
 ### Content Catalog
 
+- **2026-09-24: LLM model comparison catalog**: Added 379 model releases and size variants with official model links, creators, release dates, parameter counts, access and license distinctions, and transparent local inference memory estimates. Evidence: `src/content/docs/topics/ai/llm-model-comparison/index.md`, `docs/llm-model-comparison.md`, and both topic indexes.
+
 - **2026-04-23: Core computer science catalog**: Added data structures and all 18 NeetCode 150 coding-problem categories, then wired problem lists back into data-structure pages. Evidence: `src/content/docs/topics/cs/data-structures/`, `src/content/docs/topics/cs/coding-problems/`.
 - **2026-04-24: AI, web, ops, testing, and architecture expansion**: Added prompt templates, vehicle routing, Django, functional core imperative shell, skill-development material, home-health posts, GitOps, ArgoCD, MLOps, Gitflow, Kubernetes, Helm, Terraform, testing, compliance, and security posts. Evidence: `src/content/docs/topics/ai/`, `src/content/docs/topics/web/`, `src/content/docs/topics/ops/`, `src/content/docs/topics/testing/`, `src/content/docs/posts/`.
 - **2026-04-24: Large language model benchmark series**: Added an 8-part large language model reasoning benchmark and metrics series. Evidence: `src/content/docs/topics/ai/benchmarks/`.
