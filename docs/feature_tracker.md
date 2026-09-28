@@ -45,7 +45,7 @@ As of this audit, the repo contains:
 
 ### Content Catalog
 
-- **2026-09-28: Supabase guide and private notes tutorial**: Added platform tradeoffs, comparisons with Firebase, Appwrite, Convex, and custom backends, and a complete local JavaScript tutorial using Supabase Auth, PostgreSQL migrations, and owner-scoped CRUD policies. Evidence: `src/content/docs/posts/2026-09-28-supabase-postgres-backend-quickstart.md`, `src/content/docs/posts/index.mdx`.
+- **2026-09-28: Supabase guide and private notes tutorial**: Added platform tradeoffs, comparisons with Firebase, Appwrite, Convex, and custom backends, and a complete local JavaScript tutorial using Supabase Auth, PostgreSQL migrations, and owner-scoped CRUD policies. The public [companion repository](https://github.com/waggertron/supabase-notes-quickstart) includes the complete app, setup helpers, a full run guide, five API tests, two browser tests, and GitHub Actions validation. Evidence: `src/content/docs/posts/2026-09-28-supabase-postgres-backend-quickstart.md`, `src/content/docs/posts/index.mdx`, and the companion repository's `README.md` and `tests/`.
 
 - **2026-09-24: LLM model comparison catalog**: Added 379 model releases and size variants with official model links, creators, release dates, parameter counts, access and license distinctions, and transparent local inference memory estimates. Evidence: `src/content/docs/topics/ai/llm-model-comparison/index.md`, `docs/llm-model-comparison.md`, and both topic indexes.
 

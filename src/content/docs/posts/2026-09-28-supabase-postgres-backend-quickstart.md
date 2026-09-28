@@ -137,6 +137,22 @@ These approaches can coexist. You can use Supabase for Auth and the database whi
 
 You need Node.js 22.12 or newer, npm, and a running Docker-compatible container engine. Allow time and disk space for the first image download. The example uses Vite and plain JavaScript so that no frontend framework knowledge is required.
 
+### Run the complete app
+
+The public [Supabase notes quick-start repository](https://github.com/waggertron/supabase-notes-quickstart) contains the complete app below, its database migration, pinned dependencies, setup helpers, and automated browser and API tests.
+
+```bash
+git clone https://github.com/waggertron/supabase-notes-quickstart.git
+cd supabase-notes-quickstart
+npm ci
+npm run setup
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`. The setup command starts local Supabase, applies the migration, and creates `.env.local` with the local URL and publishable key. The [README](https://github.com/waggertron/supabase-notes-quickstart#readme) includes prerequisites, a two-account walkthrough, test commands, production preview, shutdown, database reset, and troubleshooting instructions.
+
+The numbered steps below walk through building the app from scratch in a separate directory. If you cloned the repository, the files and configuration are already included.
+
 ### 1. Create the project
 
 Run these commands in a new directory. The package versions are pinned so the example has a reproducible starting point.
