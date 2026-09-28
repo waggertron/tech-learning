@@ -45,6 +45,8 @@ As of this audit, the repo contains:
 
 ### Content Catalog
 
+- **2026-09-28: Supabase guide and private notes tutorial**: Added platform tradeoffs, comparisons with Firebase, Appwrite, Convex, and custom backends, and a complete local JavaScript tutorial using Supabase Auth, PostgreSQL migrations, and owner-scoped CRUD policies. Evidence: `src/content/docs/posts/2026-09-28-supabase-postgres-backend-quickstart.md`, `src/content/docs/posts/index.mdx`.
+
 - **2026-09-24: LLM model comparison catalog**: Added 379 model releases and size variants with official model links, creators, release dates, parameter counts, access and license distinctions, and transparent local inference memory estimates. Evidence: `src/content/docs/topics/ai/llm-model-comparison/index.md`, `docs/llm-model-comparison.md`, and both topic indexes.
 
 - **2026-04-23: Core computer science catalog**: Added data structures and all 18 NeetCode 150 coding-problem categories, then wired problem lists back into data-structure pages. Evidence: `src/content/docs/topics/cs/data-structures/`, `src/content/docs/topics/cs/coding-problems/`.
