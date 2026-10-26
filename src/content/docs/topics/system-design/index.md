@@ -59,6 +59,7 @@ End-to-end walkthroughs of sixteen canonical interview problems, each with clari
 ## Advanced patterns
 
 - [Microservices vs Monolith](./microservices/), Conway's Law, domain-driven boundaries, the modular monolith, Strangler Fig migration
+- [Monolith to microservices, one boundary at a time](../../posts/2026-10-26-monolith-to-microservices-one-boundary-at-a-time/), a store migration through notifications, inventory reservations, and search
 - [Circuit Breaker and Resilience](./circuit-breaker/), circuit breaker state machine, bulkhead isolation, retry with jitter, composing patterns
 - [Event Sourcing and CQRS](./event-sourcing/), append-only event log, projections, snapshots, separating read and write models
 - [Distributed Locking](./distributed-locking/), Redis SETNX, Redlock, ZooKeeper ephemeral nodes, fencing tokens
