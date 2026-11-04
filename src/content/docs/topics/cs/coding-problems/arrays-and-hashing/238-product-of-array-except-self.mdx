@@ -5,7 +5,7 @@ parent: arrays-and-hashing
 tags: [leetcode, neetcode-150, arrays, prefix-suffix, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-07-16
+updated: 2026-11-04
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -139,6 +139,72 @@ final class Solution {
 
 Compute both in $O(n)$ and combine.
 
+### Walkthrough: what each array entry means
+
+The prefix and suffix products here are **exclusive**: they exclude the current element. An inclusive product would include it. Define what each slot contains before choosing indices:
+
+- **`prefix[k]`**: The product strictly to the left of `nums[k]`.
+- **`suffix[k]`**: The product strictly to the right of `nums[k]`.
+
+These are sometimes called `front` and `back`. The names differ, but the meaning is the same. In Python slice notation, they summarize `nums[:k]` and `nums[k + 1:]`. Those slices describe the ranges, not extra lists the algorithm needs to create.
+
+Use `[2, 3, 4, 5]` so accidentally skipping the first element changes the product:
+
+```text
+index:       0     1     2     3
+nums:       [2,    3,    4,    5]
+prefix:     [1,    2,    6,   24]
+suffix:     [60,  20,    5,    1]
+```
+
+At index `1`, exclude `3`. `prefix[1]` already contains `2`, and `suffix[1]` already contains `4 * 5`. Multiply those two entries at the **same index**:
+
+| Index `k` | Excluded value | `prefix[k]`: everything left | `suffix[k]`: everything right | `answer[k]` |
+| --- | --- | --- | --- | --- |
+| 0 | `2` | `1` (nothing left) | `3 * 4 * 5 = 60` | `60` |
+| 1 | `3` | `2` | `4 * 5 = 20` | `40` |
+| 2 | `4` | `2 * 3 = 6` | `5` | `30` |
+| 3 | `5` | `2 * 3 * 4 = 24` | `1` (nothing right) | `24` |
+
+```text
+index:       0     1     2     3
+nums:       [2,    3,    4,    5]
+prefix:     [1,    2,    6,   24]
+             *     *     *     *
+suffix:     [60,  20,    5,    1]
+             =     =     =     =
+answer:     [60,  40,   30,   24]
+```
+
+The product of an empty side is `1`, the multiplicative identity: multiplying by it leaves the other side unchanged. That is why the combine step works at both ends without special cases.
+
+### Building an exclusive product: store, then update
+
+A running accumulator makes the meaning explicit:
+
+```python
+prefix = [1] * len(nums)
+cur = 1
+for i in range(len(nums)):
+    prefix[i] = cur  # Everything before i, excluding nums[i].
+    cur *= nums[i]  # Include nums[i] for the next iteration.
+```
+
+Before each iteration, `cur` is the product strictly to the left of `i`. Store it before multiplying in the current value. Starting this loop at `1` would skip `nums[0]` entirely: for this input, `prefix[1]` would incorrectly be `1` instead of `2`.
+
+The implementation below uses a different, equally valid construction: `prefix[i - 1] * nums[i - 1]`. It starts at `1` because `prefix[0]` is already initialized, and it explicitly incorporates `nums[0]` when computing `prefix[1]`. Loop bounds depend on how the stored product is built.
+
+### Common indexing and assignment mistakes
+
+| Mistake | Why it fails | Correct interpretation |
+| --- | --- | --- |
+| `prefix[k - 1] * suffix[k + 1]` | At `k = 1`, this gives `1 * 5`, skipping both `2` and `4`. | Both arrays already exclude the current element. Use `prefix[k] * suffix[k]`. |
+| `answer[0] = suffix[n - 1]` | The last suffix is the empty right side, so it is `1`. | Index `0` needs `suffix[0]`, which is `60` here. |
+| `prefix[k] + suffix[k]` | Adding the two products does not multiply all remaining elements. | Combine the products with multiplication. |
+| `answer = prefix[k] * suffix[k]` inside the loop | This replaces the entire list with a number. | Assign one slot: `answer[k] = prefix[k] * suffix[k]`. |
+
+The meaning of each entry determines the index. Moving to a neighboring slot is not needed just because the problem says to exclude the current element.
+
 <Tabs>
 <TabItem label="Python">
 ```python
@@ -248,6 +314,34 @@ final class Solution {
 
 Reuse the output array for the prefix pass; track the suffix product as a single running scalar on a second pass.
 
+### Deriving the space optimization
+
+The two-array approach keeps three arrays: prefixes, suffixes, and the answer. Remove storage in two steps:
+
+1. Store the left products directly in `answer`. This array is required as the output, so a separate prefix array would duplicate those values.
+2. Walk backward and generate each right product when it is needed. Once a suffix product has been used, the next iteration only needs that product multiplied by the current input value. A single variable can carry it.
+
+After the forward pass, the output contains the old prefix array:
+
+```text
+index:       0     1     2     3
+nums:       [2,    3,    4,    5]
+answer:     [1,    2,    6,   24]
+```
+
+Before each backward iteration, `answer[i]` still contains the product strictly to the left of `i`, and the scalar `suffix` contains the product strictly to its right. Multiply them, then include `nums[i]` in the scalar for the next iteration:
+
+| Index `i` | Left product in `answer[i]` | `suffix` before use | Updated `answer[i]` | `suffix` after including `nums[i]` |
+| --- | --- | --- | --- | --- |
+| 3 | `24` | `1` | `24 * 1 = 24` | `5` |
+| 2 | `6` | `5` | `6 * 5 = 30` | `20` |
+| 1 | `2` | `20` | `2 * 20 = 40` | `60` |
+| 0 | `1` | `60` | `1 * 60 = 60` | `120` (unused) |
+
+The final output is `[60, 40, 30, 24]`. Updating `suffix` before using it would include the very element we want to exclude. Overwriting `answer[i]` is safe: later iterations use their own untouched left products and the scalar, not the completed entries to their right.
+
+This keeps only the state still needed. The output uses $O(n)$ storage, but the additional variables use $O(1)$ extra space. The algorithm does not need to modify `nums`.
+
 <Tabs>
 <TabItem label="Python">
 ```python
@@ -320,7 +414,7 @@ func productExceptSelf(nums []int) []int {
 | L2 (init output) | $O(n)$ | 1 | $O(n)$ |
 | **L3, L4 (prefix pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
 | L5 (init suffix) | $O(1)$ | 1 | $O(1)$ |
-| **L6, L7, L8 (suffix pass)** | **$O(1)$** | **n-1** | **$O(n)$** |
+| **L6, L7, L8 (suffix pass)** | **$O(1)$** | **n** | **$O(n)$** |
 
 Two linear passes, no auxiliary arrays. The suffix accumulator eliminates the need for a separate `suffix[]` array.
 
@@ -359,6 +453,35 @@ final class Solution {
 </TabItem>
 </Tabs>
 
+## How to recognize this pattern
+
+The pattern is **prefix/suffix accumulation**. Here the summaries are exclusive products. The signal is an answer for every position that depends on everything except that position. Ask whether the remaining elements split into a left part and a right part whose summaries can be computed once and combined.
+
+This avoids rebuilding almost the same product for every index. It also avoids needing an inverse operation to remove the current element from a total product. With zero in the input, naive total-product division cannot recover the answer at the zero's position.
+
+The same decomposition works with associative operations that have an identity, such as sum with `0` or product with `1`. Preserve the original order when combining summaries. The operation and the information each answer needs determine whether the same space optimization is possible.
+
+| Connection | Shared reasoning | What differs |
+| --- | --- | --- |
+| [Array scans](../../../coding-concepts/array-scans/) | Define what the running state means before the current element, then consume and update it in order. | This problem needs information from both directions. |
+| [Prefix sums](../../../coding-concepts/prefix-sums/) | Reuse accumulated summaries instead of rescanning the input. | Range sums commonly subtract two checkpoints. Here we multiply disjoint left and right products. |
+| [42. Trapping Rain Water](../../two-pointers/042-trapping-rain-water/) | Each position depends on summaries from both sides. | Left and right maxima determine the limiting water height, rather than products. |
+
+## Why zeros and negative values need no special branches
+
+The two sides contain every element except the excluded one, exactly once. Multiplication handles the values directly:
+
+- **One zero**: For `[-1, 1, 0, -3, 3]`, only the position of the zero can have a nonzero answer. Its two sides multiply to `9`. Every other position has that zero on one side.
+- **Two zeros**: For `[2, 0, 4, 0]`, every position has at least one zero among the remaining elements, so all answers are zero.
+- **Negative values**: The signs follow ordinary multiplication. No separate sign logic is needed.
+- **Two elements**: For `[2, 3]`, the left/right identities produce `[3, 2]` with the same loops.
+
+## Key takeaways
+
+- Define what a stored product includes before choosing indices. Exclusive left and right products combine at the same index.
+- Use a running product before including the current value when that value must be excluded.
+- Derive the follow-up by reusing the output for one side and generating the other side as needed.
+
 ## Summary
 
 | Approach | Time | Space |
@@ -367,7 +490,7 @@ final class Solution {
 | Prefix + suffix arrays | $O(n)$ | $O(n)$ |
 | **Space-optimized** | **$O(n)$** | **$O(1)$** extra |
 
-Division would give an $O(n)$ single-pass solution, forbidden here because of how it handles zeros (and to force the prefix/suffix idea, which generalizes to many problems).
+Division is explicitly forbidden by the problem. Computing a total product and then dividing for each output would take separate passes and would need special handling for zeros. Prefix/suffix products satisfy the constraint directly.
 
 ## Test cases
 
@@ -389,6 +512,8 @@ def product_except_self(nums: list[int]) -> list[int]:
     return answer
 
 def _run_tests():
+    assert product_except_self([2, 3, 4, 5]) == [60, 40, 30, 24]
+    assert product_except_self([2, 0, 4, 0]) == [0, 0, 0, 0]
     assert product_except_self([1, 2, 3, 4]) == [24, 12, 8, 6]
     assert product_except_self([-1, 1, 0, -3, 3]) == [0, 0, 9, 0, 0]
     assert product_except_self([1, 1]) == [1, 1]
