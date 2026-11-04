@@ -2,24 +2,24 @@
   "schemaVersion": 4,
   "catalogRoot": "src/content/docs/topics/cs/coding-problems",
   "summary": {
-    "pages": 191,
+    "pages": 192,
     "categories": 18,
-    "documentedApproaches": 510,
+    "documentedApproaches": 512,
     "sourceFiles": {
-      "python": 475,
+      "python": 478,
       "typescript": 474,
       "go": 474,
       "swift": 698
     },
     "languageCoverage": {
       "python": {
-        "starterFiles": 191,
-        "starterHarnesses": 185,
+        "starterFiles": 192,
+        "starterHarnesses": 186,
         "practiceTabs": 191,
-        "practiceRepls": 191,
+        "practiceRepls": 192,
         "approachTabs": 483,
-        "approachSources": 265,
-        "approachHarnesses": 259,
+        "approachSources": 267,
+        "approachHarnesses": 261,
         "approachStaticExamples": 0
       },
       "typescript": {
@@ -84,8 +84,8 @@
     },
     {
       "category": "arrays-and-hashing",
-      "pages": 18,
-      "documentedApproaches": 43,
+      "pages": 19,
+      "documentedApproaches": 45,
       "swiftReadyPages": 18,
       "swiftReadyApproaches": 43,
       "vectorReadyPages": 18
@@ -6802,6 +6802,91 @@
           ],
           "swiftContractErrors": [],
           "swiftReady": true
+        }
+      ]
+    },
+    {
+      "category": "arrays-and-hashing",
+      "slug": "380-insert-delete-getrandom-o1",
+      "title": "380. Insert Delete GetRandom O(1) (Medium)",
+      "page": "arrays-and-hashing/380-insert-delete-getrandom-o1.mdx",
+      "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
+      "practiceTabs": [],
+      "practiceRepls": [
+        "python"
+      ],
+      "starterFiles": {
+        "python": "arrays-and-hashing/380-insert-delete-getrandom-o1.py",
+        "typescript": null,
+        "go": null,
+        "swift": null
+      },
+      "starterHarnesses": [
+        "python"
+      ],
+      "starterImports": [
+        "python"
+      ],
+      "swiftContractErrors": [],
+      "swiftReady": false,
+      "approaches": [
+        {
+          "number": 1,
+          "title": "A set with conversion before each draw",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "arrays-and-hashing/380-insert-delete-getrandom-o1-approach1.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 2,
+          "title": "A list, an index map, and swap-and-pop",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "arrays-and-hashing/380-insert-delete-getrandom-o1-approach2.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
         }
       ]
     },

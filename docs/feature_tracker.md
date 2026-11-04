@@ -45,6 +45,8 @@ As of this audit, the repo contains:
 
 ### Content Catalog
 
+- **2026-11-04: RandomizedSet learning entry and tutoring capture**: Added problem 380 with executable Python baseline and swap-and-pop implementations, state traces, complexity details, invariant checks, and catalog links. Documented how to turn interactive debugging into reusable explanations and preserve hint-first tutoring preferences. Evidence: `src/content/docs/topics/cs/coding-problems/arrays-and-hashing/380-insert-delete-getrandom-o1.mdx`, `docs/AUTHORING.md`, `.agents/skills/authoring/SKILL.md`, `.agents/skills/quiz/SKILL.md`.
+
 - **2026-09-28: Supabase guide and private notes tutorial**: Added platform tradeoffs, comparisons with Firebase, Appwrite, Convex, and custom backends, and a complete local JavaScript tutorial using Supabase Auth, PostgreSQL migrations, and owner-scoped CRUD policies. The public [companion repository](https://github.com/waggertron/supabase-notes-quickstart) includes the complete app, setup helpers, a full run guide, five API tests, two browser tests, and GitHub Actions validation. Evidence: `src/content/docs/posts/2026-09-28-supabase-postgres-backend-quickstart.md`, `src/content/docs/posts/index.mdx`, and the companion repository's `README.md` and `tests/`.
 
 - **2026-09-24: LLM model comparison catalog**: Added 379 model releases and size variants with official model links, creators, release dates, parameter counts, access and license distinctions, and transparent local inference memory estimates. Evidence: `src/content/docs/topics/ai/llm-model-comparison/index.md`, `docs/llm-model-comparison.md`, and both topic indexes.

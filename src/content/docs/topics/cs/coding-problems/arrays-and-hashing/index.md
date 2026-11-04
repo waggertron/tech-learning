@@ -1,11 +1,11 @@
 ---
 title: Arrays & Hashing
-description: "18 problems covering hash maps, frequency counting, prefix sums, range boundaries, and the complement-lookup pattern that appears throughout every other category."
+description: "19 problems covering hash maps, frequency counting, prefix sums, range boundaries, and the complement-lookup pattern that appears throughout every other category."
 parent: coding-problems
 tags: [leetcode, neetcode-150, arrays, hash-tables]
 status: draft
 created: 2026-04-23
-updated: 2026-07-13
+updated: 2026-11-04
 ---
 
 ## Overview
@@ -30,6 +30,7 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 - [228. Summary Ranges (Easy)](./228-summary-ranges/)
 - [303. Range Sum Query - Immutable (Easy)](./303-range-sum-query-immutable/)
 - [349. Intersection of Two Arrays (Easy)](./349-intersection-of-two-arrays/)
+- [380. Insert Delete GetRandom O(1) (Medium)](./380-insert-delete-getrandom-o1/)
 - [387. First Unique Character in a String (Easy)](./387-first-unique-character/)
 - [454. 4Sum II (Medium)](./454-4sum-ii/)
 - [459. Repeated Substring Pattern (Easy)](./459-repeated-substring-pattern/)
@@ -46,3 +47,5 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 - **Prefix sums for $O(1)$ range queries**: Range Sum Query.
 - **Range boundaries in a sorted scan**: Summary Ranges.
 - **Modular arithmetic for pair counting**: Pairs of Songs Divisible by 60.
+
+- **List plus index map, swap-and-pop**: Insert Delete GetRandom O(1).

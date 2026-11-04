@@ -1,0 +1,263 @@
+---
+title: "380. Insert Delete GetRandom O(1) (Medium)"
+description: "Combine a list and a value-to-index map for uniform random selection and swap-and-pop removal, with operation-by-operation complexity and state traces."
+parent: arrays-and-hashing
+tags: [leetcode, arrays, hash-tables, randomized, medium]
+status: draft
+created: 2026-11-04
+updated: 2026-11-04
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './380-insert-delete-getrandom-o1.py?raw';
+import approach1PyCode from './380-insert-delete-getrandom-o1-approach1.py?raw';
+import approach2PyCode from './380-insert-delete-getrandom-o1-approach2.py?raw';
+
+## Problem
+
+Build a `RandomizedSet` with three operations:
+
+- **`insert(val)`**: Add an absent value and return `True`. Return `False` if it already exists.
+- **`remove(val)`**: Delete a present value and return `True`. Return `False` if it is absent.
+- **`getRandom()`**: Return a current value, with equal probability for every stored value.
+
+Each operation needs average $O(1)$ time. `getRandom()` is only called when the set is nonempty. Values are signed 32-bit integers, and there are at most 200,000 operation calls.
+
+For example, insert `1`, try removing absent `2`, then insert `2`. The results are `True`, `False`, `True`. A random draw can now return either `1` or `2`. Remove `1`, and every subsequent draw returns `2` until another value is inserted.
+
+[LeetCode 380](https://leetcode.com/problems/insert-delete-getrandom-o1/) is a bonus problem outside the NeetCode 150.
+
+## Try it yourself
+
+Implement the methods in this starter. Its demonstration intentionally reaches `NotImplementedError` until the methods are filled in.
+
+<PythonRepl code={practiceCode} id="insert-delete-getrandom-o1-practice-py" />
+
+## Approach 1: A set with conversion before each draw
+
+A Python set already handles membership, insertion, and removal in average constant time. To choose randomly, convert it into an indexable sequence:
+
+```python
+import random
+
+class RandomizedSet:
+    def __init__(self):
+        self.items = set()
+
+    def insert(self, val: int) -> bool:
+        if val in self.items:             # L1: average O(1)
+            return False
+        self.items.add(val)               # L2: average O(1)
+        return True
+
+    def remove(self, val: int) -> bool:
+        if val not in self.items:         # L3: average O(1)
+            return False
+        self.items.remove(val)            # L4: average O(1)
+        return True
+
+    def getRandom(self) -> int:
+        values = tuple(self.items)        # L5: copies every stored value
+        return random.choice(values)      # L6: O(1) indexed choice
+```
+
+This produces the correct behavior, but it misses the required time bound. If there are `n` live values, creating the tuple allocates `n` slots and copies the values before the random choice even happens. The conversion is normally described as $O(n)$, and retained set capacity can make iteration scan additional unused slots after many deletions. It is not constant time.
+
+| Lines | Work | Cost |
+| --- | --- | --- |
+| L1-L4 | Set membership, insertion, and removal | Average $O(1)$ per operation |
+| L5 | Build an indexable copy | At least linear in the number of live values |
+| L6 | Choose an index in the tuple | $O(1)$ |
+
+**Complexity:** `insert` and `remove` take average $O(1)$ time. `getRandom` takes linear time under ordinary set-size assumptions and creates $O(n)$ temporary tuple storage. The set stores $O(n)$ logical entries.
+
+Calling `random.choice(self.items)` directly does not fix this: sets do not support indexing. Rebuilding the set afterward with `self.items = set(values)` is also unnecessary. Choosing an element does not remove it.
+
+<PythonRepl code={approach1PyCode} id="insert-delete-getrandom-o1-approach1-py" />
+
+## Approach 2: A list, an index map, and swap-and-pop
+
+Keep the indexable sequence permanently instead of rebuilding it for every draw. Pair a list with a dictionary that locates each value:
+
+```text
+index:       0   1   2   3
+items:      [10, 20, 30, 40]
+positions:  {10: 0, 20: 1, 30: 2, 40: 3}
+```
+
+The invariant is **`positions[value]` is the index of that value in `items`**. Every value appears exactly once, and the two containers have equal lengths. The list supports random indexing. The dictionary supports membership checks and locating a value without searching the list.
+
+```python
+import random
+
+class RandomizedSet:
+    def __init__(self):
+        self.items = []                         # L1
+        self.positions = {}                     # L2
+
+    def insert(self, val: int) -> bool:
+        if val in self.positions:               # L3
+            return False                        # L4
+        self.positions[val] = len(self.items)    # L5
+        self.items.append(val)                  # L6
+        return True                             # L7
+
+    def remove(self, val: int) -> bool:
+        if val not in self.positions:           # L8
+            return False                        # L9
+        index = self.positions[val]             # L10
+        last = self.items[-1]                   # L11
+        self.items[index] = last                 # L12
+        self.positions[last] = index             # L13
+        self.items.pop()                        # L14
+        del self.positions[val]                 # L15
+        return True                             # L16
+
+    def getRandom(self) -> int:
+        return random.choice(self.items)        # L17
+```
+
+### Initialization and insertion, line by line
+
+For insertion, use the list's current length as the new index, then append the value at that index. Inserting `40` into `[10, 20, 30]` records `positions[40] = 3` and produces `[10, 20, 30, 40]`.
+
+| Line | Meaning | Time |
+| --- | --- | --- |
+| L1 | Create an empty list for indexed access. | $O(1)$ |
+| L2 | Create an empty value-to-index dictionary. | $O(1)$ |
+| L3 | Check for a duplicate in the dictionary. | Average $O(1)$ |
+| L4 | Reject a duplicate without changing either container. | $O(1)$ |
+| L5 | Record the next available index; `len` itself is constant time. | Average/amortized $O(1)$ |
+| L6 | Append the value to that slot. | Amortized $O(1)$ |
+| L7 | Report successful insertion. | $O(1)$ |
+
+A dictionary lookup avoids an accidental linear scan such as `val in self.items` when `items` is a list.
+
+### Removal: order is free to change
+
+Deleting from the middle of a list normally shifts later elements left. A list alone also needs a linear search to locate a value. The dictionary solves the search, but ordinary middle deletion would still cost $O(n)$.
+
+The problem does not require preserving order. Fill the hole with the last value, update its recorded index, and pop the last slot. This is **swap-and-pop**, also described as move-last-and-pop because no literal two-way swap is necessary.
+
+To remove `20`:
+
+```text
+Before:
+index:       0   1   2   3
+items:      [10, 20, 30, 40]
+positions:  {10: 0, 20: 1, 30: 2, 40: 3}
+
+Find the hole: index = 1
+Save the last value: last = 40
+
+Overwrite the hole:
+items:      [10, 40, 30, 40]
+
+Record the moved value's new location:
+positions:  {10: 0, 20: 1, 30: 2, 40: 1}
+
+Pop the last slot and delete the removed value's entry:
+index:       0   1   2
+items:      [10, 40, 30]
+positions:  {10: 0, 30: 2, 40: 1}
+```
+
+The intermediate duplicate is temporary. The invariant holds again when the method returns. `getRandom` is called between operations, so it sees one slot per stored value.
+
+| Line | Meaning when removing `20` | Time |
+| --- | --- | --- |
+| L8 | Check whether `20` is absent. | Average $O(1)$ |
+| L9 | Return `False` if there is nothing to remove. | $O(1)$ |
+| L10 | Find the hole, index `1`, without searching the list. | Average $O(1)$ |
+| L11 | Save the last value, `40`. | $O(1)$ |
+| L12 | Overwrite index `1` with `40`. No shifting or appending. | $O(1)$ |
+| L13 | Change the dictionary entry for `40` from `3` to `1`. | Average $O(1)$ |
+| L14 | Remove the final list slot. | Amortized $O(1)$ |
+| L15 | Delete the dictionary entry for `20`. | Average $O(1)$ |
+| L16 | Report successful removal. | $O(1)$ |
+
+### Why the update order handles the last element too
+
+Suppose `items = [10, 40, 30]` and we remove `30`. Both `val` and `last` are `30`. Overwriting the slot with itself and recording its unchanged index are harmless. Popping removes the slot, and deleting `positions[30]` removes the final mapping.
+
+Deleting the mapping *before* the unconditional `positions[last] = index` assignment would recreate a stale entry when `last == val`. In this implementation, update the moved value's index before deleting the removed value's mapping.
+
+Removing the only element follows the same path and leaves both containers empty. A missing value returns `False` before any mutation. A removed value can later be inserted again.
+
+### Does removal allocate more list space?
+
+No new slot is added during removal:
+
+```text
+items[index] = last   overwrites one existing slot
+items.pop()           removes one slot
+```
+
+The temporary duplicate uses a slot that was already there. List length drops by one, and dictionary length drops by one. Each method needs only a constant number of local variables beyond the stored containers.
+
+For complexity discussions, the data structure stores $O(n)$ logical entries for `n` current values. Actual CPython allocated memory can retain capacity from earlier sizes, especially in dictionaries, so it need not shrink after every removal. A conservative allocated-memory bound is $O(N)$ for the peak number of simultaneously stored values. Retaining capacity is different from adding storage on every removal.
+
+### Random choice and equal probability
+
+L17 chooses directly from the existing list, with no conversion or copying:
+
+```python
+return random.choice(self.items)
+```
+
+For `[10, 40, 30]`, each of the three indices has probability `1/3`. Each current value occupies exactly one index, so each value has probability `1/3` too. Rearranging the list does not change that correspondence. Rejecting duplicate insertions is part of preserving equal probability over the set's values.
+
+### Average versus amortized time
+
+Dictionary access relies on average constant-time hashing behavior. Dynamic-list resizing has a different explanation: an individual append or end-pop can cost $O(n)$ when storage is resized, but that cost is spread across a sequence of operations. This is **amortized** constant time. Neither statement promises that every individual call takes worst-case $O(1)$ time.
+
+| Method | Time | What the bound depends on |
+| --- | --- | --- |
+| `insert` | Average/amortized $O(1)$ | Dictionary access and list growth |
+| `remove` | Average/amortized $O(1)$ | Dictionary access and end-pop; no middle shifting |
+| `getRandom` | $O(1)$ in the standard interview model | Uniform index selection and direct list indexing |
+
+The structure uses $O(n)$ logical storage, with $O(1)$ auxiliary space per operation. This is not an $O(1)$-total-space solution.
+
+### Run the implementation and checks
+
+The executable version checks missing and duplicate values, middle/last/only-element removal, reinsertion, and 2,000 mixed operations against Python set semantics. It checks the index invariant after every operation. Deterministic index-selection checks avoid relying on a flaky statistical test to establish fairness; the equal-probability argument comes from one slot per value and uniform index selection.
+
+<PythonRepl code={approach2PyCode} id="insert-delete-getrandom-o1-approach2-py" />
+
+## How to recognize this pattern
+
+The combination of fast membership, uniform random selection, and no ordering requirement points toward a **list plus an index map**. Each structure provides something the other lacks. Swap-and-pop removes the remaining obstacle by trading away order to avoid shifting.
+
+| Tempting choice | What works | What misses the requirement |
+| --- | --- | --- |
+| Set alone | Fast membership, insertion, and removal | No indexed random access; converting before every draw copies the contents |
+| List alone | Random indexing and end insertion | Finding a value and deleting from the middle are linear |
+| Linked list plus a map | Locate and unlink a known node | Selecting the kth node still requires traversal |
+| List plus index map | Membership, location, and random indexing | Meets the target when removal moves the last value into the hole |
+
+The boundary is order: if surviving elements must keep their relative order, this removal technique changes required behavior. Also, `random.choice` chooses with replacement. A draw leaves the set unchanged and can return the same value repeatedly.
+
+## Key takeaways
+
+- Maintain one list slot per value and a dictionary pointing back to that slot.
+- When order does not matter, move the last element into a removal hole and pop the end.
+- Account for conversions and copies around a fast library call, not just the call itself.
+- State average hashing and amortized resizing costs separately from worst-case costs.
+
+## References
+
+- [Python random selection](https://docs.python.org/3/library/random.html#random.choice): `choice` operates on a nonempty sequence.
+- [Python set types](https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset): sets do not support indexing or slicing.
+- [CPython operation complexity](https://docs.python.org/3/builtins/time-complexity.html): list shifting, resizing, hash-table costs, and retained capacity.
+
+## Related topics
+
+- [Arrays](../../../data-structures/arrays/): indexed access and dynamic storage.
+- [Hash tables](../../../data-structures/hash-tables/): fast membership and locating stored information.
+- [217. Contains Duplicate](../217-contains-duplicate/): when set membership alone is sufficient.
+
+## Related concepts
+
+- [Hash map counting](../../../coding-concepts/hash-map-counting/): storing information about each value; here the stored information is a position rather than a count.
+- [Simulation](../../../coding-concepts/simulation/): implement each operation while preserving the relationship between the stored containers.

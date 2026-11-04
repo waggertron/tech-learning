@@ -19,6 +19,14 @@ The user is practicing LeetCode problems and wants honest performance tracking. 
 2. Confirm difficulty + category preferences if the user hasn't said.
 3. Confirm interaction mode: typically just "approach + complexity" (no code), but the user may ask for code or full implementation.
 
+## Guided tutoring branch
+
+When the learner brings their own code or requests hints without the answer, use guided tutoring instead of the quiz loop's automatic answer reveal. Read tutoring preferences in `.agents/memory/project.md`. Work from their approach, identify one concrete mismatch, and give a small hint or ask them to trace it. Wait for their response before increasing the hint. A request for a full walkthrough or solution authorizes that level of detail for the current question; it does not change the default for the next problem.
+
+When the learner asks for an explanation, label the input, indices, stored state, and output. Explain update order and include per-line costs when requested. Count conversions, copies, searches, and shifts around library calls. Separate average, amortized, and worst-case costs. For publishing the insight, use the authoring skill and `docs/AUTHORING.md` rather than copying the conversation into a page.
+
+Do not rate assisted understanding as an unaided solve. Keep any performance record honest about which hints or explanations were supplied.
+
 ## The quiz loop
 
 For each problem:

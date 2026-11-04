@@ -174,6 +174,14 @@ $$
 
 Use headings like `### Further explanation` so quick readers can skip the deeper material.
 
+### Capturing reasoning from coding practice
+
+When a practice session exposes a reusable misunderstanding, build the explanation around the state invariant: what each slot, accumulator, or map entry means. Use a fully labeled concrete trace with indices and intermediate states, then explain why the update order preserves that meaning. Choose inputs that expose the mistake rather than hide it, such as a first factor other than `1` for a product scan.
+
+Include a minimal incorrect expression and its counterexample when that makes the correct reasoning clearer. Account for conversions, copies, searches, shifting, and resizing around library calls. Distinguish average hashing, amortized dynamic-array costs, worst-case calls, logical storage, and retained capacity when relevant. For paired containers, test their relationship after mutations, including the case where the moved and removed value are the same.
+
+Keep learner preferences and personal performance in ignored local memory. Public pages teach the transferable reasoning and do not reproduce the tutoring transcript. The authoring skill points here for this teaching layer; the quiz skill controls when hints or solutions are revealed.
+
 ### Coding problem related concepts
 
 Every coding problem page ends with a **Related concepts** section. Use at least two links, usually 2-5 total, so the page points back to the transferable tactics behind the solution rather than only another entry in the same LeetCode category.

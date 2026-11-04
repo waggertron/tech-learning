@@ -203,6 +203,10 @@ Many existing entries started as thin coverage so the catalog was complete. When
 6. **Keep the page coherent.** If an entry grows past the normal length range, split into subtopics or child pages instead of making one oversized page.
 7. **Update surrounding links.** A newly deepened entry often deserves new related-topic links from nearby pages.
 
+## Capturing a coding-practice insight
+
+When deepening an entry from a tutoring session, follow [Capturing reasoning from coding practice](../../../docs/AUTHORING.md#capturing-reasoning-from-coding-practice). Define the state invariant, use a labeled trace that exposes the mistake, explain update order, and account for hidden copies and scans as well as average and amortized costs. Keep personal tutoring preferences in local memory rather than published content.
+
 ## Using Source Material
 
 When the user provides an article, editorial, answer, transcript, or pasted reference, use it as raw input only. Do not copy its prose structure sentence by sentence. Extract the concepts, verify them against the repo context, then write original explanations in this site's voice.
