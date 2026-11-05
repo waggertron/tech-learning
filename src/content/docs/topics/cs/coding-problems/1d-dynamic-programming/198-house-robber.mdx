@@ -5,7 +5,7 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-07-16
+updated: 2026-11-04
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -175,6 +175,72 @@ Each index `i` is computed exactly once; subsequent calls return a cached result
 
 `dp[i]` = max money robbing houses `0..i`. `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`.
 
+### Two valid meanings for the DP index
+
+An index can identify a house or count how many houses have been considered. Both conventions work, but their allocation, base cases, and recurrence must agree:
+
+| Detail | House-index state | Prefix-length state |
+| --- | --- | --- |
+| Meaning of `dp[i]` | Best money from houses `0` through `i` | Best money from the first `i` houses |
+| Current house | `nums[i]` | `nums[i - 1]` |
+| Table length | `n` | `n + 1` |
+| Base cases | `dp[0] = nums[0]`, then best of the first two | `dp[0] = 0`, `dp[1] = nums[0]` |
+| Loop | `range(2, n)` | `range(2, n + 1)` |
+| Final answer | `dp[n - 1]` | `dp[n]` |
+
+The implementation below uses house indices. The [prefix-length DP convention](../../../coding-concepts/tabulation/#prefix-length-dp-and-the-empty-prefix) is often easier to reason about because it gives the empty input prefix its own slot.
+
+### Walkthrough: count houses, then choose take or skip
+
+With the prefix-length convention, `dp[i]` means the best total from the first `i` houses, whether or not the last of those houses is robbed.
+
+At `i = 3` for `[2, 7, 9, 3, 1]`, the current house is `nums[2] = 9`. There are two possibilities:
+
+- **Skip it**: Keep `dp[2] = 7`, the best result from the first two houses.
+- **Rob it**: Add `9` to `dp[1] = 2`. The neighboring house containing `7` is excluded, so the total is `11`.
+
+Take `max(7, 11)`. We are choosing the better legal plan, not adding the two plans together.
+
+```text
+Input index:         0   1   2   3   4
+nums:               [2,  7,  9,  3,  1]
+
+Houses considered:   0   1   2   3   4   5
+Current value:       -   2   7   9   3   1
+dp:                 [0,  2,  7, 11, 11, 12]
+```
+
+| Houses `i` | Current house | Skip: `dp[i - 1]` | Rob: `dp[i - 2] + nums[i - 1]` | `dp[i]` |
+| --- | --- | --- | --- | --- |
+| 2 | `nums[1] = 7` | `2` | `0 + 7 = 7` | `7` |
+| 3 | `nums[2] = 9` | `7` | `2 + 9 = 11` | `11` |
+| 4 | `nums[3] = 3` | `11` | `7 + 3 = 10` | `11` |
+| 5 | `nums[4] = 1` | `11` | `11 + 1 = 12` | `12` |
+
+Here is that version in Python:
+
+```python
+def rob_prefix(nums: list[int]) -> int:
+    n = len(nums)
+    if not nums:
+        return 0
+    dp = [0] * (n + 1)                         # O(n) allocation
+    dp[1] = nums[0]                            # O(1) base case
+    for i in range(2, n + 1):                  # n - 1 iterations
+        dp[i] = max(dp[i - 1], dp[i - 2] + nums[i - 1])
+    return dp[n]                              # O(1) lookup
+```
+
+Each loop iteration performs a fixed number of lookups, an addition, and a comparison, all $O(1)$. Allocation plus the loop gives $O(n)$ time and $O(n)$ extra space. For a single house, the loop is empty and the initialized `dp[1]` is already the answer. The empty-input guard is optional robustness beyond the problem's nonempty-input constraint.
+
+### Common mistakes: mixing counts with positions
+
+If `dp[1] = nums[0]`, the state is counting houses. Allocating only `n` slots and then writing `dp[n]` goes beyond the table. Reading `nums[i]` at that same step also goes beyond the input: the `i`th house is at index `i - 1`.
+
+Starting the recurrence at `0` creates a different problem: `dp[i - 1]` and `dp[i - 2]` become negative indices in Python. Those read from the end of the list rather than representing smaller solved prefixes, or raise an error when the list is too short. Fill the base cases first and start at `2`.
+
+The constraint is adjacency, not index parity. Choosing all even-indexed houses or all odd-indexed houses is insufficient. For `[2, 1, 1, 2]`, either fixed parity totals `3`, while taking indices `0` and `3` gives `4`.
+
 <Tabs>
 <TabItem label="Python">
 ```python
@@ -243,6 +309,10 @@ function rob(nums: number[]): number {
 ## Approach 4: Bottom-up with two variables (optimal)
 
 `prev2 = dp[i-2]`, `prev1 = dp[i-1]`. `dp[i] = max(prev1, prev2 + nums[i])`.
+
+Before processing a house, `prev1` is the best total from all earlier houses, and `prev2` is the best total from the prefix ending before its immediate neighbor. Use both old values to compute the next result, then shift them forward. Python's simultaneous assignment evaluates the right-hand expressions before changing either variable. Updating `prev2` first in separate statements would lose the older value needed for the rob choice.
+
+Like [Climbing Stairs](../070-climbing-stairs/), the table only needs its previous two results. The dependency shape permits the same space reduction, but the recurrence has a different purpose: stairs adds counts from distinct final moves, while House Robber maximizes the value of take/skip choices. Similar-looking dependencies do not imply the same base cases or combining operation.
 
 <Tabs>
 <TabItem label="Python">
@@ -368,4 +438,5 @@ console.log('all tests pass');
 ## Related concepts
 
 - [Dynamic Programming](../../../coding-concepts/dynamic-programming/), state-and-transition tactics for solving overlapping subproblems with cached answers.
-- [State Compression](../../../coding-concepts/state-compression/), dP memory tactics for keeping only the previous states needed for the next transition.
+- [Tabulation: prefix-length DP](../../../coding-concepts/tabulation/#prefix-length-dp-and-the-empty-prefix), distinguish a count of considered houses from the current house's zero-based index.
+- [State Compression](../../../coding-concepts/state-compression/), DP memory tactics for keeping only the previous states needed for the next transition.

@@ -205,7 +205,7 @@ Many existing entries started as thin coverage so the catalog was complete. When
 
 ## Capturing a coding-practice insight
 
-When deepening an entry from a tutoring session, follow [Capturing reasoning from coding practice](../../../docs/AUTHORING.md#capturing-reasoning-from-coding-practice). Define the state invariant, use a labeled trace that exposes the mistake, explain update order, and account for hidden copies and scans as well as average and amortized costs. Keep personal tutoring preferences in local memory rather than published content.
+When deepening an entry from a tutoring session, follow [Capturing reasoning from coding practice](../../../docs/AUTHORING.md#capturing-reasoning-from-coding-practice). Define the state invariant, use a labeled trace that exposes the mistake, explain update order, and account for hidden copies and scans as well as average and amortized costs. Keep personal tutoring preferences in local memory rather than published content. For a full approach explanation, use the [default complete-solution structure](../../../docs/AUTHORING.md#default-structure-for-a-complete-solution-explanation): code first, state definition, labeled trace, line-to-purpose table, concrete transitions, reusable rule, then precise complexity and any complete optimized version. This format does not override hint-first tutoring.
 
 ## Using Source Material
 

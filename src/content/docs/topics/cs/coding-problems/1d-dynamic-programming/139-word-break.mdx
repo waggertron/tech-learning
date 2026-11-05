@@ -5,7 +5,7 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, strings, hash-tables, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-07-16
+updated: 2026-11-04
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -53,29 +53,16 @@ LeetCode 139 · [Link](https://leetcode.com/problems/word-break/) · *Medium*
 
 ## Approach 1: Recursive, try every prefix
 
-```python
-def word_break(s, word_dict):
-    words = set(word_dict)                        # L1: O(W) to build set
-    def f(start):
-        if start == len(s):                       # L2: base case, O(1)
-            return True
-        for end in range(start + 1, len(s) + 1): # L3: try every prefix from start
-            if s[start:end] in words and f(end):  # L4: O(L) slice + O(L) hash lookup
-                return True
-        return False
-    return f(0)                                   # L5: initial call
-```
-
 <Tabs>
 <TabItem label="Python">
 ```python
 def word_break(s, word_dict):
-    words = set(word_dict)                        # L1: O(W) to build set
+    words = set(word_dict)                        # L1: O(D) to build set
     def f(start):
         if start == len(s):                       # L2: base case, O(1)
             return True
         for end in range(start + 1, len(s) + 1): # L3: try every prefix from start
-            if s[start:end] in words and f(end):  # L4: O(L) slice + O(L) hash lookup
+            if s[start:end] in words and f(end):  # L4: O(end - start) slice + hash lookup
                 return True
         return False
     return f(0)                                   # L5: initial call
@@ -84,11 +71,11 @@ def word_break(s, word_dict):
 <TabItem label="TypeScript">
 ```typescript
 function wordBreak(s: string, wordDict: string[]): boolean {
-    const words = new Set(wordDict);                       // L1: O(W) to build set
+    const words = new Set(wordDict);                       // L1: O(D) to build set
     function f(start: number): boolean {
         if (start === s.length) return true;               // L2: base case, O(1)
         for (let end = start + 1; end <= s.length; end++) { // L3: try every prefix
-            if (words.has(s.slice(start, end)) && f(end)) { // L4: O(L) slice + lookup
+            if (words.has(s.slice(start, end)) && f(end)) { // L4: substring creation and hashing
                 return true;
             }
         }
@@ -103,7 +90,7 @@ function wordBreak(s: string, wordDict: string[]): boolean {
 func wordBreak(s string, wordDict []string) bool {
     words := map[string]bool{}
     for _, w := range wordDict {
-        words[w] = true                                    // L1: O(W) to build set
+        words[w] = true                                    // L1: O(D) to build set
     }
     var f func(start int) bool
     f = func(start int) bool {
@@ -111,7 +98,7 @@ func wordBreak(s string, wordDict []string) bool {
             return true
         }
         for end := start + 1; end <= len(s); end++ {      // L3: try every prefix from start
-            if words[s[start:end]] && f(end) {             // L4: O(L) slice + O(L) hash lookup
+            if words[s[start:end]] && f(end) {             // L4: O(end-start) hashing, O(1) slice
                 return true
             }
         }
@@ -128,21 +115,21 @@ func wordBreak(s string, wordDict []string) bool {
 
 **Where the time goes, line by line**
 
-*Variables: n = len(s), W = number of words in wordDict, L = max word length.*
+*Variables: n = len(s), W = word count, D = total dictionary characters, L = max word length.*
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build set) | $O(W · L)$ | 1 | $O(W · L)$ |
+| L1 (build set) | $O(D)$ | 1 | $O(D)$ |
 | L2 (base case) | $O(1)$ | once per call | $O(calls)$ |
 | L3 (range loop) | $O(n)$ iterations | once per call | $O(n · calls)$ |
-| **L4 (slice + lookup)** | **$O(L)$** | **$O(n)$ per call, $O(2ⁿ)$ calls** | **$O(2ⁿ · n · L)$** ← dominates |
+| **L4 (slice + lookup)** | **$O(n)$ upper bound** | **$O(n)$ per call, $O(2^n)$ calls** | **$O(n^2 2^n)$ coarse upper bound** |
 | L5 (initial call) | $O(1)$ | 1 | $O(1)$ |
 
-Without memoization, the same suffix can be recomputed from scratch every time a different prefix reaches it. In the worst case (e.g., `s = "aaaaaa"`, `wordDict = ["a", "aa", ...]`) the number of distinct recursive calls doubles with each character, producing exponential blowup.
+Without memoization, different segmentations can reach the same suffix and recompute it. A run of `"a"` characters ending in `"b"`, with dictionary words covering many lengths of `"a"`, forces repeated failed branches. There are at most $O(2^n)$ calls, each trying up to `n` endpoints with up to `n` characters of substring work. This gives a deliberately coarse exponential upper bound.
 
 **Complexity**
-- **Time:** $O(2ⁿ)$, driven by L4 (exponential re-computation of identical subproblems).
-- **Space:** $O(n)$ for the call stack.
+- **Time:** $O(D + n^2 2^n)$ as a coarse upper bound including substring work. Memoization removes the repeated subproblems.
+- **Space:** $O(n + W)$ for the call stack, word-set entries, and a temporary substring. Recursion passes indices rather than suffix copies.
 
 ## Approach 2: Top-down memoized
 
@@ -154,13 +141,13 @@ Cache by start index.
 from functools import lru_cache
 
 def word_break(s, word_dict):
-    words = set(word_dict)                        # L1: O(W · L) to build set
+    words = set(word_dict)                        # L1: O(D) to build set
     @lru_cache(maxsize=None)
     def f(start):
         if start == len(s):                       # L2: base case, O(1)
             return True
         for end in range(start + 1, len(s) + 1): # L3: try every split point
-            if s[start:end] in words and f(end):  # L4: O(L) slice + O(L) hash lookup
+            if s[start:end] in words and f(end):  # L4: O(end - start) slice + hash lookup
                 return True
         return False
     return f(0)                                   # L5: initial call
@@ -169,13 +156,13 @@ def word_break(s, word_dict):
 <TabItem label="TypeScript">
 ```typescript
 function wordBreak(s: string, wordDict: string[]): boolean {
-    const words = new Set(wordDict);                       // L1: O(W · L) to build set
+    const words = new Set(wordDict);                       // L1: O(D) to build set
     const memo = new Map<number, boolean>();
     function f(start: number): boolean {
         if (start === s.length) return true;               // L2: base case, O(1)
         if (memo.has(start)) return memo.get(start)!;
         for (let end = start + 1; end <= s.length; end++) { // L3: try every split point
-            if (words.has(s.slice(start, end)) && f(end)) { // L4: O(L) slice + lookup
+            if (words.has(s.slice(start, end)) && f(end)) { // L4: substring creation and hashing
                 memo.set(start, true);
                 return true;
             }
@@ -192,7 +179,7 @@ function wordBreak(s: string, wordDict: string[]): boolean {
 func wordBreak(s string, wordDict []string) bool {
     words := map[string]bool{}
     for _, w := range wordDict {
-        words[w] = true                                    // L1: O(W · L) to build set
+        words[w] = true                                    // L1: O(D) to build set
     }
     memo := map[int]bool{}
     var f func(start int) bool
@@ -204,7 +191,7 @@ func wordBreak(s string, wordDict []string) bool {
             return v
         }
         for end := start + 1; end <= len(s); end++ {      // L3: try every split point
-            if words[s[start:end]] && f(end) {             // L4: O(L) slice + O(L) hash lookup
+            if words[s[start:end]] && f(end) {             // L4: O(end-start) hashing, O(1) slice
                 memo[start] = true
                 return true
             }
@@ -223,21 +210,21 @@ func wordBreak(s string, wordDict []string) bool {
 
 **Where the time goes, line by line**
 
-*Variables: n = len(s), W = number of words in wordDict, L = max word length.*
+*Variables: n = len(s), W = word count, D = total dictionary characters, L = max word length.*
 
 | Line | Per-call cost | Times executed | Contribution |
 | --- | --- | --- | --- |
-| L1 (build set) | $O(W · L)$ | 1 | $O(W · L)$ |
+| L1 (build set) | $O(D)$ | 1 | $O(D)$ |
 | L2 (base case) | $O(1)$ | at most n + 1 | $O(n)$ |
 | L3 (range loop) | $O(n)$ iterations | n unique start values | $O(n²)$ total iters |
-| **L4 (slice + lookup)** | **$O(L)$** | **$O(n²)$ total** | **$O(n² · L)$** ← dominates |
+| **L4 (slice + lookup)** | **$O(n)$ upper bound** | **$O(n²)$ total** | **$O(n³)$** ← dominates |
 | L5 (initial call) | $O(1)$ | 1 | $O(1)$ |
 
-Memoization limits `f` to at most `n + 1` unique `start` values. Each unique call does $O(n)$ iterations of the inner loop, each costing $O(L)$ for the slice. Total: $O(n² · L)$.
+Memoization limits `f` to at most `n + 1` unique `start` values. Each call tries up to $O(n)$ endpoints. In Python, the unrestricted slices and their hashes can each cost $O(n)$, so this implementation has an $O(n^3)$ upper bound, plus dictionary setup.
 
 **Complexity**
-- **Time:** $O(n² · L)$, driven by L4 across all memoized calls.
-- **Space:** $O(n)$ for the cache and call stack.
+- **Time:** $O(D + n^3)$, including dictionary setup and unrestricted Python slicing and hashing.
+- **Space:** $O(n + W)$ for cache entries, stack, set entries, and the temporary candidate substring. Recursion passes indices rather than copying suffix strings.
 
 **Try this approach:**
 
@@ -255,19 +242,17 @@ Memoization limits `f` to at most `n + 1` unique `start` values. Each unique cal
 
 ## Approach 3: Bottom-up DP (canonical)
 
-`dp[i] = True` iff `s[:i]` can be segmented. `dp[0] = True`; `dp[i] = any(dp[j] and s[j:i] in words for j < i)`.
-
 <Tabs>
 <TabItem label="Python">
 ```python
 def word_break(s, word_dict):
-    words = set(word_dict)              # L1: O(W · L) to build set
+    words = set(word_dict)              # L1: O(D) to build set
     n = len(s)                          # L2: O(1)
     dp = [False] * (n + 1)             # L3: O(n) allocation
     dp[0] = True                        # L4: base case, O(1)
     for i in range(1, n + 1):          # L5: outer loop, n iterations
         for j in range(i):             # L6: inner loop, i iterations
-            if dp[j] and s[j:i] in words:  # L7: O(L) slice + O(L) hash lookup
+            if dp[j] and s[j:i] in words:  # L7: O(i - j) slice + hash lookup
                 dp[i] = True           # L8: O(1)
                 break
     return dp[n]                        # L9: O(1)
@@ -276,13 +261,13 @@ def word_break(s, word_dict):
 <TabItem label="TypeScript">
 ```typescript
 function wordBreak(s: string, wordDict: string[]): boolean {
-    const words = new Set(wordDict);              // L1: O(W · L) to build set
+    const words = new Set(wordDict);              // L1: O(D) to build set
     const n = s.length;                           // L2: O(1)
     const dp = new Array(n + 1).fill(false);      // L3: O(n) allocation
     dp[0] = true;                                 // L4: base case, O(1)
     for (let i = 1; i <= n; i++) {               // L5: outer loop, n iterations
         for (let j = 0; j < i; j++) {            // L6: inner loop, i iterations
-            if (dp[j] && words.has(s.slice(j, i))) {  // L7: O(L) slice + lookup
+            if (dp[j] && words.has(s.slice(j, i))) {  // L7: substring creation and hashing
                 dp[i] = true;                    // L8: O(1)
                 break;
             }
@@ -297,14 +282,14 @@ function wordBreak(s: string, wordDict: string[]): boolean {
 func wordBreak(s string, wordDict []string) bool {
     words := map[string]bool{}
     for _, w := range wordDict {
-        words[w] = true                           // L1: O(W · L) to build set
+        words[w] = true                           // L1: O(D) to build set
     }
     n := len(s)                                   // L2: O(1)
     dp := make([]bool, n+1)                       // L3: O(n) allocation
     dp[0] = true                                  // L4: base case, O(1)
     for i := 1; i <= n; i++ {                    // L5: outer loop, n iterations
         for j := 0; j < i; j++ {                 // L6: inner loop, i iterations
-            if dp[j] && words[s[j:i]] {           // L7: O(L) slice + O(L) hash lookup
+            if dp[j] && words[s[j:i]] {           // L7: O(i-j) hashing, O(1) slice
                 dp[i] = true                      // L8: O(1)
                 break
             }
@@ -319,27 +304,77 @@ func wordBreak(s string, wordDict []string) bool {
   </TabItem>
 </Tabs>
 
+### State: what does each slot mean?
+
+**`dp[i]` means the first `i` characters can be segmented into dictionary words.** It does not mean that the entire prefix must itself be one dictionary word.
+
+For `s = "leetcode"` and `word_dict = ["leet", "code"]`:
+
+```text
+Prefix length:  0   1   2   3    4     5      6       7        8
+Prefix:         ""  l   le  lee  leet  leetc  leetco  leetcod  leetcode
+dp:             T   F   F   F    T     F      F       F        T
+```
+
+There are `n + 1` slots because prefix lengths run from `0` through `n`. `dp[0] = True` is the valid empty prefix: it supplies a starting point for the first dictionary word. This is the [prefix-length DP convention](../../../coding-concepts/tabulation/#prefix-length-dp-and-the-empty-prefix).
+
+### What each part of the code does
+
+| Code | Meaning |
+| --- | --- |
+| `words = set(word_dict)` | Build a membership structure for whole dictionary words. `dict(word_dict)` would expect key-value pairs. |
+| `dp = [False] * (n + 1)` | Reserve one slot for every prefix length, including zero. |
+| `dp[0] = True` | Mark the empty prefix as valid so the first word can begin at index `0`. |
+| `for i in range(1, n + 1)` | Choose the endpoint of the prefix being solved. |
+| `for j in range(i)` | Try each starting position for its final word. |
+| `dp[j]` | Check whether everything before the split is already segmentable. |
+| `s[j:i] in words` | Check whether the entire final piece is one dictionary word. `s[i - 1]` alone would inspect only one character. |
+| `dp[i] = True` | Record that a valid split was found. |
+| `break` | Stop searching: this is a feasibility question, so one valid split is enough. |
+| `return dp[n]` | Return whether the entire string can be segmented. |
+
+### Concrete transitions: a valid prefix plus one last word
+
+At `i = 4`, the split `j = 0` works:
+
+```text
+Already valid prefix: ""       dp[0] = True
+Last word:            "leet"   s[0:4] in words
+Result:                        dp[4] = True
+```
+
+At `i = 8`, the split `j = 4` works:
+
+```text
+Character index:   0 1 2 3   4 5 6 7
+s:                 l e e t | c o d e |
+Split position:           j=4       i=8
+
+Already valid prefix: "leet"   dp[4] = True
+Last word:            "code"   s[4:8] in words
+Result:                        dp[8] = True
+```
+
+The reusable rule is **a valid earlier prefix plus one valid final piece makes a valid larger prefix**. Both checks must hold for the same split `j`. A dictionary word at the end cannot repair an invalid earlier prefix: `"xcode"` is false with `["leet", "code"]`, even though `"code"` is a word.
+
+Python's `and` skips the substring check when `dp[j]` is false. Words remain in the set after use, so `"applepenapple"` can use `"apple"` twice. The loop considers all possible splits rather than committing to the first word that looks plausible.
+
 **Where the time goes, line by line**
 
-*Variables: n = len(s), W = number of words in wordDict, L = max word length.*
+Let `n = len(s)`, `W` be the number of dictionary words, and `D` be their total character count. These Python bounds account for creating and hashing new substrings under average hash-table behavior.
 
-| Line | Per-call cost | Times executed | Contribution |
-| --- | --- | --- | --- |
-| L1 (build set) | $O(W · L)$ | 1 | $O(W · L)$ |
-| L2, L3, L4 (init) | $O(n)$ total | 1 | $O(n)$ |
-| L5 (outer loop) | $O(1)$ | n | $O(n)$ |
-| L6 (inner loop) | $O(1)$ | 0+1+...+(n-1) | $O(n²)$ iters total |
-| **L7 (slice + lookup)** | **$O(L)$** | **$O(n²)$ worst case** | **$O(n² · L)$** ← dominates |
-| L8, L9 (assignments) | $O(1)$ | at most n | $O(n)$ |
+| Line | Work | Cost |
+| --- | --- | --- |
+| L1 | Build the word set, including initial word hashing. | $O(D)$ |
+| L2-L4 | Read the length, allocate the DP table, and set its base case. | $O(n)$ |
+| L5-L6 | Try split positions for every endpoint. | At most `1 + 2 + ... + n` pairs, or $O(n^2)$ |
+| L7 | If `dp[j]` is true, create and hash `s[j:i]`. | $O(i-j)$ per checked substring, up to $O(n)$ |
+| L8 | Set a feasible state and stop its inner loop. | At most once per endpoint, $O(n)$ total |
+| L9 | Read the final state. | $O(1)$ |
 
-The early `break` in L8 short-circuits once a valid `j` is found, but the worst case still touches all $O(n²)$ pairs. Each pair costs $O(L)$ for the string slice and hash lookup, giving $O(n² · L)$ overall.
+**Complexity:** The unrestricted version takes $O(D + n^3)$ worst-case time, not merely $O(n^2)$: counting split pairs alone omits substring creation and hashing. An early `break` can help individual inputs but does not remove that worst case. It uses $O(n + W)$ auxiliary space for the DP table, set entries referencing the existing words, and one temporary substring of up to length `n`. If dictionary character storage is counted too, the bound is $O(n + D)$.
 
-**Complexity**
-- **Time:** $O(n² · L)$, driven by L7 across all (i, j) pairs.
-- **Space:** $O(n)$ for the dp array.
-
-### Optimization
-Limit the inner loop to `j ≥ i - max_word_length`. Saves time when dictionary words are short relative to `s`.
+The maximum dictionary-word length does not bound the substrings created by this code: the unrestricted loop still constructs candidates that are too long to match. The final version below avoids that wasted work.
 
 **Try this approach:**
 
@@ -355,13 +390,49 @@ Limit the inner loop to `j ≥ i - max_word_length`. Saves time when dictionary 
   </TabItem>
 </Tabs>
 
+## Final version: bound the last word's length
+
+Keep the same state, base case, and two checks. Only the candidate split range changes. If the longest dictionary word has length `L`, a substring longer than `L` cannot match a word, so there is no reason to construct it.
+
+```python
+def word_break_bounded(s: str, word_dict: list[str]) -> bool:
+    words = set(word_dict)
+    max_len = max(len(word) for word in words)
+    n = len(s)
+    dp = [False] * (n + 1)
+    dp[0] = True
+
+    for i in range(1, n + 1):
+        for j in range(max(0, i - max_len), i):
+            if dp[j] and s[j:i] in words:
+                dp[i] = True
+                break
+
+    return dp[n]
+```
+
+The problem guarantees a nonempty dictionary of nonempty words, so `max` has at least one value. A valid final word starts no earlier than `i - max_len`. Clamping that start to `0` avoids negative positions near the beginning of the string. Every valid segmentation considered by the original version is still reachable.
+
+### Complexity discussion
+
+Let `L` be the longest dictionary-word length and `K = min(n, L)`. The optimized version considers at most `K` splits per endpoint, for $O(nK)$ candidates. Each new substring has at most `K` characters, so slicing and hashing cost at most $O(K)$. Total time is **$O(D + nK^2)$**, commonly written **$O(D + nL^2)$** when `L <= n`. Computing `max_len` takes $O(W)$, absorbed by $O(D)$ because dictionary words are nonempty.
+
+For this problem, `L <= 20`. That bounds the substring work at each endpoint, so the optimized scan is linear in `n` when treating the maximum word length as a fixed constant, plus dictionary setup. Without the length cap, the baseline has $O(n^2)$ candidate splits and up to $O(n)$ substring work per candidate, hence $O(D + n^3)$.
+
+The optimized implementation uses **$O(n + W)$ auxiliary space**: the DP table, word-set references, and one temporary substring of up to `K` characters. Counting the input word characters as stored dictionary data gives $O(n + D)$ instead. A set lookup has average constant-time table probing, but hashing a newly created string still takes time proportional to its length.
+
+This remains prefix DP. Word Break can depend on any valid earlier split within the word-length window, so the two-variable optimization from Climbing Stairs and House Robber cannot be copied directly.
+
 ## Summary
+
+Python costs below include dictionary setup. `D` is total dictionary characters, `W` is word count, and `L` is maximum word length. The naive recursion row is a coarse upper bound that includes substring work.
 
 | Approach | Time | Space |
 | --- | --- | --- |
-| Naive recursion | $O(2ⁿ)$ | $O(n)$ |
-| Top-down memo | $O(n² · L)$ | $O(n)$ |
-| **Bottom-up DP** | **$O(n² · L)$** | **$O(n)$** |
+| Naive recursion | $O(D + n^2 2^n)$ coarse upper bound | $O(n + W)$ |
+| Top-down memo | $O(D + n^3)$ upper bound | $O(n + W)$ |
+| Bottom-up DP | $O(D + n^3)$ | $O(n + W)$ |
+| **Length-bounded bottom-up DP** | **$O(D + nK^2)$**, `K = min(n, L)` | **$O(n + W)$** |
 
 The "partition a string into dictionary pieces" template applies to Word Break II (140, which enumerates all segmentations) and Concatenated Words (472).
 
@@ -481,9 +552,11 @@ func main() { runTests() }
 ## Related data structures
 
 - [Strings](../../../data-structures/strings/), prefix DP
-- [Hash Tables](../../../data-structures/hash-tables/), $O(1)$ dictionary membership
+- [Hash Tables](../../../data-structures/hash-tables/), average constant-time table probing after hashing the candidate word
 
 ## Related concepts
 
 - [Memoization](../../../coding-concepts/memoization/), top-down caching tactics for preserving recursive clarity while avoiding repeated subproblem work.
 - [Sequence DP](../../../coding-concepts/sequence-dp/), order-aware DP tactics for strings and arrays where prefixes or positions define reusable states.
+
+- [Tabulation: prefix-length DP](../../../coding-concepts/tabulation/#prefix-length-dp-and-the-empty-prefix), one Boolean state per prefix and a valid empty prefix.

@@ -182,6 +182,20 @@ Include a minimal incorrect expression and its counterexample when that makes th
 
 Keep learner preferences and personal performance in ignored local memory. Public pages teach the transferable reasoning and do not reproduce the tutoring transcript. The authoring skill points here for this teaching layer; the quiz skill controls when hints or solutions are revealed.
 
+### Default structure for a complete solution explanation
+
+When a learner requests code followed by an explanation, or a coding-problem approach is expanded into a full walkthrough, use this order:
+
+1. Show the complete implementation first.
+2. Define the state or invariant in one plain sentence. Clarify a nearby interpretation that would lead to a different algorithm when relevant.
+3. Show a fully labeled input/state/output trace with indices or prefix lengths.
+4. Explain each meaningful line or block in a code-to-purpose table. Tie base cases and loop bounds to the state definition.
+5. Walk through concrete transitions, naming the old state, new piece or choice, and resulting state.
+6. State the reusable rule and why update order, early exits, or reuse are valid. Include one counterexample to a likely misunderstanding when useful.
+7. End with time and space costs for the code actually shown, including string slicing, hashing, copying, and setup. If adding an optimization, show the complete final implementation and compare its costs with the baseline.
+
+Keep language variants together and follow them with one shared explanation rather than repeating the same prose per language. Scale the trace and table to the algorithm. This format governs full explanations, not hint-first tutoring: do not reveal a solution before the learner requests it. Personal preference notes belong in local memory; this structure is the reusable authoring default.
+
 ### Coding problem related concepts
 
 Every coding problem page ends with a **Related concepts** section. Use at least two links, usually 2-5 total, so the page points back to the transferable tactics behind the solution rather than only another entry in the same LeetCode category.

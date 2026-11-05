@@ -23,6 +23,8 @@ The user is practicing LeetCode problems and wants honest performance tracking. 
 
 When the learner brings their own code or requests hints without the answer, use guided tutoring instead of the quiz loop's automatic answer reveal. Read tutoring preferences in `.agents/memory/project.md`. Work from their approach, identify one concrete mismatch, and give a small hint or ask them to trace it. Wait for their response before increasing the hint. A request for a full walkthrough or solution authorizes that level of detail for the current question; it does not change the default for the next problem.
 
+When the learner requests a complete solution or code followed by explanation, default to the [complete-solution structure](../../../docs/AUTHORING.md#default-structure-for-a-complete-solution-explanation): complete code first, state meaning, labeled trace, line-to-purpose table, concrete transitions, reusable rule, and complexity at the end. If an optimization is requested, include its complete implementation and compare the costs. For partial hints, continue the guided branch without revealing complete code.
+
 When the learner asks for an explanation, label the input, indices, stored state, and output. Explain update order and include per-line costs when requested. Count conversions, copies, searches, and shifts around library calls. Separate average, amortized, and worst-case costs. For publishing the insight, use the authoring skill and `docs/AUTHORING.md` rather than copying the conversation into a page.
 
 Do not rate assisted understanding as an unaided solve. Keep any performance record honest about which hints or explanations were supplied.
