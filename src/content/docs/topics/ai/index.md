@@ -11,6 +11,7 @@ description: "Topics in artificial intelligence, natural language processing, pr
 - [Natural Language Processing](./natural-language-processing/): classical NLP, spaCy pipelines, NLTK corpus analysis, sparse classifiers, and where LLMs fit
 - [AI Harness Development](./harness-development/): the scaffolding around an LLM that turns it into something useful
 - [LangGraph](./langgraph/): stateful graph workflows and a Python MCP server example
+- [Instructor](./instructor/): typed Python extraction, validation and retries, streaming, and a documented feature map with concrete use cases
 - [RAG (Retrieval-Augmented Generation)](./rag/): grounding LLM responses in external knowledge
 - [AI Skill Development](./skill-development/): packaged, invocable capabilities loaded on demand
 - [AI Coding Tool Blindspots](./coding-tool-blindspots/): predictable failure modes of modern AI coding assistants

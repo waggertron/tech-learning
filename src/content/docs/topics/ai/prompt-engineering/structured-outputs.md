@@ -5,7 +5,7 @@ parent: prompt-engineering
 tags: [llm, json, function-calling, tool-use]
 status: draft
 created: 2026-04-23
-updated: 2026-07-13
+updated: 2026-11-06
 ---
 
 ## Why free-form output breaks systems
@@ -76,6 +76,7 @@ The schema should encode business meaning, not only JSON shape. For example, `pr
 
 ## Related topics
 
+- [Instructor](../../instructor/), concrete Python extraction, validation, retry, and streaming examples
 - [Prompt templates](../templates/), where schema-driven prompting fits
 - [Tool design and schema discipline](../../harness-development/tool-design/), structured arguments for agent tools
 - [Context window management](../context-window-management/), placing schema and examples where the model can use them
