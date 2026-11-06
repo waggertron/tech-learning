@@ -1,18 +1,18 @@
 ---
 title: "Knuth-Morris-Pratt (KMP)"
-description: "Linear-time substring search by precomputing a failure function that tells you how far to slide the pattern on a mismatch, so no character in the text is ever inspected twice."
+description: "Linear-time substring search by precomputing a failure function that tells you how far to slide the pattern on a mismatch, so the text pointer never moves backward."
 parent: named-algorithms
 tags: [algorithms, strings, pattern-matching, interviews]
 status: draft
 created: 2026-05-04
-updated: 2026-05-04
+updated: 2026-11-06
 ---
 
 ## What it does
 
 Given a text string `T` of length `n` and a pattern string `P` of length `m`, find every position in `T` where `P` occurs as a substring.
 
-KMP solves this in **$O(n + m)$** time: $O(m)$ to preprocess the pattern, $O(n)$ to scan the text. It never inspects the same character of the text more than once. Contrast with the naive approach, which is $O(nm)$ in the worst case.
+KMP solves this in **$O(n + m)$** time: $O(m)$ to preprocess the pattern, $O(n)$ to scan the text. The text pointer never moves backward. A character can be compared again during a fallback, but the aggregate comparison count is linear. Contrast with the naive approach, which is $O(nm)$ in the worst case.
 
 Named after Donald Knuth, Vaughan Pratt, and James Morris, who independently discovered the same algorithm and published it jointly in 1977. It remains the canonical interview answer for "implement substring search without using built-ins."
 
@@ -38,7 +38,7 @@ def naive_search(text, pattern):
 
 Each outer iteration can do up to `m` comparisons. With `n - m + 1` starting positions, the worst case is $O(nm)$.
 
-The adversarial input that actually triggers $O(nm)$: search for pattern `"aaab"` inside text `"aaa...aaa"` (all `a`s, no `b`). Every starting position matches the first `m-1` characters and fails only on the last one. With n = 10,000 and m = 100, that's nearly a million character comparisons for a search that returns no matches.
+The adversarial input that actually triggers $O(nm)$: search for pattern `"aaab"` inside text `"aaa...aaa"` (all `a`s, no `b`). Every starting position matches the first `m-1` characters and fails only on the last one. More generally, a pattern of `m - 1` copies of `"a"` followed by `"b"` forces the same repeated work. With `n = 10,000` and `m = 100`, that is nearly a million character comparisons for a search that returns no matches.
 
 ```
 text:    a a a a a a a a a ...
@@ -48,7 +48,7 @@ pattern: a a a b
              ^ ^ ^ X  (fail again)
 ```
 
-KMP would handle this in $O(n + m)$ by recognizing that after the failure at `b`, the prefix `"aaa"` is also a suffix of what was matched, so the pattern pointer jumps back only as far as necessary, not all the way to zero.
+KMP would handle this in $O(n + m)$ by recognizing that after matching `"aaa"` and failing at `b`, the matched text ends with `"aa"`, which is also the pattern's prefix. The pattern pointer falls back from 3 to `lps[2] = 2`, preserving those two known matches.
 
 ## The failure function (LPS array)
 
@@ -530,6 +530,7 @@ if __name__ == "__main__":
 
 ## Related topics
 
+- [28. First Occurrence: LPS walkthrough](../../coding-problems/sliding-window/028-find-the-index-of-the-first-occurrence/#lps-longest-proper-prefix-that-is-also-a-suffix), the `"ababac"` prefix table and first-match search trace.
 - [Data Structures](../../data-structures/), for the string and array primitives KMP operates on
 - [BFS](../bfs/), another graph/tree algorithm where understanding the pointer invariant is the key insight
 - Z-algorithm: a close sibling to KMP with arguably simpler derivation. It builds a Z-array (longest match with the prefix starting at each position) rather than an LPS array. Both solve substring search in $O(n + m)$; KMP is more common in interviews, Z-algorithm is worth knowing as a mental cross-check.

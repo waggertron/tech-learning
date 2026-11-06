@@ -4,9 +4,9 @@
   "summary": {
     "pages": 195,
     "categories": 18,
-    "documentedApproaches": 520,
+    "documentedApproaches": 522,
     "sourceFiles": {
-      "python": 489,
+      "python": 491,
       "typescript": 474,
       "go": 474,
       "swift": 698
@@ -18,8 +18,8 @@
         "practiceTabs": 191,
         "practiceRepls": 195,
         "approachTabs": 483,
-        "approachSources": 275,
-        "approachHarnesses": 269,
+        "approachSources": 277,
+        "approachHarnesses": 271,
         "approachStaticExamples": 0
       },
       "typescript": {
@@ -165,7 +165,7 @@
     {
       "category": "sliding-window",
       "pages": 10,
-      "documentedApproaches": 26,
+      "documentedApproaches": 28,
       "swiftReadyPages": 9,
       "swiftReadyApproaches": 24,
       "vectorReadyPages": 9
@@ -19611,7 +19611,7 @@
         },
         {
           "number": 2,
-          "title": "Built-in (interview-acceptable)",
+          "title": "Built-in substring search",
           "languageTabs": [
             "python",
             "typescript",
@@ -19645,6 +19645,52 @@
           ],
           "swiftContractErrors": [],
           "swiftReady": true
+        },
+        {
+          "number": 3,
+          "title": "Check each start without a slice",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "sliding-window/028-find-the-index-of-the-first-occurrence-approach3.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 4,
+          "title": "KMP, reuse a matched prefix",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "sliding-window/028-find-the-index-of-the-first-occurrence-approach4.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
         }
       ]
     },

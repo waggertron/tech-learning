@@ -86,7 +86,7 @@ canonical: https://waggertron.github.io/tech-learning/posts/<slug>/
 
 ### YAML gotchas this session hit (repeatedly)
 
-These are the only frontmatter bugs that have broken the build so far:
+Common frontmatter mistakes that have caused build failures:
 
 1. **Unquoted description starting with a backtick.** `description: \`Form\` vs ...` parses as something exotic in YAML. Fix: wrap the whole value in double quotes, or avoid backtick as the first character.
 

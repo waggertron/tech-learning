@@ -5,7 +5,7 @@ parent: sliding-window
 tags: [leetcode, sliding-window, strings, easy]
 status: draft
 created: 2026-05-07
-updated: 2026-07-16
+updated: 2026-11-06
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -21,6 +21,8 @@ import approach2SwiftCode from './028-find-the-index-of-the-first-occurrence-app
 import approach2PyCode from './028-find-the-index-of-the-first-occurrence-approach2.py?raw';
 import approach2TsCode from './028-find-the-index-of-the-first-occurrence-approach2.ts?raw';
 import approach2GoCode from './028-find-the-index-of-the-first-occurrence-approach2.go?raw';
+import approach3PyCode from './028-find-the-index-of-the-first-occurrence-approach3.py?raw';
+import approach4PyCode from './028-find-the-index-of-the-first-occurrence-approach4.py?raw';
 
 ## Problem
 
@@ -93,6 +95,31 @@ func strStr(haystack string, needle string) int {
   </TabItem>
 </Tabs>
 
+### State and boundaries: one candidate start at a time
+
+**`i` is the candidate starting index, and `m` is the exact number of characters to compare.** For `haystack = "sadbutsad"` and `needle = "sad"`:
+
+```text
+Index:      0 1 2 3 4 5 6 7 8
+haystack:   s a d b u t s a d
+Start 0:    s a d
+Start 6:                s a d
+```
+
+The slice is `haystack[i:i + m]`. Python excludes the endpoint, so `haystack[0:3]` contains indices `0`, `1`, and `2`. Using `i + m + 1` would request an extra character.
+
+For a whole candidate to fit, `i + m <= n`, or `i <= n - m`. Here `n = 9` and `m = 3`, so the last valid start is `6`, not `5`. Since `range` also excludes its endpoint, use `range(n - m + 1)` to include that final start. If `m > n`, the range is empty and the function returns `-1` without comparing a window.
+
+| Code | Purpose |
+| --- | --- |
+| `n, m = len(haystack), len(needle)` | Name the text and pattern lengths. |
+| `range(n - m + 1)` | Try every complete window, including the final one. |
+| `haystack[i:i + m] == needle` | Compare exactly `m` characters at this start. |
+| `return i` inside the loop | Return the first match because starts are tested from left to right. |
+| Final `return -1` | Report that no candidate matched. |
+
+For `haystack = "abc"`, `needle = "bc"`, the scan tries start `0` and then start `1`. The second window matches. Leaving off the range's `+1` would skip that only successful candidate.
+
 **Where the time goes, line by line**
 
 *Variables: n = len(haystack), m = len(needle).*
@@ -105,15 +132,15 @@ func strStr(haystack string, needle string) int {
 | L4 (return) | $O(1)$ | 1 | $O(1)$ |
 | L5 (return -1) | $O(1)$ | 1 | $O(1)$ |
 
-The slice `haystack[i:i+m]` allocates a new string of length `m` and the `==` comparison scans up to `m` characters. Done at each of the ~n positions, that is $O(n * m)$ total.
+For the Python version, each candidate slice can create a string of length `m`, and equality can inspect up to `m` characters. With `m <= n`, there are `n - m + 1` candidates, giving $O((n - m + 1)m)$ worst-case time, commonly bounded by $O(nm)$. Only one temporary window is needed at a time. Go string slices are views rather than copied character buffers, so the allocation explanation is Python-specific.
 
 **Complexity**
-- **Time:** $O(n * m)$, driven by L3 (window comparison at every position).
-- **Space:** $O(m)$ for the slice allocated at each step.
+- **Time:** $O((n - m + 1)m)$ for `m <= n`, or the looser $O(nm)$ bound. A longer needle is rejected in $O(1)$ by the empty loop.
+- **Python extra space:** $O(m)$ for one temporary slice when a candidate fits; $O(1)$ when none fits.
 
-## Approach 2: Built-in (interview-acceptable)
+## Approach 2: Built-in substring search
 
-Python's `str.find()` and JavaScript's `String.prototype.indexOf()` use optimized algorithms under the hood. In an interview, returning the built-in result is explicitly acceptable for this problem.
+Python's `str.find()` returns the first matching index, or `-1` when no match exists. The corresponding TypeScript and Go calls express the same search. When implementing the search algorithm is part of an exercise, use a manual approach instead.
 
 <Tabs>
 <TabItem label="Python">
@@ -141,7 +168,7 @@ func strStr(haystack string, needle string) int {
   </TabItem>
 </Tabs>
 
-This is $O(n)$ in the average case and $O(n * m)$ in the worst case, but the constant factor is far lower than a hand-rolled loop because the inner comparison runs in native code.
+The public Python documentation specifies the return behavior, not one universal time or space bound. The algorithm used by a built-in depends on the language implementation and version. Do not transfer the complexity of our slice loop to every built-in, or label every built-in KMP. The explicit KMP version below supplies its own $O(n + m)$ worst-case proof.
 
 **Try this approach:**
 
@@ -157,19 +184,174 @@ This is $O(n)$ in the average case and $O(n * m)$ in the worst case, but the con
   </TabItem>
 </Tabs>
 
-## Note on KMP
+## Approach 3: Check each start without a slice
 
-The Knuth-Morris-Pratt algorithm solves this in $O(n + m)$ time and $O(m)$ space by precomputing a failure function over `needle` that allows the search to skip redundant comparisons. See [KMP](../../../named-algorithms/kmp/) for the full walkthrough.
+```python
+def str_str(haystack: str, needle: str) -> int:
+    n = len(haystack)
+    m = len(needle)
+    for i in range(n - m + 1):
+        if haystack.startswith(needle, i):
+            return i
+    return -1
+```
 
-## Summary
+`startswith(needle, i)` asks whether the entire needle begins at exactly index `i`. It does not search for a later match. This preserves the same candidate-start logic while avoiding construction of a Python slice for each attempt in CPython. The allocation and auxiliary-space claims here are checked against CPython 3.14.0 source, rather than guaranteed by the Python language specification.
 
-| Approach | Time | Space |
+**Time:** $O((n - m + 1)m)$ worst case for `m <= n`, since candidates can repeatedly match most of the needle before failing. **Auxiliary space:** $O(1)$ in CPython for the indexed prefix checks. Avoiding a copy improves allocation behavior but does not eliminate repeated character comparisons.
+
+<PythonRepl code={approach3PyCode} id="find-first-occurrence-approach3-py" />
+
+## Approach 4: KMP, reuse a matched prefix
+
+```python
+def build_lps(pattern: str) -> list[int]:
+    lps = [0] * len(pattern)
+    length = 0
+
+    for i in range(1, len(pattern)):
+        while length > 0 and pattern[i] != pattern[length]:
+            length = lps[length - 1]
+        if pattern[i] == pattern[length]:
+            length += 1
+        lps[i] = length
+
+    return lps
+
+
+def str_str(haystack: str, needle: str) -> int:
+    m = len(needle)
+    if m == 0:
+        return 0
+    if m > len(haystack):
+        return -1
+
+    lps = build_lps(needle)
+    j = 0
+    for i, char in enumerate(haystack):
+        while j > 0 and char != needle[j]:
+            j = lps[j - 1]
+        if char == needle[j]:
+            j += 1
+        if j == m:
+            return i - m + 1
+
+    return -1
+```
+
+### State: how much of the needle already matches?
+
+**`j` is the number of needle characters currently matched against a suffix of the text processed so far.** The next expected character is `needle[j]`. If it differs from the current text character, use the LPS table to keep a shorter prefix that is already known to match.
+
+Here is the mismatch that motivates KMP:
+
+```text
+Text index:  0 1 2 3 4 5 6 7
+haystack:    a b a b a b a c
+needle:      a b a b a c
+             = = = = = X
+
+Matched:     "ababa"
+Expected:    "c"
+Actual:      "b" at text index 5
+```
+
+The matched text ends in `"aba"`, which is also the beginning of the needle:
+
+```text
+Already matched:   a b a b a
+Ending:                a b a
+Needle beginning:  a b a
+```
+
+Keep those three matches rather than comparing them again. The candidate start shifts from `0` to `2`, but the text stays at index `5` while its `"b"` is retried against `needle[3]`.
+
+### LPS: longest proper prefix that is also a suffix
+
+A prefix begins at the start of a string; a suffix ends at its end. A **proper** prefix excludes the entire string itself. `lps[i]` is the length of the longest proper prefix of `needle[:i + 1]` that is also its suffix.
+
+```text
+Needle index:  0 1 2 3 4 5
+needle:       a b a b a c
+lps:          0 0 1 2 3 0
+```
+
+| Needle prefix | Longest matching beginning and ending | LPS value |
 | --- | --- | --- |
-| Brute sliding window | $O(n * m)$ | $O(m)$ |
-| Built-in | $O(n)$ avg | $O(1)$ |
-| KMP | $O(n + m)$ | $O(m)$ |
+| `"a"` | None | `0` |
+| `"ab"` | None | `0` |
+| `"aba"` | `"a"` | `1` |
+| `"abab"` | `"ab"` | `2` |
+| `"ababa"` | `"aba"` | `3` |
+| `"ababac"` | None | `0` |
 
-The brute approach is the clearest to reason about and fine for small inputs. Use the built-in in interviews unless the interviewer specifically asks for the algorithm. KMP is the canonical $O(n)$ solution.
+For `"abab"`, the matching beginning and ending are `"ab"`, so `lps[3] = 2`. For `"ababa"`, they are `"aba"`, so `lps[4] = 3`. A one-character prefix has no nonempty proper prefix, which explains the first zero.
+
+### Building LPS: extend a match or fall back
+
+In `build_lps`, `length` tracks the candidate border length. A border is a prefix that is also a suffix. When `pattern[i]` matches `pattern[length]`, extend that border by one. If they differ, try the border of the existing border using `lps[length - 1]`.
+
+For `"ababac"`, the first five entries grow to `[0, 0, 1, 2, 3]`. At index `5`, `"c"` fails against the next character after the length-3 border. Fall back from length `3` to `lps[2] = 1`, then from `1` to `lps[0] = 0`. It still does not match `"a"`, so `lps[5]` remains `0`.
+
+The pattern position `i` stays fixed during that fallback chain. The helper is asking which shorter already-known border could still be extended by this same character, rather than rescanning old characters.
+
+### Search: why the lookup is `lps[j - 1]`
+
+If `j` characters matched, their needle indices are `0` through `j - 1`. The LPS entry for that matched prefix is therefore `lps[j - 1]`, not `lps[j]`. For four matched characters, read index `3`.
+
+Continuing the example:
+
+| Text index `i` | Character | Match state/action | `j` afterward |
+| --- | --- | --- | --- |
+| `0` through `4` | `"ababa"` | Match the first five needle characters. | `5` |
+| `5` | `"b"` | Expected `needle[5] = "c"`; fall back to `lps[4] = 3`, then match `needle[3] = "b"`. | `4` |
+| `6` | `"a"` | Match `needle[4]`. | `5` |
+| `7` | `"c"` | Match `needle[5]`; the entire needle has matched. | `6` |
+
+The match ends at text index `7`, so its start is `7 - 6 + 1 = 2`. Returning immediately gives the first occurrence. This version stops at the first match; the shared [KMP entry](../../../named-algorithms/kmp/) also explains continuing to find overlapping matches.
+
+### What each part of the KMP code does
+
+| Code | Purpose |
+| --- | --- |
+| `lps = [0] * len(pattern)` | Reserve one reusable-border length for each needle prefix. |
+| `length = lps[length - 1]` | During preprocessing, try a shorter known border after a mismatch. |
+| `if pattern[i] == pattern[length]` | Extend the border when the next characters agree. |
+| Empty-needle guard | Return `0` as a useful extension beyond this problem's nonempty-needle constraint. |
+| Longer-needle guard | Reject immediately when a match cannot fit. |
+| `for i, char in enumerate(haystack)` | Advance through the text without moving the text index backward. |
+| `while j > 0 and char != needle[j]` | Retry the current text character against shorter candidate prefixes. |
+| `j = lps[j - 1]` | Preserve an already-matched suffix as the next candidate's prefix. |
+| `j += 1` | Include the current character in the matched prefix. |
+| `if j == m` | Detect a complete match and return `i - m + 1`. |
+
+### Complexity discussion
+
+Building LPS takes $O(m)$ time. Its scan index only increases, and the total decreases of `length` are bounded by its earlier increases. The search has the same accounting: each text character advances the scan once, and successful comparisons can increase `j` at most `n` times. Fallbacks decrease `j`, so there can only be $O(n)$ total fallback steps.
+
+A text character **can be compared again** during fallback. The guarantee is that the text pointer never moves backward and the total number of comparisons is linear, not that every character participates in exactly one comparison.
+
+**Time:** $O(n + m)$ worst case. **Extra space:** $O(m)$ for LPS plus a constant number of indices. Unlike the slice loop, KMP neither creates candidate substrings nor restarts an entire pattern comparison at each possible start.
+
+<PythonRepl code={approach4PyCode} id="find-first-occurrence-approach4-py" />
+
+## Approach comparison
+
+| Approach | Time | Auxiliary space | Main tradeoff |
+| --- | --- | --- | --- |
+| Python slice loop | $O((n - m + 1)m)$ for `m <= n` | $O(m)$ | Simple window boundaries, temporary strings |
+| Built-in search | Implementation-dependent | Implementation-dependent | Short code; not an explanation of the search algorithm |
+| CPython `startswith` loop | $O((n - m + 1)m)$ for `m <= n` | $O(1)$ | Avoids slices, still repeats comparisons |
+| KMP | $O(n + m)$ | $O(m)$ | Reuses border information, requires LPS preprocessing |
+
+For the manual loops, a longer needle means no candidate fits and the function returns `-1` in constant time. The current problem guarantees both strings are nonempty; the existing runner checks also exercise empty-string extensions explicitly.
+
+## Key takeaways
+
+- Slice endpoints exclude the final index, while the range needs `+1` to include the last candidate start.
+- Returning on the first matching candidate enforces first-occurrence semantics.
+- Removing slice allocations improves space; KMP improves repeated-comparison work.
+- After `j` matched characters, `lps[j - 1]` describes the reusable prefix of what already matched.
 
 ## Test cases
 
@@ -235,6 +417,12 @@ func strStr(haystack string, needle string) int {
 </TabItem>
 </Tabs>
 
+## References
+
+- [Python string search methods](https://docs.python.org/3.14/library/stdtypes.html#str.find): `find` returns the lowest matching index or `-1`; `startswith` supports checking from a specified index.
+- [CPython indexed prefix comparison](https://github.com/python/cpython/blob/ebf955df7a89ed0c7968f79faec1de49f61ed7cb/Objects/unicodeobject.c#L9944-L10005): the prefix check reads existing character buffers without creating a substring.
+- [Knuth, Morris, and Pratt, Fast Pattern Matching in Strings](https://www.cs.jhu.edu/~misha/Spring23/Knuth77.pdf): the original linear-time algorithm and mismatch-retry reasoning.
+
 ## Related topics
 
 - [KMP algorithm](../../../named-algorithms/kmp/), the $O(n + m)$ solution to this exact problem
@@ -245,3 +433,4 @@ func strStr(haystack string, needle string) int {
 
 - [Array Scans](../../../coding-concepts/array-scans/), the linear pass habit of carrying just enough state while reading each item once.
 - [Two Pointers](../../../coding-concepts/two-pointers/), the two index invariant that shrinks or coordinates positions without nested loops.
+- [KMP](../../../named-algorithms/kmp/), build a failure function over the needle and reuse matched borders after a mismatch.
