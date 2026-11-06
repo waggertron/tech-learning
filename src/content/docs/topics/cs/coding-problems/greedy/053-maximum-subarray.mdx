@@ -5,7 +5,7 @@ parent: greedy
 tags: [leetcode, neetcode-150, greedy, dp, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-07-15
+updated: 2026-11-06
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -237,14 +237,15 @@ The recurrence is T(n) = 2T(n/2) + $O(n)$, which solves to $O(n log n)$ by the M
 
 ## Approach 3: Kadane's algorithm (optimal greedy)
 
-Keep a running sum. If it goes negative, reset to 0, no point carrying negative baggage forward.
+At each position, choose between starting a new nonempty subarray and extending the best one ending at the previous position. Keep a separate best result across all positions.
 
 <Tabs>
 <TabItem label="Python">
 ```python
 def max_subarray(nums):
     best = cur = nums[0]        # L1: O(1)
-    for x in nums[1:]:          # L2: single pass, n-1 iterations
+    for i in range(1, len(nums)):  # L2: single pass, n-1 iterations
+        x = nums[i]              # O(1) access without copying a list
         cur = max(x, cur + x)   # L3: greedy choice: extend or restart
         best = max(best, cur)   # L4: track global best
     return best
@@ -283,6 +284,63 @@ func maxSubArray(nums []int) int {
   </TabItem>
 </Tabs>
 
+### State: best ending here versus best anywhere
+
+**`cur` is the largest sum of a nonempty subarray ending at the current index. `best` is the largest sum found anywhere so far.** A subarray is contiguous, so extending it must include the current number; it cannot skip over an inconvenient value.
+
+At each new number `x`, there are exactly two ways to form a best subarray ending here:
+
+```text
+Start fresh:  [x]                         sum = x
+Extend:       [best ending previously, x] sum = old cur + x
+```
+
+Choose the larger sum with `cur = max(x, cur + x)`. Then compare the new `cur` with the global record using `best = max(best, cur)`.
+
+### Labeled trace: extending, restarting, and preserving the record
+
+```text
+Index:   0   1   2   3
+nums:   [-4,  3,  2, -8]
+```
+
+| Index | Current number | Start fresh | Extend previous `cur` | New `cur` | New `best` |
+| --- | --- | --- | --- | --- | --- |
+| 0 | `-4` | Initialize from `[-4]` | Not needed | `-4` | `-4` |
+| 1 | `3` | `3` | `-4 + 3 = -1` | `3` | `3` |
+| 2 | `2` | `2` | `3 + 2 = 5` | `5` | `5` |
+| 3 | `-8` | `-8` | `5 - 8 = -3` | `-3` | `5` |
+
+At index `1`, restarting at `[3]` beats keeping `[-4, 3]`. At index `2`, extend to `[3, 2]`. At index `3`, the best subarray required to end there is `[3, 2, -8]`, totaling `-3`. The earlier `[3, 2]` is still the best overall, so the answer is `best = 5`, not the final `cur = -3`.
+
+A negative current number does not automatically mean restart. In the problem's main example, `[4, -1, 2, 1]` is optimal: carrying `4` through `-1` leaves a positive sum of `3`, which helps the following numbers. The decision compares the two candidate sums rather than checking only the sign of `x`.
+
+### What each part of the code does
+
+| Code | Purpose |
+| --- | --- |
+| `best = cur = nums[0]` | Initialize both states from the real, nonempty first-element subarray. |
+| `range(1, len(nums))` | Begin after the already-processed first element. |
+| `x = nums[i]` | Read the next number without creating a sliced copy of the input. |
+| `cur = max(x, cur + x)` | Choose start-fresh versus extend for the best sum ending here. |
+| `best = max(best, cur)` | Preserve the largest result across every ending position, using the newly updated `cur`. |
+| `return best` | Return the best anywhere, even if the final ending-here sum is smaller. |
+
+### Why initialization matters for negative-only inputs
+
+The subarray must contain at least one element. Initializing both states to zero would allow an empty choice to beat every negative subarray. Instead, initialize from `nums[0]`:
+
+```text
+Index:       0   1   2
+nums:       [-5, -2, -7]
+cur:        [-5, -2, -7]
+best:       [-5, -2, -2]
+```
+
+At `-2`, restarting beats extending: `max(-2, -5 - 2) = -2`. At `-7`, restarting again gives `cur = -7`, but `best` remains `-2`. The answer is the least-negative element, not zero.
+
+The loop starts at `1` because index `0` supplied the initial state. Starting again at `0` could count the first number twice, such as turning `[3]` into a candidate sum of `6`. For a single-element array, the loop is empty and the initialized `best` is already correct. The problem guarantees a nonempty array, so reading `nums[0]` is valid.
+
 **Where the time goes, line by line**
 
 *Variables: n = len(nums).*
@@ -292,14 +350,17 @@ func maxSubArray(nums []int) int {
 | L1 (init) | $O(1)$ | 1 | $O(1)$ |
 | **L2, L3, L4 (loop)** | **$O(1)$** | **n-1** | **$O(n)$** ← dominates |
 
-A single pass; each element is touched exactly once.
+Initialization handles the first number, and the loop processes each remaining number once. Every iteration does a fixed number of accesses, additions, and comparisons. Python index iteration avoids the $O(n)$ extra list created by `nums[1:]`, so the implementation actually keeps constant auxiliary space.
 
 **Complexity**
 - **Time:** $O(n)$, driven by L2/L3/L4 (the single linear scan).
 - **Space:** $O(1)$.
 
-### Why greedy works
-At each position, the best subarray ending here is either "extend the previous best" or "start fresh from here." That's it, a greedy choice (restart vs. extend) at every index suffices, because a negative running total can only hurt future extensions.
+### Why the recurrence is enough
+
+Every nonempty subarray ending at index `i` either contains only `nums[i]` or extends a contiguous subarray ending at `i - 1`. Among those extensions, the largest earlier sum produces the largest new sum, because they all add the same current value. That proves the two-choice recurrence for `cur`.
+
+Only the largest sum ending at the previous index is needed for the next transition; earlier ending-here states can be discarded. `best` separately summarizes the results across all ending positions. This is both a greedy restart-or-extend decision and a one-dimensional DP recurrence compressed to constant state. It is called **Kadane's algorithm**.
 
 **Try this approach:**
 
@@ -349,7 +410,8 @@ func maxSubArray(nums []int) int {
 
 def max_subarray(nums):
     best = cur = nums[0]
-    for x in nums[1:]:
+    for i in range(1, len(nums)):
+        x = nums[i]
         cur = max(x, cur + x)
         best = max(best, cur)
     return best
