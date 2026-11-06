@@ -1,0 +1,230 @@
+---
+title: "530. Minimum Absolute Difference in BST (Easy)"
+description: "Use inorder traversal to compare sorted neighbors, then remove the values list by tracking the previous value with an explicit stack."
+parent: trees
+tags: [leetcode, trees, bst, inorder, easy]
+status: draft
+created: 2026-11-06
+updated: 2026-11-06
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './530-minimum-absolute-difference-in-bst.py?raw';
+import approach1PyCode from './530-minimum-absolute-difference-in-bst-approach1.py?raw';
+import approach2PyCode from './530-minimum-absolute-difference-in-bst-approach2.py?raw';
+
+## Problem
+
+Given a binary search tree, find the smallest absolute difference between the values stored at two different nodes. The nodes can be anywhere in the tree; they do not need to share an edge.
+
+The tree contains between 2 and 10,000 nodes, with values between 0 and 100,000.
+
+```text
+        4
+       / \
+      2   6
+     / \
+    1   3
+```
+
+For the level-order input `[4, 2, 6, 1, 3]`, the answer is `1`. For `[1, 0, 48, null, null, 12, 49]`, the answer is also `1`.
+
+[LeetCode 530](https://leetcode.com/problems/minimum-absolute-difference-in-bst/) is a bonus problem outside the NeetCode 150.
+
+## Try it yourself
+
+The runnable starter defines `TreeNode` and constructs the example tree. Fill in the minimum-difference function. Its demonstration reaches `NotImplementedError` until the function is implemented.
+
+<PythonRepl code={practiceCode} id="minimum-absolute-difference-bst-practice-py" />
+
+## Approach 1: Collect inorder values, then compare neighbors
+
+```python
+def minimum_difference(root):
+    values = []
+
+    def inorder(node):
+        if node is None:
+            return
+        inorder(node.left)
+        values.append(node.val)
+        inorder(node.right)
+
+    inorder(root)
+    best = float("inf")
+    for i in range(1, len(values)):
+        best = min(best, values[i] - values[i - 1])
+    return best
+```
+
+### State: inorder turns a BST into sorted values
+
+**`values` holds the node values visited so far in inorder.** In a BST, visiting the left subtree, then the current node, then the right subtree produces sorted order.
+
+The position of `values.append(node.val)` is the key: it runs after the left subtree has finished and before the right subtree starts. Moving it before the left call would produce preorder, which is not generally sorted.
+
+For the example tree, the traversal walks left from `4` to `2` to `1`. The left call at `1` reaches `None` and returns. The traversal then records `1`, returns to record `2`, visits and records `3`, returns to record `4`, and finally records `6`.
+
+```text
+Visit position:   0  1  2  3  4
+values:          [1, 2, 3, 4, 6]
+Neighbor gaps:      1  1  1  2
+Minimum gap:        1
+```
+
+### What each part of the code does
+
+| Code | Purpose |
+| --- | --- |
+| `values = []` | Store the inorder sequence. |
+| `if node is None: return` | Stop at an empty subtree. |
+| `inorder(node.left)` | Visit the values to the current node's left first. |
+| `values.append(node.val)` | Record this node after the left subtree. |
+| `inorder(node.right)` | Visit the values to its right afterward. |
+| `inorder(root)` | Begin traversal from the root. |
+| `best = float("inf")` | Let the first real gap replace the initial value. |
+| `range(1, len(values))` | Start where a previous value exists. |
+| `values[i] - values[i - 1]` | Measure the gap between sorted neighbors. |
+| `min(best, ...)` | Keep the smallest gap seen. |
+
+### Why adjacent pairs are enough
+
+Suppose sorted values include `a <= b <= c`. The gap `c - a` is the sum of `b - a` and `c - b`, so it cannot be smaller than both neighboring gaps. Applying that reasoning across a sorted sequence shows that some minimum-gap pair is adjacent.
+
+At visit position `1`, compare `2 - 1 = 1` and set `best` to `1`. At position `2`, compare `3 - 2 = 1`, which leaves `best` unchanged. Continue through `6 - 4 = 2` and return `1`.
+
+No `abs()` is needed because each newly visited value is at least the previous value. This reasoning depends on the BST ordering property, not just the fact that the input is a binary tree.
+
+### Why parent-child comparisons can miss the answer
+
+```text
+       10
+      /
+     1
+      \
+       9
+```
+
+The edge gaps are `10 - 1 = 9` and `9 - 1 = 8`, but the answer is `10 - 9 = 1`. Those nodes are adjacent in the sorted sequence `[1, 9, 10]`, even though they are not directly connected by an edge. Comparing neighboring values from a breadth-first or preorder traversal is also insufficient because those orders are not sorted.
+
+### Complexity and the recursive limit
+
+Let `n` be the number of nodes and `h` the tree height.
+
+| Work | Time | Extra space |
+| --- | --- | --- |
+| Visit all nodes and append their values | $O(n)$ | $O(n)$ values plus $O(h)$ recursive frames |
+| Compare `n - 1` neighboring pairs | $O(n)$ | $O(1)$ additional state |
+| Total | $O(n)$ | $O(n + h) = O(n)$ |
+
+The time is linear, but a sufficiently skewed tree can exceed Python's recursion-depth limit. The iterative version below supports deep trees without recursive calls.
+
+<PythonRepl code={approach1PyCode} id="minimum-absolute-difference-bst-approach1-py" />
+
+## Approach 2: Iterative inorder with the previous value
+
+```python
+def minimum_difference(root):
+    stack = []
+    current = root
+    previous = None
+    best = float("inf")
+
+    while current is not None or stack:
+        while current is not None:
+            stack.append(current)
+            current = current.left
+
+        current = stack.pop()
+        if previous is not None:
+            best = min(best, current.val - previous)
+        previous = current.val
+        current = current.right
+
+    return best
+```
+
+### State: compare the ordered values as they arrive
+
+**`previous` is the last value visited in inorder, and `best` is the smallest gap among values visited so far.** Each value only needs its immediate predecessor, so storing the full sequence is unnecessary.
+
+The stack holds nodes whose own visit is pending while their left subtrees are explored. The inner loop saves the left path. Popping visits the next node in sorted order. Moving right then applies the same left-first procedure to that node's right subtree.
+
+### Labeled trace
+
+For the same example tree, stacks are shown from bottom to top:
+
+```text
+Start at 4: push 4, 2, 1       stack = [4, 2, 1]
+Pop and visit 1               stack = [4, 2]
+Pop and visit 2, then go right current = 3
+Push 3, pop and visit 3        stack = [4]
+Pop and visit 4, then go right current = 6
+Push 6, pop and visit 6        stack = []
+```
+
+| Current value | Previous value before this visit | Gap | Best after this visit |
+| --- | --- | --- | --- |
+| `1` | `None` | No pair yet | Infinity |
+| `2` | `1` | `1` | `1` |
+| `3` | `2` | `1` | `1` |
+| `4` | `3` | `1` | `1` |
+| `6` | `4` | `2` | `1` |
+
+### What each part of the code does
+
+| Code | Purpose |
+| --- | --- |
+| `stack = []` | Replace recursive traversal frames with explicit pending nodes. |
+| `current = root` | Begin descending from the root. |
+| `previous = None` | Represent that no value has been visited yet. |
+| `while current is not None or stack` | Continue while there is a subtree to enter or a saved node to visit. |
+| Inner `while` | Follow left children and save their ancestors. |
+| `current = stack.pop()` | Visit the next node after its left subtree is complete. |
+| `if previous is not None` | Skip comparison only for the first visited value. |
+| `best = min(best, current.val - previous)` | Compare the current sorted value with its predecessor. |
+| `previous = current.val` | Save the current value for the next visit. |
+| `current = current.right` | Start the right subtree's inorder traversal. |
+
+For the concrete visit to `2`, `previous` is still `1`. Compute the gap `2 - 1`, update `best`, then change `previous` to `2`. Updating `previous` first would compare `2` with itself and incorrectly produce zero.
+
+Use `previous is not None`, not `if previous`: zero is a valid node value. On `[0, 10]`, a truthiness check would skip the only comparison. There is no need to handle an empty tree or a lone node as a valid answer case because the problem guarantees at least two nodes. That guarantee also ensures `best` becomes an integer gap before it is returned.
+
+### Complexity discussion
+
+Each node is pushed once, popped once, and compared at most once. The nested loops do not make the algorithm quadratic: across the entire traversal, there are only `n` pushes and `n` pops.
+
+**Time:** $O(n)$. **Extra space:** $O(h)$ for the stack, plus a constant number of variables. In a balanced tree, `h` is $O(\log n)$. In a skewed tree, it is $O(n)$. The iterative traversal removes the values list and avoids recursive calls; it does not guarantee constant space or a better worst-case space bound for every tree shape.
+
+The executable version includes a 10,000-node skewed-tree check. Neither approach modifies the input tree.
+
+<PythonRepl code={approach2PyCode} id="minimum-absolute-difference-bst-approach2-py" />
+
+## How to recognize this pattern
+
+The clue is a BST combined with a question about values in sorted order. Use [inorder traversal as an ordered stream](../../../coding-concepts/tree-traversal/#inorder-as-an-ordered-stream), then decide how much previous information the comparison needs. Here, one previous value is enough.
+
+A plain binary tree does not supply sorted inorder values. For such an input, collecting and sorting values would cost $O(n \log n)$ before the adjacent-pair scan. BST structure supplies the order for free, so no sort is needed here.
+
+## Key takeaways
+
+- The closest pair is adjacent in sorted order, even if the nodes are far apart structurally.
+- In a BST, left-node-right visitation produces that sorted order.
+- Compare with the previous value before replacing it; use `None` rather than truthiness to distinguish the first visit.
+- Streaming the comparisons removes the values list, while traversal still needs $O(h)$ stack space.
+
+## References
+
+- [LeetCode 530](https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/): problem constraints and examples.
+- [Python recursion limit](https://docs.python.org/3/library/sys.html#sys.getrecursionlimit): recursive traversals are subject to the interpreter's recursion-depth limit.
+
+## Related topics
+
+- [230. Kth Smallest Element in a BST](../230-kth-smallest-element-in-a-bst/): use the same ordered traversal to count visits.
+- [98. Validate Binary Search Tree](../098-validate-binary-search-tree/): reason about the ordering that makes this solution valid.
+- [Binary trees](../../../data-structures/binary-trees/): tree shape and traversal basics.
+
+## Related concepts
+
+- [Tree traversal](../../../coding-concepts/tree-traversal/#inorder-as-an-ordered-stream): consume BST values in order without materializing the whole sequence.
+- [DFS](../../../coding-concepts/dfs/): use an explicit stack to manage pending tree work.

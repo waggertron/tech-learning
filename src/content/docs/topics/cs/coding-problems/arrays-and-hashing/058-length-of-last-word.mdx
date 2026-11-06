@@ -1,0 +1,219 @@
+---
+title: "58. Length of Last Word (Easy)"
+description: "Compare a forward word-state scan, a backward two-phase scan, and Python's split one-liner, with traces and allocation costs."
+parent: arrays-and-hashing
+tags: [leetcode, strings, arrays, easy]
+status: draft
+created: 2026-11-06
+updated: 2026-11-06
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './058-length-of-last-word.py?raw';
+import approach1PyCode from './058-length-of-last-word-approach1.py?raw';
+import approach2PyCode from './058-length-of-last-word-approach2.py?raw';
+import approach3PyCode from './058-length-of-last-word-approach3.py?raw';
+
+## Problem
+
+Return the number of characters in the final word of `s`. A word is a maximal run of characters other than a space. Leading, repeated, and trailing spaces do not contribute to a word's length.
+
+The input has 1 to 10,000 characters, contains only English letters and spaces, and has at least one word.
+
+| Input | Last word | Answer |
+| --- | --- | --- |
+| `"Hello World"` | `"World"` | `5` |
+| `"   fly me   to   the moon  "` | `"moon"` | `4` |
+| `"luffy is still joyboy"` | `"joyboy"` | `6` |
+
+[LeetCode 58](https://leetcode.com/problems/length-of-last-word/) is a bonus problem outside the NeetCode 150.
+
+## Try it yourself
+
+Fill in the starter function. Its sample call reaches `NotImplementedError` until the function is implemented.
+
+<PythonRepl code={practiceCode} id="length-last-word-practice-py" />
+
+## Approach 1: Forward scan with word state
+
+```python
+def length_of_last_word(s: str) -> int:
+    length = 0
+    in_word = False
+
+    for char in s:
+        if char == " ":
+            in_word = False
+            continue
+
+        if not in_word:
+            length = 0
+            in_word = True
+
+        length += 1
+
+    return length
+```
+
+### State: keep the latest word length
+
+**`length` is the length of the current word, or the most recently completed word when the scan is between words.** `in_word` tells whether the previous character belonged to a word.
+
+On a space, clear the flag but preserve the length. On the first letter after a space, reset the length before counting that new word. This leaves the final word's length intact when trailing spaces are encountered.
+
+```text
+Index:       0 1 2 3 4 5 6 7 8
+Character:   g o _ m o o n _ _
+             ----- ---------
+Word:        go    moon
+
+_ represents one space in this diagram.
+```
+
+| Characters processed | `in_word` afterward | `length` afterward | Reason |
+| --- | --- | --- | --- |
+| `"go"` | `True` | `2` | Start and count the first word. |
+| Following space | `False` | `2` | End the word without losing its length. |
+| `"m"` | `True` | `1` | Reset for the new word, then count its first letter. |
+| `"oon"` | `True` | `4` | Continue counting the same word. |
+| Two trailing spaces | `False` | `4` | Preserve the final completed length. |
+
+### What each part does
+
+| Code | Purpose |
+| --- | --- |
+| `for char in s` | Read each character directly; no index is needed for this version. |
+| Space branch | Leave word state and skip counting this character. |
+| `if not in_word` | Detect the start of a new word, including the very first one. |
+| `length = 0` | Discard the previous word's count only when another word actually starts. |
+| `length += 1` | Count one letter in the current word. |
+| `return length` | Return the final retained count. |
+
+Resetting `length` on every space would lose the answer for `"moon  "`. The flag separates ending a word from starting its successor. An explicit empty-string guard is unnecessary under the problem's guarantee that at least one word exists.
+
+**Time:** $O(n)$ for `n = len(s)`, since every character is examined. **Extra space:** $O(1)$ for the counter and flag. This is already an efficient, correct solution; the next version reduces the state and can stop sooner.
+
+<PythonRepl code={approach1PyCode} id="length-last-word-approach1-py" />
+
+## Approach 2: Backward scan in two phases
+
+```python
+def length_of_last_word(s: str) -> int:
+    i = len(s) - 1
+
+    while i >= 0 and s[i] == " ":
+        i -= 1
+
+    length = 0
+    while i >= 0 and s[i] != " ":
+        length += 1
+        i -= 1
+
+    return length
+```
+
+### State: skip padding, then count one word
+
+**`i` points to the next character to inspect from the right.** The first loop removes trailing spaces from consideration. The second counts only the last word. The two phases replace the `in_word` flag.
+
+For `"go moon  "`:
+
+```text
+Index:          0 1 2 3 4 5 6 7 8
+Character:      g o _ m o o n _ _
+Skip spaces:                  <-   i: 8 -> 7 -> 6
+Count letters:        <------      n, o, o, m -> length 4
+Stop at:            _              i = 2
+
+The earlier word "go" never needs to be scanned.
+```
+
+| Step | Pointer/action | Count |
+| --- | --- | --- |
+| Skip trailing spaces | Move from index `8` through `7`, ending at `6`. | Not counting yet |
+| Count `n`, `o`, `o`, `m` | Visit indices `6`, `5`, `4`, `3`. | `1`, `2`, `3`, `4` |
+| Find the separator | Index `2` is a space; stop. | `4` |
+
+### What each part does
+
+| Code | Purpose |
+| --- | --- |
+| `i = len(s) - 1` | Start at the final character, which may be padding. |
+| First `while` | Skip all trailing spaces before counting. |
+| `length = 0` | Begin a fresh count at the final word. |
+| Second `while` | Count letters until a separator or the beginning is reached. |
+| `i >= 0` before `s[i]` | Short-circuit before an invalid negative-position access. |
+
+Skipping trailing spaces first is essential. Counting immediately from the final character would return zero whenever the string ends with spaces. A single word with no preceding separator is also handled: the pointer moves to `-1`, and the bounds check stops the loop before another access.
+
+Let `t` be the number of trailing spaces and `L` the last word's length. The work is $O(t + L)$, including at most one preceding-separator check. **Worst-case time:** $O(n)$, such as one word occupying the whole string. **Extra space:** $O(1)$. The two loops share one pointer that only moves left, so they do not multiply into quadratic work.
+
+<PythonRepl code={approach2PyCode} id="length-last-word-approach2-py" />
+
+## Approach 3: Concise Python split
+
+```python
+def length_of_last_word(s: str) -> int:
+    return len(s.split()[-1])
+```
+
+### State: build the words, then select the last
+
+With no separator argument, `split()` treats consecutive whitespace as a separator and omits leading and trailing empty entries. The problem only allows spaces and letters, so that behavior matches its word boundaries.
+
+```text
+s:               "go moon  "
+s.split():       ["go", "moon"]
+s.split()[-1]:   "moon"
+len(...):        4
+```
+
+| Expression | Purpose | Cost |
+| --- | --- | --- |
+| `s.split()` | Scan the whole string and build a list of its words. | $O(n)$ time and up to $O(n)$ extra space |
+| `[-1]` | Select the last list entry. At least one word is guaranteed. | $O(1)$ |
+| `len(...)` | Read that word's stored length. | $O(1)$ |
+
+This is a short expression, but the expensive step happens before selecting the final word. It still processes earlier words and allocates their list entries and, generally, substring objects. The list and word storage can total $O(n)$ extra space in the worst case.
+
+Do not casually replace `split()` with `split(" ")`: an explicit space separator preserves empty entries between repeated spaces and after trailing spaces. For example, `"moon  ".split(" ")` produces `["moon", "", ""]`, so selecting the last entry would incorrectly give length zero. The no-argument form already handles the padding; a preceding `strip()` is unnecessary.
+
+**Time:** $O(n)$. **Extra space:** $O(n)$ worst case. Prefer this version when its brevity is useful and allocating all words is acceptable; use the backward scan when constant extra space and avoiding unrelated earlier words matter.
+
+<PythonRepl code={approach3PyCode} id="length-last-word-approach3-py" />
+
+## Approach comparison
+
+| Approach | Time | Extra space | Main tradeoff |
+| --- | --- | --- | --- |
+| Forward scan | $O(n)$ | $O(1)$ | Clear word-state handling, reads the whole string |
+| Backward scan | $O(t + L)$, worst-case $O(n)$ | $O(1)$ | Two phases and an early stop before earlier words |
+| `split()` one-liner | $O(n)$ | $O(n)$ worst case | Short code, but builds all words |
+
+## How to recognize this pattern
+
+The request is about the **last** contiguous group of characters. Start at the end when earlier groups cannot change the answer. Separating trailing padding from the target group often removes state flags and avoids a full forward scan.
+
+A forward scan is still useful when words arrive as a stream and earlier input cannot be revisited. The backward approach assumes the complete string is available for indexing. The one-liner trades direct control over scanning and allocation for convenience.
+
+## Key takeaways
+
+- A correct forward scan can preserve the latest result across trailing separators.
+- Scan from the answer's end when only the final contiguous group matters.
+- Separate skipping separators from counting the target group.
+- Short code does not imply constant space: account for the list and strings created by `split()`.
+
+## References
+
+- [LeetCode 58](https://leetcode.com/problems/length-of-last-word/): statement and input guarantees.
+- [Python string splitting](https://docs.python.org/3/library/stdtypes.html#str.split): default whitespace splitting differs from an explicit separator.
+
+## Related topics
+
+- [Strings](../../../data-structures/strings/): indexing, lengths, and string operations.
+- [125. Valid Palindrome](../../two-pointers/125-valid-palindrome/): skip irrelevant characters while moving through a string from its ends.
+
+## Related concepts
+
+- [Array scans](../../../coding-concepts/array-scans/): choose a scan direction and retain only the state the result needs.
+- [Simulation](../../../coding-concepts/simulation/): encode the word-boundary rules directly as state transitions.

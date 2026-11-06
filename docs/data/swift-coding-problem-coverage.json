@@ -2,24 +2,24 @@
   "schemaVersion": 4,
   "catalogRoot": "src/content/docs/topics/cs/coding-problems",
   "summary": {
-    "pages": 192,
+    "pages": 195,
     "categories": 18,
-    "documentedApproaches": 512,
+    "documentedApproaches": 520,
     "sourceFiles": {
-      "python": 478,
+      "python": 489,
       "typescript": 474,
       "go": 474,
       "swift": 698
     },
     "languageCoverage": {
       "python": {
-        "starterFiles": 192,
-        "starterHarnesses": 186,
+        "starterFiles": 195,
+        "starterHarnesses": 189,
         "practiceTabs": 191,
-        "practiceRepls": 192,
+        "practiceRepls": 195,
         "approachTabs": 483,
-        "approachSources": 267,
-        "approachHarnesses": 261,
+        "approachSources": 275,
+        "approachHarnesses": 269,
         "approachStaticExamples": 0
       },
       "typescript": {
@@ -84,8 +84,8 @@
     },
     {
       "category": "arrays-and-hashing",
-      "pages": 19,
-      "documentedApproaches": 45,
+      "pages": 20,
+      "documentedApproaches": 48,
       "swiftReadyPages": 18,
       "swiftReadyApproaches": 43,
       "vectorReadyPages": 18
@@ -180,8 +180,8 @@
     },
     {
       "category": "trees",
-      "pages": 17,
-      "documentedApproaches": 45,
+      "pages": 18,
+      "documentedApproaches": 47,
       "swiftReadyPages": 17,
       "swiftReadyApproaches": 45,
       "vectorReadyPages": 17
@@ -196,8 +196,8 @@
     },
     {
       "category": "two-pointers",
-      "pages": 7,
-      "documentedApproaches": 19,
+      "pages": 8,
+      "documentedApproaches": 22,
       "swiftReadyPages": 7,
       "swiftReadyApproaches": 19,
       "vectorReadyPages": 7
@@ -5309,6 +5309,114 @@
           ],
           "swiftContractErrors": [],
           "swiftReady": true
+        }
+      ]
+    },
+    {
+      "category": "arrays-and-hashing",
+      "slug": "058-length-of-last-word",
+      "title": "58. Length of Last Word (Easy)",
+      "page": "arrays-and-hashing/058-length-of-last-word.mdx",
+      "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
+      "practiceTabs": [],
+      "practiceRepls": [
+        "python"
+      ],
+      "starterFiles": {
+        "python": "arrays-and-hashing/058-length-of-last-word.py",
+        "typescript": null,
+        "go": null,
+        "swift": null
+      },
+      "starterHarnesses": [
+        "python"
+      ],
+      "starterImports": [
+        "python"
+      ],
+      "swiftContractErrors": [],
+      "swiftReady": false,
+      "approaches": [
+        {
+          "number": 1,
+          "title": "Forward scan with word state",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "arrays-and-hashing/058-length-of-last-word-approach1.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 2,
+          "title": "Backward scan in two phases",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "arrays-and-hashing/058-length-of-last-word-approach2.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 3,
+          "title": "Concise Python split",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "arrays-and-hashing/058-length-of-last-word-approach3.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
         }
       ]
     },
@@ -24387,6 +24495,93 @@
     },
     {
       "category": "trees",
+      "slug": "530-minimum-absolute-difference-in-bst",
+      "title": "530. Minimum Absolute Difference in BST (Easy)",
+      "page": "trees/530-minimum-absolute-difference-in-bst.mdx",
+      "helperTypes": [
+        "tree-node"
+      ],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
+      "practiceTabs": [],
+      "practiceRepls": [
+        "python"
+      ],
+      "starterFiles": {
+        "python": "trees/530-minimum-absolute-difference-in-bst.py",
+        "typescript": null,
+        "go": null,
+        "swift": null
+      },
+      "starterHarnesses": [
+        "python"
+      ],
+      "starterImports": [
+        "python"
+      ],
+      "swiftContractErrors": [],
+      "swiftReady": false,
+      "approaches": [
+        {
+          "number": 1,
+          "title": "Collect inorder values, then compare neighbors",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "trees/530-minimum-absolute-difference-in-bst-approach1.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 2,
+          "title": "Iterative inorder with the previous value",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "trees/530-minimum-absolute-difference-in-bst-approach2.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        }
+      ]
+    },
+    {
+      "category": "trees",
       "slug": "543-diameter-of-binary-tree",
       "title": "543. Diameter of Binary Tree (Easy)",
       "page": "trees/543-diameter-of-binary-tree.mdx",
@@ -25749,6 +25944,114 @@
           ],
           "swiftContractErrors": [],
           "swiftReady": true
+        }
+      ]
+    },
+    {
+      "category": "two-pointers",
+      "slug": "151-reverse-words-in-a-string",
+      "title": "151. Reverse Words in a String (Medium)",
+      "page": "two-pointers/151-reverse-words-in-a-string.mdx",
+      "helperTypes": [],
+      "sharedTestVectors": {
+        "file": null,
+        "caseCounts": {
+          "valid": 0,
+          "boundary": 0,
+          "invalid": 0
+        },
+        "errors": [
+          "shared vector file is missing"
+        ],
+        "ready": false
+      },
+      "practiceTabs": [],
+      "practiceRepls": [
+        "python"
+      ],
+      "starterFiles": {
+        "python": "two-pointers/151-reverse-words-in-a-string.py",
+        "typescript": null,
+        "go": null,
+        "swift": null
+      },
+      "starterHarnesses": [
+        "python"
+      ],
+      "starterImports": [
+        "python"
+      ],
+      "swiftContractErrors": [],
+      "swiftReady": false,
+      "approaches": [
+        {
+          "number": 1,
+          "title": "Backward scan that builds each word",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "two-pointers/151-reverse-words-in-a-string-approach1.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 2,
+          "title": "Backward scan with word boundaries",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "two-pointers/151-reverse-words-in-a-string-approach2.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
+        },
+        {
+          "number": 3,
+          "title": "Concise split, reverse, and join",
+          "languageTabs": [],
+          "codeFences": [
+            "python"
+          ],
+          "repls": [
+            "python"
+          ],
+          "staticExamples": [],
+          "sourceFiles": {
+            "python": "two-pointers/151-reverse-words-in-a-string-approach3.py",
+            "typescript": null,
+            "go": null,
+            "swift": null
+          },
+          "sourceHarnesses": [
+            "python"
+          ],
+          "swiftContractErrors": [],
+          "swiftReady": false
         }
       ]
     },

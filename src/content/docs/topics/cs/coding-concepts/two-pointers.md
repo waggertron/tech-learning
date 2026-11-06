@@ -5,7 +5,7 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-07-01
+updated: 2026-11-06
 ---
 
 ## Tactic
@@ -75,6 +75,7 @@ These prompt words often point toward this concept:
 - [42. Trapping Rain Water](../../coding-problems/two-pointers/042-trapping-rain-water/)
 - [125. Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/)
 - [160. Intersection of Two Linked Lists](../../coding-problems/linked-list/160-intersection-of-two-linked-lists/)
+- [151. Reverse Words in a String](../../coding-problems/two-pointers/151-reverse-words-in-a-string/)
 - [167. Two Sum II, Input Array Is Sorted](../../coding-problems/two-pointers/167-two-sum-ii/)
 - [189. Rotate Array](../../coding-problems/two-pointers/189-rotate-array/)
 - [443. String Compression](../../coding-problems/two-pointers/443-string-compression/)

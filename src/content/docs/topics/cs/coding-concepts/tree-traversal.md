@@ -5,7 +5,7 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-07-01
+updated: 2026-11-06
 ---
 
 ## Tactic
@@ -15,6 +15,14 @@ Tree traversal visits nodes while carrying path, depth, or subtree state. Recurs
 The invariant depends on traversal order. Preorder handles a node before children, inorder exposes sorted order in a BST, postorder solves children before the parent, and level order groups nodes by depth.
 
 Choose the traversal from the data dependency. If the parent needs child answers, use postorder. If children need path state from ancestors, use preorder. If the answer is by level, use BFS.
+
+### Inorder as an ordered stream
+
+In a BST, inorder traversal produces values in sorted order. If the answer only depends on neighboring values, consume that order as it is generated instead of collecting a list first. Keep the previous value, compute the current comparison, then replace the previous value.
+
+[Minimum Absolute Difference in BST](../../coding-problems/trees/530-minimum-absolute-difference-in-bst/) uses this to compare adjacent sorted values. Its closest pair need not be a parent and child. [Kth Smallest Element in a BST](../../coding-problems/trees/230-kth-smallest-element-in-a-bst/) consumes the same order with a visit count instead of a previous-value comparison.
+
+An iterative inorder traversal saves the left path on a stack, pops a node to visit it, then starts its right subtree. Every node is pushed and popped once, giving $O(n)$ time and $O(h)$ stack space for height `h`. That space is $O(\log n)$ for a balanced tree and $O(n)$ for a skewed tree. Removing a collected values list does not remove the traversal stack.
 
 ## Value
 
@@ -81,6 +89,7 @@ These prompt words often point toward this concept:
 - [235. Lowest Common Ancestor of a BST](../../coding-problems/trees/235-lowest-common-ancestor-of-a-bst/)
 - [297. Serialize and Deserialize Binary Tree](../../coding-problems/trees/297-serialize-and-deserialize-binary-tree/)
 - [337. House Robber III](../../coding-problems/trees/337-house-robber-iii/)
+- [530. Minimum Absolute Difference in BST](../../coding-problems/trees/530-minimum-absolute-difference-in-bst/)
 - [543. Diameter of Binary Tree](../../coding-problems/trees/543-diameter-of-binary-tree/)
 - [572. Subtree of Another Tree](../../coding-problems/trees/572-subtree-of-another-tree/)
 - [968. Binary Tree Cameras](../../coding-problems/trees/968-binary-tree-cameras/)

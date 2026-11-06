@@ -1,11 +1,11 @@
 ---
 title: Arrays & Hashing
-description: "19 problems covering hash maps, frequency counting, prefix sums, range boundaries, and the complement-lookup pattern that appears throughout every other category."
+description: "20 problems covering hash maps, frequency counting, prefix sums, range boundaries, and the complement-lookup pattern that appears throughout every other category."
 parent: coding-problems
 tags: [leetcode, neetcode-150, arrays, hash-tables]
 status: draft
 created: 2026-04-23
-updated: 2026-11-04
+updated: 2026-11-06
 ---
 
 ## Overview
@@ -25,6 +25,8 @@ Arrays & Hashing is the first section of the NeetCode 150 and the most load-bear
 9. [128. Longest Consecutive Sequence (Medium)](./128-longest-consecutive-sequence/)
 
 **Bonus problems (same pattern, outside NeetCode 150):**
+
+- [58. Length of Last Word (Easy)](./058-length-of-last-word/)
 
 - [205. Isomorphic Strings (Easy)](./205-isomorphic-strings/)
 - [228. Summary Ranges (Easy)](./228-summary-ranges/)

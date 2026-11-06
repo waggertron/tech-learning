@@ -5,7 +5,7 @@ parent: coding-problems
 tags: [leetcode, neetcode-150, two-pointers]
 status: draft
 created: 2026-04-23
-updated: 2026-07-13
+updated: 2026-11-06
 ---
 
 ## Index movement with a proof
@@ -40,6 +40,8 @@ Two pointers is not "use two variables." It is a pruning argument. When you move
 5. [42. Trapping Rain Water (Hard)](./042-trapping-rain-water/)
 
 ## Bonus problems
+
+- [151. Reverse Words in a String (Medium)](./151-reverse-words-in-a-string/)
 
 - [189. Rotate Array (Medium)](./189-rotate-array/)
 - [443. String Compression (Medium)](./443-string-compression/)

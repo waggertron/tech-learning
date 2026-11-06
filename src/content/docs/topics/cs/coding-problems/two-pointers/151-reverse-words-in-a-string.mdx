@@ -1,0 +1,244 @@
+---
+title: "151. Reverse Words in a String (Medium)"
+description: "Compare backward word-building, a linear boundary scan, and split/reversed/join, with whitespace handling and Python string-copying costs."
+parent: two-pointers
+tags: [leetcode, strings, two-pointers, medium]
+status: draft
+created: 2026-11-06
+updated: 2026-11-06
+---
+
+import PythonRepl from '../../../../../../components/PythonRepl.astro';
+import practiceCode from './151-reverse-words-in-a-string.py?raw';
+import approach1PyCode from './151-reverse-words-in-a-string-approach1.py?raw';
+import approach2PyCode from './151-reverse-words-in-a-string-approach2.py?raw';
+import approach3PyCode from './151-reverse-words-in-a-string-approach3.py?raw';
+
+## Problem
+
+Reverse the order of the words in `s`, preserving the characters inside each word. Return the words separated by exactly one space, with no leading or trailing spaces.
+
+A word is a maximal run of non-space characters. The input contains English letters, digits, and spaces, has 1 to 10,000 characters, and contains at least one word.
+
+| Input | Output |
+| --- | --- |
+| `"the sky is blue"` | `"blue is sky the"` |
+| `"  hello world  "` | `"world hello"` |
+| `"a good   example"` | `"example good a"` |
+
+[LeetCode 151](https://leetcode.com/problems/reverse-words-in-a-string/) is a bonus problem outside the NeetCode 150. Its follow-up asks about constant extra space when the input is a mutable character buffer.
+
+## Try it yourself
+
+Fill in the starter function. Its sample call reaches `NotImplementedError` until the function is implemented.
+
+<PythonRepl code={practiceCode} id="reverse-words-string-practice-py" />
+
+## Approach 1: Backward scan that builds each word
+
+```python
+def reverse_words(s: str) -> str:
+    backwards = []
+    current_word = ""
+    in_word = False
+
+    for i in range(len(s) - 1, -1, -1):
+        char = s[i]
+        if char == " ":
+            if in_word:
+                backwards.append(current_word)
+                current_word = ""
+                in_word = False
+        else:
+            current_word = char + current_word
+            in_word = True
+
+    if current_word != "":
+        backwards.append(current_word)
+    return " ".join(backwards)
+```
+
+### State: reversed word order, normal character order
+
+**`backwards` contains completed words in the desired output order. `current_word` holds the word being collected, with its letters in their original order.** The scan moves right to left, but prepending each letter keeps the word readable.
+
+For `"a good   example"`, the first letters encountered are `e`, `l`, `p`, `m`, `a`, `x`, `e`:
+
+```text
+Characters encountered:  e -> l -> p -> m -> a -> x -> e
+current_word:            e -> le -> ple -> mple -> ample -> xample -> example
+Completed words:         ["example", "good", "a"]
+Output:                  "example good a"
+```
+
+### What each part does
+
+| Code | Purpose |
+| --- | --- |
+| Reverse index loop | Encounter the final word first. |
+| `current_word = char + current_word` | Restore original letter order while scanning a word backward. |
+| `in_word` | Distinguish the space ending a word from extra consecutive spaces. |
+| Append on the first space after a word | Save the completed word exactly once. |
+| Final `if current_word != ""` | Save a word that reaches index `0` without a preceding space. |
+| `" ".join(backwards)` | Put exactly one space between words, without extra padding. |
+
+At the first space after `"example"`, append that word and clear the word state. The other two spaces add nothing. After collecting `"a"`, the loop ends before finding a separator, so the final append preserves it.
+
+This solution is correct. The flag could be replaced by a check for a nonempty `current_word`, but that alone would not remove the copying cost below.
+
+### The hidden cost of prepending strings
+
+Python strings are immutable. `char + current_word` constructs a new string containing the new character and the previous word contents. A word of length `L` requires copying progressively larger strings:
+
+```text
+Characters copied:  1 + 2 + 3 + ... + L
+Total work:         O(L^2)
+```
+
+For word lengths `L1, L2, ...`, the overall time is $O(n + \sum L_i^2)$, including scanning and joining. **Worst-case time:** $O(n^2)$ for one long word. **Extra space:** $O(n)$ for the collected words, temporary word strings, and final result. Cumulative allocation work can be quadratic even though those temporary copies are not all retained at once.
+
+<PythonRepl code={approach1PyCode} id="reverse-words-string-approach1-py" />
+
+## Approach 2: Backward scan with word boundaries
+
+```python
+def reverse_words(s: str) -> str:
+    words = []
+    i = len(s) - 1
+
+    while i >= 0:
+        while i >= 0 and s[i] == " ":
+            i -= 1
+        if i < 0:
+            break
+
+        end = i + 1
+        while i >= 0 and s[i] != " ":
+            i -= 1
+        words.append(s[i + 1:end])
+
+    return " ".join(words)
+```
+
+### State: locate each word, then copy it once
+
+**`i` points to the next character to inspect from the right, and `end` is the exclusive right boundary of the current word.** `words` already contains every word to the right in final output order.
+
+For `"a good   example"`:
+
+```text
+Index:       0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Character:   a _ g o o d _ _ _ e  x  a  m  p  l  e
+
+First word:  start = 9, end = 16 -> s[9:16] = "example"
+Next word:   start = 2, end = 6  -> s[2:6]  = "good"
+Last word:   start = 0, end = 1  -> s[0:1]  = "a"
+```
+
+Spaces are shown as `_` for visibility. The final `e` is at index `15`, so the exclusive slice endpoint is `16`.
+
+### What each part does
+
+| Code | Purpose |
+| --- | --- |
+| First inner `while` | Skip trailing spaces and separators between words. |
+| `if i < 0: break` | Stop if skipping spaces reaches the beginning. |
+| `end = i + 1` | Save the word's right boundary using Python's exclusive slice endpoint. |
+| Second inner `while` | Move left until just before the word starts. |
+| `s[i + 1:end]` | Copy the entire word once, preserving character order. |
+| `words.append(...)` | Save that word in the already-reversed word order. |
+| Final `join` | Normalize every output separator to one space. |
+
+When scanning the first word above, `end = 16`. Counting left stops with `i = 8`, so append `s[9:16]`. There is no character-by-character construction and no separate `in_word` flag.
+
+The bounds checks come before `s[i]` access. If a word reaches the beginning, the scan stops at `i = -1` and the slice starts at `0`. After a word is appended, only separators are skipped before finding the next one, so leading, trailing, and repeated spaces never create empty output words.
+
+### Complexity
+
+Every character is scanned a constant number of times, and the word slices copy at most `n` characters in total. The nested loops share a pointer that only moves left; they do not restart a full scan for each word.
+
+**Time:** $O(n)$, including slices and the final join. **Extra space:** $O(n)$ for word storage and the returned string. This improves the original version's copying cost while keeping the same backward-scanning idea.
+
+<PythonRepl code={approach2PyCode} id="reverse-words-string-approach2-py" />
+
+## Approach 3: Concise split, reverse, and join
+
+```python
+def reverse_words(s: str) -> str:
+    return " ".join(reversed(s.split()))
+```
+
+### State: transform the word sequence
+
+The operations separate the task into extracting words, reversing their order, and choosing output spacing:
+
+```text
+s:                    "a good   example"
+s.split():            ["a", "good", "example"]
+Values from reversed: ["example", "good", "a"]
+Joined result:        "example good a"
+```
+
+| Expression | Purpose |
+| --- | --- |
+| `s.split()` | Extract nonempty words while ignoring leading, trailing, and repeated whitespace. |
+| `reversed(...)` | Iterate over the words in reverse order without reversing their characters. |
+| `" ".join(...)` | Create the result with exactly one space between adjacent words. |
+
+The input only allows ordinary spaces as separators, so Python's default whitespace splitting matches the problem. An explicit `split(" ")` would preserve empty entries for repeated or trailing spaces. The no-argument form already handles padding, so calling `strip()` first is unnecessary.
+
+This is different from `s[::-1]`, which reverses every character: `"good example"` would become `"elpmaxe doog"`. Reverse the sequence of words, not the letters inside them.
+
+**Time:** $O(n)$ to split, iterate, and join. **Extra space:** $O(n)$ for the words and output. `reversed` is an iterator rather than a second explicit reversed list, but that does not make the complete expression constant-space.
+
+<PythonRepl code={approach3PyCode} id="reverse-words-string-approach3-py" />
+
+## Follow-up: mutable input and constant extra space
+
+If the input is a writable character buffer, a different interface permits an in-place method:
+
+1. Compact the buffer to remove outer spaces and keep one space between words, using read and write indices.
+2. Reverse the compacted sequence with two pointers.
+3. Reverse each word's character range to restore its letter order.
+
+For example:
+
+```text
+Compacted:          "a good example"
+Reverse everything: "elpmaxe doog a"
+Reverse each word:  "example good a"
+```
+
+Each phase takes $O(n)$ time and uses a constant number of indices, assuming the buffer can be overwritten and shortened without creating another buffer. Python's `str` is immutable. Converting it with `list(s)` allocates $O(n)$ storage, and creating a final string also allocates storage. That conversion does not satisfy an in-place claim for the original Python string.
+
+## Approach comparison
+
+| Approach | Time | Extra space | Main tradeoff |
+| --- | --- | --- | --- |
+| Build words by prepending | $O(n^2)$ worst case | $O(n)$ | Correct backward scan, but repeated string copies |
+| Slice each word once | $O(n)$ | $O(n)$ | Explicit boundaries and no state flag |
+| `split` / `reversed` / `join` | $O(n)$ | $O(n)$ | Short Python code, still allocates |
+| Mutable-buffer follow-up | $O(n)$ | $O(1)$ under the mutable-buffer interface | Requires writable input, not a Python string |
+
+## Key takeaways
+
+- Scanning backward naturally reverses word order, but each word's letters stay in their original order.
+- Find a word's boundaries and slice it once to avoid repeated immutable-string prepends.
+- Extract words without separators, then let `join` handle uniform spacing.
+- Account for the buffers actually allocated before claiming constant extra space.
+
+## References
+
+- [LeetCode 151](https://leetcode.com/problems/reverse-words-in-a-string/): problem and mutable-string follow-up.
+- [Python strings and splitting](https://docs.python.org/3/library/stdtypes.html#str.split): immutable strings and default whitespace splitting.
+
+## Related topics
+
+- [58. Length of Last Word](../../arrays-and-hashing/058-length-of-last-word/): perform the same skip-spaces/find-word scan once instead of repeating it.
+- [189. Rotate Array](../189-rotate-array/): combine whole-sequence and subrange reversals.
+- [Strings](../../../data-structures/strings/): indexing, slices, and immutable concatenation.
+
+## Related concepts
+
+- [Array scans](../../../coding-concepts/array-scans/): choose the scan direction and carry only word-boundary state.
+- [Two pointers](../../../coding-concepts/two-pointers/): read/write compaction and reversing bounded character ranges.

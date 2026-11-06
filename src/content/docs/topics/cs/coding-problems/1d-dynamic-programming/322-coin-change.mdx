@@ -5,7 +5,7 @@ parent: 1d-dynamic-programming
 tags: [leetcode, neetcode-150, dp, knapsack, medium]
 status: draft
 created: 2026-04-23
-updated: 2026-07-16
+updated: 2026-11-05
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -187,8 +187,6 @@ Each value from 0 to A is computed exactly once. The coin loop inside each call 
 
 ## Approach 3: Bottom-up DP (canonical)
 
-`dp[i]` = min coins to make `i`. `dp[0] = 0`; `dp[i] = min(dp[i - c] + 1)` over valid coins.
-
 <Tabs>
 <TabItem label="Python">
 ```python
@@ -223,6 +221,88 @@ function coinChange(coins: number[], amount: number): number {
   </TabItem>
 </Tabs>
 
+### State: fewest coins for the current subtotal
+
+**`dp[i]` is the fewest coins needed to make exactly subtotal `i`.** `amount` is the final target, while `i` changes as the table is filled. Keep those roles separate when checking whether a transition is valid.
+
+For `coins = [1, 2, 5]` and `amount = 11`, the finished table is:
+
+```text
+Subtotal i:   0  1  2  3  4  5  6  7  8  9 10 11
+dp[i]:       [0, 1, 1, 2, 2, 1, 2, 2, 3, 3, 2, 3]
+```
+
+The table has `amount + 1` slots because subtotal zero is included. `dp[0] = 0`: making zero requires no coins. Other states begin unreachable, not zero, because zero would falsely claim those amounts also need no coins.
+
+### What each part of the code does
+
+| Code | Meaning |
+| --- | --- |
+| `INF = amount + 1` | Choose a placeholder larger than any valid coin count. |
+| `dp = [INF] * (amount + 1)` | Mark every subtotal as unreachable so far. |
+| `dp[0] = 0` | Supply the known solution for subtotal zero. |
+| `for i in range(1, amount + 1)` | Solve subtotals in increasing order, through the final target. |
+| `for c in coins` | Try each denomination as the last coin. |
+| `if c <= i` | Only use a coin that fits the current subtotal. |
+| `dp[i - c] + 1` | Make the remaining subtotal with its best known count, then add one coin of value `c`. |
+| `min(dp[i], ...)` | Keep the best candidate found across all possible last coins. |
+| Final return | Convert the unreachable placeholder to the required `-1`; otherwise return the count. |
+
+### Concrete transition: choose the last coin
+
+To make subtotal `7`, a final coin of `5` leaves subtotal `2`. That candidate is `dp[7 - 5] + 1`: the extra `1` counts one coin, not one unit of money.
+
+| Last coin `c` | Earlier subtotal `7 - c` | Best earlier count | Add the last coin | Candidate count |
+| --- | --- | --- | --- | --- |
+| `1` | `6` | `dp[6] = 2` | `+1` | `3` |
+| `2` | `5` | `dp[5] = 1` | `+1` | `2` |
+| `5` | `2` | `dp[2] = 1` | `+1` | `2` |
+
+Take the minimum, so `dp[7] = 2`. Both `5 + 2` and `2 + 5` give that count. We need the minimum number, not the number of distinct ways to arrange coins.
+
+The reusable rule is **an optimal solution for a smaller subtotal plus one last coin gives a candidate for the current subtotal**. Every solution has some last coin, so checking every denomination covers the possibilities. Positive coin values ensure `i - c < i`, making each valid dependency an earlier solved state. Unlimited reuse is allowed because that earlier solution may already contain the same denomination.
+
+### Common mistake: checking the final target instead of the current state
+
+This guard checks whether a coin fits the eventual target:
+
+```python
+if amount - c < 0:
+    continue
+```
+
+But the next expression reads `dp[i - c]`, so the guard needs to protect that index. For `amount = 11`, `i = 1`, and `c = 5`:
+
+```text
+Final-target check:  11 - 5 = 6    coin is allowed through
+Actual DP lookup:     1 - 5 = -4   reads dp[-4]
+```
+
+Python negative indices count backward from the end of the list. `dp[-4]` is `dp[8]` in this 12-slot table, not a solution for a negative subtotal.
+
+In this exact ascending loop, the incorrect guard can appear to work: a negative lookup that gets through wraps to a future cell that is still `INF`, so it does not improve the answer. That masking effect is not the intended transition. State the actual requirement directly, using either form:
+
+```python
+if i - c < 0:
+    continue
+dp[i] = min(dp[i], dp[i - c] + 1)
+```
+
+Or use the equivalent `if c <= i:` form in the complete implementation above. The general debugging habit is to validate against the state being solved, not just the outer problem's target.
+
+### Unreachable states and the final answer
+
+With `coins = [2]` and `amount = 3`:
+
+```text
+Subtotal:       0    1    2    3
+Logical state: [0,  INF,  1,  INF]
+```
+
+Subtotal `1` has no fitting coin. Subtotal `2` uses `dp[0] + 1 = 1`. Subtotal `3` depends on unreachable subtotal `1`, so it stays unreachable. The method returns `-1`, not the internal placeholder.
+
+With `float("inf")`, infinity plus one stays infinity. With the integer sentinel used here, `INF + 1` is larger than `INF`, so `min(INF, INF + 1)` also preserves the unreachable state. These are two representations of the same logical meaning. Zero is already a valid amount: when the target is `0`, the loops do no work and return the initialized `dp[0] = 0`.
+
 **Where the time goes, line by line**
 
 *Variables: n = len(coins), A = the target amount.*
@@ -246,7 +326,7 @@ Coin Change is **unbounded**, each coin can be used infinitely. The outer loop o
 
 ### The sentinel choice
 
-`INF = amount + 1` works because you can never need more than `amount` coins of denomination 1. Any reachable amount costs at most `amount` coins, so `amount + 1` is guaranteed larger than any valid answer. The `min()` recurrence will always prefer a real path over the sentinel, and the final check `dp[amount] != INF` cleanly separates reachable from unreachable.
+`INF = amount + 1` works because every coin is a positive integer worth at least 1. Any combination making a reachable subtotal `i` has at most `i` coins, even when denomination 1 is absent. Therefore `amount + 1` is larger than every valid answer. The `min()` recurrence prefers a real path over the sentinel, and the final check cleanly separates reachable from unreachable.
 
 `float('inf')` works too, but `amount + 1` stays an integer and gives a tighter bound. See [Sentinel Values](../../../sentinel-values/) for the general pattern across DP, shortest-path, and search problems.
 

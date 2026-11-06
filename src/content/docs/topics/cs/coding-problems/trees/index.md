@@ -1,11 +1,11 @@
 ---
 title: Trees
-description: "17 problems covering binary trees and BSTs, traversals, recursion over subtrees, tree DP, BST invariants, and serialization."
+description: "18 problems covering binary trees and BSTs, traversals, recursion over subtrees, tree DP, BST invariants, and serialization."
 parent: coding-problems
 tags: [leetcode, neetcode-150, trees, bst]
 status: draft
 created: 2026-04-23
-updated: 2026-05-07
+updated: 2026-11-06
 ---
 
 ## Overview
@@ -38,6 +38,7 @@ The largest NeetCode category for a reason: trees reward recursive thinking, and
 
 **Bonus problems (same pattern, outside NeetCode 150):**
 
+- [530. Minimum Absolute Difference in BST (Easy)](./530-minimum-absolute-difference-in-bst/)
 - [337. House Robber III (Medium)](./337-house-robber-iii/) -- tree DP returning a (rob, skip) tuple from each subtree.
 - [968. Binary Tree Cameras (Hard)](./968-binary-tree-cameras/) -- greedy post-order traversal with three states (covered, uncovered, has-camera).
 

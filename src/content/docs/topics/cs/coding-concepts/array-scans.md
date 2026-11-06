@@ -5,7 +5,7 @@ parent: coding-concepts
 tags: [coding-concepts, algorithms, interviews]
 status: draft
 created: 2026-06-30
-updated: 2026-07-30
+updated: 2026-11-06
 ---
 
 ## Tactic
@@ -76,6 +76,7 @@ These prompt words often point toward this concept:
 - [73. Set Matrix Zeroes](../../coding-problems/math-and-geometry/073-set-matrix-zeroes/)
 - [74. Search a 2D Matrix](../../coding-problems/binary-search/074-search-a-2d-matrix/)
 - [84. Largest Rectangle in Histogram](../../coding-problems/stack/084-largest-rectangle-in-histogram/)
+- [58. Length of Last Word](../../coding-problems/arrays-and-hashing/058-length-of-last-word/)
 - [121. Best Time to Buy and Sell Stock](../../coding-problems/sliding-window/121-best-time-to-buy-and-sell-stock/)
 - [122. Best Time to Buy and Sell Stock II](../../coding-problems/greedy/122-best-time-to-buy-and-sell-stock-ii/)
 - [125. Valid Palindrome](../../coding-problems/two-pointers/125-valid-palindrome/)
@@ -83,6 +84,7 @@ These prompt words often point toward this concept:
 - [134. Gas Station](../../coding-problems/greedy/134-gas-station/)
 - [136. Single Number](../../coding-problems/bit-manipulation/136-single-number/)
 - [152. Maximum Product Subarray](../../coding-problems/1d-dynamic-programming/152-maximum-product-subarray/)
+- [151. Reverse Words in a String](../../coding-problems/two-pointers/151-reverse-words-in-a-string/)
 - [189. Rotate Array](../../coding-problems/two-pointers/189-rotate-array/)
 - [209. Minimum Size Subarray Sum](../../coding-problems/sliding-window/209-minimum-size-subarray-sum/)
 - [217. Contains Duplicate](../../coding-problems/arrays-and-hashing/217-contains-duplicate/)
