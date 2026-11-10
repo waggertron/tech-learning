@@ -61,3 +61,6 @@ __pycache__/
 
 # local research notes (not published)
 docs/research/
+
+# private study plans, interview notes, and generated artifacts
+/artifacts/

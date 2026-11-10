@@ -35,6 +35,7 @@ End-to-end walkthroughs of sixteen canonical interview problems, each with clari
 
 **Standalone walkthroughs:**
 
+- [Shared callback queues, atomic claims, and safe retries](../../posts/2026-11-09-atomic-callback-claims-and-safe-retries/), incremental data modeling and PostgreSQL concurrency through a multi-location clinic workflow
 - [URL Shortener](./case-studies/url-shortener/), ID generation, base62 encoding, redirect caching, analytics pipeline
 - [Social Feed](./case-studies/social-feed/), fanout strategies, hybrid push/pull, the celebrity problem, ML ranking
 - [Video Streaming](./case-studies/video-streaming/), chunked upload, transcoding pipeline, adaptive bitrate, CDN strategy
