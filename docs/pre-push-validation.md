@@ -4,7 +4,7 @@ This repo uses an outcome-based validation workflow. A push is ready when the si
 
 ## Acceptance criteria
 
-1. **Pages display intended content**: Built HTML pages are non-empty, have titles, have visible headings, include the Starlight content region, and do not contain build or runtime failure markers.
+1. **Pages display intended content**: Built HTML pages are non-empty, have titles, have visible headings, include the Starlight content region or dated plugin archive previews, and do not contain build or runtime failure markers.
 2. **Links connect**: Built internal links resolve under `/tech-learning`, generated assets exist, and hash links point to real anchors.
 3. **Code examples are trustworthy**: Fenced code languages are known, source examples parse, Twelve-Factor excerpts match immutable tagged releases and retain their API proof tokens, generated React output views are in sync, React output behavior tests pass, the MCP companion compiles and passes its deterministic tests, and the Swift runner contract and component tests pass.
 4. **Custom functionality behaves as intended**: Browser smoke tests cover synchronized Twelve-Factor language tabs, the DSL calculator, generated React output interaction, representative Python, TypeScript, and Go REPL markup, and the complete Swift REPL browser contract.
@@ -50,6 +50,7 @@ npm run validate:pages
 npm run validate:links
 npm run validate:twelve-factor-browser
 npm run validate:custom-pages
+npm run validate:post-discovery
 npm run validate:swift-repl-browser
 ```
 
@@ -210,3 +211,5 @@ Add or update validation when a bug reaches any of these surfaces:
 - Internal planning notes or mechanical source piles reach rendered pages.
 
 Record new reusable validation rules in `docs/feature_tracker.md` and update `.agents/skills/pre-push-validation/SKILL.md` when future Codex sessions need the behavior.
+
+Post discovery validation checks homepage newest/oldest sorting, archive pagination, tags, RSS, preserved series routes, self-hosted fonts, both themes, mobile overflow, and no-JavaScript links. See `docs/post-discovery.md`.

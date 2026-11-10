@@ -1,0 +1,9 @@
+---
+import Default from '@astrojs/starlight/components/MarkdownContent.astro';
+import BlogContent from 'starlight-blog/overrides/MarkdownContent.astro';
+
+const { id } = Astro.locals.starlightRoute;
+const isSeries = id === 'posts/series' || id.startsWith('posts/series/');
+---
+
+{isSeries ? <Default><slot /></Default> : <BlogContent><slot /></BlogContent>}

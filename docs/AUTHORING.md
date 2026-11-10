@@ -270,7 +270,7 @@ Lines 550+ usually mean the topic should split.
 
 ### Planned series pages and one-off helpers
 
-For an unwritten long-form series, create a tracked plan in `docs/plans/current/` rather than empty post stubs. Keep the public series landing page under `posts/series/<slug>/index.mdx` reader-facing. Move the tracked plan to `docs/plans/history/` when the series plan is finished, superseded, or no longer active.
+For an unwritten long-form series, create a tracked plan in `docs/plans/current/` rather than empty post stubs. Keep the series landing source under `src/content/docs/post-series/<slug>/index.mdx` reader-facing, with frontmatter `slug: posts/series/<slug>` to preserve its public URL. The series hub lives at `src/content/docs/post-series/index.mdx` with `slug: posts/series`. Keeping these sources outside `posts/` lets Starlight Blog list dated posts without treating series guides as posts. Move the tracked plan to `docs/plans/history/` when the series plan is finished, superseded, or no longer active.
 
 The rendered page still has to read as public content. Do not leave internal implementation notes, future file paths, "add this later" sections, agent instructions, or maintenance checklists in the page body. Move private source gathering and tool evaluation notes to `docs/research/`, which is gitignored. Use `docs/` for tracked workflow documentation and `.agents/memory/` for local session memory.
 

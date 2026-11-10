@@ -79,7 +79,9 @@ function validatePage(filePath, errors) {
     fail(errors, filePath, "missing visible <h1>");
   }
 
-  if (!isNotFoundPage && !html.includes("data-pagefind-body")) {
+  const isBlogListing = /^posts\/(?:index\.html|\d+\/index\.html|(?:tags|authors)\/[^/]+\/index\.html)$/.test(relativePath.split(path.sep).join('/'));
+  const hasBlogPreviews = isBlogListing && /<article\b[^>]*class="[^"]*\bpreview\b/.test(html) && /<time\b/.test(html);
+  if (!isNotFoundPage && !html.includes("data-pagefind-body") && !hasBlogPreviews) {
     fail(errors, filePath, "missing data-pagefind-body content region");
   }
 

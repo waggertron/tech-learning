@@ -222,7 +222,7 @@ async function validateActiveSidebarEntry(browser) {
 
       return {
         href: activeEntry.getAttribute("href"),
-        backgroundImage: getComputedStyle(activeEntry).backgroundImage,
+        backgroundColor: getComputedStyle(activeEntry).backgroundColor,
         boxShadow: getComputedStyle(activeEntry).boxShadow,
         color: getComputedStyle(activeEntry).color,
         ancestorsOpen: activeEntry.closest("details:not([open])") === null,
@@ -238,13 +238,13 @@ async function validateActiveSidebarEntry(browser) {
     if (!activeState?.href?.endsWith("/topics/cs/coding-problems/binary-search/704-binary-search/")) {
       throw new Error(`Unexpected active sidebar entry: ${activeState?.href ?? "missing"}`);
     }
-    if (!activeState.backgroundImage.includes("linear-gradient")) {
-      throw new Error("Active sidebar entry is missing its yellow gradient");
+    if (!["rgb(220, 236, 226)", "rgb(37, 75, 64)"].includes(activeState.backgroundColor)) {
+      throw new Error(`Unexpected active sidebar background: ${activeState.backgroundColor}`);
     }
     if (activeState.boxShadow.includes("inset")) {
       throw new Error("Active sidebar entry still has an inset border");
     }
-    if (activeState.color !== "rgb(66, 32, 6)") {
+    if (!["rgb(23, 62, 50)", "rgb(215, 241, 229)"].includes(activeState.color)) {
       throw new Error(`Unexpected active sidebar text color: ${activeState.color}`);
     }
     if (!activeState.ancestorsOpen) {

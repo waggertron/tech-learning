@@ -1,8 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightBlog from 'starlight-blog';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+
+// Publication dates are calendar dates. Keep plugin formatting stable across build hosts.
+process.env.TZ = 'UTC';
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,6 +33,7 @@ export default defineConfig({
   },
   integrations: [
     starlight({
+      plugins: [starlightBlog({ title: 'Posts', prefix: 'posts', postCount: 10, recentPostCount: 6 })],
       title: 'Here Be Dragons',
       description: 'A shareable knowledge base of tech topics I research.',
       social: {
@@ -39,6 +44,7 @@ export default defineConfig({
         Footer: './src/components/Footer.astro',
         Head: './src/components/Head.astro',
         Search: './src/components/Search.astro',
+        MarkdownContent: './src/components/MarkdownContent.astro',
       },
       pagefind: false,
       sidebar: [

@@ -1,6 +1,6 @@
 ---
 name: post-series
-description: "Use when creating, updating, organizing, or planning post series in the tech-learning repo. Covers series frontmatter, series landing pages under posts/series, reading-order design, code-anchor planning for future posts, updating posts/index.mdx, and build validation."
+description: "Use when creating, updating, organizing, or planning post series in the tech-learning repo. Covers series frontmatter, series landing sources under post-series with public posts/series routes, reading-order design, code-anchor planning for future posts, discovery, and build validation."
 ---
 
 # Post series
@@ -18,14 +18,16 @@ src/content/docs/posts/YYYY-MM-DD-slug.md
 Series pages live here:
 
 ```text
-src/content/docs/posts/series/<series-slug>/index.mdx
+src/content/docs/post-series/<series-slug>/index.mdx
 ```
 
 The visible hub is:
 
 ```text
-src/content/docs/posts/series/index.mdx
+src/content/docs/post-series/index.mdx
 ```
+
+Series sources stay outside `posts/` so Starlight Blog does not treat the guides as dated blog posts. Give the hub frontmatter `slug: posts/series` and each detail page `slug: posts/series/<series-slug>` to preserve public URLs. Markdown links still resolve from those rendered routes. Source imports resolve from the new source location.
 
 Each post that belongs to a series gets this frontmatter:
 
@@ -42,8 +44,8 @@ series:
 1. **Find candidates**: Scan existing posts by tags, titles, and cross-links. Use `rg -n "series:|See also|Related topics|../2026" src/content/docs/posts`.
 2. **Choose the series shape**: Prefer one clear sequence over many overlapping collections. A post should usually belong to one primary series.
 3. **Update post frontmatter**: Add `series.slug` and `series.order`. Keep existing URLs and filenames unchanged.
-4. **Create the landing page**: Add `src/content/docs/posts/series/<slug>/index.mdx`.
-5. **Update discovery**: Add the series to both `src/content/docs/posts/index.mdx` and `src/content/docs/posts/series/index.mdx`.
+4. **Create the landing page**: Add `src/content/docs/post-series/<slug>/index.mdx` with frontmatter `slug: posts/series/<slug>`.
+5. **Update discovery**: Add the series to `src/content/docs/post-series/index.mdx` and keep the series hub linked from the post browsing surfaces.
 6. **Validate**: Run the token scan, em-dash scan, and `npm run build`.
 
 ## Landing Page Pattern
@@ -54,6 +56,7 @@ Use this frontmatter for a series detail page:
 ---
 title: Series title, post series
 description: "One sentence describing the sequence and what the reader gets."
+slug: posts/series/<series-slug>
 sidebar:
   hidden: true
 ---
@@ -78,7 +81,7 @@ Keep the series index visible. Keep detail pages hidden from the sidebar unless 
 
 ## Planning New Series
 
-For an unwritten long-form series, create a tracked plan under `docs/plans/current/` rather than empty post stubs. Keep public series landing pages under `src/content/docs/posts/series/<series-slug>/index.mdx` reader-facing. Move the plan to `docs/plans/history/` when it is finished, superseded, or no longer active.
+For an unwritten long-form series, create a tracked plan under `docs/plans/current/` rather than empty post stubs. Keep public series landing sources under `src/content/docs/post-series/<series-slug>/index.mdx` reader-facing and preserve their `posts/series/<series-slug>` frontmatter slugs. Move the plan to `docs/plans/history/` when it is finished, superseded, or no longer active.
 
 Each planned part should include:
 
@@ -102,7 +105,7 @@ Keep the rendered page reader-facing. Do not publish internal implementation TOD
 
 When a source section cites the same author or publication several times for one argument, consolidate those bullets into one stronger synthesis. A source pile reads mechanical and low-value.
 
-When a series plan adds a user-visible helper, update `docs/feature_tracker.md`, keep the series page linked from both post indexes, and run `npm run build`.
+When a series plan adds a user-visible helper, update `docs/feature_tracker.md`, keep the series page linked from the series hub and post browsing surfaces, and run `npm run build`.
 
 ## Existing Series
 

@@ -1,4 +1,136 @@
-/* Custom theme tweaks. Starlight's defaults are good, add overrides here as needed. */
+/* Self-hosted Latin subsets. Other scripts use the system font fallback. */
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-latin-variable.woff2') format('woff2');
+}
+
+:root {
+  --sl-font: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --hbd-font-heading: 'Newsreader', Georgia, serif;
+  --sl-content-width: 65rem;
+  --sl-text-body: 1.0625rem;
+  --sl-line-height: 1.7;
+  --sl-color-white: #edf5f0;
+  --sl-color-gray-1: #e0ece5;
+  --sl-color-gray-2: #c5d8d0;
+  --sl-color-gray-3: #a0b8af;
+  --sl-color-gray-4: #68877b;
+  --sl-color-gray-5: #38564d;
+  --sl-color-gray-6: #213d35;
+  --sl-color-black: #142b26;
+  --sl-color-accent-low: #254b40;
+  --sl-color-accent: #3e9774;
+  --sl-color-accent-high: #a4dabc;
+  --sl-color-text-accent: #a4dabc;
+  --sl-color-bg-nav: #19332c;
+  --sl-color-bg-sidebar: #19332c;
+  --hbd-current-bg: #254b40;
+  --hbd-current-text: #d7f1e5;
+  --hbd-current-mark: #a4dabc;
+  --hbd-button-bg: #256349;
+}
+
+:root[data-theme='light'] {
+  --sl-color-white: #192f26;
+  --sl-color-gray-1: #243e31;
+  --sl-color-gray-2: #354f42;
+  --sl-color-gray-3: #5a7067;
+  --sl-color-gray-4: #7e9388;
+  --sl-color-gray-5: #bdcdc2;
+  --sl-color-gray-6: #e8efe9;
+  --sl-color-gray-7: #f0f5f1;
+  --sl-color-black: #f8faf8;
+  --sl-color-accent-low: #dcece2;
+  --sl-color-accent: #256349;
+  --sl-color-accent-high: #194b35;
+  --sl-color-text-accent: #256349;
+  --sl-color-bg-nav: #f0f5f1;
+  --sl-color-bg-sidebar: #f0f5f1;
+  --hbd-current-bg: #dcece2;
+  --hbd-current-text: #173e32;
+  --hbd-current-mark: #256349;
+}
+
+/* Keep the journal character in the page chrome and prose, outside live demos. */
+.site-title,
+h1#_top,
+.preview h2,
+.sl-markdown-content > :is(h1, h2, h3, h4),
+.sl-markdown-content > .sl-heading-wrapper :is(h1, h2, h3, h4) {
+  font-family: var(--hbd-font-heading);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  letter-spacing: -0.025em;
+}
+
+/* The pinned blog plugin hides its title panel. Keep archive titles visible. */
+body:has(article.preview) .content-panel:first-of-type {
+  display: block;
+}
+
+.site-title {
+  color: var(--sl-color-white);
+  font-size: 1.625rem;
+}
+
+h1#_top {
+  font-size: clamp(2.3rem, 4.5vw, 3.25rem);
+  line-height: 1.12;
+  max-width: 28ch;
+  text-wrap: balance;
+}
+
+.sl-markdown-content > :is(p, ul, ol, blockquote) {
+  max-width: 76ch;
+}
+
+.sl-markdown-content > p:first-child {
+  font-size: 1.125rem;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 0.065em;
+}
+
+.sl-markdown-content a:hover:not(:where(.not-content *)) {
+  text-decoration-thickness: 0.12em;
+}
+
+.sl-markdown-content > blockquote {
+  border-inline-start: 3px solid var(--sl-color-accent);
+  padding-inline-start: 1.25rem;
+  color: var(--sl-color-text);
+}
+
+.page > .header {
+  border-bottom-color: var(--sl-color-gray-5);
+}
+
+#starlight__sidebar a {
+  border-radius: 0.35rem;
+}
+
+#starlight__sidebar a:not([aria-current='page']):hover {
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-white);
+}
+
+:where(a, button, select, input, summary):focus-visible {
+  outline: 2px solid var(--sl-color-text-accent);
+  outline-offset: 3px;
+}
 
 /* KaTeX dark-mode color correction */
 [data-theme='dark'] .katex { color: var(--sl-color-text); }
@@ -9,20 +141,13 @@
   .katex-mathml { display: block; }
 }
 
-:root {
-  --sl-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --sl-content-width: 65rem;
-}
-
 /* Keep the current page easy to find in long sidebar catalogs. */
 #starlight__sidebar a[aria-current='page'] {
   position: relative;
-  color: #422006;
-  background: linear-gradient(120deg, #fde68a 0%, #facc15 52%, #eab308 100%);
-  box-shadow: 0 4px 12px rgb(234 179 8 / 28%);
-  text-shadow: 0 1px 0 rgb(255 255 255 / 35%);
+  color: var(--hbd-current-text);
+  background: var(--hbd-current-bg);
+  font-weight: 650;
   scroll-margin-block: 1.5rem;
-  transition: filter 160ms ease, box-shadow 160ms ease;
 }
 
 #starlight__sidebar a[aria-current='page']::before {
@@ -32,18 +157,19 @@
   inset-inline-start: 0;
   width: 0.2rem;
   border-radius: 999px;
-  background: #713f12;
+  background: var(--hbd-current-mark);
 }
 
 #starlight__sidebar a[aria-current='page']:hover {
-  color: #422006;
-  filter: brightness(1.04);
-  box-shadow: 0 5px 16px rgb(234 179 8 / 36%);
+  color: var(--hbd-current-text);
+  background: var(--hbd-current-bg);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
 #starlight__sidebar a[aria-current='page']:focus-visible {
-  color: #422006;
-  outline: 2px solid #fef08a;
+  color: var(--hbd-current-text);
+  outline: 2px solid var(--sl-color-text-accent);
   outline-offset: 2px;
 }
 
@@ -67,7 +193,7 @@
 .code-run-btn {
   display: inline-flex;
   align-items: center;
-  background: var(--sl-color-accent, #6750a4);
+  background: var(--hbd-button-bg);
   border: 1px solid transparent;
   border-radius: 4px;
   color: #fff;

@@ -1,6 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
+import { blogSchema } from 'starlight-blog/schema';
 
 const topicExtension = z.object({
   category: z.string().optional(),
@@ -23,6 +24,11 @@ const topicExtension = z.object({
 export const collections = {
   docs: defineCollection({
     loader: docsLoader(),
-    schema: docsSchema({ extend: topicExtension }),
+    schema: (context) => docsSchema({
+      extend: (schemaContext) => blogSchema(schemaContext).merge(topicExtension),
+    })(context).transform((data) => ({
+      ...data,
+      excerpt: data.excerpt ?? data.description,
+    })),
   }),
 };
