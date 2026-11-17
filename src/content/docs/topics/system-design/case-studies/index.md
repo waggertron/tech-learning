@@ -5,7 +5,7 @@ parent: system-design
 tags: [system-design, case-studies, interviews]
 status: draft
 created: 2026-05-06
-updated: 2026-05-21
+updated: 2026-11-16
 ---
 
 Each case study applies the [interview framework](../interview-framework/) to a canonical [system design](../) problem. The format is consistent: clarifying questions, estimation, high-level design with Mermaid diagrams, deep dives on the most interesting components, failure modes, and key takeaways.
@@ -14,8 +14,9 @@ These problems cover the most commonly asked designs across Google, Meta, Amazon
 
 ## Standalone case studies
 
-Six standalone walkthroughs, each covering a distinct design space:
+Standalone walkthroughs, each covering a distinct design space:
 
+- [Hyper Low Latency Patient Info Lookup for Telecom Data Enrichment](./patient-lookup-aws/), ten million daily reads, DynamoDB capacity, a 100 ms p99 target, and failure testing
 - [URL Shortener](./url-shortener/), ID generation, base62 encoding, redirect caching, and analytics pipelines
 - [Social Feed](./social-feed/), fanout strategies, hybrid push/pull, ML ranking, and the celebrity problem
 - [Video Streaming](./video-streaming/), chunked upload, transcoding pipelines, adaptive bitrate, and CDN strategy

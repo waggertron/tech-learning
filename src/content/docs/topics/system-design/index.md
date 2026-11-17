@@ -5,7 +5,7 @@ category: system-design
 tags: [system-design, distributed-systems, interviews]
 status: draft
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-11-16
 ---
 
 System design interviews ask you to architect a real-world system from scratch, usually in 45 minutes. Unlike coding interviews, there is no single correct answer. The job is to reason through trade-offs clearly, ask the right clarifying questions, and make defensible decisions under constraints.
@@ -34,6 +34,8 @@ The same skills matter in production. A system that starts as a single process e
 End-to-end walkthroughs of sixteen canonical interview problems, each with clarifying questions, estimation, Mermaid high-level design, deep dives, failure modes, and key takeaways.
 
 **Standalone walkthroughs:**
+
+- [Hyper Low Latency Patient Info Lookup for Telecom Data Enrichment](./case-studies/patient-lookup-aws/), capacity and latency budgets for ten million daily reads, with a client-side validation plan
 
 - [Shared callback queues, atomic claims, and safe retries](../../posts/2026-11-09-atomic-callback-claims-and-safe-retries/), incremental data modeling and PostgreSQL concurrency through a multi-location clinic workflow
 - [URL Shortener](./case-studies/url-shortener/), ID generation, base62 encoding, redirect caching, analytics pipeline

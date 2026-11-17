@@ -28,6 +28,8 @@ As of this audit, the repo contains:
 
 ## Feature Register
 
+- **2026-11-16: AWS patient lookup case study**: Added a source-derived capacity and latency walkthrough for ten million daily reads, including a tenant-scoped data model, DynamoDB read accounting, application failure capacity, and client-side load-test criteria. Throughput and latency remain explicitly unmeasured. Evidence: `src/content/docs/topics/system-design/case-studies/patient-lookup-aws.md`, system-design and topic indexes.
+
 ### Site Foundation
 
 - **2026-11-09: Date-sorted post discovery and journal theme**: Added Starlight Blog archives, tags, pagination, RSS, and a homepage newest/oldest selector. Preserved post and series URLs while separating series sources, and added self-hosted typography with a green light/dark theme. Evidence: `src/components/PostBrowser.astro`, `src/components/MarkdownContent.astro`, `src/content.config.ts`, `src/content/docs/post-series/`, `src/styles/custom.css`, `scripts/validate-post-discovery.mjs`, `docs/post-discovery.md`, `DESIGN.md`.
