@@ -18,6 +18,7 @@ Full background lives in [`docs/AUTHORING.md`](../../../docs/AUTHORING.md). This
 - User asks to expand, deepen, or improve a bare-bones entry.
 - User asks for more implementations, alternate approaches, variants, or language examples.
 - User provides source material and asks to turn it into an entry or add it to an existing entry.
+- User asks to turn a completed learning discussion into a system-design case study.
 - User asks to add, update, or link coding-problem concepts such as two pointers, greedy algorithms, memoization, graph traversal, or dynamic programming.
 - Any edit in `src/content/docs/`.
 
@@ -206,6 +207,14 @@ Many existing entries started as thin coverage so the catalog was complete. When
 ## Capturing a coding-practice insight
 
 When deepening an entry from a tutoring session, follow [Capturing reasoning from coding practice](../../../docs/AUTHORING.md#capturing-reasoning-from-coding-practice). Define the state invariant, use a labeled trace that exposes the mistake, explain update order, and account for hidden copies and scans as well as average and amortized costs. Keep personal tutoring preferences in local memory rather than published content. For a full approach explanation, use the [default complete-solution structure](../../../docs/AUTHORING.md#default-structure-for-a-complete-solution-explanation): code first, state definition, labeled trace, line-to-purpose table, concrete transitions, reusable rule, then precise complexity and any complete optimized version. This format does not override hint-first tutoring.
+
+## Turning a system-design discussion into a case study
+
+Use [Learning-derived system-design case studies](../../../docs/AUTHORING.md#learning-derived-system-design-case-studies) when a post grows from guided practice. When the user wants to learn cases together, incorporate their questions and feedback before drafting each post. Preserve private foundation notes separately from the final teaching outline, which can reorder the conversation to make prerequisites clear.
+
+Start with roles, access scope, and latency or freshness requirements. Introduce each entity and mechanism through the behavior or failure that requires it. For an iterative walkthrough, use a before diagram, one question, answer and reason, relevant SQL with its result, and an after diagram. Keep complete code after the guided sequence when that is the requested format. This does not change coding-problem explanation order or authorize revealing later tutoring answers.
+
+Follow [Preserving tested example code](../../../docs/AUTHORING.md#preserving-tested-example-code) for embedded source and concurrency evidence. Keep personal correspondence, study plans, and assessments in ignored storage. A learner's acknowledgment is not evidence of independent mastery.
 
 ## Using Source Material
 

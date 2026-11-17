@@ -196,6 +196,38 @@ When a learner requests code followed by an explanation, or a coding-problem app
 
 Keep language variants together and follow them with one shared explanation rather than repeating the same prose per language. Scale the trace and table to the algorithm. This format governs full explanations, not hint-first tutoring: do not reveal a solution before the learner requests it. Personal preference notes belong in local memory; this structure is the reusable authoring default.
 
+### Learning-derived system-design case studies
+
+Use this format when a requested post grows from interactive system-design practice. Work through the case with the learner and use their questions, misconceptions, and feedback to choose the explanations. Do not prewrite future case studies when the agreed workflow is to learn them together first. A standalone article request can proceed without a tutoring session.
+
+Keep the original discussion or foundation notes separate from the final instructional outline. Preserve requested source notes, then order the post by what the reader needs to understand next. Conversation chronology often includes detours that do not belong in the final teaching sequence. Personal correspondence, deadlines, study plans, and assessment belong in ignored `artifacts/` or `.agents/memory/`. Generalized authoring plans belong in `docs/plans/` only when intended for the public repository.
+
+Begin with a concrete product question and clarify three kinds of requirements:
+
+| Question | Useful follow-ups | Design consequence |
+| --- | --- | --- |
+| Who can do what? | Which roles view, claim, assign, release, or complete work? Who may act for another person? | Defines workflows, allowed transitions, and ownership rules. |
+| Who can read or write which data? | Is access scoped to an organization, location, or user? Can staff belong to several locations? Are shared queues and personal assignments separate views? | Determines relationships, query predicates, and server-side authorization checks. |
+| How fast, and how current? | What are the response-time and throughput targets? How quickly must another viewer see a change? What must remain correct during a race, retry, or outage? | Separates latency and freshness targets from invariants that require coordination. |
+
+State assumptions as assumptions. Explain how each answer changes the design. Start with the smallest model that supports the core workflow, then introduce each additional entity, relationship, constraint, index, and mechanism through a requirement or failure example. For each addition, say what it enables or prevents and mention a meaningful tradeoff when one exists. A complete model at the end should include the supporting entities and cardinalities promised by the question.
+
+For an iterative visual walkthrough, use this teaching unit:
+
+1. Show the current model or timeline before asking the question.
+2. Ask one focused question about the next decision or failure.
+3. Give the answer and explain why it satisfies the requirement.
+4. Show formatted SQL or code where it contributes to the answer, including returned rows, affected-row counts, or expected errors.
+5. Show the resulting model or timeline, keeping names, IDs, and layout stable so the change is visible.
+
+Use ASCII relationship diagrams for cardinality and timelines for interleaved operations. Diagrams should expose a change in state, behavior, or knowledge. Combine adjacent steps when duplicate sketches would add no information. In live tutoring, pause for the learner's answer before showing the worked solution unless they ask for guidance. A finished post can present both sides of the dialogue.
+
+For a concurrency case, establish the desired user-visible result, demonstrate the unsafe interleaving, then introduce the guarded operation and its commit or rollback boundary. Explain a lost response after commit before introducing idempotency. Distinguish competition between different requests from retries of one logical request. Each mechanism needs its own motivating failure, regardless of scale.
+
+Finish with the complete data model and request-flow diagram. When requested, include the full SQL and application code, setup instructions, expected output, relevant tags or hashtags, and a verified working repository link. Link to the tested revision as well as the repository's entry point. Long complete-source blocks can follow the shorter teaching excerpts when a self-contained implementation is part of the requested deliverable. This is a system-design walkthrough format, not a replacement for the coding-problem complete-solution structure above.
+
+Keep personal assessment out of the published explanation. In private memory, distinguish guided understanding from independent retrieval or transfer. Record only observed evidence and confidence actually supplied by the learner.
+
 ### Coding problem related concepts
 
 Every coding problem page ends with a **Related concepts** section. Use at least two links, usually 2-5 total, so the page points back to the transferable tactics behind the solution rather than only another entry in the same LeetCode category.
@@ -260,7 +292,23 @@ Lines 550+ usually mean the topic should split.
 - Language tag on every fenced block.
 - Working code, not pseudocode, whenever possible.
 - `django` as a language is a warning (astro-expressive-code doesn't have it); use `html` or omit the tag for Django templates.
-- Keep each block under ~30 lines; break up longer ones with prose in between.
+- Prefer blocks under ~30 lines during an explanation. A requested complete runnable implementation can use a longer labeled block after the teaching excerpts.
+
+### Preserving tested example code
+
+Treat executable source as the source of truth for full code blocks. Compare embedded schema, seed data, and application code with the tested files before publishing. A full-file block should match that file exactly. Mark excerpts as excerpts and explain their prerequisites so a reader does not mistake a fragment for a complete program.
+
+When JavaScript inserts literal source with `String.replace`, use a replacement callback:
+
+```js
+const updated = page.replace(marker, () => sourceText);
+```
+
+A replacement string interprets sequences such as `$$` and `$&`. That can silently corrupt PostgreSQL dollar-quoted function bodies or other literal source. A callback preserves the source text.
+
+Run displayed SQL against the intended database with known fixtures. Label deliberately unsafe examples and demonstrate their failure in an isolated fixture. Syntax checks and sequential happy-path output do not prove a concurrency guarantee. Test the relevant competing requests, an in-flight duplicate, commit and rollback, and replayed outcomes with real overlapping transactions. Coordinate the interleaving explicitly and observe lock waiting where the claim depends on it, rather than relying on a sleep. Bound waits and release held transactions in `finally` before joining worker threads so a failed assertion does not hang the suite.
+
+Document the engine, isolation level, and snapshot assumptions that make the example work. For a reservation followed by a replay lookup, check which statement can see the winner's committed row before combining statements into a CTE or function. Link to official documentation and state verification limits. The [callback claims case study](../src/content/docs/posts/2026-11-09-atomic-callback-claims-and-safe-retries.md) provides a worked example with a pinned runnable repository. These are example-specific checks in addition to the site's normal code-example validation.
 
 ### Diagrams
 
