@@ -25,8 +25,14 @@ struct NoteBrowser: View {
             .filter { !favoritesOnly || $0.isFavorite }
             .filter { note in
                 query.isEmpty || note.title.localizedStandardContains(query)
+                    || note.body.localizedStandardContains(query)
+                    || note.tags.contains { $0.localizedStandardContains(query) }
             }
-            .sorted { $0.updatedAt > $1.updatedAt }
+            .sorted { left, right in
+                left.updatedAt == right.updatedAt
+                    ? left.id.rawValue < right.id.rawValue
+                    : left.updatedAt > right.updatedAt
+            }
     }
 
     var body: some View {
@@ -55,7 +61,7 @@ Selection also needs cleanup when notes disappear. Decide whether deleting a sel
 LazyVGrid(columns: [GridItem(.adaptive(minimum: 180))]) {
     ForEach(visibleNotes) { note in
         NavigationLink(value: note.id) {
-            NoteCard(note: note)
+            NoteRow(note: note)
         }
     }
 }
@@ -76,13 +82,13 @@ List(model.visibleNotes) { note in
     NoteRow(note: note)
 }
 .refreshable {
-    await model.refresh()
+    await model.load()
 }
 ```
 
 Refresh is an event, not a complete state model. Keep existing notes visible while checking for newer data when possible. Expose stale, offline, failure, and retry states without replacing usable content with a blank spinner.
 
-The refresh method must observe cancellation and coalesce or reject duplicate work according to an explicit contract.
+The actual `NoteListModel.load()` rejects duplicate loads and checks cancellation before publishing loaded notes. A refresh method must observe cancellation and coalesce or reject duplicate work according to an explicit contract.
 
 ## Empty results have different causes
 

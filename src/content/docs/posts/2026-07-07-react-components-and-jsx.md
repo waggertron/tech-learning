@@ -120,7 +120,7 @@ The parent owns the list shape and calls `ProductCard` for each item. Compositio
 
 ## Series navigation
 
-- Previous: none. Start here.
+- Previous: none. This is the start of the core series.
 - Next: [Part 2: Props, children, and component boundaries](../2026-07-07-react-props-children-component-boundaries/)
 - Series index: [Modern React development](../series/modern-react-development/)
 

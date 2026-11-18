@@ -9,114 +9,75 @@ series:
   order: 39
 ---
 
-Async interface work needs a lifetime and a visible state model. Starting a request from `body` provides neither.
+Loading needs a lifetime and a result-publication policy. Cancelling an old task is useful, but providers can ignore cancellation. A request token can prevent its eventual result from replacing newer content.
 
-## Model every reachable state
+## Preserve useful content while replacing it
+
+The complete framework-neutral implementation lives in `Packages/FieldNotesCore/Sources/FieldNotesCore/ResourceLoader.swift`:
 
 ```swift
-enum LoadState<Value> {
+public enum ResourceState<Value: Sendable>: Sendable {
     case idle
     case loading(previous: Value?)
     case loaded(Value)
-    case failed(message: String, previous: Value?)
-}
-```
+    case failed(previous: Value?)
 
-Keeping previous content distinguishes first load from refresh. A failed refresh can show the last weather context with a warning instead of replacing useful data with an empty error screen.
-
-## Put effects behind a contract
-
-```swift
-protocol WeatherClient: Sendable {
-    func weather(for coordinate: Coordinate) async throws -> WeatherContext
-}
-
-@MainActor
-@Observable
-final class WeatherModel {
-    private let client: any WeatherClient
-    private(set) var state: LoadState<WeatherContext> = .idle
-
-    init(client: any WeatherClient) {
-        self.client = client
+    public var value: Value? {
+        switch self {
+        case .idle: nil
+        case .loading(let value), .failed(let value): value
+        case .loaded(let value): value
+        }
     }
+}
 
-    func load(coordinate: Coordinate) async {
+/// Latest request wins even when a provider ignores cancellation.
+public actor ResourceLoader<Value: Sendable> {
+    public private(set) var state: ResourceState<Value> = .idle
+    private var generation = 0
+    public init() {}
+
+    public func load(_ fetch: @Sendable () async throws -> Value) async {
+        generation += 1
+        let request = generation
         let previous = state.value
         state = .loading(previous: previous)
-
         do {
-            let weather = try await client.weather(for: coordinate)
+            let value = try await fetch()
             try Task.checkCancellation()
-            state = .loaded(weather)
-        } catch is CancellationError {
-            state = previous.map(LoadState.loaded) ?? .idle
+            guard request == generation else { return }
+            state = .loaded(value)
         } catch {
-            state = .failed(
-                message: "Weather is unavailable. Try again.",
-                previous: previous
-            )
+            guard request == generation else { return }
+            if error is CancellationError {
+                if let previous { state = .loaded(previous) } else { state = .idle }
+            } else { state = .failed(previous: previous) }
         }
     }
 }
 ```
 
-The UI model owns display state. The client owns request construction, response validation, decoding, status codes, and transport errors. Domain code does not depend on `URLSession`.
+Each invocation captures a generation before suspension. A result publishes only if that generation is still current. Cancellation restores the previous content or idle state. A failure retains previous content inside a distinct failed state, so the interface can show stale data and recovery together.
 
-## Tie tasks to identity
+The actor serializes access to state, but it does not hold a lock across `await`. Another call can enter while the old fetch is suspended. That is exactly why the generation check exists.
 
-```swift
-WeatherPanel(state: model.state)
-    .task(id: note.coordinate) {
-        await model.load(coordinate: note.coordinate)
-    }
-```
+## Prove the race without sleeping
 
-When the task ID changes, SwiftUI cancels the prior task and starts work for the new input. Cancellation is cooperative. The client and model must propagate or check it before publishing stale results.
+The package tests use an actor gate with a checked continuation. They start the old request, wait until it reaches the gate, complete a new request, then release the old result. The final value remains the new value.
 
-Button-created unstructured tasks need ownership too. Store or otherwise scope them when repeated taps, dismissal, or replacement should cancel previous work.
+A second test loads content, forces a failure, then cancels a suspended replacement. The original content remains available. These tests passed with Swift 6.3.3 using `./scripts/test-package.sh` from the companion directory.
 
-## Render progress without destroying context
+## Connect a task at the interface boundary
 
-```swift
-switch model.state {
-case .idle, .loading(previous: nil):
-    ProgressView("Loading weather")
-case .loading(previous: let weather?):
-    WeatherCard(weather: weather).overlay { ProgressView() }
-case .loaded(let weather):
-    WeatherCard(weather: weather)
-case .failed(let message, let previous):
-    WeatherFailure(message: message, previous: previous, retry: reload)
-}
-```
+The actual note list uses `.task { await model.load() }` and `.refreshable { await model.load() }`. `NoteListModel.load()` coalesces duplicate requests and checks cancellation before publishing repository data. It keeps previously loaded notes during refresh rather than replacing them with an initial spinner.
 
-Progress labels, retry actions, offline copy, and preserved content are product behavior. A spinner alone does not explain failure or recovery.
+`ResourceLoader` is a separate lesson for replaceable inputs such as an image key or coordinate. A SwiftUI adapter would read the actor's state into its main-actor presentation model after awaiting work. It is not itself an observable SwiftUI object.
 
-## Treat images as another resource pipeline
+## Keep transport claims separate
 
-`AsyncImage` can cover simple remote presentation, but product requirements often need an injected loader with request deduplication, decoded-image memory limits, disk policy, cancellation, and deterministic test data.
+A network client still owns request creation, status-code validation, decoding, and transport errors. An image loader also needs a bounded cache, transformation-aware keys, and a policy for stale/private images. None of those follows automatically from an actor or `AsyncImage`.
 
-Cache keys should include the resource and relevant transformation. Bound every cache. Define whether stale images may appear offline and how private data is cleared.
-
-Use placeholders with stable layout so image completion does not cause surprising jumps. Supply useful accessibility labels for meaningful images and hide decorative ones.
-
-## Test below the view first
-
-An in-memory weather client can prove:
-
-- successful first load
-- refresh preserving old content
-- transport and decoding failure
-- cancellation before state publication
-- a newer coordinate winning over an older request
-- retry after failure
-
-UI tests then cover the smaller question: does each state expose the right copy, progress, and action?
-
-## Validation boundary
-
-The code was not compiled with Observation or SwiftUI, and no live service was called. Task lifetime, URLSession behavior, caching, offline behavior, Simulator networking, and image accessibility remain Not verified.
+The current app intentionally loads local text notes. It does not claim a weather service or image cache. This implementation proves cancellation and result ordering with deterministic values; URLSession, image decoding, offline networking, SwiftUI task delivery, and device behavior remain unverified.
 
 ## Series navigation
 

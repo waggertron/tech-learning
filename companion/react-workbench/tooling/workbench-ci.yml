@@ -1,0 +1,29 @@
+# Copy this specimen to .github/workflows/react-workbench.yml to enable it.
+name: React workbench
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check app types
+        run: node node_modules/typescript/bin/tsc --noEmit --jsx react-jsx --module esnext --moduleResolution bundler --target es2022 --esModuleInterop --strict --types react,react-dom,node companion/react-workbench/src/main.tsx
+      - name: Check formatting
+        run: node node_modules/prettier/bin/prettier.cjs --check 'companion/react-workbench/src/**/*.tsx' companion/react-workbench/vite.config.ts
+      - name: Build production artifact
+        run: node node_modules/vite/bin/vite.js build --config companion/react-workbench/vite.config.ts
+      - name: Prove lint diagnostics and Compiler activation
+        run: |
+          REACT_TOOLING_DIR="$(mktemp -d)"
+          npm install --prefix "$REACT_TOOLING_DIR" --no-audit --no-fund --save-exact babel-plugin-react-compiler@1.0.0 eslint@10.15.0 eslint-plugin-react-hooks@7.1.1
+          node companion/react-workbench/check-tooling.mjs "$REACT_TOOLING_DIR"
+      - run: node node_modules/playwright/cli.js install --with-deps chromium
+      - name: Check React behavior
+        run: node --test tests/react-example-output-views.test.mjs
+      - name: Prove local release rollback
+        run: node companion/react-workbench/verify-release.mjs

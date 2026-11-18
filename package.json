@@ -53,7 +53,8 @@
     "validate:swift-runner-local-browser": "node scripts/validate-swift-runner-local-browser.mjs",
     "validate:pre-push": "node scripts/validate-pre-push.mjs",
     "new:topic": "bash scripts/new-topic.sh",
-    "new:post": "bash scripts/new-post.sh"
+    "new:post": "bash scripts/new-post.sh",
+    "validate:post-migrations": "node scripts/validate-post-series-migrations.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

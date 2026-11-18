@@ -1,50 +1,62 @@
 ---
-title: "ScreenRoom product and content model"
-description: "How do browsing, search, profiles, playback, and continue-watching fit a television context?"
+title: "ScreenRoom: a product design brief"
+description: "A television catalog and playback design with separate focus, access, player, and progress lifetimes."
 date: 2026-07-20
 tags: [ios, swift, case-study, screen]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-20-screenroom-product-content-model/
-series:
-  slug: zero-to-ios-hero
-  order: 123
 ---
 
-ScreenRoom is a television-first streaming product with an iPhone companion. It treats focus, playback lifetime, account state, access, and progress as durable product concerns rather than details of a player screen.
+A viewer selects a title, starts playback, leaves, and returns to the correct position. The catalog may refresh while playback continues. The first useful result is a stable playback session and a recoverable return to the selected catalog item.
 
-## Product decision
+This is a design brief and project assignment. It does not describe a completed application.
 
-How do browsing, search, profiles, playback, and continue-watching fit a television context?
+## One useful vertical slice
 
-The smallest useful vertical slice is concrete: Define catalog, profile, entitlement, playback intent, and progress models before styling a player.
+Use a local catalog and one known media fixture. Implement selection, loading, playing, paused, failed, and ended states, plus a stored resume position. Defer subscriptions, downloaded media, account linking, and recommendation services until that lifecycle works.
 
-## Boundaries that keep the design honest
+## Model the durable state
 
-- Model catalog, profile, entitlement, playback intent, and progress separately so each lifecycle can fail and recover visibly.
-- Make focus and remote interaction deterministic across navigation, refreshed shelves, overlays, and profile changes.
-- Keep the player in a stable coordinator and persist progress from meaningful playback events.
-- Validate poor networks, subtitle and accessibility behavior, account transitions, StoreKit state, and television hardware before release.
-- Avoid this failure: Starting with a custom player skin before content discovery and navigation work.
+```text
+CatalogItem(id, mediaReference)
+Profile(id) -> PlaybackProgress(profileID, itemID, position)
+PlaybackSession(id, itemID, status)
 
-## Release evidence
+selected -> loading -> playing -> paused -> playing -> ended
+                |          |
+                +-> failed <-+-> interrupted
+```
 
-No ScreenRoom tvOS or iOS target, focus journey, AVPlayer session, media stream, StoreKit transaction, download, remote command, subtitle track, or Apple TV device run was exercised.
+The player belongs to a stable session coordinator. A catalog cell only emits selection. Progress is keyed by profile and title, not by the index of a shelf row. Access is a separate decision that can change while a title remains in the catalog.
 
-This chapter records product and architecture decisions. Apple framework behavior still requires the matching Xcode target, configured service or account where applicable, and named Simulator or physical-device evidence. The browser Swift runner does not validate these Apple SDK surfaces.
+## Compare the main alternatives
 
-## Series navigation
+Begin with system playback controls unless the product requires custom behavior they cannot supply. A custom overlay adds focus, subtitles, accessibility, interruption, and command-routing obligations. Store progress on meaningful events and a bounded interval; writing on every frame adds unnecessary work without improving recovery proportionally.
 
-- Previous: [Part 122: PulseTrail testing and release review](../2026-07-20-pulsetrail-testing-release-review/)
-- Next: [Part 124: ScreenRoom tvOS architecture and focus](../2026-07-20-screenroom-tvos-architecture-focus/)
-- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+## Walk through a failure
+
+When a stream stalls, keep the selected title and last confirmed position. Distinguish buffering from an unrecoverable failure and provide a retry path. When a shelf refresh removes the focused item, choose a nearby valid focus destination. When an account or profile changes, reconcile access and progress rather than reuse the previous profile's state.
+
+## Acceptance scenarios
+
+1. Refresh the catalog while playing and verify that the session is not recreated.
+2. Pause, relaunch, and resume the same profile/title within the documented position policy.
+3. Simulate stall, failure, retry, and interruption without losing selected identity.
+4. Navigate with a remote and subtitles enabled, then verify an accessible return to the catalog.
+
+A deterministic model test can prove transition and identity rules. The platform adapter then needs its own interface, permission, interruption, and integration checks. Keep evidence tied to the actual target and destination rather than treating a design review as an executed feature.
+
+## Implementation boundary
+
+No ScreenRoom app target, service integration, account transaction, or hardware journey is supplied by this brief. Use the [Field Notes capstone](../2026-07-19-swiftui-field-notes-capstone/) for the implemented notebook path. Build this assignment only when its distinct user task justifies the extra platform and validation cost.
 
 ## References
 
-- [tvOS](https://developer.apple.com/tvos/)
-- [AVFoundation](https://developer.apple.com/documentation/avfoundation)
-- [StoreKit](https://developer.apple.com/documentation/storekit)
+- [AVKit](https://developer.apple.com/documentation/avkit) documents the central framework boundary for this assignment.
+- [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) provides platform interaction and accessibility guidance.
 
 ## Related topics
 
-- [Video capture, editing, playback, and streaming architecture](../2026-07-19-video-capture-editing-playback-streaming-architecture/)
-- [StoreKit, subscriptions, offers, and entitlement state](../2026-07-19-storekit-subscriptions-offers-entitlement-state/)
+- [Apple platform selection](../2026-07-19-one-product-across-apple-platforms/)
+- [Apple capability selection](../2026-07-19-widgetkit-live-activities/)
 
+[Series reading guide](../series/zero-to-ios-hero/)

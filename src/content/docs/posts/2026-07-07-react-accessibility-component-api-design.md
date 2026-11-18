@@ -1,15 +1,15 @@
 ---
-title: "Modern React 36: Accessibility as component API design"
+title: "Modern React 33: Accessibility as component API design"
 description: "Accessibility as component API design, not a cleanup pass after markup exists."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-accessibility-component-api-design/
 series:
   slug: modern-react-development
-  order: 36
+  order: 33
 ---
 
-This is part 36 of the [Modern React development series](../series/modern-react-development/).
+This is part 33 of the [Modern React development series](../series/modern-react-development/).
 
 Accessible React is mostly accessible HTML with good component contracts. A component API should make the accessible path the natural path by asking for labels, relationships, state, and semantics up front.
 
@@ -115,8 +115,8 @@ The field component owns the ID wiring so callers cannot forget the label relati
 
 ## Series navigation
 
-- Previous: [Part 35: Styling, design tokens, and variants](../2026-07-07-react-styling-design-tokens-variants/)
-- Next: [Part 37: Validation at form and API boundaries](../2026-07-07-react-validation-form-api-boundaries/)
+- Previous: [Part 32: Styling, design tokens, and variants](../2026-07-07-react-styling-design-tokens-variants/)
+- Next: [Part 34: Validation at form and API boundaries](../2026-07-07-react-validation-form-api-boundaries/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

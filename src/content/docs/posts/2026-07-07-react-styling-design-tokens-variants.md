@@ -1,15 +1,15 @@
 ---
-title: "Modern React 35: Styling, design tokens, and variants"
+title: "Modern React 32: Styling, design tokens, and variants"
 description: "Styling React components with tokens, variants, and predictable class contracts."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-styling-design-tokens-variants/
 series:
   slug: modern-react-development
-  order: 35
+  order: 32
 ---
 
-This is part 35 of the [Modern React development series](../series/modern-react-development/).
+This is part 32 of the [Modern React development series](../series/modern-react-development/).
 
 React does not require one styling system. It does require clear component contracts. Design tokens and variants help component styling stay predictable while letting callers choose supported visual states.
 
@@ -113,8 +113,8 @@ Tokens keep repeated design values named in one place, which makes component cla
 
 ## Series navigation
 
-- Previous: [Part 34: Code splitting and lazy loading](../2026-07-07-react-code-splitting-lazy-loading/)
-- Next: [Part 36: Accessibility as component API design](../2026-07-07-react-accessibility-component-api-design/)
+- Previous: [Part 31: Code splitting and lazy loading](../2026-07-07-react-code-splitting-lazy-loading/)
+- Next: [Part 33: Accessibility as component API design](../2026-07-07-react-accessibility-component-api-design/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

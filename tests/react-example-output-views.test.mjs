@@ -310,7 +310,7 @@ function isDeferredUiLiteral(example, text) {
 }
 
 test("Modern React examples have the expected coverage count", () => {
-  assert.equal(examples.length, 78);
+  assert.equal(examples.length, 73);
 });
 
 test("every Modern React example shows its imports near the top", () => {
@@ -438,7 +438,7 @@ test("the generated browser registry exposes live examples and runners", () => {
   const registry = readFileSync(generatedRegistryPath, "utf8");
   assert.match(registry, /export const reactExampleRegistry/);
   assert.match(registry, /2026-07-07-react-components-and-jsx-1-render-data-with-jsx/);
-  assert.match(registry, /2026-07-07-react-vite-client-only-apps-2-minimal-vite-config/);
+  assert.match(registry, /2026-07-07-react-framework-choice-project-setup-1-an-explicit-vite-boundary/);
 });
 
 test("the React example runtime is bundled by Astro", () => {
@@ -695,5 +695,54 @@ test("live React output entries render non-empty generated module markup", () =>
       /^<[^>]+><\/[^>]+>$/,
       `Generated live module ${outputId} should not render an empty shell`,
     );
+  }
+});
+
+test("performance helpers keep a substantial fixture and expose measured timings", () => {
+  const helpers = evaluateGeneratedModule(path.join(postsDir, "_react-example-modules/performance.ts"));
+  const rows = helpers.createReportRows(12000);
+  assert.equal(rows.length, 12000);
+  assert.equal(new Set(rows.map((row) => row.id)).size, 12000);
+  assert.ok(helpers.runExpensiveFilter(rows, "north").length > 0);
+  assert.equal(helpers.reportRenderTiming({ id: "report", phase: "update", actualDuration: 12.5 }), "report update: 12.50 ms");
+});
+
+test("recovery and rollout fixtures demonstrate failure isolation, reset, and both flag variants", async () => {
+  const { createServer } = await import("vite");
+  const { chromium } = await import("playwright");
+  const server = await createServer({
+    configFile: path.join(repoRoot, "companion/react-workbench/vite.config.ts"),
+    server: { host: "127.0.0.1", port: 0 },
+  });
+  let browser;
+  try {
+    await server.listen();
+    const address = server.httpServer.address();
+    assert.ok(address && typeof address !== "string");
+    browser = await chromium.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.goto(`http://127.0.0.1:${address.port}/`);
+    const recovery = page.getByRole("region", { name: "Recovery demonstration" });
+    await recovery.getByRole("button", { name: "Break revenue panel" }).click();
+    await recovery.getByRole("alert").waitFor();
+    assert.match(await recovery.innerText(), /Activity remains available/);
+    await recovery.getByRole("button", { name: "Retry revenue panel" }).click();
+    await recovery.getByText("Revenue loaded").waitFor();
+    assert.equal(await recovery.getByRole("alert").count(), 0);
+    const rollout = page.getByRole("region", { name: "Release demonstration" });
+    await rollout.getByText("Classic checkout", { exact: true }).waitFor();
+    await rollout.getByRole("checkbox", { name: "Enable new checkout" }).check();
+    await rollout.getByText("New checkout", { exact: true }).waitFor();
+    await rollout.getByRole("button", { name: "Simulate checkout failure" }).click();
+    await rollout.getByRole("status").getByText(/checkout-failed/).waitFor();
+    await rollout.getByRole("checkbox", { name: "Enable new checkout" }).uncheck();
+    await rollout.getByText("Classic checkout", { exact: true }).waitFor();
+    const performance = page.getByRole("region", { name: "Performance demonstration" });
+    await performance.getByRole("button", { name: "Update unrelated counter" }).click();
+    await performance.getByRole("button", { name: "Read latest render timing" }).click();
+    assert.match(await performance.getByRole("status").innerText(), /report (mount|update|nested-update): [\d.]+ ms/);
+  } finally {
+    await browser?.close();
+    await server.close();
   }
 });

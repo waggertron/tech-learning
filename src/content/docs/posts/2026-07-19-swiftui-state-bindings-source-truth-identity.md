@@ -14,7 +14,7 @@ Every mutable fact needs one source of truth. SwiftUI wrappers describe ownershi
 ## Own local state once
 
 ```swift
-struct NoteEditor: View {
+struct DraftOwnershipExample: View {
     @State private var draft: NoteDraft
 
     init(note: FieldNote) {
@@ -27,7 +27,7 @@ struct NoteEditor: View {
 }
 ```
 
-`NoteEditor` owns the temporary draft for this editor identity. `EditorFields` receives permission to read and mutate that same value:
+`DraftOwnershipExample` owns the temporary draft for this editor identity. `EditorFields` receives permission to read and mutate that same value:
 
 ```swift
 struct EditorFields: View {
@@ -134,7 +134,7 @@ If the answers are unclear, the wrapper choice is probably masking an ownership 
 
 ## Validation boundary
 
-The state and binding examples were claims-audited but not compiled with SwiftUI. Xcode, Apple SDK, Simulator, and state-restoration behavior remain Not verified.
+The complete app uses `NoteEditorScreen` with `NoteDraft` from FieldNotesCore. Its package tests prove draft validation and save semantics. The small binding examples illustrate ownership separately and have not been type-checked with SwiftUI. Xcode, Apple SDK, Simulator, and state-restoration behavior remain Not verified.
 
 ## Series navigation
 

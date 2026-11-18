@@ -1,18 +1,19 @@
 ---
 slug: posts/series/software-design-principles
-title: Software design principles, post series
-description: "A short sequence on design principles that survive contact with real code: SOLID, composition, and concurrency control."
+title: Software design principles, collection
+description: "Worked lessons in controlling change and asynchronous mutation: SOLID, composition, and a TypeScript async mutex."
 sidebar:
   hidden: true
 ---
 
-This series treats design advice as a set of failure modes. A principle earns its place only when it helps explain what breaks, what coupling grows, or what race appears under load.
+Choose a lesson by the failure you are trying to prevent. These articles form a collection, not a prerequisite sequence.
 
-## Reading order
+## Worked lessons
 
-1. [SOLID principles](../../2026-04-24-solid-principles/), what each principle is trying to prevent.
-2. [Composition over inheritance](../../2026-04-24-composition-over-inheritance/), why object graphs usually age better than class trees.
-3. [TypeScript async mutex](../../2026-05-15-typescript-async-mutex-pattern/), serializing async writes when JavaScript concurrency looks single-threaded but is not.
+- [SOLID and composition through a changing report feature](../../2026-04-24-solid-principles/), separate report rules from delivery, add auditing without a subclass matrix, and test behavioral substitution.
+- [TypeScript async mutex](../../2026-05-15-typescript-async-mutex-pattern/), serialize async writes when two operations can interleave across an `await`.
+
+The report example isolates behavior that changes independently. The mutex example addresses a different problem: several correct operations that interfere when they share mutable state. Neither design principle nor class structure alone establishes a concurrency guarantee.
 
 ## Related topics
 

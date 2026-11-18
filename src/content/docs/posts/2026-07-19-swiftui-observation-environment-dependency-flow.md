@@ -14,35 +14,59 @@ Observation tells SwiftUI which model reads can affect a view. Dependency inject
 ## Keep the model on the main actor
 
 ```swift
+import FieldNotesCore
 import Observation
 
 @MainActor
 @Observable
 final class NoteListModel {
-    private let library: NoteLibrary
-
+    let library: NoteLibrary
     private(set) var notes: [FieldNote] = []
     private(set) var isLoading = false
     private(set) var errorMessage: String?
+    var query = ""
 
-    init(library: NoteLibrary) {
-        self.library = library
+    init(library: NoteLibrary) { self.library = library }
+
+    var visibleNotes: [FieldNote] {
+        let key = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return key.isEmpty ? notes : notes.filter {
+            $0.title.lowercased().contains(key) || $0.body.lowercased().contains(key)
+                || $0.tags.contains { $0.lowercased().contains(key) }
+        }
     }
 
     func load() async {
+        guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
-
         do {
-            notes = try await library.notes()
-            errorMessage = nil
-        } catch is CancellationError {
-            return
-        } catch {
-            errorMessage = "Notes could not be loaded."
+            let loaded = try await library.notes()
+            try Task.checkCancellation()
+            notes = loaded; errorMessage = nil
         }
+        catch is CancellationError { return }
+        catch { errorMessage = "Notes could not be loaded. Your saved data was not changed." }
+    }
+
+    func save(_ draft: NoteDraft) async throws {
+        try await SaveNote(library: library)(draft)
+        await load()
+    }
+
+    func favorite(_ note: FieldNote) async {
+        do {
+            try await library.setFavorite(id: note.id, to: !note.isFavorite, at: Date())
+            await load()
+        } catch { errorMessage = "Favorite could not be changed. Try again." }
+    }
+
+    func delete(_ note: FieldNote) async throws {
+        try await library.delete(id: note.id)
+        await load()
     }
 }
+
 ```
 
 The model owns presentation state and coordinates a library contract. The library owns domain operations. The view does not know whether the repository is in memory, on disk, or remote.
@@ -89,11 +113,11 @@ SwiftUI tracks the observable properties read while forming this view. Reading `
 When a control needs a binding into an observable model, create bindable access at the editing boundary:
 
 ```swift
-struct SettingsView: View {
-    @Bindable var model: SettingsModel
+struct SearchControls: View {
+    @Bindable var model: NoteListModel
 
     var body: some View {
-        Toggle("Show archived notes", isOn: $model.showsArchived)
+        TextField("Search notes", text: $model.query)
     }
 }
 ```
@@ -113,12 +137,12 @@ Prefer explicit initializer injection for feature services and models. Use envir
 ```swift
 let previewModel = NoteListModel(
     library: NoteLibrary(
-        repository: InMemoryNoteRepository(seed: .previewNotes)
+        repository: InMemoryNoteRepository(notes: [])
     )
 )
 ```
 
-Previews and tests get local fixtures. Production composition selects the disk-backed adapter later. Neither interface code nor domain code needs credentials or a cloud service.
+Previews and tests get local fixtures. Production composition now selects `FileNoteRepository` from `Apps/Shared/AppComposition.swift`. Neither interface code nor domain code needs credentials or a cloud service.
 
 ## Review the dependency graph
 

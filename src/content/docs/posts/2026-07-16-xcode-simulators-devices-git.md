@@ -302,8 +302,8 @@ The next post deliberately breaks a calculation, stops the process in LLDB, insp
 
 ## Series navigation
 
-- Previous: [Part 1: The Apple development map](../2026-07-16-apple-development-map/)
-- Next: [Part 3: How to learn by building and debugging](../2026-07-16-learning-by-building-debugging/)
+- Previous: [Part 1: Zero to iOS Hero 1: The Apple development map](../2026-07-16-apple-development-map/)
+- Next: [Part 3: Zero to iOS Hero 3: Learn by building and debugging](../2026-07-16-learning-by-building-debugging/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

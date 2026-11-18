@@ -9,58 +9,65 @@ series:
   order: 61
 ---
 
-A presentation model earns its place when a screen has derived display state, user commands, and asynchronous work that should behave the same in SwiftUI and UIKit. It is not a mandatory partner for every view.
+A presentation model translates application operations into states the screen can show. It does not become a second repository. The Field Notes implementation uses `NoteListModel` in `Apps/SwiftUI/FieldNotesSwiftUIApp.swift` and the shared `SaveNote` operation.
 
-## Model the editor contract
+## Follow the save across the boundary
+
+```text
+editable NoteDraft -> SaveState.requested -> SaveNote
+                                         -> NoteLibrary.save
+                                         -> NoteRepository.save
+success -> refresh committed notes -> dismiss editor
+failure -> retain draft -> show recovery -> retry with the same note ID
+```
+
+`NoteDraft` owns one stable ID from the moment editing starts. A retry sends that identity again. The repository replaces by ID, so it does not append a second note.
+
+## Keep presentation state separate from durable data
+
+The editor uses the actual shared reducer:
 
 ```swift
-@MainActor
-final class NoteEditorModel {
-    private let saveNote: (NoteDraft) async throws -> Void
+public enum SaveEvent: Sendable { case requested, succeeded, failed }
+public enum SaveEffect: Equatable, Sendable { case none, save }
+public enum SaveState: Equatable, Sendable {
+    case idle, saving, saved, failed
 
-    var draft = NoteDraft(title: "", body: "")
-    private(set) var phase: Phase = .editing
+    /// A submitted snapshot cannot accept later edits that dismissal would discard.
+    /// Failure restores editing; success stays locked until the editor dismisses.
+    public var acceptsInput: Bool { self == .idle || self == .failed }
 
-    enum Phase: Equatable {
-        case editing
-        case saving
-        case failed(String)
-        case saved
-    }
-
-    init(saveNote: @escaping (NoteDraft) async throws -> Void) {
-        self.saveNote = saveNote
-    }
-
-    var canSave: Bool {
-        !draft.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            && phase != .saving
-    }
-
-    func save() async {
-        guard canSave else { return }
-        phase = .saving
-        do {
-            try await saveNote(draft)
-            phase = .saved
-        } catch {
-            phase = .failed("The note could not be saved.")
+    public mutating func reduce(_ event: SaveEvent) -> SaveEffect {
+        switch (self, event) {
+        case (.idle, .requested), (.failed, .requested): self = .saving; return .save
+        case (.saving, .succeeded): self = .saved
+        case (.saving, .failed): self = .failed
+        default: break
         }
+        return .none
     }
 }
 ```
 
-SwiftUI can observe the model and UIKit can render it after commands. Neither adapter changes the saving policy.
+`NoteEditorScreen` calls `state.reduce(.requested)` before starting a task. Only `.save` starts work. A second tap while `.saving` returns `.none`. Success dismisses the editor; failure changes the state to `.failed` and leaves every draft field intact.
 
-## Keep UI mechanics outside
+The reducer does not perform persistence. It returns permission to perform an effect. This makes duplicate submission behavior testable without rendering the view.
 
-The model should not import SwiftUI or UIKit to express colors, alerts, navigation controllers, focus bindings, or table cells. It exposes semantic state such as `saving` or `failed`; each UI translates that state into its own presentation.
+## Give the UI model one job
 
-The model is also not the domain. A title invariant still belongs in a domain value or use case if it must hold for widgets, imports, and background sync.
+`NoteListModel.save(_:)` calls `SaveNote`, then reloads committed notes. Search derives from the current notes instead of copying them into independently mutable arrays. The model is `@MainActor` and observable because its properties describe UI state. `NoteLibrary` is a `Sendable` struct, not a protocol named differently in each article.
 
-## Add the boundary selectively
+An observable object is useful when several views read changing presentation state. A pure value or a closure is enough when no shared lifetime is needed. MVVM does not require a view model for every label.
 
-A static row probably needs no model. An editor with validation, autosave, cancellation, and two UI adapters does. Judge the boundary by reduced duplication and easier behavior tests, not by whether the folder tree says MVVM.
+## Check the contract
+
+From `companion/field-notes` run:
+
+```bash
+./scripts/test-package.sh
+```
+
+The package tests cover duplicate requests, failure followed by retry, fixed draft identity/time, save failure preserving input, and both repository implementations. App-target tests cover the observable model separately. The package checks passed with Swift 6.3.3. SwiftUI rendering and UI journeys remain unverified until the Xcode scheme runs.
 
 ## Series navigation
 

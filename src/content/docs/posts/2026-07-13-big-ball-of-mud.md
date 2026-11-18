@@ -359,4 +359,4 @@ Architecture stays healthy when the cheapest ordinary change also moves the syst
 - [Functional Core, Imperative Shell](../../topics/cs/functional-core-imperative-shell/), a concrete boundary between decisions and side effects
 - [Team dynamics and technology laws](../../topics/cs/technology-laws/team-dynamics/), Conway's Law, Brooks's Law, and organizational constraints on software
 - [Integration tests](../../topics/testing/integration-tests/), testing real boundaries without relying on production as the first integration environment
-- [Composition over inheritance](../2026-04-24-composition-over-inheritance/), reducing coupling within object models and module designs
+- [Composition over inheritance](../2026-04-24-solid-principles/), reducing coupling within object models and module designs

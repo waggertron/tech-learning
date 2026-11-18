@@ -1,254 +1,140 @@
 ---
 slug: posts/series/zero-to-ios-hero
-title: Zero to iOS Hero, post series
-description: "A production-shaped path from the Swift language and Apple development tools through SwiftUI, UIKit, architecture, testing, shipping, platform capabilities, and complete app case studies."
+title: Zero to iOS Hero, reading guide
+description: "Swift exercises and a Field Notes app path, with separate Apple platform references and optional product design briefs."
 sidebar:
   label: zero to iOS hero
 ---
 
-Zero to iOS Hero teaches the layers that turn Swift source into an Apple platform product. The path begins with the language and toolchain, builds the same Field Notes product through SwiftUI and UIKit, separates product rules from framework code, and carries the result through testing and release work.
+Start with Swift exercises, then follow Field Notes through product design, SwiftUI, UIKit, architecture, and testing. Read the implementation evidence on each lesson: package execution, Apple SDK compilation, Simulator checks, and physical-device checks establish different things.
 
-Each post names its evidence boundary. Standard-library exercises can run in the browser's Swift 6.3.3 Linux environment. Apple SDK, Simulator, signing, entitlement, account, and physical-device claims require their matching Apple development surface.
+The core notebook path is separate from the reference guides and optional project assignments below. The design briefs describe proposed products, not completed applications.
 
-## Reading order
+## Core reading order
 
-### Orientation and development workflow
+### Orientation and tools
 
-1. [The Apple development map](../../2026-07-16-apple-development-map/), place Swift, Xcode, SDKs, frameworks, targets, schemes, runtimes, and devices into separate layers.
-2. [Xcode, simulators, devices, and Git](../../2026-07-16-xcode-simulators-devices-git/), follow a project through building, running, signing, and its first source-control checkpoint.
-3. [Learn by building and debugging](../../2026-07-16-learning-by-building-debugging/), use predictions, assertions, compiler diagnostics, LLDB, logs, documentation, and small experiments to shorten the feedback loop.
+1. [Zero to iOS Hero 1: The Apple development map](../../2026-07-16-apple-development-map/), Swift, Xcode, SDKs, frameworks, targets, schemes, Simulator runtimes, and devices placed into one development map.
+2. [Zero to iOS Hero 2: Xcode, simulators, devices, and Git](../../2026-07-16-xcode-simulators-devices-git/), The path from an Xcode project to simulated and physical destinations, with signing, diagnostics, Derived Data, and the first Git checkpoint.
+3. [Zero to iOS Hero 3: Learn by building and debugging](../../2026-07-16-learning-by-building-debugging/), A prediction-first Swift debugging loop using compiler diagnostics, assertions, LLDB breakpoints, variable inspection, logs, documentation, and small experiments.
 
-### Swift from first principles
+### Swift language
 
-4. [Values, variables, types, and inference](../../2026-07-16-swift-values-variables-types-inference/), use constants, mutation, annotations, and inference to model Field Notes data precisely.
-5. [Operators, conversion, and overflow](../../2026-07-16-swift-operators-conversion-overflow/), combine typed values, make numeric conversions explicit, and choose checked or wrapping arithmetic deliberately.
-6. [Control flow, ranges, and patterns](../../2026-07-16-swift-control-flow-patterns/), select branches, classify tuples, filter sequences, and repeat work with the construct that matches the rule.
-7. [Functions and API shape](../../2026-07-16-swift-functions-api-shape/), name behavior, design readable argument labels, and make results and mutation visible at the call site.
-8. [Optionals and absence](../../2026-07-16-swift-optionals-absence/), model missing input and results with binding, guard, chaining, coalescing, and explicit propagation.
-9. [Collections, sequences, and cost](../../2026-07-16-swift-collections-sequences-cost/), choose order, keyed lookup, uniqueness, and eager or lazy evaluation with their operation costs visible.
-10. [Strings, Unicode, and formatting](../../2026-07-16-swift-strings-unicode-formatting/), handle grapheme clusters, indexes, search keys, dates, measurements, and localized display boundaries.
-11. [Structures and value semantics](../../2026-07-16-swift-structures-value-semantics/), replace temporary tuples with a Field Note value and prove edits do not leak across copies.
-12. [Enumerations, associated values, and pattern matching](../../2026-07-16-swift-enumerations-associated-values-pattern-matching/), replace contradictory loading flags with one exhaustive state whose cases carry only relevant data.
-13. [Classes, identity, inheritance, and type casting](../../2026-07-16-swift-classes-identity-inheritance-type-casting/), model a shared editing session, separate reference identity from equality, and keep subclassing and casts deliberate.
-14. [Properties, methods, subscripts, initialization, and deinitialization](../../2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization/), build a validated Tag whose construction and mutation paths preserve its invariants.
-15. [Closures, function types, capture, and higher-order operations](../../2026-07-16-swift-closures-function-types-capture-higher-order-operations/), pass ranking and filtering rules as typed values and make live and snapshot capture policies explicit.
-16. [Protocols, extensions, and protocol-oriented design](../../2026-07-16-swift-protocols-extensions-protocol-oriented-design/), isolate wall time behind a small Clock capability and compare existential, generic, opaque, and composed uses.
-17. [Errors, Result, throwing APIs, and recovery](../../2026-07-17-swift-errors-result-throwing-recovery/), decode a typed import, translate provider failures at the boundary, preserve outcomes, and choose recovery without erasing the cause.
-18. [Generics, associated types, existentials, and opaque types](../../2026-07-17-swift-generics-associated-types-existentials-opaque-types/), page typed values and compare caller-selected generics, conformer-selected associated types, runtime boxes, and hidden concrete returns.
-19. [ARC, ownership, capture lists, and memory safety](../../2026-07-18-swift-arc-ownership-capture-lists-memory-safety/), trace a strong editor and callback cycle, remove its owning edge, and choose weak or unowned captures from lifetime rules.
-20. [Async and await, tasks, groups, cancellation, and continuations](../../2026-07-18-swift-async-await-tasks-groups-cancellation-continuations/), load note assets with structured child tasks, observe cancellation, and bridge one callback exactly once.
-21. [Actors, global actors, Sendable, and data isolation](../../2026-07-18-swift-actors-global-actors-sendable-data-isolation/), protect revision bookkeeping inside an actor and keep UI-observed status on the main actor.
-22. [Property wrappers, result builders, and macros](../../2026-07-19-swift-property-wrappers-result-builders-macros/), inspect generated behavior through a clamped property, a validation builder, and the macro expansion boundary.
-23. [Modules, packages, access control, interoperability, and API design](../../2026-07-19-swift-modules-packages-access-control-interoperability-api-design/), shape the real FieldNotesCore package around a small public contract and keep interop details at adapters.
+4. [Zero to iOS Hero 4: Values, variables, types, and inference](../../2026-07-16-swift-values-variables-types-inference/), Use constants, variables, type annotations, and Swift's inference rules to model facts without reaching for mutation or Any.
+5. [Zero to iOS Hero 5: Operators, conversion, and overflow](../../2026-07-16-swift-operators-conversion-overflow/), Build typed expressions, convert numeric values deliberately, clamp a score, and distinguish checked arithmetic from wrapping overflow.
+6. [Zero to iOS Hero 6: Control flow, ranges, and patterns](../../2026-07-16-swift-control-flow-patterns/), Express decisions and repetition with if, switch, loops, ranges, where clauses, and Swift pattern matching.
+7. [Zero to iOS Hero 7: Functions and API shape](../../2026-07-16-swift-functions-api-shape/), Design Swift functions whose names, argument labels, parameters, defaults, returns, and mutation behavior make call sites readable.
+8. [Zero to iOS Hero 8: Optionals and absence](../../2026-07-16-swift-optionals-absence/), Represent missing values explicitly and choose among optional binding, guard, chaining, nil coalescing, propagation, and force unwrapping.
+9. [Zero to iOS Hero 9: Collections, sequences, and cost](../../2026-07-16-swift-collections-sequences-cost/), Choose arrays for order, dictionaries for keyed lookup, sets for uniqueness, and lazy sequences when deferred work matches consumption.
+10. [Zero to iOS Hero 10: Strings, Unicode, and formatting](../../2026-07-16-swift-strings-unicode-formatting/), Treat Swift text as Unicode grapheme clusters, normalize search keys deliberately, use String.Index, and format dates and measurements at display boundaries.
+11. [Zero to iOS Hero 11: Structures and value semantics](../../2026-07-16-swift-structures-value-semantics/), Model a Field Note as a structure, distinguish stored values from instances, and prove that editing one copy leaves the original unchanged.
+12. [Zero to iOS Hero 12: Enumerations, associated values, and pattern matching](../../2026-07-16-swift-enumerations-associated-values-pattern-matching/), Replace contradictory loading flags with one exhaustive Swift enumeration whose cases carry only the data each state needs.
+13. [Zero to iOS Hero 13: Classes, identity, inheritance, and type casting](../../2026-07-16-swift-classes-identity-inheritance-type-casting/), Use a shared editing session to distinguish reference identity from value equality, then keep inheritance and runtime casting inside deliberate boundaries.
+14. [Zero to iOS Hero 14: Properties, methods, subscripts, initialization, and deinitialization](../../2026-07-16-swift-properties-methods-subscripts-initialization-deinitialization/), Build a validated Tag value whose properties, methods, subscript, initializer, and lifecycle boundaries protect its invariants.
+15. [Zero to iOS Hero 15: Closures, function types, capture, and higher-order operations](../../2026-07-16-swift-closures-function-types-capture-higher-order-operations/), Pass Field Notes behavior as typed values, compose collection operations, and make closure capture and lifetime choices visible.
+16. [Zero to iOS Hero 16: Protocols, extensions, and protocol-oriented design](../../2026-07-16-swift-protocols-extensions-protocol-oriented-design/), Define a small Clock capability, supply deterministic and composed implementations, and choose carefully between generics, existentials, and default behavior.
+17. [Zero to iOS Hero 17: Errors, Result, throwing APIs, and recovery](../../2026-07-17-swift-errors-result-throwing-recovery/), Model import failures as typed values, map transport details at a boundary, preserve deferred outcomes with Result, and choose recovery from the failure contract.
+18. [Zero to iOS Hero 18: Generics, associated types, existentials, and opaque types](../../2026-07-17-swift-generics-associated-types-existentials-opaque-types/), Build a generic page and protocol-backed note source while preserving type relationships across constraints, associated types, existentials, and opaque returns.
+19. [ARC, ownership, capture lists, and memory safety](../../2026-07-18-swift-arc-ownership-capture-lists-memory-safety/), Trace strong reference graphs, reproduce an editor callback cycle, and choose weak or unowned captures from explicit lifetime rules.
+20. [Async and await, tasks, groups, cancellation, and continuations](../../2026-07-18-swift-async-await-tasks-groups-cancellation-continuations/), Load note assets with structured child tasks, propagate cancellation, and bridge one callback without losing its completion contract.
+21. [Actors, global actors, Sendable, and data isolation](../../2026-07-18-swift-actors-global-actors-sendable-data-isolation/), Protect sync bookkeeping with an actor, move UI-observed state to MainActor, and define which values can cross concurrency boundaries.
+22. [Property wrappers, result builders, and macros](../../2026-07-19-swift-property-wrappers-result-builders-macros/), Inspect three forms of generated Swift, build a clamped property and validation builder, and decide when compiler expansion clarifies an API.
+23. [Modules, packages, access control, interoperability, and API design](../../2026-07-19-swift-modules-packages-access-control-interoperability-api-design/), Extract a reusable FieldNotesCore library, shape its public surface, test it through SwiftPM, and keep C and Objective-C details at adapter boundaries.
 
 ### Product and interface design
 
-24. [From app idea to user problem](../../2026-07-19-ios-app-idea-user-problem/), define the Field Notes user, situation, smallest useful release, research risks, and measurable outcome before choosing screens.
-25. [User journeys, tasks, states, and edge cases](../../2026-07-19-ios-user-journeys-tasks-states-edge-cases/), model capture, offline work, permission denial, interruption, deletion, and recovery as complete behavior.
-26. [Information architecture and navigation](../../2026-07-19-ios-information-architecture-navigation/), map notes, places, search, detail, editing, and settings across compact and regular presentations.
-27. [Interaction design and feedback](../../2026-07-19-ios-interaction-design-feedback/), specify save, autosave, focus, deletion, undo, progress, failure, and gesture alternatives as observable transitions.
-28. [Visual systems, HIG, typography, color, symbols, and materials](../../2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials/), define semantic visual roles and audit their appearance, contrast, content-size, and motion behavior.
-29. [Adaptive design for iPhone, iPad, and windows](../../2026-07-19-ios-adaptive-design-iphone-ipad-windows/), transform one route model across stack and split presentations, resizing, multiple scenes, touch, pointer, and keyboard input.
-30. [Accessibility, localization, and inclusive product design](../../2026-07-19-ios-accessibility-localization-inclusive-product-design/), audit the editor across assistive technologies, text sizes, contrast, motion, input methods, languages, and right-to-left layout.
+24. [From app idea to user problem](../../2026-07-19-ios-app-idea-user-problem/), Turn Field Notes from a feature idea into a specific user, situation, problem statement, smallest release, and measurable outcome.
+25. [User journeys, tasks, states, and edge cases](../../2026-07-19-ios-user-journeys-tasks-states-edge-cases/), Model capture, retrieval, editing, deletion, permission denial, offline work, failures, and recovery as complete Field Notes journeys.
+26. [Information architecture and navigation](../../2026-07-19-ios-information-architecture-navigation/), Organize Field Notes around notes, places, search, editing, and settings, then map those objects into compact and regular navigation without losing selection.
+27. [Interaction design and feedback](../../2026-07-19-ios-interaction-design-feedback/), Specify Field Notes controls, focus, save progress, autosave, destructive deletion, undo, errors, and gesture alternatives as observable state transitions.
+28. [Visual systems, HIG, typography, color, symbols, and materials](../../2026-07-19-ios-visual-systems-hig-typography-color-symbols-materials/), Define semantic Field Notes tokens for type, spacing, color, shape, symbols, materials, and motion, then audit their behavior across appearance and accessibility settings.
+29. [Adaptive design for iPhone, iPad, and windows](../../2026-07-19-ios-adaptive-design-iphone-ipad-windows/), Transform one Field Notes navigation model across compact phones, regular iPads, resized windows, multiple scenes, touch, pointer, and keyboard input.
+30. [Accessibility, localization, and inclusive product design](../../2026-07-19-ios-accessibility-localization-inclusive-product-design/), Audit the Field Notes editor for VoiceOver, Dynamic Type, contrast, motion, keyboard input, right-to-left layout, and locale-aware content before implementation.
 
-### SwiftUI in depth
+### SwiftUI
 
-31. [SwiftUI's value-view mental model](../../2026-07-19-swiftui-value-view-mental-model/), separate ephemeral view values from framework-owned storage and trace how identity and dependency reads drive updates.
-32. [SwiftUI composition, modifiers, styles, and components](../../2026-07-19-swiftui-composition-modifiers-styles-components/), extract rows, chips, modifiers, and button styles around clear visual and interaction contracts.
-33. [SwiftUI layout, safe areas, stacks, grids, and custom layout](../../2026-07-19-swiftui-layout-safe-areas-stacks-grids-custom-layout/), follow proposal, measurement, and placement from standard containers to a wrapping tag layout.
-34. [SwiftUI controls, forms, validation, focus, and keyboards](../../2026-07-19-swiftui-controls-forms-validation-focus-keyboard/), build a draft-based editor with native inputs, validation recovery, focus, and honest cancellation.
-35. [SwiftUI state, bindings, source of truth, and identity](../../2026-07-19-swiftui-state-bindings-source-truth-identity/), give each mutable fact one owner, derive secondary values, and pass narrow mutation access.
-36. [SwiftUI Observation, environment, and dependency flow](../../2026-07-19-swiftui-observation-environment-dependency-flow/), connect observable presentation models to explicit application contracts and scoped context.
-37. [SwiftUI lists, grids, scrolling, search, selection, and refresh](../../2026-07-19-swiftui-lists-grids-scrolling-search-selection-refresh/), derive one visible collection with stable identity and preserve useful content through refresh.
-38. [SwiftUI navigation, presentation, alerts, and deep links](../../2026-07-19-swiftui-navigation-presentation-alerts-deep-links/), model routes and focused presentations as validated, restorable data.
-39. [SwiftUI async work, loading states, networking, and images](../../2026-07-19-swiftui-async-loading-networking-images/), tie cancellable requests to identity and render first load, refresh, failure, retry, and cached resources honestly.
-40. [SwiftUI with SwiftData, queries, migration, and test stores](../../2026-07-19-swiftui-swiftdata-queries-relationships-migration-test-stores/), separate persistent models from domain rules and test fresh, disk, relationship, and migration behavior explicitly.
-41. [SwiftUI animation, gestures, drag and drop, and drawing](../../2026-07-19-swiftui-animation-transitions-gestures-drag-drop-drawing/), explain state changes with motion while preserving alternate input and reduced-motion paths.
-42. [SwiftUI scenes, windows, navigation, and commands](../../2026-07-19-swiftui-scenes-windows-navigation-commands-platform/), give each window coherent state and adapt shared route intent to system-managed presentations.
-43. [SwiftUI previews, tests, accessibility, and performance](../../2026-07-19-swiftui-previews-testing-ui-accessibility-performance/), place fixtures, behavior tests, UI journeys, audits, and measurements at the distance that proves each risk.
-44. [SwiftUI Field Notes capstone](../../2026-07-19-swiftui-field-notes-capstone/), assemble the local-first release loop, architecture, product states, acceptance checks, and honest evidence ledger.
+31. [SwiftUI's value-view mental model](../../2026-07-19-swiftui-value-view-mental-model/), Trace what SwiftUI recomputes, where state persists, and how identity and dependency reads control updates.
+32. [SwiftUI composition, modifiers, styles, and components](../../2026-07-19-swiftui-composition-modifiers-styles-components/), Build reusable SwiftUI rows, tag chips, and button styles while keeping data flow and product rules visible.
+33. [SwiftUI layout, safe areas, stacks, grids, and custom layout](../../2026-07-19-swiftui-layout-safe-areas-stacks-grids-custom-layout/), Follow SwiftUI's proposal and response layout process from stacks and grids to an adaptive tag layout.
+34. [SwiftUI controls, forms, validation, focus, and keyboards](../../2026-07-19-swiftui-controls-forms-validation-focus-keyboard/), Build a draft-based note editor with native controls, focused fields, validation, submit behavior, and unsaved-change handling.
+35. [SwiftUI state, bindings, source of truth, and identity](../../2026-07-19-swiftui-state-bindings-source-truth-identity/), Place transient UI state at one owner, derive secondary facts, and pass narrow bindings without duplicating truth.
+36. [SwiftUI Observation, environment, and dependency flow](../../2026-07-19-swiftui-observation-environment-dependency-flow/), Connect observable models, bindable editing, environment context, and injected services without creating hidden global dependencies.
+37. [SwiftUI lists, grids, scrolling, search, selection, and refresh](../../2026-07-19-swiftui-lists-grids-scrolling-search-selection-refresh/), Render changing note collections with stable identity, one data pipeline, search, selection, and refresh behavior.
+38. [SwiftUI navigation, presentation, alerts, and deep links](../../2026-07-19-swiftui-navigation-presentation-alerts-deep-links/), Represent routes, sheets, alerts, and external note URLs as coherent data that can validate and restore.
+39. [SwiftUI async work, loading states, networking, and images](../../2026-07-19-swiftui-async-loading-networking-images/), Tie cancellable loading to view identity, preserve useful content during refresh, and keep networking and image caching behind explicit contracts.
+40. [SwiftUI with SwiftData, queries, migration, and test stores](../../2026-07-19-swiftui-swiftdata-queries-relationships-migration-test-stores/), Connect SwiftData models, queries, relationships, disk containers, migrations, and isolated test stores without losing domain boundaries.
+41. [SwiftUI animation, gestures, drag and drop, and drawing](../../2026-07-19-swiftui-animation-transitions-gestures-drag-drop-drawing/), Use state-driven motion, transitions, gesture precedence, transferable tags, and custom drawing without obscuring interaction.
+42. [SwiftUI scenes, windows, navigation, and commands](../../2026-07-19-swiftui-scenes-windows-navigation-commands-platform/), Give each window coherent state, adapt navigation to available space, and expose system commands without assuming an iPhone-shaped app.
+43. [SwiftUI previews, tests, accessibility, and performance](../../2026-07-19-swiftui-previews-testing-ui-accessibility-performance/), Place fixtures, Swift Testing checks, UI journeys, accessibility audits, and measurements at the distance that proves each risk.
+44. [SwiftUI Field Notes capstone](../../2026-07-19-swiftui-field-notes-capstone/), Assemble a local-first Field Notes app from explicit product states, domain contracts, SwiftUI adapters, deterministic tests, and release evidence.
 
-### UIKit in depth
+### UIKit
 
-45. [UIKit's event-driven mental model and app lifecycle](../../2026-07-19-uikit-event-driven-mental-model-app-lifecycle/), trace application, scene, window, controller, responder, and run-loop ownership.
-46. [UIKit views, controls, target-action, and delegation](../../2026-07-19-uikit-views-controls-configuration-target-action-delegation/), configure reusable views and controls that report intent without owning domain decisions.
-47. [UIKit Auto Layout, stack views, guides, and priorities](../../2026-07-19-uikit-auto-layout-stacks-guides-priorities-debugging/), express adaptive relationships and debug conflicts from product rules.
-48. [UIKit view-controller lifecycle and containment](../../2026-07-19-uikit-view-controller-lifecycle-containment-composition/), compose loading, empty, list, and error regions with complete ownership transitions.
-49. [UIKit navigation, tabs, split views, and coordinators](../../2026-07-19-uikit-navigation-tabs-split-views-coordinators/), translate shared routes into container-controller behavior across compact and regular presentations.
-50. [UIKit sheets, popovers, alerts, activities, and pickers](../../2026-07-19-uikit-sheets-popovers-alerts-activities-system-pickers/), choose presentation from task scope and keep system-owned work in system controllers.
-51. [UIKit responder chain, gestures, menus, and input](../../2026-07-19-uikit-responder-chain-gestures-menus-drag-drop-input/), route touch, pointer, keyboard, menu, gesture, and drag input to one intentional action path.
-52. [UIKit text, forms, keyboards, focus, and validation](../../2026-07-19-uikit-text-forms-keyboards-focus-validation/), edit a temporary draft with deliberate focus, keyboard layout, validation, and failure recovery.
-53. [UIKit table views, reuse, prefetching, and diffable data](../../2026-07-19-uikit-table-views-reuse-prefetching-diffable-data/), drive rows from stable IDs, reusable configuration, deterministic snapshots, and cancellable prefetching.
-54. [UIKit collection views and compositional layout](../../2026-07-19-uikit-collection-views-compositional-layout-cells-configuration/), separate snapshot identity, adaptive section geometry, and reusable cell presentation.
-55. [UIKit scrolling, drawing, layers, animation, and haptics](../../2026-07-19-uikit-scrolling-drawing-layers-animation-haptics/), choose the rendering layer from measured interaction and performance needs.
-56. [UIKit observation, concurrency, networking, and persistence](../../2026-07-19-uikit-observation-concurrency-networking-persistence/), render observable state on the main actor and keep effects behind cancellable adapters.
-57. [UIKit traits, accessibility, localization, and restoration](../../2026-07-19-uikit-traits-appearance-accessibility-localization-restoration/), respond to changing environments and restore route intent by stable identity.
-58. [UIKit Field Notes capstone](../../2026-07-19-uikit-field-notes-capstone/), assemble feature parity through UIKit's lifecycle, containers, collections, input, and evidence model.
+45. [UIKit's event-driven mental model and app lifecycle](../../2026-07-19-uikit-event-driven-mental-model-app-lifecycle/), Trace UIKit from application and scene setup through the run loop, responder chain, view controllers, and main-thread interface updates.
+46. [UIKit views, controls, target-action, and delegation](../../2026-07-19-uikit-views-controls-configuration-target-action-delegation/), Build configured note rows and controls with target-action and delegation while keeping domain decisions outside reusable views.
+47. [UIKit Auto Layout, stack views, guides, and priorities](../../2026-07-19-uikit-auto-layout-stacks-guides-priorities-debugging/), Express an adaptive note editor with anchors, safe-area guides, stack views, Dynamic Type, priorities, and constraint debugging.
+48. [UIKit view-controller lifecycle and containment](../../2026-07-19-uikit-view-controller-lifecycle-containment-composition/), Compose loading, empty, list, and error regions with explicit controller ownership and the complete child-containment sequence.
+49. [UIKit navigation, tabs, split views, and coordinators](../../2026-07-19-uikit-navigation-tabs-split-views-coordinators/), Translate shared route intent into navigation and split-view containers while keeping controller presentation ownership explicit.
+50. [UIKit sheets, popovers, alerts, activities, and pickers](../../2026-07-19-uikit-sheets-popovers-alerts-activities-system-pickers/), Choose push, modal, popover, alert, activity, and system-picker presentations from task scope and container ownership.
+51. [UIKit responder chain, gestures, menus, and input](../../2026-07-19-uikit-responder-chain-gestures-menus-drag-drop-input/), Trace touch, pointer, keyboard, menu, gesture, and drag events to one intentional handler with accessible alternatives.
+52. [UIKit text, forms, keyboards, focus, and validation](../../2026-07-19-uikit-text-forms-keyboards-focus-validation/), Build a draft-based UIKit editor with text fields, text views, input traits, focus traversal, keyboard layout, and validation recovery.
+53. [UIKit table views, reuse, prefetching, and diffable data](../../2026-07-19-uikit-table-views-reuse-prefetching-diffable-data/), Drive a searchable note table from stable identifiers, reusable cells, deterministic snapshots, and cancellable prefetch work.
+54. [UIKit collection views and compositional layout](../../2026-07-19-uikit-collection-views-compositional-layout-cells-configuration/), Build list, grid, and attachment sections from compositional layout, registrations, content configurations, and stable diffable identifiers.
+55. [UIKit scrolling, drawing, layers, animation, and haptics](../../2026-07-19-uikit-scrolling-drawing-layers-animation-haptics/), Choose view animation, Core Animation, custom drawing, transitions, and haptics from measured interaction and rendering needs.
+56. [UIKit observation, concurrency, networking, and persistence](../../2026-07-19-uikit-observation-concurrency-networking-persistence/), Bind observable presentation state to UIKit with cancellable tasks, explicit main-actor rendering, and injected network and storage boundaries.
+57. [UIKit traits, accessibility, localization, and restoration](../../2026-07-19-uikit-traits-appearance-accessibility-localization-restoration/), Adapt UIKit to changing traits, appearance, assistive technology, locale, and scene restoration without freezing launch-time assumptions.
+58. [UIKit Field Notes capstone](../../2026-07-19-uikit-field-notes-capstone/), Assemble Field Notes with UIKit lifecycle, containers, modern collections, input, local data, accessibility, restoration, and focused evidence.
 
-### iOS app architecture and design
+### Architecture
 
-59. [iOS architecture starts with pressure](../../2026-07-19-ios-architecture-starts-with-pressure/), score boundaries by change, test, integration, lifetime, criticality, and team pressure before choosing a pattern.
-60. [MVC and controller boundaries](../../2026-07-19-ios-mvc-controller-boundaries/), keep UIKit controllers focused on lifecycle, events, navigation, and rendering while ordinary Swift types own formatting and validation.
-61. [MVVM and presentation models](../../2026-07-19-ios-mvvm-presentation-models/), share semantic editor state, derived values, and commands across SwiftUI and UIKit without importing either framework.
-62. [Unidirectional data flow, reducers, and state machines](../../2026-07-19-ios-unidirectional-data-flow-reducers-state-machines/), express synchronization as explicit states, events, transitions, and controlled effects.
-63. [Domain models, value objects, invariants, and use cases](../../2026-07-19-ios-domain-models-value-objects-invariants-use-cases/), protect product meaning with validated values and framework-independent application actions.
-64. [Dependency injection and the composition root](../../2026-07-19-ios-dependency-injection-composition-root/), select clocks, IDs, stores, APIs, and analytics once at startup instead of hiding them in global state.
-65. [Coordinators, routers, deep links, and restoration](../../2026-07-19-ios-coordinators-routers-deep-links-restoration/), parse one stable route model and adapt it to SwiftUI and UIKit navigation.
-66. [Repositories, gateways, clients, and ports and adapters](../../2026-07-19-ios-repositories-gateways-clients-ports-adapters/), define purpose-named application contracts only where substitution, tests, transactions, or volatile integrations justify them.
-67. [Modularization with Swift Package Manager](../../2026-07-19-ios-modularization-swift-package-manager/), enforce an inward dependency graph when reuse, ownership, safety, or measured build pressure earns a module.
-68. [Data architecture, source of truth, caching, offline sync, and conflict](../../2026-07-19-ios-data-architecture-source-truth-cache-offline-sync-conflict/), keep durable local work visible while an outbox and explicit conflict policy reconcile server state.
-69. [Concurrency architecture, isolation, cancellation, and lifecycle](../../2026-07-19-ios-concurrency-architecture-isolation-cancellation-lifecycle/), assign mutable state to owners and connect every task to a lifetime with a real cancellation path.
-70. [Architecture tests, refactoring seams, decisions, and tradeoffs](../../2026-07-19-ios-architecture-tests-refactoring-decisions-tradeoffs/), prove boundaries with behavior at several distances and evolve them through small recorded decisions.
+59. [iOS architecture starts with pressure](../../2026-07-19-ios-architecture-starts-with-pressure/), Score Field Notes boundaries by change, test, integration, lifetime, criticality, and team pressure before choosing an architecture pattern.
+60. [MVC and controller boundaries](../../2026-07-19-ios-mvc-controller-boundaries/), Keep UIKit controllers focused on lifecycle and event routing by extracting formatting and validation into ordinary Swift types.
+61. [MVVM and presentation models](../../2026-07-19-ios-mvvm-presentation-models/), Use a framework-neutral editor presentation model when derived state, commands, and asynchronous work need one testable owner.
+62. [Unidirectional data flow, reducers, and state machines](../../2026-07-19-ios-unidirectional-data-flow-reducers-state-machines/), Make editing and synchronization transitions explicit with state, events, pure reducers, and controlled effects.
+63. [Domain models, value objects, invariants, and use cases](../../2026-07-19-ios-domain-models-value-objects-invariants-use-cases/), Protect Field Notes business meaning with validated values and use cases that remain independent of screens, databases, and APIs.
+64. [Dependency injection and the composition root](../../2026-07-19-ios-dependency-injection-composition-root/), Select clocks, identifiers, storage, APIs, and analytics once at startup instead of hiding them in global state.
+65. [Coordinators, routers, deep links, and restoration](../../2026-07-19-ios-coordinators-routers-deep-links-restoration/), Translate one validated route model into SwiftUI and UIKit navigation while keeping navigation frameworks outside the domain.
+66. [Repositories, gateways, clients, and ports and adapters](../../2026-07-19-ios-repositories-gateways-clients-ports-adapters/), Define purpose-named application ports where substitution, testing, or failure policy justifies an external boundary.
+67. [Modularization with Swift Package Manager](../../2026-07-19-ios-modularization-swift-package-manager/), Extract domain, application, and selected adapters into modules only when dependency, ownership, reuse, or build pressure earns the split.
+68. [Data architecture, source of truth, caching, offline sync, and conflict](../../2026-07-19-ios-data-architecture-source-truth-cache-offline-sync-conflict/), Treat durable local state as visible truth while an outbox, cursor, idempotent operations, and conflict policy reconcile server changes.
+69. [Concurrency architecture, isolation, cancellation, and lifecycle](../../2026-07-19-ios-concurrency-architecture-isolation-cancellation-lifecycle/), Assign mutable state to explicit isolation domains and connect every asynchronous task to a request, feature, scene, or app lifetime.
 
-### Testing as a development discipline
+### Testing and production foundations
 
-71. [Testing strategy, seams, and confidence](../../2026-07-19-ios-testing-strategy-seams-confidence/), place each risk at the lowest testing distance that can produce trustworthy environment-specific evidence.
-72. [Swift Testing fundamentals and parameterized tests](../../2026-07-19-swift-testing-fundamentals-parameterized-tests/), express focused behavior with suites, expectations, requirements, traits, arguments, and async tests.
-73. [XCTest, XCUITest, test plans, and framework coexistence](../../2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/), retain XCTest for UI automation, performance, established suites, and configurable Xcode matrices.
-74. [Deterministic dependencies and concurrency tests](../../2026-07-19-ios-deterministic-dependencies-concurrency-tests/), control time, identity, events, cancellation, and ordering instead of sleeping or relying on scheduler luck.
-75. [SwiftUI, UIKit, navigation, accessibility, and UI behavior tests](../../2026-07-19-ios-swiftui-uikit-navigation-accessibility-ui-tests/), run one product acceptance contract through framework-specific drivers and retain separate accessibility evidence.
-76. [Persistence, migration, networking, and contract tests](../../2026-07-19-ios-persistence-migration-network-contract-tests/), exercise adapters against shared behavior, historical fixtures, corrupt inputs, retries, and transactional failure.
-77. [Performance, memory, energy, launch, and device matrices](../../2026-07-19-ios-performance-memory-energy-launch-device-matrices/), set journey budgets and retain distinct Simulator, device, thermal, and release evidence.
-78. [CI, flake control, test data, release qualification, and evidence](../../2026-07-19-ios-ci-flake-control-test-data-release-evidence/), layer gates, preserve first-failure artifacts, govern quarantine, and qualify releases claim by claim.
+70. [Testing strategy, seams, and confidence](../../2026-07-19-ios-testing-strategy-seams-confidence/), Place each Field Notes risk at the lowest testing distance that can produce trustworthy evidence without mistaking coverage for confidence.
+71. [Swift Testing fundamentals and parameterized tests](../../2026-07-19-swift-testing-fundamentals-parameterized-tests/), Express focused Swift behavior with tests, expectations, requirements, tags, traits, arguments, and async confirmations.
+72. [XCTest, XCUITest, test plans, and framework coexistence](../../2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/), Keep XCTest where UI automation, performance metrics, existing suites, and Xcode test plans provide unique value alongside Swift Testing.
+73. [Deterministic dependencies and concurrency tests](../../2026-07-19-ios-deterministic-dependencies-concurrency-tests/), Control clocks, identifiers, randomness, event streams, and cancellation so concurrency tests observe behavior instead of scheduler luck.
+74. [Persistence, migration, networking, and contract tests](../../2026-07-19-ios-persistence-migration-network-contract-tests/), Exercise storage and HTTP adapters against shared contracts, versioned fixtures, corrupt inputs, retries, and transactional failure paths.
+75. [Performance, memory, energy, launch, and device matrices](../../2026-07-19-ios-performance-memory-energy-launch-device-matrices/), Set user-centered budgets, measure with XCTest and Instruments, and keep Simulator, device, thermal, and release evidence distinct.
+76. [CI, flake control, test data, release qualification, and evidence](../../2026-07-19-ios-ci-flake-control-test-data-release-evidence/), Govern deterministic fixtures, OS matrices, artifacts, retries, quarantine, and release gates so failures stay visible and actionable.
+77. [Networking, authentication, real-time events, and resilience](../../2026-07-19-ios-networking-authentication-realtime-resilience/), Build a typed URLSession boundary with safe authentication refresh, explicit pagination, bounded retries, cancellation, and resilient event streams.
 
-### Production engineering and shipping
+## Reference guides
 
-79. [Networking, authentication, real-time events, and resilience](../../2026-07-19-ios-networking-authentication-realtime-resilience/), build typed transport, single-flight authentication refresh, bounded retries, explicit pagination, and recoverable streams without exposing credentials.
-80. [Persistence, Core Data, files, caches, migrations, and secure storage](../../2026-07-19-ios-persistence-core-data-files-caches-migrations-secure-storage/), choose storage by durability, query, size, secrecy, migration, and recovery requirements.
-81. [Security, privacy, permissions, and platform policy](../../2026-07-19-ios-security-privacy-permissions-platform-policy/), request least privilege in context and preserve useful denial paths.
-82. [Background work, notifications, deep links, and app extensions](../../2026-07-19-ios-background-work-notifications-deep-links-app-extensions/), treat system re-entry as bounded adapters around shared routes and use cases.
-83. [Logging, analytics, crashes, privacy, and feature flags](../../2026-07-19-ios-logging-analytics-crashes-privacy-feature-flags/), collect typed minimized evidence and govern operational flags explicitly.
-84. [Instruments, responsiveness, energy, launch, and networking](../../2026-07-19-ios-instruments-responsiveness-energy-launch-networking/), reproduce a budget failure, trace its dominant cost, and verify one focused fix.
-85. [Build settings, signing, entitlements, CI, dependencies, and release configuration](../../2026-07-19-ios-build-settings-signing-entitlements-ci-dependencies-release-configuration/), produce auditable environment-specific archives without putting secrets in source.
-86. [TestFlight, App Store review, launch, observability, and evolution](../../2026-07-19-ios-testflight-app-store-review-launch-observability-evolution/), carry an archive through beta evidence, truthful review material, controlled rollout, support, and rollback.
+- [iOS production readiness: storage, privacy, and release](../../2026-07-19-ios-persistence-core-data-files-caches-migrations-secure-storage/)
+- [Background work: checkpoint, expire, and resume](../../2026-07-19-ios-background-work-notifications-deep-links-app-extensions/)
+- [Choosing an Apple platform for one product](../../2026-07-19-one-product-across-apple-platforms/)
+- [Choosing Apple capabilities by the user problem](../../2026-07-19-widgetkit-live-activities/)
 
-### Apple ecosystem and capability atlas
+## Optional product design briefs
 
-87. [One product across Apple platforms](../../2026-07-19-one-product-across-apple-platforms/), share domain behavior while giving each device its own capabilities, navigation, input, and lifecycle.
-88. [iPadOS, multitasking, pointer, keyboard, Pencil, and documents](../../2026-07-19-ipados-multitasking-pointer-keyboard-pencil-documents/), build independent adaptive workspaces with alternate input and document boundaries.
-89. [macOS with SwiftUI](../../2026-07-19-macos-swiftui-scenes-commands-windows-settings-tables-documents/), make windows, documents, menus, settings, tables, toolbars, and keyboard access primary surfaces.
-90. [AppKit, Mac Catalyst, and framework choice](../../2026-07-19-appkit-mac-catalyst-framework-choice/), choose a UI stack by interaction quality, control depth, team knowledge, and measured reuse.
-91. [watchOS app structure and Watch connectivity](../../2026-07-19-watchos-app-structure-watch-connectivity/), divide glanceable capture, independent work, phone coordination, and shared rules.
-92. [Workouts, complications, Smart Stack, and watch constraints](../../2026-07-19-watchos-workouts-complications-smart-stack-constraints/), design sessions and timelines around wrist interaction, privacy, battery, and system scheduling.
-93. [tvOS focus, remote input, shelves, and navigation](../../2026-07-19-tvos-focus-remote-input-shelves-navigation/), replace direct touch with predictable focus identity and ten-foot hierarchy.
-94. [AVKit, AVFoundation, playback, streaming, and media sessions](../../2026-07-19-avkit-avfoundation-playback-streaming-media-sessions/), compose system playback, interruptions, remote controls, subtitles, and durable position.
-95. [visionOS windows, volumes, ornaments, and spatial input](../../2026-07-19-visionos-windows-volumes-ornaments-spatial-input/), choose the smallest spatial presentation that serves the task and preserves comfort.
-96. [RealityKit, ARKit, immersive spaces, comfort, and assets](../../2026-07-19-realitykit-arkit-immersive-spaces-comfort-assets/), model entities, tracking quality, gestures, assets, performance, and nonspatial fallback.
-97. [WidgetKit and Live Activities](../../2026-07-19-widgetkit-live-activities/), publish glanceable timelines and bounded live progress without treating extensions as always running.
-98. [App Intents, Shortcuts, Spotlight, and system actions](../../2026-07-19-app-intents-shortcuts-spotlight-system-actions/), expose stable entities and application commands outside the app.
-99. [CloudKit, iCloud containers, sharing, and sync](../../2026-07-19-cloudkit-icloud-containers-sharing-sync/), keep Apple's cloud stack behind local-first sync, account, conflict, and sharing policy.
-100. [MapKit, Core Location, geocoding, and WeatherKit](../../2026-07-19-mapkit-core-location-geocoding-weatherkit/), add optional place and weather context with proportional access, caching, and fallback.
-101. [Camera, PhotoKit, image pipelines, and Vision](../../2026-07-19-camera-photokit-image-pipelines-vision/), acquire, orient, store, thumbnail, analyze, and delete images with bounded memory and consent.
-102. [Audio, speech, recording, and interruptions](../../2026-07-19-audio-speech-recording-interruptions/), model recording, routes, interruptions, permissions, transcription, and recovery explicitly.
-103. [Video capture, editing, playback, and streaming architecture](../../2026-07-19-video-capture-editing-playback-streaming-architecture/), separate capture, timed assets, composition, export, playback, and delivery.
-104. [Core Bluetooth, nearby interaction, accessories, and connectivity](../../2026-07-19-core-bluetooth-nearby-interaction-accessories-connectivity/), treat nearby hardware as a stateful protocol with bounded discovery, framing, and recovery.
-105. [HealthKit, WorkoutKit, and health-data design](../../2026-07-19-healthkit-workoutkit-health-data-design/), preserve units and provenance while minimizing authorization, retention, and export.
-106. [Core ML, Vision, Natural Language, and on-device intelligence](../../2026-07-19-core-ml-vision-natural-language-on-device-intelligence/), place versioned inference behind measured accuracy, confidence, performance, and fallback contracts.
-107. [StoreKit, subscriptions, offers, and entitlement state](../../2026-07-19-storekit-subscriptions-offers-entitlement-state/), derive durable access from verified transaction history and lifecycle state.
-108. [Apple Pay, passes, Wallet, and transaction UX](../../2026-07-19-apple-pay-passes-wallet-transaction-ux/), validate eligible physical transactions and durable pass state without storing payment credentials.
-109. [Games, GameKit, SpriteKit, SceneKit, and Metal choices](../../2026-07-19-games-gamekit-spritekit-scenekit-metal-choices/), choose scene, service, and rendering layers from mechanics and measured needs.
-110. [Home, Matter, CarPlay, files, collaboration, and specialized extensions](../../2026-07-20-home-matter-carplay-files-collaboration-specialized-extensions/), evaluate specialized frameworks, entitlements, targets, and document flows without coupling the core.
-111. [Atlas Desk discovery and release boundary](../../2026-07-20-atlas-desk-discovery-release-boundary/), define Atlas Desk around capture, connection, retrieval, export, and a measurable first release.
-112. [Atlas Desk domain and architecture](../../2026-07-20-atlas-desk-domain-architecture/), protect document rules with domain values, application operations, and purpose-named ports.
-113. [Atlas Desk SwiftUI phone and tablet app](../../2026-07-20-atlas-desk-swiftui-phone-tablet-app/), adapt one task model to quick phone capture and keyboard-rich iPad research.
-114. [Atlas Desk storage, search, files, and sync](../../2026-07-20-atlas-desk-storage-search-files-sync/), coordinate durable local writes, indexing, attachments, migrations, outbox sync, and conflicts.
-115. [Atlas Desk macOS product design](../../2026-07-20-atlas-desk-macos-product-design/), make the Mac product native through windows, commands, import, settings, and desktop interaction.
-116. [Atlas Desk quality and release review](../../2026-07-20-atlas-desk-quality-release-review/), gate release on migration, conflict, scale, accessibility, and interrupted-sync evidence.
-117. [PulseTrail product, safety, and privacy](../../2026-07-20-pulsetrail-product-safety-privacy/), bound an offline outdoor product with explicit safety limits and health-data minimization.
-118. [PulseTrail cross-device architecture](../../2026-07-20-pulsetrail-cross-device-architecture/), assign workout authority and exchange versioned, recoverable phone-watch messages.
-119. [PulseTrail HealthKit, WorkoutKit, maps, and location](../../2026-07-20-pulsetrail-healthkit-workoutkit-maps-location/), preserve authorization, units, provenance, interruptions, and route gaps in workout records.
-120. [PulseTrail watch UI, complications, widgets, and Live Activities](../../2026-07-20-pulsetrail-watch-ui-complications-widgets-live-activities/), project one durable workout into glanceable watch, widget, and lock-screen surfaces.
-121. [PulseTrail offline, battery, sync, and failure recovery](../../2026-07-20-pulsetrail-offline-battery-sync-failure-recovery/), checkpoint sessions, batch samples, conserve energy, and recover delayed cross-device transfer.
-122. [PulseTrail testing and release review](../../2026-07-20-pulsetrail-testing-release-review/), combine deterministic replays with device, outdoor, energy, authorization, and privacy evidence.
-123. [ScreenRoom product and content model](../../2026-07-20-screenroom-product-content-model/), separate catalog, profile, access, playback intent, and progress before styling the television experience.
-124. [ScreenRoom tvOS architecture and focus](../../2026-07-20-screenroom-tvos-architecture-focus/), make focus and selection restorable product state across remote-driven catalog navigation.
-125. [ScreenRoom playback and media lifecycle](../../2026-07-20-screenroom-playback-media-lifecycle/), give playback, commands, interruptions, subtitles, progress, and events stable lifecycle ownership.
-126. [ScreenRoom backend, auth, subscriptions, and downloads](../../2026-07-20-screenroom-backend-auth-subscriptions-downloads/), separate device authorization, account sessions, verified access, catalog paging, and downloads.
-127. [ScreenRoom performance, accessibility, and resilience](../../2026-07-20-screenroom-performance-accessibility-resilience/), measure television image and playback costs while exposing buffering, failure, and accessible recovery.
-128. [ScreenRoom testing and release review](../../2026-07-20-screenroom-testing-release-review/), layer media, purchase, focus, account, analytics, and real-device evidence for release.
-129. [NeighborLink product, trust, and moderation](../../2026-07-20-neighborlink-product-trust-moderation/), design listing, identity, chat, location, reporting, blocking, appeal, and moderation as one trust system.
-130. [NeighborLink architecture, identity, and API contracts](../../2026-07-20-neighborlink-architecture-identity-api-contracts/), isolate identity, authorization, paging, uploads, DTO mapping, and message streams behind typed contracts.
-131. [NeighborLink UIKit feed, search, forms, camera, and maps](../../2026-07-20-neighborlink-uikit-feed-search-forms-camera-maps/), drive UIKit collection snapshots, drafts, media, search, and maps from coherent presentation state.
-132. [NeighborLink chat, offline writes, push, and deep links](../../2026-07-20-neighborlink-chat-offline-writes-push-deep-links/), make chat durable with client IDs, outbox replay, sequence reconciliation, push, and validated routes.
-133. [NeighborLink payments, privacy, security, and moderation operations](../../2026-07-20-neighborlink-payments-privacy-security-moderation-operations/), fit physical-goods payment, data minimization, reports, blocks, audit events, and appeals into one operation.
-134. [NeighborLink quality and release review](../../2026-07-20-neighborlink-quality-release-review/), attack authorization, moderation, media, services, accessibility, and account transitions before release.
-135. [SpacePlanner product, comfort, and spatial design](../../2026-07-20-spaceplanner-product-comfort-spatial-design/), choose windows, volumes, and immersion from planning value, comfort, exit, and recovery needs.
-136. [SpacePlanner architecture and asset pipeline](../../2026-07-20-spaceplanner-architecture-asset-pipeline/), keep spatial projects and edits independent of entities, assets, rendering, persistence, and collaboration.
-137. [SpacePlanner windows, volumes, immersion, and input](../../2026-07-20-spaceplanner-windows-volumes-immersion-input/), combine predictable window, volume, immersive, gaze, pinch, and direct-manipulation behavior.
-138. [SpacePlanner RealityKit, ARKit, interaction, and rendering](../../2026-07-20-spaceplanner-realitykit-arkit-interaction-rendering/), build scalable component and system interaction with domain-owned snapping and undo.
-139. [SpacePlanner persistence, collaboration, performance, and accessibility](../../2026-07-20-spaceplanner-persistence-collaboration-performance-accessibility/), merge intent, stream large assets, measure performance, and provide accessible nonspatial alternatives.
-140. [SpacePlanner testing and release review](../../2026-07-20-spaceplanner-testing-release-review/), close the series with domain, device, tracking, frame, comfort, collaboration, and accessibility evidence.
+Each brief defines a user problem, bounded feature, state model, alternatives, failures, and acceptance scenarios. None supplies a completed specialist-platform app.
 
-## Where the path goes
+- [Atlas Desk: a product design brief](../../2026-07-20-atlas-desk-discovery-release-boundary/)
+- [PulseTrail: a product design brief](../../2026-07-20-pulsetrail-product-safety-privacy/)
+- [ScreenRoom: a product design brief](../../2026-07-20-screenroom-product-content-model/)
+- [NeighborLink: a product design brief](../../2026-07-20-neighborlink-product-trust-moderation/)
+- [SpacePlanner: a product design brief](../../2026-07-20-spaceplanner-product-comfort-spatial-design/)
 
-The orientation arc establishes the tools and evidence vocabulary. The later curriculum follows eight connected tracks:
+## Practice and evidence
 
-```text
-Swift language
-    |
-    v
-Product and interface design
-    |
-    +-> SwiftUI
-    |
-    +-> UIKit
-    |
-    v
-Architecture and data boundaries
-    |
-    v
-Testing and production engineering
-    |
-    v
-Shipping and Apple platform capabilities
-    |
-    v
-Complete product case studies
-```
+The standard-library Swift exercises run in the browser only when an execution service is available. Their Linux environment cannot import Apple frameworks. The Field Notes companion provides source and package tests; each app lesson records which Apple-target checks have actually run.
 
-The same Field Notes domain appears across the core path. Keeping one product spine makes framework differences visible without changing every business rule at the same time.
-
-## Evidence labels
-
-Examples use the smallest environment that can prove their claim:
-
-- **Compiled**: The named Swift source or target completed compilation.
-- **Package tested**: Swift package tests passed.
-- **Linux runner tested**: Browser or executor checks passed against Swift 6.3.3 on Linux.
-- **Simulator tested**: A named journey passed on a recorded Simulator runtime.
-- **Device tested**: A named journey passed on recorded physical hardware.
-- **Account tested**: A service integration passed with the named development or sandbox account.
-- **Not verified**: The required tool, destination, hardware, entitlement, account, or service was unavailable.
-
-One label never silently upgrades into another. A successful browser run does not prove SwiftUI. A successful Simulator run does not prove camera behavior or device performance.
-
-## Practice surfaces
-
-The course uses several execution shapes because one shape cannot prove everything:
-
-- Editable browser exercises for Swift standard-library work.
-- Standalone Swift files for compiler and debugger experiments.
-- Swift packages for domain rules and deterministic tests.
-- Xcode targets for SwiftUI, UIKit, extensions, and Apple SDK integrations.
-- Simulator journeys for supported interface and runtime behavior.
-- Physical-device checks for hardware, performance, background execution, and service boundaries.
-
-The current browser editor has an explicit unavailable state when no execution service is configured. Source remains editable and visible in that state.
-
-## Product spine
-
-Field Notes is a local-first notebook for short observations, tags, favorites, search, and later synchronization. It begins as a command-line package checkpoint, gains separate SwiftUI and UIKit adapters, and grows only when a lesson introduces a new product pressure.
-
-The shared core does not depend on either interface framework. This lets the series compare framework models without duplicating domain behavior or pretending that an interface type owns persistence and networking rules.
-
-## How to read the series
-
-Read in order when Swift or Apple development is new. Experienced Swift developers can use the orientation arc as a vocabulary check, then enter at product design, SwiftUI, UIKit, architecture, testing, production engineering, or the platform capability atlas.
-
-Run the code when the environment is available. When it is not, keep the evidence label honest and continue with lessons whose claims fit the installed tools.
+Use the package setup instructions linked from the capstone. An unverified Apple target remains unverified even when the package tests pass. Reference guides help choose a capability and its validation surface without implying that every framework has been integrated.
 
 ## Related topics
 
-- [Swift coding problems](../../../topics/cs/coding-problems/), runnable standard-library practice across the full coding-problem catalog.
-- [Testing](../../../topics/testing/), the test distances and feedback loops used throughout the course.
-- [Software design principles](../software-design-principles/), neighboring design guidance for boundaries, composition, and maintainable change.
+- [Swift coding problems](../../../topics/cs/coding-problems/)
+- [Testing](../../../topics/testing/)
+- [Software design collection](../software-design-principles/)

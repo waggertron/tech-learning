@@ -9,132 +9,114 @@ series:
   order: 33
 ---
 
-SwiftUI layout is a negotiation. A parent proposes a size, a child reports the size it wants within that proposal, then the parent places the child.
+A wrapping tag container must do more than name the `Layout` protocol. It needs a repeatable row-packing rule, measurements from child views, and a placement policy for narrow and right-to-left layouts.
 
-## Read a frame as a request
+## Measure and pack rows separately
 
-```swift
-Text(note.title)
-    .frame(maxWidth: .infinity, alignment: .leading)
-```
-
-The frame offers its child space and reports a framed size upward. It does not mutate the intrinsic size of `Text`. Fixed width and height values can be appropriate for icons or bounded artwork, but they are poor defaults for localized text and resizable windows.
-
-## Use stacks for relationships
+The companion's pure algorithm lives in `Packages/FieldNotesCore/Sources/FieldNotesCore/TagFlow.swift`:
 
 ```swift
-VStack(alignment: .leading, spacing: 8) {
-    Text(note.title).font(.headline)
+public struct FlowSize: Equatable, Sendable {
+    public let width: Double
+    public let height: Double
+    public init(width: Double, height: Double) { self.width = width; self.height = height }
+}
 
-    HStack {
-        Label(note.placeName, systemImage: "mappin")
-        Spacer()
-        Text(note.updatedAt, format: .dateTime.hour().minute())
+public struct FlowPosition: Equatable, Sendable {
+    public let x: Double
+    public let y: Double
+    public init(x: Double, y: Double) { self.x = x; self.y = y }
+}
+
+public struct FlowMeasurement: Equatable, Sendable {
+    public let size: FlowSize
+    public let positions: [FlowPosition]
+}
+
+/// Widths are measured by the interface before this pure row-packing step.
+public enum TagFlow {
+    public static func measure(sizes: [FlowSize], width: Double, spacing: Double = 8, rightToLeft: Bool = false) -> FlowMeasurement {
+        let available = max(0, width.isFinite ? width : sizes.reduce(0) { $0 + $1.width + spacing })
+        var positions: [FlowPosition] = []
+        var x = 0.0
+        var y = 0.0
+        var rowHeight = 0.0
+        var usedWidth = 0.0
+        for size in sizes {
+            let itemWidth = min(available, max(0, size.width))
+            if x > 0, x + itemWidth > available {
+                x = 0
+                y += rowHeight + spacing
+                rowHeight = 0
+            }
+            positions.append(FlowPosition(x: rightToLeft ? available - x - itemWidth : x, y: y))
+            usedWidth = max(usedWidth, x + itemWidth)
+            rowHeight = max(rowHeight, size.height)
+            x += itemWidth + spacing
+        }
+        return FlowMeasurement(size: FlowSize(width: rightToLeft ? available : usedWidth, height: sizes.isEmpty ? 0 : y + rowHeight), positions: positions)
     }
-    .font(.caption)
-    .foregroundStyle(.secondary)
 }
 ```
 
-Alignment and spacing express relationships. `Spacer` consumes flexible space. Layout priority helps resolve competition, but it does not repair a composition that has no workable compact form.
+Each item either fits on the current row or starts the next one. Row height is the maximum child height. Empty input has zero height. A child wider than the proposal is assigned the available width; its measured height must come from that same constrained proposal.
 
-## Let grids adapt to available width
+Right-to-left placement mirrors each x coordinate within the available width. It preserves the input order rather than sorting the tags backwards.
 
-```swift
-let columns = [
-    GridItem(.adaptive(minimum: 140), spacing: 12)
-]
+## Connect the algorithm to SwiftUI
 
-LazyVGrid(columns: columns, spacing: 12) {
-    ForEach(notes) { note in
-        NoteCard(note: note)
-    }
-}
-```
-
-Adaptive columns respond to container space instead of device names. Lazy containers create children as they become needed, which matters for large collections. They do not remove the need for stable IDs or cheap row computation.
-
-## Safe areas carry system meaning
-
-Content normally respects bars, sensors, rounded corners, and system regions. Backgrounds may extend farther than interactive content:
+`Apps/SwiftUI/TagFlowLayout.swift` provides the complete adapter:
 
 ```swift
-ZStack {
-    Color(.systemGroupedBackground)
-        .ignoresSafeArea()
+import FieldNotesCore
+import SwiftUI
 
-    NoteList()
-        .safeAreaPadding(.horizontal)
-}
-```
-
-Do not ignore the safe area for the entire screen merely to make a color reach the edge. Keep controls, text, and gestures in usable regions. Keyboard and container safe areas also need observation in the actual app.
-
-## A custom tag flow layout
-
-Stacks cannot wrap tags. The `Layout` protocol can measure and place them while preserving ordinary child views:
-
-```swift
 struct TagFlowLayout: Layout {
+    var rightToLeft = false
     var spacing: CGFloat = 8
 
-    func sizeThatFits(
-        proposal: ProposedViewSize,
-        subviews: Subviews,
-        cache: inout ()
-    ) -> CGSize {
-        let result = rows(proposal: proposal, subviews: subviews)
-        return result.size
+    private func measurement(proposal: ProposedViewSize, subviews: Subviews) -> (FlowMeasurement, [CGSize]) {
+        let measured = subviews.map { $0.sizeThatFits(ProposedViewSize(width: proposal.width, height: nil)) }
+        let width = proposal.width ?? measured.reduce(0) { $0 + $1.width + spacing }
+        let result = TagFlow.measure(
+            sizes: measured.map { FlowSize(width: $0.width, height: $0.height) },
+            width: width, spacing: spacing, rightToLeft: rightToLeft
+        )
+        return (result, measured)
     }
 
-    func placeSubviews(
-        in bounds: CGRect,
-        proposal: ProposedViewSize,
-        subviews: Subviews,
-        cache: inout ()
-    ) {
-        let result = rows(proposal: proposal, subviews: subviews)
-        for item in result.items {
-            subviews[item.index].place(
-                at: CGPoint(x: bounds.minX + item.origin.x,
-                            y: bounds.minY + item.origin.y),
-                proposal: .unspecified
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let result = measurement(proposal: proposal, subviews: subviews).0
+        return CGSize(width: result.size.width, height: result.size.height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let (result, sizes) = measurement(proposal: ProposedViewSize(width: bounds.width, height: nil), subviews: subviews)
+        for index in subviews.indices {
+            let point = result.positions[index]
+            subviews[index].place(
+                at: CGPoint(x: bounds.minX + point.x, y: bounds.minY + point.y),
+                anchor: .topLeading,
+                proposal: ProposedViewSize(width: min(bounds.width, sizes[index].width), height: sizes[index].height)
             )
         }
     }
 }
+
+
 ```
 
-The omitted `rows` helper performs one deterministic measurement pass: place a chip on the current row if it fits, otherwise start a new row. Production code should cache measurements when profiling shows repeated work and should account for spacing, empty input, narrow proposals, and right-to-left placement.
+`sizeThatFits` reports the measured container. `placeSubviews` uses the final bounds and places every child with an explicit top-leading anchor. The detail screen passes its environment layout direction into `rightToLeft`.
 
-Use it like any container:
+## Choose the simpler container first
 
-```swift
-TagFlowLayout {
-    ForEach(note.tags) { tag in
-        TagChip(name: tag.name)
-    }
-}
-```
+A `VStack` or `HStack` expresses a single row or column. `LazyVGrid` is useful when a grid's column policy matches the content. A custom `Layout` earns its cost here because tags have unequal widths and need wrapping.
 
-## Test the layout as a matrix
+Do not ignore safe areas on the entire screen just to extend a background. The app keeps interactive content inside system-provided usable regions.
 
-One screenshot proves one proposal. Check:
+## Check geometry and rendering separately
 
-| Pressure | Expected response |
-| --- | --- |
-| narrow phone | chips wrap without horizontal clipping |
-| wide window | rows use space without extreme fixed gaps |
-| accessibility text | chip height grows and rows reflow |
-| long localization | labels wrap or expand by declared policy |
-| right-to-left | semantic order and placement remain coherent |
-| empty tags | container reports a stable empty size |
-
-Geometry readers and preference keys have valid uses, but adding measurement feedback can create update loops. Prefer standard containers and the layout protocol before measuring global coordinates.
-
-## Validation boundary
-
-The layout code is illustrative and was not compiled or rendered. The custom helper is intentionally incomplete until a later companion-app implementation supplies executable tests. Xcode, previews, Simulator sizes, Dynamic Type, and right-to-left placement remain Not verified.
+`tagFlowBoundaries` tests empty input, two wrapped rows, larger child heights, a too-wide child, and mirrored x positions. These package tests passed with Swift 6.3.3. The source also includes narrow/large-text and RTL previews. Preview rendering, actual text measurement, and accessibility still need the Xcode target and remain unverified.
 
 ## Series navigation
 

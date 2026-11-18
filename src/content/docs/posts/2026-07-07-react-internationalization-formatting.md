@@ -1,15 +1,15 @@
 ---
-title: "Modern React 39: Internationalization and formatting"
+title: "Modern React 36: Internationalization and formatting"
 description: "Internationalization and formatting for dates, numbers, currency, and text that cannot stay hard-coded."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-internationalization-formatting/
 series:
   slug: modern-react-development
-  order: 39
+  order: 36
 ---
 
-This is part 39 of the [Modern React development series](../series/modern-react-development/).
+This is part 36 of the [Modern React development series](../series/modern-react-development/).
 
 Internationalization starts when UI stops assuming one language, date shape, number format, currency, plural rule, and text direction. React renders whatever strings and formatted values you give it, so formatting needs a clear home.
 
@@ -113,8 +113,8 @@ export function AppointmentTime({
 
 ## Series navigation
 
-- Previous: [Part 38: Auth, roles, and protected UI](../2026-07-07-react-auth-roles-protected-ui/)
-- Next: [Part 40: Deployment, observability, and feature flags](../2026-07-07-react-deployment-observability-feature-flags/)
+- Previous: [Part 35: Auth, roles, and protected UI](../2026-07-07-react-auth-roles-protected-ui/)
+- Next: [Part 37: Build, observe, and roll back a release](../2026-07-07-react-deployment-observability-feature-flags/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

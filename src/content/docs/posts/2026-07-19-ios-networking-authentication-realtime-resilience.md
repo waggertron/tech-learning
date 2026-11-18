@@ -6,7 +6,7 @@ tags: [ios, swift, production, networking, authentication, urlsession, resilienc
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-networking-authentication-realtime-resilience/
 series:
   slug: zero-to-ios-hero
-  order: 79
+  order: 77
 ---
 
 A production network layer translates typed application requests into HTTP, owns transport policy, and returns domain-safe results. Views should not construct URLs, decode API shapes, refresh credentials, or decide retries.
@@ -62,8 +62,7 @@ The URLSession architecture is source reviewed. No live service, credential refr
 
 ## Series navigation
 
-- Previous: [Part 78: CI, flake control, test data, release qualification, and evidence](../2026-07-19-ios-ci-flake-control-test-data-release-evidence/)
-- Next: [Part 80: Persistence, Core Data, files, caches, migrations, and secure storage](../2026-07-19-ios-persistence-core-data-files-caches-migrations-secure-storage/)
+- Previous: [Part 76: CI, flake control, test data, release qualification, and evidence](../2026-07-19-ios-ci-flake-control-test-data-release-evidence/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

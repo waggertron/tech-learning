@@ -1,15 +1,15 @@
 ---
-title: "Modern React 37: Validation at form and API boundaries"
+title: "Modern React 34: Validation at form and API boundaries"
 description: "Validation at form and API boundaries before user input becomes trusted application state."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-validation-form-api-boundaries/
 series:
   slug: modern-react-development
-  order: 37
+  order: 34
 ---
 
-This is part 37 of the [Modern React development series](../series/modern-react-development/).
+This is part 34 of the [Modern React development series](../series/modern-react-development/).
 
 Validation belongs at the boundary where untrusted input enters the application. React forms can guide users while they type, but server and API boundaries still need to parse and validate before data becomes trusted.
 
@@ -158,8 +158,8 @@ The Action returns a UI-friendly result while keeping parsing at the submit boun
 
 ## Series navigation
 
-- Previous: [Part 36: Accessibility as component API design](../2026-07-07-react-accessibility-component-api-design/)
-- Next: [Part 38: Auth, roles, and protected UI](../2026-07-07-react-auth-roles-protected-ui/)
+- Previous: [Part 33: Accessibility as component API design](../2026-07-07-react-accessibility-component-api-design/)
+- Next: [Part 35: Auth, roles, and protected UI](../2026-07-07-react-auth-roles-protected-ui/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

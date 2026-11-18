@@ -1,6 +1,6 @@
 ---
-title: SwiftUI Field Notes capstone
-description: "Assemble a local-first Field Notes app from explicit product states, domain contracts, SwiftUI adapters, deterministic tests, and release evidence."
+title: "SwiftUI Field Notes: assemble the local notebook"
+description: "Wire the shared note contracts into SwiftUI, exercise failed-save recovery and disk relaunch, and distinguish package proof from pending Apple-target evidence."
 date: 2026-07-19
 tags: [ios, swift, swiftui, capstone, architecture]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-swiftui-field-notes-capstone/
@@ -9,66 +9,74 @@ series:
   order: 44
 ---
 
-The capstone is complete when the local product loop is coherent, recoverable, accessible, and tested. Sync and extra platform features do not rescue a broken local notebook.
+The capstone is one local product loop: browse, create, validate, save, relaunch, edit, search, favorite, and delete with confirmation. It uses the same tested core through SwiftUI's own interface model.
 
-## The release loop
-
-```text
-launch -> browse or empty state -> create or open note
-   -> edit draft -> validate -> save locally -> retrieve later
-```
-
-Field Notes includes list, detail, editor, search, favorites, tags, optional place context, attachments, settings, and restoration. Every feature uses the same stable note identity and application contracts.
-
-## Keep the dependency direction visible
+## Build the layers that exist
 
 ```text
-SwiftUI scenes and views
-          |
-          v
-observable presentation models
-          |
-          v
-FieldNotesCore use cases and values
-          ^
-          |
-SwiftData, files, location, and network adapters
+SwiftUI controls and navigation
+           |
+           v
+NoteDraft / SaveState / SaveNote
+           |
+           v
+NoteLibrary -> NoteRepository
+                    |
+          FileNoteRepository actor
+                    |
+       versioned JSON in Application Support
 ```
 
-The composition root selects live or in-memory adapters. Views describe current state and emit actions. Durable rules remain testable without rendering SwiftUI.
+The alternative in-memory adapter exists for tests. SwiftData migration is a separate lesson and is not silently selected by the app. The file repository has one app-owned writer and does not claim multi-process coordination or power-loss durability beyond Foundation's atomic replacement behavior.
 
-## Assemble one state vocabulary
+## Run the companion
 
-The app distinguishes initial loading, empty library, populated content, search with no matches, save progress, recoverable failure, offline stale content, permission denial, missing route, and restoration failure.
+From `companion/field-notes`:
 
-Draft edits remain separate from persisted notes. Save validates once, preserves text on failure, and prevents duplicate submission. Deletion has a precise confirmation and Undo policy.
+```bash
+swift build --package-path Packages/FieldNotesCore
+./scripts/test-package.sh
+xcodegen generate --spec project.yml
+xcodebuild -project FieldNotes.xcodeproj -scheme FieldNotesSwiftUI -showdestinations
+```
 
-## Acceptance checklist
+Choose a destination that the last command actually reports, then pass its exact value as `DESTINATION` to the Makefile:
 
-- Create, edit, favorite, search, delete, undo, and relaunch preserve the documented contract.
-- Stable IDs drive lists, selection, navigation, windows, tasks, and persistence.
-- Cancellation prevents stale network or attachment results from replacing newer state.
-- Empty, loading, error, offline, permission, and missing-note states offer useful recovery.
-- VoiceOver, Dynamic Type, contrast, Reduce Motion, keyboard, localization, and right-to-left layout are audited.
-- Domain and use-case tests run with deterministic clocks, IDs, stores, and service fakes.
-- UI tests cover the smallest critical create and recovery journeys.
-- Migration, launch, scrolling, memory, and device-sensitive behavior carry separate evidence.
+```bash
+make build-swiftui DESTINATION="$FIELD_NOTES_DESTINATION"
+make test-swiftui DESTINATION="$FIELD_NOTES_DESTINATION"
+```
 
-## Stop before speculative scope
+Set `FIELD_NOTES_DESTINATION` to the selected destination before those commands. The repository does not guess a simulator device name or runtime.
 
-Cloud sync, collaboration, widgets, live activities, and watch support wait until a measured product need justifies them. The local architecture leaves seams for those adapters without pretending they already work.
+## Follow a failed save
 
-## Evidence ledger
+The UI driver starts `--ui-testing --store-name save-failure --reset-store --fail-first-save`. Enter a title and tap Save. The first write fails without touching the file. The editor keeps the title and shows recovery copy. Tap Save again: the same draft ID is committed once, and the list displays one note.
 
-Record each claim as compiled, package tested, Simulator tested, device tested, account tested, or Not verified. Browser Swift cannot prove this capstone because it cannot import Apple frameworks.
+The other journey saves a note, edits its observation, terminates, and launches the same store without resetting it. This distinguishes durable data from an in-memory list that only survives navigation.
 
-## Current repository checkpoint
+## Inspect the source by responsibility
 
-The repository contains a tested `FieldNotesCore` package plus reproducible SwiftUI and UIKit target declarations. The SwiftUI app source shows the composition shape. Full Xcode, Simulator, signing, assistive technology, migration, and device gates remain open.
+- `Apps/Shared/AppComposition.swift`: production store location and debug-only deterministic startup.
+- `Apps/SwiftUI/`: native controls, navigation, state rendering, and event handling.
+- `Packages/FieldNotesCore/Sources/FieldNotesCore/NoteDraft.swift`: draft, validated values, save operation, and save reducer.
+- `Packages/FieldNotesCore/Sources/FieldNotesCore/adapters/FileNoteRepository.swift`: versioned file I/O and atomic replacement.
+- `Tests/SwiftUIUITests/`: the two actual product journeys.
 
-## Validation boundary
+## Completion evidence
 
-This post assembles the release contract but does not claim a shipped app. The capstone remains Not verified as an Apple application until the companion target builds and the recorded UI, accessibility, Simulator, and device checks pass.
+| Claim | Current evidence |
+| --- | --- |
+| package domain, reducer, loader, layout geometry, and both repositories | Swift 6.3.3 package tests passed |
+| app and UI-test syntax | `swiftc -frontend -parse` passed |
+| Apple SDK compilation and Simulator journeys | not verified, full Xcode unavailable |
+| accessibility, signing, archives, and physical devices | not verified |
+
+A syntax parse does not resolve Apple APIs or run a UI test. The capstone's app implementation is inspectable, but its Apple application acceptance remains open.
+
+## Keep the slice bounded
+
+Attachments, location, cloud sync, widgets, multiple independent windows, draft restoration, and other platform integrations are excluded from this release. They need their own product contract and matching evidence before being described as working features.
 
 ## Series navigation
 

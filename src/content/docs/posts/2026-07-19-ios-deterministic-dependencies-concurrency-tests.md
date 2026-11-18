@@ -6,7 +6,7 @@ tags: [ios, swift, testing, concurrency, determinism, field-notes]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-deterministic-dependencies-concurrency-tests/
 series:
   slug: zero-to-ios-hero
-  order: 74
+  order: 73
 ---
 
 A deterministic test controls the inputs that decide behavior. Wall-clock time, random identifiers, task scheduling, global state, and live network responses are inputs even when they are not ordinary function parameters.
@@ -43,8 +43,8 @@ Unsupported fake operations should fail loudly. A fake that silently ignores inv
 
 ## Series navigation
 
-- Previous: [Part 73: XCTest, XCUITest, test plans, and framework coexistence](../2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/)
-- Next: [Part 75: SwiftUI, UIKit, navigation, accessibility, and UI behavior tests](../2026-07-19-ios-swiftui-uikit-navigation-accessibility-ui-tests/)
+- Previous: [Part 72: XCTest, XCUITest, test plans, and framework coexistence](../2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/)
+- Next: [Part 74: Persistence, migration, networking, and contract tests](../2026-07-19-ios-persistence-migration-network-contract-tests/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

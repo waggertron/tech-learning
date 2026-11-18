@@ -6,34 +6,32 @@ tags: [ios, swift, testing, xctest, xcuitest, test-plans, field-notes]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/
 series:
   slug: zero-to-ios-hero
-  order: 73
+  order: 72
 ---
 
 XCTest remains the right tool for XCUITest interface automation, performance measurement, Objective-C interoperability, and established suites whose rewrite would add cost without stronger evidence.
 
 ## Give one UI journey a controlled launch
 
-```swift
-final class CreateNoteUITests: XCTestCase {
-    func testCreatesNoteFromEmptyLibrary() {
-        let app = XCUIApplication()
-        app.launchArguments = ["--ui-testing", "--fixture", "empty-library"]
-        app.launch()
-
-        app.buttons["New note"].tap()
-        app.textFields["Title"].tap()
-        app.textFields["Title"].typeText("Trail marker")
-        app.buttons["Save"].tap()
-
-        XCTAssertTrue(app.staticTexts["Trail marker"].waitForExistence(timeout: 2))
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.lifetime = .keepAlways
-        add(attachment)
-    }
-}
+```text
+Given an empty deterministic local store
+When the user creates a note with a valid title
+Then the note appears in the library
+When the app terminates and relaunches using the same store
+Then the same note can be reopened and edited
 ```
 
-The app must interpret test arguments only in a controlled nonproduction path and load deterministic local data. Stable visible labels are preferable selectors; accessibility identifiers help when labels are localized or duplicated.
+The companion supplies separate drivers at `Tests/SwiftUIUITests/FieldNotesSwiftUIUITests.swift` and `Tests/UIKitUITests/FieldNotesUIKitUITests.swift`. Both use the `--ui-testing`, `--store-name`, and `--reset-store` launch contract. The relaunch step omits reset so it checks actual persistence rather than recreating the fixture.
+
+Each driver opens New Note, attempts an invalid save, enters a title, saves, edits, terminates, and reopens the same store. A separate failed-save journey checks that the draft survives and retry creates one note. The two adapters share the acceptance behavior, not private view hierarchies or assumptions about identical screen structure.
+
+Launch into deterministic local data and wait for meaningful accessibility elements. Stable visible labels are useful selectors; identifiers help when labels are localized or duplicated. Keep test-only launch configuration unavailable in ordinary release use. The capstones link the current companion setup and matching source.
+
+## Keep accessibility evidence separate
+
+A passing tap sequence does not establish useful VoiceOver order, labels, values, actions, large-text layout, keyboard focus, or right-to-left behavior. Audit those journeys on supported destinations. Screenshots can catch appearance drift, but pixels alone do not establish assistive-technology interaction or durable persistence.
+
+Place validation in domain tests, presentation transitions in model/controller tests, and route/control wiring in XCUITest. A layout refactor should not break a behavior test when the visible contract is unchanged.
 
 ## Use test plans for matrices
 
@@ -49,8 +47,8 @@ The UI journey requires a generated Xcode project, matching scheme, and Simulato
 
 ## Series navigation
 
-- Previous: [Part 72: Swift Testing fundamentals and parameterized tests](../2026-07-19-swift-testing-fundamentals-parameterized-tests/)
-- Next: [Part 74: Deterministic dependencies and concurrency tests](../2026-07-19-ios-deterministic-dependencies-concurrency-tests/)
+- Previous: [Part 71: Swift Testing fundamentals and parameterized tests](../2026-07-19-swift-testing-fundamentals-parameterized-tests/)
+- Next: [Part 73: Deterministic dependencies and concurrency tests](../2026-07-19-ios-deterministic-dependencies-concurrency-tests/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

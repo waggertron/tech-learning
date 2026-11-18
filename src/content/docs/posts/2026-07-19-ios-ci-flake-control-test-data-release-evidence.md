@@ -6,7 +6,7 @@ tags: [ios, swift, testing, ci, reliability, release, field-notes]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-ci-flake-control-test-data-release-evidence/
 series:
   slug: zero-to-ios-hero
-  order: 78
+  order: 76
 ---
 
 Continuous integration should answer whether a change is safe, and preserve enough evidence to explain why it is not. A green retry with the original failure hidden does neither.
@@ -38,8 +38,8 @@ A release checklist links each critical claim to a passing artifact: unit and co
 
 ## Series navigation
 
-- Previous: [Part 77: Performance, memory, energy, launch, and device matrices](../2026-07-19-ios-performance-memory-energy-launch-device-matrices/)
-- Next: [Part 79: Networking, authentication, real-time events, and resilience](../2026-07-19-ios-networking-authentication-realtime-resilience/)
+- Previous: [Part 75: Performance, memory, energy, launch, and device matrices](../2026-07-19-ios-performance-memory-energy-launch-device-matrices/)
+- Next: [Part 77: Networking, authentication, real-time events, and resilience](../2026-07-19-ios-networking-authentication-realtime-resilience/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

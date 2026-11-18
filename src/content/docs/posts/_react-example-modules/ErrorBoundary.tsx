@@ -2,27 +2,33 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
-  fallback: ReactNode;
+  fallback: ReactNode | ((reset: () => void) => ReactNode);
+  onReset?: () => void;
+  onError?: (error: Error, info: ErrorInfo) => void;
 };
 
-type State = {
-  failed: boolean;
-};
+export class ErrorBoundary extends Component<Props, { failed: boolean }> {
+  state = { failed: false };
 
-export class ErrorBoundary extends Component<Props, State> {
-  state: State = { failed: false };
-
-  static getDerivedStateFromError(): State {
+  static getDerivedStateFromError() {
     return { failed: true };
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    void error;
-    void info;
+    this.props.onError?.(error, info);
   }
 
+  private reset = () => {
+    this.props.onReset?.();
+    this.setState({ failed: false });
+  };
+
   render() {
-    if (this.state.failed) return this.props.fallback;
+    if (this.state.failed) {
+      return typeof this.props.fallback === "function"
+        ? this.props.fallback(this.reset)
+        : this.props.fallback;
+    }
     return this.props.children;
   }
 }

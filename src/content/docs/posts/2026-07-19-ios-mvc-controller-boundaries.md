@@ -49,7 +49,7 @@ An extension can organize a long file, but it does not create a boundary. A rena
 
 ## Series navigation
 
-- Previous: [Part 59: Architecture starts with pressure](../2026-07-19-ios-architecture-starts-with-pressure/)
+- Previous: [Part 59: iOS architecture starts with pressure](../2026-07-19-ios-architecture-starts-with-pressure/)
 - Next: [Part 61: MVVM and presentation models](../2026-07-19-ios-mvvm-presentation-models/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 

@@ -1,15 +1,15 @@
 ---
-title: "Modern React 34: Code splitting and lazy loading"
+title: "Modern React 31: Code splitting and lazy loading"
 description: "Code splitting with lazy imports and Suspense boundaries for less initial JavaScript."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-code-splitting-lazy-loading/
 series:
   slug: modern-react-development
-  order: 34
+  order: 31
 ---
 
-This is part 34 of the [Modern React development series](../series/modern-react-development/).
+This is part 31 of the [Modern React development series](../series/modern-react-development/).
 
 A React app does not need to send every component to the browser before the first screen can work. Code splitting lets the app load some code later, and `lazy` connects that delayed code to Suspense.
 
@@ -107,8 +107,8 @@ Route boundaries are natural split points because users only need the code for t
 
 ## Series navigation
 
-- Previous: [Part 33: Error boundaries and recovery](../2026-07-07-react-error-boundaries-recovery/)
-- Next: [Part 35: Styling, design tokens, and variants](../2026-07-07-react-styling-design-tokens-variants/)
+- Previous: [Part 30: Error boundaries and working recovery](../2026-07-07-react-error-boundaries-recovery/)
+- Next: [Part 32: Styling, design tokens, and variants](../2026-07-07-react-styling-design-tokens-variants/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

@@ -412,8 +412,8 @@ The next post moves related data and behavior into a `FieldNote` structure and p
 
 ## Series navigation
 
-- Previous: [Part 9: Collections, sequences, and cost](../2026-07-16-swift-collections-sequences-cost/)
-- Next: [Part 11: Structures and value semantics](../2026-07-16-swift-structures-value-semantics/)
+- Previous: [Part 9: Zero to iOS Hero 9: Collections, sequences, and cost](../2026-07-16-swift-collections-sequences-cost/)
+- Next: [Part 11: Zero to iOS Hero 11: Structures and value semantics](../2026-07-16-swift-structures-value-semantics/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

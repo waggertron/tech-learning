@@ -9,54 +9,59 @@ series:
   order: 62
 ---
 
-Unidirectional data flow is valuable when several events can move one feature through interacting states. State describes what is true, an event describes what happened, and a reducer chooses the next state plus any requested effect.
+A reducer makes transitions explicit when event ordering matters. Field Notes uses a small save state machine rather than applying a store framework to every screen.
 
-## Make illegal transitions visible
+## Define states before adding effects
 
 ```swift
-enum SyncState: Equatable {
-    case idle
-    case syncing(pending: Int)
-    case offline(pending: Int)
-    case failed(pending: Int)
-}
+public enum SaveEvent: Sendable { case requested, succeeded, failed }
+public enum SaveEffect: Equatable, Sendable { case none, save }
+public enum SaveState: Equatable, Sendable {
+    case idle, saving, saved, failed
 
-enum SyncEvent {
-    case requested(pending: Int)
-    case networkUnavailable
-    case uploadCompleted(remaining: Int)
-    case uploadFailed
-}
+    /// A submitted snapshot cannot accept later edits that dismissal would discard.
+    /// Failure restores editing; success stays locked until the editor dismisses.
+    public var acceptsInput: Bool { self == .idle || self == .failed }
 
-enum SyncEffect: Equatable { case uploadNext }
-
-func reduce(_ state: SyncState, _ event: SyncEvent) -> (SyncState, [SyncEffect]) {
-    switch (state, event) {
-    case (_, .requested(let count)) where count > 0:
-        return (.syncing(pending: count), [.uploadNext])
-    case (.syncing(let count), .networkUnavailable):
-        return (.offline(pending: count), [])
-    case (.syncing, .uploadCompleted(let remaining)) where remaining > 0:
-        return (.syncing(pending: remaining), [.uploadNext])
-    case (.syncing, .uploadCompleted):
-        return (.idle, [])
-    case (.syncing(let count), .uploadFailed):
-        return (.failed(pending: count), [])
-    default:
-        return (state, [])
+    public mutating func reduce(_ event: SaveEvent) -> SaveEffect {
+        switch (self, event) {
+        case (.idle, .requested), (.failed, .requested): self = .saving; return .save
+        case (.saving, .succeeded): self = .saved
+        case (.saving, .failed): self = .failed
+        default: break
+        }
+        return .none
     }
 }
 ```
 
-The reducer performs no upload. An effect handler owns that external work and sends the result back as another event.
+The transition table is deliberately small:
 
-## Test the transition table
+| Current state | Event | Next state | Effect |
+| --- | --- | --- | --- |
+| idle or failed | requested | saving | save |
+| saving | requested | saving | none |
+| saving | succeeded | saved | none |
+| saving | failed | failed | none |
+| any other combination | any event | unchanged | none |
 
-Pure transitions make boundary cases cheap to enumerate: zero pending changes, lost connectivity, partial progress, duplicate completion, cancellation, and retry. The tests assert both next state and requested effects.
+The duplicate-request row prevents two submissions from racing. The failed-to-saving row is the retry policy. A terminal saved editor dismisses; opening a different draft creates a new state machine.
 
-## Scope state to a feature
+## Execute effects at the adapter boundary
 
-One global state tree can turn unrelated changes into broad observation and coordination. Field Notes can use a reducer for synchronization while keeping simple view-local focus and disclosure state in the UI. Choose the model per pressure.
+The SwiftUI editor copies the submitted draft, asks the reducer for an effect, and awaits the real use case. The UIKit editor follows the same sequence. Both disable submission during the operation and preserve input on failure.
+
+A transition to saved means the repository acknowledged the save. Cancelling a task after that acknowledgement does not undo committed data. If a product needs undo, that is another explicit command, not an assumption about cancellation.
+
+## Test event sequences
+
+`saveTransitions` in `Packages/FieldNotesCore/Tests/FieldNotesCoreTests/RepositoryContractTests.swift` sends request, duplicate request, failure, retry, and success. It checks both the returned effect and the next state.
+
+Run `./scripts/test-package.sh` from `companion/field-notes`. These reducer and repository tests passed on Swift 6.3.3. The model does not prove UIKit event delivery or SwiftUI control behavior.
+
+## Stop before ceremony
+
+A direct function is clearer when an operation has no durable event ordering or competing effects. Add explicit state when it prevents a reachable contradiction, such as two saves or a success label after failure. Do not build a global action bus just to toggle a local disclosure.
 
 ## Series navigation
 

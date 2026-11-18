@@ -1,7 +1,7 @@
 # Field Notes Acceptance Specification
 
-**Version:** 1.0
-**Date:** 2026-07-16
+**Version:** 1.1
+**Date:** 2026-11-17
 **Applies to:** SwiftUI and UIKit core-path applications
 **Deployment floor:** iOS and iPadOS 17.0
 
@@ -26,39 +26,49 @@ The first complete UI slice supports:
 
 Photos, location, maps, accounts, and sync join in later checkpoints. Their absence from the first slice is deliberate, not an implied success state.
 
+## Current implementation and evidence
+
+The November remediation implements the bounded text-note loop in the SwiftUI and UIKit sources. Both use the same `NoteDraft`, `SaveNote`, `SaveState`, `NoteLibrary`, and file repository. The production adapter stores version 1 JSON in Application Support. It replaces a whole snapshot atomically through Foundation and supports one application-owned writer for one file. It does not promise cross-process coordination or power-loss durability.
+
+The shared package tests cover both memory/file behavioral contracts, reopen, corrupt/unsupported stores, failed replacement preserving prior data, save identity/time, validated values, duplicate-request/retry transitions, cancellation/latest-request ordering, and pure tag geometry. Apple app targets, accessibility criteria, previews, migration, and UI journeys remain unverified because full Xcode is unavailable.
+
+The source UI suites now define separate create/edit/relaunch and first-save-failure/retry journeys for each framework. Debug launch arguments select an isolated named file store. Reset occurs only with `--reset-store`; the relaunch step deliberately omits that flag. `--fail-first-save` rejects one write before forwarding retry to the real file adapter.
+
+The layouts below remain acceptance targets, not evidence that adaptive split views or accessibility passed. The current implementation uses a compact navigation path. Independent multiwindow state, draft restoration, attachments, location, maps, cloud sync, and device integrations remain deferred. A separate SwiftData migration specimen is an alternative lesson, not the app's selected repository.
+
 ## Layout Contract
 
 ### Compact width
 
 ```text
-┌─────────────────────────────┐
-│ Field Notes             [+] │
-├─────────────────────────────┤
-│ [Search notes...]           │
-├─────────────────────────────┤
-│ Redwood trail           >   │
-│ forest, favorite            │
-├─────────────────────────────┤
-│ Tide pools              >   │
-│ coast, yesterday            │
-├─────────────────────────────┤
-│ Notes     Map     Settings  │
-└─────────────────────────────┘
++-----------------------------+
+| Field Notes             [+] |
++-----------------------------+
+| [Search notes...]           |
++-----------------------------+
+| Redwood trail           >   |
+| forest, favorite            |
++-----------------------------+
+| Tide pools              >   |
+| coast, yesterday            |
++-----------------------------+
+| Notes     Map     Settings  |
++-----------------------------+
 ```
 
 ### Regular width
 
 ```text
-┌──────────────────┬──────────────────────────┐
-│ Field Notes  [+] │ Redwood trail            │
-├──────────────────┼──────────────────────────┤
-│ [Search...]      │ Notes from the north     │
-│                  │ trail...                 │
-│ Redwood trail  > │                          │
-│ Tide pools     > │ Tags: forest, morning    │
-│ City garden    > │                          │
-│                  │ [Favorite] [Edit]        │
-└──────────────────┴──────────────────────────┘
++------------------+--------------------------+
+| Field Notes  [+] | Redwood trail            |
++------------------+--------------------------+
+| [Search...]      | Notes from the north     |
+|                  | trail...                 |
+| Redwood trail  > |                          |
+| Tide pools     > | Tags: forest, morning    |
+| City garden    > |                          |
+|                  | [Favorite] [Edit]        |
++------------------+--------------------------+
 ```
 
 Compact width uses list-to-detail navigation. Regular width keeps the collection and current detail visible when space permits. Tests select destinations by accessible identity and content, not by assuming a specific view hierarchy.
@@ -66,20 +76,20 @@ Compact width uses list-to-detail navigation. Regular width keeps the collection
 ### Editor states
 
 ```text
-┌─────────────────────────────┐
-│ Cancel      New Note   Save │
-├─────────────────────────────┤
-│ Title                       │
-│ [                         ] │
-│ Title is required.          │
-│                             │
-│ Note                        │
-│ [                         ] │
-│ [                         ] │
-│                             │
-│ Tags                        │
-│ [forest] [morning]      [+] │
-└─────────────────────────────┘
++-----------------------------+
+| Cancel      New Note   Save |
++-----------------------------+
+| Title                       |
+| [                         ] |
+| Title is required.          |
+|                             |
+| Note                        |
+| [                         ] |
+| [                         ] |
+|                             |
+| Tags                        |
+| [forest] [morning]      [+] |
++-----------------------------+
 ```
 
 Validation appears next to the affected field and is announced when it becomes visible. The same meaning cannot rely on red color alone.
@@ -138,15 +148,15 @@ Both applications must satisfy the following on the compact and regular-width pa
 Errors are modeled as recoverable product states, not only alerts or logged strings.
 
 ```text
-┌─────────────────────────────┐
-│ Field Notes                 │
-├─────────────────────────────┤
-│ Notes could not be loaded.  │
-│ Your saved data was not     │
-│ changed.                    │
-│                             │
-│ [Try Again]                 │
-└─────────────────────────────┘
++-----------------------------+
+| Field Notes                 |
++-----------------------------+
+| Notes could not be loaded.  |
+| Your saved data was not     |
+| changed.                    |
+|                             |
+| [Try Again]                 |
++-----------------------------+
 ```
 
 - A loading failure distinguishes unavailable data from an empty library.

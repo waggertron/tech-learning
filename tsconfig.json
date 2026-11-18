@@ -1,5 +1,15 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "src/content/docs/**/*.ts"]
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "src/content/docs/**/*.ts",
+    "companion/react-workbench/dist",
+    "companion/react-workbench/releases",
+    "companion/react-workbench/.tooling",
+    "companion/react-workbench/.vite"
+  ]
 }

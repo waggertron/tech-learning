@@ -144,7 +144,7 @@ The route knows which data belongs with the URL and exposes that loaded data to 
 ## Series navigation
 
 - Previous: [Part 23: React Router v7](../2026-07-07-react-router-v7-framework/)
-- Next: [Part 25: Expo and React Native](../2026-07-07-react-expo-react-native/)
+- Next: [Part 25: Storybook and component workbenches](../2026-07-07-react-storybook-component-workbenches/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

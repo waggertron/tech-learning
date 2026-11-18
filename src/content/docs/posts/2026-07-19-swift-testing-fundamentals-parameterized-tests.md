@@ -6,7 +6,7 @@ tags: [ios, swift, testing, swift-testing, parameterized-tests, field-notes]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-swift-testing-fundamentals-parameterized-tests/
 series:
   slug: zero-to-ios-hero
-  order: 72
+  order: 71
 ---
 
 Swift Testing centers each test on behavior rather than a test class lifecycle. `@Test` declares a test, `#expect` records an expectation, and `#require` stops the current test when later checks need a valid value.
@@ -52,8 +52,8 @@ The sample uses Apple Swift Testing syntax but was not compiled in this content 
 
 ## Series navigation
 
-- Previous: [Part 71: Testing strategy, seams, and confidence](../2026-07-19-ios-testing-strategy-seams-confidence/)
-- Next: [Part 73: XCTest, XCUITest, test plans, and framework coexistence](../2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/)
+- Previous: [Part 70: Testing strategy, seams, and confidence](../2026-07-19-ios-testing-strategy-seams-confidence/)
+- Next: [Part 72: XCTest, XCUITest, test plans, and framework coexistence](../2026-07-19-ios-xctest-xcuitest-test-plans-coexistence/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

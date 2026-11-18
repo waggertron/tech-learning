@@ -1,15 +1,15 @@
 ---
-title: "Modern React 28: Vitest, Testing Library, and Playwright"
+title: "Modern React 26: Vitest, Testing Library, and Playwright"
 description: "Choosing between Vitest, Testing Library, and Playwright for different React failure modes."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-vitest-testing-library-playwright/
 series:
   slug: modern-react-development
-  order: 28
+  order: 26
 ---
 
-This is part 28 of the [Modern React development series](../series/modern-react-development/).
+This is part 26 of the [Modern React development series](../series/modern-react-development/).
 
 React testing works best as a stack, not one tool stretched across every kind of feedback. Vitest runs fast unit and component tests, Testing Library gives user-centered DOM helpers, and Playwright checks browser flows end to end.
 
@@ -132,8 +132,8 @@ The browser test checks routing, rendering, and user input together.
 
 ## Series navigation
 
-- Previous: [Part 27: Storybook and component workbenches](../2026-07-07-react-storybook-component-workbenches/)
-- Next: [Part 29: ESLint, TypeScript, formatting, and CI gates](../2026-07-07-react-eslint-typescript-formatting-ci/)
+- Previous: [Part 25: Storybook and component workbenches](../2026-07-07-react-storybook-component-workbenches/)
+- Next: [Part 27: Routing and nested layouts](../2026-07-07-react-routing-nested-layouts/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

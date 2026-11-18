@@ -1,6 +1,6 @@
 ---
-title: SOLID principles, what each one is actually trying to prevent
-description: "Five design principles from Robert Martin's 2000 paper, still quoted, still misquoted. What each one was reacting to, what it actually says, and the misreadings that make SOLID feel like ceremony when it should feel like force multiplication."
+title: SOLID and composition through a changing report feature
+description: "Evolve a TypeScript report through channel selection and delivery auditing, test behavioral substitution, and see where composition reduces change without extra interfaces."
 date: 2026-04-24
 tags: [solid, design, oop, architecture]
 crosspost: [devto, linkedin]
@@ -10,117 +10,184 @@ series:
   order: 1
 ---
 
-## The acronym and its heritage
+A report starts as one function: select completed visits, format their IDs, and email the result. Then a customer wants an inbox delivery option. Later, support needs to know whether delivery succeeded. Those are two separate changes. They expose what SOLID and composition are useful for.
 
-SOLID was coined by Michael Feathers in 2000 as a mnemonic for five principles Robert Martin had been writing about since the late 1990s:
+The goal is a design in which changing report content does not require editing a transport, and adding delivery auditing does not require a subclass for every transport.
 
-- **S**: Single Responsibility Principle
-- **O**: Open/Closed Principle
-- **L**: Liskov Substitution Principle
-- **I**: Interface Segregation Principle
-- **D**: Dependency Inversion Principle
+## Start with the concrete feature
 
-They're OO principles, designed to fight specific 1990s-era pains: giant classes, fragile inheritance, rigid abstractions, unnecessary coupling. In 2026 they're often taught badly, as rules to memorize rather than tensions to manage.
+An initial implementation can be direct:
 
-## S, Single Responsibility Principle
+```typescript
+async function emailCompletedVisits(
+  visits: readonly { id: string; complete: boolean }[],
+  sendEmail: (message: string) => Promise<{ receipt: string }>,
+) {
+  const ids = visits.filter((visit) => visit.complete).map((visit) => visit.id).sort();
+  return sendEmail(`Completed visits: ${ids.join(", ") || "none"}`);
+}
+```
 
-**A class should have one, and only one, reason to change.**
+There is no reason to introduce five interfaces for this function. It has one known delivery path. Its report rule is deterministic, and its external effect is supplied by the caller.
 
-The usual bad paraphrase: "a class should do one thing." That's not quite it. A `UserService` that validates emails, hashes passwords, and saves users to a database *does* one thing, it manages users, but it has three reasons to change (email rules, crypto library, database schema).
+The split becomes useful when the two reasons to change become real: the report's selection/formatting rules and the destination's delivery behavior.
 
-The real unit is *axis of change*. Code that changes together belongs together. Code that changes for different reasons belongs apart.
+## Change 1: let the caller choose delivery
 
-**What it prevents**: A change to the email validation rule forcing a re-test of the password hashing code. Two stakeholders modifying the same class for unrelated reasons, producing merge conflicts.
+Keep report construction pure. Give delivery one small behavioral contract:
 
-**Misreading**: "Every class should have one public method." You end up with 200 `*Service` classes that are each a single function.
+```typescript
+export type Visit = Readonly<{ id: string; complete: boolean }>;
+export type Delivery = Readonly<{ receipt: string }>;
+export type Sender = (message: string) => Promise<Delivery>;
 
-## O, Open/Closed Principle
+export function buildReport(visits: readonly Visit[]): string {
+  const ids = visits.filter((visit) => visit.complete).map((visit) => visit.id).sort();
+  return `Completed visits: ${ids.join(", ") || "none"}`;
+}
 
-**Software entities should be open for extension but closed for modification.**
+export async function notify(visits: readonly Visit[], send: Sender): Promise<Delivery> {
+  return send(buildReport(visits));
+}
+```
 
-Adding a new feature shouldn't require modifying existing code. You add new code, a new class, a new plugin, and the old code keeps working unchanged.
+`buildReport` owns the report rule. `notify` composes that rule with one effect. The caller supplies email, an inbox adapter, or a recording fake. The function does not need to know which one was selected.
 
-Classic OCP violation: a `shape.area()` function with an `if shape.type == 'circle' / rect / triangle` chain. Every new shape means editing the chain. OCP suggests polymorphism, each shape implements `area()`, and the chain disappears.
+```typescript
+const received: string[] = [];
+const inbox: Sender = async (message) => {
+  received.push(message);
+  return { receipt: "inbox-1" };
+};
 
-**What it prevents**: Changes that ripple through the codebase. Fear of adding features because the blast radius is unknown.
+const delivery = await notify(
+  [{ id: "v2", complete: true }, { id: "v1", complete: true }],
+  inbox,
+);
 
-**Misreading**: "Every class needs an interface and a factory so it can be replaced." Most code will never be replaced. Premature extensibility is a tax on reading.
+console.log(received[0]); // Completed visits: v1, v2
+console.log(delivery.receipt); // inbox-1
+```
 
-## L, Liskov Substitution Principle
+A function type is enough. An `AbstractNotificationFactory`, registry, and dependency-injection container would add setup without answering another requirement.
 
-**Subtypes must be substitutable for their base types.** (Barbara Liskov, 1987)
+This is dependency inversion at a small scale: the reporting workflow describes the capability it consumes. A provider adapter satisfies it. It is also interface segregation: the report needs `send`, not subscription management, account deletion, or every method in a provider SDK.
 
-If `Square extends Rectangle`, any code using a `Rectangle` should work identically when given a `Square`. That's rarely true, set a `Square`'s width and its height must change too, violating `Rectangle`'s contract.
+## Change 2: audit delivery without a subclass matrix
 
-**What it prevents**: Inheritance trees where downcasting and `isinstance` checks leak back into the calling code.
+Suppose support now needs a delivery outcome. Inheritance can turn two independent dimensions into a tree:
 
-**The modern take**: most language communities have moved toward composition over inheritance. LSP violations rarely show up in code written after ~2015 because the inheritance relationships that used to produce them aren't built anymore.
+```text
+EmailReporter
+InboxReporter
+AuditedEmailReporter
+AuditedInboxReporter
+```
 
-## I, Interface Segregation Principle
+Adding retries later multiplies the combinations again. Composition keeps the dimensions separate: a sender delivers, and a wrapper records the result.
 
-**Clients shouldn't depend on methods they don't use.**
+```typescript
+export type AuditEvent =
+  | Readonly<{ outcome: "sent"; receipt: string }>
+  | Readonly<{ outcome: "failed" }>;
 
-A fat interface with 15 methods forces implementers to stub or empty the ones they don't need. Splitting into narrower interfaces means each implementer depends only on what it uses.
+export function withAudit(send: Sender, record: (event: AuditEvent) => void): Sender {
+  return async (message) => {
+    let delivery: Delivery;
+    try {
+      delivery = await send(message);
+    } catch (error) {
+      record({ outcome: "failed" });
+      throw error;
+    }
+    record({ outcome: "sent", receipt: delivery.receipt });
+    return delivery;
+  };
+}
+```
 
-Example: instead of a single `Device` interface with `read`, `write`, `lock`, `unlock`, `format`, split into `Readable`, `Writable`, `Lockable`. A read-only device implements only `Readable`.
+Use the wrapper with either destination:
 
-**What it prevents**: Ripple changes when a method on a broad interface changes, every unrelated implementer has to update.
+```typescript
+const audit: AuditEvent[] = [];
+const auditedInbox = withAudit(inbox, (event) => audit.push(event));
+await notify([{ id: "v1", complete: true }], auditedInbox);
+console.log(audit); // [{ outcome: "sent", receipt: "inbox-1" }]
+```
 
-**Misreading**: "Every method needs its own interface." Interfaces with one method are usually better modeled as function types.
+A delivery failure stays a failure. The wrapper does not turn it into a successful empty receipt. The event also excludes the report body.
 
-## D, Dependency Inversion Principle
+The example uses an in-memory recording callback. It does not make provider delivery and a durable audit write atomic. If recording throws after delivery, the caller receives that failure even though delivery succeeded. A production workflow needs an explicit consistency policy, often an outbox and idempotent delivery. A decorator alone does not solve that problem.
 
-Two statements:
+## A matching shape can still violate substitution
 
-1. High-level modules shouldn't depend on low-level modules. Both should depend on abstractions.
-2. Abstractions shouldn't depend on details. Details should depend on abstractions.
+TypeScript accepts this function as a `Sender`:
 
-Instead of `OrderService` directly using `MySQLOrderRepo`, both depend on an `OrderRepo` interface. `OrderService` can then run with `MySQLOrderRepo`, `PostgresOrderRepo`, or `InMemoryOrderRepo` (useful for testing).
+```typescript
+const silentSender: Sender = async () => ({ receipt: "" });
+```
 
-**What it prevents**: Business logic that can't be tested without a real database. Upgrade paths that require rewriting the domain code.
+Its shape matches, but it violates the behavioral promise: a fulfilled delivery has a nonempty receipt. A caller that records successful delivery cannot substitute it safely. That is a Liskov substitution problem even without class inheritance.
 
-**Misreading**: "DI framework everywhere." DIP is about direction of dependency, not about a specific injection mechanism. Constructor injection works. A DI container is overkill for most things.
+The contract can be exercised against any adapter:
 
-## The tensions SOLID balances
+```typescript
+export async function assertSenderContract(send: Sender): Promise<void> {
+  const delivery = await send("contract probe");
+  if (typeof delivery.receipt !== "string" || delivery.receipt.trim() === "") {
+    throw new Error("Successful delivery requires a nonempty receipt");
+  }
+}
+```
 
-SOLID principles pull against each other:
+A real adapter contract also defines what rejection means, whether a lost response can accompany a successful delivery, and how duplicate requests behave. A type annotation cannot establish those external guarantees.
 
-- **SRP + OCP**: splitting classes can make extension harder because there's more code to navigate.
-- **ISP + SRP**: narrow interfaces can imply narrow classes, sometimes *too* narrow.
-- **DIP + YAGNI**: every abstraction has a cost. Reach for it when you need substitutability, not on principle.
+## Run the specimen
 
-Applying SOLID means picking which force to lean on for this code. A 200-line data transformation utility doesn't need all five. A 20,000-line domain model probably does.
+The complete source and tests live in `companion/design-principles/`. From a repository checkout with Node 22.18 or newer:
 
-## What SOLID doesn't cover
+```bash
+node --test companion/design-principles/notifications.test.mjs
+node_modules/.bin/tsc --strict --noEmit --types node --target ES2022 --module NodeNext --moduleResolution NodeNext companion/design-principles/notifications.ts
+```
 
-- **Concurrency.** Nothing in SOLID is about thread-safety or async design.
-- **Performance.** SOLID doesn't care about cache locality or hot-path allocation.
-- **Distributed systems.** Microservices and network boundaries need different principles (bulkheads, circuit breakers, idempotency).
-- **Functional programming.** SOLID is implicitly OO. For FP, consult separate principles (purity, referential transparency, immutability).
+The five tests check report filtering/order, interchangeable destinations, preserved delivery receipts, failure propagation/auditing, and rejection of the empty-receipt substitute. These are local behavioral checks. No email provider or durable audit database participates.
 
-SOLID is a set of *design* principles for *object-oriented* code. Expecting it to be a complete engineering philosophy is asking too much of a mnemonic.
+## What each principle buys here
 
-## A practical reading
+| Principle | Concrete pressure | Result |
+| --- | --- | --- |
+| Single responsibility | Content rules and delivery change independently | Pure report function separate from effect |
+| Open/closed | Add inbox delivery without rewriting report selection | Supply another sender |
+| Liskov substitution | A sender appears successful but provides no receipt | Test the behavioral contract |
+| Interface segregation | A provider SDK has many unrelated operations | Consume only the `Sender` function |
+| Dependency inversion | Report tests need no live provider | The workflow defines its consumed capability |
 
-If you read one book's worth of SOLID once:
+Open/closed is local to a chosen boundary. A new reporting requirement can still require changing `buildReport`. The principle does not promise that existing code never changes.
 
-- **S** is about cohesion. Code that changes together belongs together.
-- **O** is about decoupling. New behavior without rewriting old code.
-- **L** is about subtyping. If you inherit, inherit behavior-preservingly.
-- **I** is about interface design. Don't make clients carry dead weight.
-- **D** is about direction. Depend on abstractions, not concretes.
+## Composition over inheritance
 
-Four of five are really about one thing: minimizing ripple effects. That's the whole game.
+Composition combines objects or functions that have separate contracts. Here `notify` uses a sender and `withAudit` wraps one. That makes the combinations visible at construction rather than encoding them in a subclass hierarchy.
+
+Inheritance remains useful when an existing framework deliberately exposes a base class as its extension contract, or when a subtype truly preserves the base behavior. A genuine subtype does not require callers to detect its concrete class, skip unsupported methods, or weaken their expectations.
+
+The cost of composition is indirection and construction. A one-off formatter with no independent behavior to vary can remain a function. Do not replace every private call with a port, class, factory, and test double.
+
+## Review a proposed abstraction
+
+Name the requirement that varies. Name the contract a caller relies on. Show the test that would fail if a substitute broke that contract. Then compare the construction cost with the change it isolates.
+
+If those answers are vague, keep the concrete implementation until another requirement exposes a real boundary. SOLID is useful vocabulary for that review, not a quota of interfaces.
 
 ## References
 
-- [Robert Martin, *Agile Software Development, Principles, Patterns, and Practices*](https://www.oreilly.com/library/view/agile-software-development/0135974445/), the original book-length treatment
-- [Uncle Bob's article series](https://web.archive.org/web/20150202200348/http://www.objectmentor.com/resources/articles/srp.pdf) (SRP PDF, 2005)
-- [Barbara Liskov, *Data Abstraction and Hierarchy* (1987)](https://dl.acm.org/doi/10.1145/62139.62141), LSP in its original context
-- [Sandi Metz, *Practical Object-Oriented Design in Ruby (POODR)*](https://www.poodr.com/), SOLID without the dogma
-- [Dan North, *CUPID, the back story*](https://dannorth.net/cupid-the-back-story/), the critical response that proposes an alternative
+- [TypeScript handbook: More on Functions](https://www.typescriptlang.org/docs/handbook/2/functions.html) describes callable contracts and function types.
+- [TypeScript handbook: Type Compatibility](https://www.typescriptlang.org/docs/handbook/type-compatibility.html) explains structural compatibility, which does not prove behavioral substitution.
+- [Barbara Liskov, Data Abstraction and Hierarchy](https://dl.acm.org/doi/10.1145/62139.62141) establishes the behavioral substitution concern.
 
 ## Related topics and posts
 
-- [Composition over inheritance](../2026-04-24-composition-over-inheritance/), how to do what inheritance promised without its pathologies
-- [Functional Core, Imperative Shell](../../topics/cs/functional-core-imperative-shell/), an architectural pattern that subsumes much of DIP
+- [Software design collection](../series/software-design-principles/), choose a lesson by the failure you are trying to prevent.
+- [Functional Core, Imperative Shell](../../topics/cs/functional-core-imperative-shell/), separate deterministic decisions from effects.
+- [Strategy](../../topics/cs/design-patterns/strategy/), select behavior through a narrow collaborator.
+- [TypeScript async mutex](../2026-05-15-typescript-async-mutex-pattern/), a separate lesson about coordinating asynchronous mutation.

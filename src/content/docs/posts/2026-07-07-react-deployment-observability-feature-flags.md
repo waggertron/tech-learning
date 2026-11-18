@@ -1,140 +1,139 @@
 ---
-title: "Modern React 40: Deployment, observability, and feature flags"
-description: "Deployment, observability, and feature flags for learning how React behaves in production."
+title: "Modern React 37: Build, observe, and roll back a release"
+description: "Build a local React artifact, record release-aware events, switch checkout variants, and serve an earlier artifact to recover."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-deployment-observability-feature-flags/
 series:
   slug: modern-react-development
-  order: 40
+  order: 37
 ---
 
-This is part 40 of the [Modern React development series](../series/modern-react-development/).
+This is part 37 of the [Modern React development series](../series/modern-react-development/).
 
-A React app changes character in production. Bundles are optimized, users have slower devices, networks fail, errors need reports, and feature rollouts need control. Deployment work gives the app feedback loops after it leaves a developer machine.
+A release consists of bytes, configuration, and behavior. Build once, keep the artifact, and attach the same release identifier to observations. When a candidate fails, a saved previous artifact gives rollback a concrete destination.
 
 ## Concept
 
-Deployment ships the built app to users. Observability collects signals about what the app is doing. Feature flags control whether a capability is visible or active for a user, cohort, environment, or rollout stage.
+A production build transforms source into static assets. Deployment selects which artifact a server delivers. Runtime configuration is data read after those assets load. A feature flag chooses a behavior within an artifact; rolling back an artifact changes the code itself.
 
-## Terms
-
-- **Deployment**: The process of building and publishing an application for users.
-- **Observability**: Telemetry that helps teams understand runtime behavior through logs, metrics, traces, errors, and events.
-- **Feature flag**: A runtime switch that controls a feature without requiring a new build.
-- **Web vitals**: User experience metrics for loading, responsiveness, and visual stability.
-- **CI**: Continuous integration, an automated environment that runs checks for a change.
-- **PII**: Personally identifiable information, data that can identify a specific person.
+The example uses an intentionally local static server. It demonstrates the build and rollback mechanics without pretending to provide a public hosting platform, authentication service, or payment system.
 
 ## Mental model
 
-Think of production as a long-running experiment with instruments. Deployments change the system, observability tells you what changed, and flags let you narrow or reverse exposure.
+Separate three controls:
 
-## How it is used
+| Control | Changes | Does not prove |
+| --- | --- | --- |
+| build | generated HTML and JavaScript | successful runtime behavior |
+| flag | selected checkout variant | server authorization |
+| rollback | artifact served to the next page load | data-schema rollback |
 
-Use this layer for production error reporting, performance monitoring, release gates, gradual rollouts, A/B tests, kill switches, analytics events, and identifying regressions after a React or framework upgrade.
+## Build and save an artifact
 
-## How to use it
+From the repository root after `npm ci`:
 
-1. Build the app with the production command used by CI.
-2. Report root errors and route errors to an error service.
-3. Measure key user flows and web vitals.
-4. Read feature flags from a provider or server boundary, then pass simple booleans or variants into UI.
-5. Keep server-side authorization separate from client feature visibility.
-
-## Example: Root error reporting
-
-```tsx
-import { createRoot } from "react-dom/client";
-
-const root = createRoot(document.getElementById("root")!, {
-  onCaughtError(error, errorInfo) {
-    reportError({
-      name: "react-caught-error",
-      message: error.message,
-      componentStack: errorInfo.componentStack,
-    });
-  },
-});
-
-root.render(<App />);
+```bash
+node node_modules/vite/bin/vite.js build --config companion/react-workbench/vite.config.ts
+node companion/react-workbench/release.mjs previous-1
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting" data-render-mode="result" data-interaction-mode="runner" data-runner-entry="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting" role="region" aria-label="Output view: Root error reporting">
-  <div class="react-example-output__header">Browser result</div>
-  <div class="react-example-output__body">
-    <div class="react-example-output__runner" data-react-example-runner="2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting">
-  <button type="button" class="react-example-output__run-button">Run example</button>
-  <div class="react-example-output__runner-output" aria-live="polite">
-    <pre class="react-example-output__runner-pre">const root = createRoot(document.getElementById(&quot;root&quot;)!, {
-  onCaughtError(error, errorInfo) {
-    reportError({
-      name: &quot;react-caught-error&quot;,
-      message: error.message,
-      componentStack: errorInfo.componentStack,
-    });
-  },
-});
-root.render(&lt;App /&gt;);</pre>
-  </div>
-</div>
-  </div>
-</div>
+Vite writes `companion/react-workbench/dist/index.html`, hashed JavaScript under `dist/assets/`, and `dist/runtime-config.json`. The snapshot command copies those files into `releases/previous-1` and records a SHA-256 digest plus the file list in `release.json`. It rejects an existing name so a release cannot be silently overwritten.
 
-React root options provide one place to report production render errors caught by boundaries.
+After changing the application, repeat with a new name:
 
-## Example: Feature flag as a prop
+```bash
+node node_modules/vite/bin/vite.js build --config companion/react-workbench/vite.config.ts
+node companion/react-workbench/release.mjs candidate-2
+node companion/react-workbench/serve.mjs candidate-2
+```
+
+Open `http://127.0.0.1:4175`. Inspect the network requests: `index.html` points to a hashed asset, while `/runtime-config.json` is fetched separately. A missing or malformed configuration produces an explicit startup message instead of silently selecting a feature variant.
+
+The configuration contains only a release name and a Boolean checkout decision. Browser-delivered configuration is public. A private service credential would not belong there.
+
+## Example: Observe a deterministic rollout
 
 ```tsx
-import { ClassicPaymentForm } from "./ClassicPaymentForm";
-import { NewPaymentSheet } from "./NewPaymentSheet";
+import { useState } from "react";
 
-type CheckoutPageProps = {
-  flags: {
-    newPaymentSheet: boolean;
-  };
-};
+type ReleaseEvent = { release: string; variant: "classic" | "new"; name: string };
 
-export function CheckoutPage({ flags }: CheckoutPageProps) {
-  return flags.newPaymentSheet ? (
-    <NewPaymentSheet />
-  ) : (
-    <ClassicPaymentForm />
+export function ReleaseDemo({ initialEnabled = false, release = "candidate-2" }: { initialEnabled?: boolean; release?: string }) {
+  const [enabled, setEnabled] = useState(initialEnabled);
+  const [events, setEvents] = useState<ReleaseEvent[]>([]);
+  const variant = enabled ? "new" : "classic";
+  function record(name: string) {
+    setEvents((current) => [...current, { release, variant, name }]);
+  }
+  return (
+    <section>
+      <label><input type="checkbox" checked={enabled} onChange={(event) => setEnabled(event.target.checked)} /> Enable new checkout</label>
+      <h3>{enabled ? "New checkout" : "Classic checkout"}</h3>
+      <button type="button" onClick={() => record("checkout-completed")}>Complete simulated checkout</button>
+      <button type="button" onClick={() => record("checkout-failed")}>Simulate checkout failure</button>
+      <div role="status">
+        {events.length === 0 ? <p>No release events yet</p> : <ul>{events.map((event, index) => <li key={index}>{event.release} / {event.variant} / {event.name}</li>)}</ul>}
+      </div>
+    </section>
   );
 }
 ```
 
-<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop.tsx" role="region" aria-label="Output view: Feature flag as a prop">
+<div class="react-example-output not-content" data-react-example-output="2026-07-07-react-deployment-observability-feature-flags-1-observe-a-deterministic-rollout" data-render-mode="react-server" data-interaction-mode="live-component" data-live-entry="./react-example-modules/2026-07-07-react-deployment-observability-feature-flags-1-observe-a-deterministic-rollout.tsx" role="region" aria-label="Output view: Observe a deterministic rollout">
   <div class="react-example-output__header">React output</div>
   <div class="react-example-output__body">
-    <div class="react-example-output__rendered"><form><h2>New payment sheet</h2><button>Confirm payment</button></form></div>
+    <div class="react-example-output__rendered"><section><label><input type="checkbox"/> Enable new checkout</label><h3>Classic checkout</h3><button type="button">Complete simulated checkout</button><button type="button">Simulate checkout failure</button><div role="status"><p>No release events yet</p></div></section></div>
   </div>
 </div>
 
-The component receives a simple decision. The flag system can live at the server, provider, or route boundary.
+Both variants are reachable. Start with **Classic checkout**, enable the new checkout, then simulate a failure. The status records the release, variant, and event name. Disable the flag and the classic path returns without changing the bundle.
 
-## Details to watch
+The checkbox is a local stand-in for a configuration decision, not a remote rollout service. The workbench starts it from `runtime-config.json`. The events remain in memory and reset on page reload. They demonstrate an event schema and visible failure feedback rather than a durable analytics backend.
 
-- **Build parity**: CI should run the same production build command used for deployment.
-- **Flag cleanup**: Expired flags become permanent complexity. Track owners and removal dates.
-- **Telemetry privacy**: Telemetry should avoid personally identifiable information unless the system is designed and approved for it.
-- **Client visibility**: A feature flag can hide UI, but it is not authorization.
+In a real rollout, compare failure counts to attempts for the same release and cohort. A larger count can mean more users rather than worse behavior. Define the observation period and rollback threshold before expanding exposure. Do not transmit payment details or user-entered content as event fields.
+
+For render-time reporting, use the [error boundary lesson](../2026-07-07-react-error-boundaries-recovery/). The simulated checkout failure here is an application event, so it is recorded directly by its action handler.
+
+## Roll back the local artifact
+
+Stop the local server with Ctrl-C. Serve the saved previous release:
+
+```bash
+node companion/react-workbench/serve.mjs previous-1
+```
+
+Reload the page and inspect `/release.json`. Its name identifies the selected artifact. The server uses `Cache-Control: no-store` so this exercise does not accidentally test an old cached page. Production caching needs a deliberate HTML/configuration policy alongside immutable hashed assets.
+
+If both snapshots came from unchanged source, they will have the same content digest. That is a useful control: selecting a different release name is not evidence that the code changed. Make a visible application change between snapshots to test the complete rollback loop.
+
+The loopback server does not implement SPA route fallback, public transport security, traffic switching, or migration rollback. Those deployment decisions belong to the chosen hosting platform and backend. A feature flag also does not authorize a server-side operation.
+
+## Verify the release
+
+The behavior test checks classic/new variants and a release-labelled failure event:
+
+```bash
+node --test --test-name-pattern='recovery and rollout' tests/react-example-output-views.test.mjs
+```
+
+Before release, run the production build and inspect the served artifact, configuration request, failure event, and rollback destination. React Profiler callbacks require a profiling-capable build; ordinary production behavior is not proven by a development timing display.
 
 ## Series navigation
 
-- Previous: [Part 39: Internationalization and formatting](../2026-07-07-react-internationalization-formatting/)
-- Next: none. This is the end of the series.
+- Previous: [Part 36: Internationalization and formatting](../2026-07-07-react-internationalization-formatting/)
+- Next: none. This is the end of the core series.
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References
 
-- [createRoot error logging](https://react.dev/reference/react-dom/client/createRoot)
-- [Next.js Deploying](https://nextjs.org/docs/app/getting-started/deploying)
-- [Next.js useReportWebVitals](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals)
-- [Profiler](https://react.dev/reference/react/Profiler)
+- [Vite production builds](https://vite.dev/guide/build) describes generated assets and deployment-related configuration.
+- [Vite static deployment](https://vite.dev/guide/static-deploy) distinguishes a build from a production host.
+- [Vite environment variables](https://vite.dev/guide/env-and-mode) explains build-time replacement and client exposure.
+- [createRoot error reporting](https://react.dev/reference/react-dom/client/createRoot) explains root render-error hooks.
 
 ## Related topics
 
-- [Web topics](../../topics/web/)
-- [System design topics](../../topics/system-design/)
+- [Framework choice and project setup](../2026-07-07-react-framework-choice-project-setup/)
+- [Error boundaries and recovery](../2026-07-07-react-error-boundaries-recovery/)
 - [Testing](../../topics/testing/)

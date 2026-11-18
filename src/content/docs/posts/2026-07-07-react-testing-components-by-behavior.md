@@ -129,7 +129,7 @@ test("shows a validation message for a short display name", async () => {
 ## Series navigation
 
 - Previous: [Part 18: TypeScript patterns for React](../2026-07-07-react-typescript-component-patterns/)
-- Next: [Part 20: Performance and React Compiler](../2026-07-07-react-performance-and-compiler/)
+- Next: [Part 20: Measure render work and understand Compiler](../2026-07-07-react-performance-and-compiler/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

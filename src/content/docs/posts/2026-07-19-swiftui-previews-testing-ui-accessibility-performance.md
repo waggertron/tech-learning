@@ -9,66 +9,45 @@ series:
   order: 43
 ---
 
-No single SwiftUI test surface proves the interface. Previews accelerate inspection, unit tests prove rules, UI tests prove wiring, and device measurements prove hardware behavior.
+A preview shows a chosen state. A unit test proves a rule. A UI journey proves the controls are wired through the application. Each answers a different question.
 
-## Preview states, not one ideal record
+## Begin with deterministic product behavior
 
-```swift
-#Preview("Load failure") {
-    NoteListView(model: .fixture(state: .failed("Disk unavailable")))
-}
+The package suite covers validated titles/tags/coordinates, fixed identity/time, save state transitions, failure, repository replacement/deletion, reopen, corrupt stores, atomic replacement failure, row packing, and cancellable latest-request loading.
 
-#Preview("Large text") {
-    NoteEditor(draft: .fixture)
-        .environment(\.dynamicTypeSize, .accessibility5)
-}
+Run it from `companion/field-notes`:
+
+```bash
+./scripts/test-package.sh
 ```
 
-Useful fixtures cover loading, empty, populated, error, long localization, right-to-left layout, large text, dark appearance, and permission denial. A preview is interactive inspection, not automated passing evidence.
+These checks passed on Swift 6.3.3. They do not require an Apple UI runtime.
 
-## Test rules below the view
+## Launch a separate UI store
 
-```swift
-import Testing
-
-@Test("Blank titles are rejected")
-func blankTitle() {
-    let draft = NoteDraft(title: "   ", body: "Observed near creek")
-    #expect(draft.titleError == "Enter a title.")
-    #expect(!draft.canSave)
-}
-```
-
-Formatting, validation, filtering, route parsing, and cancellation policy run faster and fail more clearly outside rendered views.
-
-## Keep UI journeys narrow
+Both app drivers use these actual startup switches:
 
 ```swift
-func testCreateNote() {
-    let app = XCUIApplication()
-    app.launchArguments = ["--ui-testing", "--store", "in-memory"]
-    app.launch()
-
-    app.buttons["New Note"].tap()
-    app.textFields["Title"].typeText("Creek crossing")
-    app.buttons["Save"].tap()
-    XCTAssertTrue(app.staticTexts["Creek crossing"].waitForExistence(timeout: 2))
-}
+app.launchArguments = [
+    "--ui-testing", "--store-name", "save-failure",
+    "--reset-store", "--fail-first-save"
+]
+app.launch()
 ```
 
-Launch arguments select deterministic local data. UI automation proves the create flow is wired through controls, navigation, and storage. It does not need every validation combination already covered by unit tests.
+The debug composition root resolves a separate file, resets it only when requested, and can reject the first save. The retry then reaches the real file adapter. Production startup ignores the test switches.
 
-## Audit accessibility beyond identifiers
+`FieldNotesSwiftUIUITests` and `FieldNotesUIKitUITests` each contain a create/edit/relaunch journey and a failure/retry journey. Their assertions target visible titles, fields, actions, and recovery copy. Relaunch omits `--reset-store`, so the saved note has to come from disk.
 
-Automation identifiers help tests find elements. They do not prove useful VoiceOver order, labels, values, actions, Dynamic Type layout, contrast, reduced motion, keyboard access, Voice Control, or localization. Record those checks separately.
+## Add previews for risky geometry
 
-## Measure a budget
+`TagFlowLayout.swift` includes narrow large-text and right-to-left preview cases. The pure row-packing algorithm has separate tests, so a visual failure can be distinguished from incorrect geometry. Neither surface proves VoiceOver ordering, actual text measurement, or interaction by itself.
 
-Define a user outcome first: launch to usable notes, scroll a seeded collection, open an editor, or save an attachment. Record destination, data size, release configuration, metric, and variance. Simulator timing does not become device performance evidence.
+## Keep accessibility and performance evidence honest
 
-## Validation boundary
+Inspect large text, reading order, keyboard traversal, contrast, and reduced motion on real rendered screens. A test identifier is not an accessible name. Measure launch and scrolling using a fixed data fixture and named device conditions before reporting performance.
 
-The examples did not run under Xcode. Preview rendering, Swift Testing in an app target, XCUITest, accessibility audits, Instruments, Simulator, and device performance remain Not verified.
+The app, migration, and UI-test files were syntax-parsed only. Xcode builds, UI execution, preview rendering, accessibility audits, Instruments, and physical-device performance remain unverified because this environment has Command Line Tools without full Xcode.
 
 ## Series navigation
 

@@ -25,6 +25,7 @@ const steps = [
   ["Build", "npm", ["run", "build"]],
   ["Page validation", "npm", ["run", "validate:pages"]],
   ["Internal link validation", "npm", ["run", "validate:links"]],
+  ["Post route migrations", "npm", ["run", "validate:post-migrations"]],
 ];
 
 if (includeExternal) {

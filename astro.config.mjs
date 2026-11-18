@@ -1,3 +1,4 @@
+import postMigrations from './docs/data/post-series-route-migrations.json' with { type: 'json' };
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
@@ -12,6 +13,9 @@ process.env.TZ = 'UTC';
 export default defineConfig({
   site: 'https://waggertron.github.io',
   base: '/tech-learning',
+  redirects: Object.fromEntries(postMigrations.filter((entry) => entry.active).map((entry) => [
+    entry.oldRoute, `/tech-learning${entry.newRoute}${entry.destinationFragment ? '#' + entry.destinationFragment : ''}`,
+  ])),
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [[rehypeKatex, { throwOnError: false, output: 'htmlAndMathml' }]],

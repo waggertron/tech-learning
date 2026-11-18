@@ -116,7 +116,7 @@ The layout wraps all child account routes, so shared navigation does not need to
 
 ## Series navigation
 
-- Previous: [Part 21: Framework choice and project setup](../2026-07-07-react-framework-choice-project-setup/)
+- Previous: [Part 21: Choose a framework and prove the setup](../2026-07-07-react-framework-choice-project-setup/)
 - Next: [Part 23: React Router v7](../2026-07-07-react-router-v7-framework/)
 - Series index: [Modern React development](../series/modern-react-development/)
 

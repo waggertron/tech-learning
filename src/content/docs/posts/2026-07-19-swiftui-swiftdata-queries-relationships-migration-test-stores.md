@@ -9,97 +9,81 @@ series:
   order: 40
 ---
 
-SwiftData can make persistence feel like part of the view tree. The database still has a separate lifetime, schema, failure surface, and migration history.
+The app's default persistence is a versioned JSON file. SwiftData is an alternative adapter lesson, not a second store silently writing the same library. A persistence framework needs its own schema and migration evidence.
 
-## Define a persistence model deliberately
+## Change a shipped schema deliberately
+
+Version 1 stores a note ID and title. Version 2 adds an optional summary so existing data has a valid destination without inventing missing content.
+
+The complete specimen is `Apps/SwiftUI/NoteStoreSchema.swift`:
 
 ```swift
+import Foundation
 import SwiftData
 
-@Model
-final class StoredNote {
-    @Attribute(.unique) var id: String
-    var title: String
-    var body: String
-    var updatedAt: Date
-    @Relationship(deleteRule: .cascade) var attachments: [StoredAttachment]
-
-    init(id: String, title: String, body: String, updatedAt: Date) {
-        self.id = id
-        self.title = title
-        self.body = body
-        self.updatedAt = updatedAt
-        self.attachments = []
+/// This is an alternative persistence lesson, not the app's selected file adapter.
+enum NoteSchemaV1: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(1, 0, 0) }
+    static var models: [any PersistentModel.Type] { [StoredNote.self] }
+    @Model final class StoredNote {
+        @Attribute(.unique) var id: String
+        var title: String
+        init(id: String, title: String) { self.id = id; self.title = title }
     }
 }
-```
 
-The persistence type describes stored shape and relationships. Field Notes can map it to a validated `FieldNote` domain value so storage annotations and mutable managed lifetime do not spread through every use case.
-
-## Compose a disk container once
-
-```swift
-@main
-struct FieldNotesApp: App {
-    private let container: ModelContainer
-
-    init() {
-        container = try! ModelContainer(for: StoredNote.self, StoredAttachment.self)
-    }
-
-    var body: some Scene {
-        WindowGroup { NoteListScreen() }
-            .modelContainer(container)
-    }
-}
-```
-
-A shipping app should replace the force with an explicit startup failure policy. It may show recovery, preserve the store for support, or open a controlled read-only path. Silently deleting a store after an error can destroy user data.
-
-## Query for presentation, not every rule
-
-```swift
-struct NoteListScreen: View {
-    @Query(sort: \StoredNote.updatedAt, order: .reverse)
-    private var notes: [StoredNote]
-
-    var body: some View {
-        List(notes) { note in
-            Text(verbatim: note.title)
+enum NoteSchemaV2: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(2, 0, 0) }
+    static var models: [any PersistentModel.Type] { [StoredNote.self] }
+    @Model final class StoredNote {
+        @Attribute(.unique) var id: String
+        var title: String
+        var summary: String?
+        init(id: String, title: String, summary: String? = nil) {
+            self.id = id; self.title = title; self.summary = summary
         }
     }
 }
+
+enum NoteMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [NoteSchemaV1.self, NoteSchemaV2.self] }
+    static var stages: [MigrationStage] {
+        [.lightweight(fromVersion: NoteSchemaV1.self, toVersion: NoteSchemaV2.self)]
+    }
+}
 ```
 
-`@Query` is useful when a view directly owns a simple fetch presentation. Complex authorization, sync conflict rules, transactions, or framework-neutral reuse belong behind an application boundary.
+Both versions use a nested model named `StoredNote`. The migration plan lists the old and new schemas in order and declares the lightweight transition. The immutable domain `FieldNote` remains separate from these mutable persistent objects.
 
-## Use isolated test and preview stores
+## Start from an old store
+
+`Tests/SwiftUIAppTests/NoteMigrationTests.swift` creates a version 1 store in a temporary directory, inserts `old-note`, closes that container's scope, then opens the same URL with version 2 and the migration plan.
+
+Its assertions check that exactly one note remains, its ID and title are unchanged, and the new summary is nil. That is different from creating an empty version 2 database and declaring migration successful.
 
 ```swift
-let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+let schema = Schema(versionedSchema: NoteSchemaV2.self)
+let configuration = ModelConfiguration(schema: schema, url: url)
 let container = try ModelContainer(
-    for: StoredNote.self,
-    configurations: configuration
+    for: schema,
+    migrationPlan: NoteMigrationPlan.self,
+    configurations: [configuration]
 )
 ```
 
-Each test gets a fresh container and valid fixtures. An in-memory store proves model and query behavior, not disk durability, file protection, migration, or crash recovery.
+The same suite creates two separate in-memory containers and proves that inserting into one does not seed the other. Use a fresh container for each preview/test. Do not connect previews to a person's live store.
 
-## Treat migration as shipped behavior
+## Separate failure policies
 
-A schema change needs old-store fixtures and an expected destination. Test required and optional fields, relationship changes, uniqueness, interrupted migration, and data the current app no longer creates but older releases did.
+If a migration cannot open a store, keep the source intact and show a recovery path. Deleting the file and retrying is data loss, not migration recovery. A production migration also needs unsupported-schema, relationship, uniqueness, disk-full, and interruption cases that this small additive specimen does not claim to cover.
 
-```text
-version 1 store -> migration plan -> version 2 store
-       |                              |
-       +-- preserved IDs and notes ---+
-```
+The file adapter's package tests already cover malformed data, unsupported version, failed replacement preserving the previous bytes, and reopen. Those results do not prove SwiftData behavior.
 
-Never test only a fresh latest schema and call persistence complete.
+## Run the matching evidence
 
-## Validation boundary
+Generate the companion Xcode project, resolve an installed destination, and run the `FieldNotesSwiftUI` scheme. `NoteMigrationTests` belongs to its app-test target.
 
-The code is claims-audited but not compiled. SwiftData requires an Apple SDK and supported deployment target. Container creation, queries, relationships, disk durability, and migrations remain Not verified.
+The specimen was syntax-parsed but not type-checked or executed against SwiftData because full Xcode is unavailable. Migration and isolated-container results remain unverified. The API shape was reviewed against Apple's SchemaMigrationPlan, ModelConfiguration, and ModelContainer references on 2026-11-17.
 
 ## Series navigation
 
@@ -108,6 +92,9 @@ The code is claims-audited but not compiled. SwiftData requires an Apple SDK and
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References
+
+- [SchemaMigrationPlan](https://developer.apple.com/documentation/swiftdata/schemamigrationplan) defines ordered schemas and migration stages.
+- [ModelContainer schema initializer](https://developer.apple.com/documentation/swiftdata/modelcontainer/init(for:migrationplan:configurations:)-1czix) accepts the schema, migration plan, and configuration array.
 
 - [SwiftData](https://developer.apple.com/documentation/swiftdata) documents models, containers, contexts, and queries.
 - [Adding and editing persistent data in your app](https://developer.apple.com/documentation/swiftdata/adding-and-editing-persistent-data-in-your-app) shows SwiftData model definitions and editing.

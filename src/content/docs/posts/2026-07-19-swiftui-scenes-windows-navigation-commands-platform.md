@@ -9,72 +9,48 @@ series:
   order: 42
 ---
 
-A scene is a system-managed presentation of part of the app. One process can own several windows, each with different navigation, selection, size, and lifecycle state.
+A scene is a system-managed presentation. The initial Field Notes application uses one `WindowGroup`; its composition root shares the library while each list view owns its editor presentation.
 
-## Separate shared data from window state
+## Start with the actual app entry point
 
 ```swift
 @main
-struct FieldNotesApp: App {
-    @State private var library = NoteLibraryModel()
+struct FieldNotesSwiftUIApp: App {
+    @State private var model = NoteListModel(library: AppComposition.library())
 
     var body: some Scene {
-        WindowGroup {
-            NotesScene(library: library)
-        }
-
-        WindowGroup("Note", for: NoteID.self) { $noteID in
-            NoteWindow(library: library, noteID: noteID)
-        }
+        WindowGroup { NoteListView(model: model) }
     }
 }
 ```
 
-The library is shared application data. Each `NotesScene` owns its own selection, route path, search query, and draft presentation. Putting all navigation in one global object makes two windows fight over one path.
+`AppComposition` selects the repository. `NoteListModel` owns committed collection data and the current search. `NoteListView` owns the optional new-note draft, so presenting an editor does not mutate durable storage.
 
-## Open a focused window by value
+## Separate future window state from shared data
 
-```swift
-@Environment(\.openWindow) private var openWindow
-
-Button("Open in New Window") {
-    openWindow(value: note.id)
-}
-```
-
-The system decides window placement and restoration. The destination still handles a missing or deleted note.
-
-## Adapt navigation from available presentation
-
-`NavigationSplitView` can show sidebar, content, and detail where space permits, then collapse for compact presentation. Keep the selected note and route intent independent from the number of visible columns.
+The current model's search is shared with its instance. Adding multiple independent windows would require moving search, route selection, and drafts into per-window state while sharing only the library and committed-data coordination.
 
 ```text
-compact: list -> detail
-regular: sidebar | list | detail
+shared repository and application operations
+                 |
+        +--------+--------+
+        |                 |
+window A state       window B state
+query, selection     query, selection
+editor draft         editor draft
 ```
 
-Do not branch on device model. iPad windows resize, external displays differ, and platform idioms evolve.
+Without that split, changing a search in one window could change another window. A shared observable object is a lifetime choice, not a free multiwindow architecture.
 
-## Put commands on application actions
+## Route commands through the same operations
 
-```swift
-.commands {
-    CommandGroup(after: .newItem) {
-        Button("New Note") { library.beginNewNote() }
-            .keyboardShortcut("n", modifiers: .command)
-    }
-}
-```
+A future menu command for New Note would create a draft in the focused window, just as its toolbar button does. A command to save would call the same guarded save operation as the editor. The command's enabled state follows the focused window's valid draft and in-flight operation.
 
-Menu and keyboard actions call the same application command as visible controls. Disabled state and focused-window context need to match the current scene.
+Scene phase can request bounded refresh. It is not a promise that work will continue after suspension. Committed notes are already on disk before the editor dismisses. Unsaved draft restoration remains outside this slice.
 
-## Respond to lifecycle without assuming termination
+## Evidence boundary
 
-Scene phase can prompt bounded work such as committing an already-valid draft or refreshing stale data. It is not a promise of background execution. Save durable work before suspension and make repeated callbacks idempotent.
-
-## Validation boundary
-
-Multiwindow APIs, commands, split-view collapse, scene restoration, lifecycle transitions, and platform-specific behavior were not compiled or run. They remain Not verified until tested with supported Xcode destinations.
+The companion supplies a single-window app source, not an implemented document/window product. Multiwindow restoration, command routing, split-view adaptation, and platform-specific behavior remain unverified. The next capstone uses the supported bounded local loop rather than claiming those extensions are complete.
 
 ## Series navigation
 

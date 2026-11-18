@@ -6,7 +6,7 @@ tags: [ios, swift, testing, performance, instruments, energy, field-notes]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-performance-memory-energy-launch-device-matrices/
 series:
   slug: zero-to-ios-hero
-  order: 77
+  order: 75
 ---
 
 Performance work begins with a user-visible budget and a reproducible workload. "Feels fast" and one simulator number are observations, not durable evidence.
@@ -21,6 +21,16 @@ Performance work begins with a user-visible budget and a reproducible workload. 
 | sync 500 changes | duration, bytes, CPU, energy | controlled network profile and signposts |
 
 Record device model, OS, app build, data fixture, network profile, thermal state, power state, run count, and variance. Compare like with like.
+
+## Measure one repeatable workload
+
+Seed 2,000 notes with deterministic IDs, fixed dates, short and long titles, and a known favorite distribution. Reset to that fixture before every run. Measure cold launch to an interactive library separately from warm launch. Scroll the same sequence, open and close an editor five times, then compare retained memory after returning to the list.
+
+Capture a release build on one named supported device with OS, thermal state, power state, network profile, and five repeated runs. Report the individual measurements and their median. A Simulator run can help isolate a regression, but it is a separate measurement series.
+
+If launch misses the product's budget, inspect a launch/time-profile trace before changing code. For example, if the trace shows synchronous decoding dominating startup, test loading the first visible records before decoding optional attachments. Rerun the identical fixture and interaction sequence. Keep the baseline and candidate traces, then compare both latency and peak memory so a faster launch does not hide excessive retained data.
+
+This is a measurement procedure, not an observed speedup. No hardware timings are supplied here.
 
 ## Use layers of evidence
 
@@ -40,8 +50,8 @@ No performance, memory, energy, launch, Simulator, or device measurements were r
 
 ## Series navigation
 
-- Previous: [Part 76: Persistence, migration, networking, and contract tests](../2026-07-19-ios-persistence-migration-network-contract-tests/)
-- Next: [Part 78: CI, flake control, test data, release qualification, and evidence](../2026-07-19-ios-ci-flake-control-test-data-release-evidence/)
+- Previous: [Part 74: Persistence, migration, networking, and contract tests](../2026-07-19-ios-persistence-migration-network-contract-tests/)
+- Next: [Part 76: CI, flake control, test data, release qualification, and evidence](../2026-07-19-ios-ci-flake-control-test-data-release-evidence/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

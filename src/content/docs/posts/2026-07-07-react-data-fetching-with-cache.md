@@ -1,15 +1,15 @@
 ---
-title: "Modern React 31: Data fetching with a cache"
+title: "Modern React 28: Data fetching with a cache"
 description: "Data fetching with a client cache instead of one-off effects per component."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-data-fetching-with-cache/
 series:
   slug: modern-react-development
-  order: 31
+  order: 28
 ---
 
-This is part 31 of the [Modern React development series](../series/modern-react-development/).
+This is part 28 of the [Modern React development series](../series/modern-react-development/).
 
 Server data is not the same as local UI state. It has loading states, errors, freshness rules, retries, deduplication, and invalidation. A data cache gives those concerns a shared owner.
 
@@ -105,8 +105,8 @@ A cache provider gives components access to the same query client instead of eac
 
 ## Series navigation
 
-- Previous: [Part 30: Routing and nested layouts](../2026-07-07-react-routing-nested-layouts/)
-- Next: [Part 32: Mutations and cache invalidation](../2026-07-07-react-mutations-cache-invalidation/)
+- Previous: [Part 27: Routing and nested layouts](../2026-07-07-react-routing-nested-layouts/)
+- Next: [Part 29: Mutations and cache invalidation](../2026-07-07-react-mutations-cache-invalidation/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

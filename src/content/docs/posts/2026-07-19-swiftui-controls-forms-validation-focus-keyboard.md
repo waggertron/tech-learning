@@ -9,131 +9,73 @@ series:
   order: 34
 ---
 
-An editor needs a temporary draft. Writing each keystroke directly into the persisted note makes Cancel dishonest and exposes half-valid data to the rest of the app.
+An editor changes a draft until persistence acknowledges Save. Cancel must leave the committed note unchanged, and a failed write must leave text available for retry.
 
-## Give the draft an explicit shape
+## Use the same draft as the application
 
-```swift
-struct NoteDraft: Equatable {
-    var title = ""
-    var body = ""
-    var isFavorite = false
+`NoteDraft` comes from `FieldNotesCore`. A new instance assigns its stable ID once. An edited instance copies the existing note. The app's `SaveNote` operation validates the title and tags, applies the clock, and writes through `NoteLibrary`.
 
-    var trimmedTitle: String {
-        title.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    var titleError: String? {
-        trimmedTitle.isEmpty ? "Enter a title." : nil
-    }
-
-    var canSave: Bool { titleError == nil }
-}
-```
-
-The draft holds editable input. Conversion to a durable domain command happens only after validation succeeds.
-
-## Build from native controls
+The complete SwiftUI adapter is `NoteEditorScreen` in `Apps/SwiftUI/FieldNotesSwiftUIApp.swift`:
 
 ```swift
-struct NoteEditor: View {
-    enum Field: Hashable { case title, body }
-
-    @State private var draft: NoteDraft
-    @State private var attemptedSave = false
-    @FocusState private var focusedField: Field?
-
-    let original: NoteDraft
+struct NoteEditorScreen: View {
+    @State var draft: NoteDraft
     let save: (NoteDraft) async throws -> Void
-
-    init(note: FieldNote, save: @escaping (NoteDraft) async throws -> Void) {
-        let draft = NoteDraft(title: note.title, body: note.body,
-                              isFavorite: note.isFavorite)
-        _draft = State(initialValue: draft)
-        original = draft
-        self.save = save
-    }
+    @Environment(\.dismiss) private var dismiss
+    @State private var state = SaveState.idle
+    @State private var attemptedSave = false
+    @FocusState private var titleFocused: Bool
 
     var body: some View {
-        Form {
-            Section("Note") {
-                TextField("Title", text: $draft.title)
-                    .textInputAutocapitalization(.sentences)
-                    .submitLabel(.next)
-                    .focused($focusedField, equals: .title)
-                    .onSubmit { focusedField = .body }
-
-                TextField("Observation", text: $draft.body, axis: .vertical)
-                    .lineLimit(4...12)
-                    .focused($focusedField, equals: .body)
-
-                if attemptedSave, let error = draft.titleError {
-                    Text(error).foregroundStyle(.red)
+        NavigationStack {
+            Form {
+                TextField("Title", text: $draft.title).focused($titleFocused)
+                if attemptedSave, let error = draft.titleError { Text(error).foregroundStyle(.red) }
+                Section("Observation") {
+                    TextEditor(text: $draft.body).frame(minHeight: 100).accessibilityLabel("Observation")
                 }
+                TextField("Tags, separated by commas", text: $draft.tags)
+                if attemptedSave, let error = draft.tagsError { Text(error).foregroundStyle(.red) }
+                Toggle("Favorite", isOn: $draft.isFavorite)
+                if state == .saving { ProgressView("Saving note") }
+                if state == .failed { Text("The note was not saved. Your draft is safe. Try Save again.").foregroundStyle(.red) }
             }
+            .disabled(!state.acceptsInput)
+            .navigationTitle(draft.createdAt == nil ? "New Note" : "Edit Note")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() }.disabled(!state.acceptsInput) }
+                ToolbarItem(placement: .confirmationAction) { Button("Save", action: submit).disabled(!state.acceptsInput) }
+            }
+            .interactiveDismissDisabled(!state.acceptsInput)
+        }
+    }
 
-            Toggle("Favorite", isOn: $draft.isFavorite)
+    private func submit() {
+        attemptedSave = true
+        guard draft.canSave else { titleFocused = true; return }
+        guard state.reduce(.requested) == .save else { return }
+        let submitted = draft
+        Task {
+            do { try await save(submitted); _ = state.reduce(.succeeded); dismiss() }
+            catch { _ = state.reduce(.failed) }
         }
     }
 }
 ```
 
-Labels stay visible and match Voice Control names. Input traits are hints, not validation. Pasted text, hardware keyboards, dictation, and automation can bypass the onscreen keyboard.
+The title error appears only after an attempted submission. Focus moves to the invalid title. The observation uses a native text editor; tags and favorite state stay editable values in the draft.
 
-## Validate at the action boundary
+## Do not dismiss before acknowledgement
 
-```swift
-private func submit() {
-    attemptedSave = true
+The task calls `save(submitted)` before dismissing. On failure, the reducer becomes failed and the draft remains in state. The same Save button retries the same ID. The entire form, toolbar, and interactive sheet dismissal are disabled during a write so a second action cannot race the in-flight submission.
 
-    guard draft.canSave else {
-        focusedField = .title
-        return
-    }
+This is not draft restoration. Cancelling or terminating before a successful save can discard unsaved input. The capstone promises committed-note persistence and explicitly leaves draft restoration outside its slice.
 
-    Task {
-        try await save(draft)
-    }
-}
-```
+## Test through a reachable failure
 
-Disable Save when that communicates readiness, but keep an accessible explanation near invalid input. Validation during typing can be useful when it helps correction. Do not announce an error before a person has had a reasonable chance to enter a value.
+Both UI suites start a separate store with `--fail-first-save`. Their journey enters a title, attempts Save, checks the visible failure and retained title, retries, and checks that one row appears. Another journey attempts a blank title before saving valid input.
 
-Async save needs explicit progress, success, and failure state. Part 39 supplies that complete state machine.
-
-## Preserve the unsaved-change contract
-
-```swift
-private var hasUnsavedChanges: Bool {
-    draft != original
-}
-```
-
-Cancel can dismiss immediately when the draft is unchanged. Otherwise present a choice to keep editing or discard the draft. Interactive dismissal needs the same policy, not a separate loophole.
-
-The persisted note remains unchanged until Save succeeds. If saving fails, the draft stays on screen with recovery guidance.
-
-## Treat focus as state, not storage
-
-Focus identifies the current interaction target. It can change because of touch, keyboard traversal, validation recovery, navigation, or system behavior. Avoid using focus as the source of truth for whether content is valid or saved.
-
-For iPad and Mac-style input, pair field traversal with visible commands. A keyboard shortcut must invoke the same save action and validation path as the toolbar button.
-
-## Test complete form states
-
-- new blank draft
-- valid title and multiline body
-- validation failure and focus recovery
-- save in progress and repeated-submit prevention
-- save failure with text preserved
-- unchanged and changed cancellation
-- largest Dynamic Type sizes
-- hardware keyboard traversal and shortcuts
-- VoiceOver order and error announcement
-
-## Validation boundary
-
-These examples were reviewed but not compiled or exercised with a software or hardware keyboard. Xcode, Apple SDK, Simulator, focus movement, dismissal, VoiceOver, and Dynamic Type behavior remain Not verified.
+The package save/reducer contracts passed. UI-test source and app source passed syntax parsing, but the tests have not run in Xcode. Keyboard geometry, focus announcement, large-text layout, and Simulator interaction remain unverified.
 
 ## Series navigation
 

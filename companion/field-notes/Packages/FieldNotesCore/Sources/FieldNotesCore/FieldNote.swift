@@ -10,6 +10,8 @@ public struct NoteID: RawRepresentable, Codable, Hashable, Sendable {
 
 public enum FieldNoteValidationError: Error, Equatable, Sendable {
     case blankTitle
+    case invalidTag
+    case invalidCoordinate
 }
 
 public struct FieldNote: Identifiable, Codable, Equatable, Sendable {
@@ -42,6 +44,23 @@ public struct FieldNote: Identifiable, Codable, Equatable, Sendable {
         self.isFavorite = isFavorite
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, title, body, tags, isFavorite, createdAt, updatedAt
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            id: values.decode(NoteID.self, forKey: .id),
+            title: values.decode(String.self, forKey: .title),
+            body: values.decode(String.self, forKey: .body),
+            tags: values.decode([String].self, forKey: .tags),
+            isFavorite: values.decode(Bool.self, forKey: .isFavorite),
+            createdAt: values.decode(Date.self, forKey: .createdAt),
+            updatedAt: values.decode(Date.self, forKey: .updatedAt)
+        )
     }
 
     public func updating(

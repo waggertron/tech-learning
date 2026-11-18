@@ -1,0 +1,4 @@
+# Reproduction baseline, not a claim that this is the latest security release.
+Django==5.2.8
+asgiref==3.13.0
+sqlparse==0.6.1

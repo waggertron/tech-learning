@@ -5,20 +5,17 @@ date: 2026-07-24
 tags: [ai, agents, claude-code, coding-agents, architecture]
 crosspost: [linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-24-claude-code-clean-room-agent-internals/
-series:
-  slug: coding-agent-internals
-  order: 1
 ---
 
 People are talking about leaked Claude Code source. That does not make leaked source a good source for public writing.
 
-For an educational post series, leaked proprietary code creates three problems at once. It is legally messy. It is ethically weak. It is also a bad teaching artifact, because readers cannot safely inspect the same evidence, run the same examples, or reuse the same implementation details.
+For an educational article, leaked proprietary code creates three problems at once. It is legally messy. It is ethically weak. It is also a bad teaching artifact, because readers cannot safely inspect the same evidence, run the same examples, or reuse the same implementation details.
 
 The better move is clean-room analysis. Treat the leak as the reason to ask a question, not as the evidence for the answer.
 
-This series will study coding-agent internals through public documentation, observable product behavior, open protocols, and small examples we can own. No leaked code excerpts. No links to mirrors. No private prompts or private identifiers. No claims that only make sense if a reader has the leaked files open.
+This article studies coding-agent internals through public documentation, observable product behavior, open protocols, and small examples we can own. No leaked code excerpts. No links to mirrors. No private prompts or private identifiers. No claims that only make sense if a reader has the leaked files open.
 
-That boundary is not a dodge. It is the only way the series stays broadly useful.
+That boundary is not a dodge. It is the only way the explanation stays broadly useful.
 
 ## The architecture we can study safely
 
@@ -74,7 +71,7 @@ None of those points require leaked code.
 
 ## The clean-room source stack
 
-The series will use this evidence stack, in order:
+Use this evidence stack, in order:
 
 1. Official product docs for features and configuration behavior.
 2. Public engineering posts for architecture claims.
@@ -304,21 +301,6 @@ That pushes the hard decisions back into the model. A better surface separates c
 
 The second shape is easier to approve, log, test, and constrain. It also gives the model fewer ways to smuggle unrelated work into one overloaded call.
 
-## What this series will cover
-
-The first post establishes the clean-room boundary. The rest of the series should read like an architecture tour:
-
-- **The harness loop**: model turn, tool call, execution, observation, stop condition.
-- **Context assembly**: repo instructions, file excerpts, summaries, task state, and compaction.
-- **Tool design**: names, schemas, return contracts, error types, idempotency, and evals.
-- **Permissions**: deny, ask, allow, approval fatigue, least privilege, audit logs, and sandboxing.
-- **Hooks**: pre-tool, post-tool, pre-compact, post-compact, stop hooks, and policy injection.
-- **Subagents**: task isolation, parallel search, delegated review, and parent-child context boundaries.
-- **MCP**: moving tool surfaces into explicit protocol servers instead of hardcoding every integration.
-- **Evaluation**: scoring a coding agent by behavioral outcomes, not by how polished its transcript sounds.
-
-The through-line is simple: a coding agent is not one clever prompt. It is a product boundary around an LLM.
-
 ## What to remember
 
 The leak may be the spark, but it should not be the fuel.
@@ -340,7 +322,6 @@ That question is answerable without touching leaked code. It is also the one rea
 
 ## Related topics
 
-- [Coding Agent Internals series](../series/coding-agent-internals/)
 - [AI Harness Development](../../topics/ai/harness-development/)
 - [Context Engineering](../../topics/ai/harness-development/context-engineering/)
 - [Tool Design and Schema Discipline](../../topics/ai/harness-development/tool-design/)

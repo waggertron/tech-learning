@@ -1,6 +1,6 @@
 ---
-title: "MCP 9: Remote Production, Security, and Operations"
-description: "Streamable HTTP, sessions, OAuth, token boundaries, tenant isolation, SSRF, DNS rebinding, limits, observability, testing, and protocol evolution for remote MCP."
+title: "MCP 9: A Remote Production Design Checklist"
+description: "A design checklist for remote MCP transport, authorization, isolation, limits, and recovery, with explicit boundaries around the local companion implementation."
 date: 2026-07-19
 tags: [mcp, security, oauth, observability, distributed-systems]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-remote-mcp-production-security/
@@ -12,6 +12,12 @@ series:
 This is part 9 of the [MCP Server Design series](../series/mcp-server-design/).
 
 A local stdio server inherits one user's process boundary. A remote server accepts network traffic from many clients and users. Transport, identity, tenant isolation, session storage, rate limits, and operational recovery become part of the design.
+
+## Scope of the example
+
+The companion demonstrates a local stdio server and client. This chapter is a design checklist for a remote adaptation, not an implemented HTTP or OAuth deployment. No remote authorization-server configuration, token verification middleware, TLS endpoint, or distributed session store is supplied by the companion.
+
+A remote implementation needs those components plus executable contracts for invalid tokens, wrong audiences, tenant access, session ownership, rate limits, and shutdown. The checklist identifies those responsibilities so they can be assigned and tested before exposing a service.
 
 ## Streamable HTTP
 
@@ -147,7 +153,7 @@ Streamable HTTP owns remote carriage. OAuth establishes delegated access to the 
 ## Series navigation
 
 - Previous: [Part 8: Sampling, elicitation, roots, and tasks](../2026-07-19-mcp-sampling-elicitation-roots-tasks/)
-- Next: none. Continue with the companion project and adapt it to a real domain.
+- Next: none. Run the local companion before designing a remote adaptation.
 - Series index: [MCP Server Design](../series/mcp-server-design/)
 
 ## References

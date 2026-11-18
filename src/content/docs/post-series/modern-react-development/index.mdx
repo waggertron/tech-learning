@@ -1,14 +1,14 @@
 ---
 slug: posts/series/modern-react-development
-title: Modern React development, 40-part post series
-description: "A 40-part instructional React series covering component design, state, effects, forms, data loading, Actions, Server Components, frameworks, tooling, testing, accessibility, security, and production architecture."
+title: Modern React development, 37-part post series
+description: "A 37-part instructional React series covering component design, state, effects, forms, data loading, Actions, Server Components, frameworks, tooling, testing, accessibility, security, and production architecture."
 sidebar:
   label: modern react
 ---
 
 React has become two things at once: a component model for client user interfaces and an architecture layer for full-stack React frameworks. This series teaches both from the same mental model: data flows through a tree, user intent flows through events and Actions, and each boundary owns the facts it is responsible for.
 
-Every post introduces one concept, defines the terms needed to read React docs, explains the mental model, shows practical TypeScript examples, and names the details that matter when the pattern reaches real application code.
+The core reading path has 37 installments. Focused API lessons explain one mechanism through working examples. Broader setup, measurement, recovery, and release lessons include a reproducible workbench and explicit limits on what has been executed. An optional native-renderer comparison sits outside the required sequence.
 
 ## Reading order
 
@@ -31,27 +31,24 @@ Every post introduces one concept, defines the terms needed to read React docs, 
 17. [Server Actions and mutation boundaries](../../2026-07-07-react-server-actions-mutation-boundaries/), how Server Functions handle trusted writes behind form and Action flows.
 18. [TypeScript patterns for React](../../2026-07-07-react-typescript-component-patterns/), how prop, event, reducer, ref, and children types shape safer component APIs.
 19. [Testing components by behavior](../../2026-07-07-react-testing-components-by-behavior/), how to assert user-visible behavior instead of implementation details.
-20. [Performance and React Compiler](../../2026-07-07-react-performance-and-compiler/), how purity, measurement, memoization, and Compiler support fit together.
-21. [Framework choice and project setup](../../2026-07-07-react-framework-choice-project-setup/), how to decide whether the app needs a framework or a smaller client-only setup.
+20. [Measure render work and understand Compiler](../../2026-07-07-react-performance-and-compiler/), how purity, measurement, memoization, and Compiler support fit together.
+21. [Choose a framework and prove the setup](../../2026-07-07-react-framework-choice-project-setup/), how to decide whether the app needs a framework or a smaller client-only setup.
 22. [Next.js App Router](../../2026-07-07-react-nextjs-app-router/), how App Router uses files, layouts, Server Components, Suspense, and Server Functions.
 23. [React Router v7](../../2026-07-07-react-router-v7-framework/), how route modules, loaders, actions, and nested layouts organize application flow.
 24. [TanStack Router and TanStack Start](../../2026-07-07-react-tanstack-router-start/), how type-safe routes and search params become application boundaries.
-25. [Expo and React Native](../../2026-07-07-react-expo-react-native/), how React's component model maps to native screens through Expo and React Native.
-26. [Vite and client-only apps](../../2026-07-07-react-vite-client-only-apps/), how Vite supports fast React development when the app owns routing and data choices.
-27. [Storybook and component workbenches](../../2026-07-07-react-storybook-component-workbenches/), how stories make component states visible outside product flows.
-28. [Vitest, Testing Library, and Playwright](../../2026-07-07-react-vitest-testing-library-playwright/), how to pick the right testing distance for a React behavior.
-29. [ESLint, TypeScript, formatting, and CI gates](../../2026-07-07-react-eslint-typescript-formatting-ci/), how automated checks keep React rules and project contracts out of manual review.
-30. [Routing and nested layouts](../../2026-07-07-react-routing-nested-layouts/), how URL state and shared route shells structure application UI.
-31. [Data fetching with a cache](../../2026-07-07-react-data-fetching-with-cache/), how server data gets a shared owner for freshness, loading, and error state.
-32. [Mutations and cache invalidation](../../2026-07-07-react-mutations-cache-invalidation/), how writes update or refresh every cached read that depends on changed data.
-33. [Error boundaries and recovery](../../2026-07-07-react-error-boundaries-recovery/), how render-time failures get contained and reported.
-34. [Code splitting and lazy loading](../../2026-07-07-react-code-splitting-lazy-loading/), how lazy imports and Suspense reduce initial JavaScript.
-35. [Styling, design tokens, and variants](../../2026-07-07-react-styling-design-tokens-variants/), how component APIs expose supported visual states without open-ended styling.
-36. [Accessibility as component API design](../../2026-07-07-react-accessibility-component-api-design/), how labels, semantics, focus, and ARIA belong in component contracts.
-37. [Validation at form and API boundaries](../../2026-07-07-react-validation-form-api-boundaries/), how untrusted input becomes parsed, typed, and safe enough to use.
-38. [Auth, roles, and protected UI](../../2026-07-07-react-auth-roles-protected-ui/), how UI communicates permissions while server checks enforce them.
-39. [Internationalization and formatting](../../2026-07-07-react-internationalization-formatting/), how locale-aware formatting keeps display text separate from raw facts.
-40. [Deployment, observability, and feature flags](../../2026-07-07-react-deployment-observability-feature-flags/), how production builds, telemetry, and rollout controls close the React feedback loop.
+25. [Storybook and component workbenches](../../2026-07-07-react-storybook-component-workbenches/), how stories make component states visible outside product flows.
+26. [Vitest, Testing Library, and Playwright](../../2026-07-07-react-vitest-testing-library-playwright/), how to pick the right testing distance for a React behavior.
+27. [Routing and nested layouts](../../2026-07-07-react-routing-nested-layouts/), how URL state and shared route shells structure application UI.
+28. [Data fetching with a cache](../../2026-07-07-react-data-fetching-with-cache/), how server data gets a shared owner for freshness, loading, and error state.
+29. [Mutations and cache invalidation](../../2026-07-07-react-mutations-cache-invalidation/), how writes update or refresh every cached read that depends on changed data.
+30. [Error boundaries and recovery](../../2026-07-07-react-error-boundaries-recovery/), how render-time failures get contained and reported.
+31. [Code splitting and lazy loading](../../2026-07-07-react-code-splitting-lazy-loading/), how lazy imports and Suspense reduce initial JavaScript.
+32. [Styling, design tokens, and variants](../../2026-07-07-react-styling-design-tokens-variants/), how component APIs expose supported visual states without open-ended styling.
+33. [Accessibility as component API design](../../2026-07-07-react-accessibility-component-api-design/), how labels, semantics, focus, and ARIA belong in component contracts.
+34. [Validation at form and API boundaries](../../2026-07-07-react-validation-form-api-boundaries/), how untrusted input becomes parsed, typed, and safe enough to use.
+35. [Auth, roles, and protected UI](../../2026-07-07-react-auth-roles-protected-ui/), how UI communicates permissions while server checks enforce them.
+36. [Internationalization and formatting](../../2026-07-07-react-internationalization-formatting/), how locale-aware formatting keeps display text separate from raw facts.
+37. [Build, observe, and roll back a release](../../2026-07-07-react-deployment-observability-feature-flags/), how production builds, telemetry, and rollout controls close the React feedback loop.
 
 ## Foundations
 
@@ -81,37 +78,38 @@ The second section covers newer React patterns for loading, transitions, forms, 
 17. [Server Actions and mutation boundaries](../../2026-07-07-react-server-actions-mutation-boundaries/)
 18. [TypeScript patterns for React](../../2026-07-07-react-typescript-component-patterns/)
 19. [Testing components by behavior](../../2026-07-07-react-testing-components-by-behavior/)
-20. [Performance and React Compiler](../../2026-07-07-react-performance-and-compiler/)
+20. [Measure render work and understand Compiler](../../2026-07-07-react-performance-and-compiler/)
 
 ## Frameworks And Tooling
 
-The third section looks at the application layer around React: framework choice, App Router, React Router, TanStack tools, Expo, Vite, Storybook, testing stacks, and CI gates.
+The third section looks at the application layer around React: framework choice, App Router, React Router, TanStack tools, a concrete Vite/TypeScript setup, Storybook, and testing stacks.
 
-21. [Framework choice and project setup](../../2026-07-07-react-framework-choice-project-setup/)
+21. [Choose a framework and prove the setup](../../2026-07-07-react-framework-choice-project-setup/)
 22. [Next.js App Router](../../2026-07-07-react-nextjs-app-router/)
 23. [React Router v7](../../2026-07-07-react-router-v7-framework/)
 24. [TanStack Router and TanStack Start](../../2026-07-07-react-tanstack-router-start/)
-25. [Expo and React Native](../../2026-07-07-react-expo-react-native/)
-26. [Vite and client-only apps](../../2026-07-07-react-vite-client-only-apps/)
-27. [Storybook and component workbenches](../../2026-07-07-react-storybook-component-workbenches/)
-28. [Vitest, Testing Library, and Playwright](../../2026-07-07-react-vitest-testing-library-playwright/)
-29. [ESLint, TypeScript, formatting, and CI gates](../../2026-07-07-react-eslint-typescript-formatting-ci/)
-30. [Routing and nested layouts](../../2026-07-07-react-routing-nested-layouts/)
+25. [Storybook and component workbenches](../../2026-07-07-react-storybook-component-workbenches/)
+26. [Vitest, Testing Library, and Playwright](../../2026-07-07-react-vitest-testing-library-playwright/)
+27. [Routing and nested layouts](../../2026-07-07-react-routing-nested-layouts/)
 
 ## Production Interfaces
 
 The final section connects React code to production boundaries: data caches, mutations, error recovery, lazy loading, styling systems, accessibility, validation, auth, internationalization, and observability.
 
-31. [Data fetching with a cache](../../2026-07-07-react-data-fetching-with-cache/)
-32. [Mutations and cache invalidation](../../2026-07-07-react-mutations-cache-invalidation/)
-33. [Error boundaries and recovery](../../2026-07-07-react-error-boundaries-recovery/)
-34. [Code splitting and lazy loading](../../2026-07-07-react-code-splitting-lazy-loading/)
-35. [Styling, design tokens, and variants](../../2026-07-07-react-styling-design-tokens-variants/)
-36. [Accessibility as component API design](../../2026-07-07-react-accessibility-component-api-design/)
-37. [Validation at form and API boundaries](../../2026-07-07-react-validation-form-api-boundaries/)
-38. [Auth, roles, and protected UI](../../2026-07-07-react-auth-roles-protected-ui/)
-39. [Internationalization and formatting](../../2026-07-07-react-internationalization-formatting/)
-40. [Deployment, observability, and feature flags](../../2026-07-07-react-deployment-observability-feature-flags/)
+28. [Data fetching with a cache](../../2026-07-07-react-data-fetching-with-cache/)
+29. [Mutations and cache invalidation](../../2026-07-07-react-mutations-cache-invalidation/)
+30. [Error boundaries and recovery](../../2026-07-07-react-error-boundaries-recovery/)
+31. [Code splitting and lazy loading](../../2026-07-07-react-code-splitting-lazy-loading/)
+32. [Styling, design tokens, and variants](../../2026-07-07-react-styling-design-tokens-variants/)
+33. [Accessibility as component API design](../../2026-07-07-react-accessibility-component-api-design/)
+34. [Validation at form and API boundaries](../../2026-07-07-react-validation-form-api-boundaries/)
+35. [Auth, roles, and protected UI](../../2026-07-07-react-auth-roles-protected-ui/)
+36. [Internationalization and formatting](../../2026-07-07-react-internationalization-formatting/)
+37. [Build, observe, and roll back a release](../../2026-07-07-react-deployment-observability-feature-flags/)
+
+## Optional native branch
+
+[React Native: rendering primitives and shared state](../../2026-07-07-react-expo-react-native/) compares host primitives and reusable Hook logic. It does not claim to teach an Expo build, permissions, or device integration.
 
 ## Related topics
 

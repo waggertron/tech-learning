@@ -11,7 +11,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
-        let library = NoteLibrary(repository: InMemoryNoteRepository())
+        let library = AppComposition.library()
         let root = NoteListViewController(library: library)
         let navigationController = UINavigationController(rootViewController: root)
         let window = UIWindow(windowScene: windowScene)

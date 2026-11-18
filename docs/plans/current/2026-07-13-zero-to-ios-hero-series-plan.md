@@ -4,6 +4,10 @@
 **Status:** In execution, Gate 3 established
 **Series slug:** `zero-to-ios-hero`
 
+## Editorial remediation
+
+The [2026-11-17 post-series value improvement plan](./2026-11-17-post-series-value-improvement-plan.md) governs consolidation and rebuilding of the affected curriculum posts. Its migration table and evidence-backed checklist replace the expansion/publication assumptions for those posts. Existing runner and coding-problem work remains under this plan. Historical completion marks below do not establish the new editorial acceptance criteria.
+
 ## Execution checklist
 
 This checklist is the source of truth for execution. Check an item only after its definition of done is satisfied and its evidence is committed. Every planned post also has a status checkbox in its curriculum table.

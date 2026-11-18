@@ -9,101 +9,73 @@ series:
   order: 38
 ---
 
-Navigation is application state with a visual presentation. Model destinations as data and the interface can validate deep links, restore context, and adapt between stack and split layouts.
+Navigation presents intent. The current app opens detail by stable note ID and presents a temporary draft for editing. Parsing an external URL is a separate boundary from registering or delivering that URL.
 
-## Define routes with domain identity
+## Push a detail that resolves current data
+
+The actual list uses this composition:
 
 ```swift
-enum Route: Hashable {
-    case note(FieldNote.ID)
-    case settings
+NavigationLink {
+    NoteDetailScreen(id: note.id, model: model)
+} label: {
+    NoteRow(note: note)
+}
+```
+
+`NoteDetailScreen` resolves `id` against `model.notes`. If the note no longer exists, it shows Note Unavailable. It does not retain an independent mutable copy of committed data. Updating a note preserves its identity, so the same destination can render the replacement.
+
+The implementation lives with `NoteListView` and `NoteDetailScreen` in `Apps/SwiftUI/FieldNotesSwiftUIApp.swift`. `NoteRow` is defined in `NoteComponents.swift`.
+
+## Present one draft at a time
+
+```swift
+@State private var newDraft: NoteDraft?
+
+// Inside the view's toolbar:
+Button("New Note", systemImage: "plus") {
+    newDraft = NoteDraft()
 }
 
-struct RootView: View {
-    @State private var path: [Route] = []
+// On the presenting view:
+.sheet(item: $newDraft) { draft in
+    NoteEditorScreen(draft: draft, save: model.save)
+}
+```
 
-    var body: some View {
-        NavigationStack(path: $path) {
-            NoteListView(open: { id in path.append(.note(id)) })
-                .navigationDestination(for: Route.self) { route in
-                    switch route {
-                    case .note(let id): NoteDetailScreen(noteID: id)
-                    case .settings: SettingsView()
-                    }
-                }
-        }
+The optional draft is both the presentation fact and the identity of the editing task. There is no independent `showsEditor` Boolean that can disagree with it. The editor owns a local draft copy; Cancel dismisses without committing it. A successful save dismisses only after the repository acknowledges the write.
+
+Deletion uses an explicit confirmation. The detail calls the application delete operation, waits for success, then returns to a valid collection. A failed delete leaves the note visible and shows recovery.
+
+## Parse an external route without pretending delivery works
+
+The complete parser in `FieldNotesCore/NoteRoute.swift` is:
+
+```swift
+import Foundation
+
+/// Parsing is testable without registering a URL scheme or claiming universal-link delivery.
+public enum NoteRoute: Equatable, Sendable {
+    case note(NoteID)
+
+    public init?(url: URL) {
+        guard url.scheme == "fieldnotes", url.host == "note",
+              url.pathComponents.count == 2,
+              let rawID = url.pathComponents.last, !rawID.isEmpty else { return nil }
+        self = .note(NoteID(rawValue: rawID))
     }
 }
 ```
 
-The path records intent, not whole mutable model objects. A destination resolves the ID against current data and can show a missing-note state.
+The package tests accept a valid note route and reject the wrong scheme, host, missing ID, and extra path components. A `NoteID` initializer is non-failable; syntax checks belong before constructing it. The parser alone cannot prove that the note exists.
 
-## Model focused presentation
+The app does not register this custom scheme yet. A full integration would register the handler, parse at `.onOpenURL`, resolve the ID, and route into the correct window. Universal links additionally require a hosted association file and signed installation. None of those follows from a passing parser test.
 
-```swift
-enum Sheet: Identifiable {
-    case newNote
-    case edit(FieldNote.ID)
+## Keep restoration separate from persistence
 
-    var id: String {
-        switch self {
-        case .newNote: "new"
-        case .edit(let id): "edit-\(id)"
-        }
-    }
-}
+Committed notes survive relaunch through the file adapter. The current app does not promise restoring an open detail, unsaved draft, or navigation path. Those require explicit encoding, reconciliation against current notes, and a policy for missing destinations.
 
-@State private var sheet: Sheet?
-```
-
-One optional value prevents several sheet Booleans from becoming true together. The item passed to `.sheet(item:)` also identifies the presented task.
-
-Alerts benefit from the same approach:
-
-```swift
-struct DeleteRequest: Identifiable {
-    let id: FieldNote.ID
-    let title: String
-}
-
-@State private var deleteRequest: DeleteRequest?
-```
-
-The confirmation carries the exact note and copy needed for the decision. Confirm invokes one deletion path. Cancel clears the request without mutation.
-
-## Parse deep links at a boundary
-
-```swift
-enum DeepLink {
-    case note(FieldNote.ID)
-
-    init?(url: URL) {
-        guard url.scheme == "fieldnotes",
-              url.host == "note",
-              let rawID = url.pathComponents.dropFirst().first,
-              let id = FieldNote.ID(rawValue: rawID) else { return nil }
-        self = .note(id)
-    }
-}
-```
-
-Parsing validates syntax. Routing validates application state: does the note exist, may this user open it, and which window owns the request? Invalid or missing destinations need visible recovery.
-
-Universal links also require associated domains, a hosted association file, signing, installation, and device testing. URL parsing alone does not prove them.
-
-## Restore durable route state carefully
-
-Routes can be encoded for restoration when their values are stable. On restore, reconcile them against current notes and permissions. Drop or replace invalid destinations rather than crashing or manufacturing stale objects.
-
-Compact and regular layouts may present the same selection differently. Keep the route or selection model shared while adapters choose stack, column, sheet, or window presentation.
-
-## Avoid navigation ownership leaks
-
-Leaf rows can emit intent such as `open(note.id)`. They should not locate a global navigator and mutate arbitrary paths. Keeping route mutation at a feature boundary makes previews and tests smaller.
-
-## Validation boundary
-
-The route examples were not compiled. Navigation transitions, sheet and alert presentation, state restoration, universal-link association, Simulator routing, signing, and physical-device delivery remain Not verified.
+The parser package tests passed on Swift 6.3.3. App source was syntax-parsed, but navigation transitions, sheets, confirmations, restoration, URL delivery, and Simulator behavior remain unverified until the Apple targets run.
 
 ## Series navigation
 

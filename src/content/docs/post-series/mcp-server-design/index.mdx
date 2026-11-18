@@ -1,14 +1,14 @@
 ---
 slug: posts/series/mcp-server-design
 title: MCP Server Design, post series
-description: "A nine-part path from HTTP and REST comparisons through MCP protocol mechanics, server construction, client consumption, model integration, bidirectional features, and production security."
+description: "A nine-part path from HTTP and REST comparisons through MCP protocol mechanics, server construction, client consumption, model integration, bidirectional features, and a remote-production design checklist."
 sidebar:
   hidden: true
 ---
 
 MCP is easiest to learn from familiar ground. This series begins with an ordinary REST API, separates HTTP transport from MCP semantics, then builds both sides of the connection: a TypeScript server and a client that places discovered tools inside a controlled model interaction loop.
 
-The same engineering-operations example continues through every part. It exposes incident tools, runbook resources, an investigation prompt, sampling, elicitation, roots, tasks, and a remote production boundary.
+The same engineering-operations example continues through every part. It exposes incident tools, runbook resources, an investigation prompt, sampling, elicitation, roots, and tasks. The final chapter examines the separate requirements for a remote production boundary.
 
 ## What you will be able to do
 
@@ -18,7 +18,7 @@ The same engineering-operations example continues through every part. It exposes
 - Consume tools, resources, templates, and prompts through an MCP client.
 - Connect MCP tools to a model while preserving approval and authorization boundaries.
 - Use sampling, elicitation, roots, and experimental tasks deliberately.
-- Deploy Streamable HTTP with OAuth, isolation, limits, testing, and observability.
+- Review a proposed remote service against transport, OAuth, isolation, limits, testing, and observability requirements.
 
 ## Reading order
 
@@ -30,7 +30,7 @@ The same engineering-operations example continues through every part. It exposes
 6. [Build a Local TypeScript Server](../../2026-07-19-build-local-typescript-mcp-server/), create the working stdio server backed by tested domain code.
 7. [Build a Client and Model Tool Loop](../../2026-07-19-build-mcp-client-model-loop/), consume the server and connect it to provider-neutral model function calling.
 8. [Sampling, Elicitation, Roots, and Tasks](../../2026-07-19-mcp-sampling-elicitation-roots-tasks/), add negotiated bidirectional workflows.
-9. [Remote Production, Security, and Operations](../../2026-07-19-remote-mcp-production-security/), move to Streamable HTTP without collapsing trust boundaries.
+9. [A Remote Production Design Checklist](../../2026-07-19-remote-mcp-production-security/), distinguish the implemented local companion from the controls required by a remote service.
 
 ## Version baseline
 
@@ -39,6 +39,8 @@ The protocol examples target MCP specification `2025-11-25`. The companion TypeS
 ## Companion implementation
 
 The source lives under `companion/mcp-engineering-ops/` in the repository. It includes the domain service, MCP server, stdio transport, client catalog inspection, a provider-neutral model loop, and deterministic tests for approved and denied calls.
+
+The companion does not implement remote HTTP hosting or OAuth. Part 9 describes the design and verification work that a remote adaptation requires.
 
 ## Related topics
 

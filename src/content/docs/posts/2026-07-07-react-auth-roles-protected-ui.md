@@ -1,15 +1,15 @@
 ---
-title: "Modern React 38: Auth, roles, and protected UI"
+title: "Modern React 35: Auth, roles, and protected UI"
 description: "Auth-aware React UI that hides unusable controls without pretending that hiding is authorization."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-auth-roles-protected-ui/
 series:
   slug: modern-react-development
-  order: 38
+  order: 35
 ---
 
-This is part 38 of the [Modern React development series](../series/modern-react-development/).
+This is part 35 of the [Modern React development series](../series/modern-react-development/).
 
 Auth-aware UI helps users understand what they can do, but it is not the same as authorization. React can hide, disable, or label controls based on a session snapshot. The server still decides whether the action is allowed.
 
@@ -124,8 +124,8 @@ The trusted write checks authorization where the data changes.
 
 ## Series navigation
 
-- Previous: [Part 37: Validation at form and API boundaries](../2026-07-07-react-validation-form-api-boundaries/)
-- Next: [Part 39: Internationalization and formatting](../2026-07-07-react-internationalization-formatting/)
+- Previous: [Part 34: Validation at form and API boundaries](../2026-07-07-react-validation-form-api-boundaries/)
+- Next: [Part 36: Internationalization and formatting](../2026-07-07-react-internationalization-formatting/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

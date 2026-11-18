@@ -223,32 +223,16 @@ export const reactExampleRegistry = [
     "props": null
   },
   {
-    "id": "2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop",
-    "title": "Feature flag as a prop",
+    "id": "2026-07-07-react-deployment-observability-feature-flags-1-observe-a-deterministic-rollout",
+    "title": "Observe a deterministic rollout",
     "fileName": "2026-07-07-react-deployment-observability-feature-flags.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-deployment-observability-feature-flags-2-feature-flag-as-a-prop.tsx",
+    "modulePath": "./react-example-modules/2026-07-07-react-deployment-observability-feature-flags-1-observe-a-deterministic-rollout.tsx",
     "mode": "react-server",
     "interactionMode": "live-component",
-    "componentName": "CheckoutPage",
+    "componentName": "ReleaseDemo",
     "needsQueryClientProvider": false,
-    "summary": "Feature flag as a prop. This example mounts a live React component in the browser.",
-    "props": {
-      "flags": {
-        "newPaymentSheet": true
-      }
-    }
-  },
-  {
-    "id": "2026-07-07-react-deployment-observability-feature-flags-1-root-error-reporting",
-    "title": "Root error reporting",
-    "fileName": "2026-07-07-react-deployment-observability-feature-flags.md",
-    "modulePath": null,
-    "mode": "result",
-    "interactionMode": "runner",
-    "componentName": null,
-    "needsQueryClientProvider": false,
-    "summary": "const root = createRoot(document.getElementById(\"root\")!, {\n  onCaughtError(error, errorInfo) {\n    reportError({\n      name: \"react-caught-error\",\n      message: error.message,\n      componentStack: errorInfo.componentStack,\n    });\n  },\n});\nroot.render(<App />);",
-    "props": null
+    "summary": "Observe a deterministic rollout. This example mounts a live React component in the browser.",
+    "props": {}
   },
   {
     "id": "2026-07-07-react-effects-synchronization-cleanup-2-chat-room-subscription",
@@ -277,42 +261,28 @@ export const reactExampleRegistry = [
     "props": {}
   },
   {
-    "id": "2026-07-07-react-error-boundaries-recovery-2-root-production-reporting",
-    "title": "Root production reporting",
+    "id": "2026-07-07-react-error-boundaries-recovery-2-a-boundary-with-an-explicit-reset",
+    "title": "A boundary with an explicit reset",
     "fileName": "2026-07-07-react-error-boundaries-recovery.md",
     "modulePath": null,
     "mode": "result",
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "createRoot(document.getElementById(\"root\")!, {\n  onCaughtError(error, errorInfo) {\n    reportError({\n      error,\n      componentStack: errorInfo.componentStack,\n    });\n  },\n}).render(<App />);",
+    "summary": "type Props = {\n  children: ReactNode;\n  fallback: ReactNode | ((reset: () => void) => ReactNode);\n  onReset?: () => void;\n  onError?: (error: Error, info: ErrorInfo) => void;\n};\nexport class ErrorBoundary extends Component<Props, { failed: boolean }> {\n  state = { failed: false };\n  static getDerivedStateFromError() {\n    return { failed: true };\n  }\n  componentDidCatch(error: Error, info: ErrorInfo) {\n    this.props.onError?.(error, info);\n  }",
     "props": null
   },
   {
-    "id": "2026-07-07-react-error-boundaries-recovery-1-boundary-usage",
-    "title": "Boundary usage",
+    "id": "2026-07-07-react-error-boundaries-recovery-1-break-and-retry-one-panel",
+    "title": "Break and retry one panel",
     "fileName": "2026-07-07-react-error-boundaries-recovery.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-error-boundaries-recovery-1-boundary-usage.tsx",
+    "modulePath": "./react-example-modules/2026-07-07-react-error-boundaries-recovery-1-break-and-retry-one-panel.tsx",
     "mode": "react-server",
     "interactionMode": "live-component",
-    "componentName": "DashboardPage",
+    "componentName": "RecoveryDemo",
     "needsQueryClientProvider": false,
-    "summary": "Boundary usage. This example mounts a live React component in the browser.",
+    "summary": "Break and retry one panel. This example mounts a live React component in the browser.",
     "props": {}
-  },
-  {
-    "id": "2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value",
-    "title": "Effect lint value",
-    "fileName": "2026-07-07-react-eslint-typescript-formatting-ci.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-eslint-typescript-formatting-ci-1-effect-lint-value.tsx",
-    "mode": "react-server",
-    "interactionMode": "live-component",
-    "componentName": "RoomTitle",
-    "needsQueryClientProvider": false,
-    "summary": "Effect lint value. This example mounts a live React component in the browser.",
-    "props": {
-      "roomId": "general"
-    }
   },
   {
     "id": "2026-07-07-react-events-and-local-state-2-disclosure-state",
@@ -392,27 +362,27 @@ export const reactExampleRegistry = [
     "props": {}
   },
   {
-    "id": "2026-07-07-react-framework-choice-project-setup-2-client-entry-point",
-    "title": "Client entry point",
+    "id": "2026-07-07-react-framework-choice-project-setup-2-own-the-browser-entry",
+    "title": "Own the browser entry",
     "fileName": "2026-07-07-react-framework-choice-project-setup.md",
     "modulePath": null,
     "mode": "result",
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "const rootElement = document.getElementById(\"root\");\nif (!rootElement) {\n  throw new Error(\"Missing root element\");\n}\ncreateRoot(rootElement).render(<App />);",
+    "summary": "const element = document.getElementById(\"root\");\nif (!element) throw new Error(\"Missing root element\");\ncreateRoot(element).render(<App />);",
     "props": null
   },
   {
-    "id": "2026-07-07-react-framework-choice-project-setup-1-framework-decision-shape",
-    "title": "Framework decision shape",
+    "id": "2026-07-07-react-framework-choice-project-setup-1-an-explicit-vite-boundary",
+    "title": "An explicit Vite boundary",
     "fileName": "2026-07-07-react-framework-choice-project-setup.md",
     "modulePath": null,
     "mode": "result",
     "interactionMode": "runner",
     "componentName": null,
     "needsQueryClientProvider": false,
-    "summary": "export function chooseReactStart(need: ProjectNeed) {\n  if (need.routes && (need.serverRendering || need.serverMutations)) {\n    return \"Start with a React framework\";\n  }\n  if (need.staticPages || need.routes) {\n    return \"Compare a framework with a Vite app plus router\";\n  }\n  return \"A client-only Vite app is a reasonable starting point\";\n}",
+    "summary": "export default defineConfig({\n  root: fileURLToPath(new URL(\".\", import.meta.url)),\n  cacheDir: \".vite\",\n  esbuild: { jsx: \"automatic\", jsxImportSource: \"react\" },\n  build: { outDir: \"dist\", emptyOutDir: true },\n});",
     "props": null
   },
   {
@@ -589,39 +559,16 @@ export const reactExampleRegistry = [
     }
   },
   {
-    "id": "2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region",
-    "title": "Profiler around a slow region",
+    "id": "2026-07-07-react-performance-and-compiler-1-compare-an-unrelated-update",
+    "title": "Compare an unrelated update",
     "fileName": "2026-07-07-react-performance-and-compiler.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-performance-and-compiler-2-profiler-around-a-slow-region.tsx",
+    "modulePath": "./react-example-modules/2026-07-07-react-performance-and-compiler-1-compare-an-unrelated-update.tsx",
     "mode": "react-server",
     "interactionMode": "live-component",
-    "componentName": "InstrumentedDashboard",
+    "componentName": "PerformanceComparison",
     "needsQueryClientProvider": false,
-    "summary": "Profiler around a slow region. This example mounts a live React component in the browser.",
+    "summary": "Compare an unrelated update. This example mounts a live React component in the browser.",
     "props": {}
-  },
-  {
-    "id": "2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation",
-    "title": "Memoized expensive calculation",
-    "fileName": "2026-07-07-react-performance-and-compiler.md",
-    "modulePath": "./react-example-modules/2026-07-07-react-performance-and-compiler-1-memoized-expensive-calculation.tsx",
-    "mode": "react-server",
-    "interactionMode": "live-component",
-    "componentName": "FilteredReport",
-    "needsQueryClientProvider": false,
-    "summary": "Memoized expensive calculation. This example mounts a live React component in the browser.",
-    "props": {
-      "rows": [
-        {
-          "id": "row-1",
-          "name": "Revenue"
-        },
-        {
-          "id": "row-2",
-          "name": "Retention"
-        }
-      ]
-    }
   },
   {
     "id": "2026-07-07-react-props-children-component-boundaries-2-reusable-row-with-explicit-props",
@@ -1176,30 +1123,6 @@ export const reactExampleRegistry = [
     "componentName": null,
     "needsQueryClientProvider": false,
     "summary": "type ProfileInput =\n  | { ok: true; displayName: string }\n  | { ok: false; error: string };\nconst profileSchema = z.object({\n  displayName: z.string().trim().min(2),\n});\nfunction parseProfile(formData: FormData): ProfileInput {\n  const parsed = profileSchema.safeParse({\n    displayName: formData.get(\"displayName\"),\n  });\n  if (!parsed.success) {\n    return { ok: false, error: \"Display name needs at least two characters.\" };\n  }\n  return { ok: true, displayName: parsed.data.displayName };",
-    "props": null
-  },
-  {
-    "id": "2026-07-07-react-vite-client-only-apps-2-minimal-vite-config",
-    "title": "Minimal Vite config",
-    "fileName": "2026-07-07-react-vite-client-only-apps.md",
-    "modulePath": null,
-    "mode": "result",
-    "interactionMode": "runner",
-    "componentName": null,
-    "needsQueryClientProvider": false,
-    "summary": "export default defineConfig({\n  plugins: [react()],\n  server: {\n    port: 5173,\n  },\n});",
-    "props": null
-  },
-  {
-    "id": "2026-07-07-react-vite-client-only-apps-1-vite-react-entry",
-    "title": "Vite React entry",
-    "fileName": "2026-07-07-react-vite-client-only-apps.md",
-    "modulePath": null,
-    "mode": "result",
-    "interactionMode": "runner",
-    "componentName": null,
-    "needsQueryClientProvider": false,
-    "summary": "const root = document.getElementById(\"root\");\nif (!root) {\n  throw new Error(\"Missing root element\");\n}\ncreateRoot(root).render(<App />);",
     "props": null
   },
   {

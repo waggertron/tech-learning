@@ -7,7 +7,7 @@ crosspost: [devto, linkedin]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-05-15-typescript-async-mutex-pattern/
 series:
   slug: software-design-principles
-  order: 3
+  order: 2
 ---
 
 ## The problem

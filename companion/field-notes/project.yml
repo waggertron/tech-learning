@@ -22,6 +22,7 @@ targets:
     platform: iOS
     sources:
       - Apps/SwiftUI
+      - Apps/Shared
     dependencies:
       - package: FieldNotesCore
         product: FieldNotesCore
@@ -36,6 +37,7 @@ targets:
     platform: iOS
     sources:
       - Apps/UIKit
+      - Apps/Shared
     dependencies:
       - package: FieldNotesCore
         product: FieldNotesCore

@@ -6,7 +6,7 @@ tags: [ios, swift, testing, persistence, migrations, networking, contracts, fiel
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-19-ios-persistence-migration-network-contract-tests/
 series:
   slug: zero-to-ios-hero
-  order: 76
+  order: 74
 ---
 
 Boundary tests prove translation and failure behavior that pure domain tests cannot see. They should use the smallest real boundary available: an in-memory container, temporary directory, intercepted URL request, or credential-free local service.
@@ -45,8 +45,8 @@ The contract shape is instructional. SwiftData and Core Data migrations require 
 
 ## Series navigation
 
-- Previous: [Part 75: SwiftUI, UIKit, navigation, accessibility, and UI behavior tests](../2026-07-19-ios-swiftui-uikit-navigation-accessibility-ui-tests/)
-- Next: [Part 77: Performance, memory, energy, launch, and device matrices](../2026-07-19-ios-performance-memory-energy-launch-device-matrices/)
+- Previous: [Part 73: Deterministic dependencies and concurrency tests](../2026-07-19-ios-deterministic-dependencies-concurrency-tests/)
+- Next: [Part 75: Performance, memory, energy, launch, and device matrices](../2026-07-19-ios-performance-memory-energy-launch-device-matrices/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

@@ -1,15 +1,15 @@
 ---
-title: "Modern React 32: Mutations and cache invalidation"
+title: "Modern React 29: Mutations and cache invalidation"
 description: "Mutation flows and cache invalidation after writes change server-backed data."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-mutations-cache-invalidation/
 series:
   slug: modern-react-development
-  order: 32
+  order: 29
 ---
 
-This is part 32 of the [Modern React development series](../series/modern-react-development/).
+This is part 29 of the [Modern React development series](../series/modern-react-development/).
 
 A mutation changes server-backed data. After the write, every cached read that depends on that data needs a plan: update it directly, invalidate it for refetch, or navigate to a route that reloads it.
 
@@ -116,8 +116,8 @@ A direct update is useful when the next cached value is known and small.
 
 ## Series navigation
 
-- Previous: [Part 31: Data fetching with a cache](../2026-07-07-react-data-fetching-with-cache/)
-- Next: [Part 33: Error boundaries and recovery](../2026-07-07-react-error-boundaries-recovery/)
+- Previous: [Part 28: Data fetching with a cache](../2026-07-07-react-data-fetching-with-cache/)
+- Next: [Part 30: Error boundaries and working recovery](../2026-07-07-react-error-boundaries-recovery/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

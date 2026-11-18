@@ -9,40 +9,51 @@ series:
   order: 64
 ---
 
-Dependency injection means a type receives the collaborators it needs. A composition root is the narrow startup location that chooses concrete live, preview, or test implementations and connects them.
+The composition root is the startup location that chooses concrete collaborators. Field Notes has two interfaces and one repository contract, so choosing storage once prevents the frameworks from implementing different product rules.
 
-## Make the graph visible
+## Construct the application from the outside
+
+Both apps call the same `AppComposition.library()` factory in `Apps/Shared/AppComposition.swift`:
 
 ```swift
-struct AppDependencies {
-    var clock: @Sendable () -> Date
-    var makeID: @Sendable () -> UUID
-    var library: any NoteLibrary
-    var analytics: any Analytics
-}
-
-@MainActor
-func makeApp(dependencies: AppDependencies) -> AppModel {
-    let createNote = CreateNote(
-        makeID: dependencies.makeID,
-        now: dependencies.clock,
-        save: dependencies.library.save
-    )
-    return AppModel(createNote: createNote, analytics: dependencies.analytics)
-}
+let repository = FileNoteRepository(url: url)
+let library = NoteLibrary(repository: repository)
 ```
 
-Production startup supplies a durable library and real clock. Tests supply fixed time, predictable IDs, an in-memory library, and recording analytics. The use case itself does not branch on environment.
+`url` is resolved in Application Support before constructing the repository. SwiftUI passes the library into `NoteListModel`; UIKit passes it into `NoteListViewController`. Both eventually call the same `SaveNote` operation.
 
-## Prefer explicit construction
+```text
+Application Support URL
+          |
+          v
+FileNoteRepository -> NoteLibrary -> SwiftUI model or UIKit controller
+```
 
-Initializer injection makes required collaborators visible and keeps instances immutable. Method injection suits a value needed for one operation. Environment-based injection can be useful near SwiftUI, but core dependencies should still have clear ownership and defaults that do not silently reach production services.
+The file adapter is an actor. The app creates one writer for one file and shares it through the library value. Constructing two live file actors for the same URL would create independent serialization domains, so this implementation does not promise cross-process or multiple-writer coordination.
 
-## Avoid mutable service location
+## Substitute the contract in tests
 
-A singleton registry hides the dependency graph, permits tests to affect one another, and allows any code to acquire any service. Moving a global behind a protocol changes its spelling, not its lifetime or ownership risk.
+```swift
+let repository = InMemoryNoteRepository()
+let save = SaveNote(
+    library: NoteLibrary(repository: repository),
+    now: { Date(timeIntervalSince1970: 1_700_000_000) }
+)
+let draft = NoteDraft(title: "Creek", id: NoteID(rawValue: "test-note"))
+let note = try await save(draft)
+```
 
-The composition root may be framework-specific because startup is framework-specific. The objects it creates can remain independent.
+The same `SaveNote` runs against memory or disk. Tests do not switch behavior inside the use case. The shared repository contract covers replacement, idempotent deletion, search, ordering, and value round trips.
+
+## Keep test configuration at startup
+
+Debug UI tests pass `--ui-testing`, `--store-name`, and optionally `--reset-store` or `--fail-first-save`. Only the composition factory interprets those arguments. A failed-save fixture wraps the selected file repository and rejects its first write, then forwards retries.
+
+The test store name permits only letters, digits, and hyphens. Production startup does not accept an arbitrary path from launch arguments. If the Application Support directory cannot be resolved, the factory supplies an unavailable repository so the interface exposes a recoverable failure instead of deleting data or trapping.
+
+## Match the evidence to the layer
+
+Package contracts passed with Swift 6.3.3. The two app entry points and test drivers have syntax-check evidence only. Xcode target compilation, startup configuration, Simulator journeys, and device accessibility remain unverified. Dependency injection makes those checks easier to isolate; it does not replace them.
 
 ## Series navigation
 

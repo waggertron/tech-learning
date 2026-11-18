@@ -1,49 +1,74 @@
 ---
-title: "NeighborLink product, trust, and moderation"
-description: "How do listings, chat, identity, location, reporting, and trust change one another?"
+title: "NeighborLink: a product design brief"
+description: "A local listings and messaging design whose trust rules survive offline work and retries."
 date: 2026-07-20
 tags: [ios, swift, case-study, neighbor]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-20-neighborlink-product-trust-moderation/
-series:
-  slug: zero-to-ios-hero
-  order: 129
 ---
 
-NeighborLink is a community marketplace where listings, messaging, identity, approximate location, payments, and moderation form one trust system. Product quality includes the operational path for preventing, reporting, reviewing, and appealing harm.
+A neighbor lists an item, another person asks a question, and both can report or block unsafe contact. Trust behavior belongs in the first release because listing, identity, chat, and moderation affect one another.
 
-## Product decision
+This is a design brief and project assignment. It does not describe a completed application.
 
-How do listings, chat, identity, location, reporting, and trust change one another?
+## One useful vertical slice
 
-The smallest useful vertical slice is concrete: Model roles, listing lifecycle, conversation membership, reports, blocks, and moderation outcomes before opening posting.
+Build one listing draft, authenticated creation against a local service contract, a conversation attached to that listing, and report/block actions. Keep payment, discovery ranking, public location precision, and broad media support outside the first slice.
 
-## Boundaries that keep the design honest
+## Model the durable state
 
-- Represent authorization and moderation transitions on the server, then project only permitted actions to the client.
-- Minimize precise location and retained personal data while keeping safety and support workflows effective.
-- Design reports, blocks, audit events, and appeals alongside listings and chat.
-- Make degraded services and hostile input part of the initial release model.
-- Avoid this failure: Treating abuse prevention, appeal, and support operations as work that can wait until after launch.
+```text
+Account(id, status)
+    +-> Listing(id, authorID, visibility)
+            +-> Conversation(id, participants)
+                    +-> Message(clientID, serverSequence, status)
 
-## Release evidence
+message: draft -> queued -> acknowledged
+                    |          |
+                    +-> retry  +-> visible
+```
 
-No NeighborLink client, backend, identity provider, listing flow, location service, moderation queue, payment, or adversarial device journey was implemented or exercised.
+The service authorizes every listing and conversation operation using the current account. A client route, hidden button, or cached participant list cannot establish authority. A block affects message and notification behavior as well as the visible profile.
 
-This chapter records product and architecture decisions. Apple framework behavior still requires the matching Xcode target, configured service or account where applicable, and named Simulator or physical-device evidence. The browser Swift runner does not validate these Apple SDK surfaces.
+## Moderate an explicit report
 
-## Series navigation
+```text
+submitted -> triaged -> decided -> notified
+                          |
+                          +-> appealed -> reviewed -> upheld or revised
+```
 
-- Previous: [Part 128: ScreenRoom testing and release review](../2026-07-20-screenroom-testing-release-review/)
-- Next: [Part 130: NeighborLink architecture, identity, and API contracts](../2026-07-20-neighborlink-architecture-identity-api-contracts/)
-- Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
+A moderation decision records the report ID, subject, outcome, reason, acting role, and timestamp. Keep the original decision in an append-only audit history when a later appeal revises it. Expose only the explanation appropriate to the affected person, not private reporter details or internal review material. Blocking protects the immediate interaction; moderation resolves the broader listing/account policy.
+
+## Compare the main alternatives
+
+A server-backed write simplifies shared authority but must fail visibly when offline. An outbox improves continuity when the product can tolerate queued work. It requires stable client IDs, replay policy, and reconciliation. Start with text messages before uploads so the retry contract is clear.
+
+## Walk through a failure
+
+A message may be accepted just before connectivity disappears. Replay the same client ID and reconcile its server sequence instead of creating a second message. If the sender loses access before replay, retain a visible failure without leaking the protected conversation. Recheck a push/deep-link destination against current account and block state.
+
+## Acceptance scenarios
+
+1. Send the same client ID twice and display one acknowledged message.
+2. Switch accounts with a queued write and prevent it from being sent as the new account.
+3. Report and block a participant, then verify notifications and conversation access follow policy.
+4. Restore an expired or deleted listing route into a recoverable state.
+5. Submit a report, record a reasoned decision, appeal it, and revise the outcome while preserving the original actor/reason history and reporter privacy.
+
+A deterministic model test can prove transition and identity rules. The platform adapter then needs its own interface, permission, interruption, and integration checks. Keep evidence tied to the actual target and destination rather than treating a design review as an executed feature.
+
+## Implementation boundary
+
+No NeighborLink app target, service integration, account transaction, or hardware journey is supplied by this brief. Use the [Field Notes capstone](../2026-07-19-swiftui-field-notes-capstone/) for the implemented notebook path. Build this assignment only when its distinct user task justifies the extra platform and validation cost.
 
 ## References
 
-- [App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
-- [User privacy and data use](https://developer.apple.com/app-store/user-privacy-and-data-use/)
-- [Security](https://developer.apple.com/documentation/security)
+- [User Notifications](https://developer.apple.com/documentation/usernotifications) documents the central framework boundary for this assignment.
+- [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) provides platform interaction and accessibility guidance.
 
 ## Related topics
 
-- [Networking, authentication, pagination, real-time updates, and resilience](../2026-07-19-ios-networking-authentication-realtime-resilience/)
-- [Security, privacy, permissions, and platform policy](../2026-07-19-ios-security-privacy-permissions-platform-policy/)
+- [Apple platform selection](../2026-07-19-one-product-across-apple-platforms/)
+- [Apple capability selection](../2026-07-19-widgetkit-live-activities/)
+
+[Series reading guide](../series/zero-to-ios-hero/)

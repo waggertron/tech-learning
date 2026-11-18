@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-16
 **Status:** Gate 3 baseline
-**Applies to:** Posts 1 through 140
+**Applies to:** The current core path and explicitly implemented artifacts; original part assignments below are historical
 
 ## Purpose
 
@@ -42,7 +42,22 @@ Authoring status is independent from evidence status. A post may be created, rev
 | CA | Capability atlas | Required for every named platform and capability target. | Required with deterministic adapter and capability-specific failures. | Required where the simulator faithfully supports the capability. | Required when hardware, system account, entitlement, sensor, media route, or background behavior matters. | Required for the capability's primary journeys. | Contextual, and required for device-resource or real-time claims. | Required for availability, permission, entitlement, account, privacy, product fit, and simulator limits. |
 | CS | Case study | Required for every target touched by the case-study checkpoint. | Required for domain, application, adapters, UI, failures, upgrades, and release paths introduced. | Required for all supported simulator journeys. | Required for every hardware, system-service, performance, energy, and release claim. | Required for primary and recovery journeys. | Required when scale, media, sensors, networking, rendering, launch, energy, or memory affects the product. | Required for product boundary, architecture, privacy, security, operations, distribution, and transfer exercise. |
 
-## Post Assignments
+## Current curriculum after consolidation
+
+The [remediation plan](./plans/current/2026-11-17-post-series-value-improvement-plan.md) replaces the original 140-installment publication shape. The core reading order now contains 77 installments. Four separate reference guides cover production readiness, background-work design, platform selection, and capability selection. Five product briefs are assignments rather than completed app case studies.
+
+Use [the route inventory](./post-series-route-migrations.md) to map original part identities to their retained sources. New reading-order numbers do not change the historical identity of a test record.
+
+| Current surface | Acceptance boundary |
+| --- | --- |
+| core Swift language and domain package | actual compiler and package test results |
+| SwiftUI/UIKit source and capstones | package evidence plus separate app-target, Simulator, accessibility, and device checks |
+| reference guides | correct decisions, failure boundaries, focused sources, and resolving links; no claim of executed capability integrations |
+| optional product briefs | distinct problem, bounded slice, state model, alternatives, failure walkthrough, acceptance scenarios; no completed-app claim |
+
+The original capability and case-study profiles remain useful when an integration is actually implemented. They do not require pretending each listed framework already has a target. Missing Xcode or hardware checks remain unverified.
+
+## Original Post Assignments (historical)
 
 | # | Post | Profile | Required additions |
 | ---: | --- | :---: | --- |

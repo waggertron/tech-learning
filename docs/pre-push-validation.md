@@ -48,6 +48,7 @@ npm run validate:code-examples
 npm run build
 npm run validate:pages
 npm run validate:links
+npm run validate:post-migrations
 npm run validate:twelve-factor-browser
 npm run validate:custom-pages
 npm run validate:post-discovery
@@ -213,3 +214,7 @@ Add or update validation when a bug reaches any of these surfaces:
 Record new reusable validation rules in `docs/feature_tracker.md` and update `.agents/skills/pre-push-validation/SKILL.md` when future Codex sessions need the behavior.
 
 Post discovery validation checks homepage newest/oldest sorting, archive pagination, tags, RSS, preserved series routes, self-hosted fonts, both themes, mobile overflow, and no-JavaScript links. See `docs/post-discovery.md`.
+
+## Retired post routes
+
+`npm run validate:post-migrations` checks every active entry in `docs/data/post-series-route-migrations.json` against built static redirect HTML. It requires a direct local destination, an existing source and heading anchor, removal of the old source, exclusion from the full post catalog and Pagefind content, no chains, and no unexplained live links to a retired article. The same check runs after the build/link stages of pre-push validation. Static redirects are meta refresh pages on GitHub Pages, not HTTP 301 responses.

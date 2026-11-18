@@ -1,15 +1,15 @@
 ---
-title: "Modern React 27: Storybook and component workbenches"
+title: "Modern React 25: Storybook and component workbenches"
 description: "Storybook as a component workbench for states that are hard to reach through the product flow."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-storybook-component-workbenches/
 series:
   slug: modern-react-development
-  order: 27
+  order: 25
 ---
 
-This is part 27 of the [Modern React development series](../series/modern-react-development/).
+This is part 25 of the [Modern React development series](../series/modern-react-development/).
 
 Storybook gives components a place to be developed and reviewed outside the full application flow. A story is a named example state, which makes rare, loading, empty, and error states easier to see on purpose.
 
@@ -131,8 +131,8 @@ The story can double as a small interaction check for a state that reviewers can
 
 ## Series navigation
 
-- Previous: [Part 26: Vite and client-only apps](../2026-07-07-react-vite-client-only-apps/)
-- Next: [Part 28: Vitest, Testing Library, and Playwright](../2026-07-07-react-vitest-testing-library-playwright/)
+- Previous: [Part 24: TanStack Router and TanStack Start](../2026-07-07-react-tanstack-router-start/)
+- Next: [Part 26: Vitest, Testing Library, and Playwright](../2026-07-07-react-vitest-testing-library-playwright/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

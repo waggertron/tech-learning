@@ -1,15 +1,15 @@
 ---
-title: "Modern React 30: Routing and nested layouts"
+title: "Modern React 27: Routing and nested layouts"
 description: "Routing and nested layouts as the structure that makes URL state match UI state."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-routing-nested-layouts/
 series:
   slug: modern-react-development
-  order: 30
+  order: 27
 ---
 
-This is part 30 of the [Modern React development series](../series/modern-react-development/).
+This is part 27 of the [Modern React development series](../series/modern-react-development/).
 
 Routing connects the URL to the UI. Nested layouts make the route tree visible in the screen structure, so shared shells stay mounted while child route content changes.
 
@@ -122,8 +122,8 @@ The route shape mirrors the UI shape: account shell first, child page second.
 
 ## Series navigation
 
-- Previous: [Part 29: ESLint, TypeScript, formatting, and CI gates](../2026-07-07-react-eslint-typescript-formatting-ci/)
-- Next: [Part 31: Data fetching with a cache](../2026-07-07-react-data-fetching-with-cache/)
+- Previous: [Part 26: Vitest, Testing Library, and Playwright](../2026-07-07-react-vitest-testing-library-playwright/)
+- Next: [Part 28: Data fetching with a cache](../2026-07-07-react-data-fetching-with-cache/)
 - Series index: [Modern React development](../series/modern-react-development/)
 
 ## References

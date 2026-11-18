@@ -1,15 +1,12 @@
 ---
-title: "Modern React 25: Expo and React Native"
-description: "Expo and React Native for applying React patterns to native screens instead of the browser DOM."
+title: "React Native: rendering primitives and shared state"
+description: "Compare native rendering primitives with browser elements and identify which React state logic can be shared."
 date: 2026-07-07
 tags: [react, typescript, frontend, web]
 canonical: https://waggertron.github.io/tech-learning/posts/2026-07-07-react-expo-react-native/
-series:
-  slug: modern-react-development
-  order: 25
 ---
 
-This is part 25 of the [Modern React development series](../series/modern-react-development/).
+This optional branch accompanies the [Modern React development series](../series/modern-react-development/). It compares rendering and shared state rather than walking through an Expo project or device integration.
 
 React Native applies the React component model to native apps. Expo provides the project tooling, SDK modules, development workflow, and deployment services that make that native React path practical.
 
@@ -31,15 +28,13 @@ Think of React Native as React speaking a different host language. Components st
 
 ## How it is used
 
-Use Expo for mobile and universal apps that need native screens, device APIs, app store builds, over-the-air updates, push notifications, camera, location, or mobile navigation patterns.
+Use this comparison when deciding whether component and Hook logic transfers to a native interface. React Native primitives are the demonstrated subject. Expo supplies a separate project and native-capability workflow that these two examples do not exercise.
 
-## How to use it
+## Reading the comparison
 
-1. Create the project with Expo tooling.
-2. Use React Native primitives such as `View`, `Text`, `Pressable`, `Image`, and `ScrollView`.
-3. Use Expo SDK modules for device APIs instead of browser APIs.
-4. Keep shared React logic in Hooks when it is not tied to DOM or native-only APIs.
-5. Test on real device classes because layout, gestures, permissions, and performance differ from the browser.
+Keep state and domain calculations independent of the renderer when they have the same contract. Replace browser elements with native primitives deliberately: a `Text` is not a styled `div`, and device gestures, layout, permissions, and accessibility need native validation.
+
+The browser output below uses a web adapter for illustration. It does not prove an iOS or Android target, device API, Expo build, notification, or app-store release. Use the official Expo tutorial for a separate runnable project workflow.
 
 ## Example: Native screen component
 
@@ -105,11 +100,10 @@ The Hook is regular React logic. The rendered controls are React Native primitiv
 - **Permissions**: Device APIs often need permission flows and platform-specific behavior.
 - **Web support**: Expo can target web, but mobile-first UI still needs browser review when shipped to web.
 
-## Series navigation
+## Return to the core path
 
-- Previous: [Part 24: TanStack Router and TanStack Start](../2026-07-07-react-tanstack-router-start/)
-- Next: [Part 26: Vite and client-only apps](../2026-07-07-react-vite-client-only-apps/)
-- Series index: [Modern React development](../series/modern-react-development/)
+- [Framework choice and project setup](../2026-07-07-react-framework-choice-project-setup/)
+- [Modern React development](../series/modern-react-development/)
 
 ## References
 

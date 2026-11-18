@@ -52,7 +52,7 @@ An actor protects its isolated state. It is not merely a queue for arbitrary wor
 ## Series navigation
 
 - Previous: [Part 68: Data architecture, source of truth, caching, offline sync, and conflict](../2026-07-19-ios-data-architecture-source-truth-cache-offline-sync-conflict/)
-- Next: [Part 70: Architecture tests, refactoring seams, decisions, and tradeoffs](../2026-07-19-ios-architecture-tests-refactoring-decisions-tradeoffs/)
+- Next: [Part 70: Testing strategy, seams, and confidence](../2026-07-19-ios-testing-strategy-seams-confidence/)
 - Series index: [Zero to iOS Hero](../series/zero-to-ios-hero/)
 
 ## References

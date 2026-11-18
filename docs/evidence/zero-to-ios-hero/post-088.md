@@ -2,6 +2,6 @@
 
 Date: 2026-07-19
 
-- Published: `src/content/docs/posts/2026-07-19-ipados-multitasking-pointer-keyboard-pencil-documents.md`
+- Published: `src/content/docs/posts/2026-07-19-one-product-across-apple-platforms.md`
 - Reviewed: product boundary, adapter ownership, failure states, privacy, and platform evidence requirements.
 - Boundary: No iPad Simulator, hardware keyboard, pointer, Pencil, document provider, or physical iPad evidence was available.

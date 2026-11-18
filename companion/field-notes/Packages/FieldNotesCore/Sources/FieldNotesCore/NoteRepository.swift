@@ -1,3 +1,8 @@
+/// Save replaces the value with the same ID; deleting an absent ID succeeds.
+/// Load returns value copies in unspecified order. NoteLibrary supplies a total order.
+/// Successful file writes survive a normal reopen; memory writes last for the actor lifetime.
+/// A failed mutation leaves prior committed data intact. Cancellation is checked before
+/// SaveNote submits a mutation; cancellation after commit does not undo a saved note.
 public protocol NoteRepository: Sendable {
     func load() async throws -> [FieldNote]
     func save(_ note: FieldNote) async throws

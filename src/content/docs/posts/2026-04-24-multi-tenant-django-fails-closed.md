@@ -1,6 +1,6 @@
 ---
-title: Multi-tenant Django that fails closed
-description: "Row-level tenancy with a middleware and a TenantScopedManager, every query filtered automatically, every insert blocked if the tenant is not set. No way to accidentally leak across tenants."
+title: Django tenant scoping, the guardrails and the bypasses
+description: "Scope selected Django ORM reads and writes to a verified tenant context, test missing-context failures, and identify raw SQL, relation, bulk, and administrative bypasses."
 date: 2026-04-24
 tags: [django, multi-tenant, security, patterns]
 crosspost: [devto, linkedin]
@@ -10,92 +10,133 @@ series:
   order: 3
 ---
 
+A missing `tenant_id` condition can expose another customer's records. A scoped default manager makes that omission harder in ordinary ORM calls. It does not establish database-enforced isolation or protect every Django operation.
+
+The boundary matters more than the convenience: missing context raises, supported writes validate ownership, and bypasses stay explicit. Authorization still decides which tenant the authenticated actor may use.
+
 ## The failure mode
 
-Multi-tenant B2B apps have one terrifying bug: a query without a `tenant_id` filter. It's usually a new endpoint, or a report, or a debug shell. Run it, and suddenly Tenant A sees Tenant B's rows. In production there is no second chance.
+Suppose tenant A and tenant B each have a patient and a visit. An endpoint calls `Visit.objects.all()` without adding a tenant condition. A scoped manager can attach that condition automatically. The endpoint then sees A's visits while A's verified tenant context is active.
 
-## The fix, in Django
+That guarantee applies to this manager's constructed queryset. It does not imply that a raw query, relation join, custom admin, bulk operation, or previously constructed queryset has the same boundary.
 
-Row-level tenancy with three cooperating pieces, all of which fail closed.
+## Establish context after authentication
 
-### 1. A middleware that reads the JWT and attaches the tenant
+Use a `ContextVar` to carry the selected tenant through one operation, and restore its previous token on exit:
 
 ```python
-# tenancy/middleware.py
-class TenantMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
+from contextlib import contextmanager
+from contextvars import ContextVar
 
-    def __call__(self, request):
-        # JWT-authenticated requests get a tenant claim; read it here.
-        claim = getattr(request, "auth", None)
-        request.tenant_id = claim.get("tenant") if claim else None
-        _tenant_context.set(request.tenant_id)   # ContextVar
-        try:
-            return self.get_response(request)
-        finally:
-            _tenant_context.set(None)
+_current_tenant = ContextVar("current_tenant", default=None)
+
+class TenantNotSetError(RuntimeError):
+    pass
+
+def tenant_id():
+    value = _current_tenant.get()
+    if value is None:
+        raise TenantNotSetError("A verified tenant context is required")
+    return value
+
+@contextmanager
+def tenant_scope(value):
+    if value is None:
+        raise TenantNotSetError("Cannot establish an empty tenant context")
+    token = _current_tenant.set(value)
+    try:
+        yield
+    finally:
+        _current_tenant.reset(token)
 ```
 
-The `ContextVar` makes the tenant ID visible deep in ORM code without passing it through every signature.
+The caller resolves membership from authenticated server-side identity before entering `tenant_scope`. A request parameter, token payload decoded without verification, or model-generated argument is not proof of membership.
 
-### 2. A manager that filters every query
+Middleware placement depends on the authentication stack. Django middleware cannot assume that Django REST Framework has already populated `request.auth`. Wrap the operation after the actual authentication and membership checks. Background jobs need their own verified tenant selection because no HTTP middleware runs there.
+
+Resetting the exact token also preserves an outer scope when a nested operation raises. Setting the variable to `None` unconditionally would erase that outer scope.
+
+## Scope the default manager
 
 ```python
-# tenancy/managers.py
+from django.db import models
+
 class TenantScopedManager(models.Manager):
     def get_queryset(self):
-        tid = _tenant_context.get()
-        if tid is None:
-            raise TenantNotSetError(
-                "TenantScopedManager used with no tenant in context"
-            )
-        return super().get_queryset().filter(tenant_id=tid)
+        return super().get_queryset().filter(tenant_id=tenant_id())
 ```
 
-Every ORM read through `Model.objects.whatever()` gets filtered. A missing tenant doesn't return zero rows, it raises. Silent empties hide bugs. Loud exceptions surface them.
+`Visit.objects.filter(status="scheduled")` now contains both the tenant condition and the requested status condition. Constructing the queryset without context raises instead of silently returning no rows.
 
-### 3. A `save()` that blocks mismatched inserts
+The context value is captured when the queryset is constructed. A queryset created for A does not become a B queryset when evaluated later inside B's scope. Keep querysets and model instances within their request or job ownership boundary.
 
-```python
-# tenancy/models.py
-class TenantScopedModel(models.Model):
-    tenant = models.ForeignKey("tenancy.Tenant", on_delete=models.PROTECT)
+## Guard writes separately
 
-    def save(self, *args, **kwargs):
-        ctx_tenant = _tenant_context.get()
-        if ctx_tenant is None:
-            raise TenantNotSetError("Attempted save with no tenant context")
-        if self.tenant_id not in (None, ctx_tenant):
-            raise CrossTenantWriteError(
-                f"Tenant mismatch: row={self.tenant_id}, ctx={ctx_tenant}"
-            )
-        if self.tenant_id is None:
-            self.tenant_id = ctx_tenant
-        super().save(*args, **kwargs)
+A read filter alone is not a write contract. Instance saves need to validate the active tenant, assign it for new rows, reject another tenant's primary key, and validate tenant-owned foreign keys.
 
-    class Meta:
-        abstract = True
+The companion's `Visit.prepare_tenant_write()` checks that the selected patient's tenant matches the visit tenant. Its base implementation checks an existing primary key through an explicitly unscoped manager before saving. This closes the simple “construct A's object with B's primary key” overwrite path in the specimen.
+
+A synchronous check followed by a write is not a database constraint. Concurrency, malicious raw writes, database users, and other services need additional controls. A cross-tenant foreign key is still structurally valid to the database unless the schema or database policy prevents it.
+
+Bulk APIs require a separate decision. Django's `update()`, `bulk_create()`, and `bulk_update()` do not run an instance's ordinary `save()` override. The specimen therefore uses this supported subset:
+
+| Operation | Specimen policy |
+| --- | --- |
+| scoped read | default manager adds the active tenant |
+| instance save/delete | validate active and stored ownership |
+| `update(name=...)` or `update(status=...)` | allow only non-ownership fields on scoped rows |
+| `bulk_create()` | validate and assign tenant for every object first |
+| bulk tenant/relation-field change | reject |
+| conflict-handling bulk insert | reject |
+| `bulk_update()` | reject rather than imply its instances are guarded |
+
+Rejecting unsupported operations is deliberate. Expanding the API means specifying the ownership rule and testing the new path, not merely adding another model method override.
+
+## Related objects do not inherit every filter
+
+Django uses a model's base manager for some related-object access. Its documentation explicitly warns against filtering away rows in that base manager. The specimen keeps `all_objects` as the unfiltered base manager and `objects` as the scoped default manager.
+
+A join such as `Visit.objects.filter(patient__name="B patient")` scopes the visit queryset. It does not automatically add the patient manager's tenant filter. `select_related("patient")` also does not establish that the linked patient's tenant matches the visit tenant.
+
+The contract suite deliberately creates an invalid cross-tenant relation through an explicit bypass and shows that a join can traverse it. This is a limitation test: a passing result demonstrates why manager filtering alone is insufficient.
+
+## Raw SQL and administration are separate paths
+
+`objects.raw()` ignores prior queryset filtering. A direct database cursor never enters the manager. An explicitly exposed `all_objects` manager can read across tenants by design.
+
+Django admin normally starts from the model's default manager, so missing tenant context can make it fail. A custom admin queryset can bypass that manager. Admin authentication, tenant selection, object permissions, and privileged cross-tenant support tools therefore need an explicit policy. “It uses Django admin” proves none of those controls.
+
+For stronger isolation, evaluate database-enforced tenant policies and schema constraints alongside application authorization. Those controls still need tests under the actual database roles and connection lifecycle. This SQLite specimen does not demonstrate PostgreSQL row-level security.
+
+## Run the boundary specimen
+
+The complete small app and tests are in `companion/django-tenancy/`. It uses its own in-memory SQLite database and no application credentials. The reproduction baseline is Python 3.14.6 and Django 5.2.8, recorded in its `requirements.txt`.
+
+With that environment active, run from a repository checkout:
+
+```bash
+python3 -m unittest discover -s companion/django-tenancy/tests
 ```
 
-Three defenses: read, write, and "not set at all." All raise by default.
+The nine cases cover missing context, A/B reads and updates, cross-tenant writes, relation ownership, bulk policy, job scope, nested exception cleanup, raw/unscoped bypasses, join bypasses, and the admin default-manager boundary. Several concerns share a case.
 
-## The gotchas
+All nine contract tests passed on 2026-11-17 with Python 3.14.6 and Django 5.2.8 against in-memory SQLite. The passing bypass cases demonstrate the limits of manager scoping. They do not establish isolation on another database, Django version, middleware stack, or production database role.
 
-- **`Model.objects.all()` in a management command.** No middleware runs, no tenant is set, the manager raises. Fix: give management commands a helper that sets `_tenant_context` explicitly for the tenant they're operating on.
-- **Related manager bypass.** `tenant_a_user.visits.all()` works fine. `Visit.objects.filter(user=tenant_a_user)` works through the manager. But `user.visits_set.all()` goes through a reverse accessor that uses the *default* manager. The project fix: make `TenantScopedManager` the default (`objects = TenantScopedManager()`), not an alternate. `Meta.base_manager_name = "objects"` if you're on older Django.
-- **Raw SQL.** `Model.objects.raw(...)` and `connection.cursor()` bypass the manager. Lint rule + code review: no raw SQL in domain code. Exceptions go through an explicit helper that injects the tenant.
-- **Admin.** Django admin has its own querysets. Either hide the admin in prod or override `get_queryset()` on each `ModelAdmin`.
-- **`select_related` / `prefetch_related`.** Fine, they traverse FKs, each through its own manager, each filtered. As long as every model uses `TenantScopedManager`, the graph stays scoped.
+The specimen's baseline is for reproduction, not a claim about the latest Django security patch. Use a supported patched release and rerun the contracts before adopting the pattern.
 
-## Why it's worth it
+## What the pattern earns
 
-The default `tenant_id` filter is the most commonly forgotten `WHERE` clause in B2B SaaS. Making it automatic, and making its absence an exception, not a silent pass, turns a class of production incidents into a class of test failures. The tests catch it. The prod logs never have to.
+For the supported call paths, a scoped manager and validated writes make accidental tenant omissions visible and testable. They are useful application guardrails. The unfiltered base manager, joins, raw access, bulk behavior, and privileged tools explain why “every query is automatically safe” is too strong a claim.
 
-I built this into a portfolio project ([`home-health-provider-skeleton`](https://github.com/waggertron/home-health-provider-skeleton)) and the middleware + manager + model base class is ~100 lines total. Cheap to add, very cheap to live with.
+## References
 
-## See also
+- [Django 5.2 managers and base managers](https://docs.djangoproject.com/en/5.2/topics/db/managers/#base-managers) explains default versus base managers and related-object access.
+- [Django 5.2 QuerySet API](https://docs.djangoproject.com/en/5.2/ref/models/querysets/) documents `raw()`, `update()`, `bulk_create()`, and `bulk_update()` behavior, including paths that bypass `save()`.
+- [Django raw SQL](https://docs.djangoproject.com/en/5.2/topics/db/sql/) distinguishes model raw queries from direct cursor access.
 
-- [Django Part 5, Authentication](../../topics/web/django/part-05-authentication/), custom user models and JWT
-- [Django Part 7, Advanced ORM](../../topics/web/django/part-07-advanced-orm/), managers, Q, and query composition
-- [Django Part 10, Production](../../topics/web/django/part-10-production/), security headers and deployment hardening
+## Related topics
+
+- [Django authentication](../../topics/web/django/part-05-authentication/), establish identity before selecting a tenant.
+- [Django advanced ORM](../../topics/web/django/part-07-advanced-orm/), managers, joins, and query composition.
+- [Django production](../../topics/web/django/part-10-production/), broader deployment and security boundaries.
+- [Home-health routing system](../series/home-health-routing-system/), the project context for tenant-owned visits.

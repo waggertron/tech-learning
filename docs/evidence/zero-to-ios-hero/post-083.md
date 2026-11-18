@@ -2,6 +2,6 @@
 
 Date: 2026-07-19
 
-- Published: `src/content/docs/posts/2026-07-19-ios-logging-analytics-crashes-privacy-feature-flags.md`
+- Published: `src/content/docs/posts/2026-07-19-ios-persistence-core-data-files-caches-migrations-secure-storage.md`
 - Reviewed: product boundary, adapter ownership, failure states, privacy, and platform evidence requirements.
 - Boundary: No production analytics provider, crash service, remote configuration, or user dataset was connected.

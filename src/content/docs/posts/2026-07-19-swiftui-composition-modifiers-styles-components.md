@@ -137,7 +137,7 @@ Prefer a narrow input:
 
 ```swift
 NoteRow(note: note)
-TagChip(name: tag.name)
+TagChip(name: tag)
 ```
 
 Avoid an option bag with many unrelated Boolean switches. If two variants have different meaning or interaction, two focused types can be clearer than one universal component.
@@ -150,7 +150,8 @@ struct EmptyState<Action: View>: View {
     @ViewBuilder let action: () -> Action
 
     var body: some View {
-        ContentUnavailableView(title, systemImage: "note.text") {
+        VStack(spacing: 12) {
+            Text(title).font(.headline)
             action()
         }
     }
@@ -171,7 +172,7 @@ A useful component answers yes to at least one question:
 
 ## Validation boundary
 
-These SwiftUI snippets were reviewed against the series component rules but were not compiled. Xcode, Apple SDK, preview, Simulator, and accessibility behavior remain Not verified.
+The companion now includes `NoteRow`, `TagChip`, `TagStrip`, and `EmptyState` in `Apps/SwiftUI/NoteComponents.swift`. The list uses the actual `NoteRow`. Its components and app source were syntax-parsed, but not type-checked against SwiftUI. Xcode, Apple SDK, preview, Simulator, and accessibility behavior remain Not verified.
 
 ## Series navigation
 

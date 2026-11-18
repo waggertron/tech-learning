@@ -9,83 +9,40 @@ series:
   order: 41
 ---
 
-SwiftUI animates changes between two interface descriptions. Motion is an explanation of changed state, not a second source of truth.
+Animation explains a state change; it does not perform the business operation. Field Notes persists a favorite change through `NoteLibrary` and then displays the resulting state.
 
-## Animate the state change
-
-```swift
-Button {
-    withAnimation(.snappy) {
-        note.isFavorite.toggle()
-    }
-} label: {
-    Label("Favorite", systemImage: note.isFavorite ? "star.fill" : "star")
-}
-```
-
-The favorite value changes once. Animation controls how the visual difference appears. Persistence and error recovery still need a model contract.
-
-## Transitions need insertion or removal
+## Animate a value after the operation succeeds
 
 ```swift
-if showsSavedMessage {
-    Text("Saved")
-        .transition(.opacity.combined(with: .move(edge: .top)))
+Button(note.isFavorite ? "Remove Favorite" : "Mark Favorite") {
+    Task { await model.favorite(note) }
 }
+.animation(.default, value: note.isFavorite)
 ```
 
-A transition describes a view entering or leaving the hierarchy. It does not animate a property that remains in place. The surrounding state change needs an animation transaction.
+`FieldNote` is immutable. Calling `note.isFavorite.toggle()` is not a valid operation on the actual domain value. The application creates a replacement note, stores it, then reloads the visible collection. If persistence fails, the UI keeps the committed state and exposes the failure.
 
-## Respect reduced motion
+## Keep motion optional
 
 ```swift
 @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-private var savedTransition: AnyTransition {
-    reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity)
+private var feedbackAnimation: Animation? {
+    reduceMotion ? nil : .easeInOut(duration: 0.2)
 }
 ```
 
-Meaning survives when large movement is removed. Save status also has text and accessibility semantics.
+A status label and accessible action carry the meaning even when animation is removed. A transition applies to insertion/removal; animating a persistent property is a different operation.
 
-## Define gesture precedence
+## Choose input alternatives before custom gestures
 
-A row containing a button, navigation action, swipe action, and long press can produce conflicts. Prefer native controls and container APIs. When custom gestures are necessary, state which gesture wins, whether simultaneous recognition is allowed, and what keyboard or accessibility action provides the same result.
+Native buttons and navigation links already define roles and activation. Before adding drag-and-drop reordering, define what moves, which IDs identify items, what cancellation means, and how a keyboard or accessibility action performs the same operation.
 
-```swift
-TagChip(name: tag.name)
-    .draggable(tag.id.rawValue)
-```
+The current capstone does not implement tag reordering or custom drawing. Those are optional extensions rather than unfinished steps disguised as complete features. A useful extension would add one reorder command with invalid-ID and cancellation tests before attaching a gesture.
 
-Drop handling validates the transferred type and domain ID before mutating order. Drag and drop is an alternate path, not the only way to reorder tags.
+## Verify the interaction that matters
 
-## Draw values, not hidden controls
-
-```swift
-struct MapBadge: View {
-    let count: Int
-
-    var body: some View {
-        Canvas { context, size in
-            let rect = CGRect(origin: .zero, size: size).insetBy(dx: 2, dy: 2)
-            context.fill(Path(ellipseIn: rect), with: .color(.accentColor))
-        }
-        .overlay { Text(count, format: .number).foregroundStyle(.white) }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(count) notes at this location")
-    }
-}
-```
-
-Custom drawing can reduce view count and express shapes. It does not automatically provide controls, hit testing, Dynamic Type, or accessibility semantics.
-
-## Validate interaction as a matrix
-
-Check touch, pointer, keyboard, VoiceOver, Voice Control, Reduce Motion, interruption mid-animation, and drag cancellation. Profile drawing and animation on hardware before making performance claims.
-
-## Validation boundary
-
-The snippets were not compiled or rendered. Animation timing, gesture precedence, transfer behavior, reduced motion, accessibility, drawing performance, and device haptics remain Not verified.
+Package tests cover favorite replacement and failure. The current app source supplies native favorite controls. Reduced-motion animation, gesture precedence, accessibility activation, and device timing still require Apple-target checks. This page does not claim those checks passed.
 
 ## Series navigation
 

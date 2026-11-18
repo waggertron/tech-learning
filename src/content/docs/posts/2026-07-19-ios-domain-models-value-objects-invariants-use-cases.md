@@ -9,61 +9,84 @@ series:
   order: 63
 ---
 
-Domain code holds behavior that must remain true regardless of which screen, database, or API is active. Its types use the product's language and prevent invalid states where practical.
+The same rules apply when a note is created from SwiftUI, UIKit, a command line, or a decoded file. Put those rules into values and use cases that each adapter can call.
 
-## Turn rules into values
+## Reject invalid values at construction
 
 ```swift
-struct Tag: Hashable, Sendable {
-    let value: String
+import Foundation
 
-    init(_ raw: String) throws {
-        let normalized = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard (1...24).contains(normalized.count) else {
-            throw ValidationError.invalidTag
-        }
-        value = normalized.lowercased()
+public struct Tag: Hashable, Sendable {
+    public let value: String
+
+    public init(_ raw: String) throws {
+        let normalized = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard (1...24).contains(normalized.count) else { throw FieldNoteValidationError.invalidTag }
+        value = normalized
     }
 }
 
-struct Coordinate: Equatable, Sendable {
-    let latitude: Double
-    let longitude: Double
+public struct Coordinate: Equatable, Sendable {
+    public let latitude: Double
+    public let longitude: Double
 
-    init(latitude: Double, longitude: Double) throws {
-        guard (-90...90).contains(latitude), (-180...180).contains(longitude) else {
-            throw ValidationError.invalidCoordinate
+    public init(latitude: Double, longitude: Double) throws {
+        guard latitude.isFinite, longitude.isFinite,
+              (-90...90).contains(latitude), (-180...180).contains(longitude) else {
+            throw FieldNoteValidationError.invalidCoordinate
         }
         self.latitude = latitude
         self.longitude = longitude
     }
 }
+
+
 ```
 
-Once created, these values carry their validity into SwiftUI, UIKit, storage adapters, and sync operations.
+`Tag` trims and normalizes a label, then rejects empty or overlong values. `Coordinate` rejects non-finite values as well as out-of-range coordinates. Checking only numeric ranges without understanding invalid floating-point values makes a boundary harder to reason about.
 
-## Put orchestration in use cases
+The note app does not currently collect location. `Coordinate` is a tested domain-value example, not evidence of Core Location authorization or device behavior.
+
+## Model editable input separately
+
+`NoteDraft` carries a stable note ID, editable text, comma-separated tags, favorite state, and an optional original creation time. A new draft gets its ID before the first submission. An edit copies an existing note and retains its creation time.
+
+The title readiness check is a UI convenience. `FieldNote` still rejects blank titles at construction, including during decoding. File data does not get permission to bypass domain rules because it came from a previously saved store.
+
+## Keep orchestration small
 
 ```swift
-struct CreateNote {
-    var makeID: () -> UUID
-    var now: () -> Date
-    var save: (Note) async throws -> Void
+public struct SaveNote: Sendable {
+    private let library: NoteLibrary
+    private let now: @Sendable () -> Date
 
-    func callAsFunction(draft: NoteDraft) async throws -> Note {
-        let title = try NoteTitle(draft.title)
-        let note = Note(id: makeID(), title: title, body: draft.body, createdAt: now())
-        try await save(note)
+    public init(library: NoteLibrary, now: @escaping @Sendable () -> Date = { Date() }) {
+        self.library = library
+        self.now = now
+    }
+
+    @discardableResult
+    public func callAsFunction(_ draft: NoteDraft) async throws -> FieldNote {
+        let date = now()
+        let tags = try draft.parsedTags.map { try Tag($0).value }
+        let note = try FieldNote(
+            id: draft.id, title: draft.title, body: draft.body, tags: tags,
+            isFavorite: draft.isFavorite, createdAt: draft.createdAt ?? date, updatedAt: date
+        )
+        try Task.checkCancellation()
+        try await library.save(note)
         return note
     }
 }
 ```
 
-The use case owns the complete action. The UI supplies intent; adapters supply IDs, time, and persistence.
+Time is injected, so a test can assert exact timestamps. Identity is supplied by the draft, so repeated attempts retain one ID. The repository owns replacement and durability; the use case does not infer a successful disk write from a changed UI property.
 
-## Avoid an anemic mirror
+The package tests prove valid/boundary/invalid tags and coordinates, fixed identity/time, creation time preservation on edit, and failure leaving input unchanged. Run `./scripts/test-package.sh` from `companion/field-notes`.
 
-A type that only repeats database columns or JSON fields is a transport shape, not automatically a domain model. Translate external shapes at the boundary, then keep product rules in types whose names and behavior reflect Field Notes.
+## Separate rules from representation
+
+The default app uses a versioned JSON file repository. A separate SwiftData lesson maps its own stored model. Neither annotation belongs on `NoteDraft` or `SaveNote`. This keeps domain behavior executable without an iOS runtime.
 
 ## Series navigation
 

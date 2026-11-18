@@ -1,3 +1,4 @@
+import postMigrations from '../docs/data/post-series-route-migrations.json' with { type: 'json' };
 import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,6 +59,14 @@ function fail(errors, filePath, message) {
 function validatePage(filePath, errors) {
   const relativePath = path.relative(distDir, filePath);
   const html = readFileSync(filePath, "utf8");
+  const migration = postMigrations.find(entry => entry.active && relativePath.split(path.sep).join('/') === entry.oldRoute.slice(1) + 'index.html');
+  if (migration) {
+    const destination = '/tech-learning' + migration.newRoute + (migration.destinationFragment ? '#' + migration.destinationFragment : '');
+    if (!/<meta[^>]+http-equiv=["']refresh["']/i.test(html) || !html.includes(destination)) {
+      fail(errors, filePath, 'declared compatibility route does not redirect to its destination');
+    }
+    return;
+  }
   const isNotFoundPage = relativePath === "404.html";
   const size = statSync(filePath).size;
 
