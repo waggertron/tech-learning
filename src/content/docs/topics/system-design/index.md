@@ -5,7 +5,7 @@ category: system-design
 tags: [system-design, distributed-systems, interviews]
 status: draft
 created: 2026-05-06
-updated: 2026-11-16
+updated: 2026-11-19
 ---
 
 System design interviews ask you to architect a real-world system from scratch, usually in 45 minutes. Unlike coding interviews, there is no single correct answer. The job is to reason through trade-offs clearly, ask the right clarifying questions, and make defensible decisions under constraints.
@@ -60,6 +60,8 @@ End-to-end walkthroughs of sixteen canonical interview problems, each with clari
 - [eBay](./case-studies/ebay/), auction state machine, proxy bidding, bid sniper problem, payment escrow
 
 ## Advanced patterns
+
+- [Reliable user deletion](../../posts/2026-11-19-reliable-user-deletion-workflows/), a thirty-day deadline, cancellation cutoff, fenced worker leases, provider recovery, and durable redispatch
 
 - [Microservices vs Monolith](./microservices/), Conway's Law, domain-driven boundaries, the modular monolith, Strangler Fig migration
 - [Monolith to microservices, one boundary at a time](../../posts/2026-10-26-monolith-to-microservices-one-boundary-at-a-time/), a store migration through notifications, inventory reservations, and search

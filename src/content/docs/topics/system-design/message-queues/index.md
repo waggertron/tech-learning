@@ -5,7 +5,7 @@ parent: system-design
 tags: [system-design, message-queues, kafka, rabbitmq, async]
 status: draft
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-11-19
 ---
 
 A message queue is a buffer between services. The producer writes a message and moves on. The consumer reads and processes the message independently. The two services never talk to each other directly; they share only the queue.
@@ -228,6 +228,8 @@ print(f"DLQ size: {dlq.qsize()}")
 - [AWS SQS vs. SNS vs. EventBridge decision guide](https://docs.aws.amazon.com/decision-guides/latest/sns-or-sqs-or-eventbridge/sns-or-sqs-or-eventbridge.html)
 
 ## Related topics
+
+- [Reliable user deletion](../../../posts/2026-11-19-reliable-user-deletion-workflows/), a worked example where the database tracks unfinished work and the queue carries recoverable wake-ups
 
 - [Scalability](../scalability/), queues absorb write spikes and decouple services for independent scaling
 - [Databases at Scale](../databases/), queues buffer high-volume writes before they hit the database

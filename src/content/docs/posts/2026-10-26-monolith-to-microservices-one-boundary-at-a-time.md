@@ -263,6 +263,8 @@ The useful question at each boundary is concrete: what does the caller need to k
 
 ## Related topics
 
+- [Reliable user deletion](../2026-11-19-reliable-user-deletion-workflows/): Carry atomic claims and repeat-safe effects into a deadline-driven, multi-provider workflow.
+
 - [Microservices vs Monolith](../../topics/system-design/microservices/), deployment boundaries, domain ownership, and modular monoliths.
 - [Message Queues](../../topics/system-design/message-queues/), buffering, delivery guarantees, and consumers.
 - [Saga Pattern](../../topics/system-design/saga-pattern/), compensation and coordination across services.

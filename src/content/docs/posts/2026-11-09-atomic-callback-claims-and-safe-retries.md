@@ -1269,6 +1269,8 @@ Psycopg's [transaction contexts](https://www.psycopg.org/psycopg3/docs/basic/tra
 
 ## Related topics
 
+- [Reliable user deletion](../2026-11-19-reliable-user-deletion-workflows/): Carry atomic claims and repeat-safe effects into a deadline-driven, multi-provider workflow.
+
 - [Databases at scale](../../topics/system-design/databases/): storage choices, indexes, and transactions.
 - [API design](../../topics/system-design/api-design/): request contracts and idempotency.
 - [Distributed locking](../../topics/system-design/distributed-locking/): coordinating work across processes.

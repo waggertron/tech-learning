@@ -5,7 +5,7 @@ parent: system-design
 tags: [system-design, saga-pattern, distributed-systems, microservices]
 status: draft
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-11-19
 ---
 
 A saga is a sequence of local transactions across multiple services, each publishing events that trigger the next step. If any step fails, compensating transactions undo the work done by previous steps. Sagas replace distributed two-phase commit (2PC) as the mechanism for maintaining consistency across service boundaries.
@@ -48,7 +48,7 @@ Each step is a local transaction within one service. If a step fails, **compensa
 
 ## Compensating transactions
 
-A compensating transaction is the inverse of a forward transaction. For every step in a saga, you must define its compensating action:
+A compensating transaction is the inverse of a forward transaction. For each reversible step, define a compensating action. An irreversible step instead needs a clear commitment boundary and forward recovery:
 
 | Forward action | Compensating action |
 | --- | --- |
@@ -209,7 +209,7 @@ Mitigations:
 
 **Choreography is simpler for simple flows. Orchestration is better for complex ones.** Two or three steps with clear trigger events are fine with choreography. Five or more steps with conditional branches, timeouts, and complex compensations should use an orchestrator.
 
-**Every forward step must have a defined compensation.** If you cannot define the compensation before implementing the step, you have not thought through the failure mode. Compensating transactions are first-class design artifacts, not afterthoughts.
+**Define recovery for every step.** Reversible work needs an explicit compensation. After an irreversible commitment, such as deleting external data, retry or reconcile the remaining work instead of promising an undo. The [user-deletion walkthrough](../../../posts/2026-11-19-reliable-user-deletion-workflows/) shows this forward-recovery boundary.
 
 **Compensations can fail.** A refund to a cancelled credit card fails. A hotel cancellation API is down. You must handle compensation failures: retry with backoff, escalate to a DLQ, alert a human. Never assume compensation succeeds.
 
@@ -223,6 +223,8 @@ Mitigations:
 - [AWS Step Functions for saga orchestration](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-saga.html)
 
 ## Related topics
+
+- [Reliable user deletion](../../../posts/2026-11-19-reliable-user-deletion-workflows/), irreversible provider cleanup with durable progress and forward recovery
 
 - [Microservices vs Monolith](../microservices/), the context that makes sagas necessary
 - [Event Sourcing and CQRS](../event-sourcing/), events as the coordination mechanism in choreography-based sagas
