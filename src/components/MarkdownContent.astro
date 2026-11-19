@@ -1,9 +1,13 @@
 ---
 import Default from '@astrojs/starlight/components/MarkdownContent.astro';
 import BlogContent from 'starlight-blog/overrides/MarkdownContent.astro';
+import ContentTags from './ContentTags.astro';
 
-const { id } = Astro.locals.starlightRoute;
+const { id, entry } = Astro.locals.starlightRoute;
+const isBlogPost = id.startsWith('posts/') && !id.startsWith('posts/series') && !id.startsWith('posts/tags/') && Boolean(entry.data.date);
 const isSeries = id === 'posts/series' || id.startsWith('posts/series/');
 ---
+
+{!isBlogPost && <ContentTags tags={entry.data.tags ?? []} />}
 
 {isSeries ? <Default><slot /></Default> : <BlogContent><slot /></BlogContent>}

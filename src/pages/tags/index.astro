@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { buildTagIndex, relativeContentHref } from '../../lib/content-tags.mjs';
+const tags = [...buildTagIndex(await getCollection('docs')).values()];
+---
+
+<StarlightPage frontmatter={{ title: 'Tags', description: 'Browse posts, topics, and guides by their shared tags.', tableOfContents: false }}>
+  <div data-tag-directory>
+    <p>Tags connect related pages across the site. Choose a tag to browse its posts, topics, and guides.</p>
+    <p>{tags.length} tags.</p>
+    <ul class="tag-directory">
+      {tags.map(tag => (
+        <li><a href={relativeContentHref(Astro.url.pathname, `posts/tags/${tag.slug}`, import.meta.env.BASE_URL)}>{tag.label} <span>({tag.entries.length})</span></a></li>
+      ))}
+    </ul>
+  </div>
+</StarlightPage>
+
+<style>
+  .tag-directory { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0.45rem 1.5rem; padding-inline-start: 1.25rem; }
+  .tag-directory li { margin: 0; overflow-wrap: anywhere; }
+  .tag-directory a { display: inline-block; padding-block: 0.2rem; }
+  span { color: var(--sl-color-gray-2); }
+</style>

@@ -274,7 +274,7 @@ If each message is delivered to 1.5 recipients on average:
 
 - [System Design Interview, Alex Xu, Chapter 2: Back-of-the-Envelope Estimation](https://bytebytego.com/)
 - [Latency Numbers Every Programmer Should Know, interactive](https://colin-scott.github.io/personal_website/research/interactive_latency.html)
-- [AWS Calculator for reference](https://calculator.aws/pricing/2/home)
+- [AWS Calculator for reference](https://calculator.aws/)
 
 ## Related topics
 
@@ -282,3 +282,5 @@ If each message is delivered to 1.5 recipients on average:
 - [Scalability](../scalability/), what the numbers tell you about scaling strategy
 - [Databases at Scale](../databases/), how storage estimates drive sharding decisions
 - [Caching](../caching/), why read/write ratios determine caching strategy
+
+- [Patient lookup on AWS](../case-studies/patient-lookup-aws/): A complete traffic-to-capacity, latency, and monthly-cost calculation with explicit billing assumptions.

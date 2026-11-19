@@ -2,11 +2,12 @@ import { defineCollection, z } from 'astro:content';
 import { docsLoader } from '@astrojs/starlight/loaders';
 import { docsSchema } from '@astrojs/starlight/schema';
 import { blogSchema } from 'starlight-blog/schema';
+import { contentTagsSchema } from './lib/content-tags.mjs';
 
 const topicExtension = z.object({
   category: z.string().optional(),
   parent: z.string().optional(),
-  tags: z.array(z.string()).default([]),
+  tags: contentTagsSchema,
   status: z.enum(['draft', 'published']).default('draft'),
   created: z.coerce.date().optional(),
   updated: z.coerce.date().optional(),

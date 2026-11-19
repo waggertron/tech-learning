@@ -2,7 +2,7 @@
 
 The homepage shows ten posts at a time, newest first. Its date selector reorders the full catalog before displaying ten rows, so oldest first reaches the earliest posts. Without JavaScript, the newest rows and archive links remain usable.
 
-Starlight Blog owns `/posts/`, paginated archives, tag pages, post metadata, and `/posts/rss.xml`. The homepage discovery component is excluded from Pagefind so hidden rows do not create misleading search hits. The homepage consumes its `Astro.locals.starlightBlog.posts` data. `src/components/PostBrowser.astro` owns the selector and compact list.
+Starlight Blog owns `/posts/`, paginated archives, post metadata, and `/posts/rss.xml`. The explicit `/posts/tags/<tag>/` routes now serve shared post/topic archives, and `/tags/` provides their directory. See [Unified content tags](./unified-tags.md). The homepage discovery component is excluded from Pagefind so hidden rows do not create misleading search hits. The homepage consumes its `Astro.locals.starlightBlog.posts` data. `src/components/PostBrowser.astro` owns the selector and compact list.
 
 ## Compatibility
 
@@ -14,7 +14,7 @@ The plugin reserves the `/posts/` listing route. `src/content/docs/posts/index.m
 
 Dated posts stay under `src/content/docs/posts/` and include a `date` and a quoted `description`. The schema uses the description as the list excerpt unless explicit `excerpt` frontmatter is supplied. This prevents the plugin from rendering entire posts, including interactive examples, in archive lists.
 
-Series guides live under `src/content/docs/post-series/`. Their explicit `slug: posts/series/...` values preserve public routes and existing relative links. Keep them outside `posts/`, because the pinned plugin treats every source in that directory as a dated post. `src/components/MarkdownContent.astro` renders series guides with ordinary Starlight content and delegates other pages to the plugin override. The plugin's component override warning is expected for this intentional wrapper. Archive and tag pages contain semantic post previews instead of `data-pagefind-body`, so page validation checks that specific structure and dates on those routes.
+Series guides live under `src/content/docs/post-series/`. Their explicit `slug: posts/series/...` values preserve public routes and existing relative links. Keep them outside `posts/`, because the pinned plugin treats every source in that directory as a dated post. `src/components/MarkdownContent.astro` renders series guides with ordinary Starlight content and delegates other pages to the plugin override. The plugin's component override warning is expected for this intentional wrapper. Dated archives contain semantic post previews instead of `data-pagefind-body`. Shared tag archives use an explicit listing marker and are excluded from full-text indexing; page validation checks the appropriate structure for each. Topic pages show accessible tag links, while dated posts retain the plugin footer tags.
 
 ## Visual system
 
@@ -27,6 +27,8 @@ npm run build
 npm run validate:pages
 npm run validate:links
 npm run validate:post-discovery
+npm run validate:content-tags
+npm run validate:content-tags-browser
 npm run validate:custom-pages
 ```
 

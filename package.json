@@ -54,7 +54,10 @@
     "validate:pre-push": "node scripts/validate-pre-push.mjs",
     "new:topic": "bash scripts/new-topic.sh",
     "new:post": "bash scripts/new-post.sh",
-    "validate:post-migrations": "node scripts/validate-post-series-migrations.mjs"
+    "validate:post-migrations": "node scripts/validate-post-series-migrations.mjs",
+    "test:content-tags": "node --test tests/content-tags.test.mjs",
+    "validate:content-tags": "node scripts/validate-content-tags.mjs",
+    "validate:content-tags-browser": "node scripts/validate-content-tags-browser.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

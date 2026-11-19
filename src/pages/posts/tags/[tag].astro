@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import type { InferGetStaticPropsType } from 'astro';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { buildTagIndex, relativeContentHref } from '../../../lib/content-tags.mjs';
+
+export const prerender = true;
+export async function getStaticPaths() {
+  const index = buildTagIndex(await getCollection('docs'));
+  return [...index.values()].map(group => ({ params: { tag: group.slug }, props: { group } }));
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { group } = Astro.props;
+const href = (route: string) => relativeContentHref(Astro.url.pathname, route, import.meta.env.BASE_URL);
+---
+
+<StarlightPage hasSidebar={false} frontmatter={{ title: `Pages tagged “${group.label}”`, description: `Posts, topics, and guides tagged ${group.label}.`, tableOfContents: false, pagefind: false }}>
+  <div class="tag-archive" data-tag-archive={group.slug}>
+    <p><a href={href('tags')}>Browse all tags</a></p>
+    <p>{group.entries.length} tagged {group.entries.length === 1 ? 'page' : 'pages'} across posts, topics, and guides.</p>
+    <ul class="tag-results">
+      {group.entries.map(entry => (
+        <li data-tag-entry={entry.id}>
+          <h2><a href={href(entry.id)}>{entry.data.title}</a></h2>
+          {entry.data.description && <p>{entry.data.description}</p>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</StarlightPage>
+
+<style>
+  .tag-results { list-style: none; padding: 0; }
+  .tag-results > li { border-top: 1px solid var(--sl-color-hairline-light); padding-block: 1.25rem; }
+  h2 { margin: 0; font-size: var(--sl-text-xl); }
+  h2 a { text-decoration: none; }
+  h2 a:hover { text-decoration: underline; }
+  li p { margin: 0.5rem 0 0; color: var(--sl-color-gray-2); }
+</style>

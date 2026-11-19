@@ -7,6 +7,7 @@ const steps = [
   ["Secret scan", "bash", ["scripts/check-secrets.sh"]],
   ["Style validation", "npm", ["run", "validate:style"]],
   ["Published content review", "npm", ["run", "validate:published-content"]],
+  ["Content tag tests", "npm", ["run", "test:content-tags"]],
   ["Twelve-Factor topic contract", "npm", ["run", "validate:twelve-factor-topic"]],
   ["React output sync", "npm", ["run", "check:react-outputs"]],
   ["React output tests", "npm", ["run", "test:react-outputs"]],
@@ -26,6 +27,7 @@ const steps = [
   ["Page validation", "npm", ["run", "validate:pages"]],
   ["Internal link validation", "npm", ["run", "validate:links"]],
   ["Post route migrations", "npm", ["run", "validate:post-migrations"]],
+  ["Unified content tags", "npm", ["run", "validate:content-tags"]],
 ];
 
 if (includeExternal) {
@@ -36,6 +38,7 @@ if (!skipCustom) {
   steps.push(["Twelve-Factor browser validation", "npm", ["run", "validate:twelve-factor-browser"]]);
   steps.push(["Custom page validation", "npm", ["run", "validate:custom-pages"]]);
   steps.push(["Post discovery validation", "npm", ["run", "validate:post-discovery"]]);
+  steps.push(["Content tag browser validation", "npm", ["run", "validate:content-tags-browser"]]);
   steps.push(["Swift REPL browser validation", "npm", ["run", "validate:swift-repl-browser"]]);
 }
 

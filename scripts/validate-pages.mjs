@@ -90,7 +90,8 @@ function validatePage(filePath, errors) {
 
   const isBlogListing = /^posts\/(?:index\.html|\d+\/index\.html|(?:tags|authors)\/[^/]+\/index\.html)$/.test(relativePath.split(path.sep).join('/'));
   const hasBlogPreviews = isBlogListing && /<article\b[^>]*class="[^"]*\bpreview\b/.test(html) && /<time\b/.test(html);
-  if (!isNotFoundPage && !html.includes("data-pagefind-body") && !hasBlogPreviews) {
+  const isTagArchive = /^posts\/tags\/[^/]+\/index\.html$/.test(relativePath.split(path.sep).join('/')) && /data-tag-archive=/.test(html);
+  if (!isNotFoundPage && !html.includes("data-pagefind-body") && !hasBlogPreviews && !isTagArchive) {
     fail(errors, filePath, "missing data-pagefind-body content region");
   }
 

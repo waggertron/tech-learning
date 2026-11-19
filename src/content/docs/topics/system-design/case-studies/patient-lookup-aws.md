@@ -1,18 +1,18 @@
 ---
-title: "Case Study: Hyper Low Latency Patient Info Lookup for Telecom Data Enrichment"
-description: "Size an AWS patient lookup service for ten million daily reads, fivefold capacity, and a 100 ms p99 target, then define the tests needed to validate it."
+title: "Patient lookup on AWS: capacity, latency, and cost"
+description: "Size ten million daily patient lookups, budget a complete AWS deployment, and validate a 100 ms p99 objective without confusing estimates with measured results."
 parent: case-studies
-tags: [system-design, case-studies, interviews, aws, dynamodb, capacity-planning, latency]
+tags: [system-design, case-studies, interviews, aws, dynamodb, capacity-planning, latency, cost-modeling]
 status: draft
 created: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-19
 ---
 
 A clinic employee enters a phone number and needs the matching patient's authorized details. The service handles ten million lookups per day during a sixteen-hour business window. It needs five times the average business-hours capacity and a client-observed p99 latency at or below 100 ms.
 
 That sounds like a database-selection question. The first decisions are about what a lookup means, who may see the result, and which traffic and failure conditions the target covers. Those answers determine the access pattern, capacity, and validation plan.
 
-This case study develops a starting design: an Application Load Balancer, a Go service on ECS Fargate, and two DynamoDB tables. The capacity calculations are estimates. The per-task throughput and latency allocations are hypotheses to test, not measured results.
+This case study develops a starting design: an Application Load Balancer, a Go service on ECS Fargate, and two DynamoDB tables. The capacity calculations are estimates. The per-task throughput and latency allocations are hypotheses to test, not measured results. The [monthly cost model](#10-price-the-complete-deployment) budgets the complete footprint at about \$1,425, with an on-demand alternative and explicit operating assumptions.
 
 ## 1. Define the lookup and its targets
 
@@ -287,6 +287,134 @@ For a 200 ms client-visible target, one possible allocation is 40 ms network, 10
 
 The transferable sequence is: define the operation and objective, estimate peak reads and writes, calculate storage and bandwidth, expand dependency traffic, size for measured usable capacity and failures, allocate latency, and test the full request.
 
+## 10. Price the complete deployment
+
+The proposed footprint costs approximately **\$1,425/month**, or **\$17,100/year**, under the assumptions below. An initial **\$1,600 monthly budget** adds about 12% for uncertainty. This prices a design hypothesis, not a deployed service or a measured 100 ms guarantee.
+
+Rates were checked on November 19, 2026 for US East (N. Virginia), USD, Linux/x86 Fargate, and DynamoDB Standard. Use 730 hours for fixed monthly resources and a representative thirty-day month for request volume. Keep all six tasks and the proposed database capacity ready throughout the month. A scheduled overnight reduction is an alternative, not an assumed saving in this estimate.
+
+### Separate ready capacity from actual usage
+
+```text
+Normal monthly traffic = 10,000,000/day x 30 = 300 million lookups
+Consumed read units = 300 million x 4 = 1.2 billion
+Decimal response payload = 300 million x 10,000 bytes = 3 TB
+
+Always-ready capacity = six tasks + 5,000 provisioned RCU
+Rounded peak target = 1,000 lookups/sec
+```
+
+A peak capacity target is not a prediction that every business-hour second runs at that rate. Task and provisioned-capacity charges follow time allocated. Transfer, WAF, and request-based database charges follow usage.
+
+For transfer pricing, budget approximately 3,000 billable GB as a planning proxy for that payload. Actual billed transfer depends on AWS's metering, protocol overhead, request traffic, and routing. Do not treat the decimal payload calculation as an invoice measurement.
+
+### Count stored items, then price storage
+
+Use an explicit storage specimen: ten million patients, a complete 10 KiB patient item, and one complete 200-byte directory item per patient. Add DynamoDB's 100-byte storage overhead to each item:
+
+```text
+Patient bytes = 10,000,000 x (10,240 + 100)
+Directory bytes = 10,000,000 x (200 + 100)
+Combined storage = 106,400,000,000 bytes, about 99.1 GiB
+Rounded storage input for pricing = 100 GB
+```
+
+This is a stored-data assumption, independent of lookup count and response size. It assumes one directory entry per patient and no secondary indexes. Measure actual keys, attribute names, values, and enabled-feature overhead before accepting it. A one-GB directory would barely cover the per-item storage overhead alone. AWS documents the distinction in [item-size and storage accounting](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/CapacityUnitCalculations.html).
+
+### Budget writes that match the consistency design
+
+The read path still uses two nontransactional strong reads. For this cost example, assume one million coordinated updates per month, each transaction changing one existing directory item of at most 1 KiB and one patient item of at most 10 KiB.
+
+Transactional writes consume twice the ordinary write units per item:
+
+```text
+Directory = 2 x ceil(200 / 1,024) = 2 write units/update
+Patient = 2 x ceil(10,240 / 1,024) = 20 write units/update
+Paired transaction = 22 write units/update
+Monthly consumption = 1 million x 22 = 22 million write units
+
+Provisioned example:
+Directory: 10 WCU / 2 units = 5 updates/sec
+Patients: 50 WCU / 20 units = 2.5 updates/sec
+Paired update capacity = 2.5 updates/sec before skew or other work
+```
+
+The 10/50 WCU split is a separate write-peak assumption. A monthly average cannot prove that an import burst fits. Removing an old phone mapping, creating a new one, or changing another patient adds mutations and needs a new estimate. Retrying an operation can also add work.
+
+[Transaction capacity and isolation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html) explains both the doubled write cost and why ordinary reads do not acquire a multi-item snapshot. Keep the association validation and bounded retry policy from section 4 even when writers use transactions.
+
+### Include the supporting services
+
+| Resource | Monthly assumption and rate | USD/month |
+| --- | --- | ---: |
+| Fargate application | Six tasks x 730 h x (\$0.04048/vCPU-h + 2 x \$0.004445/GB-h) | \$216.24 |
+| DynamoDB reads | 5,000 RCU x 730 h x \$0.00013/RCU-h | \$474.50 |
+| DynamoDB storage | 100 GB x \$0.25/GB-month | \$25.00 |
+| Application Load Balancer | 730 h x \$0.0225/h + 3,000 GB x \$0.008, using its byte dimension | \$40.43 minimum |
+| ALB public IPv4 | Assume three addresses x 730 h x \$0.005/address-h | \$10.95 |
+| Internet response transfer | (3,000 - 100 shared free GB) x \$0.09/GB | \$261.00 |
+| **Core subtotal** | Compute, provisioned reads, storage, and public request path | **\$1,028.12** |
+| Private-subnet connectivity | Three NAT gateways: \$98.55; their IPv4: \$10.95; 50 GB processing: \$2.25 | \$111.75 |
+| DynamoDB writes | (10 + 50) WCU x 730 h x \$0.00065/WCU-h | \$28.47 |
+| Point-in-time recovery | 100 GB x \$0.20/GB-month | \$20.00 |
+| CloudWatch logs | 30 GB ingested x \$0.50 + 30 GB billed retained storage x \$0.03 | \$15.90 |
+| Metrics and alarms | Twenty custom metrics x \$0.30 + ten standard alarm metrics x \$0.10 | \$7.00 |
+| Tracing | Three million recorded traces x \$5/million + three million queried/scanned x \$0.50/million | \$16.50 |
+| Optional WAF, included here | One ACL: \$5; ten ordinary rules: \$10; 300 million requests: \$180 | \$195.00 |
+| ECR image storage | 5 GB x \$0.10/GB-month | \$0.50 |
+| Route 53 | One hosted zone; qualifying ALB alias queries have no query charge | \$0.50 |
+| Secrets Manager | Three secrets x \$0.40 + 10,000 API calls x \$0.05/10,000 | \$1.25 |
+| **Modeled total** | Sum of displayed line items | **\$1,424.99** |
+| **Planning budget** | Approximately 12% above the modeled total | **\$1,600** |
+
+The cents make the addition inspectable. The useful planning figure is about \$1.4k/month, not a quote accurate to the cent. Rates come from [Fargate](https://aws.amazon.com/fargate/pricing/) and [DynamoDB](https://aws.amazon.com/dynamodb/pricing/) for compute and storage, plus [load balancing](https://aws.amazon.com/elasticloadbalancing/pricing/), [VPC](https://aws.amazon.com/vpc/pricing/), and [internet transfer](https://aws.amazon.com/ec2/pricing/on-demand/) for the network path.
+
+The ALB row is a payload-only lower bound. AWS charges each hour using the largest LCU dimension: new connections, active connections, processed bytes, or rule evaluations. Requests, headers, connection churn, extra rules, and uneven traffic can increase it. Three ALB addresses are a planning assumption, not a guaranteed fixed count.
+
+The DynamoDB gateway endpoint adds no endpoint charge and keeps database traffic out of NAT. It does not deliver container images, logs, or arbitrary outbound service calls. The NAT allowance covers those other operations and excludes the client response payload, which returns through the ALB. A private-endpoint alternative needs the actual services and AZs priced separately. Nine interface endpoint interfaces at \$0.01/hour would cost \$65.70/month before data processing, but that is not automatically a complete substitute for internet access. Do not charge both alternatives unless both are deployed. See [gateway endpoints](https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html) and [PrivateLink pricing](https://aws.amazon.com/privatelink/pricing/).
+
+Thirty GB of logs is roughly 100 bytes per lookup, so this is a lean collection policy. One KB per lookup would produce about 300 GB of ingestion, adding approximately \$135 before retention. Billed retained log storage is a separate, potentially compressed-volume input. Trace recording and querying are also separate assumptions: one-percent request sampling produces three million recorded traces, not automatically three million queried traces. Operational rates are documented in [CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/), with the smaller [ECR](https://aws.amazon.com/ecr/pricing/), [Route 53](https://aws.amazon.com/route53/pricing/), and [Secrets Manager](https://aws.amazon.com/secrets-manager/pricing/) charges priced above.
+
+WAF is optional in the architecture and included in this total. The \$195 assumes ordinary rules within the basic capacity allowance and no paid managed rules, Bot Control, CAPTCHA, or WAF log ingestion. Without it, the modeled total is approximately **\$1,230/month**. Additional request traffic needs its own allowance. See [WAF pricing](https://aws.amazon.com/waf/pricing/).
+
+This estimate applies the shared 100-GB internet-transfer allowance but no DynamoDB, logging, or tracing free allowances. If that transfer allowance is used elsewhere, add approximately \$9. Commitments, credits, and volume discounts are not assumed. Staging, multiple Regions, paid support, taxes, external identity-provider charges, load generators, separate backup copies, and restore jobs are outside this footprint. PITR is included. Additional inter-AZ transfer and extra customer-managed encryption-key usage need pricing if the deployment introduces them.
+
+### Compare complete billing modes and traffic profiles
+
+For the normal 300-million-lookup month, on-demand database charges would be:
+
+```text
+Reads = 1.2 billion units x $0.125/million = $150
+Transactional writes = 22 million units x $0.625/million = $13.75
+
+Full on-demand deployment estimate:
+$1,424.99 - $474.50 provisioned reads - $28.47 provisioned writes
+          + $150 on-demand reads + $13.75 on-demand writes
+= $1,085.77/month, approximately $1,090
+```
+
+DynamoDB's [billing mode](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BillingModeSummary.html) applies to both read and write throughput on a table. Replacing only its read line while keeping provisioned write charges would mix two incompatible configurations. Both tables switch modes in this comparison; the task count and remaining footprint stay the same. Warm throughput, quotas, maximum settings, and hot keys still need the original load tests.
+
+| Scenario | What changes | Estimate |
+| --- | --- | ---: |
+| Normal traffic, provisioned mode | 300 million lookups; six tasks, 5,000 RCU, 60 WCU ready all month | About \$1,425 full footprint |
+| Normal traffic, on-demand mode | Replace both provisioned database lines with consumed read and write units | About \$1,090 full footprint |
+| Target rate sustained throughout every active window | 1,000/sec x 16 h/day x 30 days = 1.728 billion lookups and 17,280 GB approximate payload | About \$2,390 **core only** |
+
+The sustained-target row excludes the supporting-service rows, whose usage would also change. In particular, WAF request charges and sampled telemetry grow with traffic. Keeping the same six tasks is a capacity hypothesis to test, not a proven response to the extra volume. Tiered internet-transfer pricing applies above the first 10,240 GB beyond the shared allowance.
+
+A useful read-charge break-even for this exact fixed 5,000-RCU configuration is:
+
+```text
+$474.50 / ($0.125 / 1 million units) / 4 units per lookup
+= 949 million lookups/month
+= about 31.6 million lookups/day in a thirty-day month
+```
+
+Below that volume, on-demand reads cost less than keeping this particular provisioned allocation all month. Above it, provisioned reads can cost less if the configured capacity still covers the peaks. This compares read charges, not complete bills or latency. At the sustained-target volume, on-demand reads alone would cost \$864/month. Write volume, autoscaling, schedules, and different capacity margins change the economic comparison.
+
+Validate the price model with the same representative traffic used for the performance test. Record consumed units, actual stored item sizes, task utilization, ALB LCUs, transfer, NAT processing, and telemetry volume. Reconcile the measurements with [AWS Pricing Calculator](https://calculator.aws/) and a tagged test bill. Buying headroom and keeping tasks warm does not establish the client-visible p99 objective.
+
 ## Final design and interview answer
 
 ```text
@@ -298,6 +426,8 @@ Caller
   |
   | HTTPS: authenticated tenant-scoped lookup
   v
+AWS WAF (optional, included in cost model)
+  |
 Application Load Balancer
   |
   +----------+----------+

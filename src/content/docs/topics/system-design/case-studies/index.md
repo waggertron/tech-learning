@@ -16,7 +16,7 @@ These problems cover the most commonly asked designs across Google, Meta, Amazon
 
 Standalone walkthroughs, each covering a distinct design space:
 
-- [Hyper Low Latency Patient Info Lookup for Telecom Data Enrichment](./patient-lookup-aws/), ten million daily reads, DynamoDB capacity, a 100 ms p99 target, and failure testing
+- [Patient lookup on AWS: capacity, latency, and cost](./patient-lookup-aws/), ten million daily reads, DynamoDB capacity, monthly operating costs, and a 100 ms p99 validation plan
 - [URL Shortener](./url-shortener/), ID generation, base62 encoding, redirect caching, and analytics pipelines
 - [Social Feed](./social-feed/), fanout strategies, hybrid push/pull, ML ranking, and the celebrity problem
 - [Video Streaming](./video-streaming/), chunked upload, transcoding pipelines, adaptive bitrate, and CDN strategy

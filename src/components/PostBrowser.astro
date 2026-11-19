@@ -19,7 +19,7 @@ const dateFormat = new Intl.DateTimeFormat('en', {
       </select>
     </label>
   </header>
-  <p class="post-browser__links"><a href="posts/">Browse the archive</a><a href="posts/series/">Explore post series</a></p>
+  <p class="post-browser__links"><a href="posts/">Browse the archive</a><a href="posts/series/">Explore post series</a><a href="tags/">Browse all tags</a></p>
   {posts.length === 0 ? <p>No posts yet.</p> : (
     <ol class="post-browser__list" data-post-list>
       {posts.map((post) => (

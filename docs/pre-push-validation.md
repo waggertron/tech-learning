@@ -30,6 +30,7 @@ The command runs:
 bash scripts/check-secrets.sh
 npm run validate:style
 npm run validate:published-content
+npm run test:content-tags
 npm run validate:twelve-factor-topic
 npm run check:react-outputs
 npm run test:react-outputs
@@ -49,9 +50,11 @@ npm run build
 npm run validate:pages
 npm run validate:links
 npm run validate:post-migrations
+npm run validate:content-tags
 npm run validate:twelve-factor-browser
 npm run validate:custom-pages
 npm run validate:post-discovery
+npm run validate:content-tags-browser
 npm run validate:swift-repl-browser
 ```
 
@@ -218,3 +221,7 @@ Post discovery validation checks homepage newest/oldest sorting, archive paginat
 ## Retired post routes
 
 `npm run validate:post-migrations` checks every active entry in `docs/data/post-series-route-migrations.json` against built static redirect HTML. It requires a direct local destination, an existing source and heading anchor, removal of the old source, exclusion from the full post catalog and Pagefind content, no chains, and no unexplained live links to a retired article. The same check runs after the build/link stages of pre-push validation. Static redirects are meta refresh pages on GitHub Pages, not HTTP 301 responses.
+
+## Content tags
+
+`npm run test:content-tags` checks shared tag membership and safe routes. After a build, `npm run validate:content-tags` verifies every tagged page and archive in the actual output, including topic pages and existing blog tag URLs. See [Unified content tags](./unified-tags.md) for authoring rules and route compatibility.

@@ -35,7 +35,7 @@ End-to-end walkthroughs of sixteen canonical interview problems, each with clari
 
 **Standalone walkthroughs:**
 
-- [Hyper Low Latency Patient Info Lookup for Telecom Data Enrichment](./case-studies/patient-lookup-aws/), capacity and latency budgets for ten million daily reads, with a client-side validation plan
+- [Patient lookup on AWS: capacity, latency, and cost](./case-studies/patient-lookup-aws/), capacity, latency, and a complete monthly AWS cost model for ten million daily reads
 
 - [Shared callback queues, atomic claims, and safe retries](../../posts/2026-11-09-atomic-callback-claims-and-safe-retries/), incremental data modeling and PostgreSQL concurrency through a multi-location clinic workflow
 - [URL Shortener](./case-studies/url-shortener/), ID generation, base62 encoding, redirect caching, analytics pipeline

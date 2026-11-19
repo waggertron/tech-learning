@@ -51,6 +51,7 @@ export default defineConfig({
         MarkdownContent: './src/components/MarkdownContent.astro',
       },
       pagefind: false,
+      routeMiddleware: './src/starlight-tags.ts',
       sidebar: [
         {
           label: 'Topics',
